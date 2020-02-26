@@ -250,6 +250,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 }
             });
         }
+        else if (this.get("typ") === "WFS" && Radio.request("Parser", "getTreeType") === "light") {
+            this.listenToOnce(this, {
+                // data will be loaded at first selection
+                "change:isSelected": function () {
+                    this.updateSource(true);
+                }
+            });
+        }
 
         this.listenTo(channel, {
             "updateLayerInfo": function (name) {

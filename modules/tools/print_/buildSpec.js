@@ -189,6 +189,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             }
             else if (layer instanceof Vector) {
                 features = layer.getSource().getFeaturesInExtent(extent);
+
                 if (features.length > 0) {
                     returnLayer = this.buildVector(layer, features);
                 }
@@ -311,7 +312,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
                     stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
                     // do nothing if we already have a style object for this CQL rule
@@ -658,14 +658,15 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
             styleModel,
             labelField,
-            labelValue;
+            labelValue,
+            styleAttr = feature.get("styleId") ? "styleId" : styleAttribute;
 
-        if (styleAttribute === "") {
+        if (styleAttr === "") {
             return "*";
         }
         // cluster feature with geometry style
         else if (feature.get("features") !== undefined) {
-            return "[" + styleAttribute + "='" + feature.get("features")[0].get(styleAttribute) + "']";
+            return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "']";
         }
         // feature with geometry style and label style
         else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
@@ -673,13 +674,13 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             if (styleModel !== undefined && styleModel.get("labelField").length > 0) {
                 labelField = styleModel.get("labelField");
                 labelValue = feature.get(labelField);
-                return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "' AND " + labelField + "='" + labelValue + "']";
+                return "[" + styleAttr + "='" + feature.get(styleAttr) + "' AND " + labelField + "='" + labelValue + "']";
             }
             // feature with geometry style
-            return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
+            return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
         }
         // feature with geometry style
-        return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
+        return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
     },
 
     /**

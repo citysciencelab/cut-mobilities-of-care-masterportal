@@ -198,6 +198,91 @@ describe("core/Util", function () {
             expect(proxyURL).to.be.equal("./test.json");
         });
     });
+
+    describe("renameKeys", function () {
+        const obj = {
+            name: "Reder",
+            job: "Frontend-Master",
+            shoeSize: "100"
+        };
+
+        before(function () {
+            model = new Model();
+        });
+
+        it("should return an object", function () {
+            expect(model.renameKeys({name: "firstName", job: "passion"}, obj)).to.be.an("object");
+        });
+
+        it("should have the keys called firstName and passion", function () {
+            expect(model.renameKeys({name: "firstName", job: "passion"}, obj)).to.include({firstName: "Reder", passion: "Frontend-Master"});
+        });
+
+        it("should have the key passion", function () {
+            expect(model.renameKeys({names: "firstName", job: "passion"}, obj)).to.include({passion: "Frontend-Master"});
+        });
+
+        it("should have the keys called name, job and shoeSize", function () {
+            expect(model.renameKeys({}, obj)).to.include({name: "Reder", job: "Frontend-Master", shoeSize: "100"});
+        });
+    });
+
+    describe("renameValues", function () {
+        const obj = {
+            name: "Reder",
+            job: "Frontend_Master",
+            shoeSize: "100"
+        };
+
+        before(function () {
+            model = new Model();
+        });
+
+        it("should return an object", function () {
+            expect(model.renameValues({Reder: "Vornfeld", Frontend_Master: "Backend_Master"}, obj)).to.be.an("object");
+        });
+
+        it("should have the values Vornfeld and Backend_Master", function () {
+            expect(model.renameValues({Reder: "Vornfeld", Frontend_Master: "Backend_Master"}, obj)).to.include({name: "Vornfeld", job: "Backend_Master"});
+        });
+
+        it("should have the values Reder and Backend_Master", function () {
+            expect(model.renameValues({Duden: "Vornfeld", Frontend_Master: "Backend_Master"}, obj)).to.include({name: "Reder", job: "Backend_Master"});
+        });
+
+        it("should have the values Reder and Frontend_Master", function () {
+            expect(model.renameValues({}, obj)).to.include({name: "Reder", job: "Frontend_Master"});
+        });
+    });
+
+    describe("pickKeyValuePairs", function () {
+        const obj = {
+            name: "Reder",
+            job: "Frontend_Master",
+            shoeSize: "100"
+        };
+
+        before(function () {
+            model = new Model();
+        });
+
+        it("should return an object", function () {
+            expect(model.pickKeyValuePairs(obj, ["name", "job"])).to.be.an("object");
+        });
+
+        it("should have the keys name and job", function () {
+            expect(model.pickKeyValuePairs(obj, ["name", "job"])).to.have.all.keys("name", "job");
+        });
+
+        it("should have the key job", function () {
+            expect(model.pickKeyValuePairs(obj, [undefined, "job"])).to.have.all.keys("job");
+        });
+
+        it("should return an object equals {name: 'Reder', job: 'Frontend_Master'}", function () {
+            expect(model.pickKeyValuePairs(obj, ["name", "job"])).to.deep.equal({name: "Reder", job: "Frontend_Master"});
+        });
+    });
+
     describe("splitAddressString", function () {
         it("should split addressString with streetname without blank", function () {
             expect(model.splitAddressString("Straße 1, PLZ Stadt", ",", " ")).to.deep.equal([
@@ -262,3 +347,4 @@ describe("core/Util", function () {
         });
     });
 });
+

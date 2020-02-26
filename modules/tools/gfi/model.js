@@ -124,6 +124,14 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
                 if (this.get("desktopViewType") === "attached" && Radio.request("Util", "isViewMobile") === false) {
                     Radio.trigger("Map", "addOverlay", this.get("overlay"));
                 }
+            },
+            "updateSize": function () {
+                this.initView();
+                if (this.get("isVisible") === true) {
+                    this.get("currentView").render();
+                    this.get("themeList").appendTheme(this.get("themeIndex"));
+                    this.get("currentView").toggle();
+                }
             }
         }, this);
 

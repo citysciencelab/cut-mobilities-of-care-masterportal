@@ -91,6 +91,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "getMap": function () {
                 return this.get("map");
             },
+            "getLayerByName": this.getLayerByName,
+            "getOverlayById": this.getOverlayById,
             "getMapMode": this.getMapMode
         }, this);
 
@@ -641,7 +643,15 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * This function allows the hover text to be hovered so that the text could be copied
+     * gets an overlay by its identifier
+     * @param {string|number} id - identifier
+     * @returns {ol.Overlay} the overlay
+     */
+    getOverlayById: function (id) {
+        return this.get("map").getOverlayById(id);
+    },
+
+    /** This function allows the hover text to be hovered so that the text could be copied
      * a new class "hoverText" will be inserted by mouseover and removed by mouseout
      * @returns {void}
      */

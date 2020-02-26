@@ -10,11 +10,13 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
         isActive: false,
         deactivateGFI: false,
         renderToWindow: true,
+        resizableWindow: false,
         supportedIn3d: ["coord", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"],
         supportedOnlyIn3d: ["shadow"],
         supportedInOblique: ["contact"],
         supportedOnlyInOblique: [],
-        toolsToRenderInSidebar: ["filter"]
+        toolsToRenderInSidebar: ["filter"],
+        alwaysActiveTools: []
     },
     /**
      * @class Tool
@@ -30,6 +32,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
      * @property {Boolean} isActive=false Flag if tool is active
      * @property {Boolean} deactivateGFI=false Flag if tool should deactivate gfi
      * @property {Boolean} renderToWindow=true Flag if tool should be rendered in window
+     * @property {Boolean} resizableWindow=false Flag if tool-window should be resizable
      * @property {String[]} supportedIn3d=["coord", "shadow", "gfi", "wfsFeatureFilter", "searchByCoord", "legend", "contact", "saveSelection", "measure", "parcelSearch"] Array of tool ids that are supported in 3d
      * @property {String[]} supportedOnlyIn3d=["shadow"] Array of tool ids that are only supported in 3d
      * @property {String[]} supportedInOblique=["contact"] Array of tool ids that are supported in oblique mode
@@ -56,7 +59,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
 
                 if (value) {
 
-                    if (model.get("keepOtherToolsOpened") !== true) {
+                    if (model.get("keepOpen") !== true) {
                         if (this.collection) {
                             this.collection.setActiveToolsToFalse(model);
                         }

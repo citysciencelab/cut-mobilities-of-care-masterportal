@@ -12,18 +12,19 @@ const MouseHoverPopupView = Backbone.View.extend(/** @lends MouseHoverPopupView.
      * @listens MouseHover#render
      * @listens MouseHover#destroy
      */
-    initialize: function (config) {
-        if (!this.isTouchdevice()) {
-            this.model = new MouseHoverPopup(config);
-            this.listenTo(this.model, {
-                "render": this.render,
-                "destroy": this.destroy
-            });
+    initialize: function () {
+        if (document.getElementById("map")) {
+            if (!this.isTouchdevice()) {
+                this.model = new MouseHoverPopup();
+                this.listenTo(this.model, {
+                    "render": this.render,
+                    "destroy": this.destroy
+                });
 
-            this.createOverlayElement();
+                this.createOverlayElement();
+            }
         }
     },
-
     /**
      * Checks the device type. Disable the ability on smartphones and tablets as they usually don't have a mouse to hover.
      * @fires Util#RadioRequestUtilIsAny
