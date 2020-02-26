@@ -142,7 +142,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     sort: function (type, input, first, second) {
         let sorted = input;
         const isArray = Array.isArray(sorted),
-            isArrayOfObjects = sorted.every(element => typeof element === "object");
+            isArrayOfObjects = isArray ? sorted.every(element => typeof element === "object") : false;
 
         if (isArray && !isArrayOfObjects) {
             sorted = this.sortArray(sorted);
