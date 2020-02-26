@@ -180,7 +180,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         }
 
         values = [min, max];
-        values = Radio.request("Util", "sort", values);
+        values = Radio.request("Util", "sort", "", values);
 
         this.updateValues(values);
 
