@@ -313,7 +313,7 @@ function loadApp () {
             }
         }
     });
-    
+
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
