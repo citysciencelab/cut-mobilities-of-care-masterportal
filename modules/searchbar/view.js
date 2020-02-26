@@ -388,7 +388,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             this.hitSelected(); // erster und einziger Eintrag in Liste
         }
         else {
-            this.model.set("typeList", _.uniq(_.pluck(this.model.get("hitList"), "type")));
             attr = this.model.toJSON();
             attr.uiStyle = Radio.request("Util", "getUiStyle");
             // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
