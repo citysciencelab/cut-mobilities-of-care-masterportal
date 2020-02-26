@@ -119,7 +119,7 @@
     },
     "mapView":
     {
-      "backgroundImage": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
+      "backgroundImage": "https://geoportal-hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [561210, 5932600]
     },
     "menu":
@@ -235,7 +235,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/gemarkungen_hh.json",
+            "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure":
