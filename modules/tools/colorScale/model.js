@@ -1,7 +1,7 @@
 import {scaleLinear, scaleSequential} from "d3-scale";
 import * as Chromatic from "d3-scale-chromatic";
 
-const ColorScale = Backbone.Model.extend({
+const ColorScale = Backbone.Model.extend(/** @lends ColorScale.prototype */{
     defaults: {},
     /**
      * @class ColorScale
