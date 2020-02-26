@@ -94,10 +94,10 @@ function loadApp () {
         utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
-        style = Radio.request("Util", "getUiStyle");
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {};
         /* eslint-disable no-undef */
-    let app = {};
+    let app = {},
+        style = "";
 
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -183,10 +183,10 @@ function loadApp () {
         new ScaleLineView();
     }
 
+    style = Radio.request("Util", "getUiStyle");
 
     // Module laden
     // Tools
-
     new SidebarView();
 
     _.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
@@ -313,6 +313,7 @@ function loadApp () {
             }
         }
     });
+    
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
