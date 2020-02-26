@@ -33,12 +33,13 @@ const ColorScale = Backbone.Model.extend({
             filteredValues = values.filter(val => !isNaN(val)),
             filteredUndefineds = values.filter(val => val === undefined),
             minValue = Math.min(...filteredValues),
-            maxValue = Math.max(...filteredValues),
+            maxValue = Math.max(...filteredValues);
+
+        let scale,
             legend = {
                 values: [],
                 colors: []
             };
-        let scale;
 
         // Check if more than one value has been submitted
         if (minValue !== maxValue && filteredValues.length > 0) {
