@@ -3,6 +3,7 @@ import DesktopThemenFolderView from "./folder/viewTree";
 import CatalogFolderView from "./folder/viewCatalog";
 import DesktopLayerView from "./layer/view";
 import SelectionView from "./layer/viewSelection";
+import store from "../../../src/store/index";
 
 const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
 
@@ -257,6 +258,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
 
         if (modul.get("type") === "tool") {
             modul.setIsActive(true);
+            store.commit("setToolActive", {id: modul.id, active: true});
         }
         else {
             $("#" + modulId).parent().addClass("open");
