@@ -228,23 +228,23 @@ describe("core/Util", function () {
         it("should return sorted objects", function () {
             const array = [];
 
-            array.push({attr1: "aStraße 1b, 12345 Stadt"});
-            array.push({attr1: "aStraße 1, 12345 Stadt"});
-            array.push({attr1: "cStraße ohne Namen 10, 12345 Stadt"});
-            array.push({attr1: "aStraße 10, 12345 Stadt"});
-            array.push({attr1: "aStraße 2, 12345 Stadt"});
-            array.push({attr1: "aStraße 1a, 12345 Stadt"});
-            array.push({attr1: "bStraße 10, 12345 Stadt"});
-            array.push({attr1: "12Straße 10, 12345 Stadt"});
-            expect(model.sortObjectsAsAddress(array, "attr1")).to.deep.equal([
-                {attr1: "12Straße 10, 12345 Stadt"},
-                {attr1: "aStraße 1, 12345 Stadt"},
-                {attr1: "aStraße 1a, 12345 Stadt"},
-                {attr1: "aStraße 1b, 12345 Stadt"},
-                {attr1: "aStraße 2, 12345 Stadt"},
-                {attr1: "aStraße 10, 12345 Stadt"},
-                {attr1: "bStraße 10, 12345 Stadt"},
-                {attr1: "cStraße ohne Namen 10, 12345 Stadt"}
+            array.push({name: "aStraße 1b, 12345 Stadt"});
+            array.push({name: "aStraße 1, 12345 Stadt"});
+            array.push({name: "cStraße ohne Namen 10, 12345 Stadt"});
+            array.push({name: "aStraße 10, 12345 Stadt"});
+            array.push({name: "aStraße 2, 12345 Stadt"});
+            array.push({name: "aStraße 1a, 12345 Stadt"});
+            array.push({name: "bStraße 10, 12345 Stadt"});
+            array.push({name: "12Straße 10, 12345 Stadt"});
+            expect(model.sortObjectsAsAddress(array)).to.deep.equal([
+                {name: "12Straße 10, 12345 Stadt"},
+                {name: "aStraße 1, 12345 Stadt"},
+                {name: "aStraße 1a, 12345 Stadt"},
+                {name: "aStraße 1b, 12345 Stadt"},
+                {name: "aStraße 2, 12345 Stadt"},
+                {name: "aStraße 10, 12345 Stadt"},
+                {name: "bStraße 10, 12345 Stadt"},
+                {name: "cStraße ohne Namen 10, 12345 Stadt"}
             ]);
         });
     });
