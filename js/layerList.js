@@ -116,17 +116,13 @@ export function mergeLayersByMetaIds (response, metaIds) {
                 // Das kopierte Objekt bekommt den gleichen Namen wie der Metadatensatz
                 newObject.name = objectsById[0].datasets[0].md_name;
                 // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
-                newObject.layers = _.pluck(objectsById, "layers").toString();
+                newObject.layers = pluck(objectsById, "layers").toString();
                 // Das Attribut maxScale wird gruppiert und der höchste Wert am kopierten Objekt gesetzt
-                newObject.maxScale = _.max(_.pluck(objectsById, "maxScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
+                newObject.maxScale = Math.max(...pluck(objectsById, "maxScale").map(Number));
                 // Das Attribut minScale wird gruppiert und der niedrigste Wert am kopierten Objekt gesetzt
-                newObject.minScale = _.min(_.pluck(objectsById, "minScale"), function (scale) {
-                    return parseInt(scale, 10);
-                });
+                newObject.minScale = Math.min(...pluck(objectsById, "minScale").map(Number));
                 // Entfernt alle zu "gruppierenden" Objekte aus der response
-                rawLayerArray = _.difference(rawLayerArray, objectsById);
+                rawLayerArray = objectDifference(rawLayerArray, objectsById);
                 // Fügt das kopierte (gruppierte) Objekt der response hinzu
                 rawLayerArray.push(newObject);
             }
@@ -134,6 +130,31 @@ export function mergeLayersByMetaIds (response, metaIds) {
     }
 
     return rawLayerArray;
+}
+
+/**
+ * Function to retrieve all entries which are stored under the defined key.
+ * @param {array} array - Array
+ * @param {string} key - Key
+ * @return {Object[]} - Return all entries which are stored under the defined key as an object.
+ */
+function pluck (array, key) {
+    return array.map(i => i[key]);
+}
+
+/**
+ * Function to retrieve all entries which are included in both arrays.
+ * @param {array} array1 - first array.
+ * @param {array} array2 - second array.
+ * @return {Object[]} - Returns array1 without the entries which were also included in array2.
+ */
+function objectDifference (array1, array2) {
+    array1.forEach((element1) => array2.forEach((element2) => {
+        if (JSON.stringify(element1) === JSON.stringify(element2)) {
+            array1.pop(element1);
+        }
+    }));
+    return array1;
 }
 
 /**
