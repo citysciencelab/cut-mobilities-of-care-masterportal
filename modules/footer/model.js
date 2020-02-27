@@ -41,7 +41,7 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
         const urls = this.get("urls");
 
         urls.forEach(function (url) {
-            if(url.aliasKey){
+            if (url.aliasKey) {
                 url.alias = i18next.t(url.aliasKey);
             }
             else if (url.alias.indexOf("translate#") > -1) {
