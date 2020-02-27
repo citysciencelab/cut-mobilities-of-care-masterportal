@@ -24,9 +24,6 @@ const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      */
     initialize: function () {
 
-        // TODO: Check projection, echo error if mismatch
-        // var projection = Radio.request("MapView", "getProjection");
-        // console.log("map projection is", projection.getCode());
 
         /*
         this.checkForScale(Radio.request("MapView", "getOptions"));
@@ -55,20 +52,27 @@ const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      */
     createLayer: function () {
 
+        // TODO: Check projection, echo error if mismatch
+        var mapEPSG = Radio.request("MapView", "getProjection").getCode(),
+            vtEPSG = this.get("epsg"),
+            vectorTileLayer,
+            defaultStyle;
+
+        if (mapEPSG !== vtEPSG) {
+            console.warn("map and layer projection mismatch", mapEPSG, vtEPSG);
+        }
 
         // TODO: Use proxy
-
-        var vectorTileLayer = new OpenLayersVectorTileLayer({
-                source: new OpenLayersVectorTileSource({
-                    format: new MVT(),
-                    url: this.get("url")
-                }),
-                id: this.get("id"),
-                typ: this.get("typ"),
-                name: this.get("name"),
-                visible: false
+        vectorTileLayer = new OpenLayersVectorTileLayer({
+            source: new OpenLayersVectorTileSource({
+                format: new MVT(),
+                url: this.get("url")
             }),
-            defaultStyle;
+            id: this.get("id"),
+            typ: this.get("typ"),
+            name: this.get("name"),
+            visible: false
+        });
 
         this.setLayer(vectorTileLayer);
 
@@ -86,17 +90,15 @@ const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             return item.defaultStyle
         });
 
-        this.set("selectedStyleID", defaultStyle.id);
-
-        // TODO: Handle undefined
-
-        console.log("default Style is ", defaultStyle.name);
-
-        // vectorTileLayer.setVisible(this.get("isSelected"));
-        // TODO: Display without style?
-        this.setStyle(defaultStyle.id).then(() => {
-            this.setVisible(this.get("isSelected"));
-        });
+        if (_.isUndefined(defaultStyle)) {
+            console.warn("Missing style. Draw without style.");
+        }
+        else {
+            this.set("selectedStyleID", defaultStyle.id);
+            this.setStyle(defaultStyle.id).then(() => {
+                this.setVisible(this.get("isSelected"));
+            });
+        }
     },
 
     setStyle: function (styleID) {
@@ -104,10 +106,11 @@ const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             return item.id === styleID;
         });
 
+        // TODO: Check if style is defined
+
         return fetch(style.url).then(response => {
             return response.json();
         }).then(mapboxStyle => {
-            // TODO: generic layer name
             applyStyle(this.get("layer"), mapboxStyle, this.get("source"));
             this.set("selectedStyleID", styleID);
         });

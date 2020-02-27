@@ -42,7 +42,7 @@
 						"name": "Strecke / Fläche messen"
 					},
 					"styleVT": {
-						"name": "Style vectorTiles",
+						"name": "Style VectorTiles",
 						"glyphicon": "glyphicon-tint"
 					},
 					"kmlimport": {
