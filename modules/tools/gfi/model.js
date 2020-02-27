@@ -374,18 +374,27 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @returns {Object}            Objekt der aufgeschlüsslten GFI
      */
     getGFIParamsList: function (layerList) {
-        var wmsLayerList = [],
-            vectorLayerList = [];
+        const wmsLayerList = [],
+            vectorLayerList = [],
+            currentScale = Radio.request("MapView", "getOptions").scale;
 
-        // Zuordnen von Layertypen zur Abfrage
-        _.each(layerList, function (layer) {
-            var typ = layer.get("typ");
+        let maxScale = "",
+            typ = "";
+
+        // Assign layer types to the query
+        layerList.forEach(function (layer) {
+            maxScale = layer.get("maxScale");
+            typ = layer.get("typ");
+
+            if (maxScale && currentScale && parseFloat(currentScale, 10) >= parseInt(maxScale, 10)) {
+                return;
+            }
 
             if (typ === "WMS") {
                 wmsLayerList.push(layer);
             }
-            else if (typ === "GROUP") {
-                _.each(layer.get("layerSource"), function (layerSource) {
+            else if (typ === "GROUP" && layer.get("layerSource")) {
+                layer.get("layerSource").forEach(function (layerSource) {
                     if (layerSource.get("typ") === "WMS" && layerSource.get("layer").getVisible() === true) {
                         wmsLayerList.push(layerSource);
                     }
