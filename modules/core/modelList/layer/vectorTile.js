@@ -7,7 +7,8 @@ import {applyStyle} from "ol-mapbox-style";
 const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
 
     defaults: _.extend({}, Layer.prototype.defaults, {
-        selectedStyleID: undefined
+        selectedStyleID: undefined,
+        isOutOfRange: false
     }),
 
     /**
