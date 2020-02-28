@@ -84,8 +84,6 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |----|-------------|---|-------|------------|--------|
 |coordinateSystem|ja|String||Das Koordinatenreferenzsystem des Layers.|`"EPSG:3857"`|
 |format|ja|String||Das Graphikformat der Kacheln des Layers. Wird nur benötigt, wenn der Parameter requestEncoding="KVP" ist.|`"image/png"`|
-|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
 |id|ja|String||Frei wählbare Layer-ID|`"320"`|
 |layer|ja|String||Name des Layers, welcher dem aus den WMTS Capabilities entsprechen muss.|`"geolandbasemap"`|
@@ -133,8 +131,6 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
    "maxScale": "2500000",
    "tileMatrixSet": "google3857",
    "coordinateSystem": "EPSG:3857",
-   "gfiAttributes": "ignore",
-   "gfiTheme": "default",
    "layerAttribution": "nicht vorhanden",
    "legendURL": "ignore",
    "cache": true,
