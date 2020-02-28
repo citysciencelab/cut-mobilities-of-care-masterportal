@@ -2,7 +2,10 @@ import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
 
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
-    defaults: {},
+    defaults: {
+        defaultConfigPath: "config.json",
+        keysNotToTranslateName: ["hitMap"]
+    },
     /**
      * @class Preparser
      * @extends Backbone.Model
@@ -15,33 +18,63 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @param {*} options todo
      */
     initialize: function (attributes, options) {
-        this.url = this.getUrlPath(options.url);
+        const defaultConfigPath = this.get("defaultConfigPath");
+
+        this.url = this.getUrlPath(options.url, this.requestConfigFromUtil(), defaultConfigPath);
+        this.fetchData(defaultConfigPath);
+    },
+
+    /**
+     * Fetches the Data from the config.json.
+     * @param {string} defaultConfigPath The default path to config.json
+     * @returns {void}
+     */
+    fetchData: function (defaultConfigPath) {
         this.fetch({async: false,
             error: function (model, xhr, error) {
                 const statusText = xhr.statusText;
                 let message,
                     position,
-                    snippet;
+                    snippet,
+                    textStatus;
 
                 // SyntaxError for consoletesting, propably because of older version.
                 if (statusText === "Not Found" || statusText.indexOf("SyntaxError") !== -1) {
                     Radio.trigger("Alert", "alert", {
-                        text: "<strong>Die Datei '" + model.url + "' ist nicht vorhanden!</strong>",
+                        text: "<strong>Die Datei \"" + model.url + "\" ist nicht vorhanden!</strong>"
+                        + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
                         kategorie: "alert-warning"
                     });
+                    if (this.url !== defaultConfigPath) {
+                        this.url = defaultConfigPath;
+                        this.fetchData(defaultConfigPath);
+                    }
                 }
                 else {
                     message = error.errorThrown.message;
                     position = parseInt(message.substring(message.lastIndexOf(" ")), 10);
                     snippet = xhr.responseText.substring(position - 30, position + 30);
+                    textStatus = error.textStatus;
                     Radio.trigger("Alert", "alert", {
                         text: "<strong>Die Datei '" + model.url + "' konnte leider nicht geladen werden!</strong> <br> " +
-                        "<small>Details: " + error.textStatus + " - " + error.errorThrown.message + ".</small><br>" +
+                        "<small>Details: " + textStatus + " - " + error.errorThrown.message + ".</small><br>" +
                         "<small>Auszug:" + snippet + "</small>",
                         kategorie: "alert-warning"
                     });
+                    if (textStatus === "parsererror") {
+                        // reload page once
+                        if (window.localStorage) {
+                            if (!localStorage.getItem("firstLoad")) {
+                                localStorage.firstLoad = true;
+                                window.location.reload();
+                            }
+                            else {
+                                localStorage.removeItem("firstLoad");
+                            }
+                        }
+                    }
                 }
-            }
+            }.bind(this)
         });
     },
 
@@ -56,45 +89,27 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     },
 
     /**
-    * build url to config file. decide between absolute or relative path
-    * @param {string} url - base url for config
+    * Build url to config file. Decide between absolute or relative path.
+    * @param {string} [configJsonPathFromConfig=""] - url for the config.json configured in config.js
+    * @param {string} [configJsonPathFromUrl=""] - The config parameter from the url, which parsed in util.
+    * @param {string} [defaultConfigPath="config.json"] The default path to config.json
     * @return {string} url to config file
     */
-    getUrlPath: function (url) {
-        var path = url !== undefined ? url : "config.json",
-            configPath;
+    getUrlPath: function (configJsonPathFromConfig = "", configJsonPathFromUrl = "", defaultConfigPath = "config.json") {
+        const defaultFormat = ".json";
+        let targetPath = defaultConfigPath;
 
-        if (path.slice(-6) === "?noext") {
-            path = url;
+        if (configJsonPathFromConfig.slice(-5) !== defaultFormat && configJsonPathFromUrl.slice(-5) === defaultFormat && configJsonPathFromUrl.slice(0, 4) !== "http") {
+            targetPath = configJsonPathFromConfig + configJsonPathFromUrl;
         }
-        else if (path.slice(-5) !== ".json") {
-            configPath = this.requestConfigFromUtil();
-
-            if (configPath && configPath.length > 0) {
-
-                if (configPath.match(/^https?:\/\//)) {
-                    // the provided path is an absolute path
-                    path = configPath;
-
-                }
-                else {
-                    // the provided path is a relative path
-                    // remove trailing "/" from path and leading "/" from urlparam "config". unions string using "/"
-                    if (path.slice(-1) === "/") {
-                        path = path.slice(0, -1);
-                    }
-                    if (configPath.slice(0, 1) === "/") {
-                        configPath = configPath.slice(1);
-                    }
-                    path = path + "/" + configPath;
-                }
-            }
-            else {
-                path = "config.json";
-            }
+        else if (configJsonPathFromUrl.slice(-5) === defaultFormat) {
+            targetPath = configJsonPathFromUrl;
+        }
+        else if (configJsonPathFromConfig.slice(-5) === defaultFormat) {
+            targetPath = configJsonPathFromConfig;
         }
 
-        return path;
+        return targetPath;
     },
 
     /**
@@ -103,7 +118,11 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     * @returns {*} todo
     */
     parse: function (response) {
-        var attributes = {
+        let attributes;
+
+        this.addTranslationToRawConfig(response, "translate#");
+
+        attributes = {
             portalConfig: response.Portalconfig,
             baselayer: response.Themenconfig.Hintergrundkarten,
             overlayer: response.Themenconfig.Fachdaten,
@@ -131,6 +150,92 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
          * @deprecated in 3.0.0
          */
         this.changeLgvContainer();
+    },
+
+    /**
+     * recursive function (!) - adds a translation function named i18nextTranslate := function(setter) to each element in subconf found to be translated
+     * @param {Object} subconf the raw response of the config.json - this is the raw data from the file before any changes are made; for recursion: this is the subobject of any object in the config.json
+     * @param {String} prefix the prefix of values to use to recognize them for translation
+     * @returns {Void}  -
+     * @pre the subconf (raw data) is as it is
+     * @post all objects of translatable values of subconf (the raw data) have an extended key i18nextTranlate with a function(setter, key) added
+     */
+    addTranslationToRawConfig: function (subconf, prefix) {
+        Object.keys(subconf).forEach(function (subkey) {
+            const subobj = subconf[subkey];
+            let translationKey;
+
+            if (typeof subobj === "string") {
+                if (subobj.indexOf(prefix) !== 0) {
+                    if (subkey === "name") {
+                        // use name defined in config.json and do not use defaultName (defined in model with key "nameTranslationKey")
+                        subconf.useConfigName = true;
+                    }
+                    // no translation wanted
+                    return;
+                }
+
+                translationKey = subobj.substr(prefix.length);
+
+                // each entry should get a translation function: in the translationfile might be stuff that is not keyed in the config.json (like pure ids from the Dienstemanager)
+                // at this point pure arrays in the config.json can't be translated with a translation function
+                if (!Array.isArray(subconf) && !subconf.hasOwnProperty("i18nextTranslate")) {
+                    /**
+                     * callback function i18nextTranslate
+                     * @param {Function} setter a function(translation) to set the value of key
+                     * @param {String} key the key (of subconf) which value should be translated
+                     * @returns {Void}  -
+                     * @pre the value of key is as it is
+                     * @post the value of key is run and replaced through i18next.t if key exists for i18next to translate
+                     */
+                    subconf.i18nextTranslate = function (setter) {
+                        if (typeof setter === "function" && i18next.exists(translationKey)) {
+                            setter(subkey, i18next.t(translationKey));
+                        }
+                        // handle language-files from addons
+                        else if (typeof setter === "function" && translationKey.indexOf("additional") === 0) {
+                            setter(subkey, i18next.t(translationKey));
+                        }
+                    };
+                }
+                else if (subconf.hasOwnProperty("i18nextTranslate") && typeof subconf.i18nextTranslate === "function") {
+                    // a function already exists - this means more then one value of this object in the config.json must be translated
+                    // put former i18nextTranslate function into scope
+                    const cascadeFunction = subconf.i18nextTranslate;
+
+                    /**
+                     * callback function i18nextTranslate with cascading former function (cascadeFunction)
+                     * @param {Function} setter a function(translation) to set the value of key
+                     * @param {String} key the key (of subconf) which value should be translated
+                     * @returns {Void}  -
+                     * @pre the values of all keys are as they are
+                     * @post the translation functions for all keys where run in a cascade
+                     */
+                    subconf.i18nextTranslate = function (setter) {
+                        // translate former values
+                        cascadeFunction(setter);
+
+                        // translate actual value
+                        if (typeof setter === "function" && i18next.exists(translationKey)) {
+                            setter(subkey, i18next.t(translationKey));
+                        }
+                        // handle language-files from addons
+                        else if (typeof setter === "function" && translationKey.indexOf("additional") === 0) {
+                            setter(subkey, i18next.t(translationKey));
+                        }
+                    };
+                }
+
+                // run the translation once for startup to ensure the absence of any translation key found in the config.json
+                // after this - use i18nextTranslate on any object to translate the value
+                if (i18next.exists(translationKey)) {
+                    subconf[subkey] = i18next.t(translationKey);
+                }
+            }
+            else if (typeof subobj === "object" && this.get("keysNotToTranslateName").indexOf(subkey) < 0) {
+                this.addTranslationToRawConfig(subobj, prefix);
+            }
+        }, this);
     },
 
     /**

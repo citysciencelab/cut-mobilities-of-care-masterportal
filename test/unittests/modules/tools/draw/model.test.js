@@ -10,9 +10,14 @@ import Map from "ol/Map";
 import View from "ol/View";
 
 describe("drawModel", function () {
-    var model;
+    let model;
 
     before(function () {
+        i18next.init({
+            lng: "cimode",
+            debug: false
+
+        });
         model = new Model();
         model.collection = new ModelList();
     });
@@ -22,12 +27,12 @@ describe("drawModel", function () {
             expect(model.createLayer(undefined)).to.exist;
         });
         it("the result should be an instance of vectorLayer for undefined input", function () {
-            var result = model.createLayer(undefined);
+            const result = model.createLayer(undefined);
 
             expect(result instanceof VectorLayer).to.be.true;
         });
         it("the result should be an instance of vectorLayer for undefined input", function () {
-            var layer = new VectorLayer();
+            const layer = new VectorLayer();
 
             expect(model.createLayer(layer)).is.equal(layer);
         });
@@ -35,7 +40,7 @@ describe("drawModel", function () {
 
     describe("createDrawInteraction", function () {
         it("the result should be an instance of Draw for empty input", function () {
-            var drawType = "",
+            const drawType = "",
                 layer = new VectorLayer(),
                 result = model.createDrawInteraction(drawType, layer);
 
@@ -44,7 +49,7 @@ describe("drawModel", function () {
         it("the result color should be the same as the input color for a polyline", function () {
             var drawType = {
                     geometry: "Polyline",
-                    text: "Linie zeichnen"
+                    text: i18next.t("common:modules.tools.draw.drawLine")
                 },
                 layer = new VectorLayer(),
                 color = [55, 126, 184, 1],
@@ -55,7 +60,7 @@ describe("drawModel", function () {
         it("the result color should be the same as the input color for a polygon", function () {
             var drawType = {
                     geometry: "Polygon",
-                    text: "Fläche zeichnen"
+                    text: i18next.t("common:modules.tools.draw.drawArea")
                 },
                 layer = new VectorLayer(),
                 color = [55, 126, 184, 1],
@@ -66,13 +71,13 @@ describe("drawModel", function () {
         it("the result color should be the same as the input color for a point of type simple_point", function () {
             var drawType = {
                     geometry: "Point",
-                    text: "Punkt zeichnen"
+                    text: i18next.t("common:modules.tools.draw.drawPoint")
                 },
                 layer = new VectorLayer(),
                 color = [55, 126, 184, 1];
 
             model.setSymbol({
-                caption: "Punkt",
+                caption: i18next.t("common:modules.tools.draw.iconList.iconPoint"),
                 type: "simple_point",
                 value: "simple_point"
             });
@@ -84,13 +89,13 @@ describe("drawModel", function () {
         it("the result color should be the same as the input color for a point of type glyphicon", function () {
             var drawType = {
                     geometry: "Point",
-                    text: "Punkt zeichnen"
+                    text: i18next.t("common:modules.tools.draw.drawPoint")
                 },
                 layer = new VectorLayer(),
                 color = [55, 126, 184, 1];
 
             model.setSymbol({
-                caption: "Blatt",
+                caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
                 type: "glyphicon",
                 value: "\ue103"
             });
@@ -102,14 +107,14 @@ describe("drawModel", function () {
         it("the result color should be the same as input color excluding the opacity which should be set as a separate parameter for a point of type image", function () {
             var drawType = {
                     geometry: "Point",
-                    text: "Punkt zeichnen"
+                    text: i18next.t("common:modules.tools.draw.drawPoint")
                 },
                 layer = new VectorLayer(),
                 color = [55, 126, 184, 1];
 
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             model.setSymbol({
-                caption: "Wolke",
+                caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
                 type: "image",
                 value: "../../../../../img/icons/cloud.png"
             });
@@ -123,9 +128,9 @@ describe("drawModel", function () {
 
     describe("createDrawInteractionAndAddToMap", function () {
         it("the result should be two instances of draw", function () {
-            var drawType = {
+            const drawType = {
                     geometry: "Circle",
-                    text: "Doppelkreis zeichnen"
+                    text: i18next.t("common:modules.tools.draw.drawDoubleCircle")
                 },
                 layer = new VectorLayer(),
                 isActive = true,
@@ -137,8 +142,8 @@ describe("drawModel", function () {
             expect(model.get("drawInteraction2") instanceof Draw).to.be.true;
         });
         it("there should only be one drawInteraction", function () {
-            var listOfDrawTypes = [{geometry: "Circle", text: "Kreis zeichnen"}, {geometry: "Point", text: "Punkt zeichnen"},
-                    {geometry: "Text", text: "Text schreiben"}, {geometry: "LineString", text: "Linie zeichnen"}],
+            const listOfDrawTypes = [{geometry: "Circle", text: i18next.t("common:modules.tools.draw.Circle")}, {geometry: "Point", text: i18next.t("common:modules.tools.draw.drawPoint")},
+                    {geometry: "Text", text: i18next.t("common:modules.tools.draw.writeText")}, {geometry: "LineString", text: i18next.t("common:modules.tools.draw.drawLine")}],
                 layer = new VectorLayer(),
                 isActive = true,
                 maxFeatures = "";
@@ -315,7 +320,7 @@ describe("drawModel", function () {
 
     describe("deactivateDrawInteraction", function () {
         before(function () {
-            var drawType = "",
+            const drawType = "",
                 layer = new VectorLayer(),
                 drawInteraction1 = model.createDrawInteraction(drawType, layer),
                 drawInteraction2 = model.createDrawInteraction(drawType, layer);
@@ -338,7 +343,7 @@ describe("drawModel", function () {
 
     describe("checkAndRemovePreviousDrawInteraction", function () {
         before(function () {
-            var drawType = "",
+            const drawType = "",
                 layer = new VectorLayer(),
                 drawInteraction1 = model.createDrawInteraction(drawType, layer),
                 drawInteraction2 = model.createDrawInteraction(drawType, layer);
@@ -380,12 +385,12 @@ describe("drawModel", function () {
             expect(model.get("methodCircle")).to.be.undefined;
         });
         it("should return 'interactiv'", function () {
-            model.setDrawType("Circle", "Kreis zeichnen");
+            model.setDrawType("Circle", i18next.t("common:modules.tools.draw.drawCircle"));
 
             expect(model.get("methodCircle")).to.deep.equal("interactiv");
         });
         it("should return 'defined'", function () {
-            model.setDrawType("Circle", "Doppelkreis zeichnen");
+            model.setDrawType("Circle", i18next.t("common:modules.tools.draw.drawDoubleCircle"));
 
             expect(model.get("methodCircle")).to.deep.equal("defined");
         });
@@ -393,7 +398,7 @@ describe("drawModel", function () {
 
     describe("getStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
-            var result;
+            let result = null;
 
             model.setDrawType(undefined, undefined);
             model.setColor([]);
@@ -401,7 +406,7 @@ describe("drawModel", function () {
             expect(result instanceof Style).to.be.true;
         });
         it("the result should be an instance of Style for undefined input", function () {
-            var result = model.getStyle(undefined, undefined);
+            const result = model.getStyle(undefined, undefined);
 
             expect(result instanceof Style).to.be.true;
         });
@@ -409,7 +414,7 @@ describe("drawModel", function () {
             var color = [55, 126, 184, 1],
                 result;
 
-            model.setDrawType("Polyline", "Linie zeichnen");
+            model.setDrawType("Polyline", i18next.t("common:modules.tools.draw.drawLine"));
             model.setColor(color);
             result = model.getStyle();
 
@@ -419,7 +424,7 @@ describe("drawModel", function () {
             var color = [55, 126, 184, 1],
                 result;
 
-            model.setDrawType("Polygon", "Linie zeichnen");
+            model.setDrawType("Polygon", i18next.t("common:modules.tools.draw.drawArea"));
             model.setColor(color);
             result = model.getStyle();
 
@@ -429,10 +434,10 @@ describe("drawModel", function () {
             var color = [55, 126, 184, 1],
                 result;
 
-            model.setDrawType("Point", "Punkt zeichnen");
+            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setColor(color);
             model.setSymbol({
-                caption: "Punkt",
+                caption: i18next.t("common:modules.tools.draw.iconList.iconPoint"),
                 type: "simple_point",
                 value: "simple_point"
             });
@@ -444,10 +449,10 @@ describe("drawModel", function () {
             var color = [55, 126, 184, 1],
                 result;
 
-            model.setDrawType("Point", "Punkt zeichnen");
+            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setColor(color);
             model.setSymbol({
-                caption: "Blatt",
+                caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
                 type: "glyphicon",
                 value: "\ue103"
             });
@@ -459,11 +464,11 @@ describe("drawModel", function () {
             var color = [55, 126, 184, 1],
                 result;
 
-            model.setDrawType("Point", "Punkt zeichnen");
+            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setColor(color);
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             model.setSymbol({
-                caption: "Wolke",
+                caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
                 type: "image",
                 value: "../../../../../img/icons/cloud.png"
             });
@@ -476,7 +481,7 @@ describe("drawModel", function () {
             var color = [255, 0, 0, 1],
                 result;
 
-            model.setDrawType("text", "Text schreiben");
+            model.setDrawType("text", i18next.t("common:modules.tools.draw.writeText"));
             model.setColor(color);
             result = model.getStyle();
 
@@ -486,7 +491,7 @@ describe("drawModel", function () {
 
     describe("getTextStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
-            var color = [],
+            const color = [],
                 text = "",
                 fontSize = 0,
                 font = "";
@@ -494,7 +499,7 @@ describe("drawModel", function () {
             expect(model.getTextStyle(color, text, fontSize, font) instanceof Style).to.be.true;
         });
         it("the result should be an instance of Style and Text for empty input", function () {
-            var color = [],
+            const color = [],
                 text = "",
                 fontSize = 0,
                 font = "";
@@ -502,7 +507,7 @@ describe("drawModel", function () {
             expect(model.getTextStyle(color, text, fontSize, font).getText() instanceof Text).to.be.true;
         });
         it("should be the result fontSize ist the same as input fontSize", function () {
-            var color = [255, 255, 0, 1],
+            const color = [255, 255, 0, 1],
                 text = "",
                 fontSize = 10,
                 font = "Arial",
@@ -520,7 +525,7 @@ describe("drawModel", function () {
             var color = [0, 0, 0, 1],
                 pointSize = 16,
                 symbol = {
-                    caption: "Blatt",
+                    caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
                     type: "glyphicon",
                     value: "\ue103"
                 },
@@ -533,7 +538,7 @@ describe("drawModel", function () {
             var color = [0, 0, 0, 1],
                 pointSize = 16,
                 symbol = {
-                    caption: "Wolke",
+                    caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
                     type: "image",
                     value: "../../../../../img/icons/cloud.png"
                 },
@@ -546,7 +551,7 @@ describe("drawModel", function () {
             var color = [0, 0, 0, 1],
                 pointSize = 16,
                 symbol = {
-                    caption: "Blatt",
+                    caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
                     type: "glyphicon",
                     value: "\ue103"
                 },
@@ -567,7 +572,7 @@ describe("drawModel", function () {
             var color = [0, 0, 0, 1],
                 pointSize = 16,
                 symbol = {
-                    caption: "Wolke",
+                    caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
                     type: "image",
                     value: "../../../../../img/icons/cloud.png"
                 },
@@ -599,7 +604,7 @@ describe("drawModel", function () {
 
     describe("getDrawStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
-            var color = [],
+            const color = [],
                 drawGeometryType = "",
                 strokeWidth = 0,
                 radius = 0;
@@ -643,29 +648,32 @@ describe("drawModel", function () {
                 radius = 20,
                 result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
 
+
             expect(result.getStroke().getWidth()).to.equal(strokeWidth);
         });
     });
-
     describe("resetModule", function () {
         it("should radius is equal default radius", function () {
-            model.setDrawType("Point", "Punkt zeichnen");
+            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setRadius(10000);
             model.resetModule();
             expect(model.get("radius")).to.deep.equal(model.defaults.radius);
         });
         it("should opacity is equal default opacity", function () {
-            model.setDrawType("Point", "Punkt zeichnen");
+            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setOpacity(0.5);
             model.resetModule();
-
             expect(model.get("opacity")).is.equal(model.defaults.opacity);
         });
         it("should color is equal default color", function () {
-            model.setDrawType("Point", "Punkt zeichnen");
+            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setColor([111, 112, 113, 0.4]);
             model.resetModule();
-
+            expect(model.get("color")).is.equal(model.defaults.color);
+        });
+        it("should drawType is equal default drawType", function () {
+            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+            model.resetModule();
             expect(model.get("color")).is.equal(model.defaults.color);
         });
         it("should drawType is equal default drawType", function () {
@@ -710,7 +718,7 @@ describe("drawModel", function () {
 
     describe("inititalizeWithoutGUI", function () {
         before(function () {
-            var params = {"drawType": "Polygon", "color": null, "opacity": 0.5, "maxFeatures": 2, "initialJSON": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}};
+            const params = {"drawType": "Polygon", "color": null, "opacity": 0.5, "maxFeatures": 2, "initialJSON": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}};
 
             model.inititalizeWithoutGUI(params);
         });
@@ -729,7 +737,7 @@ describe("drawModel", function () {
             expect(model.get("opacity")).to.equal(0.5);
         });
         it("should add Feature", function () {
-            var feature = model.get("layer").getSource().getFeatures();
+            const feature = model.get("layer").getSource().getFeatures();
 
             expect(feature).to.have.lengthOf(1);
         });
@@ -750,7 +758,7 @@ describe("drawModel", function () {
 
     describe("cancelDrawWithoutGUI", function () {
         before(function () {
-            var drawType = "",
+            const drawType = "",
                 layer = new VectorLayer();
 
             model.createDrawInteraction(drawType, layer);
@@ -781,8 +789,8 @@ describe("drawModel", function () {
     });
 
     describe("downloadFeaturesWithoutGUI", function () {
-        var downloadedFeatures,
-            featureCollectionFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}, "properties": null}]},
+        let downloadedFeatures = null;
+        const featureCollectionFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}, "properties": null}]},
             multiPolygonfeatColFromJson = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "MultiPolygon", "coordinates": [[[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]]}, "properties": null}]};
 
         it("should return FeatureCollection", function () {

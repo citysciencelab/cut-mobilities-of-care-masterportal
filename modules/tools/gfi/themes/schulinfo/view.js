@@ -33,7 +33,7 @@ const SchulInfoThemeView = ThemeView.extend({
     takeRoute: function () {
         Radio.trigger("ModelList", "setModelAttributesById", "schulwegrouting", {isActive: true});
         Radio.trigger("GFI", "setIsVisible", false);
-        Radio.trigger("SchulwegRouting", "selectSchool", this.model.get("feature").get("schul_id"));
+        Radio.trigger("Schulwegrouting", "selectSchool", this.model.get("feature").get("schul_id"));
     },
 
     /**

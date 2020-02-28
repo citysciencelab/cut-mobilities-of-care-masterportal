@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 const Config = {
+    addons: ["einwohnerabfrage"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
@@ -33,7 +34,6 @@ const Config = {
         // WGS84
         ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
     ],
-    earthRadius: 6378137,
     footer: {
         urls: [{
             "bezeichnung": "Kartographie und Gestaltung: ",
@@ -72,7 +72,17 @@ const Config = {
         maximumScreenSpaceError: 2,
         fxaa: true
     },
-    defaultToolId: "gfi"
+    defaultToolId: "gfi",
+    portalLanguage: {
+        enabled: true,
+        debug: false,
+        languages: {
+            de: "deutsch",
+            en: "englisch"
+        },
+        fallbackLanguage: "de",
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+    }
 };
 
 /* eslint-enable no-unused-vars */

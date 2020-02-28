@@ -1,4 +1,6 @@
-import Alert from "../modules/alerting/model";
+import Vue from "vue";
+import App from "../src/App.vue";
+import store from "../src/store";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -41,13 +43,11 @@ import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
-import EinwohnerabfrageView from "../modules/tools/einwohnerabfrage_hh/selectView";
 import ImportView from "../modules/tools/kmlImport/view";
 import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
-import SchulwegRoutingView from "../modules/tools/schulwegRouting_hh/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
@@ -71,6 +71,7 @@ import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
 import TitleView from "../modules/title/view";
+import LanguageView from "../modules/language/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
@@ -79,7 +80,7 @@ import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 
-var sbconfig, controls, controlsView;
+let sbconfig, controls, controlsView;
 
 /**
  * load the configuration of master portal
@@ -87,15 +88,14 @@ var sbconfig, controls, controlsView;
  */
 function loadApp () {
     /* eslint-disable no-undef */
-    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS;
-    /* eslint-disable no-undef */
-
-    // Prepare config for Utils
-    var utilConfig = {},
-        style,
+    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
+        utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        alertingConfig = Config.alerting ? Config.alerting : {};
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
+        style = Radio.request("Util", "getUiStyle");
+        /* eslint-disable no-undef */
+    let app = {};
 
     if (_.has(Config, "uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -117,8 +117,16 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
+    Vue.config.productionTip = false;
+    app = new Vue({
+        render: h => h(App),
+        store
+    });
+
+    app.$store.commit("addConfigToStore", Config);
+    app.$mount();
+
     // Core laden
-    new Alert(alertingConfig);
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
@@ -183,10 +191,6 @@ function loadApp () {
                 new CompareFeaturesView({model: tool});
                 break;
             }
-            case "einwohnerabfrage": {
-                new EinwohnerabfrageView({model: tool});
-                break;
-            }
             case "lines": {
                 new LineView({model: tool});
                 break;
@@ -197,10 +201,6 @@ function loadApp () {
             }
             case "filter": {
                 new FilterView({model: tool});
-                break;
-            }
-            case "schulwegrouting": {
-                new SchulwegRoutingView({model: tool});
                 break;
             }
             case "coord": {
@@ -309,8 +309,6 @@ function loadApp () {
             }
         }
     });
-
-    style = Radio.request("Util", "getUiStyle");
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
@@ -444,7 +442,7 @@ function loadApp () {
         });
     }
 
-    new MapMarkerView();
+    new MapMarkerView(mapMarkerConfig);
 
     sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
@@ -455,20 +453,60 @@ function loadApp () {
         }
     }
 
+    if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {
+        new LanguageView();
+    }
+
     new HighlightFeature();
 
     if (Config.addons !== undefined) {
+        Radio.channel("Addons");
+        let initCounter = 0;
+
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
+                initCounter++;
+            }
+        });
+        initCounter = initCounter * Object.keys(i18next.options.getLanguages()).length;
+
+        Config.addons.forEach((addonKey) => {
+            if (allAddons[addonKey] !== undefined) {
+
+                Object.keys(i18next.options.getLanguages()).forEach((lng) => {
+                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
+                        .then(({default: additionalLocales}) => {
+                            i18next.addResourceBundle(lng, "additional", additionalLocales);
+                            initCounter--;
+                            if (initCounter === 0) {
+                                Radio.trigger("Addons", "initialized");
+                            }
+                        }).catch(error => {
+                            initCounter--;
+                            console.warn(error);
+                            console.warn("Die Übersetzungsdateien der Anwendung " + addonKey + " konnten nicht vollständig geladen werden. Teile der Anwendung sind nicht übersetzt.");
+                        });
+                });
+
+
                 // .js need to be removed so webpack only searches for .js files
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
-                import(/* webpackChunkName: "[request]" */ `../addons/${entryPoint}.js`).then(module => {
+                import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".js").then(module => {
                     /* eslint-disable new-cap */
                     const addon = new module.default();
 
                     // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
                     if (addon.model) {
+                        // set this special attribute, because it is the only one set before this replacement
+                        const model = Radio.request("ModelList", "getModelByAttributes", {"id": addon.model.id});
+
+                        if (!model) {
+                            console.warn("wrong configuration: addon " + addonKey + " is not in tools menu or cannot be called from somewhere in the view! Defined this in config.json.");
+                        }
+                        else {
+                            addon.model.set("i18nextTranslate", model.get("i18nextTranslate"));
+                        }
                         Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
                     }
                 }).catch(error => {

@@ -108,6 +108,102 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     featuresLoaded: function (features) {
         Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
     },
+
+    /**
+     * Prepares the given features and sets or/and overwrites the coordinates based on the configuration of "altitude" and "altitudeOffset".
+     * @param {ol/Feature[]} features The olFeatures.
+     * @returns {void}
+     */
+    prepareFeaturesFor3D: function (features) {
+        const altitude = this.get("altitude"),
+            altitudeOffset = this.get("altitudeOffset");
+
+        features.forEach(feature => {
+            let geometry = feature.getGeometry();
+
+            if (altitude || altitudeOffset) {
+                geometry = this.setAltitudeOnGeometry(geometry, altitude, altitudeOffset);
+            }
+            feature.setGeometry(geometry);
+        });
+    },
+
+    /**
+     * Sets the altitude and AltitudeOffset as z coordinate.
+     * @param {ol/geom} geometry Geometry of feature.
+     * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+     * @param {Number} altitudeOffset Altitude offset.
+     * @returns {ol/geom} - The geometry with newly set coordinates.
+     */
+    setAltitudeOnGeometry: function (geometry, altitude, altitudeOffset) {
+        const type = geometry.getType(),
+            coords = geometry.getCoordinates();
+
+        let overwrittenCoords = [];
+
+        if (type === "Point") {
+            overwrittenCoords = this.setAltitudeOnPoint(coords, altitude, altitudeOffset);
+        }
+        else if (type === "MultiPoint") {
+            overwrittenCoords = this.setAltitudeOnMultiPoint(coords, altitude, altitudeOffset);
+        }
+        else {
+            console.error("Type: " + type + " is not supported yet for function \"setAltitudeOnGeometry\"!");
+        }
+
+        geometry.setCoordinates(overwrittenCoords);
+
+        return geometry;
+    },
+
+    /**
+     * Sets the altitude on multipoint coordinates.
+     * @param {Number[]} coords Coordinates.
+     * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+     * @param {Number} altitudeOffset Altitude offset.
+     * @returns {Number[]} - newly set cooordinates.
+     */
+    setAltitudeOnMultiPoint: function (coords, altitude, altitudeOffset) {
+        const overwrittenCoords = [];
+
+        coords.forEach(coord => {
+            overwrittenCoords.push(this.setAltitudeOnPoint(coord, altitude, altitudeOffset));
+        });
+
+        return overwrittenCoords;
+    },
+
+    /**
+     * Sets the altitude on point coordinates.
+     * @param {Number[]} coords Coordinates.
+     * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+     * @param {Number} altitudeOffset Altitude offset.
+     * @returns {Number[]} - newly set cooordinates.
+     */
+    setAltitudeOnPoint: function (coords, altitude, altitudeOffset) {
+        const overwrittenCoords = coords,
+            altitudeAsFloat = parseFloat(altitude),
+            altitudeOffsetAsFloat = parseFloat(altitudeOffset);
+
+        if (!isNaN(altitudeAsFloat)) {
+            if (overwrittenCoords.length === 2) {
+                overwrittenCoords.push(altitudeAsFloat);
+            }
+            else if (overwrittenCoords.length === 3) {
+                overwrittenCoords[2] = altitudeAsFloat;
+            }
+        }
+        if (!isNaN(altitudeOffsetAsFloat)) {
+            if (overwrittenCoords.length === 2) {
+                overwrittenCoords.push(altitudeOffsetAsFloat);
+            }
+            else if (overwrittenCoords.length === 3) {
+                overwrittenCoords[2] = overwrittenCoords[2] + altitudeOffsetAsFloat;
+            }
+        }
+        return overwrittenCoords;
+    },
+
     /**
      * Triggers event if vector feature is loaded
      * @param {ol.Feature} feature Updated vector feature
@@ -391,7 +487,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "metaID": metaID,
             "layername": name,
             "url": this.get("url"),
-            "typ": this.get("typ")
+            "typ": this.get("typ"),
+            "urlIsVisible": this.get("urlIsVisible")
         });
 
         this.setLayerInfoChecked(true);

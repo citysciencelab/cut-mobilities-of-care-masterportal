@@ -1,27 +1,29 @@
 ##Unit Tests##
 
 **Beispiel:**
-*lgv/test/Unittests/ExampleTest/*
+*masterportal/test/unittests/ExampleTest/*
 
 **Aufruf**:
 
-[http://localhost:9009/test/unittests/ExampleTest/ExampleTestRunner.html](http://localhost:9009/test/unittests/ExampleTest/ExampleTestRunner.html)
+npm run test
 *******************************************************************************
 
 ##Wie man Tests schreibt:###
 
 ###Ort###
-Im Projektverzeichnis */test/unittest*.
+Im Projektverzeichnis */test/unittests*.
 In diesem Ordner ist ein Ordner names *modules*.
-Hier wird die Struktur unter *lgv/modules* repliziert.
+Hier wird die Struktur unter *masterportal/modules* repliziert.
 D.h. Zu diesem *modules* Ordner sollte die Testdatei den gleichen relativen Pfad haben, wie die zu testende Datei zum *modules*-Ordner im Projektverzeichnis.
 
 Beispiel:
-soll die Datei *modules/tools/download/model.js* getestet werden, dann gehört die Testdatei in *test/modules/tools/download/testModel.js*
+soll die Datei *masterportal/modules/tools/download/model.js* getestet werden, dann gehört die Testdatei in *masterportal/test/modules/tools/download/model.test.js*
 
-Alle Tests zu einer Komponente z.b. einem Model sollen in eine Testdatei mit gleichem Namen und dem präfix *test* davor.
+Alle Tests zu einer Komponente z.b. einem Model sollen in eine Testdatei mit gleichem Namen und der Endung *test.js* abgelegt werden.
 
 Eine Testdatei beschreibt dabei immer nur genau eine zu testende Datei.
+
+Die Unittest werden beim pushen durch eine pre-push Hook geprüft.
 
 
 ###Struktur###
@@ -62,12 +64,12 @@ Im Inneren **describe** wird die Funktion, die gerade getestet werden soll besch
 ```
 
 
-**It** kapselt die einzelnen Testcases. Als erster Parameter wird ein Text übergeben der Beschreibt welche Eigenshcaft die zu testende Methode haben sollte.
+**It** kapselt die einzelnen Testcases. Als erster Parameter wird ein Text übergeben der Beschreibt welche Eigenschaft die zu testende Methode haben sollte.
 Als zweiten Parameter wird eine Callback übergeben, in der mit Hilfe eines *expect* (siehe unten) geprüft wird, ob die Eingenschaft tatsächlich besteht.
 
 **Syntax:**
 ```
-    it(testcaseDesciption, callback)
+    it(testcaseDescription, callback)
 ```
 
 **before** ist eine Funktion, die benutzt werden kann, um Vorbereitungen für eine Gruppe von Tests durchzuführen. Sie wird innerhalb einen **describe** genau *einmal* ausgeführt.
@@ -89,7 +91,7 @@ Innerhalb eines **it** sollte ein **expect** stehen.
  expect(model.testMe()).to.deep.equal({name: "Jon Snow"});
 ```
 
-[Mehr Infos](http://chaijs.com/api/bdd/)
+[Mehr Infos](https://chaijs.com/api/bdd/)
 
 
 ###Best practices###

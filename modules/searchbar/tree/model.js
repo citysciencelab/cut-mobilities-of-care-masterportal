@@ -21,7 +21,7 @@ const TreeModel = Backbone.Model.extend({
             "isActivated": this.controlListeningToSearchbar
         });
 
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
             // Führe die initiale Suche durch, da ein Suchparameter übergeben wurde.
             this.search(Radio.request("ParametricURL", "getInitString"));
         }
@@ -107,14 +107,20 @@ const TreeModel = Backbone.Model.extend({
         this.set("layers", []);
         // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
         // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
-        layerModels = _.uniq(layerModels, function (model) {
-            return model.name + model.id;
+        const layerModelsUnique = [];
+
+        layerModels.forEach(function (model) {
+            const uniqueId = model.name + model.id;
+
+            if (layerModelsUnique.indexOf(uniqueId) === -1) {
+                layerModelsUnique.push(uniqueId);
+            }
         });
-        _.each(layerModels, function (model) {
+        layerModelsUnique.forEach(function (model) {
             this.get("layers").push({
                 name: model.name,
-                metaName: _.has(model, "datasets") && _.has(model.datasets[0], "md_name") ? model.name + " (" + model.datasets[0].md_name + ")" : model.name,
-                type: "Thema",
+                metaName: model.hasOwnProperty("datasets") && model.datasets[0].hasOwnProperty("md_name") ? model.name + " (" + model.datasets[0].md_name + ")" : model.name,
+                type: i18next.t("common:modules.searchbar.type.topic"),
                 glyphicon: "glyphicon-list",
                 id: model.id
             });

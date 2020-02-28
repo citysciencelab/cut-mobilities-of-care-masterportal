@@ -26,6 +26,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @property {String[]} gradient=["#00f","#0ff","#0f0","#ff0","#f00"] Gradient of colors for heatmap.
      * @listens Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @listens Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @listens Layer#RadioTriggerVectorLayerResetFeatures
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
@@ -39,8 +40,24 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         }
         this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": this.loadInitialData,
-            "featureUpdated": this.updateFeature
+            "featureUpdated": this.updateFeature,
+            "resetFeatures": this.resetFeatures
         }, this);
+    },
+
+    resetFeatures: function (layerId, features) {
+        const featureClones = [];
+
+        if (this.checkDataLayerId(layerId)) {
+            features.forEach(feature => {
+                const clone = feature.clone();
+
+                clone.setStyle(null);
+                featureClones.push(clone);
+            });
+            this.get("layerSource").clear();
+            this.initializeHeatmap(featureClones);
+        }
     },
 
     /**
@@ -143,7 +160,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             var cloneFeature = feature.clone(),
                 count;
 
-            if (!_.isUndefined(attribute || value)) {
+            if (attribute !== "" && value !== "") {
                 count = this.countStates(feature, attribute, value);
 
                 cloneFeature.set("weightForHeatmap", count);
@@ -153,10 +170,14 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             cloneFeatures.push(cloneFeature);
         }, this);
 
+        if (layerSource === undefined) {
+            this.prepareLayerObject();
+            layerSource = this.get("layerSource");
+        }
         layerSource.addFeatures(cloneFeatures);
 
         // normalize weighting
-        if (!_.isUndefined(attribute || value)) {
+        if (attribute !== "" && value !== "") {
             this.normalizeWeight(layerSource.getFeatures());
         }
     },
@@ -192,7 +213,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         });
 
         // insert weighting
-        if (!_.isUndefined(attribute || value)) {
+        if (attribute !== "" && value !== "") {
             count = this.countStates(feature, attribute, value);
 
             cloneFeature.set("weightForHeatmap", count);
@@ -208,7 +229,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         }
 
         // normalize weighting
-        if (!_.isUndefined(attribute || value)) {
+        if (attribute !== "" && value !== "") {
             this.normalizeWeight(layerSource.getFeatures());
         }
     },

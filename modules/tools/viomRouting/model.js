@@ -5,7 +5,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 import {Stroke, Style} from "ol/style.js";
 
-const RoutingModel = Tool.extend({
+const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         bkgSuggestURL: "",
         bkgGeosearchURL: "",
@@ -26,31 +26,105 @@ const RoutingModel = Tool.extend({
         mhpOverlay: "",
         isGeolocationPossible: Radio.request("geolocation", "isGeoLocationPossible") === true,
         renderToWindow: true,
-        glyphicon: "glyphicon-road"
+        glyphicon: "glyphicon-road",
+        // translations
+        startAddressLabel: "",
+        destinationAddressLabel: "",
+        fromPlaceholder: "",
+        toPlaceholder: "",
+        setStartTimeText: "",
+        date: "",
+        time: "",
+        routingError: "",
+        enterStartDestHoverText: "",
+        enterOptionsText: "",
+        calculateRoute: "",
+        currentPosition: ""
     }),
+    /**
+     * @class RoutingModel
+     * @extends Tool
+     * @memberof Tools.viomRouting
+     * @property {String} bkgSuggestURL="" todo
+     * @property {String} bkgGeosearchURL="" todo
+     * @property {String} viomRoutingURL="" todo
+     * @property {String} viomProviderID="" todo
+     * @property {String} description="" todo
+     * @property {String} endDescription="" todo
+     * @property {String} routingtime="" todo
+     * @property {String} routingdate="" todo
+     * @property {String} fromCoord="" todo
+     * @property {String} toCoord="" todo
+     * @property {Array} fromList=[] todo
+     * @property {Array} toList=[] todo
+     * @property {String} startAdresse="" todo
+     * @property {String} zielAdresse="" todo
+     * @property {String} bbox="" todo
+     * @property {Object} routelayer=null todo
+     * @property {Boolean} isGeolocationPossible=Radio.request("geolocation", "isGeoLocationPossible") === true todo
+     * @property {Boolean} renderToWindow=true todo
+     * @property {string} glyphicon="glyphicon-road" todo
+     * @property {String} startAddressLabel="", filled with "Startadresse"- translated
+     * @property {String} destinationAddressLabel="", filled with "Zieladresse"- translated
+     * @property {String} fromPlaceholder="", filled with "Von"- translated
+     * @property {String} toPlaceholder="", filled with "Bis"- translated
+     * @property {String} setStartTimeText="", filled with "Startzeitpunkt vorgeben"- translated
+     * @property {String} date="", filled with "Datum"- translated
+     * @property {String} time="", filled with "Zeit"- translated
+     * @property {String} routingError="", filled with "Fehlermeldung bei Routenberechung"- translated
+     * @property {String} enterStartDestHoverText="", filled with "Start- und Ziel eingeben"- translated
+     * @property {String} enterOptionsText="", filled with "Optionen eingeben"- translated
+     * @property {String} calculateRoute="", filled with "Route berechnen"- translated
+     * @property {String} currentPosition="", filled with "Aktueller Standpunkt"- translated
+     * @constructs
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
     initialize: function () {
         this.superInitialize();
 
         Radio.on("geolocation", "position", this.setStartpoint, this); // asynchroner Prozess
         Radio.on("geolocation", "changedGeoLocationPossible", this.setIsGeolocationPossible, this);
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
     },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            startAddressLabel: i18next.t("common:modules.tools.viomRouting.startAddressLabel"),
+            destinationAddressLabel: i18next.t("common:modules.tools.viomRouting.destinationAddressLabel"),
+            fromPlaceholder: i18next.t("common:modules.tools.viomRouting.fromPlaceholder"),
+            toPlaceholder: i18next.t("common:modules.tools.viomRouting.toPlaceholder"),
+            setStartTimeText: i18next.t("common:modules.tools.viomRouting.setStartTimeText"),
+            date: i18next.t("common:date"),
+            time: i18next.t("common:time"),
+            routingError: i18next.t("common:modules.tools.viomRouting.routingError"),
+            enterStartDestHoverText: i18next.t("common:modules.tools.viomRouting.enterStartDestHoverText"),
+            enterOptionsText: i18next.t("common:modules.tools.viomRouting.enterOptionsText"),
+            calculateRoute: i18next.t("common:modules.tools.viomRouting.calculateRoute"),
+            currentPosition: i18next.t("common:modules.tools.viomRouting.currentPosition")
+        });
+    },
+
     setStartpoint: function (geoloc) {
         this.set("fromCoord", geoloc);
         this.setCenter(geoloc);
-        this.set("startAdresse", "aktueller Standpunkt");
+        this.set("startAdresse", this.get("currentPosition"));
     },
     setParams: function () {
-        var viomRoutingModel,
-            bkgSuggestModel,
-            bkgGeosearchModel,
-            epsgCode,
-            bbox;
-
-        viomRoutingModel = Radio.request("RestReader", "getServiceById", this.get("viomRoutingID"));
-        bkgSuggestModel = Radio.request("RestReader", "getServiceById", this.get("bkgSuggestID"));
-        bkgGeosearchModel = Radio.request("RestReader", "getServiceById", this.get("bkgGeosearchID"));
-        epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "";
-        bbox = this.get("bbox") && epsgCode !== "" ? "&bbox=" + this.get("bbox") + epsgCode : null;
+        const viomRoutingModel = Radio.request("RestReader", "getServiceById", this.get("viomRoutingID")),
+            bkgSuggestModel = Radio.request("RestReader", "getServiceById", this.get("bkgSuggestID")),
+            bkgGeosearchModel = Radio.request("RestReader", "getServiceById", this.get("bkgGeosearchID")),
+            epsgCode = Radio.request("MapView", "getProjection").getCode() ? "&srsName=" + Radio.request("MapView", "getProjection").getCode() : "",
+            bbox = this.get("bbox") && epsgCode !== "" ? "&bbox=" + this.get("bbox") + epsgCode : null;
 
         this.set("bkgSuggestURL", bkgSuggestModel.get("url"));
         this.set("bkgGeosearchURL", bkgGeosearchModel.get("url"));
@@ -126,11 +200,11 @@ const RoutingModel = Tool.extend({
                     }
                 }
                 catch (error) {
-                    Radio.trigger("Alert", "alert", {text: "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator.", kategorie: "alert-warning"});
+                    Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.routingCalcError") + ".", kategorie: "alert-warning"});
                 }
             },
             error: function (error) {
-                Radio.trigger("Alert", "alert", {text: "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten:  " + error.statusText, kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.routingCalcAborted") + ". " + error.statusText, kategorie: "alert-warning"});
             },
             timeout: 3000
         });
@@ -158,7 +232,7 @@ const RoutingModel = Tool.extend({
                 }
             },
             error: function (error) {
-                Radio.trigger("Alert", "alert", {text: "Adressabfrage fehlgeschlagen: " + error.statusText, kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.viomRouting.addressRequestFailed") + ": " + error.statusText, kategorie: "alert-warning"});
             },
             timeout: 3000
         });
@@ -225,7 +299,7 @@ const RoutingModel = Tool.extend({
                 Radio.trigger("Util", "hideLoader");
                 this.set("description", "");
                 this.set("endDescription", "");
-                Radio.trigger("Alert", "alert", {text: "Fehlermeldung bei Routenberechung", kategorie: "alert-warning"});
+                Radio.trigger("Alert", "alert", {text: this.get("routingError"), kategorie: "alert-warning"});
             }
         });
     },

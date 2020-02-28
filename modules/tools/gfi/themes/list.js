@@ -40,6 +40,8 @@ import SchulenWohnortThemeView from "./bildungsatlas/schulenWohnort/view";
 import SchulenWohnortTheme from "./bildungsatlas/schulenWohnort/model";
 import SchulentlasseneThemeView from "./bildungsatlas/schulentlassene/view";
 import SchulentlasseneTheme from "./bildungsatlas/schulentlassene/model";
+import SensorThemeView from "./sensor/view";
+import SensorTheme from "./sensor/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -121,6 +123,9 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "balkendiagramm") {
             theme = new BalkendiagrammTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "sensor") {
+            theme = new SensorTheme(attrs, options);
         }
         else {
             theme = new DefaultTheme(attrs, options);
@@ -245,6 +250,10 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "balkendiagramm": {
                 new BalkendiagrammThemeView({model: model});
+                break;
+            }
+            case "sensor": {
+                new SensorThemeView({model: model});
                 break;
             }
             default: {

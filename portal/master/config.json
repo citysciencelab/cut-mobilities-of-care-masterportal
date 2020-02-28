@@ -75,33 +75,33 @@
             "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
-            "name": "B-Plan"
+            "name": "translate#common:modules.searchbar.specialWFS.bplan"
           },
           {
             "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:hh_hh_festgestellt",
             "propertyNames": ["app:geltendes_planrecht"],
             "geometryName": "app:geom",
-            "name": "festgestellt"
+            "name": "translate#common:modules.searchbar.specialWFS.terminated"
           },
           {
             "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
-            "name": "im Verfahren"
+            "name": "translate#common:modules.searchbar.specialWFS.ongoing"
           },
           {
             "url": "/geodienste.hamburg.de/HH_WFS_KitaEinrichtung",
             "typeName": "app:KitaEinrichtungen",
             "propertyNames": ["app:Name"],
-            "name": "Kita"
+            "name": "translate#common:modules.searchbar.specialWFS.childcare"
           },
           {
             "url": "/geodienste.hamburg.de/HH_WFS_Stoerfallbetriebe",
             "typeName": "app:stoerfallbetrieb",
             "propertyNames": ["app:standort"],
-            "name": "Störfallbetrieb"
+            "name": "translate#common:modules.searchbar.specialWFS.hazardous"
           }
         ]
       },
@@ -110,7 +110,7 @@
         "minChars": 3
       },
       "zoomLevel": 9,
-      "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
+      "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "mapView":
     {
@@ -121,16 +121,16 @@
     {
       "tree":
       {
-        "name": "Themen",
+        "name": "translate#common:menu.topics",
         "glyphicon": "glyphicon-list",
         "isInitOpen": false
       },
       "ansichten": {
-        "name" : "Ansichten",
+        "name" : "translate#common:menu.views.name",
         "glyphicon": "glyphicon-list",
         "children": {
           "view1": {
-            "name": "Ansicht1",
+            "name": "translate#common:menu.views.view01",
             "type" : "viewpoint",
             "glyphicon": "glyphicon-screenshot",
             "heading": -0.30858728378862876,
@@ -141,14 +141,9 @@
           }
         }
       },
-      "schulwegrouting": {
-        "name": "Schulweg-Routing",
-        "glyphicon": "glyphicon-filter",
-        "layerId": "8712"
-      },
       "filter":
       {
-        "name": "Filter",
+        "name": "translate#common:menu.filter",
         "glyphicon": "glyphicon-filter",
         "deactivateGFI": false,
         "isGeneric": false,
@@ -217,21 +212,21 @@
       },
       "tools":
       {
-        "name": "Werkzeuge",
+        "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
         "children": {
           "einwohnerabfrage": {
-            "name": "Einwohneranzahl abfragen",
+            "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
             "onlyDesktop": false
           },
           "compareFeatures": {
-            "name": "Vergleichsliste",
+            "name": "translate#common:menu.tools.compareFeatures",
             "glyphicon": "glyphicon-th-list"
           },
           "parcelSearch":
           {
-            "name": "Flurstückssuche",
+            "name": "translate#common:menu.tools.parcelSearch",
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
@@ -240,12 +235,12 @@
           },
           "measure":
           {
-            "name": "Strecke / Fläche messen",
+            "name": "translate#common:menu.tools.measure",
             "glyphicon": "glyphicon-resize-full"
           },
           "coord":
           {
-            "name": "Koordinaten abfragen",
+            "name": "translate#common:menu.tools.coord",
             "glyphicon": "glyphicon-screenshot"
           },
           "shadow":
@@ -256,13 +251,13 @@
           },
           "gfi":
           {
-            "name": "Informationen abfragen",
+            "name": "translate#common:menu.tools.getInfos",
             "glyphicon": "glyphicon-info-sign",
             "isActive": true
           },
           "print":
           {
-            "name": "Karte drucken",
+            "name": "translate#common:menu.tools.print",
             "glyphicon": "glyphicon-print",
             "mapfishServiceId": "mapfish_qs",
             "printAppId": "mrh",
@@ -274,12 +269,12 @@
           },
           "searchByCoord":
           {
-            "name": "Koordinatensuche",
+            "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
           "kmlimport":
           {
-            "name": "KML Import",
+            "name": "translate#common:menu.tools.kmlimport",
             "glyphicon": "glyphicon-import"
           },
           "wfsFeatureFilter":
@@ -296,7 +291,7 @@
           },
           "routing":
           {
-            "name": "Routenplaner",
+            "name": "translate#common:menu.tools.routing",
             "glyphicon": "glyphicon-road",
             "viomRoutingID": "7",
             "bkgSuggestID": "4",
@@ -305,7 +300,7 @@
           },
           "draw":
           {
-            "name": "Zeichnen / Schreiben",
+            "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil"
           },
           "styleWMS": {
@@ -343,7 +338,7 @@
             "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
           },
           "saveSelection": {
-            "name": "Auswahl speichern",
+            "name": "translate#common:menu.tools.saveSelection",
             "glyphicon": "glyphicon-share"
           },
           "layerSlider": {
@@ -370,32 +365,32 @@
       },
       "legend":
       {
-        "name": "Legende",
+        "name": "translate#common:menu.legend",
         "glyphicon": "glyphicon-book"
       },
       "contact":
       {
-        "name": "Kontakt",
+        "name": "translate#common:menu.contact",
         "glyphicon": "glyphicon-envelope",
         "serviceID": "80001",
         "includeSystemInfo": true
       },
       "info":
       {
-        "name": "Informationen",
+        "name": "translate#common:menu.info",
         "glyphicon": "glyphicon-info-sign",
         "children":
         {
           "staticlinks": [
           {
-            "name": "Haftungsausschluss",
+            "name": "translate#common:modules.tools.info.disclaimer",
             "glyphicon": "glyphicon-globe",
             "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
           },
           {
-            "name": "Hamburg",
+            "name": "translate#common:modules.tools.info.home.name",
             "glyphicon": "glyphicon-globe",
-            "url": "http://www.hamburg.de"
+            "url": "translate#common:modules.tools.info.home.url"
           }]
         }
       }
@@ -495,7 +490,8 @@
       },
       {
         "id": "2128",
-        "styleId": "2128"
+        "styleId": "2128",
+        "name": "translate#common:tree.trafficCameras"
       },
       {
         "id": "8730"
@@ -522,7 +518,8 @@
       {
         "id": "4561",
         "infoFormat": "text/html",
-        "visibility": false
+        "visibility": false,
+        "urlIsVisible": false
       },
       {
         "id": "9726"

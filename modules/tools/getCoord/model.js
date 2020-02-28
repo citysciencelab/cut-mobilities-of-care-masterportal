@@ -14,7 +14,14 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
         currentProjectionName: "EPSG:25832",
         deactivateGFI: true,
         renderToWindow: true,
-        glyphicon: "glyphicon-screenshot"
+        glyphicon: "glyphicon-screenshot",
+        currentLng: "",
+        // translations
+        coordSystemField: "",
+        hdmsEastingLabel: "",
+        hdmsNorthingLabel: "",
+        cartesianEastingLabel: "",
+        cartesianNorthingLabel: ""
     }),
 
     /**
@@ -30,8 +37,15 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @property {boolean} deactivateGFI=true todo
      * @property {boolean} renderToWindow=true todo
      * @property {string} glyphicon="glyphicon-screenshot" todo
+     * @property {string} currentLng="" contains the current language - view is listening to it's changes
+     * @property {String} coordSystemField="", filled with "Koordinatensystem"- translated
+     * @property {String} hdmsEastingLabel="", filled with "Länge"- translated
+     * @property {String} hdmsNorthingLabel="", filled with "Breite"- translated
+     * @property {String} cartesianEastingLabel="", filled with "Rechtswert"- translated
+     * @property {String} cartesianNorthingLabel="", filled with "Hochwert"- translated
      * @constructs
      * @listens Tools.GetCoord#RadioTriggerChangeIsActive
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapRegisterListener
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
@@ -54,10 +68,32 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
                 }
             }
         });
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
     },
 
     /**
-     * todo
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "coordSystemField": i18next.t("common:modules.tools.getCoord.coordSystemField"),
+            "hdmsEastingLabel": i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"),
+            "hdmsNorthingLabel": i18next.t("common:modules.tools.getCoord.hdms.northingLabel"),
+            "cartesianEastingLabel": i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"),
+            "cartesianNorthingLabel": i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"),
+            "currentLng": lng
+        });
+    },
+
+    /**
+     * Stores the projections and adds interaction pointermove to map
      * @fires Core#RadioRequestMapViewGetProjection
      * @fires Core#RadioTriggerMapAddInteraction
      * @returns {void}
@@ -90,7 +126,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
     },
 
     /**
-     * todo
+     * Remembers the projection and shows mapmarker at the given position.
      * @param {*} position - todo
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      * @returns {*} todo

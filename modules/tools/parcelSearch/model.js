@@ -1,37 +1,99 @@
 import Tool from "../../core/modelList/tool/model";
 
-const ParcelSearch = Tool.extend({
+const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
-        "deactivateGFI": false,
-        "renderToWindow": true,
-        "isCollapsed": undefined,
-        "isCurrentWin": undefined,
-        "countryNumber": "02", // Kennzeichen des Landes. Wird für den Report benötigt um das Flurstückskennzeichen zusammmenzubauen
-        "fetched": false, // initiales Laden der JSON
-        "serviceId": "",
-        "reportServiceId": "",
-        "serviceURL": "", // Flurstücks-Gazetteer-URL
-        "storedQueryID": null, // StoredQueryID, die im Request angesprochen werden soll.
-        "districts": {}, // Object mit allen Gemarkungen {{"name": "id"}, {"name2": "id2"}, ...}
-        "cadastralDistricts": {}, // Object mit allen Fluren {{"id1": ["name1", "name2"]}, {"id2": ["name1", "name2"]}, ...}
-        "districtNumber": "0", // default Gemarkung
-        "cadastralDistrictField": false, // sollen Fluren genutzt werden? Wird automatisch beim parsen ermittelt.
-        "cadastralDistrictNumber": "0", // default Flur
-        "parcelDenominatorField": false, // sollen Flurstücksnenner verwendet werden? Aus config
-        "parcelNumber": "", // default Flurstücksnummer
-        "parcelDenominatorNumber": "0", // default Flurstücksnenner,
-        "createReport": false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
-        "parcelFound": false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
-        "glyphicon": "glyphicon-search",
-        "mapMarkerType": "Parcel"
+        deactivateGFI: false,
+        renderToWindow: true,
+        isCollapsed: undefined,
+        isCurrentWin: undefined,
+        countryNumber: "02", // Kennzeichen des Landes. Wird für den Report benötigt um das Flurstückskennzeichen zusammmenzubauen
+        fetched: false, // initiales Laden der JSON
+        serviceId: "",
+        reportServiceId: "",
+        serviceURL: "", // Flurstücks-Gazetteer-URL
+        storedQueryID: null, // StoredQueryID, die im Request angesprochen werden soll.
+        districts: {}, // Object mit allen Gemarkungen {{"name: "id"}, {"name2: "id2"}, ...}
+        cadastralDistricts: {}, // Object mit allen Fluren {{"id1: ["name1", "name2"]}, {"id2: ["name1", "name2"]}, ...}
+        districtNumber: "0", // default Gemarkung
+        cadastralDistrictField: false, // sollen Fluren genutzt werden? Wird automatisch beim parsen ermittelt.
+        cadastralDistrictNumber: "0", // default Flur
+        parcelDenominatorField: false, // sollen Flurstücksnenner verwendet werden? Aus config
+        parcelNumber: "", // default Flurstücksnummer
+        maxParcelNumberLength: 6, // default max-length of parcel number
+        parcelDenominatorNumber: "0", // default Flurstücksnenner,
+        createReport: false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
+        parcelFound: false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
+        glyphicon: "glyphicon-search",
+        mapMarkerType: "Parcel",
+        // translations
+        searchText: "",
+        generateReportText: "",
+        parcelNumberText: "",
+        parcelNumberPlaceholderText: "",
+        districtText: "",
+        chooseText: "",
+        wrongConfig: "",
+        districtsLoadFailed: "",
+        wrongConfigParcelsearch: "",
+        parcelSearchImpossible: "",
+        tryAgainLater: ""
+
     }),
+    /**
+     * @class ParcelSearch
+     * @extends Tool
+     * @memberof Tools.ParcelSearch
+     * @property {Boolean} deactivateGFI=false todo
+     * @property {Boolean} renderToWindow=true todo
+     * @property {Boolean} isCollapsed=undefined todo
+     * @property {Boolean} isCurrentWin=undefined todo
+     * @property {String} countryNumber="02" todo
+     * @property {Boolean} fetched=false todo
+     * @property {String} serviceId="" todo
+     * @property {String} reportServiceId="" todo
+     * @property {String} serviceURL="" todo
+     * @property {String} storedQueryID=null todo
+     * @property {Object} districts={} todo
+     * @property {Object} cadastralDistricts={} todo
+     * @property {String} districtNumber="0" todo
+     * @property {boolean} cadastralDistrictField=false todo
+     * @property {String} cadastralDistrictNumber="0" todo
+     * @property {Boolean} parcelDenominatorField=false todo
+     * @property {String} parcelNumber="" todo
+     * @property {String} maxParcelNumberLength="6" todo
+     * @property {String} parcelDenominatorNumber="0" todo
+     * @property {Boolean} createReport=false todo
+     * @property {Boolean} parcelFound=false todo
+     * @property {String} glyphicon="glyphicon-search" todo
+     * @property {String} mapMarkerType="Parcel" todo
+     * @property {String} searchText="", filled with "Suchen"- translated
+     * @property {String} generateReportText="", filled with "Bericht erzeugen"- translated
+     * @property {String} parcelNumberText="", filled with "Flurstücksnummer"- translated
+     * @property {String} parcelNumberPlaceholderText="", filled with "Nummer eingeben"- translated
+     * @property {String} districtText="", filled with "Gemarkung"- translated
+     * @property {String} chooseText="", filled with "bitte wählen"- translated
+     * @property {String} wrongConfig="", filled with "Ungültige oder unvollständige Konfiguration"- translated
+     * @property {String} districtsLoadFailed="", filled with "Gemarkungen konnten nicht geladen werden"- translated
+     * @property {String} wrongConfigParcelsearch="", filled with "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support."- translated
+     * @property {String} parcelSearchImpossible="", filled with "Flurstücksabfrage derzeit nicht möglich!"- translated
+     * @property {String} tryAgainLater="", filled with "Bitte versuchen Sie es später erneut."- translated
+     * @constructs
+     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
+     * @listens i18next#RadioTriggerLanguageChanged
+     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * @fires Core#RadioTriggerMapRegisterListener
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     */
     initialize: function () {
         this.superInitialize();
+        this.changeLang(i18next.language);
 
         this.listenTo(Radio.channel("ParcelSearch"), {
             "createReport": this.createReport
         });
-
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
         this.setDefaults();
     },
 
@@ -52,8 +114,28 @@ const ParcelSearch = Tool.extend({
             this.loadConfiguration(this.get("configJSON"));
         }
         else {
-            Radio.trigger("Alert", "alert", "Ungültige oder unvollständige Konfiguration (" + this.get("name") + ")");
+            Radio.trigger("Alert", "alert", this.get("wrongConfig") + " (" + this.get("name") + ")");
         }
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            searchText: i18next.t("common:button.search"),
+            generateReportText: i18next.t("common:modules.tools.parcelSearch.generateReport"),
+            parcelNumberText: i18next.t("common:modules.tools.parcelSearch.parcelNumber"),
+            parcelNumberPlaceholderText: i18next.t("common:modules.tools.parcelSearch.parcelNumberPlaceholder"),
+            chooseText: i18next.t("common:modules.tools.parcelSearch.choose"),
+            districtText: i18next.t("common:modules.tools.parcelSearch.district"),
+            wrongConfig: i18next.t("common:modules.tools.parcelSearch.wrongConfig"),
+            districtsLoadFailed: i18next.t("common:modules.tools.parcelSearch.districtsLoadFailed"),
+            wrongConfigParcelsearch: i18next.t("common:modules.tools.parcelSearch.wrongConfigParcelsearch"),
+            parcelSearchImpossible: i18next.t("common:modules.tools.parcelSearch.parcelSearchImpossible"),
+            tryAgainLater: i18next.t("common:modules.tools.parcelSearch.tryAgainLater")
+        });
     },
     /*
      * liest die gemarkung.json ein. Anschließend wird parse gestartet.
@@ -64,7 +146,7 @@ const ParcelSearch = Tool.extend({
             cache: false,
             context: this,
             error: function () {
-                Radio.trigger("Alert", "alert", "Gemarkungen konnten nicht geladen werden (" + this.get("name") + ")");
+                Radio.trigger("Alert", "alert", this.get("districtsLoadFailed") + " (" + this.get("name") + ")");
             },
             complete: function () {
                 Radio.trigger("Util", "hideLoader");
@@ -120,7 +202,7 @@ const ParcelSearch = Tool.extend({
             window.open(url, "_blank");
         }
         else {
-            Radio.trigger("Alert", "alert", {text: "Die Konfiguration der Flurstückssuche ist fehlerhaft. Bitte wenden Sie sich an den Support", kategorie: "alert-info"});
+            Radio.trigger("Alert", "alert", {text: this.get("wrongConfigParcelsearch"), kategorie: "alert-info"});
         }
     },
     buildUrl: function (url, params) {
@@ -171,7 +253,7 @@ const ParcelSearch = Tool.extend({
             timeout: 6000,
             async: false,
             error: function () {
-                Radio.trigger("Alert", "alert", {text: "<strong>Flurstücksabfrage derzeit nicht möglich!</strong> Bitte versuchen Sie es später erneut.", kategorie: "alert-danger"});
+                Radio.trigger("Alert", "alert", {text: "<strong>" + this.get("parcelSearchImpossible") + "</strong> " + this.get("tryAgainLater"), kategorie: "alert-danger"});
             },
             complete: function () {
                 Radio.trigger("Util", "hideLoader");
@@ -194,7 +276,7 @@ const ParcelSearch = Tool.extend({
             parcelNumber = this.padLeft(this.get("parcelNumber"), 5, "0");
             parcelDenominatorNumber = this.get("parcelDenominatorField") === true ? " / " + this.padLeft(this.get("parcelDenominatorNumber"), 3, "0") : "";
             this.setParcelFound(false);
-            Radio.trigger("Alert", "alert", {text: "Es wurde kein Flurstück mit der Nummer " + parcelNumber + parcelDenominatorNumber + " gefunden.", kategorie: "alert-info"});
+            Radio.trigger("Alert", "alert", {text: i18next.t("common:modules.tools.parcelSearch.parcelNotFound", {flstNr: parcelNumber + parcelDenominatorNumber}), kategorie: "alert-info"});
             Radio.trigger("ParcelSearch", "noParcelFound");
         }
         else {

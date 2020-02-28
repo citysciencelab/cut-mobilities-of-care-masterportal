@@ -51,62 +51,62 @@
 						"glyphicon": "glyphicon-pencil",
 						"iconList": [
 							{
-								"caption": "Punkt",
+								"caption": "translate#common:modules.tools.draw.iconList.iconPoint",
 								"type": "simple_point",
 								"value": "simple_point"
 							},
 							{
-								"caption": "Blatt",
+								"caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
 								"type": "glyphicon",
 								"value": "\ue103"
 							},
 							{
-								"caption": "CD",
+								"caption": "translate#common:modules.tools.draw.iconList.iconCD",
 								"type": "glyphicon",
 								"value": "\ue201"
 							},
 							{
-								"caption": "Doktorhut",
+								"caption": "translate#common:modules.tools.draw.iconList.iconHat",
 								"type": "glyphicon",
 								"value": "\ue233"
 							},
 							{
-								"caption": "Feuer",
+								"caption": "translate#common:modules.tools.draw.iconList.iconFire",
 								"type": "glyphicon",
 								"value": "\ue104"
 							},
 							{
-								"caption": "Film",
+								"caption": "translate#common:modules.tools.draw.iconList.iconMovie",
 								"type": "glyphicon",
 								"value": "\ue009"
 							},
 							{
-								"caption": "Flagge",
+								"caption": "translate#common:modules.tools.draw.iconList.iconFlag",
 								"type": "glyphicon",
 								"value": "\ue034"
 							},
 							{
-								"caption": "Globus",
+								"caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
 								"type": "glyphicon",
 								"value": "\ue135"
 							},
 							{
-								"caption": "Musik",
+								"caption": "translate#common:modules.tools.draw.iconList.iconMusic",
 								"type": "glyphicon",
 								"value": "\ue002"
 							},
 							{
-								"caption": "Straße",
+								"caption": "translate#common:modules.tools.draw.iconList.iconStreet",
 								"type": "glyphicon",
-								"value": "\ue024"	
+								"value": "\ue024"
 							},
 							{
-								"caption": "Wolke",
+								"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
 								"type": "image",
 								"value": "/img/icons/cloud.png"
 							},
 							{
-								"caption": "Zelt",
+								"caption": "translate#common:modules.tools.draw.iconList.iconTent",
 								"type": "glyphicon",
 								"value": "\u26fa"
 							}

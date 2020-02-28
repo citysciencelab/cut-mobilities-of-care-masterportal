@@ -1,6 +1,6 @@
 /**
- * @namespace AddOns
- * @description AddOns are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
+ * @namespace Addons
+ * @description Addons are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
  */
 
 /**
@@ -394,7 +394,7 @@
  */
 
 /**
- * @namespace Einwohnerabfrage_hh
+ * @namespace Einwohnerabfrage
  * @memberof Tools
  * @description Tool to request data about inhabitants of Hamburg.
  */
@@ -579,6 +579,12 @@
  * @description GFI Theme for SolarAtlas
  */
 
+ /**
+ * @namespace Sensor
+ * @memberof Tools.GFI.Themes
+ * @description GFI Theme for Sensordata
+ */
+
 /**
  * @namespace Table
  * @memberof Tools.GFI.Themes
@@ -613,6 +619,8 @@
  * @namespace LayerSlider
  * @memberof Tools
  * @description Animates several configured layers consecutively (e.g. to show time series).
+ * Can be configured as Player (sliderType="player") with start, stop, pause buttons.
+ * Can be configured as Handle (sliderType="handle") with a drag handle to wander through the layers using transparency.
  */
 
 /**
@@ -661,12 +669,6 @@
  * @namespace SaveSelection
  * @memberof Tools
  * @description Creates a parametric URL representing the current map state.
- */
-
-/**
- * @namespace SchulwegRouting_HH
- * @memberof Tools
- * @description Routing for school children based on Hamburg ATKIS data.
  */
 
 /**

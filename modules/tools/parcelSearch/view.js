@@ -27,9 +27,16 @@ const ParcelSearchView = Backbone.View.extend({
             "change:parcelNumber": this.checkInput,
             "change:parcelDenominatorNumber": this.checkInput,
             "change:districtNumber": this.checkInput,
-            "change:cadastralDistrictNumber": this.checkInput
+            "change:cadastralDistrictNumber": this.checkInput,
+            "change:districtText": () => {
+                if (this.model.has("renderToDOM")) {
+                    this.render2DOM();
+                }
+                else if (this.model.get("isActive") === true) {
+                    this.render2Window(this.model, true);
+                }
+            }
         });
-
         if (this.model.has("renderToDOM")) {
             this.setElement(this.model.get("renderToDOM"));
             this.listenTo(this.model, {
@@ -132,9 +139,11 @@ const ParcelSearchView = Backbone.View.extend({
         this.model.setCadastralDistrictNumber("0");
         this.$("#cadastralDistrictField").empty();
         this.$("#cadastralDistrictField").append("<option selected disabled value='0'>bitte wählen</option>");
-        _.each(_.values(_.pick(cadastralDistricts, districtNumber))[0], function (cadastralDistrict) {
-            this.$("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
-        }, this);
+        if (cadastralDistricts[districtNumber]) {
+            cadastralDistricts[districtNumber].forEach(function (cadastralDistrict) {
+                this.$("#cadastralDistrictField").append("<option value=" + cadastralDistrict + ">" + cadastralDistrict + "</option>");
+            }, this);
+        }
         this.$("#cadastralDistrictField").focus();
     },
     setParcelNumber: function (evt) {

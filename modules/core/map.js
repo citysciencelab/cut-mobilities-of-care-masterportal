@@ -4,12 +4,7 @@ import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import MapView from "./mapView";
 import ObliqueMap from "./obliqueMap";
-import OLCesium from "olcs/OLCesium.js";
-import VectorSynchronizer from "olcs/VectorSynchronizer.js";
-import FixedOverlaySynchronizer from "./3dUtils/fixedOverlaySynchronizer.js";
-import WMSRasterSynchronizer from "./3dUtils/wmsRasterSynchronizer.js";
-import {transform, get} from "ol/proj.js";
-import moment from "moment";
+import Map3dModel from "./map3d";
 import {register} from "ol/proj/proj4.js";
 import proj4 from "proj4";
 import {createMap} from "masterportalAPI";
@@ -31,7 +26,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @constructs
      * @param {Object} mapViewSettings Settings for the map.
      * @property {Number} initalLoading=0 todo
-     * @property {Cesium.JulianDate} shadowTime=null DefaultTime for 3D rendering even with disabled shadows.
      * @listens Core#RadioRequestMapGetLayers
      * @listens Core#RadioRequestMapGetWGS84MapSizeBBOX
      * @listens Core#RadioRequestMapCreateLayerIfNotExists
@@ -39,10 +33,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @listens Core#RadioRequestMapGetFeaturesAtPixel
      * @listens Core#RadioRequestMapRegisterListener
      * @listens Core#RadioRequestMapGetMap
-     * @listens Core#RadioRequestMapIsMap3d
-     * @listens Core#RadioRequestMapGetMap3d
      * @listens Core#RadioRequestMapGetMapMode
-     * @listens Core#RadioRequestMapGetFeatures3dAtPosition
      * @listens Core#RadioTriggerMapAddLayer
      * @listens Core#RadioTriggerMapAddLayerToIndex
      * @listens Core#RadioTriggerMapSetLayerToIndex
@@ -63,8 +54,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @listens Core#RadioTriggerMapUnregisterListener
      * @listens Core#RadioTriggerMapUpdateSize
      * @listens Core#RadioTriggerMapSetShadowTime
-     * @listens Core#RadioTriggerMapActivateMap3d
-     * @listens Core#RadioTriggerMapDeactivateMap3d
      * @listens Core#RadioTriggerMapSetCameraParameter
      * @listens Core#RadioTriggerMapChange
      * @listens Core#MapChangeVectorLayer
@@ -81,7 +70,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @fires Core#RadioRequestMapViewGetProjection
      * @fires Core#RadioRequestMapClickedWindowPosition
      * @fires Alerting#RadioTriggerAlertAlertRemove
-     * @fires Core#RadiotriggerMapCameraChanged
+     * @fires Core#RadioTriggerMapCameraChanged
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Core#RadioTriggerUtilShowLoader
      * @fires Core#RadioTriggerUtilHideLoader
@@ -102,10 +91,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "getMap": function () {
                 return this.get("map");
             },
-            "isMap3d": this.isMap3d,
-            "getMap3d": this.getMap3d,
-            "getMapMode": this.getMapMode,
-            "getFeatures3dAtPosition": this.getFeatures3dAtPosition
+            "getMapMode": this.getMapMode
         }, this);
 
         channel.on({
@@ -132,11 +118,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "unregisterListener": this.unregisterListener,
             "updateSize": function () {
                 this.get("map").updateSize();
-            },
-            "setShadowTime": this.setShadowTime,
-            "activateMap3d": this.activateMap3d,
-            "deactivateMap3d": this.deactivateMap3d,
-            "setCameraParameter": this.setCameraParameter
+            }
         }, this);
 
         this.listenTo(this, {
@@ -174,7 +156,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         this.addAliasForWFSFromGoeserver(getMapProjection(this.get("map")));
 
         if (window.Cesium) {
-            this.set("shadowTime", Cesium.JulianDate.fromDate(moment().hour(13).minute(0).second(0).millisecond(0).toDate()));
+            this.set("map3dModel", new Map3dModel());
         }
         if (Config.obliqueMap) {
             this.set("obliqueMap", new ObliqueMap({}));
@@ -187,9 +169,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         this.showMouseMoveText();
 
         Radio.trigger("Map", "isReady", "gfi", false);
-        if (Config.startingMap3D) {
-            this.activateMap3d();
-        }
 
         if (!_.isUndefined(Config.inputMap)) {
             this.registerListener("click", this.addMarker.bind(this));
@@ -207,6 +186,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         proj4.defs("http://www.opengis.net/gml/srs/epsg.xml#" + epsgCodeNumber, proj4.defs(epsgCode));
         register(proj4);
+        // sign projection for use in masterportal
+        proj4.defs(epsgCode).masterportal = true;
     },
 
     /**
@@ -355,294 +336,15 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {String} mapMode
      */
     getMapMode: function () {
+        const map3dModel = this.get("map3dModel");
+
         if (Radio.request("ObliqueMap", "isActive")) {
             return "Oblique";
         }
-        else if (this.getMap3d() && this.getMap3d().getEnabled()) {
+        else if (map3dModel && map3dModel.isMap3d()) {
             return "3D";
         }
         return "2D";
-    },
-
-    /**
-     * todo
-     * @returns {*} todo
-     */
-    isMap3d: function () {
-        return this.getMap3d() && this.getMap3d().getEnabled();
-    },
-
-    /**
-     * Getter for shadowTime used in OLCesium
-     * @returns {Cesium.JulianDate} shadowTime shadowTime
-     */
-    getShadowTime: function () {
-        return this.get("shadowTime");
-    },
-
-    /**
-     * create the map in 3d-mode.
-     * @returns {*} 3D-Map
-     */
-    createMap3d: function () {
-        var map3d = new OLCesium({
-            map: this.get("map"),
-            time: this.getShadowTime.bind(this),
-            sceneOptions: {
-                shadows: false
-            },
-            stopOpenLayersEventsPropagation: true,
-            createSynchronizers: function (olMap, scene) {
-                return [new WMSRasterSynchronizer(olMap, scene), new VectorSynchronizer(olMap, scene), new FixedOverlaySynchronizer(olMap, scene)];
-            }
-        });
-
-        return map3d;
-    },
-
-    /**
-     * todo
-     * @returns {void}
-     */
-    handle3DEvents: function () {
-        var eventHandler;
-
-        if (window.Cesium) {
-            eventHandler = new window.Cesium.ScreenSpaceEventHandler(this.getMap3d().getCesiumScene().canvas);
-            eventHandler.setInputAction(this.reactTo3DClickEvent.bind(this), window.Cesium.ScreenSpaceEventType.LEFT_CLICK);
-        }
-    },
-
-    /**
-     * todo
-     * @param {*} params - todo
-     * @returns {void}
-     */
-    setCameraParameter: function (params) {
-        var map3d = this.getMap3d(),
-            camera,
-            destination,
-            orientation;
-
-        // if the cameraPosition is given, directly set the cesium camera position, otherwise use olcesium Camera
-        if (map3d && params.cameraPosition) {
-            camera = this.getMap3d().getCesiumScene().camera;
-            destination = Cesium.Cartesian3.fromDegrees(params.cameraPosition[0], params.cameraPosition[1], params.cameraPosition[2]);
-            orientation = {
-                heading: Cesium.Math.toRadians(parseFloat(params.heading)),
-                pitch: Cesium.Math.toRadians(parseFloat(params.pitch)),
-                roll: Cesium.Math.toRadians(parseFloat(params.roll))
-            };
-
-            camera.setView({
-                destination,
-                orientation
-            });
-        }
-        else if (_.isUndefined(map3d) === false && _.isNull(params) === false) {
-            camera = map3d.getCamera();
-            if (_.has(params, "tilt")) {
-                camera.setTilt(parseFloat(params.tilt));
-            }
-            if (_.has(params, "heading")) {
-                camera.setHeading(parseFloat(params.heading));
-            }
-            if (_.has(params, "altitude")) {
-                camera.setAltitude(parseFloat(params.altitude));
-            }
-        }
-    },
-
-    /**
-     * todo
-     * @returns {*} todo
-     */
-    setCesiumSceneDefaults: function () {
-        var params,
-            scene = this.getMap3d().getCesiumScene();
-
-        if (_.has(Config, "cesiumParameter")) {
-            params = Config.cesiumParameter;
-            if (_.has(params, "fog")) {
-                scene.fog.enabled = _.has(params.fog, "enabled") ? params.fog.enabled : scene.fog.enabled;
-                scene.fog.density = _.has(params.fog, "density") ? parseFloat(params.fog.density) : scene.fog.density;
-                scene.fog.screenSpaceErrorFactor = _.has(params.fog, "screenSpaceErrorFactor") ? parseFloat(params.fog.screenSpaceErrorFactor) : scene.fog.screenSpaceErrorFactor;
-            }
-
-            scene.globe.tileCacheSize = _.has(params, "tileCacheSize") ? parseInt(params.tileCacheSize, 10) : scene.globe.tileCacheSize;
-            scene.globe.maximumScreenSpaceError = _.has(params, "maximumScreenSpaceError") ? params.maximumScreenSpaceError : scene.globe.maximumScreenSpaceError;
-            scene.shadowMap.maximumDistance = 5000.0;
-            scene.shadowMap.darkness = 0.6;
-            scene.shadowMap.size = 2048; // this is default
-            scene.fxaa = _.has(params, "fxaa") ? params.fxaa : scene.fxaa;
-            scene.globe.enableLighting = _.has(params, "enableLighting") ? params.enableLighting : scene.globe.enableLighting;
-            scene.globe.depthTestAgainstTerrain = true;
-            scene.highDynamicRange = false;
-            scene.pickTranslucentDepth = true;
-            scene.camera.enableTerrainAdjustmentWhenLoading = true;
-        }
-        return scene;
-    },
-
-    /**
-     * Activates the 3d Map, if oblique is still active, the obliquemap will be deactivated before.
-     * @listens Core#RadioTriggerMapChange
-     * @fires Core#RadioTriggerObliqueMapDeactivate
-     * @fires Core#RadioTriggerMapBeforeChange
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @fires Core#RadioTriggerMapChange
-     * @return {void}
-     */
-    activateMap3d: function () {
-        var camera,
-            cameraParameter = _.has(Config, "cameraParameter") ? Config.cameraParameter : null;
-
-        if (this.isMap3d()) {
-            return;
-        }
-        if (this.getMapMode() === "Oblique") {
-            Radio.once("Map", "change", function (mapMode) {
-                if (mapMode === "2D") {
-                    this.activateMap3d();
-                }
-            }.bind(this));
-            Radio.trigger("ObliqueMap", "deactivate");
-            return;
-        }
-        Radio.trigger("Map", "beforeChange", "3D");
-        if (!this.getMap3d()) {
-            this.setMap3d(this.createMap3d());
-            this.handle3DEvents();
-            this.setCesiumSceneDefaults();
-            this.setCameraParameter(cameraParameter);
-            camera = this.getMap3d().getCesiumScene().camera;
-            camera.changed.addEventListener(this.reactToCameraChanged, this);
-        }
-        this.getMap3d().setEnabled(true);
-        Radio.trigger("Alert", "alert", "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!");
-        Radio.trigger("Map", "change", "3D");
-    },
-
-    /**
-     * todo
-     * @param {*} position - todo
-     * @returns {*} todo
-     */
-    getFeatures3dAtPosition: function (position) {
-        var scene,
-            objects;
-
-        if (this.getMap3d()) {
-            scene = this.getMap3d().getCesiumScene();
-            objects = scene.drillPick(position);
-        }
-        return objects;
-    },
-
-    /**
-     * todo
-     * @param {*} event - todo
-     * @fires Core#RadioRequestMapViewGetProjection
-     * @fires Core#RadioRequestMapClickedWindowPosition
-     * @returns {void}
-     */
-    reactTo3DClickEvent: function (event) {
-        var map3d = this.getMap3d(),
-            scene = map3d.getCesiumScene(),
-            ray = scene.camera.getPickRay(event.position),
-            cartesian = scene.globe.pick(ray, scene),
-            height,
-            coords,
-            cartographic,
-            distance,
-            resolution,
-            mapProjection = Radio.request("MapView", "getProjection"),
-            transformedCoords,
-            transformedPickedPosition,
-            pickedPositionCartesian,
-            cartographicPickedPosition;
-
-        if (cartesian) {
-            cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-            coords = [window.Cesium.Math.toDegrees(cartographic.longitude), window.Cesium.Math.toDegrees(cartographic.latitude)];
-            height = scene.globe.getHeight(cartographic);
-            if (height) {
-                coords = coords.concat([height]);
-            }
-
-            distance = window.Cesium.Cartesian3.distance(cartesian, scene.camera.position);
-            resolution = map3d.getCamera().calcResolutionForDistance(distance, cartographic.latitude);
-            transformedCoords = transform(coords, get("EPSG:4326"), mapProjection);
-            transformedPickedPosition = null;
-
-            if (scene.pickPositionSupported) {
-                pickedPositionCartesian = scene.pickPosition(event.position);
-                if (pickedPositionCartesian) {
-                    cartographicPickedPosition = scene.globe.ellipsoid.cartesianToCartographic(pickedPositionCartesian);
-                    transformedPickedPosition = transform([window.Cesium.Math.toDegrees(cartographicPickedPosition.longitude), window.Cesium.Math.toDegrees(cartographicPickedPosition.latitude)], get("EPSG:4326"), mapProjection);
-                    transformedPickedPosition.push(cartographicPickedPosition.height);
-                }
-            }
-            Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: this.get("map")});
-        }
-    },
-
-    /**
-     * Deactivates the 3D map and changes to the 2D Map Mode.
-     * @fires Core#RadioTriggerMapChange
-     * @fires Core#RadioTriggerMapBeforeChange
-     * @fires Alerting#RadioTriggerAlertAlertRemove
-     * @return {void}
-     */
-    deactivateMap3d: function () {
-        var resolution,
-            resolutions;
-
-        if (this.getMap3d()) {
-            Radio.trigger("Map", "beforeChange", "2D");
-            this.get("view").animate({rotation: 0}, function () {
-                this.getMap3d().setEnabled(false);
-                this.get("view").setRotation(0);
-                resolution = this.get("view").getResolution();
-                resolutions = this.get("view").getResolutions();
-                if (resolution > resolutions[0]) {
-                    this.get("view").setResolution(resolutions[0]);
-                }
-                if (resolution < resolutions[resolutions.length - 1]) {
-                    this.get("view").setResolution(resolutions[resolutions.length - 1]);
-                }
-                Radio.trigger("Alert", "alert:remove");
-                Radio.trigger("Map", "change", "2D");
-            }.bind(this));
-        }
-    },
-
-    /**
-     * Setter for map3d.
-     * @param {*} map3d - todo
-     * @returns {*} todo
-     */
-    setMap3d: function (map3d) {
-        return this.set("map3d", map3d);
-    },
-
-    /**
-     * Getter for map3d.
-     * @returns {*} todo
-     */
-    getMap3d: function () {
-        return this.get("map3d");
-    },
-
-    /**
-     * todo
-     * @fires Core#RadiotriggerMapCameraChanged
-     * @returns {void}
-     */
-    reactToCameraChanged: function () {
-        var camera = this.getMap3d().getCamera();
-
-        Radio.trigger("Map", "cameraChanged", {"heading": camera.getHeading(), "altitude": camera.getAltitude(), "tilt": camera.getTilt()});
     },
 
     /**
@@ -896,8 +598,11 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             Radio.trigger("Util", "showLoader");
         }
         else if (num === 0) {
-            Radio.trigger("Util", "hideLoader");
+            Radio.trigger("Util", "hideLoadingModule");
             this.stopListening(this, "change:initalLoading");
+            if (document.getElementById("loader") !== null && document.getElementById("loader").style.display !== "") {
+                Radio.trigger("Util", "hideLoader");
+            }
         }
     },
 
@@ -956,15 +661,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 }
             });
         });
-    },
-
-    /**
-     * Setter for shadowTime.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setShadowTime: function (value) {
-        this.set("shadowTime", value);
     },
 
     /**

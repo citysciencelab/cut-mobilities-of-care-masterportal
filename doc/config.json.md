@@ -25,6 +25,7 @@ Im Abschnitt *Portalconfig* können folgende Eigenschaften konfiguriert werden:
 5. Menüeinträge sowie Vorhandenheit jeweiliger Tools und deren Reihenfolge (*menu*)
 6. Typ und Eigenschaften des genutzten Suchdienstes (*searchBar*)
 7. Löschbarkeit von Themen (*layersRemovable*)
+8. welche Sprachen genutzt werden sollen (*portalLanguage*)
 
 Es existieren die im Folgenden aufgelisteten Konfigurationen:
 
@@ -38,6 +39,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |menu|nein|**[menu](#markdown-header-portalconfigmenu)**||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe **[Tools](#markdown-header-portalconfigmenutools)**).|false|
 |searchBar|nein|**[searchBar](#markdown-header-portalconfigsearchbar)**||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|false|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|false|
+|portalLanguage|nein|**[portalLanguage](#markdown-header-portalLanguage)**||Mit dieser Konfiguration werden die Sprachen im Portal eingestellt, eine Default-Sprache ausgewählt und die Start-Reihenfolge festgelegt.|false|
 
 ***
 
@@ -196,10 +198,10 @@ Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearch
     "minChars": 3,
     "serviceId": "elastic",
     "queryObject": {
-                        "id": "query",
-                        "params": {
-                            "query_string": "%%searchString%%"
-                        }
+        "id": "query",
+        "params": {
+            "query_string": "%%searchString%%"
+        }
 }
 ```
 
@@ -272,6 +274,7 @@ Konfiguration des Elastic Search Suchdienstes
     "hitGlyphicon": "glyphicon-list"
 }
 ```
+
 
 ***
 #### Portalconfig.searchBar.elasticSearch.hitMap
@@ -414,6 +417,18 @@ Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinitio
     "layerTypes": ["WFS", "GeoJSON"]
 }
 ```
+***
+
+### Portalconfig.portalLanguage
+Konfiguration der Sprache
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|enabled|nein|Boolean|true|Aktiviert die Sprach-Umschalter-GUI im Portal.|Die Sprache kann dann nur noch über andere Eingriffe (z.B. Kommandozeile Backbone.i18next.changeLanguage("en")) umgeschaltet werden.|
+|debug|nein|Boolean|false|Kann für die Entwicklungsphase auf true gesetzt werden, um das Sprach-Tool zu debuggen.||
+|languages|nein|Object|{"de": "deutsch, "en": "english"}|Konfiguration der im Portal verwendeten Sprachen. Bitte beachten, dass die entsprechenden Sprach-Dateien auch hinterlegt sein müssen.||
+|startLanguage|nein|String|"de"|Die Standard-Sprache die beim Start automatisch aktiv sein soll.|Bitte beachten, dass dieser Wert ignoriert wird wenn eine andere Start-Bedingung erfüllt ist. Die startLanguage ist zugleich der Fallback, falls eine Sprache nicht erkannt wird oder Sprach-Schlüssel fehlen.|
+|changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator"]|Stellt die Reihenfolge der Sprach-Eingriffe ein, auf die beim Start geachtet werden soll.|
 
 ***
 
@@ -435,7 +450,6 @@ Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinitio
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|false|
 |backforward|nein|**[backForward](#markdown-header-portalconfigcontrolsbackforward)**|false|Deprecated in 3.0.0. Bitte "backForward" verwenden.|false|
 |backForward|nein|**[backForward](#markdown-header-portalconfigcontrolsbackforward)**|false|Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|false|
-
 
 ***
 
@@ -798,8 +812,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:tool]: # (Portalconfig.menu.tool)
 
-[type:einwohnerabfrage]: # (Portalconfig.menu.tool.einwohnerabfrage)
-
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
 
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
@@ -820,8 +832,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:contact]: # (Portalconfig.menu.tool.contact)
 
-[type:schulwegrouting]: # (Portalconfig.menu.tool.schulwegrouting)
-
 [type:filter]: # (Portalconfig.menu.tool.filter)
 
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
@@ -834,7 +844,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|einwohnerabfrage|nein|**[einwohnerabfrage](#markdown-header-portalconfigmenutooleinwohnerabfrage)**||Hamburg spezifisches Werkzeug um die Einwohner in der FHH (Freie und Hansestadt Hamburg) und der MRH (Metropol Region Hamburg) über eine zu zeichnende Geometrie abfragen zu können.|true|
 |compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vector-Features.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Flurstückssuche.|false|
 |measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
@@ -856,7 +865,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Werkzeug zum Abspielen einer Reihendfolge von Layers.|false|
 |legend|nein|**[tool](#markdown-header-portalconfigmenutool)**||Legende. Stellt die Legende aller sichtbaren Layer dar.|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|false|
-|schulwegrouting|nein|**[schulwegrouting](#markdown-header-portalconfigmenutoolschulwegrouting)**||Schulwegrouting.|true|
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Neues Filtermodul.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
@@ -994,35 +1002,6 @@ Todo
 #!json
 {
     "scale": 2
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.einwohnerabfrage
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Einwohnerabfrage für Hamburg und die MRH (Metropolregion Hamburg).
-
-**ACHTUNG: Backend notwendig!**
-
-**Es wird über einen WPS eine FME-Workbench angesprochen, welche die Anzahl der Einwohner berechnet, unter Beachtung des Datenschutzes.**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|name|ja|String||Name des Werkzeuges im Menu.|false|
-|glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
-|onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
-|populationReqServiceId|ja|String|"2"|In rest-services.[...].js konfigurierte Service-ID|false|
-
-**Beispiel Einwohnerabfrage**
-```
-#!json
-"einwohnerabfrage": {
-    "name": "Einwohneranzahl abfragen",
-    "glyphicon": "glyphicon-wrench",
-    "onlyDesktop": false
 }
 ```
 
@@ -1198,32 +1177,6 @@ Er kann aber auch ein Objekt sein.
 
 ***
 
-#### Portalconfig.menu.tool.schulwegrouting
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Mit diesem hamburgspezifischen Tool kann von jeder hamburgischen Addresse zu jeder hamburgischen Schule die Route berechnet werden. Dabei werden auch die offiziellen Schuleingänge betrachtet.
-
-**ACHTUNG: Backend notwendig!**
-
-**Es wird über einen WPS eine FME-Workbench angesprochen, welche das Routing berechnet.**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|layerId|ja|String||Id des Layers der de Schulen enthält. Dieser Layer muss auch in den **[Themenconfig](#markdown-header-themenconfig)** konfiguriert sein.|false|
-
-**Beispiel**
-```
-#!json
-"schulwegrouting": {
-    "name": "Schulweg-Routing",
-    "glyphicon": "glyphicon-filter",
-    "layerId": "8712"
-}
-```
-
-***
-
 #### Portalconfig.menu.tool.compareFeatures
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1393,7 +1346,7 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
 |glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
-|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{caption: "Punkt", type: "simple_point", value: "simple_point"}, {caption: "Blatt", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{caption: "translate#common:modules.tools.draw.iconList.iconPoint", type: "simple_point", value: "simple_point"}, {caption: "translate#common:modules.tools.draw.iconList.iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
 
 **Beispiel**
 
@@ -1403,57 +1356,67 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
     "name": "Zeichnen / Schreiben",
     "glyphicon": "glyphicon-pencil",
     "iconList": [
-                    {
-				        "caption": "Punkt",
-						"type": "simple_point",
-						"value": "simple_point"
-					},
-					{
-						"caption": "Blatt",
-						"type": "glyphicon",
-						"value": "\ue103"
-					},
-					{
-						"caption": "CD",
-						"type": "glyphicon",
-						"value": "\ue201"
-					},
-					{
-						"caption": "Doktorhut",
-						"type": "glyphicon",
-						"value": "\ue233"
-					},
-					{
-						"caption": "Film",
-						"type": "glyphicon",
-						"value": "\ue009"
-					},
-					{
-						"caption": "Flagge",
-						"type": "glyphicon",
-						"value": "\ue034"
-					},
-					{
-						"caption": "Globus",
-						"type": "glyphicon",
-						"value": "\ue135"
-					},
-					{
-						"caption": "Musik",
-						"type": "glyphicon",
-						"value": "\ue002"
-					},
-					{
-						"caption": "Straße",
-						"type": "glyphicon",
-						"value": "\ue024"	
-					},
-					{
-						"caption": "Zelt",
-						"type": "glyphicon",
-						"value": "\u26fa"
-					}
-    ]
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconPoint",
+			"type": "simple_point",
+			"value": "simple_point"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
+			"type": "glyphicon",
+			"value": "\ue103"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconCD",
+			"type": "glyphicon",
+			"value": "\ue201"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconHat",
+			"type": "glyphicon",
+			"value": "\ue233"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconFire",
+			"type": "glyphicon",
+			"value": "\ue104"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconMovie",
+			"type": "glyphicon",
+			"value": "\ue009"
+		},
+		{
+		    "caption": "translate#common:modules.tools.draw.iconList.iconFlag",
+			"type": "glyphicon",
+			"value": "\ue034"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
+			"type": "glyphicon",
+			"value": "\ue135"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconMusic",
+			"type": "glyphicon",
+			"value": "\ue002"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconStreet",
+			"type": "glyphicon",
+			"value": "\ue024"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
+			"type": "image",
+			"value": "/img/icons/cloud.png"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconTent",
+			"type": "glyphicon",
+			"value": "\u26fa"
+		}
+	]
 }
 ```
 
@@ -1465,7 +1428,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird.|false|
+|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
 |type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/icons/` abgelegt. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
@@ -1474,13 +1437,13 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 ```
 #!json
 {
-	"caption": "Wolke",
+	"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
 	"type": "image",
 	"value": "/img/icons/cloud.png"
 }
 
 {
-    "caption": "Feuer",
+    "caption": "translate#common:modules.tools.draw.iconList.iconFire",
     "type": "glyphicon",
     "value": "\ue104"
 }
@@ -1693,7 +1656,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 |title|ja|String||Titel der im Werkzeug vorkommt.|false|
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|false|
 |layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
-
+|sliderType|nein|enum["player","handle"]|"player"|Typ des Layer sliders. Entweder als "player" mit Start/Pause/Stop-Buttons oder als "handle" mit einem Hebel. Bei "handle" wird die transparenz der Layer zusätzlich mit angepasst.|false|
 **Beispiel**
 ```
 #!json
@@ -1701,6 +1664,7 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
     "name": "Zeitreihe",
     "glyphicon": "glyphicon-film",
     "title": "Simulation von Beispiel-WMS",
+    "sliderType": "player",
     "timeInterval": 2000,
     "layerIds": [
         {
@@ -2114,6 +2078,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|false|
+|urlIsVisible|nein|Boolean|true|Anzeige ob die URL in der Layerinformation angezeigt werden soll.|false|
 
 **Beispiel**
 ```
@@ -2164,6 +2129,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|false|
+|urlIsVisible|nein|Boolean|true|Anzeige ob die URL in der Layerinformation angezeigt werden soll.|false|
 
 **Beispiel mit einer Id**
 ```
@@ -2531,6 +2497,7 @@ Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent besschr
 #!json
 [510000.0, 5850000.0, 625000.4, 6000000.0]
 ```
+
 ***
 
 ## Datatypes.CustomObject

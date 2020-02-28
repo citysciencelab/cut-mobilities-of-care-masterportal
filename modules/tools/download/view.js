@@ -18,8 +18,16 @@ const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
      */
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isActive": this.render
+            "change:isActive": this.render,
+            "change:createFirstText": function () {
+                if (this.model.get("isActive") === true) {
+                    this.render(this.model, true);
+                }
+            }
         });
+        this.listenTo(Radio.channel("Window"), {
+            "setIsVisible": this.close
+        }, this);
     },
 
     /**
@@ -29,7 +37,17 @@ const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
      */
     template: _.template(DownloadTemplate),
     model: new DownloadModel(),
-
+    /**
+     * Called if window is closed. Sets the model to isActive=false.
+     * @param {Boolean} value if false, window was set to isVisible=false
+     * @returns {void}
+     */
+    close: function (value) {
+        if (!value && this.model.get("isActive") === true) {
+            this.model.set("isActive", false);
+            this.model.reset();
+        }
+    },
     /**
      * Return to the draw module.
      * @returns {void}

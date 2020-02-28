@@ -6,7 +6,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         proxy: true,
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
-        loaderOverlayTimeout: 40
+        loaderOverlayTimeout: 40,
+        fadeOut: 2000
     },
     /**
      * @class Util
@@ -80,6 +81,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
         channel.on({
             "hideLoader": this.hideLoader,
+            "hideLoadingModule": this.hideLoadingModule,
             "showLoader": this.showLoader,
             "setUiStyle": this.setUiStyle,
             "copyToClipboard": this.copyToClipboard
@@ -250,7 +252,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         try {
             document.execCommand("copy");
             Radio.trigger("Alert", "alert", {
-                text: "Inhalt wurde in die Zwischenablage kopiert.",
+                text: i18next.t("common:modules.tools.saveSelection.contentSaved"),
                 kategorie: "alert-info",
                 position: "top-center",
                 animation: 2000
@@ -258,7 +260,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         }
         catch (e) {
             Radio.trigger("Alert", "alert", {
-                text: "Inhalt konnte nicht in die Zwischenablage kopiert werden.",
+                text: i18next.t("common:modules.tools.saveSelection.contenNotSaved"),
                 kategorie: "alert-info",
                 position: "top-center"
             });
@@ -356,6 +358,14 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     hideLoader: function () {
         $("#loader").hide();
+    },
+
+    /**
+     * hides the loading module until the timeout has expired
+     * @returns {void}
+     */
+    hideLoadingModule: function () {
+        $(".loading").fadeOut(this.get("fadeOut"));
     },
 
     /**
@@ -461,7 +471,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             }
             else {
                 Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br> <small>Details: Config-Parameter verlangt eine Datei mit der Endung \".json\".</small>",
+                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
+                    + "<br> Der URL-Paramater <strong>Config</strong> verlangt eine Datei mit der Endung \".json\"."
+                    + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
                     kategorie: "alert-warning"
                 });
             }

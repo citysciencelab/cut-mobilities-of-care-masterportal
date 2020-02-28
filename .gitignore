@@ -11,14 +11,10 @@
 /nbproject/private/
 
 addons/*
-!addons/addons.md
-!addons/__example__addonsConf.json
-!addons/exampleAddon
-!addons/exampleAddon/*
+!addons/readme.txt
 
 bowerupdate.log
 build
-components
 coverage
 
 css/bootstrap.css
