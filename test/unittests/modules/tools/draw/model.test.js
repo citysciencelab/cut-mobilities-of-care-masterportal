@@ -23,7 +23,7 @@ describe("drawModel", function () {
     });
 
     describe("createLayer", function () {
-        it("should return a result that be not undefined", function () {
+        it("should return a result that should not be undefined", function () {
             expect(model.createLayer(undefined)).to.exist;
         });
         it("the result should be an instance of vectorLayer for undefined input", function () {

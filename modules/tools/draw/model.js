@@ -27,7 +27,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         strokeWidth: 1,
         opacity: 1,
         opacityContour: 1,
-        drawType: {},
+        drawType: {
+            geometry: "Point",
+            text: "Punkt zeichnen"
+        },
         symbol: "",
         pointSize: 16,
         renderToWindow: true,
@@ -1449,12 +1452,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
         this.combineColorOpacityContour(this.defaults.opacityContour);
 
-        if (_.isUndefined(value1) || _.isUndefined(value2)) {
-            this.set("drawType", {});
-        }
-        else {
-            this.set("drawType", {geometry: value1, text: value2});
-        }
+        this.set("drawType", {geometry: value1, text: value2});
     },
 
     /**
