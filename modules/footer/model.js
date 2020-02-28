@@ -41,8 +41,12 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
         const urls = this.get("urls");
 
         urls.forEach(function (url) {
-            if (url.alias.indexOf("translate#") > -1) {
-                url.alias = i18next.t(url.alias.substring("translate#".length));
+            if (url.aliasKey) {
+                url.alias = i18next.t(url.aliasKey);
+            }
+            else if (url.alias.indexOf("translate#") > -1) {
+                url.aliasKey = url.alias.substring("translate#".length);
+                url.alias = i18next.t(url.aliasKey);
             }
         }, this);
         urls[0].bezeichnung = i18next.t("common:modules.footer.designation");
