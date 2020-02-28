@@ -1,11 +1,4 @@
 
-// this.listenTo(Radio.channel("Title"), {
-//     "setSize": function () {
-//         console.log("listenTO");
-//         // this.renderDependingOnSpace();
-//     }
-// });
-
 export default {
     state: {
         link: "https://geoinfo.hamburg.de",
@@ -17,10 +10,5 @@ export default {
         LogoToolTip: undefined,
         tooltip: undefined,
         PortalLogo: undefined
-    },
-    mutations: {
-        changedTitleWidth (state, newWidth) {
-            state.TitleWidth = newWidth;
-        }
     }
 };
