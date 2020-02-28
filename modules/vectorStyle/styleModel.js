@@ -50,7 +50,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
         // label style is optional and depends on some fields
         if (isClustered || hasLabelField) {
-            if (_.isArray(styleObject)) {
+            if (Array.isArray(styleObject)) {
                 styleObject[0].setText(this.getLabelStyle(feature, style, isClustered));
             }
             else {

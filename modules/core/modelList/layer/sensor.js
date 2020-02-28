@@ -909,7 +909,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime, true);
         updatedFeature = this.aggregateDataStreamValue(feature);
         updatedFeature = this.aggregateDataStreamPhenomenonTime(feature);
-        
+
         Radio.trigger("GFI", "changeFeature", updatedFeature);
     },
 

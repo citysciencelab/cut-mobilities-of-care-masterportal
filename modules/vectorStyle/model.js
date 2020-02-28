@@ -157,7 +157,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @param {Number[]} [circleBarLineStrokeColor=[0,0,0,1]] Line stroke color of circle bar in rgba-format.
      */
     initialize: function () {
-        if (!_.isUndefined(Config.wfsImgPath)) {
+        if (Config.wfsImgPath !== undefined) {
             this.setImagePath(Config.wfsImgPath);
         }
         else {
@@ -174,12 +174,12 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createStyle: function (feature, isClustered) {
-        var style = this.getDefaultStyle(),
-            styleClass = this.get("class").toUpperCase(),
+        let style = this.getDefaultStyle();
+        const styleClass = this.get("class").toUpperCase(),
             styleSubClass = this.get("subClass").toUpperCase(),
             labelField = this.get("labelField");
 
-        if (_.isUndefined(feature)) {
+        if (feature === undefined) {
             return style;
         }
         else if (styleClass === "POINT") {
@@ -196,7 +196,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
 
         // after style is derived, createTextStyle
-        if (_.isArray(style)) {
+        if (Array.isArray(style)) {
             style[0].setText(this.createTextStyle(feature, labelField, isClustered));
         }
         else {
@@ -211,7 +211,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - Open layers default style.
     */
     getDefaultStyle: function () {
-        var fill = new Fill({
+        const fill = new Fill({
                 color: "rgba(255,255,255,0.4)"
             }),
             stroke = new Stroke({
@@ -238,7 +238,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createLineStyle: function (feature, styleSubClass) {
-        var style = this.getDefaultStyle();
+        let style = this.getDefaultStyle();
 
         if (styleSubClass === "SIMPLE") {
             style = this.createSimpleLineStyle(feature);
@@ -278,7 +278,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createPolygonStyle: function (feature, styleSubClass) {
-        var style = this.getDefaultStyle();
+        let style = this.getDefaultStyle();
 
         if (styleSubClass === "SIMPLE") {
             style = this.createSimplePolygonStyle();
@@ -296,19 +296,17 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createSimplePolygonStyle: function () {
-        var strokestyle = new Stroke({
+        const strokestyle = new Stroke({
                 color: this.returnColor(this.get("polygonStrokeColor"), "rgb"),
                 width: parseFloat(this.get("polygonStrokeWidth"))
             }),
             fill = new Fill({
                 color: this.returnColor(this.get("polygonFillColor"), "rgb")
             }),
-            style;
-
-        style = new Style({
-            stroke: strokestyle,
-            fill: fill
-        });
+            style = new Style({
+                stroke: strokestyle,
+                fill: fill
+            });
 
         return style;
     },
@@ -389,7 +387,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createPointStyle: function (feature, styleSubClass, isClustered) {
-        var style = this.getDefaultStyle();
+        let style = this.getDefaultStyle();
 
         if (styleSubClass === "SIMPLE") {
             style = this.createSimplePointStyle(feature, isClustered);
@@ -413,8 +411,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createClusterStyle: function () {
-        var clusterClass = this.get("clusterClass"),
-            clusterStyle;
+        const clusterClass = this.get("clusterClass");
+        let clusterStyle;
 
         if (clusterClass === "SIMPLE") {
             clusterStyle = this.createSimpleClusterStyle();
@@ -431,7 +429,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createSimpleClusterStyle: function () {
-        var src = this.get("imagePath") + this.get("clusterImageName"),
+        const src = this.get("imagePath") + this.get("clusterImageName"),
             isSVG = src.indexOf(".svg") > -1,
             width = this.get("clusterImageWidth"),
             height = this.get("clusterImageHeight"),
@@ -455,7 +453,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createCircleClusterStyle: function () {
-        var radius = parseFloat(this.get("clusterCircleRadius"), 10),
+        const radius = parseFloat(this.get("clusterCircleRadius"), 10),
             fillcolor = this.returnColor(this.get("clusterCircleFillColor"), "rgb"),
             strokecolor = this.returnColor(this.get("clusterCircleStrokeColor"), "rgb"),
             strokewidth = parseFloat(this.get("clusterCircleStrokeWidth"), 10),
@@ -481,14 +479,13 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createSimplePointStyle: function (feature, isClustered) {
-        var src,
+        let src,
             isSVG,
             width,
             height,
             scale,
             offset,
             imagestyle,
-            style,
             offsetXUnit,
             offsetYUnit;
 
@@ -516,12 +513,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             });
         }
 
-        style = new Style({
+        return new Style({
             image: imagestyle
         });
-
-        return style;
-
     },
 
     /**
@@ -810,12 +804,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createCirclePointStyle: function (feature, isClustered) {
-        var radius,
+        let radius,
             fillcolor,
             strokecolor,
             strokewidth,
-            circleStyle,
-            style;
+            circleStyle;
 
         if (isClustered) {
             circleStyle = this.createClusterStyle();
@@ -836,11 +829,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 })
             });
         }
-        style = new Style({
+
+        return new Style({
             image: circleStyle
         });
-
-        return style;
     },
 
     /**
@@ -850,8 +842,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {ol.Style} style
      */
     createAdvancedPointStyle: function (feature, isClustered) {
-        var styleScaling = this.get("scaling").toUpperCase(),
-            style,
+        const styleScaling = this.get("scaling").toUpperCase();
+        let style,
             imagestyle,
             workingFeature = feature;
 
@@ -865,7 +857,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         else {
 
             // parse from array
-            if (_.isArray(workingFeature.get("features"))) {
+            if (Array.isArray(workingFeature.get("features"))) {
                 workingFeature = workingFeature.get("features")[0];
             }
 
@@ -887,10 +879,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {ol.Style} style
      */
     createNominalAdvancedPointStyle: function (feature) {
-        var styleScalingShape = this.get("scalingShape").toUpperCase(),
+        const styleScalingShape = this.get("scalingShape").toUpperCase(),
             imageName = this.get("imageName"),
-            imageNameDefault = this.defaults.imageName,
-            svgPath,
+            imageNameDefault = this.defaults.imageName;
+        let svgPath,
             style,
             imageStyle;
 
@@ -914,18 +906,14 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {ol.Style} style
      */
     createIntervalAdvancedPointStyle: function (feature) {
-        var styleScalingShape = this.get("scalingShape").toUpperCase(),
-            svgPath,
-            style;
+        const styleScalingShape = this.get("scalingShape").toUpperCase();
+        let svgPath;
 
         if (styleScalingShape === "CIRCLE_BAR") {
             svgPath = this.createIntervalCircleBar(feature);
         }
 
-        style = this.createSVGStyle(svgPath);
-
-        return style;
-
+        return this.createSVGStyle(svgPath);
     },
 
     /**
@@ -934,7 +922,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {ol.Style} style
      */
     createSVGStyle: function (svgPath) {
-        var size = this.get("size");
+        const size = this.get("size");
 
         return new Style({
             image: new Icon({
@@ -952,13 +940,13 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createTextStyle: function (feature, labelField, isClustered) {
-        var textStyle,
+        let textStyle,
             textObj = {};
 
         if (isClustered) {
             textObj = this.createClusteredTextStyle(feature, labelField);
 
-            if (!_.isUndefined(textObj)) {
+            if (textObj !== undefined) {
                 textStyle = this.createTextStyleFromObject(textObj);
             }
         }
@@ -987,7 +975,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {ol/style} - The created style.
      */
     createTextStyleFromObject: function (textObj) {
-        var textStyle = new Text({
+        const textStyle = new Text({
             text: textObj.text,
             textAlign: textObj.textAlign,
             offsetX: textObj.offsetX,
@@ -1015,7 +1003,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {ol/style} - The created style.
     */
     createClusteredTextStyle: function (feature, labelField) {
-        var clusterTextObj = {};
+        let clusterTextObj = {};
 
         if (feature.get("features").length === 1) {
             clusterTextObj.text = feature.get("features")[0].get(labelField);
@@ -1070,17 +1058,17 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     * @returns {String|Number[]} - The converted color.
     */
     returnColor: function (color, dest) {
-        var src,
+        let src,
             newColor = color,
             pArray = [];
 
-        if (_.isArray(newColor) && !_.isString(newColor)) {
+        if (Array.isArray(newColor)) {
             src = "rgb";
         }
-        else if (_.isString(newColor) && newColor.indexOf("#") === 0) {
+        else if (typeof newColor === "string" && newColor.indexOf("#") === 0) {
             src = "hex";
         }
-        else if (_.isString(newColor) && newColor.indexOf("#") === -1) {
+        else if (typeof newColor === "string" && newColor.indexOf("#") === -1) {
             src = "rgb";
 
             pArray = newColor.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
@@ -1117,7 +1105,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {String} - Converted color number as hex string.
      */
     componentToHex: function (c) {
-        var hex = c.toString(16);
+        const hex = c.toString(16);
 
         return hex.length === 1 ? "0" + hex : hex;
     },
@@ -1129,13 +1117,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      */
     hexToRgb: function (hex) {
         // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
-            result,
-            hexReplace;
-
-        hexReplace = hex.replace(shorthandRegex, function (m, r, g, b) {
-            return r + r + g + g + b + b;
-        });
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+            hexReplace = hex.replace(shorthandRegex, function (m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+        let result;
 
         result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
         result = result.exec(hexReplace);
@@ -1149,7 +1135,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {array} normColor
      */
     normalizeRgbColor: function (newColor) {
-        var normColor = newColor;
+        let normColor = newColor;
 
         if (normColor.length === 4) {
             return normColor;
@@ -1172,27 +1158,30 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {String} svg with colored circle segments
      */
     createNominalCircleSegments: function (feature) {
-        var size = 10,
-            circleSegmentsRadius = parseFloat(this.get("circleSegmentsRadius"), 10),
+        const circleSegmentsRadius = parseFloat(this.get("circleSegmentsRadius"), 10),
             circleSegmentsStrokeWidth = parseFloat(this.get("circleSegmentsStrokeWidth"), 10),
-            circleSegmentsFillOpacity = _.last(this.get("circleSegmentsBackgroundColor")),
+            circleSegBCArray = this.get("circleSegmentsBackgroundColor"),
+            circleSegmentsFillOpacity = Array.isArray(circleSegBCArray) && circleSegBCArray[circleSegBCArray.length - 1],
             circleSegmentsBackgroundColor = this.returnColor(this.get("circleSegmentsBackgroundColor"), "hex"),
             scalingValueDefaultColor = this.returnColor(this.get("scalingValueDefaultColor"), "hex"),
             scalingValues = this.get("scalingValues"),
             scalingAttributesAsObject = this.getScalingAttributesAsObject(scalingValues),
             scalingAttribute = feature.get(this.get("scalingAttribute")),
             scalingObject = this.fillScalingAttributes(scalingAttributesAsObject, scalingAttribute),
-            totalSegments = _.reduce(_.values(scalingObject), function (memo, num) {
+            totalSegments = Object.values(scalingObject).reduce(function (memo, num) {
                 return memo + num;
             }, 0),
             degreeSegment = totalSegments >= 0 ? 360 / totalSegments : 360,
+            gap = parseFloat(this.get("circleSegmentsGap"), 10);
+        let size = 10,
             startAngelDegree = 0,
             endAngelDegree = degreeSegment,
             svg,
             d,
             strokeColor,
             i,
-            gap = parseFloat(this.get("circleSegmentsGap"), 10);
+            key,
+            value;
 
         // calculate size
         if (((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2) >= size) {
@@ -1205,8 +1194,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
         svg = this.createSvgNominalCircleSegments(size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity);
 
-        _.each(scalingObject, function (value, key) {
-            if (!_.isUndefined(scalingValues) && (key !== "empty")) {
+
+        for (key in scalingObject) {
+            value = scalingObject[key];
+
+            if (scalingValues !== undefined && (key !== "empty")) {
                 strokeColor = this.returnColor(scalingValues[key], "hex");
             }
             else {
@@ -1224,7 +1216,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 startAngelDegree = startAngelDegree + degreeSegment;
                 endAngelDegree = endAngelDegree + degreeSegment;
             }
-        }, this);
+        }
 
         svg = svg + "</svg>";
 
@@ -1238,22 +1230,18 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {Object} scalingObject - contains the states
      */
     fillScalingAttributes: function (scalingAttributesAsObject, scalingAttribute) {
-        var scalingObject = _.isUndefined(scalingAttributesAsObject) || _.isEmpty(scalingAttributesAsObject)
-                ? {empty: 0} : scalingAttributesAsObject,
-            states = scalingAttribute;
+        const scalingObject = scalingAttributesAsObject === undefined || Object.keys(scalingAttributesAsObject).length === 0
+            ? {empty: 0} : scalingAttributesAsObject;
+        let states = scalingAttribute;
 
-        if (_.contains(states, "|")) {
-            states = states.split(" | ");
-        }
-        else if (_.isUndefined(states)) {
-            states = undefined;
-        }
-        else {
-            states = [states];
+        if (states === undefined) {
+            return scalingObject;
         }
 
-        _.each(states, function (state) {
-            if (_.contains(_.keys(scalingObject), String(state))) {
+        states = states.split(" | ");
+
+        states.forEach(function (state) {
+            if (scalingObject.hasOwnProperty(state)) {
                 scalingObject[state] = scalingObject[state] + 1;
             }
             else {
@@ -1270,12 +1258,13 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {object} scalingAttribute with value 0
      */
     getScalingAttributesAsObject: function (scalingValues) {
-        var obj = {};
+        const obj = {};
+        let key;
 
-        if (!_.isUndefined(scalingValues)) {
-            _.each(scalingValues, function (key, value) {
-                obj[value] = 0;
-            });
+        if (scalingValues !== undefined) {
+            for (key in scalingValues) {
+                obj[key] = 0;
+            }
         }
 
         obj.empty = 0;
@@ -1293,11 +1282,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {String} svg
      */
     createSvgNominalCircleSegments: function (size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity) {
-        var halfSize = size / 2,
-            svg = "<svg width='" + size + "'" +
-                " height='" + size + "'" +
-                " xmlns='http://www.w3.org/2000/svg'" +
-                " xmlns:xlink='http://www.w3.org/1999/xlink'>";
+        const halfSize = size / 2;
+        let svg = "<svg width='" + size + "'" +
+            " height='" + size + "'" +
+            " xmlns='http://www.w3.org/2000/svg'" +
+            " xmlns:xlink='http://www.w3.org/1999/xlink'>";
 
         svg = svg + "<circle cx='" + halfSize + "'" +
             " cy='" + halfSize + "'" +
@@ -1336,49 +1325,31 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {String} all circle segments
      */
     calculateCircleSegment: function (startAngelDegree, endAngelDegree, circleRadius, size, gap) {
-        var rad = Math.PI / 180,
+        const rad = Math.PI / 180,
             xy = size / 2,
             isCircle = startAngelDegree === 0 && endAngelDegree === 360,
-            startAngleRad,
-            endAngleRad,
-            xStart,
-            yStart,
-            xEnd,
-            yEnd,
-            d,
-            endAngelDegreeActual = endAngelDegree,
-            gapActual = gap;
+            endAngelDegreeActual = isCircle ? endAngelDegree / 2 : endAngelDegree,
+            gapActual = isCircle ? 0 : gap,
+            // convert angle from degree to radiant
+            startAngleRad = (startAngelDegree + (gapActual / 2)) * rad,
+            endAngleRad = (endAngelDegreeActual - (gapActual / 2)) * rad,
+            xStart = xy + (Math.cos(startAngleRad) * circleRadius),
+            yStart = xy - (Math.sin(startAngleRad) * circleRadius),
+            xEnd = xy + (Math.cos(endAngleRad) * circleRadius),
+            yEnd = xy - (Math.sin(endAngleRad) * circleRadius);
 
         if (isCircle) {
-            endAngelDegreeActual = endAngelDegreeActual / 2;
-            gapActual = 0;
-        }
-
-        // convert angle from degree to radiant
-        startAngleRad = (startAngelDegree + (gapActual / 2)) * rad;
-        endAngleRad = (endAngelDegreeActual - (gapActual / 2)) * rad;
-
-        xStart = xy + (Math.cos(startAngleRad) * circleRadius);
-        yStart = xy - (Math.sin(startAngleRad) * circleRadius);
-
-        xEnd = xy + (Math.cos(endAngleRad) * circleRadius);
-        yEnd = xy - (Math.sin(endAngleRad) * circleRadius);
-
-        if (isCircle) {
-            d = [
+            return [
                 "M", xStart, yStart,
                 "A", circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd,
                 "A", circleRadius, circleRadius, 0, 0, 0, xStart, yStart
             ].join(" ");
         }
-        else {
-            d = [
-                "M", xStart, yStart,
-                "A", circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd
-            ].join(" ");
-        }
 
-        return d;
+        return [
+            "M", xStart, yStart,
+            "A", circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd
+        ].join(" ");
     },
 
     /**
@@ -1387,31 +1358,22 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {String} svg
      */
     createIntervalCircleBar: function (feature) {
-        var stateValue = feature.get(this.get("scalingAttribute")),
-            circleBarScalingFactor = parseFloat(this.get("circleBarScalingFactor")),
+        const circleBarScalingFactor = parseFloat(this.get("circleBarScalingFactor")),
             circleBarRadius = parseFloat(this.get("circleBarRadius"), 10),
             circleBarLineStroke = parseFloat(this.get("circleBarLineStroke"), 10),
             circleBarCircleFillColor = this.returnColor(this.get("circleBarCircleFillColor"), "hex"),
             circleBarCircleStrokeColor = this.returnColor(this.get("circleBarCircleStrokeColor"), "hex"),
             circleBarCircleStrokeWidth = this.get("circleBarCircleStrokeWidth"),
             circleBarLineStrokeColor = this.returnColor(this.get("circleBarLineStrokeColor"), "hex"),
-            size,
-            barLength,
-            svg;
-
-        if (_.contains(stateValue, " ")) {
-            stateValue = stateValue.split(" ")[0];
-        }
-
-        size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius);
-        barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor);
+            scalingAttribute = feature.get(this.get("scalingAttribute")),
+            stateValue = scalingAttribute !== undefined && scalingAttribute.indexOf(" ") !== -1 ? scalingAttribute.split(" ")[0] : scalingAttribute,
+            size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius),
+            barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor);
 
         this.setSize(size);
 
         // create svg
-        svg = this.createSvgIntervalCircleBar(size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius);
-
-        return svg;
+        return this.createSvgIntervalCircleBar(size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius);
     },
 
     /**
@@ -1423,7 +1385,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {number} size - size of the section to be drawn
      */
     calculateSizeIntervalCircleBar: function (stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius) {
-        var size = circleBarRadius * 2;
+        let size = circleBarRadius * 2;
 
         if (((stateValue * circleBarScalingFactor) + circleBarLineStroke) >= size) {
             size = size + (stateValue * circleBarScalingFactor) + circleBarLineStroke;
@@ -1441,7 +1403,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {number} barLength
      */
     calculateLengthIntervalCircleBar: function (size, circleBarRadius, stateValue, circleBarScalingFactor) {
-        var barLength;
+        let barLength;
 
         if (stateValue >= 0) {
             barLength = (size / 2) - circleBarRadius - (stateValue * circleBarScalingFactor);
@@ -1469,7 +1431,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @return {String} svg
      */
     createSvgIntervalCircleBar: function (size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius) {
-        var svg = "<svg width='" + size + "'" +
+        let svg = "<svg width='" + size + "'" +
                 " height='" + size + "'" +
                 " xmlns='http://www.w3.org/2000/svg'" +
                 " xmlns:xlink='http://www.w3.org/1999/xlink'>";

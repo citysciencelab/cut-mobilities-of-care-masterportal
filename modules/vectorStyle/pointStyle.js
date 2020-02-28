@@ -70,7 +70,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     },
 
     initialize: function (feature, styles, isClustered) {
-        if (!_.isUndefined(Config.wfsImgPath)) {
+        if (Config.wfsImgPath !== undefined) {
             this.setImagePath(Config.wfsImgPath);
         }
         else {
@@ -264,7 +264,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {ol.Style} style
      */
     createSVGStyle: function (svgPath) {
-        var size = this.get("size");
+        const size = this.get("size");
 
         return new Style({
             image: new Icon({
@@ -283,17 +283,17 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     * @returns {String|Number[]} - The converted color.
     */
     returnColor: function (color, dest) {
-        var src,
+        let src,
             newColor = color,
             pArray = [];
 
-        if (_.isArray(newColor) && !_.isString(newColor)) {
+        if (Array.isArray(newColor)) {
             src = "rgb";
         }
-        else if (_.isString(newColor) && newColor.indexOf("#") === 0) {
+        else if (typeof newColor === "string" && newColor.indexOf("#") === 0) {
             src = "hex";
         }
-        else if (_.isString(newColor) && newColor.indexOf("#") === -1) {
+        else if (typeof newColor === "string" && newColor.indexOf("#") === -1) {
             src = "rgb";
 
             pArray = newColor.replace("[", "").replace("]", "").replace(/ /g, "").split(",");
@@ -330,7 +330,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @returns {String} - Converted color number as hex string.
      */
     componentToHex: function (c) {
-        var hex = c.toString(16);
+        const hex = c.toString(16);
 
         return hex.length === 1 ? "0" + hex : hex;
     },
@@ -342,13 +342,11 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      */
     hexToRgb: function (hex) {
         // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
-            result,
-            hexReplace;
-
-        hexReplace = hex.replace(shorthandRegex, function (m, r, g, b) {
-            return r + r + g + g + b + b;
-        });
+        const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
+            hexReplace = hex.replace(shorthandRegex, function (m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+        let result;
 
         result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
         result = result.exec(hexReplace);
@@ -373,27 +371,30 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {String} svg with colored circle segments
      */
     createNominalCircleSegments: function (feature) {
-        var size = 10,
-            circleSegmentsRadius = parseFloat(this.get("circleSegmentsRadius"), 10),
+        const circleSegmentsRadius = parseFloat(this.get("circleSegmentsRadius"), 10),
             circleSegmentsStrokeWidth = parseFloat(this.get("circleSegmentsStrokeWidth"), 10),
-            circleSegmentsFillOpacity = _.last(this.get("circleSegmentsBackgroundColor")),
+            circleSegBCArray = this.get("circleSegmentsBackgroundColor"),
+            circleSegmentsFillOpacity = Array.isArray(circleSegBCArray) && circleSegBCArray[circleSegBCArray.length - 1],
             circleSegmentsBackgroundColor = this.returnColor(this.get("circleSegmentsBackgroundColor"), "hex"),
             scalingValueDefaultColor = this.returnColor(this.get("scalingValueDefaultColor"), "hex"),
             scalingValues = this.get("scalingValues"),
             scalingAttributesAsObject = this.getScalingAttributesAsObject(scalingValues),
             scalingAttribute = feature.get(this.get("scalingAttribute")),
             scalingObject = this.fillScalingAttributes(scalingAttributesAsObject, scalingAttribute),
-            totalSegments = _.reduce(_.values(scalingObject), function (memo, num) {
+            totalSegments = Object.values(scalingObject).reduce(function (memo, num) {
                 return memo + num;
             }, 0),
             degreeSegment = totalSegments >= 0 ? 360 / totalSegments : 360,
+            gap = parseFloat(this.get("circleSegmentsGap"), 10);
+        let size = 10,
             startAngelDegree = 0,
             endAngelDegree = degreeSegment,
             svg,
             d,
             strokeColor,
             i,
-            gap = parseFloat(this.get("circleSegmentsGap"), 10);
+            key,
+            value;
 
         // calculate size
         if (((circleSegmentsRadius + circleSegmentsStrokeWidth) * 2) >= size) {
@@ -406,8 +407,9 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
 
         svg = this.createSvgNominalCircleSegments(size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity);
 
-        _.each(scalingObject, function (value, key) {
-            if (!_.isUndefined(scalingValues) && (key !== "empty")) {
+        for (key in scalingObject) {
+            value = scalingObject[key];
+            if (scalingValues !== undefined && (key !== "empty")) {
                 strokeColor = this.returnColor(scalingValues[key], "hex");
             }
             else {
@@ -425,7 +427,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
                 startAngelDegree = startAngelDegree + degreeSegment;
                 endAngelDegree = endAngelDegree + degreeSegment;
             }
-        }, this);
+        }
 
         svg = svg + "</svg>";
 
@@ -439,22 +441,18 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {Object} scalingObject - contains the states
      */
     fillScalingAttributes: function (scalingAttributesAsObject, scalingAttribute) {
-        var scalingObject = _.isUndefined(scalingAttributesAsObject) || _.isEmpty(scalingAttributesAsObject)
-                ? {empty: 0} : scalingAttributesAsObject,
-            states = scalingAttribute;
+        const scalingObject = scalingAttributesAsObject === undefined || Object.keys(scalingAttributesAsObject).length === 0
+            ? {empty: 0} : scalingAttributesAsObject;
+        let states = scalingAttribute;
 
-        if (_.isUndefined(states)) {
+        if (states === undefined) {
             return scalingObject;
         }
-        else if (_.contains(states, "|")) {
-            states = states.split(" | ");
-        }
-        else {
-            states = [states];
-        }
 
-        _.each(states, function (state) {
-            if (_.contains(_.keys(scalingObject), String(state))) {
+        states = states.split(" | ");
+
+        states.forEach(function (state) {
+            if (scalingObject.hasOwnProperty(state)) {
                 scalingObject[state] = scalingObject[state] + 1;
             }
             else {
@@ -471,12 +469,13 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {object} scalingAttribute with value 0
      */
     getScalingAttributesAsObject: function (scalingValues) {
-        var obj = {};
+        const obj = {};
+        let key;
 
-        if (!_.isUndefined(scalingValues)) {
-            _.each(scalingValues, function (key, value) {
-                obj[value] = 0;
-            });
+        if (scalingValues !== undefined) {
+            for (key in scalingValues) {
+                obj[key] = 0;
+            }
         }
 
         obj.empty = 0;
@@ -494,8 +493,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {String} svg
      */
     createSvgNominalCircleSegments: function (size, circleSegmentsRadius, circleSegmentsBackgroundColor, circleSegmentsStrokeWidth, circleSegmentsFillOpacity) {
-        var halfSize = size / 2,
-            svg = "<svg width='" + size + "'" +
+        const halfSize = size / 2;
+        let svg = "<svg width='" + size + "'" +
                 " height='" + size + "'" +
                 " xmlns='http://www.w3.org/2000/svg'" +
                 " xmlns:xlink='http://www.w3.org/1999/xlink'>";
@@ -537,49 +536,31 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {String} all circle segments
      */
     calculateCircleSegment: function (startAngelDegree, endAngelDegree, circleRadius, size, gap) {
-        var rad = Math.PI / 180,
+        const rad = Math.PI / 180,
             xy = size / 2,
             isCircle = startAngelDegree === 0 && endAngelDegree === 360,
-            startAngleRad,
-            endAngleRad,
-            xStart,
-            yStart,
-            xEnd,
-            yEnd,
-            d,
-            endAngelDegreeActual = endAngelDegree,
-            gapActual = gap;
+            endAngelDegreeActual = isCircle ? endAngelDegree / 2 : endAngelDegree,
+            gapActual = isCircle ? 0 : gap,
+            // convert angle from degree to radiant
+            startAngleRad = (startAngelDegree + (gapActual / 2)) * rad,
+            endAngleRad = (endAngelDegreeActual - (gapActual / 2)) * rad,
+            xStart = xy + (Math.cos(startAngleRad) * circleRadius),
+            yStart = xy - (Math.sin(startAngleRad) * circleRadius),
+            xEnd = xy + (Math.cos(endAngleRad) * circleRadius),
+            yEnd = xy - (Math.sin(endAngleRad) * circleRadius);
 
         if (isCircle) {
-            endAngelDegreeActual = endAngelDegreeActual / 2;
-            gapActual = 0;
-        }
-
-        // convert angle from degree to radiant
-        startAngleRad = (startAngelDegree + (gapActual / 2)) * rad;
-        endAngleRad = (endAngelDegreeActual - (gapActual / 2)) * rad;
-
-        xStart = xy + (Math.cos(startAngleRad) * circleRadius);
-        yStart = xy - (Math.sin(startAngleRad) * circleRadius);
-
-        xEnd = xy + (Math.cos(endAngleRad) * circleRadius);
-        yEnd = xy - (Math.sin(endAngleRad) * circleRadius);
-
-        if (isCircle) {
-            d = [
+            return [
                 "M", xStart, yStart,
                 "A", circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd,
                 "A", circleRadius, circleRadius, 0, 0, 0, xStart, yStart
             ].join(" ");
         }
-        else {
-            d = [
-                "M", xStart, yStart,
-                "A", circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd
-            ].join(" ");
-        }
 
-        return d;
+        return [
+            "M", xStart, yStart,
+            "A", circleRadius, circleRadius, 0, 0, 0, xEnd, yEnd
+        ].join(" ");
     },
 
     /**
@@ -588,31 +569,22 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {String} svg
      */
     createIntervalCircleBar: function (feature) {
-        var stateValue = feature.get(this.get("scalingAttribute")),
-            circleBarScalingFactor = parseFloat(this.get("circleBarScalingFactor")),
+        const circleBarScalingFactor = parseFloat(this.get("circleBarScalingFactor")),
             circleBarRadius = parseFloat(this.get("circleBarRadius"), 10),
             circleBarLineStroke = parseFloat(this.get("circleBarLineStroke"), 10),
             circleBarCircleFillColor = this.returnColor(this.get("circleBarCircleFillColor"), "hex"),
             circleBarCircleStrokeColor = this.returnColor(this.get("circleBarCircleStrokeColor"), "hex"),
             circleBarCircleStrokeWidth = this.get("circleBarCircleStrokeWidth"),
             circleBarLineStrokeColor = this.returnColor(this.get("circleBarLineStrokeColor"), "hex"),
-            size,
-            barLength,
-            svg;
-
-        if (_.contains(stateValue, " ")) {
-            stateValue = stateValue.split(" ")[0];
-        }
-
-        size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius);
-        barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor);
+            scalingAttribute = feature.get(this.get("scalingAttribute")),
+            stateValue = scalingAttribute !== undefined && scalingAttribute.indexOf(" ") !== -1 ? scalingAttribute.split(" ")[0] : scalingAttribute,
+            size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius),
+            barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor);
 
         this.setSize(size);
 
         // create svg
-        svg = this.createSvgIntervalCircleBar(size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius);
-
-        return svg;
+        return this.createSvgIntervalCircleBar(size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius);
     },
 
     /**
@@ -624,7 +596,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {number} size - size of the section to be drawn
      */
     calculateSizeIntervalCircleBar: function (stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius) {
-        var size = circleBarRadius * 2;
+        let size = circleBarRadius * 2;
 
         if (((stateValue * circleBarScalingFactor) + circleBarLineStroke) >= size) {
             size = size + (stateValue * circleBarScalingFactor) + circleBarLineStroke;
@@ -642,7 +614,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {number} barLength
      */
     calculateLengthIntervalCircleBar: function (size, circleBarRadius, stateValue, circleBarScalingFactor) {
-        var barLength;
+        let barLength;
 
         if (stateValue >= 0) {
             barLength = (size / 2) - circleBarRadius - (stateValue * circleBarScalingFactor);
@@ -670,7 +642,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      * @return {String} svg
      */
     createSvgIntervalCircleBar: function (size, barLength, circleBarCircleFillColor, circleBarCircleStrokeColor, circleBarCircleStrokeWidth, circleBarLineStrokeColor, circleBarLineStroke, circleBarRadius) {
-        var svg = "<svg width='" + size + "'" +
+        let svg = "<svg width='" + size + "'" +
                 " height='" + size + "'" +
                 " xmlns='http://www.w3.org/2000/svg'" +
                 " xmlns:xlink='http://www.w3.org/1999/xlink'>";

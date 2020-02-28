@@ -2,7 +2,7 @@ import Feature from "ol/Feature.js";
 import Tool from "../core/modelList/tool/model";
 
 const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         legendParams: [],
         paramsStyleWMS: [],
         paramsStyleWMSArray: [],
@@ -41,7 +41,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @fires Legend#changeParamsStyleWMSArray
      */
     initialize: function () {
-        var channel = Radio.channel("Legend");
+        const channel = Radio.channel("Legend");
 
         this.superInitialize();
         channel.reply({
@@ -75,7 +75,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @return {Object} returns legend information
      */
     getLegend: function (layer) {
-        var layerSources = layer.get("layerSource"); // Array oder undefined
+        const layerSources = layer.get("layerSource"); // Array oder undefined
 
         return this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources);
     },
@@ -85,8 +85,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     * @returns {void}
     */
     updateParamsStyleWMSArray: function (params) {
-
-        var paramsStyleWMSArray2 = this.copyOtherParamsStyleWMS(params.styleWMSName);
+        const paramsStyleWMSArray2 = this.copyOtherParamsStyleWMS(params.styleWMSName);
 
         paramsStyleWMSArray2.push(params);
         this.set("paramsStyleWMS", params);
@@ -98,10 +97,10 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     * @returns {Array} returns paramsStyleWMS
     */
     copyOtherParamsStyleWMS: function (nameOfLayerToExclude) {
-        var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
+        const paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             paramsStyleWMSArray2 = [];
 
-        _.each(paramsStyleWMSArray, function (paramsStyleWMS) {
+        paramsStyleWMSArray.forEach(function (paramsStyleWMS) {
             if (nameOfLayerToExclude !== paramsStyleWMS.styleWMSName) {
                 paramsStyleWMSArray2.push(paramsStyleWMS);
             }
@@ -115,16 +114,13 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     * @returns {void}
     */
     resetParamsStyleWMSArray: function (layer) {
-
-        var legendParams;
-
         // Remove custom style from paramsStyleWMSArray
         this.set("paramsStyleWMSArray", this.copyOtherParamsStyleWMS(layer.get("name")));
 
         // Update legendParams: Replace legend for custom style with legend from legendURL
-        legendParams = this.get("legendParams");
+        const legendParams = this.get("legendParams");
 
-        _.each(this.get("legendParams"), function (legendParam, i) {
+        this.get("legendParams").forEach(function (legendParam, i) {
 
             if (legendParam.layername === layer.get("name")) {
 
@@ -145,12 +141,12 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     * @returns {void}
     */
     updateLegendFromStyleWMSArray: function () {
-        var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
+        const paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
             legendParams = this.get("legendParams");
 
-        _.each(this.get("legendParams"), function (legendParam, i) {
+        this.get("legendParams").forEach(function (legendParam, i) {
             _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
-                var layername,
+                let layername,
                     isVisibleInMap;
 
                 if (legendParam.layername === paramsStyleWMS.styleWMSName) {
@@ -211,7 +207,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     * @returns {Object} returns legend definition
     */
     getLegendDefinition: function (layername, typ, legendURL, styleId, layerSources) {
-        var defs = [],
+        const defs = [],
             /**
              * Selector for old or new way to set vector legend
              * @deprecated with new vectorStyle module
@@ -250,8 +246,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             return this.getLegendParamsFromURL(layername, legendURL, typ);
         }
         else if (typ === "GROUP") {
-            _.each(layerSources, function (layerSource) {
-                var childLegend = this.getLegendDefinition(layerSource.get("name"), layerSource.get("typ"), layerSource.get("legendURL"), layerSource.get("styleId"), null);
+            layerSources.forEach(function (layerSource) {
+                const childLegend = this.getLegendDefinition(layerSource.get("name"), layerSource.get("typ"), layerSource.get("legendURL"), layerSource.get("styleId"), null);
 
                 if (childLegend.legend) {
                     // layerSource-Abfragen haben immer nur legend[0]
@@ -294,17 +290,15 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {object} legendObject legend item
      */
     getLegendParamsFromWMS: function (layername, legendURL) {
-        var paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
-            paramsStyleWMS = "";
+        const paramsStyleWMSArray = this.get("paramsStyleWMSArray"),
+            paramsStyleWMS = paramsStyleWMSArray.find(function (params) {
+                let bol;
 
-        paramsStyleWMS = _.find(paramsStyleWMSArray, function (params) {
-            var bol;
-
-            if (layername === params.styleWMSName) {
-                bol = true;
-            }
-            return bol;
-        });
+                if (layername === params.styleWMSName) {
+                    bol = true;
+                }
+                return bol;
+            });
 
         if (paramsStyleWMS) {
             return {
@@ -386,7 +380,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         else if (styleClass === "LINE") {
             // Custom Point Styles
             if (styleFieldValues) {
-                _.each(styleFieldValues, function (styleFieldValue) {
+                styleFieldValues.forEach(function (styleFieldValue) {
                     const subStyle = style.clone();
 
                     // overwrite style with all styleFieldValue settings
@@ -407,7 +401,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         else if (styleClass === "POLYGON") {
             // Custom Point Styles
             if (styleSubClass === "CUSTOM") {
-                _.each(styleFieldValues, function (styleFieldValue) {
+                styleFieldValues.forEach(function (styleFieldValue) {
                     const subStyle = style.clone();
 
                     // overwrite style with all styleFieldValue settings
@@ -569,8 +563,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} svg
      */
     createCircleSVGOld: function (style) {
-        var svg = "",
-            circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
+        let svg = "";
+        const circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
             circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
             circleStrokeWidth = style.get("circleStrokeWidth"),
             circleFillColor = style.returnColor(style.get("circleFillColor"), "hex"),
@@ -600,8 +594,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} svg
      */
     createLineSVGOld: function (style) {
-        var svg = "",
-            strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
+        let svg = "";
+        const strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("lineStrokeWidth"), 10),
             strokeOpacity = style.get("lineStrokeColor")[3] || 0,
             strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
@@ -630,8 +624,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} svg
      */
     createPolygonSVGOld: function (style) {
-        var svg = "",
-            fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
+        let svg = "";
+        const fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
             strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
             fillOpacity = style.get("polygonFillColor")[3] || 0,
@@ -664,12 +658,12 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {Array} returns allItems
     */
     drawAdvancedStyleOld: function (style, layername, image, name) {
-        var scalingShape = style.get("scalingShape"),
+        const scalingShape = style.get("scalingShape"),
             scalingAttribute = style.get("scalingAttribute"),
             scalingValueDefaultColor = style.get("scalingValueDefaultColor"),
-            styleScalingValues = style.get("styleScalingValues"),
             scaling = style.get("scaling"),
-            advancedStyle = style.clone(),
+            advancedStyle = style.clone();
+        let styleScalingValues = style.get("styleScalingValues"),
             allItems = [];
 
         // set the background of the SVG transparent
@@ -704,25 +698,27 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {Array} allItems
      */
     drawNominalCircleSegmentsStyle: function (styleScalingValues, scalingValueDefaultColor, scalingAttribute, advancedStyle, image, name) {
+        let key,
+            stylePerValue;
+
         // add defaultColor
-        _.extend(styleScalingValues, {default: scalingValueDefaultColor});
+        Object.assign(styleScalingValues, {default: scalingValueDefaultColor});
 
         // for all values of attribute which define in style.json
-        _.each(styleScalingValues, function (value, key) {
-            var olFeature = new Feature({}),
-                stylePerValue;
+        for (key in styleScalingValues) {
+            const olFeature = new Feature({});
 
             olFeature.set(scalingAttribute, key);
             stylePerValue = advancedStyle.createStyle(olFeature, false);
 
-            if (_.isArray(stylePerValue)) {
+            if (Array.isArray(stylePerValue)) {
                 image.push([stylePerValue[0].getImage().getSrc(), stylePerValue[1].getImage().getSrc()]);
             }
             else {
                 image.push(stylePerValue.getImage().getSrc());
             }
             name.push(key);
-        }, this);
+        }
 
         return [image, name];
     },
@@ -736,10 +732,10 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {Array} allItems
      */
     drawIntervalCircleBars: function (scalingAttribute, advancedStyle, layername, image, name) {
-        var olFeature = new Feature({}),
-            stylePerValue,
+        const olFeature = new Feature({}),
             circleBarScalingFactor = advancedStyle.get("circleBarScalingFactor"),
             barHeight = String(20 / circleBarScalingFactor);
+        var stylePerValue;
 
         olFeature.set(scalingAttribute, barHeight);
         stylePerValue = advancedStyle.createStyle(olFeature, false);
@@ -916,11 +912,11 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {Array} returns allItems
     */
     drawAdvancedStyle: function (type, style, layername, image, name) {
-        var scalingShape = style.get("scalingShape"),
+        const scalingShape = style.get("scalingShape"),
             scalingAttribute = style.get("scalingAttribute"),
             scalingValueDefaultColor = style.get("scalingValueDefaultColor"),
-            styleScalingValues = style.get("styleScalingValues"),
-            advancedStyle = style.clone(),
+            advancedStyle = style.clone();
+        let styleScalingValues = style.get("styleScalingValues"),
             allItems = [];
 
         // set the background of the SVG transparent
@@ -950,8 +946,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} svg
      */
     createCircleSVG: function (style) {
-        var svg = "",
-            circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
+        let svg = "";
+        const circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
             circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
             circleStrokeWidth = style.get("circleStrokeWidth"),
             circleFillColor = style.get("circleFillColor") ? this.colorToRgb(style.get("circleFillColor")) : "black",
@@ -980,8 +976,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} svg
      */
     createLineSVG: function (style) {
-        var svg = "",
-            strokeColor = style.get("lineStrokeColor") ? this.colorToRgb(style.get("lineStrokeColor")) : "black",
+        let svg = "";
+        const strokeColor = style.get("lineStrokeColor") ? this.colorToRgb(style.get("lineStrokeColor")) : "black",
             strokeWidth = style.get("lineStrokeWidth"),
             strokeOpacity = style.get("lineStrokeColor")[3] || 0,
             strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
@@ -1009,8 +1005,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} svg
      */
     createPolygonSVG: function (style) {
-        var svg = "",
-            fillColor = style.get("polygonFillColor") ? this.colorToRgb(style.get("polygonFillColor")) : "black",
+        let svg = "";
+        const fillColor = style.get("polygonFillColor") ? this.colorToRgb(style.get("polygonFillColor")) : "black",
             strokeColor = style.get("polygonStrokeColor") ? this.colorToRgb(style.get("polygonStrokeColor")) : "black",
             strokeWidth = style.get("polygonStrokeWidth"),
             fillOpacity = style.get("polygonFillColor")[3] || 0,

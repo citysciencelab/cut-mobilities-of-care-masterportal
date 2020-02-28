@@ -129,7 +129,7 @@ describe("textStyleModel", function () {
             });
         });
         it("should return an object with empty = 0 for undefined input", function () {
-            var scalingAttributesAsObject = {
+            const scalingAttributesAsObject = {
                     available: 0,
                     charging: 0,
                     outoforder: 0,
@@ -149,7 +149,7 @@ describe("textStyleModel", function () {
 
     describe("calculateCircleSegment", function () {
         it("should return a string that contains a circlesegment as svg-string for data of a semicircle input", function () {
-            var startAngelDegree = 0,
+            const startAngelDegree = 0,
                 endAngelDegree = 180,
                 circleRadius = 21,
                 size = 58,

@@ -4,7 +4,7 @@ import Util from "@testUtil";
 import Feature from "ol/Feature.js";
 
 describe("vectorStyle", function () {
-    var model,
+    let model,
         utilModel,
         features,
         vectorStyle;
@@ -18,8 +18,9 @@ describe("vectorStyle", function () {
 
     describe("createStyle", function () {
         it("should return default style if feature is undefined and not clustered", function () {
-            var defaultStyle,
-                defaultStyleObj = {},
+            model = new Model({});
+
+            const defaultStyleObj = {},
                 defaultValues = {
                     circleRadius: 5,
                     circleFillColor: "rgba(255,255,255,0.4)",
@@ -28,10 +29,9 @@ describe("vectorStyle", function () {
                     fillColor: "rgba(255,255,255,0.4)",
                     strokeColor: "#3399CC",
                     strokeWidth: 1.25
-                };
+                },
+                defaultStyle = model.createStyle(undefined, false);
 
-            model = new Model({});
-            defaultStyle = model.createStyle(undefined, false);
             defaultStyleObj.circleRadius = defaultStyle.getImage().getRadius();
             defaultStyleObj.circleFillColor = defaultStyle.getImage().getFill().getColor();
             defaultStyleObj.circleStrokeColor = defaultStyle.getImage().getStroke().getColor();
@@ -43,13 +43,14 @@ describe("vectorStyle", function () {
         });
 
         it("should return default style if class !== \"POINT\" || \"POLYGON\" || \"LINE\"", function () {
-            var style = {
+            const style = {
                     class: "POINT_WRONG"
                 },
-                defaultStyle,
                 defaultStyleObj = {};
+            var defaultStyle;
 
             model = new Model(style);
+
             defaultStyle = model.createStyle(features[0], false);
             defaultStyleObj.circleRadius = defaultStyle.getImage().getRadius();
             defaultStyleObj.circleFillColor = defaultStyle.getImage().getFill().getColor();
@@ -61,10 +62,9 @@ describe("vectorStyle", function () {
         });
 
         it("should return default style if subClass !== \"SIMPLE\" || \"CUSTOM\" || \"CIRCLE\"", function () {
-            var style = {
+            const style = {
                     subClass: "SIMPLE_WRONG"
                 },
-                defaultStyle,
                 defaultStyleObj = {},
                 defaultValues = {
                     circleRadius: 5,
@@ -75,8 +75,10 @@ describe("vectorStyle", function () {
                     strokeColor: "#3399CC",
                     strokeWidth: 1.25
                 };
+            var defaultStyle;
 
             model = new Model(style);
+
             defaultStyle = model.createStyle(features[0], false);
             defaultStyleObj.circleRadius = defaultStyle.getImage().getRadius();
             defaultStyleObj.circleFillColor = defaultStyle.getImage().getFill().getColor();
@@ -90,18 +92,19 @@ describe("vectorStyle", function () {
 
         describe("POINT SIMPLE", function () {
             it("should return style with default simplePoint values", function () {
-                var style = {
+                const style = {
                         class: "POINT",
                         subClass: "SIMPLE"
                     },
-                    createdStyle,
                     createdStyleObj = {},
                     expectedValues = {
                         imageName: "/lgv-config/img/blank.png", // undefined, da wir nicht aus der Config und Util den Pfad holen.
                         imageScale: 1
                     };
+                var createdStyle;
 
                 model = new Model(style);
+
                 createdStyle = model.createStyle(features[0], false);
                 createdStyleObj.imageName = createdStyle.getImage().getSrc();
                 createdStyleObj.imageScale = createdStyle.getImage().getScale();
@@ -109,21 +112,22 @@ describe("vectorStyle", function () {
             });
 
             it("should return style with set simplePoint values", function () {
-                var style = {
+                const style = {
                         class: "POINT",
                         subClass: "SIMPLE",
                         imageName: "krankenhaus.png",
                         imageScale: 2.5
                     },
-                    createdStyle,
                     createdStyleObj = {},
                     expectedValues = {
                         imageName: "/lgv-config/img/krankenhaus.png", // undefined, da wir nicht aus der Config und Util den Pfad holen.
                         imageScale: 2.5,
                         imageSize: ""
                     };
+                var createdStyle;
 
                 model = new Model(style);
+
                 createdStyle = model.createStyle(features[0], false);
                 createdStyleObj.imageName = createdStyle.getImage().getSrc();
                 createdStyleObj.imageScale = createdStyle.getImage().getScale();
@@ -134,7 +138,7 @@ describe("vectorStyle", function () {
 
         describe("POINT CUSTOM", function () {
             it("should return default style if styleField and StyleFieldValues[0] do not match", function () {
-                var style = {
+                const style = {
                         layerId: "1711",
                         class: "POINT",
                         subClass: "CUSTOM",
@@ -155,10 +159,11 @@ describe("vectorStyle", function () {
                         strokeColor: "#3399CC",
                         strokeWidth: 1.25
                     },
-                    defaultStyle,
                     defaultStyleObj = {};
+                var defaultStyle;
 
                 model = new Model(style);
+
                 defaultStyle = model.createStyle(features[0], false);
                 defaultStyleObj.circleRadius = defaultStyle.getImage().getRadius();
                 defaultStyleObj.circleFillColor = defaultStyle.getImage().getFill().getColor();
@@ -170,7 +175,7 @@ describe("vectorStyle", function () {
                 expect(defaultStyleObj).to.deep.equal(defaultValues);
             });
             it("should return custom style if", function () {
-                var style = {
+                const style = {
                         layerId: "1711",
                         class: "POINT",
                         subClass: "CUSTOM",
@@ -188,10 +193,11 @@ describe("vectorStyle", function () {
                         imageScale: 2.5,
                         imageSize: "" // imageSize wird nur dann als array gesetzt, wenn der imageName mit .svg endet.
                     },
-                    createdStyle,
                     createdStyleObj = {};
+                var createdStyle;
 
                 model = new Model(style);
+
                 createdStyle = model.createStyle(features[0], false);
                 createdStyleObj.imageName = createdStyle.getImage().getSrc();
                 createdStyleObj.imageScale = createdStyle.getImage().getScale();
@@ -457,11 +463,10 @@ describe("vectorStyle", function () {
 
         describe("POINT CIRCLE", function () {
             it("should return style with default circle values", function () {
-                var style = {
+                const style = {
                         class: "POINT",
                         subClass: "CIRCLE"
                     },
-                    circleStyle,
                     circleStyleObj = {},
                     defaultValues = {
                         radius: 10,
@@ -469,8 +474,10 @@ describe("vectorStyle", function () {
                         strokeColor: [0, 0, 0, 1],
                         strokeWidth: 2
                     };
+                var circleStyle;
 
                 model = new Model(style);
+
                 circleStyle = model.createStyle(features[0], false);
                 circleStyleObj.radius = circleStyle.getImage().getRadius();
                 circleStyleObj.fillColor = circleStyle.getImage().getFill().getColor();
@@ -479,7 +486,7 @@ describe("vectorStyle", function () {
                 expect(circleStyleObj).to.deep.equal(defaultValues);
             });
             it("should return style with given circle values", function () {
-                var style = {
+                const style = {
                         class: "POINT",
                         subClass: "CIRCLE",
                         circleRadius: 20,
@@ -487,7 +494,6 @@ describe("vectorStyle", function () {
                         circleStrokeColor: [123, 123, 123, 0],
                         circleStrokeWidth: 30
                     },
-                    circleStyle,
                     circleStyleObj = {},
                     expectedValues = {
                         radius: 20,
@@ -495,8 +501,10 @@ describe("vectorStyle", function () {
                         strokeColor: [123, 123, 123, 0],
                         strokeWidth: 30
                     };
+                var circleStyle;
 
                 model = new Model(style);
+
                 circleStyle = model.createStyle(features[0], false);
                 circleStyleObj.radius = circleStyle.getImage().getRadius();
                 circleStyleObj.fillColor = circleStyle.getImage().getFill().getColor();
@@ -598,13 +606,13 @@ describe("vectorStyle", function () {
 
         describe("TEXT SIMPLE", function () {
             it("should return simple style with text", function () {
-                var style = {
-                        class: "POINT",
-                        subClass: "SIMPLE",
-                        imageName: "krankenhaus.png",
-                        labelField: "name"
-                    },
-                    text;
+                const style = {
+                    class: "POINT",
+                    subClass: "SIMPLE",
+                    imageName: "krankenhaus.png",
+                    labelField: "name"
+                };
+                var text;
 
                 model = new Model(style);
                 text = model.createStyle(features[0], false).getText().getText();
@@ -613,44 +621,44 @@ describe("vectorStyle", function () {
         });
         describe("TEXT CLUSTERED", function () {
             it("should return style with cluster text", function () {
-                var style = {
+                const style = {
                         class: "POINT",
                         subClass: "SIMPLE",
                         imageName: "krankenhaus.png",
                         labelField: "name"
                     },
-                    text,
                     clusterFeature = new Feature({features: [features[0], features[1]]});
+                var text;
 
                 model = new Model(style);
                 text = model.createStyle(clusterFeature, true).getText().getText();
                 expect(text).to.equal("2");
             });
             it("should return style with no text", function () {
-                var style = {
+                const style = {
                         class: "POINT",
                         subClass: "SIMPLE",
                         imageName: "krankenhaus.png",
                         labelField: "name",
                         clusterText: "NONE"
                     },
-                    text,
                     clusterFeature = new Feature({features: [features[0], features[1]]});
+                var text;
 
                 model = new Model(style);
                 text = model.createStyle(clusterFeature, true).getText();
                 expect(text).to.be.undefined;
             });
             it("should return style with given text", function () {
-                var style = {
+                const style = {
                         class: "POINT",
                         subClass: "SIMPLE",
                         imageName: "krankenhaus.png",
                         labelField: "name",
                         clusterText: "mehrere Features"
                     },
-                    text,
                     clusterFeature = new Feature({features: [features[0], features[1]]});
+                var text;
 
                 model = new Model(style);
                 text = model.createStyle(clusterFeature, true).getText().getText();
@@ -695,7 +703,7 @@ describe("vectorStyle", function () {
             });
         });
         it("should return an object with empty = 0 for undefined input", function () {
-            var scalingAttributesAsObject = {
+            const scalingAttributesAsObject = {
                     available: 0,
                     charging: 0,
                     outoforder: 0,
@@ -714,7 +722,7 @@ describe("vectorStyle", function () {
     });
     describe("calculateCircleSegment", function () {
         it("should return a string that contains a circlesegment as svg-string for data of a semicircle input", function () {
-            var startAngelDegree = 0,
+            const startAngelDegree = 0,
                 endAngelDegree = 180,
                 circleRadius = 21,
                 size = 58,

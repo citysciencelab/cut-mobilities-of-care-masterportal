@@ -9,7 +9,7 @@ import {Vector as VectorSource} from "ol/source.js";
 import sinon from "sinon";
 
 describe("core/modelList/layer/sensor", function () {
-    var sensorLayer;
+    let sensorLayer;
 
     before(function () {
         sensorLayer = new SensorLayerModel();
@@ -130,7 +130,7 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.mergeByCoordinates(undefined)).to.be.an("array").that.is.empty;
         });
         it("should return an array that is empty for array with testdata", function () {
-            var dataArray = [{Test: [{name: "testname"}]}];
+            const dataArray = [{Test: [{name: "testname"}]}];
 
             expect(sensorLayer.mergeByCoordinates(dataArray)).to.be.an("array").that.is.empty;
         });
@@ -144,12 +144,12 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.changeTimeZone(undefined, "+1")).that.have.string("");
         });
         it("should return an string in summertime", function () {
-            var summerTime = "2018-06-05T12:11:47.922Z";
+            const summerTime = "2018-06-05T12:11:47.922Z";
 
             expect(sensorLayer.changeTimeZone(summerTime, "+1")).to.have.string("05 Juni 2018, 14:11:47");
         });
         it("should return an string in wintertime", function () {
-            var winterTime = "2018-01-01T12:11:47.922Z";
+            const winterTime = "2018-01-01T12:11:47.922Z";
 
             expect(sensorLayer.changeTimeZone(winterTime, "+1")).to.have.string("01 Januar 2018, 13:11:47");
         });
@@ -163,7 +163,7 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.createFeatures(undefined, undefined)).to.be.an("array").that.is.empty;
         });
         it("should return an empty array for obj and undefined epsg input", function () {
-            var data = [{location: [10, 10]}];
+            const data = [{location: [10, 10]}];
 
             expect(sensorLayer.createFeatures(data, undefined)).to.be.an("array").that.is.empty;
         });
@@ -182,7 +182,7 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.getFeatureByDataStreamId([], "1")).to.be.undefined;
         });
         it("should return a Feature", function () {
-            var feature0 = new Feature({
+            const feature0 = new Feature({
                     dataStreamId: "1",
                     geometry: new Point([100, 100])
                 }),
@@ -195,7 +195,7 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.getFeatureByDataStreamId(features, "1")).to.be.an.instanceof(Feature);
         });
         it("should return a Feature with combined dataStreamId", function () {
-            var feature0 = new Feature({
+            const feature0 = new Feature({
                     dataStreamId: "1",
                     geometry: new Point([100, 100])
                 }),
@@ -213,7 +213,7 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.getDataStreamIds(undefined)).to.be.an("array").that.is.empty;
         });
         it("should return an array with Strings for features input", function () {
-            var feature0 = new Feature({
+            const feature0 = new Feature({
                     geometry: new Point([100, 100])
                 }),
                 feature1 = new Feature({
@@ -229,14 +229,14 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.aggregateDataStreamValue(undefined)).to.be.undefined;
         });
         it("should return feature as is", function () {
-            var feature = new Feature({
+            const feature = new Feature({
                 geometry: new Point([100, 100])
             });
 
             expect(sensorLayer.aggregateDataStreamValue(feature)).to.be.instanceof(Feature);
         });
         it("should return feature with dataStreamValue for one dataStream", function () {
-            var feature = new Feature({
+            const feature = new Feature({
                 dataStreamId: "123",
                 dataStreamName: "ds",
                 dataStream_123_ds: "a",
@@ -247,7 +247,7 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.aggregateDataStreamValue(feature).get("dataStreamValue")).to.equal("a");
         });
         it("should return feature with dataStreamValue for more dataStreams", function () {
-            var feature = new Feature({
+            const feature = new Feature({
                 dataStreamId: "123 | 456",
                 dataStreamName: "ds1 | ds2",
                 dataStream_123_ds1: "a",
@@ -265,14 +265,14 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.aggregateDataStreamPhenomenonTime(undefined)).to.be.undefined;
         });
         it("should return feature as is", function () {
-            var feature = new Feature({
+            const feature = new Feature({
                 geometry: new Point([100, 100])
             });
 
             expect(sensorLayer.aggregateDataStreamPhenomenonTime(feature)).to.be.instanceof(Feature);
         });
         it("should return feature with dataStreamPhenomenonTime for one dataStream", function () {
-            var feature = new Feature({
+            const feature = new Feature({
                 dataStreamId: "123",
                 dataStreamName: "ds",
                 dataStream_123_ds_phenomenonTime: "a",
@@ -283,7 +283,7 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.aggregateDataStreamPhenomenonTime(feature).get("dataStreamPhenomenonTime")).to.equal("a");
         });
         it("should return feature with dataStreamPhenomenonTime for more dataStreams", function () {
-            var feature = new Feature({
+            const feature = new Feature({
                 dataStreamId: "123 | 456",
                 dataStreamName: "ds1 | ds2",
                 dataStream_123_ds1_phenomenonTime: "a",

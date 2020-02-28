@@ -46,14 +46,14 @@ const ZoomToFeature = Backbone.Model.extend({
      * @returns {void}
      */
     putIconsForFeatureIds: function (featureCenterList, imgLink, anchor, imageScale, styleListModel) {
-        var iconFeatures = [];
+        const iconFeatures = [];
 
-        _.each(featureCenterList, function (featureCenter, index) {
-            var featureName = "featureIcon" + index,
-                iconFeature = this.createIconFeature(featureCenter, featureName),
-                iconStyle;
+        featureCenterList.forEach(function (featureCenter, index) {
+            const featureName = "featureIcon" + index,
+                iconFeature = this.createIconFeature(featureCenter, featureName);
+            let iconStyle;
 
-            if (!_.isUndefined(this.get("styleId"))) {
+            if (this.get("styleId") !== undefined) {
                 iconStyle = this.createIconStyle(iconFeature, styleListModel);
             }
             else {
@@ -88,9 +88,9 @@ const ZoomToFeature = Backbone.Model.extend({
      * @returns {ol/style} featureStyle
      */
     createIconStyle: function (iconFeature, styleListModel) {
-        var featureStyle = new Style();
+        let featureStyle = new Style();
 
-        if (!_.isUndefined(styleListModel)) {
+        if (styleListModel !== undefined) {
             featureStyle = styleListModel.createStyle(iconFeature, false);
         }
 
@@ -131,26 +131,26 @@ const ZoomToFeature = Backbone.Model.extend({
     },
 
     getFeaturesFromWFS: function () {
-        if (!_.isUndefined(this.get("ids"))) {
+        if (this.get("ids") !== undefined) {
             this.requestFeaturesFromWFS(this.get("wfsId"));
         }
     },
 
     // holt sich "zoomtofeature" aus der Config, prüft ob ID vorhanden ist
     createFeatureCenterList: function () {
-        var ids = this.get("ids") || null,
+        const ids = this.get("ids") || null,
             attribute = this.get("attribute") || null,
             features = this.get("features");
 
-        if (_.isNull(ids) === false) {
-            _.each(ids, function (id) {
-                var feature = features.filter(function (feat) {
+        if (ids !== null) {
+            ids.forEach(function (id) {
+                const feature = features.filter(function (feat) {
                         if (feat.get(attribute) === id) {
                             return 1;
                         }
                         return 0;
                     }),
-                    extent = _.isEmpty(feature) ? [] : feature[0].getGeometry().getExtent(),
+                    extent = feature.length === 0 ? [] : feature[0].getGeometry().getExtent(),
                     deltaX = extent[2] - extent[0],
                     deltaY = extent[3] - extent[1],
                     center = [extent[0] + (deltaX / 2), extent[1] + (deltaY / 2)];
@@ -162,7 +162,7 @@ const ZoomToFeature = Backbone.Model.extend({
 
     // baut sich aus den Config-prefs die URL zusammen
     requestFeaturesFromWFS: function (wfsId) {
-        var LayerPrefs = getLayerWhere({id: wfsId}),
+        const LayerPrefs = getLayerWhere({id: wfsId}),
             url = LayerPrefs && LayerPrefs.hasOwnProperty("url") ? LayerPrefs.url : "",
             version = LayerPrefs && LayerPrefs.hasOwnProperty("version") ? LayerPrefs.version : "",
             typename = LayerPrefs && LayerPrefs.hasOwnProperty("featureType") ? LayerPrefs.featureType : "",
@@ -182,7 +182,7 @@ const ZoomToFeature = Backbone.Model.extend({
             success: this.parseFeatures,
             timeout: 6000,
             error: function () {
-                var msg = "URL: " + Radio.request("Util", "getProxyURL", url) + " nicht erreichbar.";
+                const msg = "URL: " + Radio.request("Util", "getProxyURL", url) + " nicht erreichbar.";
 
                 Radio.trigger("Alert", "alert", msg);
             }
@@ -191,7 +191,7 @@ const ZoomToFeature = Backbone.Model.extend({
 
     // holt sich aus der AJAX response die Daten und speichert sie als ol.Features
     parseFeatures: function (data) {
-        var format = this.get("format"),
+        const format = this.get("format"),
             features = format.readFeatures(data);
 
         this.setFeatures(features);
@@ -199,17 +199,17 @@ const ZoomToFeature = Backbone.Model.extend({
 
     // holt sich das "bboxes"-array, berechnet aus allen bboxes die finale bbox und sendet diese an die map
     zoomToFeatures: function () {
-        var bbox = [],
+        const bbox = [],
             ids = this.get("ids"),
             attribute = this.get("attribute") || null,
             features = this.get("features");
 
         if (ids.length > 0) {
-            _.each(ids, function (id, index) {
-                var feature = features.filter(function (feat) {
+            ids.forEach(function (id, index) {
+                const feature = features.filter(function (feat) {
                         return feat.get(attribute) === id ? 1 : 0;
                     }),
-                    extent = _.isEmpty(feature) ? [] : feature[0].getGeometry().getExtent();
+                    extent = feature.length === 0 ? [] : feature[0].getGeometry().getExtent();
 
                 // erste bbox direkt füllen
                 if (index === 0) {

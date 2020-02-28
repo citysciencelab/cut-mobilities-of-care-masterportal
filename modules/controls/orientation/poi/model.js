@@ -33,13 +33,13 @@ const POIModel = Backbone.Model.extend({
          * @deprecated with new vectorStyle module
          * @type {Boolean}
          */
-        const isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false;
-        var poiDistances = Radio.request("geolocation", "getPoiDistances"),
-            poiFeatures = [],
-            featInCircle = [],
+        const isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false,
+            poiDistances = Radio.request("geolocation", "getPoiDistances"),
+            poiFeatures = [];
+        let featInCircle = [],
             sortedFeatures = [];
 
-        _.each(poiDistances, function (distance) {
+        poiDistances.forEach(function (distance) {
             featInCircle = Radio.request("geolocation", "getFeaturesInCircle", distance);
             sortedFeatures = _.sortBy(featInCircle, function (feature) {
                 return feature.dist2Pos;
@@ -50,14 +50,10 @@ const POIModel = Backbone.Model.extend({
             });
         }, this);
 
-        _.each(poiFeatures, function (category) {
-            _.each(category.features, function (feat) {
-                const imgPath = isNewVectorStyle ? this.getImgPath(feat) : this.getImgPathOld(feat);
-
-                _.extend(feat, {
-                    imgPath: imgPath,
-                    name: this.getFeatureTitle(feat)
-                });
+        poiFeatures.forEach(function (category) {
+            category.features.forEach(function (feat) {
+                feat.imgPath = isNewVectorStyle ? this.getImgPath(feat) : this.getImgPathOld(feat);
+                feat.name = this.getFeatureTitle(feat);
             }, this);
         }, this);
 
@@ -69,12 +65,12 @@ const POIModel = Backbone.Model.extend({
      * @returns {void}
      */
     initActiveCategory: function () {
-        var poi,
+        let poi,
             first;
 
         if (!_.isNumber(this.get("activeCategory"))) {
             poi = this.get("poiFeatures");
-            first = _.find(poi, function (dist) {
+            first = poi.find(function (dist) {
                 return dist.features.length > 0;
             });
 
@@ -106,10 +102,10 @@ const POIModel = Backbone.Model.extend({
      * @return {string}      imgPath
      */
     getImgPathOld: function (feat) {
-        var imagePath = "",
-            style = Radio.request("StyleList", "returnModelById", feat.styleId),
+        let imagePath = "",
             styleClass,
             styleSubClass;
+        const style = Radio.request("StyleList", "returnModelById", feat.styleId);
 
         if (style) {
             styleClass = style.get("class");
@@ -177,10 +173,10 @@ const POIModel = Backbone.Model.extend({
      * @return {string}                  Name des Bildes
      */
     createStyleFieldImageName: function (feature, style) {
-        var styleField = style.get("styleField"),
+        const styleField = style.get("styleField"),
             styleFields = style.get("styleFieldValues"),
             value = feature.get(styleField),
-            image = _.find(styleFields, function (field) {
+            image = styleFields.find(function (field) {
                 return field.styleFieldValue === value;
             });
 
@@ -193,12 +189,12 @@ const POIModel = Backbone.Model.extend({
      * @returns {void}
      */
     zoomFeature: function (id) {
-        var poiFeatures = this.get("poiFeatures"),
+        const poiFeatures = this.get("poiFeatures"),
             activeCategory = this.get("activeCategory"),
-            selectedPoiFeatures = _.find(poiFeatures, function (poi) {
+            selectedPoiFeatures = poiFeatures.find(function (poi) {
                 return poi.category === activeCategory;
             }),
-            feature = _.find(selectedPoiFeatures.features, function (feat) {
+            feature = selectedPoiFeatures.features.find(function (feat) {
                 return feat.getId() === id;
             }),
             extent = feature.getGeometry().getExtent();
@@ -215,8 +211,8 @@ const POIModel = Backbone.Model.extend({
      * @return {string}       SVG
      */
     createCircleSVG: function (style) {
-        var svg = "",
-            circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
+        let svg = "";
+        const circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
             circleStrokeOpacity = style.get("circleStrokeColor")[3].toString() || 0,
             circleStrokeWidth = style.get("circleStrokeWidth"),
             circleFillColor = style.returnColor(style.get("circleFillColor"), "hex"),
@@ -245,8 +241,8 @@ const POIModel = Backbone.Model.extend({
      * @return {string}       SVG
      */
     createLineSVG: function (style) {
-        var svg = "",
-            strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
+        let svg = "";
+        const strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("lineStrokeWidth"), 10),
             strokeOpacity = style.get("lineStrokeColor")[3].toString() || 0;
 
@@ -269,8 +265,8 @@ const POIModel = Backbone.Model.extend({
      * @return {string}       SVG
      */
     createPolygonSVG: function (style) {
-        var svg = "",
-            fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
+        let svg = "";
+        const fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
             strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
             fillOpacity = style.get("polygonFillColor")[3].toString() || 0,

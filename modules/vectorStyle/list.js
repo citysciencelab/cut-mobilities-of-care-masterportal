@@ -17,7 +17,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         return new WFSStyle(attrs, options);
     },
     url: function () {
-        if (!_.has(Config, "styleConf") || Config.styleConf === "") {
+        if (!Config.hasOwnProperty("styleConf") || Config.styleConf === "") {
             return "keine Style JSON";
         }
         return Config.styleConf;
@@ -37,7 +37,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      * @listens VectorStyle#RadioRequestStyleListReturnModelById
      */
     initialize: function () {
-        var channel = Radio.channel("StyleList");
+        const channel = Radio.channel("StyleList");
 
         channel.reply({
             "returnModelById": this.returnModelById,
@@ -199,7 +199,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      * @returns {String} - Style id
      */
     getStyleIdForZoomToFeature: function () {
-        var styleId;
+        let styleId;
 
         if (Config && Config.hasOwnProperty("zoomToFeature") && Config.zoomToFeature.hasOwnProperty("styleId")) {
             styleId = Config.zoomToFeature.styleId;
