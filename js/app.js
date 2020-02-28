@@ -94,28 +94,28 @@ function loadApp () {
         utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
-        style = Radio.request("Util", "getUiStyle");
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {};
         /* eslint-disable no-undef */
-    let app = {};
+    let app = {},
+        style = "";
 
-    if (_.has(Config, "uiStyle")) {
+    if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
-    if (_.has(Config, "proxyHost")) {
+    if (Config.hasOwnProperty("proxyHost")) {
         utilConfig.proxyHost = Config.proxyHost;
     }
-    if (_.has(Config, "proxy")) {
+    if (Config.hasOwnProperty("proxy")) {
         utilConfig.proxy = Config.proxy;
     }
 
     // RemoteInterface laden
-    if (_.has(Config, "remoteInterface")) {
+    if (Config.hasOwnProperty("remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
         new RadioMasterportalAPI();
     }
 
-    if (_.has(Config, "quickHelp")) {
+    if (Config.hasOwnProperty("quickHelp")) {
         new QuickHelpView(Config.quickHelp);
     }
 
@@ -141,7 +141,7 @@ function loadApp () {
     new AddGeoJSON();
     new WindowView();
 
-    if (_.has(Config, "cswId")) {
+    if (Config.hasOwnProperty("cswId")) {
         cswParserSettings.cswId = Config.cswId;
     }
 
@@ -154,7 +154,7 @@ function loadApp () {
     if (Config.hasOwnProperty("zoomToGeometry")) {
         new ZoomToGeometry(Config.zoomToGeometry);
     }
-    if (_.has(Config, "zoomToFeature")) {
+    if (Config.hasOwnProperty("zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
 
@@ -162,34 +162,34 @@ function loadApp () {
     new SliderRangeView();
     new DropdownView();
 
-    if (_.has(Config, "metaDataCatalogueId")) {
+    if (Config.hasOwnProperty("metaDataCatalogueId")) {
         layerInformationModelSettings.metaDataCatalogueId = Config.metaDataCatalogueId;
     }
     new LayerinformationModel(layerInformationModelSettings);
 
-    if (_.has(Config, "footer")) {
+    if (Config.hasOwnProperty("footer")) {
         new FooterView(Config.footer);
     }
 
-    if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
+    if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {
         new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
     }
 
-    if (_.has(Config, "mouseHover")) {
+    if (Config.hasOwnProperty("mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
     }
 
-    if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
+    if (Config.hasOwnProperty("scaleLine") && Config.scaleLine === true) {
         new ScaleLineView();
     }
 
+    style = Radio.request("Util", "getUiStyle");
 
     // Module laden
     // Tools
-
     new SidebarView();
 
-    _.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
+    Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
             case "compareFeatures": {
                 new CompareFeaturesView({model: tool});
@@ -313,13 +313,14 @@ function loadApp () {
             }
         }
     });
+
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
 
-        _.each(controls, function (control) {
-            var element,
-                orientationConfigAttr = _.isString(control.attr) ? {zoomMode: control.attr} : control;
+        controls.forEach(control => {
+            const orientationConfigAttr = typeof control.attr === "string" ? {zoomMode: control.attr} : control;
+            let element;
 
             switch (control.id) {
                 case "zoom": {
@@ -354,20 +355,20 @@ function loadApp () {
                  * @deprecated in 3.0.0
                  */
                 case "totalview": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         console.warn("'totalview' is deprecated. Please use 'totalView' instead");
                         new TotalView(control.id);
                     }
                     break;
                 }
                 case "totalView": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         new TotalView(control.id);
                     }
                     break;
                 }
                 case "attributions": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
                     }
@@ -378,7 +379,7 @@ function loadApp () {
                  * @deprecated in 3.0.0
                  */
                 case "backforward": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         console.warn("'backforward' is deprecated. Please use 'backForward' instead");
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
@@ -386,7 +387,7 @@ function loadApp () {
                     break;
                 }
                 case "backForward": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
@@ -397,7 +398,7 @@ function loadApp () {
                  * @deprecated in 3.0.0
                  */
                 case "overviewmap": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
                         element = controlsView.addRowBR(control.id, false);
                         new OverviewmapView(element, control.id, control.attr);
@@ -405,7 +406,7 @@ function loadApp () {
                     break;
                 }
                 case "overviewMap": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id, false);
                         new OverviewmapView(element, control.id, control.attr);
                     }
@@ -448,8 +449,8 @@ function loadApp () {
 
     new MapMarkerView(mapMarkerConfig);
 
-    sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
-    sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
+    sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
         if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
