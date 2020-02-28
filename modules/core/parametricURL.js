@@ -177,7 +177,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {boolean} - Return of a Boolean
      */
     toBoolean: function (value) {
-        var val = typeof value === "string" ? value.toLowerCase() : value;
+        const val = typeof value === "string" ? value.toLowerCase() : value;
 
         switch (val) {
             case true:
@@ -200,12 +200,11 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {number} todo
      */
     toNumber: function (num, precision) {
-        var factor;
-
         if (num === null) {
             return 0;
         }
-        factor = Math.pow(10, isFinite(precision) ? precision : 0);
+        const factor = Math.pow(10, isFinite(precision) ? precision : 0);
+
         return Math.round(num * factor) / factor;
     },
 
@@ -215,15 +214,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     pushToIsInitOpen: function (value) {
-        var isInitOpenArray = this.get("isInitOpen"),
+        const isInitOpenArray = this.get("isInitOpen"),
             msg = "";
 
         isInitOpenArray.push(value);
-        isInitOpenArray = _.uniq(isInitOpenArray);
+        isInitOpenArray = [...new Set(isInitOpenArray)];
 
         if (isInitOpenArray.length > 1) {
             msg += "Fehlerhafte Kombination von Portalkonfiguration und parametrisiertem Aufruf.<br>";
-            _.each(isInitOpenArray, function (tool, index) {
+            isInitOpenArray.forEach((tool, index) => {
                 msg += tool;
                 if (index < isInitOpenArray.length - 1) {
                     msg += " und ";
@@ -242,38 +241,35 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     createLayerParams: function (layerIdString) {
-        var visibilityListString = _.has(this.get("result"), "VISIBILITY") ? _.values(_.pick(this.get("result"), "VISIBILITY"))[0] : "",
-            transparencyListString = _.has(this.get("result"), "TRANSPARENCY") ? _.values(_.pick(this.get("result"), "TRANSPARENCY"))[0] : "",
+        const result = this.get("result"),
+            visibilityListString = result.hasOwnProperty("VISIBILITY") ? result.VISIBILITY : "",
+            transparencyListString = result.hasOwnProperty("TRANSPARENCY") ? result.TRANSPARENCY : "",
             layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
-            visibilityList,
-            transparencyList,
             layerParams = [];
+        let visibilityList,
+            transparencyList;
 
-        // Sichtbarkeit auslesen. Wenn fehlend true
+        // Read out visibility. If missing true
         if (visibilityListString === "") {
-            visibilityList = _.map(layerIdList, function () {
-                return true;
-            });
+            visibilityList = layerIdList.map(() => true);
         }
         else if (visibilityListString.indexOf(",") > -1) {
-            visibilityList = _.map(visibilityListString.split(","), function (val) {
+            visibilityList = visibilityListString.split(",").map(val => {
                 return this.toBoolean(val);
-            }, this);
+            });
         }
         else {
             visibilityList = new Array(this.toBoolean(visibilityListString));
         }
 
-        // Tranzparenzwert auslesen. Wenn fehlend Null.
+        // Read out transparency value. If missing null.
         if (transparencyListString === "") {
-            transparencyList = _.map(layerIdList, function () {
-                return 0;
-            });
+            transparencyList = layerIdList.map(() => 0);
         }
         else if (transparencyListString.indexOf(",") > -1) {
-            transparencyList = _.map(transparencyListString.split(","), function (val) {
+            transparencyList = transparencyListString.split(",").map(val => {
                 return this.toNumber(val);
-            }, this);
+            });
         }
         else {
             transparencyList = [parseInt(transparencyListString, 0)];
@@ -284,16 +280,16 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             return;
         }
 
-        _.each(layerIdList, function (val, index) {
-            var layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
+        layerIdList.forEach((val, index) => {
+            const layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
                 layerExisting = getLayerWhere({id: val}),
-                treeType = Radio.request("Parser", "getTreeType"),
-                layerToPush;
+                treeType = Radio.request("Parser", "getTreeType");
+            let layerToPush;
 
             layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
 
-            if (_.isUndefined(layerConfigured) && !_.isNull(layerExisting) && treeType === "light") {
-                layerToPush = _.extend({
+            if (layerConfigured === undefined && layerExisting !== null && treeType === "light") {
+                layerToPush = Object.assign({
                     isBaseLayer: false,
                     isVisibleInTree: "true",
                     parentId: "tree",
@@ -301,10 +297,10 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 }, layerExisting);
                 Radio.trigger("Parser", "addItemAtTop", layerToPush);
             }
-            else if (_.isUndefined(layerConfigured)) {
+            else if (layerConfigured === undefined) {
                 Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
             }
-        }, this);
+        });
 
         this.setLayerParams(layerParams);
     },
@@ -357,7 +353,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     parseProjection: function (result) {
-        var projection = result.pop();
+        const projection = result.pop();
 
         if (projection !== undefined) {
             this.setProjectionFromUrl(projection);
@@ -482,13 +478,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
     /**
      * Triggers the uiStyle for the modes: table or simple.
-     * @param {*} result - Table or simple style.
+     * @param {string} [result=""] - Table or simple style.
      * @fires Core#RadioTriggerUtilSetUiStyle
      * @returns {void}
      */
-    parseStyle: function (result) {
-        if (result && (result === "TABLE" || result === "SIMPLE")) {
-            Radio.trigger("Util", "setUiStyle", result);
+    parseStyle: function (result = "") {
+        const resultUpperCase = result.toUpperCase();
+
+        if (resultUpperCase === "TABLE" || resultUpperCase === "SIMPLE") {
+            Radio.trigger("Util", "setUiStyle", resultUpperCase);
         }
     },
 
@@ -538,11 +536,11 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     updateQueryStringParam: function (key, value) {
-        var baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
+        const baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
             urlQueryString = document.location.search,
             newParam = key + "=" + value,
-            params = "?" + newParam,
-            keyRegex;
+            params = "?" + newParam;
+        let keyRegex;
 
         // If the "search" string exists, then build params from it
         if (urlQueryString) {

@@ -32,7 +32,7 @@
            "filter":"filter=(typ:*)",
            "score":0.6
         },
-        "specialWFS":{
+        "specialWFS": {
            "minChar":3,
            "definitions":[
               {
@@ -42,7 +42,8 @@
                     "app:geltendes_planrecht"
                  ],
                  "geometryName":"app:geom",
-                 "name":"festgestellt"
+                 "name":"festgestellt",
+                 "namespaces": "xmlns:app='http://www.deegree.org/app'"
               },
               {
                  "url":"/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
@@ -51,7 +52,8 @@
                     "app:plan"
                  ],
                  "geometryName":"app:the_geom",
-                 "name":"im Verfahren"
+                 "name":"im Verfahren",
+                 "namespaces": "xmlns:app='http://www.deegree.org/app'"
               }
            ]
         },
@@ -734,7 +736,7 @@
                        "424"
                     ],
                     "name":"Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
-                    "legendURL":"https:/geofos/legenden/bauschutz_flughafen_legende.png"
+                    "legendURL":"https:/geoportal-hamburg.de/legende/bauschutz_flughafen_legende.png"
                  }
               ]
            },

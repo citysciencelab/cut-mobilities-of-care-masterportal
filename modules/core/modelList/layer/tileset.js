@@ -314,7 +314,7 @@ const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
 
     /**
      * sets a vcsStyle Object to the tileset
-     * @see tools/virtualcity/planning.js
+     * @see tools/virtualCity/planning.js
      * @param {Object} vcsStyle -
      * @return {void} -
      */

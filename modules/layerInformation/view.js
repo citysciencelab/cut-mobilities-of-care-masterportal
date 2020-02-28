@@ -92,13 +92,16 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     addContentHTML: function () {
         const legends = this.model.get("legend");
 
-        legends.legend.forEach(function (legend) {
-            legend.html = this.contentTemplate(legend);
-        }, this);
+        if (legends.legend !== null) {
+            legends.legend.forEach(function (legend) {
+                legend.html = this.contentTemplate(legend);
+            }, this);
+        }
     },
     /**
     * Removes this view.
     * @fires Layer#RadioTriggerLayerSetLayerInfoChecked
+    * @fires Layer#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
     * @returns {void}
     */
     remove: function () {
@@ -107,6 +110,7 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
         this.$el.remove();
         $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").remove(this.$el);
         this.model.setIsVisible(false);
+        Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
     }
 });
 

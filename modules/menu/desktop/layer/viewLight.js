@@ -25,6 +25,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeTransparency
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
+     * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
@@ -38,6 +39,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         });
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleByMapMode
+        });
+        this.listenTo(Radio.channel("LayerInformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
         this.$el.on({
             click: function (e) {
@@ -59,7 +63,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {Backbone.View} todo
      */
     render: function () {
-        var attr = this.model.toJSON(),
+        const attr = this.model.toJSON(),
             selector = $("#" + this.model.get("parentId"));
 
         selector.prepend(this.$el.html(this.template(attr)));
@@ -74,7 +78,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     rerender: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         if (this.model.get("isSettingVisible") === true) {
@@ -87,7 +91,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @return {void}
      */
     renderSetting: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
@@ -121,6 +125,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.showLayerInformation();
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
+        this.highlightLayerInformationIcon();
     },
 
     /**
@@ -231,6 +236,22 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         else {
             this.$el.hide();
         }
+    },
+
+    /**
+     * Highlights the Layer Information Icon in the layertree
+     * @returns {void}
+     */
+    highlightLayerInformationIcon: function () {
+        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+    },
+
+    /**
+     * Unhighlights the Layer Information Icon in the layertree
+     * @returns {void}
+     */
+    unhighlightLayerInformationIcon: function () {
+        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
     }
 });
 
