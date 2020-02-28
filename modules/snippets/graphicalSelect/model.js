@@ -11,6 +11,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         isOpen: false,
         name: "Geometrie",
         type: "string",
+        displayName: "Geometrie auswählen",
         snippetType: "graphicalSelect",
         isMultiple: false,
         drawInteraction: undefined,
