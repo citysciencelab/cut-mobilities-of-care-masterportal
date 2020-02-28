@@ -674,12 +674,6 @@ describe("drawModel", function () {
         it("should drawType is equal default drawType", function () {
             model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.resetModule();
-            expect(model.get("color")).is.equal(model.defaults.color);
-        });
-        it("should drawType is equal default drawType", function () {
-            model.setDrawType("Point", "Punkt zeichnen");
-            model.resetModule();
-
             expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
         });
     });

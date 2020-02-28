@@ -1448,7 +1448,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             }
         }
         this.combineColorOpacityContour(this.defaults.opacityContour);
-        this.set("drawType", {geometry: value1, text: value2});
+
+        if (_.isUndefined(value1) || _.isUndefined(value2)) {
+            this.set("drawType", {});
+        }
+        else {
+            this.set("drawType", {geometry: value1, text: value2});
+        }
     },
 
     /**
