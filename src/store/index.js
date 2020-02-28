@@ -3,7 +3,6 @@ import Vuex from "vuex";
 import Alerting from "./Alerting";
 import SupplyCoord from "./SupplyCoord";
 import ScaleLine from "./ScaleLine";
-import Title from "./Title";
 
 /**
  * Returns an object in which the Config parameters are assigned to the modules.
