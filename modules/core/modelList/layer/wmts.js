@@ -103,7 +103,6 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             typ: this.get("typ"),
             legendURL: this.get("legendURL"),
             routable: this.get("routable"),
-            gfiTheme: this.get("gfiTheme"),
             infoFormat: this.get("infoFormat")
         }));
     },
@@ -199,23 +198,6 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      */
     getLayer: function () {
         return this.get("layer");
-    },
-
-    /**
-     * Gets the URL of the getFeatureInfo module from the layerSource.
-     *
-     * @returns {String} - The URL of the getFeatureInfo module.
-     */
-    getGFIUrl: function () {
-        const resolution = Radio.request("MapView", "getOptions").resolution,
-            projection = Radio.request("MapView", "getProjection"),
-            coordinate = Radio.request("GFI", "getCoordinate");
-
-        return this.get("layerSource")
-            .getGetFeatureInfoUrl(coordinate, resolution, projection, {
-                INFO_FORMAT: this.get("infoFormat"),
-                FEATURE_COUNT: this.get("featureCount")
-            });
     }
 });
 
