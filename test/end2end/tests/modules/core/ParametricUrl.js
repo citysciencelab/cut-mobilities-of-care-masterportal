@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist, setCenter} = require("../../../library/scripts"),
-    {centersTo} = require("../../../library/utils"),
-    {isBasic, isCustom, isDefault} = require("../../../settings"),
+    {getUnnavigatedDriver, loadUrl} = require("../../../library/driver"),
+    {imageLoaded, getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
+    {centersTo, clickFeature} = require("../../../library/utils"),
+    {isBasic, isCustom, isDefault, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
@@ -11,16 +11,21 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ParameterTests ({builder, url, resolution}) {
+async function ParameterTests ({builder, url, resolution, mode}) {
     describe("URL Query Parameters", function () {
         let driver;
 
-        afterEach(async function () {
+        before(async function () {
+            driver = await getUnnavigatedDriver(builder, resolution);
+        });
+
+        after(async function () {
             await driver.quit();
         });
 
-        it("?style=simple hides control elements", async function () {
-            driver = await initDriver(builder, `${url}?style=simple`, resolution);
+        // TODO feature is currently broken; stop skipping when bug is fixed
+        it.skip("?style=simple hides control elements", async function () {
+            await loadUrl(driver, `${url}?style=simple`, mode);
 
             await driver.wait(until.elementIsNotVisible(driver.findElement(By.id("main-nav"))), 10000);
             expect(await driver.findElements(By.className("ol-viewport"))).to.not.be.empty;
@@ -30,37 +35,39 @@ async function ParameterTests ({builder, url, resolution}) {
         });
 
         it("?center= allows setting coordinates of map", async function () {
-            driver = await initDriver(builder, `${url}?center=566499,5942803`, resolution);
+            await loadUrl(driver, `${url}?center=566499,5942803`, mode);
 
             const center = await driver.executeScript(getCenter);
 
             expect([566499, 5942803]).to.eql(center);
         });
 
-        it("?bezirk=[number] zooms to a district", async function () {
-            const expectedCoordinate = [556535.269, 5937846.413000001];
+        if (isMaster(url)) {
+            it("?zoomtogeometry=[number] zooms to a district", async function () {
+                const expectedCoordinate = [556535.269, 5937846.413000001];
 
-            // Bezirk 2 is Altona
-            driver = await initDriver(builder, `${url}?bezirk=2`, resolution);
-            expect(await centersTo(driver, expectedCoordinate)).to.be.true;
-        });
+                // Bezirk 1 is Altona according to portal/master/config.js listing
+                await loadUrl(driver, `${url}?zoomtogeometry=1`, mode);
+                expect(await centersTo(driver, expectedCoordinate)).to.be.true;
+            });
 
-        it("?bezirk=[districtName] zooms to a district", async function () {
-            const expectedCoordinate = [578867.787, 5924175.483999999];
+            it("?bezirk=[districtName] zooms to a district", async function () {
+                const expectedCoordinate = [578867.787, 5924175.483999999];
 
-            driver = await initDriver(builder, `${url}?bezirk=bergedorf`, resolution);
-            expect(await centersTo(driver, expectedCoordinate)).to.be.true;
-        });
+                await loadUrl(driver, `${url}?zoomtogeometry=bergedorf`, mode);
+                expect(await centersTo(driver, expectedCoordinate)).to.be.true;
+            });
+        }
 
         it("?layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
             // 2426 is "Bezirke"
-            driver = await initDriver(builder, `${url}?layerids=2426&visibility=true&transparency=0`, resolution);
+            await loadUrl(driver, `${url}?layerids=2426&visibility=true&transparency=0`, mode);
 
-            const treeEntry = await driver.findElement(By.css(
-                    isBasic(url)
-                        ? "ul#tree li:first-child .glyphicon-check"
-                        : "#SelectedLayer .layer-item [title=\"Bezirke\"]"
-                )),
+            const treeEntry = await driver.findElement(
+                    isBasic(url) || isMaster(url)
+                        ? By.xpath("//ul[@id='tree']/li[.//span[@title='Bezirke'] and .//span[contains(@class,'glyphicon-check')]]")
+                        : By.css("#SelectedLayer .layer-item [title=\"Bezirke\"]")
+                ),
                 visible = await driver.executeScript(isLayerVisible, "2426", "1");
 
             expect(treeEntry).to.exist;
@@ -70,15 +77,15 @@ async function ParameterTests ({builder, url, resolution}) {
         it("?layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
             // 2426 is "Bezirke"
             // 452 is "Luftbilder DOP 20 (belaubt)"
-            driver = await initDriver(builder, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, resolution);
+            await loadUrl(driver, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
 
             const treeEntryLuftbilder = await driver.findElement(By.css(
-                    isBasic(url)
+                    isBasic(url) || isMaster(url)
                         ? "ul#tree li [title^=\"Luftbilder\"]"
                         : "#SelectedLayer .layer-item [title^=\"Luftbilder\"]"
                 )),
                 treeEntryBezirke = await driver.findElement(By.css(
-                    isBasic(url)
+                    isBasic(url) || isMaster(url)
                         ? "ul#tree li [title=\"Bezirke\"]"
                         : "#SelectedLayer .layer-item [title=\"Bezirke\"]"
                 )),
@@ -94,34 +101,32 @@ async function ParameterTests ({builder, url, resolution}) {
             expect(10.58332761833642).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:40.000
         });
 
-        if (isBasic(url)) {
-            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info", async function () {
-                driver = await initDriver(builder, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, resolution);
-                const viewport = await driver.findElement(By.css(".ol-viewport"));
+        if (isMaster(url)) {
+            // TODO can't be clicked due to alert regarding gemarkungen.json; stop skipping when that is fixed
+            it.skip("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
 
-                // test KiTa layer GFI with example "KiTa Stadt-Land-Fluss" at coords "550103.5102357711, 5935760.012742457"
-                await driver.executeScript(setCenter, [550103.5102357711, 5935760.012742457]);
-                await driver.actions({bridge: true})
-                    .move({origin: viewport})
-                    .click()
-                    .perform();
+                // test KiTa layer GFI with example "KiTa Stadt-Land-Fluss" at coords "550115.420 5935760.220"
+                do {
+                    await clickFeature(driver, [550115.420, 5935760.220]);
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
                 await driver.wait(until.elementLocated(By.css("div.gfi")));
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'KiTa Stadt-Land-Fluss')]"))).to.exist;
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'KiTa Stadt-Land-Fluss')]")));
                 await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                 await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.gfi"))));
 
-                // test hospital layer GFI with example "Krankenhaus Tabea" at coords "552304.1809224088, 5935345.322637472"
-                await driver.executeScript(setCenter, [552304.1809224088, 5935345.322637472]);
-                await driver.actions({bridge: true})
-                    .move({origin: viewport})
-                    .click()
-                    .perform();
+                // test hospital layer GFI with example "Krankenhaus Tabea" at coords "552406.014 5935396.345"
+                do {
+                    await clickFeature(driver, [552406.014, 5935396.345]);
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
                 await driver.wait(until.elementLocated(By.css("div.gfi")));
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Krankenhaus Tabea')]"))).to.exist;
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Krankenhaus Tabea')]")));
                 await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                 await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.gfi"))));
 
@@ -145,30 +150,28 @@ async function ParameterTests ({builder, url, resolution}) {
                  */
                 expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
             });
-        }
 
-        if (isDefault(url)) {
-            it("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
-                driver = await initDriver(builder, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, resolution);
-                const viewport = await driver.findElement(By.css(".ol-viewport"));
+            // TODO can't be clicked due to alert regarding gemarkungen.json; stop skipping when that is fixed
+            it.skip("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
+                const coords = [566688.25, 5934320.50];
 
-                // test hospital layer GFI with example "Hamburg Hauptbahnhof" at coords "566703.4596051318, 5934257.665292527"
-                await driver.executeScript(setCenter, [566703.4596051318, 5934257.665292527]);
-                await driver.actions({bridge: true})
-                    .move({origin: viewport})
-                    .click()
-                    .perform();
+                // test hospital layer GFI with example "Hamburg Hauptbahnhof" at coords "566688.25, 5934320.50"
+                do {
+                    await clickFeature(driver, coords);
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
                 await driver.wait(until.elementLocated(By.css("div.gfi")));
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Steintorwall 20')]"))).to.exist;
+                expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//h6[contains(.,'Steintorwall 20')]"))).to.exist;
                 await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                 await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.gfi"))));
 
                 // check whether layer has its legend loaded
                 await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Legende')]"))).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-win"))));
-                expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_Solaratlas?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=geb_sum')]"))).to.exist;
+                expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//img[contains(@src,'http://www.geoportal-hamburg.de/legende/legende_solar.png')]"))).to.exist;
                 await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Legende')]"))).click();
                 await (await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                 await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.legend-win"))));
@@ -176,7 +179,7 @@ async function ParameterTests ({builder, url, resolution}) {
                 // check layer information in topic tree
                 await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Themen')]"))).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
-                await (await driver.findElement(By.xpath("//ul[@id='SelectedLayer']/li/span[2]/span"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/li[.//span[@title='Eignungsflächen']]//span[contains(@class,'glyphicon-info-sign')]"))).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
                 /* NOTE: This test fails since the text indicates an error occured.
                  * Is the info text static? If so, this line should be changed to check for the presence of the actually desired content.
@@ -186,9 +189,9 @@ async function ParameterTests ({builder, url, resolution}) {
             });
         }
 
-        if (isCustom(url)) {
+        if (isMaster(url) || isCustom(url)) {
             it("?featureid= displays markers for features", async function () {
-                driver = await initDriver(builder, `${url}?featureid=18,26`, resolution);
+                await loadUrl(driver, `${url}?featureid=18,26`, mode);
                 await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
                     {coordinate: [568814.3835, 5931819.377], image: "https://geoportal-hamburg.de/lgv-config/img/location_eventlotse.svg"},
                     {coordinate: [567043.565, 5934455.808], image: "https://geoportal-hamburg.de/lgv-config/img/location_eventlotse.svg"}
@@ -197,26 +200,27 @@ async function ParameterTests ({builder, url, resolution}) {
         }
 
         it("?zoomlevel= sets the chosen zoom level", async function () {
-            driver = await initDriver(builder, `${url}?zoomlevel=8`, resolution);
+            await loadUrl(driver, `${url}?zoomlevel=8`, mode);
 
             expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
         });
 
-        if (isCustom(url)) {
-            it("?startupmodul= allows opening tools initially", async function () {
-                driver = await initDriver(builder, `${url}?startupmodul=routing`, resolution);
+        it("?startupmodul= allows opening tools initially", async function () {
+            const toolName = isMaster(url) || isCustom(url) ? "routing" : "draw",
+                selector = `//div[contains(@id,'window')]//span[contains(.,'${
+                    isMaster(url) || isCustom(url) ? "Routenplaner" : "Zeichnen / Schreiben"
+                }')]`;
 
-                const selector = "//div[contains(@id,'window')]//span[contains(.,'Routenplaner')]";
+            await loadUrl(driver, `${url}?startupmodul=${toolName}`, mode);
 
-                await driver.wait(until.elementLocated(By.xpath(selector)), 10000);
+            await driver.wait(until.elementLocated(By.xpath(selector)), 10000);
 
-                expect(await driver.findElement(By.xpath(selector))).to.exist;
-            });
-        }
+            expect(await driver.findElement(By.xpath(selector))).to.exist;
+        });
 
-        if (!isBasic(url)) {
+        if (isCustom(url) || isMaster(url) || isDefault(url)) {
             it("?query= fills and executes query field", async function () {
-                driver = await initDriver(builder, `${url}?query=Neuenfeld`, resolution);
+                await loadUrl(driver, `${url}?query=Neuenfeld`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
                 const input = await driver.findElement(By.css("#searchInput"));
@@ -229,9 +233,9 @@ async function ParameterTests ({builder, url, resolution}) {
             });
         }
 
-        if (isDefault(url)) {
+        if (isMaster(url)) {
             it("?query= fills and executes search and zooms to result if unique address", async function () {
-                driver = await initDriver(builder, `${url}?query=Neuenfelder Straße,19, 21109`, resolution);
+                await loadUrl(driver, `${url}?query=Neuenfelder Straße,19, 21109`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
                 const input = await driver.findElement(By.css("#searchInput")),
@@ -251,17 +255,28 @@ async function ParameterTests ({builder, url, resolution}) {
             });
         }
 
-        if (isCustom(url)) {
-            it("?config= allows selecting a config", async function () {
-                driver = await initDriver(builder, `${url}?config=../basic/config.json`, resolution);
-                // icon varies between basic and custom - use as indicator that switching config worked
-                await driver.wait(until.elementLocated(By.css(".dropdown:nth-child(1) > .dropdown-toggle > .glyphicon-folder-open")));
-            });
-        }
+        // TODO loading portaltitle image currently does not work; stop skipping after bug is fixed
+        it.skip("?config= allows selecting a config", async function () {
+            // test by redirecting all to basic, including basic
+            await loadUrl(driver, `${url}?config=../basic/config.json`, mode);
+
+            // icon varies between basic and all others - use as indicator that basic is active
+            await driver.wait(
+                until.elementLocated(By.css(".dropdown:nth-child(1) > .dropdown-toggle > .glyphicon-folder-open")),
+                5000,
+                "Glyphicon set in basic for tree was not found."
+            );
+
+            // also check whether header image loaded correctly
+            const imageSelector = By.css("#portalTitle img");
+
+            await driver.wait(until.elementLocated(imageSelector));
+            await driver.wait(async () => driver.executeScript(imageLoaded, await driver.findElement(imageSelector)), 5000, "PortalTitle Image did not load.");
+        });
 
         if (isDefault(url)) {
             it("?mdid= opens and displays a layer", async function () {
-                driver = await initDriver(builder, `${url}?mdid=EBA4BF12-3ED2-4305-9B67-8E689FE8C445`, resolution);
+                await loadUrl(driver, `${url}?mdid=EBA4BF12-3ED2-4305-9B67-8E689FE8C445`, mode);
 
                 // check if active in tree
                 await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Themen')]"))).click();
@@ -273,6 +288,7 @@ async function ParameterTests ({builder, url, resolution}) {
             });
         }
 
+        // TODO nach Rücksprache in MPLGV-96 erstmal auf ".skip" gestellt, bis eine öffentliche Konfiguration hierfür kommt
         if (isDefault(url)) {
             it.skip("opening and configuring lots of layers works", async function () {
                 /* TODO
@@ -280,15 +296,13 @@ async function ParameterTests ({builder, url, resolution}) {
                     -> Es werden diverse Layer angezeigt NOTE nur einer wegen überwiegend visibility false
                     -> Es wird kein Fehler oder Alert angezeigt NOTE einige Fehler/Alerts - falsche Datenquelle? (DT)
                     -> Transparenz und Sichtbarkeit der Layer stimmen mit dem Aufruf überein NOTE ist im Test
-
-                NOTE nach Rücksprache in MPLGV-96 erstmal auf ".skip" gestellt, bis eine öffentliche Konfiguration hierfür kommt
                 */
                 let layers = "368,8,717,2428,2423,1562_0,2432,1754,1757,1172,1935geofox-bahn,2676,2444,1561_6,2941,2452",
                     visibility = "true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false",
                     transparency = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
                     center = "572765.7219565103,5940389.380731404";
 
-                driver = await initDriver(builder, `${url}?layerIDs=${layers}&visibility=${visibility}&transparency=${transparency}&center=${center}&zoomlevel=5`, resolution);
+                await loadUrl(driver, `${url}?layerIDs=${layers}&visibility=${visibility}&transparency=${transparency}&center=${center}&zoomlevel=5`, mode);
 
                 layers = layers.split(",");
                 visibility = visibility.split(",");

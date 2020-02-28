@@ -313,6 +313,15 @@ function getCoordinatesOfXthFeatureInLayer () {
     return null;
 }
 
+/**
+ * @param {HTMLElement} img image to check
+ * @returns {boolean} true if image loaded */
+function imageLoaded () {
+    return arguments[0].complete &&
+        typeof arguments[0].naturalWidth !== "undefined" &&
+        arguments[0].naturalWidth > 0;
+}
+
 /** @returns {boolean} true if oblique map responds to be turned on */
 function isObModeOn () {
     return Backbone.Radio.request("ObliqueMap", "isActive");
@@ -419,6 +428,7 @@ module.exports = {
     areRegExpsInMeasureLayer,
     isFullscreen,
     isLayerVisible,
+    imageLoaded,
     isObModeOn,
     getObModeResolution,
     getCoordinatesOfXthFeatureInLayer,

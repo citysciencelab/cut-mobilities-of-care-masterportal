@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 const Config = {
     wfsImgPath: "./ressources/img/",
     namedProjections: [
@@ -28,4 +26,7 @@ const Config = {
     }
 };
 
-/* eslint-enable no-unused-vars */
+// conditional export to make config readable by e2e tests
+if (typeof module !== "undefined") {
+    module.exports = Config;
+}

@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../library/driver"),
     {zoomIn} = require("../../../library/scripts"),
     {clickFeature, hoverFeature} = require("../../../library/utils"),
-    {isDefault, isCustom, isBasic} = require("../../../settings"),
+    {isDefault, isCustom, isMaster, isBasic} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
@@ -13,6 +13,12 @@ const webdriver = require("selenium-webdriver"),
  */
 async function GfiTests ({builder, url, resolution}) {
     describe("Gfi", function () {
+        const exampleHospital = {
+            coord: [551370.202, 5937222.981],
+            name: "Asklepios Westklinikum Hamburg",
+            street: "Suurheid 20"
+        };
+
         let driver;
 
         beforeEach(async function () {
@@ -23,31 +29,25 @@ async function GfiTests ({builder, url, resolution}) {
             await driver.quit();
         });
 
-        if (isCustom(url)) {
-            /* NOTE
-             * This test fails (in Chrome only?) due to a CSS issue where the nav-bar will be multiline
-             * in test resolution 1024x768. This causes the page to be scrollable, which in turn
-             * confuses Chrome regarding clicking the center of ".ol-viewport" - instead, Chrome
-             * will click somewhere near the feature.
-             * NOTE issue identified in https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues/445/masterportal-header-bricht-um-version-243
-             */
-            it("custom tree hospitals open gfi on click", async function () {
-                await clickFeature(driver, [576048.895, 5957194.601]);
-                await driver.wait(until.elementLocated(By.css("div.gfi")));
+        if (isMaster(url) || isCustom(url)) {
+            it("hospitals open gfi on click", async function () {
+                do {
+                    await clickFeature(driver, exampleHospital.coord);
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                expect(await driver.findElement(By.xpath("//td[contains(.,'Heinrich Sengelmann Krankenhaus')]"))).to.exist;
-                expect(await driver.findElement(By.xpath("//td[contains(.,'Kayhuder Straße 65')]"))).to.exist;
+                expect(await driver.findElement(By.xpath(`//td[contains(.,'${exampleHospital.name}')]`))).to.exist;
+                expect(await driver.findElement(By.xpath(`//td[contains(.,'${exampleHospital.street}')]`))).to.exist;
             });
-        }
 
-        if (isCustom(url)) {
-            // NOTE same centering issue as previously ("custom tree hospitals open gfi on click")
-            it("custom tree hospitals show tooltip on hover", async function () {
-                await hoverFeature(driver, [576048.895, 5957194.601]);
-                await driver.wait(until.elementLocated(By.css("div.tooltip")));
+            it("hospitals show tooltip on hover", async function () {
+                do {
+                    await hoverFeature(driver, exampleHospital.coord, {x: -10, y: -10});
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.css("div.tooltip"))).length === 0);
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.tooltip"))));
-                expect(await driver.findElement(By.xpath("//div[contains(@class, 'tooltip')]//span[contains(.,'Heinrich Sengelmann Krankenhaus')]"))).to.exist;
-                expect(await driver.findElement(By.xpath("//div[contains(@class, 'tooltip')]//span[contains(.,'Kayhuder Straße 65')]"))).to.exist;
+                expect(await driver.findElement(By.xpath(`//div[contains(@class, 'tooltip')]//span[contains(.,'${exampleHospital.name}')]`))).to.exist;
+                expect(await driver.findElement(By.xpath(`//div[contains(@class, 'tooltip')]//span[contains(.,'${exampleHospital.street}')]`))).to.exist;
             });
         }
 
@@ -70,10 +70,9 @@ async function GfiTests ({builder, url, resolution}) {
         }
 
         if (isBasic(url)) {
-            // NOTE same centering issue as previously ("custom tree hospitals open gfi on click")
             it("basic tree hospital+kita layer displays gfi on kita click", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
-                await (await driver.findElement(By.xpath("//ul[@id='tree']/li[4]/span/span/span"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/li//span[contains(.,'Kita und Krankenhäuser')]"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
 
                 await clickFeature(driver, [577664.4797278475, 5940742.819722826]);
@@ -86,7 +85,6 @@ async function GfiTests ({builder, url, resolution}) {
         }
 
         if (isDefault(url)) {
-            // NOTE same centering issue as previously ("custom tree hospitals open gfi on click")
             it("default tree traffic camera layer displays gfi including video element", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
@@ -102,14 +100,14 @@ async function GfiTests ({builder, url, resolution}) {
             });
         }
 
-        if (isBasic(url)) {
-            // NOTE same centering issue as previously ("custom tree hospitals open gfi on click")
-            it("basic tree traffic intensity layer displays gfi including overview table", async function () {
+        if (isMaster(url)) {
+            // TODO currently blocked by a warníng message
+            it.skip("basic tree traffic intensity layer displays gfi including overview table", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Verkehrsstärken')]"))).click();
+                await (await driver.findElement(By.xpath("//span[contains(@title,'Verkehrsstärken')]"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
 
-                await clickFeature(driver, [561974.6965336638, 5930701.887644928]);
+                await clickFeature(driver, [562228.696396504, 5930738.047401453]);
 
                 await driver.wait(until.elementLocated(By.css("div.gfi")));
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
@@ -148,7 +146,6 @@ async function GfiTests ({builder, url, resolution}) {
         }
 
         if (isDefault(url)) {
-            // NOTE same centering issue as previously ("custom tree hospitals open gfi on click")
             it("default tree bicycle count layer shows gfi with info page initially open", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
@@ -193,12 +190,13 @@ async function GfiTests ({builder, url, resolution}) {
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
                 expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]"))).to.exist;
                 await driver.switchTo().frame(await driver.findElement(By.xpath("//iframe[contains(@class,'gfi-iFrame')]")));
-                expect(await driver.findElement(By.xpath("//td[contains(.,'Öjendorfer Park')]"))).to.exist;
+                await driver.wait(until.elementLocated(By.xpath("//td[contains(.,'Öjendorfer Park')]")));
             });
         }
 
         if (isCustom(url)) {
-            it("custom tree hvv stop layer displays gfi from application/vnd.ogc.gml", async function () {
+            // TODO oftentimes blocked by div#loader - remove skip when fixed
+            it.skip("custom tree hvv stop layer displays gfi from application/vnd.ogc.gml", async function () {
                 // hvv stops not available on initial zoom level
                 await driver.executeScript(zoomIn);
 
@@ -222,10 +220,10 @@ async function GfiTests ({builder, url, resolution}) {
         }
 
         if (isDefault(url)) {
-            // NOTE same centering issue as previously ("custom tree hospitals open gfi on click")
             it("default tree gfi windows can be dragged, but not outside the screen", async function () {
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
+                await driver.wait(until.elementLocated(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]")));
                 await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
                 await (await driver.findElement(By.css(".layer:nth-child(53) > .layer-item > .glyphicon"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();

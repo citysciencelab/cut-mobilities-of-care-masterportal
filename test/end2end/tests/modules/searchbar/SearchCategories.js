@@ -12,10 +12,11 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function SearchCategories ({builder, url, resolution}) {
-    const skipAll = !isDefault(url); // only default config has sufficiently configured search bar for test
+    const testIsApplicable = isDefault(url); // only default config has sufficiently configured search bar for test
 
-    describe("Searchbar", function () {
-        (skipAll ? describe.skip : describe)("Search Categories", function () {
+    if (testIsApplicable) {
+        // TODO with the current configurations, none has the sufficient specialWFS set; configurations need to be expanded first
+        describe.skip("Search Categories", function () {
             const searchString = "Haus",
                 resultsSelector = By.css("#searchInputUL > li.results");
             let driver, searchInput, searchList, searchMarker, initialCenter, initialResolution, clear;
@@ -34,9 +35,9 @@ async function SearchCategories ({builder, url, resolution}) {
                 await searchInput.sendKeys(searchString);
                 await driver.wait(until.elementIsVisible(searchList));
                 /* clicking this element may do nothing (especially in Firefox) when
-                 * searches are still running; to circumvent this issue, the element
-                 * is clicked until it's no longer found, assuming the category
-                 * menu was opened */
+                * searches are still running; to circumvent this issue, the element
+                * is clicked until it's no longer found, assuming the category
+                * menu was opened */
                 do {
                     await reclickUntilNotStale(driver, resultsSelector);
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
@@ -182,7 +183,7 @@ async function SearchCategories ({builder, url, resolution}) {
                 });
             });
         });
-    });
+    }
 }
 
 module.exports = SearchCategories;

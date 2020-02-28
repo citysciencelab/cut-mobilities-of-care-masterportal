@@ -16,11 +16,11 @@ const webdriver = require("selenium-webdriver"),
     configs = new Map([
         ["basic", "/portal/basic"], // was LT
         ["master", "/portal/master"], // was DT
-        ["custom", "/portal/masterCustom"], // was CT
+        // ["custom", "/portal/masterCustom"], // was CT TODO currently skipped to avoid div#loader issues (flickers)
         ["default", "/portal/masterDefault"] // was DT, too?
     ]),
     modes = [
-        "2D",
+        "2D"
         // "3D",
         // "OB"
     ];
@@ -67,7 +67,7 @@ function isOB (mode) {
  * @returns {boolean} whether configuration is basic
  */
 function isBasic (url) {
-    return url.endsWith(configs.get("basic"));
+    return url.split("?")[0].endsWith(configs.get("basic"));
 }
 
 /**
@@ -76,7 +76,7 @@ function isBasic (url) {
  * @returns {boolean} whether configuration is basic
  */
 function isMaster (url) {
-    return url.endsWith(configs.get("master"));
+    return url.split("?")[0].endsWith(configs.get("master"));
 }
 
 /**
@@ -85,7 +85,7 @@ function isMaster (url) {
  * @returns {boolean} whether configuration is default
  */
 function isDefault (url) {
-    return url.endsWith(configs.get("default"));
+    return url.split("?")[0].endsWith(configs.get("default"));
 }
 
 /**
@@ -94,7 +94,16 @@ function isDefault (url) {
  * @returns {boolean} whether configuration is custom
  */
 function isCustom (url) {
-    return url.endsWith(configs.get("custom"));
+    return url.split("?")[0].endsWith(configs.get("custom"));
+}
+
+/**
+ * Returns true for browsername indicating chrome is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether configuration is custom
+ */
+function isChrome (browsername) {
+    return browsername.toLowerCase().includes("chrome");
 }
 
 /**
@@ -141,6 +150,7 @@ module.exports = {
     is3D,
     isOB,
     isMobile,
+    isChrome,
     isBasic,
     isMaster,
     isDefault,

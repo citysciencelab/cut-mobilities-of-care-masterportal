@@ -1,13 +1,14 @@
-const // modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
+const {isBasic, is2D} = require("./settings"),
+    modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
     modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
     modulesControlsButton3DTests = require("./tests/modules/controls/Button3D.js"),
-    // modulesControlsButtonObliqueTests = require("./tests/modules/controls/ButtonOblique.js"),
-    // modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
-    // modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
+    modulesControlsButtonObliqueTests = require("./tests/modules/controls/ButtonOblique.js"),
+    modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
+    modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
     modulesControlsOrientationTests = require("./tests/modules/controls/Orientation.js"),
-    // modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
+    modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
     modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
-    // modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
+    modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
     modulesCoreParametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
     modulesSearchbarSearchCategories = require("./tests/modules/searchbar/SearchCategories.js"),
     modulesSearchbarGdiSearch = require("./tests/modules/searchbar/GdiSearch.js"),
@@ -50,31 +51,36 @@ function tests (builder, url, browsername, resolution, config, mode) {
     describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
         this.timeout(150000);
 
-        // TODO remove to activate OB testing
-        if (mode === "OB") {
+        if (isBasic(url) && !is2D(mode)) {
+            // portal/basic does not offer any mode besides 2D; skip all suites for non-2D basic
+            return;
+        }
+
+        // TODO remove to activate OB/2D testing (not used in first iteration, and OB may be moved to a different test run)
+        if (mode === "OB" || mode === "3D") {
             return;
         }
 
         const suites = [
                 // // // modules/controls
-                // modulesControlsAttributionsTests,
+                modulesControlsAttributionsTests,
                 modulesControlsBackForwardTests,
                 modulesControlsButton3DTests,
-                // TODO pull OB to different suites array - maybe depending on environment variable?
-                // modulesControlsButtonObliqueTests,
-                // modulesControlsFreezeTests,
-                // modulesControlsFullScreenTests,
+                // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
+                modulesControlsButtonObliqueTests,
+                modulesControlsFreezeTests,
+                modulesControlsFullScreenTests,
                 modulesControlsOrientationTests,
-                // modulesControlsOverviewMapTests,
+                modulesControlsOverviewMapTests,
                 modulesControlsTotalViewTests,
-                // modulesControlsZoomTests,
+                modulesControlsZoomTests,
 
                 // // // modules/core
                 modulesCoreParametricUrlTests,
 
                 // // // modules/searchbar
-                modulesSearchbarSearchCategories,
                 modulesSearchbarGdiSearch,
+                modulesSearchbarSearchCategories,
 
                 // // // modules/tools
                 modulesToolsCoord,

@@ -1,6 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getCenter, getResolution, setResolution} = require("../../../library/scripts"),
+    {isDefault, isCustom} = require("../../../settings"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
 
@@ -12,18 +13,19 @@ const webdriver = require("selenium-webdriver"),
 async function SearchByCoordTests ({builder, url, resolution}) {
     describe("SearchByCoord", function () {
         const selectors = {
-            tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
-            toolSearchByCoord: By.xpath("//a[contains(.,'Koordinatensuche')]"),
-            modal: By.xpath("//div[@id='window']"),
-            coordSystemSelect: By.xpath("//select[@id='coordSystemField']"),
-            coordinatesNorthingField: By.xpath("//input[@id='coordinatesNorthingField']"),
-            coordinatesEastingField: By.xpath("//input[@id='coordinatesEastingField']"),
-            etrs89Option: By.xpath("//option[contains(.,'ETRS89')]"),
-            wgs84Option: By.xpath("//option[contains(.,'WGS84')]"),
-            wgs84DecimalOption: By.xpath("//option[contains(.,'WGS84(Dezimalgrad)')]"),
-            searchButton: By.xpath("//div[@id='window']//button[contains(.,'Suchen')]"),
-            searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]")
-        };
+                tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
+                toolSearchByCoord: By.xpath("//a[contains(.,'Koordinatensuche')]"),
+                modal: By.xpath("//div[@id='window']"),
+                coordSystemSelect: By.xpath("//select[@id='coordSystemField']"),
+                coordinatesNorthingField: By.xpath("//input[@id='coordinatesNorthingField']"),
+                coordinatesEastingField: By.xpath("//input[@id='coordinatesEastingField']"),
+                etrs89Option: By.xpath("//option[contains(.,'ETRS89')]"),
+                wgs84Option: By.xpath("//option[contains(.,'WGS84')]"),
+                wgs84DecimalOption: By.xpath("//option[contains(.,'WGS84(Dezimalgrad)')]"),
+                searchButton: By.xpath("//div[@id='window']//button[contains(.,'Suchen')]"),
+                searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]")
+            },
+            expectedResolution = isCustom(url) || isDefault(url) ? 0.66 : 0.13;
         let driver, searchMarkerContainer;
 
         before(async function () {
@@ -55,6 +57,7 @@ async function SearchByCoordTests ({builder, url, resolution}) {
             await option.click();
 
             // these elements can't be fetch before previous clicks, since they'd become stale by now
+            await (await driver.findElement(selectors.coordinatesNorthingField)).click(); // needed in Chrome, else element may not be interactable in next step
             await (await driver.findElement(selectors.coordinatesNorthingField)).clear();
             await (await driver.findElement(selectors.coordinatesNorthingField)).sendKeys(northing);
             await (await driver.findElement(selectors.coordinatesEastingField)).clear();
@@ -64,7 +67,7 @@ async function SearchByCoordTests ({builder, url, resolution}) {
             await driver.wait(async () => searchMarkerContainer.isDisplayed());
             expect((await driver.executeScript(getCenter))[0]).to.be.closeTo(expectedCenter[0], 0.005);
             expect((await driver.executeScript(getCenter))[1]).to.be.closeTo(expectedCenter[1], 0.005);
-            expect(await driver.executeScript(getResolution)).to.be.closeTo(0.13, 0.005);
+            expect(await driver.executeScript(getResolution)).to.be.closeTo(expectedResolution, 0.005);
         }
 
         it("displays a modal dialog containing the tool elements, offering the coordinate systems ETRS89, WGS84, and WGS84(Dezimalgrad)", async () => {

@@ -1,5 +1,6 @@
 const {until, By} = require("selenium-webdriver"),
-    {getResolution} = require("./scripts");
+    {getResolution} = require("./scripts"),
+    {isMaster} = require("../settings");
 
 /**
  * Activates 3D mode for opened Masterportal.
@@ -31,20 +32,23 @@ async function prepareOB (driver) {
 }
 
 /**
- * Prepares the driver for testing.
- * @param {selenium-webdriver.Builder} builder builder for current driver
- * @param {String} url to get
- * @param {String} resolution formatted as "AxB" with A, B integers
+ * Loads url and waits until loading overlays are hidden and backbone is initialized.
+ * Will also prepare mode.
+ * @param {selenium-webdriver.driver} driver driver object
+ * @param {String} url url to load
  * @param {String} mode additional instance preparation before tests can be executed
- * @returns {selenium.webdriver.Driver} driver instance
+ * @returns {void}
  */
-async function initDriver (builder, url, resolution, mode) {
-    const driver = await builder.build(),
-        widthHeight = resolution.split("x").map(x => parseInt(x, 10));
-
-    await driver.manage().window().setRect({width: widthHeight[0], height: widthHeight[1]});
+async function loadUrl (driver, url, mode) {
     await driver.get(url);
     await driver.wait(until.elementLocated(By.id("loader")), 50000);
+
+    if (isMaster(url)) {
+        // wait for logo to disappear (only appears in master)
+        await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("portal-logo"))));
+    }
+
+    await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
     await driver.wait(async () => await driver.executeScript(getResolution) !== null);
@@ -56,10 +60,41 @@ async function initDriver (builder, url, resolution, mode) {
     else if (mode === "OB") {
         await prepareOB(driver);
     }
+}
+
+/**
+ * Builds the driver and sets its resolution.
+ * @param {selenium-webdriver.Builder} builder builder for current driver
+ * @param {String} resolution formatted as "AxB" with A, B integers
+ * @returns {selenium.webdriver.Driver} driver instance
+ */
+async function getUnnavigatedDriver (builder, resolution) {
+    const driver = await builder.build(),
+        widthHeight = resolution.split("x").map(x => parseInt(x, 10));
+
+    await driver.manage().window().setRect({width: widthHeight[0], height: widthHeight[1]});
+
+    return driver;
+}
+
+/**
+ * Prepares the driver for testing; build, set resolution, activate mode, get url.
+ * @param {selenium-webdriver.Builder} builder builder for current driver
+ * @param {String} url to get
+ * @param {String} resolution formatted as "AxB" with A, B integers
+ * @param {String} mode additional instance preparation before tests can be executed
+ * @returns {selenium.webdriver.Driver} driver instance
+ */
+async function initDriver (builder, url, resolution, mode) {
+    const driver = await getUnnavigatedDriver(builder, resolution);
+
+    await loadUrl(driver, url, mode);
 
     return driver;
 }
 
 module.exports = {
-    initDriver
+    getUnnavigatedDriver,
+    initDriver,
+    loadUrl
 };

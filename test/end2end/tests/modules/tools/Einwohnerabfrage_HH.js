@@ -1,21 +1,20 @@
 const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../library/driver"),
-    {isDefault} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
  * Tests regarding resident counter tool.
- * TODO This test has been prepared regarding the required data. However, since the feature
- * has been moved to be an addon, it can currently not be tested, since no preparations for
- * testing addons have been taken. File is kept since notes will be helpful when addons are
- * tested later.
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
 async function CoordTests ({builder, url, resolution}) {
-    const skip = !isDefault(url);
-
-    (skip ? describe.skip : describe.only)("Einwohnerabfrage_HH", function () {
+    /*
+    * TODO This test has been prepared regarding the required data. However, since the feature
+    * has been moved to be an addon, it can currently not be tested, since no preparations for
+    * testing addons have been taken. File is kept since notes will be helpful when addons are
+    * tested later.
+    */
+    describe.skip("Einwohnerabfrage_HH", function () {
         const selectors = {
             tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
             toolResidentCounter: By.xpath("//a[contains(.,'Einwohneranzahl abfragen')]"),

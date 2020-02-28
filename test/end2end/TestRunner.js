@@ -24,7 +24,7 @@ const webdriver = require("selenium-webdriver"),
     // proxy for local testing
     localHttpProxy = process.env.http_proxy,
     localHttpsProxy = process.env.https_proxy,
-    localBypassList = ["localhost", "127.0.0.1", "10.*", "geodienste.hamburg.de"];
+    localBypassList = ["localhost", "127.0.0.1", "10.*", "geodienste.hamburg.de", "test-geodienste.hamburg.de"];
     /* eslint-enable no-process-env */
 
 // pulling execution to separate function for JSDoc; expected input is e.g. "chrome", "bs", "chrome,firefox"
