@@ -1,41 +1,5 @@
 [
   {
-    "id": "320",
-    "name": "Geoland Basemap",
-    "urls": [
-      "https://maps1.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-      "https://maps2.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-      "https://maps3.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-      "https://maps4.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
-      "https://maps.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"
-    ],
-    "typ": "WMTS",
-    "layer": "geolandbasemap",
-    "version": "1.0.0",
-    "format": "image/png",
-    "style": "normal",
-    "transparent": false,
-    "tileSize": "256",
-    "gutter": "0",
-    "minScale": "0",
-    "maxScale": "2500000",
-    "maxZoom": "19",
-    "tileMatrixSet": "google3857",
-    "coordinateSystem": "EPSG:3857",
-    "gfiAttributes": "ignore",
-    "gfiTheme": "default",
-    "layerAttribution": "nicht vorhanden",
-    "legendURL": "ignore",
-    "cache": true,
-    "wrapX": true,
-    "origin": [
-      -20037508.3428,
-      20037508.3428
-    ],
-    "resLength": "20",
-    "requestEncoding": "REST"
-  },
-  {
     "id": "452",
     "name": "Luftbilder DOP 20",
     "url": "https://geodienste.hamburg.de/HH_WMS_Cache_Luftbilder",
