@@ -30,7 +30,7 @@ const ScaleLineView = Backbone.View.extend({
         if (document.getElementsByClassName("footer").length > 0) {
             document.getElementsByClassName("footer")[0].appendChild(this.el);
         }
-        else {
+        else if (document.getElementsByClassName("ol-viewport").length > 0) {
             document.getElementsByClassName("ol-viewport")[0].appendChild(this.el);
         }
         if (i18next && i18nextIsEnabled) {

@@ -8,7 +8,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         paramsStyleWMSArray: [],
         renderToWindow: false,
         renderToSidebar: false,
-        keepOtherToolsOpened: true,
+        keepOpen: true,
         glyphicon: "glyphicon-book",
         rotationAngle: 0,
         startX: 0,
@@ -53,6 +53,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         channel.on({
             "setLayerList": this.setLayerList
         }, this);
+        this.listenTo(Radio.channel("Map"), {
+            "change": this.setLayerList
+        });
         this.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": this.setLayerList
         });
@@ -60,6 +63,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             "updateParamsStyleWMS": this.updateParamsStyleWMSArray,
             "resetParamsStyleWMS": this.resetParamsStyleWMSArray
         });
+
         this.listenTo(this, {
             "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
         });
@@ -166,24 +170,35 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     },
     /**
     * Sets the legend information for all visible layers
-    * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
     * @returns {void}
     */
     setLayerList: function () {
-        const modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            sortedModelList = modelList.sort((layerA, layerB) => layerB.get("selectionIDX") - layerA.get("selectionIDX")),
-            visibleLayer = sortedModelList.filter(layer => layer.get("legendURL") !== "ignore"),
+        const layers = this.filterLayersForLegend(),
             tempArray = [];
 
-
-        visibleLayer.forEach(layer => {
-            const layerSources = layer.get("layerSource"); // Array oder undefined
-
-            tempArray.push(this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layerSources));
+        layers.forEach(layer => {
+            tempArray.push(this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layer.get("layerSource")));
         }, this);
 
         this.unset("legendParams");
         this.set("legendParams", tempArray);
+    },
+
+    /**
+     * Returns sorted and filtered layer list for legend.
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Core#RadioTriggerMapChange
+     * @returns {Layer[]} sorted and filtered layers
+     */
+    filterLayersForLegend: function () {
+        const visibleLayer = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
+            filteredLegendUrl = visibleLayer.filter(layer => layer.get("legendURL") !== "ignore"),
+            isMode3D = Radio.request("Map", "isMap3d"),
+            filterViewType = filteredLegendUrl.filter(layer => {
+                return (isMode3D && layer.get("supported").includes("3D")) || (!isMode3D && layer.get("supported").includes("2D"));
+            });
+
+        return filterViewType.sort((layerA, layerB) => layerB.get("selectionIDX") - layerA.get("selectionIDX"));
     },
 
     /**
@@ -526,6 +541,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
         return svg;
     },
+
     /**
     * todo
     * @param {*} style todo

@@ -11,7 +11,8 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         isOpen: false,
         name: "Geometrie",
         type: "string",
-        snippetType: "graphicalselect",
+        displayName: "Geometrie auswählen",
+        snippetType: "graphicalSelect",
         isMultiple: false,
         drawInteraction: undefined,
         circleOverlay: new Overlay({
@@ -27,7 +28,6 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         selectedAreaGeoJson: undefined,
         // translations
         geographicValues: {},
-        displayName: "",
         tooltipMessage: "",
         tooltipMessagePolygon: ""
     },
@@ -42,7 +42,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
      * @property {String} name="Geometrie" name of the dropdown
      * @property {String} type="string" type of the dropdown values
      * @property {String} displayName="Geometrie auswählen" label of the dropdown
-     * @property {String} snippetType="graphicalselect" type of the dropdown values
+     * @property {String} snippetType="graphicalSelect" type of the dropdown values
      * @property {Boolean} isMultiple=false dropdown multiple
      * @property {Object} drawInteraction=undefined the interaction to draw a square, circle or polygon
      * @property {ol.overlay} circleOverlay=new Overlay({offset: [15, 0], positioning: "center-left"}) circle overlay (tooltip) - shows the radius
@@ -81,7 +81,7 @@ const GraphicalSelectModel = SnippetDropdownModel.extend(/** @lends GraphicalSel
         }, this);
         this.listenTo(this, {
             "change:selectedAreaGeoJson": function () {
-                channel.trigger("onDrawEnd", this.get("selectedAreaGeoJson"));
+                channel.trigger("onDrawEnd", this.get("selectedAreaGeoJson"), this.id);
             }
         });
         this.createDomOverlay("circle-overlay", this.get("circleOverlay"));

@@ -323,14 +323,16 @@ Konfiguration der SpecialWFS Suche
             "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
-            "name": "B-Plan"
+            "name": "B-Plan",
+            "namespaces": "xmlns:app='http://www.deegree.org/app'"
         },
         {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
-            "name": "im Verfahren"
+            "name": "im Verfahren",
+            "namespaces": "xmlns:app='http://www.deegree.org/app'"
         }
     ]
 }
@@ -350,6 +352,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 |propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|false|
 |geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|false|
 |maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features.|false|
+|namespaces|nein|String||XML Namespaces zur Abfrage von propertyNames oder geometryName (*xmlns:wfs*, *xmlns:ogc* und *xmlns:gml* werden immer genutzt).|false|
 |data|nein|String||Deprecated in 3.0.0 Filterparameter für den WFS request.|false|
 
 **Beispiel**
@@ -880,6 +883,9 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
 |onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
 |isVisibleInMenu|nein|Boolean|true|Flag ob das Tool unter Werkzeuge angezeigt wird.|false|
+|renderToWindow|nein|Boolean|true|Flag ob das Tool beim Anklicken im frei schwebenden Fenster dargestellt werden soll.|false|
+|resizableWindow|nein|Boolean|false|Flag ob das Tool-Fenster vergrößer-/verkleinerbar ist.|false|
+|keepOpen|nein|Boolean|false|Flag ob das Tool parallel zu anderen Tools geöffnet bleibt.|false|
 
 **Beispiel eines Tools**
 ```
@@ -1016,7 +1022,8 @@ Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 |isGeneric|nein|Boolean|false|Zeigt an ob sich der Filter dynamisch erzeugen lässt. Ist momentan noch nicht umgesetzt.|false|
 |minScale|nein|Integer||Minimale Zoomstufe auf die der Filter bei der Darstellung der Ergebnisse heranzoomt.|false|
 |liveZoomToFeatures|nein|Boolean|false|Gibt an ob der Filter sofort nach der Filterung auf die Filterergebnisse zoomt.|false|
-|predefinedQueries|nein|**[predefinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)**[]||Definition der Filterabfragen.|false|
+|predefinedQueries|nein|[predefinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)[]||Definition der Filterabfragen.|false|
+|saveToUrl|nein|Boolean|true|Speichert das aktuelle Filterergebnis in der Url ab. Dadurch kann das Filterergebnis als Lesezeichen abgelegt werden.|false|
 
 **Beispiel**
 ```

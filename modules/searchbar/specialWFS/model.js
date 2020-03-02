@@ -8,7 +8,8 @@ const SpecialWFSModel = Backbone.Model.extend({
         maxFeatures: 20,
         timeout: 6000,
         definitions: null,
-        ajaxRequests: {}
+        ajaxRequests: {},
+        defaultNamespaces: "xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml'"
     },
 
     /**
@@ -115,10 +116,11 @@ const SpecialWFSModel = Backbone.Model.extend({
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             maxFeatures = definition.maxFeatures ? definition.maxFeatures : this.get("maxFeatures"),
+            namespaces = definition.namespaces ? this.get("defaultNamespaces") + " " + definition.namespaces : this.get("defaultNamespaces"),
             data, propertyName;
 
-        data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS'";
-        data += " xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml' traverseXlinkDepth='*' version='1.1.0'>";
+        data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' ";
+        data += namespaces + " traverseXlinkDepth='*' version='1.1.0'>";
         data += "<wfs:Query typeName='" + typeName + "'>";
         for (propertyName of propertyNames) {
             data += "<wfs:PropertyName>" + propertyName + "</wfs:PropertyName>";
