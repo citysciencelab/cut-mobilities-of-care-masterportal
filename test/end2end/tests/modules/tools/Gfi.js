@@ -53,12 +53,14 @@ async function GfiTests ({builder, url, resolution}) {
 
         if (isDefault(url)) {
             it("default tree development plans open gfi on click", async function () {
+                const topic = await driver.wait(until.elementLocated(By.xpath("//span[contains(.,'Themen')]")));
+
                 // open layer
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await topic.click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
                 await (await driver.findElement(By.xpath("//*[contains(@id,'InfrastrukturBauenundWohnen')]/*[contains(@class,'glyphicon')]"))).click();
                 await (await driver.findElement(By.xpath("//*[contains(@id,'BebauungsplneHamburg')]/*[contains(@class,'glyphicon-unchecked')]"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await topic.click();
 
                 await clickFeature(driver, [554521.38, 5932738.29]);
 

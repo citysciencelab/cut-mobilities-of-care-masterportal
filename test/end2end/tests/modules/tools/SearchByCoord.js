@@ -47,6 +47,7 @@ async function SearchByCoordTests ({builder, url, resolution}) {
          */
         async function searchCoordinatesAndCheckResults ({easting, northing, optionSelector, expectedCenter}) {
             await driver.executeScript(setResolution, 5);
+            await driver.wait(until.elementLocated(selectors.coordSystemSelect));
 
             const coordSystemSelect = await driver.findElement(selectors.coordSystemSelect),
                 option = await driver.findElement(optionSelector);
@@ -71,6 +72,8 @@ async function SearchByCoordTests ({builder, url, resolution}) {
         }
 
         it("displays a modal dialog containing the tool elements, offering the coordinate systems ETRS89, WGS84, and WGS84(Dezimalgrad)", async () => {
+            await driver.wait(until.elementLocated(selectors.tools));
+
             const tools = await driver.findElement(selectors.tools),
                 toolSearchByCoord = await driver.findElement(selectors.toolSearchByCoord);
 

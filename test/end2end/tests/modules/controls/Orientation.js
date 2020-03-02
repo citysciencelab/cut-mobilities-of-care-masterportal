@@ -48,11 +48,14 @@ function Orientation ({builder, url, resolution, browsername}) {
             let driver, poiButton;
 
             before(async function () {
+                const themenSelector = By.xpath("//span[contains(.,'Themen')]");
+
                 driver = await initDriver(builder, url, resolution);
                 await driver.executeScript(mockGeoLocationAPI);
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await driver.wait(until.elementLocated(themenSelector));
+                await (await driver.findElement(themenSelector)).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/li[.//span[contains(.,'Bike and Ride Parkplätze')]]"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(themenSelector)).click();
             });
 
             after(async function () {

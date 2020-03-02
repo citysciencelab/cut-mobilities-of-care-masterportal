@@ -214,8 +214,6 @@ async function ParameterTests ({builder, url, resolution, mode}) {
             await loadUrl(driver, `${url}?startupmodul=${toolName}`, mode);
 
             await driver.wait(until.elementLocated(By.xpath(selector)), 10000);
-
-            expect(await driver.findElement(By.xpath(selector))).to.exist;
         });
 
         if (isCustom(url) || isMaster(url) || isDefault(url)) {
@@ -276,10 +274,13 @@ async function ParameterTests ({builder, url, resolution, mode}) {
 
         if (isDefault(url)) {
             it("?mdid= opens and displays a layer", async function () {
+                const topicSelector = By.xpath("//div[@id='navbarRow']//a[contains(.,'Themen')]");
+
                 await loadUrl(driver, `${url}?mdid=EBA4BF12-3ED2-4305-9B67-8E689FE8C445`, mode);
 
                 // check if active in tree
-                await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Themen')]"))).click();
+                await driver.wait(until.elementLocated(topicSelector));
+                await (await driver.findElement(topicSelector)).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
                 await driver.findElement(By.css("ul#SelectedLayer .layer-item:first-child span.glyphicon-check"));
 
