@@ -95,8 +95,8 @@ function loadApp () {
         layerInformationModelSettings = {},
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
-        i18nextIsEnabled = i18next.options.hasOwnProperty("isEnabled") ? i18next.options.isEnabled() : false,
-        i18nextLanguages = i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
+        i18nextIsEnabled = i18next && i18next.options.hasOwnProperty("isEnabled") ? i18next.options.isEnabled() : false,
+        i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
         /* eslint-disable no-undef */
     let app = {},
         style = "";
@@ -459,7 +459,7 @@ function loadApp () {
             new TitleView();
         }
     }
-    if (i18next && !i18nextIsEnabled && Object.keys(i18nextLanguages).length > 1) {
+    if (i18nextIsEnabled && Object.keys(i18nextLanguages).length > 1) {
         new LanguageView();
     }
 
