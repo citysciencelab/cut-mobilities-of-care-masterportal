@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
 async function LegendTests ({builder, config, url, resolution}) {
     const testIsApplicable = isMaster(url) || isCustom(url),
         expectedEntries = {
-            master: ["Krankenhäuser", "Schulinfosystem", "Hauptkirchen"],
+            master: ["Krankenhäuser", "Schulinfosystem"],
             custom: ["Krankenhäuser und Schulen", "Geobasiskarten (farbig)"]
         }[config];
 
