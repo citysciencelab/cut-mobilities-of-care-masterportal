@@ -18,7 +18,7 @@ const webdriver = require("selenium-webdriver"),
     browser = process.env.browser || "firefox,chrome",
     browserstackuser = process.env.bs_user,
     browserstackkey = process.env.bs_key,
-    url = process.env.url || "http://localhost:9001",
+    url = process.env.url || "https://localhost:9001",
     // proxy for browserstack
     proxy = process.env.proxy || "",
     // proxy for local testing
@@ -51,6 +51,8 @@ function setLocalProxy (currentBrowser, builder) {
             new webdriverChrome.Options()
                 .addArguments(`--proxy-server=${localHttpProxy}`)
                 .addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`)
+                .addArguments("--ignore-certificate-errors")
+                .addArguments("--ignore-ssl-errors")
         );
     }
     else {

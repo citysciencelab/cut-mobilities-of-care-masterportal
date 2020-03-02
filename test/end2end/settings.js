@@ -100,10 +100,19 @@ function isCustom (url) {
 /**
  * Returns true for browsername indicating chrome is running.
  * @param {String} browsername is browsername or contains browsername
- * @returns {boolean} whether configuration is custom
+ * @returns {boolean} whether running browser is chrome
  */
 function isChrome (browsername) {
     return browsername.toLowerCase().includes("chrome");
+}
+
+/**
+ * Returns true for browsername indicating firefox is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether running browser is firefox
+ */
+function isFirefox (browsername) {
+    return browsername.toLowerCase().includes("firefox");
 }
 
 /**
@@ -115,6 +124,7 @@ function isChrome (browsername) {
 function getBsCapabilities (browserstackuser, browserstackkey) {
     const base = {
         "seleniumVersion": "4.0.0-alpha.5",
+        "acceptSslCerts": true,
         "project": "MasterPortal",
         "browserstack.local": true,
         "browserstack.user": browserstackuser,
@@ -151,6 +161,7 @@ module.exports = {
     isOB,
     isMobile,
     isChrome,
+    isFirefox,
     isBasic,
     isMaster,
     isDefault,

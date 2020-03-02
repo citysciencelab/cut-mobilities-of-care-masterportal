@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {isBasic} = require("../../../settings"),
+    {isFirefox, isMaster, isCustom} = require("../../../settings"),
     {getCenter, mockGeoLocationAPI} = require("../../../library/scripts"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
@@ -9,11 +9,8 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function Orientation ({builder, url, resolution}) {
-    const skipProximity = !isBasic(url); // only configured in basic
-
-    // TODO button currently missing; may work again after rebasing
-    describe.skip("Modules Controls GeoLocate", function () {
+function Orientation ({builder, url, resolution, browsername}) {
+    describe("Modules Controls GeoLocate", function () {
         let driver, geolocateButton;
 
         before(async function () {
@@ -32,7 +29,7 @@ function Orientation ({builder, url, resolution}) {
             expect(geolocateButton).to.exist;
         });
 
-        it("relocates map after clicking the button", async function () {
+        (isCustom(url) ? it.skip : it)("relocates map after clicking the button", async function () {
             const center = await driver.executeScript(getCenter);
 
             await driver.wait(new Promise(r => setTimeout(r, 2500)));
@@ -45,50 +42,52 @@ function Orientation ({builder, url, resolution}) {
         });
     });
 
-    // TODO button currently missing; may work again after rebasing
-    (skipProximity ? describe.skip : describe.skip)("Modules Controls ProximitySearch", function () {
-        let driver, poiButton;
+    // only configured in portal/master
+    if (isMaster(url)) {
+        describe("Modules Controls ProximitySearch", function () {
+            let driver, poiButton;
 
-        before(async function () {
-            driver = await initDriver(builder, url, resolution);
-            await driver.executeScript(mockGeoLocationAPI);
-            await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
-            await (await driver.findElement(By.xpath("//ul[@id='tree']/li[7]/span/span/span"))).click();
-            await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+            before(async function () {
+                driver = await initDriver(builder, url, resolution);
+                await driver.executeScript(mockGeoLocationAPI);
+                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/li[.//span[contains(.,'Bike and Ride Parkplätze')]]"))).click();
+                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+            });
+
+            after(async function () {
+                await driver.quit();
+            });
+
+            it("should have a poi button", async function () {
+                poiButton = await driver.findElement(By.id("geolocatePOI"));
+                await driver.wait(until.elementIsVisible(poiButton), 1000, "POI Button not visible.");
+
+                expect(poiButton).to.exist;
+            });
+
+            it("should open the POI window after click on the poi button", async function () {
+                await poiButton.click();
+
+                await driver.wait(until.elementLocated(By.css("div.modal-dialog")));
+                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'500m')]")));
+                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'1000m')]")));
+                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'2000m')]")));
+            });
+
+            (isFirefox(browsername) ? it.skip : it)("should relocate after click on an item", async function () {
+                await (await driver.findElement(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'2000m')]"))).click();
+
+                const center = await driver.executeScript(getCenter),
+                    firstResult = await driver.findElement(By.css("div.modal-dialog div.active table.table tr:first-child"));
+
+                await driver.wait(until.elementIsVisible(firstResult));
+                await firstResult.click();
+
+                expect(center).not.to.eql(await driver.executeScript(getCenter));
+            });
         });
-
-        after(async function () {
-            await driver.quit();
-        });
-
-        it("should have a poi button", async function () {
-            poiButton = await driver.findElement(By.id("geolocatePOI"));
-            await driver.wait(until.elementIsVisible(poiButton), 1000, "POI Button not visible.");
-
-            expect(poiButton).to.exist;
-        });
-
-        it("should open the POI window after click on the poi button", async function () {
-            await driver.actions({bridge: true})
-                .click(poiButton)
-                .perform();
-
-            await driver.wait(until.elementLocated(By.css("div.modal-dialog")));
-            await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'500m')]")));
-            await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'1000m')]")));
-            await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'2000m')]")));
-        });
-
-        it("should relocate after click on an item", async function () {
-            await (await driver.findElement(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'2000m')]"))).click();
-
-            const center = await driver.executeScript(getCenter);
-
-            await (await driver.findElement(By.css("div.modal-dialog table.table td"))).click();
-
-            expect(center).not.to.eql(await driver.executeScript(getCenter));
-        });
-    });
+    }
 }
 
 module.exports = Orientation;
