@@ -15,9 +15,10 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     /**
      * todo
      * @param {*} layerList - todo
+     * @param {Object} Layer3dList - the 3d layer list or null
      * @returns {void}
      */
-    parseTree: function (layerList) {
+    parseTree: function (layerList, Layer3dList) {
         // Im Default-Tree(FHH-Atlas / GeoOnline) werden nur WMS angezeigt
         // Und nur Layer die min. einem Metadatensatz zugeordnet sind
         var newLayerList = this.filterList(layerList);
@@ -28,7 +29,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
         // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt
         newLayerList = this.createLayerPerDataset(newLayerList);
 
-        this.parseLayerList(newLayerList);
+        this.parseLayerList(newLayerList, Layer3dList);
     },
 
     /**
@@ -92,9 +93,10 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     /**
      * Creates the layertree from the Services.json parsed by Rawlayerlist.
      * @param {object[]} layerList -
+     * @param {Object} Layer3dList - the 3d layer list or null
      * @returns {void}
      */
-    parseLayerList: function (layerList) {
+    parseLayerList: function (layerList, Layer3dList) {
         var baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
             // Unterscheidung nach Overlay und Baselayer
             typeGroup = _.groupBy(layerList, function (layer) {
@@ -112,7 +114,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
         // Models für die Fachdaten erzeugen
         this.groupDefaultTreeOverlays(typeGroup.overlays);
         // Models für 3D Daten erzeugen
-        this.create3dLayer(typeGroup.layer3d);
+        this.create3dLayer(typeGroup.layer3d, Layer3dList);
         // Models für Oblique Daten erzeugen
         this.createObliqueLayer(typeGroup.oblique);
     },
@@ -132,20 +134,32 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * todo
      * @param {*} layerList - todo
      * @fires Core#RadioRequestUtilIsViewMobile
+     * @param {Object} Layer3dList - the 3d layer list or null
      * @returns {void}
      */
-    create3dLayer: function (layerList) {
-        var isMobile = Radio.request("Util", "isViewMobile"),
+    create3dLayer: function (layerList, Layer3dList) {
+        const isMobile = Radio.request("Util", "isViewMobile"),
             isVisibleInTree = isMobile ? "false" : "true";
 
-        _.each(layerList, function (layer) {
-            this.addItem(_.extend({
-                type: "layer",
-                parentId: "3d_daten",
-                level: 0,
-                isVisibleInTree: isVisibleInTree
-            }, layer));
-        }, this);
+        let layer3DVisibility;
+
+        if (layerList && Array.isArray(layerList)) {
+            layerList.forEach(function (layer) {
+                if (Layer3dList && typeof Layer3dList === "object" && Layer3dList.Layer && Layer3dList.Layer.length > 0) {
+                    layer3DVisibility = Layer3dList.Layer.filter(function (layer3D) {
+                        return layer3D.id === layer.id;
+                    })[0].visibility;
+                }
+
+                this.addItem(_.extend({
+                    type: "layer",
+                    parentId: "3d_daten",
+                    level: 0,
+                    isVisibleInTree: isVisibleInTree,
+                    isSelected: layer3DVisibility ? layer3DVisibility : false
+                }, layer));
+            }, this);
+        }
     },
 
     /**
