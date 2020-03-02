@@ -23,7 +23,8 @@ const ScaleLineView = Backbone.View.extend({
     className: "scale-line",
     template: _.template(ScaleLineTemplate),
     render: function () {
-        const attr = this.model.toJSON();
+        const attr = this.model.toJSON(),
+            i18nextIsEnabled = i18next.options.hasOwnProperty("isEnabled") ? i18next.options.isEnabled() : false;
 
         this.$el.html(this.template(attr));
         if (document.getElementsByClassName("footer").length > 0) {
@@ -32,7 +33,7 @@ const ScaleLineView = Backbone.View.extend({
         else {
             document.getElementsByClassName("ol-viewport")[0].appendChild(this.el);
         }
-        if (!i18next.options.isEnabled()) {
+        if (i18next && i18nextIsEnabled) {
             this.$el.css({
                 "right": "0px"
             });
