@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getCenter, getResolution, setResolution} = require("../../../library/scripts"),
-    {isDefault, isCustom} = require("../../../settings"),
+    {isBasic, isDefault, isCustom} = require("../../../settings"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
 
@@ -25,7 +25,7 @@ async function SearchByCoordTests ({builder, url, resolution}) {
                 searchButton: By.xpath("//div[@id='window']//button[contains(.,'Suchen')]"),
                 searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]")
             },
-            expectedResolution = isCustom(url) || isDefault(url) ? 0.66 : 0.13;
+            expectedResolution = isBasic(url) || isCustom(url) || isDefault(url) ? 0.66 : 0.13;
         let driver, searchMarkerContainer;
 
         before(async function () {
@@ -56,8 +56,8 @@ async function SearchByCoordTests ({builder, url, resolution}) {
             await coordSystemSelect.click();
             await option.click();
 
-            // these elements can't be fetch before previous clicks, since they'd become stale by now
-            await (await driver.findElement(selectors.coordinatesNorthingField)).click(); // needed in Chrome, else element may not be interactable in next step
+            // following elements can't be fetched before previous clicks, since they'd become stale by now
+            await driver.wait(until.elementIsVisible(await driver.findElement(selectors.coordinatesNorthingField)));
             await (await driver.findElement(selectors.coordinatesNorthingField)).clear();
             await (await driver.findElement(selectors.coordinatesNorthingField)).sendKeys(northing);
             await (await driver.findElement(selectors.coordinatesEastingField)).clear();
