@@ -12,7 +12,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function GdiSearch ({builder, url, resolution}) {
-    describe("Gdi Search", function () {
+    describe.skip("Gdi Search", function () {
         const searchInputSelector = By.css("#searchInput"),
             searchString = "Alt",
             layerName = "Altbestand",
