@@ -17,7 +17,7 @@
         },
         "searchBar": {
             "minChars": 3,
-            "placeholder": "Suche Adresse, Stadtteil, Themen, Flurstück",
+            "placeholder": "translate#common:modules.searchbar.placeholder.addressTopicParcel",
             "quickHelp": true,
             "gazetteer": {
                 "minChars": 3,
@@ -33,18 +33,18 @@
         },
         "menu": {
             "tree": {
-                "name": "Themen",
+                "name": "translate#common:menu.topics",
                 "glyphicon": "glyphicon-list",
                 "isAlwaysExpanded": [
                     "SelectedLayer"
                 ]
             },
             "tools": {
-                "name": "Werkzeuge",
+                "name": "translate#common:menu.tools.name",
                 "glyphicon": "glyphicon-wrench",
                 "children": {
                     "parcelSearch": {
-                        "name": "Flurstückssuche",
+                        "name": "translate#common:menu.tools.parcelSearch",
                         "glyphicon": "glyphicon-search",
                         "serviceId": "6",
                         "storedQueryID": "Flurstueck",
@@ -52,16 +52,16 @@
                         "parcelDenominator": false
                     },
                     "measure": {
-                        "name": "Strecke / Fläche messen",
+                        "name": "translate#common:menu.tools.measure",
                         "glyphicon": "glyphicon-resize-full"
                     },
                     "gfi": {
-                        "name": "Informationen abfragen",
+                        "name": "translate#common:menu.tools.getInfos",
                         "glyphicon": "glyphicon-info-sign",
                         "isActive": true
                     },
                     "print": {
-                        "name": "Karte drucken",
+                        "name": "translate#common:menu.tools.print",
                         "glyphicon": "glyphicon-print",
                         "mapfishServiceId": "mapfish",
                         "printAppId": "master",
@@ -70,23 +70,23 @@
                         "version": "mapfish_print_3"
                     },
                     "coord": {
-                        "name": "Koordinaten abfragen",
+                        "name": "translate#common:menu.tools.coord",
                         "glyphicon": "glyphicon-screenshot"
                     },
                     "searchByCoord": {
-                        "name": "Koordinatensuche",
+                        "name": "translate#common:menu.tools.searchByCoord",
                         "glyphicon": "glyphicon-record"
                     },
                     "kmlimport": {
-                        "name": "KML Import",
+                        "name": "translate#common:menu.tools.kmlimport",
                         "glyphicon": "glyphicon-import"
                     },
                     "draw": {
-                        "name": "Zeichnen / Schreiben",
+                        "name": "translate#common:menu.tools.draw",
                         "glyphicon": "glyphicon-pencil"
                     },
                     "saveSelection": {
-                        "name": "Auswahl speichern",
+                        "name": "translate#common:menu.tools.saveSelection",
                         "glyphicon": "glyphicon-share"
                     },
                     "shadow":
@@ -98,11 +98,11 @@
                 }
             },
             "legend": {
-                "name": "Legende",
+                "name": "translate#common:menu.legend",
                 "glyphicon": "glyphicon-book"
             },
             "contact": {
-                "name": "Kontakt",
+                "name": "translate#common:menu.contact",
                 "glyphicon": "glyphicon-envelope",
                 "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
                 "serviceID": "80002",
