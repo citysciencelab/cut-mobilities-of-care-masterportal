@@ -94,7 +94,7 @@ function loadApp () {
         utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {};
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         i18nextIsEnabled = i18next.options.hasOwnProperty("isEnabled") ? i18next.options.isEnabled() : false,
         i18nextLanguages = i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
         /* eslint-disable no-undef */
