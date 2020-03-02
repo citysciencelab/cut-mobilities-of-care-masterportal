@@ -14,10 +14,10 @@ const webdriver = require("selenium-webdriver"),
         // "600x800"
     ],
     configs = new Map([
-        ["basic", "/portal/basic"], // was LT
-        ["master", "/portal/master"], // was DT
-        // ["custom", "/portal/masterCustom"], // was CT TODO currently skipped to avoid div#loader issues (flickers)
-        ["default", "/portal/masterDefault"] // was DT, too?
+        ["basic", "/portal/basic"],
+        ["master", "/portal/master"],
+        ["custom", "/portal/masterCustom"],
+        ["default", "/portal/masterDefault"]
     ]),
     modes = [
         "2D"
