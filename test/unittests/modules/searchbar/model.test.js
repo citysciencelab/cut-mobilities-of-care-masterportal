@@ -1,12 +1,26 @@
 import Model from "@modules/searchbar/model.js";
 import {expect} from "chai";
+import sinon from "sinon";
 
 describe("modules/searchbar", function () {
-    var model = {};
+    let model = {},
+        triggered = false;
 
     before(function () {
         model = new Model();
+        sinon.stub(Radio, "trigger").callsFake(function (channel, topic) {
+            if (topic === "alert") {
+                triggered = true;
+                return null;
+            }
+            return null;
+        });
     });
+
+    after(function () {
+        sinon.restore();
+    });
+
     describe("changeFileExtension", function () {
         it("should correctly change extension to extension with shorter length ", function () {
             expect(model.changeFileExtension("test.svg", ".js")).to.be.an("string").that.equals("test.js");
@@ -136,6 +150,17 @@ describe("modules/searchbar", function () {
 
                 expect(model.get("hitList")).to.deep.equal(hitListObijOutput);
             });
+        });
+    });
+
+    describe("checkInitialSearchResult", function () {
+        it("should not trigger Radio when Array is not empty", function () {
+            model.checkInitialSearchResult(["hit"]);
+            expect(triggered).to.be.false;
+        });
+        it("should trigger Radio when Array is empty", function () {
+            model.checkInitialSearchResult([]);
+            expect(triggered).to.be.true;
         });
     });
 });

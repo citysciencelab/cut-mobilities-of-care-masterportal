@@ -119,8 +119,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      */
     checkInitialSearch: function () {
         var allDone = true;
-
         // Ist mindestens ein Suchalgorithmus noch als ausstehend markiert?
+
         _.forEach(this.get("activeInitialSearchTasks"), function (taskName) {
             var status = this.get("initialSearch_" + taskName);
 
@@ -135,7 +135,23 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             // beendet und die Ergebnisliste erstmalig erzeugt.
             this.set("isInitialSearch", false);
             this.createRecommendedList("initialSearchFinished");
+            this.checkInitialSearchResult(this.get("recommendedList"));
             this.set("isInitialRecommendedListCreated", true);
+        }
+    },
+
+    /**
+     * Creates a user message if the initialSearch has no results to inform the user.
+     * @param   {Object[]} results recommendedList
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {void}
+     */
+    checkInitialSearchResult: function (results) {
+        if (Array.isArray(results) && !results.length) {
+            Radio.trigger("Alert", "alert", {
+                text: i18next.t("common:modules.searchbar.noInitialResults"),
+                fadeOut: 5000
+            });
         }
     },
 
