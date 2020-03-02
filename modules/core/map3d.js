@@ -85,7 +85,6 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
             this.prepareCamera(scene);
         }
         map3d.setEnabled(true);
-        Radio.trigger("Alert", "alert", i18next.t("common:modules.controls.3d.betaWarning"));
         Radio.trigger("Map", "change", "3D");
     },
 
