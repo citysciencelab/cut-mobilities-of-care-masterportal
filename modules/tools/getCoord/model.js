@@ -91,7 +91,6 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
             "currentLng": lng
         });
     },
-   
     /**
      * Stores the projections and adds interaction pointermove to map
      * @fires Core#RadioRequestMapViewGetProjection

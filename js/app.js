@@ -92,11 +92,10 @@ function loadApp () {
         utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {};
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
         /* eslint-disable no-undef */
-    let app = {},
-        style = "";
+    let app = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
