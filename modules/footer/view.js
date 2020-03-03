@@ -16,6 +16,11 @@ const FooterView = Backbone.View.extend(/** @lends FooterView.prototype */{
      */
     initialize: function (attr) {
         this.model = new Footermodel(attr);
+        this.listenTo(this.model, {
+            "change:currentLng": function () {
+                this.render();
+            }
+        });
         this.render();
     },
     template: _.template(Template),

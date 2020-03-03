@@ -340,7 +340,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             allThings.push(things.value);
         }
 
-        allThings = allThings.flat();
+        allThings = this.flattenArray(allThings);
         allThings = this.getNewestSensorData(allThings);
         if (mergeThingsByCoordinates) {
             allThings = this.mergeByCoordinates(allThings);
@@ -506,14 +506,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 aggregatedThing.location = this.getCoordinates(thing[0]);
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
-                    keys.push(Object.keys(thing2.name));
-                    keys.push(Object.keys(thing2.description));
                     props = Object.assign(props, thing2.properties);
-                    props = Object.assign(props, {name: thing2.name});
-                    props = Object.assign(props, {description: thing2.description});
                 });
-                keys = [...new Set(keys.flat())];
+                keys = [...new Set(this.flattenArray(keys))];
                 keys = this.excludeDataStreamKeys(keys, "dataStream_");
+                keys.push("name");
+                keys.push("description");
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
             }
             else {
@@ -528,6 +526,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         return aggregatedArray;
+    },
+
+    /**
+     * flattenArray creates a new array with all sub-array elements concatenated
+     * @info this is equivalent to Array.flat() - except no addition for testing is needed for this one
+     * @param {*} array the array to flatten its sub-arrays or anything else
+     * @returns {*}  the flattened array if an array was given, the untouched input otherwise
+     */
+    flattenArray: function (array) {
+        return Array.isArray(array) ? array.reduce((acc, val) => acc.concat(val), []) : array;
     },
 
     /**
@@ -558,7 +566,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const aggregatedProperties = {};
 
         keys.forEach(key => {
-            const valuesArray = thingArray.map(thing => thing.properties[key]);
+            const valuesArray = thingArray.map(thing => key === "name" || key === "description" ? thing[key] : thing.properties[key]);
 
             aggregatedProperties[key] = valuesArray.join(" | ");
         });

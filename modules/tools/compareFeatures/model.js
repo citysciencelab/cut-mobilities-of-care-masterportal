@@ -15,17 +15,49 @@ const CompareFeaturesModel = Tool.extend({
         // number of attributes to be displayed
         numberOfAttributesToShow: 12,
         glyphicon: "glyphicon-th-list",
-        renderToWindow: false
+        renderToWindow: false,
+        // translations
+        title: "",
+        topicsSelection: "",
+        moreInfo: "",
+        lessInfo: "",
+        exportAsPdf: "",
+        limitReached: "",
+        removeObjects: "",
+        gotoComparisonlist: "",
+        back: ""
     }),
     initialize: function () {
-        var channel = Radio.channel("CompareFeatures");
+        const channel = Radio.channel("CompareFeatures");
 
         this.superInitialize();
+        this.changeLang(i18next.language);
         channel.on({
             "setIsActivated": this.setIsActive,
             "addFeatureToList": this.addFeatureToList,
             "removeFeatureFromList": this.removeFeatureFromList
         }, this);
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            title: i18next.t("common:modules.tools.compareFeatures.title"),
+            topicsSelection: i18next.t("common:modules.tools.compareFeatures.topicsSelection"),
+            moreInfo: i18next.t("common:modules.tools.compareFeatures.moreInfo"),
+            lessInfo: i18next.t("common:modules.tools.compareFeatures.lessInfo"),
+            exportAsPdf: i18next.t("common:modules.tools.compareFeatures.exportAsPdf"),
+            limitReached: i18next.t("common:modules.tools.compareFeatures.feedback.limitReached"),
+            removeObjects: i18next.t("common:modules.tools.compareFeatures.feedback.removeObjects"),
+            gotoComparisonlist: i18next.t("common:modules.tools.compareFeatures.feedback.gotoComparisonlist"),
+            back: i18next.t("common:button.back")
+        });
     },
 
     /**

@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import Model from "@modules/snippets/graphicalSelect/model.js";
 
-describe("snippets/graphicalselect/model", function () {
+describe("snippets/graphicalSelect/model", function () {
     var model;
 
     before(function () {

@@ -850,6 +850,12 @@
  * @description todo
  */
 
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
+ * @description Unhighlight the icon in the layertree for layerinformation
+ * @example Radio.trigger("LayerInformation", "unhighlightLayerInfomationIcon")
+ */
+
 
 /** -------------------- OBLIQUE MAP-------------------- */
 
@@ -1431,8 +1437,12 @@
 /**
  * @event Core#RadioRequestUtilSort
  * @description Sorting alorithm that distinguishes between array[objects] and other arrays.
- * @returns {string[]} - Sorted Array
- * @example Radio.request("Util", "sort", values);
+ * @param {String} type Type of sort algorithm Currently .
+ * @param {String[] | Object[]} values Values to be sorted.
+ * @param {String} first Name of first Attribute to be sorted.
+ * @param {String} second Name of second Attribute to be sorted. Only if type!== "address".
+ * @returns {string[] | Object[]} - Sorted Array
+ * @example Radio.request("Util", "sort", type, values, first, second);
  */
 
 /**
@@ -2289,6 +2299,13 @@
  * @description todo
  */
 
+ /** -------------------- ADDONS -------------------- */
+ /**
+ * @event Addons#initialized
+ * @description Is fired after addons are inizialized if addons are configured, e.g. the language files are loaded
+ */
+
+
 /** -------------------- TOOLS.LAYERSLIDER -------------------- */
 
 /**
@@ -2378,6 +2395,15 @@
  * @description Triggered when the model attribute "isActive" changes.
  */
 
+/** -------------------- i18next -------------------- */
+
+/**
+ * @event i18next#RadioTriggerLanguageChanged
+ * @description Triggers if the languages has changed
+ * @param {String} lng the new language to use
+ * @example Radio.trigger("i18next", "languageChanged", lng);
+ */
+
 /** -------------------- ZOOMTOGEOMETRY -------------------- */
 
 /**
@@ -2405,4 +2431,3 @@
  */
 
 
- 

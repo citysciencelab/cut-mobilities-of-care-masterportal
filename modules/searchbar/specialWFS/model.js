@@ -8,7 +8,8 @@ const SpecialWFSModel = Backbone.Model.extend({
         maxFeatures: 20,
         timeout: 6000,
         definitions: null,
-        ajaxRequests: {}
+        ajaxRequests: {},
+        defaultNamespaces: "xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml'"
     },
 
     /**
@@ -57,18 +58,18 @@ const SpecialWFSModel = Backbone.Model.extend({
     * @returns {void}
     */
     setDefinitions: function (values) {
-        var definitions = [];
+        const definitions = [];
 
-        _.each(values, function (value) {
-            var definition = value;
+        values.forEach(function (value) {
+            let definition = value;
 
             // @deprecated since 3.0.0
-            if (_.has(value, "data")) {
-                definition = _.extend(value, this.getDataParameters(value));
+            if (value.hasOwnProperty("data")) {
+                definition = Object.assign(value, this.getDataParameters(value));
             }
 
-            if (_.has(definition, "typeName") === false || _.has(definition, "propertyNames") === false) {
-                console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
+            if (!definition.hasOwnProperty("typeName") || !definition.hasOwnProperty("propertyNames")) {
+                console.error("SpecialWFS (setDefinitions): parameters missing - definition of specialWFS is ignored.");
                 return undefined;
             }
 
@@ -92,8 +93,8 @@ const SpecialWFSModel = Backbone.Model.extend({
             parameters[keyValue.split("=")[0].toUpperCase()] = decodeURIComponent(keyValue.split("=")[1]);
         });
 
-        if (_.has(parameters, "TYPENAMES") === false || _.has(parameters, "PROPERTYNAME") === false) {
-            console.error("SpecialWFS: Ignoriere specialWFS-Definition aufgrund fehlender Parameter.");
+        if (!parameters.hasOwnProperty("TYPENAMES") || !parameters.hasOwnProperty("PROPERTYNAME")) {
+            console.error("SpecialWFS (getDataParameters): parameters missing - definition of specialWFS is ignored.");
             return undefined;
         }
 
@@ -115,10 +116,11 @@ const SpecialWFSModel = Backbone.Model.extend({
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             maxFeatures = definition.maxFeatures ? definition.maxFeatures : this.get("maxFeatures"),
+            namespaces = definition.namespaces ? this.get("defaultNamespaces") + " " + definition.namespaces : this.get("defaultNamespaces"),
             data, propertyName;
 
-        data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS'";
-        data += " xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml' traverseXlinkDepth='*' version='1.1.0'>";
+        data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' ";
+        data += namespaces + " traverseXlinkDepth='*' version='1.1.0'>";
         data += "<wfs:Query typeName='" + typeName + "'>";
         for (propertyName of propertyNames) {
             data += "<wfs:PropertyName>" + propertyName + "</wfs:PropertyName>";
@@ -151,7 +153,14 @@ const SpecialWFSModel = Backbone.Model.extend({
             data;
 
         if (searchString.length >= this.get("minChars")) {
-            _.each(definitions, function (def) {
+            definitions.forEach(function (def) {
+                // translate if necessary
+                if (typeof def.i18nextTranslate === "function") {
+                    def.i18nextTranslate(function (key, value) {
+                        def[key] = value;
+                    });
+                }
+
                 data = this.getWFS110Xml(def, searchString);
                 def.url = this.manipulateUrlForProxy(def.url);
                 this.sendRequest(def, data);
@@ -177,7 +186,7 @@ const SpecialWFSModel = Backbone.Model.extend({
     sendRequest: function (def, data) {
         var ajax = this.get("ajaxRequests");
 
-        if (ajax[def.name] !== null && !_.isUndefined(ajax[def.name])) {
+        if (ajax[def.name] !== null && ajax[def.name] !== undefined) {
             ajax[def.name].abort();
             this.polishAjax(def.name);
         }

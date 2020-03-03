@@ -11,7 +11,12 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         isInitOpen: true,
         isOpen: false,
         mapControl: undefined,
-        supportedIn3d: false
+        supportedIn3d: false,
+        // translations
+        showOverviewControlText: "",
+        hideOverviewControlText: "",
+        showOverviewTableText: "",
+        hideOverviewTableText: ""
     },
     /**
      * @class OverviewMapModel
@@ -22,14 +27,24 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @param {String} [attr.layerId=baselayer] layerId to use in map
      * @param {Boolean} [attr.isInitOpen=true] Flag to open or disable map control on startup
      * @param {Number} [attr.resolution=maxResolution] Resolution to use in map control
+     * @property {String} showOverviewControlText="", filled with "Übersichtskarte einblenden"- translated
+     * @property {String} hideOverviewControlText="", filled with "Übersichtskarte ausblenden"- translated
+     * @property {String} showOverviewTableText="", filled with "Mini-Map einschalten"- translated
+     * @property {String} hideOverviewTableText="", filled with "Mini-Map ausschalten"- translated
      * @fires Core#RadioRequestMapGetMap
      * @fires Core#RadioRequestMapViewGetResolutions
      * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
      * @fires Core#RadioTriggerMapAddControl
      * @fires Core#RadioTriggerMapRemoveControl
      * @fires Alerting#RadioTriggerAlertAlert
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function (attr) {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang();
+
         /**
          * baselayer
          * @deprecated in 3.0.0
@@ -38,6 +53,20 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
             console.warn("OverviewMap: Attribute 'baselayer' is deprecated. Please use 'layerId'");
             this.setLayerId(attr.baselayer);
         }
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        this.set({
+            showOverviewControlText: i18next.t("common:modules.controls.overviewMap.showOverviewControl"),
+            hideOverviewControlText: i18next.t("common:modules.controls.overviewMap.hideOverviewControl"),
+            showOverviewTableText: i18next.t("common:modules.controls.overviewMap.showOverviewTable"),
+            hideOverviewTableText: i18next.t("common:modules.controls.overviewMap.hideOverviewTable")
+        });
     },
 
     /**

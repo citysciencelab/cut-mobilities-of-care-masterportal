@@ -1,4 +1,4 @@
-<select class="selectpicker" title="<%= displayName %>" <%isMultiple? print("multiple") : print("")%>>
+<select class="selectpicker <%isDropup? print('dropup') : print('')%>" title="<%= displayName %>" data-live-search="<%= liveSearch ? true : false %>" <%isMultiple? print("multiple") : print("")%>>
     <% _.each(valueModelsToShow, function (model) { %>
         <option value="<%= model.get('value') %>"><%= model.get('displayName') %></option>
     <% }); %>

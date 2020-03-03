@@ -154,14 +154,19 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     },
 
     /**
-     * @description todo
+     * Sets center and resolution to initial values
      * @fires Core#RadioRequestParametricURLGetCenter
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @returns {void}
      */
     resetView: function () {
-        const center = Radio.request("ParametricURL", "getCenter") || this.get("settings").startCenter || defaults.startCenter,
-            resolution = this.get("settings").resolution || defaults.startResolution;
+        const paramUrlCenter = Radio.request("ParametricURL", "getCenter"),
+            settingsCenter = this.get("settings") !== undefined && this.get("settings").hasOwnProperty("startCenter") ? this.get("settings").startCenter : undefined,
+            defaultCenter = defaults.startCenter,
+            center = paramUrlCenter || settingsCenter || defaultCenter,
+            settingsResolution = this.get("settings") !== undefined && this.get("settings").hasOwnProperty("resolution") ? this.get("settings").resolution : undefined,
+            defaultResolution = defaults.startResolution,
+            resolution = settingsResolution || defaultResolution;
 
         this.get("view").setCenter(center);
         this.get("view").setResolution(resolution);
