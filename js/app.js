@@ -179,7 +179,6 @@ function loadApp () {
         new MouseHoverPopupView(Config.mouseHover);
     }
 
-    new WindowView();
     // Module laden
     // Tools
     new SidebarView();
