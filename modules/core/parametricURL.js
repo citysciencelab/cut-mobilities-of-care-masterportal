@@ -539,6 +539,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         const baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
             urlQueryString = document.location.search,
             newParam = key + "=" + value;
+
         let keyRegex,
             params = "?" + newParam;
 

@@ -58,17 +58,16 @@ const SourceModel = QueryModel.extend({
     listenToFeaturesLoaded: function () {
         this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId, features) {
-                var urlFilterRules;
+                const filters = Radio.request("ParametricURL", "getFilter");
+                let urlFilterRules = [];
 
                 if (layerId === this.get("layerId")) {
-                    if (this.get("snippetCollection").length > 0 && this.get("isAutoRefreshing") && !this.get("isInitialLoad")) {
-
-                        urlFilterRules = Radio.request("ParametricURL", "getFilter").filter(function (urlFilters) {
-                            var name = Radio.request("Filter", "getFilterName", layerId);
+                    if (this.get("snippetCollection").length > 0 && this.get("isAutoRefreshing") && !this.get("isInitialLoad") && filters) {
+                        urlFilterRules = filters.filter(function (urlFilters) {
+                            const name = Radio.request("Filter", "getFilterName", layerId);
 
                             return urlFilters.name === name;
                         }, this);
-
                         this.createQueryFromUrlFilterRules(urlFilterRules[0]);
                         this.get("snippetCollection").reset(null);
                         this.processFeatures(features);
