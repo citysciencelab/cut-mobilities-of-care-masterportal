@@ -1,35 +1,25 @@
 <script>
-import { mapState } from "vuex";
-
 export default {
     name: "Tool",
-    props: ["title", "icon", "active", "renderToWindow"],
-    mounted() {
-        document.getElementsByTagName("body")[0].appendChild(this.$el);
-    },
-    updated() {
-        if(this.renderToWindow && this.draggable === false && this.active){
-            //tried to do this in mounted.nextTick, but the el is not filled then
-             $(this.$el).draggable({
-                    containment: "#map",
-                    handle: ".move",
-                    start: function (event, ui) {
-                        // As .draggable works by manipulating the css top and left values the following code is necessary if the bottom and right values
-                        // are used for the positioning of the tool window (as is the case for the table tool window). Otherwise dragging the window will
-                        // resize the window if no height and width values are set.
-                        ui.helper.css({
-                            right: "auto",
-                            bottom: "auto"
-                        });
-                    },
-                    stop: function (event, ui) {
-                        ui.helper.css({"height": "", "width": ""});
-                    }
-                });
-            this.draggable = true;
+    props: {
+        title: {
+            type: String,
+            required: true
+        },
+        icon: {
+            type: String,
+            required: true
+        },
+        active: {
+            type: Boolean,
+            required: true
+        },
+        renderToWindow: {
+            type: Boolean,
+            required: true
         }
     },
-    data() {
+    data () {
         return {
             draggable: false,
             maxPosTop: 0,
@@ -38,14 +28,40 @@ export default {
         };
     },
     watch: {
-        active(newValue, oldValue) {
+        active (newValue) {
             if (newValue === false) {
                 this.draggable = false;
                 $(".backdrop").remove();
-            } else if(!this.renderToWindow && Radio.request("Util", "isViewMobile")){
+            }
+            else if (!this.renderToWindow && Radio.request("Util", "isViewMobile")) {
                 $(".masterportal-container").append("<div class='backdrop'></div>");
             }
             this.updateMap();
+        }
+    },
+    mounted () {
+        document.getElementsByTagName("body")[0].appendChild(this.$el);
+    },
+    updated () {
+        if (this.renderToWindow && this.draggable === false && this.active) {
+            // tried to do this in mounted.nextTick, but the el is not filled then
+            $(this.$el).draggable({
+                containment: "#map",
+                handle: ".move",
+                start: function (event, ui) {
+                    // As .draggable works by manipulating the css top and left values the following code is necessary if the bottom and right values
+                    // are used for the positioning of the tool window (as is the case for the table tool window). Otherwise dragging the window will
+                    // resize the window if no height and width values are set.
+                    ui.helper.css({
+                        right: "auto",
+                        bottom: "auto"
+                    });
+                },
+                stop: function (event, ui) {
+                    ui.helper.css({"height": "", "width": ""});
+                }
+            });
+            this.draggable = true;
         }
     },
     methods: {
@@ -53,12 +69,13 @@ export default {
          * Updates the size of the map depending on sidebars visibility
          *  @return {void}
          */
-        updateMap(){
+        updateMap () {
             if (!this.renderToWindow) {
-                //only set the map to full width, if not another sidebar is open
+                // only set the map to full width, if not another sidebar is open
                 document.getElementById("map").style.width = "100%";
                 Radio.trigger("Map", "updateSize");
-            } else {
+            }
+            else {
                 document.getElementById("map").style.width = "100%";
             }
         },
@@ -94,10 +111,10 @@ export default {
         },
         /**
          * Updates size of map and emits event to parent.
-         * @property {Event} event the click event
+         * @param {Event} event the click event
          * @return {void}
          */
-        close(event) {
+        close (event) {
             this.updateMap();
             // emit event to parent e.g. SupplyCoord (which uses the tool as component and is therefor the parent)
             this.$parent.$emit("close", event);
@@ -107,21 +124,37 @@ export default {
 </script>
 
 <template>
-    <div v-if="active" v-bind:class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']">
+    <div
+        v-if="active"
+        :class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']"
+    >
         <div class="win-heading header">
             <p class="buttons pull-right">
-                <span class="glyphicon glyphicon-minus" title="Minimieren" v-on:click="minimize"></span>
-                <span class="glyphicon glyphicon-remove" v-on:click="close($event)"></span>
+                <span
+                    class="glyphicon glyphicon-minus"
+                    title="Minimieren"
+                    @click="minimize"
+                />
+                <span
+                    class="glyphicon glyphicon-remove"
+                    @click="close($event)"
+                />
             </p>
             <p class="buttons pull-left move">
-                <span class="glyphicon win-icon" v-bind:class="icon"></span>
+                <span
+                    class="glyphicon win-icon"
+                    :class="icon"
+                />
             </p>
-            <p class="title move" v-on:click="maximize">
-                <span>{{title}}</span>
+            <p
+                class="title move"
+                @click="maximize"
+            >
+                <span>{{ title }}</span>
             </p>
         </div>
         <div class="win-body-vue">
-            <slot name="toolBody"></slot>
+            <slot name="toolBody" />
         </div>
     </div>
 </template>

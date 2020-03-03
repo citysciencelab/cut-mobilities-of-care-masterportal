@@ -1,40 +1,15 @@
 <script>
 import Tool from "./Tool.vue";
-import { mapState } from "vuex";
-import { Pointer } from "ol/interaction.js";
-import { toStringHDMS, toStringXY } from "ol/coordinate.js";
-import { getProjections, transformFromMapProjection } from "masterportalAPI/src/crs";
+import {Pointer} from "ol/interaction.js";
+import {toStringHDMS, toStringXY} from "ol/coordinate.js";
+import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
 
 export default {
+    name: "SupplyCoord",
     components: {
         Tool
     },
-    created() {
-        this.$on("close", this.close);
-    },
-    watch: {
-        active(newValue, oldValue) {
-            const myBus = Backbone.Events;
-
-            Radio.trigger("MapMarker", "hideMarker");
-            Radio.trigger( "Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this );
-            if (newValue) {
-                // active is true
-                myBus.listenTo(Radio.channel("Map"), {
-                    clickedWindowPosition: function(evt) {
-                        this.positionClicked(evt.coordinate);
-                    }
-                });
-                this.createInteraction();
-                this.changedPosition();
-            } else {
-                this.$store.commit("Tools/SupplyCoord/updatePosition", true);
-                this.removeInteraction();
-                myBus.stopListening( Radio.channel("Map", "clickedWindowPosition"));
-            }
-        }
-    },
-    data() {
+    data () {
         return {
             coordinatesEastingField: "",
             coordinatesNorthingField: "",
@@ -43,42 +18,68 @@ export default {
         };
     },
     computed: {
-        active() {
+        active () {
             return this.$store.state.Tools.SupplyCoord.active;
         },
-        updatePosition() {
+        updatePosition () {
             return this.$store.state.Tools.SupplyCoord.updatePosition;
         },
-        projections() {
+        projections () {
             return this.$store.state.Tools.SupplyCoord.projections;
         },
-        renderToWindow() {
+        renderToWindow () {
             return this.$store.state.Tools.SupplyCoord.renderToWindow;
         },
-        icon() {
+        icon () {
             return this.$store.state.Tools.SupplyCoord.glyphicon;
         },
-        title() {
+        title () {
             return this.$store.state.Tools.SupplyCoord.title;
         },
-        currentProjectionName() {
+        currentProjectionName () {
             return this.$store.state.Tools.SupplyCoord.currentProjectionName;
         },
         currentSelection: {
-            get() {
+            get () {
                 return this.$store.state.Tools.SupplyCoord.currentSelection;
             },
-            set(newValue) {
+            set (newValue) {
                 this.$store.commit("Tools/SupplyCoord/currentSelection", newValue);
             }
         }
     },
+    watch: {
+        active (newValue) {
+            const myBus = Backbone.Events;
+
+            Radio.trigger("MapMarker", "hideMarker");
+            Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
+            if (newValue) {
+                // active is true
+                myBus.listenTo(Radio.channel("Map"), {
+                    clickedWindowPosition: function (evt) {
+                        this.positionClicked(evt.coordinate);
+                    }
+                });
+                this.createInteraction();
+                this.changedPosition();
+            }
+            else {
+                this.$store.commit("Tools/SupplyCoord/updatePosition", true);
+                this.removeInteraction();
+                myBus.stopListening(Radio.channel("Map", "clickedWindowPosition"));
+            }
+        }
+    },
+    created () {
+        this.$on("close", this.close);
+    },
     methods: {
-        selectionChanged(event) {
+        selectionChanged (event) {
             this.$store.commit("Tools/SupplyCoord/currentSelection", event.target.value);
             this.changedPosition(event.target.value);
         },
-        positionClicked: function(position) {
+        positionClicked: function (position) {
             const isViewMobile = Radio.request("Util", "isViewMobile"),
                 updatePosition = isViewMobile
                     ? true
@@ -89,7 +90,7 @@ export default {
             this.$store.commit("Tools/SupplyCoord/updatePosition", !updatePosition);
             Radio.trigger("MapMarker", "showMarker", position);
         },
-        setCoordinates: function(evt) {
+        setCoordinates: function (evt) {
             const position = evt.coordinate;
 
             if (this.$store.state.Tools.SupplyCoord.updatePosition) {
@@ -97,34 +98,35 @@ export default {
                 this.changedPosition(position);
             }
         },
-        createInteraction() {
+        createInteraction () {
             this.$store.commit("Tools/SupplyCoord/projections", getProjections());
             this.$store.commit("Tools/SupplyCoord/mapProjection", Radio.request("MapView", "getProjection"));
             const pointerMove = new Pointer(
                 {
-                    handleMoveEvent: function(evt) {
+                    handleMoveEvent: function (evt) {
                         this.checkPosition(evt.coordinate);
                     }.bind(this),
-                    handleDownEvent: function(evt) {
+                    handleDownEvent: function (evt) {
                         this.positionClicked(evt.coordinate);
                     }.bind(this)
                 },
                 this
             );
+
             this.$store.commit("Tools/SupplyCoord/selectPointerMove", pointerMove);
             Radio.trigger("Map", "addInteraction", pointerMove);
         },
-        removeInteraction() {
+        removeInteraction () {
             Radio.trigger("Map", "removeInteraction", this.$store.state.Tools.SupplyCoord.selectPointerMove);
             this.$store.commit("Tools/SupplyCoord/selectPointerMove", null);
         },
-        checkPosition(position) {
+        checkPosition (position) {
             if (this.$store.state.Tools.SupplyCoord.updatePosition) {
                 Radio.trigger("MapMarker", "showMarker", position);
                 this.$store.commit("Tools/SupplyCoord/positionMapProjection", position);
             }
         },
-        changedPosition() {
+        changedPosition () {
             const targetProjectionName = this.$store.state.Tools.SupplyCoord.currentSelection,
                 position = this.returnTransformedPosition(targetProjectionName),
                 targetProjection = this.returnProjectionByName(targetProjectionName);
@@ -135,7 +137,7 @@ export default {
                 this.adjustWindow(targetProjection);
             }
         },
-        returnTransformedPosition(targetProjection) {
+        returnTransformedPosition (targetProjection) {
             const positionMapProjection = this.$store.state.Tools.SupplyCoord
                 .positionMapProjection;
             let positionTargetProjection = [0, 0];
@@ -149,14 +151,14 @@ export default {
             }
             return positionTargetProjection;
         },
-        returnProjectionByName(name) {
+        returnProjectionByName (name) {
             const projections = this.$store.state.Tools.SupplyCoord.projections;
 
-            return _.find(projections, function(projection) {
+            return _.find(projections, function (projection) {
                 return projection.name === name;
             });
         },
-        adjustPosition(position, targetProjection) {
+        adjustPosition (position, targetProjection) {
             let coord, easting, northing;
 
             // geographische Koordinaten
@@ -174,7 +176,7 @@ export default {
             this.coordinatesEastingField = easting;
             this.coordinatesNorthingField = northing;
         },
-        adjustWindow(targetProjection) {
+        adjustWindow (targetProjection) {
             // geographische Koordinaten
             if (targetProjection.projName === "longlat") {
                 this.coordinatesEastingLabel = "Breite";
@@ -186,18 +188,19 @@ export default {
                 this.coordinatesNorthingLabel = "Hochwert";
             }
         },
-        getHDMS(coord) {
+        getHDMS (coord) {
             return toStringHDMS(coord);
         },
-        getCartesian(coord) {
+        getCartesian (coord) {
             return toStringXY(coord, 2);
         },
-        close() {
+        close () {
             this.$store.commit("Tools/SupplyCoord/active", false);
-            //set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
+            // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.SupplyCoord.id});
-            if(model) {
-                model.set("isActive", false)
+
+            if (model) {
+                model.set("isActive", false);
             }
         }
     }
@@ -205,30 +208,76 @@ export default {
 </script>
 
 <template lang="html">
-    <Tool v-bind:title="title" v-bind:icon="icon" v-bind:active="active" v-bind:renderToWindow="renderToWindow">
-        <form v-if="active" class="form-horizontal" role="form" slot="toolBody">
-            <div class="form-group form-group-sm">
-                <label for="coordSystemField" class="col-md-5 col-sm-5 control-label">Koordinatensystem</label>
-                <div class="col-md-7 col-sm-7">
-                    <select class="form-control input-sm pull-left" id="coordSystemField" v-model="currentSelection" @change="selectionChanged($event)">
-                        <option v-for="(projection, i) in projections" v-bind:key="i" v-bind:value="projection.name" v-bind:SELECTED="projection.name === currentProjectionName">
-                            {{ projection.title ? projection.title : projection.name}}
-                        </option>
-                    </select>
+    <Tool
+        :title="title"
+        :icon="icon"
+        :active="active"
+        :render-to-window="renderToWindow"
+    >
+        <template v-slot:toolBody>
+            <form
+                v-if="active"
+                class="form-horizontal"
+                role="form"
+            >
+                <div class="form-group form-group-sm">
+                    <label
+                        for="coordSystemField"
+                        class="col-md-5 col-sm-5 control-label"
+                    >Koordinatensystem</label>
+                    <div class="col-md-7 col-sm-7">
+                        <select
+                            id="coordSystemField"
+                            v-model="currentSelection"
+                            class="form-control input-sm pull-left"
+                            @change="selectionChanged($event)"
+                        >
+                            <option
+                                v-for="(projection, i) in projections"
+                                :key="i"
+                                :value="projection.name"
+                                :SELECTED="projection.name === currentProjectionName"
+                            >
+                                {{ projection.title ? projection.title : projection.name }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label id="coordinatesEastingLabel" for="coordinatesEastingField" class="col-md-5 col-sm-5 control-label">{{coordinatesEastingLabel}}</label>
-                <div class="col-md-7 col-sm-7">
-                    <input type="text" class="form-control" id="coordinatesEastingField" v-model="coordinatesEastingField" readonly contenteditable="false">
+                <div class="form-group form-group-sm">
+                    <label
+                        id="coordinatesEastingLabel"
+                        for="coordinatesEastingField"
+                        class="col-md-5 col-sm-5 control-label"
+                    >{{ coordinatesEastingLabel }}</label>
+                    <div class="col-md-7 col-sm-7">
+                        <input
+                            id="coordinatesEastingField"
+                            v-model="coordinatesEastingField"
+                            type="text"
+                            class="form-control"
+                            readonly
+                            contenteditable="false"
+                        >
+                    </div>
                 </div>
-            </div>
-            <div class="form-group form-group-sm">
-                <label id="coordinatesNorthingLabel" for="coordinatesNorthingField" class="col-md-5 col-sm-5 control-label">{{coordinatesNorthingLabel}}</label>
-                <div class="col-md-7 col-sm-7">
-                    <input type="text" class="form-control" id="coordinatesNorthingField" v-model="coordinatesNorthingField" readonly contenteditable="false">
+                <div class="form-group form-group-sm">
+                    <label
+                        id="coordinatesNorthingLabel"
+                        for="coordinatesNorthingField"
+                        class="col-md-5 col-sm-5 control-label"
+                    >{{ coordinatesNorthingLabel }}</label>
+                    <div class="col-md-7 col-sm-7">
+                        <input
+                            id="coordinatesNorthingField"
+                            v-model="coordinatesNorthingField"
+                            type="text"
+                            class="form-control"
+                            readonly
+                            contenteditable="false"
+                        >
+                    </div>
                 </div>
-            </div>
-        </form> 
-    </Tool>  
+            </form>
+        </template>
+    </Tool>
 </template>
