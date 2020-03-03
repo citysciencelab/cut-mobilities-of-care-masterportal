@@ -3,7 +3,6 @@ import Alerting from './components/Alerting.vue'
 import SupplyCoord from './components/SupplyCoord.vue'
 import ScaleLine from "./components/ScaleLine.vue";
 import Title from "./components/Title.vue";
-import ScaleLine from "./components/ScaleLine.vue";
 
 export default {
 <<<<<<< HEAD
@@ -42,7 +41,6 @@ export default {
         <SupplyCoord />
         <ScaleLine />
         <Title />
-        <ScaleLine />
     </div>
 </template>
 

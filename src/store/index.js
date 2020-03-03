@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import Alerting from "./Alerting";
 import SupplyCoord from "./SupplyCoord";
 import ScaleLine from "./ScaleLine";
+import Title from "./Title";
 
 /**
  * Returns an object in which the Config parameters are assigned to the modules.
@@ -194,69 +195,5 @@ const store = new Vuex.Store({
         }
     }
 });
-
-/**
- * Returns an object in which the Config parameters are assigned to the modules.
- * @returns {object} contains Config parameters to Moudles.
- */
-function getConfigToStateModules () {
-    return {
-        Alerting: "alerting",
-        Title: "portalTitle",
-        ScaleLine: "scaleLine"
-    };
-}
-
-/**
- * For objects, the first level is traversed and the values are added to the store.
- * For all other values such as strings and arrays, the values are added directly to the store.
- * Triggers the parsing for each available module one after the other
- * @param {object} state - Vuex store.
- * @param {object} [Config={}] - Data from config.js or config.json.
- * @param {object} [configToStateModulesParameters={}] - Contains Config parameters to Moudles.
- * @returns {void}
- */
-function parseConfigToStore (state, Config = {}, configToStateModulesParameters = {}) {
-    Object.keys(configToStateModulesParameters).forEach(stateModule => {
-        const configParameter = configToStateModulesParameters[stateModule];
-
-        parseConfigParameters(state, Config, configParameter, stateModule);
-    });
-}
-
-/**
- * Adds the data from the Config to the Vuex Store.
- * Objects that have a parameter "children" will be searched at a deeper level.
- * @param {object} state - Vuex store.
- * @param {object} [Config={}] - Data from config.js or config.json.
- * @param {string} configParameter - Parameter assigned to a module in the Config.
- * @param {string} stateModule - Module to which a config parameter is to be assigned.
- * @returns {void}
- */
-function parseConfigParameters (state, Config = {}, configParameter, stateModule) {
-    if (Config.hasOwnProperty(configParameter)) {
-        addConfigParametersToState(state, Config, configParameter, stateModule);
-    }
-    else if (typeof Config === "object") {
-        Object.values(Config).forEach(configChild => {
-            if (configChild.hasOwnProperty("children")) {
-                parseConfigParameters(state, configChild.children, configParameter, stateModule);
-            }
-        });
-    }
-};
-
-/**
- * Adds the parameters of the Config to the Vuex store.
- * For objects, each attribute is added individually.
- * @param {object} state - Vuex store.
- * @param {object} [Config={}] - Data from config.js or config.json.
- * @param {string} configParameter - Parameter assigned to a module in the Config.
- * @param {string} stateModule - Module to which a config parameter is to be assigned.
- * @returns {void}
- */
-function addConfigParametersToState (state, Config = {}, configParameter, stateModule) {
-    const configParameterFromConfig = Config[configParameter];
-}
 
 export default store;
