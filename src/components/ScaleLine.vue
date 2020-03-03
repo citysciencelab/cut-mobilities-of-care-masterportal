@@ -39,21 +39,24 @@ export default {
         });
     },
     updated () {
-        if(this.insideFooter) {
+        if (this.insideFooter) {
             document.getElementById("scale-line").remove();
             document.getElementsByClassName("footer")[0].appendChild(this.$el);
         }
     }
-}
+};
 </script>
 
 <template>
-    <div id="scale-line" v-if="mapMode != 'Oblique'">
+    <div
+        v-if="mapMode !== 'Oblique'"
+        id="scale-line"
+    >
         <span>
-        {{scaleLineValue}}
+            {{ scaleLineValue }}
         </span>
         <span>
-            1: {{scaleNumber}}
+            1: {{ scaleNumber }}
         </span>
     </div>
 </template>
