@@ -253,24 +253,22 @@ async function ParameterTests ({builder, url, resolution, mode}) {
             });
         }
 
-        // TODO loading portaltitle image currently does not work; stop skipping after bug is fixed
-        it.skip("?config= allows selecting a config", async function () {
-            // test by redirecting all to basic, including basic
-            await loadUrl(driver, `${url}?config=../basic/config.json`, mode);
+        if (isMaster(url)) {
+            it("?config= allows selecting a config", async function () {
+                // test by redirecting master to default
+                await loadUrl(driver, `${url}?config=../masterDefault/config.json`, mode);
+                await driver.findElement(By.xpath("//div[@id='portalTitle']/span[contains(.,'MasterDefault')]"));
+                await driver.wait(async () => driver.executeScript(
+                    imageLoaded,
+                    await driver.wait(until.elementLocated(By.css("#portalTitle img")))
+                ), 5000, "PortalTitle Image did not load.");
 
-            // icon varies between basic and all others - use as indicator that basic is active
-            await driver.wait(
-                until.elementLocated(By.css(".dropdown:nth-child(1) > .dropdown-toggle > .glyphicon-folder-open")),
-                5000,
-                "Glyphicon set in basic for tree was not found."
-            );
-
-            // also check whether header image loaded correctly
-            const imageSelector = By.css("#portalTitle img");
-
-            await driver.wait(until.elementLocated(imageSelector));
-            await driver.wait(async () => driver.executeScript(imageLoaded, await driver.findElement(imageSelector)), 5000, "PortalTitle Image did not load.");
-        });
+                // test by redirecting master to custom
+                await loadUrl(driver, `${url}?config=../masterCustom/config.json`, mode);
+                // await driver.findElement(By.xpath("//div[@id='portalTitle']/span[contains(.,'MasterCustom')]")); <- not in test resolution
+                expect(await (await driver.findElement(By.css("#tree .SelectedLayer"))).isDisplayed()).to.be.true;
+            });
+        }
 
         if (isDefault(url)) {
             it("?mdid= opens and displays a layer", async function () {
