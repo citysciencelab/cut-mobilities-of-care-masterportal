@@ -1,7 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getResolution, mouseWheelUp, mouseWheelDown} = require("../library/scripts"),
-    {onMoveEnd} = require("../library/scriptsAsync"),
     {initDriver} = require("../library/driver"),
     {isMobile} = require("../settings"),
     {By} = webdriver;
@@ -28,19 +27,23 @@ async function ZoomTests ({builder, url, resolution}) {
             });
 
             it("should zoom in on mouse wheel up", async function () {
+                this.timeout(15000);
                 const res = await driver.executeScript(getResolution);
 
+                /* only do-while on zoom-in since function may not be ready;
+                 * zoom-out should then work immediately */
                 do {
                     await driver.executeScript(mouseWheelUp, canvas);
-                    await driver.executeAsyncScript(onMoveEnd);
+                    await driver.wait(new Promise(r => setTimeout(r, 500)));
                 } while (res <= await driver.executeScript(getResolution));
             });
 
             it("should zoom out on mouse wheel down", async function () {
+                this.timeout(15000);
                 const res = await driver.executeScript(getResolution);
 
                 await driver.executeScript(mouseWheelDown, canvas);
-                await driver.executeAsyncScript(onMoveEnd);
+                await driver.wait(new Promise(r => setTimeout(r, 500)));
 
                 expect(res).to.be.below(await driver.executeScript(getResolution));
             });
