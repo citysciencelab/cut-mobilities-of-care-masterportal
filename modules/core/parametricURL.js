@@ -538,9 +538,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     updateQueryStringParam: function (key, value) {
         const baseUrl = [location.protocol, "//", location.host, location.pathname].join(""),
             urlQueryString = document.location.search,
-            newParam = key + "=" + value,
+            newParam = key + "=" + value;
+        let keyRegex,
             params = "?" + newParam;
-        let keyRegex;
 
         // If the "search" string exists, then build params from it
         if (urlQueryString) {
