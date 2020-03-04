@@ -1,7 +1,6 @@
 const webdriver = require("selenium-webdriver"),
-    {expect} = require("chai"),
     {getCenter} = require("../library/scripts"),
-    {onMoveEnd} = require("../library/scriptsAsync"),
+    {losesCenter} = require("../library/utils"),
     {initDriver} = require("../library/driver"),
     {isChrome} = require("../settings"),
     {By, Button} = webdriver;
@@ -24,21 +23,19 @@ async function PanTests ({builder, url, resolution, browsername}) {
             await driver.quit();
         });
 
-        // TODO randomly doesn't skip - retry until it works? Listen to OL until it's ready to pan somehow?
-        it.skip("should move when panned", async function () {
+        it("should move when panned", async function () {
+            this.timeout(10000);
             const center = await driver.executeScript(getCenter),
                 viewport = await driver.findElement(By.css(".ol-viewport"));
 
-            await driver.actions({bridge: true})
-                .move({origin: viewport})
-                .press(Button.LEFT)
-                .move({origin: viewport, x: 10, y: 10})
-                .release(Button.LEFT)
-                .perform();
-
-            await driver.executeAsyncScript(onMoveEnd);
-
-            expect(center).not.to.eql(await driver.executeScript(getCenter));
+            do {
+                await driver.actions({bridge: true})
+                    .move({origin: viewport})
+                    .press(Button.LEFT)
+                    .move({origin: viewport, x: 10, y: 10})
+                    .release(Button.LEFT)
+                    .perform();
+            } while (!await losesCenter(driver, center));
         });
     });
 }
