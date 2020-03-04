@@ -1,7 +1,64 @@
 <script>
 export default {
+    name: "Title",
+    computed: {
+        /**
+        * LogoLink
+        * @deprecated in 3.0.0
+        * @returns {String} - link
+        */
+        link () {
+            const deprecatedParameter = this.getDeprecatedParameters("LogoLink");
+
+            return deprecatedParameter === undefined ? this.$store.state.Title.link : deprecatedParameter;
+        },
+        /**
+        * LogoToolTip
+        * @deprecated in 3.0.0
+        * tooltip
+        * @deprecated in 3.0.0
+        * @returns {String} - toolTip
+        */
+        toolTip () {
+            const deprecatedParameter = this.getDeprecatedParameters("LogoToolTip") === undefined ? this.getDeprecatedParameters("tooltip") : deprecatedParameter;
+
+            return deprecatedParameter === undefined ? this.$store.state.Title.toolTip : deprecatedParameter;
+        },
+        /**
+        * LogoLink
+        * @deprecated in 3.0.0
+        * @returns {String} - URL, where the logo is stored
+        */
+        logo () {
+            const deprecatedParameter = this.getDeprecatedParameters("PortalLogo");
+
+            return deprecatedParameter === undefined ? this.$store.state.Title.logo : deprecatedParameter;
+        },
+        /**
+        * PortalTitle
+        * @deprecated in 3.0.0
+        * @returns {String} - the name/title of the portal
+        */
+        title () {
+            const deprecatedParameter = this.getDeprecatedParameters("PortalTitle");
+
+            return deprecatedParameter === undefined ? this.$store.state.Title.title : deprecatedParameter;
+        }
+    },
     mounted () {
         $(this.$el).insertAfter(document.getElementById("root"));
+    },
+    created () {
+        const that = this,
+            myBus = Backbone.Events;
+
+        myBus.listenTo(Radio.channel("Title"), {
+            "setSize": function () {
+                setTimeout(function () {
+                    that.renderDependingOnSpace();
+                }, 500);
+            }
+        });
     },
     methods: {
         /**
@@ -17,7 +74,7 @@ export default {
                 LogoToolTip: "toolTip",
                 tooltip: "toolTip",
                 PortalLogo: "logo"
-            }
+            };
 
             if (this.$store.state.Title[deprecatedParameter] !== undefined) {
                 console.warn(
@@ -40,13 +97,12 @@ export default {
                 titleWidth,
                 titleTextWidth,
                 rest,
-                logo,
-                doRender = false;
+                logo;
             const titleEl = document.getElementsByClassName("portal-title"),
                 titlePadding = 10;
-            
+
             this.$el.style.display = "block";
-            document.getElementById('title-text').style.display = 'inline-block';
+            document.getElementById("title-text").style.display = "inline-block";
 
             if (document.getElementById("searchbar")) {
                 navMenuWidth = document.getElementById("root").offsetWidth;
@@ -65,81 +121,42 @@ export default {
                 rest = navBarWidth - navMenuWidth - searchbarWidth;
                 document.getElementById("title-text").style.width = (rest - logo - titlePadding).toString() + "px";
 
-                if (logo < rest && this.$el.style.display === 'none') {
-                    this.$el.style.display = 'block';
+                if (logo < rest && this.$el.style.display === "none") {
+                    this.$el.style.display = "block";
                 }
                 else if (rest < logo && this.$el.style.display === "block") {
-                    this.$el.style.display = 'none';
+                    this.$el.style.display = "none";
                 }
-                if (rest - titleTextWidth - logo - titlePadding < (30/titleTextWidth * 100) - titleTextWidth && document.getElementById('title-text').style.display === 'inline-block') {
-                    document.getElementById('title-text').style.display = 'none';
+                if (rest - titleTextWidth - logo - titlePadding < (30 / titleTextWidth * 100) - titleTextWidth && document.getElementById("title-text").style.display === "inline-block") {
+                    document.getElementById("title-text").style.display = "none";
                 }
-                else if (rest - titleTextWidth - logo - titlePadding > (30/titleTextWidth * 100) && document.getElementById('title-text').style.display === 'none') {
-                    document.getElementById('title-text').style.display = 'inline-block';
+                else if (rest - titleTextWidth - logo - titlePadding > (30 / titleTextWidth * 100) && document.getElementById("title-text").style.display === "none") {
+                    document.getElementById("title-text").style.display = "inline-block";
                 }
             }
-        },
-    },
-    computed: {
-        /**
-        * LogoLink
-        * @deprecated in 3.0.0
-        */
-        link () {
-            const deprecatedParameter = this.getDeprecatedParameters('LogoLink');
-
-            return ((deprecatedParameter === undefined) ? this.$store.state.Title.link : deprecatedParameter);
-        },
-        /**
-        * LogoToolTip
-        * @deprecated in 3.0.0
-        * tooltip
-        * @deprecated in 3.0.0
-        */
-        toolTip () {
-            const deprecatedParameter = ((this.getDeprecatedParameters('LogoToolTip') === undefined) ? this.getDeprecatedParameters('tooltip') : deprecatedParameter);
-
-            return ((deprecatedParameter === undefined) ? this.$store.state.Title.toolTip : deprecatedParameter);
-        },
-        /**
-        * LogoLink
-        * @deprecated in 3.0.0
-        */
-        logo () {
-            const deprecatedParameter = this.getDeprecatedParameters('PortalLogo');
-
-            return ((deprecatedParameter === undefined) ? this.$store.state.Title.logo : deprecatedParameter);
-        },
-        /**
-        * PortalTitle
-        * @deprecated in 3.0.0
-        */
-        title () {
-            const deprecatedParameter = this.getDeprecatedParameters('PortalTitle');
-
-            return ((deprecatedParameter === undefined) ? this.$store.state.Title.title : deprecatedParameter);
         }
-    },
-    created () {
-        const that = this,
-            myBus = Backbone.Events;
-
-        myBus.listenTo(Radio.channel("Title"), {
-            "setSize": function () {
-                setTimeout(function() {
-                    that.renderDependingOnSpace();
-                }, 500);
-            }
-        })
     }
-}
+};
 </script>
 
 <template>
     <div class="portal-title">
-        <a :href="link" target="_blank" :data-toggle="title" data-placement="bottom" :title="toolTip">
-            <img id="logo" :src="logo">
-            <span id="title-text" v-html="title"/>
+        <a
+            :href="link"
+            target="_blank"
+            :data-toggle="title"
+            data-placement="bottom"
+            :title="toolTip"
+        >
+
+            <img
+                id="logo"
+                :src="logo"
+            >
+            <span
+                id="title-text"
+                v-html="title"
+            />
         </a>
     </div>
 </template>
