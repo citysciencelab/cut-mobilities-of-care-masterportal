@@ -30,7 +30,11 @@ async function LegendTests ({builder, config, url, resolution}) {
             });
 
             it("should contain active layers", async function () {
-                await (await driver.wait(until.elementLocated(By.xpath("//div[@id='navbarRow']//a[contains(normalize-space(),'Legende')]")))).click();
+                do {
+                    // retry until functionality is active - may get stuck else
+                    await (await driver.wait(until.elementLocated(By.xpath("//div[@id='navbarRow']//a[contains(normalize-space(),'Legende')]")))).click();
+                    await driver.wait(new Promise(r => setTimeout(r, 50)));
+                } while ((await driver.findElements(By.css(".legend-win-content"))).length !== 0);
 
                 const legendContent = await driver.wait(until.elementLocated(By.css(".legend-win-content"))),
                     headers = await legendContent.findElements(By.tagName("h4")),
