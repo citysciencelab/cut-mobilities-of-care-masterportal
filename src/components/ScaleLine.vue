@@ -71,7 +71,7 @@ div#scale-line {
     position: absolute;
     text-align: center;
     font-size: 10px;
-    padding: 4px 8px;
+    padding: 4px 40px;
     right: 0px;
 }
 div#scale-line > span {
