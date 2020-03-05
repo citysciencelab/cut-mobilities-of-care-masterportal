@@ -94,7 +94,9 @@ function loadApp () {
         utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {};
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
+        i18nextIsEnabled = i18next && i18next.options.hasOwnProperty("isEnabled") ? i18next.options.isEnabled() : false,
+        i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
         /* eslint-disable no-undef */
     let app = {},
         style = "";
@@ -457,8 +459,7 @@ function loadApp () {
             new TitleView();
         }
     }
-
-    if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {
+    if (i18nextIsEnabled && Object.keys(i18nextLanguages).length > 1) {
         new LanguageView();
     }
 
@@ -473,12 +474,12 @@ function loadApp () {
                 initCounter++;
             }
         });
-        initCounter = initCounter * Object.keys(i18next.options.getLanguages()).length;
+        initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
 
-                Object.keys(i18next.options.getLanguages()).forEach((lng) => {
+                Object.keys(i18nextLanguages).forEach((lng) => {
                     import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales);

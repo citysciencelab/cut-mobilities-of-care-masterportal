@@ -123,6 +123,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**
@@ -208,10 +209,16 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleColor: function (model, value) {
         if (model.has("minScale") === true) {
+            let statusCheckbox = 0;
+
             if (value === true) {
+                statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
                 this.$el.addClass("disabled");
-                this.$el.find("*").css("pointer-events", "none");
                 this.$el.find("*").css("cursor", "not-allowed");
+                this.$el.find("*").css("pointer-events", "none");
+                if (statusCheckbox === 0) {
+                    this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
+                }
                 this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
             }
             else {
