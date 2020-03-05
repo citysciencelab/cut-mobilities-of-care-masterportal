@@ -747,7 +747,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             subscriptionTopics = this.get("subscriptionTopics");
 
         dataStreamIds.forEach(function (id) {
-            if (client && !subscriptionTopics[id]) {
+            if (client && id && !subscriptionTopics[id]) {
                 client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {
                     rm_simulate: true,
                     rm_path: this.get("httpSubFolder")
@@ -776,7 +776,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         for (id in subscriptionTopics) {
-            if (client && (isSelected === false || isSelected === true && subscriptionTopics[id] === true && !dataStreamIdsInverted.hasOwnProperty(id))) {
+            if (client && id && (isSelected === false || isSelected === true && subscriptionTopics[id] === true && !dataStreamIdsInverted.hasOwnProperty(id))) {
                 client.unsubscribe("v" + version + "/Datastreams(" + id + ")/Observations");
                 subscriptionTopics[id] = false;
             }

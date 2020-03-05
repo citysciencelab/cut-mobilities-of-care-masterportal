@@ -409,8 +409,19 @@ describe("core/modelList/layer/sensor", function () {
 
     describe("subscribeToSensorThings", function () {
         let topics = [];
+        const feature0 = new Feature({
+                dataStreamId: "1",
+                geometry: new Point([100, 100])
+            }),
+            feature1 = new Feature({
+                dataStreamId: "2 | 3",
+                geometry: new Point([100, 100])
+            }),
+            features = [feature0, feature1];
 
         it("should subscribe on a topic", function () {
+            sensorLayer.get("layerSource").addFeatures(features);
+
             topics = [];
             sensorLayer.set("mqttClient", {
                 subscribe: function (topic) {
@@ -421,7 +432,11 @@ describe("core/modelList/layer/sensor", function () {
             sensorLayer.set("subscriptionTopics", {}, {silent: true});
             sensorLayer.subscribeToSensorThings();
 
-            expect(topics).to.deep.equal(["v1.0/Datastreams()/Observations"]);
+            expect(topics).to.deep.equal([
+                "v1.0/Datastreams(1)/Observations",
+                "v1.0/Datastreams(2)/Observations",
+                "v1.0/Datastreams(3)/Observations"
+            ]);
         });
         it("should not subscribe on a topic that has already been subscribed", function () {
             topics = [];
@@ -431,7 +446,11 @@ describe("core/modelList/layer/sensor", function () {
                 }
             }, {silent: true});
 
-            sensorLayer.set("subscriptionTopics", {"": true}, {silent: true});
+            sensorLayer.set("subscriptionTopics", {
+                "1": true,
+                "2": true,
+                "3": true
+            }, {silent: true});
             sensorLayer.subscribeToSensorThings();
 
             expect(topics).to.be.empty;
