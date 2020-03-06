@@ -105,18 +105,16 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      */
     getSimpleGeometryStyle: function (geometryType, feature, rule, isClustered) {
         const style = rule.style;
-        let styleObject, id;
+        let styleObject;
 
         if (geometryType === "Point") {
             styleObject = new PointStyle(feature, style, isClustered);
-            id = this.createLegendId("Point", rule);
-            this.addLegendInfo(id, "Point", styleObject);
+            this.addLegendInfo("Point", styleObject, rule);
             return styleObject.getStyle();
         }
         else if (geometryType === "LineString") {
             styleObject = new LinestringStyle(feature, style, isClustered);
-            id = this.createLegendId("LineString", rule);
-            this.addLegendInfo(id, "LineString", styleObject);
+            this.addLegendInfo("LineString", styleObject, rule);
             return styleObject.getStyle();
         }
         else if (geometryType === "LinearRing") {
@@ -125,8 +123,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         }
         else if (geometryType === "Polygon") {
             styleObject = new PolygonStyle(feature, style, isClustered);
-            id = this.createLegendId("Polygon", rule);
-            this.addLegendInfo(id, "Polygon", styleObject);
+            this.addLegendInfo("Polygon", styleObject, rule);
             return styleObject.getStyle();
         }
         else if (geometryType === "Circle") {
@@ -450,7 +447,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Returns a id created from geometryType and conditions using base64 decoding.
+     * Returns a unique id created from geometryType and conditions using base64 decoding.
      * @param   {string} geometryType features geometry type
      * @param   {object} rule         a rule description
      * @returns {string} id
@@ -462,14 +459,15 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Adds a unique legendInfo for each id
-     * @param {string} id unique identifier for each combination of geometryType and conditions
+     * Adds a unique legendInfo for each id to this vectorStyle model to be used for legend descriptions.
      * @param {string} geometryType features geometry type needed in legend model
      * @param {vectorStyle/style} styleObject  a vector style needed in
+     * @param {Object} rule conditions
      * @returns {void}
      */
-    addLegendInfo: function (id, geometryType, styleObject) {
+    addLegendInfo: function (geometryType, styleObject, rule) {
         const legendInfos = this.get("legendInfos"),
+            id = this.createLegendId(geometryType, rule),
             hasLegendInfo = legendInfos.some(legend => {
                 return legend.id === id;
             });
@@ -478,10 +476,40 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             legendInfos.push({
                 "id": id,
                 "geometryType": geometryType,
-                "styleObject": styleObject
+                "styleObject": styleObject,
+                "label": this.createLegendLabel(rule, styleObject)
             });
             Radio.trigger("Legend", "setLayerList");
         }
+    },
+
+    /**
+     * Returns the label or null examining some attributes. Giving precedence to "legendValue". Otherwhile creates a string out of rules conditions.
+     * @param   {Object} rule conditions
+     * @param   {vectorStyle/style} styleObject a vector style needed in
+     * @returns {String | null} label for this styleObject
+     */
+    createLegendLabel: function (rule, styleObject) {
+        if (styleObject.hasOwnProperty("legendValue")) {
+            return styleObject.legendValue.toString();
+        }
+        else if (rule.hasOwnProperty("conditions")) {
+            let label = "";
+
+            if (rule.conditions.hasOwnProperty("properties")) {
+                label = Object.values(rule.conditions.properties).join(", ");
+            }
+
+            if (rule.conditions.hasOwnProperty("sequence") && Array.isArray(rule.conditions.sequence)
+            && rule.conditions.sequence.every(element => typeof element === "number") && rule.conditions.sequence.length === 2
+            && rule.conditions.sequence[1] >= rule.conditions.sequence[0]) {
+                label = label + " (" + rule.conditions.sequence.join("-") + ")";
+            }
+
+            return label;
+        }
+
+        return null;
     },
 
     /**

@@ -814,12 +814,11 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      */
     getLegendParamsForLines: function (legendInfo, layername) {
         const style = legendInfo.styleObject,
-            condition = legendInfo.condition,
-            svg = this.createLineSVG(style),
-            name = this.determineValueName(style, condition, layername);
+            label = legendInfo.label,
+            svg = this.createLineSVG(style);
 
         return {
-            name: name,
+            name: label ? label : layername,
             svg: svg
         };
     },
@@ -832,12 +831,11 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      */
     getLegendParamsForPolygons: function (legendInfo, layername) {
         const style = legendInfo.styleObject,
-            condition = legendInfo.condition,
-            svg = this.createPolygonSVG(style),
-            name = this.determineValueName(style, condition, layername);
+            label = legendInfo.label,
+            svg = this.createPolygonSVG(style);
 
         return {
-            name: name,
+            name: label ? label : layername,
             svg: svg
         };
     },
@@ -851,18 +849,17 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      */
     getLegendParamsForPoint: function (legendInfo, layername) {
         const style = legendInfo.styleObject,
-            condition = legendInfo.condition,
+            label = legendInfo.label,
             type = style.get("type");
 
-        let name = [],
-            svg = [],
+        let svg = [],
             allItems;
 
         if (type === "circle") {
             svg = this.createCircleSVG(style);
         }
         else if (type === "nominal" || type === "interval") {
-            allItems = this.drawAdvancedStyle(type, style, layername, svg, name);
+            allItems = this.drawAdvancedStyle(type, style, layername, svg);
 
             return {
                 name: allItems[1],
@@ -873,33 +870,10 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             svg = this.createImageSVG(style);
         }
 
-        name = this.determineValueName(style, condition, layername);
-
         return {
-            name: name,
+            name: label ? label : layername,
             svg: svg
         };
-    },
-
-    /**
-     * Determines the name of a feature to display in the legend.
-     * The attributes are considered in the order legendValue, styleFieldValue and layerName.
-     * @param {VectorStyle} style - Style created by vectorStyle.
-     * @param {VectorStyle} condition - textual condition for this rule
-     * @param {string} layername - Layername defined in config.
-     * @returns {string} the name for the layer in legend
-     */
-    determineValueName: function (style, condition, layername) {
-        let name = layername;
-
-        if (style.has("legendValue")) {
-            name = style.get("legendValue");
-        }
-        else if (condition !== null) {
-            name = condition;
-        }
-
-        return name;
     },
 
     /**
@@ -908,14 +882,14 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @param {ol.style} style style from features
      * @param {String} layername Name of layer
      * @param {Array} image should contain the image source for legend elements
-     * @param {Array} name should contain the names for legend elements
      * @returns {Array} returns allItems
     */
-    drawAdvancedStyle: function (type, style, layername, image, name) {
+    drawAdvancedStyle: function (type, style, layername, image) {
         const scalingShape = style.get("scalingShape"),
             scalingAttribute = style.get("scalingAttribute"),
             scalingValueDefaultColor = style.get("scalingValueDefaultColor"),
-            advancedStyle = style.clone();
+            advancedStyle = style.clone(),
+            name = [];
         let styleScalingValues = style.get("styleScalingValues"),
             allItems = [];
 

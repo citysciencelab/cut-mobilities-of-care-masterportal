@@ -227,20 +227,20 @@ describe("vectorStyleModel", function () {
             expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(0);
         });
         it("addLegendInfo should insert one item", function () {
-            styleModel.addLegendInfo("myId", "Point", "test");
+            styleModel.addLegendInfo("Point", "test", rules2[0]);
             expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(1);
-            expect(styleModel.get("legendInfos")[0]).to.deep.include({geometryType: "Point", id: "myId", styleObject: "test"});
+            expect(styleModel.get("legendInfos")[0]).to.include({geometryType: "Point", styleObject: "test"});
         });
         it("but should not insert it twice", function () {
-            styleModel.addLegendInfo("myId", "Point", "test");
+            styleModel.addLegendInfo("Point", "test", rules2[0]);
             expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(1);
-            expect(styleModel.get("legendInfos")[0]).to.deep.include({geometryType: "Point", id: "myId", styleObject: "test"});
+            expect(styleModel.get("legendInfos")[0]).to.include({geometryType: "Point", styleObject: "test"});
         });
-        it("as long the id is not a bit different", function () {
-            styleModel.addLegendInfo("myId2", "Point", "test");
+        it("as long the rule is not different", function () {
+            styleModel.addLegendInfo("Point", "test", rules2[1]);
             expect(styleModel.get("legendInfos")).to.be.an("array").to.have.lengthOf(2);
-            expect(styleModel.get("legendInfos")[0]).to.deep.include({geometryType: "Point", id: "myId", styleObject: "test"});
-            expect(styleModel.get("legendInfos")[1]).to.deep.include({geometryType: "Point", id: "myId2", styleObject: "test"});
+            expect(styleModel.get("legendInfos")[0]).to.include({geometryType: "Point", styleObject: "test"});
+            expect(styleModel.get("legendInfos")[1]).to.include({geometryType: "Point", styleObject: "test"});
         });
     });
 
@@ -484,6 +484,21 @@ describe("vectorStyleModel", function () {
             expect(styleModel.isObjectPath(123)).to.be.false;
             expect(styleModel.isObjectPath("123")).to.be.false;
             expect(styleModel.isObjectPath("foo@id")).to.be.false;
+        });
+    });
+
+    describe("createLegendLabel", function () {
+        it("should return label with properties and sequence", function () {
+            expect(styleModel.createLegendLabel(rules2[0], {})).to.equal("test1 (1-1)");
+        });
+        it("should return label with properties only", function () {
+            expect(styleModel.createLegendLabel(rules2[1], {})).to.equal("test1");
+        });
+        it("should return label from legendValue", function () {
+            expect(styleModel.createLegendLabel(rules2[1], {legendValue: "myLabel"})).to.equal("myLabel");
+        });
+        it("should return null without conditions or legendValue", function () {
+            expect(styleModel.createLegendLabel(rules2[2], {})).to.be.null;
         });
     });
 });
