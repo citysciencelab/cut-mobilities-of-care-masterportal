@@ -90,9 +90,7 @@ if (!("Config" in window)) {
 
     // Abwarten bis Config.js geladen ist, dann layer list laden
     loadConfigJs.then(() => {
-        if (Config.hasOwnProperty("portalLanguage")) {
-            initLanguage(Config.portalLanguage);
-        }
+        initLanguage(Config.portalLanguage);
         fetch(Config.layerConf);
     });
 
