@@ -127,7 +127,10 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             typ: this.get("typ"),
             id: this.get("id"),
             weight: function (feature) {
-                return feature.get("weightForHeatmap");
+                if (feature.get("calculatedWeight") !== undefined) {
+                    return feature.get("calculatedWeight");
+                }
+                return feature.get("normalizeWeightForHeatmap");
             },
             gfiAttributes: this.get("gfiAttributes"),
             blur: this.get("blur"),
@@ -154,16 +157,21 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         var attribute = this.get("attribute"),
             value = this.get("value"),
             layerSource = this.get("layerSource"),
+            weightAttribute = this.get("weightAttribute"),
+            weightAttributeMax = this.get("weightAttributeMax"),
             cloneFeatures = [];
 
-        _.each(features, function (feature) {
+        features.forEach(function (feature) {
             var cloneFeature = feature.clone(),
                 count;
 
             if (attribute !== "" && value !== "") {
                 count = this.countStates(feature, attribute, value);
-
                 cloneFeature.set("weightForHeatmap", count);
+            }
+
+            if ((weightAttribute && weightAttributeMax) !== undefined) {
+                cloneFeature.set("calculatedWeight", feature.get(weightAttribute) / weightAttributeMax);
             }
 
             cloneFeature.setId(feature.getId());
@@ -186,7 +194,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @returns {void}
      */
     createLegendURL: function () {
-        console.error("legendURL for heatmap not yet implemented");
+        // console.info("legendURL for heatmap not yet implemented");
     },
 
     /**
@@ -206,7 +214,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         cloneFeature.setId(featureId);
 
         // check is feature exist
-        _.each(layerSource.getFeatures(), function (feat) {
+        layerSource.getFeatures().forEach(function (feat) {
             if (feat.getId() === featureId) {
                 heatmapFeature = feat;
             }
@@ -220,7 +228,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         }
 
         // if the feature is new, then pushes otherwise change it
-        if (_.isUndefined(heatmapFeature)) {
+        if (heatmapFeature !== undefined) {
             layerSource.addFeature(cloneFeature);
         }
         else {
@@ -244,7 +252,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             return feature.get("weightForHeatmap");
         }).get("weightForHeatmap");
 
-        _.each(featuresWithValue, function (feature) {
+        featuresWithValue.forEach(function (feature) {
             feature.set("weightForHeatmap", feature.get("weightForHeatmap") / max);
         });
     },

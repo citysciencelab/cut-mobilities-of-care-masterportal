@@ -327,7 +327,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         featureValue = feature.get(styleField);
         if (!_.isUndefined(featureValue)) {
             styleFieldValueObj = this.get("styleFieldValues").filter(function (styleFieldValue) {
-                return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toUpperCase();
+                return styleFieldValue.styleFieldValue.toUpperCase() === featureValue.toString().toUpperCase();
             })[0];
         }
 
@@ -797,7 +797,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             textStyle = undefined;
         }
         else {
-            textObj.text = feature.get(labelField);
+            textObj.text = feature.get(labelField) ? feature.get(labelField).toString() : "";
             textObj.textAlign = this.get("textAlign");
             textObj.font = this.get("textFont").toString();
             textObj.scale = parseFloat(this.get("textScale"), 10);

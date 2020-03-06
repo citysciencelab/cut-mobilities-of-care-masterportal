@@ -1,9 +1,9 @@
-import VirtualCityModel from "@modules/tools/virtualcity/model.js";
-import Planning from "@modules/tools/virtualcity/planning.js";
+import VirtualCityModel from "@modules/tools/virtualCity/model.js";
+import Planning from "@modules/tools/virtualCity/planning.js";
 import {expect} from "chai";
 import sinon from "sinon";
 
-describe("tools/virtualcity/VirtualcityModel", function () {
+describe("tools/virtualCity/VirtualcityModel", function () {
     var virtualcity,
         server,
         serviceResponse = [

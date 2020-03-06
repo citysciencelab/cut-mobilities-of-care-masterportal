@@ -239,8 +239,9 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     getLocalizedValues: function () {
         const localizedValues = {};
 
-        localizedValues[this.get("area")] = "Polygon";
         localizedValues[this.get("stretch")] = "LineString";
+        localizedValues[this.get("area")] = "Polygon";
+
         return localizedValues;
     },
 

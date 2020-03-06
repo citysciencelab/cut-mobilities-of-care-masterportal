@@ -69,7 +69,7 @@ const Config = {
             {
                 "bezeichnung": "",
                 "url": "https://www.hamburg.de/bsu/timonline",
-                "alias": "Kartenunstimmigkeit"
+                "alias": "translate#common:modules.footer.cardDiscrepancy"
             }
         ]
     },
@@ -113,7 +113,17 @@ const Config = {
         maximumScreenSpaceError: 2,
         fxaa: false
     },
-    startingMap3D: false
+    startingMap3D: false,
+    portalLanguage: {
+        enabled: true,
+        debug: false,
+        languages: {
+            de: "deutsch",
+            en: "englisch"
+        },
+        fallbackLanguage: "de",
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+    }
 };
 
 /* eslint-enable no-unused-vars */

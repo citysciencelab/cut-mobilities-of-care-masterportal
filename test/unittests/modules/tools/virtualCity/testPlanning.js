@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import Planning from "@modules/tools/virtualcity/planning.js";
+import Planning from "@modules/tools/virtualCity/planning.js";
 import TilesetLayer from "@modules/core/modelList/layer/tileset.js";
 import sinon from "sinon";
 import chai from "chai";
@@ -7,7 +7,7 @@ import sinonChai from "sinon-chai";
 
 chai.use(sinonChai);
 
-describe("tools/virtualcity/planning", function () {
+describe("tools/virtualCity/planning", function () {
     var planning,
         server,
         scene,
