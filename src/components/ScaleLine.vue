@@ -55,7 +55,6 @@ export default {
 <style lang="less">
 div#scale-line {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
-    border-radius: 0 5px 0 0;
     bottom: 0;
     color: #777;
     position: absolute;
