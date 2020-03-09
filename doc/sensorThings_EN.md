@@ -377,7 +377,7 @@ client.on("connect", function () {
     client.subscribe("v1.0/Datastreams(74)/Observations", {
         qos: 0,
         retain: 0,
-        rm_simulate: true
+        rmSimulate: true
     });
 });
 
@@ -392,9 +392,9 @@ client.on("message", function (topic, jsonPayload) {
 Note the changes:
 
  - context: here you can set your this scope for the events (on connect and on message)
- - rm_simulate: if set to true a simulation of Retained Messages via https will take place
+ - rmSimulate: if set to true a simulation of Retained Messages via https will take place
  - jsonPayload: using sensorThingsMqtt the payload is always delivered as a JavaScript Object or JSON - no need to parse it furthermore
- - note that no simulation of Retained Messages will take place if retain is set to 2 (even if rm_simulate is true). Negate this sentence: "If the Retain Handling option is not 2, all matching retained messages are sent to the Client." ([source](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440))
+ - note that no simulation of Retained Messages will take place if retain is set to 2 (even if rmSimulate is true). Negate this sentence: "If the Retain Handling option is not 2, all matching retained messages are sent to the Client." ([source](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440))
 
 
 ### Configuration ###
@@ -430,10 +430,10 @@ const client = mqtt.connect({
 |----|---------|----|-------|-----------|-------|
 |qos|no|Number|0|The maximum Quality of Service level at which the Server can send Application Messages to the Client. [link](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)|0, 1 or 2|
 |retain|no|Number|0|flag of how to use Retained Messages for this subscription [link](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc385349265)|0: get latest message on subscription, 1: get latest message only if first to subscribe on topic, 2: do not send messages on subscription|
-|rm_simulate|no|Boolean|false|activate the simulation of Retained Messages||
-|rm_path|no|String|empty|a path on the server in case the path differs from the standard implementation|if http REST is http://test.com/subpath/Datastreams but mqtt is mqtt://test.com/Datastreams you then want to set rm_path to "subpath/"|
-|rm_protocol|no|String|"https"|the protocol to use for the simulation|http, https, ...|
-|rm_httpClient|no|Function|SensorThingsClientHttp|an alternative function to call http urls with; the default http handler uses axios|if you prefer a different httpclient set rm_httpClient as a function(url, onsuccess) with onsuccess as function(resp)|
+|rmSimulate|no|Boolean|false|activate the simulation of Retained Messages||
+|rmPath|no|String|empty|a path on the server in case the path differs from the standard implementation|if http REST is http://test.com/subpath/Datastreams but mqtt is mqtt://test.com/Datastreams you then want to set rmPath to "subpath/"|
+|rmProtocol|no|String|"https"|the protocol to use for the simulation|http, https, ...|
+|rmHttpClient|no|Function|SensorThingsClientHttp|an alternative function to call http urls with; the default http handler uses axios|if you prefer a different httpclient set rmHttpClient as a function(url, onsuccess) with onsuccess as function(resp)|
 
 Example:
 
@@ -453,10 +453,10 @@ client.on("connect", function () {
     client.subscribe("v1.0/Datastreams(74)/Observations", {
         qos: 0,
         retain: 0,
-        rm_simulate: true,
-        rm_path: "itsLGVhackathon/",
-        rm_protocol: "https",
-        rm_httpClient: function (url, onsuccess) {
+        rmSimulate: true,
+        rmPath: "itsLGVhackathon/",
+        rmProtocol: "https",
+        rmHttpClient: function (url, onsuccess) {
             $.ajax({
                 dataType: "json",
                 url: url,

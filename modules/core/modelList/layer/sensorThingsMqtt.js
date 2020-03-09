@@ -27,7 +27,7 @@ export function SensorThingsMqtt () {
      * @param {String} errormsg the error message as String
      * @returns {Void}  -
      */
-    function _defaultErrorHandler (errormsg) {
+    function defaultErrorHandler (errormsg) {
         console.warn(errormsg);
     }
 
@@ -38,19 +38,19 @@ export function SensorThingsMqtt () {
      * @param {String} [mqttOptions.protocol] the protocol to use (mqtt, mqtts, ws, wss, wx, wxs), default: mqtt
      * @param {String} [mqttOptions.path] the path to follow (e.g. if protocol is wss, the path might be /mqtt)
      * @param {Object} [mqttOptions.context] the scope to call with
-     * @param {mqtt} [mqtt_opt] the mqtt object to be used instead of the default (default is the npm package mqtt)
-     * @param {SensorThingsErrorCallback} [onerror_opt] an optional callback to use as errorhandler - if not set console.warn will be triggert on error
+     * @param {mqtt} [mqttOpt] the mqtt object to be used instead of the default (default is the npm package mqtt)
+     * @param {SensorThingsErrorCallback} [onerrorOpt] an optional callback to use as errorhandler - if not set console.warn will be triggert on error
      * @returns {SensorThingsHttpClient}  the client to bind the message and connect event and to subscribe and unsubscribe with
      */
-    this.connect = function (mqttOptions, mqtt_opt, onerror_opt) {
+    this.connect = function (mqttOptions, mqttOpt, onerrorOpt) {
         const options = Object.assign({
                 host: "",
                 protocol: "mqtt",
                 path: "/",
                 context: this
             }, mqttOptions),
-            mqttClient = (mqtt_opt || defaultMqtt).connect(options),
-            onerror = onerror_opt || _defaultErrorHandler;
+            mqttClient = (mqttOpt || defaultMqtt).connect(options),
+            onerror = onerrorOpt || defaultErrorHandler;
 
         if (options.host === "") {
             onerror("No host was set on connecting with SensorThingsMqtt. Please set the host.");
@@ -63,14 +63,14 @@ export function SensorThingsMqtt () {
 /**
  * The SensorThingsMqttClient - received calling SensorThingsMqtt.connect
  * @constructor
- * @param {mqtt/mqttClient} _mqttClient the mqtt client (e.g. from npm mqtt)
- * @param {String} _mqttHost the mqtt host
- * @param {Object} _context the context to call events in (e.g. this)
+ * @param {mqtt/mqttClient} mqttClient the mqtt client (e.g. from npm mqtt)
+ * @param {String} mqttHost the mqtt host
+ * @param {Object} context the context to call events in (e.g. this)
  * @memberof Core.ModelList.Layer.SensorThingsMqtt
  * @export
  */
-export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
-    let _messageHandler;
+export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
+    let messageHandler;
 
     /**
      * an async function to call an url and to receive data from
@@ -78,7 +78,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
      * @param {Function} onsuccess a function(resp) with resp as JSON response of the call
      * @returns {Void}  -
      */
-    function _defaultHttpClient (url, onsuccess) {
+    function defaultHttpClient (url, onsuccess) {
         axios({
             method: "get",
             url: url,
@@ -100,7 +100,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
      * @param {SensorThingsMqttClient~callbackMessage} callbackMessage the handler as function(payload) to give the simulated retained message to
      * @returns {Void}  -
      */
-    function _simulateRetainedMessage (host, topic, httpClient, callbackMessage) {
+    function simulateRetainedMessage (host, topic, httpClient, callbackMessage) {
         const term = topic.split("/").pop().toLowerCase(),
             single = term.indexOf("(") >= 0,
             subTerm = single ? term.substr(0, term.indexOf("(")) : term,
@@ -114,10 +114,10 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
                 }
                 httpClient(parsedUrl.href, function (resp) {
                     if (!single && Array.isArray(resp.value) && resp.value.length) {
-                        callbackMessage.call(_context, topic, resp.value[0]);
+                        callbackMessage.call(context, topic, resp.value[0]);
                     }
                     else {
-                        callbackMessage.call(_context, topic, resp);
+                        callbackMessage.call(context, topic, resp);
                     }
                 });
                 break;
@@ -125,23 +125,23 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
                 // there should be only one location
                 httpClient(parsedUrl.href, function (resp) {
                     if (!single && Array.isArray(resp.value) && resp.value.length) {
-                        callbackMessage.call(_context, topic, resp.value[0]);
+                        callbackMessage.call(context, topic, resp.value[0]);
                     }
                     else {
-                        callbackMessage.call(_context, topic, resp);
+                        callbackMessage.call(context, topic, resp);
                     }
                 });
                 break;
             default:
                 httpClient(parsedUrl.href, function (resp) {
-                    callbackMessage.call(_context, topic, resp);
+                    callbackMessage.call(context, topic, resp);
                 });
         }
     }
 
     /**
-     * sets a handler as event of "eventName" for the _mqttClient
-     * @description if eventName equals 'message', handler is set as instance variable _messageHandler - later used for the simulation of retained messages
+     * sets a handler as event of "eventName" for the mqttClient
+     * @description if eventName equals 'message', handler is set as instance variable messageHandler - later used for the simulation of retained messages
      * @param {String} eventName the name of the mqtt event (connect, message, close, end, error)
      * @param {SensorThingsMqttCallbackMessage} handler the event handler
      * @returns {Void}  -
@@ -152,19 +152,19 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
         }
 
         if (eventName === "message") {
-            _messageHandler = handler;
-            _mqttClient.on(eventName, function (topic, payload) {
+            messageHandler = handler;
+            mqttClient.on(eventName, function (topic, payload) {
                 try {
-                    return handler.call(_context, topic, JSON.parse(payload));
+                    return handler.call(context, topic, JSON.parse(payload));
                 }
                 catch (e) {
-                    return handler.call(_context, topic, payload);
+                    return handler.call(context, topic, payload);
                 }
             });
         }
         else {
-            _mqttClient.on(eventName, function (...args) {
-                return handler.apply(_context, args);
+            mqttClient.on(eventName, function (...args) {
+                return handler.apply(context, args);
             });
         }
     };
@@ -172,31 +172,31 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
     /**
      * function to subscribe to a topic
      * @param {String} topic the SensorThings topic to subscribe at
-     * @param {Object} [options_opt] a few options that can be set
-     * @param {Number} [options_opt.qos=0] flag of how to set quality of service for this subscription - see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169
-     * @param {Number} [options_opt.retain=0] flag of how to use retained messages for this subscription - see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc385349265
-     * @param {Boolean} [options_opt.rm_simulate=true] false if no simulation of retained messages should take place, otherwise true
-     * @param {String} [options_opt.rm_path=""] a path on the server in case the path differs from the standard implementation
-     * @param {String} [options_opt.rm_protocol="https"] the protocol to use for the simulation (http, https, ...)
-     * @param {SensorThingsClientHttp} [options_opt.rm_httpClient] a function to call an url with for the simulation instead of using the default (_defaultHttpClient)
-     * @param {SensorThingsMqttCallbackMessage} [onmessage_opt] a function to be called for receiving the message, default: _messageHandler
+     * @param {Object} [optionsOpt] a few options that can be set
+     * @param {Number} [optionsOpt.qos=0] flag of how to set quality of service for this subscription - see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169
+     * @param {Number} [optionsOpt.retain=0] flag of how to use retained messages for this subscription - see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc385349265
+     * @param {Boolean} [optionsOpt.rmSimulate=true] false if no simulation of retained messages should take place, otherwise true
+     * @param {String} [optionsOpt.rmPath=""] a path on the server in case the path differs from the standard implementation
+     * @param {String} [optionsOpt.rmProtocol="https"] the protocol to use for the simulation (http, https, ...)
+     * @param {SensorThingsClientHttp} [optionsOpt.rmHttpClient] a function to call an url with for the simulation instead of using the default (defaultHttpClient)
+     * @param {SensorThingsMqttCallbackMessage} [onmessageOpt] a function to be called for receiving the message, default: messageHandler
      * @returns {Void}  -
      */
-    this.subscribe = function (topic, options_opt, onmessage_opt) {
+    this.subscribe = function (topic, optionsOpt, onmessageOpt) {
         const options = Object.assign({
             qos: 0,
             retain: 0,
-            rm_simulate: false,
-            rm_path: "",
-            rm_protocol: "https",
-            rm_httpClient: _defaultHttpClient
-        }, options_opt);
+            rmSimulate: false,
+            rmPath: "",
+            rmProtocol: "https",
+            rmHttpClient: defaultHttpClient
+        }, optionsOpt);
 
-        _mqttClient.subscribe(topic, options);
+        mqttClient.subscribe(topic, options);
 
-        if (options.rm_simulate && (options.retain !== 2)) {
+        if (options.rmSimulate && (options.retain !== 2)) {
             // simulate retained message
-            _simulateRetainedMessage(options.rm_protocol + "://" + _mqttHost + options.rm_path, topic, options.rm_httpClient, onmessage_opt || _messageHandler);
+            simulateRetainedMessage(options.rmProtocol + "://" + mqttHost + options.rmPath, topic, options.rmHttpClient, onmessageOpt || messageHandler);
         }
     };
 
@@ -206,7 +206,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
      * @returns {Void}  -
      */
     this.unsubscribe = function (topic) {
-        _mqttClient.unsubscribe(topic);
+        mqttClient.unsubscribe(topic);
     };
 
     /**
@@ -214,7 +214,7 @@ export function SensorThingsMqttClient (_mqttClient, _mqttHost, _context) {
      * @returns {mqtt/mqttClient}  the currently used mqtt client
      */
     this.getMqttClient = function () {
-        return _mqttClient;
+        return mqttClient;
     };
 
 }

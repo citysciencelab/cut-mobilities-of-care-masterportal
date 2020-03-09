@@ -128,56 +128,56 @@ describe("core/modelList/layer/SensorThingsMqtt", function () {
                 httpLastUrl = url;
             }
 
-            it("should call the subscribe function of the mqttClient without simulating retained messages if rm_simulate is set to false", function () {
+            it("should call the subscribe function of the mqttClient without simulating retained messages if rmSimulate is set to false", function () {
                 client.subscribe("baz", {
-                    rm_simulate: false,
-                    rm_httpClient: httpTestClient
+                    rmSimulate: false,
+                    rmHttpClient: httpTestClient
                 });
 
                 expect(mqttTestClient.getLastTopic()).to.equal("baz");
                 expect(httpLastUrl).to.be.false;
             });
-            it("should not simulate retained messages if retain is set to 2, even if rm_simulate is set to true", function () {
+            it("should not simulate retained messages if retain is set to 2, even if rmSimulate is set to true", function () {
                 client.subscribe("qux", {
                     retain: 2,
-                    rm_simulate: true,
-                    rm_httpClient: httpTestClient
+                    rmSimulate: true,
+                    rmHttpClient: httpTestClient
                 });
 
                 expect(mqttTestClient.getLastTopic()).to.equal("qux");
                 expect(httpLastUrl).to.be.false;
             });
-            it("should simulate retained messages if rm_simulate is set to true and retain is 0 or 1", function () {
+            it("should simulate retained messages if rmSimulate is set to true and retain is 0 or 1", function () {
                 client.subscribe("baz", {
                     retain: 0,
-                    rm_simulate: true,
-                    rm_protocol: "foo",
-                    rm_httpClient: httpTestClient
+                    rmSimulate: true,
+                    rmProtocol: "foo",
+                    rmHttpClient: httpTestClient
                 });
                 expect(httpLastUrl).to.equal("foo://testhost/baz");
 
                 client.subscribe("qux", {
                     retain: 1,
-                    rm_simulate: true,
-                    rm_protocol: "foo",
-                    rm_httpClient: httpTestClient
+                    rmSimulate: true,
+                    rmProtocol: "foo",
+                    rmHttpClient: httpTestClient
                 });
                 expect(httpLastUrl).to.equal("foo://testhost/qux");
             });
 
             it("should extent the simulation url in case Observations are subscribed", function () {
                 client.subscribe("baz/Observations", {
-                    rm_simulate: true,
-                    rm_protocol: "foo",
-                    rm_httpClient: httpTestClient
+                    rmSimulate: true,
+                    rmProtocol: "foo",
+                    rmHttpClient: httpTestClient
                 });
                 expect(httpLastUrl).to.equal("foo://testhost/baz/Observations?%24orderby=phenomenonTime%20desc&%24top=1");
             });
             it("should not extent the simulation url in case a Observation is subscribed with an exact identifier", function () {
                 client.subscribe("baz/Observations(123456)", {
-                    rm_simulate: true,
-                    rm_protocol: "foo",
-                    rm_httpClient: httpTestClient
+                    rmSimulate: true,
+                    rmProtocol: "foo",
+                    rmHttpClient: httpTestClient
                 });
                 expect(httpLastUrl).to.equal("foo://testhost/baz/Observations(123456)");
             });

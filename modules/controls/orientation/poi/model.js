@@ -39,7 +39,7 @@ const POIModel = Backbone.Model.extend({
         let featInCircle = [],
             sortedFeatures = [];
 
-        poiDistances.forEach(function (distance) {
+        poiDistances.forEach(distance => {
             featInCircle = Radio.request("geolocation", "getFeaturesInCircle", distance);
             sortedFeatures = _.sortBy(featInCircle, function (feature) {
                 return feature.dist2Pos;
@@ -48,14 +48,14 @@ const POIModel = Backbone.Model.extend({
                 "category": distance,
                 "features": sortedFeatures
             });
-        }, this);
+        });
 
-        poiFeatures.forEach(function (category) {
-            category.features.forEach(function (feat) {
+        poiFeatures.forEach(category => {
+            category.features.forEach(feat => {
                 feat.imgPath = isNewVectorStyle ? this.getImgPath(feat) : this.getImgPathOld(feat);
                 feat.name = this.getFeatureTitle(feat);
-            }, this);
-        }, this);
+            });
+        });
 
         this.setPoiFeatures(poiFeatures);
     },

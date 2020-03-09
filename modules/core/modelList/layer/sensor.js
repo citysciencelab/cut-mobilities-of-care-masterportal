@@ -238,9 +238,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             }, this);
 
             // only features with geometry
-            features = features.filter(function (subFeature) {
-                return subFeature.getGeometry() !== undefined;
-            });
+            features = features.filter(subFeature => subFeature.getGeometry() !== undefined);
         }
 
         return features;

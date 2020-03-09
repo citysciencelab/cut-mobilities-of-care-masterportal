@@ -29,7 +29,7 @@ export function SensorThingsHttp () {
      * @param {SensorThingsErrorCallback} onerror a function (resp) with the response of the call
      * @returns {Void}  -
      */
-    function _defaultHttpClient (url, onsuccess, onerror) {
+    function defaultHttpClient (url, onsuccess, onerror) {
         axios({
             method: "get",
             url: url,
@@ -240,7 +240,7 @@ export function SensorThingsHttp () {
         const requestUrl = addCountToUrl(url);
         let completeResult = Array.isArray(result) ? result : [];
 
-        (httpClient || _defaultHttpClient)(requestUrl, function (response) {
+        (httpClient || defaultHttpClient)(requestUrl, function (response) {
             if (response && response.hasOwnProperty("value") && Array.isArray(response.value)) {
                 completeResult = completeResult.concat(response.value);
             }
