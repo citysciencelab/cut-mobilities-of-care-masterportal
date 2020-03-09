@@ -3,19 +3,19 @@
 import {mapGetters} from "vuex";
 
 import storeModule from "./module";
-import {componentMap, mobileHiddenControls} from "./data";
 
 export default {
     name: "Controls",
     computed: {
         ...mapGetters(["controls", "mobile"]),
+        ...mapGetters("controls", ["componentMap", "mobileHiddenControls"]),
         activeControls () {
             return this.controls === null
                 ? []
                 : Object.keys(this.controls)
-                    .map(key => componentMap[key]
+                    .map(key => this.componentMap[key]
                         ? {
-                            component: componentMap[key],
+                            component: this.componentMap[key],
                             props: typeof this.controls[key] === "object" ? this.controls[key] : {},
                             key
                         }
@@ -37,7 +37,7 @@ export default {
         * @returns {Boolean} true if control should be hidden in mobile screen width
         */
         hiddenMobile (componentName) {
-            return mobileHiddenControls.includes(componentName);
+            return this.mobileHiddenControls.includes(componentName);
         }
     }
 };
