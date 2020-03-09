@@ -137,19 +137,18 @@
           "properties": {
             "kategorie": "Unsichtbares Objekt"
           }
-        }
-      },
-      {
+        },
         "style": {
-          "type": "icon",
-          "clusterCircleRadius" : 15,
-          "clusterCircleFillColor": [230, 230, 10, 1],
-          "clusterTextType": "counter",
-          "clusterTextOffsetY" : 2,
-          "clusterTextStrokeWidth" : 0,
-          "imageName" : "unsichtbares-objekt_10.png",
-          "imageScale" : "0.5"
-        }
+            "type": "icon",
+            "clusterCircleRadius" : 15,
+            "clusterCircleFillColor": [230, 230, 10, 1],
+            "clusterTextType": "counter",
+            "clusterTextOffsetY" : 2,
+            "clusterTextStrokeWidth" : 0,
+            "clusterTextFillColor": [0, 0, 0, 1],
+            "imageName" : "unsichtbares-objekt_10.png",
+            "imageScale" : "0.5"
+          }
       }
     ]
   },

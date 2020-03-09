@@ -93,7 +93,7 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
         const isClustered = this.get("isClustered"),
             feature = this.get("feature");
 
-        if (isClustered && feature.hasOwnProperty("features") && this.get("clusterTextType") !== "none") {
+        if (isClustered && feature.get("features").length > 1 && this.get("clusterTextType") !== "none") {
             return this.createClusteredTextStyle();
         }
         else if (this.checkLabelField()) {
