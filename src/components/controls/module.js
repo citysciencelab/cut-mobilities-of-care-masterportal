@@ -50,11 +50,12 @@ export default {
          * @returns {void}
          */
         unregisterModule (state, name) {
-            state.componentMap = {
-                ...state.componentMap,
-                [name]: undefined
-            };
-            state.mobileHiddenControls.filter(s => s !== name);
+            const nextMap = {...state.componentMap};
+
+            delete nextMap[name];
+
+            state.componentMap = nextMap;
+            state.mobileHiddenControls = state.mobileHiddenControls.filter(s => s !== name);
         }
     },
     getters: {
