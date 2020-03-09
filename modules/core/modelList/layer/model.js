@@ -355,14 +355,26 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Toggles the attribute isSelected
+     * Toggles the attribute isSelected.
+     * If the layer is a baselayer, the other selected baselayers are deselected.
+     *
      * @return {void}
      */
     toggleIsSelected: function () {
+        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")});
+
+        console.log("Grouped Up", layerGroup);
+
         if (this.get("isSelected") === true) {
             this.setIsSelected(false);
         }
         else {
+            if (this.get("parentId") === "Baselayer") {
+                layerGroup.forEach(layer => {
+                    console.log(layer.attributes.name, layer.attributes);
+                    layer.setIsSelected(false);
+                });
+            }
             this.setIsSelected(true);
         }
     },

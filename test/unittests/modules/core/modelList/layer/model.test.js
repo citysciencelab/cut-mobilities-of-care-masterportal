@@ -1,33 +1,32 @@
-import WMSLayer from "@modules/core/modelList/layer/wms.js";
+import Layer from "@modules/core/modelList/layer/model.js";
+import ModelList from "@modules/core/modelList/list.js";
 import {expect} from "chai";
 
-describe("core/modelList/layer/wms", function () {
-    var model = {};
+describe("core/modelList/layer/model", function () {
+    let layer;
 
     before(function () {
-        model = new WMSLayer();
+        layer = new Layer();
     });
 
-    describe("setIsRemovable", function () {
-        it("setIsRemovable should return true value", function () {
-            model.setIsRemovable(true);
-            expect(model.get("isRemovable")).to.be.true;
+    afterEach(function () {
+        layer = new Layer();
+    });
+
+    describe("toggleIsSelected", function () {
+        let secondLayer;
+
+        before(function () {
+            secondLayer = new Layer();
+            secondLayer.setIsSelected(true);
+            layer.setIsSelected(false);
+            ModelList.addModel(layer);
+            ModelList.addModel(secondLayer);
         });
-        it("setIsRemovable should return false value", function () {
-            model.setIsRemovable(false);
-            expect(model.get("isRemovable")).to.be.false;
-        });
-        it("setIsRemovable should return undefined value", function () {
-            model.setIsRemovable(undefined);
-            expect(model.get("isRemovable")).to.be.false;
-        });
-        it("setIsRemovable should return null value", function () {
-            model.setIsRemovable(null);
-            expect(model.get("isRemovable")).to.be.false;
-        });
-        it("setIsRemovable should return string value", function () {
-            model.setIsRemovable("string");
-            expect(model.get("isRemovable")).to.be.false;
-        });
+
+        it("on selecting a baselayer all other baselayers should be deselected", function () {
+            layer.toggleIsSelected();
+            expect(false).to.be.true;
+        })
     });
 });
