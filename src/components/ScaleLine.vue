@@ -33,17 +33,6 @@ export default {
                     that.$store.state.ScaleLine.mapMode = mode;
                 }
             });
-            myBus.listenTo(Radio.channel("Footer"), {
-                isReady: function () {
-                    that.$store.state.ScaleLine.insideFooter = true;
-                }
-            });
-        }
-    },
-    updated () {
-        if (this.insideFooter) {
-            document.getElementById("scale-line").remove();
-            document.getElementsByClassName("footer")[0].appendChild(this.$el);
         }
     }
 };
@@ -66,6 +55,7 @@ export default {
 <style lang="less">
 div#scale-line {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
+    border-radius: 0 5px 0 0;
     bottom: 0;
     color: #777;
     position: absolute;
@@ -73,6 +63,7 @@ div#scale-line {
     font-size: 10px;
     padding: 4px 40px;
     right: 0px;
+    z-index: 1;
 }
 div#scale-line > span {
     &:first-child {
