@@ -23,6 +23,16 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      */
     initialize: function () {
         Layer.prototype.initialize.apply(this);
+
+        if (this.get("isVisibleInMap")) {
+            this.updateSource();
+        }
+
+        this.listenTo(this, {
+            "change:isVisibleInMap": function () {
+                this.updateSource();
+            }
+        });
     },
 
     /**
