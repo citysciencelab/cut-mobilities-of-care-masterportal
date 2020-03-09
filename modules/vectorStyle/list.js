@@ -130,7 +130,11 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
              * filter for .layerId and styleId as well
              * @deprecated since v 3.0
              */
-            return styleIds.includes(styleModel.layerId) || styleIds.includes(styleModel.styleId);
+            if (!Config.hasOwnProperty("useVectorStyleBeta") || Config.useVectorStyleBeta !== true) {
+                return styleIds.includes(styleModel.layerId);
+            }
+
+            return styleIds.includes(styleModel.styleId);
         });
 
         this.add(filteredData);
