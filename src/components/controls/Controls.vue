@@ -2,20 +2,8 @@
 <script>
 import {mapGetters} from "vuex";
 
-import Attributions from "./attributions/Attributions.vue";
-import BackForward from "./backForward/BackForward.vue";
-import Zoom from "./zoom/Zoom.vue";
-
 import storeModule from "./module";
-
-const componentMap = {
-        attributions: Attributions,
-        backForward: BackForward,
-        zoom: Zoom
-    },
-    mobileHiddenControls = [
-        "backForward"
-    ];
+import {componentMap, mobileHiddenControls} from "./data";
 
 export default {
     name: "Controls",
