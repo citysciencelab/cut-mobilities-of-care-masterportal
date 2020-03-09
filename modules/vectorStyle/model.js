@@ -324,13 +324,13 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         let styleField = this.get("styleField"),
             featureKeys = [],
             styleFieldValueObj,
-            style = this.getDefaultStyle();
-        var featureValue,
-            polygonFillColor,
-            polygonStrokeColor,
-            polygonStrokeWidth,
-            strokestyle,
-            fillstyle;
+            style = this.getDefaultStyle(),
+            featureValue = false,
+            polygonFillColor = false,
+            polygonStrokeColor = false,
+            polygonStrokeWidth = false,
+            strokestyle = false,
+            fillstyle = false;
 
         if (typeof styleField === "object") {
             featureKeys = feature.get("features") ? feature.get("features")[0].getKeys() : feature.getKeys();
@@ -684,8 +684,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {Object/Boolean}  returns the found styleFieldValue, null if no value has matched or false if no feature, styleField or any styleFieldValues exists
      */
     getStyleFieldValueObject: function (feature, styleFieldParam, styleFieldValues, maxRangeAttribute, minRangeAttribute) {
-        var featureValue;
-
         if (!feature || typeof styleFieldParam !== "object" && typeof styleFieldParam !== "string" || !styleFieldValues) {
             return false;
         }
@@ -693,6 +691,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         const rangeMax = this.getRangeValueFromRangeAttribute(feature, maxRangeAttribute, false),
             rangeMin = this.getRangeValueFromRangeAttribute(feature, minRangeAttribute, 0);
         let featureKeys,
+            featureValue = false,
             styleField = styleFieldParam,
             obj,
             idx;

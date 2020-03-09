@@ -47,7 +47,7 @@ describe("vectorStyle", function () {
                     class: "POINT_WRONG"
                 },
                 defaultStyleObj = {};
-            var defaultStyle;
+            let defaultStyle = false;
 
             model = new Model(style);
 
@@ -75,7 +75,7 @@ describe("vectorStyle", function () {
                     strokeColor: "#3399CC",
                     strokeWidth: 1.25
                 };
-            var defaultStyle;
+            let defaultStyle = false;
 
             model = new Model(style);
 
@@ -101,7 +101,7 @@ describe("vectorStyle", function () {
                         imageName: "/lgv-config/img/blank.png", // undefined, da wir nicht aus der Config und Util den Pfad holen.
                         imageScale: 1
                     };
-                var createdStyle;
+                let createdStyle = false;
 
                 model = new Model(style);
 
@@ -124,7 +124,7 @@ describe("vectorStyle", function () {
                         imageScale: 2.5,
                         imageSize: ""
                     };
-                var createdStyle;
+                let createdStyle = false;
 
                 model = new Model(style);
 
@@ -160,7 +160,7 @@ describe("vectorStyle", function () {
                         strokeWidth: 1.25
                     },
                     defaultStyleObj = {};
-                var defaultStyle;
+                let defaultStyle = false;
 
                 model = new Model(style);
 
@@ -194,7 +194,7 @@ describe("vectorStyle", function () {
                         imageSize: "" // imageSize wird nur dann als array gesetzt, wenn der imageName mit .svg endet.
                     },
                     createdStyleObj = {};
-                var createdStyle;
+                let createdStyle = false;
 
                 model = new Model(style);
 
@@ -474,7 +474,7 @@ describe("vectorStyle", function () {
                         strokeColor: [0, 0, 0, 1],
                         strokeWidth: 2
                     };
-                var circleStyle;
+                let circleStyle = false;
 
                 model = new Model(style);
 
@@ -501,7 +501,7 @@ describe("vectorStyle", function () {
                         strokeColor: [123, 123, 123, 0],
                         strokeWidth: 30
                     };
-                var circleStyle;
+                let circleStyle = false;
 
                 model = new Model(style);
 
@@ -592,7 +592,7 @@ describe("vectorStyle", function () {
                         strokeWidth: 2,
                         strokeDash: [2, 2]
                     };
-                var lineStyle;
+                let lineStyle = false;
 
                 features[0].set("foo", "bar");
                 lineStyle = lineModel.createStyle(features[0], false);
@@ -612,7 +612,7 @@ describe("vectorStyle", function () {
                     imageName: "krankenhaus.png",
                     labelField: "name"
                 };
-                var text;
+                let text = false;
 
                 model = new Model(style);
                 text = model.createStyle(features[0], false).getText().getText();
@@ -628,7 +628,7 @@ describe("vectorStyle", function () {
                         labelField: "name"
                     },
                     clusterFeature = new Feature({features: [features[0], features[1]]});
-                var text;
+                let text = false;
 
                 model = new Model(style);
                 text = model.createStyle(clusterFeature, true).getText().getText();
@@ -643,7 +643,7 @@ describe("vectorStyle", function () {
                         clusterText: "NONE"
                     },
                     clusterFeature = new Feature({features: [features[0], features[1]]});
-                var text;
+                let text = false;
 
                 model = new Model(style);
                 text = model.createStyle(clusterFeature, true).getText();
@@ -658,7 +658,7 @@ describe("vectorStyle", function () {
                         clusterText: "mehrere Features"
                     },
                     clusterFeature = new Feature({features: [features[0], features[1]]});
-                var text;
+                let text = false;
 
                 model = new Model(style);
                 text = model.createStyle(clusterFeature, true).getText().getText();

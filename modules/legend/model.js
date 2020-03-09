@@ -735,7 +735,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         const olFeature = new Feature({}),
             circleBarScalingFactor = advancedStyle.get("circleBarScalingFactor"),
             barHeight = String(20 / circleBarScalingFactor);
-        var stylePerValue;
+        let stylePerValue = false;
 
         olFeature.set(scalingAttribute, barHeight);
         stylePerValue = advancedStyle.createStyle(olFeature, false);
