@@ -32,7 +32,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             text: "Punkt zeichnen"
         },
         symbol: "",
-        pointSize: 16,
+        pointSize: 6,
         renderToWindow: true,
         deactivateGFI: true,
         glyphicon: "glyphicon-pencil",
@@ -62,13 +62,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "6 px", value: 6}
         ],
         pointSizeOptions: [
-            {caption: "16 px", value: 16},
-            {caption: "24 px", value: 24},
-            {caption: "32 px", value: 32},
-            {caption: "40 px", value: 40},
-            {caption: "48 px", value: 48},
-            {caption: "56 px", value: 56},
-            {caption: "64 px", value: 64}
+            {caption: "6 px", value: 6},
+            {caption: "8 px", value: 8},
+            {caption: "10 px", value: 10},
+            {caption: "12 px", value: 12},
+            {caption: "14 px", value: 14},
+            {caption: "16 px", value: 16}
         ],
         fontSizeOptions: [
             {caption: "10 px", value: 10},
@@ -147,7 +146,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {Number} strokeWidth=1 Selected stroke width.
      * @property {Number} opacity=1 Selected opacity.
      * @property {Object} drawType The drawType.
-     * @proprety {String} symbol: "" The symbol for the point.
+     * @property {String} symbol: "" The symbol for the point.
      * @property {String} drawType.geometry The geometry of the draw type.
      * @property {String} drawType.text The placeholder text.
      * @property {Boolean} renderToWindow=true Flag to render in tool window.
@@ -344,10 +343,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 type: "simple_point",
                 value: "simple_point"
             });
-            this.set("iconList", [
-                {caption: iconPoint, type: "simple_point", value: "simple_point"},
-                {caption: iconLeaf, type: "glyphicon", value: "\ue103"}
-            ]);
+            // If no values are set in config.json, initial values have to be set here
+            if (this.get("iconList").length === 0) {
+                this.set("iconList", [
+                    {caption: iconPoint, type: "simple_point", value: "simple_point"},
+                    {caption: iconLeaf, type: "glyphicon", value: "\ue103"}
+                ]);
+            }
         }
         this.set("currentLng", lng);
     },
@@ -1091,7 +1093,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 zIndex: zIndex
             });
         }
-        // TODO: the scale has to depend on the image width instead of on fixed 96 of the cloud image; all images need a fixed size!
+        // The Size of the image needs to be fixed. As the example picture has a width / height of 96, this is used.
         // To use the opacity given by the color parameter it has to be separately added
         else if (sym[1] === "image") {
             style = new Style({

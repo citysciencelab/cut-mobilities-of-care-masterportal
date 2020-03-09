@@ -1429,7 +1429,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
-|type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/icons/` abgelegt. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
+|type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/icons/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
 **Beispiele**

@@ -47,7 +47,7 @@ describe("drawModel", function () {
             expect(result instanceof Draw).to.be.true;
         });
         it("the result color should be the same as the input color for a polyline", function () {
-            var drawType = {
+            const drawType = {
                     geometry: "Polyline",
                     text: i18next.t("common:modules.tools.draw.drawLine")
                 },
@@ -58,7 +58,7 @@ describe("drawModel", function () {
             expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as the input color for a polygon", function () {
-            var drawType = {
+            const drawType = {
                     geometry: "Polygon",
                     text: i18next.t("common:modules.tools.draw.drawArea")
                 },
@@ -69,49 +69,40 @@ describe("drawModel", function () {
             expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as the input color for a point of type simple_point", function () {
-            var drawType = {
-                    geometry: "Point",
-                    text: i18next.t("common:modules.tools.draw.drawPoint")
-                },
-                layer = new VectorLayer(),
-                color = [55, 126, 184, 1];
-
             model.setSymbol({
                 caption: i18next.t("common:modules.tools.draw.iconList.iconPoint"),
                 type: "simple_point",
                 value: "simple_point"
             });
 
-            const result = model.createDrawInteraction(drawType, layer);
-
-            expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as the input color for a point of type glyphicon", function () {
-            var drawType = {
+            const drawType = {
                     geometry: "Point",
                     text: i18next.t("common:modules.tools.draw.drawPoint")
                 },
                 layer = new VectorLayer(),
-                color = [55, 126, 184, 1];
+                color = [55, 126, 184, 1],
+                result = model.createDrawInteraction(drawType, layer);
 
+            expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
+        });
+        it("the result color should be the same as the input color for a point of type glyphicon", function () {
             model.setSymbol({
                 caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
                 type: "glyphicon",
                 value: "\ue103"
             });
 
-            const result = model.createDrawInteraction(drawType, layer);
-
-            expect(result.getOverlay().getStyle().getText().getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as input color excluding the opacity which should be set as a separate parameter for a point of type image", function () {
-            var drawType = {
+            const drawType = {
                     geometry: "Point",
                     text: i18next.t("common:modules.tools.draw.drawPoint")
                 },
                 layer = new VectorLayer(),
-                color = [55, 126, 184, 1];
+                color = [55, 126, 184, 1],
+                result = model.createDrawInteraction(drawType, layer);
 
+            expect(result.getOverlay().getStyle().getText().getFill().getColor()).to.deep.equal(color);
+        });
+        it("the result color should be the same as input color excluding the opacity which should be set as a separate parameter for a point of type image", function () {
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             model.setSymbol({
                 caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
@@ -119,7 +110,13 @@ describe("drawModel", function () {
                 value: "../../../../../img/icons/cloud.png"
             });
 
-            const result = model.createDrawInteraction(drawType, layer);
+            const drawType = {
+                    geometry: "Point",
+                    text: i18next.t("common:modules.tools.draw.drawPoint")
+                },
+                layer = new VectorLayer(),
+                color = [55, 126, 184, 1],
+                result = model.createDrawInteraction(drawType, layer);
 
             expect(result.getOverlay().getStyle().getImage().getColor()).to.deep.equal(color.slice(0, 3));
             expect(result.getOverlay().getStyle().getImage().getOpacity()).to.deep.equal(color[3]);

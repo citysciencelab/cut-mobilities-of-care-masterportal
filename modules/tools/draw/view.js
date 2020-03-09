@@ -147,11 +147,12 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownUnit,
                         .dropdownMethod,
                         .colorContour,
-                        .opacityContour`
+                        .opacityContour,
+                        .radius`
                     ).hide();
                     this.$el.find(
-                        `.radius,
-                        .symbol
+                        `.pointSize,
+                        .symbol,
                         .color,
                         .opacity`
                     ).show();
