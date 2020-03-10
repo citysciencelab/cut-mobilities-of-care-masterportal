@@ -355,7 +355,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 // on success
                 let allThings;
 
-                allThings = result.flat();
+                allThings = this.flattenArray(result);
                 allThings = this.getNewestSensorData(allThings);
                 if (mergeThingsByCoordinates) {
                     allThings = this.mergeByCoordinates(allThings);
