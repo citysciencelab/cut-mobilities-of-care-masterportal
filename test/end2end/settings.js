@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: {"browserName": "chrome", version: "79", acceptSslCerts: true, acceptInsecureCerts: true},
+        chrome: {"browserName": "chrome", version: "80", acceptSslCerts: true, acceptInsecureCerts: true},
         ie: webdriver.Capabilities.ie()
     },
     /** TODO
@@ -137,7 +137,7 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
         {
             ...base,
             "browserName": "Chrome",
-            "browser_version": "74.0",
+            "browser_version": "80.0",
             "os": "Windows",
             "os_version": "10"
         }/*
