@@ -363,16 +363,16 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     toggleIsSelected: function () {
         const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")});
 
-        console.log("Grouped Up", layerGroup);
-
         if (this.get("isSelected") === true) {
             this.setIsSelected(false);
         }
         else {
+            // This only works for treeType Custom
             if (this.get("parentId") === "Baselayer") {
                 layerGroup.forEach(layer => {
-                    console.log(layer.attributes.name, layer.attributes);
                     layer.setIsSelected(false);
+                    // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
+                    layer.checkForScale(Radio.request("MapView", "getOptions"));
                 });
             }
             this.setIsSelected(true);

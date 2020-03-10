@@ -10,7 +10,6 @@ describe("core/modelList/layer/wms", function () {
 
     describe("setIsRemovable", function () {
         it("setIsRemovable should return true value", function () {
-            expect(false).to.be.true;
             model.setIsRemovable(true);
             expect(model.get("isRemovable")).to.be.true;
         });
