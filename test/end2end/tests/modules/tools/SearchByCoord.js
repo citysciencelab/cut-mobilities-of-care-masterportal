@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function SearchByCoordTests ({builder, url, resolution}) {
-    describe("SearchByCoord", function () {
+    describe.only("SearchByCoord", function () {
         const selectors = {
                 tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
                 toolSearchByCoord: By.xpath("//a[contains(.,'Koordinatensuche')]"),
@@ -26,7 +26,7 @@ async function SearchByCoordTests ({builder, url, resolution}) {
                 searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]")
             },
             expectedResolution = isBasic(url) || isCustom(url) || isDefault(url) ? 0.66 : 0.13;
-        let driver, searchMarkerContainer;
+        let driver, searchMarkerContainer, counter;
 
         before(async function () {
             driver = await initDriver(builder, url, resolution);
@@ -65,7 +65,7 @@ async function SearchByCoordTests ({builder, url, resolution}) {
             await (await driver.findElement(selectors.coordinatesEastingField)).sendKeys(easting);
             await (await driver.findElement(selectors.searchButton)).click();
 
-            await driver.wait(async () => searchMarkerContainer.isDisplayed());
+            await driver.wait(async () => searchMarkerContainer.isDisplayed(), 10000, "Search Marker was not displayed within 10s.");
             expect((await driver.executeScript(getCenter))[0]).to.be.closeTo(expectedCenter[0], 0.005);
             expect((await driver.executeScript(getCenter))[1]).to.be.closeTo(expectedCenter[1], 0.005);
             expect(await driver.executeScript(getResolution)).to.be.closeTo(expectedResolution, 0.005);
@@ -77,14 +77,16 @@ async function SearchByCoordTests ({builder, url, resolution}) {
             const tools = await driver.findElement(selectors.tools),
                 toolSearchByCoord = await driver.findElement(selectors.toolSearchByCoord);
 
-            await driver.wait(until.elementIsVisible(tools));
-            while (!await toolSearchByCoord.isDisplayed()) {
+            await driver.wait(until.elementIsVisible(tools), 10000, "Tools Menu Entry did not become visible.");
+            counter = 0;
+            while (!await toolSearchByCoord.isDisplayed() && counter < 10) {
                 await tools.click();
-                await driver.wait(new Promise(r => setTimeout(r, 100)));
+                await driver.wait(new Promise(r => setTimeout(r, 500)));
+                counter++;
             }
             await toolSearchByCoord.click();
 
-            await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)));
+            await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)), 10000, "Modal dialog did not become visible.");
 
             searchMarkerContainer = await driver.findElement(selectors.searchMarkerContainer);
         });
