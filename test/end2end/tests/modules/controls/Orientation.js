@@ -44,7 +44,7 @@ function Orientation ({builder, url, resolution, browsername}) {
 
     // only configured in portal/master
     if (isMaster(url)) {
-        describe("Modules Controls ProximitySearch", function () {
+        describe.only("Modules Controls ProximitySearch", function () {
             let driver, poiButton;
 
             before(async function () {
@@ -56,7 +56,7 @@ function Orientation ({builder, url, resolution, browsername}) {
                     topicButton = await driver.wait(until.elementLocated(themenSelector));
 
                 await topicButton.click();
-                await (await driver.findElement(bikeAndRideSelector), 5000, "Layerlist entry 'Bike and Ride' not found.").click();
+                await (await driver.wait(until.elementLocated(bikeAndRideSelector, 5000, "Layerlist entry 'Bike and Ride' not found."))).click();
                 await topicButton.click();
             });
 
