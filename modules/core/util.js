@@ -7,6 +7,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
         loaderOverlayTimeout: 40,
+        // the loaderOverlayCounter has to be set to 1 initialy, because it is shown on start and hidden at the end of app.js
+        loaderOverlayCounter: 1,
         fadeOut: 2000
     },
     /**
@@ -480,10 +482,12 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     showLoader: function () {
+        this.incLoaderOverlayCounter();
         clearTimeout(this.get("loaderOverlayTimeoutReference"));
         this.setLoaderOverlayTimeoutReference(setTimeout(function () {
             Radio.trigger("Util", "hideLoader");
-        }, 1000 * this.get("loaderOverlayTimeout")));
+            this.setLoaderOverlayCounter(0);
+        }.bind(this), 1000 * this.get("loaderOverlayTimeout")));
         $("#loader").show();
     },
 
@@ -492,7 +496,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     hideLoader: function () {
-        $("#loader").hide();
+        this.decLoaderOverlayCounter();
+        if (this.get("loaderOverlayCounter") <= 0) {
+            $("#loader").hide();
+        }
     },
 
     /**
@@ -739,7 +746,37 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     setUiStyle: function (value) {
         this.set("uiStyle", value);
+    },
+
+    /**
+     * sets the loaderOverlayCounter to a specific number
+     * @param {Integer} value the value to set the loaderOverlayCounter to
+     * @returns {Void}  -
+     */
+    setLoaderOverlayCounter: function (value) {
+        this.set("loaderOverlayCounter", value);
+    },
+
+    /**
+     * increments the loaderOverlayCounter
+     * @pre the loaderOverlayCounter is n
+     * @post the loaderOverlayCounter is n + 1
+     * @returns {Void}  -
+     */
+    incLoaderOverlayCounter: function () {
+        this.setLoaderOverlayCounter(this.get("loaderOverlayCounter") + 1);
+    },
+
+    /**
+     * decrements the loaderOverlayCounter
+     * @pre the loaderOverlayCounter is n
+     * @post the loaderOverlayCounter is n - 1
+     * @returns {Void}  -
+     */
+    decLoaderOverlayCounter: function () {
+        this.setLoaderOverlayCounter(this.get("loaderOverlayCounter") - 1);
     }
+
 });
 
 export default Util;

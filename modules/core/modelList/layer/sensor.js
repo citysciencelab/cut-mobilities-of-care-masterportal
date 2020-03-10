@@ -339,7 +339,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
      */
     loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates, onsuccess) {
-        let isComplete = false;
         const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             http = new SensorThingsHttp(),
             currentExtent = {
@@ -374,14 +373,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
              */
             httpOnStart = function () {
                 // on start
-
-                // app.js and map.js switch the loader off (hideLoader) after onstart has started showLoader
-                // so let's wait a second before showing the loader at this point
-                setTimeout(function () {
-                    if (!isComplete) {
-                        this.loadSensorThingsStart();
-                    }
-                }.bind(this), 200);
+                this.loadSensorThingsStart();
             }.bind(this),
             /**
              * A function that is executed when the http call is completed, regardless of whether there is a success or a failure.
@@ -390,7 +382,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             httpOnComplete = function () {
                 // on complete
                 this.loadSensorThingsComplete();
-                isComplete = true;
             }.bind(this),
             /**
              * a function to call on error
