@@ -170,12 +170,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - LayerObject for mapfish print.
      */
     buildLayerType: function (layer, currentResolution) {
-        const features = [],
-            extent = Radio.request("MapView", "getCurrentExtent"),
+        const extent = Radio.request("MapView", "getCurrentExtent"),
             layerMinRes = layer.get("minResolution"),
             layerMaxRes = layer.get("maxResolution"),
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
-        let returnLayer;
+        let features = [],
+            returnLayer;
 
         if (isInScaleRange) {
             if (layer instanceof Image) {
