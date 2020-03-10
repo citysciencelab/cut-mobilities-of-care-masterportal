@@ -2,8 +2,6 @@
 <script>
 import {mapGetters} from "vuex";
 
-import storeModule from "./module";
-
 export default {
     name: "Controls",
     computed: {
@@ -27,9 +25,6 @@ export default {
     },
     mounted () {
         document.getElementById("map").appendChild(this.$el);
-    },
-    created: function () {
-        this.$store.registerModule(["controls"], storeModule);
     },
     methods: {
         /*

@@ -10,6 +10,9 @@ import getters from "./getters";
 import mutations from "./mutations";
 import state from "./state";
 
+import controlsModule from "../components/controls/module";
+import backForward from "../components/controls/backForward/module";
+
 import {isMobile} from "./lib";
 
 Vue.use(Vuex);
@@ -22,6 +25,12 @@ const store = new Vuex.Store({
             namespaced: true,
             modules: {
                 SupplyCoord // hier die stores von weiteren Tools eintragen
+            }
+        },
+        controls: {
+            ...controlsModule,
+            modules: {
+                backForward
             }
         },
         ScaleLine

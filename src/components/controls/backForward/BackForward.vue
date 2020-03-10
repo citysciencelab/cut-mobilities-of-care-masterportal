@@ -1,6 +1,5 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import storeModule from "./module";
 
 export default {
     name: "BackForward",
@@ -26,9 +25,14 @@ export default {
             return this.next === null;
         }
     },
+    /*
+     * NOTE This is how an addon could register itself to the appropriate store region
+     *      Maybe it's also desirable to offer an ["addons"] module for such cases?
     created () {
+        // import storeModule from "./module.js"; (above!)
         this.$store.registerModule(["controls", "backForward"], storeModule);
     },
+     */
     mounted () {
         this.unsubscribe = this.map.on("moveend", this.memorizeMap);
     },
