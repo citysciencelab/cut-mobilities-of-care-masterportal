@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function SearchByCoordTests ({builder, url, resolution}) {
-    describe.only("SearchByCoord", function () {
+    describe("SearchByCoord", function () {
         const selectors = {
                 tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
                 toolSearchByCoord: By.xpath("//a[contains(.,'Koordinatensuche')]"),
