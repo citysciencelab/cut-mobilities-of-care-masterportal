@@ -237,7 +237,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
         }
 
         if (isMaster(url)) {
-            it("?query= fills and executes search and zooms to result if unique address", async function () {
+            it.only("?query= fills and executes search and zooms to result if unique address", async function () {
                 await loadUrl(driver, `${url}?query=Neuenfelder Straße,19, 21109`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
@@ -246,7 +246,11 @@ async function ParameterTests ({builder, url, resolution, mode}) {
                 let center;
 
                 // value is set to search field
-                await driver.wait(async () => await input.getAttribute("value") === "Neuenfelder Straße,19, 21109");
+                await driver.wait(
+                    async () => await input.getAttribute("value") === "Neuenfelder Straße,19, 21109",
+                    10000,
+                    "Query was not written so search input."
+                );
 
                 await driver.wait(async () => {
                     center = await driver.executeScript(getCenter);
