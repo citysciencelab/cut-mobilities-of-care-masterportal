@@ -237,7 +237,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
         }
 
         if (isMaster(url)) {
-            it.only("?query= fills and executes search and zooms to result if unique address", async function () {
+            it("?query= fills and executes search and zooms to result if unique address", async function () {
                 await loadUrl(driver, `${url}?query=Neuenfelder Straße,19, 21109`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
