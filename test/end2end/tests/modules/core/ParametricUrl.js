@@ -205,7 +205,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
             expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
         });
 
-        it("?startupmodul= allows opening tools initially", async function () {
+        it.only("?startupmodul= allows opening tools initially", async function () {
             const toolName = isMaster(url) || isCustom(url) ? "routing" : "draw",
                 selector = `//div[contains(@id,'window')]//span[contains(.,'${
                     isMaster(url) || isCustom(url) ? "Routenplaner" : "Zeichnen / Schreiben"
@@ -213,7 +213,11 @@ async function ParameterTests ({builder, url, resolution, mode}) {
 
             await loadUrl(driver, `${url}?startupmodul=${toolName}`, mode);
 
-            await driver.wait(until.elementLocated(By.xpath(selector)), 10000);
+            await driver.wait(
+                until.elementLocated(By.xpath(selector)),
+                10000,
+                `Loading xpath("${selector}") in scenario "${url}?startupmodul=${toolName}" failed.`
+            );
         });
 
         if (isCustom(url) || isMaster(url) || isDefault(url)) {

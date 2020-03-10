@@ -44,7 +44,7 @@ function Orientation ({builder, url, resolution, browsername}) {
 
     // only configured in portal/master
     if (isMaster(url)) {
-        describe.only("Modules Controls ProximitySearch", function () {
+        describe("Modules Controls ProximitySearch", function () {
             let driver, poiButton;
 
             before(async function () {
