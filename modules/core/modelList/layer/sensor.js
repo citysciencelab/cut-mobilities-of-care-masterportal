@@ -738,8 +738,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         dataStreamIds.forEach(function (id) {
             if (client && id && !subscriptionTopics[id]) {
                 client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {
-                    rm_simulate: true,
-                    rm_path: this.get("httpSubFolder")
+                    rmSimulate: true,
+                    rmPath: this.get("httpSubFolder")
                 });
                 subscriptionTopics[id] = true;
             }
