@@ -44,18 +44,20 @@ function Orientation ({builder, url, resolution, browsername}) {
 
     // only configured in portal/master
     if (isMaster(url)) {
-        describe("Modules Controls ProximitySearch", function () {
+        describe.only("Modules Controls ProximitySearch", function () {
             let driver, poiButton;
 
             before(async function () {
-                const themenSelector = By.xpath("//span[contains(.,'Themen')]");
-
                 driver = await initDriver(builder, url, resolution);
                 await driver.executeScript(mockGeoLocationAPI);
-                await driver.wait(until.elementLocated(themenSelector));
-                await (await driver.findElement(themenSelector)).click();
-                await (await driver.findElement(By.xpath("//ul[@id='tree']/li[.//span[contains(.,'Bike and Ride Parkplätze')]]"))).click();
-                await (await driver.findElement(themenSelector)).click();
+
+                const bikeAndRideSelector = By.xpath("//ul[@id='tree']/li[.//span[contains(.,'Bike and Ride')]]"),
+                    themenSelector = By.xpath("//span[contains(.,'Themen')]"),
+                    topicButton = await driver.wait(until.elementLocated(themenSelector));
+
+                await topicButton.click();
+                await (await driver.findElement(bikeAndRideSelector), 5000, "Layerlist entry 'Bike and Ride' not found.").click();
+                await topicButton.click();
             });
 
             after(async function () {
