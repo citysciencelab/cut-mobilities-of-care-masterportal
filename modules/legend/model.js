@@ -530,8 +530,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} svg
      */
     createImageSVG: function (style) {
-        const imagePath = style.get("imagePath") + style.get("imageName"),
-            scale = style.get("imageScale");
+        const imagePath = style.get("imagePath") + style.get("imageName");
 
         let svg = "";
 
