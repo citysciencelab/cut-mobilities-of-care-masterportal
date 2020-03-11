@@ -84,7 +84,6 @@
                     "draw": {
                         "name": "translate#common:menu.tools.draw",
                         "glyphicon": "glyphicon-pencil"
-
                     },
                     "saveSelection": {
                         "name": "translate#common:menu.tools.saveSelection",

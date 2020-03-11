@@ -23,7 +23,7 @@ describe("drawModel", function () {
     });
 
     describe("createLayer", function () {
-        it("should return an result that be not be undefined", function () {
+        it("should return an result that be not undefined", function () {
             expect(model.createLayer(undefined)).to.exist;
         });
         it("the result should be an instance of vectorLayer for undefined input", function () {
@@ -144,7 +144,7 @@ describe("drawModel", function () {
 
             expect(result).to.deep.equal(undefined);
         });
-        it("the result should be a value and the third input parameter", function () {
+        it("the result should be a value and the third input parameter.", function () {
             const doubleIsActive = undefined,
                 circleRadiusOuter = Math.random(),
                 circleRadiusInner = Math.random(),
@@ -417,18 +417,9 @@ describe("drawModel", function () {
 
             expect(result.getFill().getColor()).to.equal(color);
         });
-        it("the result color should be the same as the input color for a polygon", function () {
-            var color = [0, 0, 0, 1],
-                drawGeometryType = "Polygon",
-                strokeWidth = 10,
-                radius = 20,
-                result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
-
-            expect(result.getFill().getColor()).to.equal(color);
-        });
-        it("the result strokeWidth should be the same as the input strokeWidth for a polyline", function () {
-            var color = [0, 0, 0, 1],
-                drawGeometryType = "Polyline",
+        it("should be the result strokeWidth ist the same as input strokeWidth", function () {
+            const color = [0, 0, 0, 1],
+                drawGeometryType = "Point",
                 strokeWidth = 10,
                 radius = 20,
                 result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
@@ -442,65 +433,65 @@ describe("drawModel", function () {
                 radius = 20,
                 result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
 
-
             expect(result.getStroke().getWidth()).to.equal(strokeWidth);
         });
-    });
-    describe("resetModule", function () {
-        it("should radius is equal default radius", function () {
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.setRadius(10000);
-            model.resetModule();
-            expect(model.get("radius")).to.deep.equal(model.defaults.radius);
-        });
-        it("should opacity is equal default opacity", function () {
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.setOpacity(0.5);
-            model.resetModule();
-            expect(model.get("opacity")).is.equal(model.defaults.opacity);
-        });
-        it("should color is equal default color", function () {
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.setColor([111, 112, 113, 0.4]);
-            model.resetModule();
-            expect(model.get("color")).is.equal(model.defaults.color);
-        });
-        it("should drawType is equal default drawType", function () {
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.resetModule();
-            expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
-        });
-    });
 
-    describe("startSelectInteraction", function () {
-        it("should be an instance of Select for empty input", function () {
-            model.startSelectInteraction(new VectorLayer());
-
-            expect(model.get("selectInteraction") instanceof Select).to.be.true;
+        describe("resetModule", function () {
+            it("should radius is equal default radius", function () {
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+                model.setRadius(10000);
+                model.resetModule();
+                expect(model.get("radius")).to.deep.equal(model.defaults.radius);
+            });
+            it("should opacity is equal default opacity", function () {
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+                model.setOpacity(0.5);
+                model.resetModule();
+                expect(model.get("opacity")).is.equal(model.defaults.opacity);
+            });
+            it("should color is equal default color", function () {
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+                model.setColor([111, 112, 113, 0.4]);
+                model.resetModule();
+                expect(model.get("color")).is.equal(model.defaults.color);
+            });
+            it("should drawType is equal default drawType", function () {
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+                model.resetModule();
+                expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
+            });
         });
-    });
 
-    describe("createSelectInteraction", function () {
-        it("the result should be an instance of Select for empty input", function () {
-            expect(model.createSelectInteraction(new VectorLayer()) instanceof Select).to.be.true;
+        describe("startSelectInteraction", function () {
+            it("should be an instance of Select for empty input", function () {
+                model.startSelectInteraction(new VectorLayer());
+
+                expect(model.get("selectInteraction") instanceof Select).to.be.true;
+            });
         });
-    });
 
-    describe("createModifyInteraction", function () {
-        it("should be an instance of Modify for empty input", function () {
-            var interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
-
-            expect(interaction instanceof Modify).to.be.true;
+        describe("createSelectInteraction", function () {
+            it("the result should be an instance of Select for empty input", function () {
+                expect(model.createSelectInteraction(new VectorLayer()) instanceof Select).to.be.true;
+            });
         });
-    });
 
-    describe("deleteFeatures", function () {
-        it("should empty the layerSource", function () {
-            model.setLayer(model.createLayer());
-            model.get("layer").getSource().getFeatures().push(new Feature());
-            model.deleteFeatures();
+        describe("createModifyInteraction", function () {
+            it("should be an instance of Modify for empty input", function () {
+                var interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
 
-            expect(model.get("layer").getSource().getFeatures()).is.empty;
+                expect(interaction instanceof Modify).to.be.true;
+            });
+        });
+
+        describe("deleteFeatures", function () {
+            it("should empty the layerSource", function () {
+                model.setLayer(model.createLayer());
+                model.get("layer").getSource().getFeatures().push(new Feature());
+                model.deleteFeatures();
+
+                expect(model.get("layer").getSource().getFeatures()).is.empty;
+            });
         });
     });
 

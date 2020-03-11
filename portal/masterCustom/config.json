@@ -277,7 +277,7 @@
                  "bkgGeosearchID":"5"
               },
               "draw":{
-                 "name":"translate#common:menu.tools.draw",
+                 "name":"Zeichnen / Schreiben",
                  "glyphicon":"glyphicon-pencil"
               },
               "featureLister":{

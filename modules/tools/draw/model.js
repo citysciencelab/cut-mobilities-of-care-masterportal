@@ -1032,7 +1032,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
-     * Creates and returns a feature style for points, lines or polygon and returns it
+     * Creates and returns a feature style for points, lines, or polygon and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
@@ -1051,7 +1051,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 width: strokeWidth
             }),
             image: new Circle({
-                radius: drawGeometryType === "Point" ? radius / 2 : 6,
+                radius: drawGeometryType === "Point" ? radius : 6,
                 fill: new Fill({
                     color: drawGeometryType === "Point" ? color : colorContour
                 })
