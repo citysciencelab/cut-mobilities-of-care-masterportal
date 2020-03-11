@@ -426,15 +426,6 @@ describe("drawModel", function () {
 
             expect(result.getStroke().getWidth()).to.equal(strokeWidth);
         });
-        it("the result strokeWidth should be the same as the input strokeWidth for a polygon", function () {
-            var color = [0, 0, 0, 1],
-                drawGeometryType = "Polygon",
-                strokeWidth = 10,
-                radius = 20,
-                result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
-
-            expect(result.getStroke().getWidth()).to.equal(strokeWidth);
-        });
 
         describe("resetModule", function () {
             it("should radius is equal default radius", function () {
@@ -447,17 +438,20 @@ describe("drawModel", function () {
                 model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
                 model.setOpacity(0.5);
                 model.resetModule();
+
                 expect(model.get("opacity")).is.equal(model.defaults.opacity);
             });
             it("should color is equal default color", function () {
                 model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
                 model.setColor([111, 112, 113, 0.4]);
                 model.resetModule();
+
                 expect(model.get("color")).is.equal(model.defaults.color);
             });
             it("should drawType is equal default drawType", function () {
                 model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
                 model.resetModule();
+
                 expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
             });
         });
@@ -478,7 +472,7 @@ describe("drawModel", function () {
 
         describe("createModifyInteraction", function () {
             it("should be an instance of Modify for empty input", function () {
-                var interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
+                const interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
 
                 expect(interaction instanceof Modify).to.be.true;
             });
@@ -493,8 +487,8 @@ describe("drawModel", function () {
                 expect(model.get("layer").getSource().getFeatures()).is.empty;
             });
         });
-    });
 
+    });
     describe("inititalizeWithoutGUI", function () {
         before(function () {
             const params = {"drawType": "Polygon", "color": null, "opacity": 0.5, "maxFeatures": 2, "initialJSON": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}};
