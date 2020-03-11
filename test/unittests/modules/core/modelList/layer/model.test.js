@@ -1,5 +1,4 @@
 import Layer from "@modules/core/modelList/layer/model.js";
-import ModelList from "@modules/core/modelList/list.js";
 import {expect} from "chai";
 
 describe("core/modelList/layer/model", function () {
@@ -17,16 +16,25 @@ describe("core/modelList/layer/model", function () {
         let secondModel;
 
         before(function () {
-            // secondLayer = new Layer();
-            /* secondLayer.setIsSelected(true);
-            layer.setIsSelected(false);
-            ModelList.addModel(layer);
-            ModelList.addModel(secondLayer);*/
+            secondModel = new Layer({channel: Radio.channel("ThisDoesNotExist")});
+
+            model.attributes.isSelected = false;
+            model.attributes.parentId = "Baselayer";
+            model.attributes.name = "IDIDTHIS";
+            model.attributes.layerSource = {};
+            secondModel.attributes.isSelected = true;
+            secondModel.attributes.parentId = "Baselayer";
+            secondModel.attributes.layerSource = {};
+
+            Radio.trigger("ModelList", "addModel", model);
+            Radio.trigger("ModelList", "addModel", secondModel);
         });
 
         it("on selecting a baselayer all other baselayers should be deselected", function () {
-            // model.toggleIsSelected();
-            // expect(false).to.be.true;
+            Radio.trigger("Layer", "toggleIsSelected");
+
+            expect(model.attributes.isSelected).to.be.true;
+            expect(secondModel.attributes.isSelected).to.be.false;
         });
     });
 });

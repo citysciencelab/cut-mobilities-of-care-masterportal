@@ -10,6 +10,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         isSettingVisible: false,
         isVisibleInMap: false,
         layerInfoClicked: false,
+        singleBaselayer: false,
         legendURL: "",
         maxScale: "1000000",
         minScale: "0",
@@ -33,6 +34,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Number} transparency=0 Transparency in percent
      * @property {Number} selectionIDX=0 Index of rendering order in layer selection
      * @property {Boolean} layerInfoClicked=false Flag if layerInfo was clicked
+     * @property {Boolean} singleBaselayer=false - Flag if only a single baselayer should be selectable at once
      * @property {String} minScale="0" Minimum scale for layer to be displayed
      * @property {String} maxScale="1000000" Maximum scale for layer to be displayed
      * @property {String} legendURL="" LegendURL to request legend from
@@ -56,6 +58,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Core#RadioTriggerMapViewChangedOptions
      */
     initialize: function () {
+        const singleBaselayer = Radio.request("Parser", "getPortalConfig").singleBaselayer;
+
+        if (!_.isUndefined(singleBaselayer)) {
+            this.setSingleBaselayer(singleBaselayer);
+        }
+
         this.registerInteractionTreeListeners(this.get("channel"));
         this.registerInteractionMapViewListeners();
 
@@ -259,6 +267,9 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             },
             "setLayerInfoChecked": function (layerInfoChecked) {
                 this.setLayerInfoChecked(layerInfoChecked);
+            },
+            "toggleIsSelected": function () {
+                this.toggleIsSelected();
             }
         });
         this.listenTo(Radio.channel("Map"), {
@@ -367,8 +378,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             this.setIsSelected(false);
         }
         else {
-            // This only works for treeType Custom
-            if (this.get("parentId") === "Baselayer") {
+            // This only works for treeType Custom, otherwise the parentId is not set on the layer
+            if (this.get("singleBaselayer") && this.get("parentId") === "Baselayer") {
                 layerGroup.forEach(layer => {
                     layer.setIsSelected(false);
                     // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
@@ -672,6 +683,16 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setIsVisibleInTree: function (value) {
         this.set("isVisibleInTree", value);
+    },
+
+    /**
+     * Setter for the singleBaselayer
+     *
+     * @param {Boolean} value - Flag if only a single baselayer should be selectable at once
+     * @returns {void}
+     */
+    setSingleBaselayer: function (value) {
+        this.set("singleBaselayer", value);
     },
 
     /**

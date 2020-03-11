@@ -447,6 +447,7 @@
      },
      "scaleLine":true,
      "treeType":"custom",
+     "singleBaselayer": true,
      "layersRemovable":false
   },
   "Themenconfig":{
