@@ -616,6 +616,12 @@
  */
 
 /**
+ * @namespace TrafficCount
+ * @memberof Tools.GFI.Themes
+ * @description GFI Theme for traffic counter
+ */
+
+/**
  * @namespace Graph
  * @memberof Tools
  * @description Module for generating graphics via d3

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<div>
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-3 col-xs-12">
+            ID: <%= title %><br>
+            Art: <%= type %><br>
+            Verkehrsmittel: <%= meansOfTransport %>
+        </div>
+    </div>
+    <ul class="nav nav-pills">
+        <li value= "infos" class="tab-toggle active">
+            <a data-toggle="tab" href="#infos">Info</a>
+        </li>
+        <li value= "day" class="tab-toggle">
+            <a data-toggle="tab" href="#day">Tag</a>
+        </li>
+        <li value= "week" class="tab-toggle">
+            <a data-toggle="tab" href="#week">Woche</a>
+        </li>
+        <li value= "year" class="tab-toggle">
+            <a data-toggle="tab" href="#year">Jahr</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="infos" class="tab-pane fade in active">
+            letzte Aktualisierung: <span id="lastUpdate"><%= lastUpdate %></span>
+        </div>
+        <div id="day" class="tab-pane fade">
+            Tag
+        </div>
+        <div id="week" class="tab-pane fade">
+            Woche
+        </div>
+        <div id="year" class="tab-pane fade">
+            Jahr
+        </div>
+    </div>
+</div>
