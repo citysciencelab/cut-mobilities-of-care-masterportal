@@ -14,6 +14,7 @@ const FilterView = Backbone.View.extend({
                     if (model.get("queryCollection").length < 1) {
                         model.createQueries(model.get("predefinedQueries"));
                     }
+                    this.$el.remove();
                     this.render();
                     this.renderDetailView();
                 }
@@ -35,6 +36,7 @@ const FilterView = Backbone.View.extend({
             },
             "renderDetailView": this.renderDetailView,
             "add": function () {
+                this.$el.remove();
                 this.render();
                 this.renderDetailView();
             }
@@ -44,6 +46,7 @@ const FilterView = Backbone.View.extend({
             if (this.model.get("queryCollection").length < 1) {
                 this.model.createQueries(this.model.get("predefinedQueries"));
             }
+            this.$el.remove();
             this.render();
         }
     },
@@ -52,7 +55,7 @@ const FilterView = Backbone.View.extend({
     className: "filter",
 
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         if (this.model.get("uiStyle") === "TABLE") {
@@ -69,10 +72,10 @@ const FilterView = Backbone.View.extend({
     },
 
     renderDetailView: function () {
-        var selectedModel = this.model.get("queryCollection").findWhere({isSelected: true}),
-            view;
+        const selectedModel = this.model.get("queryCollection").findWhere({isSelected: true});
+        let view;
 
-        if (!_.isUndefined(selectedModel)) {
+        if (selectedModel) {
             view = new QueryDetailView({model: selectedModel});
 
             this.model.setDetailView(view);
@@ -81,12 +84,12 @@ const FilterView = Backbone.View.extend({
     },
 
     renderSimpleViews: function () {
-        var view,
-            queryCollectionModels = this.model.get("queryCollection").models,
+        let view;
+        const queryCollectionModels = this.model.get("queryCollection").models,
             predefinedQueriesModels = this.model.get("predefinedQueries");
 
         if (queryCollectionModels.length > 1) {
-            _.each(queryCollectionModels, function (queryCollectionModel) {
+            queryCollectionModels.forEach(function (queryCollectionModel) {
                 const query = this.model.regulateInitialActivating(queryCollectionModel, predefinedQueriesModels);
 
                 view = new QuerySimpleView({model: query});
