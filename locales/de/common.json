@@ -382,7 +382,7 @@
             }
         },
         "searchbar": {
-            "placeholder": { 
+            "placeholder": {
                 "addressHospitalBplan" : "Suche nach Adresse/Krankenhaus/B-Plan",
                 "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück"
             },
@@ -411,7 +411,8 @@
             },
             "osm": {
                 "errorMsg": "OpenStreetMap-Suche nicht erreichbar."
-            }
+            },
+            "noInitialResults": "Die initiale Suche ergab keine Treffer."
         }
     },
     "snippets": {

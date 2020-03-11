@@ -298,6 +298,9 @@ describe("tools/print_/buildSpec", function () {
         it("should create hex string from rgbArray", function () {
             expect(buildSpecModel.rgbArrayToHex([255, 255, 255])).to.deep.include("#ffffff");
         });
+        it("should create hex string from short hexcode string", function () {
+            expect(buildSpecModel.rgbArrayToHex("#333")).to.deep.include("#333");
+        });
         it("should create default hex string from empty rgbArray", function () {
             expect(buildSpecModel.rgbArrayToHex([])).to.deep.include("#3399CC");
         });
@@ -364,7 +367,7 @@ describe("tools/print_/buildSpec", function () {
         var vectorLayer = new Vector();
 
         it("should return \"styleId\" if styleList is not available", function () {
-            expect(buildSpecModel.getStyleAttribute(vectorLayer)).to.equal("styleId");
+            expect(buildSpecModel.getStyleAttribute(vectorLayer, pointFeatures[0], false)).to.equal("styleId");
         });
     });
     describe("getFeatureStyle", function () {

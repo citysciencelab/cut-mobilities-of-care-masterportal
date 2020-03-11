@@ -2,6 +2,7 @@ import Theme from "../model";
 
 const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
     defaults: {
+        iconPath: "http://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png",
         gfiAttributesDipas: {
             "Thema": "",
             "name": "",
@@ -50,19 +51,60 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
      * @returns {void}
      */
     getIconPath: function (value) {
-        const styleModel = Radio.request("StyleList", "returnModelById", this.get("themeId"));
-        let iconPath = "http://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png",
-            valueStyle = null;
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("themeId")),
+            isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false,
+            iconPath = this.get("iconPath");
 
-        if (styleModel && styleModel.has("styleFieldValues")) {
-            valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {
-                return styleFieldValue.styleFieldValue === value;
-            });
+        let valueStyle;
+
+        if (styleModel) {
+            if (!isNewVectorStyle && styleModel.has("styleFieldValues")) {
+                // @deprecated with new vectorStyle module. Should be removed with version 3.0.
+                valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {
+                    return styleFieldValue.styleFieldValue === value;
+                });
+                this.fetchIconPathDeprecated(iconPath, valueStyle);
+            }
+            else if (isNewVectorStyle && styleModel.has("rules") && styleModel.get("rules").length > 0) {
+                valueStyle = styleModel.get("rules").filter(function (rule) {
+                    return rule.conditions.properties.Thema === value;
+                });
+                this.fetchIconPath(iconPath, valueStyle);
+            }
         }
+    },
+
+    /**
+     * @deprecated with new vectorStyle module. Should be removed with version 3.0.
+     * Getting icon from old style format
+     * @param  {String} iconPath - the default icon path
+     * @param  {Array} valueStyle - the list of style values
+     * @returns {Void} -
+     */
+    fetchIconPathDeprecated: function (iconPath, valueStyle) {
+        let finalIconPath = iconPath;
+
         if (valueStyle && valueStyle.length > 0 && ("imageName" in valueStyle[0])) {
-            iconPath = styleModel.get("imagePath") + valueStyle[0].imageName;
+            finalIconPath = valueStyle[0].imageName;
         }
-        this.setIconPath(iconPath);
+
+        this.setIconPath(finalIconPath);
+    },
+
+    /**
+     * Getting icon from new style format
+     * @param  {String} iconPath - the default icon path
+     * @param  {Array} valueStyle - the list of style values
+     * @returns {Void} -
+     */
+    fetchIconPath: function (iconPath, valueStyle) {
+        let finalIconPath = iconPath;
+
+        if (valueStyle && valueStyle.length > 0 && ("imageName" in valueStyle[0].style)) {
+            finalIconPath = valueStyle[0].style.imageName;
+        }
+
+        this.setIconPath(finalIconPath);
     },
 
     /**

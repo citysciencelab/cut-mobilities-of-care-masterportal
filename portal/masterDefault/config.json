@@ -17,7 +17,7 @@
         },
         "searchBar": {
             "minChars": 3,
-            "placeholder": "Suche Adresse, Stadtteil, Themen, Flurstück",
+            "placeholder": "translate#common:modules.searchbar.placeholder.addressTopicParcel",
             "quickHelp": true,
             "gazetteer": {
                 "minChars": 3,
@@ -33,39 +33,35 @@
         },
         "menu": {
             "tree": {
-                "name": "Themen",
+                "name": "translate#common:menu.topics",
                 "glyphicon": "glyphicon-list",
                 "isAlwaysExpanded": [
                     "SelectedLayer"
                 ]
             },
             "tools": {
-                "name": "Werkzeuge",
+                "name": "translate#common:menu.tools.name",
                 "glyphicon": "glyphicon-wrench",
                 "children": {
                     "parcelSearch": {
-                        "name": "Flurstückssuche",
+                        "name": "translate#common:menu.tools.parcelSearch",
                         "glyphicon": "glyphicon-search",
                         "serviceId": "6",
                         "storedQueryID": "Flurstueck",
                         "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
                         "parcelDenominator": false
                     },
-                    "einwohnerabfrage": {
-                        "name": "Einwohneranzahl abfragen",
-                        "glyphicon": "glyphicon-wrench"
-                    },
                     "measure": {
-                        "name": "Strecke / Fläche messen",
+                        "name": "translate#common:menu.tools.measure",
                         "glyphicon": "glyphicon-resize-full"
                     },
                     "gfi": {
-                        "name": "Informationen abfragen",
+                        "name": "translate#common:menu.tools.getInfos",
                         "glyphicon": "glyphicon-info-sign",
                         "isActive": true
                     },
                     "print": {
-                        "name": "Karte drucken",
+                        "name": "translate#common:menu.tools.print",
                         "glyphicon": "glyphicon-print",
                         "mapfishServiceId": "mapfish",
                         "printAppId": "master",
@@ -74,85 +70,24 @@
                         "version": "mapfish_print_3"
                     },
                     "coord": {
-                        "name": "Koordinaten abfragen",
+                        "name": "translate#common:menu.tools.coord",
                         "glyphicon": "glyphicon-screenshot"
                     },
                     "searchByCoord": {
-                        "name": "Koordinatensuche",
+                        "name": "translate#common:menu.tools.searchByCoord",
                         "glyphicon": "glyphicon-record"
                     },
                     "kmlimport": {
-                        "name": "KML Import",
+                        "name": "translate#common:menu.tools.kmlimport",
                         "glyphicon": "glyphicon-import"
                     },
                     "draw": {
                         "name": "translate#common:menu.tools.draw",
-                        "glyphicon": "glyphicon-pencil",
-						"iconList": [
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconPoint",
-								"type": "simple_point",
-								"value": "simple_point"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
-								"type": "glyphicon",
-								"value": "\ue103"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconCD",
-								"type": "glyphicon",
-								"value": "\ue201"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconHat",
-								"type": "glyphicon",
-								"value": "\ue233"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconFire",
-								"type": "glyphicon",
-								"value": "\ue104"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconMovie",
-								"type": "glyphicon",
-								"value": "\ue009"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconFlag",
-								"type": "glyphicon",
-								"value": "\ue034"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
-								"type": "glyphicon",
-								"value": "\ue135"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconMusic",
-								"type": "glyphicon",
-								"value": "\ue002"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconStreet",
-								"type": "glyphicon",
-								"value": "\ue024"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
-								"type": "image",
-								"value": "/img/icons/cloud.png"
-							},
-							{
-								"caption": "translate#common:modules.tools.draw.iconList.iconTent",
-								"type": "glyphicon",
-								"value": "\u26fa"
-							}
-						]
+                        "glyphicon": "glyphicon-pencil"
+
                     },
                     "saveSelection": {
-                        "name": "Auswahl speichern",
+                        "name": "translate#common:menu.tools.saveSelection",
                         "glyphicon": "glyphicon-share"
                     },
                     "shadow":
@@ -164,11 +99,11 @@
                 }
             },
             "legend": {
-                "name": "Legende",
+                "name": "translate#common:menu.legend",
                 "glyphicon": "glyphicon-book"
             },
             "contact": {
-                "name": "Kontakt",
+                "name": "translate#common:menu.contact",
                 "glyphicon": "glyphicon-envelope",
                 "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
                 "serviceID": "80002",
@@ -352,20 +287,25 @@
                     "visibility": true
                 }
             ]
+        },
+        "Fachdaten_3D":{
+            "Layer":[
+                {
+                    "id":"12883",
+                    "name":"Gelände",
+                    "visibility":true
+                },
+                {
+                    "id":"16101",
+                    "name":"Brueckenflaechen HH",
+                    "visibility":true
+                },
+                {
+                    "id":"12884",
+                    "name":"Gebäude LoD2",
+                    "visibility":true
+                }
+            ]
         }
-    },
-    "Fachdaten_3D": {
-        "Layer": [
-            {
-                "id": "12883",
-                "name": "Gelände",
-                "visibility": true
-            },
-            {
-                "id": "12884",
-                "name": "Gebäude LoD2",
-                "visibility": true
-            }
-        ]
     }
 }

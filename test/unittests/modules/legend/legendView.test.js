@@ -20,7 +20,7 @@ before(function () {
         id: "legend",
         isRoot: true,
         isVisibleInMenu: true,
-        keepOtherToolsOpened: true,
+        keepOpen: true,
         parentId: "root",
         renderToSidebar: false,
         renderToWindow: false,

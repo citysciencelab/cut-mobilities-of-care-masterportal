@@ -18,7 +18,9 @@ const FilterView = Backbone.View.extend({
                     this.renderDetailView();
                 }
                 else {
-                    this.model.get("detailView").$el[0].remove();
+                    if (this.model.get("detailView") && this.model.get("detailView").$el && Array.isArray(this.model.get("detailView").$el)) {
+                        this.model.get("detailView").$el[0].remove();
+                    }
                     this.$el.remove();
                     Radio.trigger("Sidebar", "toggle", false);
                 }
