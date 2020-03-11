@@ -17,7 +17,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         showSettings: true,
         styleable: false,
         supported: ["2D"],
-        transparency: 0
+        transparency: 0,
+        isOutOfRange: undefined
     },
     /**
      * @class Layer

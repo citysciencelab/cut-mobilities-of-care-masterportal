@@ -367,7 +367,7 @@ describe("tools/print_/buildSpec", function () {
         var vectorLayer = new Vector();
 
         it("should return \"styleId\" if styleList is not available", function () {
-            expect(buildSpecModel.getStyleAttribute(vectorLayer)).to.equal("styleId");
+            expect(buildSpecModel.getStyleAttribute(vectorLayer, pointFeatures[0], false)).to.equal("styleId");
         });
     });
     describe("getFeatureStyle", function () {

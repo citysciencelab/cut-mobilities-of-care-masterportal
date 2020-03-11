@@ -98,19 +98,19 @@ describe("modules/legend", function () {
             });
         });
     });
-    describe("determineValueName", function () {
+    describe("determineValueNameOld", function () {
         const styleModel = new Backbone.Model();
 
         it("should return layername for style empty styleModel ", function () {
-            expect(model.determineValueName(styleModel, "layerThird")).to.equal("layerThird");
+            expect(model.determineValueNameOld(styleModel, "layerThird")).to.equal("layerThird");
         });
         it("should return styleFieldValue for styleModel with the attribute styleFieldValue", function () {
             styleModel.set("styleFieldValue", "styleFieldValueSecond");
-            expect(model.determineValueName(styleModel, "layerThird")).to.equal("styleFieldValueSecond");
+            expect(model.determineValueNameOld(styleModel, "layerThird")).to.equal("styleFieldValueSecond");
         });
         it("should return legendValue for styleModel with the attributes legendValue and styleFieldValue", function () {
             styleModel.set("legendValue", "legendValueFirst");
-            expect(model.determineValueName(styleModel, "layerThird")).to.equal("legendValueFirst");
+            expect(model.determineValueNameOld(styleModel, "layerThird")).to.equal("legendValueFirst");
         });
     });
 
