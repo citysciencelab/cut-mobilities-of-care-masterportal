@@ -373,10 +373,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * todo
-     * @returns {*} todo
+     * Trigger searching via all registered services. Update searchString to enable patterns with less then three chars.
+     * @returns {void}
      */
     searchAll: function () {
+        this.model.setSearchString($("#searchInput").val());
         Radio.trigger("Searchbar", "searchAll", this.model.get("searchString"));
     },
 

@@ -6,7 +6,6 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         quickHelp: false,
         searchString: "",
         hitList: [],
-        minChars: "",
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
         knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"],
@@ -32,7 +31,6 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @property {Boolean} quickHelp=false todo
      * @property {String} searchString="" the current string in the search mask
      * @property {Array} hitList=[] todo
-     * @property {String} minChars="" todo
      * @property {Boolean} isInitialSearch=true Flag that is set to false at the end of the initial search (ParametricURL).
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
      * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"] Search algorithms for which an initial search is possible
