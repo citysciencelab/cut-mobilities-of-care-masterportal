@@ -544,13 +544,12 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} svg
      */
     createImageSVG: function (style) {
-        const imagePath = style.get("imagePath") + style.get("imageName"),
-            scale = style.get("imageScale"),
-            imageScale = Math.round(35 * scale);
+        const imagePath = style.get("imagePath") + style.get("imageName");
+
         let svg = "";
 
         svg += "<svg height='35' width='35'>";
-        svg += "<image xlink:href='" + imagePath + "' x='0' y='0' height='" + imageScale + "px' width='" + imageScale + "px'/>";
+        svg += "<image xlink:href='" + imagePath + "' x='0' y='0' height='100%' width='100%' />";
         svg += "</svg>";
 
         return svg;
