@@ -2,8 +2,8 @@
  * tools-Module is required to be able to nest tools
  * in the store as ["tools", toolName].
  * Holds information about which tools are openend.
- * TODO needs additional info to close tools that are
- * not to be kept open.
+ * Needs additional info to close tools that are not to be kept open
+ * if this becomes the actual implementation.
  */
 export default {
     namespaced: true,

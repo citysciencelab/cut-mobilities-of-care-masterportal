@@ -5,6 +5,12 @@ import {mapGetters, mapMutations} from "vuex";
 import storeModule from "./module";
 import {componentMap} from "./data";
 
+/**
+ * NOTE
+ * The contents of this folder are purely a data-flow demonstration.
+ * You can render the contents of Tools.vue as child of the App, but
+ * it's only a mock.
+ */
 export default {
     name: "Tools",
     computed: {

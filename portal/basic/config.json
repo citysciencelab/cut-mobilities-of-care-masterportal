@@ -4,7 +4,7 @@
 			"title": "Basic - Portal",
 			"logo": "./ressources/img/mp_logo.png",
 			"link": "https://geoinfo.hamburg.de",
-			"tooTtip": "Landesbetrieb Geoinformation und Vermessung"
+			"toolTip": "Landesbetrieb Geoinformation und Vermessung"
 		},
 		"treeType": "light",
 		"searchBar": {

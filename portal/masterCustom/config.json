@@ -385,7 +385,6 @@
         "buttonOblique":true,
         "button3d":true
      },
-     "scaleLine":true,
      "treeType":"custom",
      "layersRemovable":false
   },
