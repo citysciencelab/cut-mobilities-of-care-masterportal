@@ -11,6 +11,7 @@
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts --timeout 15000",
+    "test:watch": "npm run test -- --watch",
     "browsertestserver": "webpack-dev-server --config devtools/webpack.browsertest.js",
     "browsertest": "./node_modules/.bin/mocha --timeout 150000 ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
