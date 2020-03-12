@@ -6,7 +6,7 @@ export default {
     name: "Controls",
     computed: {
         ...mapGetters(["controls", "mobile"]),
-        ...mapGetters("controls", ["componentMap", "mobileHiddenControls"]),
+        ...mapGetters("controls", ["componentMap", "mobileHiddenControls", "bottomControls"]),
         activeControls () {
             return this.controls === null
                 ? []
@@ -40,9 +40,24 @@ export default {
 
 <template>
     <div class="ol-unselectable ol-control control-box">
+        <!-- TODO Issue: While this mostly works, it's duplicated code and the .spaced is mis-applied; fix -->
         <template v-for="(control, index) in activeControls">
             <component
                 :is="control.component"
+                v-if="!bottomControls.includes(control.key)"
+                :key="'control-' + control.key"
+                :class="[
+                    index !== activeControls.length - 1 ? 'spaced' : '',
+                    mobile && hiddenMobile(control.key) ? 'hidden' : ''
+                ]"
+                v-bind="control.props"
+            />
+        </template>
+        <div class="spacer" />
+        <template v-for="(control, index) in activeControls">
+            <component
+                :is="control.component"
+                v-if="bottomControls.includes(control.key)"
                 :key="'control-' + control.key"
                 :class="[
                     index !== activeControls.length - 1 ? 'spaced' : '',
@@ -78,10 +93,21 @@ export default {
     @import "../../theme.less";
 
     .control-box {
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 35px);
+        max-height: calc(100% - 35px);
+        /* Issue: While this does scroll, it will also hide the attributions flyout */
+        /* overflow-y: scroll; */
+
         right: 0px;
         padding: 5px;
         margin: 5px;
         z-index: 1;
+
+        .spacer {
+            flex-grow: 1;
+        }
 
         .spaced {
             margin-bottom: 1em;

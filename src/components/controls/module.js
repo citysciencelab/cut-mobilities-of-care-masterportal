@@ -12,6 +12,8 @@ export default {
     namespaced: true,
     state: {
         // initial state - information on all controls that are not addons.
+        // TODO consider, for easier access in UI, refactoring this state into flagged objects; example:
+        // { attributions: {component: Attributions, mobileHidden: true, bottomControls: false} }
         componentMap: {
             attributions: Attributions,
             backForward: BackForward,
@@ -19,6 +21,9 @@ export default {
         },
         mobileHiddenControls: [
             "backForward"
+        ],
+        bottomControls: [
+            "attributions"
         ]
     },
     mutations: {
@@ -29,9 +34,10 @@ export default {
          * @param {string} name name of control in config.json
          * @param {object} control Vue Component
          * @param {boolean} [hiddenMobile=false] whether component is visible in mobile resolution
+         * @param {boolean} [bottomControls=false] whether component is to be shown at lower end of control bar
          * @returns {void}
          */
-        registerModule (state, name, control, hiddenMobile = false) {
+        registerModule (state, name, control, hiddenMobile = false, bottomControls = false) {
             state.componentMap = {
                 ...state.componentMap,
                 [name]: control
@@ -40,6 +46,12 @@ export default {
                 state.hiddenMobile = [
                     ...state.hiddenMobile,
                     name
+                ];
+            }
+            if (bottomControls) {
+                state.bottomControls = [
+                    ...state.bottomControls,
+                    bottomControls
                 ];
             }
         },
@@ -60,6 +72,7 @@ export default {
     },
     getters: {
         componentMap: state => state.componentMap,
-        mobileHiddenControls: state => state.mobileHiddenControls
+        mobileHiddenControls: state => state.mobileHiddenControls,
+        bottomControls: state => state.bottomControls
     }
 };

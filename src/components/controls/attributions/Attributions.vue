@@ -95,7 +95,7 @@ export default {
             margin-right: 40px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             border: 1px solid rgb(229, 229, 229);
-            top: 0;
+            bottom: 0;
             right: 0;
 
             dt {
