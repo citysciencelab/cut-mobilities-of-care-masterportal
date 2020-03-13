@@ -61,7 +61,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     initialize: function () {
         const singleBaselayer = Radio.request("Parser", "getPortalConfig").singleBaselayer;
 
-        if (!_.isUndefined(singleBaselayer)) {
+        if (singleBaselayer !== undefined) {
             this.setSingleBaselayer(singleBaselayer);
         }
 
