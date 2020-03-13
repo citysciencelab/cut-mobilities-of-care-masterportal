@@ -4,6 +4,7 @@ import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./components/ScaleLine.vue";
 import Controls from "./components/controls/Controls.vue";
 import Tools from "./components/tools/Tools.vue";
+import MapModuleTest from "./components/MapModuleTest.vue";
 
 export default {
     name: "App",
@@ -12,7 +13,8 @@ export default {
         Tools,
         Alerting,
         SupplyCoord,
-        ScaleLine
+        ScaleLine,
+        MapModuleTest
     }
 };
 </script>
@@ -24,6 +26,7 @@ export default {
         <ScaleLine />
         <Controls />
         <Tools />
+        <MapModuleTest />
     </div>
 </template>
 
