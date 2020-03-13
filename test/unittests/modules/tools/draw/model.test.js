@@ -10,7 +10,8 @@ import Map from "ol/Map";
 import View from "ol/View";
 
 describe("drawModel", function () {
-    let model;
+    let model,
+        iconPath;
 
     before(function () {
         i18next.init({
@@ -20,6 +21,7 @@ describe("drawModel", function () {
         });
         model = new Model();
         model.collection = new ModelList();
+        iconPath = "/img/icons/";
     });
 
     describe("createLayer", function () {
@@ -107,7 +109,7 @@ describe("drawModel", function () {
             model.setSymbol({
                 caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
                 type: "image",
-                value: "../../../../../img/icons/cloud.png"
+                value: iconPath + "cloud.png"
             });
 
             const drawType = {
@@ -467,7 +469,7 @@ describe("drawModel", function () {
             model.setSymbol({
                 caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
                 type: "image",
-                value: "../../../../../img/icons/cloud.png"
+                value: iconPath + "cloud.png"
             });
             result = model.getStyle();
 
@@ -537,7 +539,7 @@ describe("drawModel", function () {
                 symbol = {
                     caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
                     type: "image",
-                    value: "../../../../../img/icons/cloud.png"
+                    value: iconPath + "cloud.png"
                 },
                 result = model.getPointStyle(color, pointSize, symbol);
 
@@ -571,7 +573,7 @@ describe("drawModel", function () {
                 symbol = {
                     caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
                     type: "image",
-                    value: "../../../../../img/icons/cloud.png"
+                    value: iconPath + "cloud.png"
                 },
                 result = model.getPointStyle(color, pointSize, symbol);
 
@@ -581,7 +583,7 @@ describe("drawModel", function () {
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             var color = [0, 0, 0, 1],
                 pointSize = 16,
-                symbol = "../../../../../img/icons/cloud.png@@image",
+                symbol = iconPath + "cloud.png@@image",
                 result = model.getPointStyle(color, pointSize, symbol);
 
             expect(result.getImage().getSrc()).to.equal(symbol.split("@@")[0]);
@@ -592,7 +594,7 @@ describe("drawModel", function () {
                 symbol = {
                     caption: "Image",
                     type: "my_personal_image",
-                    value: "../../../../../img/icons/my_personal_image.png"
+                    value: iconPath + "my_personal_image.png"
                 };
 
             expect(() => model.getPointStyle(color, pointSize, symbol)).to.throw(Error, `The given type ${symbol.type} of the symbol is not supported!`);
