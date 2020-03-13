@@ -5,22 +5,24 @@ import {mapGetters} from "vuex";
 export default {
     name: "Controls",
     computed: {
-        ...mapGetters(["controls", "mobile"]),
+        ...mapGetters(["controlsConfig", "mobile"]),
         ...mapGetters("controls", ["componentMap", "mobileHiddenControls"]),
         activeControls () {
-            return this.controls === null
-                ? []
-                : Object.keys(this.controls)
-                    .map(key => this.componentMap[key]
-                        ? {
+            if (this.controlsConfig === null) {
+                return [];
+            }
+
+            return Object.keys(this.controlsConfig)
+                .map(key => {
+                    if (this.componentMap[key]) {
+                        return {
                             component: this.componentMap[key],
-                            props: typeof this.controls[key] === "object" ? this.controls[key] : {},
+                            props: typeof this.controlsConfig[key] === "object" ? this.controlsConfig[key] : {},
                             key
-                        }
-                        : key)
-                    .filter(x => typeof x === "string"
-                        ? console.warn(`Control "${x}" not implemented; ignoring key.`)
-                        : true);
+                        };
+                    }
+                    return key;
+                }).filter(x => typeof x === "string" ? console.warn(`Control "${x}" not implemented; ignoring key.`) : true);
         }
     },
     mounted () {

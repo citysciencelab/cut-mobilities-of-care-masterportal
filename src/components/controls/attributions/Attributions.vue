@@ -105,7 +105,6 @@ export default {
             }
             dl {
                 margin-bottom: 0;
-                max-width: calc(100vw - 410px);
             }
             dd {
                 margin-bottom: 8px;
