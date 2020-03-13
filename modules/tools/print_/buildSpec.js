@@ -87,31 +87,60 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - The parsed String.
      */
     parseAddressToString: function (addressObj) {
-        const street = addressObj === undefined ? undefined : addressObj.street,
-            housenr = addressObj === undefined ? undefined : addressObj.housenr,
-            postalCode = addressObj === undefined ? undefined : addressObj.postalCode,
-            city = addressObj === undefined ? undefined : addressObj.city;
-        let addressString = "";
+        let street,
+            streetFilled = false,
+            housenr,
+            postalCode,
+            postalCodeFilled = false,
+            city,
+            addressString = "";
 
-        // street
-        addressString += street === undefined ? "" : street;
-        // blank between  street and housenr
-        addressString += addressString === "" ? "" : " ";
-        // housenr
-        addressString += housenr === undefined ? "" : housenr;
-        // newline between housenr and postalCode
-        addressString += addressString === "" ? "" : addressString + "\n ";
-        // postalCode
-        addressString += postalCode === undefined ? "" : postalCode;
-        // blank between postalCode and City
-        addressString += addressString === "" ? "" : " ";
-        // city
-        addressString += city === undefined ? "" : city;
-        // n.N. if addressString is empty
-        addressString += addressString === "" ? "n.N." : "";
-
+        if (typeof addressObj === "object") {
+            street = addressObj.street;
+            streetFilled = this.isFilled(street);
+            housenr = addressObj.housenr;
+            postalCode = addressObj.postalCode;
+            postalCodeFilled = this.isFilled(postalCode);
+            city = addressObj.city;
+        }
+        if (streetFilled) {
+            addressString += street;
+        }
+        if (this.isFilled(housenr)) {
+            if (streetFilled) {
+                addressString += " ";
+            }
+            addressString += housenr;
+        }
+        if (addressString !== "") {
+            // newline between housenr and postalCode
+            addressString += "\n ";
+        }
+        if (postalCodeFilled) {
+            addressString += postalCode;
+        }
+        if (this.isFilled(city)) {
+            if (postalCodeFilled) {
+                addressString += " ";
+            }
+            addressString += city;
+        }
+        if (addressString.trim() === "") {
+            // n.N. if addressString is empty
+            addressString += "n.N.";
+        }
         return addressString;
     },
+
+    /**
+     * Returns true, if the given string is not empty or undefined
+     * @param {string} string to check
+     * @returns {boolean} true, if string has content
+     */
+    isFilled: function (string) {
+        return string !== undefined && string.trim() !== "";
+    },
+
 
     /**
      * Defines the layers attribute of the map spec
