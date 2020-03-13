@@ -94,10 +94,10 @@ export function deleteLayersByMetaIds (response, metaIds) {
  * @return {Object[]} response - Objekte aus der services.json
  */
 export function mergeLayersByMetaIds (response, metaIds) {
-    var rawLayerArray = response,
+    let rawLayerArray = response,
         objectsById;
 
-    if (metaIds !== undefined && metaIds !== [] && metaIds !== "") {
+    if (Array.isArray(metaIds)) {
         metaIds.forEach(function (metaID) {
             let newObject = {},
                 entry;
@@ -106,7 +106,7 @@ export function mergeLayersByMetaIds (response, metaIds) {
                 return layer.typ === "WMS" && layer.datasets.length > 0 && layer.datasets[0].md_id === metaID;
             });
             // Das erste Objekt wird kopiert
-            if (typeof objectsById !== undefined && objectsById.length > 0) {
+            if (objectsById !== undefined && objectsById.length > 0) {
                 newObject = Object.assign(newObject, objectsById[0]);
                 // Das kopierte Objekt bekommt den gleichen Namen wie der Metadatensatz
                 newObject.name = objectsById[0].datasets[0].md_name;
@@ -124,7 +124,7 @@ export function mergeLayersByMetaIds (response, metaIds) {
                 // Das Attribut minScale wird gruppiert und der niedrigste Wert am kopierten Objekt gesetzt
                 newObject.minScale = Math.min(...pluck(objectsById, "minScale").map(Number));
                 // Entfernt alle zu "gruppierenden" Objekte aus der response
-                rawLayerArray = objectDifference(rawLayerArray, objectsById);
+                rawLayerArray = rawLayerArray.filter(x => !objectsById.includes(x));
                 // Fügt das kopierte (gruppierte) Objekt der response hinzu
                 rawLayerArray.push(newObject);
             }
@@ -142,23 +142,6 @@ export function mergeLayersByMetaIds (response, metaIds) {
  */
 function pluck (array, key) {
     return array.map(i => i[key]);
-}
-
-/**
- * Function to retrieve all entries which are included in both arrays.
- * @param {array} array1 - first array.
- * @param {array} array2 - second array.
- * @return {Object[]} - Returns array1 without the entries which were also included in array2.
- */
-function objectDifference (array1, array2) {
-    let index;
-
-    array2.forEach((element2) => {
-        index = array1.indexOf(element2);
-        array1.splice(index, 1);
-    });
-
-    return array1;
 }
 
 /**
@@ -180,7 +163,7 @@ function findKeyValuePair (list, properties) {
  */
 function setStyleForHVVLayer (response) {
     const styleLayerIDs = pluck(Config.tree.layerIDsToStyle, "id"),
-        layersByID = response.filter(function (layer) {
+        layersByID = response.filter(layer => {
             return styleLayerIDs.includes(layer.id);
         });
 
@@ -200,16 +183,14 @@ function setStyleForHVVLayer (response) {
  */
 export function cloneByStyle (response) {
     let rawLayerArray = response;
-    const objectsByStyle = response.filter(function (model) { // Layer die mehrere Styles haben
-        return typeof model.styles === "object" && model.typ === "WMS";
-    });
+    const objectsByStyle = response.filter(model => typeof model.styles === "object" && model.typ === "WMS");
 
     // Iteriert über die Objekte
     objectsByStyle.forEach(function (obj) {
         // Iteriert über die Styles
         obj.styles.forEach(function (style, index) {
             // Objekt wird kopiert
-            var cloneObj = Object.assign({}, obj);
+            const cloneObj = Object.assign({}, obj);
 
             // Die Attribute name, Id, etc. werden für das kopierte Objekt gesetzt
             cloneObj.style = style;
@@ -219,12 +200,10 @@ export function cloneByStyle (response) {
             cloneObj.styles = obj.styles[index];
             // Objekt wird der Response hinzugefügt
             response.splice(response.indexOf(obj), 0, cloneObj);
-        }, this);
-        // Das ursprüngliche Objekt wird gelöscht
-        rawLayerArray = response.filter(function (value) {
-            return value !== obj;
         });
-    }, this);
+        // Das ursprüngliche Objekt wird gelöscht
+        rawLayerArray = response.filter(value => value !== obj);
+    });
 
     return rawLayerArray;
 }
