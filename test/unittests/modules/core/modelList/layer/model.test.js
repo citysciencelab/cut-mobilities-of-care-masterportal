@@ -8,20 +8,16 @@ describe("core/modelList/layer/model", function () {
         model = new Layer();
     });
 
-    afterEach(function () {
-        model = new Layer();
-    });
-
     describe("toggleIsSelected", function () {
         let secondModel;
 
         before(function () {
             secondModel = new Layer({channel: Radio.channel("ThisDoesNotExist")});
 
-            model.attributes.isSelected = false;
-            model.attributes.parentId = "Baselayer";
-            model.attributes.name = "IDIDTHIS";
-            model.attributes.layerSource = {};
+            // Somehow some errors occur if the attributes for the models are set differently
+            model.set("isSelected", false);
+            model.set("parentId", "Baselayer");
+            model.set("layerSource", {});
             secondModel.attributes.isSelected = true;
             secondModel.attributes.parentId = "Baselayer";
             secondModel.attributes.layerSource = {};
@@ -30,11 +26,29 @@ describe("core/modelList/layer/model", function () {
             Radio.trigger("ModelList", "addModel", secondModel);
         });
 
-        it("on selecting a baselayer all other baselayers should be deselected", function () {
+        after(function () {
+            model = new Layer();
+        });
+
+        afterEach(function () {
+            model.set("isSelected", false);
+            secondModel.attributes.isSelected = true;
+        });
+
+        it("should deselect all other baselayers if the option singleBaseLayer is set to true", function () {
+            model.set("singleBaseLayer", true);
             Radio.trigger("Layer", "toggleIsSelected");
 
             expect(model.attributes.isSelected).to.be.true;
             expect(secondModel.attributes.isSelected).to.be.false;
+        });
+
+        it("should lead to multiple baselayers being active if the option singleBaseLayer is set to false", function () {
+            model.set("singleBaseLayer", false);
+            Radio.trigger("Layer", "toggleIsSelected");
+
+            expect(model.attributes.isSelected).to.be.true;
+            expect(secondModel.attributes.isSelected).to.be.true;
         });
     });
 });

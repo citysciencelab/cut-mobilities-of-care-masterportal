@@ -59,10 +59,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Core#RadioTriggerMapViewChangedOptions
      */
     initialize: function () {
-        const singleBaselayer = Radio.request("Parser", "getPortalConfig").singleBaselayer;
+        const portalConfig = Radio.request("Parser", "getPortalConfig");
 
-        if (singleBaselayer !== undefined) {
-            this.setSingleBaselayer(singleBaselayer);
+        if (portalConfig && portalConfig.singleBaselayer !== undefined) {
+            this.setSingleBaselayer(portalConfig.singleBaselayer);
         }
 
         this.registerInteractionTreeListeners(this.get("channel"));
@@ -381,14 +381,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     toggleIsSelected: function () {
-        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")});
+        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
+            singleBaseLayer = this.get("singleBaseLayer") && this.get("parentId") === "Baselayer";
 
         if (this.get("isSelected") === true) {
             this.setIsSelected(false);
         }
         else {
             // This only works for treeType Custom, otherwise the parentId is not set on the layer
-            if (this.get("singleBaselayer") && this.get("parentId") === "Baselayer") {
+            if (singleBaseLayer) {
                 layerGroup.forEach(layer => {
                     layer.setIsSelected(false);
                     // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
