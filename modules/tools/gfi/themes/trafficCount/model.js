@@ -1,4 +1,5 @@
 import Theme from "../model";
+import {TrafficCountApi} from "./trafficCountApi";
 
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
@@ -28,10 +29,28 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     parseProperties: function () {
         // this lines are just for demonstration purposes!!!!
         // @todo delete this
-        this.setLastUpdate("jetzt");
-        setTimeout(() => {
-            this.setLastUpdate("später");
-        }, 200);
+        const api = new TrafficCountApi("https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de", "v1.0", {
+                host: "udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de",
+                protocol: "wss",
+                path: "/mqtt",
+                context: this
+            }),
+            // @todo delete this
+            thingId = 5222,
+            // @todo delete this
+            meansOfTransport = "AnzFahrzeuge";
+
+        // @todo delete this
+        // das hier ausführen bei Registerkarten-Wechsel und beim Schließen des GFI (und besser auch beim Öffnen des GFI)
+        api.unsubscribeEverything();
+
+        // @todo delete this
+        // hier ein Beispiel für einen asynchronen Aufruf + Subscription
+        api.subscribeLastUpdate(thingId, meansOfTransport, phenomenonTime => {
+            this.setLastUpdate(phenomenonTime);
+        }, errormsg => {
+            console.warn(errormsg);
+        });
     },
 
     /**

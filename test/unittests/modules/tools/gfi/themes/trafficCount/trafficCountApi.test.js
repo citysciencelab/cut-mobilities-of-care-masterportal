@@ -121,95 +121,6 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         });
     });
 
-    describe("TrafficCountApi.getSQLDate", function () {
-        it("getSQLDate: should return a date in format YYYY-MM-DD if a specific date object is given", function () {
-            const dt = new Date(),
-                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
-
-            dt.setDate(1);
-            dt.setMonth(1);
-            dt.setYear(2000);
-
-            expect(api.getSQLDate(dt)).to.equal("2000-02-01");
-        });
-        it("getSQLDate: should return the current day in format YYYY-MM-DD if no date object is given", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt"),
-                dt = new Date(),
-                year = dt.getFullYear(),
-                month = String(dt.getMonth() + 1).length > 1 ? dt.getMonth() + 1 : "0" + (dt.getMonth() + 1),
-                day = String(dt.getDate()).length > 1 ? dt.getDate() : "0" + dt.getDate();
-
-            expect(api.getSQLDate()).to.equal(year + "-" + month + "-" + day);
-        });
-    });
-
-    describe("TrafficCountApi.getYear", function () {
-        it("getYear: should return a year in format YYYY if a specific date object is given", function () {
-            const dt = new Date(),
-                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
-
-            dt.setDate(1);
-            dt.setMonth(1);
-            dt.setYear(2000);
-
-            expect(api.getYear(dt)).to.equal("2000");
-        });
-        it("getYear: should return the current year in format YYYY if no date object is given", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt"),
-                year = String(new Date().getFullYear());
-
-            expect(api.getYear()).to.equal(year);
-        });
-    });
-
-    describe("TrafficCountApi.getMonday", function () {
-        it("getMonday: should return the date of monday in format YYYY-MM-DD if a specific date object with a random day of the week is given", function () {
-            const dt = new Date(),
-                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
-
-            dt.setDate(1);
-            dt.setMonth(0); // january
-            dt.setYear(2020);
-
-            expect(api.getMonday(dt)).to.equal("2019-12-30");
-
-            dt.setDate(1);
-            dt.setMonth(2); // march
-            dt.setYear(2020);
-
-            expect(api.getMonday(dt)).to.equal("2020-02-24");
-        });
-    });
-
-    describe("TrafficCountApi.getNameOfMonth", function () {
-        it("getNameOfMonth: should return the name of the given month", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
-
-            expect(api.getNameOfMonth(0)).to.be.false;
-            expect(api.getNameOfMonth(1)).to.equal("Januar");
-            expect(api.getNameOfMonth(2)).to.equal("Februar");
-            expect(api.getNameOfMonth(3)).to.equal("März");
-            expect(api.getNameOfMonth(4)).to.equal("April");
-            expect(api.getNameOfMonth(5)).to.equal("Mai");
-            expect(api.getNameOfMonth(6)).to.equal("Juni");
-            expect(api.getNameOfMonth(7)).to.equal("Juli");
-            expect(api.getNameOfMonth(8)).to.equal("August");
-            expect(api.getNameOfMonth(9)).to.equal("September");
-            expect(api.getNameOfMonth(10)).to.equal("Oktober");
-            expect(api.getNameOfMonth(11)).to.equal("November");
-            expect(api.getNameOfMonth(12)).to.equal("Dezember");
-            expect(api.getNameOfMonth(13)).to.be.false;
-        });
-    });
-
-    describe("TrafficCountApi.getCalendarWeek", function () {
-        it("getCalendarWeek: should return the number of week of the given date", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
-
-            expect(api.getCalendarWeek("2020-03-16")).to.equal(12);
-        });
-    });
-
     describe("TrafficCountApi.checkForObservations", function () {
         it("checkForObservations: checks if the given dataset is an array with an object that has a key Datastreams which is an array with an object with an id and a key Observations that is an array", function () {
             const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt"),
@@ -1074,8 +985,8 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         });
     });
 
-    describe("TrafficCountApi.updateStrongestDay", function () {
-        it("updateStrongestDay: should build a correct url and call it via given http dummy", function () {
+    describe("TrafficCountApi.updateHighestWorkloadDay", function () {
+        it("updateHighestWorkloadDay: should build a correct url and call it via given http dummy", function () {
             let lastOnupdate = false,
                 lastOnstart = false,
                 lastOncomplete = false,
@@ -1092,7 +1003,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true);
 
-            api.updateStrongestDay("thingId", "meansOfTransport", "year", "onupdate", "onerror", "onstart", "oncomplete");
+            api.updateHighestWorkloadDay("thingId", "meansOfTransport", "year", "onupdate", "onerror", "onstart", "oncomplete");
 
             expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Tag';$expand=Observations($filter=year(phenomenonTime) eq 'year';$orderby=result DESC;$top=1))");
             expect(typeof lastOnupdate === "function").to.be.true;
@@ -1100,7 +1011,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             expect(lastOnstart).to.equal("onstart");
             expect(lastOncomplete).to.equal("oncomplete");
         });
-        it("updateStrongestDay: should call onupdate with the found date and value", function () {
+        it("updateHighestWorkloadDay: should call onupdate with the found date and value", function () {
             let lastDate = false,
                 lastValue = false;
             const dummySensorThingsHttp = {
@@ -1119,7 +1030,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 expectedDate = "0000",
                 expectedValue = 1;
 
-            api.updateStrongestDay("thingId", "meansOfTransport", "year", (date, value) => {
+            api.updateHighestWorkloadDay("thingId", "meansOfTransport", "year", (date, value) => {
                 lastDate = date;
                 lastValue = value;
             }, "onerror", "onstart", "oncomplete");
@@ -1129,8 +1040,8 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         });
     });
 
-    describe("TrafficCountApi.updateStrongestWeek", function () {
-        it("updateStrongestWeek: should build a correct url and call it via given http dummy", function () {
+    describe("TrafficCountApi.updateHighestWorkloadWeek", function () {
+        it("updateHighestWorkloadWeek: should build a correct url and call it via given http dummy", function () {
             let lastOnupdate = false,
                 lastOnstart = false,
                 lastOncomplete = false,
@@ -1147,7 +1058,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true);
 
-            api.updateStrongestWeek("thingId", "meansOfTransport", "year", "onupdate", "onerror", "onstart", "oncomplete");
+            api.updateHighestWorkloadWeek("thingId", "meansOfTransport", "year", "onupdate", "onerror", "onstart", "oncomplete");
 
             expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Woche';$expand=Observations($filter=year(phenomenonTime) eq 'year';$orderby=result DESC;$top=1))");
             expect(typeof lastOnupdate === "function").to.be.true;
@@ -1155,7 +1066,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             expect(lastOnstart).to.equal("onstart");
             expect(lastOncomplete).to.equal("oncomplete");
         });
-        it("updateStrongestWeek: should call onupdate with the found date and value", function () {
+        it("updateHighestWorkloadWeek: should call onupdate with the found date and value", function () {
             let lastCalendarWeek = false,
                 lastValue = false;
             const dummySensorThingsHttp = {
@@ -1174,7 +1085,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 expectedCalendarWeek = 12,
                 expectedValue = 1;
 
-            api.updateStrongestWeek("thingId", "meansOfTransport", "year", (calendarWeek, value) => {
+            api.updateHighestWorkloadWeek("thingId", "meansOfTransport", "year", (calendarWeek, value) => {
                 lastCalendarWeek = calendarWeek;
                 lastValue = value;
             }, "onerror", "onstart", "oncomplete");
@@ -1184,8 +1095,8 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         });
     });
 
-    describe("TrafficCountApi.updateStrongestMonth", function () {
-        it("updateStrongestMonth: should build a correct url and call it via given http dummy", function () {
+    describe("TrafficCountApi.updateHighestWorkloadMonth", function () {
+        it("updateHighestWorkloadMonth: should build a correct url and call it via given http dummy", function () {
             let lastOnupdate = false,
                 lastOnstart = false,
                 lastOncomplete = false,
@@ -1202,7 +1113,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true);
 
-            api.updateStrongestMonth("thingId", "meansOfTransport", "year", "onupdate", "onerror", "onstart", "oncomplete");
+            api.updateHighestWorkloadMonth("thingId", "meansOfTransport", "year", "onupdate", "onerror", "onstart", "oncomplete");
 
             expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Tag';$expand=Observations($filter=year(phenomenonTime) eq 'year'))");
             expect(typeof lastOnupdate === "function").to.be.true;
@@ -1210,7 +1121,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             expect(lastOnstart).to.equal("onstart");
             expect(lastOncomplete).to.equal("oncomplete");
         });
-        it("updateStrongestMonth: should call onupdate with the best month and value of all received observations", function () {
+        it("updateHighestWorkloadMonth: should call onupdate with the best month and value of all received observations", function () {
             let lastMonth = false,
                 lastValue = false;
             const dummySensorThingsHttp = {
@@ -1233,7 +1144,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 expectedMonth = "März",
                 expectedValue = 9;
 
-            api.updateStrongestMonth("thingId", "meansOfTransport", "year", (date, value) => {
+            api.updateHighestWorkloadMonth("thingId", "meansOfTransport", "year", (date, value) => {
                 lastMonth = date;
                 lastValue = value;
             }, "onerror", "onstart", "oncomplete");
