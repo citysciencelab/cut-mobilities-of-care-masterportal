@@ -9,7 +9,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         minChars: "",
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
-        knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm"],
+        knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"],
         activeInitialSearchTasks: [],
         // translations
         i18nextTranslate: null,
@@ -35,7 +35,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @property {String} minChars="" todo
      * @property {Boolean} isInitialSearch=true Flag that is set to false at the end of the initial search (ParametricURL).
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
-     * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm"] Search algorithms for which an initial search is possible
+     * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"] Search algorithms for which an initial search is possible
      * @property {Array} activeInitialSearchTasks=[] Search algorithms for which an initial search is activated
      * @property {function} i18nextTranslate=null translation function named i18nextTranslate := function(setter), set during parsing the file "config.json"
      * @property {String} buttonSearchTitle="", filled with "Suchen"- translated

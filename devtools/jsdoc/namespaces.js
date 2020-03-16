@@ -289,6 +289,12 @@
  */
 
 /**
+ * @namespace LocationFinder
+ * @memberof Searchbar
+ * @description Configures LocationFinder search
+ */
+
+/**
  * @namespace SpecialWFS
  * @memberof Searchbar
  * @description foobar

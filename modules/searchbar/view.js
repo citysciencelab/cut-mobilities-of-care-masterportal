@@ -8,6 +8,7 @@ import VisibleVectorModel from "./visibleVector/model";
 import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
 import OSMModel from "./osm/model";
+import LocationFinderModel from "./locationFinder/model";
 import GdiModel from "./gdi/model";
 import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
@@ -143,6 +144,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         if (config.hasOwnProperty("osm")) {
             new OSMModel(config.osm);
+        }
+        if (config.hasOwnProperty("locationFinder")) {
+            new LocationFinderModel(config.locationFinder);
         }
         if (config.hasOwnProperty("gdi")) {
             new GdiModel(config.gdi);
