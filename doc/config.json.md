@@ -760,6 +760,16 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 ***
 
+#### Portalconfig.menu.legend
+
+Konfigurations-Optionen der Legende.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|showCollapseAllButton|nein|Boolean|false|Option zum Ein- bzw. Ausblenden aller Legenden|false|
+
+***
+
 #### Portalconfig.menu.info
 
 [inherits]: # (Portalconfig.menu.folder)
