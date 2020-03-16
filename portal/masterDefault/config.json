@@ -160,7 +160,8 @@
             "attributions": true,
             "buttonOblique": true
         },
-        "treeType": "default"
+        "treeType": "default",
+        "singleBaselayer": true
     },
     "Themenconfig": {
         "Hintergrundkarten": {

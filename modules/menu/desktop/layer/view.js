@@ -100,10 +100,16 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     rerender: function () {
-        const attr = this.model.toJSON();
+        const attr = this.model.toJSON(),
+            scale = Radio.request("MapView", "getOptions").scale;
 
         this.$el.html("");
         this.$el.html(this.template(attr));
+
+        // If the the model should not be selectable make sure that is not selectable!
+        if (!this.model.get("isSelected") && (this.model.get("maxScale") < scale || this.model.get("minScale") > scale)) {
+            this.addDisableClass();
+        }
     },
 
     /**
