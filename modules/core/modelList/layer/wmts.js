@@ -39,7 +39,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     createLayerSource: function () {
         const projection = getProjection(this.get("coordinateSystem")),
             extent = projection.getExtent(),
-            style = this.get("style") && this.get("style") !== "" ? this.get("style") : "normal",
+            style = this.get("style"),
             format = this.get("format"),
             gutter = this.get("gutter") ? this.get("gutter") : "0",
             wrapX = this.get("wrapX") ? this.get("wrapX") : false,
@@ -108,18 +108,13 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     },
 
     /**
-     * Sets the parameter "legendURL" to GetLegendGraphic if it is empty or undefined.
-     * This method works the same as the createLegendURL of the WMS.
+     * If no legendURL is set an Error is written on the console.
      *
      * @returns {void}
      */
     createLegendURL: function () {
-        const legendURL = [];
-
         if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
-            legendURL.push(this.get("url") + "?VERSION=" + this.get("version")
-            + "&SERVICE=WMTS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layer"));
-            this.set("legendURL", legendURL);
+            console.error("WMTS: No legendURL is specified for the layer!");
         }
     },
 
@@ -162,20 +157,15 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
 
     /**
      * If the WMTS-Layer has an extent defined, then this is returned.
-     * Else, the extent of the MapView is requested and returned.
-     * At last, the extent of the projection would be returned.
+     * Else, the extent of the projection is returned.
      *
      * @returns {Array} - The extent of the Layer.
      */
     getExtent: function () {
-        const mapViewExtent = Radio.request("MapView", "getExtent"),
-            projection = getProjection(this.get("coordinateSystem"));
+        const projection = getProjection(this.get("coordinateSystem"));
 
         if (this.has("extent")) {
             return this.get("extent");
-        }
-        else if (mapViewExtent) {
-            return mapViewExtent;
         }
 
         return projection.getExtent();
