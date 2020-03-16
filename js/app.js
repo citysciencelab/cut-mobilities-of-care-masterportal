@@ -15,6 +15,7 @@ import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAP
 import CswParserModel from "../modules/cswParser/model";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import GraphModel from "../modules/tools/graph/model";
+import ColorScale from "../modules/tools/colorScale/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
@@ -53,6 +54,7 @@ import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
+
 // @deprecated in version 3.0.0
 // remove "version" in doc and config.
 // rename "print_" to "print"
@@ -71,6 +73,7 @@ import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
 import TitleView from "../modules/title/view";
+import LanguageView from "../modules/language/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
@@ -92,27 +95,29 @@ function loadApp () {
         layerInformationModelSettings = {},
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
-        style = Radio.request("Util", "getUiStyle");
+        i18nextIsEnabled = i18next && i18next.options.hasOwnProperty("isEnabled") ? i18next.options.isEnabled() : false,
+        i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
         /* eslint-disable no-undef */
-    let app = {};
+    let app = {},
+        style = "";
 
-    if (_.has(Config, "uiStyle")) {
+    if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
-    if (_.has(Config, "proxyHost")) {
+    if (Config.hasOwnProperty("proxyHost")) {
         utilConfig.proxyHost = Config.proxyHost;
     }
-    if (_.has(Config, "proxy")) {
+    if (Config.hasOwnProperty("proxy")) {
         utilConfig.proxy = Config.proxy;
     }
 
     // RemoteInterface laden
-    if (_.has(Config, "remoteInterface")) {
+    if (Config.hasOwnProperty("remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
         new RadioMasterportalAPI();
     }
 
-    if (_.has(Config, "quickHelp")) {
+    if (Config.hasOwnProperty("quickHelp")) {
         new QuickHelpView(Config.quickHelp);
     }
 
@@ -136,8 +141,9 @@ function loadApp () {
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WPS();
     new AddGeoJSON();
+    new WindowView();
 
-    if (_.has(Config, "cswId")) {
+    if (Config.hasOwnProperty("cswId")) {
         cswParserSettings.cswId = Config.cswId;
     }
 
@@ -145,11 +151,12 @@ function loadApp () {
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
+    new ColorScale();
 
     if (Config.hasOwnProperty("zoomToGeometry")) {
         new ZoomToGeometry(Config.zoomToGeometry);
     }
-    if (_.has(Config, "zoomToFeature")) {
+    if (Config.hasOwnProperty("zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
     }
 
@@ -157,34 +164,34 @@ function loadApp () {
     new SliderRangeView();
     new DropdownView();
 
-    if (_.has(Config, "metaDataCatalogueId")) {
+    if (Config.hasOwnProperty("metaDataCatalogueId")) {
         layerInformationModelSettings.metaDataCatalogueId = Config.metaDataCatalogueId;
     }
     new LayerinformationModel(layerInformationModelSettings);
 
-    if (_.has(Config, "footer")) {
+    if (Config.hasOwnProperty("footer")) {
         new FooterView(Config.footer);
     }
 
-    if (_.has(Config, "clickCounter") && _.has(Config.clickCounter, "desktop") && Config.clickCounter.desktop !== "" && _.has(Config.clickCounter, "mobile") && Config.clickCounter.mobile !== "") {
+    if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {
         new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
     }
 
-    if (_.has(Config, "mouseHover")) {
+    if (Config.hasOwnProperty("mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
     }
 
-    if (_.has(Config, "scaleLine") && Config.scaleLine === true) {
+    if (Config.hasOwnProperty("scaleLine") && Config.scaleLine === true) {
         new ScaleLineView();
     }
 
-    new WindowView();
+    style = Radio.request("Util", "getUiStyle");
+
     // Module laden
     // Tools
-
     new SidebarView();
 
-    _.each(Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}), function (tool) {
+    Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
         switch (tool.id) {
             case "compareFeatures": {
                 new CompareFeaturesView({model: tool});
@@ -308,13 +315,14 @@ function loadApp () {
             }
         }
     });
+
     if (!style || style !== "SIMPLE") {
         controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
         controlsView = new ControlsView();
 
-        _.each(controls, function (control) {
-            var element,
-                orientationConfigAttr = _.isString(control.attr) ? {zoomMode: control.attr} : control;
+        controls.forEach(control => {
+            const orientationConfigAttr = typeof control.attr === "string" ? {zoomMode: control.attr} : control;
+            let element;
 
             switch (control.id) {
                 case "zoom": {
@@ -349,20 +357,20 @@ function loadApp () {
                  * @deprecated in 3.0.0
                  */
                 case "totalview": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         console.warn("'totalview' is deprecated. Please use 'totalView' instead");
                         new TotalView(control.id);
                     }
                     break;
                 }
                 case "totalView": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         new TotalView(control.id);
                     }
                     break;
                 }
                 case "attributions": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
                     }
@@ -373,7 +381,7 @@ function loadApp () {
                  * @deprecated in 3.0.0
                  */
                 case "backforward": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         console.warn("'backforward' is deprecated. Please use 'backForward' instead");
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
@@ -381,7 +389,7 @@ function loadApp () {
                     break;
                 }
                 case "backForward": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowTR(control.id, false);
                         new BackForwardView({el: element});
                     }
@@ -392,7 +400,7 @@ function loadApp () {
                  * @deprecated in 3.0.0
                  */
                 case "overviewmap": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
                         element = controlsView.addRowBR(control.id, false);
                         new OverviewmapView(element, control.id, control.attr);
@@ -400,7 +408,7 @@ function loadApp () {
                     break;
                 }
                 case "overviewMap": {
-                    if (control.attr === true || _.isObject(control.attr)) {
+                    if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id, false);
                         new OverviewmapView(element, control.id, control.attr);
                     }
@@ -443,29 +451,68 @@ function loadApp () {
 
     new MapMarkerView(mapMarkerConfig);
 
-    sbconfig = _.extend({}, _.has(Config, "quickHelp") ? {quickHelp: Config.quickHelp} : {});
-    sbconfig = _.extend(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
+    sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});
+    sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
         if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
             new TitleView();
         }
     }
+    if (i18nextIsEnabled && Object.keys(i18nextLanguages).length > 1) {
+        new LanguageView();
+    }
 
     new HighlightFeature();
 
     if (Config.addons !== undefined) {
+        Radio.channel("Addons");
+        let initCounter = 0;
+
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
+                initCounter++;
+            }
+        });
+        initCounter = initCounter * Object.keys(i18nextLanguages).length;
+
+        Config.addons.forEach((addonKey) => {
+            if (allAddons[addonKey] !== undefined) {
+
+                Object.keys(i18nextLanguages).forEach((lng) => {
+                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
+                        .then(({default: additionalLocales}) => {
+                            i18next.addResourceBundle(lng, "additional", additionalLocales);
+                            initCounter--;
+                            if (initCounter === 0) {
+                                Radio.trigger("Addons", "initialized");
+                            }
+                        }).catch(error => {
+                            initCounter--;
+                            console.warn(error);
+                            console.warn("Die Übersetzungsdateien der Anwendung " + addonKey + " konnten nicht vollständig geladen werden. Teile der Anwendung sind nicht übersetzt.");
+                        });
+                });
+
+
                 // .js need to be removed so webpack only searches for .js files
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
-                import(/* webpackChunkName: "[request]" */ `../addons/${entryPoint}.js`).then(module => {
+                import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".js").then(module => {
                     /* eslint-disable new-cap */
                     const addon = new module.default();
 
                     // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
                     if (addon.model) {
+                        // set this special attribute, because it is the only one set before this replacement
+                        const model = Radio.request("ModelList", "getModelByAttributes", {"id": addon.model.id});
+
+                        if (!model) {
+                            console.warn("wrong configuration: addon " + addonKey + " is not in tools menu or cannot be called from somewhere in the view! Defined this in config.json.");
+                        }
+                        else {
+                            addon.model.set("i18nextTranslate", model.get("i18nextTranslate"));
+                        }
                         Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
                     }
                 }).catch(error => {

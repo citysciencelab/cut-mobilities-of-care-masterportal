@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import {parseFlightOptions} from "@modules/tools/virtualcity/flight";
-import FlightPlayer from "@modules/tools/virtualcity/flightPlayer";
+import {parseFlightOptions} from "@modules/tools/virtualCity/flight";
+import FlightPlayer from "@modules/tools/virtualCity/flightPlayer";
 
 describe("flightPlayer", function () {
     var flightInstance,

@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <select class="form-control input-sm interaction">
     <% drawTypeOptions.forEach(function (option) { %>
-        <option value="<%= option.value %>"><%= option.caption %></option>
+        <option value="<%= option.value %>" id="<%= option.id %>"><%= option.caption %></option>
     <% }); %>
 </select>
 <hr>
 <form class="form-horizontal" role="form">
     <div class="checkbox"></div>
     <div class="form-group form-group-sm dropdownMethod">
-        <label class="col-md-5 col-sm-5 control-label">Methode</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=method%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm input-method">
-                <option value="interactiv">interaktiv</option>
-                <option value="defined">definiert</option>
+                <option value="interactiv"><%=interactive%></option>
+                <option value="defined"><%=defined%></option>
             </select>
         </div>
     </div>
     <div class="form-group form-group-sm circleRadiusInner">
-        <label class="col-md-5 col-sm-5 control-label">Durchmesser</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=diameter%></label>
         <div class="col-md-7 col-sm-7">
-            <input type="number" class="form-control" placeholder="Klicken Sie auf die Karte um den Kreis zu platzieren" disabled=true/>
+            <input type="number" class="form-control" placeholder="<%=doubleCirclePlaceholder%>" disabled=true/>
         </div>
     </div>
     <div class="form-group form-group-sm circleRadiusOuter">
-        <label class="col-md-5 col-sm-5 control-label">Äußerer Durchmesser</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=outerDiameter%></label>
         <div class="col-md-7 col-sm-7">
-            <input type="number" class="form-control" placeholder="Klicken Sie auf die Karte um den Kreis zu platzieren">
+            <input type="number" class="form-control" placeholder="<%=doubleCirclePlaceholder%>">
         </div>
     </div>
     <div class="form-group form-group-sm dropdownUnit">
-        <label class="col-md-5 col-sm-5 control-label">Einheit</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=unit%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm" disabled=true>
                 <option value="m">m</option>
@@ -38,13 +38,13 @@
         </div>
     </div>
     <div class="form-group form-group-sm text">
-        <label class="col-md-5 col-sm-5 control-label">Text</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=textI18n%></label>
         <div class="col-md-7 col-sm-7">
-            <input type="text" class="form-control" placeholder="Klicken Sie auf die Karte um den Text zu platzieren"/>
+            <input type="text" placeholder="<%=clickToPlaceText%>" class="form-control">
         </div>
     </div>
     <div class="form-group form-group-sm font-size">
-        <label class="col-md-5 col-sm-5 control-label">Schriftgröße</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=fontSizeText%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
                 <% fontSizeOptions.forEach(function (option) { %>
@@ -54,7 +54,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm font">
-        <label class="col-md-5 col-sm-5 control-label">Schriftart</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=fontName%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
                 <% fontOptions.forEach(function (option) { %>
@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm radius">
-        <label class="col-md-5 col-sm-5 control-label">Größe</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=size%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
                 <% strokeOptions.forEach(function (option) { %>
@@ -74,7 +74,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm stroke-width">
-        <label class="col-md-5 col-sm-5 control-label">Strichstärke</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=lineWidth%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
                 <% strokeOptions.forEach(function (option) { %>
@@ -84,7 +84,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm opacity">
-        <label class="col-md-5 col-sm-5 control-label">Transparenz</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=transparency%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
                     <% transparencyOptions.forEach(function (option) { %>
@@ -94,7 +94,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm opacityContour">
-        <label class="col-md-5 col-sm-5 control-label">Transparenz Umriss</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=transparencyOutline%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
                     <% transparencyOptions.slice(0, transparencyOptions.length - 1).forEach(function (option) { %>
@@ -104,7 +104,7 @@
         </div>
     </div>
     <div class="form-group form-group-sm colorContour">
-        <label class="col-md-5 col-sm-5 control-label">Umrissfarbe</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=outlineColor%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm colorContour">
                 <option value="<%= colorOptions[1].value %>"><%= colorOptions[1].caption %></option>
@@ -117,7 +117,7 @@
     </div>
     <div class="form-horizontal" role="form">
         <div class="form-group form-group-sm color">
-            <label class="col-md-5 col-sm-5 control-label">Füllfarbe</label>
+            <label class="col-md-5 col-sm-5 control-label"><%=colorText%></label>
             <div class="col-md-7 col-sm-7">
                 <select class="form-control input-sm colorFill">
                     <% colorOptions.forEach(function (option) { %>
@@ -134,7 +134,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-sm btn-block btn-primary draw">
             <span class="glyphicon glyphicon-pencil"></span>
-            Geometrie / Text zeichnen
+            <%=drawBtnText%>
             </button>
         </div>
     </div>
@@ -142,7 +142,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-lgv-grey btn-sm btn-block modify">
             <span class="glyphicon glyphicon-wrench"></span>
-            Geometrie bearbeiten
+            <%=editBtnText%>
             </button>
         </div>
     </div>
@@ -150,7 +150,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-lgv-grey btn-sm btn-block downloadDrawing">
                 <span class="glyphicon glyphicon-floppy-disk"></span>
-                Herunterladen
+                <%=downloadBtnText%>
             </button>
         </div>
     </div>
@@ -158,7 +158,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-lgv-grey btn-sm btn-block trash">
             <span class="glyphicon glyphicon-trash"></span>
-            Geometrie / Text löschen
+            <%=deleteBtnText%>
             </button>
         </div>
     </div>
@@ -166,7 +166,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-lgv-grey btn-sm btn-block delete">
             <span class="glyphicon glyphicon-trash"></span>
-            Alles löschen
+            <%=deleteAllBtnText%>
             </button>
         </div>
     </div>

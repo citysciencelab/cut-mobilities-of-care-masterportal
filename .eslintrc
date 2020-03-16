@@ -14,14 +14,17 @@
         "Config": true,
         "Radio": true,
         "Backbone": true,
-        "Cesium": true
+        "Cesium": true,
+        "i18next": true
     },
     "plugins": [
         "chai-friendly",
         "vue"
     ],
-    "parser": "babel-eslint",
+    "parser": "vue-eslint-parser",
     "parserOptions": {
+        "parser": "babel-eslint",
+        "ecmaVersion": 2017,
         "sourceType": "module",
         "allowImportExportEverywhere": true
     },

@@ -17,7 +17,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         showSettings: true,
         styleable: false,
         supported: ["2D"],
-        transparency: 0
+        transparency: 0,
+        isOutOfRange: undefined
     },
     /**
      * @class Layer
@@ -250,6 +251,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 }
             });
         }
+        else if (this.get("typ") === "WFS" && Radio.request("Parser", "getTreeType") === "light") {
+            this.listenToOnce(this, {
+                // data will be loaded at first selection
+                "change:isSelected": function () {
+                    this.updateSource(true);
+                }
+            });
+        }
 
         this.listenTo(channel, {
             "updateLayerInfo": function (name) {
@@ -327,7 +336,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     getResolutions: function () {
-        var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
+        const resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
             resoByMinScale = Radio.request("MapView", "getResoByScale", this.get("minScale"), "min");
 
         this.setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
@@ -387,7 +396,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     toggleWindowsInterval: function () {
-        var isVisible = this.get("isVisibleInMap"),
+        const isVisible = this.get("isVisibleInMap"),
             autoRefresh = this.get("autoRefresh");
 
         if (isVisible === true) {
@@ -395,7 +404,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 this.setWindowsInterval(this.intervalHandler, autoRefresh);
             }
         }
-        else if (!_.isUndefined(this.get("windowsInterval"))) {
+        else if (typeof this.get("windowsInterval") === "object") {
             clearInterval(this.get("windowsInterval"));
         }
     },
@@ -435,9 +444,9 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     toggleAttributionsInterval: function () {
-        var channelName, eventName, timeout;
+        let channelName, eventName, timeout;
 
-        if (this.has("layerAttribution") && _.isObject(this.get("layerAttribution"))) {
+        if (this.has("layerAttribution") && typeof this.get("layerAttribution") === "object") {
             channelName = this.get("layerAttribution").channel;
             eventName = this.get("layerAttribution").eventname;
             timeout = this.get("layerAttribution").timeout;
@@ -460,11 +469,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     updateLayerTransparency: function () {
-        var opacity = (100 - this.get("transparency")) / 100;
+        const opacity = (100 - this.get("transparency")) / 100;
 
         // Auch wenn die Layer im simple Tree noch nicht selected wurde können
         // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
-        if (!_.isUndefined(this.get("layer"))) {
+        if (typeof this.get("layer") === "object") {
             this.get("layer").setOpacity(opacity);
         }
     },
@@ -474,11 +483,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
-        var metaID = [],
-            legend = Radio.request("Legend", "getLegend", this),
+        let legend = "";
+        const metaID = [],
             name = this.get("name"),
             layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
+        if (this.get("legendURL") === "") {
+            this.createLegendURL();
+        }
+        legend = Radio.request("Legend", "getLegend", this);
         metaID.push(layerMetaId);
 
         Radio.trigger("LayerInformation", "add", {
@@ -487,7 +500,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "metaID": metaID,
             "layername": name,
             "url": this.get("url"),
-            "typ": this.get("typ")
+            "typ": this.get("typ"),
+            "urlIsVisible": this.get("urlIsVisible")
         });
 
         this.setLayerInfoChecked(true);
@@ -506,7 +520,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {Boolean} -
      */
     isLayerSourceValid: function () {
-        return !_.isUndefined(this.get("layerSource"));
+        return typeof this.get("layerSource") === "object";
     },
 
     /**
@@ -686,7 +700,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     removeLayer: function () {
-        var layer = this.get("id");
+        const layer = this.get("id");
 
         this.setIsVisibleInMap(false);
         this.collection.removeLayerById(layer);
@@ -699,6 +713,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setVisible: function (value) {
         this.get("layer").setVisible(value);
+    },
+
+    /**
+     * Setter for layerInfoClicked
+     * @param {Boolean} value Flag if layerinfo is opened
+     * @returns {void} -
+     */
+    setLayerInfoClicked: function (value) {
+        this.set("layerInfoClicked", value);
     }
 });
 

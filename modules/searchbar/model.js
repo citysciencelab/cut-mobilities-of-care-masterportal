@@ -10,7 +10,12 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
         knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm"],
-        activeInitialSearchTasks: []
+        activeInitialSearchTasks: [],
+        // translations
+        i18nextTranslate: null,
+        buttonSearchTitle: "",
+        buttonOpenHelpTitle: "",
+        showAllResultsText: ""
     },
 
     /**
@@ -30,6 +35,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
      * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm"] Search algorithms for which an initial search is possible
      * @property {Array} activeInitialSearchTasks=[] Search algorithms for which an initial search is activated
+     * @property {function} i18nextTranslate=null translation function named i18nextTranslate := function(setter), set during parsing the file "config.json"
+     * @property {String} buttonSearchTitle="", filled with "Suchen"- translated
+     * @property {String} buttonOpenHelpTitle="", filled with "Hilfe öffnen"- translated
+     * @property {String} showAllResultsText="", filled with "alle Ergebnisse anzeigen"- translated
      * @listens Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @listens Searchbar#RadioTriggerSearchbarPushHits
      * @listens Searchbar#RadioTriggerSearchbarRemoveHits
@@ -51,7 +60,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             "abortSearch": this.abortSearch
         });
 
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        if (typeof Radio.request("ParametricURL", "getInitString") !== "undefined") {
             // Speichere den Such-Parameter für die initiale Suche zur späteren Verwendung in der View
             this.setInitSearchString(Radio.request("ParametricURL", "getInitString"));
         }
@@ -61,6 +74,28 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             this.set("isInitialRecommendedListCreated", true);
         }
 
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language.
+     * If contents from config.json are translated, this is respected here by using the function "i18nextTranslate".
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        const setLanguage = {};
+
+        if (typeof this.get("i18nextTranslate") === "function") {
+            this.get("i18nextTranslate")(function (key, value) {
+                setLanguage[key] = value;
+            });
+        }
+        setLanguage.buttonSearchTitle = i18next.t("common:button.search");
+        setLanguage.buttonOpenHelpTitle = i18next.t("common:modules.quickHelp.titleTag");
+        setLanguage.showAllResultsText = i18next.t("common:modules.searchbar.showAllResults");
+
+        this.set(setLanguage);
     },
 
     /**
@@ -84,8 +119,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      */
     checkInitialSearch: function () {
         var allDone = true;
-
         // Ist mindestens ein Suchalgorithmus noch als ausstehend markiert?
+
         _.forEach(this.get("activeInitialSearchTasks"), function (taskName) {
             var status = this.get("initialSearch_" + taskName);
 
@@ -100,7 +135,23 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             // beendet und die Ergebnisliste erstmalig erzeugt.
             this.set("isInitialSearch", false);
             this.createRecommendedList("initialSearchFinished");
+            this.checkInitialSearchResult(this.get("recommendedList"));
             this.set("isInitialRecommendedListCreated", true);
+        }
+    },
+
+    /**
+     * Creates a user message if the initialSearch has no results to inform the user.
+     * @param   {Object[]} results recommendedList
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {void}
+     */
+    checkInitialSearchResult: function (results) {
+        if (Array.isArray(results) && !results.length) {
+            Radio.trigger("Alert", "alert", {
+                text: i18next.t("common:modules.searchbar.noInitialResults"),
+                fadeOut: 5000
+            });
         }
     },
 
@@ -134,6 +185,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         this.set("activeInitialSearchTasks", activeSearchTasks);
     },
 
+    /**
+     * Setter for attribute "initSearchString".
+     * @param {String} value Search string for initial search.
+     * @returns {void}
+     */
     setInitSearchString: function (value) {
         this.set("initSearchString", value);
     },
@@ -266,13 +322,12 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @returns {void}
      */
     createRecommendedList: function (triggeredBy) {
-        var max = this.get("recommendedListLength"),
-            recommendedList = [],
-            hitList = this.get("hitList"),
-            foundTypes = [],
-            singleTypes,
-            usedNumbers = [],
-            randomNumber;
+        const max = this.get("recommendedListLength");
+        let recommendedList = [],
+            hitList = this.get("hitList");
+
+        hitList = Radio.request("Util", "sort", "address", hitList, "name");
+        this.setHitList(hitList);
 
         // Die Funktion "createRecommendedList" wird vielfach (von jedem Suchalgorithmus) aufgerufen.
         // Im Rahmen der initialen Suche muss sichergestellt werden, dass die Ergebnisse der einzelnen
@@ -287,37 +342,116 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         }
 
         if (hitList.length > max) {
-            singleTypes = _.reject(hitList, function (hit) {
-                var res;
-
-                if (_.contains(foundTypes, hit.type) === true || foundTypes.length === max) {
-                    res = true;
-                }
-                else {
-                    foundTypes.push(hit.type);
-                }
-                return res;
-            });
-
-            while (singleTypes.length < max) {
-                randomNumber = _.random(0, hitList.length - 1);
-                if (_.contains(usedNumbers, randomNumber) === false) {
-                    singleTypes.push(hitList[randomNumber]);
-                    usedNumbers.push(randomNumber);
-                    singleTypes = _.uniq(singleTypes);
-                }
-            }
-            recommendedList = singleTypes;
+            recommendedList = this.getRandomEntriesOfEachType(hitList, max);
         }
         else {
-            recommendedList = this.get("hitList");
+            recommendedList = hitList;
         }
-        this.set("recommendedList", _.sortBy(recommendedList, "name"));
+        recommendedList = Radio.request("Util", "sort", "address", recommendedList, "name");
+        this.setRecommendedList(recommendedList);
+        this.setTypeList(this.prepareTypeList(hitList));
         this.trigger("renderRecommendedList");
 
         if (triggeredBy === "initialSearchFinished" && hitList.length === 1) {
             Radio.trigger("ViewZoom", "hitSelected");
         }
+    },
+
+    /**
+     * @param {Object[]} hitList List of all hits from searchbar.
+     * @param {Number} maxLength Configured number of hits to be shown.
+     * @returns {Object[]} - random Entries. mimum length is given by attribute "maxLength".
+     */
+    getRandomEntriesOfEachType: function (hitList, maxLength) {
+        const randomEntries = [],
+            max = hitList.length < maxLength ? hitList.length : maxLength;
+        let foundTypes = [],
+            foundTypesIterator = 0,
+            counter = 0;
+
+        hitList.every(hit => foundTypes.push(hit.type));
+        foundTypes = [...new Set(foundTypes)];
+
+        while (counter < max) {
+            const foundTypesLength = foundTypes.length,
+                positionOfFoundTypes = foundTypesIterator % foundTypesLength,
+                type = foundTypes[positionOfFoundTypes],
+                randomEntryByType = this.getRandomEntryByType(hitList, type);
+
+            if (!randomEntries.includes(randomEntryByType)) {
+                randomEntries.push(randomEntryByType);
+                counter++;
+            }
+            foundTypesIterator++;
+        }
+
+        return randomEntries;
+    },
+
+    /**
+     * Filters the hitList by type and returns an random object of the list.
+     * @param {Object[]} hitList List of all hits from searchbar.
+     * @param {String} type Type of search.
+     * @returns {Object} - random object of hitlist by given type.
+     */
+    getRandomEntryByType: function (hitList, type) {
+        const hitListByType = hitList.filter(hit => hit.type === type),
+            randomNumber = Math.floor(Math.random() * hitListByType.length);
+
+        return hitListByType[randomNumber];
+    },
+
+    /**
+     * Sorts the hitList by type.
+     * @param {Object[]} hitList Hitlist.
+     * @returns {Object[]} - sorted Hits by Type
+     */
+    prepareTypeList: function (hitList) {
+        const typeList = [],
+            types = hitList.map(hit => hit.type),
+            uniqueTypes = types.reduce((unique, item) => {
+                return unique.includes(item) ? unique : [...unique, item];
+            }, []);
+
+        uniqueTypes.forEach(type => {
+            const typeListPart = hitList.filter(hit => {
+                    return hit.type === type;
+                }),
+                typeListObj = {
+                    type: type,
+                    list: typeListPart
+                };
+
+            typeList.push(typeListObj);
+        });
+        return typeList;
+    },
+
+    /**
+     * Setter for attribute "recommendedList".
+     * @param {Object[]} value recommendedList.
+     * @returns {void}
+     */
+    setRecommendedList: function (value) {
+        this.set("recommendedList", value);
+    },
+
+    /**
+     * Setter for attribute "hitList".
+     * @param {Object[]} value hitList.
+     * @returns {void}
+     */
+    setHitList: function (value) {
+        this.set("hitList", value);
+    },
+
+    /**
+     * Setter for attribute "typeList".
+     * @param {Object[]} value typeList.
+     * @returns {void}
+     */
+    setTypeList: function (value) {
+        this.set("typeList", value);
     },
 
     /**

@@ -1,15 +1,24 @@
-const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.prototype */{
+const AttributionsControlModel = Backbone.Model.extend(/** @lends AttributionsControlModel.prototype */{
     defaults: {
         isContentVisible: true,
         isVisibleInMap: false,
         isInitOpenDesktop: true,
         isInitOpenMobile: false,
         attributionList: [],
-        isOverviewmap: Boolean(Radio.request("Parser", "getItemByAttributes", {id: "overviewmap"}))
+        // translations
+        showAttributionsText: "",
+        hideAttributionsText: ""
     },
 
     /**
-     * @class AttributionsModel
+     * @typedef {Object} DataForAttributionList
+     * @property {String} name Attribution name
+     * @property {String} text Attribution copy
+     * @property {String} type Attribution type
+     */
+
+    /**
+     * @class AttributionsControlModel
      * @extends Backbone.Model
      * @memberof Controls.Attributions
      * @constructs
@@ -17,16 +26,28 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @property {Boolean} isVisibleInMap=false true when the control is displayed on the map
      * @property {Boolean} isInitOpenDesktop=true Flag if module is initially activated upon load in desktop environment
      * @property {Boolean} isInitOpenMobile=false Flag if module is initially activated upon load in mobile environment
-     * @property {Array} attributionList=[] Array of attributions of all layers
-     * @property {Boolean} isOverviewmap=? todo
+     * @property {DataForAttributionList[]} attributionList=[] Array of attributions (see DataForAttributionList above) of all layers
+     * @property {String} showAttributionsText="" toggle text if attributions are hidden
+     * @property {String} hideAttributionsText="" toggle text if attributions are shown
      * @listens Core.ModelList#RadioTriggerModelListUpdateVisibleInMapList
      * @listens Controls.Attributions#RadioTriggerAttributionsCreateAttribution
      * @listens Controls.Attributions#RadioTriggerAttributionsRemoveAttribution
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @fires Core#RadioRequestUtilIsViewMobile
      * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Controls.Attributions#changeIsContentVisible
+     * @fires Controls.Attributions#changeIsVisibleInMap
+     * @fires Controls.Attributions#changeIsInitOpenDesktop
+     * @fires Controls.Attributions#changeIsInitOpenMobile
+     * @fires Controls.Attributions#changeAttributionList
+     * @fires Controls.Attributions#changeShowAttributionsText
+     * @fires Controls.Attributions#changeHideAttributionsText
      */
     initialize: function () {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
         this.listenTo(Radio.channel("ModelList"), {
             "updateVisibleInMapList": this.updateAttributions
         });
@@ -43,13 +64,30 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         else {
             this.setIsContentVisible(this.get("isInitOpenDesktop"));
         }
+
+        this.changeLang();
     },
+
+    /**
+    * change language - sets default values for the language
+    * @param {String} lng the language changed to
+    * @fires Controls.Attributions#changeShowAttributionsText
+    * @fires Controls.Attributions#changeHideAttributionsText
+    * @returns {Void}  -
+    */
+    changeLang: function () {
+        this.set({
+            showAttributionsText: i18next.t("common:modules.controls.attributions.showAttributions"),
+            hideAttributionsText: i18next.t("common:modules.controls.attributions.hideAttributions")
+        });
+    },
+
     /**
      * Event listener function for "createAttribution" event. Activates and opens attribution pane.
      * @param {String} name Attribution name
      * @param {String} text Attribution copy
      * @param {String} type Attribution type
-     * @returns {void}
+     * @returns {Void}  -
      */
     onCreateAttribution: function (name, text, type) {
         this.setIsVisibleInMap(true);
@@ -61,21 +99,22 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @param {String} name Attribution name
      * @param {String} text Attribution copy
      * @param {String} type Attribution type
-     * @returns {void}
+     * @returns {Void}  -
      */
     onRemoveAttribution: function (name, text, type) {
         this.removeAttribution(name, text, type);
     },
     /**
-     * Creates a single attribution and pushes it into attributions array.
+     * Creates a single attribution (look above for DataForAttributionList) and pushes it into the attributions array.
      * Sets module visibility to true and renders it.
      * @param {String} name Attribution name
      * @param {String} text Attribution copy
      * @param {String} type Attribution type
      * @fires  Attributions#AttributionsRenderAttributions
-     * @returns {void}
+     * @returns {Void}  -
      */
     createAttribution: function (name, text, type) {
+        // this is the declaration of DataForAttributionList
         this.get("attributionList").push({
             type: type,
             name: name,
@@ -93,10 +132,10 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @param {String} text Attribution copy
      * @param {String} type Attribution type
      * @fires  Controls.Attributions#AttributionsRenderAttributions
-     * @returns {void}
+     * @returns {Void}  -
      */
     removeAttribution: function (name, text, type) {
-        var filteredAttributions = this.get("attributionList").filter(function (attribution) {
+        const filteredAttributions = this.get("attributionList").filter(function (attribution) {
             return attribution.name !== name && attribution.text !== text && attribution.type !== type;
         });
 
@@ -110,7 +149,8 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     /**
      * Updates attributions functionality data. Usually called upon layer visibility change.
      * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
-     * @returns {void}
+     * @fires  Controls.Attributions#AttributionsRenderAttributions
+     * @returns {Void}  -
      */
     updateAttributions: function updateAttributions () {
         const modelList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
@@ -160,7 +200,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @returns {void}
      */
     removeAllLayerAttributions: function () {
-        var attributions = this.get("attributionList"),
+        const attributions = this.get("attributionList"),
             filteredAttributions = attributions.filter(function (attribution) {
                 return attribution.type !== "layer";
             });
@@ -175,12 +215,12 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
      * @returns {void}
      */
     generateAttributions: function (filteredModelList) {
-        _.each(filteredModelList, function (model) {
-            var name = model.get("name"),
-                text = "",
+        filteredModelList.forEach(function (model) {
+            const name = model.get("name"),
                 type = "layer";
+            let text = "";
 
-            if (_.isObject(model.get("layerAttribution"))) {
+            if (this.isObject(model.get("layerAttribution"))) {
                 text = model.get("layerAttribution").text;
             }
             else {
@@ -190,16 +230,28 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
         }, this);
     },
     /**
+     * Returns true, if obj is an object
+     * @param {*} obj to inspect
+     * @returns {void}
+     */
+    isObject: function (obj) {
+        const type = typeof obj;
+
+        return type === "function" || type === "object";
+    },
+    /**
      * Setter for "isContentVisible"
      * @param {Boolean} value flag if attributions pane is visible
+     * @fires Controls.Attributions#changeIsContentVisible
      * @returns {void}
      */
     setIsContentVisible: function (value) {
         this.set("isContentVisible", value);
     },
     /**
-     * Setter for "isContentVisible"
+     * Setter for "isVisibleInMap"
      * @param {Boolean} value flag if attributions functionality (pane + control button) is visible
+     * @fires Controls.Attributions#changeIsVisibleInMap
      * @returns {void}
      */
     setIsVisibleInMap: function (value) {
@@ -208,6 +260,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     /**
      * Setter for "attributionList"
      * @param {Boolean} value flag
+     * @fires Controls.Attributions#changeAttributionList
      * @returns {void}
      */
     setAttributionList: function (value) {
@@ -216,6 +269,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     /**
      * Setter for "isInitOpenDesktop"
      * @param {Boolean} value flag
+     * @fires Controls.Attributions#changeIsInitOpenDesktop
      * @returns {void}
      */
     setIsInitOpenDesktop: function (value) {
@@ -225,6 +279,7 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
     /**
      * Setter for "isInitOpenMobile"
      * @param {Boolean} value flag
+     * @fires Controls.Attributions#changeIsInitOpenMobile
      * @returns {void}
      */
     setIsInitOpenMobile: function (value) {
@@ -246,4 +301,4 @@ const AttributionsModel = Backbone.Model.extend(/** @lends AttributionsModel.pro
 
 });
 
-export default AttributionsModel;
+export default AttributionsControlModel;

@@ -42,9 +42,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         "click .form-control-feedback": "deleteSearchString",
         "click .btn-search": "searchAll",
         "click .list-group-item.hit": "hitSelected",
-        "touchstart .list-group-item.hit": "hitSelected",
         "click .list-group-item.results": "renderHitList",
-        "mouseover .list-group-item.hit": "showMarker",
+        "mouseenter .list-group-item.hit": "showMarker",
         "mouseleave .list-group-item.hit": "hideMarker",
         "click .list-group-item.type": "clickListGroupItem",
         "click .btn-search-question": "clickBtnQuestion",
@@ -86,7 +85,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.className = "navbar-form col-xs-9";
 
         this.listenTo(this.model, {
-            "renderRecommendedList": this.renderRecommendedList
+            "renderRecommendedList": this.renderRecommendedList,
+            "change:placeholder change:buttonSearchTitle change:showAllResultsText": this.initialRender
         });
 
         this.listenTo(Radio.channel("TableMenu"), {
@@ -122,29 +122,29 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setInitialSearchTasks(config);
 
         // Bedarfsweises Laden der Suchalgorythmen
-        if (_.has(config, "gazetteer") === true) {
+        if (config.hasOwnProperty("gazetteer")) {
             new GAZModel(config.gazetteer);
         }
-        if (_.has(config, "specialWFS") === true) {
+        if (config.hasOwnProperty("specialWFS")) {
             new SpecialWFSModel(config.specialWFS);
         }
-        if (_.has(config, "visibleVector") === true) {
+        if (config.hasOwnProperty("visibleVector")) {
             new VisibleVectorModel(config.visibleVector);
         }
-        else if (_.has(config, "visibleWFS") === true) {
+        else if (config.hasOwnProperty("visibleWFS")) {
             // Deprecated mit neuer Stable
             new VisibleVectorModel(config.visibleWFS);
         }
-        if (_.has(config, "bkg") === true) {
+        if (config.hasOwnProperty("bkg")) {
             new BKGModel(config.bkg);
         }
-        if (_.has(config, "tree") === true) {
+        if (config.hasOwnProperty("tree")) {
             new TreeModel(config.tree);
         }
-        if (_.has(config, "osm") === true) {
+        if (config.hasOwnProperty("osm")) {
             new OSMModel(config.osm);
         }
-        if (_.has(config, "gdi") === true) {
+        if (config.hasOwnProperty("gdi")) {
             new GdiModel(config.gdi);
         }
         if (config.hasOwnProperty("elasticSearch")) {
@@ -228,9 +228,13 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     clickListGroupItem: function (e) {
         // fix für Firefox
-        var event = e || window.event;
+        const event = e || window.event;
+        let target = $(event.target);
 
-        this.collapseHits($(event.target));
+        if (target.hasClass("badge")) {
+            target = target.parent();
+        }
+        this.collapseHits(target);
     },
 
     /**
@@ -384,7 +388,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             this.hitSelected(); // erster und einziger Eintrag in Liste
         }
         else {
-            this.model.set("typeList", _.uniq(_.pluck(this.model.get("hitList"), "type")));
             attr = this.model.toJSON();
             attr.uiStyle = Radio.request("Util", "getUiStyle");
             // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
@@ -840,70 +843,54 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * todo
-     * @returns {*} todo
+     * Unsets the search to initial state: Clearing up the text input field, hiding the menu and hiding all map marker.
+     * @returns {void}
      */
     deleteSearchString: function () {
         this.model.setSearchString("");
-        this.$("#searchInput").val("");
-        this.$("#searchInput + span").hide();
-        this.focusOnEnd(this.$("#searchInput"));
+        this.setSearchbarString("");
         this.hideMarker();
-        Radio.trigger("MapMarker", "hideMarker");
-        Radio.trigger("MapMarker", "hidePolygon");
-        this.clearSelection();
-        // Suchvorschläge löschen
+        this.hideMenu();
         this.$("#searchInputUL").html("");
-
     },
 
     /**
-     * todo
-     * @param {*} evt todo
-     * @returns {*} todo
-     */
-    showMarker: function (evt) {
-        var hitId = evt.currentTarget.id,
-            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
-
-        if (_.has(hit, "triggerEvent")) {
-            // bei gdi-Suche kein Aktion bei Maushover oder bei GFI on Click
-            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick") {
-                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
-            }
-        }
-        else if (_.has(hit, "coordinate")) {
-            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
-        }
-        else if (hit.hasOwnProperty("type") && hit.type !== "Thema") {
-            console.warn("Error: Could not set MapMarker, no Coordinate found for " + hit.name);
-        }
-    },
-
-    /**
-     * hides the map marker
-     * @param {event} evt mouse leave event
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * Handler for mouseenter event on hit.
+     * @param {$.Event} evt Event
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      * @returns {void}
      */
-    hideMarker: function (evt) {
-        var hitId,
-            hit;
+    showMarker: function (evt) {
+        const isEvent = evt instanceof $.Event,
+            hitId = isEvent ? evt.currentTarget.id : null,
+            hit = isEvent ? this.model.get("hitList").find(obj => obj.id === hitId) : null,
+            hitName = isEvent ? hit.name : "undefined";
 
-        if (!_.isUndefined(evt)) {
-            hitId = evt.currentTarget.id;
-            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
-        }
-
-        if (_.has(hit, "triggerEvent")) {
         // bei gdi-Suche kein Aktion bei Maushover oder bei GFI on Click
-            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
-                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
-            }
+        if (hit && hit.hasOwnProperty("triggerEvent") && hit.type !== i18next.t("common:modules.searchbar.type.subject") && hit.triggerEvent.event !== "gfiOnClick") {
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
+            return;
         }
-        else if (this.$(".dropdown-menu-search").css("display") === "block") {
-            Radio.trigger("MapMarker", "hideMarker");
+        else if (hit && hit.hasOwnProperty("coordinate")) {
+            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
+            return;
         }
+        else if (hit && hit.hasOwnProperty("type") && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject"))) {
+            return;
+        }
+
+        console.warn("Error: Could not set MapMarker for " + hitName);
+    },
+
+    /**
+     * Hides all map markers.
+     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * @fires MapMarker#RadioTriggerMapMarkerHidePolygon
+     * @returns {void}
+     */
+    hideMarker: function () {
+        Radio.trigger("MapMarker", "hideMarker");
+        Radio.trigger("MapMarker", "hidePolygon");
     },
 
     /**

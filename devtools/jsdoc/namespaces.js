@@ -1,6 +1,6 @@
 /**
- * @namespace AddOns
- * @description AddOns are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
+ * @namespace Addons
+ * @description Addons are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
  */
 
 /**
@@ -879,4 +879,21 @@
  * @namespace Tileset
  * @memberof Core.ModelList.Layer
  * @description Helper functions for Cesium 3D TilesetLayer and VCS Style Handling
+ */
+
+/**
+ * @namespace VectorStyle
+ * @description vector styles for vector layer
+ */
+
+/**
+ * @namespace SensorThingsMqtt
+ * @memberof Core.ModelList.Layer
+ * @description SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol.
+ */
+
+/**
+ * @namespace SensorThingsHttp
+ * @memberof Core.ModelList.Layer
+ * @description SensorThingsHttp is the software layer to handle the special needs of the SensorThingsAPI regarding the http protocol.
  */

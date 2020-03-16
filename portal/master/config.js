@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 const Config = {
+    addons: ["einwohnerabfrage"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
     simpleMap: false,
@@ -50,7 +51,7 @@ const Config = {
     portalConf: "./",
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v2.json",
+    styleConf: "./style_v3.json",
     proxyURL: "/cgi-bin/proxy.cgi",
     scaleLine: true,
     mouseHover: {
@@ -71,7 +72,23 @@ const Config = {
         maximumScreenSpaceError: 2,
         fxaa: true
     },
-    defaultToolId: "gfi"
+    defaultToolId: "gfi",
+    portalLanguage: {
+        enabled: true,
+        debug: false,
+        languages: {
+            de: "deutsch",
+            en: "englisch"
+        },
+        fallbackLanguage: "de",
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+    },
+    /**
+     * @deprecated to be deleted with version 3.0
+     * @property {boolean} Config.useVectorStyleBeta Flag to use the new vectorStyling module for backward compatibility
+     * @default false
+     */
+    useVectorStyleBeta: true
 };
 
 /* eslint-enable no-unused-vars */

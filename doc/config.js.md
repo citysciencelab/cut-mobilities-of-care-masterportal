@@ -8,6 +8,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
+|**useVectorStyleBeta**|nein|Boolean|false|Konfigurationswert ob anstelle des produktiven vectorStyle-Moduls ein sich in der Entwicklung befindliches neues Modul zum Styling von Vektordaten verwendet werden soll. Die Verwendung bedingt eine neue Syntax der style.json. Deprecated mit Version 3.0.|useVectorStyleBeta: true|
 |**[clickCounter](#markdown-header-clickcounter)**|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
 |cswId|nein|String|"3"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"meine CSW-ID"`|
 |addons|nein|Array|[]|Angabe der Namen der gewünschten Custom-Module. Diese befinden sich im Ordner /addons/ und deren Entrypoints werden mithilfe der Datei addonsConf.json definiert.|`["myAddon1", "myAddon2"]`|
@@ -283,4 +284,32 @@ zoomToGeometry: {
 |mapMarkerStyleId|nein|String|"mapMarkerStyle"|Style Id des MapMarkers.|
 
 
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+
+## portalLanguage ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|enabled|ja|Boolean|true|Abhängig von diesem Schalter wird ein Button zum Umschalten von Sprachen angezeigt|
+|debug|nein|Boolean|false|Schalter um debug-Ausgaben bez. der Übersetzung in der console anzuzeigen|
+|languages|ja|Object|de: "deutsch", en: "englisch"|Kurzbezeichnung und Langbezeichnung der Sprachen|
+|fallbackLanguage|nein|String|"de"|Sprache die benutzt wird, wenn Übersetzungen in der gewählten Sprache nicht verfügbar sind|
+|changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator", "htmlTag"]|Reihenfolge und woher die Benutzersprache erkannt werden soll, siehe auch https://github.com/i18next/i18next-browser-languageDetector|
+
+**Beispiel:**
+```
+portalLanguage: {
+        enabled: true,
+        debug: false,
+        languages: {
+            de: "deutsch",
+            en: "englisch"
+        },
+        fallbackLanguage: "de",
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+    }
+```
+********
+
+>Zurück zur **[Dokumentation Übersetzungen im Masterportal](languages_de.md)**.
+
+>Zurück zur **[Dokumentation Masterportal](doc.md)**
+

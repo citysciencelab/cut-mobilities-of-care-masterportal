@@ -25,6 +25,7 @@ Im Abschnitt *Portalconfig* können folgende Eigenschaften konfiguriert werden:
 5. Menüeinträge sowie Vorhandenheit jeweiliger Tools und deren Reihenfolge (*menu*)
 6. Typ und Eigenschaften des genutzten Suchdienstes (*searchBar*)
 7. Löschbarkeit von Themen (*layersRemovable*)
+8. welche Sprachen genutzt werden sollen (*portalLanguage*)
 
 Es existieren die im Folgenden aufgelisteten Konfigurationen:
 
@@ -38,6 +39,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |menu|nein|**[menu](#markdown-header-portalconfigmenu)**||Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Reihenfolge der Werkzeuge ist identisch mit der Reihenfolge, in der config.json (siehe **[Tools](#markdown-header-portalconfigmenutools)**).|false|
 |searchBar|nein|**[searchBar](#markdown-header-portalconfigsearchbar)**||Über die Suchleiste können verschiedene Suchen gleichzeitig angefragt werden.|false|
 |layersRemovable|nein|Boolean|false|Gibt an ob der Layer gelöscht werden darf.|false|
+|portalLanguage|nein|**[portalLanguage](#markdown-header-portalLanguage)**||Mit dieser Konfiguration werden die Sprachen im Portal eingestellt, eine Default-Sprache ausgewählt und die Start-Reihenfolge festgelegt.|false|
 
 ***
 
@@ -321,14 +323,16 @@ Konfiguration der SpecialWFS Suche
             "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
-            "name": "B-Plan"
+            "name": "B-Plan",
+            "namespaces": "xmlns:app='http://www.deegree.org/app'"
         },
         {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
-            "name": "im Verfahren"
+            "name": "im Verfahren",
+            "namespaces": "xmlns:app='http://www.deegree.org/app'"
         }
     ]
 }
@@ -348,6 +352,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 |propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|false|
 |geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|false|
 |maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features.|false|
+|namespaces|nein|String||XML Namespaces zur Abfrage von propertyNames oder geometryName (*xmlns:wfs*, *xmlns:ogc* und *xmlns:gml* werden immer genutzt).|false|
 |data|nein|String||Deprecated in 3.0.0 Filterparameter für den WFS request.|false|
 
 **Beispiel**
@@ -415,6 +420,18 @@ Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinitio
     "layerTypes": ["WFS", "GeoJSON"]
 }
 ```
+***
+
+### Portalconfig.portalLanguage
+Konfiguration der Sprache
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|enabled|nein|Boolean|true|Aktiviert die Sprach-Umschalter-GUI im Portal.|Die Sprache kann dann nur noch über andere Eingriffe (z.B. Kommandozeile Backbone.i18next.changeLanguage("en")) umgeschaltet werden.|
+|debug|nein|Boolean|false|Kann für die Entwicklungsphase auf true gesetzt werden, um das Sprach-Tool zu debuggen.||
+|languages|nein|Object|{"de": "deutsch, "en": "english"}|Konfiguration der im Portal verwendeten Sprachen. Bitte beachten, dass die entsprechenden Sprach-Dateien auch hinterlegt sein müssen.||
+|startLanguage|nein|String|"de"|Die Standard-Sprache die beim Start automatisch aktiv sein soll.|Bitte beachten, dass dieser Wert ignoriert wird wenn eine andere Start-Bedingung erfüllt ist. Die startLanguage ist zugleich der Fallback, falls eine Sprache nicht erkannt wird oder Sprach-Schlüssel fehlen.|
+|changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator"]|Stellt die Reihenfolge der Sprach-Eingriffe ein, auf die beim Start geachtet werden soll.|
 
 ***
 
@@ -436,7 +453,6 @@ Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinitio
 |freeze|nein|Boolean|false|Legt fest, ob ein "Ansicht sperren" Button angezeigt werden soll. Im Style 'TABLE' erscheint dieser im Werkzeug-Fenster.|false|
 |backforward|nein|**[backForward](#markdown-header-portalconfigcontrolsbackforward)**|false|Deprecated in 3.0.0. Bitte "backForward" verwenden.|false|
 |backForward|nein|**[backForward](#markdown-header-portalconfigcontrolsbackforward)**|false|Zeigt Buttons zur Steuerung der letzten und nächsten Kartenansichten an.|false|
-
 
 ***
 
@@ -867,6 +883,9 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
 |onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
 |isVisibleInMenu|nein|Boolean|true|Flag ob das Tool unter Werkzeuge angezeigt wird.|false|
+|renderToWindow|nein|Boolean|true|Flag ob das Tool beim Anklicken im frei schwebenden Fenster dargestellt werden soll.|false|
+|resizableWindow|nein|Boolean|false|Flag ob das Tool-Fenster vergrößer-/verkleinerbar ist.|false|
+|keepOpen|nein|Boolean|false|Flag ob das Tool parallel zu anderen Tools geöffnet bleibt.|false|
 
 **Beispiel eines Tools**
 ```
@@ -1003,7 +1022,8 @@ Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 |isGeneric|nein|Boolean|false|Zeigt an ob sich der Filter dynamisch erzeugen lässt. Ist momentan noch nicht umgesetzt.|false|
 |minScale|nein|Integer||Minimale Zoomstufe auf die der Filter bei der Darstellung der Ergebnisse heranzoomt.|false|
 |liveZoomToFeatures|nein|Boolean|false|Gibt an ob der Filter sofort nach der Filterung auf die Filterergebnisse zoomt.|false|
-|predefinedQueries|nein|**[predefinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)**[]||Definition der Filterabfragen.|false|
+|predefinedQueries|nein|[predefinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)[]||Definition der Filterabfragen.|false|
+|saveToUrl|nein|Boolean|true|Speichert das aktuelle Filterergebnis in der Url ab. Dadurch kann das Filterergebnis als Lesezeichen abgelegt werden.|false|
 
 **Beispiel**
 ```
@@ -1948,6 +1968,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|false|
+|urlIsVisible|nein|Boolean|true|Anzeige ob die URL in der Layerinformation angezeigt werden soll.|false|
 
 **Beispiel**
 ```
@@ -1998,6 +2019,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem dem Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer reload des Layers. Angabe in ms. Minimum ist 500.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige ob Layer niemals im Themenbaum sichtbar ist.|false|
+|urlIsVisible|nein|Boolean|true|Anzeige ob die URL in der Layerinformation angezeigt werden soll.|false|
 
 **Beispiel mit einer Id**
 ```
@@ -2246,7 +2268,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), SensorLayer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), [SensorLayer](sensorThings.md).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2365,6 +2387,7 @@ Ein Extent besteht aus einem Array bestehend aus vier Zahlen. Ein Extent besschr
 #!json
 [510000.0, 5850000.0, 625000.4, 6000000.0]
 ```
+
 ***
 
 ## Datatypes.CustomObject

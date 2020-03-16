@@ -4,7 +4,7 @@ import Geolocation from "ol/Geolocation.js";
 import proj4 from "proj4";
 import * as Proj from "ol/proj.js";
 
-const OrientationModel = Backbone.Model.extend({
+const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.prototype */{
     defaults: {
         zoomMode: "once", // once oder always entsprechend Config
         firstGeolocation: true, // Flag, ob es sich um die erste geolocation handelt, damit "once" abgebildet werden kann.
@@ -19,12 +19,27 @@ const OrientationModel = Backbone.Model.extend({
         position: "",
         isGeolocationDenied: false,
         isGeoLocationPossible: false,
-        epsg: "EPSG:25832"
-    },
-    initialize: function (config) {
-        var channel;
+        epsg: "EPSG:25832",
+        // translations
+        titleGeolocate: "",
+        titleGeolocatePOI: ""
 
-        if (_.has(config, "attr") && _.has(config.attr, "poiDistances") && _.isArray(config.attr.poiDistances)) {
+    },
+    /**
+     * @class OrientationModel
+     * @description Create orientation control instance
+     * @extends Backbone.Model
+     * @memberof Controls.orientation
+     * @param {Object} config - todo
+     * @constructs
+     * @property {String} titleGeolocate="", filled with "Standpunkt"- translated
+     * @property {String} titleGeolocatePOI="", filled with "In meiner Nähe"- translated
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
+    initialize: function (config) {
+        let channel = null;
+
+        if (config !== undefined && config.hasOwnProperty("attr") && config.attr.hasOwnProperty("poiDistances") && Array.isArray(config.attr.poiDistances)) {
             this.setPoiDistances(config.attr.poiDistances);
         }
         channel = Radio.channel("geolocation");
@@ -54,8 +69,25 @@ const OrientationModel = Backbone.Model.extend({
             "updateVisibleInMapList": this.checkWFS
         });
 
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
         this.setConfig();
         this.setIsGeoLocationPossible();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function () {
+        this.set({
+            titleGeolocate: i18next.t("common:modules.controls.orientation.titleGeolocate"),
+            titleGeolocatePOI: i18next.t("common:modules.controls.orientation.titleGeolocatePOI")
+        });
     },
 
     /**
@@ -72,7 +104,7 @@ const OrientationModel = Backbone.Model.extend({
      */
     setConfig: function () {
         if (this.get("poiDistances")) {
-            if (_.isArray(this.get("poiDistances")) && this.get("poiDistances").length > 0) {
+            if (Array.isArray(this.get("poiDistances")) && this.get("poiDistances").length > 0) {
                 this.setPoiDistances(this.get("poiDistances"));
                 this.setShowPoi(true);
             }
@@ -102,7 +134,7 @@ const OrientationModel = Backbone.Model.extend({
         Radio.trigger("Map", "removeOverlay", this.get("marker"));
     },
     untrack: function () {
-        var geolocation = this.get("geolocation");
+        const geolocation = this.get("geolocation");
 
         geolocation.un("change", this.positioning.bind(this), this);
         geolocation.un("error", this.onError.bind(this), this);
@@ -113,7 +145,7 @@ const OrientationModel = Backbone.Model.extend({
         this.set("tracking", false);
     },
     track: function () {
-        var geolocation;
+        let geolocation = null;
 
         if (this.get("isGeolocationDenied") === false) {
             Radio.trigger("Map", "addOverlay", this.get("marker"));
@@ -138,14 +170,14 @@ const OrientationModel = Backbone.Model.extend({
             this.get("marker").setPosition(position);
         }
         catch (e) {
-            console.error("Marker konnte nicht gesetzt werden");
+            console.error("wasn't able to set marker");
         }
     },
     zoomAndCenter: function (position) {
         Radio.trigger("MapView", "setCenter", position, 6);
     },
     positioning: function () {
-        var geolocation = this.get("geolocation"),
+        const geolocation = this.get("geolocation"),
             position = geolocation.getPosition(),
             firstGeolocation = this.get("firstGeolocation"),
             zoomMode = this.get("zoomMode"),
@@ -172,7 +204,7 @@ const OrientationModel = Backbone.Model.extend({
     },
     onError: function () {
         Radio.trigger("Alert", "alert", {
-            text: "<strong>Lokalisierung nicht verfügbar: </strong>",
+            text: "<strong>" + i18next.t("common:modules.controls.orientation.geolocationDeniedText") + " </strong>",
             kategorie: "alert-danger"
         });
         this.setIsGeolocationDenied(true);
@@ -180,14 +212,14 @@ const OrientationModel = Backbone.Model.extend({
     },
     onPOIError: function (evt) {
         Radio.trigger("Alert", "alert", {
-            text: "<strong>'In meiner Nähe' nicht verfügbar: </strong>" + evt.message,
+            text: "<strong>" + i18next.t("common:modules.controls.orientation.trackingDeniedText") + " </strong>" + evt.message,
             kategorie: "alert-danger"
         });
         this.untrack();
         Radio.trigger("Util", "hideLoader");
     },
     trackPOI: function () {
-        var geolocation;
+        let geolocation = null;
 
         Radio.trigger("Map", "addOverlay", this.get("marker"));
         if (this.get("geolocation") === null) {
@@ -202,7 +234,7 @@ const OrientationModel = Backbone.Model.extend({
         geolocation.once("error", this.onPOIError, this);
     },
     untrackPOI: function () {
-        var geolocation = this.get("geolocation");
+        const geolocation = this.get("geolocation");
 
         geolocation.un("change", this.callGetPOI, this);
         geolocation.un("error", this.onPOIError, this);
@@ -212,35 +244,59 @@ const OrientationModel = Backbone.Model.extend({
     },
 
     /**
-     * Ermittelt die Features aus Vektprlayern in einem Umkreis zur Position. Funktioniert auch mit Clusterlayern.
+     * Ermittelt die Features aus Vektorlayern in einem Umkreis zur Position. Funktioniert auch mit Clusterlayern.
      * @param  {integer} distance Umkreis
      * @return {Array}          Array of ol.features
      */
     getVectorFeaturesInCircle: function (distance) {
-        var geolocation = this.get("geolocation"),
+        const geolocation = this.get("geolocation"),
             position = geolocation.getPosition(),
             centerPosition = proj4(proj4("EPSG:4326"), proj4(this.get("epsg")), position),
             circle = new Circle(centerPosition, distance),
             circleExtent = circle.getExtent(),
-            visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
-            featuresAll = [],
+            visibleWFSLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
+        let featuresAll = [],
             features = [];
 
-        _.each(visibleWFSLayers, function (layer) {
+        visibleWFSLayers.forEach(function (layer) {
             if (layer.has("layerSource") === true) {
                 features = layer.get("layerSource").getFeaturesInExtent(circleExtent);
-                _.each(features, function (feat) {
-                    _.extend(feat, {
+                features.forEach(function (feat) {
+                    Object.assign(feat, {
                         styleId: layer.get("styleId"),
                         layerName: layer.get("name"),
                         dist2Pos: this.getDistance(feat, centerPosition)
                     });
                 }, this);
-                featuresAll = _.union(features, featuresAll);
+                featuresAll = this.union(features, featuresAll, function (obj1, obj2) {
+                    return obj1 === obj2;
+                });
             }
         }, this);
 
         return featuresAll;
+    },
+    /**
+     * Computes the union of the passed-in arrays: the list of unique items, in order, that are present in one or more of the arrays.
+     * @param  {Array} arr1 the first array
+     * @param  {Array} arr2 the second array
+     * @param  {Function} equalityFunc to compare objects
+     * @returns {Array} the union of the two arrays
+     */
+    union: function (arr1, arr2, equalityFunc) {
+        const union = arr1.concat(arr2);
+        let i = 0,
+            j = 0;
+
+        for (i = 0; i < union.length; i++) {
+            for (j = i + 1; j < union.length; j++) {
+                if (equalityFunc(union[i], union[j])) {
+                    union.splice(j, 1);
+                    j--;
+                }
+            }
+        }
+        return union;
     },
 
     /**
@@ -250,7 +306,7 @@ const OrientationModel = Backbone.Model.extend({
      * @return {float}      Entfernung
      */
     getDistance: function (feat, centerPosition) {
-        var closestPoint = feat.getGeometry().getClosestPoint(centerPosition),
+        const closestPoint = feat.getGeometry().getClosestPoint(centerPosition),
             line = new LineString([closestPoint, centerPosition]),
             dist = Math.round(line.getLength());
 
@@ -272,7 +328,7 @@ const OrientationModel = Backbone.Model.extend({
     },
 
     setIsGeoLocationPossible: function () {
-        this.set("isGeoLocationPossible", window.location.protocol === "https:" || _.contains(["localhost", "127.0.0.1"], window.location.hostname));
+        this.set("isGeoLocationPossible", window.location.protocol === "https:" || ["localhost", "127.0.0.1"].indexOf(window.location.hostname));
     },
 
     // setter for poiDistances

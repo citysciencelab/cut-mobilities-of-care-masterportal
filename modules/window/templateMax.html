@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <div class="win-heading header">
     <p class="buttons pull-right">
-        <span class="glyphicon glyphicon-minus" title="Minimieren"></span>
-        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+        <span class="glyphicon glyphicon-minus" title="<%= minimizeText %>"></span>
+        <span class="glyphicon glyphicon-remove" title="<%= closeText %>"></span>
     </p>
     <p class="buttons pull-left move">
         <span class="glyphicon <%= icon %> win-icon"></span>
     </p>
     <p class="title move">
-        <span><%= title %></span>
+        <span><%= name %></span>
     </p>
 </div>
 <div class="win-body">
 </div>
+<% if (resizable) { %>
+<div class="win-footer">
+    <span class="glyphicon glyphicon-triangle-right"></span>
+</div>
+<% } %>

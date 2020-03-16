@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
-    "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts",
+    "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts --timeout 15000",
+    "test:watch": "npm run test -- --watch",
     "browsertestserver": "webpack-dev-server --config devtools/webpack.browsertest.js",
     "browsertest": "./node_modules/.bin/mocha --timeout 150000 ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
@@ -26,18 +27,22 @@
     "bootstrap-colorpicker": "2.x",
     "bootstrap-datepicker": "1.8.x",
     "bootstrap-select": "1.12.x",
-    "bootstrap-slider": "10.x",
+    "bootstrap-slider": "^10.6.2",
     "bootstrap-toggle": "2.x.x",
-    "cesium": "1.50.0",
     "d3": "4.9.x",
+    "d3-scale-chromatic": "^1.5.0",
     "dom-parser": "^0.1.5",
+    "html2canvas": "^1.0.0-rc.5",
     "git-rev-sync": "^2.0.0",
     "https-proxy-agent": "^3.0.0",
+    "i18next": "^19.0.1",
+    "i18next-browser-languagedetector": "^4.0.1",
+    "i18next-xhr-backend": "^3.2.2",
     "jquery": "^3.4.1",
     "jquery-ui": "1.x",
     "moment": "2.x",
     "mqtt": "^2.15.x",
-    "olcs": "^2.5.0",
+    "olcs": "^2.10.0",
     "rbush": "^2.0.2",
     "underscore": "1.x",
     "vcs-oblique": "^2.0.1",
@@ -97,11 +102,12 @@
     "webpack-dev-server": "^3.8.2",
     "webpack-merge": "^4.2.2",
     "webpack-visualizer-plugin": "^0.1.11",
+    "whatwg-fetch": "^3.0.0",
     "xmlserializer": "^0.6.1"
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run test && npm run buildJsDoc && eslint --max-warnings 0 \"./**/*.js\""
+      "pre-push": "eslint --max-warnings 0 \"./**/*.js\" && npm run buildJsDoc && npm run test"
     }
   }
 }

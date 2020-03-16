@@ -30,7 +30,9 @@ const WFSTransaction = Backbone.Model.extend({
             feature.unset("extent");
             dom = this.writeTransaction(mode, [feature], this.getWriteOptions(model));
             xmlString = new XMLSerializer().serializeToString(dom);
-            xmlString = xmlString.replace("<Update typeName='app:" + model.get("featureType") + "'>", "<Update typeName='app:" + model.get("featureType") + "' xmlns:app='" + model.get("featureNS") + "'>");
+            if (xmlString.search("xmlns:app=") === -1) {
+                xmlString = xmlString.replace("<Update typeName='app:" + model.get("featureType") + "'>", "<Update xmlns:app='" + model.get("featureNS") + "' typeName='app:" + model.get("featureType") + "'>");
+            }
             xmlString = xmlString.replace(/<Name>/g, "<Name>app:");
             this.sendRequest(model.get("url"), xmlString);
         }

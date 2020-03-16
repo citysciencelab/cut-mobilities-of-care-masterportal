@@ -3,7 +3,7 @@
 [TOC]
 
 # services.json #
-Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS SensorThings-API) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und SensorThings-API (Sensor). Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**.
+Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS [SensorThings-API](sensorThings.md)) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und [SensorThings-API](sensorThings.md) (Sensor). Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**.
 Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
 
 ## WMS-Layer ##
@@ -135,8 +135,10 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 
 ## Sensor-Layer ##
 
-Ein Feature kann mehrere Datastreams vorhalten. Im Portal wird für jeden Datasteam die neueste Beobachtung als Attribut am Feature wie folgt eingetragen: "dataStream_[id]_[name]". id ist die @iot.id des Datastreams.
+Ein Feature kann mehrere Datastreams vorhalten. Im Portal wird für jeden Datastream die neueste Beobachtung als Attribut am Feature wie folgt eingetragen: "dataStream_[id]_[name]". id ist die @iot.id des Datastreams.
 Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter nicht verfügbar wird der Wert aus datastream.unitOfMeasurement.name verwendet.
+
+Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokumentation der SensorThings-API](sensorThings.md)
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
@@ -152,6 +154,7 @@ Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter ni
 |useProxyURL|nein|Boolean|false|Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der Domain durch Unterstriche ersetzt.|false|
 |version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 |mergeThingsByCoordinates|nein|Boolean|false|Gibt an ob Things mit gleicher Coordinate zusammenfasst werden sollen.|`true`|
+|loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
 |showNoDataValues|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
 |noDataValue|nein|String|"no data"|Platzhalter für nciht vorhandenen Observations der Datastreams.|`"Keine Daten"`|
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
@@ -250,14 +253,12 @@ Wird es als Objekt verwendet, so gelten folgende Parameter.
 |name|ja|String||Name des gfi Templates.|
 |**[params](#markdown-header-gfi_theme_params)**|nein|Object||Template spezifische Attribute.|
 
-Beispiel gfiTheme für das template "sensor"
+Beispiel gfiTheme
 ```
 #!json
 "gfiTheme": {
    "name": "sensor",
-   "params": {
-         "grafana": true
-   }
+   "params": {}
 }
 ```
 ## gfi_theme_params ##
@@ -272,7 +273,21 @@ Hier werden die Parameter für das GFI-Template "sensor" definiert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|grafana|nein|Boolean||Gibt an ob im Template ein weiterer Tab erzeugt wird um die Grafana-urls als Iframe anzubinden. Die Grafana-urls müssen als Attribute am gfiFeature hinterlegt sein und mit "grafana_url" beginnen. **[Grafana](https://grafana.com/)** wird verwendet um Diagramm-Darstellungen nicht aufwendig im Portal generieren zu müssen. Dadurch können portalseitig Ressourcen gespart werden.|
+|grafana|nein|Boolean||Gibt an ob im Template ein weiterer Tab erzeugt wird um die Grafana-urls als Iframe anzubinden. Die Grafana-urls müssen als Attribute am gfiFeature hinterlegt sein und mit dem value des Attributes "iFrameAttributesPrefix" beginnen. **[Grafana](https://grafana.com/)** wird verwendet um Diagramm-Darstellungen nicht aufwendig im Portal generieren zu müssen. Dadurch können portalseitig Ressourcen gespart werden.|
+|iFrameAttributesPrefix|nein|String||Prefix für die Attribute, die die url zu grafana enthalten.|
+
+Beispiel gfiTheme für das template "sensor"
+```
+#!json
+"gfiTheme": {
+   "name": "sensor",
+   "params": {
+         "grafana": true,
+         "iFrameAttributesPrefix": "grafana_url"
+   }
+}
+```
+
 
 ## gfi_attributes ##
 Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind:
@@ -311,10 +326,13 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|name|true|String||Name bei exakt einem Match angezeigt werden soll. |'"Test"'|
+|name|true|String||Name, der bei exakt einem Match angezeigt werden soll. |'"Test"'|
 |condition|true|enum["contains", "startsWith", "endsWith"]|| Bedingung nach welcher der key gegen alle Attribute des Features geprüft wird.| '"startsWith"'|
+|type|false|enum["string","date"]|"string"|Wenn type = "date", dann wird versucht ein Datum aus dem Attributwert zu erzeugen.| '"date"'|
+|format|false|String|"DD.MM.YYYY HH:mm:ss"|Datumsformat.| '"DD.MM.YYY"'|
+|suffix|false|String||Suffix, das an den Attributwert angehängt wird.| '"°C"'|
 
-Beispiel gfiAttributes als Objekt
+Beispiel gfiAttributes als Objekt mit suffix.
 ```
 #!json
 {
@@ -323,7 +341,24 @@ Beispiel gfiAttributes als Objekt
       "key2": "Key der im Portal gezeigt wird 2",
       "key3": {
          "name": "Key der im Portal gezeigt wird 3",
-         "condition": "contains"
+         "condition": "contains",
+         "suffix": "°C"
+      }
+   }
+}
+```
+Beispiel gfiAttributes als Objekt mit type und format
+```
+#!json
+{
+   "gfiAttributes": {
+      "key1": "Key der im Portal gezeigt wird 1",
+      "key2": "Key der im Portal gezeigt wird 2",
+      "key3": {
+         "name": "Key der im Portal gezeigt wird 3",
+         "condition": "contains",
+         "type": "date",
+         "format": "DD.MM.YY"
       }
    }
 }
