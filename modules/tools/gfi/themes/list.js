@@ -158,7 +158,7 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
                     // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                     // WMS und WFS Layer die beim Klickpunkt keine GFIs haben
                     removeModels = this.filter(function (model) {
-                        return model.get("gfiContent") === undefined || [Object, Array].includes((model.get("gfiContent") || {}).constructor) && !Object.entries(model.get("gfiContent") || {}).length;
+                        return model.get("gfiContent") === undefined || !Object.entries(model.get("gfiContent") || {}).length;
                     });
                     this.remove(removeModels);
                     this.forEach(this.addView, this);
