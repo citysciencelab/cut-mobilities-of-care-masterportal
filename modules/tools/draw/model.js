@@ -912,6 +912,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         const that = this,
             layer = this.get("layer");
 
+        drawInteraction.on("drawend", function (evt) {
+            evt.feature.set("styleId", that.uniqueId());
+        });
 
         drawInteraction.on("drawstart", function () {
             that.drawInteractionOnDrawevent(drawInteraction, doubleIsActive, layer);
