@@ -2,9 +2,9 @@
 <div>
     <div class="row">
         <div class="col-sm-8 col-sm-offset-3 col-xs-12">
-            ID: <%= title %><br>
-            Art: <%= type %><br>
-            Verkehrsmittel: <%= meansOfTransport %>
+            ID: <span id="title"><%= title %></span><br>
+            Art: <span id="type"><%= type %></span><br>
+            Verkehrsmittel: <span id="meansOfTransport"><%= meansOfTransport %></span>
         </div>
     </div>
     <ul class="nav nav-pills">
@@ -23,7 +23,50 @@
     </ul>
     <div class="tab-content">
         <div id="infos" class="tab-pane fade in active">
-            letzte Aktualisierung: <span id="lastUpdate"><%= lastUpdate %></span>
+            <table class="table table-condensed table-hover">
+                <tbody>
+                    <tr colspan = "3">
+                        <td class="bold">&nbsp;</td>
+                        <td class="bold">Zeitraum</td>
+                        <td class="bold">Anzahl</td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold">insgesamt seit</td>
+                        <td id="totalDesc" class="text-right"><%= totalDesc %></td>
+                        <td id="totalValue" class="text-right"><%= totalValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold">seit Jahresbeginn</td>
+                        <td id="thisYearDesc" class="text-right"><%= thisYearDesc %></td>
+                        <td id="thisYearValue" class="text-right"><%= thisYearValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold">im Vorjahr</td>
+                        <td id="lastYearDesc" class="text-right"><%= lastYearDesc %></td>
+                        <td id="lastYearValue" class="text-right"><%= lastYearValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold">am Vortag</td>
+                        <td id="lastDayDesc" class="text-right"><%= lastDayDesc %></td>
+                        <td id="lastDayValue" class="text-right"><%= lastDayValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold">Stärkster Tag im Jahr</td>
+                        <td id="highestWorkloadDayDesc" class="text-right"><%= highestWorkloadDayDesc %></td>
+                        <td id="highestWorkloadDayValue" class="text-right"><%= highestWorkloadDayValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold">Stärkste Woche im Jahr</td>
+                        <td id="highestWorkloadWeekDesc" class="text-right"><%= highestWorkloadWeekDesc %></td>
+                        <td id="highestWorkloadWeekValue" class="text-right"><%= highestWorkloadWeekValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold">Stärkster Monat im Jahr</td>
+                        <td id="highestWorkloadMonthDesc" class="text-right"><%= highestWorkloadMonthDesc %></td>
+                        <td id="highestWorkloadMonthValue" class="text-right"><%= highestWorkloadMonthValue %></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div id="day" class="tab-pane fade">
             Tag
@@ -33,6 +76,17 @@
         </div>
         <div id="year" class="tab-pane fade">
             Jahr
+        </div>
+
+        <div>
+            <table class="table table-condensed table-hover">
+                <tbody>
+                    <tr colspan = "2">
+                        <td class="bold">letzte Aktualisierung:</td>
+                        <td class="text-right"><span id="lastUpdate"><%= lastUpdate %></span></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
