@@ -572,6 +572,7 @@ describe("core/modelList/layer/sensor", function () {
         it("should set one Thing in a simple way without aggregation", function () {
             const allThings = [
                     {
+                        "@iot.id": "quix",
                         name: "foo",
                         description: "bar",
                         properties: {
@@ -598,6 +599,7 @@ describe("core/modelList/layer/sensor", function () {
                         baz: "qux",
                         name: "foo",
                         description: "bar",
+                        "@iot.id": "quix",
                         requestUrl: "http://example.com",
                         versionUrl: "1.0",
                         Datastreams: [{"foobar": 1}]
@@ -612,6 +614,7 @@ describe("core/modelList/layer/sensor", function () {
         it("should aggregate Things if there is more than one thing", function () {
             const allThings = [[
                     {
+                        "@iot.id": "quix",
                         name: "foo",
                         description: "bar",
                         properties: {
@@ -626,6 +629,7 @@ describe("core/modelList/layer/sensor", function () {
                         Datastreams: [{"foobar": 10}]
                     },
                     {
+                        "@iot.id": "xiuq",
                         name: "oof",
                         description: "rab",
                         properties: {
@@ -653,6 +657,7 @@ describe("core/modelList/layer/sensor", function () {
                         baz: "qux | xuq",
                         name: "foo | oof",
                         description: "bar | rab",
+                        "@iot.id": "quix | xiuq",
                         requestUrl: "http://example.com",
                         versionUrl: "1.0"
                     }

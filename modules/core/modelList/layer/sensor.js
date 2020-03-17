@@ -614,6 +614,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 keys = this.excludeDataStreamKeys(keys, "dataStream_");
                 keys.push("name");
                 keys.push("description");
+                keys.push("@iot.id");
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
                 aggregatedThing.properties.Datastreams = datastreams;
             }
@@ -622,6 +623,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 aggregatedThing.properties = thing.properties;
                 aggregatedThing.properties.name = thing.name;
                 aggregatedThing.properties.description = thing.description;
+                aggregatedThing.properties["@iot.id"] = thing["@iot.id"];
                 aggregatedThing.properties.Datastreams = thing.Datastreams;
             }
             aggregatedThing.properties.requestUrl = this.get("url");
@@ -671,7 +673,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const aggregatedProperties = {};
 
         keys.forEach(key => {
-            const valuesArray = thingArray.map(thing => key === "name" || key === "description" ? thing[key] : thing.properties[key]);
+            const valuesArray = thingArray.map(thing => key === "name" || key === "description" || key === "@iot.id" ? thing[key] : thing.properties[key]);
 
             aggregatedProperties[key] = valuesArray.join(" | ");
         });
