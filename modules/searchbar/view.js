@@ -850,6 +850,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setSearchString("");
         this.setSearchbarString("");
         this.hideMarker();
+        Radio.trigger("MapMarker", "hideMarker");
         this.hideMenu();
         this.$("#searchInputUL").html("");
     },
@@ -884,12 +885,29 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
     /**
      * Hides all map markers.
+     * @param {event} evt mouse leave event
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires MapMarker#RadioTriggerMapMarkerHidePolygon
      * @returns {void}
      */
-    hideMarker: function () {
-        Radio.trigger("MapMarker", "hideMarker");
+    hideMarker: function (evt) {
+        var hitId,
+            hit;
+
+        if (evt !== undefined) {
+            hitId = evt.currentTarget.id;
+            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
+        }
+
+        if (hit && hit.hasOwnProperty("triggerEvent")) {
+            // bei gdi-Suche kein Aktion bei Maushover oder bei GFI on Click
+            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
+                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
+            }
+        }
+        else if (this.$(".dropdown-menu-search").css("display") === "block") {
+            Radio.trigger("MapMarker", "hideMarker");
+        }
         Radio.trigger("MapMarker", "hidePolygon");
     },
 
