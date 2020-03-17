@@ -891,12 +891,12 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     hideMarker: function (evt) {
-        var hitId,
+        let hitId,
             hit;
 
         if (evt !== undefined) {
             hitId = evt.currentTarget.id;
-            hit = _.findWhere(this.model.get("hitList"), {id: hitId});
+            hit = this.model.get("hitList").find(item => Object.keys({id: hitId}).every(key => item[key] === {id: hitId}[key]));
         }
 
         if (hit && hit.hasOwnProperty("triggerEvent")) {
