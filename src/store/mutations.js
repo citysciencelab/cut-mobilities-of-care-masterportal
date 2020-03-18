@@ -1,4 +1,4 @@
-export default {
+const mutations = {
     setConfigJson (state, config) {
         state.configJson = config;
     },
@@ -57,3 +57,5 @@ export default {
         });
     }
 };
+
+export default mutations;

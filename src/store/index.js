@@ -13,7 +13,7 @@ import state from "./state";
 import controlsModule from "../components/controls/module";
 import backForward from "../components/controls/backForward/module";
 
-import {isMobile} from "./lib";
+import isMobile from "./utils/isMobile";
 
 Vue.use(Vuex);
 

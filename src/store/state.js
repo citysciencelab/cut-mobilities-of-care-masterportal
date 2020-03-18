@@ -1,6 +1,10 @@
-import {isMobile} from "./lib";
+import isMobile from "./utils/isMobile";
+import getDpi from "./utils/getDpi";
 
-export default {
+const state = {
     configJson: null,
-    mobile: isMobile()
+    mobile: isMobile(), // resize update in ./index.js
+    dpi: getDpi()
 };
+
+export default state;

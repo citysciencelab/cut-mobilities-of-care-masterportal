@@ -14,7 +14,9 @@
  * @property {?[number, number, number, number]} bbox current bounding box
  * @property {?string} projection name of currently active projection
  * @property {?number} rotation current rotation
- * @property {?Array} layers list of existing layers TODO spec layer information
+ * @property {?number[]} layerIds list of layer ids
+ * @property {?object} layers register of existing layers TODO spec layer information
+ * @property {?number[]} overlayIds list of layer ids
  * @property {?Array} overlays list of existing overlays TODO probably use layer information spec from above
  */
 const state = {
@@ -31,7 +33,9 @@ const state = {
     bbox: null,
     projection: null,
     rotation: null,
+    layerIds: null,
     layers: null,
+    overlayIds: null,
     overlays: null
 };
 
