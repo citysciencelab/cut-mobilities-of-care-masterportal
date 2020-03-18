@@ -1,13 +1,53 @@
-.tab-content {
-    .dateSelector {
-        width: 230px;
-        .dpinput {
-            text-align: center;
-            font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
-            height: 35px;
+@color_background: white;
+@color_tooltip: black;
+@color_tooltipborder: white;
+
+@color_blue: steelblue;
+
+.trafficcount-gfi-theme {
+    width: 320px;
+    margin: 4px;
+    background-color: @color_background;
+
+    .tab-content {
+        .dateSelector {
+            width: 230px;
+            .dpinput {
+                text-align: center;
+                font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+                height: 35px;
+            }
+            button {
+                height: 35px;
+            }
         }
-        button {
-            height: 35px;
+    }
+
+    div[class^="trafficCountDiagram"] {
+        .dot {
+            cursor: pointer;
+            stroke: none;
+            fill: @color_blue;
         }
+
+        .line {
+            stroke: @color_blue;
+            fill: none;
+            stroke-width: 1;
+        }
+    }
+    
+    .graph-tooltip-div {
+        display: inline-block;
+        position: absolute;
+        color: @color_tooltip;
+        padding: 2px;
+        border: 2px solid @color_tooltipborder;
+        text-align: center;
+        left: -200px;
+    }
+    
+    .gfi-info {
+        padding: 0 10px 10px;
     }
 }

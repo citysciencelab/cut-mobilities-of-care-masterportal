@@ -248,11 +248,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         this.addDayDatepicker(this.get("dayDatepicker"));
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
-            // @todo: setup diagram and table with dataset
-            if (dataset.hasOwnProperty(meansOfTransport)) {
-                return false;
+            if (!dataset.hasOwnProperty(meansOfTransport)) {
+                return;
             }
-            return false;
+
+            this.refreshDiagramDay(dataset[meansOfTransport]);
+
+            // @todo: setup table with dataset
         });
     },
 
@@ -297,11 +299,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         this.addWeekDatepicker(this.get("weekDatepicker"));
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
-            // @todo: setup diagram and table with dataset
-            if (dataset.hasOwnProperty(meansOfTransport)) {
-                return false;
+            if (!dataset.hasOwnProperty(meansOfTransport)) {
+                return;
             }
-            return false;
+
+            this.refreshDiagramWeek(dataset[meansOfTransport]);
+
+            // @todo: setup table with dataset
         });
     },
 
@@ -355,40 +359,430 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         this.addYearDatepicker(this.get("yearDatepicker"));
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
-            // @todo: setup diagram and table with dataset
-            if (dataset.hasOwnProperty(meansOfTransport)) {
-                return false;
+            if (!dataset.hasOwnProperty(meansOfTransport)) {
+                return;
             }
-            return false;
+
+            const year = moment(from, "YYYY-MM-DD").format("YYYY");
+
+            this.refreshDiagramYear(dataset[meansOfTransport], year);
+
+            // @todo: setup table with dataset
         });
     },
 
-    /**
+    /*
      * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
      * @param {object} datepicker datepicker model
      * @returns {void}
      */
     addYearDatepicker: function (datepicker) {
-        if (!datepicker) {
-            this.set("yearDatepicker", new SnippetDatepickerModel({
-                displayName: "Tag",
-                preselectedValue: moment().toDate(),
-                startDate: moment().subtract(10, "years").toDate(),
-                endDate: moment().toDate(),
-                type: "datepicker",
-                minViewMode: "years",
-                maxViewMode: "years",
-                inputs: $("#yearDateInput"),
-                autoclose: true,
-                format: "yyyy"
-            }));
-            this.listenTo(this.get("yearDatepicker"), {
-                "valuesChanged": function () {
-                    // do nothing
-                }
-            });
-            this.trigger("renderYearDatepicker");
+       if (!datepicker) {
+           this.set("yearDatepicker", new SnippetDatepickerModel({
+               displayName: "Tag",
+               preselectedValue: moment().toDate(),
+               startDate: moment().subtract(10, "years").toDate(),
+               endDate: moment().toDate(),
+               type: "datepicker",
+               minViewMode: "years",
+               maxViewMode: "years",
+               inputs: $("#yearDateInput"),
+               autoclose: true,
+               format: "yyyy"
+           }));
+           this.listenTo(this.get("yearDatepicker"), {
+               "valuesChanged": function () {
+                   // do nothing
+               }
+           });
+           this.trigger("renderYearDatepicker");
+       }
+    },
+
+    /**
+     * refreshes the diagram for a dataset based on day
+     * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
+     * @returns {Void}  -
+     */
+    refreshDiagramDay: function (dataset) {
+        const themeId = this.get("themeId"),
+            selector = ".trafficCountDiagramDay_" + themeId,
+            selectorTooltip = ".graph-tooltip-div-day_" + themeId,
+            xAxisTickValues = this.getXAxisTickValuesDay(),
+            emptyDiagramData = this.getEmptyDiagramDataDay();
+
+        this.refreshDiagramGeneral(dataset, selector, selectorTooltip, "hour", {
+            unit: " Uhr",
+            values: xAxisTickValues
+        }, "count", "", "Anzahl / 15 Min.", datetime => {
+            return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("DD.MM.YYYY");
+        }, datetime => {
+            return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm");
+        }, (value, dotData) => {
+            return dotData.hour + " Uhr: " + this.addThousandPoints(value);
+        }, emptyDiagramData);
+    },
+
+    /**
+     * refreshes the diagram for a dataset based on week
+     * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
+     * @returns {Void}  -
+     */
+    refreshDiagramWeek: function (dataset) {
+        const themeId = this.get("themeId"),
+            selector = ".trafficCountDiagramWeek_" + themeId,
+            selectorTooltip = ".graph-tooltip-div-week_" + themeId,
+            xAxisTickValues = this.getXAxisTickValuesWeek(),
+            emptyDiagramData = this.getEmptyDiagramDataWeek();
+
+        this.refreshDiagramGeneral(dataset, selector, selectorTooltip, "weekday", {
+            unit: "",
+            values: xAxisTickValues
+        }, "count", "", "Anzahl / h", datetime => {
+            const weeknumber = moment(datetime, "YYYY-MM-DD HH:mm:ss").week(),
+                year = moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
+
+            return "KW " + weeknumber + " / " + year;
+        }, datetime => {
+            const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss");
+
+            if (objMoment.format("H") === "0") {
+                return objMoment.format("dd");
+            }
+
+            return objMoment.format("dd-HH");
+        }, (value, dotData) => {
+            const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss");
+
+            return objMoment.format("DD.MM.YYYY") + ", " + objMoment.format("HH:mm") + " Uhr: " + this.addThousandPoints(value);
+        }, emptyDiagramData);
+    },
+
+    /**
+     * refreshes the diagram for a dataset based on year
+     * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
+     * @param {String} year the year from the calendar as String
+     * @returns {Void}  -
+     */
+    refreshDiagramYear: function (dataset, year) {
+        const themeId = this.get("themeId"),
+            selector = ".trafficCountDiagramYear_" + themeId,
+            selectorTooltip = ".graph-tooltip-div-year_" + themeId,
+            xAxisTickValues = this.getXAxisTickValuesYear(),
+            emptyDiagramData = this.getEmptyDiagramDataYear(year);
+
+        this.refreshDiagramGeneral(dataset, selector, selectorTooltip, "month", {
+            unit: "",
+            values: xAxisTickValues
+        }, "count", "", "Anzahl / Woche", datetime => {
+            return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
+        }, datetime => {
+            const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss"),
+                thisWeeksMonth = objMoment.format("MMM"),
+                thisWeek = objMoment.format("WW"),
+                lastWeeksMonth = objMoment.subtract(1, "week").format("MMM");
+
+            if (thisWeeksMonth !== lastWeeksMonth) {
+                return thisWeeksMonth;
+            }
+
+            return thisWeeksMonth + "-" + thisWeek;
+        }, (value, dotData) => {
+            const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss");
+
+            return "KW " + objMoment.format("WW") + " / " + objMoment.format("YYYY") + ": " + this.addThousandPoints(value);
+        }, emptyDiagramData);
+    },
+
+    /**
+     * refreshes the diagram with the given data
+     * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
+     * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
+     * @param {String} selectorTooltip the dom selector for the tooltip of the diagram (e.g. a class as ".(...)")
+     * @param {String} xAttr the attribute to use for x axis values (e.g. week, weekday, hour)
+     * @param {Object} xAxisTicks an object to define the behavior of the xAxis as object{unit, values}
+     * @param {String} yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
+     * @param {String} xAxisText the text of the x axis
+     * @param {String} yAxisText the text of the y axis
+     * @param {Callback} callbackRenderLegendText a function (phenomenonTime) to write the legend text with
+     * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to write the entry at the x axis with
+     * @param {Callback} setTooltipValue a function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
+     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {class, style, xAxisAttr}}
+     * @returns {Void}  -
+     */
+    refreshDiagramGeneral: function (dataset, selector, selectorTooltip, xAttr, xAxisTicks, yAttr, xAxisText, yAxisText, callbackRenderLegendText, callbackRenderTextXAxis, setTooltipValue, emptyDiagramData) { // eslint-disable-line
+        const legendData = [],
+            attrToShowArray = [],
+            diagramWidth = parseInt($(".trafficcount-gfi-theme").css("width"), 10) - 10,
+            diagramHeight = 280;
+        let graphConfig = null,
+            diagramData = [];
+
+        if (typeof dataset !== "object") {
+            return;
         }
+
+        this.addD3LegendData("dot", "circle", callbackRenderLegendText(Object.keys(dataset)[0]), legendData);
+        this.addD3AttrToShowArray(yAttr, "line", attrToShowArray);
+        diagramData = this.addD3LineData("dot", "circle", xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData);
+
+        graphConfig = this.createD3Config(legendData, selector, selectorTooltip, diagramWidth, diagramHeight, xAttr, xAxisTicks, {
+            label: xAxisText,
+            translate: 6
+        }, {
+            label: yAxisText,
+            offset: 54
+        }, attrToShowArray, setTooltipValue, diagramData);
+
+        // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows up
+        $(selector + " svg").remove();
+
+        Radio.trigger("Graph", "createGraph", graphConfig);
+    },
+
+    /**
+     * adds data to be used as legend data for the diagram to the given result set
+     * @param {String} classname the name of the class to use for the dots of this legend entry
+     * @param {String} stylename the name of the style to use for the dots of this legend entry (e.g. circle)
+     * @param {String} text the text to use for the legend
+     * @param {Object[]} result the result by reference to add the new legend data to: the result is an array of objects{class, style, text} that can be used as legend data for the D3 diagram
+     * @returns {Void}  -
+     */
+    addD3LegendData: function (classname, stylename, text, result) {
+        if (!Array.isArray(result)) {
+            return;
+        }
+
+        result.push({
+            class: classname,
+            style: stylename,
+            text: text
+        });
+    },
+
+    /**
+     * adds an object{attrName, attrClass} to the given result
+     * @param {String} yAttr the name of the attribute equal to yAttr in addD3LineData
+     * @param {String} classname the name of the class to use for the line with the given yAttr
+     * @param {Object[]} result the result by reference to add the new data to: result is an array of objects{attrName, attrClass} to be used as "attrToShowArray"
+     * @returns {Void}  -
+     */
+    addD3AttrToShowArray: function (yAttr, classname, result) {
+        if (!Array.isArray(result)) {
+            return;
+        }
+
+        result.push({
+            attrName: yAttr,
+            attrClass: classname
+        });
+    },
+
+    /**
+     * adds objects to use as diagram data to the given result set
+     * @param {String} classname the name of the class to use for the dots of this line
+     * @param {String} stylename the name of the style to use for the dots of this line (e.g. circle)
+     * @param {String} xAttr the attribute to use for x axis values (e.g. week, weekday, hour)
+     * @param {String} yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
+     * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to convert the key of dataset into the wanted format with
+     * @param {Object[]} dataset the dataset from the API as array of objects{phenomenonTime: value}
+     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {class, style, xAxisAttr}}
+     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram
+     */
+    addD3LineData: function (classname, stylename, xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData) {
+        if (typeof dataset !== "object" || typeof emptyDiagramData !== "object" || typeof callbackRenderTextXAxis !== "function") {
+            return [];
+        }
+
+        let key;
+
+        for (key in dataset) {
+            const obj = {
+                class: classname,
+                style: stylename,
+                date: key
+            };
+
+            obj[xAttr] = callbackRenderTextXAxis(key);
+            obj[yAttr] = dataset[key];
+
+            emptyDiagramData[obj[xAttr]] = obj;
+        }
+
+        return Object.values(emptyDiagramData);
+    },
+
+    /**
+     * returns an array of xAxis Attributes to be shown in the diagram
+     * @return {String[]}  an array with relevant xAxis Attributes for the day diagram
+     */
+    getXAxisTickValuesDay: function () {
+        return ["00:00", "06:00", "12:00", "18:00", "23:00"];
+    },
+
+    /**
+     * returns an array of xAxis Attributes to be shown in the diagram
+     * @return {String[]}  an array with relevant xAxis Attributes for the week diagram
+     */
+    getXAxisTickValuesWeek: function () {
+        const xAxisTickValues = [];
+        let wd = 0;
+
+        for (wd = 1; wd <= 7; wd++) {
+            xAxisTickValues.push(moment(wd % 7, "d").format("dd"));
+        }
+
+        return xAxisTickValues;
+    },
+
+    /**
+     * returns an array of xAxis Attributes to be shown in the diagram
+     * @return {String[]}  an array with relevant xAxis Attributes for the year diagram
+     */
+    getXAxisTickValuesYear: function () {
+        const xAxisTickValues = [];
+        let m = 0;
+
+        for (m = 1; m <= 12; m++) {
+            xAxisTickValues.push(moment(m, "M").format("MMM"));
+        }
+
+        return xAxisTickValues;
+    },
+
+    /**
+     * generates an empty dataset of diagram data to be used as pattern for the diagramData
+     * @info this is necessary to expand the year, week or day diagram to full span
+     * @return {Object}  an empty dataset for the day as object{xAttr: {class, style, hour}}
+     */
+    getEmptyDiagramDataDay: function () {
+        const result = {};
+        let key,
+            h,
+            m;
+
+        for (h = 0; h < 24; h++) {
+            for (m = 0; m < 4; m++) {
+                key = moment(h + ":" + (m * 15), "H:m").format("HH:mm");
+
+                result[key] = {
+                    hour: key
+                };
+            }
+        }
+
+        return result;
+    },
+
+    /**
+     * generates an empty dataset of diagram data to be used as pattern for the diagramData
+     * @info this is necessary to expand the year, week or day diagram to full span
+     * @return {Object}  an empty dataset for the week as object{xAttr: {class, style, hour}}
+     */
+    getEmptyDiagramDataWeek: function () {
+        const result = {};
+        let key,
+            wd,
+            h;
+
+        for (wd = 1; wd <= 7; wd++) {
+            for (h = 0; h < 24; h++) {
+                if (h === 0) {
+                    key = moment(wd % 7, "d").format("dd");
+                }
+                else {
+                    key = moment((wd % 7) + "-" + h, "d-H").format("dd-HH");
+                }
+
+                result[key] = {
+                    weekday: key
+                };
+            }
+        }
+
+        return result;
+    },
+
+    /**
+     * generates an empty dataset of diagram data to be used as pattern for the diagramData
+     * @param {String} year the year to use in format YYYY
+     * @info this is necessary to expand the year, week or day diagram to full span
+     * @return {Object}  an empty dataset for the year as object{xAttr: {class, style, hour}}
+     */
+    getEmptyDiagramDataYear: function (year) {
+        const result = {},
+            // set moment to 01.01.(year) 00:00:00
+            objMoment = moment(year, "YYYY");
+        let key,
+            lastMonth = "";
+
+        while (objMoment.format("YYYY") === year) {
+            if (lastMonth !== objMoment.format("MMM")) {
+                lastMonth = objMoment.format("MMM");
+                key = lastMonth;
+            }
+            else {
+                key = objMoment.format("MMM-WW");
+            }
+
+            result[key] = {
+                month: key
+            };
+
+            objMoment.add(1, "week");
+        }
+
+        return result;
+    },
+
+    /**
+     * generates a new config, usable for the Radio trigger "Graph"=>"createGraph"
+     * @param {Object[]} legendData an array of objects{class, style, text} to use as legend for the diagram
+     * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
+     * @param {String} selectorTooltip the dom selector for the tooltip of the diagram (e.g. a class as ".(...)")
+     * @param {Integer} width the width of the diagram
+     * @param {Integer} height the height of the diagram
+     * @param {String} xAttr the attribute to use from the dataset to bind the data to the math. x axis
+     * @param {Object} xAxisTicks an object to define the behavior of the xAxis as object{unit, values}
+     * @param {Object} xAxisLabel an object {label, translate} with the label to use for the math. x axis
+     * @param {Object} yAxisLabel an object {label, offset} with the label to use for the math. y axis
+     * @param {Object[]} attrToShowArray the classes of lines as array of object{attrName, attrClass}
+     * @param {callback} setTooltipValue a function(value) to be called at the event of a tooltip
+     * @param {Object[]} dataset an array of objects as Array({(xAttr), (yAttr), class, style})
+     * @return {Object}  a config object to be used for d3
+     */
+    createD3Config: function (legendData, selector, selectorTooltip, width, height, xAttr, xAxisTicks, xAxisLabel, yAxisLabel, attrToShowArray, setTooltipValue, dataset) { // eslint-disable-line
+        const graphConfig = {
+            legendData: legendData,
+            graphType: "Linegraph",
+            selector: selector,
+            width: width,
+            height: height,
+            margin: {
+                top: 20,
+                right: 20,
+                bottom: 40,
+                left: 60
+            },
+            svgClass: "graph-svg",
+            selectorTooltip: selectorTooltip,
+            scaleTypeX: "ordinal",
+            scaleTypeY: "linear",
+            xAxisTicks: xAxisTicks,
+            dotSize: 2,
+            yAxisTicks: {
+                ticks: 5,
+                factor: ",f"
+            },
+            data: dataset,
+            xAttr: xAttr,
+            xAxisLabel: xAxisLabel,
+            yAxisLabel: yAxisLabel,
+            attrToShowArray: attrToShowArray,
+            setTooltipValue: setTooltipValue
+        };
+
+        return graphConfig;
     },
 
     /**
