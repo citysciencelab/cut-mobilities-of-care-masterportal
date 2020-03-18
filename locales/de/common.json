@@ -261,7 +261,7 @@
                 "outlineColor": "Umrissfarbe",
                 "fontSize": "Schriftgröße",
                 "fontName": "Schriftart",
-                "size": "Größe",
+                "size": "Größe (Radius)",
                 "lineWidth": "Strichstärke",
                 "transparency": "Transparenz",
                 "color": "Füllfarbe",
