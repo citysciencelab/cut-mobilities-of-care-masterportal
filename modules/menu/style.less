@@ -32,13 +32,15 @@
         background-color: @background_color_1;
     }
 }
-.navbar-collapse.in {
-    position: absolute;
-    top: 50px;
-    z-index: 999;
-    width: 100%;
-    padding: 0;
-    max-height: 66vh;
+.navbar-collapse {
+    padding:0;
+    &.in {
+        position: absolute;
+        top: 50px;
+        z-index: 999;
+        width: 100%;
+        max-height: 66vh;
+    }
 }
 @media (min-width: 768px) {
     .navbar {

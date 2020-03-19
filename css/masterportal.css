@@ -34,6 +34,9 @@ label {
     html, body {
         font-size: 16px;
     }
+    #portalTitle {
+        display:none;
+    }
 }
 
 @media (min-height:200px) {
