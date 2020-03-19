@@ -30,7 +30,6 @@ const POIView = Backbone.View.extend({
     },
 
     show: function () {
-        Radio.trigger("Util", "showLoader");
         this.model.calcInfos();
         this.render();
 
