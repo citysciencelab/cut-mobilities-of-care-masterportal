@@ -125,7 +125,6 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
    "style": "normal",
    "transparent": false,
    "tileSize": "256",
-   "gutter": "0",
    "minScale": "0",
    "maxScale": "2500000",
    "tileMatrixSet": "google3857",
