@@ -28,7 +28,7 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
             "change:width": this.setWidth,
             "addContent": this.addContent,
             "resize": function () {
-                this.toggle(this.model, true);
+                this.toggle(this.model);
             }
         });
 
@@ -95,16 +95,15 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      * @return {void}
      * @fires Map#RadioTriggerMapUpdateSize
      */
-    toggle: function (model, isVisible) {
-        if (isVisible) {
+    toggle: function (model) {
+        if (this.model.get("isVisible")) {
             this.$el.css("width", this.model.get("width"));
             this.$el.show();
         }
         else {
             this.$el.hide();
         }
-        this.toggleBackdrop(this.model.get("isMobile"), isVisible);
-        this.setMapWidth(this.model.get("isMobile"), isVisible, model.get("width"));
+        this.setMapWidth(this.model.get("isMobile"), this.model.get("isVisible"), model.get("width"));
         Radio.trigger("Map", "updateSize");
     },
 
@@ -116,7 +115,6 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      */
     toggleClass: function (model, isMobile) {
         this.$el.toggleClass("sidebar sidebar-mobile");
-        this.toggleBackdrop(isMobile, this.model.get("isVisible"));
         this.setMapWidth(isMobile, this.model.get("isVisible"));
     },
     /**
@@ -126,11 +124,11 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      * @param {String} width The width of the sidebar in percent. e.g. "30%"
      * @return {void}
      */
-    setMapWidth: function (isMobile, isVisible, width) {
+    setMapWidth: function (isMobile, isVisible, width = "100%") {
         if (!isMobile && isVisible) {
-            const diffToHundret = 100 - parseFloat(width.substring(0, width.length - 1));
+            const diffToHundred = 100 - parseFloat(width.substring(0, width.length - 1));
 
-            $("#map").css("width", diffToHundret + "%");
+            $("#map").css("width", diffToHundred + "%");
         }
         else {
             $("#map").css("width", "100%");
@@ -174,20 +172,6 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
         this.$el.find(".drag-bar").removeClass("dragging");
     },
 
-    /**
-     * Toggles the backdrop. Needed for the mobile mode
-     * @param {boolean} isMobile Flag if the portal is in mobile mode.
-     * @param {boolean} isVisible Flag if the sidebar is visible.
-     * @return {void}
-     */
-    toggleBackdrop: function (isMobile, isVisible) {
-        if (isMobile && isVisible) {
-            $(".masterportal-container").append("<div class='backdrop'></div>");
-        }
-        else {
-            $(".backdrop").remove();
-        }
-    }
 });
 
 export default SidebarView;
