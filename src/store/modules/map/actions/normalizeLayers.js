@@ -3,6 +3,7 @@
  * @property {string} name layer name
  * @property {boolean} visibility layer visibility
  * @property {number} opacity layer opacity in [0, 1] range
+ * @property {module:ol/layer} olLayer openlayers layer object kept for quick access
  */
 
 /**

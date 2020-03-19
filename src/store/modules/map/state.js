@@ -1,3 +1,5 @@
+// TODO add 3d mode values (or model them as a separate module for composition)
+
 /**
  * User type definition
  * @typedef {object} MapState
@@ -15,9 +17,9 @@
  * @property {?string} projection name of currently active projection
  * @property {?number} rotation current rotation
  * @property {?number[]} layerIds list of layer ids
- * @property {?object} layers register of existing layers TODO spec layer information
+ * @property {?object.<string, LayerData>} layers register of existing layers
  * @property {?number[]} overlayIds list of layer ids
- * @property {?Array} overlays list of existing overlays TODO probably use layer information spec from above
+ * @property {?object.<string, LayerData>} overlays list of existing overlays
  */
 const state = {
     map: null,

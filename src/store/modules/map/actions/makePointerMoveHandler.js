@@ -1,13 +1,14 @@
 /**
- * @param {object} state state object
+ * TODO try to model this directly as an action
+ * @param {function} commit commit function
  * @returns {function} update function for mouse coordinate
  */
-function makePointerMoveHandler (state) {
+function makePointerMoveHandler (commit) {
     return (evt) => {
         if (evt.dragging) {
             return;
         }
-        state.mouseCoord = evt.coordinate;
+        commit("setMouseCoord", evt.coordinate);
     };
 }
 

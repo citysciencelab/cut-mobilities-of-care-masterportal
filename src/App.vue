@@ -4,7 +4,8 @@ import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./components/ScaleLine.vue";
 import Controls from "./components/controls/Controls.vue";
 import Tools from "./components/tools/Tools.vue";
-import MapModuleTest from "./components/MapModuleTest.vue";
+import MapModuleDebug from "./store/modules/map/MapModuleDebug.vue";
+import isDevMode from "./utils/isDevMode";
 
 export default {
     name: "App",
@@ -14,8 +15,9 @@ export default {
         Alerting,
         SupplyCoord,
         ScaleLine,
-        MapModuleTest
-    }
+        MapModuleDebug
+    },
+    data: () => ({isDevMode})
 };
 </script>
 
@@ -26,7 +28,7 @@ export default {
         <ScaleLine />
         <Controls />
         <Tools />
-        <MapModuleTest />
+        <MapModuleDebug v-if="isDevMode" />
     </div>
 </template>
 

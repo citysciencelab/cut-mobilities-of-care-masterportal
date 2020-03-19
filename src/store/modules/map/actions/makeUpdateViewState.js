@@ -7,7 +7,7 @@ import {transform} from "ol/proj";
  * @returns {?number} scale as the x in '1 : x'
  */
 function getScaleFromDpi (map) {
-    const dpi = 96, // TODO
+    const dpi = 96, // TODO - get dpi from rootState here
         view = map.getView(),
         projection = view.getProjection(),
         // first compare value
@@ -34,24 +34,25 @@ function getScaleFromDpi (map) {
 }
 
 /**
- * @param {object} state state object
+ * TODO try to model this directly as an action
+ * @param {function} commit commit function
  * @param {module:ol/Map} map openlayer map object
  * @returns {function} update function for state parts to update onmoveend
  */
-function makeUpdateViewState (state, map) {
+function makeUpdateViewState (commit, map) {
     return () => {
         const mapView = map.getView();
 
-        state.zoomLevel = mapView.getZoom();
-        state.maxZoomLevel = mapView.getMaxZoom();
-        state.minZoomLevel = mapView.getMinZoom();
-        state.resolution = mapView.getResolution();
-        state.maxResolution = mapView.getMaxResolution();
-        state.minResolution = mapView.getMinResolution();
-        state.scale = getScaleFromDpi(map);
-        state.bbox = mapView.calculateExtent(map.getSize());
-        state.rotation = mapView.getRotation();
-        state.center = mapView.getCenter();
+        commit("setZoomLevel", mapView.getZoom());
+        commit("setMaxZoomLevel", mapView.getMaxZoom());
+        commit("setMinZoomLevel", mapView.getMinZoom());
+        commit("setResolution", mapView.getResolution());
+        commit("setMaxResolution", mapView.getMaxResolution());
+        commit("setMinResolution", mapView.getMinResolution());
+        commit("setScale", getScaleFromDpi(map));
+        commit("setBbox", mapView.calculateExtent(map.getSize()));
+        commit("setRotation", mapView.getRotation());
+        commit("setCenter", mapView.getCenter());
     };
 }
 

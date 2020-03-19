@@ -14,12 +14,12 @@ import actions from "./actions";
  *     |     UI       |
  *     |______________|
  *          |     ^
- * mutation |     | getter
+ *   action |     | getter
  *          v     |
  *     ___________________
- *     |                 |
- *     | VueX Map Module |
- *     |_________________|
+ *     |                 | -----
+ *     | VueX Map Module |     | Actions produce appropriate mutations to keep in sync with Map
+ *     |_________________| <----
  *         |     ^ .on-functions registered to mutations, if they exist;
  * setters |     | where they do not exist, all access must run via VueX mutations
  *         v     | to ensure VueX/Map are kept in sync, else VueX may have old state
