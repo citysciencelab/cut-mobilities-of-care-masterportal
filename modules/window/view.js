@@ -17,8 +17,8 @@ import "jquery-ui/ui/widgets/draggable";
 const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     events: {
         "click .glyphicon-minus": "minimize",
-        "click .header > .title": "maximize",
-        "touchend .header > .title": "maximize",
+        "click .header-min": "maximize",
+        "touchend .header-min": "maximize",
         "click .glyphicon-remove": "hide",
         "touchmove .title": "touchMoveWindow",
         "touchstart .title": "touchStartWindow",
