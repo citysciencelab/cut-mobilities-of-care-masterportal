@@ -53,6 +53,42 @@ describe("modules/searchbar/tree", function () {
         });
     });
 
+    describe("getUniqeNodes", function () {
+        const layerModels = [
+            {
+                id: 1,
+                name: "aa",
+                test: 11
+            },
+            {
+                id: 2,
+                name: "aa",
+                test: 22
+            },
+            {
+                id: 3,
+                name: "cc",
+                test: 33
+            }
+        ];
+
+        it("Should be an empty array by empty array input", function () {
+            expect(model.getUniqeNodes([])).to.be.an("array").that.is.empty;
+        });
+        it("Should be an empty array by undefined input", function () {
+            expect(model.getUniqeNodes(undefined)).to.be.an("array").that.is.empty;
+        });
+        it("Should be an unique array that not includes the duplicates by name and id", function () {
+            expect(model.getUniqeNodes(layerModels)).to.be.an("array").to.not.include(
+                {
+                    id: 2,
+                    name: "aa",
+                    test: 22
+                }
+            );
+        });
+    });
+
     describe("getLayerForSearch", function () {
         const layerModelsUniqe = [
             {

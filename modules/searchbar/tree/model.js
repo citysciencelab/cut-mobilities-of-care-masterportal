@@ -85,22 +85,21 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
         }
     },
     /**
-     * @description Führt die Suche in der Nodesvariablen aus.
-     * @param {string} searchStringRegExp - Suchstring als RegExp
+     * Executes the search in the node variable.
+     * @param {string} searchStringRegExp - Suchstring as RegExp.
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @returns {void}
      */
     searchInNodes: function (searchStringRegExp) {
-        var nodes = _.uniq(this.get("nodes"), function (node) {
-            return node.name;
-        });
+        const nodes = this.getUniqeNodes(this.get("nodes"));
 
-        _.each(nodes, function (node) {
-            var nodeName = node.name.replace(/ /g, "");
+        nodes.forEach(node => {
+            const nodeName = node.name.replace(/ /g, "");
 
             if (nodeName.search(searchStringRegExp) !== -1) {
                 Radio.trigger("Searchbar", "pushHits", "hitList", node);
             }
-        }, this);
+        });
     },
 
     /**
@@ -111,7 +110,7 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
      */
     searchInLayers: function (searchStringRegExp) {
         this.get("layers").forEach(layer => {
-            var searchString = "";
+            let searchString = "";
 
             if (layer.metaName !== undefined) {
                 searchString = layer.metaName.replace(/ /g, "");
@@ -129,7 +128,8 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
     /**
      * Duplicate layers are removed so that each layer appears only once in the search,
      * even if it is contained in several categories
-     * and several times if it exists several times with different records
+     * and several times if it exists several times with different records.
+     * By name and id of layer model.
      * @param {object[]} [layerModels=[]] - LightModels of the itemList from Parser.
      * @param {string} layerModels[].name - The name of a layer model.
      * @param {string} layerModels[].id - The id of a layer model.
@@ -140,6 +140,21 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
             const firstLayermodel = layerModels.find(element => element.id === model.id && element.name === model.name);
 
             return layerModels.indexOf(firstLayermodel) === index;
+        });
+    },
+
+    /**
+     * Duplicate nodes are removed so that each node appears only once in the search,
+     * by name of node.
+     * @param {object[]} [nodes=[]] - Nodes.
+     * @param {string} nodes[].name - The name of a node.
+     * @returns {object[]} uniqueModels - Unique LightModels of the itemList from Parser.
+     */
+    getUniqeNodes: function (nodes = []) {
+        return nodes.filter((model, index) => {
+            const firstLayermodel = nodes.find(element => element.name === model.name);
+
+            return nodes.indexOf(firstLayermodel) === index;
         });
     },
 
