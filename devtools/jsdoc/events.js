@@ -1093,7 +1093,7 @@
  */
 
 
-/** -------------------- ATTRIBUTIONS ----------------- */
+/** -------------------- CONTROLS.ATTRIBUTIONS ----------------- */
 
 /**
  * @event Controls.Attributions#RadioTriggerAttributionsRenderAttributions
@@ -2430,4 +2430,24 @@
  * @description Todo
  */
 
+/** -------------------- CONTROLS.ORIENTATION ----------------- */
 
+/**
+ * @event Controls.Orientaion#RadioTriggerGeolocationRemoveOverlay
+ * @description Todo
+ * @example Radio.trigger("geolocation", "removeOverlay");
+ */
+
+/** -------------------- CONTROLS.ORIENTATION.POI ----------------- */
+
+/**
+ * @event Controls.Orientation.Poi#RadioTriggerPOIShowPOIModal
+ * @description Trigger show POI modal.
+ * @example Radio.trigger("POI", "showPOIModal");
+ */
+
+/**
+ * @event Controls.Orientation.Poi#RadioTriggerPOIHidePOIModal
+ * @description Trigger hide POI modal.
+ * @example Radio.trigger("POI", "hidePOIModal");
+ */
