@@ -872,6 +872,12 @@
  */
 
 /**
+ * @event Core#RadioTriggerObliqueMapIsActivated
+ * @returns {Boolean} - Flag if ObliqueMap is activated.
+ * @example Radio.Trigger("ObliqueMap", "isActivated")
+ */
+
+/**
  * @event Core#RadioTriggerObliqueMapActivateLayer
  * @param {ObliqueLayer} layer ObliqueLayer.
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
