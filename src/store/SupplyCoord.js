@@ -22,8 +22,14 @@ export default {
         active (state, value) {
             state.active = value;
         },
-        renderToWindow (state, value) {
-            state.renderToWindow = value;
+        currentProjectionName (state, value) {
+            state.currentProjectionName = value;
+        },
+        currentSelection (state, value) {
+            state.currentSelection = value;
+        },
+        mapProjection (state, value) {
+            state.mapProjection = value;
         },
         positionMapProjection (state, value) {
             state.positionMapProjection = value;
@@ -31,20 +37,14 @@ export default {
         projections (state, value) {
             state.projections = value;
         },
+        renderToWindow (state, value) {
+            state.renderToWindow = value;
+        },
         selectPointerMove (state, value) {
             state.selectPointerMove = value;
         },
         updatePosition (state, value) {
             state.updatePosition = value;
-        },
-        mapProjection (state, value) {
-            state.mapProjection = value;
-        },
-        currentProjectionName (state, value) {
-            state.currentProjectionName = value;
-        },
-        currentSelection (state, value) {
-            state.currentSelection = value;
         }
     }
 };

@@ -3,6 +3,7 @@ import Alerting from "./components/Alerting.vue";
 import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./components/ScaleLine.vue";
 import Title from "./components/Title.vue";
+import Language from "./components/Language.vue";
 
 export default {
     name: "App",
@@ -10,7 +11,8 @@ export default {
         Alerting,
         Title,
         SupplyCoord,
-        ScaleLine
+        ScaleLine,
+        Language
     }
 };
 </script>
@@ -21,6 +23,7 @@ export default {
         <SupplyCoord />
         <ScaleLine />
         <Title />
+        <Language />
     </div>
 </template>
 

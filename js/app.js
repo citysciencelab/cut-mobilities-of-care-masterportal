@@ -1,6 +1,7 @@
 import Vue from "vue";
 import App from "../src/App.vue";
 import store from "../src/store";
+import i18n from "../src/i18n";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -120,7 +121,8 @@ function loadApp () {
     app = new Vue({
         name: "VueApp",
         render: h => h(App),
-        store
+        store,
+        i18n
     });
 
     app.$store.commit("addConfigJsToStore", Config);
@@ -448,7 +450,7 @@ function loadApp () {
     }
 
     if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {
-        new LanguageView();
+        // new LanguageView();
     }
 
     new HighlightFeature();
