@@ -62,7 +62,6 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             }
         });
 
-
         // datepicker with target 'inputs' need listener on changeDate in order to set valuesCollection
         if (date.get("inputs")) {
             // eslint-disable-next-line
