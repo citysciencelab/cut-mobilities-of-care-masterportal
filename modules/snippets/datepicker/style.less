@@ -1,8 +1,17 @@
 @import "../style.less";
 
-.datepicker-inline {
+.datepicker-container {
+	input {
+		width: 100%;
+	}
+}
+
+.datepicker-inline, .datepicker-dropdown {
 	background-color: @whiteColor;
 	border-radius: @borderRadius12;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
 	.datepicker-days {
 		.table-condensed {
 			width: 100%;
@@ -15,7 +24,7 @@
 						cursor: default;
 						font-size: @fontSizeBig;
 						&:hover {
-							background: none;							
+							background: none;
 						}
 					}
 					color: @darkblueColor;
@@ -32,7 +41,23 @@
 			}
 			tbody {
 				tr {
-					td {
+                    &.week {
+                        &:hover {
+                            border: 2px solid @darkblueColor;
+                        }
+                    }
+                    &.week-active {
+                        border-radius: @borderRadius0;
+                        background-color: @darkblueColor;;
+                        color: @whiteColor;
+                        &:hover {
+                            border: 2px solid @darkblueColor;
+                        }
+                        td {
+                            background-image: none;
+                        }
+                    }
+					&td {
 						border-radius: @borderRadius0;
 						background: none;
 						color: @darkgreyColor;
@@ -42,16 +67,73 @@
 							color: @whiteColor;
 						}
 						&.today {
-							border: 2px solid @darkblueColor;;
+							border: 2px solid @darkblueColor;
 						}
 						&.active {
 							border-radius: @borderRadius0;
 							background-color: @darkblueColor;;
 							color: @whiteColor;
 						}
+                        &.disabled {
+                            color: @lightgreyColor;
+                        }
+                        &.cw {
+                            color: @darkblueColor;
+                        }
 					}
 				}
 			}
 		}
 	}
+    .datepicker-years {
+        .table-condensed {
+            width: 100%;
+            font-size: @fontSizeSmall;
+            thead {
+                tr {
+                    border-radius: @borderRadius0;
+                    background: none;
+                    .datepicker-switch {
+                        cursor: default;
+                        font-size: @fontSizeBig;
+                        &:hover {
+                            background: none;
+                        }
+                    }
+                    color: @darkblueColor;
+                    .next, .prev {
+                        color: @darkgreyColor;
+                        &:hover {
+                            opacity: @hoverOpacity;
+                            background-color: @darkblueColor;
+                            color: @whiteColor;
+                            border-radius: @borderRadius0;
+                        }
+                    }
+                }
+            }
+            tbody {
+                tr {
+                    td {
+                        span {
+                            border-radius: @borderRadius0;
+                            background: none;
+                            color: @darkgreyColor;
+                            &:hover {
+                                opacity: @hoverOpacity;
+                                background-color: @darkblueColor;
+                                color: @whiteColor;
+                            }
+                            &.focused {
+                                border: 2px solid @darkblueColor;
+                            }
+                            &.disabled {
+                                color: @lightgreyColor;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

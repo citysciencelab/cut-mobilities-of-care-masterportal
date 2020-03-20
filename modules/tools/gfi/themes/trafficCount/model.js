@@ -1,6 +1,7 @@
 import Theme from "../model";
 import {TrafficCountApi} from "./trafficCountApi";
 import moment from "moment";
+import SnippetDatepickerModel from "../../../../snippets/datepicker/model";
 
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
@@ -245,6 +246,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             from = moment().format("YYYY-MM-DD"),
             until = moment().format("YYYY-MM-DD");
 
+        this.addDayDatepicker(this.get("dayDatepicker"));
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
             // @todo: setup diagram and table with dataset
             if (dataset.hasOwnProperty(meansOfTransport)) {
@@ -252,6 +254,32 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             }
             return false;
         });
+    },
+
+    /**
+     * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
+     * @param {object} datepicker datepicker model
+     * @returns {void}
+     */
+    addDayDatepicker: function (datepicker) {
+        if (!datepicker) {
+            this.set("dayDatepicker", new SnippetDatepickerModel({
+                displayName: "Tag",
+                preselectedValue: moment().toDate(),
+                startDate: moment().subtract(7, "days").toDate(),
+                endDate: moment().toDate(),
+                type: "datepicker",
+                autoclose: true,
+                inputs: $("#dayDateInput"),
+                todayHighlight: false
+            }));
+            this.listenTo(this.get("dayDatepicker"), {
+                "valuesChanged": function () {
+                    // do nothing
+                }
+            });
+            this.trigger("renderDayDatepicker");
+        }
     },
 
     /**
@@ -267,6 +295,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             from = "2020-03-16",
             until = moment().format("YYYY-MM-DD");
 
+        this.addWeekDatepicker(this.get("weekDatepicker"));
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
             // @todo: setup diagram and table with dataset
             if (dataset.hasOwnProperty(meansOfTransport)) {
@@ -274,6 +303,41 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             }
             return false;
         });
+    },
+
+    /**
+     * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
+     * @param {object} datepicker datepicker model
+     * @returns {void}
+     */
+    addWeekDatepicker: function (datepicker) {
+        if (!datepicker) {
+            this.set("weekDatepicker", new SnippetDatepickerModel({
+                preselectedValue: moment().toDate(),
+                startDate: moment().subtract(1, "month").toDate(),
+                endDate: moment().toDate(),
+                type: "datepicker",
+                selectWeek: true,
+                inputs: $("#weekDateInput"),
+                calendarWeeks: true,
+                autoclose: true,
+                format: {
+                    toDisplay: function (date) {
+                        return moment(date).startOf("isoWeek").format("DD.MM.YYYY") + "-" + moment(date).endOf("isoWeek").format("DD.MM.YYYY");
+                    },
+                    toValue: function (date) {
+                        return moment.utc(date).startOf("isoWeek").toDate();
+                    }
+                },
+                todayHighlight: false
+            }));
+            this.listenTo(this.get("weekDatepicker"), {
+                "valuesChanged": function () {
+                    // do nothing
+                }
+            });
+            this.trigger("renderWeekDatepicker");
+        }
     },
 
     /**
@@ -289,6 +353,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             from = "2020-01-01",
             until = moment().format("YYYY-MM-DD");
 
+        this.addYearDatepicker(this.get("yearDatepicker"));
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
             // @todo: setup diagram and table with dataset
             if (dataset.hasOwnProperty(meansOfTransport)) {
@@ -296,6 +361,34 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             }
             return false;
         });
+    },
+
+    /**
+     * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
+     * @param {object} datepicker datepicker model
+     * @returns {void}
+     */
+    addYearDatepicker: function (datepicker) {
+        if (!datepicker) {
+            this.set("yearDatepicker", new SnippetDatepickerModel({
+                displayName: "Tag",
+                preselectedValue: moment().toDate(),
+                startDate: moment().subtract(10, "years").toDate(),
+                endDate: moment().toDate(),
+                type: "datepicker",
+                minViewMode: "years",
+                maxViewMode: "years",
+                inputs: $("#yearDateInput"),
+                autoclose: true,
+                format: "yyyy"
+            }));
+            this.listenTo(this.get("yearDatepicker"), {
+                "valuesChanged": function () {
+                    // do nothing
+                }
+            });
+            this.trigger("renderYearDatepicker");
+        }
     },
 
     /**

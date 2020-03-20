@@ -1,10 +1,13 @@
 import ThemeView from "../view";
 import TrafficCountTemplate from "text-loader!./template.html";
+import SnippetDatepickerView from "../../../../snippets/datepicker/view";
+import moment from "moment";
 
 const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype */{
     events: {
         "click .tab-toggle": "toggleTab",
-        "remove": "destroy"
+        "remove": "destroy",
+        "click .btn": "toggleCalendar"
     },
 
     /**
@@ -34,7 +37,10 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
             "change:highestWorkloadWeekDesc": this.renderHighestWorkloadWeekDesc,
             "change:highestWorkloadWeekValue": this.renderHighestWorkloadWeekValue,
             "change:highestWorkloadMonthDesc": this.renderHighestWorkloadMonthDesc,
-            "change:highestWorkloadMonthValue": this.renderHighestWorkloadMonthValue
+            "change:highestWorkloadMonthValue": this.renderHighestWorkloadMonthValue,
+            "renderDayDatepicker": this.renderDayDatepicker,
+            "renderWeekDatepicker": this.renderWeekDatepicker,
+            "renderYearDatepicker": this.renderYearDatepicker
         });
     },
     tagName: "div",
@@ -228,6 +234,32 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      */
     renderLastUpdate: function (model, value) {
         this.$el.find("#lastUpdate").text(value);
+    },
+
+    renderDayDatepicker: function () {
+        this.$el.find("#dayDateSelector").append(new SnippetDatepickerView({model: this.model.get("dayDatepicker")}).render().el);
+        this.model.get("dayDatepicker").updateValues(moment().format("DD.MM.YYYY"));
+    },
+
+    renderWeekDatepicker: function () {
+        this.$el.find("#weekDateSelector").append(new SnippetDatepickerView({model: this.model.get("weekDatepicker")}).render().el);
+        this.model.get("weekDatepicker").updateValues(moment());
+    },
+
+    renderYearDatepicker: function () {
+        this.$el.find("#yearDateSelector").append(new SnippetDatepickerView({model: this.model.get("yearDatepicker")}).render().el);
+        this.model.get("yearDatepicker").updateValues(moment().format("DD.MM.YYYY"));
+    },
+
+    /**
+     * opens the calender
+     * @param   {Event} evt click event
+     * @returns {void}
+     */
+    toggleCalendar: function (evt) {
+        const input = this.$el.find(evt.currentTarget).parents(".input-group").find("input");
+
+        input.focus();
     },
 
     destroy: function () {
