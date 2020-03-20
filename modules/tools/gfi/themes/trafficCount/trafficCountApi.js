@@ -105,7 +105,8 @@ export function TrafficCountApi (httpHost, sensorThingsVersion, mqttOptions, sen
         }
 
         // set firstDate to today
-        let firstDate = firstDateSoFar || moment().format("YYYY-MM-DD");
+        let firstDate = firstDateSoFar || moment().format("YYYY-MM-DD"),
+            phenomenonTime = "";
 
         dataset[0].Datastreams[0].Observations.forEach(observation => {
             if (!observation.hasOwnProperty("phenomenonTime")) {
@@ -113,12 +114,29 @@ export function TrafficCountApi (httpHost, sensorThingsVersion, mqttOptions, sen
                 return;
             }
 
-            if (observation.phenomenonTime < firstDate) {
-                firstDate = observation.phenomenonTime;
+            phenomenonTime = parsePhenomenonTime(observation.phenomenonTime);
+            if (phenomenonTime < firstDate) {
+                firstDate = phenomenonTime;
             }
         });
 
         return firstDate;
+    }
+
+    /**
+     * checks a phenomenonTime for interval, if not phenomenonTime is returned, if so the last part of the interval is returned
+     * @info phenomenonTime could be either "2020-03-16T14:30:01.000Z" or "2020-03-16T14:30:01.000Z/2020-03-16T14:45:00.000Z"
+     * @param {String} phenomenonInterval the phenomenonTime either as value or interval (see info)
+     * @returns {String} the phenomenonTime
+     */
+    function parsePhenomenonTime (phenomenonInterval) {
+        if (typeof phenomenonInterval !== "string") {
+            return "";
+        }
+
+        const phenomenonArray = phenomenonInterval.split("/");
+
+        return phenomenonArray[phenomenonArray.length - 1];
     }
 
     /**

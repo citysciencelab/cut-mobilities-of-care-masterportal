@@ -222,7 +222,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         });
 
         api.updateHighestWorkloadWeek(thingId, meansOfTransport, moment().format("YYYY"), (calendarWeek, value) => {
-            this.setHighestWorkloadWeekDesc(typeof calendarWeek === "string" ? calendarWeek : "");
+            this.setHighestWorkloadWeekDesc(!isNaN(calendarWeek) || typeof calendarWeek === "string" ? "KW " + calendarWeek : "");
             this.setHighestWorkloadWeekValue(this.addThousandPoints(value));
         });
 

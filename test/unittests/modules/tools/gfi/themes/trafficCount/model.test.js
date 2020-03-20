@@ -117,7 +117,7 @@ describe("tools/gfi/themes/trafficCount", function () {
             expect(model.get("lastDayValue")).to.equal("baz");
             expect(model.get("highestWorkloadDayDesc")).to.equal("17.01.2020");
             expect(model.get("highestWorkloadDayValue")).to.equal("qox");
-            expect(model.get("highestWorkloadWeekDesc")).to.equal("calendarWeek");
+            expect(model.get("highestWorkloadWeekDesc")).to.equal("KW calendarWeek");
             expect(model.get("highestWorkloadWeekValue")).to.equal("quix");
             expect(model.get("highestWorkloadMonthDesc")).to.equal("month");
             expect(model.get("highestWorkloadMonthValue")).to.equal("foobar");
