@@ -170,8 +170,7 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
     dragEnd: function () {
         this.isDragging = false;
         this.$el.find(".drag-bar").removeClass("dragging");
-    },
-
+    }
 });
 
 export default SidebarView;
