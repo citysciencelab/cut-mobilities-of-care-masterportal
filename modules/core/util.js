@@ -802,11 +802,16 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {Object} - returns the first value/entry, that matches.
      */
     findWhereJs: function (list, findId) {
-        return list.find(
-            item => Object.keys({id: findId}).every(
-                key => item[key] === {id: findId}[key]
-            )
-        );
+        let result;
+
+        if (findId !== undefined && list !== undefined) {
+            result = list.find(
+                item => Object.keys({id: findId}).every(
+                    key => item[key] === {id: findId}[key]
+                )
+            );
+        }
+        return result;
     }
 });
 
