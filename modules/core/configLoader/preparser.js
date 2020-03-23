@@ -1,5 +1,6 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
+import Store from "../../../src/store";
 
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     defaults: {
@@ -122,6 +123,8 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         let attributes;
 
         this.addTranslationToRawConfig(response, "translate#");
+
+        Store.commit("setConfigJson", response);
 
         attributes = {
             portalConfig: response.Portalconfig,

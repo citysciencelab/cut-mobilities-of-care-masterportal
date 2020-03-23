@@ -11,6 +11,7 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
+import Store from "../../src/store";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
@@ -680,6 +681,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     setMap: function (value) {
         this.set("map", value);
+        Store.commit("Map/setMap", value);
     }
 
 });

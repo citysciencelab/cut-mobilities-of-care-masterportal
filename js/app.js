@@ -76,7 +76,7 @@ import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
-import BackForwardView from "../modules/controls/backForward/view";
+// import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 
@@ -372,6 +372,7 @@ function loadApp () {
                  * backforward
                  * @deprecated in 3.0.0
                  */
+                /* commented out to avoid conflicts with prototype
                 case "backforward": {
                     if (control.attr === true || typeof control.attr === "object") {
                         console.warn("'backforward' is deprecated. Please use 'backForward' instead");
@@ -387,6 +388,7 @@ function loadApp () {
                     }
                     break;
                 }
+                */
                 /**
                  * overviewmap
                  * @deprecated in 3.0.0

@@ -16,6 +16,9 @@ label {
     font-weight: normal;
 }
 
+#map {
+    position: relative;
+}
 
 .masterportal-container #cursorGlyph {
     position: absolute;

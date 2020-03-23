@@ -1,9 +1,12 @@
-export default {
+import GenericTool from "./GenericTool";
+import composeModules from "../utils/composeModules";
+
+export default composeModules([GenericTool, {
     namespaced: true,
     state: {
         active: false,
         // change this to render in window or in sidebar
-        renderToWindow: true,
+        // renderToWindow: true, NOTE commented out for composeModules test
         id: "coord",
         title: "Koordinaten abfragen",
         deactivateGFI: true,
@@ -37,9 +40,10 @@ export default {
         projections (state, value) {
             state.projections = value;
         },
-        renderToWindow (state, value) {
-            state.renderToWindow = value;
-        },
+        // NOTE commented out for composeModules test
+        // renderToWindow (state, value) {
+        //     state.renderToWindow = value;
+        // },
         selectPointerMove (state, value) {
             state.selectPointerMove = value;
         },
@@ -47,4 +51,4 @@ export default {
             state.updatePosition = value;
         }
     }
-};
+}]);
