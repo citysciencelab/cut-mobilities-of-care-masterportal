@@ -410,16 +410,19 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     hitSelected: function (evt) {
         let hit,
-            hitID;
+            hitID,
+            pick;
         const modelHitList = this.model.get("hitList");
 
         // distingiush hit
-        if (_.has(evt, "cid")) { // in this case, evt = model
-            hit = _.values(_.pick(modelHitList, "0"))[0];
+        if (evt.hasOwnProperty("cid")) { // in this case, evt = model
+            pick = Radio.request("Util", "pick", modelHitList, [0]);
+
+            hit = Object.values(pick)[0];
         }
-        else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
+        else if (evt.hasOwnProperty("currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
-            hit = _.findWhere(modelHitList, {id: hitID});
+            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), hitID);
         }
         else if (modelHitList.length > 1) {
             return;
@@ -434,7 +437,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // 3. Hide the GFI
         Radio.trigger("GFI", "setIsVisible", false);
         // 4. Zoom if necessary on the result otherwise special handling
-        if (_.has(hit, "triggerEvent")) {
+        if (hit.hasOwnProperty("triggerEvent")) {
             this.model.setHitIsClick(true);
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
         }
@@ -787,7 +790,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     positionOfCursorToEnd: function () {
-        const selectedElement = _.find(this.$(".list-group-item"), function (element) {
+        const selectedElement = this.$(".list-group-item").find(function (element) {
                 return this.$(element).hasClass("selected");
             }, this),
             lastSelectedItem = this.model.get("searchFieldisSelected");
@@ -895,7 +898,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         if (evt !== undefined) {
             hitId = evt.currentTarget.id;
-            hit = this.model.get("hitList").find(item => Object.keys({id: hitId}).every(key => item[key] === {id: hitId}[key]));
+            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), hitId);
         }
 
         if (hit && hit.hasOwnProperty("triggerEvent")) {
@@ -906,7 +909,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         else if (this.$(".dropdown-menu-search").css("display") === "block") {
             Radio.trigger("MapMarker", "hideMarker");
         }
-        Radio.trigger("MapMarker", "hidePolygon");
     },
 
     /**
