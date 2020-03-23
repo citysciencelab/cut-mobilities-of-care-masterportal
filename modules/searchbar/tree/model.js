@@ -1,14 +1,27 @@
-const TreeModel = Backbone.Model.extend({
-    /**
-    *
-    */
+const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
     defaults: {
         inUse: false,
         minChars: 3,
         layers: [],
         nodes: []
     },
-
+    /**
+     * @class TreeModel
+     * @extends Backbone.Model
+     * @memberOf Searchbar.Tree
+     * @constructs
+     * @param {object} config - Config parameters from config.json for searching in layer tree.
+     * @property {boolean} inUse=false todo
+     * @property {number} minChars=3 Minimum number of characters to start the search.
+     * @property {object[]} layers=[] todo
+     * @property {object[]} nodes=[] todo
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
+     * @fires Core#RadioRequestParametricURLGetInitString
+     * @listens Searchbar#RadioTriggerSearchbarSearch
+     * @listens Core#RadioTriggerObliqueMapIsActivated
+     */
     initialize: function (config) {
         if (config.minChars) {
             this.set("minChars", config.minChars);
@@ -22,7 +35,7 @@ const TreeModel = Backbone.Model.extend({
         });
 
         if (Radio.request("ParametricURL", "getInitString") !== undefined) {
-            // Führe die initiale Suche durch, da ein Suchparameter übergeben wurde.
+            // Carry out the initial search because a search parameter has been passed.
             this.search(Radio.request("ParametricURL", "getInitString"));
         }
 
@@ -45,11 +58,22 @@ const TreeModel = Backbone.Model.extend({
         }
     },
 
+    /**
+     * Searches for hits for the search string in layer models.
+     * @param {string} searchString - The input in the search bar.
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
+     * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
+     * @returns {void}
+     */
     search: function (searchString) {
-        var searchStringRegExp;
+        let searchStringRegExp = "",
+            layersForSearch = [],
+            uniqueLayerModels = [];
 
         if (this.get("layers").length === 0) {
-            this.getLayerForSearch();
+            uniqueLayerModels = this.getUniqeLayermodels(Radio.request("Parser", "getItemsByAttributes", {type: "layer"}));
+            layersForSearch = this.getLayerForSearch(uniqueLayerModels);
+            this.setLayers(layersForSearch);
         }
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.set("inUse", true);
@@ -61,70 +85,109 @@ const TreeModel = Backbone.Model.extend({
         }
     },
     /**
-     * @description Führt die Suche in der Nodesvariablen aus.
-     * @param {string} searchStringRegExp - Suchstring als RegExp
+     * Executes the search in the node variable.
+     * @param {string} searchStringRegExp - Suchstring as RegExp.
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @returns {void}
      */
     searchInNodes: function (searchStringRegExp) {
-        var nodes = _.uniq(this.get("nodes"), function (node) {
-            return node.name;
-        });
+        const nodes = this.getUniqeNodes(this.get("nodes"));
 
-        _.each(nodes, function (node) {
-            var nodeName = node.name.replace(/ /g, "");
+        nodes.forEach(node => {
+            const nodeName = node.name.replace(/ /g, "");
 
             if (nodeName.search(searchStringRegExp) !== -1) {
                 Radio.trigger("Searchbar", "pushHits", "hitList", node);
             }
-        }, this);
+        });
     },
+
     /**
-     * Führt die Suche in der Layervariablen mit Suchstring aus und findet im Layernamen und im dataset name.
-     * @param {string} searchStringRegExp - Suchstring als RegExp.
+     * Executes the search in the layer variable with search string and finds in the layer name and dataset name.
+     * @param {string} searchStringRegExp - Suchstring as RegExp.
+     * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @returns {void}
      */
     searchInLayers: function (searchStringRegExp) {
-        _.each(this.get("layers"), function (layer) {
-            var searchString = "";
+        this.get("layers").forEach(layer => {
+            let searchString = "";
 
-            if (!_.isUndefined(layer.metaName)) {
+            if (layer.metaName !== undefined) {
                 searchString = layer.metaName.replace(/ /g, "");
             }
-            else if (!_.isUndefined(layer.name)) {
+            else if (layer.name !== undefined) {
                 searchString = layer.name.replace(/ /g, "");
             }
 
             if (searchString.search(searchStringRegExp) !== -1) {
                 Radio.trigger("Searchbar", "pushHits", "hitList", layer);
             }
-        }, this);
+        });
     },
 
-    getLayerForSearch: function () {
-        // lightModels aus der itemList im Parser
-        var layerModels = Radio.request("Parser", "getItemsByAttributes", {type: "layer"});
+    /**
+     * Duplicate layers are removed so that each layer appears only once in the search,
+     * even if it is contained in several categories
+     * and several times if it exists several times with different records.
+     * By name and id of layer model.
+     * @param {object[]} [layerModels=[]] - LightModels of the itemList from Parser.
+     * @param {string} layerModels[].name - The name of a layer model.
+     * @param {string} layerModels[].id - The id of a layer model.
+     * @returns {object[]} uniqueModels - Unique LightModels of the itemList from Parser.
+     */
+    getUniqeLayermodels: function (layerModels = []) {
+        return layerModels.filter((model, index) => {
+            const firstLayermodel = layerModels.find(element => element.id === model.id && element.name === model.name);
 
-        this.set("layers", []);
-        // Damit jeder Layer nur einmal in der Suche auftaucht, auch wenn er in mehreren Kategorien enthalten ist
-        // und weiterhin mehrmals, wenn er mehrmals existiert mit je unterschiedlichen Datensätzen
-        const layerModelsUnique = [];
-
-        layerModels.forEach(function (model) {
-            const uniqueId = model.name + model.id;
-
-            if (layerModelsUnique.indexOf(uniqueId) === -1) {
-                layerModelsUnique.push(uniqueId);
-            }
+            return layerModels.indexOf(firstLayermodel) === index;
         });
-        layerModelsUnique.forEach(function (model) {
-            this.get("layers").push({
+    },
+
+    /**
+     * Duplicate nodes are removed so that each node appears only once in the search,
+     * by name of node.
+     * @param {object[]} [nodes=[]] - Nodes.
+     * @param {string} nodes[].name - The name of a node.
+     * @returns {object[]} uniqueModels - Unique LightModels of the itemList from Parser.
+     */
+    getUniqeNodes: function (nodes = []) {
+        return nodes.filter((model, index) => {
+            const firstLayermodel = nodes.find(element => element.name === model.name);
+
+            return nodes.indexOf(firstLayermodel) === index;
+        });
+    },
+
+    /**
+     * Creates new models for the search from the layerModels.
+     * @param {object[]} [layerModelsUniqe=[]] - Unique LightModels of the itemList from Parser.
+     * @param {string} layerModels[].name - The name of a layer model.
+     * @param {string} layerModels[].id - The id of a layer model.
+     * @returns {object[]} Layers for search.
+     */
+    getLayerForSearch: function (layerModelsUniqe = []) {
+        const layersForsearch = [];
+
+        layerModelsUniqe.forEach(model => {
+            layersForsearch.push({
                 name: model.name,
                 metaName: model.hasOwnProperty("datasets") && model.datasets[0].hasOwnProperty("md_name") ? model.name + " (" + model.datasets[0].md_name + ")" : model.name,
                 type: i18next.t("common:modules.searchbar.type.topic"),
                 glyphicon: "glyphicon-list",
                 id: model.id
             });
-        }, this);
+        });
+
+        return layersForsearch;
+    },
+
+    /**
+     * Setter for layers.
+     * @param {object[]} layers - Layers for search.
+     * @returns {void}
+     */
+    setLayers: function (layers) {
+        this.set("layers", layers);
     }
 });
 

@@ -64,6 +64,12 @@
  */
 
 /**
+ * @namespace Poi
+ * @memberof Controls.Orientation
+ * @description Button to find features near my geolocation
+ */
+
+/**
  * @namespace Orientation3D
  * @memberof Controls
  * @description Creates navigation rosette in 3D mode.
