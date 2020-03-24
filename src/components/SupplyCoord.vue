@@ -45,6 +45,14 @@ export default {
         icon () {
             return this.storePath.glyphicon;
         },
+        mapProjection: {
+            get () {
+                return this.storePath.mapProjection;
+            },
+            set (val) {
+                this.$store.commit("Tools/SupplyCoord/mapProjection", val);
+            }
+        },
         projections: {
             get () {
                 return this.storePath.projections;
@@ -130,7 +138,7 @@ export default {
         },
         createInteraction () {
             this.projections = getProjections();
-            this.$store.commit("Tools/SupplyCoord/mapProjection", Radio.request("MapView", "getProjection"));
+            this.mapProjection = Radio.request("MapView", "getProjection");
             const pointerMove = new Pointer(
                 {
                     handleMoveEvent: function (evt) {
