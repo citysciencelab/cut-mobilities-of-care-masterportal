@@ -128,7 +128,7 @@ const CompareFeaturesView = Backbone.View.extend({
         this.$el.find("." + evt.target.classList[0]).remove();
         this.model.removeFeatureFromList(featureToRemoved);
         if (this.model.get("featureList").length === 0) {
-            this.renderErrorModal();
+            this.renderErrorModal(this.model);
         }
     },
     preparePrint: function () {
