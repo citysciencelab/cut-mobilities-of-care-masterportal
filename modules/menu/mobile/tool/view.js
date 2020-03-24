@@ -19,6 +19,12 @@ const ItemView = Backbone.View.extend({
         return this;
     },
     checkItem: function () {
+        if (!this.model.collection) {
+            // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
+            // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
+            this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
+        }
+
         this.model.setIsActive(true);
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
