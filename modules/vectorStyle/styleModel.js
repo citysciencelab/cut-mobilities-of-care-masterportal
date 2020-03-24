@@ -60,6 +60,63 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
         return styleObject;
     },
+    createLegendStyle: function (name, wfsURL, version) {
+        this.getGeometryTypeFromWFS(wfsURL, version);
+    },
+
+    createLegendInfo: function (geometryType) {
+        const rules = this.get("rules");
+        let styleObject;
+
+        geometryType.forEach(geom => rules.forEach(rule => {
+            styleObject = this.getSimpleGeometryStyle(geom, "", rule, false);
+            this.addLegendInfo(geom, styleObject, rule);
+        }));
+    },
+
+    getGeometryTypeFromWFS: function (wfsURL, version) {
+        const url = new URL(wfsURL),
+            params = {
+                "SERVICE": "WFS",
+                "VERSION": version,
+                "REQUEST": "DescribeFeatureType"
+            };
+
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+        fetch(url)
+            .then(response => response.text())
+            .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
+            .then(responseXML => {
+                this.createLegendInfo(this.parseXmlToObject(responseXML));
+            })
+            .catch(error => {
+                console.warn("The fetch of the data failed with the following error message: " + error);
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Die Legende konnte in der Layerinformation nicht erstellt werden!</strong> <br>"
+                        + "<small>Details: Ein benötigter Dienst antwortet nicht.</small>",
+                    kategorie: "alert-warning"
+                });
+            });
+    },
+
+    parseXmlToObject: function (xml) {
+        const element = xml.getElementsByTagName("element"),
+            geometryType = [];
+
+        for (let i = 0; i < element.length; i++) {
+            const typeAttribute = element[i].getAttribute("type");
+            let geomType;
+
+            if (typeAttribute && typeAttribute.includes("gml")) {
+                geomType = typeAttribute.split("gml:")[1].replace("PropertyType", "");
+            }
+            if (geomType && !geometryType.includes(geomType)) {
+                geometryType.push(geomType);
+            }
+        }
+        return geometryType;
+    },
 
     /**
      * Returns true if feature contains some kind of MultiGeometry

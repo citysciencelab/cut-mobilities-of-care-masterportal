@@ -21,12 +21,13 @@ const Config = {
     },
     layerConf: "./ressources/services-internet.json",
     restConf: "./ressources/rest-services-internet.json",
-    styleConf: "./ressources/style_v2.json",
+    styleConf: "../master/style_v3.json",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
-    }
+    },
+    useVectorStyleBeta: true
 };
 
 /* eslint-enable no-unused-vars */

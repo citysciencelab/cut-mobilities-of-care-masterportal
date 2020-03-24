@@ -42,7 +42,7 @@
           "imageScale" : "0.6",
           "imageWidth": 40,
           "imageHeight": 40,
-          "imageName" : "grundschulen.svg"
+          "imageName" : "grundschulen.png"
         }
       },
       {
@@ -56,7 +56,7 @@
           "imageScale" : "0.6",
           "imageWidth": 40,
           "imageHeight": 40,
-          "imageName" : "gymnasien.svg"
+          "imageName" : "gymnasien.png"
         }
       },
       {
@@ -70,7 +70,7 @@
           "imageScale" : "0.6",
           "imageWidth": 40,
           "imageHeight": 40,
-          "imageName" : "stadtteilschulen.svg"
+          "imageName" : "stadtteilschulen.png"
         }
       },
       {
@@ -84,7 +84,7 @@
           "imageScale" : "0.6",
           "imageWidth": 40,
           "imageHeight": 40,
-          "imageName" : "sonderschulen.svg"
+          "imageName" : "sonderschulen.png"
         }
       },
       {
@@ -98,7 +98,7 @@
           "imageScale" : "0.6",
           "imageWidth": 40,
           "imageHeight": 40,
-          "imageName" : "berufliche_schulen.svg"
+          "imageName" : "berufliche_schulen.png"
         }
       },
       {
@@ -112,7 +112,7 @@
           "imageScale" : "0.6",
           "imageWidth": 40,
           "imageHeight": 40,
-          "imageName" : "langformschulen.svg"
+          "imageName" : "langformschulen.png"
         }
       }
     ]

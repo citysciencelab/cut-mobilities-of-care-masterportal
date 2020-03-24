@@ -107,6 +107,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (this.get("isSelected")) {
             this.updateSource(true);
         }
+        this.createLegendURL();
     },
 
     /**
@@ -245,6 +246,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
             if (!_.isUndefined(style)) {
+                style.createLegendStyle(this.get("name"), this.get("url"), this.get("version"));
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
