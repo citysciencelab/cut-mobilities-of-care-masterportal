@@ -183,8 +183,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         }
 
         // tab footer
-        api.subscribeLastUpdate(thingId, meansOfTransport, phenomenonTime => {
-            this.setLastUpdate(this.parsePhenomenonTime(phenomenonTime));
+        api.subscribeLastUpdate(thingId, meansOfTransport, datetime => {
+            this.setLastUpdate(moment(datetime, "YYYY-MM-DD HH:mm:ss").format("DD.MM.YYYY, HH:mm:ss"));
         });
     },
 
@@ -338,20 +338,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         }
 
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    },
-
-    /**
-     * checks a phenomenonTime for interval, if not phenomenonTime is returned, if so the last part of the interval is returned, parses phenomenonTime into a readable datetime
-     * @info phenomenonTime could be either "2020-03-16T14:30:01.000Z" or "2020-03-16T14:30:01.000Z/2020-03-16T14:45:00.000Z"
-     * @param {String} phenomenonInterval the phenomenonTime either as value or interval (see info)
-     * @returns {String} the phenomenonTime in format DD.MM.YYYY, HH:II:SS or an empty string if the input was incorrect
-     */
-    parsePhenomenonTime: function (phenomenonInterval) {
-        const phenomenonArray = phenomenonInterval.split("/"),
-            phenomenonTime = phenomenonArray[phenomenonArray.length - 1],
-            dt = new Date(phenomenonTime);
-
-        return moment(dt).format("DD.MM.YYYY, HH:mm:ss");
     },
 
     /**
