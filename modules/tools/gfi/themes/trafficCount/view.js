@@ -44,7 +44,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         });
     },
     tagName: "div",
-    className: "trafficcount-gfi-theme",
+    className: "trafficCount",
 
     /**
      * @member TrafficCountTemplate

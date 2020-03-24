@@ -23,47 +23,57 @@
     </ul>
     <div class="tab-content">
         <div id="infos" class="tab-pane fade in active">
-            <table class="table table-condensed table-hover">
+            <div class="padded">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                        <tr colspan = "3">
+                            <td class="bold">&nbsp;</td>
+                            <td class="bold">Zeitraum</td>
+                            <td class="bold">Anzahl</td>
+                        </tr>
+                        <tr colspan = "3">
+                            <td class="bold">insgesamt seit</td>
+                            <td id="totalDesc" class="text-right"><%= totalDesc %></td>
+                            <td id="totalValue" class="text-right"><%= totalValue %></td>
+                        </tr>
+                        <tr colspan = "3">
+                            <td class="bold">seit Jahresbeginn</td>
+                            <td id="thisYearDesc" class="text-right"><%= thisYearDesc %></td>
+                            <td id="thisYearValue" class="text-right"><%= thisYearValue %></td>
+                        </tr>
+                        <tr colspan = "3">
+                            <td class="bold">im Vorjahr</td>
+                            <td id="lastYearDesc" class="text-right"><%= lastYearDesc %></td>
+                            <td id="lastYearValue" class="text-right"><%= lastYearValue %></td>
+                        </tr>
+                        <tr colspan = "3">
+                            <td class="bold">am Vortag</td>
+                            <td id="lastDayDesc" class="text-right"><%= lastDayDesc %></td>
+                            <td id="lastDayValue" class="text-right"><%= lastDayValue %></td>
+                        </tr>
+                        <tr colspan = "3">
+                            <td class="bold">Stärkster Tag im Jahr</td>
+                            <td id="highestWorkloadDayDesc" class="text-right"><%= highestWorkloadDayDesc %></td>
+                            <td id="highestWorkloadDayValue" class="text-right"><%= highestWorkloadDayValue %></td>
+                        </tr>
+                        <tr colspan = "3">
+                            <td class="bold">Stärkste Woche im Jahr</td>
+                            <td id="highestWorkloadWeekDesc" class="text-right"><%= highestWorkloadWeekDesc %></td>
+                            <td id="highestWorkloadWeekValue" class="text-right"><%= highestWorkloadWeekValue %></td>
+                        </tr>
+                        <tr colspan = "3">
+                            <td class="bold">Stärkster Monat im Jahr</td>
+                            <td id="highestWorkloadMonthDesc" class="text-right"><%= highestWorkloadMonthDesc %></td>
+                            <td id="highestWorkloadMonthValue" class="text-right"><%= highestWorkloadMonthValue %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <table class="table table-striped">
                 <tbody>
-                    <tr colspan = "3">
-                        <td class="bold">&nbsp;</td>
-                        <td class="bold">Zeitraum</td>
-                        <td class="bold">Anzahl</td>
-                    </tr>
-                    <tr colspan = "3">
-                        <td class="bold">insgesamt seit</td>
-                        <td id="totalDesc" class="text-right"><%= totalDesc %></td>
-                        <td id="totalValue" class="text-right"><%= totalValue %></td>
-                    </tr>
-                    <tr colspan = "3">
-                        <td class="bold">seit Jahresbeginn</td>
-                        <td id="thisYearDesc" class="text-right"><%= thisYearDesc %></td>
-                        <td id="thisYearValue" class="text-right"><%= thisYearValue %></td>
-                    </tr>
-                    <tr colspan = "3">
-                        <td class="bold">im Vorjahr</td>
-                        <td id="lastYearDesc" class="text-right"><%= lastYearDesc %></td>
-                        <td id="lastYearValue" class="text-right"><%= lastYearValue %></td>
-                    </tr>
-                    <tr colspan = "3">
-                        <td class="bold">am Vortag</td>
-                        <td id="lastDayDesc" class="text-right"><%= lastDayDesc %></td>
-                        <td id="lastDayValue" class="text-right"><%= lastDayValue %></td>
-                    </tr>
-                    <tr colspan = "3">
-                        <td class="bold">Stärkster Tag im Jahr</td>
-                        <td id="highestWorkloadDayDesc" class="text-right"><%= highestWorkloadDayDesc %></td>
-                        <td id="highestWorkloadDayValue" class="text-right"><%= highestWorkloadDayValue %></td>
-                    </tr>
-                    <tr colspan = "3">
-                        <td class="bold">Stärkste Woche im Jahr</td>
-                        <td id="highestWorkloadWeekDesc" class="text-right"><%= highestWorkloadWeekDesc %></td>
-                        <td id="highestWorkloadWeekValue" class="text-right"><%= highestWorkloadWeekValue %></td>
-                    </tr>
-                    <tr colspan = "3">
-                        <td class="bold">Stärkster Monat im Jahr</td>
-                        <td id="highestWorkloadMonthDesc" class="text-right"><%= highestWorkloadMonthDesc %></td>
-                        <td id="highestWorkloadMonthValue" class="text-right"><%= highestWorkloadMonthValue %></td>
+                    <tr colspan = "2">
+                        <td class="bold">letzte Aktualisierung:</td>
+                        <td class="text-right"><span id="lastUpdate"><%= lastUpdate %></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -79,7 +89,7 @@
                     </span>
                 </div>
             </div>
-            <div class="trafficCountDiagramDay_<%= themeId %>" style="position:relative;">
+            <div class="trafficCountDiagramDay_<%= themeId %> padded" style="position:relative;">
                 <div class="graph-tooltip-div graph-tooltip-div-day_<%= themeId %>"></div>
             </div>
         </div>
@@ -94,7 +104,7 @@
                     </span>
                 </div>
             </div>
-            <div class="trafficCountDiagramWeek_<%= themeId %>" style="position:relative;">
+            <div class="trafficCountDiagramWeek_<%= themeId %> padded" style="position:relative;">
                 <div class="graph-tooltip-div graph-tooltip-div-week_<%= themeId %>"></div>
             </div>
         </div>
@@ -108,21 +118,10 @@
                         </button>
                     </span>
                 </div>
-                <div class="trafficCountDiagramYear_<%= themeId %>" style="position:relative;">
+                <div class="trafficCountDiagramYear_<%= themeId %> padded" style="position:relative;">
                     <div class="graph-tooltip-div graph-tooltip-div-year_<%= themeId %>"></div>
                 </div>
             </div>
-        </div>
-
-        <div>
-            <table class="table table-condensed table-hover">
-                <tbody>
-                    <tr colspan = "2">
-                        <td class="bold">letzte Aktualisierung:</td>
-                        <td class="text-right"><span id="lastUpdate"><%= lastUpdate %></span></td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>

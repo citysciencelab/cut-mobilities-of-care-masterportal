@@ -377,26 +377,26 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {void}
      */
     addYearDatepicker: function (datepicker) {
-       if (!datepicker) {
-           this.set("yearDatepicker", new SnippetDatepickerModel({
-               displayName: "Tag",
-               preselectedValue: moment().toDate(),
-               startDate: moment().subtract(10, "years").toDate(),
-               endDate: moment().toDate(),
-               type: "datepicker",
-               minViewMode: "years",
-               maxViewMode: "years",
-               inputs: $("#yearDateInput"),
-               autoclose: true,
-               format: "yyyy"
-           }));
-           this.listenTo(this.get("yearDatepicker"), {
-               "valuesChanged": function () {
-                   // do nothing
-               }
-           });
-           this.trigger("renderYearDatepicker");
-       }
+        if (!datepicker) {
+            this.set("yearDatepicker", new SnippetDatepickerModel({
+                displayName: "Tag",
+                preselectedValue: moment().toDate(),
+                startDate: moment().subtract(10, "years").toDate(),
+                endDate: moment().toDate(),
+                type: "datepicker",
+                minViewMode: "years",
+                maxViewMode: "years",
+                inputs: $("#yearDateInput"),
+                autoclose: true,
+                format: "yyyy"
+            }));
+            this.listenTo(this.get("yearDatepicker"), {
+                "valuesChanged": function () {
+                    // do nothing
+                }
+            });
+            this.trigger("renderYearDatepicker");
+        }
     },
 
     /**
@@ -513,7 +513,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     refreshDiagramGeneral: function (dataset, selector, selectorTooltip, xAttr, xAxisTicks, yAttr, xAxisText, yAxisText, callbackRenderLegendText, callbackRenderTextXAxis, setTooltipValue, emptyDiagramData) { // eslint-disable-line
         const legendData = [],
             attrToShowArray = [],
-            diagramWidth = parseInt($(".trafficcount-gfi-theme").css("width"), 10) - 10,
+            diagramWidth = parseInt($(".trafficCount").css("width"), 10) - 10,
             diagramHeight = 280;
         let graphConfig = null,
             diagramData = [];
