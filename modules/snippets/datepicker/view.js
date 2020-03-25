@@ -1,6 +1,7 @@
 import Template from "text-loader!./template.html";
 import "bootstrap-datepicker";
 import "bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min";
+import moment from "moment";
 
 const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype */{
     /**
@@ -99,7 +100,8 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
         const inputs = this.model.get("valuesCollection").at(0).get("inputs");
 
         if (inputs) {
-            inputs.datepicker("update", value);
+            // input must be setted like 25.03.2020
+            inputs.datepicker("update", moment(value).format("DD.MM.YYYY"));
 
             return;
         }

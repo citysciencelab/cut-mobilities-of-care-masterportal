@@ -239,17 +239,17 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
 
     renderDayDatepicker: function () {
         this.$el.find("#dayDateSelector").append(new SnippetDatepickerView({model: this.model.get("dayDatepicker")}).render().el);
-        this.model.get("dayDatepicker").updateValues(moment().format("DD.MM.YYYY"));
+        this.model.get("dayDatepicker").updateValues(moment().toDate());
     },
 
     renderWeekDatepicker: function () {
         this.$el.find("#weekDateSelector").append(new SnippetDatepickerView({model: this.model.get("weekDatepicker")}).render().el);
-        this.model.get("weekDatepicker").updateValues(moment());
+        this.model.get("weekDatepicker").updateValues(moment().toDate());
     },
 
     renderYearDatepicker: function () {
         this.$el.find("#yearDateSelector").append(new SnippetDatepickerView({model: this.model.get("yearDatepicker")}).render().el);
-        this.model.get("yearDatepicker").updateValues(moment().format("DD.MM.YYYY"));
+        this.model.get("yearDatepicker").updateValues(moment().toDate());
     },
 
     /**
