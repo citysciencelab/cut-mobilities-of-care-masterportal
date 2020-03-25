@@ -38,6 +38,9 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
             "change:highestWorkloadWeekValue": this.renderHighestWorkloadWeekValue,
             "change:highestWorkloadMonthDesc": this.renderHighestWorkloadMonthDesc,
             "change:highestWorkloadMonthValue": this.renderHighestWorkloadMonthValue,
+            "change:dayTableContent": this.renderDayTableContent,
+            "change:weekTableContent": this.renderWeekTableContent,
+            "change:yearTableContent": this.renderYearTableContent,
             "renderDayDatepicker": this.renderDayDatepicker,
             "renderWeekDatepicker": this.renderWeekDatepicker,
             "renderYearDatepicker": this.renderYearDatepicker
@@ -255,6 +258,298 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      */
     renderHighestWorkloadMonthValue: function (model, value) {
         this.$el.find("#highestWorkloadMonthValue").text(value);
+    },
+
+    /**
+     * creates HTML-Code for dayTableHeader
+     * @return {String} HTML
+     */
+    createDayTableHeader: function () {
+        const dayTableHeaderArr = this.model.get("dayTableContent").day.headerArr;
+        let dayTableHeaderHtml = "";
+
+        if (dayTableHeaderArr !== undefined) {
+            dayTableHeaderHtml += "<th class=\"tableTopLeft\">" + this.model.get("dayTableContent").day.title + "</th>";
+            if (Array.isArray(dayTableHeaderArr) && dayTableHeaderArr.length > 0) {
+                for (const key in dayTableHeaderArr) {
+                    dayTableHeaderHtml += "<th class=\"tableColumn\">" + dayTableHeaderArr[key] + " <br/>Uhr</th>";
+                }
+            }
+        }
+
+        return dayTableHeaderHtml;
+    },
+
+    /**
+     * creates HTML-Code for dayTableColumns
+     * @return {String} HTML
+     */
+    createDayTableCars: function () {
+        const dayTableColumnsCarsArr = this.model.get("dayTableContent").day.carsArr;
+        let dayTableColumnsHtml = "";
+
+        if (dayTableColumnsCarsArr !== undefined) {
+            dayTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("dayTableContent").day.firstColumn + " KFZ abs.</td>";
+            if (Array.isArray(dayTableColumnsCarsArr) && dayTableColumnsCarsArr.length > 0) {
+                for (const key in dayTableColumnsCarsArr) {
+                    dayTableColumnsHtml += "<td class=\"text-align-center\">" + dayTableColumnsCarsArr[key] + "</td>";
+                }
+            }
+        }
+
+        return dayTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for yearTableColumns
+     * @return {String} HTML
+     */
+    createYearTableCars: function () {
+        const yearTableColumnsCarsArr = this.model.get("yearTableContent").year.carsArr;
+        let yearTableColumnsHtml = "";
+
+        if (yearTableColumnsCarsArr !== undefined) {
+            yearTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("yearTableContent").year.firstColumn + " KFZ abs.</td>";
+            if (Array.isArray(yearTableColumnsCarsArr) && yearTableColumnsCarsArr.length > 0) {
+                for (const key in yearTableColumnsCarsArr) {
+                    yearTableColumnsHtml += "<td class=\"text-align-center\">" + yearTableColumnsCarsArr[key] + "</td>";
+                }
+            }
+        }
+
+        return yearTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for yearTableColumns
+     * @return {String} HTML
+     */
+    createDayTableBicycles: function () {
+        const dayTableColumnsBicyclesArr = this.model.get("dayTableContent").day.bicyclesArr;
+        let dayTableColumnsHtml = "";
+
+        if (dayTableColumnsBicyclesArr !== undefined) {
+            dayTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("dayTableContent").day.firstColumn + "</td>";
+            if (Array.isArray(dayTableColumnsBicyclesArr) && dayTableColumnsBicyclesArr.length > 0) {
+                for (const key in dayTableColumnsBicyclesArr) {
+                    dayTableColumnsHtml += "<td class=\"text-align-center\">" + dayTableColumnsBicyclesArr[key] + "</td>";
+                }
+            }
+        }
+
+        return dayTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for yearTableColumns
+     * @return {String} HTML
+     */
+    createWeekTableBicycles: function () {
+        const weekTableColumnsBicyclesArr = this.model.get("weekTableContent").week.bicyclesArr;
+        let weekTableColumnsHtml = "";
+
+        if (weekTableColumnsBicyclesArr !== undefined) {
+            weekTableColumnsHtml += "<td class=\"tableFirstColumn\">KW " + this.model.get("weekTableContent").week.firstColumn + "</td>";
+            if (Array.isArray(weekTableColumnsBicyclesArr) && weekTableColumnsBicyclesArr.length > 0) {
+                for (const key in weekTableColumnsBicyclesArr) {
+                    weekTableColumnsHtml += "<td class=\"text-align-center\">" + weekTableColumnsBicyclesArr[key] + "</td>";
+                }
+            }
+        }
+        return weekTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for yearTableColumns
+     * @return {String} HTML
+     */
+    createYearTableBicycles: function () {
+        const yearTableColumnsBicyclesArr = this.model.get("yearTableContent").year.bicyclesArr;
+        let yearTableColumnsHtml = "";
+
+        if (yearTableColumnsBicyclesArr !== undefined) {
+            yearTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("yearTableContent").year.firstColumn + "</td>";
+            if (Array.isArray(yearTableColumnsBicyclesArr) && yearTableColumnsBicyclesArr.length > 0) {
+                for (const key in yearTableColumnsBicyclesArr) {
+                    yearTableColumnsHtml += "<td class=\"text-align-center\">" + yearTableColumnsBicyclesArr[key] + "</td>";
+                }
+            }
+        }
+
+        return yearTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for dayTableColumns
+     * @return {String} HTML
+     */
+    createDayTableTrucks: function () {
+        const dayTableColumnsTrucksArr = this.model.get("dayTableContent").day.trucksArr;
+        let dayTableColumnsHtml = "";
+
+        if (dayTableColumnsTrucksArr !== undefined) {
+            dayTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("dayTableContent").day.firstColumn + " SV-Anteil in %</td>";
+            if (Array.isArray(dayTableColumnsTrucksArr) && dayTableColumnsTrucksArr.length > 0) {
+                for (const key in dayTableColumnsTrucksArr) {
+                    dayTableColumnsHtml += "<td class=\"text-align-center\">" + dayTableColumnsTrucksArr[key] + "</td>";
+                }
+            }
+        }
+
+        return dayTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for weekTableColumns
+     * @return {String} HTML
+     */
+    createWeekTableTrucks: function () {
+        const weekTableColumnsTrucksArr = this.model.get("weekTableContent").week.trucksArr;
+        let weekTableColumnsHtml = "";
+
+        if (weekTableColumnsTrucksArr !== undefined) {
+            weekTableColumnsHtml += "<td class=\"tableFirstColumn\">KW " + this.model.get("weekTableContent").week.firstColumn + " SV-Anteil in %</td>";
+            if (Array.isArray(weekTableColumnsTrucksArr) && weekTableColumnsTrucksArr.length > 0) {
+                for (const key in weekTableColumnsTrucksArr) {
+                    weekTableColumnsHtml += "<td class=\"text-align-center\">" + weekTableColumnsTrucksArr[key] + "</td>";
+                }
+            }
+        }
+
+        return weekTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for yearTableTrucks
+     * @return {String} HTML
+     */
+    createYearTableTrucks: function () {
+        const yearTableColumnsTrucksArr = this.model.get("yearTableContent").year.trucksArr;
+        let yearTableColumnsHtml = "";
+
+        if (yearTableColumnsTrucksArr !== undefined) {
+            yearTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("yearTableContent").year.firstColumn + " SV-Anteil in %</td>";
+            if (Array.isArray(yearTableColumnsTrucksArr) && yearTableColumnsTrucksArr.length > 0) {
+                for (const key in yearTableColumnsTrucksArr) {
+                    yearTableColumnsHtml += "<td class=\"text-align-center\">" + yearTableColumnsTrucksArr[key] + "</td>";
+                }
+            }
+        }
+
+        return yearTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for weekTableHeader
+     * @return {String} HTML
+     */
+    createWeekTableHeader: function () {
+        const weekTableHeaderDateArr = this.model.get("weekTableContent").week.headerDateArr,
+            weekTableHeaderHourArr = this.model.get("weekTableContent").week.headerHourArr;
+
+        let weekTableHeaderHtml = "";
+
+        if (weekTableHeaderDateArr !== undefined) {
+            if (Array.isArray(weekTableHeaderDateArr) && weekTableHeaderDateArr.length > 0 &&
+                Array.isArray(weekTableHeaderHourArr) && weekTableHeaderHourArr.length > 0 &&
+                weekTableHeaderDateArr.length === weekTableHeaderHourArr.length) {
+
+                weekTableHeaderHtml += "<th class=\"tableTopLeft\">" + this.model.get("weekTableContent").week.title + "</th>";
+                for (let i = 0; i < weekTableHeaderDateArr.length; i++) {
+                    weekTableHeaderHtml += "<th class=\"tableColumn\">" + weekTableHeaderDateArr[i] + "<br/>" + weekTableHeaderHourArr[i] + " Uhr</th>";
+                }
+            }
+        }
+
+        return weekTableHeaderHtml;
+    },
+
+    /**
+     * creates HTML-Code for dayTableColumns
+     * @return {String} HTML
+     */
+    createWeekTableCars: function () {
+        const weekTableColumnsCarsArr = this.model.get("weekTableContent").week.carsArr;
+        let weekTableColumnsHtml = "";
+
+        if (weekTableColumnsCarsArr !== undefined) {
+            weekTableColumnsHtml += "<td class=\"tableFirstColumn\">KW " + this.model.get("weekTableContent").week.firstColumn + " KFZ abs.</td>";
+            if (Array.isArray(weekTableColumnsCarsArr) && weekTableColumnsCarsArr.length > 0) {
+                for (const key in weekTableColumnsCarsArr) {
+                    weekTableColumnsHtml += "<td class=\"text-align-center\">" + weekTableColumnsCarsArr[key] + "</td>";
+                }
+            }
+        }
+
+        return weekTableColumnsHtml;
+    },
+
+    /**
+     * creates HTML-Code for yearTableHeader
+     * @return {String} HTML
+     */
+    createYearTableHeader: function () {
+        const yearTableHeaderArr = this.model.get("yearTableContent").year.headerArr;
+        let yearTableHeaderHtml = "";
+
+        if (yearTableHeaderArr) {
+            yearTableHeaderHtml += "<th class=\"tableTopLeft\">" + this.model.get("yearTableContent").year.title + "</th>";
+            if (Array.isArray(yearTableHeaderArr) && yearTableHeaderArr.length > 0) {
+                for (const key in yearTableHeaderArr) {
+                    yearTableHeaderHtml += "<th class=\"tableColumn\">KW " + yearTableHeaderArr[key] + "</th>";
+                }
+            }
+        }
+
+        return yearTableHeaderHtml;
+    },
+
+    /**
+     * appends header and columns to day table
+     * @returns {Void}  -
+     */
+    renderDayTableContent: function () {
+        this.$el.find("#dayTableContentHeader").empty();
+        this.$el.find("#dayTableContentCars").empty();
+        this.$el.find("#dayTableContentTrucks").empty();
+        this.$el.find("#dayTableContentBicycles").empty();
+
+        this.$el.find("#dayTableContentHeader").append(this.createDayTableHeader());
+        this.$el.find("#dayTableContentCars").append(this.createDayTableCars());
+        this.$el.find("#dayTableContentTrucks").append(this.createDayTableTrucks());
+        this.$el.find("#dayTableContentBicycles").append(this.createDayTableBicycles());
+    },
+
+    /**
+     * appends header and columns to day table
+     * @returns {Void}  -
+     */
+    renderWeekTableContent: function () {
+        this.$el.find("#weekTableContentHeader").empty();
+        this.$el.find("#weekTableContentCars").empty();
+        this.$el.find("#weekTableContentTrucks").empty();
+        this.$el.find("#weekTableContentBicycles").empty();
+
+        this.$el.find("#weekTableContentHeader").append(this.createWeekTableHeader());
+        this.$el.find("#weekTableContentCars").append(this.createWeekTableCars());
+        this.$el.find("#weekTableContentTrucks").append(this.createWeekTableTrucks());
+        this.$el.find("#weekTableContentBicycles").append(this.createWeekTableBicycles());
+    },
+
+    /**
+     * appends header and columns to year table
+     * @returns {Void}  -
+     */
+    renderYearTableContent: function () {
+        this.$el.find("#yearTableContentHeader").empty();
+        this.$el.find("#yearTableContentCars").empty();
+        this.$el.find("#yearTableContentTrucks").empty();
+        this.$el.find("#yearTableContentBicycles").empty();
+
+        this.$el.find("#yearTableContentHeader").append(this.createYearTableHeader());
+        this.$el.find("#yearTableContentCars").append(this.createYearTableCars());
+        this.$el.find("#yearTableContentTrucks").append(this.createYearTableTrucks());
+        this.$el.find("#yearTableContentBicycles").append(this.createYearTableBicycles());
     },
 
     /**

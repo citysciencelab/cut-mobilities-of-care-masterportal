@@ -5,6 +5,14 @@ import SnippetDatepickerModel from "../../../../snippets/datepicker/model";
 
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
+        dayTableContent: {},
+        weekTableContent: {},
+        yearTableContent: {},
+
+        meansOfTransportFahrzeuge: "AnzFahrzeuge",
+        meansOfTransportFahrraeder: "AnzFahrraeder",
+        meansOfTransportSV: "AntSV",
+
         propTrafficCountApi: null,
         propThingId: 0,
         propMeansOfTransport: "",
@@ -233,6 +241,239 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     },
 
     /**
+     * creates a json for the dayLine data
+     * @param {Object} dataset contains the dayLine data
+     * @return {Object} Object with prepared data
+     */
+    prepareDatasetHourly: function (dataset) {
+        const retObj = {};
+
+        retObj.trucks = [];
+        retObj.cars = [];
+        retObj.bicycles = [];
+
+        for (const meansOfTransport in dataset) {
+            for (const datetime in dataset[meansOfTransport]) {
+
+                const splitted = datetime.split(" "),
+                    date = moment(splitted[0], "YYYY-MM-DD").format("YYYY-MM-DD"),
+                    hour = moment(splitted[1], "HH:mm:ss").format("HH:mm");
+
+                if (meansOfTransport === this.get("meansOfTransportFahrraeder")) {
+                    retObj.bicycles.push({
+                        date: date,
+                        hour: hour,
+                        result: dataset[meansOfTransport][datetime]
+                    });
+                }
+
+                if (meansOfTransport === this.get("meansOfTransportFahrzeuge")) {
+                    retObj.cars.push({
+                        date: date,
+                        hour: hour,
+                        result: dataset[meansOfTransport][datetime]
+                    });
+                }
+
+                if (meansOfTransport === this.get("meansOfTransportSV")) {
+                    retObj.trucks.push({
+                        date: date,
+                        hour: hour,
+                        result: dataset[meansOfTransport][datetime]
+                    });
+                }
+            }
+        }
+
+        return retObj;
+    },
+
+    /**
+     * creates a json for the yearLine data
+     * @param {Object} dataset contains the yearLine data
+     * @return {Object} Object with prepared data
+     */
+    prepareYearDataset: function (dataset) {
+        const retObj = {};
+
+        retObj.trucks = [];
+        retObj.cars = [];
+        retObj.bicycles = [];
+
+        for (const meansOfTransport in dataset) {
+            for (const datetime in dataset[meansOfTransport]) {
+
+                const date = moment(datetime, "YYYY-MM-DD").format("YYYY-MM-DD"),
+                    calenderWeek = moment(datetime).add(3, "days").format("WW");
+
+                if (meansOfTransport === this.get("meansOfTransportFahrraeder")) {
+                    retObj.bicycles.push({
+                        date: date,
+                        calenderWeek: calenderWeek,
+                        result: dataset[meansOfTransport][datetime]
+                    });
+                }
+
+                if (meansOfTransport === this.get("meansOfTransportFahrzeuge")) {
+                    retObj.cars.push({
+                        date: date,
+                        calenderWeek: calenderWeek,
+                        result: dataset[meansOfTransport][datetime]
+                    });
+                }
+
+                if (meansOfTransport === this.get("meansOfTransportSV")) {
+                    retObj.trucks.push({
+                        date: date,
+                        calenderWeek: calenderWeek,
+                        result: dataset[meansOfTransport][datetime]
+                    });
+                }
+            }
+        }
+
+        return retObj;
+    },
+
+    /**
+     * prepare table data
+     * @param {Object} dataset data
+     * @param {String} type of the table
+     * @param {String} title of the table
+     * @return {Void} -
+     */
+    prepareTableContent (dataset, type, title) {
+        const tblContent = {};
+
+        switch (type) {
+            case "day":
+                tblContent.day = {};
+
+                if (dataset !== undefined) {
+                    tblContent.day.title = title;
+
+                    if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                        tblContent.day.firstColumn = moment(dataset.bicycles[0].date).format("DD.MM.YYYY");
+                        tblContent.day.headerArr = [];
+                        tblContent.day.bicyclesArr = [];
+
+                        dataset.bicycles.forEach(element => {
+                            tblContent.day.headerArr.push(element.hour);
+                            tblContent.day.bicyclesArr.push(element.result);
+                        });
+                    }
+
+                    if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                        tblContent.day.firstColumn = moment(dataset.cars[0].date).format("DD.MM.YYYY");
+                        tblContent.day.headerArr = [];
+                        tblContent.day.carsArr = [];
+
+                        dataset.cars.forEach(element => {
+                            tblContent.day.headerArr.push(element.hour);
+                            tblContent.day.carsArr.push(element.result);
+                        });
+
+                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                            tblContent.day.trucksArr = [];
+
+                            dataset.trucks.forEach(element => {
+                                tblContent.day.trucksArr.push(element.result);
+                            });
+                        }
+                    }
+
+                    this.setDayTableContent(tblContent);
+                }
+                break;
+            case "week":
+                tblContent.week = {};
+                if (dataset !== undefined) {
+                    tblContent.week.title = title;
+
+                    if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                        tblContent.week.firstColumn = moment(dataset.bicycles[0].date).add(3, "days").format("WW") + "/" +
+                            moment(dataset.bicycles[0].date).format("YYYY");
+
+                        tblContent.week.headerDateArr = [];
+                        tblContent.week.headerHourArr = [];
+                        tblContent.week.bicyclesArr = [];
+
+                        dataset.bicycles.forEach(element => {
+                            tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
+                            tblContent.week.headerHourArr.push(element.hour);
+                            tblContent.week.bicyclesArr.push(element.result);
+                        });
+                    }
+
+                    if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                        tblContent.week.firstColumn = moment(dataset.cars[0].date).add(3, "days").format("WW") + "/" +
+                            moment(dataset.cars[0].date).format("YYYY");
+                        tblContent.week.headerDateArr = [];
+                        tblContent.week.headerHourArr = [];
+                        tblContent.week.carsArr = [];
+
+                        dataset.cars.forEach(element => {
+                            tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
+                            tblContent.week.headerHourArr.push(element.hour);
+                            tblContent.week.carsArr.push(element.result);
+                        });
+
+                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                            tblContent.week.firstColumn = moment(dataset.trucks[0].date).add(3, "days").format("WW") + "/" +
+                                moment(dataset.trucks[0].date).format("YYYY");
+                            tblContent.week.trucksArr = [];
+
+                            dataset.trucks.forEach(element => {
+                                tblContent.week.trucksArr.push(element.result);
+                            });
+                        }
+                    }
+
+                    this.setWeekTableContent(tblContent);
+                }
+                break;
+            case "year":
+                tblContent.year = {};
+                if (dataset !== undefined) {
+                    tblContent.year.title = title;
+                    if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                        tblContent.year.firstColumn = moment(dataset.bicycles[0].date, "YYYY-MM-DD").format("YYYY");
+                        tblContent.year.headerArr = [];
+                        tblContent.year.bicyclesArr = [];
+
+                        dataset.bicycles.forEach(element => {
+                            tblContent.year.headerArr.push(element.calenderWeek);
+                            tblContent.year.bicyclesArr.push(element.result);
+                        });
+                    }
+
+                    if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                        tblContent.year.firstColumn = moment(dataset.cars[0].date, "YYYY-MM-DD").format("YYYY");
+                        tblContent.year.headerArr = [];
+                        tblContent.year.carsArr = [];
+
+                        dataset.cars.forEach(element => {
+                            tblContent.year.headerArr.push(element.calenderWeek);
+                            tblContent.year.carsArr.push(element.result);
+                        });
+
+                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                            tblContent.year.trucksArr = [];
+
+                            dataset.trucks.forEach(element => {
+                                tblContent.year.trucksArr.push(element.result);
+                            });
+                        }
+                    }
+
+                    this.setYearTableContent(tblContent);
+                }
+                break;
+            default:
+        }
+    },
+
+    /**
      * Setup of the info tab.
      * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
      * @listens Snippets#ValuesChanged
@@ -242,7 +483,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         const datepicker = this.get("dayDatepicker"),
             startDate = moment().subtract(7, "days");
 
-        // create datepicker only on first enter of tab
         if (!datepicker) {
             this.set("dayDatepicker", new SnippetDatepickerModel({
                 displayName: "Tag",
@@ -283,7 +523,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
             this.refreshDiagramDay(dataset[meansOfTransport]);
 
-            // @todo: setup table with dataset
+            this.prepareTableContent(this.prepareDatasetHourly(dataset), "day", "Datum");
         });
     },
 
@@ -347,7 +587,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
             this.refreshDiagramWeek(dataset[meansOfTransport]);
 
-            // @todo: setup table with dataset
+            this.prepareTableContent(this.prepareDatasetHourly(dataset), "week", "Woche");
         });
     },
 
@@ -406,7 +646,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
             this.refreshDiagramYear(dataset[meansOfTransport], year);
 
-            // @todo: setup table with dataset
+            this.prepareTableContent(this.prepareYearDataset(dataset), "year", "Jahr");
         });
     },
 
@@ -850,6 +1090,33 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         }
 
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    },
+
+    /**
+     * Setter for dayTableContent
+     * @param {Object} value Contains the taleContent
+     * @returns {void}
+     */
+    setDayTableContent: function (value) {
+        this.set("dayTableContent", value);
+    },
+
+    /**
+     * Setter for weekTableContent
+     * @param {Object} value Contains the taleContent
+     * @returns {void}
+     */
+    setWeekTableContent: function (value) {
+        this.set("weekTableContent", value);
+    },
+
+    /**
+     * Setter for weekTableContent
+     * @param {Object} value Contains the taleContent
+     * @returns {void}
+     */
+    setYearTableContent: function (value) {
+        this.set("yearTableContent", value);
     },
 
     /**
