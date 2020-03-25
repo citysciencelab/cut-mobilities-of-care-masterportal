@@ -505,7 +505,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                     .style("opacity", 0.9);
                 tooltipDiv.html(yAttributeToShow)
                     .attr("style", "background-color: buttonface; border-radius: 4px; text-align: center;")
-                    .style("left", (event.layerX - 25) + "px")
+                    .style("left", (event.layerX - 0) + "px")
                     .style("top", (event.layerY - 35) + "px");
             }, tooltipDiv)
             .on("mouseout", function () {
@@ -529,7 +529,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                     .style("opacity", 0.9);
                 tooltipDiv.html(yAttributeToShow)
                     .attr("style", "background-color: buttonface; border-radius: 4px;")
-                    .style("left", (event.layerX - 25) + "px")
+                    .style("left", (event.layerX - 0) + "px")
                     .style("top", (event.layerY - 35) + "px");
             }, tooltipDiv);
     },
