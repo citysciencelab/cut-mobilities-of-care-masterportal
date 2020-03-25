@@ -783,7 +783,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * Return a copy of the object, filtered to only have values for the whitelisted keys
      * (or array of valid keys).
      * @param {Object} object - the object.
-     * @param {Array<Number>} keys - the key(s) to search for.
+     * @param {Number[]} keys - the key(s) to search for.
      * @returns {Object} - returns the entry/entries with the right key/keys.
      */
     pick: function (object, keys) {
@@ -797,8 +797,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /** Looks through the list and returns the firts value that matches all of the key-value pairs
      * listed in hitId.
-     * @param {Array<Object>} list - the list.
-     * @param {Object} findId - the id/entry to search for.
+     * @param {Object[]} [list=[]] - the list.
+     * @param {Object} [findId=""] - the id/entry to search for.
      * @returns {Object} - returns the first value/entry, that matches.
      */
     findWhereJs: function (list = [], findId = "") {
