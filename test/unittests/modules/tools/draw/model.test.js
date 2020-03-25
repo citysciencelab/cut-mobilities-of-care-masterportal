@@ -59,45 +59,6 @@ describe("drawModel", function () {
 
             expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
         });
-<<<<<<< HEAD
-        it("the result color should be the same as the input color for a point of type glyphicon", function () {
-            model.setSymbol({
-                caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
-                type: "glyphicon",
-                value: "\ue103"
-            });
-
-            const drawType = {
-                    geometry: "Point",
-                    text: i18next.t("common:modules.tools.draw.drawPoint")
-                },
-                layer = new VectorLayer(),
-                color = [55, 126, 184, 1],
-                result = model.createDrawInteraction(drawType, layer);
-
-            expect(result.getOverlay().getStyle().getText().getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as input color excluding the opacity which should be set as a separate parameter for a point of type image", function () {
-            // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
-            model.setSymbol({
-                caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
-                type: "image",
-                value: iconPath + "cloud.png"
-            });
-
-            const drawType = {
-                    geometry: "Point",
-                    text: i18next.t("common:modules.tools.draw.drawPoint")
-                },
-                layer = new VectorLayer(),
-                color = [55, 126, 184, 1],
-                result = model.createDrawInteraction(drawType, layer);
-
-            expect(result.getOverlay().getStyle().getImage().getColor()).to.deep.equal(color.slice(0, 3));
-            expect(result.getOverlay().getStyle().getImage().getOpacity()).to.deep.equal(color[3]);
-        });
-=======
->>>>>>> 6cfa10e64d407359c04df6488c991791fc011e58
     });
 
     describe("createDrawInteractionAndAddToMap", function () {
@@ -394,47 +355,9 @@ describe("drawModel", function () {
 
             expect(result.getFill().getColor()).to.deep.equal(color);
         });
-<<<<<<< HEAD
-        it("the result color should be the same as the input color for a point of type glyphicon", function () {
-            var color = [55, 126, 184, 1],
-                result;
-
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.setColor(color);
-            model.setSymbol({
-                caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
-                type: "glyphicon",
-                value: "\ue103"
-            });
-            result = model.getStyle();
-
-            expect(result.getText().getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as input color excluding the opacity which should be set as a separate parameter for a point of type image", function () {
-            var color = [55, 126, 184, 1],
-                result;
-
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.setColor(color);
-            // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
-            model.setSymbol({
-                caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
-                type: "image",
-                value: iconPath + "cloud.png"
-            });
-            result = model.getStyle();
-
-            expect(result.getImage().getColor()).to.deep.equal(color.slice(0, 3));
-            expect(result.getImage().getOpacity()).to.deep.equal(color[3]);
-        });
-        it("the result color should be the same as the input color for text", function () {
-            var color = [255, 0, 0, 1],
-                result;
-=======
         it("should be the result color ist the same as input color for text", function () {
             const color = [255, 0, 0, 1];
             let result = null;
->>>>>>> 6cfa10e64d407359c04df6488c991791fc011e58
 
             model.setDrawType("text", i18next.t("common:modules.tools.draw.writeText"));
             model.setColor(color);
@@ -475,91 +398,6 @@ describe("drawModel", function () {
         });
     });
 
-<<<<<<< HEAD
-    describe("getPointStyle", function () {
-        it("the result color should be the same as the input color for a symbol of type glyphicon", function () {
-            var color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = {
-                    caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
-                    type: "glyphicon",
-                    value: "\ue103"
-                },
-                result = model.getPointStyle(color, pointSize, symbol);
-
-            expect(result.getText().getFill().getColor()).to.equal(color);
-        });
-        it("the result color should be the same as the input color for a symbol of type image whereas the opacity is saved in a different parameter", function () {
-            // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
-            var color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = {
-                    caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
-                    type: "image",
-                    value: iconPath + "cloud.png"
-                },
-                result = model.getPointStyle(color, pointSize, symbol);
-
-            expect(result.getImage().getColor()).to.deep.equal(color.slice(0, 3));
-            expect(result.getImage().getOpacity()).to.equal(color[3]);
-        });
-        it("the result glyphicon should be the same as the input glyphicon from an object", function () {
-            var color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = {
-                    caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
-                    type: "glyphicon",
-                    value: "\ue103"
-                },
-                result = model.getPointStyle(color, pointSize, symbol);
-
-            expect(result.getText().getText()).to.equal(symbol.value);
-        });
-        it("the result glyphicon should be the same as the input glyphicon from a String", function () {
-            var color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = "\ue103@@glyphicon",
-                result = model.getPointStyle(color, pointSize, symbol);
-
-            expect(result.getText().getText()).to.equal(symbol.split("@@")[0]);
-        });
-        it("the result path to the image should be the same as the input path from an object", function () {
-            // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
-            var color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = {
-                    caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
-                    type: "image",
-                    value: iconPath + "cloud.png"
-                },
-                result = model.getPointStyle(color, pointSize, symbol);
-
-            expect(result.getImage().getSrc()).to.equal(symbol.value);
-        });
-        it("the result path to the image should be the same as the input path from a String", function () {
-            // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
-            var color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = iconPath + "cloud.png@@image",
-                result = model.getPointStyle(color, pointSize, symbol);
-
-            expect(result.getImage().getSrc()).to.equal(symbol.split("@@")[0]);
-        });
-        it("the method should throw an Error if the symbol is not of type \"glyphicon\" or \"image\"", function () {
-            var color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = {
-                    caption: "Image",
-                    type: "my_personal_image",
-                    value: iconPath + "my_personal_image.png"
-                };
-
-            expect(() => model.getPointStyle(color, pointSize, symbol)).to.throw(Error, `The given type ${symbol.type} of the symbol is not supported!`);
-        });
-    });
-
-=======
->>>>>>> 6cfa10e64d407359c04df6488c991791fc011e58
     describe("getDrawStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
             const color = [],
