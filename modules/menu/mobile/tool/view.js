@@ -13,7 +13,7 @@ const ItemView = Backbone.View.extend({
     className: "list-group-item",
     template: _.template(ItemTemplate),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         return this;
