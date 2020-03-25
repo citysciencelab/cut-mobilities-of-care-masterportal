@@ -5,9 +5,9 @@
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm pull-left" id="districtField">
                 <option <% if (districtNumber === "0") {print ("selected ");} %>disabled class="pull-left" value="0"><%=chooseText%></option>
-                <% for (let [key, value] of Object.entries(this.model.get("districts"))) { %>
-                    <option <% if (districtNumber === value) {print ("selected ");} %>class="pull-left" value=<%= value %>><%= key + " (" + value + ")" %></option>
-                <% }; %>
+                    <% Object.keys(districts).forEach(function(key) { %>
+                    <option <% if (districtNumber === districts[key]) {print ("selected ");} %>class="pull-left" value=<%= districts[key] %>><%= key + " (" + districts[key] + ")" %></option>
+                <% }); %>
             </select>
         </div>
     </div>
@@ -21,7 +21,7 @@
                     <% if(cadastralDistricts[districtNumber]){%>
                         <% cadastralDistricts[districtNumber].forEach(function (cadastralDistrict) { %>
                             <option <% if (cadastralDistrictNumber === cadastralDistrict) {print ("selected ");} %>class="pull-left" value=<%= cadastralDistrict %>><%= cadastralDistrict %></option>
-                        <% });%> 
+                        <% });%>
                     <% } %>
                 </select>
             </fieldset>
@@ -34,7 +34,7 @@
         <div class="col-md-7 col-sm-7">
              <div class="input-group" style="width:100%">
                 <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelField" class="form-control" type="text" pattern="[0-9]+" required value="<%= parcelNumber %>" placeholder="<%=parcelNumberPlaceholderText%>" maxlength="<%= maxParcelNumberLength %>"/>
-                <% if (this.model.get("parcelDenominatorField") === true) { %>
+                <% if (parcelDenominatorField === true) { %>
                 <span class="input-group-addon">/</span>
                 <input <% if (districtNumber === "0" || (cadastralDistrictField === true && cadastralDistrictNumber === "0")) {print ("disabled ");} %>id="parcelFieldDenominator" class="form-control" type="text" pattern="[0-9]+" required value="<%= parcelDenominatorNumber %>" placeholder="<%=parcelNumberPlaceholderText%>" maxlength="<%= maxParcelNumberLength %>"/>
                 <% } %>

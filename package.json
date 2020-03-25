@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
-    "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts",
+    "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts --timeout 15000",
+    "test:watch": "npm run test -- --watch",
     "browsertestserver": "webpack-dev-server --config devtools/webpack.browsertest.js",
     "browsertest": "./node_modules/.bin/mocha --timeout 150000 ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
@@ -26,10 +27,12 @@
     "bootstrap-colorpicker": "2.x",
     "bootstrap-datepicker": "1.8.x",
     "bootstrap-select": "1.12.x",
-    "bootstrap-slider": "10.x",
+    "bootstrap-slider": "^10.6.2",
     "bootstrap-toggle": "2.x.x",
     "d3": "4.9.x",
+    "d3-scale-chromatic": "^1.5.0",
     "dom-parser": "^0.1.5",
+    "html2canvas": "^1.0.0-rc.5",
     "git-rev-sync": "^2.0.0",
     "https-proxy-agent": "^3.0.0",
     "i18next": "^19.0.1",
@@ -99,6 +102,7 @@
     "webpack-dev-server": "^3.8.2",
     "webpack-merge": "^4.2.2",
     "webpack-visualizer-plugin": "^0.1.11",
+    "whatwg-fetch": "^3.0.0",
     "xmlserializer": "^0.6.1"
   },
   "husky": {

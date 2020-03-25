@@ -59,7 +59,7 @@ const TitleView = Backbone.View.extend(/** @lends TitleView.prototype */{
 
         if (document.getElementById("searchbar")) {
             navMenuWidth = document.getElementById("root").offsetWidth;
-            searchbarWidth = document.getElementById("searchForm").offsetWidth + 40; // add width of searchbarIcon
+            searchbarWidth = document.getElementById("searchForm") !== null ? document.getElementById("searchForm").offsetWidth + 40 : 0; // add width of searchbarIcon
             navBarWidth = document.getElementById("main-nav").offsetWidth;
             titleWidth = titleEl ? titleEl.offsetWidth : 0;
             if (!this.model.get("titleWidth")) {

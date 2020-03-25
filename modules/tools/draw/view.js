@@ -5,8 +5,6 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     events: {
         "change .interaction": "setDrawType",
         "keyup .text input": "setText",
-        "change .symbol select": "setSymbol",
-        "change .pointSize select": "setPointSize",
         "change .font-size select": "setFontSize",
         "change .font select": "setFont",
         "change .radius select": "setRadius",
@@ -147,12 +145,10 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownUnit,
                         .dropdownMethod,
                         .colorContour,
-                        .opacityContour,
-                        .radius`
+                        .opacityContour`
                     ).hide();
                     this.$el.find(
-                        `.pointSize,
-                        .symbol,
+                        `.radius,
                         .color,
                         .opacity`
                     ).show();
@@ -167,8 +163,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownUnit,
                         .dropdownMethod,
                         .colorContour,
-                        .opacityContour,
-                        .symbol`
+                        .opacityContour`
                     ).hide();
                     this.$el.find(
                         `.text,
@@ -186,8 +181,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .font,
                         .radius,
                         .circleRadiusOuter,
-                        .opacityContour,
-                        .symbol`
+                        .opacityContour`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -207,8 +201,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .font,
                         .radius,
                         .dropdownMethod,
-                        .opacityContour,
-                        .symbol`
+                        .opacityContour`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -232,8 +225,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownMethod,
                         .circleRadiusInner,
                         .circleRadiusOuter,
-                        .opacity,
-                        .symbol`
+                        .opacity`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -252,8 +244,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownMethod,
                         .circleRadiusInner,
                         .circleRadiusOuter,
-                        .opacityContour,
-                        .symbol`
+                        .opacityContour`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -271,8 +262,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .circleRadiusInner,
                         .circleRadiusOuter,
                         .dropdownUnit,
-                        .dropdownMethod,
-                        .symbol`
+                        .dropdownMethod`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -383,26 +373,6 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      */
     startDownloadTool: function () {
         this.model.startDownloadTool();
-    },
-
-    /**
-     * Setter for the Symbol on the model.
-     * @param {*} evt - With a new Symbol.
-     * @return {void}
-     */
-    setSymbol: function (evt) {
-        this.model.setSymbol(evt.target.value);
-        this.model.updateDrawInteraction();
-    },
-
-    /**
-     * Setter for the PointSize on the model.
-     * @param {*} evt - With a new PointSize.
-     * @return {void}
-     */
-    setPointSize: function (evt) {
-        this.model.setPointSize(evt.target.value);
-        this.model.updateDrawInteraction();
     },
 
     /**

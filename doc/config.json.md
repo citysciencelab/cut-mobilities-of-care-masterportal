@@ -33,6 +33,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |----|-------------|---|-------|------------|------|
 |portalTitle|nein|**[portalTitle](#markdown-header-portalconfigportaltitle)**||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|false|
 |treeType|nein|enum["light","default","custom"]|"light"|Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|false|
+|singleBaselayer|nein|Boolean|false|Legt fest, ob nur ein Baselayer gleichzeitig ausgewählt werden kann.|false|
 |Baumtyp|nein|enum["light","default","custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|false|
 |mapView|nein|**[mapView](#markdown-header-portalconfigmapview)**||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|false|
 |controls|nein|**[controls](#markdown-header-portalconfigcontrols)**||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|false|
@@ -323,14 +324,16 @@ Konfiguration der SpecialWFS Suche
             "url": "/geodienste_hamburg_de/MRH_WFS_Rotenburg",
             "typeName": "app:mrh_row_bplan",
             "propertyNames": ["app:name"],
-            "name": "B-Plan"
+            "name": "B-Plan",
+            "namespaces": "xmlns:app='http://www.deegree.org/app'"
         },
         {
             "url": "/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
             "typeName": "app:prosin_imverfahren",
             "propertyNames": ["app:plan"],
             "geometryName": "app:the_geom",
-            "name": "im Verfahren"
+            "name": "im Verfahren",
+            "namespaces": "xmlns:app='http://www.deegree.org/app'"
         }
     ]
 }
@@ -350,6 +353,7 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 |propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|false|
 |geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|false|
 |maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features.|false|
+|namespaces|nein|String||XML Namespaces zur Abfrage von propertyNames oder geometryName (*xmlns:wfs*, *xmlns:ogc* und *xmlns:gml* werden immer genutzt).|false|
 |data|nein|String||Deprecated in 3.0.0 Filterparameter für den WFS request.|false|
 
 **Beispiel**
@@ -820,8 +824,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:routing]: # (Portalconfig.menu.tool.routing)
 
-[type:draw]: # (Portalconfig.menu.tool.draw)
-
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 
 [type:lines]: # (Portalconfig.menu.tool.lines)
@@ -855,7 +857,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt vorraus.|false|
 |extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt vorraus.|false|
 |routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
-|draw|nein|**[draw](#markdown-header-portalconfigmenudraw)**||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|false|
+|draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|false|
 |styleWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Klassifizierung vom WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Requuest wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
 |featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektor Layers auf.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linenhafte Objekte.|false|
@@ -882,6 +884,9 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
 |onlyDesktop|nein|Boolean|false|Flag ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
 |isVisibleInMenu|nein|Boolean|true|Flag ob das Tool unter Werkzeuge angezeigt wird.|false|
+|renderToWindow|nein|Boolean|true|Flag ob das Tool beim Anklicken im frei schwebenden Fenster dargestellt werden soll.|false|
+|resizableWindow|nein|Boolean|false|Flag ob das Tool-Fenster vergrößer-/verkleinerbar ist.|false|
+|keepOpen|nein|Boolean|false|Flag ob das Tool parallel zu anderen Tools geöffnet bleibt.|false|
 
 **Beispiel eines Tools**
 ```
@@ -1018,7 +1023,8 @@ Der Filter bietet eine vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 |isGeneric|nein|Boolean|false|Zeigt an ob sich der Filter dynamisch erzeugen lässt. Ist momentan noch nicht umgesetzt.|false|
 |minScale|nein|Integer||Minimale Zoomstufe auf die der Filter bei der Darstellung der Ergebnisse heranzoomt.|false|
 |liveZoomToFeatures|nein|Boolean|false|Gibt an ob der Filter sofort nach der Filterung auf die Filterergebnisse zoomt.|false|
-|predefinedQueries|nein|**[predefinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)**[]||Definition der Filterabfragen.|false|
+|predefinedQueries|nein|[predefinedQuery](#markdown-header-portalconfigmenutoolfilterpredefinedquery)[]||Definition der Filterabfragen.|false|
+|saveToUrl|nein|Boolean|true|Speichert das aktuelle Filterergebnis in der Url ab. Dadurch kann das Filterergebnis als Lesezeichen abgelegt werden.|false|
 
 **Beispiel**
 ```
@@ -1331,121 +1337,6 @@ Routing Modul.
     "bkgSuggestID": "2",
     "bkgGeosearchID": "3",
     "isInitOpen": false
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.draw
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welche auch als Symbole dargestellt werden können, (Doppel-)Kreise, Polygone, Polyline und Text.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|name|ja|String||Name des Werkzeugs im Menü.|false|
-|glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
-|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{caption: "translate#common:modules.tools.draw.iconList.iconPoint", type: "simple_point", value: "simple_point"}, {caption: "translate#common:modules.tools.draw.iconList.iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
-
-**Beispiel**
-
-```
-#!json
-"draw": {
-    "name": "Zeichnen / Schreiben",
-    "glyphicon": "glyphicon-pencil",
-    "iconList": [
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconPoint",
-			"type": "simple_point",
-			"value": "simple_point"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
-			"type": "glyphicon",
-			"value": "\ue103"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconCD",
-			"type": "glyphicon",
-			"value": "\ue201"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconHat",
-			"type": "glyphicon",
-			"value": "\ue233"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconFire",
-			"type": "glyphicon",
-			"value": "\ue104"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconMovie",
-			"type": "glyphicon",
-			"value": "\ue009"
-		},
-		{
-		    "caption": "translate#common:modules.tools.draw.iconList.iconFlag",
-			"type": "glyphicon",
-			"value": "\ue034"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
-			"type": "glyphicon",
-			"value": "\ue135"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconMusic",
-			"type": "glyphicon",
-			"value": "\ue002"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconStreet",
-			"type": "glyphicon",
-			"value": "\ue024"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
-			"type": "image",
-			"value": "/img/icons/cloud.png"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconTent",
-			"type": "glyphicon",
-			"value": "\u26fa"
-		}
-	]
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.draw.icon
-
-Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
-|type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/icons/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
-|value|ja|String||Wert, des zu zeichnenden Objektes.|false|
-
-**Beispiele**
-
-```
-#!json
-{
-	"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
-	"type": "image",
-	"value": "/img/icons/cloud.png"
-}
-
-{
-    "caption": "translate#common:modules.tools.draw.iconList.iconFire",
-    "type": "glyphicon",
-    "value": "\ue104"
 }
 ```
 
@@ -2378,7 +2269,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), SensorLayer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), [SensorLayer](sensorThings.md).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|

@@ -1,4 +1,5 @@
 import Template from "text-loader!./template.html";
+import TemplateGroups from "text-loader!./templateGroups.html";
 import "bootstrap-select";
 /**
  * @member Template
@@ -33,6 +34,7 @@ const DropdownView = Backbone.View.extend(/** @lends DropdownView.prototype */{
     className: "dropdown-container",
     // className: "container-fluid",
     template: _.template(Template),
+    templateGroups: _.template(TemplateGroups),
 
     /**
      * renders the view depending on the isOpen attribute
@@ -44,7 +46,12 @@ const DropdownView = Backbone.View.extend(/** @lends DropdownView.prototype */{
         if (this.model.get("isOpen") === false) {
             attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
+            if (this.model.get("isGrouped")) {
+                this.$el.html(this.templateGroups(attr));
+            }
+            else {
+                this.$el.html(this.template(attr));
+            }
             this.initDropdown();
             this.markSelectedValues();
         }

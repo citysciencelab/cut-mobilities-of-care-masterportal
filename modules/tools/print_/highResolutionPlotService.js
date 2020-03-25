@@ -218,8 +218,8 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         var drawLayer = Radio.request("Draw", "getLayer");
 
         this.set("layerToPrint", []);
-        this.setWMSLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS"}));
-        this.setGROUPLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}));
+        this.setWMSLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS", isOutOfRange: false}));
+        this.setGROUPLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP", isOutOfRange: false}));
 
         if (drawLayer !== undefined && drawLayer.getSource().getFeatures().length > 0) {
             this.setLayer(drawLayer);

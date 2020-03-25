@@ -64,6 +64,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     getWmsHtmlGfi: function (successFunction) {
+
         $.ajax({
             url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
             context: this,
@@ -78,13 +79,18 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     parseWmsBohrdatenGfi: function (data) {
-        var domNodes = $.parseHTML(data);
+        const domNodes = $.parseHTML(data);
 
-        // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
-        if (domNodes.length > 3) {
-            window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+        try {
+            // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
+            if (domNodes.length > 3) {
+                window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+            }
+            this.setIsReady(true);
         }
-        this.setIsReady(true);
+        catch {
+            this.setIsReady(true);
+        }
     },
 
     /**
@@ -93,14 +99,18 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     parseWmsHtmlGfi: function (data) {
-        var gfiFeatures = {"html": this.get("gfiUrl")};
+        const gfiFeatures = {"html": this.get("gfiUrl")};
 
-        if ($(data).find("tbody").children().length > 1) {
-            this.set("gfiContent", [gfiFeatures]);
+        try {
+            if ($(data).find("tbody").children().length > 1) {
+                this.set("gfiContent", [gfiFeatures]);
+            }
+            this.setIsReady(true);
         }
-        this.setIsReady(true);
+        catch {
+            this.setIsReady(true);
+        }
     },
-
     /**
      * Requestor function for GFI of WMS layers
      * @fires Core#RadioRequestUtilGetProxyURL
@@ -108,7 +118,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     getWmsGfi: function (successFunction) {
-        var url = Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
+        let url = Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
 
         url = url.replace(/SLD_BODY=.*?&/, "");
         $.ajax({
@@ -127,8 +137,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     gfiErrorHandler: function (jqXHR) {
+        this.setIsReady(true);
         console.warn("Error occured requesting GFI with status '" + jqXHR.status + "' and errorMessage '" + jqXHR.statusText + "'");
-        Radio.trigger("Alert", "alert", "Die Informationen zu dem ausgewählten Objekt können derzeit nicht abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
+        Radio.trigger("Alert", "alert", "Nicht alle Informationen zu den ausgewählten Objekten können derzeit abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
     },
 
     /**

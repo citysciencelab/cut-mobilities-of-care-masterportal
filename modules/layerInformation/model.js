@@ -34,6 +34,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @fires CswParser#RadioTriggerCswParserGetMetaData
      * @fires LayerInformation#RadioTriggerLayerInformationSync
      * @fires LayerInformation#RadioTriggerLayerInformationRemoveView
+     * @fires LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
      * @fires Core#RadioTriggerMapAddOverlay
      * @listens LayerInformation#RadioTriggerLayerInformationAdd
      * @listens Core#RadioTriggerUtilIsViewMobileChanged
@@ -44,6 +45,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
 
         this.listenTo(channel, {
             "add": function (attrs) {
+                Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
                 this.setAttributes(attrs);
                 this.setIsVisible(true);
             }

@@ -25,7 +25,7 @@ describe("drawModel", function () {
     });
 
     describe("createLayer", function () {
-        it("should return a result that should not be undefined", function () {
+        it("should return an result that be not undefined", function () {
             expect(model.createLayer(undefined)).to.exist;
         });
         it("the result should be an instance of vectorLayer for undefined input", function () {
@@ -48,35 +48,7 @@ describe("drawModel", function () {
 
             expect(result instanceof Draw).to.be.true;
         });
-        it("the result color should be the same as the input color for a polyline", function () {
-            const drawType = {
-                    geometry: "Polyline",
-                    text: i18next.t("common:modules.tools.draw.drawLine")
-                },
-                layer = new VectorLayer(),
-                color = [55, 126, 184, 1],
-                result = model.createDrawInteraction(drawType, layer);
-
-            expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as the input color for a polygon", function () {
-            const drawType = {
-                    geometry: "Polygon",
-                    text: i18next.t("common:modules.tools.draw.drawArea")
-                },
-                layer = new VectorLayer(),
-                color = [55, 126, 184, 1],
-                result = model.createDrawInteraction(drawType, layer);
-
-            expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as the input color for a point of type simple_point", function () {
-            model.setSymbol({
-                caption: i18next.t("common:modules.tools.draw.iconList.iconPoint"),
-                type: "simple_point",
-                value: "simple_point"
-            });
-
+        it("should be the result color is the same as input color", function () {
             const drawType = {
                     geometry: "Point",
                     text: i18next.t("common:modules.tools.draw.drawPoint")
@@ -87,6 +59,7 @@ describe("drawModel", function () {
 
             expect(result.getOverlay().getStyle().getFill().getColor()).to.deep.equal(color);
         });
+<<<<<<< HEAD
         it("the result color should be the same as the input color for a point of type glyphicon", function () {
             model.setSymbol({
                 caption: i18next.t("common:modules.tools.draw.iconList.iconLeaf"),
@@ -123,6 +96,8 @@ describe("drawModel", function () {
             expect(result.getOverlay().getStyle().getImage().getColor()).to.deep.equal(color.slice(0, 3));
             expect(result.getOverlay().getStyle().getImage().getOpacity()).to.deep.equal(color[3]);
         });
+=======
+>>>>>>> 6cfa10e64d407359c04df6488c991791fc011e58
     });
 
     describe("createDrawInteractionAndAddToMap", function () {
@@ -178,7 +153,7 @@ describe("drawModel", function () {
     });
 
     describe("getDefinedRadius", function () {
-        it("the result should be a value and the second input parameter", function () {
+        it("the result should be a value and the second input parameter.", function () {
             const doubleIsActive = true,
                 circleRadiusOuter = Math.random(),
                 circleRadiusInner = Math.random(),
@@ -186,7 +161,7 @@ describe("drawModel", function () {
 
             expect(result).to.deep.equal(circleRadiusOuter);
         });
-        it("the result should be a value and the third input parameter", function () {
+        it("the result should be a value and the third input parameter.", function () {
             const doubleIsActive = false,
                 circleRadiusOuter = Math.random(),
                 circleRadiusInner = Math.random(),
@@ -194,7 +169,7 @@ describe("drawModel", function () {
 
             expect(result).to.deep.equal(circleRadiusInner);
         });
-        it("the result should be undefined and the second input parameter", function () {
+        it("the result should be undefined and the second input parameter.", function () {
             const doubleIsActive = true,
                 circleRadiusOuter = undefined,
                 circleRadiusInner = Math.random(),
@@ -202,7 +177,7 @@ describe("drawModel", function () {
 
             expect(result).to.deep.equal(undefined);
         });
-        it("the result should be undefined and the third input parameter", function () {
+        it("the result should be undefined and the third input parameter.", function () {
             const doubleIsActive = false,
                 circleRadiusOuter = Math.random(),
                 circleRadiusInner = undefined,
@@ -210,7 +185,7 @@ describe("drawModel", function () {
 
             expect(result).to.deep.equal(undefined);
         });
-        it("the result should be a value and the third input parameter", function () {
+        it("the result should be a value and the third input parameter.", function () {
             const doubleIsActive = undefined,
                 circleRadiusOuter = Math.random(),
                 circleRadiusInner = Math.random(),
@@ -218,7 +193,7 @@ describe("drawModel", function () {
 
             expect(result).to.deep.equal(circleRadiusInner);
         });
-        it("the result should be a not a number (NaN) and the second input parameter", function () {
+        it("the result should be a not a number (NaN) and the second input parameter.", function () {
             const doubleIsActive = true,
                 circleRadiusOuter = NaN,
                 circleRadiusInner = Math.random(),
@@ -229,17 +204,17 @@ describe("drawModel", function () {
     });
 
     describe("transformNaNToUndefined", function () {
-        it("should return undefined for input \"NaN\"", function () {
+        it("should return undefined", function () {
             const result = model.transformNaNToUndefined(NaN);
 
             expect(result).to.deep.equal(undefined);
         });
-        it("should return undefined for input \"undefined\"", function () {
+        it("should return undefined", function () {
             const result = model.transformNaNToUndefined(undefined);
 
             expect(result).to.deep.equal(undefined);
         });
-        it("should return the radius for input of a number", function () {
+        it("should return the radius", function () {
             const radius = Math.random(),
                 result = model.transformNaNToUndefined(radius);
 
@@ -409,41 +384,17 @@ describe("drawModel", function () {
 
             expect(result instanceof Style).to.be.true;
         });
-        it("the result color should be the same as the input color for a polyline", function () {
-            var color = [55, 126, 184, 1],
-                result;
-
-            model.setDrawType("Polyline", i18next.t("common:modules.tools.draw.drawLine"));
-            model.setColor(color);
-            result = model.getStyle();
-
-            expect(result.getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as the input color for a polygon", function () {
-            var color = [55, 126, 184, 1],
-                result;
-
-            model.setDrawType("Polygon", i18next.t("common:modules.tools.draw.drawArea"));
-            model.setColor(color);
-            result = model.getStyle();
-
-            expect(result.getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as the input color for a point of type simple_point", function () {
-            var color = [55, 126, 184, 1],
-                result;
+        it("should return result color to be the same as input color for geometry point", function () {
+            const color = [55, 126, 184, 1];
+            let result = null;
 
             model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
             model.setColor(color);
-            model.setSymbol({
-                caption: i18next.t("common:modules.tools.draw.iconList.iconPoint"),
-                type: "simple_point",
-                value: "simple_point"
-            });
             result = model.getStyle();
 
             expect(result.getFill().getColor()).to.deep.equal(color);
         });
+<<<<<<< HEAD
         it("the result color should be the same as the input color for a point of type glyphicon", function () {
             var color = [55, 126, 184, 1],
                 result;
@@ -479,6 +430,11 @@ describe("drawModel", function () {
         it("the result color should be the same as the input color for text", function () {
             var color = [255, 0, 0, 1],
                 result;
+=======
+        it("should be the result color ist the same as input color for text", function () {
+            const color = [255, 0, 0, 1];
+            let result = null;
+>>>>>>> 6cfa10e64d407359c04df6488c991791fc011e58
 
             model.setDrawType("text", i18next.t("common:modules.tools.draw.writeText"));
             model.setColor(color);
@@ -519,6 +475,7 @@ describe("drawModel", function () {
         });
     });
 
+<<<<<<< HEAD
     describe("getPointStyle", function () {
         it("the result color should be the same as the input color for a symbol of type glyphicon", function () {
             var color = [0, 0, 0, 1],
@@ -601,6 +558,8 @@ describe("drawModel", function () {
         });
     });
 
+=======
+>>>>>>> 6cfa10e64d407359c04df6488c991791fc011e58
     describe("getDrawStyle", function () {
         it("the result should be an instance of Style for empty input", function () {
             const color = [],
@@ -613,102 +572,87 @@ describe("drawModel", function () {
         it("the result should be an instance of Style for undefined input", function () {
             expect(model.getDrawStyle(undefined, undefined, undefined, undefined) instanceof Style).to.be.true;
         });
-        it("the result color should be the same as the input color for a polyline", function () {
-            var color = [0, 0, 0, 1],
-                drawGeometryType = "Polyline",
+        it("should be the result color ist the same as input color", function () {
+            const color = [0, 0, 0, 1],
+                drawGeometryType = "Point",
                 strokeWidth = 10,
                 radius = 20,
                 result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
 
             expect(result.getFill().getColor()).to.equal(color);
         });
-        it("the result color should be the same as the input color for a polygon", function () {
-            var color = [0, 0, 0, 1],
-                drawGeometryType = "Polygon",
-                strokeWidth = 10,
-                radius = 20,
-                result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
-
-            expect(result.getFill().getColor()).to.equal(color);
-        });
-        it("the result strokeWidth should be the same as the input strokeWidth for a polyline", function () {
-            var color = [0, 0, 0, 1],
-                drawGeometryType = "Polyline",
+        it("should be the result strokeWidth ist the same as input strokeWidth", function () {
+            const color = [0, 0, 0, 1],
+                drawGeometryType = "Point",
                 strokeWidth = 10,
                 radius = 20,
                 result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
 
             expect(result.getStroke().getWidth()).to.equal(strokeWidth);
         });
-        it("the result strokeWidth should be the same as the input strokeWidth for a polygon", function () {
-            var color = [0, 0, 0, 1],
-                drawGeometryType = "Polygon",
-                strokeWidth = 10,
-                radius = 20,
-                result = model.getDrawStyle(color, drawGeometryType, strokeWidth, radius);
 
+        describe("resetModule", function () {
+            it("should radius is equal default radius", function () {
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+                model.setRadius(10000);
+                model.resetModule();
+                expect(model.get("radius")).to.deep.equal(model.defaults.radius);
+            });
+            it("should opacity is equal default opacity", function () {
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+                model.setOpacity(0.5);
+                model.resetModule();
 
-            expect(result.getStroke().getWidth()).to.equal(strokeWidth);
+                expect(model.get("opacity")).is.equal(model.defaults.opacity);
+            });
+            it("should color is equal default color", function () {
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+                model.setColor([111, 112, 113, 0.4]);
+                model.resetModule();
+
+                expect(model.get("color")).is.equal(model.defaults.color);
+            });
+            it("should drawType is equal default drawType", function () {
+                model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
+                model.resetModule();
+
+                expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
+            });
         });
+
+        describe("startSelectInteraction", function () {
+            it("should be an instance of Select for empty input", function () {
+                model.startSelectInteraction(new VectorLayer());
+
+                expect(model.get("selectInteraction") instanceof Select).to.be.true;
+            });
+        });
+
+        describe("createSelectInteraction", function () {
+            it("the result should be an instance of Select for empty input", function () {
+                expect(model.createSelectInteraction(new VectorLayer()) instanceof Select).to.be.true;
+            });
+        });
+
+        describe("createModifyInteraction", function () {
+            it("should be an instance of Modify for empty input", function () {
+                const interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
+
+                expect(interaction instanceof Modify).to.be.true;
+            });
+        });
+
+        describe("deleteFeatures", function () {
+            it("should empty the layerSource", function () {
+                model.setLayer(model.createLayer());
+                model.get("layer").getSource().getFeatures().push(new Feature());
+                model.deleteFeatures();
+
+                expect(model.get("layer").getSource().getFeatures()).is.empty;
+            });
+        });
+
     });
-    describe("resetModule", function () {
-        it("should radius is equal default radius", function () {
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.setRadius(10000);
-            model.resetModule();
-            expect(model.get("radius")).to.deep.equal(model.defaults.radius);
-        });
-        it("should opacity is equal default opacity", function () {
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.setOpacity(0.5);
-            model.resetModule();
-            expect(model.get("opacity")).is.equal(model.defaults.opacity);
-        });
-        it("should color is equal default color", function () {
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.setColor([111, 112, 113, 0.4]);
-            model.resetModule();
-            expect(model.get("color")).is.equal(model.defaults.color);
-        });
-        it("should drawType is equal default drawType", function () {
-            model.setDrawType("Point", i18next.t("common:modules.tools.draw.drawPoint"));
-            model.resetModule();
-            expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
-        });
-    });
-
-    describe("startSelectInteraction", function () {
-        it("should be an instance of Select for empty input", function () {
-            model.startSelectInteraction(new VectorLayer());
-
-            expect(model.get("selectInteraction") instanceof Select).to.be.true;
-        });
-    });
-
-    describe("createSelectInteraction", function () {
-        it("the result should be an instance of Select for empty input", function () {
-            expect(model.createSelectInteraction(new VectorLayer()) instanceof Select).to.be.true;
-        });
-    });
-
-    describe("createModifyInteraction", function () {
-        it("should be an instance of Modify for empty input", function () {
-            var interaction = model.createModifyInteraction(new VectorLayer({source: new VectorSource()}));
-
-            expect(interaction instanceof Modify).to.be.true;
-        });
-    });
-
-    describe("deleteFeatures", function () {
-        it("should empty the layerSource", function () {
-            model.setLayer(model.createLayer());
-            model.get("layer").getSource().getFeatures().push(new Feature());
-            model.deleteFeatures();
-
-            expect(model.get("layer").getSource().getFeatures()).is.empty;
-        });
-    });
-
     describe("inititalizeWithoutGUI", function () {
         before(function () {
             const params = {"drawType": "Polygon", "color": null, "opacity": 0.5, "maxFeatures": 2, "initialJSON": {"type": "Polygon", "coordinates": [[[559656.9477852482, 5930649.742761639], [559514.0728624006, 5932126.116964397], [561180.9469622886, 5931935.617067266], [560831.6971508835, 5930824.367667342], [559656.9477852482, 5930649.742761639]]]}};

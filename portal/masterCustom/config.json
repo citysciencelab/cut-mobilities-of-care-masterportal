@@ -32,7 +32,7 @@
            "filter":"filter=(typ:*)",
            "score":0.6
         },
-        "specialWFS":{
+        "specialWFS": {
            "minChar":3,
            "definitions":[
               {
@@ -42,7 +42,8 @@
                     "app:geltendes_planrecht"
                  ],
                  "geometryName":"app:geom",
-                 "name":"festgestellt"
+                 "name":"festgestellt",
+                 "namespaces": "xmlns:app='http://www.deegree.org/app'"
               },
               {
                  "url":"/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
@@ -51,7 +52,8 @@
                     "app:plan"
                  ],
                  "geometryName":"app:the_geom",
-                 "name":"im Verfahren"
+                 "name":"im Verfahren",
+                 "namespaces": "xmlns:app='http://www.deegree.org/app'"
               }
            ]
         },
@@ -275,70 +277,8 @@
                  "bkgGeosearchID":"5"
               },
               "draw":{
-                 "name":"translate#common:menu.tools.draw",
-                 "glyphicon":"glyphicon-pencil",
-                 "iconList": [
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconPoint",
-                       "type": "simple_point",
-                       "value": "simple_point"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
-                       "type": "glyphicon",
-                       "value": "\ue103"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconCD",
-                       "type": "glyphicon",
-                       "value": "\ue201"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconHat",
-                       "type": "glyphicon",
-                       "value": "\ue233"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconFire",
-                       "type": "glyphicon",
-                       "value": "\ue104"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconMovie",
-                       "type": "glyphicon",
-                       "value": "\ue009"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconFlag",
-                       "type": "glyphicon",
-                       "value": "\ue034"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
-                       "type": "glyphicon",
-                       "value": "\ue135"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconMusic",
-                       "type": "glyphicon",
-                       "value": "\ue002"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconStreet",
-                       "type": "glyphicon",
-                       "value": "\ue024"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconCloud",
-                       "type": "image",
-                       "value": "/img/icons/cloud.png"
-                    },
-                    {
-                       "caption": "translate#common:modules.tools.draw.iconList.iconTent",
-                       "type": "glyphicon",
-                       "value": "\u26fa"
-                    }
-                 ]
+                 "name":"Zeichnen / Schreiben",
+                 "glyphicon":"glyphicon-pencil"
               },
               "featureLister":{
                  "name":"Liste",
@@ -447,6 +387,7 @@
      },
      "scaleLine":true,
      "treeType":"custom",
+     "singleBaselayer": true,
      "layersRemovable":false
   },
   "Themenconfig":{
@@ -796,7 +737,7 @@
                        "424"
                     ],
                     "name":"Bauschutzbereiche Verkehrsflughafen Hamburg (§ 12 LuftVG)",
-                    "legendURL":"https:/geofos/legenden/bauschutz_flughafen_legende.png"
+                    "legendURL":"https:/geoportal-hamburg.de/legende/bauschutz_flughafen_legende.png"
                  }
               ]
            },

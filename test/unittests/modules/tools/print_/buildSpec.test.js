@@ -42,20 +42,45 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("parseAddressToString", function () {
         it("should return empty string if all keys in address object are empty", function () {
-            var address = {
+            const addressEmpty = {
                 street: "",
                 housenr: "",
                 postalCode: "",
                 city: ""
             };
 
-            expect(buildSpecModel.parseAddressToString(address)).to.equal("n.N.");
+            expect(buildSpecModel.parseAddressToString(addressEmpty)).to.equal("n.N.");
         });
         it("should return empty address object is empty", function () {
             expect(buildSpecModel.parseAddressToString({})).to.equal("n.N.");
         });
         it("should return empty address object is undefined", function () {
             expect(buildSpecModel.parseAddressToString(undefined)).to.equal("n.N.");
+        });
+        it("should return parsed complete address", function () {
+            const address = {street: "Hufnerstraße", housenr: "7", postalCode: "22305", city: "Hamburg"};
+
+            expect(buildSpecModel.parseAddressToString(address)).to.equal("Hufnerstraße 7\n 22305 Hamburg");
+        });
+        it("should return parsed address - no housenr", function () {
+            const address = {street: "Hufnerstraße", housenr: "", postalCode: "22305", city: "Hamburg"};
+
+            expect(buildSpecModel.parseAddressToString(address)).to.equal("Hufnerstraße\n 22305 Hamburg");
+        });
+        it("should return parsed address - no street", function () {
+            const address = {street: "", housenr: "7", postalCode: "22305", city: "Hamburg"};
+
+            expect(buildSpecModel.parseAddressToString(address)).to.equal("7\n 22305 Hamburg");
+        });
+        it("should return parsed address - no housenr, street", function () {
+            const address = {street: "", housenr: "", postalCode: "22305", city: "Hamburg"};
+
+            expect(buildSpecModel.parseAddressToString(address)).to.equal("22305 Hamburg");
+        });
+        it("should return parsed address - no housenr, street, postalCode", function () {
+            const address = {street: "", housenr: "", postalCode: "", city: "Hamburg"};
+
+            expect(buildSpecModel.parseAddressToString(address)).to.equal("Hamburg");
         });
     });
     describe("isOwnMetaRequest", function () {
@@ -298,6 +323,9 @@ describe("tools/print_/buildSpec", function () {
         it("should create hex string from rgbArray", function () {
             expect(buildSpecModel.rgbArrayToHex([255, 255, 255])).to.deep.include("#ffffff");
         });
+        it("should create hex string from short hexcode string", function () {
+            expect(buildSpecModel.rgbArrayToHex("#333")).to.deep.include("#333");
+        });
         it("should create default hex string from empty rgbArray", function () {
             expect(buildSpecModel.rgbArrayToHex([])).to.deep.include("#3399CC");
         });
@@ -364,7 +392,7 @@ describe("tools/print_/buildSpec", function () {
         var vectorLayer = new Vector();
 
         it("should return \"styleId\" if styleList is not available", function () {
-            expect(buildSpecModel.getStyleAttribute(vectorLayer)).to.equal("styleId");
+            expect(buildSpecModel.getStyleAttribute(vectorLayer, pointFeatures[0], false)).to.equal("styleId");
         });
     });
     describe("getFeatureStyle", function () {
