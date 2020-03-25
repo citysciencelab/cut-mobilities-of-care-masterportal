@@ -10,8 +10,7 @@ import Map from "ol/Map";
 import View from "ol/View";
 
 describe("drawModel", function () {
-    let model,
-        iconPath;
+    let model;
 
     before(function () {
         i18next.init({
@@ -21,7 +20,6 @@ describe("drawModel", function () {
         });
         model = new Model();
         model.collection = new ModelList();
-        iconPath = "/img/icons/";
     });
 
     describe("createLayer", function () {
