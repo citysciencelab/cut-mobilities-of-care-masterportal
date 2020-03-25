@@ -45,7 +45,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             AnzFahrzeuge: "Kfz",
             AnzFahrraeder: "Fahrräder",
             Todo___AnzFahrraederSaeule: "Fahrräder"
-        }
+        },
+        dayInterval: "15-Min",
+        weekInterval: "1-Stunde",
+        yearInterval: "1-Woche"
     }),
 
 
@@ -171,13 +174,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         // tab body
         if (tabValue === "day") {
-            this.setupTabDay(api, thingId, meansOfTransport);
+            this.setupTabDay();
         }
         else if (tabValue === "week") {
-            this.setupTabWeek(api, thingId, meansOfTransport);
+            this.setupTabWeek();
         }
         else if (tabValue === "year") {
-            this.setupTabYear(api, thingId, meansOfTransport);
+            this.setupTabYear();
         }
         else {
             this.setupTabInfo(api, thingId, meansOfTransport);
@@ -234,36 +237,15 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     },
 
     /**
-     * setup of the info tab
-     * @param {Object} api instance of TrafficCountApi
-     * @param {String} thingId the thingId to be send to any api call
-     * @param {String} meansOfTransport the meansOfTransport to be send with any api call
+     * Setup of the info tab.
+     * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
+     * @listens Snippets#ValuesChanged
      * @returns {Void}  -
      */
-    setupTabDay: function (api, thingId, meansOfTransport) {
-        const interval = "15-Min",
-            // @todo: fetch from & until from calendar
-            from = moment().format("YYYY-MM-DD"),
-            until = moment().format("YYYY-MM-DD");
+    setupTabDay: function () {
+        const datepicker = this.get("dayDatepicker");
 
-        this.addDayDatepicker(this.get("dayDatepicker"));
-        api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
-            if (!dataset.hasOwnProperty(meansOfTransport)) {
-                return;
-            }
-
-            this.refreshDiagramDay(dataset[meansOfTransport]);
-
-            // @todo: setup table with dataset
-        });
-    },
-
-    /**
-     * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
-     * @param {object} datepicker datepicker model
-     * @returns {void}
-     */
-    addDayDatepicker: function (datepicker) {
+        // create datepicker only on first enter of tab
         if (!datepicker) {
             this.set("dayDatepicker", new SnippetDatepickerModel({
                 displayName: "Tag",
@@ -276,45 +258,48 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 todayHighlight: false
             }));
             this.listenTo(this.get("dayDatepicker"), {
-                "valuesChanged": function () {
-                    // do nothing
-                }
+                "valuesChanged": this.dayDatepickerValueChanged
             });
             this.trigger("renderDayDatepicker");
         }
     },
 
     /**
-     * setup of the info tab
-     * @param {Object} api instance of TrafficCountApi
-     * @param {String} thingId the thingId to be send to any api call
-     * @param {String} meansOfTransport the meansOfTransport to be send with any api call
-     * @returns {Void}  -
+     * Function is initially triggered and on update
+     * @param   {Event} evt  Change event
+     * @param   {Date} date selected date of weekday
+     * @returns {void}
      */
-    setupTabWeek: function (api, thingId, meansOfTransport) {
-        const interval = "1-Stunde",
-            // @todo: fetch from & until from calendar
-            from = "2020-03-16",
-            until = moment().format("YYYY-MM-DD");
+    dayDatepickerValueChanged: function (evt, date) {
+        const api = this.get("propTrafficCountApi"),
+            thingId = this.get("propThingId"),
+            meansOfTransport = this.get("propMeansOfTransport"),
+            interval = this.get("dayInterval"),
+            from = moment(date).format("YYYY-MM-DD"),
+            until = from;
 
-        this.addWeekDatepicker(this.get("weekDatepicker"));
+        api.unsubscribeEverything();
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
             if (!dataset.hasOwnProperty(meansOfTransport)) {
                 return;
             }
 
-            this.refreshDiagramWeek(dataset[meansOfTransport]);
+            this.refreshDiagramDay(dataset[meansOfTransport]);
 
             // @todo: setup table with dataset
         });
     },
 
     /**
+     * Setup of the week tab.
      * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
-     * @param {object} datepicker datepicker model
-     * @returns {void}
+     * @listens Snippets#ValuesChanged
+     * @returns {Void}  -
      */
-    addWeekDatepicker: function (datepicker) {
+    setupTabWeek: function () {
+        const datepicker = this.get("weekDatepicker");
+
+        // create datepicker only on first enter of tab
         if (!datepicker) {
             this.set("weekDatepicker", new SnippetDatepickerModel({
                 preselectedValue: moment().toDate(),
@@ -330,53 +315,54 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                         return moment(date).startOf("isoWeek").format("DD.MM.YYYY") + "-" + moment(date).endOf("isoWeek").format("DD.MM.YYYY");
                     },
                     toValue: function (date) {
-                        return moment.utc(date).startOf("isoWeek").toDate();
+                        return moment.utc(date, "DD.MM.YYYY").toDate();
                     }
                 },
                 todayHighlight: false
             }));
             this.listenTo(this.get("weekDatepicker"), {
-                "valuesChanged": function () {
-                    // do nothing
-                }
+                "valuesChanged": this.weekDatepickerValueChanged
             });
             this.trigger("renderWeekDatepicker");
         }
     },
 
     /**
-     * setup of the info tab
-     * @param {Object} api instance of TrafficCountApi
-     * @param {String} thingId the thingId to be send to any api call
-     * @param {String} meansOfTransport the meansOfTransport to be send with any api call
-     * @returns {Void}  -
+     * Function is initially triggered and on update
+     * @param   {Event} evt  Change event
+     * @param   {Date} date selected date of weekday not adjusted to start of week
+     * @returns {void}
      */
-    setupTabYear: function (api, thingId, meansOfTransport) {
-        const interval = "1-Woche",
-            // @todo: fetch from & until from calendar
-            from = "2020-01-01",
-            until = moment().format("YYYY-MM-DD");
+    weekDatepickerValueChanged: function (evt, date) {
+        const api = this.get("propTrafficCountApi"),
+            thingId = this.get("propThingId"),
+            meansOfTransport = this.get("propMeansOfTransport"),
+            interval = this.get("weekInterval"),
+            from = moment(date).startOf("isoWeek").format("YYYY-MM-DD"),
+            until = moment(date).endOf("isoWeek").format("YYYY-MM-DD");
 
-        this.addYearDatepicker(this.get("yearDatepicker"));
+        api.unsubscribeEverything();
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
             if (!dataset.hasOwnProperty(meansOfTransport)) {
                 return;
             }
 
-            const year = moment(from, "YYYY-MM-DD").format("YYYY");
-
-            this.refreshDiagramYear(dataset[meansOfTransport], year);
+            this.refreshDiagramWeek(dataset[meansOfTransport]);
 
             // @todo: setup table with dataset
         });
     },
 
-    /*
+    /**
+     * Setup of the year tab.
      * This methode creates a datepicker model and triggers the view for rendering. Snippets must be added after view.render.
-     * @param {object} datepicker datepicker model
-     * @returns {void}
+     * @listens Snippets#ValuesChanged
+     * @returns {Void}  -
      */
-    addYearDatepicker: function (datepicker) {
+    setupTabYear: function () {
+        const datepicker = this.get("yearDatepicker");
+
+        // create datepicker only on first enter of tab
         if (!datepicker) {
             this.set("yearDatepicker", new SnippetDatepickerModel({
                 displayName: "Tag",
@@ -391,12 +377,36 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 format: "yyyy"
             }));
             this.listenTo(this.get("yearDatepicker"), {
-                "valuesChanged": function () {
-                    // do nothing
-                }
+                "valuesChanged": this.yearDatepickerValueChanged
             });
             this.trigger("renderYearDatepicker");
         }
+    },
+
+    /** Function is initially triggered and on update
+     * @param   {Event} evt  Change event
+     * @param   {Date} date first day date of selected year
+     * @returns {void}
+     */
+    yearDatepickerValueChanged: function (evt, date) {
+        const api = this.get("propTrafficCountApi"),
+            thingId = this.get("propThingId"),
+            meansOfTransport = this.get("propMeansOfTransport"),
+            interval = this.get("yearInterval"),
+            from = moment(date).format("YYYY-MM-DD"),
+            year = moment(date).format("YYYY"),
+            until = moment(date).endOf("year").format("YYYY-MM-DD");
+
+        api.unsubscribeEverything();
+        api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
+            if (!dataset.hasOwnProperty(meansOfTransport)) {
+                return;
+            }
+
+            this.refreshDiagramYear(dataset[meansOfTransport], year);
+
+            // @todo: setup table with dataset
+        });
     },
 
     /**

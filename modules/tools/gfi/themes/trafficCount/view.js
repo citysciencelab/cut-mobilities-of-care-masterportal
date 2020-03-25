@@ -249,7 +249,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
 
     renderYearDatepicker: function () {
         this.$el.find("#yearDateSelector").append(new SnippetDatepickerView({model: this.model.get("yearDatepicker")}).render().el);
-        this.model.get("yearDatepicker").updateValues(moment().toDate());
+        this.model.get("yearDatepicker").updateValues(moment().startOf("year").toDate());
     },
 
     /**
