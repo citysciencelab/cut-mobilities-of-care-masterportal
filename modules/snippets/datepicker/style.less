@@ -13,7 +13,8 @@
     -moz-border-radius: 0;
     border-radius: 0;
 	.datepicker-days {
-		.table-condensed {
+        padding: 4px;
+        .table-condensed {
 			width: 100%;
 			font-size: @fontSizeSmall;
 			thead {
@@ -43,18 +44,19 @@
 				tr {
                     &.week {
                         &:hover {
-                            border: 2px solid @darkblueColor;
+                            outline: 2px solid #08589e;
                         }
                     }
                     &.week-active {
                         border-radius: @borderRadius0;
                         background-color: @darkblueColor;;
                         color: @whiteColor;
-                        &:hover {
-                            border: 2px solid @darkblueColor;
-                        }
                         td {
                             background-image: none;
+                            &:hover {
+                                background-color: @whiteColor;;
+                                color: @darkblueColor;
+                            }
                         }
                     }
 					&td {
@@ -120,15 +122,20 @@
                             background: none;
                             color: @darkgreyColor;
                             &:hover {
-                                opacity: @hoverOpacity;
-                                background-color: @darkblueColor;
-                                color: @whiteColor;
+                                color: @darkblueColor;
+                                outline: 2px solid #08589e;
                             }
-                            &.focused {
-                                border: 2px solid @darkblueColor;
+                            &.active {
+                                background: @darkblueColor;
+                                color: @whiteColor;
+                                outline: none;
                             }
                             &.disabled {
                                 color: @lightgreyColor;
+                                &:hover {
+                                  background: none;
+                                  outline: none;
+                                }
                             }
                         }
                     }
