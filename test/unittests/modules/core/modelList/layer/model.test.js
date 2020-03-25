@@ -1,33 +1,54 @@
-import WMSLayer from "@modules/core/modelList/layer/wms.js";
+import Layer from "@modules/core/modelList/layer/model.js";
 import {expect} from "chai";
 
-describe("core/modelList/layer/wms", function () {
-    var model = {};
+describe("core/modelList/layer/model", function () {
+    let model;
 
     before(function () {
-        model = new WMSLayer();
+        model = new Layer();
     });
 
-    describe("setIsRemovable", function () {
-        it("setIsRemovable should return true value", function () {
-            model.setIsRemovable(true);
-            expect(model.get("isRemovable")).to.be.true;
+    describe("toggleIsSelected", function () {
+        let secondModel;
+
+        before(function () {
+            secondModel = new Layer({channel: Radio.channel("ThisDoesNotExist")});
+
+            // Somehow some errors occur if the attributes for the models are set differently
+            model.set("isSelected", false);
+            model.set("parentId", "Baselayer");
+            model.set("layerSource", {});
+            secondModel.attributes.isSelected = true;
+            secondModel.attributes.parentId = "Baselayer";
+            secondModel.attributes.layerSource = {};
+
+            Radio.trigger("ModelList", "addModel", model);
+            Radio.trigger("ModelList", "addModel", secondModel);
         });
-        it("setIsRemovable should return false value", function () {
-            model.setIsRemovable(false);
-            expect(model.get("isRemovable")).to.be.false;
+
+        after(function () {
+            model = new Layer();
         });
-        it("setIsRemovable should return undefined value", function () {
-            model.setIsRemovable(undefined);
-            expect(model.get("isRemovable")).to.be.false;
+
+        afterEach(function () {
+            model.set("isSelected", false);
+            secondModel.attributes.isSelected = true;
         });
-        it("setIsRemovable should return null value", function () {
-            model.setIsRemovable(null);
-            expect(model.get("isRemovable")).to.be.false;
+
+        it("should deselect all other baselayers if the option singleBaseLayer is set to true", function () {
+            model.set("singleBaseLayer", true);
+            Radio.trigger("Layer", "toggleIsSelected");
+
+            expect(model.attributes.isSelected).to.be.true;
+            expect(secondModel.attributes.isSelected).to.be.false;
         });
-        it("setIsRemovable should return string value", function () {
-            model.setIsRemovable("string");
-            expect(model.get("isRemovable")).to.be.false;
+
+        it("should lead to multiple baselayers being active if the option singleBaseLayer is set to false", function () {
+            model.set("singleBaseLayer", false);
+            Radio.trigger("Layer", "toggleIsSelected");
+
+            expect(model.attributes.isSelected).to.be.true;
+            expect(secondModel.attributes.isSelected).to.be.true;
         });
     });
 });
