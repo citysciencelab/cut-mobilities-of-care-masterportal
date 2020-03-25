@@ -660,6 +660,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             geojsonFormat = new GeoJSON();
         let convertedFeature;
 
+        // take over id from feature because the feature id is not set in the clone.
+        clonedFeature.setId(feature.getId());
         // circle is not suppported by geojson
         if (clonedFeature.getGeometry().getType() === "Circle") {
             clonedFeature.setGeometry(fromCircle(clonedFeature.getGeometry()));
