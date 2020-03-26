@@ -26,7 +26,7 @@ export default {
         <ScaleLine />
         <Controls />
         <Title />
-        <Language />
+        <Language v-if="i18next.isEnabled() && i18next.getLanguages().length > 1" />
     </div>
 </template>
 

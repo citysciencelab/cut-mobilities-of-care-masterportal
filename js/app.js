@@ -1,7 +1,9 @@
 import Vue from "vue";
+import VueParams from "vue-params";
+import VueI18Next from "vue-i18next";
 import App from "../src/App.vue";
 import store from "../src/store";
-import i18n from "../src/i18n";
+import {makeI18n}  from "../src/i18n";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -97,6 +99,8 @@ function loadApp () {
         /* eslint-disable no-undef */
     let app = {};
 
+    // TODO: Warum funktioniert das nicht einfach VueParams und VueI18Next zu laden? --> Typedef fehlt oder so
+
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
     }
@@ -118,14 +122,20 @@ function loadApp () {
     }
 
     Vue.config.productionTip = false;
+    Vue.use(VueParams);
+    Vue.use(VueI18Next);
+
+    store.commit("addConfigJsToStore", Config);
+
     app = new Vue({
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n
+        i18next
     });
+    // i18n: makeI18n(store)
 
-    app.$store.commit("addConfigJsToStore", Config);
+    Vue.params.i18nextLanguage = i18next.language;
 
     app.$mount();
 

@@ -228,7 +228,9 @@ export default {
 </script>
 
 <template lang="html">
-    <!-- TODO: Translation of the entry in the menu is not implemented yet -->
+    <!-- TODO: Translation of the entry in the menu is not implemented yet
+         TODO: Statt localePath lieber den String direkt -> und nicht mehr joinen
+        -->
     <Tool
         :title="$t([localePath, 'title'].join('.'))"
         :icon="icon"

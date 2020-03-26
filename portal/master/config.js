@@ -74,7 +74,7 @@ const Config = {
     },
     defaultToolId: "gfi",
     portalLanguage: {
-        enabled: true,
+        enabled: false,
         debug: false,
         languages: {
             de: "deutsch",

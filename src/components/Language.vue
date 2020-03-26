@@ -11,18 +11,19 @@ export default {
     },
     mounted () {
         document.getElementsByTagName("body")[0].appendChild(this.$el);
-        this.translate(this.$i18n.locale);
+        // this.translate(i18next.language);
     },
     methods: {
-        translate (locale) {
-            this.$i18n.locale = locale;
-            this.$root.$emit("translate", {
+        translate (language) {
+            // this.$i18n.locale = locale;
+            /* this.$root.$emit("translate", {
                 locale: locale
-            });
-            this.activeCode = locale;
-            this.$i18n.availableLocales.forEach(code => {
-                this.languageCodes[code] = this.$i18n.t([this.localePath, code].join("."));
-            });
+            });*/
+            i18next.language = language;
+            /* this.activeCode = language;
+            i18next.whitelist.forEach(code => {
+                this.languageCodes[code] = Vue.t([this.localePath, code].join("."));
+            });*/
         },
         languageWindow () {
             this.showWindow = !this.showWindow;
@@ -39,7 +40,7 @@ export default {
             class="current-language"
             @click="languageWindow"
         >
-            {{ activeCode }}
+            {{ i18next.language }}
         </a>
         <div
             v-if="showWindow"
@@ -61,13 +62,13 @@ export default {
             </div>
             <div class="form-group form-group-sm">
                 <div
-                    v-for="(value, key) in languageCodes"
+                    v-for="(value, key) in i18next.whitelist"
                     :key="key"
                     class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
                 >
                     <button
                         class="lng btn"
-                        :disabled="key === activeCode"
+                        :disabled="key === i18next.language"
                         @click="translate(key)"
                     >
                         {{ value }}
