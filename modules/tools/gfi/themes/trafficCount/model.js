@@ -246,14 +246,15 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     setupTabDay: function () {
-        const datepicker = this.get("dayDatepicker");
+        const datepicker = this.get("dayDatepicker"),
+            startDate = moment().subtract(7, "days");
 
         // create datepicker only on first enter of tab
         if (!datepicker) {
             this.set("dayDatepicker", new SnippetDatepickerModel({
                 displayName: "Tag",
                 preselectedValue: moment().toDate(),
-                startDate: moment().subtract(7, "days").toDate(),
+                startDate: startDate.toDate(),
                 endDate: moment().toDate(),
                 type: "datepicker",
                 autoclose: true,
@@ -300,13 +301,14 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     setupTabWeek: function () {
-        const datepicker = this.get("weekDatepicker");
+        const datepicker = this.get("weekDatepicker"),
+            startDate = moment("2020-01-01") > moment().subtract(1, "year") ? moment("2020-01-01") : moment().subtract(1, "year");
 
         // create datepicker only on first enter of tab
         if (!datepicker) {
             this.set("weekDatepicker", new SnippetDatepickerModel({
                 preselectedValue: moment().toDate(),
-                startDate: moment().subtract(1, "month").toDate(),
+                startDate: startDate.toDate(),
                 endDate: moment().toDate(),
                 type: "datepicker",
                 selectWeek: true,
@@ -363,14 +365,15 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     setupTabYear: function () {
-        const datepicker = this.get("yearDatepicker");
+        const datepicker = this.get("yearDatepicker"),
+            startDate = moment("2020-01-01");
 
         // create datepicker only on first enter of tab
         if (!datepicker) {
             this.set("yearDatepicker", new SnippetDatepickerModel({
                 displayName: "Tag",
                 preselectedValue: moment().toDate(),
-                startDate: moment().subtract(10, "years").toDate(),
+                startDate: startDate.toDate(),
                 endDate: moment().toDate(),
                 type: "datepicker",
                 minViewMode: "years",
