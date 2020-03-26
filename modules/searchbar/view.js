@@ -716,9 +716,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             this.handlePasteEvent(evt, count);
         }
         else if (evt.type === "keyup") {
-            if(count < 2) {
+            if (count < 2) {
                 this.model.setTempCounter(++count);
-            } else {
+            }
+            else {
                 clearTimeout(this.model.get("timeoutReference"));
                 this.model.set("timeoutReference", setTimeout(() => {
                     this.setSearchString(evt);
