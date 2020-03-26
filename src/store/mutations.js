@@ -97,7 +97,7 @@ export default {
      * @returns {void}
      */
     addConfigJsToStore (state, Config = {}) {
-        state.configJs = Config; // NOTE dennis was here
+        state.configJs = Config;
         parseConfigToStore(state, Config, getConfigToStateModules());
     },
     /**
