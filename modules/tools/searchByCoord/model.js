@@ -115,7 +115,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
             }
 
             if (attributes.coordinates[0].coord === undefined || attributes.coordinates[1].coord.length < 1) {
-                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[1].key});               
+                attributes.coordinates[1].ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: attributes.coordinates[1].key});
                 $("#coordinatesNorthingField + .text-danger").html("");
                 $("#coordinatesNorthingField").after("<span class='text-danger'><small>" + attributes.coordinates[1].ErrorMsg + "</small></span>");
                 $("#coordinatesNorthingField").parent().addClass("has-error");

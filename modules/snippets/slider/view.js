@@ -107,7 +107,7 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
 
     /**
      * set the input values
-     * @param {array} values - contains minimum and maximum
+     * @param {number[]} values - contains minimum and maximum
      * @returns {void}
      */
     setInputMinAndMaxValue: function (values) {
@@ -203,13 +203,33 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
     },
 
     /**
-     * Sets the slider value after the external model change
-     * @param   {Date} value new Date value
+     * Sets the slider value after the external model change.
+     * @param {number[]} value - Input Values.
      * @returns {void}
      */
     updateDOMSlider: function (value) {
+        this.checkValuesAreValid(value);
         this.$el.find("input.slider").slider("setValue", value);
+
         this.setInputControlValue({value: value});
+    },
+
+    /**
+     * Checks if the input value is valid. If not, an error message is displayed.
+     * @param {number[]} value - Input Values.
+     * @returns {void}
+     */
+    checkValuesAreValid: function (value) {
+        const attributes = this.$el.find("input.slider").slider("getAttribute"),
+            minValueSlider = attributes.min,
+            maxValueSlider = attributes.max,
+            minValueInput = Math.min(...value),
+            maxValueInput = Math.max(...value);
+
+        if (!this.model.areAllValuesInRange([minValueInput, maxValueInput], minValueSlider, maxValueSlider)) {
+            Radio.trigger("Alert", "alert", "Der Eingabewert muss innerhalb des Gültigkeitsbereiches"
+                + minValueSlider + " und " + maxValueSlider + " liegen!");
+        }
     }
 });
 
