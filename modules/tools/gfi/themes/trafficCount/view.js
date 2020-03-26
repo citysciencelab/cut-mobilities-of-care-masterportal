@@ -5,7 +5,7 @@ import moment from "moment";
 
 const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype */{
     events: {
-        "click .tab-toggle": "toggleTab",
+        "shown.bs.tab": "toggleTab",
         "remove": "destroy",
         "click .btn": "toggleCalendar"
     },
@@ -59,7 +59,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      * @returns {Void}  -
      */
     toggleTab: function (evt) {
-        const value = $(evt.currentTarget).attr("value");
+        const value = $(evt.target).parent().attr("value");
 
         this.model.toggleTab(value);
     },

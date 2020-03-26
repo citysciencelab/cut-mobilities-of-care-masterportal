@@ -48,7 +48,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         },
         dayInterval: "15-Min",
         weekInterval: "1-Stunde",
-        yearInterval: "1-Woche"
+        yearInterval: "1-Woche",
+        dayDatepicker: null,
+        weekDatepicker: null,
+        yearDatepicker: null
     }),
 
 
