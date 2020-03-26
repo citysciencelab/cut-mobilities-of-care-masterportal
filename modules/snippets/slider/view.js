@@ -21,7 +21,8 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
         // This event is fired when the info button is clicked
         "click .info-icon": "toggleInfoText",
         // This event fires if key up
-        "keyup .form-control": "setValues"
+        "keyup .form-control": "setValues",
+        "focusout .form-control": "setValues"
     },
 
     className: "slider-container",
@@ -134,18 +135,16 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
     },
 
     /**
-     * check which key is up
-     * @param {event} event - key up
+     * Check which key is up.
+     * @param {event} event - Key up or focusout.
      * @returns {void}
      */
     setValues: function (event) {
-        var min = this.$el.find("input.form-minimum").prop("value"),
-            max = this.$el.find("input.form-maximum").prop("value"),
-            values;
+        const min = this.$el.find("input.form-minimum").prop("value"),
+            max = this.$el.find("input.form-maximum").prop("value");
 
-        if (event.keyCode === 13) {
-            values = this.model.changeValuesByText(min, max);
-            this.setInputMinAndMaxValue(values);
+        if (event.keyCode === 13 || event.type === "focusout") {
+            this.setInputMinAndMaxValue(this.model.changeValuesByText(min, max));
         }
 
         this.changeSizeOfInputFiled(event.target.className, event.target.value);
@@ -158,15 +157,15 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
      * @returns {void}
      */
     changeSizeOfInputFiled: function (className, value) {
-        var defaultWidth = this.model.get("defaultWidth"),
-            padding = parseInt(this.$(".form-control").css("padding").split("px")[1], 10),
+        const padding = parseInt(this.$(".form-control").css("padding").split("px")[1], 10),
             fontSize = parseInt(this.$(".form-control").css("font-size").split("px")[0], 10),
             buffer = 3,
-            width = padding + fontSize + buffer,
             targetClass = this.chooseInputFiled(className);
+        let defaultWidth = this.model.get("defaultWidth"),
+            width = padding + fontSize + buffer;
 
         // get the default width for input field
-        if (_.isUndefined(defaultWidth)) {
+        if (defaultWidth === undefined) {
             defaultWidth = parseInt(this.$(".form-control").css("width").split("px")[0], 10);
             this.model.setDefaultWidth(defaultWidth);
         }
@@ -186,12 +185,12 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
     },
 
     /**
-     *  check which input field is used
-     * @param {String} className - classes from input field
+     * Check which input field is used.
+     * @param {String} className - Classes from input field.
      * @returns {String} targetClass
      */
     chooseInputFiled: function (className) {
-        var targetClass = "";
+        let targetClass = "";
 
         if (className.includes("form-maximum")) {
             targetClass = ".form-maximum";

@@ -2,7 +2,7 @@ import proj4 from "proj4";
 import Tool from "../../core/modelList/tool/model";
 
 const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         coordSystem: "ETRS89",
         coordSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
         coordinatesEasting: "",
@@ -18,6 +18,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
         exampleAcronym: "",
         searchButtonText: ""
     }),
+
     /**
      * @class SearchByCoord
      * @extends Tool
