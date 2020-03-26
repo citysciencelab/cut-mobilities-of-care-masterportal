@@ -498,7 +498,7 @@ export function TrafficCountApi (httpHost, sensorThingsVersion, mqttOptions, sen
     this.updateDataset = function (thingId, meansOfTransport, interval, from, until, onupdate, onerror, onstart, oncomplete, todayUntilOpt) { // eslint-disable-line
         const startDate = moment(from + " 00:00:00.000", "YYYY-MM-DD HH:mm:ss.SSS").toISOString(),
             endDate = moment(until + " 23:59:59.999", "YYYY-MM-DD HH:mm:ss.SSS").toISOString(),
-            url = baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_" + interval + "';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime le " + endDate + "))",
+            url = baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_" + interval + "';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime le " + endDate + ";$orderby=phenomenonTime asc))",
             meansOfTransportFahrzeuge = "AnzFahrzeuge",
             meansOfTransportSV = "AntSV",
             result = {},
