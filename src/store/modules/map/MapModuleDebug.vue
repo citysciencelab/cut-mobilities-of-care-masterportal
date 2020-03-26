@@ -16,7 +16,7 @@ const keyStore = {
  */
 export default {
     name: "MapModuleDebug",
-    data: () => ({open: true}),
+    data: () => ({open: false}),
     computed: {
         ...mapGetters("Map", keyStore.getters),
         dataList () {

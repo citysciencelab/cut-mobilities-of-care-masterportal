@@ -14,16 +14,8 @@ export default {
         }
     },
     computed: {
-        ...mapGetters("controls/backForward", ["next", "prev"]),
-        ...mapGetters("Map", ["map"]),
-        /** @returns {boolean} whether a previous memory exists */
-        noBack () {
-            return this.prev === null;
-        },
-        /** @returns {boolean} whether a next memory exists */
-        noForth () {
-            return this.next === null;
-        }
+        ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"]),
+        ...mapGetters("Map", ["map"])
     },
     /*
      * NOTE This is how an addon could register itself to the appropriate store region
@@ -54,12 +46,12 @@ export default {
 <template>
     <div class="back-forward-buttons">
         <span
-            :class="['forward', 'glyphicon', glyphiconFor, noForth ? 'inactive' : '']"
+            :class="['forward', 'glyphicon', glyphiconFor, forthAvailable ? '' : 'inactive']"
             title="Schritt voran"
             @click="forward(map)"
         />
         <span
-            :class="['backward', 'glyphicon', glyphiconBack, noBack ? 'inactive' : '']"
+            :class="['backward', 'glyphicon', glyphiconBack, backAvailable ? '' : 'inactive']"
             title="Schritt zurück"
             @click="backward(map)"
         />

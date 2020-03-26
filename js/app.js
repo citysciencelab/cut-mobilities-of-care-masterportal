@@ -70,7 +70,6 @@ import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
-import TitleView from "../modules/title/view";
 import LanguageView from "../modules/language/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
@@ -124,7 +123,8 @@ function loadApp () {
         store
     });
 
-    app.$store.commit("addConfigToStore", Config);
+    app.$store.commit("addConfigJsToStore", Config);
+
     app.$mount();
 
     // Core laden
@@ -133,6 +133,9 @@ function loadApp () {
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
+
+    app.$store.commit("addConfigJsonToStore", Radio.request("Parser", "getPortalConfig"));
+
     new StyleList();
     new ParametricURL();
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
@@ -444,9 +447,6 @@ function loadApp () {
     sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
-        if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
-            new TitleView();
-        }
     }
 
     if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {

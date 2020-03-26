@@ -1,5 +1,4 @@
 /**
- * TODO try to model this directly as an action
  * @param {function} commit commit function
  * @returns {function} update function for mouse coordinate
  */

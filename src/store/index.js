@@ -4,6 +4,7 @@ import Vuex from "vuex";
 import Alerting from "./modules/Alerting";
 import SupplyCoord from "./modules/SupplyCoord";
 import ScaleLine from "./modules/ScaleLine";
+import Title from "./Title";
 import Map from "./modules/map";
 
 import getters from "./getters";
@@ -33,7 +34,8 @@ const store = new Vuex.Store({
                 backForward
             }
         },
-        ScaleLine
+        ScaleLine,
+        Title: Title
     },
     state,
     mutations,

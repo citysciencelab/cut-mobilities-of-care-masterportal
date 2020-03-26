@@ -32,14 +32,14 @@ const actions = {
      * @param {module:ol/Map} map map object
      * @returns {void}
      */
-    setMap ({commit}, {map}) {
+    setMap ({commit, rootGetters}, {map}) {
         // discard old listeners
         if (unsubscribes.length) {
             unsubscribes.forEach(unsubscribe => unsubscribe());
             unsubscribes = [];
         }
 
-        const updateState = makeUpdateViewState(commit, map),
+        const updateState = makeUpdateViewState(commit, map, rootGetters.dpi),
             mapView = map.getView();
 
         // set map to store

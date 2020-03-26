@@ -4,11 +4,11 @@ import {transform} from "ol/proj";
 /**
  * Return current scale depending on map zoom and device dpi.
  * @param {module:ol/Map} map openlayer map object
+ * @param {number} dpi device dpi
  * @returns {?number} scale as the x in '1 : x'
  */
-function getScaleFromDpi (map) {
-    const dpi = 96, // TODO - get dpi from rootState here
-        view = map.getView(),
+function getScaleFromDpi (map, dpi) {
+    const view = map.getView(),
         projection = view.getProjection(),
         // first compare value
         comparator1 = view.getCenter(),
@@ -34,12 +34,12 @@ function getScaleFromDpi (map) {
 }
 
 /**
- * TODO try to model this directly as an action
  * @param {function} commit commit function
  * @param {module:ol/Map} map openlayer map object
+ * @param {number} dpi needed to calculate scale
  * @returns {function} update function for state parts to update onmoveend
  */
-function makeUpdateViewState (commit, map) {
+function makeUpdateViewState (commit, map, dpi) {
     return () => {
         const mapView = map.getView();
 
@@ -49,7 +49,7 @@ function makeUpdateViewState (commit, map) {
         commit("setResolution", mapView.getResolution());
         commit("setMaxResolution", mapView.getMaxResolution());
         commit("setMinResolution", mapView.getMinResolution());
-        commit("setScale", getScaleFromDpi(map));
+        commit("setScale", getScaleFromDpi(map, dpi));
         commit("setBbox", mapView.calculateExtent(map.getSize()));
         commit("setRotation", mapView.getRotation());
         commit("setCenter", mapView.getCenter());

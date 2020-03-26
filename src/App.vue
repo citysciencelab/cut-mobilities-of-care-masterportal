@@ -4,6 +4,7 @@ import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./components/ScaleLine.vue";
 import Controls from "./components/controls/Controls.vue";
 import Tools from "./components/tools/Tools.vue";
+import Title from "./components/Title.vue";
 import MapModuleDebug from "./store/modules/map/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
 
@@ -11,10 +12,11 @@ export default {
     name: "App",
     components: {
         Controls,
-        Tools,
         Alerting,
+        Title,
         SupplyCoord,
         ScaleLine,
+        Tools,
         MapModuleDebug
     },
     data: () => ({isDevMode})
@@ -27,10 +29,12 @@ export default {
         <SupplyCoord />
         <ScaleLine />
         <Controls />
-        <Tools />
+        <!-- <Tools /> this is only a dataflow test, not real tools -->
         <MapModuleDebug v-if="isDevMode" />
+        <Title />
     </div>
 </template>
 
 <style>
+
 </style>

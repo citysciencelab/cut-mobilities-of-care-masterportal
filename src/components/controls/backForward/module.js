@@ -42,12 +42,8 @@ export default {
          */
         memorize (state, map) {
             const view = map.getView(),
-                current = state.position === null
-                    ? null
-                    : state.memory[state.position],
-                upToNext = state.position === null
-                    ? []
-                    : state.memory.slice(0, state.position + 1),
+                current = state.position === null ? null : state.memory[state.position],
+                upToNext = state.position === null ? [] : state.memory.slice(0, state.position + 1),
                 next = {
                     center: view.getCenter(),
                     zoom: view.getZoom()
@@ -67,9 +63,7 @@ export default {
                 nextMemory = nextMemory.slice(1);
             }
             else {
-                state.position = state.position === null
-                    ? 0
-                    : state.position + 1;
+                state.position = state.position === null ? 0 : state.position + 1;
             }
 
             state.memory = nextMemory;
@@ -96,27 +90,13 @@ export default {
     getters: {
         /**
          * @param {object} state module state
-         * @returns {number} currently active index in memory
+         * @returns {boolean} whether a previous memory exists
          */
-        position: state => state.position,
+        backAvailable: state => state.position === null ? false : typeof state.memory[state.position - 1] === "object",
         /**
          * @param {object} state module state
-         * @returns {ViewMemory[]} array of memorized view states
+         * @returns {boolean} whether a next memory exists
          */
-        memory: state => state.memory,
-        /**
-         * @param {object} state module state
-         * @returns {?ViewMemory} the next ViewMemory, if one exists
-         */
-        next: state => state.position === null
-            ? null
-            : state.memory[state.position + 1] || null,
-        /**
-         * @param {object} state module state
-         * @returns {?ViewMemory} the previous ViewMemory, if one exists
-         */
-        prev: state => state.position === null
-            ? null
-            : state.memory[state.position - 1] || null
+        forthAvailable: state => state.position === null ? false : typeof state.memory[state.position + 1] === "object"
     }
 };
