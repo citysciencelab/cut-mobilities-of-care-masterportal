@@ -3,27 +3,34 @@
 import {mapGetters, mapMutations} from "vuex";
 
 import storeModule from "./module";
-import {componentMap} from "./data";
 
+/**
+ * NOTE
+ * The contents of this folder are purely a data-flow demonstration.
+ * You can render the contents of Tools.vue as child of the App, but
+ * it's only a mock.
+ */
 export default {
     name: "Tools",
     computed: {
-        ...mapGetters(["tools", "mobile"]),
-        ...mapGetters("tools", ["openedTools"]),
+        ...mapGetters(["toolsConfig", "mobile"]),
+        ...mapGetters("tools", ["openedTools", "componentMap"]),
         activeTools () {
-            return this.tools === null
-                ? []
-                : Object.keys(this.tools)
-                    .map(key => componentMap[key]
-                        ? {
-                            component: componentMap[key],
-                            props: this.tools[key],
+            if (this.toolsConfig === null) {
+                return [];
+            }
+
+            return Object.keys(this.toolsConfig)
+                .map(key => {
+                    if (this.componentMap[key]) {
+                        return {
+                            component: this.componentMap[key],
+                            props: this.toolsConfig[key],
                             key
-                        }
-                        : key)
-                    .filter(x => typeof x === "string"
-                        ? console.warn(`Tool "${x}" not implemented; ignoring key.`)
-                        : true);
+                        };
+                    }
+                    return key;
+                }).filter(x => typeof x === "string" ? console.warn(`Tool "${x}" not implemented; ignoring key.`) : true);
         }
     },
     mounted () {

@@ -1,8 +1,12 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
+import ControlIcon from "../ControlIcon.vue";
 
 export default {
     name: "BackForward",
+    components: {
+        ControlIcon
+    },
     props: {
         glyphiconFor: {
             type: String,
@@ -14,16 +18,8 @@ export default {
         }
     },
     computed: {
-        ...mapGetters("controls/backForward", ["next", "prev"]),
-        ...mapGetters("Map", ["map"]),
-        /** @returns {boolean} whether a previous memory exists */
-        noBack () {
-            return this.prev === null;
-        },
-        /** @returns {boolean} whether a next memory exists */
-        noForth () {
-            return this.next === null;
-        }
+        ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"]),
+        ...mapGetters("Map", ["map"])
     },
     /*
      * NOTE This is how an addon could register itself to the appropriate store region
@@ -53,35 +49,21 @@ export default {
 
 <template>
     <div class="back-forward-buttons">
-        <span
-            :class="['forward', 'glyphicon', glyphiconFor, noForth ? 'inactive' : '']"
+        <ControlIcon
             title="Schritt voran"
-            @click="forward(map)"
+            :active="forthAvailable"
+            :icon-name="glyphiconFor"
+            @click.native="forward(map)"
         />
-        <span
-            :class="['backward', 'glyphicon', glyphiconBack, noBack ? 'inactive' : '']"
+        <ControlIcon
             title="Schritt zurück"
-            @click="backward(map)"
+            :icon-name="glyphiconBack"
+            :active="backAvailable"
+            @click.native="backward(map)"
         />
     </div>
 </template>
 
 <style lang="less" scoped>
     @import "../../../theme.less";
-
-    .back-forward-buttons {
-        .forward {
-            display: block;
-        }
-        .glyphicon {
-            cursor: pointer;
-            font-size: 22px;
-            padding: 5px 7px 6px 7px;
-            margin-top: 4px;
-        }
-        .inactive {
-            pointer-events: none;
-            background-color: grey;
-        }
-    }
 </style>

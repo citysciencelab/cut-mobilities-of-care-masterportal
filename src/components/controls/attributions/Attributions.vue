@@ -1,9 +1,13 @@
 
 <script>
 import {mapGetters} from "vuex";
+import ControlIcon from "../ControlIcon.vue";
 
 export default {
     name: "Attributions",
+    components: {
+        ControlIcon
+    },
     props: {
         isInitOpenDesktop: {
             type: Boolean,
@@ -45,16 +49,17 @@ export default {
 </script>
 
 <template>
-    <div
+    <ControlIcon
         class="attributions-button"
         aria-role="button"
         :title="'Layer-Attributions ' + (open ? 'ausblenden' : 'anzeigen')"
-        @click="toggleAttributionsFlyout"
+        :icon-name="open ? 'forward' : 'info-sign'"
+        :click="toggleAttributionsFlyout"
     >
-        <span :class="'glyphicon ' + (open ? 'glyphicon-forward' : 'glyphicon-info-sign')" />
         <div
             v-if="open"
-            class="attributions-div"
+            class="attributions-view"
+            @click.stop.prevent=""
         >
             <dl>
                 <template v-for="(attribution, index) in attributionList">
@@ -67,62 +72,40 @@ export default {
                 </template>
             </dl>
         </div>
-    </div>
+    </ControlIcon>
 </template>
 
 <style lang="less" scoped>
     @import "../../../theme.less";
 
-    .attributions-button {
-        position: relative;
+    .attributions-view {
+        cursor: initial;
+        text-align: initial;
+        position: absolute;
+        padding: 5px;
+        background-color: @background_color_3;
+        margin-right: 40px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        border: 1px solid rgb(229, 229, 229);
+        bottom: 0;
+        right: 0;
+        font-size: 12px;
+        font-family: @font_family_1;
+        color: black;
 
-        .glyphicon {
-            font-size: 22px;
+        dt {
+            color: @color_2;
+            font-size: 15px;
+            font-family: @font_family_1;
         }
-
-        .glyphicon-forward {
-            padding: 6px 4px 6px 8px;
+        dl {
+            margin-bottom: 0;
         }
-
-        .glyphicon-info-sign {
-            padding: 6px;
+        dd {
+            margin-bottom: 8px;
         }
-
-        .attributions-div {
-            position: absolute;
-            padding: 5px;
-            background-color: @background_color_3;
-            margin-right: 40px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-            border: 1px solid rgb(229, 229, 229);
-            bottom: 0;
-            right: 0;
-
-            dt {
-                color: @color_2;
-                font-size: 15px;
-                font-family: @font_family_1;
-            }
-            dl {
-                margin-bottom: 0;
-                max-width: calc(100vw - 410px);
-            }
-            dd {
-                margin-bottom: 8px;
-            }
-            .glyphicon {
-                font-size: 22px;
-                top: 0;
-            }
-            .glyphicon-info-sign {
-                padding: 6px;
-            }
-            .glyphicon-forward {
-                padding: 6px 4px 6px 8px;
-            }
-            img {
-                max-height: 2em;
-            }
+        img {
+            max-height: 2em;
         }
     }
 </style>
