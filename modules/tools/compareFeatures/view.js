@@ -143,7 +143,7 @@ const CompareFeaturesView = Backbone.View.extend({
      * @returns {void}
      */
     toggleRows: function (evt) {
-        const text = this.model.get("moreInfo");
+        let text = this.model.get("moreInfo");
 
         this.$el.find(".toggle-row").toggle();
         if (evt.target.textContent === text) {
