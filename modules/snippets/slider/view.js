@@ -71,8 +71,7 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
             precision: precision,
             value: selectedValue,
             selection: selection,
-            ticks: this.model.get("ticks"),
-            tooltip: "always"
+            ticks: this.model.get("ticks")
         });
 
         this.$el.find("input.slider").draggable();
@@ -208,9 +207,11 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
      * @returns {void}
      */
     updateDOMSlider: function (value) {
-        this.checkValuesAreValid(value);
-        this.$el.find("input.slider").slider("setValue", value);
+        if (Array.isArray(value)) {
+            this.checkValuesAreValid(value);
+        }
 
+        this.$el.find("input.slider").slider("setValue", value);
         this.setInputControlValue({value: value});
     },
 
@@ -226,9 +227,12 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
             minValueInput = Math.min(...value),
             maxValueInput = Math.max(...value);
 
-        if (!this.model.areAllValuesInRange([minValueInput, maxValueInput], minValueSlider, maxValueSlider)) {
-            Radio.trigger("Alert", "alert", "Der Eingabewert muss innerhalb des Gültigkeitsbereiches"
-                + minValueSlider + " und " + maxValueSlider + " liegen!");
+        if (!this.model.checkAreAllValuesInRange([minValueInput, maxValueInput], minValueSlider, maxValueSlider)) {
+            Radio.trigger("Alert", "alert", i18next.t("common:snippets.slider.outOfRangeErrorMessage",
+                {
+                    minValueSlider: minValueSlider,
+                    maxValueSlider: maxValueSlider
+                }));
         }
     }
 });

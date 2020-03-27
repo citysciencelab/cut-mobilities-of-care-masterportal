@@ -413,6 +413,9 @@
             "selectByPolygon": "Draw surface",
             "tooltipMessage": "Click to start and exit",
             "tooltipMessagePolygon": "Click to add a point"
+        },
+        "slider": {
+            "outOfRangeErrorMessage": "The input value must lie within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
         }
     }
 }

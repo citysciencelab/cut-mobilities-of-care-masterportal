@@ -14,14 +14,14 @@
             <% } %>
         </div>
     </div>
-    <% if (typeof infoText !== "undefined") { %>
+    <% if (infoText !== undefined) { %>
     <div class="info-icon">
         <span class="glyphicon glyphicon-info-sign"></span>
     </div>
     <% } %>
 </form>
 </div>
-<input class="slider" type="text" />
-<% if (!_.isUndefined(this.model.get("infoText"))) { %>
+<input class="slider" type="text" data-slider-tooltip="hide" />
+<% if (this.model.get("infoText") !== undefined) { %>
     <div class="info-text"><%= infoText %></div>
 <% } %>
