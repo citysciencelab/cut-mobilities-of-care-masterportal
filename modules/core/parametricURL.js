@@ -353,7 +353,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     parseProjection: function (result) {
-        const projection = result.pop();
+        const projection = result;
 
         if (projection !== undefined) {
             this.setProjectionFromUrl(projection);
