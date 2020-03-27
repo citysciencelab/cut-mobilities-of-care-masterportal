@@ -20,23 +20,6 @@ describe("tools/gfi/themes/trafficCount", function () {
             expect(model.get("isCreated")).to.be.true;
         });
     });
-    describe("destroy", function () {
-        it("should unsubscribe everything", function () {
-            let hasUnsubscribed = false;
-
-            const dummyApi = {
-                unsubscribeEverything: () => {
-                    hasUnsubscribed = true;
-                }
-            };
-
-            model.set("propTrafficCountApi", dummyApi);
-
-            hasUnsubscribed = false;
-            model.destroy();
-            expect(hasUnsubscribed).to.be.true;
-        });
-    });
     describe("addThousandPoints", function () {
         it("should parse a number and add thousand points", function () {
             expect(model.addThousandPoints(1234567)).to.equal("1.234.567");

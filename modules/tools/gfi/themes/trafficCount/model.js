@@ -65,7 +65,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      */
     initialize: function () {
         this.listenTo(this, {
-            "change:isVisible": this.onIsVisibleEvent
+            "change:isVisible": this.onIsVisibleEvent,
+            "change:isReady": this.create
         });
         this.listenTo(Radio.channel("GFI"), {
             "isVisible": this.onGFIIsVisibleEvent
@@ -81,9 +82,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {void}
      */
     onGFIIsVisibleEvent: function (visible) {
+        const api = this.get("propTrafficCountApi");
+
         if (visible === false) {
-            this.onIsVisibleEvent(null, false);
+            api.unsubscribeEverything();
             this.stopListening(Radio.channel("GFI"), "isVisible");
+            this.clear({silent: true});
+            this.unbind();
         }
     },
 
@@ -94,10 +99,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {void}
      */
     onIsVisibleEvent: function (gfi, isVisible) {
+        const api = this.get("propTrafficCountApi");
+
         // make sure to check on 'isVisible' and 'isCreated' to avoid problems mith multiple trafficCount in one opened gfi
         if (!isVisible && this.get("isCreated") === true) {
-            this.destroy();
             this.set("isCreated", false);
+            api.unsubscribeEverything();
         }
         else if (isVisible && this.get("isCreated") === false) {
             this.create();
@@ -128,18 +135,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         // init the tab for infos
         this.toggleTab("infos");
-    },
-
-    /**
-     * remove this model
-     * @returns {void}
-     */
-    destroy: function () {
-        const api = this.get("propTrafficCountApi");
-
-        api.unsubscribeEverything();
-        this.clear({silent: true});
-        this.unbind();
     },
 
     /**
