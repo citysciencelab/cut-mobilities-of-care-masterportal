@@ -424,7 +424,6 @@ const GazetteerModel = Backbone.Model.extend({
         const ajax = this.get("ajaxRequests");
 
         if (ajax[type] !== null && ajax[type] !== undefined) {
-            // ajax[type].abort();
             this.polishAjax(type);
         }
         this.ajaxSend(data, successFunction, type);
