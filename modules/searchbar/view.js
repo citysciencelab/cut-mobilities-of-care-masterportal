@@ -34,9 +34,9 @@ import Searchbar from "./model";
  */
 const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */{
     events: {
-        "paste input": "waitForEvent",
-        "keyup input": "waitForEvent",
-        "contextmenu input": "waitForEvent",
+        "paste input": "controlEvent",
+        "keyup input": "controlEvent",
+        "contextmenu input": "controlEvent",
         "focusin input": "toggleStyleForRemoveIcon",
         "focusout input": "toggleStyleForRemoveIcon",
         "click .form-control-feedback": "deleteSearchString",
@@ -682,20 +682,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     getLastElement: function () {
         return this.$el.find(this.searchbarKeyNavSelector + " li").last();
-    },
-
-    /**
-     * wait until event is loaded complete
-     * @param {event} evt - a keyup, paste or contextmenu event
-     * @returns {void}
-     */
-    waitForEvent: function (evt) {
-        const that = this;
-
-        // The paste event occurs before the value is inserted into the element
-        setTimeout(function () {
-            that.controlEvent(evt);
-        }, 0);
     },
 
     /**
