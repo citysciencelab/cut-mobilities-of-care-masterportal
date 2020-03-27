@@ -27,8 +27,8 @@ export function generateSimpleMutations (state) {
  * For example, given a state object {key: value}, an object
  * {key: state => state[key]} will be returned.
  * This is useful to avoid writing basic operations.
- * @param {object} state state to generate mutations for
- * @returns {object.<string, function>} object of mutations
+ * @param {object} state state to generate getters for
+ * @returns {object.<string, function>} object of getters
  */
 export function generateSimpleGetters (state) {
     return Object.keys(state)
