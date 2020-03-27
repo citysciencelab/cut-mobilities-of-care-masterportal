@@ -70,7 +70,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (this.model.get("isSettingVisible") === true) {
             this.$el.append(this.templateSettings(attr));
         }
-        if (this.model.get("layerInfoClicked")) {
+        if (this.model.get("layerInfoChecked")) {
             this.highlightLayerInformationIcon();
         }
     },
@@ -235,7 +235,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     highlightLayerInformationIcon: function () {
-        this.model.setLayerInfoClicked(true);
+        this.model.setLayerInfoChecked(true);
         this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
     },
 
@@ -244,7 +244,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     unhighlightLayerInformationIcon: function () {
-        this.model.setLayerInfoClicked(false);
+        this.model.setLayerInfoChecked(false);
         this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
     }
 });

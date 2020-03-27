@@ -51,7 +51,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     template: _.template(Template),
 
     /**
-     * todo
+     * Renders the selection view.
      * @returns {void}
      */
     render: function () {
@@ -96,7 +96,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Rerenders the model with updated elements.
      * @returns {void}
      */
     rerender: function () {
@@ -106,6 +106,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.$el.html("");
         this.$el.html(this.template(attr));
 
+        if (this.model.get("layerInfoChecked")) {
+            this.highlightLayerInformationIcon();
+        }
         // If the the model should not be selectable make sure that is not selectable!
         if (!this.model.get("isSelected") && (this.model.get("maxScale") < scale || this.model.get("minScale") > scale)) {
             this.addDisableClass();
@@ -113,7 +116,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes toggleIsSelected in the model
      * @returns {void}
      */
     toggleIsSelected: function () {
@@ -124,7 +127,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes setIsSettingVisible and setIsSelected in the model
+     * removes the element
      * @returns {void}
      */
     removeFromSelection: function () {
@@ -133,7 +137,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Init the LayerInformation window and inits the highlighting of the informationIcon.
      * @returns {void}
      */
     showLayerInformation: function () {
@@ -144,7 +148,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes toggleIsSettingVisible in the model
      * @returns {void}
      */
     toggleIsSettingVisible: function () {
@@ -152,7 +156,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes moveDown in the model
      * @returns {void}
      */
     moveModelDown: function () {
@@ -160,7 +164,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes moveUp in the model
      * @returns {void}
      */
     moveModelUp: function () {
