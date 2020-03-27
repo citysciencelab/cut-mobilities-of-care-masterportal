@@ -60,21 +60,26 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
         return styleObject;
     },
-    createLegendStyle: function (name, wfsURL, version) {
-        this.getGeometryTypeFromWFS(wfsURL, version);
+
+    /**
+     * Starts the process to create a legend style
+     * @param   {String} wfsURL url from layer
+     * @param   {String} version wfs version from layer
+     * @param   {String} featureType wfs feature type from layer
+     * @returns {void}
+     */
+    createLegendStyle: function (wfsURL, version, featureType) {
+        this.getGeometryTypeFromWFS(wfsURL, version, featureType);
     },
 
-    createLegendInfo: function (geometryType) {
-        const rules = this.get("rules");
-        let styleObject;
-
-        geometryType.forEach(geom => rules.forEach(rule => {
-            styleObject = this.getSimpleGeometryStyle(geom, "", rule, false);
-            this.addLegendInfo(geom, styleObject, rule);
-        }));
-    },
-
-    getGeometryTypeFromWFS: function (wfsURL, version) {
+    /**
+     * Requests the DescribeFeatureType of the wfs layer and starts the function to parse the xml and creates the legend info
+     * @param   {String} wfsURL url from layer
+     * @param   {String} version wfs version from layer
+     * @param   {String} featureType wfs feature type from layer
+     * @returns {void}
+     */
+    getGeometryTypeFromWFS: function (wfsURL, version, featureType) {
         const url = new URL(wfsURL),
             params = {
                 "SERVICE": "WFS",
@@ -88,7 +93,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             .then(response => response.text())
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
             .then(responseXML => {
-                this.createLegendInfo(this.parseXmlToObject(responseXML));
+                this.createLegendInfo(this.parseXmlForGeometryType(responseXML, featureType));
             })
             .catch(error => {
                 console.warn("The fetch of the data failed with the following error message: " + error);
@@ -100,22 +105,66 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             });
     },
 
-    parseXmlToObject: function (xml) {
-        const element = xml.getElementsByTagName("element"),
-            geometryType = [];
+    /**
+     * Parses the xml to get the geometry types of the layer
+     * @param   {String} xml response xml
+     * @param   {String} featureType wfs feature type from layer
+     * @returns {Array} geometry types of the layer
+     */
+    parseXmlForGeometryType: function (xml, featureType) {
+        const elements = Array.from(xml.getElementsByTagName("element"));
+        let geometryType = [];
 
-        for (let i = 0; i < element.length; i++) {
-            const typeAttribute = element[i].getAttribute("type");
+        elements.forEach(element => {
+            if (element.getAttribute("name") === featureType) {
+                const subElements = Array.from(element.getElementsByTagName("element"));
+
+                geometryType = this.getTypeAttributesfromSubelements(subElements);
+            }
+        });
+        return geometryType;
+    },
+
+    /**
+     * Parses the geometry types from the subelements
+     * @param   {Array} subElements xml subelements
+     * @returns {Array} geometry types of the layer
+     */
+    getTypeAttributesfromSubelements: function (subElements) {
+        const geometryType = [];
+
+        subElements.forEach(ele => {
+            const typeAttribute = ele.getAttribute("type");
             let geomType;
 
             if (typeAttribute && typeAttribute.includes("gml")) {
                 geomType = typeAttribute.split("gml:")[1].replace("PropertyType", "");
+                if (geomType === "Geometry") {
+                    geometryType.push("Point");
+                    geometryType.push("Polygon");
+                    geometryType.push("LineString");
+                }
+                else {
+                    geometryType.push(geomType);
+                }
             }
-            if (geomType && !geometryType.includes(geomType)) {
-                geometryType.push(geomType);
-            }
-        }
+        });
         return geometryType;
+    },
+
+    /**
+     * Creates the style objects for the layer
+     * @param   {Array} geometryType Array of geometry types
+     * @returns {void}
+     */
+    createLegendInfo: function (geometryType) {
+        const rules = this.get("rules");
+        let styleObject;
+
+        geometryType.forEach(geom => rules.forEach(rule => {
+            styleObject = this.getSimpleGeometryStyle(geom, "", rule, false);
+            this.addLegendInfo(geom, styleObject, rule);
+        }));
     },
 
     /**

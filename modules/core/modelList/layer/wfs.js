@@ -246,7 +246,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
             if (!_.isUndefined(style)) {
-                style.createLegendStyle(this.get("name"), this.get("url"), this.get("version"));
+                style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
