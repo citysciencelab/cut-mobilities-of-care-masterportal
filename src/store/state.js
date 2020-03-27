@@ -1,6 +1,8 @@
-import {isMobile} from "./lib";
+import {isMobile, getMasterPortalVersionNumber} from "./lib";
 
 export default {
+    masterPortalVersionNumber: getMasterPortalVersionNumber(),
     configJson: null,
+    configJs: null,
     mobile: isMobile()
 };

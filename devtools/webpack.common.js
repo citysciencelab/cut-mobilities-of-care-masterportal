@@ -134,6 +134,14 @@ module.exports = function () {
                             js: "babel-loader?presets[]=env"
                         }
                     }
+                },
+                {
+                    test: /\.(png|jpe?g|gif)$/i,
+                    use: [
+                        {
+                            loader: "file-loader"
+                        }
+                    ]
                 }
             ]
         },

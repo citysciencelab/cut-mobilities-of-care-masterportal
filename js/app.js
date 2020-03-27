@@ -23,7 +23,7 @@ import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
 import LayerinformationModel from "../modules/layerInformation/model";
-import FooterView from "../modules/footer/view";
+// import FooterView from "../modules/footer/view";
 import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
@@ -118,6 +118,7 @@ function loadApp () {
 
     Vue.config.productionTip = false;
     app = new Vue({
+        el: "#vue-root",
         name: "VueApp",
         render: h => h(App),
         store
@@ -170,7 +171,7 @@ function loadApp () {
     new LayerinformationModel(layerInformationModelSettings);
 
     if (Config.hasOwnProperty("footer")) {
-        new FooterView(Config.footer);
+        // new FooterView(Config.footer);
     }
 
     if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {

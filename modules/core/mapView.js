@@ -1,12 +1,13 @@
 import {Projection} from "ol/proj.js";
 import defaults from "masterportalAPI/src/defaults";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
+import store from "../../src/store";
 
 const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     defaults: {
         background: "",
         units: "m",
-        DOTS_PER_INCH: $("#dpidiv").outerWidth()
+        DOTS_PER_INCH: store.getters.dpi || 96 // TODO remove default when VueX Map Module is merged in
     },
 
     /**

@@ -312,8 +312,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {integer} div height
      */
     getDropdownHeight: function () {
-        if (document.getElementsByClassName("masterportal-container").length > 0) {
-            return document.getElementsByClassName("masterportal-container")[0].offsetHeight - 130;
+        if (document.getElementById("vue-app")) {
+            return document.getElementById("vue-app").offsetHeight - 130;
         }
         return 100;
     },

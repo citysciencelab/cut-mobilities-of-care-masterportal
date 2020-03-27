@@ -182,7 +182,7 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      */
     toggleBackdrop: function (isMobile, isVisible) {
         if (isMobile && isVisible) {
-            $(".masterportal-container").append("<div class='backdrop'></div>");
+            $("#vue-app").append("<div class='backdrop'></div>");
         }
         else {
             $(".backdrop").remove();

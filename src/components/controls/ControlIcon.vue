@@ -43,7 +43,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../theme.less";
+    @import "../../variables.less";
 
     .control-icon {
         display: block;

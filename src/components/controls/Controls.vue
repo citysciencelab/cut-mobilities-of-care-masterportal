@@ -46,9 +46,6 @@ export default {
             return categorizedControls;
         }
     },
-    mounted () {
-        document.getElementById("map").appendChild(this.$el);
-    },
     methods: {
         /*
         * @param {String} componentName name of the control as noted in config.json
@@ -109,7 +106,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../theme.less";
+    @import "../../variables.less";
 
     .hidden {
         display: none;
@@ -117,19 +114,15 @@ export default {
 
     .right-bar {
         pointer-events: none;
-        position: absolute;
+
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: calc(100% - 35px);
-        max-height: calc(100% - 35px);
         /* Issue: While this does scroll, it will also hide the attributions flyout */
         /* overflow-y: scroll; */
 
-        right: 0px;
         padding: 5px;
         margin: 5px;
-        z-index: 1;
 
         .spaced {
             margin-bottom: 1em;
@@ -145,6 +138,5 @@ export default {
         pointer-events: all;
         left: 0px;
         bottom: 20px;
-        z-index: 1;
     }
 </style>

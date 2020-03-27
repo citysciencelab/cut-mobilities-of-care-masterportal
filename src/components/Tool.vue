@@ -34,7 +34,7 @@ export default {
                 $(".backdrop").remove();
             }
             else if (!this.renderToWindow && Radio.request("Util", "isViewMobile")) {
-                $(".masterportal-container").append("<div class='backdrop'></div>");
+                $("#vue-app").append("<div class='backdrop'></div>");
             }
             this.updateMap();
         }
