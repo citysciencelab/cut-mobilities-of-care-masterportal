@@ -569,7 +569,7 @@
       {
         "id": "47",
         "styleId": "47",
-        "mouseHoverField": ["beginn", "ende"],
+        "mouseHoverField": ["baubeginn", "bauende"],
         "autoRefresh": 6000
       },
       {
