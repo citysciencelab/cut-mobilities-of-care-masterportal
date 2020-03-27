@@ -22,7 +22,7 @@
         </li>
     </ul>
     <div class="tab-content">
-        <div id="infos" class="tab-pane fade in active">
+        <div id="infos" class="infos tab-pane fade in active">
             <div class="padded">
                 <table class="table table-hover table-striped">
                     <tbody>
@@ -78,7 +78,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="day" class="tab-pane fade">
+        <div id="day" class="graph tab-pane fade">
             <div id="dayDateSelector" class="dateSelector">
                 <div class="input-group">
                     <input id="dayDateInput" type="text" class="form-control dpinput" placeholder="Datum">
@@ -93,7 +93,7 @@
                 <div class="graph-tooltip-div graph-tooltip-div-day_<%= themeId %>"></div>
             </div>
         </div>
-        <div id="week" class="tab-pane fade">
+        <div id="week" class="graph tab-pane fade">
             <div id="weekDateSelector" class="dateSelector">
                 <div class="input-group">
                     <input id="weekDateInput" type="text" class="form-control dpinput" placeholder="Datum">
@@ -108,7 +108,7 @@
                 <div class="graph-tooltip-div graph-tooltip-div-week_<%= themeId %>"></div>
             </div>
         </div>
-        <div id="year" class="tab-pane fade">
+        <div id="year" class="graph tab-pane fade">
             <div id="yearDateSelector" class="dateSelector">
                 <div class="input-group">
                     <input id="yearDateInput" type="text" class="form-control dpinput" placeholder="Datum">
@@ -118,9 +118,9 @@
                         </button>
                     </span>
                 </div>
-                <div class="trafficCountDiagramYear_<%= themeId %> padded" style="position:relative;">
-                    <div class="graph-tooltip-div graph-tooltip-div-year_<%= themeId %>"></div>
-                </div>
+            </div>
+            <div class="trafficCountDiagramYear_<%= themeId %> padded" style="position:relative;">
+                <div class="graph-tooltip-div graph-tooltip-div-year_<%= themeId %>"></div>
             </div>
         </div>
     </div>

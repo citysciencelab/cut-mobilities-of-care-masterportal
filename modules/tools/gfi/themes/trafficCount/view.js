@@ -61,7 +61,27 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
     toggleTab: function (evt) {
         const value = $(evt.target).parent().attr("value");
 
+        this.resize();
         this.model.toggleTab(value);
+    },
+
+    /**
+     * Detached gfi are opened on the right side so a resize might throw them out of of the map view. This method pulls the left coordinate to fit the gfi on the screen.
+     * @fires Core#RadioRequestUtilIsViewMobile
+     * @returns {void}
+     */
+    resize: function () {
+        if (this.gfiWindow === "detached" && !Radio.request("Util", "isViewMobile")) {
+            const gfiWidth = this.$el.width(),
+                mapWidth = $("#map").width() - 40,
+                gfiLeft = parseInt(this.$el.offsetParent().css("left"), 10),
+                gfiRight = gfiLeft + gfiWidth,
+                newLeft = gfiLeft - (gfiRight - mapWidth);
+
+            if (gfiRight > mapWidth) {
+                this.$el.offsetParent().css("left", newLeft + "px");
+            }
+        }
     },
 
     /**

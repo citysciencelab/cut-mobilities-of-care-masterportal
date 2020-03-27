@@ -4,7 +4,6 @@
 @color_blue: #337ab7;
 
 .trafficCount {
-    width: 320px;
     background-color: @color_background;
     .row {
         margin: 0px;
@@ -15,44 +14,52 @@
         padding-bottom: 10px;
     }
     .tab-content {
-        div[class^="trafficCountDiagram"] {
-            .dot {
-                cursor: pointer;
-                stroke: none;
-                fill: @color_blue;
-            }
-
-            .line {
-                stroke: @color_blue;
-                fill: none;
-                stroke-width: 1;
-            }
+        .infos {
+            width: 320px;
         }
-        .graph-tooltip-div {
-            display: inline-block;
-            position: absolute;
-            color: @color_tooltip;
-            padding: 2px;
-            border: 2px solid @color_tooltipborder;
-            text-align: center;
-            left: -200px;
+        .graph {
+            width: 580px;
+            min-height: 285px;
+            div[class^="trafficCountDiagram"] {
+                .dot {
+                    cursor: pointer;
+                    stroke: none;
+                    fill: @color_blue;
+                }
+
+                .line {
+                    stroke: @color_blue;
+                    fill: none;
+                    stroke-width: 1;
+                }
+            }
+            .graph-tooltip-div {
+                display: inline-block;
+                position: absolute;
+                color: @color_tooltip;
+                padding: 2px;
+                border: 2px solid @color_tooltipborder;
+                text-align: center;
+                left: -200px;
+            }
+            .dateSelector {
+                width: 230px;
+                float: right;
+                margin-right: 30px;
+                margin-top: -45px;
+                .dpinput {
+                    text-align: center;
+                    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+                    height: 35px;
+                }
+                button {
+                    height: 35px;
+                }
+            }
         }
         .padded {
             padding-left: 5px;
             padding-right: 5px;
-        }
-        .dateSelector {
-            width: 230px;
-            float: right;
-            margin-right: 70px;
-            .dpinput {
-                text-align: center;
-                font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
-                height: 35px;
-            }
-            button {
-                height: 35px;
-            }
         }
     }
 }
