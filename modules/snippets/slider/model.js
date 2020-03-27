@@ -130,7 +130,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
      * Parse strings into numbers if necessary
-     * @param  {string[]} valueList valueList
+     * @param  {string[]} [valueList=[]] valueList
      * @return {number[]} parsedValueList
      */
     parseValues: function (valueList = []) {
@@ -264,7 +264,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      * @param {number} [max=99999] - Max value in range.
      * @returns {boolean} isInrange - Are all values in range.
      */
-    areAllValuesInRange: function (values = [], min = 0, max = 99999) {
+    checkAreAllValuesInRange: function (values = [], min = 0, max = 99999) {
         let allValuesInRange = true;
 
         values.forEach(value => {
