@@ -55,7 +55,9 @@
     "time": "Zeit",
     "modules": {
         "language": {
-            "languageTitle": "Bitte wählen Sie eine Sprache aus"
+            "languageTitle": "Bitte wählen Sie eine Sprache aus",
+            "de": "Deutsch",
+            "en": "Englisch"
         },
         "quickHelp": {
             "titleTag": "Hilfe öffnen",
@@ -199,6 +201,7 @@
                 "generateReport": "Bericht erzeugen"
             },
             "getCoord": {
+                "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
                     "eastingLabel": "Länge",

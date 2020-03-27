@@ -86,18 +86,6 @@ module.exports = function () {
         },
         module: {
             rules: [
-                {
-                    test: require.resolve("vue-params"),
-                    use: {
-                        loader: "imports-loader?define=>false"
-                    }
-                },
-                {
-                    test: require.resolve("vue-i18next"),
-                    use: {
-                        loader: "imports-loader?define=>false"
-                    }
-                },
                 // ignore all files ending with ".test.js".
                 {
                     test: /\.test\.js$/,

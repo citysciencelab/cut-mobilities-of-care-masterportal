@@ -13,8 +13,7 @@ export default {
         return {
             coordinatesEastingField: "",
             coordinatesNorthingField: "",
-            storePath: this.$store.state.Tools.SupplyCoord,
-            localePath: "modules.tools.getCoord"
+            storePath: this.$store.state.Tools.SupplyCoord
         };
     },
     computed: {
@@ -221,18 +220,17 @@ export default {
             }
         },
         label (key) {
-            return [this.localePath, this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian", key].join(".");
+            const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
+
+            return "modules.tools.getCoord." + type + "." + key;
         }
     }
 };
 </script>
 
 <template lang="html">
-    <!-- TODO: Translation of the entry in the menu is not implemented yet
-         TODO: Statt localePath lieber den String direkt -> und nicht mehr joinen
-        -->
     <Tool
-        :title="$t([localePath, 'title'].join('.'))"
+        :title="$t('modules.tools.getCoord.title')"
         :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
@@ -247,7 +245,7 @@ export default {
                     <label
                         for="coordSystemField"
                         class="col-md-5 col-sm-5 control-label"
-                    >{{ $t([localePath, "coordSystemField"].join(".")) }}</label>
+                    >{{ $t("modules.tools.getCoord.coordSystemField") }}</label>
                     <div class="col-md-7 col-sm-7">
                         <select
                             id="coordSystemField"

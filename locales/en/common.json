@@ -55,7 +55,9 @@
     "time": "Time",
     "modules": {
         "language": {
-            "languageTitle": "Please choose a language"
+            "languageTitle": "Please choose a language",
+            "de": "German",
+            "en": "English"
         },
         "quickHelp": {
             "titleTag": "Open help",
@@ -199,10 +201,11 @@
                 "generateReport": "Generate report"
             },
             "getCoord": {
+                "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
                 "hdms": {
                     "eastingLabel": "Longitude",
-                    "northingLabel": "Altitude"
+                    "northingLabel": "Latitude"
                 },
                 "cartesian": {
                     "eastingLabel": "Easting",

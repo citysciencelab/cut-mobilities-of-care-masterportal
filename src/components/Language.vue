@@ -3,27 +3,15 @@ export default {
     name: "Language",
     data () {
         return {
-            activeCode: "",
-            languageCodes: {},
-            showWindow: false,
-            localePath: "modules.language"
+            showWindow: false
         };
     },
     mounted () {
         document.getElementsByTagName("body")[0].appendChild(this.$el);
-        // this.translate(i18next.language);
     },
     methods: {
         translate (language) {
-            // this.$i18n.locale = locale;
-            /* this.$root.$emit("translate", {
-                locale: locale
-            });*/
-            i18next.language = language;
-            /* this.activeCode = language;
-            i18next.whitelist.forEach(code => {
-                this.languageCodes[code] = Vue.t([this.localePath, code].join("."));
-            });*/
+            i18next.changeLanguage(language);
         },
         languageWindow () {
             this.showWindow = !this.showWindow;
@@ -40,7 +28,7 @@ export default {
             class="current-language"
             @click="languageWindow"
         >
-            {{ i18next.language }}
+            {{ this.$i18n.i18next.language }}
         </a>
         <div
             v-if="showWindow"
@@ -49,29 +37,29 @@ export default {
             <div class="language-header">
                 <label
                     for="language-header"
-                >{{ $t([localePath, "languageTitle"].join(".")) }}</label>
+                >{{ $t("modules.language.languageTitle") }}</label>
                 <a
                     class="buttons pull-right"
                     @click="languageWindow"
                 >
                     <span
                         class="glyphicon glyphicon-remove"
-                        :title="$t(['button', 'close'].join('.'))"
+                        :title="$t('button.close')"
                     />
                 </a>
             </div>
             <div class="form-group form-group-sm">
                 <div
-                    v-for="(value, key) in i18next.whitelist"
+                    v-for="(value, key) in $i18n.i18next.options.getLanguages()"
                     :key="key"
                     class="col-lg-6 col-md-6 col-sm-6 col-xs-12"
                 >
                     <button
                         class="lng btn"
-                        :disabled="key === i18next.language"
+                        :disabled="key === $i18n.i18next.language"
                         @click="translate(key)"
                     >
-                        {{ value }}
+                        {{ $t("modules.language." + key) }}
                     </button>
                 </div>
             </div>

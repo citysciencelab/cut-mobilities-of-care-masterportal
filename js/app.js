@@ -1,9 +1,7 @@
 import Vue from "vue";
-import VueParams from "vue-params";
-import VueI18Next from "vue-i18next";
+import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
 import store from "../src/store";
-import {makeI18n}  from "../src/i18n";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -97,9 +95,8 @@ function loadApp () {
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
         /* eslint-disable no-undef */
-    let app = {};
-
-    // TODO: Warum funktioniert das nicht einfach VueParams und VueI18Next zu laden? --> Typedef fehlt oder so
+    let app = {},
+        i18n;
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -122,8 +119,9 @@ function loadApp () {
     }
 
     Vue.config.productionTip = false;
-    Vue.use(VueParams);
     Vue.use(VueI18Next);
+
+    i18n = new VueI18Next(i18next);
 
     store.commit("addConfigJsToStore", Config);
 
@@ -131,11 +129,8 @@ function loadApp () {
         name: "VueApp",
         render: h => h(App),
         store,
-        i18next
+        i18n
     });
-    // i18n: makeI18n(store)
-
-    Vue.params.i18nextLanguage = i18next.language;
 
     app.$mount();
 
