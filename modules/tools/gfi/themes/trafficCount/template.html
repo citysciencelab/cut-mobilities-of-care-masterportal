@@ -69,14 +69,6 @@
                     </tbody>
                 </table>
             </div>
-            <table class="table table-striped">
-                <tbody>
-                    <tr colspan = "2">
-                        <td class="bold">letzte Aktualisierung:</td>
-                        <td class="text-right"><span id="lastUpdate"><%= lastUpdate %></span></td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
         <div id="day" class="graph tab-pane fade">
             <div id="dayDateSelector" class="dateSelector">
@@ -122,6 +114,16 @@
             <div class="trafficCountDiagramYear_<%= themeId %> padded" style="position:relative;">
                 <div class="graph-tooltip-div graph-tooltip-div-year_<%= themeId %>"></div>
             </div>
+        </div>
+        <div class="tab-bottom infos">
+            <table class="table table-striped">
+                <tbody>
+                <tr colspan = "2">
+                    <td class="bold">letzte Aktualisierung:</td>
+                    <td class="text-right"><span id="lastUpdate"><%= lastUpdate %></span></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

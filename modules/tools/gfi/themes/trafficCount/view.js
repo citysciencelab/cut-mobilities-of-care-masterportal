@@ -62,6 +62,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         const value = $(evt.target).parent().attr("value");
 
         this.resize();
+        this.setCurrentTabClassFooter(value);
         this.model.toggleTab(value);
     },
 
@@ -82,6 +83,15 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
                 this.$el.offsetParent().css("left", newLeft + "px");
             }
         }
+    },
+
+    /**
+     * adding the class dynamically into the bottom for current tab
+     * @param   {String} value element value
+     * @returns {Void}  -
+     */
+    setCurrentTabClassFooter: function (value) {
+        this.$el.find(".tab-bottom").removeClass().addClass("tab-bottom " + value);
     },
 
     /**

@@ -62,4 +62,46 @@
             padding-right: 5px;
         }
     }
+    .tab-bottom {
+        padding: 0 5px;
+        &:not(.infos) {
+            display: inline-block;
+            width: 100%;
+            .table-striped {
+                min-width: 280px;
+                width: 50%;
+                float: right;
+                tbody {
+                    tr {
+                        &:nth-of-type(odd){
+                            background-color: @color_background;
+                        }
+                        td {
+                            border-top: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @media (max-width: 580px) {
+        .col-sm-offset-3 {
+            margin-left: calc(50% - 100px);
+        }
+        .tab-content {
+            .infos {
+                width: 100%;
+            }
+            .graph {
+                width: 100%;
+                .dateSelector {
+                    width: 100%;
+                    padding: 0 10px;
+                    margin-top: 10px;
+                    margin-right: 0px;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
 }
