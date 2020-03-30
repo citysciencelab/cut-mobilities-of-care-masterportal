@@ -196,7 +196,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * @fires Core.ModelList#RadioTriggerModelListToggleDefaultTool
      * @return {void}
      */
-    hide: function () {
+    hide: function (event) {
         const toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
 
         // Dont let event bubble to .header element which would trigger maximize again!
