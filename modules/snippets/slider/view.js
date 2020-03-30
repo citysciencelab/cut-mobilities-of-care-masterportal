@@ -156,31 +156,11 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
      * @returns {void}
      */
     changeSizeOfInputFiled: function (className, value) {
-        const padding = parseInt(this.$(".form-control").css("padding").split("px")[1], 10),
-            fontSize = parseInt(this.$(".form-control").css("font-size").split("px")[0], 10),
-            buffer = 3,
-            targetClass = this.chooseInputFiled(className);
-        let defaultWidth = this.model.get("defaultWidth"),
-            width = padding + fontSize + buffer;
+        const targetClass = this.chooseInputFiled(className),
+            buffer = 7,
+            inputField = this.$(targetClass);
 
-        // get the default width for input field
-        if (defaultWidth === undefined) {
-            defaultWidth = parseInt(this.$(".form-control").css("width").split("px")[0], 10);
-            this.model.setDefaultWidth(defaultWidth);
-        }
-
-        // add a temporary span to get width from input text
-        this.$(".form-inline").append("<span class='hiddenSpan'>" + value + "</span>");
-        this.$(".hiddenSpan").text(this.$(targetClass).val());
-        width = this.$(".hiddenSpan").width() + width;
-
-        if (width > defaultWidth) {
-            this.$(targetClass).css("width", width + "px");
-        }
-        else {
-            this.$(targetClass).css("width", defaultWidth + "px");
-        }
-        this.$(".hiddenSpan").remove();
+        inputField.css("width", (inputField.val().length + buffer) + "ch");
     },
 
     /**
