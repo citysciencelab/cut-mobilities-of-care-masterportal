@@ -49,7 +49,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             styleObject = this.getGeometryStyle(feature, rules, isClustered);
 
         // label style is optional and depends on some fields
-        if (isClustered || hasLabelField) {
+        if (isClustered || (hasLabelField && feature.getProperties()[style.labelField])) {
             if (Array.isArray(styleObject)) {
                 styleObject[0].setText(this.getLabelStyle(feature, style, isClustered));
             }
