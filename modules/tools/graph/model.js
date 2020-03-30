@@ -460,8 +460,13 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      */
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue) {
         const dat = data.filter(function (obj) {
-            return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
-        });
+                return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
+            }),
+            // event.layerX / event.offsetX differ in FF and Chrome. Thats why we must adjust this here.
+            isChrome = Radio.request("Util", "isChrome"),
+            chromeOffsetX = isChrome ? 0 : 70,
+            chromeOffsetY = isChrome ? -35 : -15;
+
         let yAttributeToShow;
 
         svg.select(".graph-diagram").selectAll("points")
@@ -505,8 +510,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                     .style("opacity", 0.9);
                 tooltipDiv.html(yAttributeToShow)
                     .attr("style", "background-color: buttonface; border-radius: 4px; text-align: center;")
-                    .style("left", (event.layerX - 0) + "px")
-                    .style("top", (event.layerY - 35) + "px");
+                    .style("left", (event.layerX + chromeOffsetX) + "px")
+                    .style("top", (event.layerY + chromeOffsetY) + "px");
             }, tooltipDiv)
             .on("mouseout", function () {
                 tooltipDiv.transition()
@@ -529,8 +534,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                     .style("opacity", 0.9);
                 tooltipDiv.html(yAttributeToShow)
                     .attr("style", "background-color: buttonface; border-radius: 4px;")
-                    .style("left", (event.layerX - 0) + "px")
-                    .style("top", (event.layerY - 35) + "px");
+                    .style("left", (event.layerX + chromeOffsetX) + "px")
+                    .style("top", (event.layerY + chromeOffsetY) + "px");
             }, tooltipDiv);
     },
 
