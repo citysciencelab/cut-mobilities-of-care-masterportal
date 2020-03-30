@@ -93,7 +93,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             .then(response => response.text())
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
             .then(responseXML => {
-                this.createLegendInfo(this.parseXmlForGeometryType(responseXML, featureType));
+                const subElements = this.getSubelementsFromXML(responseXML, featureType),
+                    geometryTypes = this.getTypeAttributesFromSubelements(subElements);
+
+                this.createLegendInfo(geometryTypes);
             })
             .catch(error => {
                 console.warn("The fetch of the data failed with the following error message: " + error);
@@ -106,23 +109,21 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Parses the xml to get the geometry types of the layer
+     * Parses the xml to get the subelments from the layer
      * @param   {String} xml response xml
      * @param   {String} featureType wfs feature type from layer
-     * @returns {Array} geometry types of the layer
+     * @returns {Array} subElements of the xml element
      */
-    parseXmlForGeometryType: function (xml, featureType) {
-        const elements = Array.from(xml.getElementsByTagName("element"));
-        let geometryType = [];
+    getSubelementsFromXML: function (xml, featureType) {
+        const elements = xml ? Array.from(xml.getElementsByTagName("element")) : [];
+        let subElements = [];
 
         elements.forEach(element => {
             if (element.getAttribute("name") === featureType) {
-                const subElements = Array.from(element.getElementsByTagName("element"));
-
-                geometryType = this.getTypeAttributesfromSubelements(subElements);
+                subElements = Array.from(element.getElementsByTagName("element"));
             }
         });
-        return geometryType;
+        return subElements;
     },
 
     /**
@@ -130,10 +131,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @param   {Array} subElements xml subelements
      * @returns {Array} geometry types of the layer
      */
-    getTypeAttributesfromSubelements: function (subElements) {
-        const geometryType = [];
+    getTypeAttributesFromSubelements: function (subElements) {
+        const subElementsArray = subElements ? subElements : [],
+            geometryType = [];
 
-        subElements.forEach(ele => {
+        subElementsArray.forEach(ele => {
             const typeAttribute = ele.getAttribute("type");
             let geomType;
 
