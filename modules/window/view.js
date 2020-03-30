@@ -194,6 +194,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * Hides the Window.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Core.ModelList#RadioTriggerModelListToggleDefaultTool
+     * @param {event} event - Event
      * @return {void}
      */
     hide: function (event) {
