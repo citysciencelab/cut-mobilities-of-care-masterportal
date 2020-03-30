@@ -3,6 +3,10 @@ import MainNav from "./components/MainNav.vue";
 import MapRegion from "./components/MapRegion.vue";
 import Loader from "./components/Loader.vue";
 import Popup from "./components/Popup.vue";
+import Alerting from "./components/Alerting.vue";
+import SupplyCoord from "./components/SupplyCoord.vue";
+import MapModuleDebug from "./store/modules/map/MapModuleDebug.vue";
+import isDevMode from "./utils/isDevMode";
 
 export default {
     name: "App",
@@ -10,8 +14,12 @@ export default {
         MainNav,
         MapRegion,
         Loader,
-        Popup
-    }
+        Popup,
+        Alerting,
+        SupplyCoord,
+        MapModuleDebug
+    },
+    data: () => ({isDevMode})
 };
 </script>
 
@@ -23,6 +31,9 @@ export default {
         <!-- elements below this line must be positioned absolutely -->
         <Loader />
         <Popup />
+        <Alerting />
+        <SupplyCoord />
+        <MapModuleDebug v-if="isDevMode" />
     </div>
 </template>
 

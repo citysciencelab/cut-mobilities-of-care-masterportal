@@ -1,6 +1,6 @@
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 import ControlIcon from "../ControlIcon.vue";
 
 export default {
@@ -22,7 +22,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations("Map", ["setZoomLevel"])
+        ...mapActions("Map", ["setZoomLevel"])
     }
 };
 </script>

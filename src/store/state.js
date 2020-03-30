@@ -1,8 +1,15 @@
-import {isMobile, getMasterPortalVersionNumber} from "./lib";
+import isMobile from "../utils/isMobile";
+import getDpi from "../utils/getDpi";
+import isDevMode from "../utils/isDevMode";
+import masterPortalVersionNumber from "../utils/masterPortalVersionNumber";
 
-export default {
-    masterPortalVersionNumber: getMasterPortalVersionNumber(),
+const state = {
     configJson: null,
     configJs: null,
-    mobile: isMobile()
+    mobile: isMobile(), // resize update in ./index.js
+    dpi: getDpi(),
+    masterPortalVersionNumber,
+    isDevMode
 };
+
+export default state;

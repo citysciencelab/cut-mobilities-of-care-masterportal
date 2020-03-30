@@ -681,7 +681,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     setMap: function (value) {
         this.set("map", value);
-        Store.commit("Map/setMap", value);
+        Store.dispatch("Map/setMap", {map: value});
     }
 
 });
