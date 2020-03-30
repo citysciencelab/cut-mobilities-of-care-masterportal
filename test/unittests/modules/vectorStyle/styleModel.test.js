@@ -508,7 +508,7 @@ describe("vectorStyleModel", function () {
         });
     });
 
-    describe("getSublementsFromXML", function () {
+    describe("getSubelementsFromXML", function () {
         const featureType = "staatliche_schulen";
 
         it("should return an Array with elements", function () {
@@ -518,13 +518,7 @@ describe("vectorStyleModel", function () {
             expect(styleModel.getSubelementsFromXML(undefined, featureType)).to.be.an("array").to.be.empty;
         });
         it("should return an empty Array", function () {
-            expect(styleModel.getSubelementsFromXML(null, featureType)).to.be.an("array").to.be.empty;
-        });
-        it("should return an empty Array", function () {
             expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, undefined)).to.be.an("array").to.be.empty;
-        });
-        it("should return an empty Array", function () {
-            expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, null)).to.be.an("array").to.be.empty;
         });
     });
     describe("getTypeAttributesFromSubelements", function () {
@@ -536,9 +530,6 @@ describe("vectorStyleModel", function () {
         });
         it("should return an empty Array", function () {
             expect(styleModel.getTypeAttributesFromSubelements(undefined)).to.be.an("array").to.be.empty;
-        });
-        it("should return an empty Array", function () {
-            expect(styleModel.getTypeAttributesFromSubelements(null)).to.be.an("array").to.be.empty;
         });
     });
 });

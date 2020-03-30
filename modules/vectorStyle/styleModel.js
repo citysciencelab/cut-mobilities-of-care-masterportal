@@ -62,21 +62,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Starts the process to create a legend style
-     * @param   {String} wfsURL url from layer
-     * @param   {String} version wfs version from layer
-     * @param   {String} featureType wfs feature type from layer
-     * @returns {void}
-     */
-    createLegendStyle: function (wfsURL, version, featureType) {
-        this.getGeometryTypeFromWFS(wfsURL, version, featureType);
-    },
-
-    /**
      * Requests the DescribeFeatureType of the wfs layer and starts the function to parse the xml and creates the legend info
-     * @param   {String} wfsURL url from layer
-     * @param   {String} version wfs version from layer
-     * @param   {String} featureType wfs feature type from layer
+     * @param   {string} wfsURL url from layer
+     * @param   {string} version wfs version from layer
+     * @param   {string} featureType wfs feature type from layer
      * @returns {void}
      */
     getGeometryTypeFromWFS: function (wfsURL, version, featureType) {
@@ -109,10 +98,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Parses the xml to get the subelments from the layer
-     * @param   {String} xml response xml
-     * @param   {String} featureType wfs feature type from layer
-     * @returns {Array} subElements of the xml element
+     * Parses the xml to get the subelements from the layer
+     * @param   {string} xml response xml
+     * @param   {string} featureType wfs feature type from layer
+     * @returns {object[]} subElements of the xml element
      */
     getSubelementsFromXML: function (xml, featureType) {
         const elements = xml ? Array.from(xml.getElementsByTagName("element")) : [];
@@ -128,15 +117,14 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
     /**
      * Parses the geometry types from the subelements
-     * @param   {Array} subElements xml subelements
-     * @returns {Array} geometry types of the layer
+     * @param   {object[]} subElements xml subelements
+     * @returns {string[]} geometry types of the layer
      */
-    getTypeAttributesFromSubelements: function (subElements) {
-        const subElementsArray = subElements ? subElements : [],
-            geometryType = [];
+    getTypeAttributesFromSubelements: function (subElements = []) {
+        const geometryType = [];
 
-        subElementsArray.forEach(ele => {
-            const typeAttribute = ele.getAttribute("type");
+        subElements.forEach(elements => {
+            const typeAttribute = elements.getAttribute("type");
             let geomType;
 
             if (typeAttribute && typeAttribute.includes("gml")) {
@@ -156,15 +144,23 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
     /**
      * Creates the style objects for the layer
-     * @param   {Array} geometryType Array of geometry types
+     * @param   {string[]} geometryType Array of geometry types
      * @returns {void}
      */
     createLegendInfo: function (geometryType) {
         const rules = this.get("rules");
-        let styleObject;
+        let styleObject,
+            simpleGeom;
 
         geometryType.forEach(geom => rules.forEach(rule => {
-            styleObject = this.getSimpleGeometryStyle(geom, "", rule, false);
+            if (geom.includes("Multi")) {
+                simpleGeom = geom.replace("Multi", "");
+                styleObject = this.getMultiGeometryStyle(simpleGeom, "", rule, false);
+
+            }
+            else {
+                styleObject = this.getSimpleGeometryStyle(geom, "", rule, false);
+            }
             this.addLegendInfo(geom, styleObject, rule);
         }));
     },
@@ -253,36 +249,44 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      */
     getMultiGeometryStyle: function (geometryType, feature, rules, isClustered) {
         const olStyle = [];
-        let geometries;
+        let geometries = [];
 
-        if (geometryType === "MultiPoint") {
-            geometries = feature.getGeometry().getPoints();
-        }
-        else if (geometryType === "MultiLineString") {
-            geometries = feature.getGeometry().getLineStrings();
-        }
-        else if (geometryType === "MultiPolygon") {
-            geometries = feature.getGeometry().getPolygons();
-        }
-        else if (geometryType === "GeometryCollection") {
-            geometries = feature.getGeometry().getGeometries();
-        }
-
-        geometries.forEach((geometry, index) => {
-            const geometryTypeSimpleGeom = geometry.getType(),
-                rule = this.getRuleForIndex(rules, index);
-
-            // For simplicity reasons we do not support multi encasulated multi geometries but ignore them.
-            if (this.isMultiGeometry(geometryTypeSimpleGeom)) {
-                console.warn("Multi encapsulated multiGeometries are not supported.");
+        if (typeof feature === "object") {
+            if (geometryType === "MultiPoint") {
+                geometries = feature.getGeometry().getPoints();
             }
-            else if (rule) {
-                const simpleStyle = this.getSimpleGeometryStyle(geometryTypeSimpleGeom, feature, rule, isClustered);
-
-                simpleStyle.setGeometry(geometry);
-                olStyle.push(simpleStyle);
+            else if (geometryType === "MultiLineString") {
+                geometries = feature.getGeometry().getLineStrings();
             }
-        }, this);
+            else if (geometryType === "MultiPolygon") {
+                geometries = feature.getGeometry().getPolygons();
+            }
+            else if (geometryType === "GeometryCollection") {
+                geometries = feature.getGeometry().getGeometries();
+            }
+
+            geometries.forEach((geometry, index) => {
+                const geometryTypeSimpleGeom = geometry.getType(),
+                    rule = this.getRuleForIndex(rules, index);
+
+                // For simplicity reasons we do not support multi encasulated multi geometries but ignore them.
+                if (this.isMultiGeometry(geometryTypeSimpleGeom)) {
+                    console.warn("Multi encapsulated multiGeometries are not supported.");
+                }
+                else if (rule) {
+                    const simpleStyle = this.getSimpleGeometryStyle(geometryTypeSimpleGeom, feature, rule, isClustered);
+
+                    simpleStyle.setGeometry(geometry);
+                    olStyle.push(simpleStyle);
+                }
+            }, this);
+        }
+        else {
+            const simpleStyle = this.getSimpleGeometryStyle(geometryType, feature, rules, isClustered);
+
+            simpleStyle.setGeometry(geometryType);
+            olStyle.push(simpleStyle);
+        }
 
         return olStyle;
     },
