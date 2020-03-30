@@ -88,16 +88,17 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @returns {void}
      */
     zoomTo: function (hit) {
-        // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
-        var resolutions = Radio.request("MapView", "getResolutions"),
-            index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105),
+        // read index in scale 1:1000 as max scale, else highest possible zoomfactor
+        const resolutions = Radio.request("MapView", "getResolutions"),
+            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
+        let zoomLevel = this.model.get("zoomLevel"),
             isMobile,
             coord;
 
-        if (!_.isUndefined(hit.coordinate) && _.isArray(hit.coordinate)) {
+        if (hit.coordinate !== undefined && Array.isArray(hit.coordinate)) {
             coord = hit.coordinate;
         }
-        else if (!_.isUndefined(hit.coordinate) && !_.isArray(hit.coordinate)) {
+        else if (hit.coordinate !== undefined && !Array.isArray(hit.coordinate)) {
             coord = hit.coordinate.split(" ");
         }
 
@@ -112,19 +113,22 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                 break;
             }
             case i18next.t("common:modules.searchbar.type.parcel"): {
-                Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                Radio.trigger("MapView", "setCenter", coord, zoomLevel);
                 this.showMarker(coord);
                 break;
             }
             case i18next.t("common:modules.searchbar.type.address"): {
                 this.showMarker(coord);
-                Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                Radio.trigger("MapView", "setCenter", coord, zoomLevel);
                 break;
             }
             case i18next.t("common:modules.searchbar.type.district"): {
                 if (coord.length === 2) {
                     this.showMarker(coord);
-                    Radio.trigger("MapView", "setCenter", coord.map(singleCoord => parseInt(singleCoord, 10)), this.model.get("zoomLevel"));
+                    if (zoomLevel >= 7) {
+                        zoomLevel = Math.max(Math.floor(zoomLevel / 2), 4);
+                    }
+                    Radio.trigger("MapView", "setCenter", coord.map(singleCoord => parseInt(singleCoord, 10)), zoomLevel);
                 }
                 else if (coord.length > 2) {
                     this.model.setWkt("POLYGON", coord);
@@ -137,13 +141,13 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             case i18next.t("common:modules.searchbar.type.topic"): {
                 isMobile = Radio.request("Util", "isViewMobile");
 
-                // desktop - Themenbaum wird aufgeklappt
+                // desktop - topics tree is expanded
                 if (isMobile === false) {
                     Radio.trigger("ModelList", "showModelInTree", hit.id);
                 }
                 // mobil
                 else {
-                    // Fügt das Model zur Liste hinzu, falls noch nicht vorhanden
+                    // adds the model to list, if not contained
                     Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
                     Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
                 }

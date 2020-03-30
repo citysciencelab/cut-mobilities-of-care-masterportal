@@ -169,9 +169,18 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
         const layersForsearch = [];
 
         layerModelsUniqe.forEach(model => {
+            let metaName;
+
+            if (Array.isArray(model.datasets) && model.datasets.length > 0 && typeof model.datasets[0].md_name === "string") {
+                metaName = model.name + " (" + model.datasets[0].md_name + ")";
+            }
+            else {
+                metaName = model.name;
+            }
+
             layersForsearch.push({
                 name: model.name,
-                metaName: model.hasOwnProperty("datasets") && model.datasets[0].hasOwnProperty("md_name") ? model.name + " (" + model.datasets[0].md_name + ")" : model.name,
+                metaName,
                 type: i18next.t("common:modules.searchbar.type.topic"),
                 glyphicon: "glyphicon-list",
                 id: model.id

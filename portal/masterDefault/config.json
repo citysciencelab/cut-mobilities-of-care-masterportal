@@ -9,12 +9,6 @@
             ],
             "resolution": 5.2916638091682096
         },
-        "portalTitle": {
-            "title": "MasterDefault",
-            "logo": "https://geoportal-hamburg.de/lgv-config/img/hh-logo.png",
-            "link": "https://geoinfo.hamburg.de",
-            "toolTip": "Freie und Hansestadt Hamburg"
-        },
         "searchBar": {
             "minChars": 3,
             "placeholder": "translate#common:modules.searchbar.placeholder.addressTopicParcel",

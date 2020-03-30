@@ -13,7 +13,8 @@ const Config = {
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
             }
-        ]
+        ],
+        showVersion: true
     },
     quickHelp: {
         imgPath: "./ressources/img/"

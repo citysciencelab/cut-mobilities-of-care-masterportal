@@ -114,7 +114,7 @@
         },
         "footer":{
             "designation":"Kartographie und Gestaltung:",
-            "version":"Version",
+            "version":"Masterportal V.",
             "cardDiscrepancy":"Kartenunstimmigkeit"
         },
         "tools": {
@@ -413,6 +413,9 @@
             "selectByPolygon": "Fläche zeichnen",
             "tooltipMessage": "Klicken zum Starten und Beenden",
             "tooltipMessagePolygon": "Klicken um Stützpunkt hinzuzufügen"
+        },
+        "slider": {
+            "outOfRangeErrorMessage": "Der Eingabewert muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!"
         }
     }
 }

@@ -84,7 +84,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "renameKeys": this.renameKeys,
             "renameValues": this.renameValues,
             "pickKeyValuePairs": this.pickKeyValuePairs,
-            "groupBy": this.groupBy
+            "groupBy": this.groupBy,
+            "pick": this.pick,
+            "findWhereJs": this.findWhereJs
         }, this);
 
         channel.on({
@@ -775,8 +777,37 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     decLoaderOverlayCounter: function () {
         this.setLoaderOverlayCounter(this.get("loaderOverlayCounter") - 1);
-    }
+    },
 
+    /**
+     * Return a copy of the object, filtered to only have values for the whitelisted keys
+     * (or array of valid keys).
+     * @param {Object} object - the object.
+     * @param {Number[]} keys - the key(s) to search for.
+     * @returns {Object} - returns the entry/entries with the right key/keys.
+     */
+    pick: function (object, keys) {
+        return keys.reduce((obj, key) => {
+            if (object && object.hasOwnProperty(key)) {
+                obj[key] = object[key];
+            }
+            return obj;
+        }, {});
+    },
+
+    /** Looks through the list and returns the firts value that matches all of the key-value pairs
+     * listed in hitId.
+     * @param {Object[]} [list=[]] - the list.
+     * @param {Object} [findId=""] - the id/entry to search for.
+     * @returns {Object} - returns the first value/entry, that matches.
+     */
+    findWhereJs: function (list = [], findId = "") {
+        return list.find(
+            item => Object.keys({id: findId}).every(
+                key => item[key] === {id: findId}[key]
+            )
+        );
+    }
 });
 
 export default Util;

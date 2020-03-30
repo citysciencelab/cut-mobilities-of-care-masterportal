@@ -114,7 +114,7 @@
         },
         "footer":{
             "designation":"Cartography and design:",
-            "version":"Version",
+            "version":"Masterportal V.",
             "cardDiscrepancy":"Card discrepancy"
         },
         "tools": {
@@ -413,6 +413,9 @@
             "selectByPolygon": "Draw surface",
             "tooltipMessage": "Click to start and exit",
             "tooltipMessagePolygon": "Click to add a point"
+        },
+        "slider": {
+            "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
         }
     }
 }

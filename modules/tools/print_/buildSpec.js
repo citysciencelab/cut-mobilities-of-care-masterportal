@@ -449,18 +449,27 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * Generates the text Style
      * @param {ol.style} style Style of layer.
+     * @see https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html
      * @returns {Object} - Text Style for mapfish print.
      */
     buildTextStyle: function (style) {
+        // There are different kinds of font definitions: One sets size and font and an other sets only the name. Both are used in masterportal.
+        const isFontSizeInFont = style.getFont().split(" ").length === 2 && style.getFont().split(" ")[0].endsWith("px"),
+            textScale = style.getScale() ? style.getScale() : 1,
+            fontSize = isFontSizeInFont ? style.getFont().split(" ")[0] : 10 * textScale,
+            fontFamily = isFontSizeInFont ? style.getFont().split(" ")[1] : style.getFont(),
+            fontColor = style.getFill().getColor();
+
         return {
             type: "text",
             label: style.getText() !== undefined ? style.getText() : "",
-            fontColor: this.rgbArrayToHex(style.getFill().getColor()),
+            fontColor: this.rgbArrayToHex(fontColor),
+            fontOpacity: fontColor.length === 4 ? fontColor[3] : 1,
             labelOutlineColor: style.getStroke() !== null ? this.rgbArrayToHex(style.getStroke().getColor()) : undefined,
             labelXOffset: -style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
-            fontSize: style.getFont().split(" ")[0],
-            fontFamily: style.getFont().split(" ")[1],
+            fontSize: fontSize,
+            fontFamily: fontFamily,
             labelAlign: this.getLabelAlign(style)
         };
     },
@@ -481,6 +490,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         else if (textAlign === "right") {
             // right bottom
             return "rb";
+        }
+        else if (textAlign === "center") {
+            // center middle
+            return "cm";
         }
         // center bottom
         return "cb";
@@ -645,16 +658,22 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {object} GeoJSON object
      */
     convertFeatureToGeoJson: function (feature) {
-        const geojsonFormat = new GeoJSON();
+        const clonedFeature = feature.clone(),
+            geojsonFormat = new GeoJSON();
         let convertedFeature;
 
+        // take over id from feature because the feature id is not set in the clone.
+        clonedFeature.setId(feature.getId());
         // circle is not suppported by geojson
-        if (feature.getGeometry().getType() === "Circle") {
-            feature.setGeometry(fromCircle(feature.getGeometry()));
+        if (clonedFeature.getGeometry().getType() === "Circle") {
+            clonedFeature.setGeometry(fromCircle(clonedFeature.getGeometry()));
         }
-        convertedFeature = geojsonFormat.writeFeatureObject(feature);
 
-        if (feature.getGeometry().getCoordinates().length === 0) {
+        // Removing "Datastreams" attribute because it might overload the server as happened for some sensors.
+        clonedFeature.unset("Datastreams", {silent: true});
+
+        convertedFeature = geojsonFormat.writeFeatureObject(clonedFeature);
+        if (clonedFeature.getGeometry().getCoordinates().length === 0) {
             convertedFeature = undefined;
         }
         return convertedFeature;
