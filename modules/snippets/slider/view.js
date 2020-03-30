@@ -155,7 +155,7 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
      * @param {String} value - value from input field
      * @returns {void}
      */
-    changeSizeOfInputFiled: function (className, value) {
+    changeSizeOfInputFiled: function (className) {
         const targetClass = this.chooseInputFiled(className),
             buffer = 7,
             inputField = this.$(targetClass);
