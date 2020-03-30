@@ -457,12 +457,14 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         const isFontSizeInFont = style.getFont().split(" ").length === 2 && style.getFont().split(" ")[0].endsWith("px"),
             textScale = style.getScale() ? style.getScale() : 1,
             fontSize = isFontSizeInFont ? style.getFont().split(" ")[0] : 10 * textScale,
-            fontFamily = isFontSizeInFont ? style.getFont().split(" ")[1] : style.getFont();
+            fontFamily = isFontSizeInFont ? style.getFont().split(" ")[1] : style.getFont(),
+            fontColor = style.getFill().getColor();
 
         return {
             type: "text",
             label: style.getText() !== undefined ? style.getText() : "",
-            fontColor: this.rgbArrayToHex(style.getFill().getColor()),
+            fontColor: this.rgbArrayToHex(fontColor),
+            fontOpacity: fontColor.length === 4 ? fontColor[3] : 1,
             labelOutlineColor: style.getStroke() !== null ? this.rgbArrayToHex(style.getStroke().getColor()) : undefined,
             labelXOffset: -style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
