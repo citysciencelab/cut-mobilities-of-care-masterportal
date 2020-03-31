@@ -73,14 +73,17 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {void}
      */
     getGeometryTypeFromWFS: function (wfsURL, version, featureType) {
-        const url = new URL(wfsURL),
-            params = {
-                "SERVICE": "WFS",
-                "VERSION": version,
-                "REQUEST": "DescribeFeatureType"
-            };
+        const params = {
+            "SERVICE": "WFS",
+            "VERSION": version,
+            "REQUEST": "DescribeFeatureType"
+        };
+        let url = wfsURL + "?";
 
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+        Object.keys(params).forEach(key => {
+            url += key + "=" + params[key] + "&";
+        });
+        url = url.slice(0, -1);
 
         fetch(url)
             .then(response => response.text())
