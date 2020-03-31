@@ -267,7 +267,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     unhighlightLayerInformationIcon: function () {
         this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
-        this.model.set("layerInfoChecked", false);
+        this.model.setLayerInfoChecked(false);
     }
 });
 
