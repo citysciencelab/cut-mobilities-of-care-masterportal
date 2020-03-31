@@ -64,9 +64,8 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     getWmsHtmlGfi: function (successFunction) {
-
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
+            url: this.get("gfiUrl"),
             context: this,
             success: successFunction,
             error: this.gfiErrorHandler
@@ -118,7 +117,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     getWmsGfi: function (successFunction) {
-        let url = Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
+        let url = this.get("gfiUrl");
 
         url = url.replace(/SLD_BODY=.*?&/, "");
         $.ajax({

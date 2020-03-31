@@ -148,7 +148,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
 
     /**
      * Set uniqueId
-     * @param {number} value - counter for uniqueId 
+     * @param {number} value - counter for uniqueId
      * @returns {void}
      */
     setUniqueId: function (value) {
