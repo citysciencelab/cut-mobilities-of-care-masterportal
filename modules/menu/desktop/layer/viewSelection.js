@@ -235,8 +235,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     highlightLayerInformationIcon: function () {
-        this.model.setLayerInfoChecked(true);
-        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+        if (this.model.get("layerInfoChecked")) {
+            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+        }
     },
 
     /**
