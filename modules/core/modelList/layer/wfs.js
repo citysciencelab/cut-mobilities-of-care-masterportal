@@ -307,7 +307,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @param {Function|Object} style ol style object or style function.
      * @returns {function} - style as function.
      */
-    getStyleAsFunction: function (style) {console.log(1)
+    getStyleAsFunction: function (style) {
         if (style && {}.toString.call(style) === "[object Function]") {
             return style;
         }
