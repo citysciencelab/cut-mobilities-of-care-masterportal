@@ -124,7 +124,7 @@ export function TrafficCountApi (httpHost, sensorThingsVersion, mqttOptions, sen
     }
 
     /**
-     * checks a phenomenonTime for interval, if not phenomenonTime is returned, if so the last part of the interval is returned
+     * checks a phenomenonTime for interval, if not phenomenonTime is returned, if so the first part of the interval is returned
      * @info phenomenonTime could be either "2020-03-16T14:30:01.000Z" or "2020-03-16T14:30:01.000Z/2020-03-16T14:45:00.000Z"
      * @param {String} phenomenonInterval the phenomenonTime either as value or interval (see info)
      * @returns {String} the phenomenonTime
@@ -136,7 +136,8 @@ export function TrafficCountApi (httpHost, sensorThingsVersion, mqttOptions, sen
 
         const phenomenonArray = phenomenonInterval.split("/");
 
-        return phenomenonArray[phenomenonArray.length - 1];
+        // return the first part of the interval
+        return phenomenonArray[0];
     }
 
     /**
@@ -496,8 +497,8 @@ export function TrafficCountApi (httpHost, sensorThingsVersion, mqttOptions, sen
      * @returns {Void}  -
      */
     this.updateDataset = function (thingId, meansOfTransport, interval, from, until, onupdate, onerror, onstart, oncomplete, todayUntilOpt) { // eslint-disable-line
-        const startDate = moment(from + " 00:00:00.000", "YYYY-MM-DD HH:mm:ss.SSS").toISOString(),
-            endDate = moment(until + " 23:59:59.999", "YYYY-MM-DD HH:mm:ss.SSS").toISOString(),
+        const startDate = moment(from, "YYYY-MM-DD").toISOString(),
+            endDate = moment(until, "YYYY-MM-DD").add(1, "day").toISOString(),
             url = baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_" + interval + "';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime le " + endDate + ";$orderby=phenomenonTime asc))",
             meansOfTransportFahrzeuge = "AnzFahrzeuge",
             meansOfTransportSV = "AntSV",

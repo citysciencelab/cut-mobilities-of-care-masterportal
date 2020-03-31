@@ -394,9 +394,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
             interval = this.get("yearInterval"),
-            from = moment(date).format("YYYY-MM-DD"),
+            // subtract 3 days to savely include the first thursday of january into the interval, as the first calendar week always includes the first thursday of january
+            from = moment(date).subtract(3, "days").format("YYYY-MM-DD"),
             year = moment(date).format("YYYY"),
-            until = moment(date).endOf("year").format("YYYY-MM-DD");
+            // add 3 days to savely include the last thursday of december into the interval, as the last calendar week always includes the last thursday of december
+            until = moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD");
 
         api.unsubscribeEverything();
         api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
@@ -426,10 +428,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             unit: " Uhr",
             values: xAxisTickValues
         }, "count", "", "Anzahl / 15 Min.", datetime => {
+            // callbackRenderLegendText
             return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("DD.MM.YYYY");
         }, datetime => {
+            // callbackRenderTextXAxis
             return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm");
         }, (value, dotData) => {
+            // setTooltipValue
             return dotData.hour + " Uhr: " + this.addThousandPoints(value);
         }, emptyDiagramData);
     },
@@ -450,11 +455,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             unit: "",
             values: xAxisTickValues
         }, "count", "", "Anzahl / h", datetime => {
+            // callbackRenderLegendText
             const weeknumber = moment(datetime, "YYYY-MM-DD HH:mm:ss").week(),
                 year = moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
 
             return "KW " + weeknumber + " / " + year;
         }, datetime => {
+            // callbackRenderTextXAxis
             const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss");
 
             if (objMoment.format("H") === "0") {
@@ -463,6 +470,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
             return objMoment.format("dd-HH");
         }, (value, dotData) => {
+            // setTooltipValue
             const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss");
 
             return objMoment.format("DD.MM.YYYY") + ", " + objMoment.format("HH:mm") + " Uhr: " + this.addThousandPoints(value);
@@ -486,9 +494,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             unit: "",
             values: xAxisTickValues
         }, "count", "", "Anzahl / Woche", datetime => {
+            // callbackRenderLegendText
             return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
         }, datetime => {
-            const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss"),
+            // callbackRenderTextXAxis
+            // use thursday as fixure of the week, as the calendar week is fixated to thursday
+            const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss").add(3, "days"),
                 thisWeeksMonth = objMoment.format("MMM"),
                 thisWeek = objMoment.format("WW"),
                 lastWeeksMonth = objMoment.subtract(1, "week").format("MMM");
@@ -499,7 +510,9 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
             return thisWeeksMonth + "-" + thisWeek;
         }, (value, dotData) => {
-            const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss");
+            // setTooltipValue
+            // use thursday as fixure of the week, as the calendar week is fixated to thursday
+            const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss").add(3, "days");
 
             return "KW " + objMoment.format("WW") + " / " + objMoment.format("YYYY") + ": " + this.addThousandPoints(value);
         }, emptyDiagramData);
@@ -524,7 +537,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     refreshDiagramGeneral: function (dataset, selector, selectorTooltip, xAttr, xAxisTicks, yAttr, xAxisText, yAxisText, callbackRenderLegendText, callbackRenderTextXAxis, setTooltipValue, emptyDiagramData) { // eslint-disable-line
         const legendData = [],
             attrToShowArray = [],
-            diagramWidth = parseInt($(".trafficCount").css("width"), 10) - 10,
+            diagramWidth = 570,
             diagramHeight = 280;
         let graphConfig = null,
             diagramData = [];
@@ -674,7 +687,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         for (h = 0; h < 24; h++) {
             for (m = 0; m < 4; m++) {
-                key = moment(h + ":" + (m * 15), "H:m").format("HH:mm");
+                key = String(h).padStart(2, "0") + ":" + String(m * 15).padStart(2, "0");
 
                 result[key] = {
                     hour: key
@@ -702,7 +715,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     key = moment(wd % 7, "d").format("dd");
                 }
                 else {
-                    key = moment((wd % 7) + "-" + h, "d-H").format("dd-HH");
+                    key = moment(wd % 7, "d").format("dd") + "-" + String(h).padStart(2, "0");
                 }
 
                 result[key] = {
@@ -722,12 +735,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      */
     getEmptyDiagramDataYear: function (year) {
         const result = {},
-            // set moment to 01.01.(year) 00:00:00
-            objMoment = moment(year, "YYYY");
+            // set moment to the first thursday (00:00:00) of the year, as the first calendar week always includes the first thursday of january
+            objMoment = moment(String(year) + "-1", "YYYY-W").add(3, "days");
         let key,
             lastMonth = "";
 
-        while (objMoment.format("YYYY") === year) {
+        while (objMoment.format("YYYY") === String(year)) {
             if (lastMonth !== objMoment.format("MMM")) {
                 lastMonth = objMoment.format("MMM");
                 key = lastMonth;

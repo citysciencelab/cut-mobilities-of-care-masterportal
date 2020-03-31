@@ -205,7 +205,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
         it("parsePhenomenonTime: should split the given string interval delimited by '/' and return the agreed part", function () {
             const interval = "foo/bar",
-                expectedOutcome = "bar";
+                expectedOutcome = "foo";
 
             expect(api.parsePhenomenonTime(interval)).to.equal(expectedOutcome);
         });
@@ -1215,7 +1215,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
                 expectedFrom = new Date("2020-03-20 00:00:00.000").toISOString(),
-                expectedUntil = new Date("2020-03-20 23:59:59.999").toISOString();
+                expectedUntil = new Date("2020-03-21 00:00:00.000").toISOString();
 
             api.updateDataset("thingId", "meansOfTransport", "interval", "2020-03-20", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "todayUntilOpt");
 
