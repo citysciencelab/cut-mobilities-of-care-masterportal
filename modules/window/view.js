@@ -18,8 +18,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     events: {
         "click .glyphicon-minus": "minimize",
         "click .header-min": "maximize",
-        "touchend .header-min": "maximize",
         "click .glyphicon-remove": "hide",
+        "touchend .glyphicon-remove": "hide",
+        "touchend .header-min": "maximize",
         "touchmove .title": "touchMoveWindow",
         "touchstart .title": "touchStartWindow",
         "touchend .title": "touchMoveEnd",
@@ -163,6 +164,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         }
         return this;
     },
+
     /**
      * Minimizes the Window.
      * @returns {void}
@@ -177,6 +179,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         this.$el.draggable("disable");
         this.resetSize();
     },
+
     /**
      * Maximizes the Window.
      * @returns {void}
@@ -190,6 +193,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             this.$el.draggable("enable");
         }
     },
+
     /**
      * Hides the Window.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
@@ -208,6 +212,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             Radio.trigger("ModelList", "toggleDefaultTool");
         }
     },
+
     /**
      * Triggered on TouchStart.
      * @param {event} evt - Event, window being touched.
@@ -224,6 +229,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
 
         evt.preventDefault();
     },
+
     /**
      * Triggered on TouchMove.
      * @param {event} evt - Event of moved window.
@@ -258,6 +264,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             "width": ""
         });
     },
+
     /**
      * Function to calculate the new left and top positions.
      * @param {Object} touch Object containing the touch attributes.
