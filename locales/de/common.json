@@ -399,6 +399,12 @@
                 "errorMsg": "OpenStreetMap-Suche nicht erreichbar."
             },
             "noInitialResults": "Die initiale Suche ergab keine Treffer."
+        },
+        "vectorStyle": {
+          "styleModel": {
+            "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
+            "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
+          }
         }
     },
     "snippets": {

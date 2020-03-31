@@ -5,13 +5,6 @@ import PolygonStyle from "./polygonStyle";
 import LinestringStyle from "./linestringStyle";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
-    /**
-     * @description Class to read style.json
-     * @class VectorStyleModel
-     * @extends Backbone.Model
-     * @memberof VectorStyle
-     * @constructs
-     */
     defaults: {
         /**
          * @type {string}
@@ -30,7 +23,18 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         "legendInfos": []
     },
 
+    /**
+     * @description Class to read style.json
+     * @class VectorStyleModel
+     * @extends Backbone.Model
+     * @memberof VectorStyle
+     * @constructs
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
     initialize: function () {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
         // legendInfos must be set on initialize. Otherwhile legendInfos are mixed up with other VectorStyleModels
         this.set("legendInfos", []);
     },
@@ -90,8 +94,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             .catch(error => {
                 console.warn("The fetch of the data failed with the following error message: " + error);
                 Radio.trigger("Alert", "alert", {
-                    text: "<strong>Die Legende konnte in der Layerinformation nicht erstellt werden!</strong> <br>"
-                        + "<small>Details: Ein benötigter Dienst antwortet nicht.</small>",
+                    text: "<strong>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailed") + "</strong> <br>"
+                        + "<small>" + i18next.t("common:modules.vectorStyle.styleModel.getGeometryTypeFromWFSFetchfailedMessage") + "</small>",
                     kategorie: "alert-warning"
                 });
             });

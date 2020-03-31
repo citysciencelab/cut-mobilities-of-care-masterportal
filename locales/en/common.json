@@ -399,6 +399,12 @@
                 "errorMsg": "Searching with OpenStreetMap is currently not available."
             },
             "noInitialResults": "Initial search found no hits."
+        },
+        "vectorStyle": {
+          "styleModel": {
+            "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
+            "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
+          }
         }
     },
     "snippets": {
