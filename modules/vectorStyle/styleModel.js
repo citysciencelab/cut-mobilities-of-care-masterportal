@@ -156,12 +156,12 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             if (geom.includes("Multi")) {
                 simpleGeom = geom.replace("Multi", "");
                 styleObject = this.getMultiGeometryStyle(simpleGeom, "", rule, false);
-
             }
             else {
-                styleObject = this.getSimpleGeometryStyle(geom, "", rule, false);
+                simpleGeom = geom;
+                styleObject = this.getSimpleGeometryStyle(simpleGeom, "", rule, false);
             }
-            this.addLegendInfo(geom, styleObject, rule);
+            this.addLegendInfo(simpleGeom, styleObject, rule);
         }));
     },
 
