@@ -38,13 +38,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         isCreated: false,
         typeAssoc: {
             AnzFahrzeuge: "Infrarotsensor",
-            AnzFahrraeder: "Zählstation",
-            Todo___AnzFahrraederSaeule: "Zählsäule"
+            AnzFahrraeder: "Zählstation"
         },
         meansOfTransportAssoc: {
-            AnzFahrzeuge: "Kfz",
-            AnzFahrraeder: "Fahrräder",
-            Todo___AnzFahrraederSaeule: "Fahrräder"
+            AnzFahrzeuge: "KFZ",
+            AnzFahrraeder: "Fahrrad"
         },
         dayInterval: "15-Min",
         weekInterval: "1-Stunde",
