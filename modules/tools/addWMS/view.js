@@ -6,18 +6,21 @@ const AddWMSView = Backbone.View.extend({
         "keydown": "keydown"
     },
     initialize: function () {
-        // Tool ist nur für treeType: custom verfügbar
-        if (Radio.request("Parser", "getTreeType") !== "custom") {
+        if (!["custom", "default"].includes(Radio.request("Parser", "getTreeType"))) {
+            console.error("The addWMS tool is currently only supported for the custom and default theme trees!");
             return;
         }
+
         this.listenTo(this.model, {
             "change:wmsURL": this.urlChange,
             "change:isActive": this.render
         });
+
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
     },
+
     template: _.template(AddWMSWin),
     // Löst das laden und einfügen der Layer in den Baum aus
     loadAndAddLayers: function () {
@@ -25,7 +28,7 @@ const AddWMSView = Backbone.View.extend({
     },
     // abschicken per Enter-Taste
     keydown: function (e) {
-        var code = e.keyCode;
+        const code = e.keyCode;
 
         if (code === 13) {
             this.loadAndAddLayers();
