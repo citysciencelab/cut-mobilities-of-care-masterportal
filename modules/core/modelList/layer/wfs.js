@@ -243,9 +243,10 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
 
         if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-
             if (style !== undefined) {
-                style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
+                if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+                    style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
+                }
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
