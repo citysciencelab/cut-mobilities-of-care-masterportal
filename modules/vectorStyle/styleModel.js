@@ -3,6 +3,7 @@ import PointStyle from "./pointStyle";
 import TextStyle from "./textStyle";
 import PolygonStyle from "./polygonStyle";
 import LinestringStyle from "./linestringStyle";
+import {fetch as fetchPolyfill} from "whatwg-fetch";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {
@@ -85,7 +86,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         });
         url = url.slice(0, -1);
 
-        fetch(url)
+        fetchPolyfill(url)
             .then(response => response.text())
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
             .then(responseXML => {
