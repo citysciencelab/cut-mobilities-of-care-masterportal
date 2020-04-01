@@ -8,6 +8,11 @@ module.exports = function (destination) {
     const replacements = [
         {
             "files": destination + "/index.html",
+            "from": /\/*(\.+\/)*img\/Logo_Masterportal\.svg/g,
+            "to": "../mastercode/" + mastercodeVersionFolderName + "/img/Logo_Masterportal.svg"
+        },
+        {
+            "files": destination + "/index.html",
             "from": /\/*(\.+\/)*img\/ajax-loader\.gif/g,
             "to": "../mastercode/" + mastercodeVersionFolderName + "/img/ajax-loader.gif"
         },
