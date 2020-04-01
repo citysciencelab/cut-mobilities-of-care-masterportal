@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<div class="form-group form-group-sm">
+    <div class="col-md-7 col-sm-7">
+        <%if (selectedFeatures.getLength() > 0) {%>
+        <ul>
+            <%selectedFeatures.forEach(feature => {%>
+                <li>
+                    <%console.log("NEW FEATURE")%>
+                    <%Object.keys(feature.properties).forEach(key => {%>
+                        <%console.log(key + ":" + feature.properties[key]);%>
+                    <%});%>
+                </li>
+            <%});%>
+        </ul>
+        <%} else {%>
+            Keine Feature ausgewählt.
+        <%}%>
+    </div>
+</div>

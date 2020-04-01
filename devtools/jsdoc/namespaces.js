@@ -720,6 +720,12 @@
  */
 
 /**
+ * @namespace SelectFeatures
+ * @memberof Tools
+ * @description Tool to select multiple Features from the map by using a box for selection.
+ */
+
+/**
  * @namespace TreeFilter
  * @description foobar
  */

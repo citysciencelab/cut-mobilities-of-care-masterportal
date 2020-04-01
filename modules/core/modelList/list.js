@@ -56,6 +56,7 @@ import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 import store from "../../../src/app-store/index";
 import WfstModel from "../../tools/wfst/model";
+import SelectFeaturesTool from "../../tools/selectFeatures/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -345,6 +346,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "virtualcity") {
                 return new VirtualCityModel(attrs, options);
+            }
+            else if (attrs.id === "selectFeatures") {
+                return new SelectFeaturesTool(attrs, options);
             }
             return new Tool(attrs, options);
         }
