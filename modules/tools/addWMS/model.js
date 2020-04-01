@@ -7,7 +7,8 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
         glyphicon: "glyphicon-plus",
         uniqueId: 100,
         placeholder: "",
-        textExample: ""
+        textExample: "",
+        textLoadLayer: ""
     }),
 
     /**
@@ -40,7 +41,8 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     changeLang: function () {
         this.set({
             placeholder: i18next.t("common:modules.tools.addWMS.placeholder"),
-            textExample: i18next.t("common:modules.tools.addWMS.textExample")
+            textExample: i18next.t("common:modules.tools.addWMS.textExample"),
+            textLoadLayer: i18next.t("common:modules.tools.addWMS.textLoadLayer")
         });
     },
 
