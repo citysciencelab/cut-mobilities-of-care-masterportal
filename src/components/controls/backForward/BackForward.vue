@@ -42,6 +42,12 @@ export default {
         ),
         memorizeMap () {
             this.memorize(this.map);
+        },
+        moveForward () {
+            this.forward(this.map);
+        },
+        moveBackward () {
+            this.backward(this.map);
         }
     }
 };
@@ -53,13 +59,13 @@ export default {
             title="Schritt voran"
             :active="forthAvailable"
             :icon-name="glyphiconFor"
-            @click.native="forward(map)"
+            :on-click="moveForward"
         />
         <ControlIcon
             title="Schritt zurück"
             :icon-name="glyphiconBack"
             :active="backAvailable"
-            @click.native="backward(map)"
+            :on-click="moveBackward"
         />
     </div>
 </template>

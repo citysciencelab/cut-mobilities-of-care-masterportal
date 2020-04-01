@@ -1,13 +1,15 @@
 <script>
 import {mapGetters} from "vuex";
 import ScaleLine from "./ScaleLine.vue";
+import MousePosition from "./controls/MousePosition.vue";
 
 /* TODO implement missing feature toolModelId */
 
 export default {
     name: "Footer",
     components: {
-        ScaleLine
+        ScaleLine,
+        MousePosition
     },
     computed: {
         ...mapGetters(["footerConfig", "mobile", "masterPortalVersionNumber"]),
@@ -23,6 +25,7 @@ export default {
 
 <template>
     <div id="footer">
+        <MousePosition class="footer-mouse-position" />
         <template v-for="(url, index) in urls">
             <span
                 :key="`footer-url-${index}`"
@@ -40,10 +43,12 @@ export default {
         <template v-if="showVersion">
             <span class="hidden-xs">
                 Version: {{ masterPortalVersionNumber }}
+                <span class="glyphicon glyphicon-option-vertical hidden-xs" />
             </span>
-            <span class="glyphicon glyphicon-option-vertical hidden-xs" />
         </template>
+        <span class="spacer" />
         <ScaleLine />
+        <!-- TODO put LanguageSwitcher here (currently worked on in another branch) -->
     </div>
 </template>
 
@@ -63,9 +68,23 @@ export default {
 
         z-index: 0; /* TODO get rid of this - why is it even necessary? */
 
+        display: flex;
+        position: relative;
+
+        .spacer {
+            flex-grow: 1;
+        }
+
         .glyphicon-option-vertical {
             padding: 0 8px;
             font-size: 12px;
+        }
+
+        .footer-mouse-position {
+            position: absolute;
+            left: 0;
+            bottom: 100%;
+            margin-bottom: 8px;
         }
     }
 </style>

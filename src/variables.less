@@ -1,8 +1,10 @@
 /* TODO there should be a way to override variables for customized portal designs, shouldn't it? */
 /* TODO names should be more telling, yet abstract - like "background", "background_accent", ... */
 
+@small_icon_width: 22px;
 @color_1_dark: rgb(85, 85, 85);
 @color_1: #f3f3f3;
+@color_1_b: rgb(255, 255, 255);
 @color_2: #E10019;
 @color_3: #F3F3F3;
 @color_inactive: grey;
@@ -10,8 +12,8 @@
 @font_family_0_b: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
 @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 @background_color_1: #E10019;
-@background_color_1_hover: #F11029;
-@background_color_1_focus: #F11029;
-@background_color_1_active: #D10409;
+@background_color_1_hover: lighten(@background_color_1, 5%);
+@background_color_1_focus: lighten(@background_color_1, 15%);
+@background_color_1_active: darken(@background_color_1, 10%);
 @background_color_2: rgb(8,88,158);
 @background_color_3: #f3f3f3;

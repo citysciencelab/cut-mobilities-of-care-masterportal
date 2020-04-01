@@ -33,27 +33,4 @@ function getScaleFromDpi (map, dpi) {
     return null;
 }
 
-/**
- * @param {function} commit commit function
- * @param {module:ol/Map} map openlayer map object
- * @param {number} dpi needed to calculate scale
- * @returns {function} update function for state parts to update onmoveend
- */
-function makeUpdateViewState (commit, map, dpi) {
-    return () => {
-        const mapView = map.getView();
-
-        commit("setZoomLevel", mapView.getZoom());
-        commit("setMaxZoomLevel", mapView.getMaxZoom());
-        commit("setMinZoomLevel", mapView.getMinZoom());
-        commit("setResolution", mapView.getResolution());
-        commit("setMaxResolution", mapView.getMaxResolution());
-        commit("setMinResolution", mapView.getMinResolution());
-        commit("setScale", getScaleFromDpi(map, dpi));
-        commit("setBbox", mapView.calculateExtent(map.getSize()));
-        commit("setRotation", mapView.getRotation());
-        commit("setCenter", mapView.getCenter());
-    };
-}
-
-export default makeUpdateViewState;
+export default getScaleFromDpi;

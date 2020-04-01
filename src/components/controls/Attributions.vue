@@ -1,7 +1,7 @@
 
 <script>
 import {mapGetters} from "vuex";
-import ControlIcon from "../ControlIcon.vue";
+import ControlIcon from "./ControlIcon.vue";
 
 export default {
     name: "Attributions",
@@ -49,17 +49,17 @@ export default {
 </script>
 
 <template>
-    <ControlIcon
-        class="attributions-button"
-        aria-role="button"
-        :title="'Layer-Attributions ' + (open ? 'ausblenden' : 'anzeigen')"
-        :icon-name="open ? 'forward' : 'info-sign'"
-        :click="toggleAttributionsFlyout"
-    >
+    <div class="attributions-wrapper">
+        <ControlIcon
+            class="attributions-button"
+            aria-role="button"
+            :title="'Layer-Attributions ' + (open ? 'ausblenden' : 'anzeigen')"
+            :icon-name="open ? 'forward' : 'info-sign'"
+            :on-click="toggleAttributionsFlyout"
+        />
         <div
             v-if="open"
             class="attributions-view"
-            @click.stop.prevent=""
         >
             <dl>
                 <template v-for="(attribution, index) in attributionList">
@@ -72,11 +72,15 @@ export default {
                 </template>
             </dl>
         </div>
-    </ControlIcon>
+    </div>
 </template>
 
 <style lang="less" scoped>
-    @import "../../../variables.less";
+    @import "../../variables.less";
+
+    .attributions-wrapper {
+        position: relative;
+    }
 
     .attributions-view {
         cursor: initial;
@@ -84,11 +88,10 @@ export default {
         position: absolute;
         padding: 5px;
         background-color: @background_color_3;
-        margin-right: 40px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         border: 1px solid rgb(229, 229, 229);
         bottom: 0;
-        right: 0;
+        right: 100%;
         font-size: 12px;
         font-family: @font_family_1;
         color: black;

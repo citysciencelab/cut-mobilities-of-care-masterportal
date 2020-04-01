@@ -1,6 +1,6 @@
-import Attributions from "./attributions/Attributions.vue";
+import Attributions from "./Attributions.vue";
 import BackForward from "./backForward/BackForward.vue";
-import Zoom from "./zoom/Zoom.vue";
+import Zoom from "./Zoom.vue";
 
 /**
  * controls-Module is required to be able to nest controls
@@ -18,10 +18,10 @@ export default {
             zoom: Zoom
         },
         mobileHiddenControls: [
-            "backForward"
+            "backForward",
+            "mousePosition"
         ],
-        bottomControlsLeft: ["mousePosition"],
-        bottomControlsRight: ["attributions", "overviewMap"]
+        bottomControls: ["attributions", "overviewMap"]
     },
     mutations: {
         /**
@@ -31,7 +31,7 @@ export default {
          * @param {string} name name of control in config.json
          * @param {object} control Vue Component
          * @param {boolean} [hiddenMobile=false] whether component is visible in mobile resolution
-         * @param {(boolean|string)} [bottomControlsFlag=false] whether component is to be shown at lower end of the page; false, "Left", or "Right"
+         * @param {boolean} [bottomControlsFlag=false] whether component is to be shown at lower end of the page
          * @returns {void}
          */
         registerModule (state, name, control, hiddenMobile = false, bottomControlsFlag = false) {
@@ -45,16 +45,11 @@ export default {
                     name
                 ];
             }
-            if (["Right", "Left"].includes(bottomControlsFlag)) {
-                const key = `bottomControls${bottomControlsFlag}`;
-
-                state[key] = [
-                    ...state[key],
+            if (bottomControlsFlag) {
+                state.bottomControls = [
+                    ...state.bottomControls,
                     name
                 ];
-            }
-            else if (typeof bottomControlsFlag === "string") {
-                console.warn(`Registered component "${name}" with invalid bottomControlsFlag "${bottomControlsFlag}" - must be false, "Left", or "Right".`);
             }
         },
         /**
@@ -70,14 +65,12 @@ export default {
 
             state.componentMap = nextMap;
             state.mobileHiddenControls = state.mobileHiddenControls.filter(s => s !== name);
-            state.bottomControlsLeft = state.bottomControlsLeft.filter(s => s !== name);
-            state.bottomControlsRight = state.bottomControlsRight.filter(s => s !== name);
+            state.bottomControls = state.bottomControls.filter(s => s !== name);
         }
     },
     getters: {
         componentMap: state => state.componentMap,
         mobileHiddenControls: state => state.mobileHiddenControls,
-        bottomControlsLeft: state => state.bottomControlsLeft,
-        bottomControlsRight: state => state.bottomControlsRight
+        bottomControls: state => state.bottomControls
     }
 };

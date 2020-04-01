@@ -1,5 +1,4 @@
-import makePointerMoveHandler from "./makePointerMoveHandler";
-import makeUpdateViewState from "./makeUpdateViewState";
+import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
 
 let unsubscribes = [],
@@ -32,21 +31,20 @@ const actions = {
      * @param {module:ol/Map} map map object
      * @returns {void}
      */
-    setMap ({commit, rootGetters}, {map}) {
+    setMap ({commit, dispatch}, {map}) {
         // discard old listeners
         if (unsubscribes.length) {
             unsubscribes.forEach(unsubscribe => unsubscribe());
             unsubscribes = [];
         }
 
-        const updateState = makeUpdateViewState(commit, map, rootGetters.dpi),
-            mapView = map.getView();
+        const mapView = map.getView();
 
         // set map to store
         commit("setMap", map);
 
         // update state once initially to get initial settings
-        updateState();
+        dispatch("updateViewState");
 
         // hack: see comment on function
         loopLayerLoader(commit, map);
@@ -56,9 +54,42 @@ const actions = {
 
         // register listeners with state update functions
         unsubscribes = [
-            map.on("moveend", updateState),
-            map.on("pointermove", makePointerMoveHandler(commit))
+            map.on("moveend", () => dispatch("updateViewState")),
+            map.on("pointermove", e => dispatch("updatePointer", e))
         ];
+    },
+    /**
+     * @param {function} commit commit function
+     * @param {module:ol/Map} map openlayer map object
+     * @param {number} dpi needed to calculate scale
+     * @returns {function} update function for state parts to update onmoveend
+     */
+    updateViewState ({commit, getters, rootGetters}) {
+        const {map} = getters,
+            mapView = map.getView(),
+            {dpi} = rootGetters;
+
+        commit("setZoomLevel", mapView.getZoom());
+        commit("setMaxZoomLevel", mapView.getMaxZoom());
+        commit("setMinZoomLevel", mapView.getMinZoom());
+        commit("setResolution", mapView.getResolution());
+        commit("setMaxResolution", mapView.getMaxResolution());
+        commit("setMinResolution", mapView.getMinResolution());
+        commit("setScale", getScaleFromDpi(map, dpi));
+        commit("setBbox", mapView.calculateExtent(map.getSize()));
+        commit("setRotation", mapView.getRotation());
+        commit("setCenter", mapView.getCenter());
+    },
+    /**
+     * @param {function} commit commit function
+     * @param {object} evt update event
+     * @returns {function} update function for mouse coordinate
+     */
+    updatePointer ({commit}, evt) {
+        if (evt.dragging) {
+            return;
+        }
+        commit("setMouseCoord", evt.coordinate);
     },
     /**
      * Sets a new zoom level to map and store. All other fields will be updated onmoveend.
@@ -67,8 +98,18 @@ const actions = {
      * @returns {void}
      */
     setZoomLevel ({getters, commit}, zoomLevel) {
-        getters.map.getView().setZoom(zoomLevel);
-        commit("setZoomLevel", zoomLevel);
+        const {maxZoomLevel, minZoomLevel} = getters;
+
+        if (zoomLevel <= maxZoomLevel && zoomLevel >= minZoomLevel) {
+            getters.map.getView().setZoom(zoomLevel);
+            commit("setZoomLevel", zoomLevel);
+        }
+    },
+    increaseZoomLevel ({dispatch, getters}) {
+        dispatch("setZoomLevel", getters.zoomLevel + 1);
+    },
+    decreaseZoomLevel ({dispatch, getters}) {
+        dispatch("setZoomLevel", getters.zoomLevel - 1);
     },
     /**
      * Turns a visible layer invisible and the other way around.

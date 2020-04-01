@@ -1,13 +1,13 @@
 <script>
 import Alerting from "./Alerting.vue";
 import SupplyCoord from "./SupplyCoord.vue";
-import Controls from "./controls/Controls.vue";
+import ControlBar from "./controls/ControlBar.vue";
 import Footer from "./Footer.vue";
 
 export default {
     name: "MapRegion",
     components: {
-        Controls,
+        ControlBar,
         Alerting,
         SupplyCoord,
         Footer
@@ -17,11 +17,17 @@ export default {
 
 <template>
     <div class="anchor">
-        <div id="map" />
+        <!-- OpenLayers node; control map itself via vuex map module -->
+        <div
+            id="map"
+            tabindex="0"
+        />
+        <!-- HUD elements; always present -->
         <div class="elements-positioned-over-map">
-            <Controls class="controls" />
+            <ControlBar class="controls" />
             <Footer />
         </div>
+        <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
         <Alerting />
         <SupplyCoord />
     </div>
