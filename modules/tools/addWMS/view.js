@@ -1,10 +1,18 @@
 import AddWMSWin from "text-loader!./template.html";
 
-const AddWMSView = Backbone.View.extend({
+const AddWMSView = Backbone.View.extend(/** @lends AddWMSView.prototype */{
     events: {
         "click #addWMSButton": "loadAndAddLayers",
         "keydown": "keydown"
     },
+
+    /**
+     * @class AddWMSView
+     * @description Todo
+     * @extends Tool
+     * @memberof Tools.AddWMS
+     * @constructs
+     */
     initialize: function () {
         if (!["custom", "default"].includes(Radio.request("Parser", "getTreeType"))) {
             console.error("The addWMS tool is currently only supported for the custom and default theme trees!");
@@ -13,7 +21,8 @@ const AddWMSView = Backbone.View.extend({
 
         this.listenTo(this.model, {
             "change:wmsURL": this.urlChange,
-            "change:isActive": this.render
+            "change:isActive": this.render,
+            "change:placeholder": this.render
         });
 
         if (this.model.get("isActive") === true) {
@@ -21,12 +30,26 @@ const AddWMSView = Backbone.View.extend({
         }
     },
 
+    /**
+     * @member AddWMSTemplate
+     * @description Template used to create the addwms tool.
+     * @memberof Tools.AddWMS
+     */
     template: _.template(AddWMSWin),
-    // Löst das laden und einfügen der Layer in den Baum aus
+
+    /**
+     * Triggers the loading and inserting of layers into the tree
+     * @returns {void}
+     */
     loadAndAddLayers: function () {
         this.model.loadAndAddLayers();
     },
-    // abschicken per Enter-Taste
+
+    /**
+     * Send via Enter key.
+     * @param {Event} e - Key event.
+     * @returns {void}
+     */
     keydown: function (e) {
         const code = e.keyCode;
 
@@ -34,7 +57,13 @@ const AddWMSView = Backbone.View.extend({
             this.loadAndAddLayers();
         }
     },
-    // Rendert das Tool-Fenster
+
+    /**
+     * Renders the tool window
+     * @param {Backbone.model} model - The addwms model.
+     * @param {boolean} value - The visibility from tool.
+     * @returns {void}
+     */
     render: function (model, value) {
         if (value) {
             this.setElement(document.getElementsByClassName("win-body")[0]);

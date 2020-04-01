@@ -5,7 +5,9 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
         renderToWindow: true,
         glyphicon: "glyphicon-plus",
-        uniqueId: 100
+        uniqueId: 100,
+        placeholder: "",
+        textExample: ""
     }),
 
     /**
@@ -22,6 +24,24 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      */
     initialize: function () {
         this.superInitialize();
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            placeholder: i18next.t("common:modules.tools.addWMS.placeholder"),
+            textExample: i18next.t("common:modules.tools.addWMS.textExample")
+        });
     },
 
     /**
@@ -31,7 +51,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      */
     displayError: function (text) {
         if (text === "" || typeof text === "undefined") {
-            $(".addWMS.win-body").prepend("<div class=\"addwms_error\">Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!</div>");
+            $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + i18next.t("common:modules.tools.addWMS.error") + "</div>");
         }
         $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
     },
@@ -81,9 +101,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
                         this.parseLayer(layer, uniqId, 1);
                     });
 
-                    Radio.trigger("Alert", "alert",
-                        "Die Layer des angeforderten WMS wurden dem Themenbaum unter dem Menüpunkt <strong>Externe Fachdaten</strong> hinzugefügt!"
-                    );
+                    Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.completeMessage"));
 
                 }
                 catch (e) {
@@ -103,14 +121,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      * @returns {void}
      */
     displayErrorMessage: function () {
-        Radio.trigger("Alert", "alert", "Der angegebene Dienst konnte nicht geladen werden."
-        + " Bitte stellen Sie sicher, dass die URL richtig angegben wurde."
-        + "<br><br> Falls das Problem weiterhin auftritt,"
-        + " wenden Sie sich bitte an den Betreiber des Dienstes mit folgendem Hinweis:"
-        + "<br><strong>Es soll sichergestellt werden, dass ein CORS-Header für den Dienst gesetzt ist."
-        + " Dies wird von der <a target='_blank' href="
-        + "'https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'"
-        + ">GDI-DE</a> im Kapitel 4.7.1 empfohlen</strong");
+        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.errorMessage"));
     },
 
     /**
@@ -142,7 +153,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     getAddWmsUniqueId: function () {
         const uniqueId = this.get("uniqueId");
 
-        this.setUniqueId(this.get("uniqueId") + 1);
+        this.setUniqueId(uniqueId + 1);
         return "external_" + uniqueId;
     },
 
