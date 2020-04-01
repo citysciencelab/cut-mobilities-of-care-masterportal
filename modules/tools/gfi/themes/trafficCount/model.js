@@ -808,28 +808,31 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     },
 
     /**
-     * returns the value in meansOfTransportArray that matches the start of  the given array of datastreams property layerName
+     * returns the value in meansOfTransportArray that matches the start of the given array of datastreams property layerName, returns first match
      * @param {Object[]} datastreams the array of datastreams from the SensorThingsAPI
      * @param {String[]} meansOfTransportArray an array representing all terms to look for in the datastreams layerName
      * @returns {String|Boolean}  a string representing the means of transport (e.g. AnzFahrzeuge, AnzFahrräder) or false if no means of transport where found
      */
     getMeansOfTransportFromDatastream: function (datastreams, meansOfTransportArray) {
         let key,
+            i,
             datastream = null;
 
         if (!Array.isArray(datastreams) || datastreams.length <= 0) {
             return false;
         }
 
-        datastream = datastreams[0];
+        for (i in datastreams) {
+            datastream = datastreams[i];
 
-        if (!datastream || typeof datastream !== "object" || !datastream.hasOwnProperty("properties") || !datastream.properties.hasOwnProperty("layerName")) {
-            return false;
-        }
+            if (!datastream || typeof datastream !== "object" || !datastream.hasOwnProperty("properties") || !datastream.properties.hasOwnProperty("layerName")) {
+                continue;
+            }
 
-        for (key in meansOfTransportArray) {
-            if (datastream.properties.layerName.indexOf(meansOfTransportArray[key]) === 0) {
-                return meansOfTransportArray[key];
+            for (key in meansOfTransportArray) {
+                if (datastream.properties.layerName.indexOf(meansOfTransportArray[key]) === 0) {
+                    return meansOfTransportArray[key];
+                }
             }
         }
 

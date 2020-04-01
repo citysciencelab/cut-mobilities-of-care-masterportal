@@ -41,6 +41,11 @@ describe("tools/gfi/themes/trafficCount", function () {
             const datastreams = [
                     {
                         properties: {
+                            layerName: "no match"
+                        }
+                    },
+                    {
+                        properties: {
                             layerName: "foobar"
                         }
                     }
