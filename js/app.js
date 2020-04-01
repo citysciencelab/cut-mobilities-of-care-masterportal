@@ -82,7 +82,6 @@ import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 import "url-polyfill";
-import "fetch-polyfill";
 
 let sbconfig, controls, controlsView;
 

@@ -32,7 +32,6 @@
     "d3": "4.9.x",
     "d3-scale-chromatic": "^1.5.0",
     "dom-parser": "^0.1.5",
-    "fetch-polyfill": "^0.8.2",
     "git-rev-sync": "^2.0.0",
     "html2canvas": "^1.0.0-rc.5",
     "https-proxy-agent": "^3.0.0",
