@@ -4,6 +4,8 @@ import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./components/ScaleLine.vue";
 import Controls from "./components/controls/Controls.vue";
 import Title from "./components/Title.vue";
+import MapModuleDebug from "./store/modules/map/MapModuleDebug.vue";
+import isDevMode from "./utils/isDevMode";
 import Language from "./components/Language.vue";
 
 export default {
@@ -14,8 +16,10 @@ export default {
         Title,
         SupplyCoord,
         ScaleLine,
-        Language
-    }
+        Language,
+        MapModuleDebug
+    },
+    data: () => ({isDevMode})
 };
 </script>
 
