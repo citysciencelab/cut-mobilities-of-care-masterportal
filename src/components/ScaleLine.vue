@@ -28,9 +28,11 @@ export default {
 </template>
 
 <style lang="less">
+    @import "../variables.less";
+
     #scales {
         display: inline-block;
-        color: #777;
+        color: @secondary_contrast;
         text-align: center;
         font-size: 10px;
 

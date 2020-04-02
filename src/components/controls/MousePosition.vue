@@ -55,11 +55,11 @@ export default {
         display: flex;
         flex-direction: row;
 
-        background-color: @background_color_1;
-        color: @color_1_b;
-        font-size: 11px;
-        line-height: 24px;
-        min-height: 24px;
+        background-color: @primary;
+        color: @primary_contrast;
+        font-size: @font_size_small;
+        line-height: @icon_length_small;
+        min-height: @icon_length_small;
 
         transition: 1s ease-out;
         /* hack to prevent text from jumping during animation */
@@ -67,12 +67,12 @@ export default {
 
         &.closed {
             /* using translateX to prevent multiline flicker on width transformation */
-            transform: translateX(calc(-100% + @small_icon_width));
+            transform: translateX(calc(-100% + @icon_length_small));
         }
 
         .mouse-position-span {
             padding: 0 8px;
-            border-right: 1px solid @color_1_b;
+            border-right: 1px solid @primary_contrast;
         }
     }
 </style>

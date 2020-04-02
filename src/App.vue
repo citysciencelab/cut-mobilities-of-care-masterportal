@@ -2,7 +2,6 @@
 import MainNav from "./components/MainNav.vue";
 import MapRegion from "./components/MapRegion.vue";
 import Loader from "./components/Loader.vue";
-import Popup from "./components/Popup.vue";
 import MapModuleDebug from "./store/modules/map/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
 
@@ -12,7 +11,6 @@ export default {
         MainNav,
         MapRegion,
         Loader,
-        Popup,
         MapModuleDebug
     },
     data: () => ({isDevMode})
@@ -24,11 +22,9 @@ export default {
         <!-- layout at its heart is two elements - navigation bar and map with elements on it -->
         <MainNav />
         <MapRegion class="map-region" />
-        <!-- elements below this line must be positioned absolutely -->
-        <Loader />
-        <!-- TODO what is the Popup? Does it belong here ("can be above anything") or in the map region ("can only be above ol/Map")? -->
-        <Popup />
         <MapModuleDebug v-if="isDevMode" />
+        <!-- keep loader last so it's above it all -->
+        <Loader />
     </div>
 </template>
 
@@ -42,7 +38,8 @@ export default {
         height: 100%;
         width: 100%;
 
-        font-family: @font_family_0;
+        font-family: @font_family_default;
+        font-size: @font_size_default;
 
         .map-region {
             flex-grow: 1;

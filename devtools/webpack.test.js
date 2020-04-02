@@ -48,6 +48,14 @@ module.exports = {
             {
                 test: /\.(le|c|sa)ss$/,
                 use: "null-loader"
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    {
+                        loader: "file-loader"
+                    }
+                ]
             }
         ]
     },

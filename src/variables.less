@@ -1,19 +1,70 @@
-/* TODO there should be a way to override variables for customized portal designs, shouldn't it? */
-/* TODO names should be more telling, yet abstract - like "background", "background_accent", ... */
+/* TODO there should be a way to override variables for customized portal designs */
+/* NOTE this is a draft on how the theme could be organized; requires discussion */
 
-@small_icon_width: 22px;
-@color_1_dark: rgb(85, 85, 85);
-@color_1: #f3f3f3;
-@color_1_b: rgb(255, 255, 255);
-@color_2: #E10019;
-@color_3: #F3F3F3;
-@color_inactive: grey;
-@font_family_0: "MasterPortalFont", "Arial", sans-serif;
-@font_family_0_b: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
-@font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-@background_color_1: #E10019;
-@background_color_1_hover: lighten(@background_color_1, 5%);
-@background_color_1_focus: lighten(@background_color_1, 15%);
-@background_color_1_active: darken(@background_color_1, 10%);
+/* PRIMARY: Map Interaction
+ * Used for control elements placed directly on the map.
+ */
+@primary: #E10019;
+@primary_hover: lighten(@primary, 5%);
+@primary_focus: lighten(@primary, 15%);
+@primary_active: darken(@primary, 10%);
+@primary_contrast: #F3F3F3;
+@primary_inactive: grey;
+@primary_inactive_contrast: white;
+@primary_outline: #050505;
+
+/* SECONDARY: Navigation
+ * NavBar, open/close tool, layer list, change tabs, back button, next entry ...
+ */
+@secondary: #F3F3F3;
+@secondary_border: #e5e5e5;
+@secondary_hover: #08589e;
+@secondary_hover_contrast: #F3F3F3;
+@secondary_focus: #337ab7;
+@secondary_focus_contrast: #F3F3F3;
+@secondary_active_drop: rgba(227, 227, 227, 0.5);
+@secondary_contrast: #333333;
+
+/* ACCENT: Action
+ * Action color for windows, e.g.: search for parcels, save something, draw something, ...
+ */
+@accent: purple;
+@accent_contrast: yellow;
 @background_color_2: rgb(8,88,158);
-@background_color_3: #f3f3f3;
+@color_1_dark: rgb(85, 85, 85);
+
+/* ALERT COLORS
+ * TODO get the right colors from the codebase.
+ */
+@warn: orange;
+@warn_contrast: white;
+@error: red;
+@error_contrast: white;
+@info: blue;
+@info_contrast: white;
+@success: green;
+@success_constrast: white;
+
+/* ICON SIZES */
+@icon_length: 36px;
+@icon_length_small: 24px;
+@icon_length_menu: 0px; // TODO figure out correct value
+@icon_length_list: 0px; // TODO figure out correct value
+
+/* FONT STYLES */
+@font_family_default: "MasterPortalFont", "Arial", sans-serif;
+@font_family_narrow: "MasterPortalFont", "Arial Narrow", Arial, sans-serif;
+@font_family_accent: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+
+@font_size_huge: 16px;
+@font_size_big: 14px;
+@font_size_default: 12px;
+@font_size_small: 11px;
+@font_size_tiny: 10px;
+
+/* Should something like this be supported? TODO discuss */
+@interaction_border_radius: 0px;
+@information_border_radius: 0px;
+
+/* other */
+@shadow: rgba(0, 0, 0, 0.176);

@@ -24,11 +24,7 @@ export default {
         };
     },
     computed: {
-        /* TODO
-         * Requires a way to actually read the active attributions.
-         * Should the map get a vuex module that does this or will
-         * such issues be resolved within the respective vue files?
-         */
+        /* TODO Requires the vuex map module to support giving a list of attributions. */
         attributionList () {
             return [
                 {name: "Platzhalter", text: "gehaltener Platz"},
@@ -83,23 +79,25 @@ export default {
     }
 
     .attributions-view {
+        color: @secondary_contrast;
+        font-size: @font_size_default;
+        font-family: @font_family_accent;
+        background-color: @secondary;
+
+        border: 1px solid @secondary_border;
+        box-shadow: 0 6px 12px @shadow;
+
         cursor: initial;
         text-align: initial;
+
         position: absolute;
         padding: 5px;
-        background-color: @background_color_3;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-        border: 1px solid rgb(229, 229, 229);
         bottom: 0;
         right: 100%;
-        font-size: 12px;
-        font-family: @font_family_1;
-        color: black;
 
         dt {
-            color: @color_2;
-            font-size: 15px;
-            font-family: @font_family_1;
+            font-size: @font_size_huge;
+            color: @primary;
         }
         dl {
             margin-bottom: 0;

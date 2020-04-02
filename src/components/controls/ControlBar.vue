@@ -2,6 +2,14 @@
 <script>
 import {mapGetters} from "vuex";
 
+/**
+ * TODO the "main" control bar element is supposed to be
+ * 1. scrollable if too many elements are included within
+ * 2. open-/closable on mobile resolution, that is: only x (per default 3) control
+ * elements are to be shown, and the rest can be opened/closed via a button
+ * (think: openable toolbox); when open and place is not sufficient, the bar
+ * is to be scrollable again
+ */
 export default {
     name: "ControlBar",
     data () {

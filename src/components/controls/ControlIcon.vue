@@ -56,24 +56,28 @@ export default {
         display: block;
         text-align: center;
         top: auto;
-        font-size: 22px;
-        height: 36px;
-        width: 36px;
         margin: 5px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+
+        font-size: calc(@icon_length - 0.35 * @icon_length);
+        height: @icon_length;
+        width: @icon_length;
+
+        box-shadow: 0 6px 12px @shadow;
     }
 
     .inline {
         display: inline-block;
         text-align: center;
-        width: @small_icon_width;
-        height: @small_icon_width;
-        font-size: 16px;
+
+        font-size: @font_size_huge;
+        width: @icon_length_small;
+        height: @icon_length_small;
     }
 
     .control-icon {
-        background-color: @background_color_1;
-        color: @color_1;
+        background-color: @primary;
+        color: @primary_contrast;
+
         pointer-events: all;
         cursor: pointer;
         border: 0;
@@ -88,19 +92,19 @@ export default {
 
         /* pseudo-class state effects */
         &:hover {
-            background-color: @background_color_1_hover;
+            background-color: @primary_hover;
         }
         &:focus {
-            background-color: @background_color_1_focus;
-            outline: 1px solid black;
+            background-color: @primary_focus;
+            outline: 1px solid @primary_outline;
         }
         &:active {
-            background-color: @background_color_1_active;
+            background-color: @primary_active;
         }
 
         &:disabled {
-            background-color: @color_inactive;
-            color: @color_1;
+            background-color: @primary_inactive;
+            color: @primary_inactive_contrast;
             cursor: default;
         }
     }
