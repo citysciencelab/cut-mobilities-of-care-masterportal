@@ -81,6 +81,7 @@ import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
+import "url-polyfill";
 
 let sbconfig, controls, controlsView;
 
