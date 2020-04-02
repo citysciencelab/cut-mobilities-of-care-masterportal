@@ -53,7 +53,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (this.model.get("isSettingVisible") === true) {
             this.$el.append(this.templateSettings(attr));
         }
-        if (this.model.get("layerInfoClicked")) {
+        if (this.model.get("layerInfoChecked")) {
             this.highlightLayerInformationIcon();
         }
         return this;
