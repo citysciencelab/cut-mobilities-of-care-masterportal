@@ -29,6 +29,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`true`|
 |typ|ja|String||Diensttyp, in diesem Fall WMS (**[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMS"`|
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
+|useProxyUrlForGfi|nein|boolean|undefined|Flag um die GFI-Abfrage für einen Layer über einen reverse proxy laufen zu lassen.|false|
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
 **Beispiel WMS:**
 
@@ -94,7 +95,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-
+|useProxyUrlForGfi|nein|boolean|undefined|Flag um die GFI-Abfrage für einen Layer über einen reverse proxy laufen zu lassen.|false|
 **Beispiel WFS:**
 
 
@@ -160,7 +161,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-
+|useProxyUrlForGfi|nein|boolean|undefined|Flag um die GFI-Abfrage für einen Layer über einen reverse proxy laufen zu lassen.|false|
 **Beispiel Sensor:**
 
 
@@ -379,7 +380,7 @@ Beispiel gfiAttributes als Objekt mit type und format
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-
+|useProxyUrlForGfi|nein|boolean|undefined|Flag um die GFI-Abfrage für einen Layer über einen reverse proxy laufen zu lassen.|false|
 **Beispiel GeoJSON:**
 
 
