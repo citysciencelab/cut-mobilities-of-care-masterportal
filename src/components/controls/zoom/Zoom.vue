@@ -1,6 +1,6 @@
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
     name: "Zoom",
@@ -18,7 +18,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations("Map", ["setZoomLevel"])
+        ...mapActions("Map", ["setZoomLevel"])
     }
 };
 </script>

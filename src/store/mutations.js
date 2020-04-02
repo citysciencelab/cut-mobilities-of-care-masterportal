@@ -71,7 +71,7 @@ function addConfigParametersToState (state, Config = {}, configParameter, stateM
     }
 }
 
-export default {
+const mutations = {
     /**
      * Sets config.json.
      * @param {object} state store state
@@ -179,3 +179,5 @@ export default {
         });
     }
 };
+
+export default mutations;

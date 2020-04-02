@@ -1,6 +1,6 @@
 /**
  * @returns {boolean} true if screen is considered mobile device
  */
-export function isMobile () {
+export default function isMobile () {
     return window.innerWidth < 768;
 }
