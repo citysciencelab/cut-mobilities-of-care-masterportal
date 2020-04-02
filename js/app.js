@@ -456,10 +456,6 @@ function loadApp () {
         new SearchbarView(sbconfig);
     }
 
-    if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {
-        // new LanguageView();
-    }
-
     new HighlightFeature();
 
     if (Config.addons !== undefined) {
