@@ -2,6 +2,7 @@ import Layer from "./model";
 import {SensorThingsMqtt} from "./sensorThingsMqtt";
 import {SensorThingsHttp} from "./sensorThingsHttp";
 import moment from "moment";
+import "moment-timezone";
 import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {buffer, containsExtent} from "ol/extent";
@@ -12,6 +13,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         supported: ["2D", "3D"],
         epsg: "EPSG:4326",
         utc: "+1",
+        /**
+         * Timezone to use with moment-timezone.
+         * @type {string}
+         * @enum webpack.MomentTimezoneDataPlugin.matchZones
+         */
+        timezone: "Europe/Berlin",
         version: "1.0",
         useProxyURL: false,
         mqttPath: "/mqtt",
@@ -36,6 +43,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @property {String} url the url to initialiy call the SensorThings-API with
      * @property {String} epsg="EPSG:4326" EPSG-Code for incoming sensor geometries.
      * @property {String} utc="+1" UTC-Timezone to calulate correct time.
+     * @property {String} timezone="Europe/Berlin" Sensors origin timezone name.
      * @property {String} version="1.0" Version the SensorThingsAPI is requested.
      * @property {Boolean} useProxyUrl="1.0" Flag if url should be proxied.
      * @fires Core#RadioRequestMapViewGetOptions
@@ -293,40 +301,41 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }
         return modifiedFeature;
     },
+
     /**
-     * change time zone by given UTC-time
-     * @param  {String} phenomenonTime - time of measuring a phenomenon
-     * @param  {String} utc - timezone (default +1)
+     * Some sensor deliver an time interval like "2020-04-02T14:00:01.000Z/2020-04-02T14:15:00.000Z".
+     * Other sensors deliver a single time like "2020-04-02T14:00:01.000Z".
+     * This functions returns the first time given in string. Delimiter is always "/".
+     * @param   {string} phenomenonTime phenomenonTime given by sensor
+     * @returns {string} first phenomenonTime
+     */
+    getFirstPhenomenonTime (phenomenonTime) {
+        if (typeof phenomenonTime !== "string") {
+            return undefined;
+        }
+        else if (phenomenonTime.split("/").length !== 2) {
+            return phenomenonTime;
+        }
+
+        return phenomenonTime.split("/")[0];
+    },
+
+    /**
+     * Returns Date and time in clients local aware format converting utc time to sensors origin timezone.
+     * @param  {String} phenomenonTime phenomenonTime given by sensor
+     * @param  {String} timezone name of the sensors origin timezone
+     * @see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
      * @return {String} phenomenonTime converted with UTC
      */
-    changeTimeZone: function (phenomenonTime, utc) {
-        let utcAlgebraicSign,
-            utcNumber,
-            utcSub,
-            time = "";
+    getLocalTimeFormat: function (phenomenonTime, timezone) {
+        const utcTime = this.getFirstPhenomenonTime(phenomenonTime);
 
-        if (phenomenonTime === undefined) {
-            return "";
-        }
-        else if (utc !== undefined && (utc.indexOf("+") !== -1 || utc.indexOf("-") !== -1)) {
-            utcAlgebraicSign = utc.substring(0, 1);
-
-            if (utc.length === 2) {
-                // check for winter- and summertime
-                utcSub = parseInt(utc.substring(1, 2), 10);
-                utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
-                utcNumber = "0" + utcSub + "00";
-            }
-            else if (utc.length > 2) {
-                utcSub = parseInt(utc.substring(1, 3), 10);
-                utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
-                utcNumber = utc.substring(1, 3) + "00";
-            }
-
-            time = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("DD MMMM YYYY, HH:mm:ss");
+        if (utcTime) {
+            // "LLL" outputs month name, day of month, year, time in local aware date of the client. For example "16. März 2020 14:31"
+            return moment(utcTime).tz(timezone).format("LLL");
         }
 
-        return time;
+        return "";
     },
 
     /**
@@ -450,10 +459,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     unitOfMeasurementName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
                     dataStreamName = propertiesType ? propertiesType : unitOfMeasurementName,
                     key = "dataStream_" + dataStreamId + "_" + dataStreamName,
-                    value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined;
-                let phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
-
-                phenomenonTime = this.changeTimeZone(phenomenonTime, this.get("utc"));
+                    value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
+                    timezone = this.get("timezone"),
+                    phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
 
                 if (this.get("showNoDataValue") && !value) {
                     thing.properties[key] = this.get("noDataValue");
@@ -463,7 +471,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 }
                 else if (value) {
                     thing.properties[key] = value;
-                    thing.properties[key + "_phenomenonTime"] = phenomenonTime;
+                    thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, timezone);
                     thing.properties.dataStreamId.push(dataStreamId);
                     thing.properties.dataStreamName.push(dataStreamName);
                 }
@@ -855,8 +863,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             features = this.get("layerSource").getFeatures(),
             feature = this.getFeatureByDataStreamId(features, dataStreamId),
             result = thingToUpdate.result,
-            utc = this.get("utc"),
-            phenomenonTime = this.changeTimeZone(thingToUpdate.phenomenonTime, utc);
+            timezone = this.get("timezone"),
+            phenomenonTime = this.getLocalTimeFormat(thingToUpdate.phenomenonTime, timezone);
 
         this.updateObservationForDatastreams(feature, dataStreamId, thing);
         this.liveUpdate(feature, dataStreamId, result, phenomenonTime);
