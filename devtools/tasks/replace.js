@@ -22,27 +22,27 @@ module.exports = function (destination) {
             "to": "../mastercode/" + mastercodeVersionFolderName
         },
         {
-            "files": destination + "/css/style.css",
+            "files": destination + "/css/masterportal.css",
             "from": /css\/woffs/g,
             "to": "./woffs"
         },
         {
-            "files": destination + "/css/style.css",
+            "files": destination + "/css/masterportal.css",
             "from": /url\s?\(\s?"\/img\//g,
             "to": "url(\"../img/"
         },
         {
-            "files": destination + "/css/style.css",
+            "files": destination + "/css/masterportal.css",
             "from": /url\s?\(\s?'\/img\//g,
             "to": "url('../img/"
         },
         {
-            "files": destination + "/css/style.css",
+            "files": destination + "/css/masterportal.css",
             "from": /url\s?\(\s?\/img\//g,
             "to": "url(../img/"
         },
         {
-            "files": destination + "/masterportal.js",
+            "files": destination + "/js/masterportal.js",
             "from": /\/locales\/\{\{lng\}\}\/\{\{ns\}\}\.json/g,
             "to": "./../mastercode/" + mastercodeVersionFolderName + "/locales/{{lng}}/{{ns}}.json"
         }
