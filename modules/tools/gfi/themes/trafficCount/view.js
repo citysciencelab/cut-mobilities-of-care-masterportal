@@ -11,10 +11,10 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
     },
 
     /**
-    * @class TrafficCountView
-    * @memberof Tools.GFI.Themes.TrafficCount
-    * @constructs
-    */
+     * @class TrafficCountView
+     * @memberof Tools.GFI.Themes.TrafficCount
+     * @constructs
+     */
     initialize: function () {
         // call ThemeView's initialize method explicitly
         ThemeView.prototype.initialize.apply(this);
@@ -66,6 +66,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
 
         this.resize();
         this.setCurrentTabClassFooter(value);
+        this.setContentScrollbar(value);
         this.model.toggleTab(value);
     },
 
@@ -95,6 +96,26 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      */
     setCurrentTabClassFooter: function (value) {
         this.$el.find(".tab-bottom").removeClass().addClass("tab-bottom " + value);
+    },
+
+    /** Setting the overflow dynamically to make sure there is no scrollbar to show if the content is not out of the range of the gfi fenster (there is a bug in firefox and IE)
+     * @param {String} value element value
+     * @returns {Void}  -
+     */
+    setContentScrollbar: function (value) {
+        if (this.gfiWindow === "detached" && !Radio.request("Util", "isViewMobile")) {
+            const contentheight = $(".trafficCount").height(),
+                contentMaxheight = $(".gfi-content").height();
+
+            if (value === "infos") {
+                if (contentheight <= contentMaxheight) {
+                    $(".gfi-content").css("overflow", "hidden");
+                }
+            }
+            else {
+                $(".gfi-content").css("overflow", "auto");
+            }
+        }
     },
 
     /**
