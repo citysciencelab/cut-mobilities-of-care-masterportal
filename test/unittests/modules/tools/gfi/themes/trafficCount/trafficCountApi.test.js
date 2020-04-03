@@ -9,12 +9,12 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
     describe("TrafficCountApi.constructor", function () {
         describe("TrafficCountApi.constructor: SensorThingsHttp", function () {
             it("should take the given dummy instead of creating a new instance of SensorThingsHttp", function () {
-                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "foo", "sensorThingsMqttOpt");
+                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "foo", "sensorThingsMqttOpt", "noSingletonOpt");
 
                 expect(api.getSensorThingsHttp()).to.equal("foo");
             });
             it("should create a new instance of SensorThingsHttp on construction if no dummy was given", function () {
-                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", false, "sensorThingsMqttOpt");
+                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", false, "sensorThingsMqttOpt", "noSingletonOpt");
 
                 expect(api.getSensorThingsHttp().constructor.name).to.equal("SensorThingsHttp");
             });
@@ -22,13 +22,13 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
         describe("TrafficCountApi.constructor: SensorThingsMqtt", function () {
             it("should take the given dummy instead of creating a new instance of SensorThingsMqtt", function () {
-                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "foo");
+                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "foo", "noSingletonOpt");
 
                 expect(api.getSensorThingsMqtt()).to.equal("foo");
                 expect(api.getMqttClient()).to.be.false;
             });
             it("should create a new instance of SensorThingsMqtt on construction if no dummy was given", function () {
-                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", {host: "foo"}, "sensorThingsHttpOpt", false);
+                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", {host: "foo"}, "sensorThingsHttpOpt", false, "noSingletonOpt");
 
                 expect(api.getSensorThingsMqtt().constructor.name).to.equal("SensorThingsMqtt");
                 expect(api.getMqttClient().constructor.name).to.equal("SensorThingsMqttClient");
@@ -37,7 +37,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
         describe("TrafficCountApi.constructor: baseUrlHttp", function () {
             it("should set the base url for http calls correctly at construction", function () {
-                const api = new TrafficCountApi("https://www.example.com/foo", "version1234", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
+                const api = new TrafficCountApi("https://www.example.com/foo", "version1234", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt", "noSingletonOpt");
 
                 expect(api.getBaseUrlHttp()).to.equal("https://www.example.com/foo/version1234");
             });
@@ -45,7 +45,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
         describe("TrafficCountApi.constructor: subscriptionTopics", function () {
             it("should set the subscription topics as an empty object at time of construction", function () {
-                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
+                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt", "noSingletonOpt");
 
                 expect(api.getSubscriptionTopics()).to.be.an("object").and.to.be.empty;
             });
@@ -61,7 +61,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                             return "baz";
                         }
                     },
-                    api = new TrafficCountApi("httpHost", "sensorThingsVersion", {"foo": "bar"}, "sensorThingsHttpOpt", dummySensorThingsMqtt);
+                    api = new TrafficCountApi("httpHost", "sensorThingsVersion", {"foo": "bar"}, "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt");
 
                 expect(lastMqttOptions).to.deep.equal({"foo": "bar"});
                 expect(api.getMqttClient()).to.equal("baz");
@@ -80,7 +80,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 };
 
-                new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt);
+                new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt");
 
                 expect(lastEventName).to.equal("message");
                 expect(typeof lastCallback).to.equal("function");
@@ -96,7 +96,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                             };
                         }
                     },
-                    api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt),
+                    api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt"),
                     lastPayloads = [];
 
                 api.setSubscriptionTopics({
@@ -126,7 +126,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
     describe("TrafficCountApi.checkForObservations", function () {
         it("checkForObservations: checks if the given dataset is an array with an object that has a key Datastreams which is an array with an object with an id and a key Observations that is an array", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt"),
+            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt", "noSingletonOpt"),
                 dataset = [
                     {
                         Datastreams: [
@@ -145,7 +145,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
     describe("TrafficCountApi.sumObservations", function () {
         it("sumObservations: sum up the given observations", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt"),
+            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt", "noSingletonOpt"),
                 dataset = [{
                     Datastreams: [{
                         "@iot.id": "foo",
@@ -165,7 +165,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
     describe("TrafficCountApi.getFirstDate", function () {
         it("getFirstDate: fetch the oldest date from the given observations", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt"),
+            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt", "noSingletonOpt"),
                 dataset = [{
                     Datastreams: [{
                         "@iot.id": "foo",
@@ -182,7 +182,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             expect(api.getFirstDate([{}])).to.be.false;
         });
         it("getFirstDate: should take an initial date to account for the best first date initialy", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt"),
+            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt", "noSingletonOpt"),
                 dataset = [{
                     Datastreams: [{
                         "@iot.id": "foo",
@@ -201,7 +201,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
     });
 
     describe("TrafficCountApi.parsePhenomenonTime", function () {
-        const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
+        const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt", "noSingletonOpt");
 
         it("parsePhenomenonTime: should split the given string interval delimited by '/' and return the agreed part", function () {
             const interval = "foo/bar",
@@ -228,7 +228,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
     describe("TrafficCountApi.mqttSubscribe", function () {
         it("mqttSubscribe: should push a handler for the given topic on subscription topics", function () {
-            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt");
+            const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "sensorThingsMqttOpt", "noSingletonOpt");
 
             api.setSubscriptionTopics({});
             api.mqttSubscribe("foo", false, "bar");
@@ -250,7 +250,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         };
                     }
                 },
-                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt);
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt");
 
             api.mqttSubscribe("foo", "quix");
 
@@ -275,7 +275,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt");
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
 
             api.updateTitle("thingId", "onupdate", "onerror", "onstart", "oncomplete");
 
@@ -294,7 +294,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt");
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
 
             api.updateTitle(false, title => {
                 lastTitle = title;
@@ -307,7 +307,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             const dummySensorThingsHttp = {
                     get: false
                 },
-                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt");
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
 
             lastError = false;
             dummySensorThingsHttp.get = (url, onupdate) => {
@@ -368,7 +368,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-03-20 00:00:00").toISOString(),
                 expectedUntil = new Date("2020-03-21 00:00:00").toISOString();
 
@@ -398,7 +398,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedDate = "2020-03-20",
                 expectedValue = 10;
 
@@ -433,7 +433,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         };
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations",
                 expectedMqttOptions = {retain: 2};
 
@@ -466,7 +466,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         };
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt);
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
 
             // hint: day !== dayTodayOpt with "day" !== "today"
             api.updateDay("thingId", "meansOfTransport", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "2020-03-21");
@@ -492,7 +492,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations";
 
             api.setSubscriptionTopics({});
@@ -527,7 +527,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi(false, false, {}, dummySensorThingsHttp, true);
+                api = new TrafficCountApi(false, false, {}, dummySensorThingsHttp, true, "noSingletonOpt");
 
             // hint: day === dayTodayOpt with "day" === "day"
             api.updateDay("thingId", "meansOfTransport", "2020-03-20", "onupdate", (error) => {
@@ -549,7 +549,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations";
 
             // hint: day === dayTodayOpt with "day" === "day"
@@ -584,7 +584,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-01-01 00:00:00").toISOString(),
                 expectedUntil = new Date("2021-01-01 00:00:00").toISOString();
 
@@ -614,7 +614,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedDate = "2020",
                 expectedValue = 10;
 
@@ -659,7 +659,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedDate = "2020",
                 expectedValue = 36;
 
@@ -694,7 +694,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         };
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt);
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
 
             // hint: year !== yearTodayOpt with "year" !== "todays year"
             api.updateYear("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete", "2021");
@@ -735,7 +735,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(bar)/Observations";
 
             api.setSubscriptionTopics({});
@@ -770,7 +770,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi(false, false, {}, dummySensorThingsHttp, true);
+                api = new TrafficCountApi(false, false, {}, dummySensorThingsHttp, true, "noSingletonOpt");
 
             // hint: year === yearTodayOpt with "year" === "todays year"
             api.updateYear("thingId", "meansOfTransport", "2020", "onupdate", (error) => {
@@ -792,7 +792,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations";
 
             // hint: year === yearTodayOpt with "year" === "todays year"
@@ -827,7 +827,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true);
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt");
 
             api.updateTotal("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
@@ -857,7 +857,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedDate = moment(phenomenonTimeA).format("YYYY-MM-DD"),
                 // the sum ist two times the result sum because onupdate is called twice in this function (total + last week)
                 expectedValue = 12;
@@ -901,7 +901,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedDate = moment(phenomenonTimeA).format("YYYY-MM-DD"),
                 expectedValue = 8;
 
@@ -947,7 +947,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(bar)/Observations";
 
             api.setSubscriptionTopics({});
@@ -981,7 +981,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi(false, false, {}, dummySensorThingsHttp, true);
+                api = new TrafficCountApi(false, false, {}, dummySensorThingsHttp, true, "noSingletonOpt");
 
             api.updateTotal("thingId", "meansOfTransport", "onupdate", (error) => {
                 lastErrorMessage = error;
@@ -1002,7 +1002,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations";
 
             api.updateTotal("thingId", "meansOfTransport", "onupdate", (error) => {
@@ -1036,7 +1036,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-01-01 00:00:00").toISOString(),
                 expectedUntil = new Date("2021-01-01 00:00:00").toISOString(),
                 expectedUrl = "https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))";
@@ -1065,7 +1065,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedDate = moment(phenomenonTimeA).format("YYYY-MM-DD"),
                 expectedValue = 1;
 
@@ -1095,7 +1095,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-01-01 00:00:00").toISOString(),
                 expectedUntil = new Date("2021-01-01 00:00:00").toISOString();
 
@@ -1122,7 +1122,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedCalendarWeek = 12,
                 expectedValue = 1;
 
@@ -1152,7 +1152,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-01-01 00:00:00").toISOString(),
                 expectedUntil = new Date("2021-01-01 00:00:00").toISOString();
 
@@ -1183,7 +1183,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedMonth = "Februar",
                 expectedValue = 9;
 
@@ -1213,7 +1213,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-03-20 00:00:00.000").toISOString(),
                 expectedUntil = new Date("2020-03-21 00:00:00.000").toISOString();
 
@@ -1247,7 +1247,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedDataset = {
                     meansOfTransport: {}
                 };
@@ -1285,7 +1285,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         };
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt);
+                api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
 
             // hint: until === todayUntilOpt with "until" === "today"
             api.updateDataset("thingId", "meansOfTransport", "interval", "2020-03-20", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "2020-03-20");
@@ -1314,7 +1314,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations",
                 expectedDataset = {
                     meansOfTransport: {}
@@ -1374,7 +1374,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 meansOfTransport = "AnzFahrzeuge",
                 expectedTopicFahrzeuge = "v1234/Datastreams(foo)/Observations",
                 expectedTopicSV = "v1234/Datastreams(bar)/Observations",
@@ -1426,7 +1426,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         lastOnerror = onerror;
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true);
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt");
 
             api.subscribeLastUpdate("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
@@ -1446,7 +1446,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations";
 
             api.setSubscriptionTopics({});
@@ -1476,7 +1476,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         };
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt);
+                api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
 
             api.subscribeLastUpdate("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
@@ -1497,7 +1497,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true),
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations";
 
             api.setSubscriptionTopics({});
@@ -1537,7 +1537,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         }]);
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true);
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt");
 
             api.setSubscriptionTopics({});
             api.subscribeLastUpdate("thingId", "meansOfTransport", "onupdate", (error) => {
@@ -1551,7 +1551,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
     describe("TrafficCountApi.unsubscribeEverything", function () {
         it("unsubscribeEverything: should empty subscription topics", function () {
-            const api = new TrafficCountApi(false, false, {}, true, true);
+            const api = new TrafficCountApi(false, false, {}, true, true, "noSingletonOpt");
 
             api.setSubscriptionTopics({
                 foo: "bar",
@@ -1573,7 +1573,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         };
                     }
                 },
-                api = new TrafficCountApi(false, false, {}, true, dummySensorThingsMqtt);
+                api = new TrafficCountApi(false, false, {}, true, dummySensorThingsMqtt, "noSingletonOpt");
 
             api.setSubscriptionTopics({
                 foo: "bar",
@@ -1586,7 +1586,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         });
         it("unsubscribeEverything: should call onsuccess after unsubscribing everything topic found in subscription topics", function () {
             let onsuccessCalled = false;
-            const api = new TrafficCountApi(false, false, {}, true, true);
+            const api = new TrafficCountApi(false, false, {}, true, true, "noSingletonOpt");
 
             api.unsubscribeEverything(() => {
                 onsuccessCalled = true;
