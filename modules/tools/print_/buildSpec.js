@@ -464,7 +464,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             type: "text",
             label: style.getText() !== undefined ? style.getText() : "",
             fontColor: this.rgbArrayToHex(fontColor),
-            fontOpacity: fontColor.length === 4 ? fontColor[3] : 1,
+            fontOpacity: fontColor[0] !== "#" ? fontColor[3] : 1,
             labelOutlineColor: style.getStroke() !== null ? this.rgbArrayToHex(style.getStroke().getColor()) : undefined,
             labelXOffset: -style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
