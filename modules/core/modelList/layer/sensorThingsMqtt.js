@@ -187,8 +187,6 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
             qos: 0,
             retain: 0,
             rmSimulate: false,
-            rmPath: "",
-            rmProtocol: "https",
             rmHttpClient: defaultHttpClient
         }, optionsOpt);
 
@@ -196,7 +194,7 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
 
         if (options.rmSimulate && (options.retain !== 2)) {
             // simulate retained message
-            simulateRetainedMessage(options.rmProtocol + "://" + mqttHost + options.rmPath, topic, options.rmHttpClient, onmessageOpt || messageHandler);
+            simulateRetainedMessage(options.rmUrl, topic, options.rmHttpClient, onmessageOpt || messageHandler);
         }
     };
 
