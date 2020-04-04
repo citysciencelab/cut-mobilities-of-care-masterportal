@@ -437,6 +437,45 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * Iterates over the dataStreams and creates for each datastream the attributes:
      * "dataStream_[dataStreamId]_[dataStreamName]" and
      * "dataStream_[dataStreamId]_[dataStreamName]_phenomenonTime".
+     * @param {Object} thing thing.
+     * @returns {Void} -
+     */
+    getNewestSensorDataOfDatastream (thing) {
+        const dataStreams = thing.Datastreams;
+
+        thing.properties.dataStreamId = [];
+        thing.properties.dataStreamName = [];
+        dataStreams.forEach(dataStream => {
+            const dataStreamId = String(dataStream["@iot.id"]),
+                propertiesType = dataStream.hasOwnProperty("ObservedProperty") && dataStream.ObservedProperty.hasOwnProperty("name") ? dataStream.ObservedProperty.name : undefined,
+                unitOfMeasurementName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
+                dataStreamName = propertiesType ? propertiesType : unitOfMeasurementName,
+                key = "dataStream_" + dataStreamId + "_" + dataStreamName,
+                value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
+                timezone = this.get("timezone");
+            let phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
+
+            phenomenonTime = this.changeTimeZone(phenomenonTime, this.get("utc"));
+
+            if (this.get("showNoDataValue") && !value) {
+                thing.properties[key] = this.get("noDataValue");
+                thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
+                thing.properties.dataStreamId.push(dataStreamId);
+                thing.properties.dataStreamName.push(dataStreamName);
+            }
+            else if (value) {
+                thing.properties[key] = value;
+                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, timezone);
+                thing.properties.dataStreamId.push(dataStreamId);
+                thing.properties.dataStreamName.push(dataStreamName);
+            }
+        });
+        thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
+        thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
+    },
+
+    /**
+     * Iterates over things and creates attributes for each observed property.
      * @param {Object[]} allThings All things.
      * @returns {Object[]} - All things with the newest observation for each dataStream.
      */
@@ -444,40 +483,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const allThingsWithSensorData = allThings;
 
         allThingsWithSensorData.forEach(thing => {
-            const dataStreams = thing.Datastreams;
 
             // A thing may not have properties. So we ensure we can access them.
             if (!thing.hasOwnProperty("properties")) {
                 thing.properties = {};
             }
 
-            thing.properties.dataStreamId = [];
-            thing.properties.dataStreamName = [];
-            dataStreams.forEach(dataStream => {
-                const dataStreamId = String(dataStream["@iot.id"]),
-                    propertiesType = dataStream.hasOwnProperty("ObservedProperty") && dataStream.ObservedProperty.hasOwnProperty("name") ? dataStream.ObservedProperty.name : undefined,
-                    unitOfMeasurementName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
-                    dataStreamName = propertiesType ? propertiesType : unitOfMeasurementName,
-                    key = "dataStream_" + dataStreamId + "_" + dataStreamName,
-                    value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
-                    timezone = this.get("timezone"),
-                    phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
+            if (thing.hasOwnProperty("Datastreams")) {
+                this.getNewestSensorDataOfDatastream(thing);
+            }
 
-                if (this.get("showNoDataValue") && !value) {
-                    thing.properties[key] = this.get("noDataValue");
-                    thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
-                    thing.properties.dataStreamId.push(dataStreamId);
-                    thing.properties.dataStreamName.push(dataStreamName);
-                }
-                else if (value) {
-                    thing.properties[key] = value;
-                    thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, timezone);
-                    thing.properties.dataStreamId.push(dataStreamId);
-                    thing.properties.dataStreamName.push(dataStreamName);
-                }
-            });
-            thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
-            thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
         });
 
         return allThingsWithSensorData;
@@ -616,15 +631,19 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 thing.forEach(thing2 => {
                     keys.push(Object.keys(thing2.properties));
                     props = Object.assign(props, thing2.properties);
-                    datastreams = datastreams.concat(thing2.Datastreams);
+                    if (thing2.hasOwnProperty("Datastreams")) {
+                        datastreams = datastreams.concat(thing2.Datastreams);
+                    }
                 });
                 keys = [...new Set(this.flattenArray(keys))];
-                keys = this.excludeDataStreamKeys(keys, "dataStream_");
                 keys.push("name");
                 keys.push("description");
                 keys.push("@iot.id");
                 aggregatedThing.properties = Object.assign({}, props, this.aggregateProperties(thing, keys));
-                aggregatedThing.properties.Datastreams = datastreams;
+                if (datastreams.length > 0) {
+                    keys = this.excludeDataStreamKeys(keys, "dataStream_");
+                    aggregatedThing.properties.Datastreams = datastreams;
+                }
             }
             else {
                 aggregatedThing.location = this.getJsonGeometry(thing, 0);
@@ -632,7 +651,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 aggregatedThing.properties.name = thing.name;
                 aggregatedThing.properties.description = thing.description;
                 aggregatedThing.properties["@iot.id"] = thing["@iot.id"];
-                aggregatedThing.properties.Datastreams = thing.Datastreams;
+
+                if (thing.hasOwnProperty("Datastreams")) {
+                    aggregatedThing.properties.Datastreams = thing.Datastreams;
+                }
             }
             aggregatedThing.properties.requestUrl = this.get("url");
             aggregatedThing.properties.versionUrl = this.get("version");
