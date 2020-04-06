@@ -26,11 +26,7 @@ const WPS = Backbone.Model.extend({
      * @param {string} identifier The functionality to be invoked by the wps
      * @param {object} data Contains the Attributes to be sent
      * @param {function} responseFunction function to be called
-<<<<<<< HEAD
      * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
-=======
-     * @param {number} timeout if set, used as timeout in milliseconds, else timeout of 10.000 msecs is used
->>>>>>> update: timeout in wps request schulwergouting set to 50000
      * @returns {void}
      */
     request: function (wpsID, identifier, data, responseFunction, timeout) {
