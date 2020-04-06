@@ -56,12 +56,12 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             tileGrid: new WMTSTileGrid({
                 origin: this.get("origin"),
                 resolutions: resolutions,
-                matrixIds: matrixIds
+                matrixIds: matrixIds,
+                tileSize: this.get("tileSize")
             }),
             tilePixelRatio: DEVICE_PIXEL_RATIO,
             urls: urls,
             matrixSet: this.get("tileMatrixSet"),
-            tileSize: this.get("tileSize"),
             layer: this.get("layer"),
             format: format,
             style: style,
