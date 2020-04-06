@@ -1,14 +1,14 @@
-@color_1: #cdcdcd;
+@color_1: rgb(51, 51, 51);
 @color_2: rgb( 119, 119, 119);
 @color_3: rgb(82, 82, 82);
 @color_4: #fff;
-@font_family_1: "UniversNextW04-620CondB","Arial Narrow",Arial,sans-serif;
-@font_family_2: "UniversNextW01-Regular","Arial Narrow",Arial,sans-serif;
-@font_family_3: "HamburgSans-Regular", sans-serif;
+@font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+@font_family_2: "MasterPortalFont","Arial Narrow",Arial,sans-serif;
+@font_family_3: "MasterPortalFont", sans-serif;
 @background_color_1: #ffffff;
 @background_color_2: #fff;
 @background_color_3: #efefef;
-@background_color_4: #d42132;
+@background_color_4: #E10019;
 @background_color_5: rgb(169,169,169);
 @border_color_1: rgb(204, 204, 204);
 @border_color_2: white;
@@ -18,12 +18,13 @@
 #searchInput {
     &::placeholder {
         font-family: @font_family_1;
-        font-size: 14px;
+        font-size: 12px;
+        color:  @color_1;
         opacity: 1;
     }
     &:-ms-input-placeholder {
         font-family: @font_family_1;
-        font-size: 14px;
+        font-size: 13px;
     }
     box-shadow: none;
     font-size: 12px;
@@ -97,15 +98,11 @@
     }
     small {
         color: @color_1;
+        font-style: italic;
         padding-left: 10px;
     }
     li.type {
-        background: #e7e7e7;
-        background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-        background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
+        background: white;
     }
     li {
         &:hover {
@@ -118,11 +115,6 @@
     >.glyphicon-search {
         font-size: 12px;
     }
-    background: -moz-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -webkit-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -o-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-    background: -ms-linear-gradient(top , #fff , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
     &:hover {
         background: rgb(255, 255, 255);
         border-color: @border_color_1;
@@ -150,7 +142,6 @@
     padding: 6px;
     border-top-width: 2px;
     color: @color_4;
-    opacity: 0.6;
     >div {
         >.glyphicon {
             color: @color_4;
@@ -161,7 +152,7 @@
 }
 li.results {
     &:hover {
-        opacity: 1;
+        opacity: 0.6;
         background-color: @background_color_4;
     }
 }
@@ -260,11 +251,6 @@ li.results {
         }
         li.type {
             background: #e7e7e7;
-            background: -moz-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-            background: -webkit-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-            background: linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-            background: -o-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
-            background: -ms-linear-gradient(top , white , #f3f3f3) repeat scroll 0 0 rgba(0, 0, 0, 0);
         }
         .list-group-item {
             font-family: @font_family_3;
@@ -336,6 +322,7 @@ li.results {
         margin: 1px 0px 7px 78px;
         height: 40px;
         border-radius: 12px;
+        left: -35px;
     }
     input#searchInput.form-control {
         font-family: @font_family_3;
@@ -394,9 +381,9 @@ input#searchInput.form-control {
 }
 @media (min-width: 768px) {
     #searchbar {
-        float: right;
-        padding-left: 10px;
-        padding-right: 10px;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
     #searchInput {
         max-width: 350px;

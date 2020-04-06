@@ -3,7 +3,8 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
         // true if sidebar is visible
         isVisible: false,
         // true if viewport width < 768px
-        isMobile: false
+        isMobile: false,
+        width: "30%"
     },
 
     /**
@@ -14,8 +15,8 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
      * @property {Boolean} isMobile=false Flag if sidebar is mobile
      * @listens Sidebar#RadioTriggerSidebarToggle
      * @listens Sidebar#RadioTriggerSidebarAppend
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
-     * @fires Util#RadioRequestUtilIsViewMobile
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
+     * @fires Core#RadioRequestUtilIsViewMobile
      * @fires Sidebar#addContent
      * @constructs
      */
@@ -24,7 +25,8 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
 
         this.listenTo(channel, {
             "toggle": this.toggle,
-            "append": this.addContent
+            "append": this.addContent,
+            "resize": this.resize
         });
         this.listenTo(Radio.channel("Util"), {
             "isViewMobileChanged": this.setIsMobile
@@ -35,11 +37,13 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
     /**
      * passes a DOM element to the view
      * @param {DOM} element - from a tool view
+     * @param {boolean} dragable - is the sidebar resizeable? default = false
      * @returns {void}
      * @fires Sidebar#addContent
      */
-    addContent: function (element) {
-        this.trigger("addContent", element);
+    addContent: function (element, dragable = false) {
+        this.trigger("addContent", element, dragable);
+        Radio.trigger("Sidebar", "updated", $(element).attr("class"));
     },
     /**
      * Setter for "isMobile".
@@ -52,9 +56,23 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
     /**
      * Toggles the visibility of the sidebar. Sets the width if not undefined
      * @param {Boolean} isVisible Flag if sidebar is visible.
+     * @param {String} width Width for sidebar
+     * @fires Sidebar#setWidth
      * @returns {void}
      */
-    toggle: function (isVisible) {
+    toggle: function (isVisible, width) {
+        if (!this.get("isMobile")) {
+            if (width !== undefined) {
+                this.setWidth(width);
+            }
+            else {
+                this.setWidth("30%");
+            }
+        }
+        else {
+            this.setWidth("100%");
+        }
+        this.trigger("resize");
         this.setIsVisible(isVisible);
     },
     /**
@@ -64,6 +82,26 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
      */
     setIsVisible: function (value) {
         this.set("isVisible", value);
+    },
+    /**
+     * Setter for "width".
+     * @param {String} value The width of the sidebar in percent. e.g. "30%".
+     * @returns{void}
+     */
+    setWidth: function (value) {
+        this.set("width", value);
+    },
+    /**
+     * @description resizes the open window
+     * @param {*} width the new width
+     * @return {void}
+     */
+    resize: function (width) {
+        if (width !== undefined) {
+            this.setWidth(width);
+        }
+
+        this.trigger("resize");
     }
 });
 

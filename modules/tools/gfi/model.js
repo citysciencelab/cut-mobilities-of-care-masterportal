@@ -6,8 +6,9 @@ import TableView from "./table/view";
 import DesktopAttachedView from "./desktop/attached/view";
 import MobileView from "./mobile/view";
 import Tool from "../../core/modelList/tool/model";
+import HightlightFeature from "./highlightFeature";
 
-const Gfi = Tool.extend({
+const GFI = Tool.extend(/** @lends GFI.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         // detached | attached
         desktopViewType: "detached",
@@ -33,11 +34,22 @@ const Gfi = Tool.extend({
         glyphicon: "glyphicon-info-sign",
         isMapMarkerVisible: true,
         unlisten: false,
+        highlightFeature: undefined,
         centerMapMarkerPolygon: false
     }),
-
+    /**
+     * @class GFI
+     * @extends Tools
+     * @memberof Tools.GFI
+     * @constructs
+     */
     initialize: function () {
         var channel = Radio.channel("GFI");
+
+        // check and initiate module to highlight selected Feature
+        if (this.get("highlightVectorRules")) {
+            this.set("highlightFeature", new HightlightFeature(this.get("highlightVectorRules")));
+        }
 
         // Wegen Ladereihenfolge hier die Default-Attribute setzen, sonst sind die Werte noch nicht aus der Config ausgelesen
         this.set("uiStyle", Radio.request("Util", "getUiStyle"));
@@ -68,6 +80,9 @@ const Gfi = Tool.extend({
 
         this.listenTo(this, {
             "change:isVisible": function (model, value) {
+                if (value === false) {
+                    this.lowlightFeature();
+                }
                 channel.trigger("isVisible", value);
                 if (value === false && this.get("numberOfThemes") > 0) {
                     this.get("themeList").setAllInVisible();
@@ -82,6 +97,7 @@ const Gfi = Tool.extend({
                 }
             },
             "change:themeIndex": function (model, value) {
+                this.highlightFeature(model.get("currentView").model);
                 this.get("themeList").appendTheme(value);
             },
             "change:isActive": function (model, value) {
@@ -108,6 +124,14 @@ const Gfi = Tool.extend({
                 if (this.get("desktopViewType") === "attached" && Radio.request("Util", "isViewMobile") === false) {
                     Radio.trigger("Map", "addOverlay", this.get("overlay"));
                 }
+            },
+            "updateSize": function () {
+                this.initView();
+                if (this.get("isVisible") === true) {
+                    this.get("currentView").render();
+                    this.get("themeList").appendTheme(this.get("themeIndex"));
+                    this.get("currentView").toggle();
+                }
             }
         }, this);
 
@@ -131,6 +155,7 @@ const Gfi = Tool.extend({
                 else {
                     this.setIsVisible(false);
                 }
+                this.highlightFeature(this.get("currentView").model);
             }
         });
     },
@@ -213,6 +238,8 @@ const Gfi = Tool.extend({
         Radio.trigger("ClickCounter", "gfi");
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
+            // use pickedPosition in 3D Mode, to get the 3d position directly at the 3d object
+            this.setCoordinate(evt.pickedPosition);
         }
 
         coordinate = this.getClickedCoordinate(this.get("centerMapMarkerPolygon"), evt);
@@ -226,7 +253,7 @@ const Gfi = Tool.extend({
             this.setIsVisible(false);
         }
         else {
-            this.get("overlay").setPosition(evt.coordinate);
+            this.get("overlay").setPosition(this.get("coordinate"));
             this.get("themeList").reset(unionParams);
         }
     },
@@ -244,7 +271,7 @@ const Gfi = Tool.extend({
                 olFeature,
                 layer;
 
-            if (feature instanceof Cesium.Cesium3DTileFeature) {
+            if (feature instanceof Cesium.Cesium3DTileFeature || feature instanceof Cesium.Cesium3DTilePointFeature) {
                 propertyNames = feature.getPropertyNames();
                 _.each(propertyNames, function (propertyName) {
                     properties[propertyName] = feature.getProperty(propertyName);
@@ -279,6 +306,20 @@ const Gfi = Tool.extend({
                 layer = feature.primitive.olLayer;
                 if (olFeature && layer) {
                     gfiParams3d.push(this.getVectorGfiParams3d(olFeature, layer));
+                }
+                else if (feature.primitive.id instanceof Cesium.Entity) {
+                    layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.primitive.id.layerReferenceId});
+                    if (layerModel) {
+                        modelAttributes = _.pick(layerModel.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                    }
+                    if (modelAttributes) {
+                        if (feature.primitive.id.attributes) {
+                            modelAttributes.attributes = feature.primitive.id.attributes;
+                        }
+                    }
+                    if (layerModel) {
+                        gfiParams3d.push(modelAttributes);
+                    }
                 }
             }
         }, this);
@@ -333,18 +374,27 @@ const Gfi = Tool.extend({
      * @returns {Object}            Objekt der aufgeschlüsslten GFI
      */
     getGFIParamsList: function (layerList) {
-        var wmsLayerList = [],
-            vectorLayerList = [];
+        const wmsLayerList = [],
+            vectorLayerList = [],
+            currentScale = Radio.request("MapView", "getOptions").scale;
 
-        // Zuordnen von Layertypen zur Abfrage
-        _.each(layerList, function (layer) {
-            var typ = layer.get("typ");
+        let maxScale = "",
+            typ = "";
+
+        // Assign layer types to the query
+        layerList.forEach(function (layer) {
+            maxScale = layer.get("maxScale");
+            typ = layer.get("typ");
+
+            if (maxScale && currentScale && parseFloat(currentScale, 10) > parseInt(maxScale, 10)) {
+                return;
+            }
 
             if (typ === "WMS") {
                 wmsLayerList.push(layer);
             }
-            else if (typ === "GROUP") {
-                _.each(layer.get("layerSource"), function (layerSource) {
+            else if (typ === "GROUP" && layer.get("layerSource")) {
+                layer.get("layerSource").forEach(function (layerSource) {
                     if (layerSource.get("typ") === "WMS" && layerSource.get("layer").getVisible() === true) {
                         wmsLayerList.push(layerSource);
                     }
@@ -376,11 +426,11 @@ const Gfi = Tool.extend({
         _.each(layerlist, function (vectorLayer) {
             var features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
                     layerFilter: function (layer) {
-                        return layer.get("name") === vectorLayer.get("name");
+                        return layer.get("id") === vectorLayer.get("id");
                     },
                     hitTolerance: vectorLayer.get("hitTolerance")
                 }),
-                modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable", "layer");
 
             _.each(features, function (featureAtPixel) {
                 // Feature
@@ -595,6 +645,22 @@ const Gfi = Tool.extend({
         return false;
     },
 
+    highlightFeature: function (model) {
+        const hf = this.get("highlightFeature");
+
+        if (hf) {
+            hf.highlight(model.get("currentView").model);
+        }
+    },
+
+    lowlightFeature: function () {
+        const hf = this.get("highlightFeature");
+
+        if (hf) {
+            hf.lowlightFeatures();
+        }
+    },
+
     setClickEventKey: function (value) {
         this.set("clickEventKey", value);
     },
@@ -610,4 +676,4 @@ const Gfi = Tool.extend({
 
 });
 
-export default Gfi;
+export default GFI;

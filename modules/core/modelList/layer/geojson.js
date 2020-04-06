@@ -5,29 +5,27 @@ import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 
 const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
+    defaults: _.extend({}, Layer.prototype.defaults, {
+        supported: ["2D", "3D"],
+        isClustered: false,
+        altitudeMode: "clampToGround"
+    }),
+
     /**
-     * @class Class representing a GeoJSONLayer
+     * @class GeoJSONLayer
      * @description Module to represent GeoJSONLayer
      * @extends Layer
      * @constructs
-     * @memberOf Core.ModelList.Layer
-     * @property {String[]} [supported="2D,3D"] Supported modes "2D" and / or "3D"
-     * @property {number} [clusterDistance="undefined"] Distance to group features to clusters
-     * @property {string} [styleId="ol default"] ID of style in style.json
+     * @memberof Core.ModelList.Layer
+     * @property {String[]} supported=["2D", "3D"] Supported modes "2D" and / or "3D"
+     * @property {Boolean} isClustered=[false] Distance to group features to clusters
      * @fires StyleList#RadioRequestReturnModelById
      * @fires MapView#RadioRequestGetProjection
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Util#RadioTriggerUtilHideLoader
      * @fires RemoteInterface#RadioTriggerPostMessage
-     */
-    defaults: _.extend({}, Layer.prototype.defaults, {
-        supported: ["2D", "3D"],
-        isClustered: false
-    }),
-
-    /**
-     * @fires StyleList#RadioRequestReturnModelById
-     * @returns {void}
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
+     * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
 
@@ -81,15 +79,16 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
             id: this.get("id"),
-            altitudeMode: "clampToGround",
+            altitudeMode: this.get("altitudeMode"),
             hitTolerance: this.get("hitTolerance")
         }));
-
-        if (_.isUndefined(this.get("geojson"))) {
-            this.updateSource();
-        }
-        else {
-            this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
+        if (this.get("isSelected")) {
+            if (_.isUndefined(this.get("geojson"))) {
+                this.updateSource();
+            }
+            else {
+                this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
+            }
         }
     },
 
@@ -130,6 +129,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         xhr.timeout = 10000;
         xhr.onload = function (event) {
             that.handleResponse(event.currentTarget.responseText, xhr.status, showLoader);
+            that.expandFeaturesBySubTyp(that.get("subTyp"));
         };
         xhr.ontimeout = function () {
             that.handleResponse({}, "timeout", showLoader);
@@ -152,7 +152,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      */
     handleResponse: function (responseText, status, showLoader) {
         if (status === 200) {
-            this.handleData(responseText, Radio.request("MapView", "getProjection").getCode());
+            this.handleData(responseText);
         }
         else {
             Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + status + ")");
@@ -165,29 +165,22 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
 
     /**
      * Takes the response, parses the geojson and creates ol.features.
-     * According to the GeoJSON Specification (RFC 7946) the geometry is expected to be in EPSG:4326.
      * @fires RemoteInterface#RadioTriggerPostMessage
      * @param   {string} data   response as GeoJson
-     * @param   {string} mapCrs EPSG-Code of ol.map
      * @returns {void}
      */
-    handleData: function (data, mapCrs) {
-        var jsonCrs = "EPSG:4326",
-            features = this.parseDataToFeatures(data),
+    handleData: function (data) {
+        var mapCrs = Radio.request("MapView", "getProjection"),
+            jsonCrs = this.getJsonProjection(data),
+            features = this.parseDataToFeatures(data, mapCrs, jsonCrs),
             newFeatures = [];
 
         if (!features) {
             return;
         }
-        else if (jsonCrs !== mapCrs) {
-            features = this.transformFeatures(features, jsonCrs, mapCrs);
-        }
 
-        features.forEach(function (feature) {
-            var id = feature.get("id") || _.uniqueId();
-
-            feature.setId(id);
-        });
+        this.addId(features);
+        features = this.getFeaturesIntersectsGeometry(this.get("bboxGeometry"), features);
         this.get("layerSource").clear(true);
         this.get("layerSource").addFeatures(features);
         this.get("layer").setStyle(this.get("styleFunction"));
@@ -195,23 +188,71 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         // für it-gbm
         if (!this.has("autoRefresh")) {
             features.forEach(function (feature) {
-                feature.set("extent", feature.getGeometry().getExtent());
-                newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                var geometry = feature.getGeometry();
+
+                if (geometry) {
+                    feature.set("extent", geometry.getExtent());
+                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                }
             });
             Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.get("id")});
         }
-
+        this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
+    },
+
+    /**
+     * returns the features that intersect the given geometries
+     * @param {ol.geom.Geometry[]} geometries - GeometryCollection with one or more geometry
+     * @param {ol.Feature[]} features - all features in the geometry extent
+     * @returns {ol.Feature[]} filtered features
+     */
+    getFeaturesIntersectsGeometry: function (geometries, features) {
+        if (geometries) {
+            return features.filter(function (feature) {
+                // test if the geometry and the passed extent intersect
+                return geometries.intersectsExtent(feature.getGeometry().getExtent());
+            });
+        }
+
+        return features;
+    },
+
+    /**
+     * Takes the data string to extract the crs definition. According to the GeoJSON Specification (RFC 7946) the geometry is expected to be in EPSG:4326.
+     * For downward compatibility a crs tag can be used.
+     * @see https://tools.ietf.org/html/rfc7946
+     * @see https://geojson.org/geojson-spec#named-crs
+     * @param   {string} data   response as GeoJson
+     * @returns {string} epsg definition
+     */
+    getJsonProjection: function (data) {
+        // using indexOf method to increase performance
+        const dataString = data.replace(/\s/g, ""),
+            startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
+
+        if (startIndex !== -1) {
+            const endIndex = dataString.indexOf("\"", startIndex + 43);
+
+            return dataString.substring(startIndex + 43, endIndex);
+        }
+
+        return "EPSG:4326";
     },
 
     /**
      * Tries to parse data string to ol.format.GeoJson
      * @param   {string} data string to parse
+     * @param   {ol/proj/Projection} mapProjection target projection to parse features into
+     * @param   {string} jsonProjection projection of the json
      * @throws Will throw an error if the argument cannot be parsed.
-     * @returns {object}    ol/format/GeoJSON/features
+     * @returns {object} ol/format/GeoJSON/features
      */
-    parseDataToFeatures: function (data) {
-        const geojsonReader = new GeoJSON();
+    parseDataToFeatures: function (data, mapProjection, jsonProjection) {
+        const geojsonReader = new GeoJSON({
+            featureProjection: mapProjection,
+            dataProjection: jsonProjection
+        });
         let jsonObjects;
 
         try {
@@ -220,24 +261,92 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         catch (err) {
             console.error("GeoJSON cannot be parsed.");
         }
-
         return jsonObjects;
     },
 
     /**
-     * Transforms features between CRS
-     * @param   {feature[]} features Array of ol.features
-     * @param   {string}    crs      EPSG-Code of feature
-     * @param   {string}    mapCrs   EPSG-Code of ol.map
+     * Requests the latest sensorValues from OpenSenseMap.
+     * @param {String} subTyp SubTyp of layer.
      * @returns {void}
      */
-    transformFeatures: function (features, crs, mapCrs) {
-        _.each(features, function (feature) {
-            var geometry = feature.getGeometry();
+    expandFeaturesBySubTyp: function (subTyp) {
+        const expandedFeatures = this.get("layerSource").getFeatures();
 
-            geometry.transform(crs, mapCrs);
+        if (subTyp === "OpenSenseMap") {
+            expandedFeatures.forEach(feature => {
+                const sensors = feature.get("sensors");
+
+                sensors.forEach(sensor => {
+                    const sensorId = sensor._id,
+                        name = sensor.title.toLowerCase() || "unnamedSensor",
+                        unit = sensor.unit || "",
+                        type = sensor.sensorType || "unnamedSensorType";
+
+                    this.getValueFromOpenSenseMapSensor(feature, sensorId, name, unit, type);
+                });
+            });
+        }
+        else if (subTyp !== undefined) {
+            console.error("Subtype " + subTyp + " is not yet supported for GeoJSON-Layer.");
+        }
+    },
+
+    /**
+     * Sends async request to get the newest measurement of each sensor per feature.
+     * Async so that the user can already navigate in the map without waiting for all sensorvalues for all features.
+     * @param {Feature} feature The current Feature.
+     * @param {String} sensorId Id of sensor.
+     * @param {String} name Name of sensor.
+     * @param {String} unit Unit of sensor.
+     * @param {String} type Type of sensor.
+     * @returns {void}
+     */
+    getValueFromOpenSenseMapSensor: function (feature, sensorId, name, unit, type) {
+        const xhr = new XMLHttpRequest(),
+            async = true,
+            that = this,
+            boxId = feature.get("_id");
+        let url = "https://api.opensensemap.org/boxes/" + boxId + "/data/" + sensorId;
+
+        url = Radio.request("Util", "getProxyURL", url);
+        xhr.open("GET", url, async);
+        xhr.onload = function (event) {
+            let response = JSON.parse(event.currentTarget.responseText);
+
+            response = response.length > 0 ? response[0] : undefined;
+            that.setOpenSenseMapSensorValues(feature, response, name, unit, type);
+        };
+        xhr.send();
+    },
+
+    /**
+     * Sets the latest measurements of the opensensemap sensors at the feature.
+     * @param {Feature} feature The feature.
+     * @param {JSON} response The parsed response as JSON.
+     * @param {String} name Name of sensor.
+     * @param {String} unit Unit of sensor.
+     * @param {String} type Type of sensor.
+     * @returns {void}
+     */
+    setOpenSenseMapSensorValues: function (feature, response, name, unit, type) {
+        if (response) {
+            feature.set(name, response.value + " " + unit);
+            feature.set(name + "_createdAt", response.createdAt);
+            feature.set(name + "_sensorType", type);
+        }
+    },
+
+    /**
+     * Ensures all given features have an id
+     * @param {ol/feature[]} features features
+     * @returns {void}
+     */
+    addId: function (features) {
+        features.forEach(function (feature) {
+            const id = feature.get("id") || _.uniqueId();
+
+            feature.setId(id);
         });
-        return features;
     },
 
     /**
@@ -274,20 +383,24 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     /**
-     * Filters the visibility of features by ids
-     * @param  {string[]} featureIdList Liste der FeatureIds
+     * Filters the visibility of features by ids.
+     * @param  {String[]} featureIdList Feature ids to be shown.
+     * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @return {void}
      */
     showFeaturesByIds: function (featureIdList) {
+        const features = [];
+
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
             var feature = this.get("layerSource").getFeatureById(id);
 
             if (feature !== null) {
                 feature.setStyle(undefined);
+                features.push(feature);
             }
-
         }, this);
+        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
     },
 
     /**
@@ -329,6 +442,10 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     // setter for legendURL
     setLegendURL: function (value) {
         this.set("legendURL", value);
+    },
+
+    isUseProxy: function () {
+        return this.hasOwnProperty("isUseProxy") && this.get("isUseProxy") === true;
     }
 });
 

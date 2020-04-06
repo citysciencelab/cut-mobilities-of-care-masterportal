@@ -13,7 +13,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
      * @extends Backbone.View
      * @memberof Tools.Shadow
      * @constructs
-     * @fires Util#RadioRequestUtilGetUiStyle
+     * @fires Core#RadioRequestUtilGetUiStyle
      * @listens Menu#RadioTriggerMenuLoaderReady
      */
 
@@ -23,15 +23,11 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
 
     /**
      * Initializing module
-     * @fires Util#RadioRequestUtilGetUiStyle
+     * @fires Core#RadioRequestUtilGetUiStyle
      * @listens Menu#RadioTriggerMenuLoaderReady
      * @returns {void}
      */
     initialize: function () {
-        this.toggleButtonView = new SnippetCheckBoxView({model: this.model.get("toggleButton")});
-        this.datepickerView = new SnippetDatepickerView({model: this.model.get("datepicker")});
-        this.timesliderView = new SnippetSliderView({model: this.model.get("timeslider")});
-        this.datesliderView = new SnippetSliderView({model: this.model.get("dateslider")});
         this.listenTo(this.model, {
             "change:isActive": this.render,
             "toggleButtonValueChanged": this.toggleElements
@@ -56,6 +52,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
      */
     render: function () {
         if (this.model.get("isActive")) {
+            this.ensureSnippetsReady();
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template({}));
             this.$el.append(this.toggleButtonView.render().el);
@@ -71,6 +68,20 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
         }
 
         return this;
+    },
+
+    /**
+     * Ensures all snippet models are ready
+     * @returns {void}
+     */
+    ensureSnippetsReady: function () {
+        if (this.model.get("snippetsReady") === false) {
+            this.model.prepareSnippets();
+            this.toggleButtonView = new SnippetCheckBoxView({model: this.model.get("toggleButton")});
+            this.datepickerView = new SnippetDatepickerView({model: this.model.get("datepicker")});
+            this.timesliderView = new SnippetSliderView({model: this.model.get("timeslider")});
+            this.datesliderView = new SnippetSliderView({model: this.model.get("dateslider")});
+        }
     },
 
     /**

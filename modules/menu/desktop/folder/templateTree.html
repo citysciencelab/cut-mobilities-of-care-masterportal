@@ -6,9 +6,9 @@
    <% } %>
     <% if(isLeafFolder && isFolderSelectable) { %>
         <% if(isSelected) { %>
-            <span class="glyphicon glyphicon-check selectall" title="Alle Themen entfernen"></span>
+            <span class="glyphicon glyphicon-check selectall" title="<%= hideAllTopicsText %>"></span>
         <%} else {%>
-            <span class="glyphicon glyphicon-unchecked selectall" title="Alle Themen darstellen"></span>
+            <span class="glyphicon glyphicon-unchecked selectall" title="<%= showAllTopicsText %>"></span>
         <%}%>
     <%}%>
     <span class="title"><%= name %></span>

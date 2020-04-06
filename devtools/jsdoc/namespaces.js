@@ -1,4 +1,9 @@
 /**
+ * @namespace Addons
+ * @description Addons are Modules that are dynamically loaded into the code bundle. This allows for different portals to run with different addons.
+ */
+
+/**
  * @namespace Controls
  * @description Controls are small Elements that allow the user to interact directly with the Application.
  * In the Application the controls are situated in red squares on the map on the right side of the window.
@@ -59,13 +64,19 @@
  */
 
 /**
+ * @namespace Poi
+ * @memberof Controls.Orientation
+ * @description Button to find features near my geolocation
+ */
+
+/**
  * @namespace Orientation3D
  * @memberof Controls
  * @description Creates navigation rosette in 3D mode.
  */
 
 /**
- * @namespace Overviewmap
+ * @namespace OverviewMap
  * @memberof Controls
  * @description Small map on the bottom right of the Application, that gives the user an overview.
  */
@@ -89,6 +100,7 @@
 
 /**
  * @namespace MapMarker
+ * @memberof Core
  * @description MapMarker
  */
 
@@ -129,109 +141,109 @@
 
 /**
  * @namespace Desktop
- * @memberOf Menu
+ * @memberof Menu
  * @description Desktop specific presentation of the menu
  */
 
 /**
  * @namespace Folder
- * @memberOf Menu.Desktop
+ * @memberof Menu.Desktop
  * @description Creates folders in the desktop-menu
  */
 
 /**
  * @namespace Layer
- * @memberOf Menu.Desktop
+ * @memberof Menu.Desktop
  * @description Creates layers in the desktop-menu
  */
 
 /**
  * @namespace StaticLink
- * @memberOf Menu.Desktop
+ * @memberof Menu.Desktop
  * @description Creates static links in the desktop-menu
  */
 
 /**
  * @namespace Tool
- * @memberOf Menu.Desktop
+ * @memberof Menu.Desktop
  * @description Creates tool entries in the desktop-menu
  */
 
 /**
  * @namespace ViewPoint
- * @memberOf Menu.Desktop
+ * @memberof Menu.Desktop
  * @description foobar
  */
 
 /**
  * @namespace Mobile
- * @memberOf Menu
+ * @memberof Menu
  * @description Mobile specific presentation of the menu
  */
 
 /**
  * @namespace BreadCrumb
- * @memberOf Menu.Mobile
+ * @memberof Menu.Mobile
  * @description Creates breadcrumbs in the mobile-menu
  */
 
 /**
  * @namespace Folder
- * @memberOf Menu.Mobile
+ * @memberof Menu.Mobile
  * @description Creates folders in the mobile-menu
  */
 
 /**
  * @namespace Layer
- * @memberOf Menu.Mobile
+ * @memberof Menu.Mobile
  * @description Creates layers in the mobile-menu
  */
 
 /**
  * @namespace StaticLink
- * @memberOf Menu.Mobile
+ * @memberof Menu.Mobile
  * @description Creates static links in the mobile-menu
  */
 
 /**
  * @namespace Tool
- * @memberOf Menu.Mobile
+ * @memberof Menu.Mobile
  * @description Creates tool entries in the mobile-menu
  */
 
 /**
  * @namespace ViewPoint
- * @memberOf Menu.Mobile
+ * @memberof Menu.Mobile
  * @description foobar
  */
 
 /**
  * @namespace Table
- * @memberOf Menu
+ * @memberof Menu
  * @description Touch-table specific presentation of the menu
  */
 
 /**
  * @namespace Categories
- * @memberOf Menu.Table
+ * @memberof Menu.Table
  * @description Creates table-menu entry for categories filter (specific for touch table)
  */
 
 /**
  * @namespace Layer
- * @memberOf Menu.Table
+ * @memberof Menu.Table
  * @description Creates layers in the table-menu
  */
 
 /**
  * @namespace Main
- * @memberOf Menu.Table
+ * @memberof Menu.Table
  * @description Creates the main table-menu
  */
 
 /**
  * @namespace Tool
- * @memberOf Menu.Table
+ * @memberof Menu.Table
  * @description Creates tools in the table-menu
  */
 
@@ -242,49 +254,55 @@
 
 /**
  * @namespace VisibleVector
- * @memberOf Searchbar
+ * @memberof Searchbar
  * @description todo
  */
 
 /**
  * @namespace Bkg
- * @memberOf Searchbar
+ * @memberof Searchbar
  * @description Configures BKG search
  */
 
 /**
  * @namespace Gaz
- * @memberOf Searchbar
+ * @memberof Searchbar
  * @description Configures gazetteer search
  */
 
 /**
  * @namespace Gdi
- * @memberOf Searchbar
+ * @memberof Searchbar
+ * @description Configures search in geodata infrastructure with elastic search
+ */
+
+ /**
+ * @namespace ElasticSearch
+ * @memberof Searchbar
  * @description Configures search in geodata infrastructure with elastic search
  */
 
 /**
  * @namespace Osm
- * @memberOf Searchbar
+ * @memberof Searchbar
  * @description Configures OpenStreetMap search
  */
 
 /**
- * @namespace SpecialWfs
- * @memberOf Searchbar
+ * @namespace SpecialWFS
+ * @memberof Searchbar
  * @description foobar
  */
 
 /**
  * @namespace Tree
- * @memberOf Searchbar
+ * @memberof Searchbar
  * @description Configures search in layertree
  */
 
 /**
  * @namespace VisibleVector
- * @memberOf Searchbar
+ * @memberof Searchbar
  * @description Configures search in visible vector layers
  */
 
@@ -300,38 +318,44 @@
 
 /**
  * @namespace Checkbox
- * @memberOf Snippets
+ * @memberof Snippets
  * @description Checkbox snippet for the filter model
  */
 
 /**
  * @namespace Dropdown
- * @memberOf Snippets
+ * @memberof Snippets
  * @description Dropdown snippet for the filter model
  */
 
 /**
- * @namespace Multicheckbox
- * @memberOf Snippets
+ * @namespace MultiCheckbox
+ * @memberof Snippets
  * @description Multicheckbox snippet for the filter model
  */
 
 /**
  * @namespace Slider
- * @memberOf Snippets
+ * @memberof Snippets
  * @description Slider snippet for the filter model
  */
 
 /**
  * @namespace Value
- * @memberOf Snippets
+ * @memberof Snippets
  * @description foobar
  */
 
 /**
  * @namespace Datepicker
- * @memberOf Snippets
+ * @memberof Snippets
  * @description Datepicker Snippet using bootstrap-datepicker
+ */
+
+/**
+ * @namespace GraphicalSelect
+ * @memberOf Snippets
+ * @description GraphicalSelect Snippet for a dropdown to select square, circle or polygon to select an area in the map
  */
 
 /**
@@ -341,332 +365,346 @@
 
 /**
  * @namespace AddGeoJSON
- * @memberOf Tools
+ * @memberof Tools
  * @description Adds GeoJSON as layer
  */
 
 /**
- * @namespace AddWms
- * @memberOf Tools
+ * @namespace AddWMS
+ * @memberof Tools
  * @description Tool to add external WMS services as layer to the map.
  */
 
 /**
  * @namespace CompareFeatures
- * @memberOf Tools
+ * @memberof Tools
  * @description Tool to compare multiple vectore features.
  */
 
 /**
  * @namespace Contact
- * @memberOf Tools
+ * @memberof Tools
  * @description Contact Formular that allows the user to generate and send an email to the defined email account.
  */
 
 /**
  * @namespace Download
- * @memberOf Tools
+ * @memberof Tools
  * @description Tool to download created drawings.
  */
 
 /**
  * @namespace Draw
- * @memberOf Tools
+ * @memberof Tools
  * @description Tool to create drawings and texts on the map.
  */
 
 /**
- * @namespace Einwohnerabfrage_hh
- * @memberOf Tools
+ * @namespace Einwohnerabfrage
+ * @memberof Tools
  * @description Tool to request data about inhabitants of Hamburg.
  */
 
 /**
  * @namespace ExtendedFilter
- * @memberOf Tools
+ * @memberof Tools
  * @description Extended filter tool.
  */
 
 /**
  * @namespace Filter
- * @memberOf Tools
+ * @memberof Tools
  * @description Filter tool.
  */
 
 /**
  * @namespace Query
- * @memberOf Tools.Filter
+ * @memberof Tools.Filter
  * @description foobar
  */
 
 /**
  * @namespace Source
- * @memberOf Tools.Filter.Query
+ * @memberof Tools.Filter.Query
  * @description foobar
  */
 
 /**
  * @namespace GetCoord
- * @memberOf Tools
+ * @memberof Tools
  * @description Tool to request the coordinates of a click point in the map.
  */
 
 /**
  * @namespace GFI
- * @memberOf Tools
+ * @memberof Tools
  * @description Tool to show result of GetFeatureInfo-request.
  */
 
 /**
  * @namespace Desktop
- * @memberOf Tools.GFI
+ * @memberof Tools.GFI
  * @description Desktop representation of the GFI-popup.
  */
 
 /**
  * @namespace Attached
- * @memberOf Tools.GFI.Desktop
+ * @memberof Tools.GFI.Desktop
  * @description GFI-popup fixed on the corresponding feature on the map.
  */
 
 /**
  * @namespace Detached
- * @memberOf Tools.GFI.Desktop
+ * @memberof Tools.GFI.Desktop
  * @description GFI-popup not fixed on the corresponding feature on the map, but movable.
  */
 
 /**
  * @namespace Mobile
- * @memberOf Tools.GFI
+ * @memberof Tools.GFI
  * @description Mobile representation of the GFI-popup.
  */
 
 /**
  * @namespace Objects
- * @memberOf Tools.GFI
+ * @memberof Tools.GFI
  * @description Special objects in the GFI-popup.
  */
 
 /**
  * @namespace Image
- * @memberOf Tools.GFI.Objects
+ * @memberof Tools.GFI.Objects
  * @description Images in the GFI-popup.
  */
 
 /**
  * @namespace RoutingButton
- * @memberOf Tools.GFI.Objects
+ * @memberof Tools.GFI.Objects
  * @description Routing button in the GFI-popup.
  */
 
 /**
  * @namespace Video
- * @memberOf Tools.GFI.Objects
+ * @memberof Tools.GFI.Objects
  * @description Videos in the GFI-popup.
  */
 
 /**
  * @namespace Table
- * @memberOf Tools.GFI
+ * @memberof Tools.GFI
  * @description Table representation of the GFI-popup.
  */
 
 /**
  * @namespace Themes
- * @memberOf Tools.GFI
+ * @memberof Tools.GFI
  * @description GFI Themes for several use cases.
  */
 
 /**
  * @namespace ActiveCityMaps
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for ActiveCityMaps
  */
 
 /**
+ * @namespace Bildungsatlas
+ * @memberof Tools.GFI.Themes
+ * @description GFI Theme for Bildungsatlas
+ */
+
+/**
  * @namespace Buildings3D
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for Buildings3D
  */
 
 /**
  * @namespace ContiniuousCountingBikeTheme
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for ContiniuousCountingBike
  */
 
 /**
  * @namespace Default
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description Default GFI Theme
  */
 
 /**
  * @namespace Dipas
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for DIPAS (touch table)
  */
 
 /**
- * @namespace ElektroladeSaeulen
- * @memberOf Tools.GFI.Themes
+ * @namespace Elektroladesaeulen
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for ElektroladeSaeulen
  */
 
 /**
  * @namespace FlaechenInfo
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for FlaechenInfo
  */
 
 /**
  * @namespace Itgbm
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for itgbm
  */
 
 /**
  * @namespace MietenSpiegel
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for MietenSpiegel
  */
 
 /**
  * @namespace ReiseZeiten
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for ReiseZeiten
  */
 
 /**
  * @namespace SchulInfo
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for SchulInfo
  */
 
 /**
  * @namespace SvgOnline
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for SvgOnline
  */
 
 /**
  * @namespace SolarAtlas
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for SolarAtlas
+ */
+
+ /**
+ * @namespace Sensor
+ * @memberof Tools.GFI.Themes
+ * @description GFI Theme for Sensordata
  */
 
 /**
  * @namespace Table
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for Touch-Table
  */
 
 /**
  * @namespace Trinkwasser
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for Trinkwasser
  */
 
 /**
  * @namespace VerkehrsStaerken
- * @memberOf Tools.GFI.Themes
+ * @memberof Tools.GFI.Themes
  * @description GFI Theme for VerkehrsStaerken
  */
 
 /**
  * @namespace Graph
- * @memberOf Tools
+ * @memberof Tools
  * @description Module for generating graphics via d3
  */
 
 /**
  * @namespace KmlImport
- * @memberOf Tools
+ * @memberof Tools
  * @description Module for import of KML data to the map.
  */
 
 /**
  * @namespace LayerSlider
- * @memberOf Tools
+ * @memberof Tools
  * @description Animates several configured layers consecutively (e.g. to show time series).
+ * Can be configured as Player (sliderType="player") with start, stop, pause buttons.
+ * Can be configured as Handle (sliderType="handle") with a drag handle to wander through the layers using transparency.
  */
 
 /**
  * @namespace Measure
- * @memberOf Tools
+ * @memberof Tools
  * @description Measure distances and areas.
  */
 
 /**
  * @namespace ParcelSearch
- * @memberOf Tools
+ * @memberof Tools
  * @description Parcel search.
  */
 
 /**
  * @namespace Pendler
- * @memberOf Tools
+ * @memberof Tools
  * @description Animation of commuter movements.
  */
 
 /**
  * @namespace Animation
- * @memberOf Tools.Pendler
+ * @memberof Tools.Pendler
  * @description Animation of commuter movements.
  */
 
 /**
  * @namespace Core
- * @memberOf Tools.Pendler
+ * @memberof Tools.Pendler
  * @description Core of commuter movements.
  */
 
 /**
  * @namespace Lines
- * @memberOf Tools.Pendler
+ * @memberof Tools.Pendler
  * @description foobar
  */
 
 /**
  * @namespace Print
- * @memberOf Tools
+ * @memberof Tools
  * @description Printing module
  */
 
 /**
  * @namespace SaveSelection
- * @memberOf Tools
+ * @memberof Tools
  * @description Creates a parametric URL representing the current map state.
  */
 
 /**
- * @namespace SchulwegRouting_HH
- * @memberOf Tools
- * @description Routing for school children based on Hamburg ATKIS data.
- */
-
-/**
  * @namespace SearchByCoord
- * @memberOf Tools
+ * @memberof Tools
  * @description foobar
  */
 
 /**
  * @namespace Shadow
- * @memberOf Tools
+ * @memberof Tools
  * @description Creates shadows in 3D mode.
  */
 
 /**
  * @namespace StyleWMS
- * @memberOf Tools
+ * @memberof Tools
  * @description Tool that can modify wms tiles on request using an SLD-BODY
  */
 
 /**
  * @namespace ViomRouting
- * @memberOf Tools
+ * @memberof Tools
  * @description Tool to route on viom data.
+ */
+
+/**
+ * @namespace VirtualCity
+ * @memberof Tools
+ * @description Tool to show virtual city data
  */
 
 /**
@@ -728,43 +766,43 @@
 
 /**
  * @namespace ModelList
- * @memberOf Core
+ * @memberof Core
  * @description List module to gather all item models
  */
 
 /**
  * @namespace ConfigLoader
- * @memberOf Core
+ * @memberof Core
  * @description Parser module to gather portal configuration
  */
 
 /**
  * @namespace Layer
- * @memberOf Core.ModelList
+ * @memberof Core.ModelList
  * @description Module to gather all layermodels
  */
 
 /**
  * @namespace Folder
- * @memberOf Core.ModelList
+ * @memberof Core.ModelList
  * @description Module create folders in layertree
  */
 
 /**
  * @namespace StaticLink
- * @memberOf Core.ModelList
+ * @memberof Core.ModelList
  * @description Module create static links which can be shown in menu or layertree
  */
 
 /**
  * @namespace Tool
- * @memberOf Core.ModelList
+ * @memberof Core.ModelList
  * @description foobar
  */
 
 /**
  * @namespace ViewPoint
- * @memberOf Core.ModelList
+ * @memberof Core.ModelList
  * @description foobar
  */
 
@@ -805,13 +843,13 @@
 
 /**
  * @namespace Desktop
- * @memberOf Legend
+ * @memberof Legend
  * @description Desktop specific version of the legend popup.
  */
 
 /**
  * @namespace Mobile
- * @memberOf Legend
+ * @memberof Legend
  * @description Mobile specific version of the legend popup.
  */
 
@@ -827,18 +865,41 @@
 
 /**
  * @class Model
- * @memberOf Backbone
+ * @memberof Backbone
  * @description {@link http://backbonejs.org/#Model}
  */
 
 /**
  * @class View
- * @memberOf Backbone
+ * @memberof Backbone
  * @description {@link http://backbonejs.org/#View}
  */
 
 /**
  * @class Collection
- * @memberOf Backbone
+ * @memberof Backbone
  * @description {@link http://backbonejs.org/#Collection}
+ */
+
+/**
+ * @namespace Tileset
+ * @memberof Core.ModelList.Layer
+ * @description Helper functions for Cesium 3D TilesetLayer and VCS Style Handling
+ */
+
+/**
+ * @namespace VectorStyle
+ * @description vector styles for vector layer
+ */
+
+/**
+ * @namespace SensorThingsMqtt
+ * @memberof Core.ModelList.Layer
+ * @description SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol.
+ */
+
+/**
+ * @namespace SensorThingsHttp
+ * @memberof Core.ModelList.Layer
+ * @description SensorThingsHttp is the software layer to handle the special needs of the SensorThingsAPI regarding the http protocol.
  */

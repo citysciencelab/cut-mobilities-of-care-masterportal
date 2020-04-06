@@ -22,7 +22,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @param {Object} config - Config JSON for Searchbar in visible vector layers
      * @param {integer} [config.minChars=3] - minimum character count to initialize a seach
      * @listens Searchbar#RadioTriggerSearchbarSearch
-     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
@@ -45,35 +45,59 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     /**
      * description
      * @param {string} searchString String to search for in properties of all model's features
-     * @fires ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
      * @fires Searchbar#RadioTriggerSearchbarPushHits
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
     prepSearch: function (searchString) {
-        var sPrepSearchString,
-            aVectorLayerModels = [],
-            aFoundMatchingFeatures = [],
-            aFilteredModels;
+        var prepSearchString = "",
+            vectorLayerModels = [],
+            foundMatchingFeatures = [],
+            visibleGroupLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}),
+            filteredModels = [],
+            layerTypes = this.get("layerTypes");
 
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.setInUse(true);
-            sPrepSearchString = searchString.replace(" ", "");
+            prepSearchString = searchString.replace(" ", "");
 
-            _.each(this.getLayerTypes(), function (layerType) {
-                aVectorLayerModels = aVectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
+            _.each(layerTypes, function (layerType) {
+                vectorLayerModels = vectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
             }, this);
 
-            aFilteredModels = _.union(aVectorLayerModels).filter(function (model) {
+            vectorLayerModels = vectorLayerModels.concat(this.filterVisibleGroupLayer(visibleGroupLayers, layerTypes));
+
+            filteredModels = _.union(vectorLayerModels).filter(function (model) {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 
-            aFoundMatchingFeatures = this.findMatchingFeatures(aFilteredModels, sPrepSearchString);
-            Radio.trigger("Searchbar", "pushHits", "hitList", aFoundMatchingFeatures);
+            foundMatchingFeatures = this.findMatchingFeatures(filteredModels, prepSearchString);
+            Radio.trigger("Searchbar", "pushHits", "hitList", foundMatchingFeatures);
 
             Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
             this.setInUse(false);
         }
+    },
+
+    /**
+     * Filters the allowed layers from the visible group layers.
+     * @param {Array} visibleGroupLayers visible group layers freom modelList
+     * @param {String[]} layerTypes possible layer types
+     * @returns {Array} filterd layers
+     */
+    filterVisibleGroupLayer: function (visibleGroupLayers, layerTypes) {
+        const vectorLayerModels = [];
+
+        visibleGroupLayers.forEach(groupLayer => {
+            const vectorLayerFromGroup = groupLayer.get("layerSource").filter(childLayer => {
+                return layerTypes.includes(childLayer.get("typ"));
+            });
+
+            vectorLayerModels.push(vectorLayerFromGroup);
+        });
+
+        return Array.isArray(vectorLayerModels) ? vectorLayerModels.reduce((acc, val) => acc.concat(val), []) : vectorLayerModels;
     },
 
     /**
@@ -147,24 +171,24 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @returns {array} Array of features containing searched string
      */
     findMatchingFeatures: function (models, searchString) {
-        var aResultFeatures = [];
+        var resultFeatures = [];
 
         _.each(models, function (model) {
-            var aFeatures = model.get("layer").getSource().getFeatures(),
-                aSearchFields = model.get("searchField"),
+            var features = model.get("layer").getSource().getFeatures(),
+                searchFields = model.get("searchField"),
                 filteredFeatures;
 
-            if (_.isArray(aSearchFields) === false) {
-                aSearchFields = [aSearchFields];
+            if (_.isArray(searchFields) === false) {
+                searchFields = [searchFields];
             }
 
-            _.each(aSearchFields, function (sSearchField) {
-                filteredFeatures = this.filterFeaturesArrayRec(aFeatures, sSearchField, searchString, []);
-                aResultFeatures.push(this.getFeatureObject(sSearchField, filteredFeatures, model));
+            _.each(searchFields, function (searchField) {
+                filteredFeatures = this.filterFeaturesArrayRec(features, searchField, searchString, []);
+                resultFeatures.push(this.getFeatureObject(searchField, filteredFeatures, model));
             }, this);
         }, this);
 
-        return aResultFeatures;
+        return resultFeatures;
     },
 
     /**

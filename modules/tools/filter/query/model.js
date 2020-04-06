@@ -1,21 +1,30 @@
 import SnippetDropdownModel from "../../../snippets/dropdown/model";
 import SnippetSliderModel from "../../../snippets/slider/model";
 import SnippetCheckboxModel from "../../../snippets/checkbox/model";
-import SnippetMultiCheckboxModel from "../../../snippets/multicheckbox/model";
+import SnippetMultiCheckboxModel from "../../../snippets/multiCheckbox/model";
+import {getDisplayNamesOfFeatureAttributes} from "masterportalAPI/src/rawLayerList";
 
-const QueryModel = Backbone.Model.extend({
+const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
 
     defaults: {
         featureIds: [],
         isLayerVisible: false,
         activateOnSelection: false,
-        // flag for the search in the current map extent
         searchInMapExtent: true,
         liveZoomToFeatures: false
     },
 
     /**
-     * kann von erbenden Objekten augerufen werden
+     * @class QueryModel
+     * @description todo
+     * @extends Backbone.Model
+     * @memberOf Tools.Filter.Query
+     * @constructs
+     * @property {Array} featureIds=[] todo
+     * @property {boolean} isLayerVisible=false todo
+     * @property {boolean} activateOnSelection=false todo
+     * @property {boolean} searchInMapExtent=true Flag for the search in the current map extent.
+     * @property {boolean} liveZoomToFeatures=false todo
      * @returns {void}
      */
     superInitialize: function () {
@@ -94,10 +103,10 @@ const QueryModel = Backbone.Model.extend({
     },
 
     addSnippet: function (featureAttribute) {
-        var snippetAttribute = featureAttribute,
+        let snippetAttribute = featureAttribute,
             isSelected = false;
 
-        snippetAttribute.values = Radio.request("Util", "sort", snippetAttribute.values);
+        snippetAttribute.values = Radio.request("Util", "sort", "", snippetAttribute.values);
         if (snippetAttribute.type === "string" || snippetAttribute.type === "text") {
             snippetAttribute = _.extend(snippetAttribute, {"snippetType": "dropdown"});
             this.get("snippetCollection").add(new SnippetDropdownModel(snippetAttribute));
@@ -201,7 +210,7 @@ const QueryModel = Backbone.Model.extend({
      * @return {object} featureAttributesMap - gefiltertes Mapobject
      */
     mapDisplayNames: function (featureAttributesMap) {
-        var displayNames = Radio.request("RawLayerList", "getDisplayNamesOfFeatureAttributes", this.get("layerId"));
+        var displayNames = getDisplayNamesOfFeatureAttributes(this.get("layerId"));
 
         _.each(featureAttributesMap, function (featureAttribute) {
             if (_.isObject(displayNames) === true && _.has(displayNames, featureAttribute.name) === true) {

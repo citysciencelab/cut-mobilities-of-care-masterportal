@@ -1,98 +1,127 @@
 <!DOCTYPE html>
 <select class="form-control input-sm interaction">
-    <option value="Point">Punkt zeichnen</option>
-    <option value="LineString">Linie zeichnen</option>
-    <option value="Polygon">Fläche zeichnen</option>
-    <option value="Circle">Kreis zeichnen</option>
-    <option value="Point">Text schreiben</option>
+    <% drawTypeOptions.forEach(function (option) { %>
+        <option value="<%= option.value %>" id="<%= option.id %>"><%= option.caption %></option>
+    <% }); %>
 </select>
 <hr>
 <form class="form-horizontal" role="form">
-    <div class="form-group form-group-sm text">
-        <label class="col-md-5 col-sm-5 control-label">Text</label>
+    <div class="form-group form-group-sm dropdownMethod">
+        <label class="col-md-5 col-sm-5 control-label"><%=method%></label>
         <div class="col-md-7 col-sm-7">
-            <input type="text" class="form-control" placeholder="Klicken Sie auf die Karte um den Text zu platzieren">
+            <select class="form-control input-sm input-method">
+                <option value="interactiv"><%=interactive%></option>
+                <option value="defined"><%=defined%></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm circleRadiusInner">
+        <label class="col-md-5 col-sm-5 control-label"><%=diameter%></label>
+        <div class="col-md-7 col-sm-7">
+            <input type="number" class="form-control" placeholder="<%=doubleCirclePlaceholder%>" disabled=true/>
+        </div>
+    </div>
+    <div class="form-group form-group-sm circleRadiusOuter">
+        <label class="col-md-5 col-sm-5 control-label"><%=outerDiameter%></label>
+        <div class="col-md-7 col-sm-7">
+            <input type="number" class="form-control" placeholder="<%=doubleCirclePlaceholder%>">
+        </div>
+    </div>
+    <div class="form-group form-group-sm dropdownUnit">
+        <label class="col-md-5 col-sm-5 control-label"><%=unit%></label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm" disabled=true>
+                <option value="m">m</option>
+                <option value="km">km</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm text">
+        <label class="col-md-5 col-sm-5 control-label"><%=textI18n%></label>
+        <div class="col-md-7 col-sm-7">
+            <input type="text" placeholder="<%=clickToPlaceText%>" class="form-control">
         </div>
     </div>
     <div class="form-group form-group-sm font-size">
-        <label class="col-md-5 col-sm-5 control-label">Schriftgröße</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=fontSizeText%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="10">10 px</option>
-                <option value="12">12 px</option>
-                <option value="16">16 px</option>
-                <option value="20">20 px</option>
-                <option value="24">24 px</option>
-                <option value="32">32 px</option>
+                <% fontSizeOptions.forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
     <div class="form-group form-group-sm font">
-        <label class="col-md-5 col-sm-5 control-label">Schriftart</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=fontName%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="Arial">Arial</option>
-                <option value="Calibri">Calibri</option>
-                <option value="Times New Roman">Times New Roman</option>
+                <% fontOptions.forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
     <div class="form-group form-group-sm radius">
-        <label class="col-md-5 col-sm-5 control-label">Größe</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=size%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="6">6 px</option>
-                <option value="8">8 px</option>
-                <option value="10">10 px</option>
-                <option value="12">12 px</option>
-                <option value="14">14 px</option>
-                <option value="16">16 px</option>
+                <% pointSizeOptions.forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
     <div class="form-group form-group-sm stroke-width">
-        <label class="col-md-5 col-sm-5 control-label">Strichstärke</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=lineWidth%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="1">1 px</option>
-                <option value="2">2 px</option>
-                <option value="3">3 px</option>
-                <option value="4">4 px</option>
-                <option value="5">5 px</option>
-                <option value="6">6 px</option>
+                <% strokeOptions.forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
     <div class="form-group form-group-sm opacity">
-        <label class="col-md-5 col-sm-5 control-label">Transparenz</label>
+        <label class="col-md-5 col-sm-5 control-label"><%=transparency%></label>
         <div class="col-md-7 col-sm-7">
             <select class="form-control input-sm">
-                <option value="1.0">0 %</option>
-                <option value="0.9">10 %</option>
-                <option value="0.8">20 %</option>
-                <option value="0.7">30 %</option>
-                <option value="0.6">40 %</option>
-                <option value="0.5">50 %</option>
-                <option value="0.4">60 %</option>
-                <option value="0.3">70 %</option>
-                <option value="0.2">80 %</option>
-                <option value="0.1">90 %</option>
+                    <% transparencyOptions.forEach(function (option) { %>
+                        <option value="<%= option.value %>"><%= option.caption %></option>
+                    <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm opacityContour">
+        <label class="col-md-5 col-sm-5 control-label"><%=transparencyOutline%></label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm">
+                    <% transparencyOptions.slice(0, transparencyOptions.length - 1).forEach(function (option) { %>
+                        <option value="<%= option.value %>"><%= option.caption %></option>
+                    <% }); %>
+            </select>
+        </div>
+    </div>
+    <div class="form-group form-group-sm colorContour">
+        <label class="col-md-5 col-sm-5 control-label"><%=outlineColor%></label>
+        <div class="col-md-7 col-sm-7">
+            <select class="form-control input-sm colorContour">
+                <option value="<%= colorOptions[1].value %>"><%= colorOptions[1].caption %></option>
+                <option value="<%= colorOptions[0].value %>"><%= colorOptions[0].caption %></option>
+                <% colorOptions.slice(2).forEach(function (option) { %>
+                    <option value="<%= option.value %>"><%= option.caption %></option>
+                <% }); %>
             </select>
         </div>
     </div>
     <div class="form-horizontal" role="form">
         <div class="form-group form-group-sm color">
-            <label class="col-md-5 col-sm-5 control-label">Farbe</label>
+            <label class="col-md-5 col-sm-5 control-label"><%=colorText%></label>
             <div class="col-md-7 col-sm-7">
-                <select class="form-control input-sm">
-                    <option value="55, 126, 184">Blau</option>
-                    <option value="255, 255, 51">Gelb</option>
-                    <option value="153, 153, 153">Grau</option>
-                    <option value="77, 175, 74">Grün</option>
-                    <option value="255, 127, 0">Orange</option>
-                    <option value="228, 26, 28">Rot</option>
-                    <option value="0, 0, 0">Schwarz</option>
-                    <option value="255, 255, 255">Weiß</option>
+                <select class="form-control input-sm colorFill">
+                    <% colorOptions.forEach(function (option) { %>
+                        <option value="<%= option.value %>"><%= option.caption %></option>
+                    <% }); %>
                 </select>
             </div>
         </div>
@@ -104,7 +133,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-sm btn-block btn-primary draw">
             <span class="glyphicon glyphicon-pencil"></span>
-            Geometrie / Text zeichnen
+            <%=drawBtnText%>
             </button>
         </div>
     </div>
@@ -112,7 +141,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-lgv-grey btn-sm btn-block modify">
             <span class="glyphicon glyphicon-wrench"></span>
-            Geometrie bearbeiten
+            <%=editBtnText%>
             </button>
         </div>
     </div>
@@ -120,7 +149,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-lgv-grey btn-sm btn-block downloadDrawing">
                 <span class="glyphicon glyphicon-floppy-disk"></span>
-                Herunterladen
+                <%=downloadBtnText%>
             </button>
         </div>
     </div>
@@ -128,7 +157,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-lgv-grey btn-sm btn-block trash">
             <span class="glyphicon glyphicon-trash"></span>
-            Geometrie / Text löschen
+            <%=deleteBtnText%>
             </button>
         </div>
     </div>
@@ -136,7 +165,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <button class="btn btn-lgv-grey btn-sm btn-block delete">
             <span class="glyphicon glyphicon-trash"></span>
-            Alles löschen
+            <%=deleteAllBtnText%>
             </button>
         </div>
     </div>

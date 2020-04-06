@@ -10,6 +10,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         isSettingVisible: false,
         isVisibleInMap: false,
         layerInfoClicked: false,
+        singleBaselayer: false,
         legendURL: "",
         maxScale: "1000000",
         minScale: "0",
@@ -17,14 +18,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         showSettings: true,
         styleable: false,
         supported: ["2D"],
-        transparency: 0
+        transparency: 0,
+        isOutOfRange: undefined
     },
     /**
      * @class Layer
      * @abstract
      * @description Module to represent any layer
      * @extends Item
-     * @memberOf Core.ModelList.Layer
+     * @memberof Core.ModelList.Layer
      * @constructs
      * @property {Radio.channel} channel=Radio.channel("Layer") Radio channel of layer
      * @property {Boolean} isVisibleInMap=false Flag if layer is visible in map
@@ -33,6 +35,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Number} transparency=0 Transparency in percent
      * @property {Number} selectionIDX=0 Index of rendering order in layer selection
      * @property {Boolean} layerInfoClicked=false Flag if layerInfo was clicked
+     * @property {Boolean} singleBaselayer=false - Flag if only a single baselayer should be selectable at once
      * @property {String} minScale="0" Minimum scale for layer to be displayed
      * @property {String} maxScale="1000000" Maximum scale for layer to be displayed
      * @property {String} legendURL="" LegendURL to request legend from
@@ -42,18 +45,26 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Boolean} styleable=false Flag if wms layer can be styleable via stylewms tool
      * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
      * @fires Map#RadioTriggerMapAddLayerToIndex
-     * @fires Layer#RadioTriggerLayerFeaturesLoaded
-     * @fires MapView#RadioRequestMapViewGetResoByScale
+     * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
+     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @fires Core#RadioRequestMapViewGetResoByScale
      * @fires LayerInformation#RadioTriggerLayerInformationAdd
+     * @fires Alerting#RadioTriggerAlertAlert
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsVisibleInMap
      * @listens Layer#changeTransparency
      * @listens Layer#RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
-     * @listens Map#RadioTriggerMapChange
-     * @listens MapView#RadioTriggerMapViewChangedOptions
+     * @listens Core#RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapViewChangedOptions
      */
     initialize: function () {
+        const portalConfig = Radio.request("Parser", "getPortalConfig");
+
+        if (portalConfig && portalConfig.singleBaselayer !== undefined) {
+            this.setSingleBaselayer(portalConfig.singleBaselayer);
+        }
+
         this.registerInteractionTreeListeners(this.get("channel"));
         this.registerInteractionMapViewListeners();
 
@@ -69,6 +80,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         }
     },
 
+    /**
+     * Checks if dataLayerId matches the given layer id.
+     * @param {String} dataLayerId Id of dataLayer whose features are requested.
+     * @param {String} layerId Id of current layer.
+     * @returns {Boolean} - flag if dataLayerId matches given layer id.
+     */
+    checkIfDataLayer: function (dataLayerId, layerId) {
+        let isDataLayer = false;
+
+        if (dataLayerId === layerId) {
+            isDataLayer = true;
+        }
+        return isDataLayer;
+    },
     /**
      * Prüft anhand der Scale ob der Layer sichtbar ist oder nicht
      * @param {object} options -
@@ -86,11 +111,116 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     /**
      * Triggers event if vector features are loaded
      * @param {ol.Feature[]} features Loaded vector features
-     * @fires Layer#event:RadioTriggerLayerFeaturesLoaded
+     * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @return {void}
      */
     featuresLoaded: function (features) {
-        this.get("channel").trigger("featuresLoaded", this.get("id"), features);
+        Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
+    },
+
+    /**
+     * Prepares the given features and sets or/and overwrites the coordinates based on the configuration of "altitude" and "altitudeOffset".
+     * @param {ol/Feature[]} features The olFeatures.
+     * @returns {void}
+     */
+    prepareFeaturesFor3D: function (features) {
+        const altitude = this.get("altitude"),
+            altitudeOffset = this.get("altitudeOffset");
+
+        features.forEach(feature => {
+            let geometry = feature.getGeometry();
+
+            if (altitude || altitudeOffset) {
+                geometry = this.setAltitudeOnGeometry(geometry, altitude, altitudeOffset);
+            }
+            feature.setGeometry(geometry);
+        });
+    },
+
+    /**
+     * Sets the altitude and AltitudeOffset as z coordinate.
+     * @param {ol/geom} geometry Geometry of feature.
+     * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+     * @param {Number} altitudeOffset Altitude offset.
+     * @returns {ol/geom} - The geometry with newly set coordinates.
+     */
+    setAltitudeOnGeometry: function (geometry, altitude, altitudeOffset) {
+        const type = geometry.getType(),
+            coords = geometry.getCoordinates();
+
+        let overwrittenCoords = [];
+
+        if (type === "Point") {
+            overwrittenCoords = this.setAltitudeOnPoint(coords, altitude, altitudeOffset);
+        }
+        else if (type === "MultiPoint") {
+            overwrittenCoords = this.setAltitudeOnMultiPoint(coords, altitude, altitudeOffset);
+        }
+        else {
+            console.error("Type: " + type + " is not supported yet for function \"setAltitudeOnGeometry\"!");
+        }
+
+        geometry.setCoordinates(overwrittenCoords);
+
+        return geometry;
+    },
+
+    /**
+     * Sets the altitude on multipoint coordinates.
+     * @param {Number[]} coords Coordinates.
+     * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+     * @param {Number} altitudeOffset Altitude offset.
+     * @returns {Number[]} - newly set cooordinates.
+     */
+    setAltitudeOnMultiPoint: function (coords, altitude, altitudeOffset) {
+        const overwrittenCoords = [];
+
+        coords.forEach(coord => {
+            overwrittenCoords.push(this.setAltitudeOnPoint(coord, altitude, altitudeOffset));
+        });
+
+        return overwrittenCoords;
+    },
+
+    /**
+     * Sets the altitude on point coordinates.
+     * @param {Number[]} coords Coordinates.
+     * @param {Number} altitude Altitude. Overwrites the given z coord if available.
+     * @param {Number} altitudeOffset Altitude offset.
+     * @returns {Number[]} - newly set cooordinates.
+     */
+    setAltitudeOnPoint: function (coords, altitude, altitudeOffset) {
+        const overwrittenCoords = coords,
+            altitudeAsFloat = parseFloat(altitude),
+            altitudeOffsetAsFloat = parseFloat(altitudeOffset);
+
+        if (!isNaN(altitudeAsFloat)) {
+            if (overwrittenCoords.length === 2) {
+                overwrittenCoords.push(altitudeAsFloat);
+            }
+            else if (overwrittenCoords.length === 3) {
+                overwrittenCoords[2] = altitudeAsFloat;
+            }
+        }
+        if (!isNaN(altitudeOffsetAsFloat)) {
+            if (overwrittenCoords.length === 2) {
+                overwrittenCoords.push(altitudeOffsetAsFloat);
+            }
+            else if (overwrittenCoords.length === 3) {
+                overwrittenCoords[2] = overwrittenCoords[2] + altitudeOffsetAsFloat;
+            }
+        }
+        return overwrittenCoords;
+    },
+
+    /**
+     * Triggers event if vector feature is loaded
+     * @param {ol.Feature} feature Updated vector feature
+     * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @return {void}
+     */
+    featureUpdated: function (feature) {
+        Radio.trigger("VectorLayer", "featureUpdated", this.get("id"), feature);
     },
 
     /**
@@ -113,7 +243,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Layer#event:changeTransparency
      * @listens Layer#event:RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#event:RadioTriggerLayerSetLayerInfoChecked
-     * @listens Map#event:RadioTriggerMapChange
+     * @listens Core#RadioTriggerMapChange
      * @param {Radio.channel} channel Radio channel of this module
      * @return {void}
      */
@@ -123,9 +253,17 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             this.listenToOnce(this, {
                 // LayerSource is created on first select
                 "change:isSelected": function () {
-                    if (_.isUndefined(this.get("layerSource"))) {
+                    if (!this.isLayerSourceValid()) {
                         this.prepareLayerObject();
                     }
+                }
+            });
+        }
+        else if (this.get("typ") === "WFS" && Radio.request("Parser", "getTreeType") === "light") {
+            this.listenToOnce(this, {
+                // data will be loaded at first selection
+                "change:isSelected": function () {
+                    this.updateSource(true);
                 }
             });
         }
@@ -138,17 +276,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             },
             "setLayerInfoChecked": function (layerInfoChecked) {
                 this.setLayerInfoChecked(layerInfoChecked);
+            },
+            "toggleIsSelected": function () {
+                this.toggleIsSelected();
             }
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 if (this.get("supported").indexOf(mode) >= 0) {
                     if (this.get("isVisibleInMap")) {
-                        this.get("layer").setVisible(true);
+                        this.setVisible(true);
                     }
                 }
-                else if (this.get("layer") !== undefined) {
-                    this.get("layer").setVisible(false);
+                else if (this.isLayerValid()) {
+                    this.setVisible(false);
                 }
             }
         });
@@ -169,7 +310,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Register interaction with map view.
-     * @listens MapView#event:RadioTriggerMapViewChangedOptions
+     * @listens Core#RadioTriggerMapViewChangedOptions
      * @returns {void}
      */
     registerInteractionMapViewListeners: function () {
@@ -202,11 +343,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
 
     /**
      * Sets visible min and max resolution on layer.
-     * @fires MapView#event:RadioRequestMapViewGetResoByScale
+     * @fires Core#RadioRequestMapViewGetResoByScale
      * @returns {void}
      */
     getResolutions: function () {
-        var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
+        const resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
             resoByMinScale = Radio.request("MapView", "getResoByScale", this.get("minScale"), "min");
 
         this.setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
@@ -234,14 +375,27 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Toggles the attribute isSelected
+     * Toggles the attribute isSelected.
+     * If the layer is a baselayer, the other selected baselayers are deselected.
+     *
      * @return {void}
      */
     toggleIsSelected: function () {
+        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
+            singleBaseLayer = this.get("singleBaseLayer") && this.get("parentId") === "Baselayer";
+
         if (this.get("isSelected") === true) {
             this.setIsSelected(false);
         }
         else {
+            // This only works for treeType Custom, otherwise the parentId is not set on the layer
+            if (singleBaseLayer) {
+                layerGroup.forEach(layer => {
+                    layer.setIsSelected(false);
+                    // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
+                    layer.checkForScale(Radio.request("MapView", "getOptions"));
+                });
+            }
             this.setIsSelected(true);
         }
     },
@@ -266,7 +420,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     toggleWindowsInterval: function () {
-        var isVisible = this.get("isVisibleInMap"),
+        const isVisible = this.get("isVisibleInMap"),
             autoRefresh = this.get("autoRefresh");
 
         if (isVisible === true) {
@@ -274,7 +428,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 this.setWindowsInterval(this.intervalHandler, autoRefresh);
             }
         }
-        else if (!_.isUndefined(this.get("windowsInterval"))) {
+        else if (typeof this.get("windowsInterval") === "object") {
             clearInterval(this.get("windowsInterval"));
         }
     },
@@ -293,7 +447,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         }
     },
     /**
-     * Adds or removes layer from map, depending on attribte isSelected
+     * Adds or removes layer from map, depending on attribute isSelected
      * @returns {void}
      */
     toggleLayerOnMap: function () {
@@ -314,9 +468,9 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     toggleAttributionsInterval: function () {
-        var channelName, eventName, timeout;
+        let channelName, eventName, timeout;
 
-        if (this.has("layerAttribution") && _.isObject(this.get("layerAttribution"))) {
+        if (this.has("layerAttribution") && typeof this.get("layerAttribution") === "object") {
             channelName = this.get("layerAttribution").channel;
             eventName = this.get("layerAttribution").eventname;
             timeout = this.get("layerAttribution").timeout;
@@ -339,11 +493,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     updateLayerTransparency: function () {
-        var opacity = (100 - this.get("transparency")) / 100;
+        const opacity = (100 - this.get("transparency")) / 100;
 
         // Auch wenn die Layer im simple Tree noch nicht selected wurde können
         // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
-        if (!_.isUndefined(this.get("layer"))) {
+        if (typeof this.get("layer") === "object") {
             this.get("layer").setOpacity(opacity);
         }
     },
@@ -353,11 +507,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
-        var metaID = [],
-            legend = Radio.request("Legend", "getLegend", this),
+        let legend = "";
+        const metaID = [],
             name = this.get("name"),
             layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
+        if (this.get("legendURL") === "") {
+            this.createLegendURL();
+        }
+        legend = Radio.request("Legend", "getLegend", this);
         metaID.push(layerMetaId);
 
         Radio.trigger("LayerInformation", "add", {
@@ -366,10 +524,27 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "metaID": metaID,
             "layername": name,
             "url": this.get("url"),
-            "typ": this.get("typ")
+            "typ": this.get("typ"),
+            "urlIsVisible": this.get("urlIsVisible")
         });
 
         this.setLayerInfoChecked(true);
+    },
+
+    /**
+     * Checks if the layer has been setup and a layer object exist
+     * @returns {Boolean} -
+     */
+    isLayerValid: function () {
+        return this.get("layer") !== undefined;
+    },
+
+    /**
+     * Checks if the layerSource has been setup and a layersource object exist
+     * @returns {Boolean} -
+     */
+    isLayerSourceValid: function () {
+        return typeof this.get("layerSource") === "object";
     },
 
     /**
@@ -440,7 +615,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setIsVisibleInMap: function (value) {
         this.set("isVisibleInMap", value);
-        this.get("layer").setVisible(value);
+        this.setVisible(value);
     },
 
     /**
@@ -525,6 +700,16 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
+     * Setter for the singleBaselayer
+     *
+     * @param {Boolean} value - Flag if only a single baselayer should be selectable at once
+     * @returns {void}
+     */
+    setSingleBaselayer: function (value) {
+        this.set("singleBaselayer", value);
+    },
+
+    /**
      * Setter for isRemovable
      * @param {Boolean} value Flag if layer is removable from the tree
      * @returns {void}
@@ -549,10 +734,19 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     removeLayer: function () {
-        var layer = this.get("id");
+        const layer = this.get("id");
 
         this.setIsVisibleInMap(false);
         this.collection.removeLayerById(layer);
+    },
+
+    /**
+     * Setter for the layer visibility
+     * @param {Boolean} value new visibility value
+     * @returns {void} -
+     */
+    setVisible: function (value) {
+        this.get("layer").setVisible(value);
     }
 });
 

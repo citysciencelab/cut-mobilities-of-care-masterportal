@@ -14,7 +14,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         cc: [],
         ccToUser: false,
         bcc: [],
-        textPlaceholder: "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;",
         text: "",
         url: "",
         ticketId: "",
@@ -28,7 +27,20 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         glyphicon: "glyphicon-envelope",
         serviceID: undefined,
         closeAndDelete: false,
-        withTicketNo: true
+        withTicketNo: true,
+        lngSwitchDetected: "",
+        // translations
+        textPlaceholder: "",
+        userNamePlaceholder: "",
+        emailAddressPlaceholder: "",
+        telephonePlaceholder: "",
+        errorName: "",
+        errorEmail: "",
+        errorNumber: "",
+        textSendButton: "",
+        errorMessage: "",
+        successMessage: "",
+        successTicket: ""
     }),
 
     /**
@@ -50,7 +62,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @property {Object[]} [bcc=[]] BCC emails. Email object existst of:
      * @property {String} bcc.email Email address
      * @property {String} bcc.name Email name to be shown
-     * @property {String} [textPlaceholder="Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"] Placeholder for user input textarea
      * @property {String} text="" Users text
      * @property {String} url="" Url of email service
      * @property {String} ticketId="" Generated Id of user ticket. Format "mm.dd.-[Id]"
@@ -63,8 +74,20 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @property {String} contactInfo="" Additional text that can be shown above the contact form
      * @property {String} glyphicon="glyphicon-envelope" Glyhphicon that is shown before the tool name
      * @property {String} serviceID=undefined Id of service in rest-services.json thats contains the service url
+     * @property {String} lngSwitchDetected="" contains the current language, view is listening to it
+     * @property {String} textPlaceholder="Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"] Placeholder for user input textarea
+     * @property {String} userNamePlaceholder="", filled with "Ihr Name"- translated
+     * @property {String} emailAddressPlaceholder="", filled with "Ihre Emailadresse"- translated
+     * @property {String} telephonePlaceholder="", filled with "Ihre Telefonnummer"- translated
+     * @property {String} errorName="", filled with "Bitte nennen Sie uns Ihren Namen."- translated
+     * @property {String} errorEmail="", filled with "Bitte geben Sie eine gültige Emailadresse ein."- translated
+     * @property {String} errorNumber="", filled with "Unter welcher Telefonnummer können wir Sie erreichen?"- translated
+     * @property {String} textSendButton="", filled with "Abschicken"- translated
+     * @property {String} errorMessage="", filled with "Emailversand fehlgeschlagen!"- translated
+     * @property {String} successMessage="", filled with "Ihre Anfrage wurde erfolgreich versendet"- translated
+     * @property {String} successTicket="", filled with "Ihre Ticketnummer lautet:"- translated
      * @fires Parser#RadioRequestParserGetPortalConfig
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Util#RadioTriggerUtilShowLoader
      * @fires Util#RadioTriggerUtilHideLoader
      * @fires AlertingModel#RadioTriggerAlertAlert
@@ -74,12 +97,40 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     initialize: function () {
         this.superInitialize();
         this.setAttributes(Radio.request("Parser", "getPortalConfig"));
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            textPlaceholder: i18next.t("common:modules.tools.contact.textPlaceholder"),
+            userNamePlaceholder: i18next.t("common:modules.tools.contact.userNamePlaceholder"),
+            textSendButton: i18next.t("common:modules.tools.contact.textSendButton"),
+            emailAddressPlaceholder: i18next.t("common:modules.tools.contact.emailAddressPlaceholder"),
+            telephonePlaceholder: i18next.t("common:modules.tools.contact.telephonePlaceholder"),
+            errorName: i18next.t("common:modules.tools.contact.errorName"),
+            errorEmail: i18next.t("common:modules.tools.contact.errorEmail"),
+            errorNumber: i18next.t("common:modules.tools.contact.errorNumber"),
+            errorMessage: i18next.t("common:modules.tools.contact.errorMessage"),
+            successMessage: i18next.t("common:modules.tools.contact.successMessage"),
+            successTicket: i18next.t("common:modules.tools.contact.successTicket"),
+            lngSwitchDetected: i18next.language
+        });
     },
 
     /**
      * Creates and sets the initially needed attributes
      * @param {JSON} configJson configJson
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @returns {void}
      */
     setAttributes: function (configJson) {
@@ -220,7 +271,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
             complete: function (jqXHR) {
                 Radio.trigger("Util", "hideLoader");
                 if (jqXHR.status !== 200 || jqXHR.responseText.indexOf("ExceptionReport") !== -1) {
-                    Radio.trigger("Alert", "alert", {text: "<strong>Emailversand fehlgeschlagen!</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
+                    Radio.trigger("Alert", "alert", {text: "<strong>" + this.get("errorMessage") + "</strong> " + jqXHR.statusText + " (" + jqXHR.status + ")", kategorie: "alert-danger"});
                 }
             },
             success: function (data) {
@@ -229,10 +280,10 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
                 }
                 else {
                     if (withTicketNo === false) {
-                        Radio.trigger("Alert", "alert", {text: "Ihre Anfrage wurde erfolgreich versendet", kategorie: "alert-success"});
+                        Radio.trigger("Alert", "alert", {text: this.get("successMessage"), kategorie: "alert-success"});
                     }
                     else {
-                        Radio.trigger("Alert", "alert", {text: data.message + "<br>Ihre Ticketnummer lautet: <strong>" + this.get("ticketId") + "</strong>.", kategorie: "alert-success"});
+                        Radio.trigger("Alert", "alert", {text: data.message + "<br>" + this.get("successTicket") + "<strong>" + this.get("ticketId") + "</strong>.", kategorie: "alert-success"});
                     }
                     if (closeAndDelete === true) {
                         Radio.trigger("WindowView", "hide");

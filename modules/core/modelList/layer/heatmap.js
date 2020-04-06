@@ -5,6 +5,8 @@ import {Heatmap} from "ol/layer.js";
 const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
 
     defaults: _.extend({}, Layer.prototype.defaults, {
+        attribute: "",
+        value: "",
         radius: 10,
         blur: 15,
         gradient: [
@@ -16,37 +18,80 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @description Module to represent HeatmapLayer
      * @extends Layer
      * @constructs
-     * @memberOf Core.ModelList.Layer
+     * @memberof Core.ModelList.Layer
+     * @property {String} attribute=[""] Attribute to filter by.
+     * @property {String} value=[""] Value to filter by.
      * @property {Number} radius=10 Radius to calculate the heatmap.
      * @property {Number} blur=15 Blur for heatmap.
      * @property {String[]} gradient=["#00f","#0ff","#0f0","#ff0","#f00"] Gradient of colors for heatmap.
-     * @listens HeatmapLayer#RadioTriggerHeatmapLayerLoadInitialData
-     * @listens HeatmapLayer#RadioTriggerHeatmapLayerLoadUpdateHeatmap
+     * @listens Layer#RadioTriggerVectorLayerFeaturesLoaded
+     * @listens Layer#RadioTriggerVectorLayerFeatureUpdated
+     * @listens Layer#RadioTriggerVectorLayerResetFeatures
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlertRemove
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @description This layer is used to generate a heatmap. It uses the features of a already configured vector layer such as WFS or Sensor.
      */
     initialize: function () {
-        var channel = Radio.channel("HeatmapLayer");
-
         this.checkForScale(Radio.request("MapView", "getOptions"));
 
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
+        this.listenTo(Radio.channel("VectorLayer"), {
+            "featuresLoaded": this.loadInitialData,
+            "featureUpdated": this.updateFeature,
+            "resetFeatures": this.resetFeatures
+        }, this);
+    },
 
-        this.listenTo(channel, {
-            "loadInitialData": this.loadInitialData,
-            "loadupdateHeatmap": this.loadupdateHeatmap
-        });
+    resetFeatures: function (layerId, features) {
+        const featureClones = [];
+
+        if (this.checkDataLayerId(layerId)) {
+            features.forEach(feature => {
+                const clone = feature.clone();
+
+                clone.setStyle(null);
+                featureClones.push(clone);
+            });
+            this.get("layerSource").clear();
+            this.initializeHeatmap(featureClones);
+        }
     },
 
     /**
      * Loads the initial heatmap features.
      * @param {String} layerId Id of layer whose data has to be loaded.
      * @param {ol/Feature[]} features Features that have to be used for heatmap layer.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Alerting#RadioTriggerAlertAlertRemove
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
     loadInitialData: function (layerId, features) {
+        if (!layerId) {
+            const dataLayer = Radio.request("ModelList", "getModelByAttributes", {id: this.get("dataLayerId")}),
+                dataLayerNameOrId = dataLayer ? dataLayer.get("name") : this.get("dataLayerId"),
+                dataLayerSource = dataLayer ? dataLayer.get("layerSource") : undefined,
+                dataLayerFeatures = dataLayerSource ? dataLayerSource.getFeatures() : [];
+
+            if (dataLayerFeatures.length > 0) {
+                this.initializeHeatmap(dataLayerFeatures);
+            }
+            else {
+                Radio.trigger("Alert", "alert", {
+                    text: "<strong>Bitte aktivieren Sie den Layer \"" + dataLayerNameOrId + "\"</strong><br>" +
+                    "Dieser liefert die Daten für den Heatmap-Layer :<br>" +
+                    "\"" + this.get("name") + "\".",
+                    kategorie: "alert-info",
+                    id: "heatmap_" + this.get("id") + "_dataLayerId_" + this.get("dataLayerId")
+                });
+            }
+        }
         if (this.checkDataLayerId(layerId)) {
             this.initializeHeatmap(features);
+            Radio.trigger("Alert", "alert:remove", "heatmap_" + this.get("id") + "_dataLayerId_" + layerId);
         }
     },
 
@@ -56,7 +101,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @param {ol/feature} feature  Feature that was updated.
      * @returns {void}
      */
-    loadupdateHeatmap: function (layerId, feature) {
+    updateFeature: function (layerId, feature) {
         if (this.checkDataLayerId(layerId)) {
             this.updateHeatmap(feature);
         }
@@ -68,6 +113,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      */
     createLayerSource: function () {
         this.setLayerSource(new VectorSource());
+        this.loadInitialData();
     },
 
     /**
@@ -81,7 +127,10 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             typ: this.get("typ"),
             id: this.get("id"),
             weight: function (feature) {
-                return feature.get("weightForHeatmap");
+                if (feature.get("calculatedWeight") !== undefined) {
+                    return feature.get("calculatedWeight");
+                }
+                return feature.get("normalizeWeightForHeatmap");
             },
             gfiAttributes: this.get("gfiAttributes"),
             blur: this.get("blur"),
@@ -108,26 +157,35 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         var attribute = this.get("attribute"),
             value = this.get("value"),
             layerSource = this.get("layerSource"),
+            weightAttribute = this.get("weightAttribute"),
+            weightAttributeMax = this.get("weightAttributeMax"),
             cloneFeatures = [];
 
-        _.each(features, function (feature) {
+        features.forEach(function (feature) {
             var cloneFeature = feature.clone(),
                 count;
 
-            if (!_.isUndefined(attribute || value)) {
+            if (attribute !== "" && value !== "") {
                 count = this.countStates(feature, attribute, value);
-
                 cloneFeature.set("weightForHeatmap", count);
+            }
+
+            if ((weightAttribute && weightAttributeMax) !== undefined) {
+                cloneFeature.set("calculatedWeight", feature.get(weightAttribute) / weightAttributeMax);
             }
 
             cloneFeature.setId(feature.getId());
             cloneFeatures.push(cloneFeature);
         }, this);
 
+        if (layerSource === undefined) {
+            this.prepareLayerObject();
+            layerSource = this.get("layerSource");
+        }
         layerSource.addFeatures(cloneFeatures);
 
         // normalize weighting
-        if (!_.isUndefined(attribute || value)) {
+        if (attribute !== "" && value !== "") {
             this.normalizeWeight(layerSource.getFeatures());
         }
     },
@@ -136,7 +194,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @returns {void}
      */
     createLegendURL: function () {
-        console.error("legendURL for heatmap not yet implemented");
+        // console.info("legendURL for heatmap not yet implemented");
     },
 
     /**
@@ -156,21 +214,21 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         cloneFeature.setId(featureId);
 
         // check is feature exist
-        _.each(layerSource.getFeatures(), function (feat) {
+        layerSource.getFeatures().forEach(function (feat) {
             if (feat.getId() === featureId) {
                 heatmapFeature = feat;
             }
         });
 
         // insert weighting
-        if (!_.isUndefined(attribute || value)) {
+        if (attribute !== "" && value !== "") {
             count = this.countStates(feature, attribute, value);
 
             cloneFeature.set("weightForHeatmap", count);
         }
 
         // if the feature is new, then pushes otherwise change it
-        if (_.isUndefined(heatmapFeature)) {
+        if (heatmapFeature !== undefined) {
             layerSource.addFeature(cloneFeature);
         }
         else {
@@ -179,7 +237,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
         }
 
         // normalize weighting
-        if (!_.isUndefined(attribute || value)) {
+        if (attribute !== "" && value !== "") {
             this.normalizeWeight(layerSource.getFeatures());
         }
     },
@@ -194,7 +252,7 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
             return feature.get("weightForHeatmap");
         }).get("weightForHeatmap");
 
-        _.each(featuresWithValue, function (feature) {
+        featuresWithValue.forEach(function (feature) {
             feature.set("weightForHeatmap", feature.get("weightForHeatmap") / max);
         });
     },

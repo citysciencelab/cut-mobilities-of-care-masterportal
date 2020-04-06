@@ -9,10 +9,11 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      * @class ShadowModel
      * @extends Tool
      * @memberof Tools.Shadow
-     * @property {String} glyphicon="glyphicon-screenshot" Glyphicon that is shown before the tool name
+     * @property {String} [glyphicon="glyphicon-screenshot"] Glyphicon that is shown before the tool name
+     * @property {Boolean} [isShadowEnabled=false] Flag to enable shadows on immidiately
      * @constructs
-     * @fires Map#RadioTriggerMapSetShadowTime
-     * @fires Map#RadioRequestMapGetMap3d
+     * @fires Core#RadioTriggerMapSetShadowTime
+-    * @fires Core#RadioRequestGetMap3d
      */
     defaults: _.extend({}, Tool.prototype.defaults, {
         glyphicon: "glyphicon-screenshot",
@@ -20,15 +21,23 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         dateslider: null,
         toggleButton: null,
         datepicker: null,
-        isShadowEnabled: false
+        isShadowEnabled: false,
+        snippetsReady: false
     }),
 
     /**
-     * Loads default values and external tools
+     * Initialize the model
      * @returns {void}
      */
     initialize: function () {
         this.superInitialize();
+    },
+
+    /**
+     * Initializes sub-models
+     * @returns {void}
+     */
+    prepareSnippets: function () {
         const minMaxTimes = this.getMinMaxTimesOfCurrentDay(),
             defaultTime = this.getTime(this.get("shadowTime")),
             timesliderStep = 1000 * 60 * 30,
@@ -40,11 +49,14 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
             button = this.getNewButton("Schattendarstellung", this.get("isShadowEnabled")),
             datepicker = this.getNewDatepicker(defaultDay, minMaxDays[0], minMaxDays[1], "Datum", "datepicker");
 
+        this.setCesiumTime(this.combineTimeAndDate(defaultTime, defaultDay));
         this.setToggleButton(button);
         this.setTimeslider(timeslider);
         this.setDateslider(dateslider);
         this.setDatepicker(datepicker);
         this.registerListener();
+
+        this.setSnippetsReady(true);
     },
 
     /**
@@ -113,7 +125,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     /**
      * Trigger new date to map3D
      * @param {timestamp} datetime new Time
-     * @fires Map#RadioTriggerMapSetShadowTime
+     * @fires Core#RadioTriggerMapSetShadowTime
      * @returns {void}
      */
     setCesiumTime: function (datetime) {
@@ -181,7 +193,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
 
     /**
      * Returns the cesiumScene if defined
-     * @fires Map#RadioRequestMapGetMap3d
+     * @fires Core#RadioRequestGetMap3d
      * @returns {object | undefined} cesiumScene cesiumScene of map3D
      */
     getCesiumScene: function () {
@@ -319,6 +331,15 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      */
     setIsShadowEnabled: function (value) {
         this.set("isShadowEnabled", value);
+    },
+
+    /**
+     * Setter for snippetsReady
+     * @param {boolean} value snippetsReady
+     * @returns {void}
+     */
+    setSnippetsReady: function (value) {
+        this.set("snippetsReady", value);
     }
 });
 

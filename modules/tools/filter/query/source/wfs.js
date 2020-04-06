@@ -23,9 +23,9 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
      * @returns {void}
      */
     buildQueryDatastructureByType: function (layerObject) {
-        var url = Radio.request("Util", "getProxyURL", layerObject.get("url")),
-            featureType = layerObject.get("featureType"),
-            version = layerObject.get("version"),
+        var url = Radio.request("Util", "getProxyURL", layerObject.url),
+            featureType = layerObject.featureType,
+            version = layerObject.version,
             featureAttributesMap = [];
 
         featureAttributesMap = this.requestMetadata(url, featureType, version, this.parseResponse);
@@ -80,19 +80,36 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
         _.each(elements, function (element) {
 
             var type = $(element).attr("type"),
-                typeWithoutNamespace;
+                typeWithoutNamespace,
+                simpleTypeIndex,
+                restriction;
 
-            if (type) {
-                // Remove namespace (if neccesary)
-                typeWithoutNamespace = type.replace(/.*?:?([^:]*)$/i, "$1");
-
-                // Summerize numerical types
-                if (typeWithoutNamespace === "long" || typeWithoutNamespace === "double" || typeWithoutNamespace === "short") {
-                    typeWithoutNamespace = "decimal";
+            if (!type) {
+                // Fallback: Try to get type from simpleType-Node (if provided). If this fails the element is rejected.
+                simpleTypeIndex = Array.from(element.childNodes).findIndex(nodeItem => (/simpletype/i).exec(nodeItem.tagName));
+                if (simpleTypeIndex !== -1) {
+                    restriction = Array.from(element.childNodes[simpleTypeIndex].childNodes).find(nodeItem => (/restriction/i).exec(nodeItem.tagName));
+                    if (restriction) {
+                        type = restriction.getAttribute("base");
+                    }
+                    else {
+                        return;
+                    }
                 }
-
-                featureAttributesMap.push({name: $(element).attr("name"), type: typeWithoutNamespace});
+                else {
+                    return;
+                }
             }
+
+            // Remove namespace (if neccesary)
+            typeWithoutNamespace = type.replace(/.*?:?([^:]*)$/i, "$1");
+
+            // Summerize numerical types
+            if (typeWithoutNamespace === "long" || typeWithoutNamespace === "double" || typeWithoutNamespace === "short") {
+                typeWithoutNamespace = "decimal";
+            }
+
+            featureAttributesMap.push({name: $(element).attr("name"), type: typeWithoutNamespace});
         });
 
         this.createSnippets(featureAttributesMap);

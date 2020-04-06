@@ -20,7 +20,6 @@ const longitudeMax = 900000.0,
 before(function () {
     model = new Model();
 });
-
 describe("tools/gfi/Model", function () {
     describe("getClickedCoordinate", function () {
         it("should return undefined for true as input event", function () {

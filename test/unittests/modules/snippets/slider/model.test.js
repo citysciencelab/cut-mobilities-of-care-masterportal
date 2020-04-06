@@ -84,4 +84,16 @@ describe("snippets/slider/model", function () {
             expect(model.changeValuesByText(undefined, undefined)).to.be.an("array").includes(100, 2000);
         });
     });
+
+    describe("checkAreAllValuesInRange", function () {
+        it("should return true for all numbers in range", function () {
+            expect(model.checkAreAllValuesInRange([1, 5, 7, 15, 99, 100], 1, 100)).to.be.true;
+        });
+        it("should return false if a number is out of range ", function () {
+            expect(model.checkAreAllValuesInRange([1, 5, 10], 5, 20)).to.be.false;
+        });
+        it("should return true if the passed array is empty", function () {
+            expect(model.checkAreAllValuesInRange([], 1, 10)).to.be.true;
+        });
+    });
 });

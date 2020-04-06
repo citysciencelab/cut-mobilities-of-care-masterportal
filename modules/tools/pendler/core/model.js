@@ -1,7 +1,7 @@
 import Tool from "../../../core/modelList/tool/model";
 import {WFS} from "ol/format.js";
 
-const PendlerCoreModel = Tool.extend({
+const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         kreis: "",
         kreise: [],
@@ -23,8 +23,35 @@ const PendlerCoreModel = Tool.extend({
         attributionText: "<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
             "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>"
     }),
+    /**
+     * @class PendlerCoreModel
+     * @extends Tool
+     * @memberof pendler
+     * @constructs
+     * @property {String} kreis="" name of the landkreis
+     * @property {Array} kreise=[] names of landkreise
+     * @property {Array} pendlerLegend=[] the legend
+     * @property {Boolean} renderToWindow=true Flag if tool should be rendered in window
+     * @property {Number} zoomLevel=1 level map is zoomed
+     * @property {String} url= "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung" url to get the 'pendlerverflechtung' from
+     * @property {Object} params= {
+            REQUEST: "GetFeature",
+            SERVICE: "WFS",
+            TYPENAME: "app:mrh_kreise",
+            VERSION: "1.1.0",
+            maxFeatures: "10000"
+        } Request params to get the features.
+     * @property {String} featureType= "mrh_einpendler_gemeinde" name of a feature type
+     * @property {String} attrAnzahl="anzahl_einpendler" name of the attribute for count of commuter
+     * @property {String} attrGemeinde="wohnort" name of the attribute called 'gemeinde'
+     * @property {String} alertId="" id of an alert before download
+     * @property {String} attributionText="<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
+            "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>" text to show as an attribution
+     * @fires //todo
+     * @listens Alerting#RadioTriggerAlertConfirmed
+     */
     initialize: function () {
-        var channel = Radio.channel("Animation");
+        const channel = Radio.channel("Animation");
 
         this.superInitialize();
         channel.reply({
@@ -98,20 +125,22 @@ const PendlerCoreModel = Tool.extend({
     /**
      * Führt einen HTTP-Request aus
      * @param {String} type - GET oder POST
-     * @param {String} data -
+     * @param {String} data - data to send
      * @param {function} successFunction - Wird aufgerufen wenn der Request erfolgreich war
      * @returns {void}
      */
     sendRequest: function (type, data, successFunction) {
+        const url = this.get("url");
+
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", this.get("url")),
+            url: Radio.request("Util", "getProxyURL", url),
             data: data,
             contentType: "text/xml",
             type: type,
             context: this,
             success: successFunction,
             error: function (jqXHR, errorText, error) {
-                Radio.trigger("Alert", "alert", error);
+                console.error("Loading of " + url + " failed:", error);
             }
         });
     },
@@ -122,7 +151,7 @@ const PendlerCoreModel = Tool.extend({
      * @returns {void}
      */
     centerGemeinde: function (setMarker) {
-        var coords = [];
+        let coords = [];
 
         if (this.get("direction") === "wohnort") {
             coords = this.get("lineFeatures")[0].getGeometry().getFirstCoordinate();
@@ -145,12 +174,12 @@ const PendlerCoreModel = Tool.extend({
      * @returns {void}
      */
     parseKreise: function (data) {
-        var kreise = [],
+        const kreise = [],
             hits = $("gml\\:featureMember,featureMember", data);
+        let kreis;
 
         _.each(hits, function (hit) {
-            var kreis = $(hit).find("app\\:kreisname,kreisname")[0].textContent;
-
+            kreis = $(hit).find("app\\:kreisname,kreisname")[0].textContent;
             kreise.push(kreis);
         });
         this.setKreise(_.without(kreise.sort(), "Bremen", "Berlin", "Kiel", "Hannover"));
@@ -165,12 +194,12 @@ const PendlerCoreModel = Tool.extend({
      * @returns {void}
      */
     parseGemeinden: function (data) {
-        var gemeinden = [],
+        const gemeinden = [],
             hits = $("wfs\\:member,member", data);
+        let gemeinde;
 
         _.each(hits, function (hit) {
-            var gemeinde = $(hit).find("app\\:gemeinde,gemeinde")[0].textContent;
-
+            gemeinde = $(hit).find("app\\:gemeinde,gemeinde")[0].textContent;
             gemeinden.push(gemeinde);
         });
         this.setGemeinden(gemeinden.sort());
@@ -182,7 +211,7 @@ const PendlerCoreModel = Tool.extend({
      * @returns {void}
      */
     parseFeatures: function (data) {
-        var wfsReader = new WFS({
+        const wfsReader = new WFS({
             featureNS: "http://www.deegree.org/app",
             featureType: this.get("featureType")
         });
@@ -199,7 +228,7 @@ const PendlerCoreModel = Tool.extend({
      * @returns {Object[]} Gekürzte Feature-Liste
      */
     truncateFeatureList: function (features, limitText) {
-        var limit;
+        let limit;
 
         switch (limitText) {
             case "top5":
@@ -227,38 +256,33 @@ const PendlerCoreModel = Tool.extend({
      * @returns {Object[]} Stortierte und Abgeschnittene Feature-Liste
      */
     selectFeatures: function (rawFeatures) {
-        var sortedFeatures,
-            relevantFeatures;
-
         // Sortiere nach Anzahl der Pendler
-        sortedFeatures = _.sortBy(rawFeatures, function (feature) {
+        const sortedFeatures = _.sortBy(rawFeatures, function (feature) {
             // Verwende die Gegenzahl als Wert zur Sortierung, um absteigende Reihenfolge zu erhalten.
             return feature.get(this.get("attrAnzahl")) * -1;
         }, this);
 
         // Schneide Liste gemäß gewähltem Top ab
-        relevantFeatures = this.truncateFeatureList(sortedFeatures, this.get("trefferAnzahl"));
-
-        return relevantFeatures;
+        return this.truncateFeatureList(sortedFeatures, this.get("trefferAnzahl"));
     },
 
     /**
      * Bereite den Inhalt der Abfrage an den WFS vor.
      * @param {String} value Abzufragender Schlüssel (im Falle des Pendler-Tools: "Wohnort" oder "Arbeitsplatz")
-     * @returns {Void} Kein Rückgabewert
+     * @returns {void} Kein Rückgabewert
      */
     createPostBody: function (value) {
-        var postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
-                        "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
-                            "<wfs:Query typeName='app:" + this.get("featureType") + "'>" +
-                                "<ogc:Filter>" +
-                                    "<ogc:PropertyIsEqualTo>" +
-                                        "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
-                                        "<ogc:Literal>" + this.get("gemeinde") + "</ogc:Literal>" +
-                                    "</ogc:PropertyIsEqualTo>" +
-                                "</ogc:Filter>" +
-                            "</wfs:Query>" +
-                        "</wfs:GetFeature>";
+        const postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
+            "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
+            "<wfs:Query typeName='app:" + this.get("featureType") + "'>" +
+            "<ogc:Filter>" +
+            "<ogc:PropertyIsEqualTo>" +
+            "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
+            "<ogc:Literal>" + this.get("gemeinde") + "</ogc:Literal>" +
+            "</ogc:PropertyIsEqualTo>" +
+            "</ogc:Filter>" +
+            "</wfs:Query>" +
+            "</wfs:GetFeature>";
 
         // Wenn sich die zu betrachtende Gemeinde nicht geändert hat bleibt der Request gleich
         // und muss nicht erneut gestellt werden. Löse stattdessen die erneute Verarbeitung der Daten aus.
@@ -269,8 +293,12 @@ const PendlerCoreModel = Tool.extend({
 
         this.setPostBody(postBody);
     },
+    /**
+     * Creates a confirmable alert with the 'attributionText'
+     * @returns {void}
+     */
     createAlertBeforeDownload: function () {
-        var alertId = "PendlerDownload";
+        const alertId = "PendlerDownload";
 
         this.setAlertId(alertId);
         Radio.trigger("Alert", "alert", {
@@ -280,6 +308,10 @@ const PendlerCoreModel = Tool.extend({
             confirmable: true
         });
     },
+    /**
+     * downloads all line-features as csv file
+     * @returns {void}
+     */
     download: function () {
         const features = this.get("lineFeatures"),
             featurePropertyList = [];
@@ -312,54 +344,147 @@ const PendlerCoreModel = Tool.extend({
             }
         }
     },
+    /**
+     * Increases the zIndex of the layer with the given name, so it is readable.
+     * @param {String} layerName name of the layer
+     * @returns {void}
+     */
+    assertLayerOnTop: function (layerName) {
+        const layers = Radio.request("Map", "getLayers").getArray().filter(layer => layer.get("name") === layerName);
 
-    setPostBody: function (value) {
-        this.set("postBody", value);
+        if (layers.length > 0) {
+            let zIndex = layers[0].getZIndex();
+
+            layers[0].setZIndex(++zIndex);
+
+        }
     },
-    setLineFeatures: function (value) {
-        this.set("lineFeatures", value);
-    },
-    setUrl: function (value) {
-        this.set("url", value);
-    },
-    setParams: function (value) {
-        this.set("params", value);
-    },
-    setFeatureType: function (value) {
-        this.set("featureType", value);
-    },
-    setAttrAnzahl: function (value) {
-        this.set("attrAnzahl", value);
-    },
-    setAttrGemeinde: function (value) {
-        this.set("attrGemeinde", value);
-    },
-    setKreise: function (value) {
-        this.set("kreise", value);
-    },
-    setKreis: function (value) {
-        this.set("kreis", value);
-    },
-    setGemeinden: function (value) {
-        this.set("gemeinden", value);
-    },
-    setGemeinde: function (value) {
-        this.set("gemeinde", value);
-    },
-    setTrefferAnzahl: function (value) {
-        this.set("trefferAnzahl", value);
-    },
-    setDirection: function (value) {
-        this.set("direction", value);
-    },
-    setZoomLevel: function (value) {
-        this.set("zoomLevel", value);
-    },
+    /**
+     * resets the window by unsetting 'kreis', 'pendlerLegend' and 'postbody'
+     * @returns {void}
+     */
     resetWindow: function () {
         this.setKreis("");
         this.set("pendlerLegend", []);
         this.unset("postBody", {silent: true});
     },
+    /**
+     * Sets the body of the post request
+     * @param {String} value body of the post request
+     * @returns {void}
+     */
+    setPostBody: function (value) {
+        this.set("postBody", value);
+    },
+    /**
+     * Sets the line features
+     * @param {Feature[]} value body of the post request
+     * @returns {void}
+     */
+    setLineFeatures: function (value) {
+        this.set("lineFeatures", value);
+    },
+    /**
+     * Sets the url
+     * @param {String} value url
+     * @returns {void}
+     */
+    setUrl: function (value) {
+        this.set("url", value);
+    },
+    /**
+     * Sets the params for a request
+     * @param {Object} value params
+     * @returns {void}
+     */
+    setParams: function (value) {
+        this.set("params", value);
+    },
+    /**
+     * Sets the feature type
+     * @param {String} value type of a feature
+     * @returns {void}
+     */
+    setFeatureType: function (value) {
+        this.set("featureType", value);
+    },
+    /**
+     * Sets the attribute for 'Anzahl'
+     * @param {String} value the attribute name
+     * @returns {void}
+     */
+    setAttrAnzahl: function (value) {
+        this.set("attrAnzahl", value);
+    },
+    /**
+     * Sets the attribute for 'Gemeinde'
+     * @param {String} value the attribute name
+     * @returns {void}
+     */
+    setAttrGemeinde: function (value) {
+        this.set("attrGemeinde", value);
+    },
+    /**
+     * Sets the 'Landkreise'
+     * @param {String[]} value names of the 'Landkreise'
+     * @returns {void}
+     */
+    setKreise: function (value) {
+        this.set("kreise", value);
+    },
+    /**
+     * Sets the 'Landkreis'
+     * @param {String} value name of the 'Landkreis'
+     * @returns {void}
+     */
+    setKreis: function (value) {
+        this.set("kreis", value);
+    },
+    /**
+     * Sets a list of 'Gemeinde'
+     * @param {String[]} value names of the 'Gemeinde'
+     * @returns {void}
+     */
+    setGemeinden: function (value) {
+        this.set("gemeinden", value);
+    },
+    /**
+     * Sets the 'Gemeinde'
+     * @param {String} value name of the 'Gemeinde'
+     * @returns {void}
+     */
+    setGemeinde: function (value) {
+        this.set("gemeinde", value);
+    },
+    /**
+     * Sets the amount of hits
+     * @param {String} value hit count
+     * @returns {void}
+     */
+    setTrefferAnzahl: function (value) {
+        this.set("trefferAnzahl", value);
+    },
+    /**
+     * Sets the direction 'Wohnort' or 'Arbeitsort'
+     * @param {String} value the direction
+     * @returns {void}
+     */
+    setDirection: function (value) {
+        this.set("direction", value);
+    },
+    /**
+     * Sets the zoomlevel
+     * @param {Number} value the level
+     * @returns {void}
+     */
+    setZoomLevel: function (value) {
+        this.set("zoomLevel", value);
+    },
+    /**
+     * Sets the id of the alert
+     * @param {String} value alert-id
+     * @returns {void}
+     */
     setAlertId: function (value) {
         this.set("alertId", value);
     }

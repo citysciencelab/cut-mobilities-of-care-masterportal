@@ -5,7 +5,7 @@ So wird die lokale Entwicklungsumgebung eingerichtet.
 ## Systemvoraussetzungen
 
 ###git
-[git](http://git-scm.com/) installieren.
+**[git](http://git-scm.com/)** installieren.
 Der Installationspfad von Git (C:\Program Files\Git\bin\) muss in der systemweiten PATH-Umgebungsvariable stehen.
 
 Da das git-Protokoll von Firewalls geblockt werden kann, git so konfigurieren, dass stattdessen https verwendet wird:
@@ -22,7 +22,7 @@ in der normalen shell **UND** in der Admin-shell (git-shell als Admin ausführen
 ```
 
 ### Node.js
-[Node.js](http://nodejs.org) installieren. Letzte als funktionierend bekannte Version: node-v10.15.0 mit NPM 6.4.1
+**[Node.js](http://nodejs.org)** installieren. Letzte als funktionierend bekannte Version: node-v10.15.0 mit NPM 6.4.1
 
 Test in cmd:
 
@@ -30,7 +30,7 @@ Test in cmd:
 # node -v
 ```
 
-Mit Node.js wird auch der Node Package Manager [NPM](http://npmjs.org) installiert.
+Mit Node.js wird auch der Node Package Manager **[NPM](http://npmjs.org)** installiert.
 
 Test in cmd:
 
@@ -64,6 +64,7 @@ außerdem
 # setx https_proxy <proxy-url:port>
 --> danach alle cmds schließen und neu starten, damit die Änderungen wirksam werden
 
+Die Proxies müssen ebenfalls in den Systemvariablen eingetragen werden.
 ```
 
 #### npm-Pakete global als Admin installieren
@@ -73,7 +74,7 @@ Einige npm-Pakete müssen in unserem Setup global und als Admin installiert werd
 # npm config set prefix C:\Programme\nodejs\
 ```
 
-In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. [Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders).
+In diesen Pfad werden durch den Admin global installierte Pakete abgelegt. **[Doku zu npm-Ordnern](https://docs.npmjs.com/files/folders)**.
 
 **ACHTUNG:** Bitte VOR Konfiguration dieses Parameters den korrekten Systempfad ermitteln!
 (Auf einem deutschsprachigen Win10 ist dies bspw. ```C:\Program Files\nodejs```)
@@ -84,16 +85,6 @@ Repository klonen und in das erstellte Verzeichnis wechseln:
 # git clone https://bitbucket.org/geowerkstatt-hamburg/masterportal.git
 # cd lgv
 ```
-
-**Wichtig**: in der Datei package.json bei den dev-dependencies "lgv-config"  ggf. die eigenen Config-Repos (z.B. dieses [öffentliche Repo für lgv-config](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/)) inkl. credentials einbinden, z.B.
-
-```
-# https://<user>:<pw>@bitbucket.org/geowerkstatt-hamburg/lgv-config.git#master
-```
-
-
-Installiert das Repository [lgv-config](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config) mit services.json und style.json.
-
 
 
 für alle npm-Pakete:

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<ul class="nav nav-pills">
+    <li value= "daten" class="tab-toggle active"><a data-toggle="tab" href="#daten">Daten</a></li>
+    <li value= "info" class="tab-toggle"><a data-toggle="tab" href="#info">Info</a></li>
+</ul>
+<div class="tab-content">
+    <div class="gfi-info tab-pane fade" id="info">
+        <h5><b>Einzugsgebiete :</b></h5>
+        <p>Dargestellt werden die Anteile der Schülerinnen und Schüler der angeklickten Schule nach Wohnort. Dabei können Grundschulen, Sonderschulen (Primarstufe) sowie Stadtteilschulen mit integrierter Grundschule angeklickt werden. Ist ein statistisches Gebiet um die angeklickte Schule beispielsweise dunkel eingefärbt, bedeutet dies, dass ein hoher Anteil der Schülerinnen und Schüler dieser Schule in diesem dunkel eingefärbten Gebiet wohnen. Durch Hovern auf ein eingefärbtes statistisches Gebiet wird die Anzahl der Schülerinnen und Schüler angezeigt, die in diesem Gebiet wohnen und die angeklickte Schule besuchen.</p></br>
+        <p>ACHTUNG: Bei Schulen mit mehreren Zweigstellen wurden die Schülerzahlen aller Zweigstellen addiert und am Hauptstandort der Schule angezeigt. Das gilt auch für die ReBBZ.</p></br>
+        <p>Nicht ausgewiesen werden statistische Gebiete, in denen insgesamt weniger als 5 Schülerinnen und Schüler der Primarstufe wohnen.</p>
+    </div>
+    <div class="gfi-daten tab-pane fade in active" id="daten">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2"><%= name %></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr colspan="2">
+                    <td>Adresse:</td>
+                    <td><%= address %></td>
+                </tr>
+                <tr colspan="2">
+                    <td>Gesamtzahl der Schüler:</td>
+                    <td><%= countStudents %></td>
+                </tr>
+                <tr colspan="2">
+                    <td>davon in der Primarstufe:</td>
+                    <td><%= countStudentsPrimary %></td>
+                </tr>
+                <tr colspan="2">
+                    <td>davon in der Sekundarstufe:</td>
+                    <td><%= countStudentsSecondary %></td>
+                </tr>
+                <tr colspan="2">
+                    <td>Sozialindex:</td>
+                    <td><%= socialIndex %></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"><i><%= hintText %></i></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

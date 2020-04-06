@@ -12,8 +12,8 @@ import TrinkwasserThemeView from "./trinkwasser/view";
 import TrinkwasserTheme from "./trinkwasser/model";
 import MietenspiegelThemeView from "./mietenspiegel/view";
 import MietenspiegelTheme from "./mietenspiegel/model";
-import SgvOnlineTheme from "./sgvonline/model";
-import SgvOnlineThemeView from "./sgvonline/view";
+import SgvOnlineTheme from "./sgvOnline/model";
+import SgvOnlineThemeView from "./sgvOnline/view";
 import VerkehrsStaerkenTheme from "./verkehrsstaerken/model";
 import VerkehrsStaerkenThemeView from "./verkehrsstaerken/view";
 import SchulInfoTheme from "./schulinfo/model";
@@ -30,7 +30,18 @@ import ElektroladesaeulenThemeView from "./elektroladesaeulen/view";
 import ElektroladesaeulenTheme from "./elektroladesaeulen/model";
 import ActiveCityMapsThemeView from "./activeCityMaps/view";
 import ActiveCityMapsTheme from "./activeCityMaps/model";
-
+import SchulenStandorteThemeView from "./bildungsatlas/schulenStandorte/view";
+import SchulenStandorteTheme from "./bildungsatlas/schulenStandorte/model";
+import BalkendiagrammThemeView from "./bildungsatlas/balkendiagramm/view";
+import BalkendiagrammTheme from "./bildungsatlas/balkendiagramm/model";
+import SchulenEinzugsgebieteThemeView from "./bildungsatlas/schulenEinzugsgebiete/view";
+import SchulenEinzugsgebieteTheme from "./bildungsatlas/schulenEinzugsgebiete/model";
+import SchulenWohnortThemeView from "./bildungsatlas/schulenWohnort/view";
+import SchulenWohnortTheme from "./bildungsatlas/schulenWohnort/model";
+import SchulentlasseneThemeView from "./bildungsatlas/schulentlassene/view";
+import SchulentlasseneTheme from "./bildungsatlas/schulentlassene/model";
+import SensorThemeView from "./sensor/view";
+import SensorTheme from "./sensor/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -44,16 +55,29 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
      * @fires MouseHover#RadioTriggerMouseHoverHide
      */
     model: function (attrs, options) {
-        var gfiTheme = attrs.gfiTheme,
-            theme;
+        const gfiTheme = attrs.gfiTheme;
+        let theme;
 
-        if (_.isObject(attrs.gfiTheme)) {
+        if (typeof attrs.gfiTheme === "object") {
             attrs.gfiParams = gfiTheme.params;
             attrs.gfiTheme = gfiTheme.name;
         }
 
         if (attrs.gfiTheme === "table") {
             theme = new TableTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "schulenStandorte") {
+            theme = new SchulenStandorteTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "schulenEinzugsgebiete") {
+            theme = new SchulenEinzugsgebieteTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "schulenWohnort") {
+            theme = new SchulenWohnortTheme(attrs, options);
+
+        }
+        else if (attrs.gfiTheme === "schulentlassene") {
+            theme = new SchulentlasseneTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "dipas") {
             theme = new DipasTheme(attrs, options);
@@ -97,6 +121,12 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         else if (attrs.gfiTheme === "buildings_3d") {
             theme = new Buildings3dTheme(attrs, options);
         }
+        else if (attrs.gfiTheme === "balkendiagramm") {
+            theme = new BalkendiagrammTheme(attrs, options);
+        }
+        else if (attrs.gfiTheme === "sensor") {
+            theme = new SensorTheme(attrs, options);
+        }
         else {
             theme = new DefaultTheme(attrs, options);
         }
@@ -104,7 +134,7 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     },
 
     initialize: function () {
-        var channel = Radio.channel("gfiList");
+        const channel = Radio.channel("gfiList");
 
         // get new feature data
         this.listenTo(channel, {
@@ -122,15 +152,14 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
                 });
             },
             "change:isReady": function () {
-                var removeModels;
+                let removeModels;
 
-                if (_.contains(this.pluck("isReady"), false) === false) {
-                // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
+                if (this.pluck("isReady").includes(false) === false) {
+                    // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                     // WMS und WFS Layer die beim Klickpunkt keine GFIs haben
                     removeModels = this.filter(function (model) {
-                        return model.get("gfiContent") === undefined || _.isEmpty(model.get("gfiContent"));
+                        return model.get("gfiContent") === undefined || !Object.entries(model.get("gfiContent") || {}).length;
                     });
-
                     this.remove(removeModels);
                     this.forEach(this.addView, this);
                     // listener in modules/tools/gfi/model.js
@@ -144,6 +173,22 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         switch (model.get("gfiTheme")) {
             case "table": {
                 new TableThemeView({model: model});
+                break;
+            }
+            case "schulenStandorte": {
+                new SchulenStandorteThemeView({model: model});
+                break;
+            }
+            case "schulenEinzugsgebiete": {
+                new SchulenEinzugsgebieteThemeView({model: model});
+                break;
+            }
+            case "schulenWohnort": {
+                new SchulenWohnortThemeView({model: model});
+                break;
+            }
+            case "schulentlassene": {
+                new SchulentlasseneThemeView({model: model});
                 break;
             }
             case "reisezeiten": {
@@ -202,15 +247,28 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
                 new Buildings3dThemeView({model: model});
                 break;
             }
+            case "balkendiagramm": {
+                new BalkendiagrammThemeView({model: model});
+                break;
+            }
+            case "sensor": {
+                new SensorThemeView({model: model});
+                break;
+            }
             default: {
                 new DefaultThemeView({model: model});
             }
         }
     },
 
-    appendTheme: function (value) {
+    /**
+     * handling on appendTheme
+     * @param   {integer} themeIndex index of theme in array
+     * @returns {void}
+     */
+    appendTheme: function (themeIndex) {
         this.setAllInVisible();
-        this.at(value).setIsVisible(true);
+        this.at(themeIndex).setIsVisible(true);
         Radio.trigger("MouseHover", "hide");
     },
 

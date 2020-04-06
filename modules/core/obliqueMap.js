@@ -104,6 +104,11 @@ const ObliqueMap = Backbone.Model.extend({
     registerLayer: function (layer) {
         this.layers.push(layer);
     },
+    /**
+     * @fires Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerMapBeforeChange
+     * @return {void} -
+     */
     deactivate: function () {
         var interactions,
             map2D,
@@ -113,6 +118,7 @@ const ObliqueMap = Backbone.Model.extend({
         map2D = Radio.request("Map", "getMap");
 
         if (this.isActive() && this.currentCollection && _.has(this.currentDirection, "currentImage")) {
+            Radio.trigger("Map", "beforeChange", "2D");
             Radio.trigger("ObliqueMap", "isActivated", false);
             this.getCenter().then(function (center) {
                 var resolution,
@@ -199,10 +205,16 @@ const ObliqueMap = Backbone.Model.extend({
         return Promise.reject(new Error("there is no currentImage"));
     },
 
+    /**
+     * @fires Core#RadioTriggerMapChange
+     * @fires Core#RadioTriggerMapBeforeChange
+     * @return {void} -
+     */
     activate: function () {
         var fillArea, oc, containerAttribute, map2D, interactions;
 
         if (!this.isActive()) {
+            Radio.trigger("Map", "beforeChange", "Oblique");
             Radio.trigger("ObliqueMap", "isActivated", true);
             const center = Radio.request("MapView", "getCenter"),
                 activeTool = Radio.request("ModelList", "getModelByAttributes", {type: "tool", isActive: true}),

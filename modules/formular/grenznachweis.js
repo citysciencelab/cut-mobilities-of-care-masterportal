@@ -69,7 +69,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      * @property {String} activeDIV="beschreibung" Shows which HTML div is currently active ('beschreibung' or 'kundendaten')
      * @property {String} wpsurl="" URL to the WPS service
      * @property {Boolean} renderToWindow=true Flag, if the fomular shall be rendered to the masterportal tool window.
-     * @fires RestReader#RadioRequestRestReaderGetServicebyId
+     * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Map#RadioTriggerMapAddLayer
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Searchbar#RadioTriggerSearchbarDeleteSearchString

@@ -1,16 +1,24 @@
 import DrawTemplate from "text-loader!./template.html";
 import DownloadView from "../download/view";
 
-const DrawToolView = Backbone.View.extend({
+const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     events: {
         "change .interaction": "setDrawType",
         "keyup .text input": "setText",
         "change .font-size select": "setFontSize",
         "change .font select": "setFont",
         "change .radius select": "setRadius",
+        "change .dropdownMethod": "setMethodCircle",
+        "change .dropdownUnit": "setUnit",
+        "keyup .circleRadiusInner input": "setCircleRadius",
+        "keyup .circleRadiusOuter input": "setCircleRadiusOuter",
+        "change .circleRadiusInner input": "setCircleRadius",
+        "change .circleRadiusOuter input": "setCircleRadiusOuter",
         "change .stroke-width select": "setStrokeWidth",
         "change .opacity select": "setOpacity",
+        "change .opacityContour select": "setOpacityContour",
         "change .color select": "setColor",
+        "change .colorContour select": "setColorContour",
         "click .delete": "deleteFeatures",
         "click .draw": "toggleInteraction",
         "click .modify": "toggleInteraction",
@@ -19,25 +27,33 @@ const DrawToolView = Backbone.View.extend({
     },
 
     /**
-     * initialize the drawTool
-     * that would be called by creates this tool
-     * create an instance from download tool
-     * @return {void}
+     * @class DrawToolView
+     * @extends Backbone.View
+     * @memberof Tools.Draw
+     * @constructs
      */
     initialize: function () {
-        var downloadModel = Radio.request("ModelList", "getModelByAttributes", {id: "download"});
-
         this.listenTo(this.model, {
-            "change:isActive": this.render
+            "change:isActive": this.render,
+            "change:currentLng": function () {
+                if (this.model.get("isActive") === true) {
+                    this.renderAfterLngChanged(this.model, true);
+                }
+            }
         });
 
-        new DownloadView({model: downloadModel});
+        new DownloadView();
 
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
     },
 
+    /**
+     * @member DrawTemplate
+     * @description Template used to create the draw tool.
+     * @memberof Tools.Draw
+     */
     template: _.template(DrawTemplate),
 
     /**
@@ -58,15 +74,32 @@ const DrawToolView = Backbone.View.extend({
     },
 
     /**
+     * render the tool draw after the language changed
+     * @param {Backbone.model} model - draw model
+     * @param {boolean} isActive - from tool
+     * @return {Backbone.View} DrawView
+     */
+    renderAfterLngChanged: function (model, isActive) {
+        if (isActive && this.model.get("renderToWindow")) {
+            this.renderSurface(model, model.get("lastDrawTypeIndex"));
+        }
+        else {
+            this.removeSurface();
+        }
+        return this;
+    },
+
+    /**
      * render this tool
      * @param {Backbone.model} model - draw model
+     * @param {Number} lastDrawTypeIndex - index of the last select for drawtype
      * @return {void}
      */
-    renderSurface: function (model) {
+    renderSurface: function (model, lastDrawTypeIndex) {
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template(model.toJSON()));
         this.delegateEvents();
-        this.renewSurface();
+        this.renewSurface(lastDrawTypeIndex);
         this.registerListener();
         this.model.toggleInteraction("draw");
     },
@@ -76,7 +109,7 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     removeSurface: function () {
-        var layerSource = this.model.get("layer").getSource();
+        const layerSource = this.model.get("layer").getSource();
 
         this.model.resetModule();
         $("#map").removeClass("no-cursor");
@@ -89,36 +122,158 @@ const DrawToolView = Backbone.View.extend({
 
     /**
      * renews the surface of the drawtool
+     * @param {Number} lastDrawTypeIndex - index of the last select for drawtype
      * @return {void}
      */
-    renewSurface: function () {
-        var element = this.$el.find(".interaction")[0];
+    renewSurface: function (lastDrawTypeIndex) {
+        const element = this.$el.find(".interaction")[0];
 
-        switch (element.options[element.selectedIndex].text) {
-            case "Punkt zeichnen": {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").show();
-                this.$el.find(".stroke-width").hide();
-                break;
+        if (lastDrawTypeIndex) {
+            // after lng changed set selectbox to selection before
+            element.selectedIndex = lastDrawTypeIndex;
+        }
+        if (element) {
+            switch (element.options[element.selectedIndex].id) {
+                case "drawPoint": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .stroke-width,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .colorContour,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.radius,
+                        .color,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                case "writeText": {
+                    this.$el.find(
+                        `.radius,
+                        .stroke-width,
+                        .circleRadiusOuter,
+                        .circleRadiusInner,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .colorContour,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .color,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                case "drawCircle": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .circleRadiusOuter,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .circleRadiusInner,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .color,
+                        .colorContour,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                case "drawDoubleCircle": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .dropdownMethod,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .dropdownUnit,
+                        .color,
+                        .colorContour,
+                        .opacity`
+                    ).show();
+                    break;
+                }
+                case "drawLine": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .color,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .opacity`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .colorContour,
+                        .opacityContour`
+                    ).show();
+                    break;
+                }
+                case "drawArea": {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .dropdownUnit,
+                        .dropdownMethod,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .opacityContour`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .color,
+                        .opacity,
+                        .colorContour`
+                    ).show();
+                    break;
+                }
+                default: {
+                    this.$el.find(
+                        `.text,
+                        .font-size,
+                        .font,
+                        .radius,
+                        .circleRadiusInner,
+                        .circleRadiusOuter,
+                        .dropdownUnit,
+                        .dropdownMethod`
+                    ).hide();
+                    this.$el.find(
+                        `.stroke-width,
+                        .colorContour,
+                        .color`
+                    ).show();
+                    break;
+                }
             }
-            case "Text schreiben": {
-                this.$el.find(".text").show();
-                this.$el.find(".font-size").show();
-                this.$el.find(".font").show();
-                this.$el.find(".radius").hide();
-                this.$el.find(".stroke-width").hide();
-                break;
-            }
-            default: {
-                this.$el.find(".text").hide();
-                this.$el.find(".font-size").hide();
-                this.$el.find(".font").hide();
-                this.$el.find(".radius").hide();
-                this.$el.find(".stroke-width").show();
-                break;
-            }
+            this.model.set("lastDrawTypeIndex", element.selectedIndex);
         }
     },
 
@@ -147,7 +302,7 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     renderGlyphicon: function (evt) {
-        var element = document.getElementById("cursorGlyph");
+        const element = document.getElementById("cursorGlyph");
 
         $(element).css("left", evt.originalEvent.offsetX + 5);
         $(element).css("top", evt.originalEvent.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
@@ -159,9 +314,12 @@ const DrawToolView = Backbone.View.extend({
      * @return {void}
      */
     setDrawType: function (evt) {
-        var element = evt.target,
+        const element = evt.target,
             selectedElement = element.options[element.selectedIndex];
 
+        if (selectedElement.text === this.model.get("drawDoubleCircle")) {
+            this.model.enableMethodDefined(false);
+        }
         this.model.setDrawType(selectedElement.value, selectedElement.text);
         this.model.updateDrawInteraction();
         this.renewSurface();
@@ -249,13 +407,24 @@ const DrawToolView = Backbone.View.extend({
     },
 
     /**
+     * setter for the unit of the circle diameter
+     * @param {event} evt - with new fontSize
+     * @return {void}
+     */
+    setUnit: function (evt) {
+        this.model.setUnit(evt.target.value);
+        this.setCircleRadius();
+        this.setCircleRadiusOuter();
+    },
+
+    /**
      * setter for new color on the model
      * and adds the opacity before
      * @param {event} evt - with new color
      * @return {void}
      */
     setColor: function (evt) {
-        var colors = evt.target.value.split(","),
+        const colors = evt.target.value.split(","),
             newColor = [];
 
         colors.forEach(function (color) {
@@ -267,6 +436,24 @@ const DrawToolView = Backbone.View.extend({
     },
 
     /**
+     * setter for new strokecolor on the model
+     * and adds the opacity before
+     * @param {event} evt - with new color
+     * @return {void}
+     */
+    setColorContour: function (evt) {
+        const colors = evt.target.value.split(","),
+            newColorContour = [];
+
+        colors.forEach(function (color) {
+            newColorContour.push(parseInt(color, 10));
+        });
+        newColorContour.push(this.model.get("opacityContour"));
+        this.model.setColorContour(newColorContour);
+        this.model.updateDrawInteraction();
+    },
+
+    /**
      * setter for radius on the model
      * @param {event} evt - with new radius
      * @return {void}
@@ -274,6 +461,35 @@ const DrawToolView = Backbone.View.extend({
     setRadius: function (evt) {
         this.model.setRadius(evt.target.value);
         this.model.updateDrawInteraction();
+    },
+
+    setMethodCircle: function (evt) {
+
+        if (evt.target.value === "defined") {
+            this.model.enableMethodDefined(false);
+        }
+        else if (evt.target.value === "interactiv") {
+            this.model.enableMethodDefined(true);
+        }
+        this.model.setMethodCircle(evt.target.value);
+    },
+
+    /**
+     * setter for radius on the model
+     * @param {event} evt - with new radius
+     * @return {void}
+     */
+    setCircleRadius: function () {
+        this.model.setCircleRadius($(".circleRadiusInner input")[0].value);
+    },
+
+    /**
+     * setter for radius on the model
+     * @param {event} evt - with new radius
+     * @return {void}
+     */
+    setCircleRadiusOuter: function () {
+        this.model.setCircleRadiusOuter($(".circleRadiusOuter input")[0].value);
     },
 
     /**
@@ -288,16 +504,21 @@ const DrawToolView = Backbone.View.extend({
 
     /**
      * setter for opacity on the model
-     * and also sets the color new on the model
      * @param {event} evt - with new opacity
      * @return {void}
      */
     setOpacity: function (evt) {
-        var newColor = this.model.get("color");
+        this.model.setOpacity(evt.target.value);
+        this.model.updateDrawInteraction();
+    },
 
-        newColor[3] = parseFloat(evt.target.value);
-        this.model.setColor(newColor);
-        this.model.setOpacity(parseFloat(evt.target.value));
+    /**
+     * setter for opacity of the stroke on the model
+     * @param {event} evt - with new opacity
+     * @return {void}
+     */
+    setOpacityContour: function (evt) {
+        this.model.combineColorOpacityContour(evt.target.value);
         this.model.updateDrawInteraction();
     }
 });

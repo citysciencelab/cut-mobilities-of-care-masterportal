@@ -13,7 +13,7 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
      * @memberof Menu.Desktop.Folder
      * @constructs
      * @listens Map#RadioTriggerMapChange
-     * @listens Util#RadioTriggerUtilIsViewMobileChanged
+     * @listens Core#RadioTriggerUtilIsViewMobileChanged
      * @fires Map#RadioRequestMapGetMapMode
      */
     initialize: function () {
@@ -41,6 +41,14 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
         if (this.model.get("isVisibleInMenu")) {
             $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         }
+
+        if (this.model.get("isInitOpen")) {
+            this.$el.addClass("open");
+        }
+        else {
+            this.$el.removeClass("open");
+        }
+
         return this;
     },
 

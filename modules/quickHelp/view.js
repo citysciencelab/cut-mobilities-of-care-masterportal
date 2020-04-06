@@ -60,6 +60,11 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
                 containment: "#map",
                 handle: ".header"
             });
+            this.listenTo(this.model, {
+                "change:currentLng": function () {
+                    this.rerender();
+                }
+            });
         }
     },
     templateSearch: _.template(TemplateSearch),
@@ -74,6 +79,33 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
     render: function () {
         $("body").append(this.$el);
         return this;
+    },
+
+    /**
+     * rerenders the window
+     * @returns {void}
+     */
+    rerender: function () {
+        const value = this.model.get("currentHelpTopic"),
+            attr = this.model.toJSON();
+
+        switch (value) {
+            case "search": {
+                this.$el.html(this.templateSearch(attr));
+                break;
+            }
+            case "tree": {
+                this.$el.html(this.templateTree(attr));
+                break;
+            }
+            case "measure": {
+                this.$el.html(this.templateMeasureTool(attr));
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     },
 
     /**
@@ -109,6 +141,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
                 break;
             }
         }
+        this.model.setCurrentHelpTopic(value);
         this.$el.show("slow");
     },
 

@@ -5,7 +5,11 @@ const merge = require("webpack-merge"),
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
     fs = require("fs"),
-    _ = require("underscore");
+    HttpsProxyAgent = require("https-proxy-agent"),
+    /* eslint-disable no-process-env */
+    proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
+    /* eslint-disable no-process-env */
+    proxyAgent = proxyServer !== undefined ? new HttpsProxyAgent(proxyServer) : "";
 
 
 let proxies;
@@ -17,21 +21,27 @@ else {
     proxies = require("./proxyconf_example.json");
 }
 
+Object.keys(proxies).forEach(proxy => {
+    if (proxies[proxy].agent !== undefined) {
+        proxies[proxy].agent = proxyAgent;
+    }
+});
 
-module.exports = function (env, args) {
-    const path2CustomModule = _.isString(args.CUSTOMMODULE) && args.CUSTOMMODULE !== "" ? args.CUSTOMMODULE : "";
-
+module.exports = function () {
     return merge.smart({
         mode: "development",
         devtool: "cheap-module-eval-source-map",
         devServer: {
-            port: 9001,
-            publicPath: "/build/",
-            overlay: true,
+            headers: {
+                "Access-Control-Allow-Origin": "*"
+            },
             https: true,
             open: true,
             openPage: "portal/master",
-            proxy: proxies
+            overlay: true,
+            port: 9001,
+            proxy: proxies,
+            publicPath: "/build/"
         },
         module: {
             rules: [
@@ -49,7 +59,8 @@ module.exports = function (env, args) {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
                     options: {
-                        name: "[name].[ext]"
+                        name: "[name].[ext]",
+                        publicPath: "../../css/fonts"
                     }
                 }
             ]
@@ -60,5 +71,5 @@ module.exports = function (env, args) {
         //         filename: "./statistics.html"
         //     })
         // ]
-    }, new Common(path2CustomModule));
+    }, new Common());
 };

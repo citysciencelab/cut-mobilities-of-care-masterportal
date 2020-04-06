@@ -7,7 +7,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * @memberof Tools.GFI.Themes
      * @constructs
      * @listens gfiView#RadioTriggerRender
-     * @fires Util#RadioRequestUtilIsViewMobile
+     * @fires Core#RadioRequestUtilIsViewMobile
      * @fires GFI#RadioRequestGFIGetCurrentView
      */
     initialize: function () {
@@ -43,20 +43,21 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
         }
         return this;
     },
+
     /**
-    * todo
-    * @param {*} model todo
-    * @param {*} value todo
-    * @returns {*} todo
-    */
+     * Appends the gfi theme to the gfi tool
+     * @param   {Tools/GFI/Themes/Model} model model with gfi theme
+     * @param   {boolean} value is gfi tool visible
+     * @returns {void}
+     */
     appendTheme: function (model, value) {
-        var isViewMobile = Radio.request("Util", "isViewMobile"),
+        const isViewMobile = Radio.request("Util", "isViewMobile"),
             currentView = Radio.request("GFI", "getCurrentView"),
-            oldGfiWidth = currentView.$el.width(),
-            oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
+            oldGfiWidth = currentView.$el.width();
+
+        let oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
 
         if (value === true) {
-
             if (_.isNaN(oldLeft)) {
                 oldLeft = 0;
             }

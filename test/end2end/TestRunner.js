@@ -1,18 +1,64 @@
-var webdriver = require("selenium-webdriver"),
+require("dotenv").config();
+require("./fixes");
+
+const webdriver = require("selenium-webdriver"),
     path = require("path"),
+    http = require("http"),
     tests = require(path.resolve(__dirname, "./tests.js")),
-    driver,
-    driver_chrome,
-    driver_ff,
-    driver_ie,
-    loader;
+    {
+        getBsCapabilities,
+        capabilities,
+        resolutions,
+        configs,
+        modes
+    } = require("./settings"),
+    /* eslint-disable no-process-env */
+    browser = process.env.browser || "chrome",
+    browserstackuser = process.env.bs_user,
+    browserstackkey = process.env.bs_key,
+    proxy = process.env.proxy || "",
+    url = process.env.url || "http://localhost:9001";
+    /* eslint-enable no-process-env */
 
-// driver_ie = new webdriver.Builder().withCapabilities(webdriver.Capabilities.ie()).build();
-// tests(driver_ie);
+// pulling execution to separate function for JSDoc; expected input is e.g. "chrome", "bs", "chrome,firefox"
+runTests(browser.split(","));
 
-// driver_ff = new webdriver.Builder().withCapabilities(webdriver.Capabilities.firefox()).build();
-// tests(driver_ff);
+/**
+ * Constructs all combinations-to-test of
+ *     BROWSER x CONFIG x MODE x RESOLUTION
+ * This is done for both local and browserstack testing.
+ * @param {String[]} browsers should be ["bs"] for browserstack testing or an array of the browsers you test locally
+ * @returns {void}
+ */
+function runTests (browsers) {
+    browsers.forEach(currentBrowser => {
+        configs.forEach((pathEnd, config) => {
+            const completeUrl = url + pathEnd;
 
-driver_chrome = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
-tests(driver_chrome);
+            modes.forEach(mode => {
+                if (currentBrowser !== "bs") {
+                    const builder = new webdriver.Builder().withCapabilities(capabilities[currentBrowser]);
 
+                    resolutions.forEach(resolution => {
+                        tests(builder, completeUrl, currentBrowser, resolution, config, mode);
+                    });
+                }
+                else {
+                    const bsCapabilities = getBsCapabilities(browserstackuser, browserstackkey);
+
+                    bsCapabilities.forEach(capability => {
+                        const builder = new webdriver.Builder().
+                            usingHttpAgent(new http.Agent({keepAlive: true})).
+                            usingServer("http://hub-cloud.browserstack.com/wd/hub").
+                            withCapabilities(capability).
+                            usingWebDriverProxy(proxy);
+
+                        resolutions.forEach(resolution => {
+                            tests(builder, completeUrl, "browserstack / " + capability.browserName, resolution, config, mode);
+                        });
+                    });
+                }
+            });
+        });
+    });
+}

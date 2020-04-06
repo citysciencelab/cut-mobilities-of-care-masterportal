@@ -1,114 +1,107 @@
-import DownloadWin from "text-loader!./template.html";
-import {Circle} from "ol/geom.js";
-import {fromCircle} from "ol/geom/Polygon.js";
+import DownloadTemplate from "text-loader!./template.html";
+import DownloadModel from "./model";
 
-const DownloadView = Backbone.View.extend({
+const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
     events: {
-        "click button.back": "back",
-        "change .file-endings": "prepareData"
-    },
-    initialize: function () {
-        var channel = Radio.channel("download");
-
-        // this.model = new DownloadModel();
-        this.template = _.template(DownloadWin);
-
-        this.listenTo(this.model, {
-            "change:isActive": this.render
-        });
-
-        channel.on({
-            "start": this.start
-        }, this);
+        "click .back": "back",
+        "change .formats": "setSelectedFormat",
+        "keyup .filename": "setFileName",
+        "click .downloadBtn": "download"
     },
     /**
-     * Startet das Download modul
-     * @param  {ol.feature[]} features die Features die heruntergeladen werden sollen
-     * @returns {void}
+     * @class DownloadView
+     * @extends Backbone.View
+     * @memberof Tools.Download
+     * @listens Tools.Download#changeIsActive
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @constructs
      */
-    start: function (features) {
-        if (features.data.length === 0) {
-            Radio.trigger("Alert", "alert", "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!");
-            return;
-        }
-        _.each(features.data, function (feature) {
-            if (feature.getGeometry() instanceof Circle) {
-            // creates a regular polygon from a circle with 32(default) sides
-                feature.setGeometry(fromCircle(feature.getGeometry()));
+    initialize: function () {
+        this.listenTo(this.model, {
+            "change:isActive": this.render,
+            "change:createFirstText": function () {
+                if (this.model.get("isActive") === true) {
+                    this.render(this.model, true);
+                }
             }
         });
+        this.listenTo(Radio.channel("Window"), {
+            "setIsVisible": this.close
+        }, this);
+    },
 
-        this.model.setData(features.data);
-        this.model.setFormats(features.formats);
-        this.model.setCaller(features.caller);
-        this.model.set("id", "download");
-        this.model.set("name", "Download");
-        this.model.set("glyphicon", "glyphicon-plus");
-        // $(".win-heading .title").text("Download");
-        Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", false);
-        this.model.set("isActive", true);
+    /**
+     * @member DownloadTemplate
+     * @description Template used to create the download tool
+     * @memberof Tools.Download
+     */
+    template: _.template(DownloadTemplate),
+    model: new DownloadModel(),
+    /**
+     * Called if window is closed. Sets the model to isActive=false.
+     * @param {Boolean} value if false, window was set to isVisible=false
+     * @returns {void}
+     */
+    close: function (value) {
+        if (!value && this.model.get("isActive") === true) {
+            this.model.set("isActive", false);
+            this.model.reset();
+        }
     },
     /**
-     * Ruft das Tool auf, das den Download gestartet hat
+     * Return to the draw module.
      * @returns {void}
      */
     back: function () {
         this.model.set("isActive", false);
+        this.model.reset();
         Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", true);
     },
-    /**
-     *
-     * @return {void}
-     */
-    prepareDownloadButton: function () {
-        this.model.setSelectedFormat();
-        if (this.model.prepareData() !== "invalid Format") {
 
-            if (this.model.isInternetExplorer()) {
-                this.model.prepareDownloadButtonIE();
-            }
-            else {
-                this.model.prepareDownloadButtonNonIE();
-            }
-        }
-    },
     /**
-     * startet den Download, wenn auf den Button geklickt wird
+     * Sets the selected format by user input
+     * @param {Event} evt Change event in format dropdown.
      * @returns {void}
      */
-    triggerDownload: function () {
+    setSelectedFormat: function (evt) {
+        const value = evt.currentTarget.value;
+
+        this.model.setSelectedFormat(value);
+        this.model.prepareData();
+        this.model.prepareDownloadButton();
+    },
+
+    /**
+     * Sets the typed filename by user input
+     * @param {Event} evt Keyup event in filename textfield.
+     * @returns {void}
+     */
+    setFileName: function (evt) {
+        const value = evt.currentTarget.value;
+
+        this.model.setFileName(value);
+        this.model.prepareDownloadButton();
+    },
+
+    download: function () {
         this.model.download();
     },
+    /**
+     * renders the models content.
+     * @param {Tools.Download.DownloadModel} model Download model.
+     * @param {Boolean} value Flag if model is active.
+     * @returns {void}
+     */
     render: function (model, value) {
         if (value) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template(model.toJSON()));
-            this.appendOptions();
             this.delegateEvents();
         }
         else {
             this.undelegateEvents();
         }
         return this;
-    },
-    /**
-     * Hängt die wählbaren Dateiformate als Option an das Formate-Dropdown
-     * @returns {void}
-     */
-    appendOptions: function () {
-        var options = this.model.getFormats(),
-            that = this;
-
-        _.each(options, function (option) {
-            that.$(".file-endings").append($("<option>", {
-                value: option,
-                text: option
-            }));
-        });
-        if (options.length === 1) {
-            this.$(".file-endings").val(options[0]);
-            this.prepareDownloadButton();
-        }
     }
 });
 

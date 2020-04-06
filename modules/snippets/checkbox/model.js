@@ -1,24 +1,52 @@
 import SnippetModel from "../model";
 import ValueModel from "../value/model";
 
-const CheckboxSnippet = SnippetModel.extend({
+const CheckboxSnippet = SnippetModel.extend(/** @lends CheckboxSnippet.prototype */{
     defaults: {
-        // text of the on toggle
-        textOn: "An",
-        // text of the off toggle
-        textOff: "Aus",
-        // size of the toggle. possible values: large, normal, small, mini
-        size: "small"
+        size: "small",
+        // translations
+        textOn: "",
+        textOff: ""
     },
-
+    /**
+     * @class CheckboxSnippet
+     * @memberof snippets.checkbox
+     * @extends SnippetModel
+     * @constructs
+     * @property {String} size="small", size of the toggle. possible values: large, normal, small, mini
+     * @property {String} textOn="", filled with "An"- translated / text of the on toggle
+     * @property {String} textOff="", filled with "Aus"- translated / text of the off toggle
+     * @fires Core#RadioRequestMapGetMap
+     * @fires Core#RadioRequestMapViewGetResolutions
+     * @fires Core.ConfigLoader#RadioRequestParserGetInitVisibBaselayer
+     * @fires Core#RadioTriggerMapAddControl
+     * @fires Core#RadioTriggerMapRemoveControl
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
     initialize: function () {
         this.superInitialize();
+        this.changeLang(i18next.language);
         this.addValueModel(this.get("isSelected"));
         this.listenTo(this.get("valuesCollection"), {
             "change:isSelected": function (model) {
                 this.trigger("valuesChanged", model.get("isSelected"));
                 this.renderView();
             }
+        });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            textOn: i18next.t("common:snippets.checkbox.on"),
+            textOff: i18next.t("common:snippets.checkbox.off")
         });
     },
     addValueModel: function (value) {

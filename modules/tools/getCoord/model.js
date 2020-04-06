@@ -1,9 +1,10 @@
 import Tool from "../../core/modelList/tool/model";
 import {Pointer} from "ol/interaction.js";
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
+import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
 
 
-const CoordPopup = Tool.extend({
+const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
     defaults: _.extend({}, Tool.prototype.defaults, {
         selectPointerMove: null,
         projections: [],
@@ -13,9 +14,42 @@ const CoordPopup = Tool.extend({
         currentProjectionName: "EPSG:25832",
         deactivateGFI: true,
         renderToWindow: true,
-        glyphicon: "glyphicon-screenshot"
+        glyphicon: "glyphicon-screenshot",
+        currentLng: "",
+        // translations
+        coordSystemField: "",
+        hdmsEastingLabel: "",
+        hdmsNorthingLabel: "",
+        cartesianEastingLabel: "",
+        cartesianNorthingLabel: ""
     }),
 
+    /**
+     * @class CoordPopup
+     * @extends Tool
+     * @memberof Tools.GetCoord
+     * @property {*} selectPointerMove=null todo
+     * @property {array} projections=[] todo
+     * @property {*} mapProjection=null todo
+     * @property {array} positionMapProjection=[] todo
+     * @property {boolean} updatePosition=true todo
+     * @property {string} currentProjectionName="EPSG:25832" todo
+     * @property {boolean} deactivateGFI=true todo
+     * @property {boolean} renderToWindow=true todo
+     * @property {string} glyphicon="glyphicon-screenshot" todo
+     * @property {string} currentLng="" contains the current language - view is listening to it's changes
+     * @property {String} coordSystemField="", filled with "Koordinatensystem"- translated
+     * @property {String} hdmsEastingLabel="", filled with "Länge"- translated
+     * @property {String} hdmsNorthingLabel="", filled with "Breite"- translated
+     * @property {String} cartesianEastingLabel="", filled with "Rechtswert"- translated
+     * @property {String} cartesianNorthingLabel="", filled with "Hochwert"- translated
+     * @constructs
+     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
+     * @listens i18next#RadioTriggerLanguageChanged
+     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
+     * @fires Core#RadioTriggerMapRegisterListener
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     */
     initialize: function () {
         this.superInitialize();
         this.listenTo(this, {
@@ -34,10 +68,38 @@ const CoordPopup = Tool.extend({
                 }
             }
         });
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
     },
 
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "coordSystemField": i18next.t("common:modules.tools.getCoord.coordSystemField"),
+            "hdmsEastingLabel": i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"),
+            "hdmsNorthingLabel": i18next.t("common:modules.tools.getCoord.hdms.northingLabel"),
+            "cartesianEastingLabel": i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"),
+            "cartesianNorthingLabel": i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"),
+            "currentLng": lng
+        });
+    },
+
+    /**
+     * Stores the projections and adds interaction pointermove to map
+     * @fires Core#RadioRequestMapViewGetProjection
+     * @fires Core#RadioTriggerMapAddInteraction
+     * @returns {void}
+     */
     createInteraction: function () {
-        this.setProjections(Radio.request("CRS", "getProjections"));
+        this.setProjections(getProjections());
         this.setMapProjection(Radio.request("MapView", "getProjection"));
         this.setSelectPointerMove(new Pointer({
             handleMoveEvent: function (evt) {
@@ -63,6 +125,12 @@ const CoordPopup = Tool.extend({
         }
     },
 
+    /**
+     * Remembers the projection and shows mapmarker at the given position.
+     * @param {*} position - todo
+     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     * @returns {*} todo
+     */
     positionClicked: function (position) {
         var isViewMobile = Radio.request("Util", "isViewMobile"),
             updatePosition = isViewMobile ? true : this.get("updatePosition");
@@ -72,17 +140,27 @@ const CoordPopup = Tool.extend({
         Radio.trigger("MapMarker", "showMarker", position);
     },
 
+    /**
+     * todo
+     * @param {*} targetProjection - todo
+     * @returns {*} todo
+     */
     returnTransformedPosition: function (targetProjection) {
         var positionMapProjection = this.get("positionMapProjection"),
             positionTargetProjection = [0, 0];
 
         if (positionMapProjection.length > 0) {
-            positionTargetProjection = Radio.request("CRS", "transformFromMapProjection", targetProjection, positionMapProjection);
+            positionTargetProjection = transformFromMapProjection(Radio.request("Map", "getMap"), targetProjection, positionMapProjection);
         }
 
         return positionTargetProjection;
     },
 
+    /**
+     * todo
+     * @param {*} name - todo
+     * @returns {*} todo
+     */
     returnProjectionByName: function (name) {
         var projections = this.get("projections");
 
@@ -91,44 +169,83 @@ const CoordPopup = Tool.extend({
         });
     },
 
+    /**
+     * todo
+     * @param {*} coord - todo
+     * @returns {*} todo
+     */
     getHDMS: function (coord) {
         return toStringHDMS(coord);
     },
 
+    /**
+     * Getter for cartesian coordinates.
+     * @param {*} coord - todo
+     * @returns {string} cartesian coordinates
+     */
     getCartesian: function (coord) {
         return toStringXY(coord, 2);
     },
 
-    // setter for selectPointerMove
+    /**
+     * Setter for selectPointerMove.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setSelectPointerMove: function (value) {
         this.set("selectPointerMove", value);
     },
 
-    // setter for mapProjection
+    /**
+     * Setter for mapProjection.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setMapProjection: function (value) {
         this.set("mapProjection", value);
     },
 
-    // setter for projections
+    /**
+     * Setter for projections.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setProjections: function (value) {
         this.set("projections", value);
     },
 
-    // setter for positionMapProjection
+    /**
+     * Setter for positionMapProjection.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setPositionMapProjection: function (value) {
         this.set("positionMapProjection", value);
     },
 
-    // setter for updatePosition
+    /**
+     * Setter for updatePosition.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setUpdatePosition: function (value) {
         this.set("updatePosition", value);
     },
-    // setter for currentProjection
+
+    /**
+     * Setter for currentProjectionName.
+     * @param {*} value - todo
+     * @returns {void}
+     */
     setCurrentProjectionName: function (value) {
         this.set("currentProjectionName", value);
     },
 
-    // setter for coordinates
+    /**
+     * Setter for coordinates.
+     * @param {*} evt - todo
+     * @returns {void}
+     */
     setCoordinates: function (evt) {
         var position = evt.coordinate;
 

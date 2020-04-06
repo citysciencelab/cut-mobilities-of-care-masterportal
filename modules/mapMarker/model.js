@@ -3,13 +3,12 @@ import VectorLayer from "ol/layer/Vector.js";
 import Overlay from "ol/Overlay.js";
 import {Stroke, Style, Fill} from "ol/style.js";
 import {WKT} from "ol/format.js";
+import Feature from "ol/Feature.js";
+import Point from "ol/geom/Point";
 
-const MapMarkerModel = Backbone.Model.extend({
+const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype */{
     defaults: {
-        marker: new Overlay({
-            positioning: "bottom-center",
-            stopEvent: false
-        }),
+        marker: {},
         polygon: new VectorLayer({
             name: "mapMarker",
             source: new VectorSource(),
@@ -28,13 +27,36 @@ const MapMarkerModel = Backbone.Model.extend({
         }),
         wkt: "",
         markers: [],
-        zoomLevel: 7
+        zoomLevel: 7,
+        type: "Overlay",
+        mapMarkerStyleId: "mapMarkerStyle"
     },
-    initialize: function () {
-        var searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr,
-            parcelSearchConf = Radio.request("Parser", "getItemsByAttributes", {id: "parcelSearch"})[0];
 
-        Radio.trigger("Map", "addOverlay", this.get("marker"));
+    /**
+     * @class MapMarkerModel
+     * @description Model for MapMarker and Highlighting
+     * @extends Backbone.Model
+     * @memberof Core.MapMarker
+     * @constructs
+     * @param {Object} marker={} The marker. May be an olOverlay or an olVectorLayer. Depends on config.
+     * @param {VectorLayer} polygon The polygon vector layer.
+     * @param {String} wkt="" The wkt.
+     * @param {Object[]} markers=[] An array containing multiple markers.
+     * @param {Number} zoomLevel=7 The zoomLevel for marker.
+     * @param {String} type="Overlay". The type of the marker, can be "Overlay" or "Layer".
+     * @param {String} mapMarkerStyleId="mapMarkerStyle". The styleId of the mapMarker. used for type="Layer".
+     * @fires Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
+     * @fires Core#RadioTriggerMapAddOverlay
+     * @fires Core#RadioTriggerMapAddLayerToIndex
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     */
+    initialize: function () {
+        let searchConf = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"});
+        const parcelSearchConf = Radio.request("Parser", "getItemsByAttributes", {id: "parcelSearch"})[0],
+            type = this.get("type");
+
+        searchConf = searchConf[0] !== undefined && searchConf[0].hasOwnProperty("attr") ? searchConf[0].attr : {};
+
         Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
 
         if (_.has(searchConf, "zoomLevel")) {
@@ -43,8 +65,86 @@ const MapMarkerModel = Backbone.Model.extend({
         if (parcelSearchConf && parcelSearchConf.styleId) {
             this.setMapMarkerPolygonStyle(parcelSearchConf.styleId);
         }
+        this.createMarker(type);
     },
 
+    /**
+     * Creates the mapMarker based on the configured type.
+     * @param {String} type Type of Marker coming from Config.js. Possible values are "Overlay" or "Layer".
+     * @returns {void}
+     */
+    createMarker: function (type) {
+        if (type === "Overlay") {
+            this.createOverlayMarker();
+        }
+        else if (type === "Layer") {
+            this.createLayerMarker();
+        }
+        else {
+            console.error("unknown type: " + type + " for mapMarker! Creating default overlayMarker");
+            this.setType("Overlay");
+            this.createOverlayMarker();
+        }
+    },
+
+    /**
+     * Creates the overlayMarker.
+     * @fires Core#RadioTriggerMapAddOverlay
+     * @returns {void}
+     */
+    createOverlayMarker: function () {
+        const overlay = new Overlay({
+            positioning: "bottom-center",
+            stopEvent: false
+        });
+
+        this.setMarker(overlay);
+        Radio.trigger("Map", "addOverlay", overlay);
+    },
+
+    /**
+     * Creates the layerMarker.
+     * @fires Core#RadioTriggerMapAddLayerToIndex
+     * @returns {void}
+     */
+    createLayerMarker: function () {
+        const layer = new VectorLayer({
+            name: "markerAsPointLayer",
+            source: new VectorSource({
+                features: [new Feature({
+                    name: "pointMarker",
+                    geometry: new Point([0, 0])
+                })
+                ]
+            }),
+            alwaysOnTop: true,
+            visible: true
+        });
+
+        this.setMapMarkerPointStyle(layer, this.get("mapMarkerStyleId"));
+        this.setMarker(layer);
+        Radio.trigger("Map", "addLayerToIndex", [layer, Radio.request("Map", "getLayers").getArray().length]);
+    },
+
+    /**
+     * Sets the point style of the marker if its type is "Layer".
+     * @param {VectorLayer} markerLayer The markerLayer.
+     * @param {String} styleId  The style id.
+     * @returns {void}
+     */
+    setMapMarkerPointStyle: function (markerLayer, styleId) {
+        const styleListModel = Radio.request("StyleList", "returnModelById", styleId),
+            feature = markerLayer.getSource().getFeatures()[0];
+
+        if (styleListModel) {
+            markerLayer.setStyle(styleListModel.createStyle(feature, false));
+        }
+    },
+
+    /**
+     * Returns the feature from wkt.
+     * @returns {Feature} - The feature from wkt.
+     */
     getFeature: function () {
         var format = new WKT(),
             feature = format.readFeature(this.get("wkt"));
@@ -52,6 +152,10 @@ const MapMarkerModel = Backbone.Model.extend({
         return feature;
     },
 
+    /**
+     * Returns the extent of the feature.
+     * @returns {ol/Extent} - the extent.
+     */
     getExtent: function () {
         var feature = this.getFeature(),
             extent = feature.getGeometry().getExtent();
@@ -74,10 +178,10 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
-     * Hilsfunktion zum ermitteln eines Features mit textueller Beschreibung
-     * @param  {string} type Geometrietyp
-     * @param  {number[]} geom Array mit Koordinatenwerten
-     * @return {string} wkt WellKnownText-Geom
+     * Help function for determining a feature with textual description
+     * @param  {string} type Geometrietype
+     * @param  {number[]} geom Array with coordinate values
+     * @returns {string} wkt WellKnownText-Geom
      */
     getWKTGeom: function (type, geom) {
         var wkt,
@@ -134,7 +238,7 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
-     * Erstellt ein Polygon um das WKT-Feature
+     * Creates a polygon around the WKT feature
      * @return {void}
      */
     showFeature: function () {
@@ -145,7 +249,7 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
-     * Löscht das Polygon
+     * Deletes the polygon
      * @return {void}
      */
     hideFeature: function () {
@@ -154,8 +258,9 @@ const MapMarkerModel = Backbone.Model.extend({
     },
 
     /**
-     * setMapMarkerPolygonStyle styles the mapMArker polygon via the style model from the stylelist
+     * SetMapMarkerPolygonStyle styles the mapMArker polygon via the style model from the stylelist.
      * @param {string} mapMarkerStyleId styleId for the mapMarker polygon to find the style model
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @return {void}
      */
     setMapMarkerPolygonStyle: function (mapMarkerStyleId) {
@@ -166,45 +271,90 @@ const MapMarkerModel = Backbone.Model.extend({
         }
     },
 
-    // setter for zoomLevel
+    /**
+     * setter for zoomLevel
+     * @param {*} value todo
+     * @returns {void}
+     */
     setZoomLevel: function (value) {
         this.set("zoomLevel", value);
     },
 
-    // setter for wkt
+    /**
+     * setter for wkt
+     * @param {*} type todo
+     * @param {*} geom todo
+     * @returns {void}
+     */
     setWkt: function (type, geom) {
         var value = this.getWKTGeom(type, geom);
 
         this.set("wkt", value);
     },
 
-    // setter for marker
+    /**
+     * setter for marker
+     * @param {*} value todo
+     * @returns {void}
+     */
     setMarker: function (value) {
         this.set("marker", value);
     },
 
-    // setter for markers
+    /**
+     * setter for markers
+     * @param {*} value todo
+     * @returns {void}
+     */
     setMarkers: function (value) {
         this.set("markers", value);
     },
 
-    // setter for polygon
+    /**
+     * setter for polygon
+     * @param {*} value todo
+     * @returns {void}
+     */
     setPolygon: function (value) {
         this.set("polygon", value);
     },
 
-    // setter for polygonStyle
+    /**
+     * setter for style
+     * @param {*} value todo
+     * @returns {void}
+     */
     setStyle: function (value) {
         this.set("style", value);
     },
 
+    /**
+     * setter for projectionFromParamUrl
+     * @param {*} value todo
+     * @returns {void}
+     */
     setProjectionFromParamUrl: function (value) {
         this.set("projectionFromParamUrl", value);
     },
 
+    /**
+     * setter for startMarker
+     * @param {*} value todo
+     * @returns {void}
+     */
     setMarkerFromParamUrl: function (value) {
         this.set("startMarker", value);
+    },
+
+    /**
+     * Setter for attribute "type".
+     * @param {String} value Type of mapMarker.
+     * @returns {void}
+     */
+    setType: function (value) {
+        this.set("type", value);
     }
+
 });
 
 export default MapMarkerModel;

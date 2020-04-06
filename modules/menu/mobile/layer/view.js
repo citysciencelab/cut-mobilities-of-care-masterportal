@@ -18,7 +18,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     /**
      * @class LayerView
      * @extends Backbone.View
-     * @memberOf Menu.Mobile.Layer
+     * @memberof Menu.Mobile.Layer
      * @constructs
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsSettingVisible
@@ -56,8 +56,13 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     toggleColor: function (model, value) {
         if (model.has("minScale") === true) {
             if (value === true) {
+                const statusCheckbox = this.$el.find(".glyphicon.glyphicon-unchecked").length;
+
                 this.$el.addClass("disabled");
                 this.$el.find("*").css("pointer-events", "none");
+                if (statusCheckbox === 0) {
+                    this.$el.find("div.pull-left").css("pointer-events", "auto");
+                }
             }
             else {
                 this.$el.removeClass("disabled");
@@ -117,6 +122,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.toggleIsSelected();
         Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
         this.render();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**
@@ -135,6 +141,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**

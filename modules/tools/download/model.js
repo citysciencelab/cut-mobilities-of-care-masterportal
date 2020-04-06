@@ -1,393 +1,199 @@
 import proj4 from "proj4";
-import {KML} from "ol/format.js";
+import {KML, GeoJSON, GPX} from "ol/format.js";
 import Tool from "../../core/modelList/tool/model";
+import {Circle} from "ol/geom.js";
+import {fromCircle} from "ol/geom/Polygon.js";
 
-const DownloadModel = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defaults, {
+const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         id: "download",
-        renderToWindow: true
+        name: "Download",
+        glyphicon: "glyphicon-plus",
+        renderToWindow: true,
+        channel: Radio.channel("Download"),
+        formats: ["KML", "GEOJSON", "GPX"],
+        selectedFormat: "",
+        features: [],
+        dataString: "",
+        fileName: "",
+        isInternetExplorer: undefined,
+        blob: undefined,
+        // translations:
+        createFirstText: "",
+        unknownGeometry: "",
+        formatText: "",
+        pleaseChooseText: "",
+        filenameText: "",
+        enterFilenameText: "",
+        loadDownText: "",
+        backText: ""
     }),
-    // Die Features
-    data: {},
-    // das ausgewählte Format
-    selectedFormat: $(".file-endings").val(),
-    // Die Fromate
-    formats: {},
-    // Das Modul, das den Download gestartet hat
-    caller: {},
-    // download button selector
-    dlBtnSel: "a.downloadFile",
+
+    /**
+     * @class DownloadModel
+     * @extends Tool
+     * @memberof Tools.Download
+     * @property {String} id="download" Id.
+     * @property {String} name="Download" Name.
+     * @property {String} glyphicon="glyphicon-plus" Glyphicon class.
+     * @property {Boolean} renderToWindow=true Flag if tool should render to tool window.
+     * @property {Radio.channel} channel Channel of tool.
+     * @property {String[]} formats=["KML", "GEOJSON", "GPX"] Default formats that are supported.
+     * @property {String} selectedFormat="" The selected format.
+     * @property {ol/Feature[]} features=[] The features to be donloaded.
+     * @property {String} dataString="" The features converted as dataString.
+     * @property {String} fileName="" The filename.
+     * @property {String} createFirstText="", filled with "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!"- translated
+     * @property {String} unknownGeometry="", filled with "Unbekannte Geometry:"- translated
+     * @property {String} formatText="", filled with "Format"- translated
+     * @property {String} pleaseChooseText="", filled with "Bitte Auswählen"- translated
+     * @property {String} filenameText="", filled with "Dateiname"- translated
+     * @property {String} enterFilenameText="", filled with "Bitte Dateiname angeben"- translated
+     * @property {String} loadDownText="", filled with "Herunterladen"- translated
+     * @property {String} backText="", filled with "Zurück"- translated
+     * @listens Tools.Download#RadioTriggerDownloadStart
+     * @listens i18next#RadioTriggerLanguageChanged
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @fires Core#RadioRequestUtilIsInternetExplorer
+     * @fires Tools.Download#changeIsActive
+     * @constructs
+     */
     initialize: function () {
         this.superInitialize();
-        this.listenTo(this, {
-            "change:isActive": this.setStatus
+        this.changeLang(i18next.language);
+        this.listenTo(this.get("channel"), {
+            "start": this.start
+        });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
         });
     },
-    setStatus: function (model, value) { // Fenstermanagement
-        if (!value) {
-            this.data = {};
-            this.formats = {};
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            createFirstText: i18next.t("common:modules.tools.download.createFirst"),
+            unknownGeometry: i18next.t("common:modules.tools.download.unknownGeometry"),
+            formatText: i18next.t("common:modules.tools.download.format"),
+            pleaseChooseText: i18next.t("common:modules.tools.download.pleaseChoose"),
+            filenameText: i18next.t("common:modules.tools.download.filename"),
+            enterFilenameText: i18next.t("common:modules.tools.download.enterFilename"),
+            loadDownText: i18next.t("common:button.download"),
+            backText: i18next.t("common:button.back")
+        });
+    },
+
+    /**
+     * @param {Object} obj Configuration to start the download module.
+     * @param {String[]} obj.formats Formats to be supported.
+     * @param {ol/Feature[]} obj.features Features to be downloaded.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @returns {void}
+     */
+    start: function (obj) {
+        if (obj.features.length === 0) {
+            Radio.trigger("Alert", "alert", this.get("createFirstText"));
+            return;
         }
+        obj.features.forEach(feature => {
+            if (feature.getGeometry() instanceof Circle) {
+                feature.setGeometry(fromCircle(feature.getGeometry()));
+            }
+        });
+
+        this.setFormats(obj.formats);
+        this.setFeatures(obj.features);
+        Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", false);
+        this.set("isActive", true);
     },
+
     /**
-     * Setzt das Model und den View zurück
+     * Converts the data and saves it to the param "dataString"
+     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
-     */
-    cleanUp: function () {
-        this.data = {};
-        this.formats = {};
-        this.caller = {};
-        this.removeDom();
-    },
-    /**
-     * setter für Data
-     * @param {ol.Feature} data Vektor Objekt das heruntergeladen werden kann
-     * @returns {void}
-     */
-    setData: function (data) {
-        this.data = data;
-    },
-    /**
-     * getter für Data
-     * @returns {void}
-     */
-    getData: function () {
-        return this.data;
-    },
-
-    getSelectedFormat: function () {
-        return $(".file-endings").val();
-    },
-
-    /**
-     * setter für Format
-     * @param {String} selectedFormat formats die möglich Formate in die die Features umgewandelt werden können
-     * @returns {void}
-     */
-    setSelectedFormat: function (selectedFormat) {
-        this.selectedFormat = selectedFormat;
-    },
-
-    getFormats: function () {
-        return this.formats;
-    },
-    /**
-     * setter für Format
-     * @param {String} formats die möglich Formate in die die Features umgewandelt werden können
-     * @returns {void}
-     */
-    setFormats: function (formats) {
-        this.formats = formats;
-    },
-
-    getCaller: function () {
-        return this.caller;
-    },
-    /**
-     * setter für das Tool, dass den Download aufgerufen hat
-     * @param {Object} caller -
-     * @returns {void}
-     */
-    setCaller: function (caller) {
-        this.caller = caller;
-    },
-
-    getDlBtnSel: function () {
-        return this.dlBtnSel;
-    },
-
-    /**
-     * validates Filename
-     * @param {string} filename -
-     * @returns {void}
-     */
-    validateFilename: function (filename) {
-        var result;
-
-        if (_.isUndefined(filename) || _.isNull(filename)) {
-            return false;
-        }
-        filename.trim();
-        result = filename.match(/^[0-9a-zA-Z]+(\.[0-9a-zA-Z]+)?$/);
-
-        if (_.isUndefined(result) || _.isNull(result)) {
-            Radio.trigger("Alert", "alert", "Bitte geben Sie einen gültigen Dateinamen ein! (Erlaubt sind Klein-,Großbuchstaben und Zahlen.)");
-        }
-        return !_.isUndefined(result) && !_.isNull(result);
-    },
-    appendFileExtension: function (filename, format) {
-        var suffix = "." + format;
-
-        if (filename.indexOf(suffix, filename.length - suffix.length) === -1) {
-            return filename + "." + format;
-        }
-        return filename;
-    },
-    /**
-     * Überprüft, ob im Format Selectfeld ein Format ausgewählt wurde.
-     * @return {Boolean} Flag if fileExtension is valid
-     */
-    validateFileExtension: function () {
-        var format = this.getSelectedFormat();
-
-        if (format === "none" || format === "" || typeof format === "undefined") {
-            Radio.trigger("Alert", "alert", "Bitte Format auswählen");
-            return false;
-        }
-        return true;
-    },
-
-    /**
-     * prepare Convertiert die Übergebenen Daten für den Download und setzt sie hinterher wieder zurück,
-     * damit sie weiterhin korrekt angezeigt werden.
-     * @returns {object} converted
      */
     prepareData: function () {
+        let features = this.get("features");
+        const selectedFormat = this.get("selectedFormat"),
+            formatKml = new KML({extractStyles: true}),
+            formatGeoJson = new GeoJSON(),
+            formatGpx = new GPX();
 
-        var backup = this.backupCoords(this.getData()),
-            converted;
-
-        converted = this.convert(this.getSelectedFormat(), this.getData());
-
-        this.restoreCoords(this.getData(), backup);
-        this.setData(converted);
-        return converted;
-    },
-    /**
-     * Gibt zurück, ob der Browser die Microsoft File API unterstützt
-     * @return {Boolean} true | false
-     */
-    isInternetExplorer: function () {
-        return window.navigator.msSaveOrOpenBlob;
-    },
-
-    /**
-     * Stand: 26.04.16 Der IE unterstüzt das HTML5 downlaod Attribut nicht deswegen wird
-     * Ein die nur von IE unterstütze File Api verwendet
-     * @returns {void}
-     */
-    prepareDownloadButtonIE: function () {
-        var fileData = [this.getData()],
-            blobObject = new Blob(fileData),
-            that = this;
-
-        $(this.getDlBtnSel()).on("click", function () {
-            var filename = $("input.file-name").val();
-
-            if (that.validateFilename(filename)) {
-                if (that.validateFileExtension()) {
-                    filename = that.appendFileExtension(filename, that.getSelectedFormat());
-                    window.navigator.msSaveOrOpenBlob(blobObject, filename);
-                }
-            }
-        });
-    },
-    /**
-         * Nutzt das 'HTML% Attribute "Download" um einen localen Download zu ermöglichen.
-         * @return {void}
-         */
-    prepareDownloadButtonNonIE: function () {
-        var url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.getData()),
-            that = this;
-
-        $(this.getDlBtnSel()).attr("href", url);
-        $(this.getDlBtnSel()).on("click", function (e) {
-            var filename = $("input.file-name").val();
-
-            if (!that.validateFilename(filename) || !that.validateFileExtension()) {
-                e.preventDefault();
-            }
-            else {
-                filename = that.appendFileExtension(filename, that.getSelectedFormat());
-                $(that.getDlBtnSel()).attr("download", filename);
-            }
-        });
-    },
-    backupCoords: function (data) {
-        var coords = [];
-
-        _.each(data, function (feature) {
-            coords.push(feature.getGeometry().getCoordinates());
-        });
-        return coords;
-    },
-    restoreCoords: function (data, backup) {
-        _.each(data, function (feature, index) {
-            feature.getGeometry().setCoordinates(backup[index]);
-        });
-    },
-    /**
-     * Erzeugt ein unsichtbares <a> mit Hilfe dessen ein download getriggert werden kann
-     * @param  {String} data     Das Objekt, das heruntergeladen werden soll
-     * @param  {String} filename Der Dateiname, der herunterzuladenen Daten
-     * @return {HTML}  Ein <a>-Tag das die herunterzuladenen Daten enthält
-     */
-    createDOM: function (data, filename) {
-        var a = document.createElement("a");
-
-        a.href = "data:text/json;charset=utf-8," + data;
-        a.downloadFile = filename;
-        $(a).hide();
-        $(".win-body").append(a);
-        return a;
-    },
-
-    removeDom: function () {
-        $(".win-body a").remove();
-    },
-    /**
-     * Konvertiert ein Feature Objekt in ein Format
-     * @param  {string} format das Fromat in das Konvertiert werden soll
-     * @param  {ol.Feature} data das Vector Object, dass nach kml konvertiert werden soll
-     * @return {Object} das konvertierte Objekt
-     */
-    convert: function (format, data) {
-        var converter = this.getConverter(format);
-
-        if (_.isFunction(converter)) {
-            return converter(data, this);
+        switch (selectedFormat) {
+            case "KML":
+                features = this.convertFeaturesToKML(features, formatKml);
+                break;
+            case "GEOJSON":
+                features = this.convertFeatures(features, formatGeoJson);
+                break;
+            case "GPX":
+                features = this.convertFeatures(features, formatGpx);
+                break;
+            case "none":
+                features = "";
+                this.setSelectedFormat("");
+                break;
+            default:
+                Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.download.formatNotSupported"), {selectedFormat: selectedFormat});
         }
-
-        return "invalid Format";
-
-
+        this.setDataString(features);
     },
-    /**
-         * Diese funktion wählt anhand der im Dropdown ausgewählten Endung die Konvertier funktion
-         * @param  {string} format das Format in das konvertiert wird
-         * @return {function} die Konvertierfunktion
-         */
-    getConverter: function (format) {
-        var knownFormats = ["kml", "jpg"],
-            convertFunction;
 
-        switch (format) {
-            case knownFormats[0]: {
-                convertFunction = this.convertFeaturesToKML;
-                break;
-            }
-            default: {
-                Radio.trigger("Alert", "alert", "Ein Unbekanntes Format wurde an das Download Tool übergeben: <br><strong>" + format + "</strong><br> Bekannte Formate:<br>" + knownFormats);
-            }
-        }
-
-        return convertFunction;
-    },
     /**
-     * Transfomiert Geometrische Objekte
-     * @param  {object} geometry    Die geometrie die konvertiert werden soll
-     * @param  {object} projections Ein Object, dass ausgangs und ziel Projection enthält
-     * @return {nubmer[]} transCoord Die transformierten Koordinaten der Geometry
+     * Converts the given features into the given format.
+     * @param {ol/Feature[]} features The features to be downloaded.
+     * @param {ol/Format} format The format for the features to be downloaded.
+     * @return {String} - The converted features as string.
      */
-    transformCoords: function (geometry, projections) {
+    convertFeatures: function (features, format) {
+        let convertedFeatures = [];
 
-        var transCoord = [];
+        features.forEach(feature => {
+            const featureClone = feature.clone(),
+                transCoord = this.transformCoords(featureClone.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
 
-        switch (geometry.getType()) {
-            case "Polygon": {
-                transCoord = this.transformPolygon(geometry.getCoordinates(), projections, this);
-                break;
-            }
-            case "Point": {
-                transCoord = this.transformPoint(geometry.getCoordinates(), projections);
-                break;
-            }
-            case "LineString": {
-                transCoord = this.transformLine(geometry.getCoordinates(), projections, this);
-                break;
-            }
-            default: {
-                Radio.trigger("Alert", "alert", "Unbekannte Geometry: <br><strong>" + geometry.getType());
-            }
-        }
-        return transCoord;
-    },
-    /**
-     * Transformiert ein Polygon
-     * @param  {number[]} coords      Alle Punkte des Polygons
-     * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
-     * @param  {Object} context     das Download Model
-     * @return {number[]}             [description]
-     */
-    transformPolygon: function (coords, projections, context) {
-
-        var transCoord = [];
-
-        // multiple Points
-        _.each(coords, function (points) {
-            _.each(points, function (point) {
-                transCoord.push(context.transformPoint(point, projections));
-            });
-        }, this);
-        return [transCoord];
-    },
-    /**
-     * Transformiert eine Linie
-     * @param  {array} coords      Alle Punkte der Linie
-     * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
-     * @param  {Object} context     das Download Model
-     * @return {array}             Die Transformierten Punkte
-     */
-    transformLine: function (coords, projections, context) {
-
-        var transCoord = [];
-
-        // multiple Points
-        _.each(coords, function (point) {
-            transCoord.push(context.transformPoint(point, projections));
-        }, this);
-        return transCoord;
-    },
-    /**
-     * Transformiert einen Punkt in eine andere Projektion
-     * @param  {array} point       Der zu tranformierende Punkt
-     * @param  {Object} projections Ein Object, dass ausgangs und ziel Projection enthält
-     * @return {array}             Der transformierte Punkt
-     */
-    transformPoint: function (point, projections) {
-        return proj4(projections.sourceProj, projections.destProj, point);
-    },
-    /**
-     * Konvertiert Features nach KML, benötigt min. OpenLayers 3.12
-     * @param  {ol.Feature} features das Vector Object, dass nach kml konvertiert werden soll
-     * @param {object} context -
-     * @return {KML-String} das Resultierende KML
-     */
-    convertFeaturesToKML: function (features, context) {
-        var format = new KML({extractStyles: true}),
-            pointOpacities = [],
-            pointColors = [],
-            featuresWithPointStyle,
-            pointRadiuses = [],
-            textFonts = [];
-
-        _.each(features, function (feature) {
-            var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32")),
-                type,
-                styles,
-                color,
-                style;
-
-            // für den Download nach einem Import! Z-Koordinate absägen
             if (transCoord.length === 3) {
                 transCoord.pop();
             }
 
-            feature.getGeometry().setCoordinates(transCoord, "XY");
-            type = feature.getGeometry().getType();
-            styles = feature.getStyleFunction().call(feature);
-            style = styles[0];
+            featureClone.getGeometry().setCoordinates(transCoord, "XY");
+            convertedFeatures.push(featureClone);
+        }, this);
+        convertedFeatures = format.writeFeatures(convertedFeatures);
+        return convertedFeatures;
+    },
 
-            // wenn Punkt-Geometrie
+    /**
+     * Converts features to KML and also storing the style information.
+     * @param {ol/Feature[]} features The features to be downloaded.
+     * @param {ol/Format} format The format for the features to be downloaded.
+     * @return {String} - The converted features as string.
+     */
+    convertFeaturesToKML: function (features, format) {
+        const pointOpacities = [],
+            pointColors = [],
+            pointRadiuses = [],
+            textFonts = [];
+        let convertedFeatures = [];
+
+        features.forEach(feature => {
+            const type = feature.getGeometry().getType(),
+                styles = feature.getStyleFunction().call(feature),
+                style = styles[0];
+            let color;
+
             if (type === "Point") {
-
                 if (feature.getStyle().getText()) {
                     textFonts.push(feature.getStyle().getText().getFont());
                     pointOpacities.push(undefined);
                     pointColors.push(undefined);
                     pointRadiuses.push(undefined);
                 }
-                // wenn es kein Text ist(also Punkt), werden Farbe, Transparenz und Radius in arrays gespeichert um dann das KML zu erweitern.
                 else {
                     color = style.getImage().getFill().getColor();
                     pointOpacities.push(style.getImage().getFill().getColor()[3]);
@@ -397,14 +203,13 @@ const DownloadModel = Tool.extend({
                 }
 
             }
-        }, context);
+        }, this);
 
-        // KML zerlegen und die Punktstyles einfügen
-        featuresWithPointStyle = $.parseXML(format.writeFeatures(features));
+        convertedFeatures = $.parseXML(this.convertFeatures(features, format));
 
-        $(featuresWithPointStyle).find("Point").each(function (i, point) {
-            var placemark = point.parentNode,
-                style,
+        $(convertedFeatures).find("Point").each(function (i, point) {
+            const placemark = point.parentNode;
+            let style,
                 pointStyle,
                 fontStyle;
 
@@ -413,7 +218,6 @@ const DownloadModel = Tool.extend({
                 fontStyle = "<font>" + textFonts[i] + "</font>";
                 $(style).append($(fontStyle));
             }
-            // kein Text, muss also Punkt sein
             else {
                 style = $(placemark).find("Style")[0];
                 pointStyle = "<pointstyle>";
@@ -427,16 +231,16 @@ const DownloadModel = Tool.extend({
             }
 
         });
-        return new XMLSerializer().serializeToString(featuresWithPointStyle);
+        return new XMLSerializer().serializeToString(convertedFeatures);
     },
 
     /**
-         * Erzeugt Projection aus ESPG codes und zone
-         * @param  {String} sourceProj ESPG der Ausgangsprojektion
-         * @param  {String} destProj   ESPG der Zielprojektion
-         * @param  {String} zone       UTM-Zone
-         * @return {Object}            Ein Object, das proj4-Projektionen enthält, mit denen Koordinaten umgerechnet werden können
-         */
+     * Gets the projection in proj4 format.
+     * @param {String} sourceProj Source projection name.
+     * @param {String} destProj Destination projection name.
+     * @param {String} zone Zone of source projection.
+     * @returns {Object} - an object with the definitions of the goven projection names.
+     */
     getProjections: function (sourceProj, destProj, zone) {
         proj4.defs(sourceProj, "+proj=utm +zone=" + zone + "ellps=WGS84 +towgs84=0,0,0,0,0,0,1 +units=m +no_defs");
 
@@ -444,6 +248,243 @@ const DownloadModel = Tool.extend({
             sourceProj: proj4(sourceProj),
             destProj: proj4(destProj)
         };
+    },
+
+    /**
+     * Transform the given Geometry into the given projections.
+     * @param {ol/Geom} geometry Geometry.
+     * @param {Object} projections Object containing the projections.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol/Coordinate} - The projected coordinates.
+     */
+    transformCoords: function (geometry, projections) {
+        let transCoord = [];
+
+        switch (geometry.getType()) {
+            case "Polygon": {
+                transCoord = this.transformPolygon(geometry.getCoordinates(), projections);
+                break;
+            }
+            case "Point": {
+                transCoord = this.transformPoint(geometry.getCoordinates(), projections);
+                break;
+            }
+            case "LineString": {
+                transCoord = this.transformLine(geometry.getCoordinates(), projections);
+                break;
+            }
+            default: {
+                Radio.trigger("Alert", "alert", this.get("unknownGeometry") + " <br><strong>" + geometry.getType());
+            }
+        }
+        return transCoord;
+    },
+
+    /**
+     * Transform the given polygon coords into the given projections.
+     * @param {ol/Coordinate} coords Coordinates.
+     * @param {Object} projections Object containing the projections.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol/Coordinate} - The projected coordinates.
+     */
+    transformPolygon: function (coords, projections) {
+        const transCoord = [];
+
+        coords.forEach(points => {
+            points.forEach(point => {
+                transCoord.push(this.transformPoint(point, projections));
+            }, this);
+        }, this);
+        return [transCoord];
+    },
+
+    /**
+     * Transform the given line coords into the given projections.
+     * @param {ol/Coordinate} coords Coordinates.
+     * @param {Object} projections Object containing the projections.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol/Coordinate} - The projected coordinates.
+     */
+    transformLine: function (coords, projections) {
+        const transCoord = [];
+
+        coords.forEach(point => {
+            transCoord.push(this.transformPoint(point, projections));
+        }, this);
+        return transCoord;
+    },
+
+    /**
+     * Transform the given point coords into the given projections.
+     * @param {ol/Coordinate} point Coordinates.
+     * @param {Object} projections Object containing the projections.
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {ol/Coordinate} - The projected coordinates.
+     */
+    transformPoint: function (point, projections) {
+        return proj4(projections.sourceProj, projections.destProj, point);
+    },
+
+    /**
+     * Validates the Filename and appends the extension if the user didnt add it.
+     * @returns {String} - the generated fileName.
+     */
+    validateFileNameAndExtension: function () {
+        const fileName = this.get("fileName"),
+            selectedFormat = this.get("selectedFormat"),
+            suffix = "." + selectedFormat.toLowerCase();
+        let validatedFileName;
+
+        if (fileName.length > 0 && selectedFormat.length > 0) {
+            if (!fileName.toLowerCase().endsWith(suffix)) {
+                validatedFileName = fileName + suffix;
+            }
+            else {
+                validatedFileName = fileName;
+            }
+        }
+        return validatedFileName;
+    },
+
+    /**
+     * Prepares the download button. Distinguishes between IE and nonIE.
+     * @fires Core#RadioRequestUtilIsInternetExplorer
+     * @returns {void}
+     */
+    prepareDownloadButton: function () {
+        const fileName = this.validateFileNameAndExtension(),
+            isInternetExplorer = Radio.request("Util", "isInternetExplorer");
+
+        this.setIsInternetExplorer(isInternetExplorer);
+        if (fileName) {
+            if (isInternetExplorer) {
+                this.prepareDownloadButtonIE();
+            }
+            else {
+                this.prepareDownloadButtonNonIE();
+            }
+            this.setDisabledOnDownloadButton(false);
+        }
+        else {
+            this.setDisabledOnDownloadButton(true);
+        }
+    },
+
+    /**
+     * Enables or disables the download button.
+     * @param {Boolean} isDisabled Flag if download button is disabled or not.
+     * @returns {void}
+     */
+    setDisabledOnDownloadButton: function (isDisabled) {
+        $(".downloadBtn").prop("disabled", isDisabled);
+    },
+
+    /**
+     * Prepares the download button for nonIE browsers.
+     * @returns {void}
+     */
+    prepareDownloadButtonNonIE: function () {
+        const url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.get("dataString"));
+
+        $(".downloadFile").attr("href", url);
+    },
+
+    /**
+     * Prepares the download button for IE browsers.
+     * @returns {void}
+     */
+    prepareDownloadButtonIE: function () {
+        const fileData = [this.get("dataString")],
+            blobObject = new Blob(fileData);
+
+        this.setBlob(blobObject);
+    },
+
+    /**
+     * Triggers the download
+     * @returns {void}
+     */
+    download: function () {
+        if (this.get("isInternetExplorer")) {
+            window.navigator.msSaveOrOpenBlob(this.get("blob"), this.validateFileNameAndExtension());
+        }
+        else {
+            $(".downloadFile").attr("download", this.validateFileNameAndExtension());
+        }
+    },
+    /**
+     * Resets the model.
+     * @returns {void}
+     */
+    reset: function () {
+        this.setFormats([]);
+        this.setFeatures([]);
+        this.setDataString("");
+        this.setSelectedFormat("");
+        this.setFileName("");
+    },
+
+    /**
+     * Setter for attribute "formats".
+     * @param {String[]} value Formats.
+     * @returns {void}
+     */
+    setFormats: function (value) {
+        this.set("formats", value);
+    },
+
+    /**
+     * Setter for attribute "features".
+     * @param {ol/Feature[]} value Features.
+     * @returns {void}
+     */
+    setFeatures: function (value) {
+        this.set("features", value);
+    },
+
+    /**
+     * Setter for attribute "dataString".
+     * @param {String} value The features saved as string.
+     * @returns {void}
+     */
+    setDataString: function (value) {
+        this.set("dataString", value);
+    },
+
+    /**
+     * Setter for attribute "selectedFormat".
+     * @param {String} value The selected Format.
+     * @returns {void}
+     */
+    setSelectedFormat: function (value) {
+        this.set("selectedFormat", value);
+    },
+
+    /**
+     * Setter for attribute "fileName".
+     * @param {String} value Filename without extension.
+     * @returns {void}
+     */
+    setFileName: function (value) {
+        this.set("fileName", value);
+    },
+
+    /**
+     * Setter for attribute "blob".
+     * @param {Blob} value Blob.
+     * @returns {void}
+     */
+    setBlob: function (value) {
+        this.set("blob", value);
+    },
+
+    /**
+     * Setter for attribute "isInternetExplorer".
+     * @param {Boolean} value Flag if browser is ie.
+     * @returns {void}
+     */
+    setIsInternetExplorer: function (value) {
+        this.set("isInternetExplorer", value);
     }
 });
 

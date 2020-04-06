@@ -18,13 +18,14 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     /**
      * @class LayerView
      * @extends Backbone.View
-     * @memberOf Menu.Desktop.Layer
+     * @memberof Menu.Desktop.Layer
      * @constructs
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsSettingVisible
      * @listens Layer#changeTransparency
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
+     * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
@@ -38,6 +39,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         });
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleByMapMode
+        });
+        this.listenTo(Radio.channel("LayerInformation"), {
+            "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
         this.$el.on({
             click: function (e) {
@@ -55,11 +59,11 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     templateSettings: _.template(TemplateSettings),
 
     /**
-     * todo
+     * Renders the selection view.
      * @returns {Backbone.View} todo
      */
     render: function () {
-        var attr = this.model.toJSON(),
+        const attr = this.model.toJSON(),
             selector = $("#" + this.model.get("parentId"));
 
         selector.prepend(this.$el.html(this.template(attr)));
@@ -70,14 +74,17 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Rerenders the model with updated elements.
      * @returns {void}
      */
     rerender: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
-        if (this.model.get("isSettingVisible") === true) {
+        if (this.model.get("layerInfoChecked")) {
+            this.highlightLayerInformationIcon();
+        }
+        if (this.model.get("isSettingVisible")) {
             this.$el.append(this.templateSettings(attr));
         }
     },
@@ -87,7 +94,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @return {void}
      */
     renderSetting: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
@@ -105,26 +112,28 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes toggleIsSelected in the model
      * @returns {void}
      */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
         this.rerender();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**
-     * todo
+     * Init the LayerInformation window and inits the highlighting of the informationIcon.
      * @returns {void}
      */
     showLayerInformation: function () {
         this.model.showLayerInformation();
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
+        this.highlightLayerInformationIcon();
     },
 
     /**
-     * todo
+     * Executes toggleIsSettingVisible in the model
      * @returns {void}
      */
     toggleIsSettingVisible: function () {
@@ -141,7 +150,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes moveDown in the model
      * @returns {void}
      */
     moveModelDown: function () {
@@ -149,7 +158,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes moveUp in the model
      * @returns {void}
      */
     moveModelUp: function () {
@@ -157,7 +166,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes incTransparency in the model
      * @returns {void}
      */
     incTransparency: function () {
@@ -165,7 +174,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes decTransparency in the model
      * @returns {void}
      */
     decTransparency: function () {
@@ -173,7 +182,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Triggers the styleWMS tool to open
+     * Removes the class "open" from ".nav li:first-child"
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @returns {void}
      */
@@ -183,7 +193,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Triggers the parser to remove the item/layer
+     * Executes removeLayer in the model
+     * Removes the element
      * @fires Parser#RadioTriggerParserRemoveItem
      * @returns {void}
      */
@@ -202,10 +214,16 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleColor: function (model, value) {
         if (model.has("minScale") === true) {
+            let statusCheckbox = 0;
+
             if (value === true) {
+                statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
                 this.$el.addClass("disabled");
-                this.$el.find("*").css("pointer-events", "none");
                 this.$el.find("*").css("cursor", "not-allowed");
+                this.$el.find("*").css("pointer-events", "none");
+                if (statusCheckbox === 0) {
+                    this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
+                }
                 this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
             }
             else {
@@ -231,6 +249,25 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         else {
             this.$el.hide();
         }
+    },
+
+    /**
+     * Highlights the Layer Information Icon in the layertree
+     * @returns {void}
+     */
+    highlightLayerInformationIcon: function () {
+        if (this.model.get("layerInfoChecked")) {
+            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+        }
+    },
+
+    /**
+     * Unhighlights the Layer Information Icon in the layertree
+     * @returns {void}
+     */
+    unhighlightLayerInformationIcon: function () {
+        this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
+        this.model.setLayerInfoChecked(false);
     }
 });
 

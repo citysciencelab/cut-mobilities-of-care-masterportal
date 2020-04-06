@@ -12,6 +12,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
     events: {
         "changeDate": "changeDate"
     },
+
     /**
      * Setting listener
      * @returns {void}

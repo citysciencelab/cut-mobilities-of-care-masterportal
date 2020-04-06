@@ -14,13 +14,17 @@
         "Config": true,
         "Radio": true,
         "Backbone": true,
-        "Cesium": true
+        "Cesium": true,
+        "i18next": true
     },
     "plugins": [
-        "chai-friendly"
+        "chai-friendly",
+        "vue"
     ],
-    "parser": "babel-eslint",
+    "parser": "vue-eslint-parser",
     "parserOptions": {
+        "parser": "babel-eslint",
+        "ecmaVersion": 2017,
         "sourceType": "module",
         "allowImportExportEverywhere": true
     },
@@ -143,7 +147,6 @@
         "consistent-this": "error",
         "func-call-spacing": ["error", "never"],
         "func-style": ["error", "declaration"],
-        "function-paren-newline": ["error", "never"],
         "implicit-arrow-linebreak": "error",
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "jsx-quotes": "error",
@@ -164,7 +167,6 @@
         "no-new-object": "error",
         "no-tabs": "error",
         "no-trailing-spaces": "error",
-        "no-underscore-dangle": "error",
         "no-unneeded-ternary": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": "error",
@@ -204,6 +206,7 @@
             {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]}
         ],
         "backbone/no-native-jquery": [0, "selector"],
-        "backbone/no-silent": 0
+        "backbone/no-silent": 0,
+        "eol-last": ["error", "always"]
     }
 }

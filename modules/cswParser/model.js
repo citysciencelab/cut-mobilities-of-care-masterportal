@@ -20,8 +20,8 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
      * @constructs
      * @property {String} cswId="" Id of csw service, corresponding to rest-services.json
      * @fires Alerting#RadioTriggerAlertAlert
-     * @fires CswParser#RadioTriggerFetchedMetaData
-     * @listens CswParser#RadioTriggerGetMetaData
+     * @fires CswParser#RadioTriggerCswParserFetchedMetaData
+     * @listens CswParser#RadioTriggerCswParserGetMetaData
      */
     initialize: function () {
         var channel = Radio.channel("CswParser");
@@ -44,13 +44,7 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
             async: false,
             context: this,
             error: function () {
-                Radio.trigger("Alert", "alert", {
-                    text: "<b>Entschuldigung</b><br>" +
-                        "Zurzeit können leider keine Metadaten abgefragt werden.<br>" +
-                        "Eventuell ist die Metadaten-Schnittstelle nicht erreichbar.<br>" +
-                        "Versuchen Sie es bitte später erneut",
-                    kategorie: "alert-warning"
-                });
+                this.parseData({}, cswObj);
             },
             success: function (xmlDoc) {
                 this.parseData(xmlDoc, cswObj);
@@ -61,7 +55,7 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
      * Parses the data returned by the meta data request.
      * @param {Object} xmlDoc Result of the meta data request.
      * @param {Object} cswObj Object of CSW request information.
-     * @fires CswParser#RadioTriggerFetchedMetaData
+     * @fires CswParser#RadioTriggerCswParserFetchedMetaData
      * @returns {void}
      */
     parseData: function (xmlDoc, cswObj) {
@@ -192,13 +186,23 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
      * @returns {String} abstractText Abstract text of the meta data entry
      */
     parseAbstractText: function (xmlDoc) {
-        var abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0].textContent;
+        var abstractText,
+            abstractTextContent;
 
-        if (abstractText.length > 1000) {
-            return abstractText.substring(0, 600) + "...";
+        abstractText = $("gmd\\:abstract,abstract", xmlDoc)[0];
+
+        if (abstractText !== undefined && typeof abstractText.textContent === "string") {
+            abstractTextContent = abstractText.textContent;
+        }
+        else {
+            abstractTextContent = "Fehler beim Laden der Vorschau der Metadaten.";
         }
 
-        return abstractText;
+        if (abstractTextContent.length > 1000) {
+            return abstractTextContent.substring(0, 600) + "...";
+        }
+
+        return abstractTextContent;
     },
     /**
      * Parses the URL part of the data returned by the meta data request.

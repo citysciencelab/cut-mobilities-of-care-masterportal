@@ -32,15 +32,37 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      */
 
     initialize: function () {
-        var channel = Radio.channel("MouseHover");
+        const channel = Radio.channel("MouseHover");
 
-        this.listenTo(channel, {
-            "hide": this.destroyPopup
-        });
-        Radio.trigger("Map", "addOverlay", this.get("overlay"));
-        Radio.trigger("Map", "registerListener", "pointermove", this.checkDragging.bind(this), this);
-        this.getMouseHoverInfosFromConfig();
+        if (document.getElementById("map")) {
+            this.listenTo(channel, {
+                "hide": this.destroyPopup,
+                "toggle": this.toggle
+            });
+            Radio.trigger("Map", "addOverlay", this.get("overlay"));
+            this.setPoinertMoveListener(Radio.request("Map", "registerListener", "pointermove", this.checkDragging.bind(this)));
+            document.getElementById("map").addEventListener("mouseleave", this.destroyPopup.bind(this));
+
+            this.getMouseHoverInfosFromConfig();
+        }
     },
+
+    /**
+     * turns the overlay on or off
+     * @param {string|number} id - the overlay identifier
+     * @returns {void}
+     */
+    toggle: function (id) {
+        if (Radio.request("Map", "getOverlayById", id)) {
+            Radio.trigger("Map", "removeOverlay", this.get("overlay"));
+            Radio.trigger("Map", "unregisterListener", this.get("pointerMoveListener"));
+        }
+        else {
+            Radio.trigger("Map", "addOverlay", this.get("overlay"));
+            this.setPoinertMoveListener(Radio.request("Map", "registerListener", "pointermove", this.checkDragging.bind(this)));
+        }
+    },
+
     /**
     * Gets MouseHoverInfos from config.
     * @fires Parser#RadioRequestParserGetItemsByAttributes
@@ -344,7 +366,9 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
 
         if (textArray.length > maxNum) {
             textArrayCorrected = _.sample(textArray, maxNum);
-            textArrayCorrected.push("<span class='info'>" + this.get("infoText") + "</span>");
+            if (this.get("infoText").length > 0) {
+                textArrayCorrected.push("<span class='info'>" + this.get("infoText") + "</span>");
+            }
         }
         else {
             textArrayCorrected = textArray;
@@ -369,6 +393,15 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
         });
 
         return textArrayBroken;
+    },
+
+    /**
+     * setter for pointerMoveListener
+     * @param {object} value - event object
+     * @returns {void}
+     */
+    setPoinertMoveListener: function (value) {
+        this.set("pointerMoveListener", value);
     },
 
     /**

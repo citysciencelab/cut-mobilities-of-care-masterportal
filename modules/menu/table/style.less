@@ -3,8 +3,8 @@
 @color_3: #808080;
 @color_4: #003063;
 @color_5: #f2f2f2;
-@font_family_1: "HamburgSans",sans-serif;
-@font_family_2: "HamburgSans", sans-serif;
+@font_family_1: "MasterPortalFont",sans-serif;
+@font_family_2: "MasterPortalFont", sans-serif;
 @background_color_1: #F2F2F2;
 @background_color_2: #fff;
 @background_color_3: #808080;
@@ -13,11 +13,9 @@
 @background_color_6: #D8D8D8;
 
 /**************** Layer Settings ****************/
-#table-nav {
+#table-navigation {
     z-index: 5;;
     position: absolute;
-    width: 485px;
-    height: 50px;
     font-family: @font_family_1;
     touch-action: pan-x pan-y;
     border-radius: 12px;
@@ -44,10 +42,11 @@
 }
 .table-nav {
     border-radius: 12px;
+    margin: 5px;
 }
 .table-nav-main {
     background-color: @background_color_1;
-    margin: auto;
+    margin: 0px 5px;
     width: 480px;
     height: 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -56,25 +55,24 @@
 #table-nav-drag{
     width: 20px;
     height: 40px;
-    position: absolute;
+    position: relative;
+    left: -5px;
 }
 #table-nav-drag:before{
     left:0;
 }
 #table-layer-list {
     position: relative;
-    margin-left: 25px;
     width: 40px;
     background-color: @background_color_2;
+    left: 20px;
+    top: -45px;
 }
 #table-category-list {
     .icon-categories {
         font-size: 27.5px;
         color: @color_1;
     }
-    position: relative;
-    left: calc(50% + 252px);
-    margin-top: -45px;
     width: 40px;
     background-color: @background_color_1;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -89,11 +87,7 @@
         }
     }
 }
-#table-tools {
-    position: relative;
-    top: -40px;
-    left: calc(50% + 303px);
-}
+
 .table-category-list {
     a {
         &:link {
@@ -104,14 +98,11 @@
 a {
     &:visited {
         text-decoration: none;
-        text-decoration: none;
     }
     &:hover {
         text-decoration: none;
-        text-decoration: none;
     }
     &:active {
-        text-decoration: none;
         text-decoration: none;
     }
 }
@@ -125,9 +116,13 @@ a {
         font-size: 26px;
     }
 }
+
+.table-tools > div {
+    margin: 5px;
+}
+
 .table-categories {
     background-color: @background_color_1;
-    margin: auto;
     width: 40px;
     height: 40px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -139,8 +134,8 @@ a {
     width: 268px;
     display: none;
     position: absolute;
-    bottom: 50px;
-    left: -52px;
+    bottom: 45px;
+    left: -207px;
     padding: 12px;
     margin-left: -149px;
     &:after {
@@ -201,10 +196,8 @@ a {
     height: 40px;
 }
 .table-nav-layers-panel {
-    background: transparent;
     border-width: 0px;
     -webkit-box-shadow: none;
-    box-shadow: none;
     background-color: @background_color_1;
     border-radius: 12px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -218,10 +211,8 @@ a {
 }
 .table-nav-cat-panel {
     font-size: 17px;
-    background: transparent;
     border-width: 0px;
     -webkit-box-shadow: none;
-    box-shadow: none;
     background-color: @background_color_1;
     border-radius: 12px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
@@ -233,7 +224,7 @@ a {
     width: 320px;
     bottom: -20px;
     display: none;
-    margin-left: -227px;
+    margin-left: -243px;
     div > div.detailview-head {
         display: none;
     }
@@ -254,6 +245,7 @@ a {
     }
     .multicheckbox-label{
         vertical-align: text-bottom;
+        padding-left: 20px;
     }
 }
 .table-layer-list {
@@ -295,9 +287,6 @@ a {
         background-color: @background_color_3;
         border-radius: 12px;
     }
-    &:before {
-        display: none;
-    }
     .icon-cross1 {
         &:before {
             display: block;
@@ -307,6 +296,9 @@ a {
             font-size: 18px;
             }
         }
+}
+.table-layer-list>.icon-burgermenu_alt::before{
+    display: none;
 }
 .icon-burgermenu_alt.collapsed {
     #table-nav-layers-panel-toggler {
@@ -318,7 +310,7 @@ a {
     }
     .icon-cross1 {
         &:before {
-        display: none;
+            display: none;
         }
     }
 }

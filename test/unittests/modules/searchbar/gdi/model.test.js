@@ -4,51 +4,160 @@ import {expect} from "chai";
 describe("modules/searchbar/gdi", function () {
     var model = {},
         config = {
-            "minChars": 4,
-            "serviceId": "elastic"
+            "searchBar": {
+                "gdi": {
+                    "minChars": 4,
+                    "serviceId": "elastic",
+                    "queryObject": {
+                        "id": "query",
+                        "params": {
+                            "query_string": "%%searchString%%"
+                        }
+                    }
+                }
+            }
         };
 
     before(function () {
         model = new Model(config);
     });
-    describe("check Defaults and Settings", function () {
-        it("minChars Value should be 4", function () {
-            expect(model.get("minChars")).to.equal(4);
-        });
-        it("change of minChars Value should return 5", function () {
-            model.setMinChars(5);
-            expect(model.get("minChars")).to.equal(5);
-        });
+    describe("appendSearchStringToPayload", function () {
+        it("should append string to searchStringAttribute", function () {
+            const payload = {
+                    id: "query",
+                    params: {
+                        query_string: ""
+                    }
+                },
+                searchStringAttribute = "query_string";
 
-        it("ServiceID Value should be 'elastic'", function () {
-            expect(model.get("serviceId")).to.equal("elastic");
-        });
-        it("change of ServiceID Value should return 4711", function () {
-            model.setServiceId("4711");
-            expect(model.get("serviceId")).to.equal("4711");
-        });
-    });
-    describe("createQueryString", function () {
-        var searchString = "festge",
-            query = "";
-
-        it("the created query should be an object", function () {
-            query = model.createQuery(searchString);
-            expect(query).to.be.an("object");
-        });
-        it("the created query should contain the correct query_string", function () {
-            expect(query.bool.must).to.be.an("array").to.deep.include({
-                query_string: {
-                    "fields": ["datasets.md_name^2", "name^2", "datasets.keywords"],
-                    "query": "*" + searchString + "*",
-                    "lowercase_expanded_terms": false
-                }
-            },
-            {match:
-                {
-                    typ: "WMS"
+            expect(model.appendSearchStringToPayload(payload, searchStringAttribute, "test")).to.deep.equal({
+                id: "query",
+                params: {
+                    query_string: "test"
                 }
             });
+        });
+        it("should do nothing if searchStringAttribute is not found in payload", function () {
+            const payload = {
+                    id: "query",
+                    params: {
+                        query_string: ""
+                    }
+                },
+                searchStringAttribute = "query_string_";
+
+            expect(model.appendSearchStringToPayload(payload, searchStringAttribute, "test")).to.deep.equal({
+                id: "query",
+                params: {
+                    query_string: ""
+                }
+            });
+        });
+    });
+    describe("findAttributeByPath", function () {
+        it("should find attribute on first level", function () {
+            const object = {
+                    level0: "helloWorld"
+                },
+                path = "level0";
+
+            expect(model.findAttributeByPath(object, path)).to.equal("helloWorld");
+        });
+        it("should find attribute on second level", function () {
+            const object = {
+                    level0: {
+                        level1: "helloWorld"
+                    }
+                },
+                path = "level0.level1";
+
+            expect(model.findAttributeByPath(object, path)).to.equal("helloWorld");
+        });
+        it("should find attributes and create array", function () {
+            const object = {
+                    level0: {
+                        key0: "hello",
+                        key1: "World"
+                    }
+                },
+                path = ["level0.key0", "level0.key1"];
+
+            expect(model.findAttributeByPath(object, path)).to.deep.equal(["hello", "World"]);
+        });
+    });
+    describe("createHit", function () {
+        it("should create hit", function () {
+            const result = {
+                    id: "0815",
+                    name: "name",
+                    x: 123456,
+                    y: 456789,
+                    foo: "bar",
+                    deeperKey: {
+                        key: "value"
+                    }
+                },
+                hitMap = {
+                    id: "id",
+                    name: "name",
+                    coordinate: ["x", "y"],
+                    key: "deeperKey.key"
+                },
+                hitType = "type",
+                hitGlyphicon = "glyphicon-abc",
+                triggerEvent = {
+                    channel: "MyChannel",
+                    event: "MyEvent"
+                };
+
+            expect(model.createHit(result, hitMap, hitType, hitGlyphicon, triggerEvent)).to.deep.equal(
+                {
+                    id: "0815",
+                    name: "name",
+                    coordinate: [123456, 456789],
+                    key: "value",
+                    type: "type",
+                    glyphicon: "glyphicon-abc",
+                    triggerEvent: {
+                        channel: "MyChannel",
+                        event: "MyEvent"
+                    }
+                }
+            );
+        });
+        it("should create hit without trigger event", function () {
+            const result = {
+                    id: "0815",
+                    name: "name",
+                    x: 123456,
+                    y: 456789,
+                    foo: "bar",
+                    deeperKey: {
+                        key: "value"
+                    }
+                },
+                hitMap = {
+                    id: "id",
+                    name: "name",
+                    coordinate: ["x", "y"],
+                    key: "deeperKey.key"
+                },
+                hitType = "type",
+                hitGlyphicon = "glyphicon-abc",
+                triggerEvent = {
+                };
+
+            expect(model.createHit(result, hitMap, hitType, hitGlyphicon, triggerEvent)).to.deep.equal(
+                {
+                    id: "0815",
+                    name: "name",
+                    coordinate: [123456, 456789],
+                    key: "value",
+                    type: "type",
+                    glyphicon: "glyphicon-abc"
+                }
+            );
         });
     });
 });

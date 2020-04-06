@@ -33,6 +33,7 @@ const FlaecheninfoTheme = Theme.extend({
 
     /**
      * Parsed die GFI-Attribute
+     * @fires Tools.GFI#RadioRequestGFIGetRequestedParcelId
      * @returns {void}
      */
     parseGfiContent: function () {

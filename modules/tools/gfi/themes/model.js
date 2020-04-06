@@ -47,7 +47,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
         }
         else if (this.get("typ") === "Cesium3DTileFeature") {
-            this.getCesium3DTileFeatureGfi();
+            this.get3DFeatureGfi();
+        }
+        else if (this.get("typ") === "Entities3D") {
+            this.get3DFeatureGfi();
         }
         else {
             this.getVectorGfi();
@@ -61,8 +64,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     getWmsHtmlGfi: function (successFunction) {
+        const gfiUrl = this.get("gfiUrl");
+
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", this.get("gfiUrl")),
+            url: this.get("useProxyUrlForGfi") === true ? Radio.request("Util", "getProxyURL", gfiUrl) : gfiUrl,
             context: this,
             success: successFunction,
             error: this.gfiErrorHandler
@@ -75,13 +80,18 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     parseWmsBohrdatenGfi: function (data) {
-        var domNodes = $.parseHTML(data);
+        const domNodes = $.parseHTML(data);
 
-        // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
-        if (domNodes.length > 3) {
-            window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+        try {
+            // bei domNodes.length < 3 = nur der xml-header (?xml version='1.0' encoding='UTF-8'?) ohne html
+            if (domNodes.length > 3) {
+                window.open(this.get("gfiUrl"), "weitere Informationen", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700");
+            }
+            this.setIsReady(true);
         }
-        this.setIsReady(true);
+        catch {
+            this.setIsReady(true);
+        }
     },
 
     /**
@@ -90,14 +100,18 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     parseWmsHtmlGfi: function (data) {
-        var gfiFeatures = {"html": this.get("gfiUrl")};
+        const gfiFeatures = {"html": this.get("gfiUrl")};
 
-        if ($(data).find("tbody").children().length > 1) {
-            this.set("gfiContent", [gfiFeatures]);
+        try {
+            if ($(data).find("tbody").children().length > 1) {
+                this.set("gfiContent", [gfiFeatures]);
+            }
+            this.setIsReady(true);
         }
-        this.setIsReady(true);
+        catch {
+            this.setIsReady(true);
+        }
     },
-
     /**
      * Requestor function for GFI of WMS layers
      * @fires Core#RadioRequestUtilGetProxyURL
@@ -105,11 +119,11 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     getWmsGfi: function (successFunction) {
-        var url = Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
+        let url = this.get("gfiUrl");
 
         url = url.replace(/SLD_BODY=.*?&/, "");
         $.ajax({
-            url: url,
+            url: this.get("useProxyUrlForGfi") === true ? Radio.request("Util", "getProxyURL", url) : url,
             method: "GET",
             context: this,
             success: successFunction,
@@ -124,8 +138,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     gfiErrorHandler: function (jqXHR) {
+        this.setIsReady(true);
         console.warn("Error occured requesting GFI with status '" + jqXHR.status + "' and errorMessage '" + jqXHR.statusText + "'");
-        Radio.trigger("Alert", "alert", "Die Informationen zu dem ausgewählten Objekt können derzeit nicht abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
+        Radio.trigger("Alert", "alert", "Nicht alle Informationen zu den ausgewählten Objekten können derzeit abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
     },
 
     /**
@@ -206,7 +221,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         gfiFormat = new WMSGetFeatureInfo();
         // das reverse wird fürs Planportal gebraucht SD 18.01.2016
         gfiFeatures = gfiFormat.readFeatures(dat, {
-            dataProjection: Config.view.proj
+            dataProjection: Radio.request("MapView", "getProjection")
         }).reverse();
 
         // ESRI is not parsed by the Ol-format
@@ -280,10 +295,11 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     },
 
     /**
-     * todo add jsdoc info about this function
+     * adds the gfiContent for a 3D Cesium TileFeature or a 3d Cesium Entity.
+     * The Attributes are saved directly at the model in the attributes property
      * @returns {void}
      */
-    getCesium3DTileFeatureGfi: function () {
+    get3DFeatureGfi: function () {
         var gfiContent;
 
         gfiContent = this.translateGFI([this.get("attributes")], this.get("gfiAttributes"));
@@ -421,13 +437,26 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
             else {
                 preGfi = this.allKeysToLowerCase(preGfi);
+                if (this.get("gfiParams") && this.get("gfiParams").hasOwnProperty("iFrameAttributesPrefix")) {
+                    preGfi = this.removeIFrameAttributes(preGfi, this.get("gfiParams").iFrameAttributesPrefix);
+                }
                 _.each(gfiAttributes, function (value, key) {
-                    var name = preGfi[key.toLowerCase()];
+                    var name,
+                        origName = key,
+                        translatedName = value;
+
+                    if (typeof translatedName === "string") {
+                        name = preGfi[origName.toLowerCase()];
+                    }
+                    if (typeof translatedName === "object") {
+                        name = this.getNameFromObject(preGfi, origName.toLowerCase(), translatedName);
+                        translatedName = translatedName.name;
+                    }
 
                     if (name) {
-                        gfi[value] = name;
+                        gfi[translatedName] = name;
                     }
-                });
+                }, this);
             }
             if (_.isEmpty(gfi) !== true) {
                 pgfi.push(gfi);
@@ -437,6 +466,118 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return pgfi;
     },
 
+    /**
+     * Removes Attributes from the preGfi object that start with the given string.
+     * Currently used only for sensor-Theme.
+     * @param {Object} preGfi preGfi.
+     * @param {String} prefix String condition each attributes starts with.
+     * @returns {Object} - The pregfi without the attributes starting with string.
+     */
+    removeIFrameAttributes: function (preGfi, prefix) {
+        let gfi = preGfi;
+
+        if (this.get("gfiTheme") === "sensor") {
+            gfi = Object.keys(gfi).filter(key => {
+                return !key.startsWith(prefix);
+            }).reduce((obj, key) => {
+                obj[key] = gfi[key];
+                return obj;
+            }, {});
+        }
+        return gfi;
+    },
+
+    getNameFromObject: function (preGfi, origName, translatedName) {
+        let name = this.translateNameFromObject(preGfi, origName, translatedName.condition),
+            date;
+
+        const type = translatedName.hasOwnProperty("type") ? translatedName.type : "string",
+            format = translatedName.hasOwnProperty("format") ? translatedName.format : "DD.MM.YYYY HH:mm:ss";
+
+        if (name) {
+            if (translatedName.hasOwnProperty("suffix")) {
+                name = String(name) + " " + translatedName.suffix;
+            }
+            if (type === "date") {
+                date = moment(String(name));
+
+                if (date.isValid()) {
+                    name = moment(String(name)).format(format);
+                }
+            }
+            else if (type === "string") {
+                name = String(name);
+            }
+            else {
+                console.error("getNameFromObject:Could not transform " + name + "into a data. Taking default value");
+            }
+        }
+        return name;
+    },
+
+    /**
+     * Translates the given name from gfiAttribute Object based on the condition type
+     * @param {Object} preGfi Object of all values that the feature has.
+     * @param {String} origName The name to be proofed against the keys.
+     * @param {Object} condition GFI-Attribute Object.
+     * @returns {String} - name if condition matches exactly one key.
+     */
+    translateNameFromObject: function (preGfi, origName, condition) {
+        const length = origName.length;
+        let name,
+            matches = [];
+
+        if (condition === "contains") {
+            matches = Object.keys(preGfi).filter(key => {
+                return key.length !== length && key.includes(origName);
+            });
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
+                name = preGfi[matches[0]];
+            }
+        }
+        else if (condition === "startsWith") {
+            matches = Object.keys(preGfi).filter(key => {
+                return key.length !== length && key.startsWith(origName);
+            });
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
+                name = preGfi[matches[0]];
+            }
+        }
+        else if (condition === "endsWith") {
+            matches = Object.keys(preGfi).filter(key => {
+                return key.length !== length && key.endsWith(origName);
+            });
+            if (this.checkIfMatchesValid(origName, condition, matches)) {
+                name = preGfi[matches[0]];
+            }
+        }
+        else {
+            name = preGfi[origName];
+        }
+        return name;
+    },
+
+    /**
+     * Checks if the matches have exact one entry.
+     * @param {String} origName The name to be proofed against the keys.
+     * @param {String} condition Matching conditon.
+     * @param {String[]} matches An array of all keys matching the condition.
+     * @returns {Boolean} - Flag of array has exacly one entry.
+     */
+    checkIfMatchesValid: function (origName, condition, matches) {
+        let isValid = false;
+
+        if (matches.length === 0) {
+            console.error("no match found for gfi translation: '" + condition + "', '" + origName + "'");
+        }
+        else if (matches.length > 1) {
+            console.error("more than 1 match found for gfi translation: " + condition + "', '" + origName + "'");
+        }
+        else {
+            isValid = true;
+        }
+        return isValid;
+    },
     /**
      * set all keys from object to lowercase
      * @param {object} obj - key value pairs

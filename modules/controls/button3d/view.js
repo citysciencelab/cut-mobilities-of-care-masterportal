@@ -1,4 +1,6 @@
 import Button3dTemplate from "text-loader!./template.html";
+import Button3dTemplateTable from "text-loader!./templateTable.html";
+import Button3dModel from "./model";
 /**
  * @member Button3dTemplate
  * @description Template used for the 3D Button
@@ -30,31 +32,44 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
      * @fires Core.ModelList.Tool#RadioRequestToolGetCollection
+     * @listens Controls.Button3d#changeButtonTitle
+     * @listens Controls.Button3d#changeOpenView3dText
+     * @listens Controls.Button3d#changeCloseView3dText
      * @listens Core#RadioTriggerMapChange
      */
     initialize: function () {
-        var channel = Radio.channel("Map"),
+        const channel = Radio.channel("Map"),
             style = Radio.request("Util", "getUiStyle");
 
+        this.model = new Button3dModel();
         channel.on({
             "change": this.change
         }, this);
+
+        this.listenTo(this.model, {
+            "change": function () {
+                const changed = this.model.changed;
+
+                if (changed.buttonTitle || changed.openView3dText || changed.closeView3dText) {
+                    if (style === "DEFAULT") {
+                        this.render();
+                    }
+                    else if (style === "TABLE") {
+                        this.renderToToolbar();
+                    }
+                }
+            }
+        });
+
+
         if (style === "DEFAULT") {
-            this.template = _.template(Button3dTemplate);
             this.render();
         }
         else if (style === "TABLE") {
-            this.listenTo(Radio.channel("MenuLoader"), {
-                "ready": function () {
-                    this.setElement("#table-tools-menu");
-                    this.renderToToolbar();
-                }
-            });
-            this.setElement("#table-tools-menu");
-            this.renderToToolbar();
+            this.renderToToolbarInit();
         }
     },
-    tabletemplate: _.template("<div id='3d-ansicht' class='table-tool'><a href='#'><span class='glyphicon icon-btn3d1'></span><span id='3d_titel'><%=ansicht %></span></a> </div>"),
+
     /**
      * Shows the 3D button as selected.
      * Shows the 3D button as not selected.
@@ -63,37 +78,67 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      */
     change: function (map) {
         if (map === "3D") {
+            // 3d close
             this.$("#button3D").addClass("toggleButtonPressed");
+            this.$("#3d-titel-open").hide();
+            this.$("#3d-titel-close").show();
         }
         else {
+            // 3d open
             this.$("#button3D").removeClass("toggleButtonPressed");
+            this.$("#3d-titel-close").hide();
+            this.$("#3d-titel-open").show();
         }
-    },
-    /**
-     * Render Function
-     * @returns {Button3dView} - Returns itself
-     */
-    render: function () {
-        this.$el.html(this.template);
-        if (Radio.request("Map", "isMap3d")) {
-            this.$("#button3D").addClass("toggleButtonPressed");
-        }
-
-        return this;
     },
     /**
      * Render Function
      * @fires Core#RadioRequestMapIsMap3d
      * @returns {Button3dView} - Returns itself
      */
-    renderToToolbar: function () {
-        this.$el.append(this.tabletemplate({ansicht: "Ansicht einschalten"}));
+    render: function () {
+        const attr = this.model.toJSON(),
+            template = _.template(Button3dTemplate);
+
+        this.$el.html(template(attr));
         if (Radio.request("Map", "isMap3d")) {
-            this.$("#3d-ansicht").addClass("toggleButtonPressed");
+            this.$("#button3D").addClass("toggleButtonPressed");
         }
 
         return this;
     },
+
+    /**
+     * initial render function for the table UiStyle - this is necessary because $el has classes attached that are styled for red buttons (which are not used in table style)
+     * @pre the bound element $e is in its initial state (with some css classes)
+     * @post the table template is attached to $el, $el has been striped from its css classes and $el is append to the list #table-tools-menu
+     * @returns {Void}  -
+     */
+    renderToToolbarInit: function () {
+        this.renderToToolbar();
+
+        // remove all css classes of main element because this is not a red button
+        this.$el.attr("class", "");
+        $("#table-tools-menu").append(this.$el);
+    },
+
+    /**
+     * render function for the table UiStyle
+     * @pre the bound element $e is something
+     * @post the table template is attached to $el
+     * @fires Core#RadioRequestMapIsMap3d
+     * @returns {Button3dView} - Returns itself
+     */
+    renderToToolbar: function () {
+        const attr = this.model.toJSON(),
+            templateTable = _.template(Button3dTemplateTable);
+
+        this.$el.html(templateTable(attr));
+        if (Radio.request("Map", "isMap3d")) {
+            this.$("#3d-ansicht").addClass("toggleButtonPressed");
+        }
+        return this;
+    },
+
     /**
      * Shows the map in 3D-mode if 3d button is activated.
      * Shows the map in 2D-mode if the 3d button is deactivated.
@@ -101,13 +146,16 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedIn3d
      * @fires Core.ModelList.Tool#RadioRequestToolGetSupportedOnlyInOblique
      * @fires Core.ModelList.Tool#RadioRequestToolGetCollection
+     * @fires ObliqueMap#RadioRequestObliqueMapIsActive
+     * @fires Core#RadioRequestMapIsMap3d
      * @return {void}
      */
     mapChange: function () {
         const supportedOnlyIn3d = Radio.request("Tool", "getSupportedOnlyIn3d"),
             supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
             supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
-            activeTools = Radio.request("Tool", "getCollection").where({"type": "tool", "isActive": true});
+            modelCollection = Radio.request("Tool", "getCollection"),
+            activeTools = modelCollection !== undefined ? modelCollection.where({"type": "tool", "isActive": true}) : [];
 
         if (Radio.request("Map", "isMap3d")) {
             this.controlsMapChangeClose3D(activeTools, supportedOnlyIn3d);
@@ -135,7 +183,8 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         Radio.trigger("Map", "deactivateMap3d");
         Radio.trigger("Alert", "alert:remove");
         Radio.trigger("Filter", "enable");
-        this.$("#3d_titel").text("Ansicht einschalten");
+        this.$("#3d-titel-close").hide();
+        this.$("#3d-titel-open").show();
 
         activeTools.forEach(tool => {
             if (supportedOnlyIn3d.includes(tool.get("id"))) {
@@ -177,11 +226,14 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @returns {void}
      */
     controlsMapChangeClose2D: function (activeTools, supportedIn3d) {
-        this.$("#3d_titel").text("Ansicht ausschalten");
+        const betaWarning = i18next.exists("common:modules.controls.3d.betaWarning") ? i18next.t("common:modules.controls.3d.betaWarning") : "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!";
+
+        this.$("#3d-titel-open").hide();
+        this.$("#3d-titel-close").show();
         Radio.trigger("Filter", "disable");
         Radio.trigger("ModelList", "toggleWfsCluster", false);
         Radio.trigger("Map", "activateMap3d");
-        Radio.trigger("Alert", "alert", "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!");
+        Radio.trigger("Alert", "alert", betaWarning);
 
         activeTools.forEach(tool => {
             if (!supportedIn3d.includes(tool.get("id"))) {

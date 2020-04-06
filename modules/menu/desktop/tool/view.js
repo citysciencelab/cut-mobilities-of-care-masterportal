@@ -21,12 +21,15 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         this.listenTo(this.model, {
             "change:isActive": this.toggleIsActiveClass
         });
+        // Listener for addOns so that multilanguage geht initially adjusted.
+        this.listenTo(this.model, {
+            "change:name": this.rerender
+        });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 this.toggleSupportedVisibility(mode);
             }
         });
-
         this.render();
         this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
         this.setCssClass();
@@ -40,13 +43,45 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
      * @returns {this} this
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.translateName(this.model.toJSON());
 
         if (this.model.get("isVisibleInMenu") !== false) {
             $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         }
         return this;
     },
+
+    /**
+     * Rerenders the view. Gets triggered on name change
+     * @returns {void}
+     */
+    rerender: function () {
+        const attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
+    },
+
+    /**
+     * Looks for the key "translate#" in the name of the model. If found the name will be translated.
+     * The name is not yet translated, because it is from an addon.
+     * @param {Array} attr attributes of this model
+     * @returns {Array} attributes of this model maybe with translated name, if necessary
+     */
+    translateName: function (attr) {
+        if (attr.name && attr.name.indexOf("translate#") === 0) {
+            // addons-model: name is not translated in app.js, must be done here
+            const translationKey = attr.name.substr("translate#".length);
+
+            if (i18next.exists(translationKey)) {
+                const name = i18next.t(translationKey);
+
+                this.model.set("name", name);
+                attr.name = name;
+            }
+        }
+        return attr;
+    },
+
 
     /**
      * Controls which tools are available in 2D, 3D and Oblique modes.
@@ -109,9 +144,27 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             this.model.setIsActive(true);
         }
         else {
-            this.model.collection.setActiveToolsToFalse(this.model);
-            this.model.setIsActive(true);
+            if (!this.model.collection) {
+                // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
+                // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
+                this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
+                // for the highlighting in the menu -> view-model-binding is lost by addons
+                this.listenTo(this.model, {
+                    "change:isActive": this.toggleIsActiveClass
+                });
+            }
+            if (!this.model.get("isActive")) {
+                // active the tool if it is not active
+                // deactivate all other modules as long as the tool is not set to "keepOpen"
+                this.model.collection.setActiveToolsToFalse(this.model);
+                this.model.setIsActive(true);
+            }
+            else {
+                // deactivate tool if it is already active
+                this.model.setIsActive(false);
+            }
         }
+
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
     }

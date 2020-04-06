@@ -1,5 +1,6 @@
 import Backbone from "backbone";
 import ModelList from "../modelList/list";
+import {getLayerList} from "masterportalAPI/src/rawLayerList";
 
 const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     defaults: {
@@ -28,7 +29,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @description Parse the configured models from config datas
      * Models can be of type folder, layer, staticlink, tool, viewpoint, ...
      * @extends Backbone.Model
-     * @memberOf Core.ConfigLoader
+     * @memberof Core.ConfigLoader
      * @constructs
      * @property {Array} itemList=[] lightModels
      * @property {Array} overlayer=[] Themenconfig.Fachdaten
@@ -63,7 +64,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @fires Core.ModelList#RadioTriggerModelListRenderTree
      * @fires Core.ModelList#RadioTriggerModelListSetModelAttributesById
      * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
-     * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
+     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @fires Core.ModelList#RadioTriggerModelListShowModelInTree
+     * @fires Core.ModelList#RadioTriggerModelListRefreshLightTree
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
     initialize: function () {
@@ -98,7 +101,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "addItems": this.addItems,
             "addFolder": this.addFolder,
             "addLayer": this.addLayer,
-            "addGDILayer": this.addGDILayer,
+            "addGdiLayer": this.addGdiLayer,
             "addGeoJSONLayer": this.addGeoJSONLayer,
             "removeItem": this.removeItem
         }, this);
@@ -117,7 +120,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 modelList.remove(modelListToRemove);
                 this.setItemList([]);
                 this.addTreeMenuItems();
-                this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
+                this.parseTree(getLayerList());
                 Radio.trigger("ModelList", "removeModelsByParentId", "tree");
                 Radio.trigger("ModelList", "renderTree");
                 Radio.trigger("ModelList", "setModelAttributesById", "Overlayer", {isExpanded: true});
@@ -146,7 +149,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         }
         else {
             this.addTreeMenuItems(this.get("treeType"));
-            this.parseTree(Radio.request("RawLayerList", "getLayerAttributesList"));
+            this.parseTree(getLayerList(), this.get("overlayer_3d") ? this.get("overlayer_3d") : null);
         }
         this.createModelList();
     },
@@ -346,6 +349,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             typ: "WMS",
             type: "layer",
             url: url,
+            urlIsVsible: true,
             version: version
         };
 
@@ -376,49 +380,91 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isSelected: true,
             isVisibleInTree: true,
             cache: false,
-            datasets: []
+            datasets: [],
+            urlIsVsible: true
         };
 
         this.addItem(layer);
     },
 
+
     /**
-     * adds a layer from the elastic serach gdi search
-     * @param {Object} values - includes {name, id, parentId, level, layers, url, version, gfiAttributes, datasets, isJustAdded}
+     * Adds found layer to layer tree
+     * @param {Object} hit layer to be added
+     * @fires Core.ModelList#RadioTriggerModelListRenderTree
+     * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
+     * @fires Core.ModelList#RadioTriggerModelListShowModelInTree
+     * @fires Core.ModelList#RadioTriggerModelListRefreshLightTree
      * @returns {void}
      */
-    addGDILayer: function (values) {
-        var layer = {
-            cache: false,
-            datasets: values.datasets,
-            featureCount: "3",
-            format: "image/png",
-            gfiAttributes: values.gfiAttributes,
-            gutter: "0",
-            id: values.id,
-            isChildLayer: false,
-            isJustAdded: values.isJustAdded,
-            isSelected: true,
-            isVisibleInTree: true,
-            layerAttribution: "nicht vorhanden",
-            layers: values.layers,
-            legendURL: "",
-            level: values.level,
-            maxScale: "2500000",
-            minScale: "0",
-            name: values.name,
-            parentId: values.parentId,
-            singleTile: false,
-            tilesize: "512",
-            transparency: 0,
-            transparent: true,
-            typ: "WMS",
-            type: "layer",
-            url: values.url,
-            version: values.version
-        };
+    addGdiLayer: function (hit) {
+        const treeType = this.get("treeType");
+        let level = 0,
+            layerTreeId,
+            parentId = "tree",
+            gdiLayer = {
+                cache: false,
+                featureCount: "3",
+                format: "image/png",
+                gutter: "0",
+                isChildLayer: false,
+                isSelected: true,
+                isVisibleInTree: true,
+                layerAttribution: "nicht vorhanden",
+                legendURL: "",
+                maxScale: "2500000",
+                minScale: "0",
+                singleTile: false,
+                tilesize: "512",
+                transparency: 0,
+                transparent: true,
+                typ: "WMS",
+                type: "layer",
+                urlIsVsible: true
+            };
 
-        this.addItemAtTop(layer);
+        if (hit.source) {
+            // check if layer is already in layer tree
+            layerTreeId = this.getItemByAttributes({id: hit.source.id});
+            if (!layerTreeId) {
+
+                if (treeType === "custom") {
+                    // create folder and add it as "Externe Fachdaten"
+                    parentId = "extthema";
+                    level = 2;
+                    if (!this.getItemByAttributes({id: "ExternalLayer"})) {
+                        this.addFolder("Externe Fachdaten", "ExternalLayer", "tree", 0);
+                        Radio.trigger("ModelList", "renderTree");
+                        $("#Overlayer").parent().after($("#ExternalLayer").parent());
+                    }
+                    if (!this.getItemByAttributes({id: parentId})) {
+                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, true);
+                    }
+                }
+                gdiLayer = Object.assign(gdiLayer, {
+                    name: hit.source.name,
+                    id: hit.source.id,
+                    parentId: parentId,
+                    level: level,
+                    layers: hit.source.layers,
+                    url: hit.source.url,
+                    version: hit.source.version,
+                    gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
+                    datasets: hit.source.datasets,
+                    isJustAdded: true
+                });
+                this.addItemAtTop(gdiLayer);
+                Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.source.id});
+            }
+
+            Radio.trigger("ModelList", "showModelInTree", hit.source.id);
+            if (treeType === "light") {
+                Radio.trigger("ModelList", "refreshLightTree");
+            }
+        }
+        else {
+            console.error("Es konnte kein Eintrag für Layer " + hit.source.id + " in ElasticSearch gefunden werden.");
+        }
     },
 
     /**
@@ -477,6 +523,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 model.parentId === "info" ||
                 model.parentId === "bezirke" ||
                 model.parentId === "3d_daten" ||
+                model.parentId === "simulation" ||
+                model.parentId === "utilities" ||
                 model.parentId === "ansichten";
         }));
     },

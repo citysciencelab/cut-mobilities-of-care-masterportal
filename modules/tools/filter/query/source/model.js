@@ -1,5 +1,6 @@
 import QueryModel from "../model";
 import {intersects} from "ol/extent.js";
+import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 const SourceModel = QueryModel.extend({
     defaults: {
@@ -55,19 +56,18 @@ const SourceModel = QueryModel.extend({
      * @return {void}
      */
     listenToFeaturesLoaded: function () {
-        this.listenTo(Radio.channel("Layer"), {
+        this.listenTo(Radio.channel("VectorLayer"), {
             "featuresLoaded": function (layerId, features) {
-                var urlFilterRules;
+                const filters = Radio.request("ParametricURL", "getFilter");
+                let urlFilterRules = [];
 
                 if (layerId === this.get("layerId")) {
-                    if (this.get("snippetCollection").length > 0 && this.get("isAutoRefreshing") && !this.get("isInitialLoad")) {
-
-                        urlFilterRules = Radio.request("ParametricURL", "getFilter").filter(function (urlFilters) {
-                            var name = Radio.request("Filter", "getFilterName", layerId);
+                    if (this.get("snippetCollection").length > 0 && this.get("isAutoRefreshing") && !this.get("isInitialLoad") && filters) {
+                        urlFilterRules = filters.filter(function (urlFilters) {
+                            const name = Radio.request("Filter", "getFilterName", layerId);
 
                             return urlFilters.name === name;
                         }, this);
-
                         this.createQueryFromUrlFilterRules(urlFilterRules[0]);
                         this.get("snippetCollection").reset(null);
                         this.processFeatures(features);
@@ -77,7 +77,7 @@ const SourceModel = QueryModel.extend({
                         this.setIsInitialLoad(false);
 
                         if (!this.get("isAutoRefreshing")) {
-                            this.stopListening(Radio.channel("Layer"), "featuresLoaded");
+                            this.stopListening(Radio.channel("VectorLayer"), "featuresLoaded");
                         }
                     }
                 }
@@ -125,7 +125,7 @@ const SourceModel = QueryModel.extend({
     },
 
     buildQueryDatastructure: function () {
-        var layerObject = Radio.request("RawLayerList", "getLayerWhere", {id: this.get("layerId")});
+        var layerObject = getLayerWhere({id: this.get("layerId")});
 
         if (this.get("searchInMapExtent") === true) {
             this.addSearchInMapExtentSnippet();

@@ -88,7 +88,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         attr.treeType = Radio.request("Parser", "getTreeType");
         attr.category = Radio.request("Parser", "getCategory");
         attr.categories = Radio.request("Parser", "getCategories");
-        attr.backgroundImage = Radio.request("Parser", "getItemByAttributes", {id: "backgroundImage"});
+        attr.backgroundImage = Radio.request("MapView", "getBackgroundImage");
         this.$el.find(".header").toggleClass("closed");
         $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         return this;
