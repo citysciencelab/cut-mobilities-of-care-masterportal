@@ -1,4 +1,5 @@
 import {expect} from "chai";
+import Util from "@testUtil";
 import Model from "@modules/vectorStyle/styleModel";
 import {GeoJSON} from "ol/format.js";
 import {Text, Style, Stroke, Fill} from "ol/style.js";
@@ -203,10 +204,15 @@ describe("vectorStyleModel", function () {
         ];
 
     let styleModel,
+        utilModel,
+        xmlDescribeFeatureType,
         jsonObjects;
+
 
     before(function () {
         styleModel = new Model();
+        utilModel = new Util();
+        xmlDescribeFeatureType = utilModel.getDescribeFeatureTypeResponse();
         jsonObjects = geojsonReader.readFeatures(jsonFeatures);
     });
 
@@ -499,6 +505,31 @@ describe("vectorStyleModel", function () {
         });
         it("should return null without conditions or legendValue", function () {
             expect(styleModel.createLegendLabel(rules2[2], {})).to.be.null;
+        });
+    });
+
+    describe("getSubelementsFromXML", function () {
+        const featureType = "staatliche_schulen";
+
+        it("should return an Array with elements", function () {
+            expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, featureType)).to.be.an("array");
+        });
+        it("should return an empty Array", function () {
+            expect(styleModel.getSubelementsFromXML(undefined, featureType)).to.be.an("array").to.be.empty;
+        });
+        it("should return an empty Array", function () {
+            expect(styleModel.getSubelementsFromXML(xmlDescribeFeatureType, undefined)).to.be.an("array").to.be.empty;
+        });
+    });
+    describe("getTypeAttributesFromSubelements", function () {
+        let subElements;
+
+        it("should return an Array with element Point", function () {
+            subElements = styleModel.getSubelementsFromXML(xmlDescribeFeatureType, "staatliche_schulen");
+            expect(styleModel.getTypeAttributesFromSubelements(subElements)).to.be.an("array").to.include("Point");
+        });
+        it("should return an empty Array", function () {
+            expect(styleModel.getTypeAttributesFromSubelements(undefined)).to.be.an("array").to.be.empty;
         });
     });
 });

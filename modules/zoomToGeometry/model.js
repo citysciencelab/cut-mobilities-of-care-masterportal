@@ -1,6 +1,7 @@
 import {WFS} from "ol/format.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import {fetch as fetchPolyfill} from "whatwg-fetch";
 
 const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype */{
     defaults: {
@@ -73,7 +74,7 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
 
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
-        fetch(url)
+        fetchPolyfill(url)
             .then(response => response.text())
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
             .then(responseXML => {

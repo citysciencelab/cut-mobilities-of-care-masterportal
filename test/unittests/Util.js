@@ -24,7 +24,7 @@ Util = Backbone.Model.extend({
         return null;
     },
     createTestFeatures: function (path) {
-        var format = new WFS({
+        const format = new WFS({
                 featureNS: "http://www.deegree.org/app"
             }),
             data = fs.readFileSync(this.get("basepath") + path, "utf8"),
@@ -33,14 +33,20 @@ Util = Backbone.Model.extend({
         return features;
     },
     getGeoJsonTestFeatures: function () {
-        var geojson = JSON.parse(fs.readFileSync(this.get("basepath") + "resources/testFeatures.json", "utf8"));
+        const geojson = JSON.parse(fs.readFileSync(this.get("basepath") + "resources/testFeatures.json", "utf8"));
 
         return geojson;
     },
     getCswResponse: function () {
-        var xml = fs.readFileSync(this.get("basepath") + "resources/testCswResponse.xml", "utf8");
+        const xml = fs.readFileSync(this.get("basepath") + "resources/testCswResponse.xml", "utf8");
 
         return xml;
+    },
+    getDescribeFeatureTypeResponse: function () {
+        const xml = fs.readFileSync(this.get("basepath") + "resources/testDescribeFeatureTypeResponse.xml", "utf8"),
+            xmlObject = new window.DOMParser().parseFromString(xml, "text/xml");
+
+        return xmlObject;
     }
 });
 

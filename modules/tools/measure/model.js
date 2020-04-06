@@ -224,7 +224,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             "valuesChanged": function () {
                 selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
                 selectedUnit = this.get("snippetDropdownModelUnit").getSelectedValues();
-                if (!this.getIsDrawn()) {
+                if (!this.getIsDrawing()) {
                     this.createInteraction(selectedValues.values[0] || Object.keys(this.getLocalizedValues())[0]);
                 }
                 this.setUnit(selectedUnit.values[0]);
@@ -450,7 +450,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
-                that.setIsDrawn(true);
+                that.setIsDrawing(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
                 that.setTextPoint(textPoint);
@@ -458,7 +458,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 that.registerClickListener(that);
             }, this);
             this.get("draw").on("drawend", function (evt) {
-                that.setIsDrawn(false);
+                that.setIsDrawing(false);
                 evt.feature.set("styleId", evt.feature.ol_uid);
                 that.unregisterPointerMoveListener(that);
                 that.unregisterClickListener(that);
@@ -858,7 +858,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         let source = null,
             actualFeature = null;
 
-        if (this.get("isDrawn")) {
+        if (this.get("isDrawing")) {
+            this.get("draw").finishDrawing();
             source = this.get("source");
             if (source.getFeatures().length > 0) {
                 actualFeature = source.getFeatures().slice(-1)[0];
@@ -917,13 +918,13 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @param {boolean} value - true or false
      * @returns {this} this
      */
-    setIsDrawn: function (value) {
+    setIsDrawing: function (value) {
         var dropdownmenu,
             button;
 
         dropdownmenu = document.querySelector(".dropdown_geometry");
         button = dropdownmenu.querySelector("button");
-        this.set("isDrawn", value);
+        this.set("isDrawing", value);
         /* wird geprüft, ob es gemessen wird, falls ja, wird dropdown menu für Geometry ausgegraut*/
         if (value) {
             button.setAttribute("disabled", "disabled");
@@ -937,8 +938,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * getter for drawn function
      * @returns {void}
      */
-    getIsDrawn: function () {
-        return this.get("isDrawn");
+    getIsDrawing: function () {
+        return this.get("isDrawing");
     },
 
     /**

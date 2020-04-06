@@ -226,7 +226,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         }
         else if (typ === "WFS") {
             if (isNewVectorStyle) {
-                return this.getLegendParamsFromVector(layername, styleId);
+                return this.getLegendParamsFromVector(layername, styleId, legendURL);
             }
             return this.getLegendParamsFromVectorOld(layername, styleId);
         }
@@ -750,6 +750,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @param   {string} layername Name of layer to use in legend view
      * @param   {integer} styleId styleId
+     * @param   {string|sting[]}   legendURL can be a image path as sting or array of strings
      * @returns {object} legendObject legend item
      * @returns {string} legendObject.legendname layername
      * @returns {object[]} legendObject.legend Array of legend entries in this particular layer e.g. because of multiple categories
@@ -757,7 +758,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} legendObject.legend.img svg
      * @returns {string} legendObject.legend.typ=svg fixed type
      */
-    getLegendParamsFromVector: function (layername, styleId) {
+    getLegendParamsFromVector: function (layername, styleId, legendURL) {
         let subLegend;
         const image = [],
             name = [],
@@ -772,6 +773,17 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                     legendname: [],
                     img: [],
                     typ: "svg"
+                }]
+            };
+        }
+
+        if (typeof legendURL === "string") {
+            return {
+                layername: layername,
+                legend: [{
+                    legendname: [],
+                    img: legendURL,
+                    typ: "png"
                 }]
             };
         }

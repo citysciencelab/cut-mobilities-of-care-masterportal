@@ -2,9 +2,13 @@ import Tool from "../../core/modelList/tool/model";
 import {WMSCapabilities} from "ol/format.js";
 
 const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         renderToWindow: true,
-        glyphicon: "glyphicon-plus"
+        glyphicon: "glyphicon-plus",
+        uniqueId: 100,
+        placeholder: "",
+        textExample: "",
+        textLoadLayer: ""
     }),
 
     /**
@@ -13,15 +17,33 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      * @extends Tool
      * @memberof Tools.AddWMS
      * @constructs
-     * @fires Util#RadioTriggerUtilShowLoader
-     * @fires Util#RadioTriggerUtilHideLoader
-     * @fires Util#RadioTriggerUtilGetProxyUrl
-     * @fires ModelList#RadioTriggerModelListRenderTree
-     * @fires Parser#RadioTriggerParserAddFolder
-     * @fires Parser#RadioTriggerParserAddLayer
+     * @fires Core#RadioTriggerUtilShowLoader
+     * @fires Core#RadioTriggerUtilHideLoader
+     * @fires Core.ModelList#RadioTriggerModelListRenderTree
+     * @fires Core.ConfigLoader#RadioTriggerParserAddFolder
+     * @fires Core.ConfigLoader#RadioTriggerParserAddLayer
      */
     initialize: function () {
         this.superInitialize();
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function () {
+        this.set({
+            placeholder: i18next.t("common:modules.tools.addWMS.placeholder"),
+            textExample: i18next.t("common:modules.tools.addWMS.textExample"),
+            textLoadLayer: i18next.t("common:modules.tools.addWMS.textLoadLayer")
+        });
     },
 
     /**
@@ -31,22 +53,21 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      */
     displayError: function (text) {
         if (text === "" || typeof text === "undefined") {
-            $(".addWMS.win-body").prepend("<div class=\"addwms_error\">Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!</div>");
+            $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + i18next.t("common:modules.tools.addWMS.error") + "</div>");
         }
         $(".addWMS.win-body").prepend("<div class=\"addwms_error\">" + text + "</div>");
     },
 
     /**
      * todo
-     * @fires Util#RadioTriggerUtilShowLoader
-     * @fires Util#RadioTriggerUtilHideLoader
-     * @fires Util#RadioTriggerUtilGetProxyUrl
-     * @fires ModelList#RadioTriggerModelListRenderTree
-     * @fires Parser#RadioTriggerParserAddFolder
+     * @fires Core#RadioTriggerUtilShowLoader
+     * @fires Core#RadioTriggerUtilHideLoader
+     * @fires Core.ModelList#RadioTriggerModelListRenderTree
+     * @fires Core.ConfigLoader#RadioTriggerParserAddFolder
      * @return {void}
      */
     loadAndAddLayers: function () {
-        var url = $("#wmsUrl").val();
+        const url = $("#wmsUrl").val();
 
         $(".addwms_error").remove();
         if (url === "") {
@@ -57,62 +78,94 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
         $.ajax({
             timeout: 4000,
             context: this,
-            url: Radio.request("Util", "getProxyURL", url) + "?request=GetCapabilities&service=WMS",
+            url: url + "?request=GetCapabilities&service=WMS",
             success: function (data) {
-                var parser,
+                let parser,
                     uniqId,
                     capability;
 
                 Radio.trigger("Util", "hideLoader");
                 try {
                     parser = new WMSCapabilities();
-                    uniqId = _.uniqueId("external_");
+                    uniqId = this.getAddWmsUniqueId();
                     capability = parser.read(data);
 
                     this.setWMSVersion(capability.version);
                     this.setWMSUrl(url);
 
-                    if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}))) {
+                    if (Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}) === undefined) {
                         Radio.trigger("Parser", "addFolder", "Externe Fachdaten", "ExternalLayer", "tree", 0);
                         Radio.trigger("ModelList", "renderTree");
                         $("#Overlayer").parent().after($("#ExternalLayer").parent());
                     }
                     Radio.trigger("Parser", "addFolder", capability.Service.Title, uniqId, "ExternalLayer", 0);
-                    _.each(capability.Capability.Layer.Layer, function (layer) {
+                    capability.Capability.Layer.Layer.forEach(layer => {
                         this.parseLayer(layer, uniqId, 1);
-                    }, this);
+                    });
+
+                    Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.completeMessage"));
+
                 }
                 catch (e) {
-                    this.displayError();
+                    this.displayErrorMessage();
                 }
             },
             error: function () {
                 Radio.trigger("Util", "hideLoader");
-                this.displayError();
+                this.displayErrorMessage();
             }
         });
 
     },
 
     /**
+     * Display error message for wms which have misspelling or no CORS-Header.
+     * @returns {void}
+     */
+    displayErrorMessage: function () {
+        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.errorMessage"));
+    },
+
+    /**
      * todo
      * @param {object} object todo
      * @param {string} parentId todo
-     * @param {int} level todo
-     * @fires Parser#RadioTriggerParserAddFolder
-     * @fires Parser#RadioTriggerParserAddLayer
+     * @param {number} level todo
+     * @fires Core.ConfigLoader#RadioTriggerParserAddFolder
+     * @fires Core.ConfigLoader#RadioTriggerParserAddLayer
      * @return {void}
      */
     parseLayer: function (object, parentId, level) {
-        if (_.has(object, "Layer")) {
-            _.each(object.Layer, function (layer) {
+        if (object.hasOwnProperty("Layer")) {
+            object.Layer.forEach(layer => {
                 this.parseLayer(layer, object.Title, level + 1);
-            }, this);
+            });
             Radio.trigger("Parser", "addFolder", object.Title, object.Title, parentId, level);
         }
         else {
             Radio.trigger("Parser", "addLayer", object.Title, object.Title, parentId, level, object.Name, this.get("wmsUrl"), this.get("version"));
         }
+    },
+
+    /**
+     * Getter for addWMS UniqueId.
+     * Counts the uniqueId 1 up.
+     * @returns {string} uniqueId - The unique id for addWMS.
+     */
+    getAddWmsUniqueId: function () {
+        const uniqueId = this.get("uniqueId");
+
+        this.setUniqueId(uniqueId + 1);
+        return "external_" + uniqueId;
+    },
+
+    /**
+     * Set uniqueId
+     * @param {number} value - counter for uniqueId
+     * @returns {void}
+     */
+    setUniqueId: function (value) {
+        this.set("uniqueId", value);
     },
 
     /**

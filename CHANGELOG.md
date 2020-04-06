@@ -1,3 +1,98 @@
+# Changelog LGV Master-Portal 2.5
+
+NEU:
+
+- CustomTree: Der Parameter singleBaselayer wurde hinzugefügt. Steuert, ob nur ein einzelner Baselayer auf einmal wählbar sein soll oder nicht.
+- VectorStyling: Neues Vektorstyling. Ermöglicht das Einlesen von gemischten Geometrien über GeoJSON oder WFS, und das Verarbeiten von Multigeometrien.
+- Sensordaten:
+  - Ladestrategien für http- und mqtt-Protokolle wurden in extra Module ausgelagert.
+  - Abonnements können auf Browserextent reduziert werden.
+  - Abruf von sämtlichen Daten läuft nun komplett asynchron.
+  - Letzter Status kann direkt beim Abonnieren geholt werden (Retain-Message).
+  - Konfigurierbarkeit für Sensordaten im GFI wurde erweitert.
+- GeoJson: Werden als default in EPSG:4326 gelesen, können aber über crs einen eigenen EPSG Code mitgeben.
+- ParametricURL: Neue Parameter zoomToExtent und zoomToGeometry, zoomt auf einen in der URL angegebenen Kartenausschnitt bzw. auf eine ausgewählte Geometrie.
+- MasterportalAPI: Einbinden der MasterportalAPI als Kern des Masterportals.
+- Heatmap: Erweitert für WFS und GeoJson.
+- end2end-Test: Die Möglichkeit end2end-Tests zu schreiben wurde implementiert.
+- Snippet graphicalsselect: Neues Snippet um verschiedene graphische Auswahlmöglichkeiten in der Karte zu haben.
+- Logo von *MasterPortal* wird beim Laden angezeigt
+- Es können nun eigene Module - sogenannte *Addons* - in Portale eingebunden werden. Weitere Infos siehe **addons.md**.
+- Suche:
+    - Nach Klicken auf *alle Ergebnisse anzeigen* kann nun auch auf eine Gruppe geklickt werden, um diese zu öffnen.
+    - Wenn ein Thema ausgewählt wird, wird die entsprechende Ebene aktiviert.
+- Tools
+    - StyleIds können nun vom Typ Array sein
+    - Zeichnen: Das Tool wurde erweitert und verbessert. Es können nun beispielsweise auch Doppelkreise gezeichnet werden.
+    - Zeichnung Herunterladen: Funktion wurde erweitert
+- Internationalisierung wurde hinzugefügt
+- Sidebar: Breite ist nun konfigurierbar
+- Layerslider: Das Tool wurde erweitert und verbessert.
+- 3D:
+    - 3D: Features eines Layers können zum Ausblenden in 3D in der config.json konfiguriert werden.
+    - Map-Marker kann nun 3D-Koordinaten bekommen. Dies ist möglich durch eine Konfiguration des Markers als Ebene.
+    - VectorLayer können nun ihre 3D-Koordinate oder duch Konfiguration erhöht dargestellt werden.
+- GFI:
+    - Konfigurierbar, um Vektordaten bei GFI Abfrage anders darzustellen.
+    - Neues GFI-Theme *sensor*, *bildungatlas*
+- Layer:
+    - GeoJson-Layer um subTyp *opensensemap* für *Opensensemap API* erweitert
+    - URL in Layer-Information kann nun durch Konfiguration versteckt werden
+- Neuer Pre-Push-Hook erstellt Documentation und überprüft diese
+- Dokumentation für *Addons* hinzugefügt
+
+REFACTOR:
+
+- Suche: Die Konfigurierbarkeit der Elastic-Search Suche wurde erweitert.
+- Build-Script:
+    - Erstellt nun sämtliche Portale in angegebenen Ordner
+    - Erstellt nun Mastercode-Ordner
+    - Für Cross-Plattform angepasst
+- Konsolidierung:
+    - Hamburg-spezifischer Code wurden entfernt
+    - Hamburg-spezifische Tools wurden in die neuen *Addons* umgezogen
+- Doku:
+    - *setup.md* wurde angepasst
+- Konventionen: Wurden erweitert und überarbeitet.
+- Eslint: Überarbeitung der Regel function-paren-newline, sobald bei einem Paramter einer Funktion ein Zeilenumbruch verwendet wird ist dies bei allen Parametern erforderlich.
+- master Portale: Intranet URL's entfernt.
+- Fonts: Erzeugung einer eigenen Fontclass MasterportalFont, um den Font des Masterportals zentral setzen zu können.
+- camelCase: Umbenennung diverser Ordner und Dateien entsprechend der camelCase Konvention.
+
+FIXES:
+
+- Draw-Tool: Gezeichnete Features werden im gleichen Stil gedruckt, in dem sie gezeichnet wurden. Text behält auch im Druck seine Position bei.
+- Layer: Gemergde Layer behalten ihre GFI-Attribute und können abgefragt werden.
+- Layer: Fortan können auch Layer deaktiviert werden, die im aktuellen Maßstab nicht sichtbar sind.
+- Filter: Der Filter kann im Internet Explorer wieder geöffnet werden.
+- Filter: Ein Fehler verhinderte die Verwendung des Filters. Dieser wurde behoben.
+- Elastic-Search: Es kann wieder nach konfigurierten Fachtemen gesucht werden.
+- Suche: Ein Fehler wurde beseitig, der beim Entfernen des eingegebenen Suchbegriffs aufgetreten ist.
+- Messtool: Die voreingestellte Einheit (m² oder m) wurde auf die jeweilige Auswahl (Fläche oder Strecke) abgestimmt.
+- Themenbaum: Der Themenbaum lässt sich wieder inital öffnen.
+- Legende: Die Symbole in der Legende wurden sehr klein skaliert, nun werden sie in einer annehmbaren Größe dargestellt.
+- Graph: Verschiedene fixes für das graph Modul.
+- Case-sensitive Dateisysteme: Doppeltes Module quickhelp gelöscht.
+- Arrow functions: Arrow functions(=>) in Templates führen zu Fehlern im IE 11, daher entfernt.
+- Gruppenlayer: Fehlerhändling, wenn die Dienste nicht antworten.
+- Layerinformation: Fehlerhandling, wenn keine Metadaten gefunden werden.
+- FreezeWindow: Drehte sich mit der Table Navigation
+- Filter: Keine Filter-Inhalte vorhanden bei isIntiOpen = true
+- Fehler beseitigt, durch welchen unsichtbare Ebenen in der Legende angezeigt wurden
+- Fehler beseitigt, durch welchen Ebenen fälschlicherweise ausgeblendet wurden
+- Fehler beseitigt, durch welchen man nur im initialen Maßstab drucken konnte
+- Legende: Darstellungsreihenfolge der Ebenen in der Legende war nicht gleich der Reihenfolge in der Themenauswahl
+- Hintergrundgrafik kann nun korrekt deaktiviert werden
+- Filter: Funktioniert nun auch mit Heatmaps in Kombination mit deren DataLayern.
+- Karte:
+    - Maßstabsdarstellung ändert sich in seiner Länge nicht mehr beim Zoomen
+- Header bricht nicht mehr um bei bestimmten Breiten
+- Anpinnen einer Ebene beeinträchtigt nicht mehr die Usability im Layerinfo-Fenster
+- Überflüssige Projektionen wurden entfernt
+- Mobile: Es kann nun in den Suchergebnissen gescrollt werden
+- BackgroundCanvas kann nun wieder konfiguriert werden.
+- diverse Bugfixes.
+
 # Changelog LGV Master-Portal 2.4.3
 
 NEU:
