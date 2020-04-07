@@ -263,7 +263,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     retObj.bicycles.push({
                         date: date,
                         hour: hour,
-                        result: dataset[meansOfTransport][datetime]
+                        result: this.addThousandPoints(dataset[meansOfTransport][datetime])
                     });
                 }
 
@@ -271,7 +271,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     retObj.cars.push({
                         date: date,
                         hour: hour,
-                        result: dataset[meansOfTransport][datetime]
+                        result: this.addThousandPoints(dataset[meansOfTransport][datetime])
                     });
                 }
 
@@ -310,7 +310,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     retObj.bicycles.push({
                         date: date,
                         calenderWeek: calenderWeek,
-                        result: dataset[meansOfTransport][datetime]
+                        result: this.addThousandPoints(dataset[meansOfTransport][datetime])
                     });
                 }
 
@@ -318,7 +318,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     retObj.cars.push({
                         date: date,
                         calenderWeek: calenderWeek,
-                        result: dataset[meansOfTransport][datetime]
+                        result: this.addThousandPoints(dataset[meansOfTransport][datetime])
                     });
                 }
 
