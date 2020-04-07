@@ -5,11 +5,11 @@ NEU:
 - CustomTree: Der Parameter singleBaselayer wurde hinzugefügt. Steuert, ob nur ein einzelner Baselayer auf einmal wählbar sein soll oder nicht.
 - VectorStyling: Neues Vektorstyling. Ermöglicht das Einlesen von gemischten Geometrien über GeoJSON oder WFS, und das Verarbeiten von Multigeometrien.
 - Sensordaten:
-  - Ladestrategien für http- und mqtt-Protokolle wurden in extra Module ausgelagert.
-  - Abonnements können auf Browserextent reduziert werden.
-  - Abruf von sämtlichen Daten läuft nun komplett asynchron.
-  - Letzter Status kann direkt beim Abonnieren geholt werden (Retain-Message).
-  - Konfigurierbarkeit für Sensordaten im GFI wurde erweitert.
+    - Ladestrategien für http- und mqtt-Protokolle wurden in extra Module ausgelagert.
+    - Abonnements können auf Browserextent reduziert werden.
+    - Abruf von sämtlichen Daten läuft nun komplett asynchron.
+    - Letzter Status kann direkt beim Abonnieren geholt werden (Retain-Message).
+    - Konfigurierbarkeit für Sensordaten im GFI wurde erweitert.
 - GeoJson: Werden als default in EPSG:4326 gelesen, können aber über crs einen eigenen EPSG Code mitgeben.
 - ParametricURL: Neue Parameter zoomToExtent und zoomToGeometry, zoomt auf einen in der URL angegebenen Kartenausschnitt bzw. auf eine ausgewählte Geometrie.
 - MasterportalAPI: Einbinden der MasterportalAPI als Kern des Masterportals.
