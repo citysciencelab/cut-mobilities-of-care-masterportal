@@ -124,7 +124,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         editBtnText: "",
         downloadBtnText: "",
         deleteBtnText: "",
-        deleteAllBtnText: ""
+        deleteAllBtnText: "",
+        idCounter: 0
     }),
     /**
      * @class DrawModel
@@ -946,8 +947,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {ol/style/Style} style
      */
     getStyle: function () {
-        var style = new Style(),
-            drawType = this.get("drawType"),
+        const drawType = this.get("drawType"),
             color = this.get("color"),
             colorContour = this.get("colorContour"),
             text = this.get("text"),
@@ -956,6 +956,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             strokeWidth = this.get("strokeWidth"),
             radius = this.get("radius"),
             zIndex = this.get("zIndex");
+        let style = new Style();
 
         if (drawType.hasOwnProperty("text") && drawType.text === this.get("writeText")) {
             style = this.getTextStyle(color, text, fontSize, font, 9999);
@@ -1032,7 +1033,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
-     * Creates and returns a feature style for points, lines or polygons and returns it
+     * Creates and returns a feature style for points, lines or polygon and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
