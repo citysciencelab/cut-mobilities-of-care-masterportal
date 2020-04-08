@@ -76,7 +76,8 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
          * @type {number}
          */
         "textStrokeWidth": 3,
-        "labelField": ""
+        "labelField": "",
+        "textSuffix": ""
     },
 
     initialize: function (feature, styles, isClustered) {
@@ -163,10 +164,15 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
     createLabeledTextStyle: function () {
         const feature = this.get("feature"),
             featureProperties = feature.getProperties(),
-            labelField = this.get("labelField");
+            labelField = this.get("labelField"),
+            textSuffix = this.get("textSuffix");
+        let text = featureProperties && featureProperties.hasOwnProperty(labelField) ? featureProperties[labelField] : "undefined";
 
+        if (textSuffix !== "") {
+            text = text + " " + textSuffix;
+        }
         return new Text({
-            text: featureProperties && featureProperties.hasOwnProperty(labelField) ? featureProperties[labelField] : "undefined",
+            text: text,
             textAlign: this.get("textAlign"),
             offsetX: this.get("textOffsetX"),
             offsetY: this.get("textOffsetY"),
