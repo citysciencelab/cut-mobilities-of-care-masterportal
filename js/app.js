@@ -1,4 +1,5 @@
 import Vue from "vue";
+import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
 import store from "../src/store";
 import RestReaderList from "../modules/restReader/collection";
@@ -94,7 +95,8 @@ function loadApp () {
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
         /* eslint-disable no-undef */
-    let app = {};
+    let app = {},
+        i18n;
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -117,14 +119,19 @@ function loadApp () {
     }
 
     Vue.config.productionTip = false;
+    Vue.use(VueI18Next);
+
+    i18n = new VueI18Next(i18next);
+
+    store.commit("addConfigJsToStore", Config);
+
     app = new Vue({
         el: "#vue-root",
         name: "VueApp",
         render: h => h(App),
-        store
+        store,
+        i18n
     });
-
-    app.$store.commit("addConfigJsToStore", Config);
 
     app.$mount();
 
@@ -448,10 +455,6 @@ function loadApp () {
     sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
-    }
-
-    if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {
-        new LanguageView();
     }
 
     new HighlightFeature();

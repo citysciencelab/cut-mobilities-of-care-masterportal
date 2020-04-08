@@ -13,38 +13,77 @@ export default {
         return {
             coordinatesEastingField: "",
             coordinatesNorthingField: "",
-            coordinatesEastingLabel: "Rechtswert",
-            coordinatesNorthingLabel: "Hochwert"
+            storePath: this.$store.state.Tools.SupplyCoord
         };
     },
     computed: {
-        active () {
-            return this.$store.state.Tools.SupplyCoord.active;
+        active: {
+            get () {
+                return this.storePath.active;
+            },
+            set (val) {
+                this.$store.commit("Tools/SupplyCoord/active", val);
+            }
         },
-        updatePosition () {
-            return this.$store.state.Tools.SupplyCoord.updatePosition;
-        },
-        projections () {
-            return this.$store.state.Tools.SupplyCoord.projections;
-        },
-        renderToWindow () {
-            return this.$store.state.Tools.SupplyCoord.renderToWindow;
-        },
-        icon () {
-            return this.$store.state.Tools.SupplyCoord.glyphicon;
-        },
-        title () {
-            return this.$store.state.Tools.SupplyCoord.title;
-        },
-        currentProjectionName () {
-            return this.$store.state.Tools.SupplyCoord.currentProjectionName;
+        currentProjectionName: {
+            get () {
+                return this.storePath.currentProjectionName;
+            },
+            set (val) {
+                this.$store.commit("Tools/SupplyCoord/currentProjectionName", val);
+            }
         },
         currentSelection: {
             get () {
-                return this.$store.state.Tools.SupplyCoord.currentSelection;
+                return this.storePath.currentSelection;
             },
             set (newValue) {
                 this.$store.commit("Tools/SupplyCoord/currentSelection", newValue);
+            }
+        },
+        icon () {
+            return this.storePath.glyphicon;
+        },
+        mapProjection: {
+            get () {
+                return this.storePath.mapProjection;
+            },
+            set (val) {
+                this.$store.commit("Tools/SupplyCoord/mapProjection", val);
+            }
+        },
+        projections: {
+            get () {
+                return this.storePath.projections;
+            },
+            set (val) {
+                this.$store.commit("Tools/SupplyCoord/projections", val);
+            }
+        },
+        positionMapProjection: {
+            get () {
+                return this.storePath.positionMapProjection;
+            }, set (val) {
+                this.$store.commit("Tools/SupplyCoord/positionMapProjection", val);
+            }
+        },
+        renderToWindow () {
+            return this.storePath.renderToWindow;
+        },
+        selectPointerMove: {
+            get () {
+                return this.storePath.selectPointerMove;
+            },
+            set (val) {
+                this.$store.commit("Tools/SupplyCoord/selectPointerMove", val);
+            }
+        },
+        updatePosition: {
+            get () {
+                return this.storePath.updatePosition;
+            },
+            set (val) {
+                this.$store.commit("Tools/SupplyCoord/updatePosition", val);
             }
         }
     },
@@ -65,7 +104,7 @@ export default {
                 this.changedPosition();
             }
             else {
-                this.$store.commit("Tools/SupplyCoord/updatePosition", true);
+                this.updatePosition = true;
                 this.removeInteraction();
                 myBus.stopListening(Radio.channel("Map", "clickedWindowPosition"));
             }
@@ -76,31 +115,29 @@ export default {
     },
     methods: {
         selectionChanged (event) {
-            this.$store.commit("Tools/SupplyCoord/currentSelection", event.target.value);
+            this.currentSelection = event.target.value;
             this.changedPosition(event.target.value);
         },
         positionClicked: function (position) {
             const isViewMobile = Radio.request("Util", "isViewMobile"),
-                updatePosition = isViewMobile
-                    ? true
-                    : this.$store.state.Tools.SupplyCoord.updatePosition;
+                updatePosition = isViewMobile ? true : this.updatePosition;
 
-            this.$store.commit("Tools/SupplyCoord/positionMapProjection", position);
+            this.positionMapProjection = position;
             this.changedPosition(position);
-            this.$store.commit("Tools/SupplyCoord/updatePosition", !updatePosition);
+            this.updatePosition = !updatePosition;
             Radio.trigger("MapMarker", "showMarker", position);
         },
         setCoordinates: function (evt) {
             const position = evt.coordinate;
 
-            if (this.$store.state.Tools.SupplyCoord.updatePosition) {
-                this.$store.commit("Tools/SupplyCoord/positionMapProjection", position);
+            if (this.updatePosition) {
+                this.positionMapProjection = position;
                 this.changedPosition(position);
             }
         },
         createInteraction () {
-            this.$store.commit("Tools/SupplyCoord/projections", getProjections());
-            this.$store.commit("Tools/SupplyCoord/mapProjection", Radio.request("MapView", "getProjection"));
+            this.projections = getProjections();
+            this.mapProjection = Radio.request("MapView", "getProjection");
             const pointerMove = new Pointer(
                 {
                     handleMoveEvent: function (evt) {
@@ -113,46 +150,43 @@ export default {
                 this
             );
 
-            this.$store.commit("Tools/SupplyCoord/selectPointerMove", pointerMove);
+            this.selectPointerMove = pointerMove;
             Radio.trigger("Map", "addInteraction", pointerMove);
         },
         removeInteraction () {
-            Radio.trigger("Map", "removeInteraction", this.$store.state.Tools.SupplyCoord.selectPointerMove);
-            this.$store.commit("Tools/SupplyCoord/selectPointerMove", null);
+            Radio.trigger("Map", "removeInteraction", this.selectPointerMove);
+            this.selectPointerMove = null;
         },
         checkPosition (position) {
-            if (this.$store.state.Tools.SupplyCoord.updatePosition) {
+            if (this.updatePosition) {
                 Radio.trigger("MapMarker", "showMarker", position);
-                this.$store.commit("Tools/SupplyCoord/positionMapProjection", position);
+                this.positionMapProjection = position;
             }
         },
         changedPosition () {
-            const targetProjectionName = this.$store.state.Tools.SupplyCoord.currentSelection,
+            const targetProjectionName = this.currentSelection,
                 position = this.returnTransformedPosition(targetProjectionName),
                 targetProjection = this.returnProjectionByName(targetProjectionName);
 
-            this.$store.commit("Tools/SupplyCoord/currentProjectionName", targetProjectionName);
+            this.currentProjectionName = targetProjectionName;
             if (position) {
                 this.adjustPosition(position, targetProjection);
-                this.adjustWindow(targetProjection);
             }
         },
         returnTransformedPosition (targetProjection) {
-            const positionMapProjection = this.$store.state.Tools.SupplyCoord
-                .positionMapProjection;
             let positionTargetProjection = [0, 0];
 
-            if (positionMapProjection.length > 0) {
+            if (this.positionMapProjection.length > 0) {
                 positionTargetProjection = transformFromMapProjection(
                     Radio.request("Map", "getMap"),
                     targetProjection,
-                    positionMapProjection
+                    this.positionMapProjection
                 );
             }
             return positionTargetProjection;
         },
         returnProjectionByName (name) {
-            const projections = this.$store.state.Tools.SupplyCoord.projections;
+            const projections = this.projections;
 
             return _.find(projections, function (projection) {
                 return projection.name === name;
@@ -163,45 +197,32 @@ export default {
 
             // geographische Koordinaten
             if (targetProjection.projName === "longlat") {
-                coord = this.getHDMS(position);
+                coord = toStringHDMS(position);
                 easting = coord.substr(0, 13);
                 northing = coord.substr(14);
             }
             // kartesische Koordinaten
             else {
-                coord = this.getCartesian(position);
+                coord = toStringXY(position, 2);
                 easting = coord.split(",")[0].trim();
                 northing = coord.split(",")[1].trim();
             }
             this.coordinatesEastingField = easting;
             this.coordinatesNorthingField = northing;
         },
-        adjustWindow (targetProjection) {
-            // geographische Koordinaten
-            if (targetProjection.projName === "longlat") {
-                this.coordinatesEastingLabel = "Breite";
-                this.coordinatesNorthingLabel = "Länge";
-            }
-            // kartesische Koordinaten
-            else {
-                this.coordinatesEastingLabel = "Rechtswert";
-                this.coordinatesNorthingLabel = "Hochwert";
-            }
-        },
-        getHDMS (coord) {
-            return toStringHDMS(coord);
-        },
-        getCartesian (coord) {
-            return toStringXY(coord, 2);
-        },
         close () {
-            this.$store.commit("Tools/SupplyCoord/active", false);
+            this.active = false;
             // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.SupplyCoord.id});
+            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
 
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        label (key) {
+            const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
+
+            return "modules.tools.getCoord." + type + "." + key;
         }
     }
 };
@@ -209,7 +230,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="title"
+        :title="$t('modules.tools.getCoord.title')"
         :icon="icon"
         :active="active"
         :render-to-window="renderToWindow"
@@ -224,7 +245,7 @@ export default {
                     <label
                         for="coordSystemField"
                         class="col-md-5 col-sm-5 control-label"
-                    >Koordinatensystem</label>
+                    >{{ $t("modules.tools.getCoord.coordSystemField") }}</label>
                     <div class="col-md-7 col-sm-7">
                         <select
                             id="coordSystemField"
@@ -248,7 +269,7 @@ export default {
                         id="coordinatesEastingLabel"
                         for="coordinatesEastingField"
                         class="col-md-5 col-sm-5 control-label"
-                    >{{ coordinatesEastingLabel }}</label>
+                    >{{ $t(label("eastingLabel")) }}</label>
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="coordinatesEastingField"
@@ -265,7 +286,7 @@ export default {
                         id="coordinatesNorthingLabel"
                         for="coordinatesNorthingField"
                         class="col-md-5 col-sm-5 control-label"
-                    >{{ coordinatesNorthingLabel }}</label>
+                    >{{ $t(label("northingLabel")) }}</label>
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="coordinatesNorthingField"

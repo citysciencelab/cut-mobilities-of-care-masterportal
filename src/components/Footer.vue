@@ -1,6 +1,7 @@
 <script>
 import {mapGetters} from "vuex";
 import ScaleLine from "./ScaleLine.vue";
+import Language from "./Language.vue";
 import MousePosition from "./controls/MousePosition.vue";
 
 /* TODO implement missing feature toolModelId */
@@ -8,6 +9,7 @@ import MousePosition from "./controls/MousePosition.vue";
 export default {
     name: "Footer",
     components: {
+        Language,
         ScaleLine,
         MousePosition
     },
@@ -21,6 +23,9 @@ export default {
         },
         showVersion () {
             return this.footerConfig?.showVersion;
+        },
+        showLanguageSwitcher () {
+            return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
         }
     }
 };
@@ -56,7 +61,7 @@ export default {
             </template>
             <span class="spacer" />
             <ScaleLine />
-            <!-- TODO put LanguageSwitcher here (currently worked on in another branch) -->
+            <Language v-if="showLanguageSwitcher" />
         </template>
     </div>
 </template>
