@@ -43,8 +43,11 @@
         }
         .graph {
             width: 580px;
-            min-height: 260px;
             div[class^="trafficCountDiagram"] {
+                min-height: 285px;
+                &.inactive {
+                    display: none;
+                }
                 .dot {
                     cursor: pointer;
                     stroke: none;
@@ -83,13 +86,19 @@
                 }
             }
             .table {
-                margin-top: 20px;
-                margin-bottom: 10px;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                &.inactive {
+                    display: none;
+                }
             }
         }
         .padded {
             padding-left: 5px;
             padding-right: 5px;
+        }
+        .form-check {
+            padding: 0 5px;
         }
     }
     .tab-bottom {
@@ -98,6 +107,7 @@
             display: inline-block;
             width: 100%;
             .table-striped {
+                margin-top: 10px;
                 min-width: 280px;
                 width: 50%;
                 float: right;

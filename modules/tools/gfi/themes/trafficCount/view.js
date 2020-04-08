@@ -7,7 +7,8 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
     events: {
         "shown.bs.tab": "toggleTab",
         "remove": "destroy",
-        "click .btn": "toggleCalendar"
+        "click .btn": "toggleCalendar",
+        "change input.form-check-input": "toggleTableDiagram"
     },
 
     /**
@@ -89,15 +90,6 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         }
     },
 
-    /**
-     * adding the class dynamically into the bottom for current tab
-     * @param   {String} value element value
-     * @returns {Void}  -
-     */
-    setCurrentTabClassFooter: function (value) {
-        this.$el.find(".tab-bottom").removeClass().addClass("tab-bottom " + value);
-    },
-
     /** Setting the overflow dynamically to make sure there is no scrollbar to show if the content is not out of the range of the gfi fenster (there is a bug in firefox and IE)
      * @param {String} value element value
      * @returns {Void}  -
@@ -116,6 +108,15 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
                 $(".gfi-content").css("overflow", "auto");
             }
         }
+    },
+
+    /**
+     * adding the class dynamically into the bottom for current tab
+     * @param   {String} value element value
+     * @returns {Void}  -
+     */
+    setCurrentTabClassFooter: function (value) {
+        this.$el.find(".tab-bottom").removeClass().addClass("tab-bottom " + value);
     },
 
     /**
@@ -607,6 +608,31 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         const input = this.$el.find(evt.currentTarget).parents(".input-group").find("input");
 
         input.focus();
+    },
+
+    /**
+     * Showing the table or diagram with checkbox value
+     * @param   {Event} evt click event
+     * @returns {void}
+     */
+    toggleTableDiagram: function (evt) {
+        const inputId = evt.target.id,
+            currentTab = inputId.split("-")[1];
+        let toggledElementId;
+
+        if (inputId.includes("table")) {
+            toggledElementId = "#table" + currentTab;
+        }
+        else if (inputId.includes("diagram")) {
+            toggledElementId = "#diagram" + currentTab;
+        }
+
+        if (this.$(evt.target).prop("checked")) {
+            this.$el.find($(toggledElementId)).removeClass("inactive");
+        }
+        else {
+            this.$el.find($(toggledElementId)).addClass("inactive");
+        }
     },
 
     destroy: function () {
