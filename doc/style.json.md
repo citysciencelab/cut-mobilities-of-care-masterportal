@@ -407,6 +407,7 @@ Für weitere Informationen siehe auch die [Openlayers Beschreibung](https://open
 |textFillColor|   |Integer[]| [69, 96, 166, 1] |Füllfarbe des Textes in rgba.|
 |textStrokeColor|   |Integer[]| [240, 240, 240, 1] | Randfarbe des Textes in rgba.|
 |textStrokeWidth|   |Integer| 3 | Breite der Textstriche.|
+|textSuffix|nein|String|'""'|Suffix das hinter den Text gehängt wird.|
 
 > Hinweis: Eine Cluster-Beschriftung ist gegenüber dieser Beschriftung höher priorisiert.
 
