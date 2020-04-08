@@ -1033,7 +1033,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
-     * Creates and returns a feature style for points, lines or polygon and returns it
+     * Creates and returns a feature style for points, lines, or polygon and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
