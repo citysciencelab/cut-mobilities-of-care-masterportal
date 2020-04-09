@@ -737,10 +737,12 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         let stylePerValue = false;
 
         olFeature.set(scalingAttribute, barHeight);
-        stylePerValue = advancedStyle.createStyle(olFeature, false);
+        if (advancedStyle.hasOwnProperty("createStyle")) {
+            stylePerValue = advancedStyle.createStyle(olFeature, false);
 
-        image.push(stylePerValue.getImage().getSrc());
-        name.push(layername);
+            image.push(stylePerValue.getImage().getSrc());
+            name.push(layername);
+        }
 
         return [image, name];
     },
