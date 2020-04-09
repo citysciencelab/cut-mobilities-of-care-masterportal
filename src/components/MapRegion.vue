@@ -48,6 +48,7 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: end;
+            align-self: flex-end;
 
             height: 100%;
             width: 100%;

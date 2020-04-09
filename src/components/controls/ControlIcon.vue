@@ -68,8 +68,9 @@ export default {
     .inline {
         display: inline-block;
         text-align: center;
+        top: auto;
 
-        font-size: @font_size_huge;
+        font-size: calc(@icon_length_small - 0.35 * @icon_length_small);
         width: @icon_length_small;
         height: @icon_length_small;
     }

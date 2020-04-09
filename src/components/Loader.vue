@@ -1,63 +1,106 @@
 <script>
-// TODO this is just the HTML copied in - functions/CSS are still to be migrated
-//      maybe control loader via store module
+/* TODO
+ * Idea: control loader visibility via store module
+ * Concept:
+ *  - Store Module holds an array of keys (= strings)
+ *  - Any component/loading procedure/... has a key (its name)
+ *  - Anything may add its own key to the array of keys
+ *  - When done, they must remove their own key
+ * => As long as anything has its key registered, the loader is shown
+ */
 export default {
-    name: "Loader"
+    name: "Loader",
+    data () {
+        return {
+            imgUrl: "/img/ajax-loader.gif"
+        };
+    },
+    computed: {
+        simple () {
+            // TODO not yet controlled - should be in config.JSON or config.JS maybe?
+            return false;
+        }
+    }
 };
 </script>
 
 <template>
-    <!-- not yet implemented
-    <div id="loader">
-        <img src="../img/ajax-loader.gif">
-    </div>
-    -->
-    <div class="loading">
+    <div
+        id="loader"
+        :class="simple ? 'simple' : ''"
+    >
         <img
-            id="portal-logo"
-            src="https://geoportal-hamburg.de/lgv-config/img/Logo_Masterportal.svg"
+            v-if="simple"
+            class="simple-loader"
+            :src="imgUrl"
         >
-        <div id="portal-text">
-            Masterportal
-        </div>
-        <div id="init-loader">
-            <img src="../../img/ajax-loader.gif">
+        <div
+            v-else
+            class="complex-loader"
+        >
+            <img
+                class="portal-logo"
+                src="https://geoportal-hamburg.de/lgv-config/img/Logo_Masterportal.svg"
+                alt="Masterportal"
+            >
+            <div class="loader-text">
+                Masterportal
+            </div>
+            <img
+                class="loader-icon"
+                :src="imgUrl"
+            >
         </div>
     </div>
 </template>
 
 <style lang="less" scoped>
-    .loading {
-        position: absolute;
-        top: 30%;
-        left: 32.5%;
-        z-index: 9999;
-        text-align: center;
-        width: 35%;
-    }
-
-    .loading div {
-        font-size: 5vmin;
-        line-height: 130%;
-        margin-top: 5%;
-    }
-
-    /* currently not in use
+    @import "../variables.less";
     #loader {
-        background-color: rgba(0, 0, 0, 0.4);
-        color: #FFFFFF;
+        position: absolute;
         height: 100%;
-        position: absolute;
         width: 100%;
-        z-index: 2000;
-    }
 
-    #loader img {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        margin-left: -21px;
-        margin-top: -5px;
+        background-color: @secondary;
+        color: @secondary_contrast;
+
+        &.simple {
+            background-color: @shadow_overlay;
+        }
+
+        .simple-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .complex-loader {
+            position: absolute;
+
+            display: flex;
+            flex-direction: column;
+
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            text-align: center;
+
+            .portal-logo {
+                width: 35vw;
+            }
+
+            .loader-text {
+                font-family: @font_family_accent;
+                font-size: 5vmin;
+                line-height: 130%;
+                margin: 5% 0;
+            }
+
+            .loader-icon {
+                align-self: center;
+            }
+        }
     }
-    */
 </style>

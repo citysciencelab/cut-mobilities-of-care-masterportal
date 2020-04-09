@@ -71,7 +71,7 @@ import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
-import LanguageView from "../modules/language/view";
+// import LanguageView from "../modules/language/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
@@ -93,10 +93,10 @@ function loadApp () {
         layerInformationModelSettings = {},
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
-        style = Radio.request("Util", "getUiStyle");
+        style = Radio.request("Util", "getUiStyle"),
+        i18n = new VueI18Next(i18next);
         /* eslint-disable no-undef */
-    let app = {},
-        i18n;
+    let app = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -120,8 +120,6 @@ function loadApp () {
 
     Vue.config.productionTip = false;
     Vue.use(VueI18Next);
-
-    i18n = new VueI18Next(i18next);
 
     store.commit("addConfigJsToStore", Config);
 
