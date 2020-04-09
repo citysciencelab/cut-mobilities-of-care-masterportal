@@ -98,29 +98,12 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
         if (isClustered && feature.get("features").length > 1 && this.get("clusterTextType") !== "none") {
             return this.createClusteredTextStyle();
         }
-        // else if (this.checkLabelField()) {
         else if (labelField) {
             return this.createLabeledTextStyle();
         }
 
         return new Text();
     },
-
-    /**
-     * Returns true if labelField is properly set.
-     * @returns {Boolean} labelField is properly set
-     */
-    // checkLabelField: function () {
-    //     const feature = this.get("feature"),
-    //         featureProperties = feature.getProperties(),
-    //         labelField = this.get("labelField") ? this.get("labelField") : null;
-
-    //     if (labelField && featureProperties && featureProperties.hasOwnProperty(labelField)) {
-    //         return true;
-    //     }
-
-    //     return false;
-    // },
 
     /**
     * Creates text style for clustered features. The text attribute is set according to "clusterTextType".
