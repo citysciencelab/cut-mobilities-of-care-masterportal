@@ -39,6 +39,32 @@ const StyleModel = Backbone.Model.extend(/** @lends StyleModel.prototype */{
 
             this.set(key, value);
         }
+    },
+    prepareField: function (featureProperties, field) {
+        const isPath = field.startsWith("@");
+        let value = field;
+
+        if (isPath) {
+            value = this.getValueFromPath(featureProperties, value);
+        }
+        else {
+            value = featureProperties && featureProperties.hasOwnProperty(field) ? featureProperties[field] : "undefined";
+        }
+        return value;
+    },
+    getValueFromPath: function (featureProperties, path) {
+        const pathParts = path.substring(1).split(".");
+        let property = featureProperties,
+            value = "undefined";
+
+        pathParts.forEach(part => {
+            property = property ? property[part] : undefined;
+        });
+
+        if (property) {
+            value = property;
+        }
+        return value;
     }
 });
 
