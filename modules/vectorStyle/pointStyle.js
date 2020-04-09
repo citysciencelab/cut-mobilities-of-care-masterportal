@@ -576,7 +576,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             circleBarCircleStrokeColor = this.returnColor(this.get("circleBarCircleStrokeColor"), "hex"),
             circleBarCircleStrokeWidth = this.get("circleBarCircleStrokeWidth"),
             circleBarLineStrokeColor = this.returnColor(this.get("circleBarLineStrokeColor"), "hex"),
-            scalingAttribute = feature.get(this.get("scalingAttribute")),
+            featureProperties = feature.getProperties(),
+            scalingAttribute = this.prepareField(featureProperties, this.get("scalingAttribute")),
             stateValue = scalingAttribute !== undefined && scalingAttribute.indexOf(" ") !== -1 ? scalingAttribute.split(" ")[0] : scalingAttribute,
             size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius),
             barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor);
