@@ -92,12 +92,14 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
     */
     getStyle: function () {
         const isClustered = this.get("isClustered"),
-            feature = this.get("feature");
+            feature = this.get("feature"),
+            labelField = this.get("labelField");
 
         if (isClustered && feature.get("features").length > 1 && this.get("clusterTextType") !== "none") {
             return this.createClusteredTextStyle();
         }
-        else if (this.checkLabelField()) {
+        // else if (this.checkLabelField()) {
+        else if (labelField) {
             return this.createLabeledTextStyle();
         }
 
@@ -108,17 +110,17 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
      * Returns true if labelField is properly set.
      * @returns {Boolean} labelField is properly set
      */
-    checkLabelField: function () {
-        const feature = this.get("feature"),
-            featureProperties = feature.getProperties(),
-            labelField = this.get("labelField") ? this.get("labelField") : null;
+    // checkLabelField: function () {
+    //     const feature = this.get("feature"),
+    //         featureProperties = feature.getProperties(),
+    //         labelField = this.get("labelField") ? this.get("labelField") : null;
 
-        if (labelField && featureProperties && featureProperties.hasOwnProperty(labelField)) {
-            return true;
-        }
+    //     if (labelField && featureProperties && featureProperties.hasOwnProperty(labelField)) {
+    //         return true;
+    //     }
 
-        return false;
-    },
+    //     return false;
+    // },
 
     /**
     * Creates text style for clustered features. The text attribute is set according to "clusterTextType".
@@ -164,9 +166,8 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
     createLabeledTextStyle: function () {
         const feature = this.get("feature"),
             featureProperties = feature.getProperties(),
-            labelField = this.get("labelField"),
             textSuffix = this.get("textSuffix");
-        let text = featureProperties && featureProperties.hasOwnProperty(labelField) ? featureProperties[labelField] : "undefined";
+        let text = this.prepareField(featureProperties, this.get("labelField"));
 
         if (textSuffix !== "") {
             text = text + " " + textSuffix;
