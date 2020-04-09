@@ -26,9 +26,6 @@ describe("tools/gfi/themes/Model", function () {
     });
 
     describe("translateGFI", function () {
-        it("should return an empty array for undefined input", function () {
-            expect(model.translateGFI(undefined, undefined)).to.be.an("array").that.is.empty;
-        });
         it("should return an correct array for gfiList and gfiAttributes input", function () {
             var gfiList = [
                     {
