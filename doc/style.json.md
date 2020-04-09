@@ -301,7 +301,7 @@ Für jedes Feature wird ein dynamischer Style gesetzt. Dieser Style unterstützt
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |scalingShape| x |String||Angabe der Darstellungsart: CIRCLE_BAR.|
-|scalingAttribute| x |String||Attribut das zur Darstellung verwendet werden soll.|
+|scalingAttribute| x |String||Attribut das zur Darstellung verwendet werden soll. Kann auch als [Objektpfadverweis](#markdown-header-objektpfadverweise) genutzt werden.|
 |scalingValues|   |Object[]||Attributwerte denen eine Farbe zugeordnet ist, z.B. `{"charging" : [220, 0, 0, 1]}`. Innerhalb des Objektes können beliebig viele Attributwerte angegeben werden.|
 |scalingValueDefaultColor|   |Integer[]|[0, 0, 0, 1]|Standardfarbe für alle Attributwerte die nicht in *scalingValues* definiert sind.|
 |circleSegmentsRadius|   |Float|10|Radius der Kreissegmente|
