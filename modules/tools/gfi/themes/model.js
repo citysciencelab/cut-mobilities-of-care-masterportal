@@ -404,66 +404,127 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             return pgfi;
         }
 
-        _.each(gfiList, function (element) {
-            var preGfi = {},
-                gfi = {};
+        gfiList.forEach(element => {
+            let gfi = this.removeInvalidEntries(element);
 
-            // get rid of invalid keys and keys with invalid values; trim values
-            _.each(element, function (value, key) {
-                var valueName = value;
-
-                if (this.get("gfiTheme") === "table") {
-                    if (this.isValidKey(key)) {
-                        preGfi[key] = valueName;
-                    }
-                }
-                else if (this.isValidKey(key) && this.isValidValue(valueName)) {
-                    if (this.isMultiTag(value)) {
-                        valueName = JSON.parse(valueName).multiTag;
-                    }
-                    if (_.isArray(valueName)) {
-                        valueName = valueName.join("</br>");
-                    }
-                    preGfi[key] = _.isString(valueName) ? valueName.trim() : valueName;
-                }
-            }, this);
             if (gfiAttributes === "showAll") {
-                // beautify keys
-                _.each(preGfi, function (value, key) {
-                    var keyName = this.beautifyString(key);
-
-                    gfi[keyName] = value;
-                }, this);
+                gfi = this.beautifyGfiKeys(gfi);
             }
             else {
-                preGfi = this.allKeysToLowerCase(preGfi);
-                if (this.get("gfiParams") && this.get("gfiParams").hasOwnProperty("iFrameAttributesPrefix")) {
-                    preGfi = this.removeIFrameAttributes(preGfi, this.get("gfiParams").iFrameAttributesPrefix);
-                }
-                _.each(gfiAttributes, function (value, key) {
-                    var name,
-                        origName = key,
-                        translatedName = value;
-
-                    if (typeof translatedName === "string") {
-                        name = preGfi[origName.toLowerCase()];
-                    }
-                    if (typeof translatedName === "object") {
-                        name = this.getNameFromObject(preGfi, origName.toLowerCase(), translatedName);
-                        translatedName = translatedName.name;
-                    }
-
-                    if (name) {
-                        gfi[translatedName] = name;
-                    }
-                }, this);
+                gfi = this.prepareGfiByAttributes(gfi, gfiAttributes);
             }
             if (_.isEmpty(gfi) !== true) {
                 pgfi.push(gfi);
             }
-        }, this);
+        });
 
         return pgfi;
+    },
+    prepareGfiByAttributes: function (gfi, attributes) {
+        const preparedGfi = {};
+
+        Object.keys(attributes).forEach(key => {
+            let newKey = attributes[key],
+                value = this.prepareGfiValue(gfi, key);
+
+            if (typeof newKey === "object") {
+                value = this.prepareGfiValueFromObject(value, newKey);
+                newKey = newKey.name;
+            }
+            preparedGfi[newKey] = value;
+        });
+
+        return preparedGfi;
+    },
+
+    prepareGfiValueFromObject: function (value, obj) {
+        const type = obj.hasOwnProperty("type") ? obj.type : "string",
+            format = obj.hasOwnProperty("format") ? obj.format : "DD.MM.YYYY HH:mm:ss";
+        let preparedValue = value,
+            date;
+
+        preparedValue = this.appendSuffix(preparedValue, obj.suffix);
+        switch (type) {
+            case "date": {
+                date = moment(String(preparedValue));
+                if (date.isValid()) {
+                    preparedValue = moment(String(preparedValue)).format(format);
+                }
+                break;
+            }
+            // default equals to obj.type === "string"
+            default: {
+                preparedValue = String(preparedValue);
+            }
+        }
+
+        return preparedValue;
+    },
+
+    appendSuffix: function (value, suffix) {
+        let valueWithSuffix = value;
+
+        if (suffix) {
+            valueWithSuffix = String(valueWithSuffix) + " " + suffix;
+        }
+        return valueWithSuffix;
+    },
+
+    prepareGfiValue: function (gfi, key) {
+        const isPath = key.startsWith("@");
+        let value = gfi[key];
+
+        if (isPath) {
+            value = this.getValueFromPath(gfi, key);
+        }
+        return value;
+    },
+
+    getValueFromPath: function (gfi, path) {
+        const pathParts = path.substring(1).split(".");
+        let value = gfi;
+
+        pathParts.forEach(part => {
+            value = value ? value[part] : undefined;
+        });
+
+        return value;
+    },
+
+    beautifyGfiKeys: function (gfi) {
+        const beautifiedGfi = {};
+
+        Object.keys(gfi).forEach(key => {
+            const value = gfi[key],
+                beautifiedKey = this.beautifyString(key);
+
+            beautifiedGfi[beautifiedKey] = value;
+        });
+        return beautifiedGfi;
+    },
+
+    // get rid of invalid keys and keys with invalid values; trim values
+    removeInvalidEntries: function (element) {
+        const gfi = {};
+
+        Object.keys(element).forEach(key => {
+            let value = element[key];
+
+            if (this.get("gfiTheme") === "table") {
+                if (this.isValidKey(key)) {
+                    gfi[key] = value;
+                }
+            }
+            else if (this.isValidKey(key)) {
+                if (this.isMultiTag(value)) {
+                    value = JSON.parse(value).multiTag;
+                    value = value.join("</br>");
+                }
+                value = typeof value === "string" ? value.trim() : value;
+                gfi[key] = value;
+            }
+        });
+        return gfi;
     },
 
     /**
@@ -487,97 +548,6 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return gfi;
     },
 
-    getNameFromObject: function (preGfi, origName, translatedName) {
-        let name = this.translateNameFromObject(preGfi, origName, translatedName.condition),
-            date;
-
-        const type = translatedName.hasOwnProperty("type") ? translatedName.type : "string",
-            format = translatedName.hasOwnProperty("format") ? translatedName.format : "DD.MM.YYYY HH:mm:ss";
-
-        if (name) {
-            if (translatedName.hasOwnProperty("suffix")) {
-                name = String(name) + " " + translatedName.suffix;
-            }
-            if (type === "date") {
-                date = moment(String(name));
-
-                if (date.isValid()) {
-                    name = moment(String(name)).format(format);
-                }
-            }
-            else if (type === "string") {
-                name = String(name);
-            }
-            else {
-                console.error("getNameFromObject:Could not transform " + name + "into a data. Taking default value");
-            }
-        }
-        return name;
-    },
-
-    /**
-     * Translates the given name from gfiAttribute Object based on the condition type
-     * @param {Object} preGfi Object of all values that the feature has.
-     * @param {String} origName The name to be proofed against the keys.
-     * @param {Object} condition GFI-Attribute Object.
-     * @returns {String} - name if condition matches exactly one key.
-     */
-    translateNameFromObject: function (preGfi, origName, condition) {
-        const length = origName.length;
-        let name,
-            matches = [];
-
-        if (condition === "contains") {
-            matches = Object.keys(preGfi).filter(key => {
-                return key.length !== length && key.includes(origName);
-            });
-            if (this.checkIfMatchesValid(origName, condition, matches)) {
-                name = preGfi[matches[0]];
-            }
-        }
-        else if (condition === "startsWith") {
-            matches = Object.keys(preGfi).filter(key => {
-                return key.length !== length && key.startsWith(origName);
-            });
-            if (this.checkIfMatchesValid(origName, condition, matches)) {
-                name = preGfi[matches[0]];
-            }
-        }
-        else if (condition === "endsWith") {
-            matches = Object.keys(preGfi).filter(key => {
-                return key.length !== length && key.endsWith(origName);
-            });
-            if (this.checkIfMatchesValid(origName, condition, matches)) {
-                name = preGfi[matches[0]];
-            }
-        }
-        else {
-            name = preGfi[origName];
-        }
-        return name;
-    },
-
-    /**
-     * Checks if the matches have exact one entry.
-     * @param {String} origName The name to be proofed against the keys.
-     * @param {String} condition Matching conditon.
-     * @param {String[]} matches An array of all keys matching the condition.
-     * @returns {Boolean} - Flag of array has exacly one entry.
-     */
-    checkIfMatchesValid: function (origName, condition, matches) {
-        let isValid = false;
-
-        if (matches.length === 0) {
-            console.error("no match found for gfi translation: '" + condition + "', '" + origName + "'");
-        }
-        else if (matches.length > 1) {
-            console.error("more than 1 match found for gfi translation: " + condition + "', '" + origName + "'");
-        }
-        else {
-            isValid = true;
-        }
-        return isValid;
-    },
     /**
      * set all keys from object to lowercase
      * @param {object} obj - key value pairs
