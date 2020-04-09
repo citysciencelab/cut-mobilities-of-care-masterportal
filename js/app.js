@@ -93,8 +93,7 @@ function loadApp () {
         layerInformationModelSettings = {},
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
-        style = Radio.request("Util", "getUiStyle"),
-        i18n = new VueI18Next(i18next);
+        style = Radio.request("Util", "getUiStyle");
         /* eslint-disable no-undef */
     let app = {};
 
@@ -119,16 +118,17 @@ function loadApp () {
     }
 
     Vue.config.productionTip = false;
-    Vue.use(VueI18Next);
 
     store.commit("addConfigJsToStore", Config);
+
+    Vue.use(VueI18Next);
 
     app = new Vue({
         el: "#vue-root",
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n
+        i18n: new VueI18Next(i18next)
     });
 
     app.$mount();
