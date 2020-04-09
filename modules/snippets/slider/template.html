@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <form class="form-inline">
     <div class= "title-values pull-left">
+        <% if (withLabel === true && displayName) { %>
         <div class="form-group form-group-sm">
             <label><%= displayName %></label>
         </div>
+        <% } %>
         <div class="form-group form-group-sm pull-right">
             <% if (editableValueBox===true) { %>
-            <input type="text" class="form-control form-minimum valueBox" placeholder="<%= valuesCollection.at(0).get('value') %>">
-            <% } else { %>
-            <label class="valueBox"><% print (this.model.getValueText(valuesCollection.at(0).get("value"))); %></label>
+                <input type="text" class="form-control form-minimum valueBox" placeholder="<%= valuesCollection.at(0).get('value') %>">
+            <% } else if (withLabel === true) { %>
+                <label class="valueBox"><% print (this.model.getValueText(valuesCollection.at(0).get("value"))); %></label>
             <% } %>
         </div>
     </div>
-    <% if (typeof infoText !== "undefined") { %>
+    <% if (infoText !== undefined) { %>
     <div class="info-icon">
         <span class="glyphicon glyphicon-info-sign"></span>
     </div>
@@ -20,6 +22,6 @@
 </form>
 </div>
 <input class="slider" type="text" data-slider-tooltip="hide" />
-<% if (!_.isUndefined(this.model.get("infoText"))) { %>
+<% if (this.model.get("infoText") !== undefined) { %>
     <div class="info-text"><%= infoText %></div>
 <% } %>

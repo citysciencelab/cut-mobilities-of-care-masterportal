@@ -1,4 +1,5 @@
 import Template from "text-loader!./template.html";
+import TemplateGroups from "text-loader!./templateGroups.html";
 import "bootstrap-select";
 /**
  * @member Template
@@ -31,20 +32,25 @@ const DropdownView = Backbone.View.extend(/** @lends DropdownView.prototype */{
     },
     model: {},
     className: "dropdown-container",
-    // className: "container-fluid",
     template: _.template(Template),
+    templateGroups: _.template(TemplateGroups),
 
     /**
      * renders the view depending on the isOpen attribute
      * @return {Object} - this
      */
     render: function () {
-        var attr;
+        let attr;
 
         if (this.model.get("isOpen") === false) {
             attr = this.model.toJSON();
 
-            this.$el.html(this.template(attr));
+            if (this.model.get("isGrouped")) {
+                this.$el.html(this.templateGroups(attr));
+            }
+            else {
+                this.$el.html(this.template(attr));
+            }
             this.initDropdown();
             this.markSelectedValues();
         }
@@ -59,7 +65,7 @@ const DropdownView = Backbone.View.extend(/** @lends DropdownView.prototype */{
      */
     initDropdown: function () {
         this.$el.find(".selectpicker").selectpicker({
-            width: _.isUndefined(this.model.get("infoText")) ? "100%" : "85%",
+            width: this.model.get("infoText") === undefined ? "100%" : "90%",
             selectedTextFormat: "static",
             size: this.model.get("numOfOptions")
         });
@@ -70,10 +76,10 @@ const DropdownView = Backbone.View.extend(/** @lends DropdownView.prototype */{
      * @return {void}
      */
     markSelectedValues: function () {
-        var models = this.model.get("valuesCollection").where({isSelected: true}),
+        const models = this.model.get("valuesCollection").where({isSelected: true}),
             values = [];
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             values.push(model.get("value"));
         });
         this.$el.find(".selectpicker").selectpicker("val", values);
@@ -105,7 +111,7 @@ const DropdownView = Backbone.View.extend(/** @lends DropdownView.prototype */{
     },
 
     toggleInfoText: function () {
-        var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
+        const isInfoTextVisible = this.$el.find(".info-text").is(":visible");
 
         if (!isInfoTextVisible) {
             this.model.trigger("hideAllInfoText");

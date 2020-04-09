@@ -21,6 +21,10 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         this.listenTo(this.model, {
             "change:isActive": this.toggleIsActiveClass
         });
+        // Listener for addOns so that multilanguage geht initially adjusted.
+        this.listenTo(this.model, {
+            "change:name": this.rerender
+        });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 this.toggleSupportedVisibility(mode);
@@ -45,6 +49,16 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         }
         return this;
+    },
+
+    /**
+     * Rerenders the view. Gets triggered on name change
+     * @returns {void}
+     */
+    rerender: function () {
+        const attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
     },
 
     /**
@@ -134,10 +148,23 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
                 // addons are initialized with 'new Tool(attrs, options);' Then the model is replaced after importing the addon.
                 // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
                 this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
+                // for the highlighting in the menu -> view-model-binding is lost by addons
+                this.listenTo(this.model, {
+                    "change:isActive": this.toggleIsActiveClass
+                });
             }
-            this.model.collection.setActiveToolsToFalse(this.model);
-            this.model.setIsActive(true);
+            if (!this.model.get("isActive")) {
+                // active the tool if it is not active
+                // deactivate all other modules as long as the tool is not set to "keepOpen"
+                this.model.collection.setActiveToolsToFalse(this.model);
+                this.model.setIsActive(true);
+            }
+            else {
+                // deactivate tool if it is already active
+                this.model.setIsActive(false);
+            }
         }
+
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
     }

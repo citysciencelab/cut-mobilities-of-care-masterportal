@@ -8,6 +8,10 @@ html, body {
     font-family: MasterPortalFont, Arial, sans-serif;
 }
 
+.font-bold {
+    font-family: 'MasterPortalFont Bold','Arial Narrow',Arial,sans-serif;
+}
+
 label {
     font-weight: normal;
 }
@@ -29,6 +33,9 @@ label {
     }
     html, body {
         font-size: 16px;
+    }
+    #portalTitle {
+        display:none;
     }
 }
 

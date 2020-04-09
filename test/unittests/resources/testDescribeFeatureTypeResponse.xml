@@ -1,0 +1,118 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml" xmlns:app="http://www.deegree.org/app" xmlns:xlink="http://www.w3.org/1999/xlink" targetNamespace="http://www.deegree.org/app" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <import namespace="http://www.opengis.net/gml" schemaLocation="http://schemas.opengis.net/gml/3.1.1/base/gml.xsd"/>
+  <element name="hh_schulen_dwh" substitutionGroup="gml:_Feature">
+    <complexType>
+      <complexContent>
+        <extension base="gml:AbstractFeatureType">
+          <sequence>
+            <element name="Name" minOccurs="0" type="string"/>
+            <element name="Schul_ID" minOccurs="0" type="string"/>
+            <element name="Schulform" minOccurs="0" type="string"/>
+            <element name="Schulicon" minOccurs="0" type="string"/>
+            <element name="Adresse" minOccurs="0" type="string"/>
+            <element name="Ort" minOccurs="0" type="string"/>
+            <element name="bezirk" minOccurs="0" type="string"/>
+            <element name="stadtteil" minOccurs="0" type="string"/>
+            <element name="Telefon" minOccurs="0" type="string"/>
+            <element name="FAX" minOccurs="0" type="string"/>
+            <element name="rechtsform" minOccurs="0" type="string"/>
+            <element name="internet" minOccurs="0" type="string"/>
+            <element name="email" minOccurs="0" type="string"/>
+            <element name="is_rebbz" minOccurs="0" type="boolean"/>
+            <element name="name_rebbz" minOccurs="0" type="string"/>
+            <element name="schueleranzahl" minOccurs="0" type="integer"/>
+            <element name="schueleranzahl_schuljahr" minOccurs="0" type="string"/>
+            <element name="the_geom" minOccurs="0" type="gml:PointPropertyType"/>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+  <element name="hh_schulen_eingaenge" substitutionGroup="gml:_Feature">
+    <complexType>
+      <complexContent>
+        <extension base="gml:AbstractFeatureType">
+          <sequence>
+            <element name="Schul_ID" minOccurs="0" type="string"/>
+            <element name="Eingangsart" minOccurs="0" type="string"/>
+            <element name="Adresse" minOccurs="0" type="string"/>
+            <element name="the_geom" minOccurs="0" type="gml:PointPropertyType"/>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+  <element name="staatliche_schulen" substitutionGroup="gml:_Feature">
+    <complexType>
+      <complexContent>
+        <extension base="gml:AbstractFeatureType">
+          <sequence>
+            <element name="abschluss" minOccurs="0" type="string"/>
+            <element name="adresse_ort" minOccurs="0" type="string"/>
+            <element name="adresse_strasse_hausnr" minOccurs="0" type="string"/>
+            <element name="ansprechp_klasse_1" minOccurs="0" type="string"/>
+            <element name="ansprechp_klasse_5" minOccurs="0" type="string"/>
+            <element name="ansprechp_buero" minOccurs="0" type="string"/>
+            <element name="anzahl_schueler" minOccurs="0" type="integer"/>
+            <element name="anzahl_schueler_gesamt" minOccurs="0" type="string"/>
+            <element name="auszeichnung" minOccurs="0" type="string"/>
+            <element name="bezirk" minOccurs="0" type="string"/>
+            <element name="bilingual" minOccurs="0" type="string"/>
+            <element name="einzugsgebiet" minOccurs="0" type="string"/>
+            <element name="fax" minOccurs="0" type="string"/>
+            <element name="ferienbetreuung_anteil" minOccurs="0" type="string"/>
+            <element name="foerderart" minOccurs="0" type="string"/>
+            <element name="fremdsprache" minOccurs="0" type="string"/>
+            <element name="fremdsprache_mit_klasse" minOccurs="0" type="string"/>
+            <element name="ganztagsform" minOccurs="0" type="string"/>
+            <element name="is_rebbz" minOccurs="0" type="string"/>
+            <element name="kantine_vorh" minOccurs="0" type="boolean"/>
+            <element name="kapitelbezeichnung" minOccurs="0" type="string"/>
+            <element name="kernunterricht" minOccurs="0" type="string"/>
+            <element name="kernzeitbetreuung" minOccurs="0" type="string"/>
+            <element name="kiosk_vorh" minOccurs="0" type="boolean"/>
+            <element name="lgv_standortk_erwachsenenbildung" minOccurs="0" type="string"/>
+            <element name="mittagspause" minOccurs="0" type="string"/>
+            <element name="name_schulleiter" minOccurs="0" type="string"/>
+            <element name="name_stellv_schulleiter" minOccurs="0" type="string"/>
+            <element name="name_oberstufenkoordinator" minOccurs="0" type="string"/>
+            <element name="nutzung_kantine_anteil" minOccurs="0" type="string"/>
+            <element name="oberstufenprofil" minOccurs="0" type="string"/>
+            <element name="offenetuer" minOccurs="0" type="string"/>
+            <element name="rebbz_homepage" minOccurs="0" type="string"/>
+            <element name="rechtsform" minOccurs="0" type="string"/>
+            <element name="schueleranzahl_schuljahr" minOccurs="0" type="string"/>
+            <element name="schuelerzeitung" minOccurs="0" type="string"/>
+            <element name="schul_email" minOccurs="0" type="string"/>
+            <element name="schul_homepage" minOccurs="0" type="string"/>
+            <element name="schul_icon" minOccurs="0" type="string"/>
+            <element name="schul_id" minOccurs="0" type="string"/>
+            <element name="schul_telefonnr" minOccurs="0" type="string"/>
+            <element name="schulaufsicht" minOccurs="0" type="string"/>
+            <element name="schulform" minOccurs="0" type="string"/>
+            <element name="schulinspektion_link" minOccurs="0" type="string"/>
+            <element name="schulische_ausrichtung" minOccurs="0" type="string"/>
+            <element name="schulname" minOccurs="0" type="string"/>
+            <element name="schulpartnerschaft" minOccurs="0" type="string"/>
+            <element name="schulportrait" minOccurs="0" type="string"/>
+            <element name="schultyp" minOccurs="0" type="string"/>
+            <element name="schulwahl_wohnort" minOccurs="0" type="string"/>
+            <element name="schwerpunktschule" minOccurs="0" type="boolean"/>
+            <element name="sprachzertifikat" minOccurs="0" type="string"/>
+            <element name="stadtteil" minOccurs="0" type="string"/>
+            <element name="standort_id" minOccurs="0" type="string"/>
+            <element name="standortkl1" minOccurs="0" type="string"/>
+            <element name="standortkl5" minOccurs="0" type="string"/>
+            <element name="standortoberstufe" minOccurs="0" type="string"/>
+            <element name="vegetarisch" minOccurs="0" type="string"/>
+            <element name="wahlmoeglichkeit_essen" minOccurs="0" type="boolean"/>
+            <element name="zuegigkeit_kl_1" minOccurs="0" type="string"/>
+            <element name="zuegigkeit_kl_5" minOccurs="0" type="string"/>
+            <element name="zustaendiges_rebbz" minOccurs="0" type="string"/>
+            <element name="the_geom" minOccurs="0" type="gml:PointPropertyType"/>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+</schema>

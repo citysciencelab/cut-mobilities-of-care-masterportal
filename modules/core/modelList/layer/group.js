@@ -7,7 +7,7 @@ import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
 
 const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true
     }),
@@ -23,6 +23,16 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      */
     initialize: function () {
         Layer.prototype.initialize.apply(this);
+
+        if (this.get("isVisibleInMap")) {
+            this.updateSource();
+        }
+
+        this.listenTo(this, {
+            "change:isVisibleInMap": function () {
+                this.updateSource();
+            }
+        });
     },
 
     /**
@@ -32,9 +42,9 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @return {void}
      */
     createLayerSource: function () {
-        var layerSource = [];
+        const layerSource = [];
 
-        _.each(this.get("children"), function (childLayerDefinition) {
+        this.get("children").forEach(childLayerDefinition => {
             if (childLayerDefinition.typ === "WMS") {
                 layerSource.push(new WMSLayer(childLayerDefinition));
             }
@@ -53,7 +63,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             else if (childLayerDefinition.typ === "Heatmap") {
                 layerSource.push(new HeatmapLayer(childLayerDefinition));
             }
-            _.last(layerSource).prepareLayerObject();
+            layerSource[layerSource.length - 1].prepareLayerObject();
         }, this);
 
         this.setLayerSource(layerSource);
@@ -64,7 +74,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @return {void}
      */
     createLayer: function () {
-        var layers = _.map(this.get("layerSource"), function (layer) {
+        const layers = this.get("layerSource").map(layer => {
                 return layer.get("layer");
             }),
             groupLayer = new LayerGroup({
@@ -80,7 +90,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @return {void}
      */
     createLegendURL: function () {
-        _.each(this.get("layerSource"), function (layerSource) {
+        this.get("layerSource").forEach(layerSource => {
             layerSource.createLegendURL();
         }, this);
     },
@@ -91,7 +101,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @returns {void}
      */
     updateSource: function () {
-        _.each(this.get("layerSource"), function (layerSource) {
+        this.get("layerSource").forEach(layerSource => {
             if (typeof layerSource.updateSource !== "undefined") {
                 layerSource.updateSource();
             }
@@ -105,12 +115,17 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
-        var metaID = [],
-            legend = Radio.request("Legend", "getLegend", this),
+        let legend = "";
+        const metaID = [],
             name = this.get("name");
 
-        _.each(this.get("children"), function (layer) {
-            var layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
+        if (!this.get("layerSource")) {
+            this.prepareLayerObject();
+        }
+        legend = Radio.request("Legend", "getLegend", this);
+
+        this.get("children").forEach(layer => {
+            const layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
 
             if (layerMetaId) {
                 metaID.push(layerMetaId);
@@ -139,8 +154,8 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     * @returns {void}
     **/
     checkForScale: function (options) {
-        var currentScale = parseFloat(options.scale, 10),
-            childLayersAreOutOfRange = true,
+        const currentScale = parseFloat(options.scale, 10);
+        let childLayersAreOutOfRange = true,
             groupLayerIsOutOfRange = false;
 
         if (currentScale > parseInt(this.get("maxScale"), 10) || currentScale < parseInt(this.get("minScale"), 10)) {

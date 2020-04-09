@@ -15,7 +15,7 @@
 <div class="address innerRDiv" style="<% if (routelayer !== null) {print ('display: none');} %>">
     <h4><%= startAddressLabel %>:</h4>
     <div class="input-group inputGroupR" id="input-group-start">
-        <input type="text" class="form-control adresse" id="startAdresse" placeholder="<%= fromPlaceholder %>:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="off">
+        <input type="search" class="form-control adresse" id="startAdresse" placeholder="<%= fromPlaceholder %>:" aria-describedby="basic-addon1"  value="<%=startAdresse%>" autocomplete="false">
         <div style="position:relative;">
              <ul id="start" class="dropdown-menu-routing" aria-labelledby="startAdresse">
             </ul>
@@ -24,7 +24,7 @@
     </div>
     <h4><%= destinationAddressLabel%>:</h4>
     <div class="input-group inputGroupR" id="input-group-ziel">
-        <input type="text" class="form-control adresse" id="zielAdresse" placeholder="<%= toPlaceholder %>:" aria-describedby="basic-addon1" value="<%=zielAdresse%>" autocomplete="off">
+        <input type="search" class="form-control adresse" id="zielAdresse" placeholder="<%= toPlaceholder %>:" aria-describedby="basic-addon1" value="<%=zielAdresse%>" autocomplete="false">
         <div style="position:relative;">
             <ul id="ziel" class="dropdown-menu-routing" role="menu" aria-labelledby="zielAdresse">
             </ul>

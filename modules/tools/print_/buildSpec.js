@@ -44,7 +44,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Boolean} - Flag if csw response is from own metaRequest.
      */
     isOwnMetaRequest: function (uniqueIdList, uniqueId) {
-        return _.contains(uniqueIdList, uniqueId);
+        return Array.isArray(uniqueIdList) && uniqueIdList.indexOf(uniqueId) !== -1;
     },
 
     /**
@@ -64,16 +64,16 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     updateMetaData: function (layerName, parsedData) {
-        var layers = _.has(this.get("attributes"), "legend") && _.has(this.get("attributes").legend, "layers") ? this.get("attributes").legend.layers : undefined,
+        const layers = this.get("attributes").hasOwnProperty("legend") && this.get("attributes").legend.hasOwnProperty("layers") ? this.get("attributes").legend.layers : undefined,
             layer = _.findWhere(layers, {layerName: layerName});
 
-        if (!_.isUndefined(layer)) {
-            layer.metaDate = _.has(parsedData, "date") ? parsedData.date : "n.N.";
-            layer.metaOwner = _.has(parsedData, "orgaOwner") ? parsedData.orgaOwner : "n.N.";
-            layer.metaAddress = _.has(parsedData, "address") ? this.parseAddressToString(parsedData.address) : "n.N.";
-            layer.metaEmail = _.has(parsedData, "email") ? parsedData.email : "n.N.";
-            layer.metaTel = _.has(parsedData, "tel") ? parsedData.tel : "n.N.";
-            layer.metaUrl = _.has(parsedData, "url") ? parsedData.url : "n.N.";
+        if (layer !== undefined) {
+            layer.metaDate = parsedData.hasOwnProperty("date") ? parsedData.date : "n.N.";
+            layer.metaOwner = parsedData.hasOwnProperty("orgaOwner") ? parsedData.orgaOwner : "n.N.";
+            layer.metaAddress = parsedData.hasOwnProperty("address") ? this.parseAddressToString(parsedData.address) : "n.N.";
+            layer.metaEmail = parsedData.hasOwnProperty("email") ? parsedData.email : "n.N.";
+            layer.metaTel = parsedData.hasOwnProperty("tel") ? parsedData.tel : "n.N.";
+            layer.metaUrl = parsedData.hasOwnProperty("url") ? parsedData.url : "n.N.";
         }
     },
 
@@ -87,31 +87,60 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - The parsed String.
      */
     parseAddressToString: function (addressObj) {
-        var street = _.isUndefined(addressObj) ? undefined : addressObj.street,
-            housenr = _.isUndefined(addressObj) ? undefined : addressObj.housenr,
-            postalCode = _.isUndefined(addressObj) ? undefined : addressObj.postalCode,
-            city = _.isUndefined(addressObj) ? undefined : addressObj.city,
+        let street,
+            streetFilled = false,
+            housenr,
+            postalCode,
+            postalCodeFilled = false,
+            city,
             addressString = "";
 
-        // street
-        addressString += _.isUndefined(street) ? "" : street;
-        // blank between  street and housenr
-        addressString += addressString === "" ? "" : " ";
-        // housenr
-        addressString += _.isUndefined(housenr) ? "" : housenr;
-        // newline between housenr and postalCode
-        addressString += addressString === "" ? "" : addressString + "\n ";
-        // postalCode
-        addressString += _.isUndefined(postalCode) ? "" : postalCode;
-        // blank between postalCode and City
-        addressString += addressString === "" ? "" : " ";
-        // city
-        addressString += _.isUndefined(city) ? "" : city;
-        // n.N. if addressString is empty
-        addressString += addressString === "" ? "n.N." : "";
-
+        if (typeof addressObj === "object") {
+            street = addressObj.street;
+            streetFilled = this.isFilled(street);
+            housenr = addressObj.housenr;
+            postalCode = addressObj.postalCode;
+            postalCodeFilled = this.isFilled(postalCode);
+            city = addressObj.city;
+        }
+        if (streetFilled) {
+            addressString += street;
+        }
+        if (this.isFilled(housenr)) {
+            if (streetFilled) {
+                addressString += " ";
+            }
+            addressString += housenr;
+        }
+        if (addressString !== "") {
+            // newline between housenr and postalCode
+            addressString += "\n ";
+        }
+        if (postalCodeFilled) {
+            addressString += postalCode;
+        }
+        if (this.isFilled(city)) {
+            if (postalCodeFilled) {
+                addressString += " ";
+            }
+            addressString += city;
+        }
+        if (addressString.trim() === "") {
+            // n.N. if addressString is empty
+            addressString += "n.N.";
+        }
         return addressString;
     },
+
+    /**
+     * Returns true, if the given string is not empty or undefined
+     * @param {string} string to check
+     * @returns {boolean} true, if string has content
+     */
+    isFilled: function (string) {
+        return string !== undefined && string.trim() !== "";
+    },
+
 
     /**
      * Defines the layers attribute of the map spec
@@ -119,23 +148,23 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     buildLayers: function (layerList) {
-        var layers = [],
+        const layers = [],
             attributes = this.get("attributes"),
             currentResolution = Radio.request("MapView", "getOptions").resolution;
 
         layerList.forEach(function (layer) {
-            var printLayers = [];
+            const printLayers = [];
 
             if (layer instanceof Group) {
-                _.each(layer.getLayers().getArray(), function (childLayer) {
+                layer.getLayers().getArray().forEach(function (childLayer) {
                     printLayers.push(this.buildLayerType(childLayer, currentResolution));
                 }, this);
             }
             else {
                 printLayers.push(this.buildLayerType(layer, currentResolution));
             }
-            _.each(printLayers, function (printLayer) {
-                if (!_.isUndefined(printLayer)) {
+            printLayers.forEach(function (printLayer) {
+                if (printLayer !== undefined) {
                     layers.push(printLayer);
                 }
             });
@@ -151,7 +180,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object|undefined} - VectorObject for mapfish print.
      */
     getDrawLayerInfo: function (layer, extent) {
-        var featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
+        const featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
             features = _.sortBy(featuresInExtent, function (feature) {
                 return feature.getStyle().getZIndex();
             });
@@ -170,12 +199,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - LayerObject for mapfish print.
      */
     buildLayerType: function (layer, currentResolution) {
-        var features = [],
-            extent = Radio.request("MapView", "getCurrentExtent"),
-            returnLayer,
+        const extent = Radio.request("MapView", "getCurrentExtent"),
             layerMinRes = layer.get("minResolution"),
             layerMaxRes = layer.get("maxResolution"),
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
+        let features = [],
+            returnLayer;
 
         if (isInScaleRange) {
             if (layer instanceof Image) {
@@ -189,6 +218,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             }
             else if (layer instanceof Vector) {
                 features = layer.getSource().getFeaturesInExtent(extent);
+
                 if (features.length > 0) {
                     returnLayer = this.buildVector(layer, features);
                 }
@@ -220,7 +250,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - wms layer spec
      */
     buildTileWms: function (layer) {
-        var source = layer.getSource(),
+        const source = layer.getSource(),
             mapObject = {
                 baseURL: source.getUrls()[0],
                 opacity: layer.getOpacity(),
@@ -233,7 +263,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 }
             };
 
-        if (_.has(source.getParams(), "SLD_BODY") && !_.isUndefined(source.getParams().SLD_BODY)) {
+        if (source.getParams().hasOwnProperty("SLD_BODY") && source.getParams().SLD_BODY !== undefined) {
             mapObject.customParams.SLD_BODY = source.getParams().SLD_BODY;
             mapObject.styles = ["style"];
         }
@@ -246,7 +276,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - wms layer spec
      */
     buildImageWms: function (layer) {
-        var source = layer.getSource(),
+        const source = layer.getSource(),
             mapObject = {
                 baseURL: source.getUrl(),
                 opacity: layer.getOpacity(),
@@ -267,9 +297,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @param {ol.layer.Vector} layer vector layer with vector source
      * @param {ol.feature[]} features vectorfeatures
      * @returns {object} - geojson layer spec
-    */
+     */
     buildVector: function (layer, features) {
-        var geojsonList = [];
+        const geojsonList = [];
 
         return {
             type: "geojson",
@@ -286,20 +316,22 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - style for mapfish print.
      */
     buildStyle: function (layer, features, geojsonList) {
-        var mapfishStyleObject = {
+        const mapfishStyleObject = {
                 "version": "2"
             },
-            styleAttribute = this.getStyleAttribute(layer);
+            isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false;
 
         features.forEach(function (feature) {
-            var clonedFeature,
-                styles = this.getFeatureStyle(feature, layer),
+            const styles = this.getFeatureStyle(feature, layer),
+                styleAttribute = this.getStyleAttribute(layer, feature, isNewVectorStyle);
+
+            let clonedFeature,
                 stylingRule,
                 styleObject,
                 geometryType,
                 styleGeometryFunction;
 
-            _.each(styles, function (style, index) {
+            styles.forEach(function (style, index) {
                 if (style !== null) {
                     clonedFeature = feature.clone();
                     clonedFeature.set(styleAttribute, clonedFeature.get(styleAttribute) + "_" + String(index));
@@ -307,17 +339,17 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
                     // if style has geometryFunction, take geometry from style Function
                     styleGeometryFunction = style.getGeometryFunction();
-                    if (!_.isNull(styleGeometryFunction) && !_.isUndefined(styleGeometryFunction)) {
+                    if (styleGeometryFunction !== null && styleGeometryFunction !== undefined) {
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
                     stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
                     // do nothing if we already have a style object for this CQL rule
                     if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
                         return;
                     }
+
                     styleObject = {
                         symbolizers: []
                     };
@@ -366,7 +398,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - Circle Style for mapfish print.
      */
     buildPointStyleCircle: function (style) {
-        var fillStyle = style.getFill(),
+        const fillStyle = style.getFill(),
             strokeStyle = style.getStroke(),
             obj = {
                 type: "point",
@@ -417,18 +449,27 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * Generates the text Style
      * @param {ol.style} style Style of layer.
+     * @see https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html
      * @returns {Object} - Text Style for mapfish print.
      */
     buildTextStyle: function (style) {
+        // There are different kinds of font definitions: One sets size and font and an other sets only the name. Both are used in masterportal.
+        const isFontSizeInFont = style.getFont().split(" ").length === 2 && style.getFont().split(" ")[0].endsWith("px"),
+            textScale = style.getScale() ? style.getScale() : 1,
+            fontSize = isFontSizeInFont ? style.getFont().split(" ")[0] : 10 * textScale,
+            fontFamily = isFontSizeInFont ? style.getFont().split(" ")[1] : style.getFont(),
+            fontColor = style.getFill().getColor();
+
         return {
             type: "text",
-            label: !_.isUndefined(style.getText()) ? style.getText() : "",
-            fontColor: this.rgbArrayToHex(style.getFill().getColor()),
-            labelOutlineColor: !_.isNull(style.getStroke()) ? this.rgbArrayToHex(style.getStroke().getColor()) : undefined,
+            label: style.getText() !== undefined ? style.getText() : "",
+            fontColor: this.rgbArrayToHex(fontColor),
+            fontOpacity: fontColor[0] !== "#" ? fontColor[3] : 1,
+            labelOutlineColor: style.getStroke() !== null ? this.rgbArrayToHex(style.getStroke().getColor()) : undefined,
             labelXOffset: -style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
-            fontSize: style.getFont().split(" ")[0],
-            fontFamily: style.getFont().split(" ")[1],
+            fontSize: fontSize,
+            fontFamily: fontFamily,
             labelAlign: this.getLabelAlign(style)
         };
     },
@@ -440,7 +481,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - placement indicator
      */
     getLabelAlign: function (style) {
-        var textAlign = style.getTextAlign();
+        const textAlign = style.getTextAlign();
 
         if (textAlign === "left") {
             // left bottom
@@ -449,6 +490,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         else if (textAlign === "right") {
             // right bottom
             return "rb";
+        }
+        else if (textAlign === "center") {
+            // center middle
+            return "cm";
         }
         // center bottom
         return "cb";
@@ -461,7 +506,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - Polygon Style for mapfish print.
      */
     buildPolygonStyle: function (style, layer) {
-        var fillStyle = style.getFill(),
+        const fillStyle = style.getFill(),
             strokeStyle = style.getStroke(),
             obj = {
                 type: "polygon",
@@ -484,7 +529,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - LineString Style for mapfish print.
      */
     buildLineStringStyle: function (style, layer) {
-        var strokeStyle = style.getStroke(),
+        const strokeStyle = style.getStroke(),
             obj = {
                 type: "line",
                 strokeOpacity: layer.getOpacity()
@@ -502,7 +547,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - Fill Style for mapfish print.
      */
     buildFillStyle: function (style, obj) {
-        var fillColor = style.getColor();
+        let fillColor = style.getColor();
 
         if (typeof fillColor === "string") {
             fillColor = this.colorStringToRgbArray(fillColor);
@@ -557,14 +602,13 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - LineString Style for mapfish print.
      */
     buildStrokeStyle: function (style, obj) {
-        var strokeColor;
+        const strokeColor = style.getColor();
 
-        strokeColor = style.getColor();
         obj.strokeColor = this.rgbArrayToHex(strokeColor);
-        if (_.isArray(strokeColor) && strokeColor[3] !== undefined) {
+        if (Array.isArray(strokeColor) && strokeColor[3] !== undefined) {
             obj.strokeOpacity = strokeColor[3];
         }
-        if (_.indexOf(_.functions(style), "getWidth") !== -1 && style.getWidth() !== undefined) {
+        if (typeof style.getWidth === "function" && style.getWidth() !== undefined) {
             obj.strokeWidth = style.getWidth();
         }
         return obj;
@@ -576,7 +620,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - Image name.
      */
     getImageName: function (imageSrc) {
-        var start = imageSrc.lastIndexOf("/");
+        const start = imageSrc.lastIndexOf("/");
 
         return imageSrc.indexOf("/") !== -1 ? imageSrc.substr(start) : "/" + imageSrc;
     },
@@ -614,16 +658,22 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {object} GeoJSON object
      */
     convertFeatureToGeoJson: function (feature) {
-        var geojsonFormat = new GeoJSON(),
-            convertedFeature;
+        const clonedFeature = feature.clone(),
+            geojsonFormat = new GeoJSON();
+        let convertedFeature;
 
+        // take over id from feature because the feature id is not set in the clone.
+        clonedFeature.setId(feature.getId());
         // circle is not suppported by geojson
-        if (feature.getGeometry().getType() === "Circle") {
-            feature.setGeometry(fromCircle(feature.getGeometry()));
+        if (clonedFeature.getGeometry().getType() === "Circle") {
+            clonedFeature.setGeometry(fromCircle(clonedFeature.getGeometry()));
         }
-        convertedFeature = geojsonFormat.writeFeatureObject(feature);
 
-        if (feature.getGeometry().getCoordinates().length === 0) {
+        // Removing "Datastreams" attribute because it might overload the server as happened for some sensors.
+        clonedFeature.unset("Datastreams", {silent: true});
+
+        convertedFeature = geojsonFormat.writeFeatureObject(clonedFeature);
+        if (clonedFeature.getGeometry().getCoordinates().length === 0) {
             convertedFeature = undefined;
         }
         return convertedFeature;
@@ -635,7 +685,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {ol.style.Style[]} returns or an array of styles
      */
     getFeatureStyle: function (feature, layer) {
-        var styles;
+        let styles;
 
         if (feature.getStyleFunction() !== undefined) {
             styles = feature.getStyleFunction().call(feature);
@@ -655,46 +705,60 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {string} an ECQL Expression
      */
     getStylingRule: function (layer, feature, styleAttribute) {
-        var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
-            styleModel,
+        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
+            styleAttr = feature.get("styleId") ? "styleId" : styleAttribute;
+        let styleModel,
             labelField,
             labelValue;
 
-        if (styleAttribute === "") {
+        if (styleAttr === "") {
             return "*";
         }
         // cluster feature with geometry style
         else if (feature.get("features") !== undefined) {
-            return "[" + styleAttribute + "='" + feature.get("features")[0].get(styleAttribute) + "']";
+            return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "']";
         }
         // feature with geometry style and label style
         else if (layerModel !== undefined && Radio.request("StyleList", "returnModelById", layerModel.get("styleId")) !== undefined) {
             styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
-            if (styleModel !== undefined && styleModel.get("labelField").length > 0) {
+            if (styleModel !== undefined && styleModel.get("labelField") && styleModel.get("labelField").length > 0) {
                 labelField = styleModel.get("labelField");
                 labelValue = feature.get(labelField);
-                return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "' AND " + labelField + "='" + labelValue + "']";
+                return "[" + styleAttr + "='" + feature.get(styleAttr) + "' AND " + labelField + "='" + labelValue + "']";
             }
             // feature with geometry style
-            return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
+            return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
         }
         // feature with geometry style
-        return "[" + styleAttribute + "='" + feature.get(styleAttribute) + "']";
+        return "[" + styleAttr + "='" + feature.get(styleAttr) + "']";
     },
 
     /**
      * @param {ol.Layer} layer -
-     * @returns {string} the attribute by whose value the feature is styled
+     * @param {ol.feature} feature - the feature of current layer
+     * @param {Boolean} isNewVectorStyle - check if it is the new vector style
+     * @returns {String} the attribute by whose value the feature is styled
      */
-    getStyleAttribute: function (layer) {
-        var layerId = layer.get("id"),
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-            styleField = "styleId";
+    getStyleAttribute: function (layer, feature, isNewVectorStyle) {
+        const layerId = layer.get("id");
+
+        let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+            styleField = "styleId",
+            styleList,
+            ruleFeature;
+
 
         if (layerModel !== undefined) {
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
+            styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
             if (layerModel.get("styleId")) {
-                styleField = Radio.request("StyleList", "returnModelById", layerModel.get("styleId")).get("styleField");
+                if (isNewVectorStyle && styleList !== undefined) {
+                    ruleFeature = styleList.getRulesForFeature(feature);
+                    styleField = ruleFeature.length && ruleFeature[0] && ruleFeature[0].hasOwnProperty("conditions") ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
+                }
+                else {
+                    styleField = styleList.get("styleField");
+                }
             }
         }
 
@@ -710,7 +774,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @return {Backbone.Model} found layer model
      */
     getChildModelIfGroupLayer: function (model, layerId) {
-        var layerModel = model;
+        const layerModel = model;
 
         if (layerModel.get("typ") === "GROUP") {
             layerModel = _.filter(layerModel.get("layerSource"), function (childLayer) {
@@ -722,22 +786,25 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
     /**
      * Converts an rgb array to hexcode. Default is the open layers default color.
+     * It also checks if rgb is an hexcode, if true it will be returned.
      * @param {number[]} rgb - a rgb color represented as an array
      * @returns {string} - hex color
      */
     rgbArrayToHex: function (rgb) {
-        var hexR,
+        let hexR,
             hexG,
             hexB,
             hexString = "#3399CC";
 
-        if (_.isArray(rgb) && rgb.length >= 3) {
+        if (Array.isArray(rgb) && rgb.length >= 3) {
             hexR = this.addZero(rgb[0].toString(16));
             hexG = this.addZero(rgb[1].toString(16));
             hexB = this.addZero(rgb[2].toString(16));
             hexString = "#" + hexR + hexG + hexB;
         }
-
+        else if (typeof rgb === "string" && rgb.includes("#") && rgb.length >= 4) {
+            hexString = rgb;
+        }
         return hexString;
     },
 
@@ -757,16 +824,17 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @return {void}
      */
     buildLegend: function (isLegendSelected, legendParams, isMetaDataAvailable) {
-        var legendObject = {},
+        const legendObject = {},
             metaDataLayerList = [];
 
         if (isLegendSelected && legendParams.length > 0) {
             legendObject.layers = [];
-            _.each(legendParams, function (layerParam) {
+            legendParams.forEach(function (layerParam) {
                 if (isMetaDataAvailable) {
                     metaDataLayerList.push(layerParam.layername);
                 }
-                if (layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
+
+                if (layerParam.legend && Array.isArray(layerParam.legend) && layerParam.legend.length > 0 && layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
                     Radio.trigger("Alert", "alert", {
                         kategorie: "alert-info",
                         text: "<b>Der Layer \"" + layerParam.layername + "\" enthält eine als PDF vordefinierte Legende. " +
@@ -786,7 +854,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
         if (isMetaDataAvailable) {
-            _.each(metaDataLayerList, function (layerName) {
+            metaDataLayerList.forEach(function (layerName) {
                 this.getMetaData(layerName);
             }, this);
         }
@@ -799,12 +867,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     getMetaData: function (layerName) {
-        var layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
+        const layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
             metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
             uniqueId = _.uniqueId(),
             cswObj = {};
 
-        if (!_.isNull(metaId)) {
+        if (metaId !== null) {
             this.get("uniqueIdList").push(uniqueId);
             cswObj.layerName = layerName;
             cswObj.metaId = metaId;
@@ -821,8 +889,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object[]} - prepared legend attributes.
      */
     prepareLegendAttributes: function (layerParam) {
-        var valuesArray = [],
-            typ = layerParam.legend[0].typ;
+        const valuesArray = [],
+            typ = layerParam.legend && Array.isArray(layerParam.legend) && layerParam.legend.length > 0 ? layerParam.legend[0].typ : "";
 
         if (typ === "WMS") {
             valuesArray.push(this.createWmsLegendList(layerParam.legend[0].img));
@@ -843,15 +911,15 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object[]} - prepared wms legens for mapfish print.
      */
     createWmsLegendList: function (urls) {
-        var wmsLegendList = [],
-            legendUrls = urls;
+        const wmsLegendList = [];
+        let legendUrls = urls;
 
         if (typeof urls === "string") {
             legendUrls = [legendUrls];
         }
 
-        _.each(legendUrls, function (url) {
-            var wmsLegendObject = {
+        legendUrls.forEach(function (url) {
+            const wmsLegendObject = {
                 legendType: "wmsGetLegendGraphic",
                 geometryType: "",
                 imageUrl: url,
@@ -872,18 +940,18 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object[]} - List of wfs legends to mapfish print template.
      */
     createWfsLegendList: function (urls, legendNames, layerName) {
-        var wfsLegendList = [],
-            wfsLegendObject;
+        const wfsLegendList = [];
+        let wfsLegendObject;
 
-        if (_.isString(urls)) {
-            wfsLegendObject = this.createWfsLegendObject(urls, layerName);
-            wfsLegendList.push(wfsLegendObject);
-        }
-        else {
-            _.each(urls, function (url, index) {
+        if (Array.isArray(urls)) {
+            urls.forEach(function (url, index) {
                 wfsLegendObject = this.createWfsLegendObject(url, legendNames[index]);
                 wfsLegendList.push(wfsLegendObject);
             }, this);
+        }
+        else {
+            wfsLegendObject = this.createWfsLegendObject(urls, layerName);
+            wfsLegendList.push(wfsLegendObject);
         }
 
         return wfsLegendList;
@@ -896,7 +964,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - wfs legend object
      */
     createWfsLegendObject: function (url, label) {
-        var wfsLegendObject = {
+        const wfsLegendObject = {
             legendType: "",
             geometryType: "",
             imageUrl: "",
@@ -923,9 +991,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object[]} - legend list from stlyed wms layer for mapfish print.
      */
     createStyleWmsLegendList: function (legendObjects) {
-        var styleWmsLegendList = [];
+        const styleWmsLegendList = [];
 
-        _.each(legendObjects, function (styleWmsParam) {
+        legendObjects.forEach(function (styleWmsParam) {
             styleWmsLegendList.push({
                 legendType: "geometry",
                 geometryType: "polygon",
@@ -942,9 +1010,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - Fill color as hex.
      */
     getFillFromSVG: function (svgString) {
-        var indexOfFill = svgString.indexOf("fill:") + 5,
-            hexLength = 6 + 1,
-            hexColor = "#000000";
+        const indexOfFill = svgString.indexOf("fill:") + 5,
+            hexLength = 6 + 1;
+        let hexColor = "#000000";
 
         if (svgString.indexOf("fill:") !== -1) {
             hexColor = svgString.substring(indexOfFill, indexOfFill + hexLength);
@@ -958,7 +1026,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - Url for legend path.
      */
     createLegendImageUrl: function (path) {
-        var url = path,
+        let url = path,
             image;
 
         if (url.indexOf("http") === -1) {
@@ -979,8 +1047,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @return {void}
      */
     buildGfi: function (isGfiSelected, gfiArray) {
-        var gfiObject = {},
-            gfiAttributes,
+        const gfiObject = {};
+        let gfiAttributes,
             layerName;
 
         if (isGfiSelected) {
@@ -1007,7 +1075,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     addGfiFeature: function (layers, coordinates) {
-        var geojsonFormat = new GeoJSON(),
+        const geojsonFormat = new GeoJSON(),
             gfiFeature = new Feature({
                 geometry: new Point(coordinates),
                 name: "GFI Point"
@@ -1043,14 +1111,15 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @return {Object[]} parsed array[objects] with key- and value attributes
      */
     prepareGfiAttributes: function (gfiAttributes) {
-        var valuesArray = [];
+        const valuesArray = [];
+        let key;
 
-        _.each(gfiAttributes, function (value, key) {
+        for (key in gfiAttributes) {
             valuesArray.push({
                 key: key,
-                value: value
+                value: gfiAttributes[key]
             });
-        });
+        }
 
         return valuesArray;
     },
@@ -1061,7 +1130,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     buildScale: function (scale) {
-        var scaleText = "1:" + scale;
+        const scaleText = "1:" + scale;
 
         this.setScale(scaleText);
     },

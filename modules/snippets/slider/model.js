@@ -3,35 +3,41 @@ import ValueModel from "./valueModel";
 import moment from "moment";
 
 const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
+    defaults: Object.assign({}, SnippetModel.prototype.defaults, {
+        editableValueBox: true,
+        step: 1,
+        preselectedValues: null,
+        precision: 3,
+        selection: "before",
+        displayName: undefined,
+        ticks: [],
+        withLabel: true,
+        errorMessage: "Text"
+    }),
+
     /**
      * @class SliderModel
      * @extends SnippetModel
      * @memberof Snippets.Slider
      * @constructs
      * @property {boolean} editableValueBox=true Flag to show input or label
-     * @property {float} step=1 Increment step of the slider
-     * @property {float | array} [preselectedValues] Initial value. Use array to have a range slider.
-     * @property {float} precision=3 The number of digits shown after the decimal.
+     * @property {number} step=1 Increment step of the slider
+     * @property {number | number[]} [preselectedValues] Initial value. Use array to have a range slider.
+     * @property {number} precision=3 The number of digits shown after the decimal.
      * @property {string} selection=before Selection placement. Accepts: 'before', 'after' or 'none'. In case of a range slider, the selection will be placed between the handles
+     * @property {string} displayName=display name of the snippet
+     * @property {ticks} ticks=slider ticks
+     * @property {boolean} withLabel=true Flag to show label
      * @param {object} attributes Model to be used in this view
      * @fires Util#RadioRequestUtilSort
      * @listens Alerting#RadioTriggerAlertAlert
      */
-    defaults: _.extend({}, SnippetModel.prototype.defaults, {
-        editableValueBox: true,
-        step: 1,
-        preselectedValues: null,
-        precision: 3,
-        selection: "before"
-    }),
-
     initialize: function (attributes) {
-        var parsedValues;
+        const parsedValues = this.parseValues(attributes.values);
 
         // parent (SnippetModel) initialize
         this.superInitialize();
-        parsedValues = this.parseValues(attributes.values);
-        this.addValueModels(_.min(parsedValues), _.max(parsedValues));
+        this.addValueModels(Math.min(...parsedValues), Math.max(...parsedValues));
         if (this.get("preselectedValues") !== null) {
             this.updateValues(this.get("preselectedValues"));
         }
@@ -41,6 +47,9 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
             },
             "updateDOMSlider": function () {
                 this.trigger("updateDOMSlider", this.getSelectedValues().values);
+            },
+            "updateValue": function (value) {
+                this.updateValues(value);
             }
         });
     },
@@ -78,7 +87,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      */
     updateValues: function (snippetValues) {
         // range slider
-        if (_.isArray(snippetValues) === true) {
+        if (Array.isArray(snippetValues)) {
             this.get("valuesCollection").at(0).setValue(snippetValues[0]);
             this.get("valuesCollection").at(1).setValue(snippetValues[1]);
         }
@@ -96,7 +105,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      */
     updateValuesSilently: function (snippetValues) {
         // range slider
-        if (_.isArray(snippetValues) === true) {
+        if (Array.isArray(snippetValues)) {
             this.get("valuesCollection").at(0).set("value", snippetValues[0], {silent: true});
             this.get("valuesCollection").at(1).set("value", snippetValues[1], {silent: true});
         }
@@ -121,16 +130,16 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
     /**
      * Parse strings into numbers if necessary
-     * @param  {string[]} valueList valueList
+     * @param  {string[]} [valueList=[]] valueList
      * @return {number[]} parsedValueList
      */
-    parseValues: function (valueList) {
-        var parsedValueList = [];
+    parseValues: function (valueList = []) {
+        const parsedValueList = [];
 
-        _.each(valueList, function (value) {
-            var val = value;
+        valueList.forEach(value => {
+            let val = value;
 
-            if (_.isString(val)) {
+            if (typeof val === "string") {
                 val = parseInt(val, 10);
             }
             parsedValueList.push(val);
@@ -147,12 +156,12 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      * @returns {void}
      */
     changeValuesByText: function (minValue, maxValue) {
-        var min = minValue,
-            max = maxValue,
-            initValues = this.get("valuesCollection").pluck("initValue"),
-            values,
-            lastValues,
+        const initValues = this.get("valuesCollection").pluck("initValue"),
             type = this.getSelectedValues().type;
+        let min = minValue,
+            max = maxValue,
+            values,
+            lastValues;
 
         // check if input is allowed
         if (min === "" && max !== "") {
@@ -171,7 +180,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         }
 
         values = [min, max];
-        values = Radio.request("Util", "sort", values);
+        values = Radio.request("Util", "sort", "", values);
 
         this.updateValues(values);
 
@@ -179,13 +188,13 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     },
 
     /**
-     * Converts number to integer or decimal by type
+     * Converts number to integer or decimal by type.
      * @param {number} inputValue - input value
      * @param {String} type - input type
      * @returns {void} value
     */
     parseValueToNumber: function (inputValue, type) {
-        var value = _.isUndefined(inputValue) ? NaN : inputValue;
+        let value = inputValue === undefined ? NaN : inputValue;
 
         if (type === "integer") {
             value = parseInt(value, 10);
@@ -207,9 +216,9 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
     * @returns {number} val
     */
     checkInvalidInput: function (value, otherValue) {
-        var val = value;
+        let val = value;
 
-        if (_.isNaN(val)) {
+        if (isNaN(val)) {
             val = otherValue;
             this.errorMessage();
         }
@@ -247,9 +256,29 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         }
         return value.toString();
     },
+
     /**
-     * Setter for defaultWidth
-     * @param {integer} value defaultWidth
+     * Checks whether all values lies within a specified range.
+     * @param {number[]} [values=[]] - Values to be checked.
+     * @param {number} [min=0] - Min value in range.
+     * @param {number} [max=99999] - Max value in range.
+     * @returns {boolean} isInrange - Are all values in range.
+     */
+    checkAreAllValuesInRange: function (values = [], min = 0, max = 99999) {
+        let allValuesInRange = true;
+
+        values.forEach(value => {
+            if (allValuesInRange && value < min || value > max) {
+                allValuesInRange = false;
+            }
+        });
+
+        return allValuesInRange;
+    },
+
+    /**
+     * Setter for defaultWidth.
+     * @param {number} value - The default width.
      * @returns {void}
      */
     setDefaultWidth: function (value) {

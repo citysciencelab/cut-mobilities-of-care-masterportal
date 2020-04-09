@@ -79,12 +79,13 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             altitudeMode: this.get("altitudeMode"),
             hitTolerance: this.get("hitTolerance")
         }));
-
-        if (_.isUndefined(this.get("geojson"))) {
-            this.updateSource();
-        }
-        else {
-            this.handleData(this.get("geojson"));
+        if (this.get("isSelected")) {
+            if (_.isUndefined(this.get("geojson"))) {
+                this.updateSource();
+            }
+            else {
+                this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
+            }
         }
     },
 
@@ -177,6 +178,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         }
 
         this.addId(features);
+        features = this.getFeaturesIntersectsGeometry(this.get("bboxGeometry"), features);
         this.get("layerSource").clear(true);
         this.get("layerSource").addFeatures(features);
         this.get("layer").setStyle(this.get("styleFunction"));
@@ -184,8 +186,12 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         // für it-gbm
         if (!this.has("autoRefresh")) {
             features.forEach(function (feature) {
-                feature.set("extent", feature.getGeometry().getExtent());
-                newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                var geometry = feature.getGeometry();
+
+                if (geometry) {
+                    feature.set("extent", geometry.getExtent());
+                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                }
             });
             Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.get("id")});
         }
@@ -211,6 +217,23 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
                 return stylelistmodel.createStyle(feature, isClustered);
             });
         }
+    },
+
+    /**
+     * returns the features that intersect the given geometries
+     * @param {ol.geom.Geometry[]} geometries - GeometryCollection with one or more geometry
+     * @param {ol.Feature[]} features - all features in the geometry extent
+     * @returns {ol.Feature[]} filtered features
+     */
+    getFeaturesIntersectsGeometry: function (geometries, features) {
+        if (geometries) {
+            return features.filter(function (feature) {
+                // test if the geometry and the passed extent intersect
+                return geometries.intersectsExtent(feature.getGeometry().getExtent());
+            });
+        }
+
+        return features;
     },
 
     /**
@@ -416,6 +439,10 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     // setter for legendURL
     setLegendURL: function (value) {
         this.set("legendURL", value);
+    },
+
+    isUseProxy: function () {
+        return this.hasOwnProperty("isUseProxy") && this.get("isUseProxy") === true;
     }
 });
 

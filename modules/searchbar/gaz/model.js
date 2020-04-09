@@ -154,7 +154,7 @@ const GazetteerModel = Backbone.Model.extend({
                 affix: $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0] ? $(hit).find("dog\\:hausnummernzusatz,hausnummernzusatz")[0].textContent : ""
             });
         });
-        sortedHouseNumbers = Radio.request("Util", "sort", houseNumbers, "number", "affix");
+        sortedHouseNumbers = Radio.request("Util", "sort", "", houseNumbers, "number", "affix");
 
         Radio.trigger("Gaz", "houseNumbers", sortedHouseNumbers);
         return sortedHouseNumbers;
@@ -424,7 +424,6 @@ const GazetteerModel = Backbone.Model.extend({
         const ajax = this.get("ajaxRequests");
 
         if (ajax[type] !== null && ajax[type] !== undefined) {
-            ajax[type].abort();
             this.polishAjax(type);
         }
         this.ajaxSend(data, successFunction, type);

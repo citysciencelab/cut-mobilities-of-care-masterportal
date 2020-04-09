@@ -850,6 +850,12 @@
  * @description todo
  */
 
+/**
+ * @event LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
+ * @description Unhighlight the icon in the layertree for layerinformation
+ * @example Radio.trigger("LayerInformation", "unhighlightLayerInfomationIcon")
+ */
+
 
 /** -------------------- OBLIQUE MAP-------------------- */
 
@@ -863,6 +869,12 @@
  * @event Core#RadioRequestObliqueMapIsActive
  * @returns {Boolean} - Flag if ObliqueMap is active.
  * @example Radio.request("ObliqueMap", "isActive")
+ */
+
+/**
+ * @event Core#RadioTriggerObliqueMapIsActivated
+ * @returns {Boolean} - Flag if ObliqueMap is activated.
+ * @example Radio.Trigger("ObliqueMap", "isActivated")
  */
 
 /**
@@ -1087,7 +1099,7 @@
  */
 
 
-/** -------------------- ATTRIBUTIONS ----------------- */
+/** -------------------- CONTROLS.ATTRIBUTIONS ----------------- */
 
 /**
  * @event Controls.Attributions#RadioTriggerAttributionsRenderAttributions
@@ -1431,8 +1443,12 @@
 /**
  * @event Core#RadioRequestUtilSort
  * @description Sorting alorithm that distinguishes between array[objects] and other arrays.
- * @returns {string[]} - Sorted Array
- * @example Radio.request("Util", "sort", values);
+ * @param {String} type Type of sort algorithm Currently .
+ * @param {String[] | Object[]} values Values to be sorted.
+ * @param {String} first Name of first Attribute to be sorted.
+ * @param {String} second Name of second Attribute to be sorted. Only if type!== "address".
+ * @returns {string[] | Object[]} - Sorted Array
+ * @example Radio.request("Util", "sort", type, values, first, second);
  */
 
 /**
@@ -2420,5 +2436,24 @@
  * @description Todo
  */
 
+/** -------------------- CONTROLS.ORIENTATION ----------------- */
 
- 
+/**
+ * @event Controls.Orientaion#RadioTriggerGeolocationRemoveOverlay
+ * @description Todo
+ * @example Radio.trigger("geolocation", "removeOverlay");
+ */
+
+/** -------------------- CONTROLS.ORIENTATION.POI ----------------- */
+
+/**
+ * @event Controls.Orientation.Poi#RadioTriggerPOIShowPOIModal
+ * @description Trigger show POI modal.
+ * @example Radio.trigger("POI", "showPOIModal");
+ */
+
+/**
+ * @event Controls.Orientation.Poi#RadioTriggerPOIHidePOIModal
+ * @description Trigger hide POI modal.
+ * @example Radio.trigger("POI", "hidePOIModal");
+ */
