@@ -48,17 +48,6 @@ describe("textStyleModel", function () {
         });
     });
 
-    describe("checkLabelField", function () {
-        it("should return true because feature has a labelfield", function () {
-            styleModel.set("labelField", "name", {silent: true});
-            expect(styleModel.checkLabelField()).to.be.true;
-        });
-        it("should return false if feature has no labelfield", function () {
-            styleModel.set("labelField", "not exist", {silent: true});
-            expect(styleModel.checkLabelField()).to.be.false;
-        });
-    });
-
     describe("createLabeledTextStyle", function () {
         it("should return aspected text style", function () {
             styleModel.set("labelField", "name", {silent: true});
