@@ -398,7 +398,7 @@ Für weitere Informationen siehe auch die [Openlayers Beschreibung](https://open
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|labelField| ja |String| "undefined" |Attribut des Features, nach dessen Wert das Label angezeigt werden soll.|
+|labelField| ja |String| "undefined" |Attribut des Features, nach dessen Wert das Label angezeigt werden soll. Kann auch als [Objektpfadverweis](#markdown-header-objektpfadverweise) genutzt werden.|
 |textAlign|   |String|"center"|Ausrichtung des Textes am Feature.|
 |textFont|   |String|"Comic Sans MS"|Font des Textes am Feature.|
 |textScale|   |Integer|2|Skalierung des Textes.|
