@@ -16,10 +16,13 @@ describe("modules/searchbar/locationFinder", function () {
 
         it("Build URL and payload", function () {
 
+            model.set("sref", "testEpsgCode");
+
             model.sendRequest = function (url, payload) {
                 expect(url).to.eq("testServiceUrl/Lookup");
                 expect(payload).to.eql({
-                    query: "helloWorld"
+                    query: "helloWorld",
+                    sref: "testEpsgCode"
                 });
             };
 
@@ -29,12 +32,14 @@ describe("modules/searchbar/locationFinder", function () {
         it("Build URL and payload with filter", function () {
 
             model.set("classes", ["Adresse", "Straßenname"]);
+            model.set("sref", "testEpsgCode");
 
             model.sendRequest = function (url, payload) {
                 expect(url).to.eq("testServiceUrl/Lookup");
                 expect(payload).to.eql({
                     query: "helloWorld",
-                    filter: "type:Adresse,Straßenname"
+                    filter: "type:Adresse,Straßenname",
+                    sref: "testEpsgCode"
                 });
             };
 

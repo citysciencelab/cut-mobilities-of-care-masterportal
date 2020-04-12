@@ -91,6 +91,14 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
             payload.filter = "type:" + this.get("classes").join(",");
         }
 
+        // Set target CRS
+        if (this.get("sref")) {
+            payload.sref = this.get("sref");
+        }
+        else {
+            payload.sref = Radio.request("MapView", "getProjection").getCode();
+        }
+
         this.sendRequest(url, payload);
     },
 
@@ -108,8 +116,13 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
 
         // Test for sucess-status of service
         if (!(data.hasOwnProperty("ok") && data.ok)) {
+            let statusText = i18next.t("common:modules.searchbar.locationFinder.serverError");
+
+            if (data.info) {
+                statusText = statusText + ": " + data.info;
+            }
             this.showError({
-                statusText: i18next.t("common:modules.searchbar.locationFinder.serverError")
+                statusText: statusText
             });
             Radio.trigger("Searchbar", "abortSearch", "locationFinder");
             return;
