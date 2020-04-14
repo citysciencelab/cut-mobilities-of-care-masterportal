@@ -47,6 +47,14 @@ Util = Backbone.Model.extend({
             xmlObject = new window.DOMParser().parseFromString(xml, "text/xml");
 
         return xmlObject;
+    },
+    getFile: function (path) {
+        var xml = fs.readFileSync(this.get("basepath") + path, "utf8");
+
+        return xml;
+    },
+    parseXML: function (xmlStr) {
+        return new window.DOMParser().parseFromString(xmlStr, "text/xml");
     }
 });
 

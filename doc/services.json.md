@@ -83,6 +83,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
 |featureNS|ja|String||featureNamespace. Ist gewöhnlich im Header der WFS-Capabilities referenziert und löst den Namespace auf, der unter FeatureType/Name angegeben wird.|`"http://www.deegree.org/app"`|
 |featureType|ja|String||featureType-Name im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *FeatureTypeList/FeatureType/Name* entsprechen. Allerdings ohne Namespace.|`"bab_vkl"`|
+|featurePrefix|nein|String||Dient der eindeutigen Identifizierung eines FeatureTypes im Dienst.|
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
 |gfiFormat|nein|String/Object||Optionale Steuerung des Inhaltes der GFI-Informationen für diesen Layer. Der Inhalt kann im Rahmen eines Projektes frei gewählt werden. Die Steuerung der Inhalte über diesen Parameter ist z.B. bei der Verwendung eines gfi-Themes für mehrere Layer von zentraler Bedeutung.|`{"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}`|
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
@@ -132,6 +133,29 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       ]
    }
 ```
+
+**Beispiel WFS-T:**
+
+
+```
+#!json
+{
+    "id" : "1234",
+    "name" : "WFSTLayer",
+    "url" : "http://IP-Adresse/Beispiel/Pfad",
+    "typ" : "WFS",
+    "featureType" : "wfstBsp",
+    "format" : "image/png",
+    "version" : "1.1.0",
+    "featureNS" : "http://beispiel.link.org/gmlsf",
+    "featurePrefix" : "sf",
+    "outputFormat" : "XML",
+    "gfiAttributes" : "showAll",
+    "layerAttribution" : "nicht vorhanden",
+    "legendURL" : "",
+    "datasets" : []
+  }
+  ```
 
 
 ## Sensor-Layer ##
