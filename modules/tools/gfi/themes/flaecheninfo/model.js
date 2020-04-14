@@ -37,32 +37,29 @@ const FlaecheninfoTheme = Theme.extend({
      * @returns {void}
      */
     parseGfiContent: function () {
-        var requestedParcelId = Radio.request("GFI", "getRequestedParcelId"),
-            textContent,
-            umring,
+        const requestedParcelId = Radio.request("GFI", "getRequestedParcelId");
+        let textContent,
+            ring,
             gfiContent = this.get("gfiContent");
 
         // Sometimes parcel service returns multiple results as center points parcels may be inside another
         // parcel. Because this, results are sorted this way.
-        gfiContent = gfiContent.sort(foundGfiContent => {
-            return foundGfiContent.Flurstück === requestedParcelId ? -1 : 1;
-        });
+        if (gfiContent && typeof gfiContent.sort === "function") {
+            gfiContent = gfiContent.sort(foundGfiContent => {
+                return foundGfiContent.Flurstück === requestedParcelId ? -1 : 1;
+            });
 
-        textContent = _.omit(gfiContent[0], this.get("geometryKey"));
-        umring = _.find(gfiContent[0], function (val, key) {
-            if (key === this.get("geometryKey")) {
-                return val;
-            }
-            return null;
-        }, this);
+            textContent = Radio.request("Util", "omit", gfiContent[0], this.get("geometryKey"));
+            ring = gfiContent[0].hasOwnProperty(this.get("geometryKey")) ? gfiContent[0][this.get("geometryKey")] : "";
 
-        this.setGfiContent([textContent]);
-        this.setGeometry(umring);
-        this.showUmring();
+            this.setGfiContent([textContent]);
+            this.setGeometry(ring);
+            this.showUmring();
+        }
     },
 
     createReport: function () {
-        var flurst = this.get("gfiContent")[0].Flurstück,
+        const flurst = this.get("gfiContent")[0].Flurstück,
             gemarkung = this.get("gfiContent")[0].Gemarkung;
 
         Radio.trigger("ParcelSearch", "createReport", flurst, gemarkung);
