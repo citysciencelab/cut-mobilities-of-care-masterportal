@@ -428,22 +428,27 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                 value = this.prepareGfiValue(gfi, key);
 
             if (typeof newKey === "object") {
-                value = this.prepareGfiValueFromObject(value, newKey);
+                value = this.prepareGfiValueFromObject(key, newKey, gfi);
                 newKey = newKey.name;
             }
-            preparedGfi[newKey] = value;
+            if (value && value !== "undefined") {
+                preparedGfi[newKey] = value;
+            }
         });
 
         return preparedGfi;
     },
 
-    prepareGfiValueFromObject: function (value, obj) {
+    prepareGfiValueFromObject: function (key, obj, gfi) {
         const type = obj.hasOwnProperty("type") ? obj.type : "string",
-            format = obj.hasOwnProperty("format") ? obj.format : "DD.MM.YYYY HH:mm:ss";
-        let preparedValue = value,
+            format = obj.hasOwnProperty("format") ? obj.format : "DD.MM.YYYY HH:mm:ss",
+            condition = obj.hasOwnProperty("condition") ? obj.condition : null;
+        let preparedValue = this.prepareGfiValue(gfi, key),
             date;
 
-        preparedValue = this.appendSuffix(preparedValue, obj.suffix);
+        if (condition) {
+            preparedValue = this.getValueFromCondition(key, condition, gfi);
+        }
         switch (type) {
             case "date": {
                 date = moment(String(preparedValue));
@@ -457,10 +462,42 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                 preparedValue = String(preparedValue);
             }
         }
+        if (preparedValue && preparedValue !== "undefined") {
+            preparedValue = this.appendSuffix(preparedValue, obj.suffix);
+        }
 
         return preparedValue;
     },
 
+    getValueFromCondition: function (key, condition, gfi) {
+        let valueFromCondition,
+            match;
+
+        if (condition === "contains") {
+            match = Object.keys(gfi).filter(key2 => {
+                return key2.length !== length && key2.includes(key);
+            })[0];
+            valueFromCondition = gfi[match];
+        }
+        else if (condition === "startsWith") {
+            match = Object.keys(gfi).filter(key2 => {
+                return key2.length !== length && key2.startsWith(key);
+            })[0];
+            valueFromCondition = gfi[match];
+        }
+        else if (condition === "endsWith") {
+            match = Object.keys(gfi).filter(key2 => {
+                return key2.length !== length && key2.endsWith(key);
+            })[0];
+            valueFromCondition = gfi[match];
+        }
+        else {
+            valueFromCondition = gfi[key];
+        }
+
+        return valueFromCondition;
+
+    },
     appendSuffix: function (value, suffix) {
         let valueWithSuffix = value;
 
