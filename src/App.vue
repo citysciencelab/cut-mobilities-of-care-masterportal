@@ -3,7 +3,7 @@ import Alerting from "./components/Alerting.vue";
 import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./components/ScaleLine.vue";
 import Controls from "./components/controls/Controls.vue";
-import Tools from "./components/tools/Tools.vue";
+// import Tools from "./components/tools/Tools.vue";
 import Title from "./components/Title.vue";
 import MapModuleDebug from "./store/modules/map/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
@@ -17,7 +17,7 @@ export default {
         Title,
         SupplyCoord,
         ScaleLine,
-        Tools,
+        // Tools,
         Language,
         MapModuleDebug
     },
