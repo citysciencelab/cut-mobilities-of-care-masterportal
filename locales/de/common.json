@@ -37,7 +37,8 @@
             "draw": "Zeichnen / Schreiben",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
-            "addWms": "WMS hinzufügen"
+            "addWms": "WMS hinzufügen",
+            "wfsTransaction": "WFS-T Tool"
         },
         "legend": "Legende",
         "contact": "Kontakt",

@@ -1,0 +1,1468 @@
+import Model from "@modules/tools/wfst/model.js";
+import ModelList from "@modules/core/modelList/list.js";
+import {expect} from "chai";
+import testServices from "../../../resources/testServices.json";
+import Util from "@testUtil";
+import {Draw} from "ol/interaction.js";
+
+describe("WfstModel", function () {
+    var model,
+        utilModel,
+        dftNonHierXml,
+        dftNonHierXmlPrefix,
+        dftHierXml,
+        dftHierXmlPrefix,
+        attributeFields = [],
+        attributeFieldsPointGeom = [],
+        gfiAttributes,
+        wfstFields = [],
+        transactionResponseInsert,
+        transactionResponseDelete,
+        transactionResponseUpdate,
+        transactionFailedResponse,
+        transactionJqXHR,
+        features,
+        drawLayer;
+
+    before(function () {
+        var dftNonHierarchicalResponse,
+            dftNonHierarchicalResponsePrefix,
+            dftHierarchicalResponse,
+            dftHierarchicalResponsePrefix,
+            attributeFieldsFile,
+            attributeFieldsPointGeomFile,
+            xmlAttrFields,
+            xmlAttrFields2,
+            wfstFieldsStr,
+            newField,
+            transactionJqXHRFile,
+            vectorLayer = Radio.request("Map", "createLayerIfNotExists", "wfst_Layer"),
+            drawAttr;
+
+        model = new Model();
+        utilModel = new Util();
+
+        // Different describe feature type responses
+        dftNonHierarchicalResponse = utilModel.getFile("resources/testNonHierarchicalDftResponse.xml");
+        dftNonHierXml = utilModel.parseXML(dftNonHierarchicalResponse);
+        dftNonHierarchicalResponsePrefix = utilModel.getFile("resources/testNonHierarchicalDftResponsePrefix.xml");
+        dftNonHierXmlPrefix = utilModel.parseXML(dftNonHierarchicalResponsePrefix);
+        dftHierarchicalResponse = utilModel.getFile("resources/testHierarchicalDftResponse.xml");
+        dftHierXml = utilModel.parseXML(dftHierarchicalResponse);
+        dftHierarchicalResponsePrefix = utilModel.getFile("resources/testHierarchicalDftResponsePrefix.xml");
+        dftHierXmlPrefix = utilModel.parseXML(dftHierarchicalResponsePrefix);
+
+        // Attribute fields from an example feature with no special geometry type
+        attributeFieldsFile = utilModel.getFile("resources/testAttributeFields.xml");
+        xmlAttrFields = utilModel.parseXML(attributeFieldsFile);
+
+        $(xmlAttrFields).find("element").each(function (index, e) {
+            attributeFields.push(e);
+        });
+
+        // Attribute fields from an example feature with point geometry type
+        attributeFieldsPointGeomFile = utilModel.getFile("resources/testAttributeFieldsPointGeom.xml");
+        xmlAttrFields2 = utilModel.parseXML(attributeFieldsPointGeomFile);
+
+        $(xmlAttrFields2).find("element").each(function (index, e) {
+            attributeFieldsPointGeom.push(e);
+        });
+
+        // Example gfiAttributes
+        gfiAttributes = {
+            "name": "Name",
+            "vorhaben": "Vorhaben",
+            "anfragedatum": "Anfragedatum",
+            "bemerkung": "Bemerkung",
+            "vorgangsnummer": "Vorgangsnummer",
+            "testnummer": "Testnummer",
+            "istest": "Ist es ein Test?"
+        };
+
+        // Create example wfst fields
+        wfstFieldsStr = utilModel.getFile("resources/wfstFields.txt").split(/(?<=},)/);
+        wfstFieldsStr.forEach(function (field) {
+            newField = field.replace("},", "}");
+            wfstFields.push(JSON.parse(newField));
+        });
+        model.set("wfstFields", wfstFields);
+
+        // Example responses for transactions witht the wfst service
+        transactionResponseInsert = utilModel.parseXML(utilModel.getFile("resources/testTransactionResponseInsert.xml"));
+        transactionResponseDelete = utilModel.parseXML(utilModel.getFile("resources/testTransactionResponseDelete.xml"));
+        transactionResponseUpdate = utilModel.parseXML(utilModel.getFile("resources/testTransactionResponseUpdate.xml"));
+        transactionFailedResponse = utilModel.parseXML(utilModel.getFile("resources/testTransactionFailedResponse.xml"));
+        transactionJqXHRFile = utilModel.getFile("resources/testTransactionJqXHR.xml");
+        transactionJqXHR = JSON.parse(transactionJqXHRFile);
+
+        // Example features
+        features = utilModel.createTestFeatures("resources/testFeatureWfst.xml");
+
+        // Example layer which is created for adding a new geometry in the application
+        drawLayer = new Draw({
+            source: vectorLayer.getSource(),
+            type: "Point",
+            geometryName: "geom"
+        });
+
+        // Attributes for the example layer
+        drawAttr = {
+            "active": true,
+            "name": "Max Mustermann",
+            "vorhaben": "Testen",
+            "anfragedatum": "2020-01-28",
+            "bemerkung": "Dies ist ein Punkt",
+            "vorgangsnummer": 3,
+            "testnummer": 1.3,
+            "istest": false
+        };
+        drawLayer.set("values_", drawAttr);
+
+        // Creates an example Modellist
+        model.collection = new ModelList(testServices);
+
+        model.set("layerIds", []);
+        model.set("currentLayerId", "682");
+    });
+
+    describe("handleEditDeleteBtn", function () {
+        it("should return an Array with the passed configurations for displaying the delete and edit buttons and their captions.", function () {
+            var deleteConfig = "TestCaption",
+                editConfig = false,
+                result = [[true, false], ["TestCaption", "Geometrie bearbeiten"]];
+
+            expect(model.handleEditDeleteButton(deleteConfig, editConfig)).to.deep.equal(result);
+        });
+        it("should return an Array with the default configutations for displaying the delete and edit buttons and their captions if no configurations was made.", function () {
+            var result = [[true, true], ["Geometrie löschen", "Geometrie bearbeiten"]];
+
+            expect(model.handleEditDeleteButton(undefined, undefined)).to.deep.equal(result);
+        });
+        it("should return an Array with the default configutations for displaying the delete and edit buttons and their captions if the passed configuration is null.", function () {
+            var deleteConfig = null,
+                editConfig = null,
+                result = [[true, true], ["Geometrie löschen", "Geometrie bearbeiten"]];
+
+            expect(model.handleEditDeleteButton(deleteConfig, editConfig)).to.deep.equal(result);
+        });
+    });
+    describe("checkLayerConfig", function () {
+        it("should return an empty array, if all passed active layers are configured correct.", function () {
+            // Todo
+            // benötigt WFS Layer
+        });
+        it("should return an empty object, if no layers were passed.", function () {
+            // Todo
+            // benötigt WFS Layer
+        });
+        it("should return an empty object, if all passed active layers are undefined.", function () {
+            // Todo
+            // benötigt WFS Layer
+        });
+        it("should return an array wit all incorrect configured layers.", function () {
+            // Todo
+            // benötigt WFS Layer
+        });
+    });
+    describe("handleAvailableLayers", function () {
+        it("should return an empty Array if no layerIds were given", function () {
+            var ids = [],
+                initialAlertCases = ["AvailableLayers"];
+
+            model.set("initialAlertCases", ["AvailableLayers"]);
+            expect(model.handleAvailableLayers(ids, initialAlertCases)).to.be.empty;
+        });
+        it("should return the error case 'AvailableLayers' if no layerIds were configured.", function () {
+            var ids = [],
+                initialAlertCases = [],
+                alertCase = "AvailableLayers";
+
+            model.set("initialAlertCases", []);
+            model.handleAvailableLayers(ids, initialAlertCases);
+            expect(model.get("initialAlertCases")).to.include(alertCase);
+        });
+        it("should return the error case 'AvailableLayers' only once if no layerIds were configured and the error case is already existing in the initialAlertCase parameter.", function () {
+            var ids = [],
+                initialAlertCases = ["AvailableLayers"],
+                result = ["AvailableLayers"];
+
+            model.set("initialAlertCases", ["AvailableLayers"]);
+            model.handleAvailableLayers(ids, initialAlertCases);
+            expect(model.get("initialAlertCases")).to.deep.equal(result);
+        });
+        it("should return an empty Array if the passed layerIds are undefined.", function () {
+            var initialAlertCases = ["AvailableLayers"];
+
+            model.set("initialAlertCases", ["AvailableLayers"]);
+            expect(model.handleAvailableLayers(undefined, initialAlertCases)).to.be.empty;
+        });
+        it("should return the configured LayerIds", function () {
+            var ids = ["123", "456", "789"],
+                initialAlertCases = [],
+                result = ["123", "456", "789"];
+
+            model.set("initialAlertCases", []);
+            expect(model.handleAvailableLayers(ids, initialAlertCases)).to.deep.equal(result);
+        });
+    });
+    describe("checkActiveLayers", function () {
+        it("should return the passed object, if all passed active layers are configured correct", function () {
+            var activeLayers = {
+                    "682": "Kindertagesstaetten",
+                    "1731": "Krankenhäuser Hamburg"
+                },
+                incorrectConfigLayers = [];
+
+            expect(model.checkActiveLayers(activeLayers, incorrectConfigLayers)).to.deep.equal(activeLayers);
+        });
+        it("should return an empty object, if no active layer was passed", function () {
+            var activeLayers = {},
+                incorrectConfigLayers = [];
+
+            expect(model.checkActiveLayers(activeLayers, incorrectConfigLayers)).to.be.empty;
+        });
+        it("should return an empty object, if all passed active layers are undefined", function () {
+            var incorrectConfigLayers = [];
+
+            expect(model.checkActiveLayers(undefined, incorrectConfigLayers)).to.be.empty;
+        });
+        it("should return an empty object, if all passed active layers are configured incorrect", function () {
+            var activeLayers = {},
+                incorrectConfigLayers = ["682", "1731"];
+
+            activeLayers["682"] = "Kindertagesstaetten";
+            activeLayers["1731"] = "Krankenhäuser Hamburg";
+
+            expect(model.checkActiveLayers(activeLayers, incorrectConfigLayers)).to.be.empty;
+        });
+    });
+    describe("getActiveLayers", function () {
+        it("should return no layer if none is selected in the layer tree", function () {
+            var ids = ["683", "1933"];
+
+            expect(model.getActiveLayers(ids)).to.be.empty;
+        });
+        it("should return no layer if no layer was configured", function () {
+            var ids = [];
+
+            expect(model.getActiveLayers(ids)).to.be.empty;
+        });
+        it("should return the layers that are selected in the layer tree", function () {
+            var layerNames = {},
+                ids = ["682", "1731", "1933"];
+
+            layerNames[682] = "Kindertagesstaetten";
+            layerNames[1731] = "Krankenhäuser Hamburg";
+            Radio.trigger("ModelList", "setModelAttributesById", "682", {isSelected: true});
+            Radio.trigger("ModelList", "setModelAttributesById", "1731", {isSelected: true});
+            expect(model.getActiveLayers(ids)).to.deep.equal(layerNames);
+        });
+    });
+    describe("getSelectedLayer", function () {
+        it("should return null if the passed activeLayer Object is empty", function () {
+            var activeLayers = {},
+                firstId = null;
+
+            expect(model.getSelectedLayer(activeLayers)).to.deep.equal(firstId);
+        });
+        it("should return null if the passed activeLayer Object is null", function () {
+            var activeLayers = null,
+                firstId = null;
+
+            expect(model.getSelectedLayer(activeLayers)).to.deep.equal(firstId);
+        });
+        it("should return the id of the first layer in the passed activeLayer Object if it contains at least one active layer", function () {
+            var activeLayers = {},
+                firstId = "682";
+
+            activeLayers[682] = "Kindertagesstaetten";
+            activeLayers[1731] = "Krankenhäuser Hamburg";
+            expect(model.getSelectedLayer(activeLayers)).to.deep.equal(firstId);
+        });
+    });
+    describe("getCurrentLayer", function () {
+        it("should return the current active Layer", function () {
+            var currentLayer = Radio.request("ModelList", "getModelByAttributes", {id: model.get("currentLayerId")});
+
+            // durch WFS Layer ersetzen
+            expect(model.getCurrentLayer()).to.deep.equal(currentLayer);
+        });
+        it("should return null if the there is currently no active layer", function () {
+            model.set("currentLayerId", null);
+
+            expect(model.getCurrentLayer()).to.be.null;
+        });
+    });
+    describe("getAlertMessage", function () {
+        it("should return the appropriate error message for the passed error case", function () {
+            var alertCase = "decimalError",
+                errorMessage = "Bitte geben Sie nur Dezimalzahlen ein! Das Dezimal-Trennzeichen ist ein Komma.";
+
+            expect(model.getAlertMessage(alertCase)).is.equal(errorMessage);
+        });
+        it("should return an empty String if the passed error Case is empty", function () {
+            var alertCase = "",
+                errorMessage = "";
+
+            expect(model.getAlertMessage(alertCase)).is.equal(errorMessage);
+        });
+        it("should return an empty String if the passed error Case is undefined or null", function () {
+            var errorMessage = "";
+
+            expect(model.getAlertMessage(undefined)).is.equal(errorMessage);
+        });
+    });
+    describe("getLayerParams", function () {
+        it("should return an empty object, if the passed layer is empty", function () {
+            var wfsLayer = {};
+
+            expect(model.getLayerParams(wfsLayer)).to.be.empty;
+        });
+        it("should return an empty object, if the passed layer is undefined", function () {
+
+            expect(model.getLayerParams(undefined)).to.be.empty;
+        });
+        it("should return the respective attributes of the passed layer", function () {
+            var wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: "682"}),
+                result = {
+                    url: "https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung",
+                    version: "1.3.0",
+                    featureType: undefined,
+                    featureNS: undefined,
+                    featurePrefix: undefined,
+                    gfiAttributes: "showAll"
+                };
+
+            // WFS Layer verwenden
+            expect(model.getLayerParams(wfsLayer)).to.deep.equal(result);
+        });
+    });
+    describe("parseResponse", function () {
+        it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a non-hierarchical XML Schema.", function () {
+            var featureTypename = "wfstest",
+                response = model.parseResponse(dftNonHierXml, featureTypename),
+                responseNames = [],
+                i = 0,
+                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
+
+            while (i < response.length) {
+                responseNames.push($(response[i]).attr("name"));
+                i++;
+            }
+            expect(responseNames).to.deep.equal(result);
+        });
+        it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a non-hierarchical XML Schema and uses a prefix.", function () {
+            var featureTypename = "wfstest",
+                response = model.parseResponse(dftNonHierXmlPrefix, featureTypename),
+                responseNames = [],
+                i = 0,
+                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
+
+            while (i < response.length) {
+                responseNames.push($(response[i]).attr("name"));
+                i++;
+            }
+            expect(responseNames).to.deep.equal(result);
+        });
+        it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a hierarchical XML Schema.", function () {
+            var featureTypename = "wfstest",
+                response = model.parseResponse(dftHierXml, featureTypename),
+                responseNames = [],
+                i = 0,
+                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
+
+            while (i < response.length) {
+                responseNames.push($(response[i]).attr("name"));
+                i++;
+            }
+            expect(responseNames).to.deep.equal(result);
+        });
+        it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a hierarchical XML Schema and uses a prefix.", function () {
+            var featureTypename = "wfstest",
+                response = model.parseResponse(dftHierXmlPrefix, featureTypename),
+                responseNames = [],
+                i = 0,
+                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
+
+            while (i < response.length) {
+                responseNames.push($(response[i]).attr("name"));
+                i++;
+            }
+            expect(responseNames).to.deep.equal(result);
+        });
+        it("should return an empty array, if the passed DescribeFeatureType response is undefined.", function () {
+            var featureTypename = "wfstest";
+
+            expect(model.parseResponse(undefined, featureTypename)).to.be.empty;
+        });
+    });
+    describe("filterInputFields", function () {
+        it("should return an array with all attributes of the feature type, if the value of gfiAttributes is 'showAll'.", function () {
+            var gfiAttributesS = "showAll",
+                result = [
+                    {
+                        "field": "name",
+                        "caption": "name"
+                    },
+                    {
+                        "field": "vorhaben",
+                        "caption": "vorhaben"
+                    },
+                    {
+                        "field": "anfragedatum",
+                        "caption": "anfragedatum"
+                    },
+                    {
+                        "field": "bemerkung",
+                        "caption": "bemerkung"
+                    },
+                    {
+                        "field": "vorgangsnummer",
+                        "caption": "vorgangsnummer"
+                    },
+                    {
+                        "field": "testnummer",
+                        "caption": "testnummer"
+                    },
+                    {
+                        "field": "istest",
+                        "caption": "istest"
+                    }
+                ];
+
+            expect(model.filterInputFields(gfiAttributesS, attributeFields)).to.deep.equal(result);
+        });
+        it("should return an empty array, if the value of gfiAttributes is 'ignore'.", function () {
+            var gfiAttributesI = "ignore";
+
+            expect(model.filterInputFields(gfiAttributesI, attributeFields)).to.be.empty;
+        });
+        it("should return an empty array, if gfiAttributes is undefined.", function () {
+            expect(model.filterInputFields(undefined, attributeFields)).to.be.empty;
+        });
+        it("should return an array with the attributes of the feature type that are contained in gfiAttributes.", function () {
+            var result = [
+                {
+                    "field": "name",
+                    "caption": "Name"
+                },
+                {
+                    "field": "vorhaben",
+                    "caption": "Vorhaben"
+                },
+                {
+                    "field": "anfragedatum",
+                    "caption": "Anfragedatum"
+                },
+                {
+                    "field": "bemerkung",
+                    "caption": "Bemerkung"
+                },
+                {
+                    "field": "vorgangsnummer",
+                    "caption": "Vorgangsnummer"
+                },
+                {
+                    "field": "testnummer",
+                    "caption": "Testnummer"
+                },
+                {
+                    "field": "istest",
+                    "caption": "Ist es ein Test?"
+                }
+            ];
+
+            expect(model.filterInputFields(gfiAttributes, attributeFields)).to.deep.equal(result);
+        });
+    });
+    describe("getGeometryName", function () {
+        it("should return null, if the passed attributeFields are empty.", function () {
+            var attributeFieldsEmpty = [];
+
+            expect(model.getGeometryName(attributeFieldsEmpty)).to.be.null;
+        });
+        it("should return null, if the passed attributeFields are undefined.", function () {
+            expect(model.getGeometryName(undefined)).to.be.null;
+        });
+        it("should return the name of the geometry, if the passed parameter contains the geometry attribute.", function () {
+            var geometry = "geom";
+
+            expect(model.getGeometryName(attributeFields)).to.deep.equal(geometry);
+        });
+    });
+    describe("getTypeOfInputFields", function () {
+        it("should return an Object with inputfield type and the type of each feature attribute in the passed object.", function () {
+            var result = {
+                "name": {"fieldType": "text", "type": "string"},
+                "vorhaben": {"fieldType": "text", "type": "string"},
+                "anfragedatum": {"fieldType": "date", "type": "date"},
+                "bemerkung": {"fieldType": "text", "type": "string"},
+                "vorgangsnummer": {"fieldType": "text", "type": "integer"},
+                "testnummer": {"fieldType": "text", "type": "decimal"},
+                "istest": {"fieldType": "checkbox", "type": "boolean"}
+            };
+
+            expect(model.getTypeOfInputFields(attributeFields)).to.deep.equal(result);
+        });
+        it("should return an empty Object if the passed parameter attributeFields is empty.", function () {
+            var attributeFieldsEmpty = [];
+
+            expect(model.getTypeOfInputFields(attributeFieldsEmpty)).to.be.empty;
+        });
+        it("should return an empty Object if the passed parameter attributeFields is undefined.", function () {
+            expect(model.getTypeOfInputFields(undefined)).to.be.empty;
+        });
+    });
+    describe("getMandatoryFields", function () {
+        it("should return an array with true for the attributes where 'minOccurs' is not existing or 'minOccurs' is equal to 1 and with false for the attributes where 'minOccurs' is equal to 0.", function () {
+            var result = [];
+
+            result.geom = true;
+            result.name = true;
+            result.vorhaben = true;
+            result.anfragedatum = true;
+            result.bemerkung = false;
+            result.vorgangsnummer = true;
+            result.testnummer = false;
+            result.istest = false;
+
+            expect(model.getMandatoryFields(attributeFields)).to.deep.equal(result);
+        });
+        it("should return an empty array, if the passed object is empty.", function () {
+            var attributeFieldsEmpty = [];
+
+            expect(model.getMandatoryFields(attributeFieldsEmpty)).to.be.empty;
+        });
+    });
+    describe("handleInputFields", function () {
+        it("should return an empty array, if one of the passed objects is undefined.", function () {
+            var fields = [
+                    {
+                        "field": "name",
+                        "caption": "Name"
+                    },
+                    {
+                        "field": "vorhaben",
+                        "caption": "Vorhaben"
+                    },
+                    {
+                        "field": "anfragedatum",
+                        "caption": "Anfragedatum"
+                    },
+                    {
+                        "field": "bemerkung",
+                        "caption": "Bemerkung"
+                    },
+                    {
+                        "field": "vorgangsnummer",
+                        "caption": "Vorgangsnummer"
+                    },
+                    {
+                        "field": "testnummer",
+                        "caption": "Testnummer"
+                    },
+                    {
+                        "field": "istest",
+                        "caption": "Ist es ein Test?"
+                    }
+                ],
+                type = {
+                    "name": {"fieldType": "text", "type": "string"},
+                    "vorhaben": {"fieldType": "text", "type": "string"},
+                    "anfragedatum": {"fieldType": "date", "type": "date"},
+                    "bemerkung": {"fieldType": "text", "type": "string"},
+                    "vorgangsnummer": {"fieldType": "text", "type": "integer"},
+                    "testnummer": {"fieldType": "text", "type": "decimal"},
+                    "istest": {"fieldType": "checkbox", "type": "boolean"}
+                };
+
+            expect(model.handleInputFields(fields, type, undefined)).to.be.empty;
+        });
+        it("should return an array with default values for the attribute type and the mandatory flag, if the passed type or the mandatory object do not contain a value for an attribute.", function () {
+            var fields = [
+                    {
+                        "field": "name",
+                        "caption": "Name"
+                    },
+                    {
+                        "field": "vorhaben",
+                        "caption": "Vorhaben"
+                    },
+                    {
+                        "field": "anfragedatum",
+                        "caption": "Anfragedatum"
+                    },
+                    {
+                        "field": "bemerkung",
+                        "caption": "Bemerkung"
+                    },
+                    {
+                        "field": "vorgangsnummer",
+                        "caption": "Vorgangsnummer"
+                    },
+                    {
+                        "field": "testnummer",
+                        "caption": "Testnummer"
+                    },
+                    {
+                        "field": "istest",
+                        "caption": "Ist es ein Test?"
+                    }
+                ],
+                type = {
+                    "name": {"fieldType": "text", "type": "string"},
+                    "anfragedatum": {"fieldType": "date", "type": "date"},
+                    "bemerkung": {"fieldType": "text", "type": "string"},
+                    "vorgangsnummer": {"fieldType": "text", "type": "integer"},
+                    "testnummer": {"fieldType": "text", "type": "decimal"},
+                    "istest": {"fieldType": "checkbox", "type": "boolean"}
+                },
+                mandatory = [];
+
+            mandatory.geom = true;
+            mandatory.name = true;
+            mandatory.vorhaben = true;
+            mandatory.anfragedatum = true;
+            mandatory.vorgangsnummer = true;
+            mandatory.testnummer = false;
+            mandatory.istest = false;
+
+            expect(model.handleInputFields(fields, type, mandatory)).to.deep.equal(wfstFields);
+        });
+        it("should return an array with all attributes of the feature type, that are specified in gfiAttributes and the attribute type and if the attribute is mandatory or not.", function () {
+            var fields = [
+                    {
+                        "field": "name",
+                        "caption": "Name"
+                    },
+                    {
+                        "field": "vorhaben",
+                        "caption": "Vorhaben"
+                    },
+                    {
+                        "field": "anfragedatum",
+                        "caption": "Anfragedatum"
+                    },
+                    {
+                        "field": "bemerkung",
+                        "caption": "Bemerkung"
+                    },
+                    {
+                        "field": "vorgangsnummer",
+                        "caption": "Vorgangsnummer"
+                    },
+                    {
+                        "field": "testnummer",
+                        "caption": "Testnummer"
+                    },
+                    {
+                        "field": "istest",
+                        "caption": "Ist es ein Test?"
+                    }
+                ],
+                type = {
+                    "name": {"fieldType": "text", "type": "string"},
+                    "vorhaben": {"fieldType": "text", "type": "string"},
+                    "anfragedatum": {"fieldType": "date", "type": "date"},
+                    "bemerkung": {"fieldType": "text", "type": "string"},
+                    "vorgangsnummer": {"fieldType": "text", "type": "integer"},
+                    "testnummer": {"fieldType": "text", "type": "decimal"},
+                    "istest": {"fieldType": "checkbox", "type": "boolean"}
+                },
+                mandatory = [];
+
+            mandatory.geom = true;
+            mandatory.name = true;
+            mandatory.vorhaben = true;
+            mandatory.anfragedatum = true;
+            mandatory.bemerkung = false;
+            mandatory.vorgangsnummer = true;
+            mandatory.testnummer = false;
+            mandatory.istest = false;
+
+            expect(model.handleInputFields(fields, type, mandatory)).to.deep.equal(wfstFields);
+        });
+    });
+    describe("getButtonTitleConfigs", function () {
+        it("should return the default captions for all Buttons and the Layer Select if no configuration was made", function () {
+            var buttons = [undefined, undefined, undefined],
+                btnCaptConfs = ["Punkt erfassen", "Linie erfassen", "Fläche erfassen", "aktueller Layer:"];
+
+            expect(model.getButtonTitleConfigs(undefined, buttons, btnCaptConfs)).to.deep.equal(btnCaptConfs);
+        });
+        it("should return the new caption for the Layer Select of the model", function () {
+            var layerSelect = "Wfs-t Feature Types",
+                buttons = [true, false, true],
+                btnCaptConfs = ["Punkt-Test", "Linie erfassen", "Fläche erfassen", "aktueller Layer:"],
+                result = ["Punkt-Test", "Linie erfassen", "Fläche erfassen", "Wfs-t Feature Types"];
+
+            expect(model.getButtonTitleConfigs(layerSelect, buttons, btnCaptConfs)).to.deep.equal(result);
+        });
+        it("should return the new caption for the Point Button of the model", function () {
+            var buttons = [[{"layerId": "682", "caption": "Baum erfassen", "show": true}], false, true],
+                btnCaptConfs = ["Punkt-Test", "Linie erfassen", "Fläche erfassen", "aktueller Layer:"],
+                layerId = "682",
+                result = ["Baum erfassen", "Linie erfassen", "Fläche erfassen", "aktueller Layer:"];
+
+            expect(model.getButtonTitleConfigs(undefined, buttons, btnCaptConfs, layerId)).to.deep.equal(result);
+        });
+    });
+    describe("getButtonConfig", function () {
+        it("should return true for the point button configuration and false for the configuration of the other buttons, if the passed layers geometry is point.", function () {
+            var buttons = [
+                    [
+                        {
+                            "layerId": "123",
+                            "caption": "Test",
+                            "show": true
+                        }
+                    ],
+                    true,
+                    [
+                        {
+                            "layerId": "123",
+                            "show": false
+                        }
+                    ]
+                ],
+                layerId = "123",
+                result = [true, false, false];
+
+            expect(model.getButtonConfig(attributeFieldsPointGeom, layerId, buttons)).to.deep.equal(result);
+        });
+        it("should return an array with the configurations made for the point, line and area button, if the passed layers geometry is not of a special type.", function () {
+            var buttons = [
+                    [
+                        {
+                            "layerId": "123",
+                            "caption": "Test",
+                            "show": true
+                        }
+                    ],
+                    true,
+                    [
+                        {
+                            "layerId": "123",
+                            "show": false
+                        }
+                    ]
+                ],
+                layerId = "123",
+                result = [true, true, false];
+
+            expect(model.getButtonConfig(attributeFields, layerId, buttons)).to.deep.equal(result);
+        });
+        it("should return an array with the configurations made for the point, line and area button, if the passed attributeFields are empty and the layers geometry is not of a special type.", function () {
+            var attributeFieldsEmpty = [],
+                buttons = [
+                    [
+                        {
+                            "layerId": "123",
+                            "caption": "Test",
+                            "show": true
+                        }
+                    ],
+                    true,
+                    [
+                        {
+                            "layerId": "123",
+                            "show": false
+                        }
+                    ]
+                ],
+                layerId = "123",
+                result = [true, true, false];
+
+            expect(model.getButtonConfig(attributeFieldsEmpty, layerId, buttons)).to.deep.equal(result);
+        });
+        it("should return an array with the default configurations for the point, line and area button, if the passed layers geometry is not of a special type and no configurations were made.", function () {
+            var buttons = [undefined, undefined, undefined],
+                layerId = "123",
+                result = [true, true, true];
+
+            expect(model.getButtonConfig(attributeFields, layerId, buttons)).to.deep.equal(result);
+        });
+    });
+    describe("getFieldType", function () {
+        it("should return the type of the requestet input field", function () {
+            var id = "name";
+
+            expect(model.getFieldType(id, wfstFields)).to.deep.equal("string");
+        });
+        it("should return undefined if the passed wfstFields are empty", function () {
+            var wfstFieldsEmpty = [],
+                id = "name";
+
+            expect(model.getFieldType(id, wfstFieldsEmpty)).to.be.undefined;
+        });
+        it("should return undefined if the passed id is undefined or is not included in the wfstFields", function () {
+            var id;
+
+            expect(model.getFieldType(id, wfstFields)).to.be.undefined;
+        });
+    });
+    describe("handleFeatureAttributes", function () {
+        it("should set the feature properties from the input fields", function () {
+            var featureProperties = {
+                    "active": true,
+                    "name": "",
+                    "geom": "",
+                    "vorhaben": "",
+                    "anfragedatum": "",
+                    "bemerkung": "",
+                    "vorgangsnummer": "",
+                    "testnummer": "",
+                    "istest": ""
+                },
+                id = "name",
+                inputValue = "Test",
+                result = {
+                    "active": true,
+                    "name": "Test",
+                    "geom": "",
+                    "vorhaben": "",
+                    "anfragedatum": "",
+                    "bemerkung": "",
+                    "vorgangsnummer": "",
+                    "testnummer": "",
+                    "istest": ""
+                };
+
+            expect(model.handleFeatureAttributes(featureProperties, id, inputValue)).to.deep.equal(result);
+        });
+        it("should not set the feature properties from the input fields if the input value is no string or boolean", function () {
+            var featureProperties = {
+                    "active": true,
+                    "name": "",
+                    "geom": "",
+                    "vorhaben": "",
+                    "anfragedatum": "",
+                    "bemerkung": "",
+                    "vorgangsnummer": "",
+                    "testnummer": "",
+                    "istest": ""
+                },
+                id = "name",
+                inputValue = 12;
+
+            expect(model.handleFeatureAttributes(featureProperties, id, inputValue)).to.deep.equal(featureProperties);
+        });
+        it("should not set the feature properties from the input fields if the passed id is not of type string", function () {
+            var featureProperties = {
+                    "active": true,
+                    "name": "",
+                    "geom": "",
+                    "vorhaben": "",
+                    "anfragedatum": "",
+                    "bemerkung": "",
+                    "vorgangsnummer": "",
+                    "testnummer": "",
+                    "istest": ""
+                },
+                id = true,
+                inputValue = "Test";
+
+            expect(model.handleFeatureAttributes(featureProperties, id, inputValue)).to.deep.equal(featureProperties);
+        });
+    });
+    describe("inheritModelListAttributes", function () {
+        it("should return the layer id for the current feature", function () {
+            // todo
+            // benötigt WFS Layer
+        });
+        it("should return undefined if the passed feature id is undefined", function () {
+            // todo
+            // benötigt WFS Layer
+        });
+        it("should return undefined if the passed array with wfs layers is empty", function () {
+            // todo
+            // benötigt WFS Layer
+        });
+    });
+    describe("getActionType", function () {
+        it("should return 'update' if the current executet transaction is update.", function () {
+            var activeButton = "wfst-module-recordButton-save",
+                result = "update";
+
+            expect(model.getActionType(features[0], activeButton)).to.deep.equal(result);
+        });
+        it("should return 'delete' if the current executet transaction is delete.", function () {
+            var activeButton = "wfst-module-recordButton-delete",
+                result = "delete";
+
+            expect(model.getActionType(features[0], activeButton)).to.deep.equal(result);
+        });
+        it("should return undefined if the passed feature is empty and the passed active button is the save button.", function () {
+            var featureEmpty = {},
+                activeButton = "wfst-module-recordButton-save";
+
+            expect(model.getActionType(featureEmpty, activeButton)).to.be.undefined;
+        });
+        it("should return undefined if the passed active button is undefined.", function () {
+            expect(model.getActionType(features[0], undefined)).to.be.undefined;
+        });
+    });
+    describe("proofConditions", function () {
+        it("should return true if all mandatory fields are filled and a geometry was created.", function () {
+            var geometryName = "geom";
+
+            expect(model.proofConditions(features[0], wfstFields, geometryName)).to.be.true;
+        });
+        it("should return false if a mandatory field is not filled but a geometry was created.", function () {
+            var geometryName = "geom";
+
+            expect(model.proofConditions(features[2], wfstFields, geometryName)).to.be.false;
+        });
+        it("should return false if all mandatory fields are filled, but no geometry was created.", function () {
+            var geometryName = "geom";
+
+            expect(model.proofConditions(drawLayer, wfstFields, geometryName)).to.be.false;
+        });
+        it("should return false if the passed feature is empty.", function () {
+            var featureEmpty = {},
+                geometryName = "geom";
+
+            expect(model.proofConditions(featureEmpty, wfstFields, geometryName)).to.be.false;
+        });
+        it("should return false if the passed wfstFields are empty.", function () {
+            var wfstFieldsEmpty = {},
+                geometryName = "geom";
+
+            expect(model.proofConditions(features[0], wfstFieldsEmpty, geometryName)).to.be.false;
+        });
+    });
+    describe("handleFeatureProperties", function () {
+        it("should return the feature with correct ordered properties, if the passed feature has missing properties.", function () {
+            var featureProperties = {
+                    "name": "Test handleFeatureProperties 1",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": "3",
+                    "testnummer": "1.1",
+                    "istest": "true"
+                },
+                correctedFeature = model.handleFeatureProperties(featureProperties, features[11]),
+                result = {
+                    "name": "Test handleFeatureProperties 1",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": "3",
+                    "testnummer": "1.1",
+                    "istest": "true"
+                };
+
+            delete correctedFeature.unset("geom");
+            expect(correctedFeature.getProperties()).to.deep.equal(result);
+        });
+        it("should return the feature with correct ordered properties, if some of the passed feature properties do not have values", function () {
+            var featureProperties = {
+                    "name": "Test handleFeatureProperties 2",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "",
+                    "vorgangsnummer": "3",
+                    "testnummer": "",
+                    "istest": "true"
+                },
+                correctedFeature = model.handleFeatureProperties(featureProperties, features[12]),
+                result = {
+                    "name": "Test handleFeatureProperties 2",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "",
+                    "vorgangsnummer": "3",
+                    "testnummer": "",
+                    "istest": "true"
+                };
+
+            delete correctedFeature.unset("geom");
+            expect(correctedFeature.getProperties()).to.deep.equal(result);
+        });
+        it("should return the passed feature, if the passed featureProperties are empty.", function () {
+            var featureProperties = {},
+                correctedFeature = model.handleFeatureProperties(featureProperties, features[13]),
+                result = {
+                    "name": "Test handleFeatureProperties 3",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-27",
+                    "vorgangsnummer": "1",
+                    "testnummer": "1.1",
+                    "istest": "true"
+                };
+
+            delete correctedFeature.unset("geom");
+            expect(correctedFeature.getProperties()).to.deep.equal(result);
+        });
+        it("sould return an empty feature if the passed feature is empty.", function () {
+            var featureEmpty = {},
+                featureProperties = {
+                    "name": "Test handleFeatureProperties 4",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "test",
+                    "vorgangsnummer": "3",
+                    "testnummer": "1.1",
+                    "istest": "true"
+                };
+
+            expect(model.handleFeatureProperties(featureProperties, featureEmpty)).to.be.empty;
+        });
+    });
+    describe("handleFlawedAttributes", function () {
+        it("should return the passed feature without incorrect attributes.", function () {
+            var flawedFeature = model.handleFlawedAttributes(features[3], wfstFields),
+                correctedFeatureAttributes = {
+                    "name": "Test handleFlawedAttributes",
+                    "vorhaben": "Testen",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": "3",
+                    "testnummer": "1.1",
+                    "istest": "true"
+                };
+
+            delete flawedFeature.values_.geom;
+            expect(flawedFeature.values_).to.deep.equal(correctedFeatureAttributes);
+        });
+        it("should return the feature with false values for not checked checkboxes.", function () {
+            var flawedFeature = model.handleFlawedAttributes(features[4], wfstFields),
+                correctedFeatureAttributes = {
+                    "name": "Test handleFlawedAttributes2",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": "3",
+                    "testnummer": "1.1",
+                    "istest": false
+                };
+
+            delete flawedFeature.values_.geom;
+
+            expect(flawedFeature.values_).to.deep.equal(correctedFeatureAttributes);
+        });
+        it("should return the passed feature, if the passed wfstFields are empty.", function () {
+            var wfstFieldsEmpty = [];
+
+            expect(model.handleFlawedAttributes(features[0], wfstFieldsEmpty)).to.deep.equal(features[0]);
+        });
+        it("should return an empty object, if the passed feature is empty.", function () {
+            var featureEmpty = {};
+
+            expect(model.handleFlawedAttributes(featureEmpty, wfstFields)).to.be.empty;
+        });
+    });
+    describe("handleDecimalSeperator", function () {
+        it("should return the feature with the ',' decimal seperator for the display mode.", function () {
+            var mode = "display",
+                result = {
+                    "name": "Max Mustermann",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-01-28",
+                    "bemerkung": "Dies ist ein Punkt",
+                    "vorgangsnummer": "3",
+                    "testnummer": "1,3",
+                    "istest": "false"
+                },
+                displayFeature = model.handleDecimalSeperator(features[0].values_, mode, wfstFields);
+
+            delete displayFeature.geom;
+
+            expect(displayFeature).to.deep.equal(result);
+        });
+        it("should return the feature with the '.' decimal seperator for the transaction mode.", function () {
+            var mode = "transaction",
+                result = {
+                    "name": "Max Mustermann",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-01-28",
+                    "bemerkung": "Dies ist ein Punkt",
+                    "vorgangsnummer": "3",
+                    "testnummer": "1.3",
+                    "istest": "false"
+                },
+                displayFeature = model.handleDecimalSeperator(features[0], mode, wfstFields);
+
+            delete displayFeature.values_.geom;
+
+            expect(displayFeature.values_).to.deep.equal(result);
+        });
+        it("should return the passed feature, if the passed wfstFields are empty.", function () {
+            var mode = "display",
+                wfstFieldsEmpty = [];
+
+            expect(model.handleDecimalSeperator(features[0], mode, wfstFieldsEmpty)).to.deep.equal(features[0]);
+        });
+        it("should return the passed feature, if the passed mode is undefined.", function () {
+            var wfstFieldsEmpty = [];
+
+            expect(model.handleDecimalSeperator(features[0], undefined, wfstFieldsEmpty)).to.deep.equal(features[0]);
+        });
+        it("should return an empty Object, if the passed feature is empty.", function () {
+            var featureEmpty = {},
+                mode = "display";
+
+            expect(model.handleDecimalSeperator(featureEmpty, mode, wfstFields)).to.be.empty;
+        });
+    });
+    describe("handleEmptyAttributes", function () {
+        it("should return a feature without empty attributes, if the passed feature has empty attributes and the transaction mode is insert.", function () {
+            var result = {
+                    "name": "Test handleEmptyAttributes 1",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-27",
+                    "vorgangsnummer": "1",
+                    "istest": "true"
+                },
+                mode = "insert",
+                editedFeature;
+
+            features[5].setProperties({"bemerkung": "", "testnummer": ""});
+            editedFeature = model.handleEmptyAttributes(features[5], mode);
+
+            delete editedFeature.values_.geom;
+            expect(editedFeature.values_).to.deep.equal(result);
+        });
+        it("should return a feature with null attributes, if the passed feature has empty attributes and the transaction mode is update.", function () {
+            var result = {
+                    "name": "Test handleEmptyAttributes 2",
+                    "vorhaben": "Testen",
+                    "anfragedatum": "2020-02-27",
+                    "bemerkung": null,
+                    "vorgangsnummer": "1",
+                    "testnummer": null,
+                    "istest": "true"
+                },
+                mode = "update",
+                editedFeature;
+
+            features[6].setProperties({"bemerkung": "", "testnummer": ""});
+            editedFeature = model.handleEmptyAttributes(features[6], mode);
+
+            delete editedFeature.values_.geom;
+            expect(editedFeature.values_).to.deep.equal(result);
+        });
+        it("should return the passed feature, if it has no empty attributes.", function () {
+            expect(model.handleEmptyAttributes(features[0])).to.deep.equal(features[0]);
+        });
+        it("should return an empty object, if the passed feature is empty.", function () {
+            var featureEmpty = {};
+
+            expect(model.handleEmptyAttributes(featureEmpty)).to.be.empty;
+        });
+    });
+    describe("handleMissingFeatureProperties", function () {
+        it("should return a feature with all missing properties, if the passed feature has missing properties.", function () {
+            var geometry = "geom",
+                mode = "drawProperties",
+                properties = {
+                    "active": true,
+                    "name": "Test handleMissingFeatureProperties",
+                    "geom": "",
+                    "vorhaben": "test",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": 123,
+                    "testnummer": 1.1,
+                    "istest": true
+                },
+                result = {
+                    "name": "Test handleMissingFeatureProperties",
+                    "vorhaben": "test",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": 123,
+                    "testnummer": 1.1,
+                    "istest": true
+                },
+                editedFeature = model.handleMissingFeatureProperties(features[7], geometry, properties, mode);
+
+            delete editedFeature.values_.geom;
+            expect(editedFeature.values_).to.deep.equal(result);
+        });
+        it("should return an empty object, if the passed feature is empty.", function () {
+            var featureEmpty = {},
+                geometry = "geom",
+                properties = {
+                    "active": true,
+                    "name": "Test handleMissingFeatureProperties",
+                    "geom": "",
+                    "vorhaben": "test",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": 123,
+                    "testnummer": 1.1,
+                    "istest": true
+                },
+                mode = "drawProperties";
+
+            expect(model.handleMissingFeatureProperties(featureEmpty, geometry, properties, mode)).to.be.empty;
+        });
+        it("should return a feature with empty property values, if the passed mode is undefined.", function () {
+            var geometry = "geom",
+                properties = {
+                    "active": true,
+                    "name": "Test handleMissingFeatureProperties",
+                    "geom": "",
+                    "vorhaben": "test",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": 123,
+                    "testnummer": 1.1,
+                    "istest": true
+                },
+                result = {
+                    "name": "",
+                    "vorhaben": "",
+                    "anfragedatum": "",
+                    "bemerkung": "",
+                    "vorgangsnummer": "",
+                    "testnummer": "",
+                    "istest": ""
+                },
+                editedFeature = model.handleMissingFeatureProperties(features[8], geometry, properties, undefined);
+
+            delete editedFeature.values_.geom;
+            expect(editedFeature.values_).to.deep.equal(result);
+        });
+        it("should return a feature with empty property values and an empty property geom, if the passed mode is 'draw'.", function () {
+            var geometry = "geom",
+                mode = "draw",
+                properties = {
+                    "active": true,
+                    "name": "Test handleMissingFeatureProperties",
+                    "geom": "",
+                    "vorhaben": "test",
+                    "anfragedatum": "2020-02-18",
+                    "bemerkung": "Ein Test Punkt",
+                    "vorgangsnummer": 123,
+                    "testnummer": 1.1,
+                    "istest": true
+                },
+                result = {
+                    "geom": "",
+                    "name": "",
+                    "vorhaben": "",
+                    "anfragedatum": "",
+                    "bemerkung": "",
+                    "vorgangsnummer": "",
+                    "testnummer": "",
+                    "istest": ""
+                },
+                editedFeature = model.handleMissingFeatureProperties(features[9], geometry, properties, mode);
+
+            expect(editedFeature.values_).to.deep.equal(result);
+        });
+        it("should return a feature with empty property values, if the passed properties are empty.", function () {
+            var geometry = "geom",
+                properties = {},
+                result = {
+                    "name": "",
+                    "vorhaben": "",
+                    "anfragedatum": "",
+                    "bemerkung": "",
+                    "vorgangsnummer": "",
+                    "testnummer": "",
+                    "istest": ""
+                },
+                editedFeature = model.handleMissingFeatureProperties(features[10], geometry, properties, undefined);
+
+            delete editedFeature.values_.geom;
+            expect(editedFeature.values_).to.deep.equal(result);
+        });
+    });
+    describe("transactionWFS", function () {
+        it("should return a xml string for an insert transaction, if the passed parameter are correct", function () {
+            var mode = "insert",
+                writeOptions = {
+                    featureNS: "http://cite.opengeospatial.org/gmlsf",
+                    featurePrefix: "sf",
+                    featureType: "wfstlgv",
+                    srsName: "EPSG:25832"
+                },
+                xmlString = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
+                "<Insert><wfstlgv xmlns=\"http://cite.opengeospatial.org/gmlsf\" fid=\"SF_AGGREGATEGEOFEATURE_107\"><geom><Point xmlns=\"http://www.opengis.net/gml\" srsName=\"EPSG:25832\">" +
+                "<pos srsDimension=\"2\">566776.881 5936145.508</pos></Point></geom><name>Test transactionWFS</name><vorhaben>Testen</vorhaben><anfragedatum>2020-01-29</anfragedatum>" +
+                "<bemerkung>Dies ist ein Punkt</bemerkung><vorgangsnummer>2</vorgangsnummer><testnummer>1.2</testnummer><istest>false</istest></wfstlgv></Insert></Transaction>";
+
+            expect(model.transactionWFS(mode, features[1], writeOptions)).to.deep.equal(xmlString);
+        });
+        it("should return a xml string for a delete transaction, if the passed parameter are correct", function () {
+            var mode = "delete",
+                writeOptions = {
+                    featureNS: "http://cite.opengeospatial.org/gmlsf",
+                    featurePrefix: "sf",
+                    featureType: "wfstlgv",
+                    srsName: "EPSG:25832"
+                },
+                xmlString = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
+                "<Delete typeName=\"sf:wfstlgv\" xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\"><Filter xmlns=\"http://www.opengis.net/ogc\"><FeatureId fid=\"SF_AGGREGATEGEOFEATURE_107\"/>" +
+                "</Filter></Delete></Transaction>";
+
+            expect(model.transactionWFS(mode, features[1], writeOptions)).to.deep.equal(xmlString);
+        });
+        it("should return a xml string for an update transaction, if the passed parameter are correct", function () {
+            var mode = "update",
+                writeOptions = {
+                    featureNS: "http://cite.opengeospatial.org/gmlsf",
+                    featurePrefix: "sf",
+                    featureType: "wfstlgv",
+                    srsName: "EPSG:25832"
+                },
+                xmlString = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
+                "<Update typeName=\"sf:wfstlgv\" xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\"><Property><Name>sf:geom</Name><Value><Point xmlns=\"http://www.opengis.net/gml\" srsName=\"EPSG:25832\">" +
+                "<pos srsDimension=\"2\">566776.881 5936145.508</pos></Point></Value></Property><Property><Name>sf:name</Name><Value>Test transactionWFS</Value></Property><Property><Name>sf:vorhaben</Name><Value>Testen</Value>" +
+                "</Property><Property><Name>sf:anfragedatum</Name><Value>2020-01-29</Value></Property><Property><Name>sf:bemerkung</Name><Value>Dies ist ein Punkt</Value></Property><Property>" +
+                "<Name>sf:vorgangsnummer</Name><Value>2</Value></Property><Property><Name>sf:testnummer</Name><Value>1.2</Value></Property><Property><Name>sf:istest</Name><Value>false</Value></Property>" +
+                "<Filter xmlns=\"http://www.opengis.net/ogc\"><FeatureId fid=\"SF_AGGREGATEGEOFEATURE_107\"/></Filter></Update></Transaction>";
+
+            expect(model.transactionWFS(mode, features[1], writeOptions)).to.deep.equal(xmlString);
+        });
+        it("should return undefined if the passed parameter mode is undefined", function () {
+            var writeOptions = {
+                featureNS: "http://cite.opengeospatial.org/gmlsf",
+                featurePrefix: "sf",
+                featureType: "wfstlgv",
+                srsName: "EPSG:25832"
+            };
+
+            expect(model.transactionWFS(undefined, features[1], writeOptions)).to.be.undefined;
+        });
+        it("should return undefined if the passed feature is empty.", function () {
+            var featureEmpty = {},
+                mode = "insert";
+
+            expect(model.transactionWFS(mode, featureEmpty)).to.be.undefined;
+        });
+    });
+    describe("handleIEXml", function () {
+        it("should return the passed XML string, if it contains the namespace in the update tag.", function () {
+            var writeOptions = {
+                    featureNS: "http://cite.opengeospatial.org/gmlsf",
+                    featurePrefix: "sf",
+                    featureType: "wfstlgv",
+                    srsName: "EPSG:25832"
+                },
+                mode = "update",
+                xmlString = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
+                "<Update typeName=\"sf:wfstlgv\" xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\"><Property><Name>sf:geom</Name><Value><Point xmlns=\"http://www.opengis.net/gml\" srsName=\"EPSG:25832\">" +
+                "<pos srsDimension=\"2\">566776.881 5936145.508</pos></Point></Value></Property><Property><Name>sf:name</Name><Value>Test transactionWFS</Value></Property><Property><Name>sf:vorhaben</Name><Value>Testen</Value>" +
+                "</Property><Property><Name>sf:anfragedatum</Name><Value>2020-01-29</Value></Property><Property><Name>sf:bemerkung</Name><Value>Dies ist ein Punkt</Value></Property><Property>" +
+                "<Name>sf:vorgangsnummer</Name><Value>2</Value></Property><Property><Name>sf:testnummer</Name><Value>1.2</Value></Property><Property><Name>sf:istest</Name><Value>false</Value></Property>" +
+                "<Filter xmlns=\"http://www.opengis.net/ogc\"><FeatureId fid=\"SF_AGGREGATEGEOFEATURE_107\"/></Filter></Update></Transaction>";
+
+            expect(model.handleIEXml(xmlString, writeOptions, mode)).to.deep.equal(xmlString);
+        });
+        it("should return an XML string containing the namespace in the update tag if the passed XML string did not contain it.", function () {
+            var writeOptions = {
+                    featureNS: "http://cite.opengeospatial.org/gmlsf",
+                    featurePrefix: "sf",
+                    featureType: "wfstlgv",
+                    srsName: "EPSG:25832"
+                },
+                mode = "update",
+                xmlString = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
+                "<Update typeName=\"sf:wfstlgv\"><Property><Name>sf:geom</Name><Value><Point xmlns=\"http://www.opengis.net/gml\" srsName=\"EPSG:25832\">" +
+                "<pos srsDimension=\"2\">566776.881 5936145.508</pos></Point></Value></Property><Property><Name>sf:name</Name><Value>Test transactionWFS</Value></Property><Property><Name>sf:vorhaben</Name><Value>Testen</Value>" +
+                "</Property><Property><Name>sf:anfragedatum</Name><Value>2020-01-29</Value></Property><Property><Name>sf:bemerkung</Name><Value>Dies ist ein Punkt</Value></Property><Property>" +
+                "<Name>sf:vorgangsnummer</Name><Value>2</Value></Property><Property><Name>sf:testnummer</Name><Value>1.2</Value></Property><Property><Name>sf:istest</Name><Value>false</Value></Property>" +
+                "<Filter xmlns=\"http://www.opengis.net/ogc\"><FeatureId fid=\"SF_AGGREGATEGEOFEATURE_107\"/></Filter></Update></Transaction>",
+                result = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
+                "<Update typeName=\"sf:wfstlgv\" xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\"><Property><Name>sf:geom</Name><Value><Point xmlns=\"http://www.opengis.net/gml\" srsName=\"EPSG:25832\">" +
+                "<pos srsDimension=\"2\">566776.881 5936145.508</pos></Point></Value></Property><Property><Name>sf:name</Name><Value>Test transactionWFS</Value></Property><Property><Name>sf:vorhaben</Name><Value>Testen</Value>" +
+                "</Property><Property><Name>sf:anfragedatum</Name><Value>2020-01-29</Value></Property><Property><Name>sf:bemerkung</Name><Value>Dies ist ein Punkt</Value></Property><Property>" +
+                "<Name>sf:vorgangsnummer</Name><Value>2</Value></Property><Property><Name>sf:testnummer</Name><Value>1.2</Value></Property><Property><Name>sf:istest</Name><Value>false</Value></Property>" +
+                "<Filter xmlns=\"http://www.opengis.net/ogc\"><FeatureId fid=\"SF_AGGREGATEGEOFEATURE_107\"/></Filter></Update></Transaction>";
+
+            expect(model.handleIEXml(xmlString, writeOptions, mode)).to.deep.equal(result);
+        });
+        it("should return the passed XML string, if the passed mode is undefined", function () {
+            var writeOptions = {
+                    featureNS: "http://cite.opengeospatial.org/gmlsf",
+                    featurePrefix: "sf",
+                    featureType: "wfstlgv",
+                    srsName: "EPSG:25832"
+                },
+                xmlString = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
+                "<Update typeName=\"sf:wfstlgv\" xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\"><Property><Name>sf:geom</Name><Value><Point xmlns=\"http://www.opengis.net/gml\" srsName=\"EPSG:25832\">" +
+                "<pos srsDimension=\"2\">566776.881 5936145.508</pos></Point></Value></Property><Property><Name>sf:name</Name><Value>Test transactionWFS</Value></Property><Property><Name>sf:vorhaben</Name><Value>Testen</Value>" +
+                "</Property><Property><Name>sf:anfragedatum</Name><Value>2020-01-29</Value></Property><Property><Name>sf:bemerkung</Name><Value>Dies ist ein Punkt</Value></Property><Property>" +
+                "<Name>sf:vorgangsnummer</Name><Value>2</Value></Property><Property><Name>sf:testnummer</Name><Value>1.2</Value></Property><Property><Name>sf:istest</Name><Value>false</Value></Property>" +
+                "<Filter xmlns=\"http://www.opengis.net/ogc\"><FeatureId fid=\"SF_AGGREGATEGEOFEATURE_107\"/></Filter></Update></Transaction>";
+
+            expect(model.handleIEXml(xmlString, writeOptions, undefined)).to.deep.equal(xmlString);
+        });
+        it("should return the passed XML string, if it passed writeOptions are empty.", function () {
+            var writeOptions = {},
+                mode = "update",
+                xmlString = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
+                "<Update typeName=\"sf:wfstlgv\" xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\"><Property><Name>sf:geom</Name><Value><Point xmlns=\"http://www.opengis.net/gml\" srsName=\"EPSG:25832\">" +
+                "<pos srsDimension=\"2\">566776.881 5936145.508</pos></Point></Value></Property><Property><Name>sf:name</Name><Value>Test transactionWFS</Value></Property><Property><Name>sf:vorhaben</Name><Value>Testen</Value>" +
+                "</Property><Property><Name>sf:anfragedatum</Name><Value>2020-01-29</Value></Property><Property><Name>sf:bemerkung</Name><Value>Dies ist ein Punkt</Value></Property><Property>" +
+                "<Name>sf:vorgangsnummer</Name><Value>2</Value></Property><Property><Name>sf:testnummer</Name><Value>1.2</Value></Property><Property><Name>sf:istest</Name><Value>false</Value></Property>" +
+                "<Filter xmlns=\"http://www.opengis.net/ogc\"><FeatureId fid=\"SF_AGGREGATEGEOFEATURE_107\"/></Filter></Update></Transaction>";
+
+            expect(model.handleIEXml(xmlString, writeOptions, mode)).to.deep.equal(xmlString);
+        });
+    });
+    describe("proofForCorrectTransact", function () {
+        it("should return true if the passed response includes a correct insert transaction.", function () {
+            var actionType = "insert";
+
+            expect(model.proofForCorrectTransact(transactionResponseInsert, actionType)).to.be.true;
+        });
+        it("should return true if the passed response includes a correct delete transaction.", function () {
+            var actionType = "delete";
+
+            expect(model.proofForCorrectTransact(transactionResponseDelete, actionType)).to.be.true;
+        });
+        it("should return true if the passed response includes a correct update transaction.", function () {
+            var actionType = "update";
+
+            expect(model.proofForCorrectTransact(transactionResponseUpdate, actionType)).to.be.true;
+        });
+        it("should return false if the passed response does not includes a correct transaction.", function () {
+            var actionType = "insert";
+
+            expect(model.proofForCorrectTransact(transactionFailedResponse, actionType)).to.be.false;
+        });
+        it("should return false if the passed actionType is undefined", function () {
+            expect(model.proofForCorrectTransact(transactionResponseInsert, undefined)).to.be.false;
+        });
+        it("should return false if the passed response is an empty object", function () {
+            var actionType = "insert",
+                response = {};
+
+            expect(model.proofForCorrectTransact(response, actionType)).to.be.false;
+        });
+    });
+    describe("getExceptionText", function () {
+        it("should return the exception text from the passed response", function () {
+            var result = "No service with identifier 'wfstxxxy' available.";
+
+            expect(model.getExceptionText(transactionJqXHR)).to.deep.equal(result);
+        });
+        it("should return undefined if the passed response is empty", function () {
+            expect(model.getExceptionText(undefined)).to.be.undefined;
+        });
+    });
+    describe("getSubstring", function () {
+        it("should return a substring of a passed string", function () {
+            var exception = "This is a test and <Exception>here comes the substring</Exception>",
+                seperator = ["Exception", ">", "</"],
+                result = "here comes the substring";
+
+            expect(model.getSubstring(exception, seperator)).to.deep.equal(result);
+        });
+        it("should return undefined if the passed string is undefined", function () {
+            var seperator = ["Exception", ">", "</"];
+
+            expect(model.getSubstring(undefined, seperator)).to.be.undefined;
+        });
+        it("should return undefined if no seperators are passed", function () {
+            var exception = "This is a test and <Exception>here comes the exception string</Exception>";
+
+            expect(model.getSubstring(exception, undefined)).to.be.undefined;
+        });
+    });
+});

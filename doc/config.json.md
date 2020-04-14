@@ -842,6 +842,8 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
 
+[type:wfst]: # (Portalconfig.menu.tool.wfst)
+
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -870,7 +872,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Neues Filtermodul.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
-
+|wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
 
 ***
 
@@ -1661,6 +1663,119 @@ Todo
     "minute": "0"
 }
 ```
+
+***
+
+#### Portalconfig.menu.tool.wfst
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Das WFS-T Tool bietet die Möglichkeit Features aus Web Feature Services (WFS) in der Oberfläche sowohl zu visualisieren (Get Feature), zu aktualisieren (update) und zu löschen (delete), als auch die Möglichkeit neue Features hizuzufügen (insert).
+Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.json.md).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name dieses Tools, wie er im Portal angezeigt werden soll.|
+|layerIds|ja|[layerId](#markdown-header-portalconfigmenutoolwfstlayerid)[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
+|toggleLayer|nein|Boolean|false|Flag ob die Features eines Layers beim Hinzufügen eines neuen Features sichtbar bleiben.|
+|layerSelect|nein|String|"aktueller Layer:"|Möglichkeit die Beschriftung der Layer Auswahl zu konfigurieren.|
+|pointButton|nein|[pointButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen eines Punktes zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|lineButton|nein|[lineButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Linie zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|areaButton|nein|[areaButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|edit|nein|[edit](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit wekcher Beschriftung er angezeigt wird.|
+|delete|nein|[delete](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
+
+**Beispiel**
+```
+#!json
+{
+    "wfst": {
+        "name": "WFS-T Tool"
+        "glyphicon": "glyphicon-globe",
+        "layerIds": ["1234", "5678"],
+        "toggleLayer": true,
+        "layerSelect": "TestLayer",
+        "pointButton": [
+            {
+                "layerId":"1234"
+                "caption": "Punkt-Test",
+                "show": true
+            },
+            {
+                "layerId": "5678"
+                "show": true
+            }
+        ],
+        "lineButton": false,
+        "areaButton": [
+            {
+                "layerId": "4389"
+                "show": false
+            }
+        ],
+        "edit": "Bearbeiten"
+        "delete": true
+    }
+}
+```
+#### Portalconfig.menu.tool.wfst.Button
+Das Attribut pointButton/lineButton/areaButton kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob die Funktion zum Erfassen einer Geometrie für alle Layer zur Verfügung stehen soll. Ist es vom Typ Object so gelten folgende Attribute:
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|layerId|ja|String||Der Layer für den die Konfiguration vorgenommen werden soll|false|
+|show|ja|Boolean|true|Flag ob der Button zur Verfügung stehen soll.|false|
+|caption|nein|String|"Punkt erfassen"/ "Linie erfassen"/ "Fläche erfassen"|Beschriftung des Buttons.|false|
+
+
+**Beispiel als Boolean**
+```
+#!json
+"pointButton": true
+```
+
+**Beispiel als Object**
+```
+#!json
+"pointButton": {
+    {
+        "layerId":"1234"
+        "show": true
+        "caption": "Punkt-Test",
+    },
+    {
+        "layerId": "5678"
+        "show": true
+    },
+    {
+        "layerId": "5489"
+        "show": false
+    }
+}
+```
+
+#### Portalconfig.menu.tool.wfst.EditDelete
+Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob der Editier-/ Lösch-Button zur Verfügung stehen soll. Ist es vom Typ String so wird der Button mit der dort angegebenen Beschriftung angezeigt.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|edit|ja|Boolean|true|Flag ob der Editier-Button angezeigt werden soll|false|
+|edit|ja|String|"Geometrie bearbeiten"|Beschriftung des Editier-Buttons|false|
+|delete|ja|Boolean|true|Flag ob der Lösch-Button angezeigt werden soll|false|
+|delete|ja|String|"Geometrie löschen"|Beschriftung des lösch-Buttons|false|
+
+**Beispiel als Boolean**
+```
+#!json
+"edit": true
+```
+
+**Beispiel als String**
+```
+#!json
+"edit": "Editieren"
+```
+
 
 ***
 
