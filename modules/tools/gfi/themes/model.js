@@ -420,6 +420,13 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
         return pgfi;
     },
+
+    /**
+     * Prepares the gfi by the configured attributes.
+     * @param {Object} gfi Gfi object.
+     * @param {Object} attributes Gfi attributes.
+     * @returns {Object} - Prepared gfi by configured attributes.
+     */
     prepareGfiByAttributes: function (gfi, attributes) {
         const preparedGfi = {};
 
@@ -439,6 +446,13 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return preparedGfi;
     },
 
+    /**
+     * Derives the gfi value if the value is an object.
+     * @param {*} key Key of gfi Attribute.
+     * @param {Object} obj Value of gfi attribute.
+     * @param {Object} gfi Gfi object.
+     * @returns {*} - Prepared Value from gfi.
+     */
     prepareGfiValueFromObject: function (key, obj, gfi) {
         const type = obj.hasOwnProperty("type") ? obj.type : "string",
             format = obj.hasOwnProperty("format") ? obj.format : "DD.MM.YYYY HH:mm:ss",
@@ -469,6 +483,13 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return preparedValue;
     },
 
+    /**
+     * Derives the value from the given condition.
+     * @param {String} key Key.
+     * @param {String} condition Condition to filter gfi.
+     * @param {Object} gfi Gfi object.
+     * @returns {*} - Value that matches the given condition.
+     */
     getValueFromCondition: function (key, condition, gfi) {
         let valueFromCondition,
             match;
@@ -498,6 +519,13 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return valueFromCondition;
 
     },
+
+    /**
+     * Appends a suffix if available.
+     * @param {*} value Value to append suffix.
+     * @param {*} suffix Suffix
+     * @returns {String} - Value with suffix.
+     */
     appendSuffix: function (value, suffix) {
         let valueWithSuffix = value;
 
@@ -507,6 +535,12 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return valueWithSuffix;
     },
 
+    /**
+     * Returns the value of the given key. Also considers, that the key may be an object path.
+     * @param {Object} gfi Gfi object.
+     * @param {String} key Key to derive value from.
+     * @returns {*} - Value from key.
+     */
     prepareGfiValue: function (gfi, key) {
         const isPath = key.startsWith("@");
         let value = gfi[key];
@@ -517,6 +551,12 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return value;
     },
 
+    /**
+     * Parses the path and returns the value at the position of the path.
+     * @param {Object} gfi Gfi object.
+     * @param {String} path Key that is an object path.
+     * @returns {*} - Value of gfi from path.
+     */
     getValueFromPath: function (gfi, path) {
         const pathParts = path.substring(1).split(".");
         let value = gfi;
@@ -528,6 +568,11 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return value;
     },
 
+    /**
+     * Beautifies the keys of the gfi.
+     * @param {Object} gfi Gfi object.
+     * @returns {Object} - Gfi with beautified keys.
+     */
     beautifyGfiKeys: function (gfi) {
         const beautifiedGfi = {};
 
@@ -540,16 +585,20 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         return beautifiedGfi;
     },
 
-    // get rid of invalid keys and keys with invalid values; trim values
-    removeInvalidEntries: function (element) {
-        const gfi = {};
+    /**
+     * Removes invalid entries from gfi
+     * @param {Object} gfi Gfi object.
+     * @returns {Object} - Gfi with valid entries.
+     */
+    removeInvalidEntries: function (gfi) {
+        const gfiWithValidEntries = {};
 
-        Object.keys(element).forEach(key => {
-            let value = element[key];
+        Object.keys(gfi).forEach(key => {
+            let value = gfi[key];
 
             if (this.get("gfiTheme") === "table") {
                 if (this.isValidKey(key)) {
-                    gfi[key] = value;
+                    gfiWithValidEntries[key] = value;
                 }
             }
             else if (this.isValidKey(key)) {
@@ -558,31 +607,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                     value = value.join("</br>");
                 }
                 value = typeof value === "string" ? value.trim() : value;
-                gfi[key] = value;
+                gfiWithValidEntries[key] = value;
             }
         });
-        return gfi;
-    },
-
-    /**
-     * Removes Attributes from the preGfi object that start with the given string.
-     * Currently used only for sensor-Theme.
-     * @param {Object} preGfi preGfi.
-     * @param {String} prefix String condition each attributes starts with.
-     * @returns {Object} - The pregfi without the attributes starting with string.
-     */
-    removeIFrameAttributes: function (preGfi, prefix) {
-        let gfi = preGfi;
-
-        if (this.get("gfiTheme") === "sensor") {
-            gfi = Object.keys(gfi).filter(key => {
-                return !key.startsWith(prefix);
-            }).reduce((obj, key) => {
-                obj[key] = gfi[key];
-                return obj;
-            }, {});
-        }
-        return gfi;
+        return gfiWithValidEntries;
     },
 
     /**
