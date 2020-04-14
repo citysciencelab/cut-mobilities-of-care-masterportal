@@ -324,7 +324,7 @@ Beispiel gfiAttributes als Objekt
 }
 ```
 
-Beispiel gfiAttributes als Objekt mit [Objektpfadverweis](/style.json.md#markdown-header-objektpfadverweise).
+Beispiel gfiAttributes als Objekt mit [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise).
 ```
 #!json
 {
@@ -378,7 +378,7 @@ Beispiel gfiAttributes als Objekt mit type und format
 }
 ```
 
-Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](/style.json.md#markdown-header-objektpfadverweise) und Value als Objekt.
+Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) und Value als Objekt.
 ```
 #!json
 {
