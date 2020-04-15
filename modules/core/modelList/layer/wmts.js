@@ -7,7 +7,7 @@ import {get as getProjection} from "ol/proj";
 import {getWidth} from "ol/extent";
 
 const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         infoFormat: "text/xml",
         supported: ["2D", "3D"],
         showSettings: true
