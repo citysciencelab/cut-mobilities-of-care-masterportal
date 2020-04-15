@@ -14,7 +14,7 @@ const WfsFeatureFilter = Tool.extend({
         this.superInitialize();
     },
     getLayers: function () {
-        var layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
+        const layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
             featureLayers = layers.filter(function (layer) {
                 return layer.get("layer").getSource().getFeatures().length > 0;
             }),

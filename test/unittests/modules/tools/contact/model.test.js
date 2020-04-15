@@ -2,8 +2,9 @@ import Model from "@modules/tools/contact/model.js";
 import {expect} from "chai";
 
 describe("contact/model", function () {
-    var model,
-        testAttrEmail = {
+    let model;
+
+    const testAttrEmail = {
             target: {
                 id: "contactEmail",
                 value: "Test.test@test.de"

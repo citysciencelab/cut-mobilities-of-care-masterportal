@@ -28,7 +28,7 @@ const WfsFeatureFilterView = Backbone.View.extend({
         this.getFilterInfos();
     },
     toggleHeading: function (evt) {
-        var id = this.$(evt.currentTarget)[0].id;
+        const id = this.$(evt.currentTarget)[0].id;
 
         this.$("." + id + "_wfs_panel").each(function (index, ele) {
             $(ele).toggle();
@@ -43,10 +43,11 @@ const WfsFeatureFilterView = Backbone.View.extend({
         }
     },
     getFilterInfos: function () {
-        var wfsList = this.model.get("wfsList"),
+        const wfsList = this.model.get("wfsList"),
             layerfilters = [],
-            filters = [],
-            id,
+            filters = [];
+
+        let id,
             value;
 
         _.each(wfsList, function (layer) {
@@ -72,8 +73,9 @@ const WfsFeatureFilterView = Backbone.View.extend({
     filterLayers: function (layerfilters) {
         _.each(layerfilters, function (layerfilter) {
             // Prüfe, ob alle Filter des Layers auf * stehen, damit evtl. der defaultStyle geladen werden kann
-            var showall = true,
-                layers = this.model.get("wfsList"),
+            let showall = true;
+
+            const layers = this.model.get("wfsList"),
                 wfslayer = _.find(layers, function (layer) {
                     return layer.id === layerfilter.layerId;
                 }),
@@ -105,7 +107,7 @@ const WfsFeatureFilterView = Backbone.View.extend({
                 }
 
                 features.forEach(function (feature) {
-                    var featuredarstellen = true,
+                    let featuredarstellen = true,
                         featureattribute,
                         attributname, attributvalue, featurevalue0, featurevalue;
 
@@ -147,7 +149,7 @@ const WfsFeatureFilterView = Backbone.View.extend({
         this.model.set("layerfilters", layerfilters);
     },
     render: function (model, value) {
-        var layerfilters = this.model.get("layerfilters");
+        const layerfilters = this.model.get("layerfilters");
 
         this.model.getLayers();
 
@@ -175,7 +177,7 @@ const WfsFeatureFilterView = Backbone.View.extend({
         return this;
     },
     setMaxHeight: function () {
-        var maxHeight = $(window).height() - 160;
+        const maxHeight = $(window).height() - 160;
 
         this.$el.css("max-height", maxHeight);
     }

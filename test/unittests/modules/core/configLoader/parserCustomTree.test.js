@@ -2,7 +2,7 @@ import CustomTreeParser from "@modules/core/configLoader/parserCustomTree.js";
 import {expect} from "chai";
 
 describe("core/configLoader/parserCustomTree", function () {
-    var testData;
+    let testData;
 
     before(function () {
         testData = {
@@ -37,7 +37,7 @@ describe("core/configLoader/parserCustomTree", function () {
      * @returns {object} the model
      */
     function getCustomModel (options) {
-        var model = new CustomTreeParser(options);
+        const model = new CustomTreeParser(options);
 
         model.setItemList([]);
         model.parseTree(testData.Fachdaten);

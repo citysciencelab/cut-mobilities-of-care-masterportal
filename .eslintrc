@@ -28,7 +28,7 @@
         "sourceType": "module",
         "allowImportExportEverywhere": true
     },
-    "extends": ["plugin:backbone/recommended", "plugin:you-dont-need-lodash-underscore/compatible"],
+    "extends": ["plugin:backbone/recommended"],
     "rules": {
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
         "for-direction": "error",

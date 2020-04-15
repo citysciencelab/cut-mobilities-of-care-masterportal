@@ -181,12 +181,14 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      */
     cesiumPostRender (scene) {
         const time = Date.now() / 1000;
-        var seconds, view;
 
         if (!this.get("currentSystemTime")) {
             this.setCurrentSystemTime(time);
         }
-        seconds = time - this.get("currentSystemTime");
+
+        /* eslint-disable-next-line one-var */
+        const seconds = time - this.get("currentSystemTime");
+
         this.setCurrentSystemTime(time);
         if (this.get("paused")) {
             if (this.get("screenSpaceCameraController")) {
@@ -215,10 +217,12 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
             }
         }
 
-        view = {
+        /* eslint-disable-next-line one-var */
+        const view = {
             destination: this.get("destinationSpline").evaluate(this.get("currentTime")),
             orientation: Cesium.HeadingPitchRoll.fromQuaternion(this.get("quaternionSpline").evaluate(this.get("currentTime")))
         };
+
         scene.camera.setView(view);
         if (this.get("screenSpaceCameraController")) {
             this.get("screenSpaceCameraController").enableInputs = false;

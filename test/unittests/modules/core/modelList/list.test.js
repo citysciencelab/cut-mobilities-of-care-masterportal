@@ -2,8 +2,9 @@ import Model from "@modules/core/modelList/list.js";
 import {expect} from "chai";
 
 describe("core/modelList/list", function () {
-    var model,
-        testLightModels = [
+    let model;
+
+    const testLightModels = [
             {
                 id: "713",
                 transparency: 0,
@@ -74,7 +75,7 @@ describe("core/modelList/list", function () {
             });
         });
         describe("sortLayers", function () {
-            var gModel = new Backbone.Model({
+            const gModel = new Backbone.Model({
                     "id": "1001",
                     "name": "gLayer"
                 }),
@@ -88,7 +89,7 @@ describe("core/modelList/list", function () {
                 });
 
             it("should return an sorted array by key", function () {
-                var layer = [
+                const layer = [
                         gModel,
                         xModel,
                         aModel
@@ -102,12 +103,13 @@ describe("core/modelList/list", function () {
             });
 
             it("should return an the input array by key is undefined", function () {
-                var layer = [
-                        gModel,
-                        xModel,
-                        aModel
-                    ],
-                    key;
+                const layer = [
+                    gModel,
+                    xModel,
+                    aModel
+                ];
+
+                let key;
 
                 expect(model.sortLayers(layer, key)).to.be.an("array")
                     .to.nested.include(gModel)
@@ -116,14 +118,14 @@ describe("core/modelList/list", function () {
             });
 
             it("should return an empty array by empty input", function () {
-                var layer = [],
+                const layer = [],
                     key = "";
 
                 expect(model.sortLayers(layer, key)).to.be.an("array").that.is.empty;
             });
         });
         describe("removeLayerById", function () {
-            var xModel = new Backbone.Model({
+            const xModel = new Backbone.Model({
                     "id": "1001",
                     "name": "gLayer"
                 }),
