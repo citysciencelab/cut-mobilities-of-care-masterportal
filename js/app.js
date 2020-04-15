@@ -93,10 +93,10 @@ function loadApp () {
         layerInformationModelSettings = {},
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
-        style = Radio.request("Util", "getUiStyle"),
-        i18n = new VueI18Next(i18next);
+        style = Radio.request("Util", "getUiStyle");
         /* eslint-disable no-undef */
-    let app = {};
+    let app = {},
+        i18n = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -120,6 +120,8 @@ function loadApp () {
 
     Vue.config.productionTip = false;
     Vue.use(VueI18Next);
+
+    i18n = new VueI18Next(i18next);
 
     store.commit("addConfigJsToStore", Config);
 
