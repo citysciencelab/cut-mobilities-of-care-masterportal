@@ -301,7 +301,7 @@ Für jedes Feature wird ein dynamischer Style gesetzt. Dieser Style unterstützt
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |scalingShape| x |String||Angabe der Darstellungsart: CIRCLE_BAR.|
-|scalingAttribute| x |String||Attribut das zur Darstellung verwendet werden soll.|
+|scalingAttribute| x |String||Attribut das zur Darstellung verwendet werden soll. Kann auch als [Objektpfadverweis](#markdown-header-objektpfadverweise) genutzt werden.|
 |scalingValues|   |Object[]||Attributwerte denen eine Farbe zugeordnet ist, z.B. `{"charging" : [220, 0, 0, 1]}`. Innerhalb des Objektes können beliebig viele Attributwerte angegeben werden.|
 |scalingValueDefaultColor|   |Integer[]|[0, 0, 0, 1]|Standardfarbe für alle Attributwerte die nicht in *scalingValues* definiert sind.|
 |circleSegmentsRadius|   |Float|10|Radius der Kreissegmente|
@@ -398,7 +398,7 @@ Für weitere Informationen siehe auch die [Openlayers Beschreibung](https://open
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|labelField| ja |String| "undefined" |Attribut des Features, nach dessen Wert das Label angezeigt werden soll.|
+|labelField| ja |String| "undefined" |Attribut des Features, nach dessen Wert das Label angezeigt werden soll. Kann auch als [Objektpfadverweis](#markdown-header-objektpfadverweise) genutzt werden.|
 |textAlign|   |String|"center"|Ausrichtung des Textes am Feature.|
 |textFont|   |String|"Comic Sans MS"|Font des Textes am Feature.|
 |textScale|   |Integer|2|Skalierung des Textes.|
@@ -407,6 +407,7 @@ Für weitere Informationen siehe auch die [Openlayers Beschreibung](https://open
 |textFillColor|   |Integer[]| [69, 96, 166, 1] |Füllfarbe des Textes in rgba.|
 |textStrokeColor|   |Integer[]| [240, 240, 240, 1] | Randfarbe des Textes in rgba.|
 |textStrokeWidth|   |Integer| 3 | Breite der Textstriche.|
+|textSuffix|nein|String|'""'|Suffix das hinter den Text gehängt wird.|
 
 > Hinweis: Eine Cluster-Beschriftung ist gegenüber dieser Beschriftung höher priorisiert.
 
