@@ -33,6 +33,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |----|-------------|---|-------|------------|------|
 |portalTitle|nein|**[portalTitle](#markdown-header-portalconfigportaltitle)**||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|false|
 |treeType|nein|enum["light","default","custom"]|"light"|Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|false|
+|singleBaselayer|nein|Boolean|false|Legt fest, ob nur ein Baselayer gleichzeitig ausgewählt werden kann, nur bei dem treeType „custom“ verfügbar.|false|
 |Baumtyp|nein|enum["light","default","custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|false|
 |mapView|nein|**[mapView](#markdown-header-portalconfigmapview)**||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|false|
 |controls|nein|**[controls](#markdown-header-portalconfigcontrols)**||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|false|
@@ -515,7 +516,7 @@ Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|resolution|nein|Integer||deprecated in 3.0.0: Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
+|resolution|nein|Integer||deprecated in 3.0.0: Legt die Resolution fest, die in der Overviewmap verwendet werden soll. Falls nicht angegeben, passt sich der Kartenausschnitt per Zoom automatisch an.|
 |baselayer|nein|String||deprecated in 3.0.0, danach bitte layerId verwenden!: Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
 |layerId|nein|String||Über den Parameter layerId kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
 |isInitOpen|nein|Boolean|true|Legt fest, ob die OverviewMap beim Start dargestellt oder verborgen sein soll.|
@@ -621,7 +622,7 @@ Das Attribut backForward kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|backgroundImage|nein|String||Pfad zum alternativen Hintergrund angeben.|false|
+|backgroundImage|nein|String|"https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/config.json.md#markdown-header-portalconfigmapview"|Pfad zum alternativen Hintergrund angeben.|false|
 |startCenter|nein|**[Coordinate](#markdown-header-datatypescoordinate)**|[565874, 5934140]|Die initiale Zentrumskoordinate.|false|
 |options|nein|**[option](#markdown-header-portalconfigmapviewoption)**[]|[{"resolution":66.14579761460263,"scale":250000,"zoomLevel":0}, {"resolution":26.458319045841044,"scale":100000,"zoomLevel":1}, {"resolution":15.874991427504629,"scale":60000,"zoomLevel":2}, {"resolution": 10.583327618336419,"scale":40000,"zoomLevel":3}, {"resolution":5.2916638091682096,"scale":20000,"zoomLevel":4}, {"resolution":2.6458319045841048,"scale":10000,"zoomLevel":5}, {"resolution":1.3229159522920524,"scale":5000,"zoomLevel":6}, {"resolution":0.6614579761460262,"scale":2500,"zoomLevel":7}, {"resolution":0.2645831904584105,"scale": 1000,"zoomLevel":8}, {"resolution":0.13229159522920521,"scale":500,"zoomLevel":9}]|Die initialen Maßstabsstufen und deren Auflösungen.|true|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|false|
@@ -2053,7 +2054,7 @@ Hier werden WMS typische Attribute aufgelistet.
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
 |infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|false|
-|styles|nein|String[]||Werden styles angegeben so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
+|styles|nein|String[]||Werden styles angegeben so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück. Erfolgt die Angabe eines styles, so muss der Layername als String[] angegeben werden.|true|
 
 **Beispiel**
 ```
@@ -2268,7 +2269,7 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), SensorLayer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), [SensorLayer](sensorThings.md).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|

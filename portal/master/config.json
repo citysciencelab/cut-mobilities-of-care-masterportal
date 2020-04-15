@@ -417,7 +417,6 @@
       },
       "overviewMap":
       {
-        "resolution": 611.4974492763076,
         "layerId": "452",
         "isInitOpen": false
       },
@@ -456,7 +455,7 @@
           "visibility": true
         },
         {
-         "id": "14261",
+         "id": "13032",
          "name": "Oblique",
          "visibility": true
         }
@@ -569,7 +568,7 @@
       {
         "id": "47",
         "styleId": "47",
-        "mouseHoverField": ["beginn", "ende"],
+        "mouseHoverField": ["baubeginn", "bauende"],
         "autoRefresh": 6000
       },
       {

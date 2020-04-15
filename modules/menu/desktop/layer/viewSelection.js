@@ -53,7 +53,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (this.model.get("isSettingVisible") === true) {
             this.$el.append(this.templateSettings(attr));
         }
-        if (this.model.get("layerInfoClicked")) {
+        if (this.model.get("layerInfoChecked")) {
             this.highlightLayerInformationIcon();
         }
         return this;
@@ -70,7 +70,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         if (this.model.get("isSettingVisible") === true) {
             this.$el.append(this.templateSettings(attr));
         }
-        if (this.model.get("layerInfoClicked")) {
+        if (this.model.get("layerInfoChecked")) {
             this.highlightLayerInformationIcon();
         }
     },
@@ -123,6 +123,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**
@@ -208,10 +209,16 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleColor: function (model, value) {
         if (model.has("minScale") === true) {
+            let statusCheckbox = 0;
+
             if (value === true) {
+                statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
                 this.$el.addClass("disabled");
-                this.$el.find("*").css("pointer-events", "none");
                 this.$el.find("*").css("cursor", "not-allowed");
+                this.$el.find("*").css("pointer-events", "none");
+                if (statusCheckbox === 0) {
+                    this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
+                }
                 this.$el.attr("title", "Layer wird in dieser Zoomstufe nicht angezeigt");
             }
             else {
@@ -228,8 +235,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     highlightLayerInformationIcon: function () {
-        this.model.setLayerInfoClicked(true);
-        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+        if (this.model.get("layerInfoChecked")) {
+            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+        }
     },
 
     /**
@@ -237,8 +245,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     unhighlightLayerInformationIcon: function () {
-        this.model.setLayerInfoClicked(false);
         this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
+        this.model.setLayerInfoChecked(false);
     }
 });
 

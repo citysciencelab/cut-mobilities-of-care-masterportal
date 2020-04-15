@@ -64,6 +64,12 @@
  */
 
 /**
+ * @namespace Poi
+ * @memberof Controls.Orientation
+ * @description Button to find features near my geolocation
+ */
+
+/**
  * @namespace Orientation3D
  * @memberof Controls
  * @description Creates navigation rosette in 3D mode.
@@ -879,4 +885,21 @@
  * @namespace Tileset
  * @memberof Core.ModelList.Layer
  * @description Helper functions for Cesium 3D TilesetLayer and VCS Style Handling
+ */
+
+/**
+ * @namespace VectorStyle
+ * @description vector styles for vector layer
+ */
+
+/**
+ * @namespace SensorThingsMqtt
+ * @memberof Core.ModelList.Layer
+ * @description SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol.
+ */
+
+/**
+ * @namespace SensorThingsHttp
+ * @memberof Core.ModelList.Layer
+ * @description SensorThingsHttp is the software layer to handle the special needs of the SensorThingsAPI regarding the http protocol.
  */

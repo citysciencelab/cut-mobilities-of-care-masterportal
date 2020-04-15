@@ -346,7 +346,7 @@ const TreeFilter = Tool.extend({
         this.set("SLDBody", header + filter + symbolizer + footer);
     },
     getFilterHits: function () {
-        $("#loader").show();
+        Radio.trigger("Util", "showLoader");
         $.ajax({
             url: "/geodienste_hamburg_de/HH_WFS_Strassenbaumkataster",
             data: "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' resultType='hits' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:strassenbaumkataster'>" + this.get("filter") + "</wfs:Query></wfs:GetFeature>",
@@ -365,10 +365,10 @@ const TreeFilter = Tool.extend({
                     hits = data.getElementsByTagName("FeatureCollection")[0].getAttribute("numberOfFeatures");
                 }
                 this.set("filterHits", hits);
-                $("#loader").hide();
+                Radio.trigger("Util", "hideLoader");
             },
             error: function () {
-                $("#loader").hide();
+                Radio.trigger("Util", "hideLoader");
             }
         });
     },

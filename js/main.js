@@ -118,8 +118,7 @@ else {
 function initLanguage (portalLanguageConfig) {
     // default language configuration
     const portalLanguage = Object.assign({
-        // do not enable, if not defined in config.js
-        "enabled": portalLanguageConfig !== undefined,
+        "enabled": false,
         "debug": false,
         "languages": {
             "de": "deutsch",

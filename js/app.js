@@ -78,6 +78,7 @@ import Orientation3DView from "../modules/controls/orientation3d/view";
 // import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
+import "url-polyfill";
 
 let sbconfig, controls, controlsView;
 
@@ -451,6 +452,12 @@ function loadApp () {
     sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
+        if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
+            new TitleView();
+        }
+    }
+    if (i18nextIsEnabled && Object.keys(i18nextLanguages).length > 1) {
+        new LanguageView();
     }
 
     new HighlightFeature();
@@ -464,12 +471,12 @@ function loadApp () {
                 initCounter++;
             }
         });
-        initCounter = initCounter * Object.keys(i18next.options.getLanguages()).length;
+        initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
 
-                Object.keys(i18next.options.getLanguages()).forEach((lng) => {
+                Object.keys(i18nextLanguages).forEach((lng) => {
                     import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales);
@@ -485,10 +492,15 @@ function loadApp () {
                 });
 
 
-                // .js need to be removed so webpack only searches for .js files
+                // .js need to be removed so we can specify specifically in the import statement that
+                // webpack only searches for .js files
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
-                import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".js").then(module => {
+                import(
+                    /* webpackChunkName: "[request]" */
+                    /* webpackExclude: /.+unittests.+/ */
+                    "../addons/" + entryPoint + ".js"
+                ).then(module => {
                     /* eslint-disable new-cap */
                     const addon = new module.default();
 

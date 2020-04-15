@@ -1,11 +1,5 @@
 {
   "Portalconfig":{
-     "portalTitle":{
-        "title":"MasterCustom",
-        "logo":"",
-        "link":"",
-        "toolTip":""
-     },
      "searchBar":{
         "minChars":3,
         "gazetteer":{
@@ -386,6 +380,7 @@
         "button3d":true
      },
      "treeType":"custom",
+     "singleBaselayer": true,
      "layersRemovable":false
   },
   "Themenconfig":{

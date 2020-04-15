@@ -386,7 +386,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
             maxScale = layer.get("maxScale");
             typ = layer.get("typ");
 
-            if (maxScale && currentScale && parseFloat(currentScale, 10) >= parseInt(maxScale, 10)) {
+            if (maxScale && currentScale && parseFloat(currentScale, 10) > parseInt(maxScale, 10)) {
                 return;
             }
 
