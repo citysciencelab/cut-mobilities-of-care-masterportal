@@ -848,32 +848,31 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vector-Features.|false|
-|parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Flurstückssuche.|false|
-|measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
-|coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in dei Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
-|gfi|nein|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||GetFeatureInfo(gfi). Werkzeug um Informationen abzufragen. Dabei wird entweder ein WMS-Request gestellt oder die Vectordaten im Browser abgefragt. Anschließend werden die Attribute der gefundenen Features dargestellt.|false|
-|print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
-|searchByCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
-|kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
-|wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt vorraus.|false|
-|extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt vorraus.|false|
-|routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
-|draw|nein|**[draw](#markdown-header-portalconfigmenudraw)**||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|false|
-|styleWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Klassifizierung vom WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Requuest wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
-|featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektor Layers auf.|false|
-|lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linenhafte Objekte.|false|
+|addWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Tehmenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|false|
 |animation|nein|**[animation](#markdown-header-portalconfigmenutoolanimation)**||Pendleranimation als punkthafte Objekte.|false|
-|saveSelection|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug zum Zustand Speichern. Mithilfe dieses Werkzeuges kann der Kartenzustand als URL zum Abspeichern erzeugt werden. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird auch noch die Zentrumskoordinate mit abgespeichert.|false|
+|compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vektor-Features.|false|
+|contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemldet werden.|false|
+|coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in dei Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
+|draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
+|extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt vorraus.|false|
+|featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektorlayers auf.|false|
+|filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Filtermodul mit dem sich Vektordaten aus WFS filtern lassen.|false|
+|gfi|nein|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||Mit der GetFeatureInfo(gfi)  lassen sich Informationen zu belibigen Layern anzeigen. Dabei werden bei einem WMS die daten über über die GetFeatureInfo geladen. Bei Vektordaten (WFS, Sensor, GeoJSON usw.) werdem die angeziegten Attribute aus den Daten selbst verwendet.|false|
+|kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
+|layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfloge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
-|layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Werkzeug zum Abspielen einer Reihendfolge von Layers.|false|
-|legend|nein|**[tool](#markdown-header-portalconfigmenutool)**||Legende. Stellt die Legende aller sichtbaren Layer dar.|false|
-|contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Kontaktformular. Stellt dem User eine Möglichkeit zur Verfügung, mit dem einem Konfigurierten Postfach in Verbindung zu treten um Fehler zu melden oder Wünsche und Anregungen zu äußern.|false|
-|filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Neues Filtermodul.|false|
-|virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
+|legend|nein|**[tool](#markdown-header-portalconfigmenutool)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
+|lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linenhafte Objekte.|false|
+|measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
+|parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
+|print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
+|routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
+|saveSelection|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird  als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
+|searchByCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
-
-
+|styleWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Requuest wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
+|virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
+|wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt vorraus.|false|
 ***
 
 #### Portalconfig.menu.tool
@@ -1248,7 +1247,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 oder MapfishPrint 3.
+Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 (Deprecated in 3.0.0) oder MapfishPrint 3.
 
 **ACHTUNG: Backend notwendig!**
 
