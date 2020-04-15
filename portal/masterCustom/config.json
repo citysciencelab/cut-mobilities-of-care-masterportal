@@ -327,7 +327,7 @@
                   {
                      "caption": "translate#common:modules.tools.draw.iconList.iconCloud",
                      "type": "image",
-                     "value": "/img/icons/cloud.png"
+                     "value": "/img/tools/draw/cloud.png"
                   },
                   {
                      "caption": "translate#common:modules.tools.draw.iconList.iconTent",
