@@ -4,8 +4,8 @@ import VectorLayer from "ol/layer/Vector.js";
 const chai = require("chai");
 
 describe("tools/print_/model", function () {
-    var printModel,
-        expect = chai.expect;
+    const expect = chai.expect;
+    let printModel;
 
     before(function () {
         printModel = new PrintModel();
@@ -13,7 +13,7 @@ describe("tools/print_/model", function () {
 
     describe("sortVisibleLayerListByZindex", function () {
         it("should return an sorted array by input with zIndeces", function () {
-            var array = [],
+            const array = [],
                 layer1 = new VectorLayer({
                     source: new VectorSource()
                 }),
@@ -37,7 +37,7 @@ describe("tools/print_/model", function () {
         });
 
         it("should return an sorted array by input with zIndeces und without indeces", function () {
-            var array = [],
+            const array = [],
                 layer1 = new VectorLayer({
                     source: new VectorSource()
                 }),
