@@ -8,27 +8,28 @@ import {expect} from "chai";
 import {EOL} from "os";
 
 describe("tools/print_/buildSpec", function () {
-    var buildSpecModel,
+    let buildSpecModel,
         utilModel,
         pointFeatures,
         multiPointFeatures,
         lineStringFeatures,
         multiLineStringFeatures,
         polygonFeatures,
-        multiPolygonFeatures,
-        attr = {
-            "layout": "A4 Hochformat",
-            "outputFormat": "pdf",
-            "attributes": {
-                "title": "TestTitel",
-                "map": {
-                    "dpi": 96,
-                    "projection": "EPSG:25832",
-                    "center": [561210, 5932600],
-                    "scale": 40000
-                }
+        multiPolygonFeatures;
+
+    const attr = {
+        "layout": "A4 Hochformat",
+        "outputFormat": "pdf",
+        "attributes": {
+            "title": "TestTitel",
+            "map": {
+                "dpi": 96,
+                "projection": "EPSG:25832",
+                "center": [561210, 5932600],
+                "scale": 40000
             }
-        };
+        }
+    };
 
     before(function () {
         buildSpecModel = new BuildSpecModel(attr);
@@ -40,6 +41,7 @@ describe("tools/print_/buildSpec", function () {
         lineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVerkehrsnetzLineString.xml");
         multiLineStringFeatures = utilModel.createTestFeatures("resources/testFeaturesVeloroutenMultiLineString.xml");
     });
+
     describe("parseAddressToString", function () {
         it("should return empty string if all keys in address object are empty", function () {
             const addressEmpty = {
@@ -124,7 +126,7 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("updateMetaData", function () {
         it("should not crash if legend doesn't exist yet", function () {
-            var parsedData = {
+            const parsedData = {
                 date: "",
                 orgaOwner: "",
                 address: {},
@@ -137,7 +139,7 @@ describe("tools/print_/buildSpec", function () {
             expect(buildSpecModel.get("attributes").legend).to.be.undefined;
         });
         it("should write parsedData to layer", function () {
-            var parsedData = {
+            const parsedData = {
                     date: "1.1.2019",
                     orgaOwner: "LGV",
                     address: {},
@@ -169,7 +171,7 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("prepareLegendAttributes", function () {
         it("should create legend attributes array for WMS", function () {
-            var layerParam = {
+            const layerParam = {
                 layername: "Layer1",
                 legend: [{
                     img: ["http://GetlegendGraphicRequest1", "http://GetlegendGraphicRequest2"],
@@ -193,7 +195,7 @@ describe("tools/print_/buildSpec", function () {
             });
         });
         it("should create legend attributes array for WFS", function () {
-            var layerParam = {
+            const layerParam = {
                 layername: "Layer1",
                 legend: [{
                     img: ["/lgv-config/img/imgLink1.png", "/lgv-config/img/imgLink2.png"],
@@ -218,7 +220,7 @@ describe("tools/print_/buildSpec", function () {
             });
         });
         it("should create legend attributes array for styleWMS", function () {
-            var layerParam = {
+            const layerParam = {
                 legend: [{
                     params: [
                         {color: "#000000", startRange: "1", stopRange: "2"},
@@ -253,7 +255,7 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("prepareGfiAttributes", function () {
         it("should create gfi attributes array", function () {
-            var gfiAttributes = {
+            const gfiAttributes = {
                 attr1: "value1",
                 attr2: "value2",
                 attr3: "value3"
@@ -337,7 +339,7 @@ describe("tools/print_/buildSpec", function () {
         });
     });
     describe("buildTileWms", function () {
-        var tileWmsLayer = new Tile({
+        const tileWmsLayer = new Tile({
             source: new TileWMS({
                 url: "url",
                 params: {
@@ -363,7 +365,7 @@ describe("tools/print_/buildSpec", function () {
         });
     });
     describe("buildImageWms", function () {
-        var imageWmsLayer = new Tile({
+        const imageWmsLayer = new Tile({
             source: new ImageWMS({
                 url: "url",
                 params: {
@@ -389,14 +391,14 @@ describe("tools/print_/buildSpec", function () {
         });
     });
     describe("getStyleAttribute", function () {
-        var vectorLayer = new Vector();
+        const vectorLayer = new Vector();
 
         it("should return \"styleId\" if styleList is not available", function () {
             expect(buildSpecModel.getStyleAttribute(vectorLayer, pointFeatures[0], false)).to.equal("styleId");
         });
     });
     describe("getFeatureStyle", function () {
-        var vectorLayer = new Vector();
+        const vectorLayer = new Vector();
 
         it("should return array with an ol-style", function () {
             expect(buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)).to.be.an("array");
@@ -404,7 +406,7 @@ describe("tools/print_/buildSpec", function () {
         });
     });
     describe("addFeatureToGeoJsonList", function () {
-        var list = [];
+        let list = [];
 
         it("should return array with point JSON", function () {
             buildSpecModel.addFeatureToGeoJsonList(pointFeatures[0], list);
@@ -820,7 +822,7 @@ describe("tools/print_/buildSpec", function () {
         });
     });
     describe("getStylingRule", function () {
-        var vectorLayer = new Vector();
+        const vectorLayer = new Vector();
 
         it("should return \"*\" if styleAttribute is empty string", function () {
             expect(buildSpecModel.getStylingRule(vectorLayer, pointFeatures[0], "")).to.equal("*");
@@ -834,7 +836,7 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("buildPointStyleCircle", function () {
         it("should convert circleStyle into style object for print", function () {
-            var circleStyleModel = new Style({
+            const circleStyleModel = new Style({
                     layerId: "1711",
                     class: "POINT",
                     subClass: "CIRCLE",
@@ -864,7 +866,7 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("buildPointStyleIcon", function () {
         it("should convert iconStyle into style object for print", function () {
-            var iconStyleModel = new Style({
+            const iconStyleModel = new Style({
                     layerId: "1711",
                     class: "POINT",
                     subClass: "SIMPLE",
@@ -889,7 +891,7 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("buildPolygonStyle", function () {
         it("should convert polygonStyle into style object for print", function () {
-            var polygonStyleModel = new Style({
+            const polygonStyleModel = new Style({
                     class: "POLYGON",
                     subClass: "SIMPLE",
                     polygonFillColor: [189, 189, 0, 1],
@@ -915,7 +917,7 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("buildLineStringStyle", function () {
         it("should convert lineStringStyle into style object for print", function () {
-            var lineStyleModel = new Style({
+            const lineStyleModel = new Style({
                     class: "Line",
                     subClass: "SIMPLE",
                     lineStrokeColor: [51, 153, 0, 1],
@@ -938,7 +940,7 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("getImageName", function () {
         it("should return everything behind last \"/\" inclusive", function () {
-            var iconStyleModel = new Style({
+            const iconStyleModel = new Style({
                     layerId: "1711",
                     class: "POINT",
                     subClass: "SIMPLE",

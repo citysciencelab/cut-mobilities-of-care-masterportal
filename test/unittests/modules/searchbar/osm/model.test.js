@@ -2,9 +2,10 @@ import Model from "@modules/searchbar/osm/model.js";
 import {expect} from "chai";
 
 describe("modules/searchbar/osm", function () {
-    var model = {},
-        config = {
-            "searchBar":
+    let model = {};
+
+    const config = {
+        "searchBar":
             {
                 "osm": {
                     "minChars": 3,
@@ -20,13 +21,14 @@ describe("modules/searchbar/osm", function () {
                 "zoomLevel": 9,
                 "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
             }
-        };
+    };
 
     before(function () {
         model = new Model(config);
     });
+
     describe("isSearched", function () {
-        var searched = {
+        const searched = {
                 "place_id": "83615484",
                 "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright",
                 "osm_type": "way",

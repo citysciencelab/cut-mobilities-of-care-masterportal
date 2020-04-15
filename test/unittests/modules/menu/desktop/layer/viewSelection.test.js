@@ -2,7 +2,7 @@ import LayerView from "@modules/menu/desktop/layer/viewSelection.js";
 import {expect} from "chai";
 
 describe("menu/desktop/layer/viewSelection", function () {
-    var fakeModel,
+    let fakeModel,
         CustomLayerView;
 
     before(function () {
@@ -70,11 +70,11 @@ describe("menu/desktop/layer/viewSelection", function () {
     describe("The style-icon", function () {
 
         it("should be visible for stylable layers", function () {
-            var layerView;
 
             fakeModel.setIsStyleable(true);
             fakeModel.setIsSettingVisible(true);
-            layerView = new CustomLayerView({model: fakeModel});
+
+            const layerView = new CustomLayerView({model: fakeModel});
 
             expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
 
@@ -84,11 +84,10 @@ describe("menu/desktop/layer/viewSelection", function () {
         });
 
         it("should be hidden for other not styleable layers", function () {
-            var layerView;
 
             fakeModel.setIsStyleable(false);
             fakeModel.setIsSettingVisible(true);
-            layerView = new CustomLayerView({model: fakeModel});
+            const layerView = new CustomLayerView({model: fakeModel});
 
             expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(0);
 

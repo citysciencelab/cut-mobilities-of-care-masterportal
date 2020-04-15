@@ -3,7 +3,7 @@ import Util from "@modules/core/util.js";
 import {expect} from "chai";
 
 describe("snippets/slider/model", function () {
-    var model;
+    let model;
 
     new Util();
 
@@ -15,7 +15,7 @@ describe("snippets/slider/model", function () {
     });
     describe("parseValues", function () {
         it("should return an array of numbers", function () {
-            var parsedValues = model.parseValues(model.get("values")),
+            const parsedValues = model.parseValues(model.get("values")),
                 allValues = _.every(parsedValues, function (value) {
                     return _.isNumber(value);
                 });

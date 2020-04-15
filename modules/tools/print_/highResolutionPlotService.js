@@ -98,7 +98,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @listens Print#CreatePrintJob
      */
     initialize: function () {
-        var channel = Radio.channel("Print");
+        const channel = Radio.channel("Print");
 
         this.superInitialize();
 
@@ -142,9 +142,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     getCapabilities: function () {
-        var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
-            url = resp && resp.get("url") ? resp.get("url") : null,
-            printurl;
+        const resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
+            url = resp && resp.get("url") ? resp.get("url") : null;
+
+        let printurl;
 
         if (url) {
             if (this.get("configYAML")) {
@@ -176,7 +177,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @return {String} - shows if the function succeeds or fails
      */
     updateParameter: function (response) {
-        var result = "success",
+        let result = "success",
             isError = true;
 
         if (!_.isUndefined(response) && !_.isNull(response) &&
@@ -215,7 +216,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     print: function () {
-        var drawLayer = Radio.request("Draw", "getLayer");
+        const drawLayer = Radio.request("Draw", "getLayer");
 
         this.set("layerToPrint", []);
         this.setWMSLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS", isOutOfRange: false}));
@@ -267,9 +268,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     createPrintMask: function (evt) {
-        var frameState = evt.frameState,
-            context = evt.context,
-            scale;
+        const frameState = evt.frameState,
+            context = evt.context;
+
+        let scale;
 
         // scale was selected by the user over the view
         if (this.get("isScaleSelectedManually")) {
@@ -292,7 +294,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     drawMask: function (mapSize, context) {
-        var mapWidth = mapSize[0] * DEVICE_PIXEL_RATIO,
+        const mapWidth = mapSize[0] * DEVICE_PIXEL_RATIO,
             mapHeight = mapSize[1] * DEVICE_PIXEL_RATIO;
 
         context.beginPath();
@@ -315,7 +317,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     drawPrintPage: function (mapSize, resolution, printMapSize, scale, context) {
-        var center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2, mapSize[1] * DEVICE_PIXEL_RATIO / 2],
+        const center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2, mapSize[1] * DEVICE_PIXEL_RATIO / 2],
             boundWidth = printMapSize[0] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * DEVICE_PIXEL_RATIO,
             boundHeight = printMapSize[1] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * DEVICE_PIXEL_RATIO,
             minx = center[0] - (boundWidth / 2),
@@ -341,13 +343,14 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @return {number | String} the optimal scale or an Error String
      */
     getOptimalScale: function (mapSize, resolution, printMapSize, scaleList) {
-        var mapWidth,
+        let mapWidth,
             mapHeight,
             scaleWidth,
             scaleHeight,
             scale,
-            optimalScale,
-            undefVal = mapSize === undefined || resolution === undefined || printMapSize === undefined || scaleList === undefined,
+            optimalScale;
+
+        const undefVal = mapSize === undefined || resolution === undefined || printMapSize === undefined || scaleList === undefined,
             nullVal = mapSize === null || resolution === null || printMapSize === null || scaleList === null;
 
         if (undefVal || nullVal) {
