@@ -40,6 +40,8 @@ const OrientationView = Backbone.View.extend({
                     }
                     else if (changed.titleGeolocate || changed.titleGeolocatePOI) {
                         this.render();
+                        // check, if WFS-Layer are visible, to render poi-control or not
+                        this.checkWFS();
                     }
                 }
             }, this);
@@ -50,7 +52,7 @@ const OrientationView = Backbone.View.extend({
                 new POIView(poiDistances);
             }
 
-            // initialer check, ob WFS-Layer sichtbar sind, damit nach render #geolocatePOI sichtbar wird.
+            // check, if WFS-Layer are visible, to render poi-control or not
             this.checkWFS();
         }
     },

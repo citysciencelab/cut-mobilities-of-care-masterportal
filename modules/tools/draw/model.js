@@ -194,6 +194,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {String} downloadBtnText: "" contains the translated text
      * @property {String} deleteBtnText: "" contains the translated text
      * @property {String} deleteAllBtnText: "" contains the translated text
+     * @property {Number} idCounter=0 counter for unique ids
      * @listens Tools.Draw#RadioRequestDrawGetLayer
      * @listens Tools.Draw#RadioRequestDrawDownloadWithoutGUI
      * @listens Tools.Draw#RadioTriggerDrawInitWithoutGUI
@@ -229,7 +230,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                var layer = model.createLayer(model.get("layer"));
+                const layer = model.createLayer(model.get("layer"));
 
                 if (value) {
                     this.setLayer(layer);
@@ -348,7 +349,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {void}
      */
     drawInteractionOnDrawevent: function (drawInteraction, doubleIsActive, layer) {
-        var layerSource = layer.getSource(),
+        const layerSource = layer.getSource(),
             drawType = this.get("drawType");
 
         this.setAddFeatureListener(layerSource.once("addfeature", function (evt) {
@@ -559,10 +560,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {String} GeoJSON of all Features as a String
      */
     inititalizeWithoutGUI: function (para_object) {
-        var featJSON,
+        let featJSON,
             newColor,
-            format = new GeoJSON(),
-            initJson = para_object.initialJSON,
+            format = new GeoJSON();
+        const initJson = para_object.initialJSON,
             zoomToExtent = para_object.zoomToExtent,
             transformWGS = para_object.transformWGS;
 
@@ -643,21 +644,21 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {String} GeoJSON all Features as String
      */
     downloadFeaturesWithoutGUI: function (para_object) {
-        var features = null,
-            format = new GeoJSON(),
+        let features = null,
             geomType = null,
             transformWGS = null,
-            multiPolygon = new MultiPolygon([]),
-            multiPoint = new MultiPoint([]),
-            multiLine = new MultiLine([]),
             multiGeomFeature = null,
             circleFeature = null,
             circularPoly = null,
             featureType = null,
-            featureArray = [],
             singleGeom = null,
             multiGeom = null,
             featuresConverted = {"type": "FeatureCollection", "features": []};
+        const multiPolygon = new MultiPolygon([]),
+            featureArray = [],
+            format = new GeoJSON(),
+            multiPoint = new MultiPoint([]),
+            multiLine = new MultiLine([]);
 
         if (para_object !== undefined && para_object.geomType === "multiGeometry") {
             geomType = "multiGeometry";
@@ -784,7 +785,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {void}
      */
     downloadViaRemoteInterface: function (geomType) {
-        var result = this.downloadFeaturesWithoutGUI(geomType);
+        const result = this.downloadFeaturesWithoutGUI(geomType);
 
         Radio.trigger("RemoteInterface", "postMessage", {
             "downloadViaRemoteInterface": "function identifier",
@@ -817,7 +818,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {ol/layer/Vector} vectorLayer
      */
     createLayer: function (layer) {
-        var vectorLayer = layer;
+        let vectorLayer = layer;
 
         if (vectorLayer === undefined) {
             vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
@@ -863,7 +864,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     createSelectInteractionAndAddToMap: function (layer, isActive) {
-        var selectInteraction = this.createSelectInteraction(layer);
+        const selectInteraction = this.createSelectInteraction(layer);
 
         selectInteraction.setActive(isActive);
         this.setSelectInteraction(selectInteraction);
@@ -878,7 +879,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     createModifyInteractionAndAddToMap: function (layer, isActive) {
-        var modifyInteraction = this.createModifyInteraction(layer);
+        const modifyInteraction = this.createModifyInteraction(layer);
 
         modifyInteraction.setActive(isActive);
         this.setModifyInteraction(modifyInteraction);
@@ -908,8 +909,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     createDrawInteractionListener: function (drawInteraction, maxFeatures, doubleIsActive) {
-        var that = this;
-        const layer = this.get("layer");
+        const that = this,
+            layer = this.get("layer");
+
+        drawInteraction.on("drawend", function (evt) {
+            evt.feature.set("styleId", that.uniqueId());
+        });
 
         drawInteraction.on("drawstart", function () {
             that.drawInteractionOnDrawevent(drawInteraction, doubleIsActive, layer);
@@ -918,8 +923,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         if (maxFeatures && maxFeatures > 0) {
 
             drawInteraction.on("drawstart", function () {
-                var count = that.get("layer").getSource().getFeatures().length,
-                    text = "";
+                const count = that.get("layer").getSource().getFeatures().length;
+                let text = "";
 
                 if (count > maxFeatures - 1) {
                     text = i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures});
@@ -1092,7 +1097,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {void}
      */
     startSelectInteraction: function (layer) {
-        var selectInteraction = this.createSelectInteraction(layer);
+        const selectInteraction = this.createSelectInteraction(layer);
 
         this.createSelectInteractionListener(selectInteraction, layer);
         this.setSelectInteraction(selectInteraction);
@@ -1353,6 +1358,19 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
+     * Returns a unique id, starts with the given prefix
+     * @param {string} prefix prefix for the id
+     * @returns {string} a unique id
+     */
+    uniqueId: function (prefix) {
+        let counter = this.get("idCounter");
+        const id = ++counter;
+
+        this.setIdCounter(id);
+        return prefix ? prefix + id : id;
+    },
+
+    /**
      * setter for drawType
      * @param {string} value1 - geometry type
      * @param {string} value2 - text
@@ -1421,7 +1439,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     setOpacity: function (value) {
-        var newColor = this.get("color");
+        const newColor = this.get("color");
 
         newColor[3] = parseFloat(value);
         this.setColor(newColor);
@@ -1572,7 +1590,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     * @returns {void}
     */
     countupZIndex: function () {
-        var value = this.get("zIndex") + 1;
+        const value = this.get("zIndex") + 1;
 
         this.setZIndex(value);
     },
@@ -1584,6 +1602,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     */
     setZIndex: function (value) {
         this.set("zIndex", value);
+    },
+
+    /**
+    * Sets the idCounter.
+    * @param {string} value counter
+    * @returns {void}
+    */
+    setIdCounter: function (value) {
+        this.set("idCounter", value);
     }
 });
 

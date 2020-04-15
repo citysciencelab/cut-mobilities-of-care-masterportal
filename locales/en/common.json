@@ -334,7 +334,7 @@
                 "buttonTitle": "3D",
                 "openView3d": "Start view",
                 "closeView3d": "Close view",
-                "betaWarning3d": "The 3D mode is currently still in the beta version!"
+                "betaWarning": "The 3D mode is currently still in the beta version!"
             },
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",
@@ -368,7 +368,7 @@
             }
         },
         "searchbar": {
-            "placeholder": { 
+            "placeholder": {
                 "addressHospitalBplan" : "Search for Address/Hospital/B-Plan",
                 "addressTopicParcel" : "Search address, district, topics, parcel"
             },
@@ -397,7 +397,8 @@
             },
             "osm": {
                 "errorMsg": "Searching with OpenStreetMap is currently not available."
-            }
+            },
+            "noInitialResults": "Initial search found no hits."
         }
     },
     "snippets": {

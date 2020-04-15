@@ -34,6 +34,13 @@
     "target": "https://geoportaltest.metropolregion.hamburg.de",
     "agent": ""
   },
+  "/metaver_de": {
+    "target": "https://metaver.de",
+    "pathRewrite": {
+      "^/metaver_de": ""
+    },
+    "agent": ""
+  },
   "/hmdk_fhhnet_stadt_hamburg_de": {
     "target": "http://wfalgqw001"
   },

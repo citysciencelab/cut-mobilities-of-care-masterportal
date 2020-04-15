@@ -97,7 +97,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
             vectorLayerModels.push(vectorLayerFromGroup);
         });
 
-        return vectorLayerModels.flat();
+        return Array.isArray(vectorLayerModels) ? vectorLayerModels.reduce((acc, val) => acc.concat(val), []) : vectorLayerModels;
     },
 
     /**

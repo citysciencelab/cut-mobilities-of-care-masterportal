@@ -55,10 +55,10 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
      * @fires MouseHover#RadioTriggerMouseHoverHide
      */
     model: function (attrs, options) {
-        var gfiTheme = attrs.gfiTheme,
-            theme;
+        const gfiTheme = attrs.gfiTheme;
+        let theme;
 
-        if (_.isObject(attrs.gfiTheme)) {
+        if (typeof attrs.gfiTheme === "object") {
             attrs.gfiParams = gfiTheme.params;
             attrs.gfiTheme = gfiTheme.name;
         }
@@ -134,7 +134,7 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     },
 
     initialize: function () {
-        var channel = Radio.channel("gfiList");
+        const channel = Radio.channel("gfiList");
 
         // get new feature data
         this.listenTo(channel, {
@@ -152,15 +152,14 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
                 });
             },
             "change:isReady": function () {
-                var removeModels;
+                let removeModels;
 
-                if (_.contains(this.pluck("isReady"), false) === false) {
-                // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
+                if (this.pluck("isReady").includes(false) === false) {
+                    // Wenn alle Model ihre GFI abgefragt und bearbeitet haben
                     // WMS und WFS Layer die beim Klickpunkt keine GFIs haben
                     removeModels = this.filter(function (model) {
-                        return model.get("gfiContent") === undefined || _.isEmpty(model.get("gfiContent"));
+                        return model.get("gfiContent") === undefined || !Object.entries(model.get("gfiContent") || {}).length;
                     });
-
                     this.remove(removeModels);
                     this.forEach(this.addView, this);
                     // listener in modules/tools/gfi/model.js

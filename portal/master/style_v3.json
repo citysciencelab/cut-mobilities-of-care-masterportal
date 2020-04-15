@@ -1,0 +1,509 @@
+[
+  {
+    "styleId": "location_eventlotse",
+    "rules": [
+      {
+        "style": {
+          "type": "icon",
+          "imageScale" : "2",
+          "imageName": "location_eventlotse.svg",
+          "imageWidth": 24,
+          "imageHeight": 24,
+          "imageOffsetY": 24,
+          "imageOffsetYUnit": "pixels"
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "1711",
+    "rules": [
+      {
+        "style": {
+          "type": "icon",
+          "clusterImageName": "krankenhaus.png",
+          "imageName": "krankenhaus.png",
+          "imageScale": 0.7
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "8712",
+    "rules": [
+      {
+        "conditions": {
+          "properties": {
+            "kapitelbezeichnung": "Grundschulen"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : "0.6",
+          "imageWidth": 40,
+          "imageHeight": 40,
+          "imageName" : "grundschulen.svg"
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "kapitelbezeichnung": "Gymnasien"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : "0.6",
+          "imageWidth": 40,
+          "imageHeight": 40,
+          "imageName" : "gymnasien.svg"
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "kapitelbezeichnung": "Stadtteilschulen"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : "0.6",
+          "imageWidth": 40,
+          "imageHeight": 40,
+          "imageName" : "stadtteilschulen.svg"
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "kapitelbezeichnung": "Sonderschulen"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : "0.6",
+          "imageWidth": 40,
+          "imageHeight": 40,
+          "imageName" : "sonderschulen.svg"
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "kapitelbezeichnung": "Berufliche Schulen"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : "0.6",
+          "imageWidth": 40,
+          "imageHeight": 40,
+          "imageName" : "berufliche_schulen.svg"
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "kapitelbezeichnung": "Langformschulen"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : "0.6",
+          "imageWidth": 40,
+          "imageHeight": 40,
+          "imageName" : "langformschulen.svg"
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "2128",
+    "rules": [
+      {
+        "style": {
+          "type": "icon",
+          "imageName" : "kamera.png",
+          "imageScale" : "0.3"
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "2059",
+    "rules": [
+      {
+        "conditions": {
+          "properties": {
+            "kategorie": "Unsichtbares Objekt"
+          }
+        },
+        "style": {
+            "type": "icon",
+            "clusterCircleRadius" : 15,
+            "clusterCircleFillColor": [230, 230, 10, 1],
+            "clusterTextType": "counter",
+            "clusterTextOffsetY" : 2,
+            "clusterTextStrokeWidth" : 0,
+            "clusterTextFillColor": [0, 0, 0, 1],
+            "imageName" : "unsichtbares-objekt_10.png",
+            "imageScale" : "0.5"
+          }
+      }
+    ]
+  },
+  {
+    "styleId": "2003",
+    "rules": [
+      {
+        "conditions": {
+          "properties": {
+            "hektar": [0,5, 1,5]
+          }
+        },
+        "style": {
+          "polygonStrokeColor": [100, 100, 50, 1],
+          "polygonStrokeWidth": 5,
+          "polygonFillColor": [100, 100, 100, 0.8]
+        }
+      },
+      {
+        "style": {
+          "polygonStrokeColor": [0, 0, 0, 1],
+          "polygonStrokeWidth": 1,
+          "polygonFillColor": [10, 200, 0, 0.2]
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "47",
+    "rules": [
+      {
+        "conditions": {
+          "properties": {
+            "isthotspot": "true"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "labelField": "id_kost",
+          "textScale" : 1,
+          "textOffsetX" : "0",
+          "textOffsetY" : "20",
+          "textFillColor" : [254, 254, 254, 1],
+          "textStrokeWidth" : "0",
+          "imageScale": "1.1",
+          "legendValue": "Hotspot-Maßnahme",
+          "imageName": "baustelle_neu.png"
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "isthotspot": "false"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "labelField": "id_kost",
+          "textScale" : 1,
+          "textOffsetX" : "0",
+          "textOffsetY" : "20",
+          "textFillColor" : [254, 254, 254, 1],
+          "textStrokeWidth" : "0",
+          "imageScale": "1.1",
+          "legendValue": "Maßnahme",
+          "imageName": "baustelle_gruen.png"
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "2119",
+    "rules": [
+      {
+        "style": {
+          "type": "icon",
+          "imageName" : "dira.png",
+          "imageScale" : "0.3"
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "45",
+    "rules": [
+      {
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "imageName" : "bikeandride.png",
+          "imageScale" : 0.7,
+          "clusterImageName": "bikeandride.png",
+          "clusterImageScale": 0.7,
+          "clusterTextOffsetX" : 18,
+          "clusterTextOffsetY" : -10,
+          "clusterTextFillColor" : [69, 96, 166, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "753",
+    "rules": [
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "K"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "krippe.gif",
+          "imageOffsetX" : 0.50,
+          "imageOffsetY" : 0.20
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "KEing"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "krippe.gif",
+          "imageOffsetX" : 0.30,
+          "imageOffsetY" : 0.50
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "KEEing"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "krippe_ele_eh.gif",
+          "imageOffsetX" : 0.50,
+          "imageOffsetY" : 0.50
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "KEAEing"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "krippe_ele_eh.gif",
+          "imageOffsetX" : 0.50,
+          "imageOffsetY" : 0.50
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "KE"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "krippe_ele.gif",
+          "imageOffsetX" : 0.30,
+          "imageOffsetY" : 0.50
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "KEA"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "krippe_ele.gif",
+          "imageOffsetX" : 0.30,
+          "imageOffsetY" : 0.50
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "E"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "ele.gif",
+          "imageOffsetX" : 0.30,
+          "imageOffsetY" : 0.50
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "EEing"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "ele_eh.gif",
+          "imageOffsetX" : 0.30,
+          "imageOffsetY" : 0.50
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "KEH"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "krippe_ele_hort.gif",
+          "imageOffsetX" : 0.30,
+          "imageOffsetY" : 0.50
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "Leistungsarten": "P"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "clusterType": "icon",
+          "clusterImageName": "krippe.gif",
+          "clusterImageScale": 0.6,
+          "clusterTextOffsetY" : 2,
+          "clusterTextFillColor" : [255, 0, 0, 1],
+          "clusterTextStrokeColor" : [240, 240, 240, 1],
+          "clusterTextStrokeWidth" : 3,
+          "imageScale": 0.6,
+          "imageName" : "paemi.gif",
+          "imageOffsetX" : 0.30,
+          "imageOffsetY" : 0.50
+        }
+      }
+    ]
+  },
+  {
+    "styleId": "8145",
+    "rules": [
+      {
+        "conditions": {
+          "properties": {
+            "kategorie": "Badeseen"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : 0.8,
+          "imageName" : "Icon-Badeseen.png"
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "kategorie": "Schwimmbäder"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : 0.8,
+          "imageName" : "Icon-Schwimmbaeder.png"
+        }
+      },
+      {
+        "conditions": {
+          "properties": {
+            "kategorie": "Spaß am Wasser"
+          }
+        },
+        "style": {
+          "type": "icon",
+          "imageScale" : 0.8,
+          "imageName" : "Icon-Spaß-am-Wasser.png"
+        }
+      }
+    ]
+  }
+]

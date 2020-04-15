@@ -10,6 +10,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         isSettingVisible: false,
         isVisibleInMap: false,
         layerInfoClicked: false,
+        singleBaselayer: false,
         legendURL: "",
         maxScale: "1000000",
         minScale: "0",
@@ -17,7 +18,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         showSettings: true,
         styleable: false,
         supported: ["2D"],
-        transparency: 0
+        transparency: 0,
+        isOutOfRange: undefined
     },
     /**
      * @class Layer
@@ -33,6 +35,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Number} transparency=0 Transparency in percent
      * @property {Number} selectionIDX=0 Index of rendering order in layer selection
      * @property {Boolean} layerInfoClicked=false Flag if layerInfo was clicked
+     * @property {Boolean} singleBaselayer=false - Flag if only a single baselayer should be selectable at once
      * @property {String} minScale="0" Minimum scale for layer to be displayed
      * @property {String} maxScale="1000000" Maximum scale for layer to be displayed
      * @property {String} legendURL="" LegendURL to request legend from
@@ -56,6 +59,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Core#RadioTriggerMapViewChangedOptions
      */
     initialize: function () {
+        const portalConfig = Radio.request("Parser", "getPortalConfig");
+
+        if (portalConfig && portalConfig.singleBaselayer !== undefined) {
+            this.setSingleBaselayer(portalConfig.singleBaselayer);
+        }
+
         this.registerInteractionTreeListeners(this.get("channel"));
         this.registerInteractionMapViewListeners();
 
@@ -250,6 +259,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 }
             });
         }
+        else if (this.get("typ") === "WFS" && Radio.request("Parser", "getTreeType") === "light") {
+            this.listenToOnce(this, {
+                // data will be loaded at first selection
+                "change:isSelected": function () {
+                    this.updateSource(true);
+                }
+            });
+        }
 
         this.listenTo(channel, {
             "updateLayerInfo": function (name) {
@@ -259,6 +276,9 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             },
             "setLayerInfoChecked": function (layerInfoChecked) {
                 this.setLayerInfoChecked(layerInfoChecked);
+            },
+            "toggleIsSelected": function () {
+                this.toggleIsSelected();
             }
         });
         this.listenTo(Radio.channel("Map"), {
@@ -327,7 +347,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     getResolutions: function () {
-        var resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
+        const resoByMaxScale = Radio.request("MapView", "getResoByScale", this.get("maxScale"), "max"),
             resoByMinScale = Radio.request("MapView", "getResoByScale", this.get("minScale"), "min");
 
         this.setMaxResolution(resoByMaxScale + (resoByMaxScale / 100));
@@ -355,14 +375,27 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Toggles the attribute isSelected
+     * Toggles the attribute isSelected.
+     * If the layer is a baselayer, the other selected baselayers are deselected.
+     *
      * @return {void}
      */
     toggleIsSelected: function () {
+        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
+            singleBaseLayer = this.get("singleBaseLayer") && this.get("parentId") === "Baselayer";
+
         if (this.get("isSelected") === true) {
             this.setIsSelected(false);
         }
         else {
+            // This only works for treeType Custom, otherwise the parentId is not set on the layer
+            if (singleBaseLayer) {
+                layerGroup.forEach(layer => {
+                    layer.setIsSelected(false);
+                    // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
+                    layer.checkForScale(Radio.request("MapView", "getOptions"));
+                });
+            }
             this.setIsSelected(true);
         }
     },
@@ -387,7 +420,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     toggleWindowsInterval: function () {
-        var isVisible = this.get("isVisibleInMap"),
+        const isVisible = this.get("isVisibleInMap"),
             autoRefresh = this.get("autoRefresh");
 
         if (isVisible === true) {
@@ -395,7 +428,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 this.setWindowsInterval(this.intervalHandler, autoRefresh);
             }
         }
-        else if (!_.isUndefined(this.get("windowsInterval"))) {
+        else if (typeof this.get("windowsInterval") === "object") {
             clearInterval(this.get("windowsInterval"));
         }
     },
@@ -435,9 +468,9 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     toggleAttributionsInterval: function () {
-        var channelName, eventName, timeout;
+        let channelName, eventName, timeout;
 
-        if (this.has("layerAttribution") && _.isObject(this.get("layerAttribution"))) {
+        if (this.has("layerAttribution") && typeof this.get("layerAttribution") === "object") {
             channelName = this.get("layerAttribution").channel;
             eventName = this.get("layerAttribution").eventname;
             timeout = this.get("layerAttribution").timeout;
@@ -460,11 +493,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     updateLayerTransparency: function () {
-        var opacity = (100 - this.get("transparency")) / 100;
+        const opacity = (100 - this.get("transparency")) / 100;
 
         // Auch wenn die Layer im simple Tree noch nicht selected wurde können
         // die Settings angezeigt werden. Das Layer objekt wurden dann jedoch noch nicht erzeugt und ist undefined
-        if (!_.isUndefined(this.get("layer"))) {
+        if (typeof this.get("layer") === "object") {
             this.get("layer").setOpacity(opacity);
         }
     },
@@ -474,11 +507,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
-        var metaID = [],
-            legend = Radio.request("Legend", "getLegend", this),
+        let legend = "";
+        const metaID = [],
             name = this.get("name"),
             layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
+        if (this.get("legendURL") === "") {
+            this.createLegendURL();
+        }
+        legend = Radio.request("Legend", "getLegend", this);
         metaID.push(layerMetaId);
 
         Radio.trigger("LayerInformation", "add", {
@@ -507,7 +544,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {Boolean} -
      */
     isLayerSourceValid: function () {
-        return !_.isUndefined(this.get("layerSource"));
+        return typeof this.get("layerSource") === "object";
     },
 
     /**
@@ -663,6 +700,16 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
+     * Setter for the singleBaselayer
+     *
+     * @param {Boolean} value - Flag if only a single baselayer should be selectable at once
+     * @returns {void}
+     */
+    setSingleBaselayer: function (value) {
+        this.set("singleBaselayer", value);
+    },
+
+    /**
      * Setter for isRemovable
      * @param {Boolean} value Flag if layer is removable from the tree
      * @returns {void}
@@ -687,7 +734,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     removeLayer: function () {
-        var layer = this.get("id");
+        const layer = this.get("id");
 
         this.setIsVisibleInMap(false);
         this.collection.removeLayerById(layer);
@@ -700,6 +747,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setVisible: function (value) {
         this.get("layer").setVisible(value);
+    },
+
+    /**
+     * Setter for layerInfoClicked
+     * @param {Boolean} value Flag if layerinfo is opened
+     * @returns {void} -
+     */
+    setLayerInfoClicked: function (value) {
+        this.set("layerInfoClicked", value);
     }
 });
 

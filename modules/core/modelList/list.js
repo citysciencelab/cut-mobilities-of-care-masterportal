@@ -1,6 +1,5 @@
 import WMSLayer from "./layer/wms";
 import WFSLayer from "./layer/wfs";
-import WMTSLayer from "./layer/wmts";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
 import GROUPLayer from "./layer/group";
@@ -45,6 +44,7 @@ import StyleWMS from "../../tools/styleWMS/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewPoint/model";
+import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
@@ -74,6 +74,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @listens ModelList#RadioTriggerModelListRenderTree
      * @listens ModelList#RadioTriggerModelListToggleDefaultTool
      * @listens ModelList#RadioTriggerModelListReplaceModelById
+     * @listens ModelList#RadioTriggerModelListAddAlwaysActiveTool
      * @listens ModelList#ChangeIsVisibleInMap
      * @listens ModelList#ChangeIsExpanded
      * @listens ModelList#ChangeIsSelected
@@ -123,7 +124,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 this.trigger("renderTree");
             },
             "toggleDefaultTool": this.toggleDefaultTool,
-            "refreshLightTree": this.refreshLightTree
+            "refreshLightTree": this.refreshLightTree,
+            "addAlwaysActiveTool": this.addAlwaysActiveTool
         }, this);
 
         this.listenTo(this, {
@@ -175,6 +177,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         });
         this.defaultToolId = Config.hasOwnProperty("defaultToolId") ? Config.defaultToolId : "gfi";
     },
+    defaultToolId: "",
+    alwaysActiveTools: [],
     model: function (attrs, options) {
         if (attrs.type === "layer") {
             if (attrs.typ === "WMS") {
@@ -185,9 +189,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                     return new GeoJSONLayer(attrs, options);
                 }
                 return new WFSLayer(attrs, options);
-            }
-            else if (attrs.typ === "WMTS") {
-                return new WMTSLayer(attrs, options);
             }
             else if (attrs.typ === "StaticImage") {
                 return new StaticImageLayer(attrs, options);
@@ -303,6 +304,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "formular") {
                 return new Formular(attrs, options);
+            }
+            else if (attrs.id === "colorScale") {
+                return new ColorScale(attrs, options);
             }
             /**
              * layerslider
@@ -522,7 +526,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setActiveToolsToFalse: function (activatedToolModel) {
         const legendModel = this.findWhere({id: "legend"}),
             activeTools = this.where({isActive: true}),
-            alwaysActiveTools = [activatedToolModel, legendModel];
+            activatedToolModels = Array.isArray(activatedToolModel) ? activatedToolModel : [activatedToolModel],
+            alwaysActiveTools = [...activatedToolModels, ...this.alwaysActiveTools, legendModel];
         let activeToolsToDeactivate = [];
 
         if (!activatedToolModel.get("deactivateGFI")) {
@@ -1096,6 +1101,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 model.get("typ") !== "Entities3D" &&
                 model.get("typ") !== "Oblique";
         });
+    },
+    addAlwaysActiveTool: function (model) {
+        this.alwaysActiveTools.push(model);
     }
 });
 

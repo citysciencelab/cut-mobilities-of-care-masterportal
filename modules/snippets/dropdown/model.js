@@ -16,7 +16,10 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
         preselectedValues: [],
         // number of entries displayed
         numOfOptions: 10,
-        isMultiple: true
+        isMultiple: true,
+        isGrouped: false,
+        liveSearch: false,
+        isDropup: false
     },
     /**
      * @class DropdownModel
@@ -33,28 +36,60 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      */
     initialize: function () {
         this.superInitialize();
-        this.addValueModels(this.get("values"));
-        if (this.get("preselectedValues").length > 0) {
-            this.updateSelectedValues(this.get("preselectedValues"));
-        }
-        this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
+
+        this.postInitialize();
+
         this.listenTo(this.get("valuesCollection"), {
-            "change:isSelected": function () {
-                this.triggerValuesChanged();
+            "change:isSelected": function (model, value) {
+                this.triggerValuesChanged(model, value);
+            }
+        });
+        this.listenTo(this, {
+            "change:values": function () {
+                this.postInitialize();
             }
         });
     },
 
+    postInitialize: function () {
+        this.updateValueModels(this.get("values"), this.get("isGrouped"));
+        if (this.get("preselectedValues").length > 0) {
+            this.updateSelectedValues(this.get("preselectedValues"));
+        }
+        this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}), this.get("isGrouped"));
+    },
+
     /**
-     * calls addValueModel for each value
-     * @param {string[]} valueList - init dropdown values
+     * checks for each value whether it already exists and removes the models that are not in the valueList anymore
+     * @param {string[] | object[]} valueList - init dropdown values
+     * @param {boolean} isGrouped - flag if the objects should be grouped
      * @returns {void}
      */
-    addValueModels: function (valueList) {
-        valueList.forEach(function (value) {
-            this.addValueModel(value);
-        }, this);
+    updateValueModels: function (valueList, isGrouped) {
+        if (isGrouped) {
+            // array of objects
+            valueList.forEach(function (obj) {
+                if (!this.get("valuesCollection").models.map(model => model.get("value")).includes(obj.value)) {
+                    this.addValueModel(obj.value, obj.group);
+                }
+                else {
+                    this.get("valuesCollection").remove(this.get("valuesCollection").models.filter((model) => !valueList.includes(model.get("value"))));
+                }
+            }, this);
+        }
+        else {
+            // array of strings
+            valueList.forEach(function (value) {
+                if (!this.get("valuesCollection").models.map(model => model.get("value")).includes(value)) {
+                    this.addValueModel(value);
+                }
+                else {
+                    this.get("valuesCollection").remove(this.get("valuesCollection").models.filter((model) => !valueList.includes(model.get("value"))));
+                }
+            }, this);
+        }
     },
+
     /**
      * removes all value-models from collection and calls addValueModel for each new value
      * @param {string[]} newValueList - new dropdown values
@@ -76,13 +111,15 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
 
     /**
      * creates a model value and adds it to the value collection
-     * @param  {string} value - value
+     * @param {string} value - value
+     * @param {string|undefined} group - name of its group
      * @returns {void}
      */
-    addValueModel: function (value) {
+    addValueModel: function (value, group) {
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
             value: value,
+            group: group ? group : undefined,
             displayName: this.getDisplayName(value),
             isSelected: false,
             isSelectable: true,
@@ -176,7 +213,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
             }
         }, this);
 
-        this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}));
+        this.setValueModelsToShow(this.get("valuesCollection").where({isSelectable: true}), this.get("isGrouped"));
         this.trigger("render");
     },
 
@@ -191,11 +228,21 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
 
     /**
      * sets the valueModelsToShow attribute
-     * @param  {Backbone.Model[]} value - all value models that can be selected
+     * @param {Backbone.Model[]} models - all value models that can be selected
+     * @param {boolean} isGrouped - flag if the objects should be grouped
      * @returns {void}
      */
-    setValueModelsToShow: function (value) {
-        this.set("valueModelsToShow", value);
+    setValueModelsToShow: function (models, isGrouped) {
+        if (isGrouped) {
+            const groupedModels = Radio.request("Util", "groupBy", models, function (model) {
+                return model.get("group");
+            });
+
+            this.set("valueModelsToShow", groupedModels);
+        }
+        else {
+            this.set("valueModelsToShow", models);
+        }
     },
 
     /**
