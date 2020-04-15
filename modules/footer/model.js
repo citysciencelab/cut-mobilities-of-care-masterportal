@@ -3,11 +3,11 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
         urls: [
             {
                 "bezeichnung": "Kartographie und Gestaltung: ",
-                "url": "http://www.geoinfo.hamburg.de/",
-                "alias": "Landesbetrieb Geoinformation und Vermessung",
-                "alias_mobil": "LGV Hamburg",
+                "url": "https://www.masterportal.org/",
+                "alias": "Implementierungspartnerschaft Masterportal",
+                "alias_mobil": "IP Masterportal",
                 // if a tool should be opened, no url is necessary, provide the id of the dedicated model
-                "toolModelId": "sdpdownload"
+                "toolModelId": "draw"
             }
         ],
         showVersion: false,

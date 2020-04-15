@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<a href="<%= link %> " target="_blank" data-toggle="tooltip" data-placement="bottom" title="<%= toolTip %>">
-    <% if (logo !== "") { %>
+<% if (logo && logo.trim() !== "") { %>
+    <a href="<%= link %> " target="_blank" data-toggle="tooltip" data-placement="bottom" title="<%= toolTip %>">
         <img src="<%= logo %>">
-    <% } %>
-</a>
+    </a>
+<% } %>
 <span>
     <%= title %>
 </span>

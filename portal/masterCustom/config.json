@@ -1,11 +1,5 @@
 {
   "Portalconfig":{
-     "portalTitle":{
-        "title":"MasterCustom",
-        "logo":"",
-        "link":"",
-        "toolTip":""
-     },
      "searchBar":{
         "minChars":3,
         "gazetteer":{

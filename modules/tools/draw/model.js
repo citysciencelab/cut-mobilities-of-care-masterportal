@@ -1019,7 +1019,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 font: fontSize + "px " + font,
                 fill: new Fill({
                     color: color
-                })
+                }),
+                textBaseline: "bottom"
             }),
             zIndex: zIndex
         });

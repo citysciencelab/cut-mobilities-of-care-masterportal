@@ -224,7 +224,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                 case "drawLine": {
                     this.$el.find(
                         `.text,
-                        .font.size,
+                        .font-size,
                         .font,
                         .radius,
                         .color,
@@ -258,7 +258,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                     this.$el.find(
                         `.stroke-width,
                         .color,
-                        .opacity`
+                        .opacity,
+                        .colorContour`
                     ).show();
                     break;
                 }

@@ -81,6 +81,7 @@ import Orientation3DView from "../modules/controls/orientation3d/view";
 import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
+import "url-polyfill";
 
 let sbconfig, controls, controlsView;
 
@@ -495,10 +496,15 @@ function loadApp () {
                 });
 
 
-                // .js need to be removed so webpack only searches for .js files
+                // .js need to be removed so we can specify specifically in the import statement that
+                // webpack only searches for .js files
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
-                import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".js").then(module => {
+                import(
+                    /* webpackChunkName: "[request]" */
+                    /* webpackExclude: /.+unittests.+/ */
+                    "../addons/" + entryPoint + ".js"
+                ).then(module => {
                     /* eslint-disable new-cap */
                     const addon = new module.default();
 

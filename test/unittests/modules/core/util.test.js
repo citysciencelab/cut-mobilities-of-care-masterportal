@@ -3,6 +3,28 @@ import {expect} from "chai";
 
 describe("core/Util", function () {
     let model;
+    const list = [
+        {
+            "name": "20097 Hamburg - Hamm",
+            "id": "bkgSuggest3"
+        },
+        {
+            "name": "20535 Hamburg - Hamm",
+            "id": "bkgSuggest4"
+        },
+        {
+            "name": "20537 Hamburg - Hamm",
+            "id": "bkgSuggest5"
+        },
+        {
+            "name": "22087 Hamburg - Hamm",
+            "id": "bkgSuggest6"
+        },
+        {
+            "name": "22089 Hamburg - Hamm",
+            "id": "bkgSuggest7"
+        }
+    ];
 
     describe("punctuate", function () {
         before(function () {
@@ -344,6 +366,71 @@ describe("core/Util", function () {
         });
         it("should return false for invalid address stringsB", function () {
             expect(model.isValidAddressString("aStraße, 12345 Stadt", ",", " ")).to.be.false;
+        });
+    });
+    describe("pick", function () {
+        it("should return the first entry with the name: 20097 Hamburg - Hamm and id: bkgSuggest3", function () {
+            expect(model.pick(list, [0])).to.deep.equal({"0": list[0]});
+        });
+        it("should return the first entry with the name: 20097 Hamburg - Hamm and id: bkgSuggest3", function () {
+            expect(model.pick(list, [100])).to.deep.equal({});
+        });
+        it("should return the first and second entry with the name: 20097 Hamburg - Hamm and id: bkgSuggest3", function () {
+            expect(model.pick(list, [0, 1])).to.deep.equal({
+                "0": {name: "20097 Hamburg - Hamm", id: "bkgSuggest3"},
+                "1": {name: "20535 Hamburg - Hamm", id: "bkgSuggest4"}
+            });
+        });
+        it("should return an empty object for an defined list but empty key", function () {
+            expect(model.pick(list, [])).to.deep.equal({});
+        });
+        it("should return an empty object for an defined list but undefined key", function () {
+            expect(model.pick(list, [undefined])).to.deep.equal({});
+        });
+        it("should return an empty object for an undefined list and undefined key", function () {
+            expect(model.pick(undefined, [undefined])).to.deep.equal({});
+        });
+        it("should return an empty object for an undefined list but defined key", function () {
+            expect(model.pick(undefined, [0])).to.deep.equal({});
+        });
+    });
+    describe("omit", function () {
+        const obj = {a: "foo", b: "bar", c: "baz"};
+
+        it("should return the 3. entry", function () {
+            expect(model.omit(obj, ["a", "b"])).to.deep.equal({c: "baz"});
+        });
+        it("should return obj", function () {
+            expect(model.omit(obj, [])).to.deep.equal(obj);
+        });
+        it("should return {}", function () {
+            expect(model.omit(obj, ["a", "b", "c"])).to.deep.equal({});
+        });
+        it("should return obj", function () {
+            expect(model.omit(obj, [undefined])).to.deep.equal(obj);
+        });
+        it("should return {}", function () {
+            expect(model.omit(undefined, [undefined])).to.deep.equal({});
+        });
+        it("should return {}", function () {
+            expect(model.omit(undefined, ["a"])).to.deep.equal({});
+        });
+    });
+    describe("findWhereJs", function () {
+        it("should return the first entry in the list", function () {
+            expect(model.findWhereJs(list, "bkgSuggest3")).to.deep.equal(list[0]);
+        });
+        it("should return", function () {
+            expect(model.findWhereJs(list, undefined)).to.be.undefined;
+        });
+        it("should return", function () {
+            expect(model.findWhereJs(undefined, undefined)).to.be.undefined;
+        });
+        it("should return the first entry in the list", function () {
+            expect(model.findWhereJs(list, "")).to.be.undefined;
+        });
+        it("should return the first entry in the list", function () {
+            expect(model.findWhereJs(list, 0)).to.be.undefined;
         });
     });
 });

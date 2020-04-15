@@ -1,13 +1,19 @@
 {
   "name": "masterportal",
-  "version": "2.4.3",
-  "description": "MasterPortal Hamburg",
-  "title": "MasterPortal Hamburg",
+  "author": {
+    "name": "Implementierungspartnerschaft Masterportal",
+    "email": "info@masterportal.org",
+    "url": "https://www.masterportal.org"
+  },
+  "bugs": "https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues",
+  "version": "2.5.0",
   "license": "MIT",
+  "description": "The MasterPortal as OpenSource Geoportal",
   "repository": {
     "type": "git",
     "url": "https://bitbucket.org/geowerkstatt-hamburg/masterportal.git"
   },
+  "main": "js/main.js",
   "scripts": {
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts --timeout 15000",
@@ -31,10 +37,7 @@
     "bootstrap-toggle": "2.x.x",
     "d3": "4.9.x",
     "d3-scale-chromatic": "^1.5.0",
-    "dom-parser": "^0.1.5",
     "html2canvas": "^1.0.0-rc.5",
-    "git-rev-sync": "^2.0.0",
-    "https-proxy-agent": "^3.0.0",
     "i18next": "^19.0.1",
     "i18next-browser-languagedetector": "^4.0.1",
     "i18next-xhr-backend": "^3.2.2",
@@ -43,16 +46,15 @@
     "moment": "2.x",
     "mqtt": "^2.15.x",
     "olcs": "^2.10.0",
-    "rbush": "^2.0.2",
     "underscore": "1.x",
+    "url-polyfill": "^1.1.8",
     "vcs-oblique": "^2.0.1",
     "video.js": "6.x",
     "videojs-flash": "^2.1.0",
     "vue": "^2.6.10",
     "vue-loader": "^15.7.2",
     "vue-template-compiler": "^2.6.10",
-    "vuex": "^3.1.2",
-    "zip-a-folder": "0.0.6"
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
@@ -64,7 +66,6 @@
     "chai": "4.1.1",
     "child-process-promise": "^2.2.1",
     "css-loader": "^1.0.0",
-    "deep-extend": "^0.6.0",
     "dotenv": "^8.1.0",
     "es6-promise": "^4.2.5",
     "eslint": "^6.5.1",
@@ -74,7 +75,8 @@
     "file-loader": "^2.0.0",
     "fs": "0.0.1-security",
     "fs-extra": "^7.0.0",
-    "glob": "^7.1.4",
+    "git-rev-sync": "^2.0.0",
+    "https-proxy-agent": "^3.0.0",
     "husky": "^3.0.0",
     "inquirer": "^6.2.0",
     "jaguarjs-jsdoc": "0.0.1",
@@ -83,7 +85,7 @@
     "jsdom-global": "^3.0.2",
     "less": "3.9.0",
     "less-loader": "^4.1.0",
-    "masterportalAPI": "git+https://bitbucket.org/geowerkstatt-hamburg/masterportalapi.git",
+    "masterportalAPI": "git+https://bitbucket.org/geowerkstatt-hamburg/masterportalapi.git#v1.1.0",
     "mini-css-extract-plugin": "^0.4.5",
     "mocha": "^6.2.0",
     "mocha-loader": "^2.0.0",
@@ -103,7 +105,12 @@
     "webpack-merge": "^4.2.2",
     "webpack-visualizer-plugin": "^0.1.11",
     "whatwg-fetch": "^3.0.0",
-    "xmlserializer": "^0.6.1"
+    "xmlserializer": "^0.6.1",
+    "zip-a-folder": "0.0.6"
+  },
+  "engines": {
+    "node": ">= 10.18.0",
+    "npm": ">= 6.13.4"
   },
   "husky": {
     "hooks": {

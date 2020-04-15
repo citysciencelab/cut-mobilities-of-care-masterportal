@@ -13,19 +13,21 @@ const Config = {
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
             }
-        ]
+        ],
+        showVersion: true
     },
     quickHelp: {
         imgPath: "./ressources/img/"
     },
     layerConf: "./ressources/services-internet.json",
     restConf: "./ressources/rest-services-internet.json",
-    styleConf: "./ressources/style_v2.json",
+    styleConf: "./ressources/style_v3.json",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
-    }
+    },
+    useVectorStyleBeta: true
 };
 
 /* eslint-enable no-unused-vars */

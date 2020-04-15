@@ -65,6 +65,7 @@ const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
      * @return {void}
      */
     deleteFeatures: function () {
+        this.model.removeIncompleteDrawing();
         this.model.deleteFeatures();
     },
 

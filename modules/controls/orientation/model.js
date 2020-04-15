@@ -136,13 +136,14 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
     untrack: function () {
         const geolocation = this.get("geolocation");
 
-        geolocation.un("change", this.positioning.bind(this), this);
+        geolocation.setTracking(false); // for FireFox - cannot handle geolocation.un(...)
         geolocation.un("error", this.onError.bind(this), this);
         if (this.get("tracking") === false || this.get("firstGeolocation") === false) {
             this.removeOverlay();
         }
-        this.set("firstGeolocation", true);
+
         this.set("tracking", false);
+        this.set("firstGeolocation", true);
     },
     track: function () {
         let geolocation = null;

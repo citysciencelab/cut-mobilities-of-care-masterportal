@@ -69,6 +69,9 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
                 this.setWidth("30%");
             }
         }
+        else {
+            this.setWidth("100%");
+        }
         this.trigger("resize");
         this.setIsVisible(isVisible);
     },
