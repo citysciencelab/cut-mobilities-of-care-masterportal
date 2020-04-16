@@ -1,5 +1,5 @@
 import state from "./state";
-import {generateSimpleGetters} from "../../utils/generators";
+import {generateSimpleGetters} from "../../../store/utils/generators";
 
 const getters = {
     ...generateSimpleGetters(state),

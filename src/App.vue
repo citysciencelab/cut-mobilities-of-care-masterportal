@@ -4,8 +4,8 @@ import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./modules/scaleLine/components/ScaleLine.vue";
 import Controls from "./modules/controls/Controls.vue";
 // import Tools from "./components/tools/Tools.vue";
-import Title from "./components/Title.vue";
-import MapModuleDebug from "./store/modules/map/MapModuleDebug.vue";
+import Title from "./modules/title/components/Title.vue";
+import MapModuleDebug from "./modules/map/components/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
 import Language from "./components/Language.vue";
 

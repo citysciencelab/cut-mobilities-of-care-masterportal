@@ -4,8 +4,8 @@ import Vuex from "vuex";
 import Alerting from "../modules/alerting/store";
 import SupplyCoord from "./modules/SupplyCoord";
 import ScaleLine from "../modules/scaleLine/store";
-import Title from "./Title";
-import Map from "./modules/map";
+import Title from "../modules/title/store";
+import Map from "../modules/map/store";
 
 import getters from "./getters";
 import mutations from "./mutations";
