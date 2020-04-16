@@ -23,7 +23,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
             "change:isActive change:url": this.render,
             "change:positionMapProjection": this.changedPosition,
             "change:currentLng": () => {
-                this.render(this.model, this.model.get("isActive"));
+                this.renderToolBody();
             }
         });
         // To initially open this tool it needs to fire change:isActive event on parent model because other
@@ -36,16 +36,15 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     template: _.template(GetCoordTemplate),
 
     /*
-     * Todo
+     * Function to initiate the rendering of the tool-body and to initiate a new interaction.
      * @param {object} model Model of GetCoord Tool view
      * @param {boolean} value Todo
      * @returns {view} This
      */
     render: function (model, value) {
         if (value) {
-            this.setElement(document.getElementsByClassName("win-body")[0]);
             this.model.createInteraction();
-            this.$el.html(this.template(model.toJSON()));
+            this.renderToolBody();
             this.changedPosition();
             this.delegateEvents();
         }
@@ -57,8 +56,16 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
         return this;
     },
 
+    /* Function to render the tool-body respectively the tool-window.
+    * returns {void}
+    */
+    renderToolBody: function () {
+        this.setElement(document.getElementsByClassName("win-body")[0]);
+        this.$el.html(this.template(this.model.toJSON()));
+    },
+
     /*
-     * Todo
+     * Delegates the calculation and transformation of the position according to the projection
      * @returns {void}
      */
     changedPosition: function () {
@@ -74,7 +81,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     },
 
     /*
-     * Todo
+     * Calculates the clicked position and writes the coordinate-values into the textfields.
      * @param {object} position Todo
      * @param {object} targetProjection Todo
      * @returns {void}
@@ -100,7 +107,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     },
 
     /*
-     * Todo
+     * Function to translate the coordinate-terms.
      * @param {object} targetProjection Todo
      * @returns {void}
      */
@@ -119,7 +126,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     },
 
     /*
-     * Todo
+     * Function to initiate the copying of the coordinates from the inputfields.
      * @fires Util#RadioTriggerUtilCopyToClipboard
      * @param {event} evt Click Event
      * @returns {void}
