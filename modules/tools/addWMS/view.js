@@ -22,7 +22,6 @@ const AddWMSView = Backbone.View.extend(/** @lends AddWMSView.prototype */{
         this.listenTo(this.model, {
             "change:wmsURL": this.urlChange,
             "change:isActive": this.render,
-            // "change:placeholder": this.render
             "change:currentLng": () => {
                 this.render(this.model, this.model.get("isActive"));
             }
