@@ -394,6 +394,28 @@ describe("core/Util", function () {
             expect(model.pick(undefined, [0])).to.deep.equal({});
         });
     });
+    describe("omit", function () {
+        const obj = {a: "foo", b: "bar", c: "baz"};
+
+        it("should return the 3. entry", function () {
+            expect(model.omit(obj, ["a", "b"])).to.deep.equal({c: "baz"});
+        });
+        it("should return obj", function () {
+            expect(model.omit(obj, [])).to.deep.equal(obj);
+        });
+        it("should return {}", function () {
+            expect(model.omit(obj, ["a", "b", "c"])).to.deep.equal({});
+        });
+        it("should return obj", function () {
+            expect(model.omit(obj, [undefined])).to.deep.equal(obj);
+        });
+        it("should return {}", function () {
+            expect(model.omit(undefined, [undefined])).to.deep.equal({});
+        });
+        it("should return {}", function () {
+            expect(model.omit(undefined, ["a"])).to.deep.equal({});
+        });
+    });
     describe("findWhereJs", function () {
         it("should return the first entry in the list", function () {
             expect(model.findWhereJs(list, "bkgSuggest3")).to.deep.equal(list[0]);

@@ -1492,6 +1492,19 @@
  */
 
 /**
+ * @event Core#RadioTriggerUtilPick
+ * @description Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
+ * @example Radio.request("Util", "pick");
+ */
+
+/**
+ * @event Core#RadioTriggerUtilOmit
+ * @description Returns a copy of the object, filtered to omit the keys specified (or array of blacklisted keys).
+ * @example Radio.request("Util", "omit");
+ */
+
+
+/**
  * @event Core#changeIsViewMobile
  * @description todo
  */

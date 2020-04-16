@@ -141,14 +141,19 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
         const isMobile = Radio.request("Util", "isViewMobile"),
             isVisibleInTree = isMobile ? "false" : "true";
 
-        let layer3DVisibility;
+        let layer3DVisibility,
+            layer3DVisible;
 
         if (layerList && Array.isArray(layerList)) {
             layerList.forEach(function (layer) {
                 if (Layer3dList && typeof Layer3dList === "object" && Layer3dList.Layer && Layer3dList.Layer.length > 0) {
+
                     layer3DVisibility = Layer3dList.Layer.filter(function (layer3D) {
                         return layer3D.id === layer.id;
-                    })[0].visibility;
+                    });
+                    if (layer3DVisibility[0] !== undefined) {
+                        layer3DVisible = layer3DVisibility[0].visibility;
+                    }
                 }
 
                 this.addItem(_.extend({
@@ -156,7 +161,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     parentId: "3d_daten",
                     level: 0,
                     isVisibleInTree: isVisibleInTree,
-                    isSelected: layer3DVisibility ? layer3DVisibility : false
+                    isSelected: layer3DVisible ? layer3DVisible : false
                 }, layer));
             }, this);
         }

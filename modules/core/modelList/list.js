@@ -1,4 +1,5 @@
 import WMSLayer from "./layer/wms";
+import WMTSLayer from "./layer/wmts";
 import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
@@ -183,6 +184,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         if (attrs.type === "layer") {
             if (attrs.typ === "WMS") {
                 return new WMSLayer(attrs, options);
+            }
+            else if (attrs.typ === "WMTS") {
+                return new WMTSLayer(attrs, options);
             }
             else if (attrs.typ === "WFS") {
                 if (attrs.outputFormat === "GeoJSON") {

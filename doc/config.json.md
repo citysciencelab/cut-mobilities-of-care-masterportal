@@ -33,7 +33,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |----|-------------|---|-------|------------|------|
 |portalTitle|nein|**[portalTitle](#markdown-header-portalconfigportaltitle)**||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|false|
 |treeType|nein|enum["light","default","custom"]|"light"|Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|false|
-|singleBaselayer|nein|Boolean|false|Legt fest, ob nur ein Baselayer gleichzeitig ausgewählt werden kann.|false|
+|singleBaselayer|nein|Boolean|false|Legt fest, ob nur ein Baselayer gleichzeitig ausgewählt werden kann, nur bei dem treeType „custom“ verfügbar.|false|
 |Baumtyp|nein|enum["light","default","custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|false|
 |mapView|nein|**[mapView](#markdown-header-portalconfigmapview)**||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|false|
 |controls|nein|**[controls](#markdown-header-portalconfigcontrols)**||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|false|
