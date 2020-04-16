@@ -204,6 +204,7 @@
                 "district": "District",
                 "choose": "please choose",
                 "parcelNumber": "Parcel number",
+                "plot": "Plot",
                 "parcelNumberPlaceholder": "Enter number",
                 "generateReport": "Generate report"
             },

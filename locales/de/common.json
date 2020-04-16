@@ -204,6 +204,7 @@
                 "district": "Gemarkung",
                 "choose": "bitte wählen",
                 "parcelNumber": "Flurstücksnummer",
+                "plot": "Flur",
                 "parcelNumberPlaceholder": "Nummer eingeben",
                 "generateReport": "Bericht erzeugen"
             },
