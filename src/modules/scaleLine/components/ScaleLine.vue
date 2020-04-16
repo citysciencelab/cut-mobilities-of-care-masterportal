@@ -14,20 +14,19 @@ export default {
         insideFooter () {
             return this.$store.state.ScaleLine.insideFooter;
         }
-
     },
     created () {
         const that = this,
             myBus = Backbone.Events;
 
-        if (that.$store.state.ScaleLine.scaleLine) {
+        if (this.$store.state.ScaleLine.scaleLine) {
             myBus.listenTo(Radio.channel("MapView"), {
                 changedOptions: function (options) {
-                    that.$store.dispatch("modifyScale", options);
-                    that.$store.dispatch("updateScaleLineValue", options);
+                    that.$store.dispatch("ScaleLine/modifyScale", options);
+                    that.$store.dispatch("ScaleLine/updateScaleLineValue", options);
                     document.getElementsByClassName("ol-viewport")[0].appendChild(that.$el);
                 }
-            });
+            }, this);
             myBus.listenTo(Radio.channel("Map"), {
                 change: function (mode) {
                     that.$store.state.ScaleLine.mapMode = mode;

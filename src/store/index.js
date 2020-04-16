@@ -3,7 +3,7 @@ import Vuex from "vuex";
 
 import Alerting from "./modules/Alerting";
 import SupplyCoord from "./modules/SupplyCoord";
-import ScaleLine from "./modules/ScaleLine";
+import ScaleLine from "../modules/scaleLine/store";
 import Title from "./Title";
 import Map from "./modules/map";
 
