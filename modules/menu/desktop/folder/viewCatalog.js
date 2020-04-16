@@ -83,7 +83,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      * @return {FolderCatalogView} returns this
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         attr.treeType = Radio.request("Parser", "getTreeType");
         attr.category = Radio.request("Parser", "getCategory");
@@ -107,7 +107,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      * @return {void}
      */
     toggleGlyphicon: function () {
-        var elem = $("ul#" + this.model.get("id")).prev().find(".glyphicon:first");
+        const elem = $("ul#" + this.model.get("id")).prev().find(".glyphicon:first");
 
         if (!this.model.get("isExpanded")) {
             elem.removeClass("glyphicon-minus-sign");

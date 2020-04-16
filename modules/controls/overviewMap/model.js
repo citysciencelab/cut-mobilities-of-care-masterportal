@@ -164,10 +164,9 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @returns {object} - Baselayer params.
      */
     getBaseLayerFromCollection: function (layers, baselayer) {
-        var modelFromCollection,
-            baseLayerParams;
+        const modelFromCollection = getLayerWhere({id: baselayer});
+        let baseLayerParams;
 
-        modelFromCollection = getLayerWhere({id: baselayer});
         if (_.isUndefined(modelFromCollection) === false) {
             baseLayerParams = {
                 layerUrl: modelFromCollection.url,
@@ -191,7 +190,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @returns {ol/Image} - The open layer image layer
      */
     getOvmLayer: function (baselayer) {
-        var imageLayer;
+        let imageLayer;
 
         if (baselayer instanceof Image === false) {
             imageLayer = new Image({

@@ -5,7 +5,7 @@ const RemoteInterface = Backbone.Model.extend({
         postMessageUrl: "https://localhost:8080"
     },
     initialize: function () {
-        var channel = Radio.channel("RemoteInterface");
+        const channel = Radio.channel("RemoteInterface");
 
         channel.reply({
             "getMapState": this.getMapState,
@@ -84,7 +84,7 @@ const RemoteInterface = Backbone.Model.extend({
      * @returns {void}
      */
     showPositionByFeatureId: function (featureId, layerId) {
-        var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+        const model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             feature = model.get("layerSource").getFeatureById(featureId),
             extent = feature.getGeometry().getExtent(),
             center = getCenter(extent);
@@ -93,13 +93,13 @@ const RemoteInterface = Backbone.Model.extend({
         Radio.trigger("MapView", "setCenter", center);
     },
     showPositionByExtent: function (extent) {
-        var center = getCenter(extent);
+        const center = getCenter(extent);
 
         Radio.trigger("MapMarker", "showMarker", center);
         Radio.trigger("MapView", "setCenter", center);
     },
     showPositionByExtentNoScroll: function (extent) {
-        var center = getCenter(extent);
+        const center = getCenter(extent);
 
         Radio.trigger("MapMarker", "showMarker", center);
     },

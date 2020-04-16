@@ -118,11 +118,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @returns {void}
      */
     checkInitialSearch: function () {
-        var allDone = true;
+        let allDone = true;
         // Ist mindestens ein Suchalgorithmus noch als ausstehend markiert?
 
         _.forEach(this.get("activeInitialSearchTasks"), function (taskName) {
-            var status = this.get("initialSearch_" + taskName);
+            const status = this.get("initialSearch_" + taskName);
 
             if (!status) {
                 allDone = false;
@@ -161,7 +161,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @returns {void}
      */
     setInitialSearchTasks: function (config) {
-        var searchTasks = this.get("knownInitialSearchTasks"),
+        const searchTasks = this.get("knownInitialSearchTasks"),
             activeSearchTasks = [];
 
         // Prüfe für jeden bekannten Suchalgorithmus ob er aktiviert ist. Wenn ja markiere ihn als
@@ -203,8 +203,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
     * @returns {void}
     */
     setSearchString: function (value, eventType) {
-        var splitAdress = value.split(" "),
-            houseNumber,
+        const splitAdress = value.split(" ");
+        let houseNumber,
             streetName;
 
         // für Copy/Paste bei Adressen
@@ -233,7 +233,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @return {void}
      */
     pushHits: function (attribute, value, evtType) {
-        var tempArray = _.clone(this.get(attribute)),
+        let tempArray = _.clone(this.get(attribute)),
             valueWithNumbers;
 
         tempArray.push(value);
@@ -241,7 +241,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         // removes addresses without house number, if more than one exists
         if (evtType === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
             valueWithNumbers = tempArray.filter(function (val) {
-                var valueArray = val.name.split(",")[0].split(" ");
+                const valueArray = val.name.split(",")[0].split(" ");
 
                 return !_.isNaN(parseInt(valueArray[valueArray.length - 1], 10));
             });
@@ -263,8 +263,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @return {Void} Nothing
      */
     removeHits: function (attribute, filter) {
-        var toRemove, i,
-            tempArray = _.clone(this.get(attribute));
+        const tempArray = _.clone(this.get(attribute));
+        let toRemove;
 
         if (_.isObject(filter)) {
             toRemove = _.where(tempArray, filter);
@@ -273,7 +273,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             });
         }
         else {
-            for (i = tempArray.length - 1; i >= 0; i--) {
+            for (let i = tempArray.length - 1; i >= 0; i--) {
                 if (tempArray[i] === filter) {
                     tempArray.splice(i, 1);
                 }

@@ -101,7 +101,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @fires ModelList#UpdateSelection
      */
     initialize: function () {
-        var channel = Radio.channel("ModelList");
+        const channel = Radio.channel("ModelList");
 
         channel.reply({
             "getCollection": this,
@@ -385,7 +385,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
     */
     setModelsInvisibleByParentId: function (parentId) {
-        var children;
+        let children;
 
         if (parentId === "SelectedLayer") {
             children = this.where({isSelected: true});
@@ -404,7 +404,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     * @return {void}
     */
     setVisibleByParentIsExpanded: function (parentId) {
-        var parent = this.findWhere({id: parentId});
+        const parent = this.findWhere({id: parentId});
 
         if (!parent.get("isExpanded")) {
             this.setAllDescendantsInvisible(parentId, Radio.request("Util", "isViewMobile"));
@@ -422,13 +422,15 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {void}
      */
     setAllDescendantsInvisible: function (parentId, isMobile) {
-        var children = this.where({parentId: parentId}),
-            additionalChildren = this.where({
+        const additionalChildren =
+            this.where({
                 isVisibleInTree: true,
                 parentId: parentId,
                 typ: "GROUP",
                 type: "layer"
             });
+
+        let children = this.where({parentId: parentId});
 
         children = children.concat(additionalChildren);
 
@@ -449,7 +451,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {void}
      */
     setAllDescendantsVisible: function (parentId) {
-        var children = this.where({parentId: parentId});
+        const children = this.where({parentId: parentId});
 
         _.each(children, function (child) {
             child.setIsVisibleInTree(true);
@@ -478,7 +480,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     setIsSelectedOnChildLayers: function (model) {
-        var descendantModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}));
+        let descendantModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}));
 
         // Layers in default tree are always sorted alphabetically while in other tree types, layers are
         // displayed in the order taken from config.json.
@@ -504,9 +506,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     sortLayers: function (childModels, key) {
         return childModels.sort(function (firstChild, secondChild) {
-            var firstValue = firstChild.get(key),
-                secondValue = secondChild.get(key),
-                direction;
+            const firstValue = firstChild.get(key),
+                secondValue = secondChild.get(key);
+
+            let direction;
 
             if (firstValue < secondValue) {
                 direction = -1;
@@ -529,7 +532,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     setIsSelectedOnParent: function (model) {
-        var layers = this.where({parentId: model.get("parentId")}),
+        const layers = this.where({parentId: model.get("parentId")}),
             folderModel = this.findWhere({id: model.get("parentId")}),
             allLayersSelected = _.every(layers, function (layer) {
                 return layer.get("isSelected") === true;
@@ -569,9 +572,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     toggleDefaultTool: function () {
-        var activeTools = this.where({isActive: true}),
-            legendModel = this.findWhere({id: "legend"}),
+        const legendModel = this.findWhere({id: "legend"}),
             defaultTool = this.getDefaultTool();
+
+        let activeTools = this.where({isActive: true});
 
         activeTools = _.without(activeTools, legendModel);
         if (activeTools.length === 0 && defaultTool !== undefined) {
@@ -590,9 +594,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     moveModelInTree: function (model, movement) {
-        var currentSelectionIdx = model.get("selectionIDX"),
-            newSelectionIndex = currentSelectionIdx + movement,
-            modelToSwap = this.where({selectionIDX: newSelectionIndex});
+        const currentSelectionIdx = model.get("selectionIDX"),
+            newSelectionIndex = currentSelectionIdx + movement;
+
+        let modelToSwap = this.where({selectionIDX: newSelectionIndex});
 
         // Do not move models when no model to swap is found.
         // There are hidden models such as "oblique" at selectionIDX 0, causing modelToSwap array to be not
@@ -620,10 +625,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     initLayerIndeces: function () {
-        var allLayerModels = this.getTreeLayers(),
+        const allLayerModels = this.getTreeLayers(),
             baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
-            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true),
-            initialLayers = [];
+            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true);
+
+        let initialLayers = [];
 
         initialLayers = baseLayerModels.concat(layerModels);
 
@@ -651,8 +657,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {array} Selected Layers
      */
     getTreeLayers: function () {
-        var treeType = Radio.request("Parser", "getTreeType"),
-            allLayerModels = this.where({type: "layer"});
+        const treeType = Radio.request("Parser", "getTreeType");
+        let allLayerModels = this.where({type: "layer"});
 
         // we dont want to see these layers in the tree
         allLayerModels = allLayerModels.filter(layerModel => {
@@ -677,12 +683,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {array} Sorted selected Layers
      */
     getSortedTreeLayers: function () {
-        var combinedLayers = this.getTreeLayers(),
-            firstBaseLayerIndex,
+        const combinedLayers = this.getTreeLayers(),
+            newLayers = combinedLayers.filter(layer => layer.get("selectionIDX") === 0);
+
+        let firstBaseLayerIndex,
             // we need to devide current layers from newly added ones to be able to put the latter ones in
             // at a nice position
-            currentLayers = combinedLayers.filter(layer => layer.get("selectionIDX") !== 0),
-            newLayers = combinedLayers.filter(layer => layer.get("selectionIDX") === 0);
+            currentLayers = combinedLayers.filter(layer => layer.get("selectionIDX") !== 0);
 
         // first just sort all current layers
         currentLayers.sort(function (layer1, layer2) {
@@ -723,7 +730,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {array} Sorted selected Layers
      */
     updateLayerView: function () {
-        var sortedLayers = this.getSortedTreeLayers();
+        const sortedLayers = this.getSortedTreeLayers();
 
         _.each(sortedLayers, function (layer) {
             Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
@@ -738,7 +745,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     setIsSettingVisible: function (value) {
-        var models = this.where({type: "layer"});
+        const models = this.where({type: "layer"});
 
         _.each(models, function (model) {
             model.setIsSettingVisible(value);
@@ -757,9 +764,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // lighttree: Alle models gleich hinzufügen, weil es nicht viele sind und sie direkt einen Selection index
         // benötigen, der ihre Reihenfolge in der Config Json entspricht und nicht der Reihenfolge
         // wie sie hinzugefügt werden
-        var paramLayers = Radio.request("ParametricURL", "getLayerParams"),
-            treeType = Radio.request("Parser", "getTreeType"),
-            lightModels,
+        const paramLayers = Radio.request("ParametricURL", "getLayerParams"),
+            treeType = Radio.request("Parser", "getTreeType");
+
+        let lightModels,
             itemIsVisibleInMap,
             lightModel;
 
@@ -819,7 +827,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         // Merge die parametrisierten Einstellungen an die geparsten Models
         if (_.isUndefined(paramLayers) === false && paramLayers.length !== 0) {
             _.each(lightModels, function (lightModel) {
-                var hit = _.find(paramLayers, function (paramLayer) {
+                const hit = _.find(paramLayers, function (paramLayer) {
                     return paramLayer.id === lightModel.id;
                 });
 
@@ -842,7 +850,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     setModelAttributesById: function (id, attrs) {
-        var model = this.get(id);
+        const model = this.get(id);
 
         if (_.isUndefined(model) === false) {
             model.set(attrs);
@@ -865,7 +873,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     addModelsByAttributes: function (attrs) {
-        var lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
+        const lightModels = Radio.request("Parser", "getItemsByAttributes", attrs);
 
         lightModels.forEach(model => this.add(model));
         this.updateLayerView();
@@ -880,7 +888,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
     */
     showModelInTree: function (modelId) {
-        var mode = Radio.request("Map", "getMapMode"),
+        const mode = Radio.request("Map", "getMapMode"),
             lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
 
         this.closeAllExpandedFolder();
@@ -941,7 +949,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     addAndExpandModelsRecursive: function (parentId) {
-        var lightSiblingsModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
+        const lightSiblingsModels = Radio.request("Parser", "getItemsByAttributes", {parentId: parentId}),
             parentModel = Radio.request("Parser", "getItemByAttributes", {id: lightSiblingsModels[0].parentId});
 
         this.add(lightSiblingsModels);
@@ -1005,7 +1013,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     * @return {void}
     */
     removeModelsById: function (id) {
-        var model = this.get(id);
+        const model = this.get(id);
 
         this.remove(model);
         this.updateLayerView();
@@ -1017,7 +1025,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {Object} model
      */
     retrieveGroupModel: function (attributes) {
-        var layerId = _.isObject(attributes) ? attributes.id : attributes,
+        const layerId = _.isObject(attributes) ? attributes.id : attributes,
             groupModels = this.filter(function (model) {
                 return model.get("typ") === "GROUP";
             });
@@ -1035,7 +1043,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     showAllFeatures: function (id) {
-        var model = this.getModelById(id);
+        const model = this.getModelById(id);
 
         model.showAllFeatures();
     },
@@ -1047,7 +1055,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     showFeaturesById: function (id, featureIds) {
-        var model = this.getModelById(id);
+        const model = this.getModelById(id);
 
         model.showFeaturesByIds(featureIds);
     },
@@ -1058,7 +1066,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     hideAllFeatures: function (id) {
-        var model = this.getModelById(id);
+        const model = this.getModelById(id);
 
         model.hideAllFeatures();
     },
@@ -1078,7 +1086,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {Layer} model
      */
     getModelById: function (id) {
-        var model = this.get(id);
+        let model = this.get(id);
 
         if (_.isUndefined(model)) {
             model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {

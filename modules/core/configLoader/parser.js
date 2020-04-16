@@ -70,7 +70,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
     initialize: function () {
-        var channel = Radio.channel("Parser");
+        const channel = Radio.channel("Parser");
 
         channel.reply({
             "getItemByAttributes": this.getItemByAttributes,
@@ -108,7 +108,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
         this.listenTo(this, {
             "change:category": function () {
-                var modelList = Radio.request("ModelList", "getCollection"),
+                const modelList = Radio.request("ModelList", "getCollection"),
                     modelListToRemove = modelList.filter(function (model) {
                         // Alle Fachdaten Layer
                         return model.get("type") === "layer" && model.get("parentId") !== "Baselayer";
@@ -163,7 +163,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      */
     parseMenu: function (items, parentId) {
         _.each(items, function (value, key) {
-            var item,
+            let item,
                 toolitem,
                 ansicht,
                 downloadItem;
@@ -299,7 +299,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addFolder: function (name, id, parentId, level, isExpanded) {
-        var folder = {
+        const folder = {
             type: "folder",
             name: name,
             glyphicon: "glyphicon-plus-sign",
@@ -325,7 +325,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addLayer: function (name, id, parentId, level, layers, url, version) {
-        var layer = {
+        const layer = {
             cache: false,
             datasets: [],
             featureCount: 3,
@@ -364,7 +364,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addGeoJSONLayer: function (name, id, geojson) {
-        var layer = {
+        const layer = {
             type: "layer",
             name: name,
             id: id,
@@ -505,7 +505,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     removeItem: function (id) {
-        var itemList = this.get("itemList").filter(function (item) {
+        const itemList = this.get("itemList").filter(function (item) {
             return item.id !== id;
         });
 
@@ -602,7 +602,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addOrRemove3DFolder: function (treeType, isMobile, overLayer3d, overLayers3DName) {
-        var id3d = "3d_daten";
+        const id3d = "3d_daten";
 
         if (!isMobile && (treeType === "default" || !_.isUndefined(overLayer3d))) {
             this.addItemByPosition({
@@ -628,7 +628,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {number} postion for 3d folder
      */
     postionFor3DFolder: function (itemList) {
-        var position = itemList.length + 1;
+        let position = itemList.length + 1;
 
         _.each(itemList, function (item, index) {
             if (item.name === "Hintergrundkarten") {
@@ -646,12 +646,12 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {Object[]} layerlist - Objects from the services.json
      */
     mergeObjectsByIds: function (ids, layerlist) {
-        var objectsByIds = [],
-            newObject;
+        const objectsByIds = [];
+        let newObject = {};
 
         // Objekte die gruppiert werden
         _.each(ids, function (id) {
-            var lay = _.findWhere(layerlist, {id: id});
+            const lay = _.findWhere(layerlist, {id: id});
 
             if (lay) {
                 objectsByIds.push(lay);
@@ -687,7 +687,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {String} value - Uniq-Id
      */
     createUniqId: function (value) {
-        var trimmedValue = value.replace(/[^a-zA-Z0-9]/g, "");
+        const trimmedValue = value.replace(/[^a-zA-Z0-9]/g, "");
 
         return _.uniqueId(trimmedValue);
     },
@@ -698,7 +698,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {*} todo
      */
     getItemsByMetaID: function (metaID) {
-        var layers = this.get("itemList").filter(function (item) {
+        const layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
                 if (item.datasets.length > 0) {
                     return item.datasets[0].md_id === metaID;
@@ -716,7 +716,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {String} layer inital visible baselayer
      */
     getInitVisibBaselayer: function () {
-        var layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
+        const layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
 
         if (_.isUndefined(layer)) {
             return undefined;

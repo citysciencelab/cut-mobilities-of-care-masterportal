@@ -80,7 +80,7 @@ const Orientation3DView = Backbone.View.extend({
         this.$el.show();
     },
     show3d: function () {
-        var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
+        const scene = Radio.request("Map", "getMap3d").getCesiumScene(),
             camera = scene.camera;
 
         this.is3d = true;
@@ -97,8 +97,8 @@ const Orientation3DView = Backbone.View.extend({
         this.$el.show();
     },
     buttonClicked: function (event) {
-        var command = event.target.id,
-            zoom;
+        const command = event.target.id;
+        let zoom;
 
         if (this.is3d) {
             this.move3d(event);
@@ -117,7 +117,7 @@ const Orientation3DView = Backbone.View.extend({
         }
     },
     move3d: function (event) {
-        var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
+        const scene = Radio.request("Map", "getMap3d").getCesiumScene(),
             camera = scene.camera,
             distance = camera.positionCartographic.height / 2,
             angle = 0.15,
@@ -137,7 +137,7 @@ const Orientation3DView = Backbone.View.extend({
         directions[event.target.id]();
     },
     newImage: function (image) {
-        var rotation = 0;
+        let rotation = 0;
 
         if (image) {
             switch (image.viewDirection) {
@@ -160,7 +160,7 @@ const Orientation3DView = Backbone.View.extend({
         }
     },
     pointerClicked: function (event) {
-        var source = event.target.id;
+        const source = event.target.id;
 
         switch (source) {
             case "north-pointer":
@@ -180,7 +180,11 @@ const Orientation3DView = Backbone.View.extend({
         }
     },
     northDown: function (event) {
-        var offsetRect, scene, camera, ray, groundPositionCartesian;
+        let offsetRect = "",
+            scene = "",
+            camera = "",
+            ray = "",
+            groundPositionCartesian = "";
 
         if (!this.is3d) {
             return;
@@ -214,7 +218,7 @@ const Orientation3DView = Backbone.View.extend({
 
     },
     northUp: function (event) {
-        var endTime;
+        let endTime;
 
         if (this.is3d) {
             endTime = new Date().getTime();
@@ -230,7 +234,12 @@ const Orientation3DView = Backbone.View.extend({
         }
     },
     mouseDragged: function (event) {
-        var offsetRect, top, left, y, x, rads;
+        let offsetRect = "",
+            top = "",
+            left = "",
+            y = "",
+            x = "",
+            rads = "";
 
         if (!this.is3d) {
             return;
@@ -249,7 +258,7 @@ const Orientation3DView = Backbone.View.extend({
         this.setHeading(rads);
     },
     setHeading: function (heading) {
-        var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
+        const scene = Radio.request("Map", "getMap3d").getCesiumScene(),
             camera = scene.camera,
             options = {
                 orientation: {

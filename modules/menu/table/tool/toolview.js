@@ -18,7 +18,7 @@ const ToolView = Backbone.View.extend({
     className: "table-tool",
     template: _.template(ToolTemplate),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         $("#table-tools-menu").append(this.$el.html(this.template(attr)));
 
@@ -43,7 +43,7 @@ const ToolView = Backbone.View.extend({
      * @returns {void}
      */
     toggleSupportedVisibility: function (mode) {
-        var toolsFor3D = this.model.get("supportedIn3d").concat(this.model.get("supportedOnlyIn3d"));
+        const toolsFor3D = this.model.get("supportedIn3d").concat(this.model.get("supportedOnlyIn3d"));
 
         if (mode === "2D" && this.model.get("supportedOnlyIn3d").indexOf(this.model.get("id")) < 0) {
             this.$el.show();

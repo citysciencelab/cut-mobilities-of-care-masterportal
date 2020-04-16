@@ -20,7 +20,7 @@ const ActiveCityMapsTheme = Theme.extend({
      * @returns {void}
      */
     replaceValuesWithChildObjects: function () {
-        var element = this.get("gfiContent"),
+        const element = this.get("gfiContent"),
             children = [];
 
         if (_.isString(element) && element.match(/content="text\/html/g)) {
@@ -29,10 +29,10 @@ const ActiveCityMapsTheme = Theme.extend({
         else {
             _.each(element, function (ele, index) {
                 _.each(ele, function (val, key) {
-                    var copyright,
+                    let copyright,
                         imgView,
-                        videoView,
-                        valString = String(val);
+                        videoView;
+                    const valString = String(val);
 
                     if (valString.substr(0, 4) === "http"
                         && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1 || valString.search(/\.jpeg/i) !== -1 || valString.search(/\.gif/i) !== -1)) {
@@ -98,10 +98,10 @@ const ActiveCityMapsTheme = Theme.extend({
     },
 
     getVectorGfi: function () {
-        var gfiContentList = [];
+        const gfiContentList = [];
 
         _.each(this.get("gfiFeatureList"), function (feature) {
-            var gfiContent;
+            let gfiContent;
 
             gfiContent = this.translateGFI([feature.getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent)[0];
@@ -117,8 +117,8 @@ const ActiveCityMapsTheme = Theme.extend({
      * @returns {void}
      */
     parseGfiContent: function () {
-        var gfiContent = this.get("gfiContent")[0],
-            featureInfos = [];
+        const gfiContent = this.get("gfiContent")[0];
+        let featureInfos = [];
 
         if (!_.isUndefined(gfiContent)) {
             featureInfos = [];
@@ -133,10 +133,10 @@ const ActiveCityMapsTheme = Theme.extend({
      * @return {Array}             [description]
      */
     createFeatureInfos: function (gfiContent) {
-        var featureInfos = [];
+        const featureInfos = [];
 
         _.each(gfiContent, function (attribute, key) {
-            var gfiAttributes;
+            let gfiAttributes;
 
             if (attribute.indexOf("|") !== -1) {
                 gfiAttributes = {

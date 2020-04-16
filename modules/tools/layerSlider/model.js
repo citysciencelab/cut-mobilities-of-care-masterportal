@@ -235,7 +235,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      */
     toggleLayerVisibility: function (activeLayerId) {
         _.each(this.get("layerIds"), function (layer) {
-            var status = layer.layerId === activeLayerId;
+            const status = layer.layerId === activeLayerId;
 
             this.sendModification(layer.layerId, status);
         }, this);
@@ -293,7 +293,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @returns {void}
      */
     startInterval: function () {
-        var windowsInterval = this.get("windowsInterval"),
+        const windowsInterval = this.get("windowsInterval"),
             timeInterval = this.get("timeInterval");
 
         if (_.isNull(windowsInterval)) {
@@ -307,7 +307,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @returns {void}
      */
     stopInterval: function () {
-        var windowsInterval = this.get("windowsInterval");
+        const windowsInterval = this.get("windowsInterval");
 
         if (!_.isUndefined(windowsInterval)) {
             clearInterval(windowsInterval);
@@ -320,7 +320,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @returns {void}
      */
     backwardLayer: function () {
-        var index = this.getActiveIndex(),
+        const index = this.getActiveIndex(),
             max = this.get("layerIds").length - 1;
 
         if (index > 0) {
@@ -336,7 +336,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @returns {void}
      */
     forwardLayer: function () {
-        var index = this.getActiveIndex(),
+        const index = this.getActiveIndex(),
             max = this.get("layerIds").length - 1;
 
         if (index > -1 && index < max) {
@@ -354,7 +354,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @returns {object} Invalid Layer oder undefined
      */
     checkIfAllLayersAvailable: function (layers) {
-        var invalidLayers = [];
+        const invalidLayers = [];
 
         layers.forEach(function (layerObject) {
             if (

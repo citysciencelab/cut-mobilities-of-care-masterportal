@@ -83,7 +83,7 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {void}
      */
     removeFeatureFromList: function (featureToRemoved) {
-        var featureIndex = _.findIndex(this.get("featureList"), function (feature) {
+        const featureIndex = _.findIndex(this.get("featureList"), function (feature) {
             return feature.getId() === featureToRemoved.getId();
         });
 
@@ -104,13 +104,13 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {object[]} list - one object per row
      */
     prepareFeatureListToShow: function (gfiAttributes) {
-        var list = [],
+        const list = [],
             // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
             layerId = parseInt(this.get("layerId").split("_")[0], 10),
             featureList = this.get("groupedFeatureList")[layerId];
 
         Object.keys(gfiAttributes).forEach(function (key) {
-            var row = {};
+            const row = {};
 
             row["col-1"] = gfiAttributes[key];
             featureList.forEach(function (feature, index) {
@@ -127,7 +127,7 @@ const CompareFeaturesModel = Tool.extend({
      * @return {Boolean}  Flag if attribute is FOund
      */
     checkForAttribute: function (gfiAttributes, attribute) {
-        var isAttributeFound = false;
+        let isAttributeFound = false;
 
         if (!_.isUndefined(gfiAttributes[attribute])) {
             isAttributeFound = true;
@@ -185,7 +185,7 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {object[]} including name and id
      */
     getLayerSelection: function (groupedFeatureList) {
-        var selectionList = [];
+        const selectionList = [];
 
         Object.keys(groupedFeatureList).forEach(function (key) {
             selectionList.push({
@@ -203,7 +203,7 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {string[]} featureIdList
      */
     getFeatureIds: function (groupedFeatureList, layerId) {
-        var idList = [],
+        const idList = [],
             // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
             layerIdSplit = layerId.split("_")[0];
 
@@ -220,8 +220,8 @@ const CompareFeaturesModel = Tool.extend({
      */
     beautifyAttributeValues: function (feature) {
         Object.keys(feature.getProperties()).forEach(function (key) {
-            var array = [],
-                newVal;
+            const array = [];
+            let newVal;
 
             if (typeof feature.get(key) === "string" && feature.get(key).indexOf("|") !== -1) {
                 feature.set(key, feature.get(key).split("|"));
@@ -256,7 +256,7 @@ const CompareFeaturesModel = Tool.extend({
         });
     },
     preparePrint: function (rowsToShow) {
-        var realLayerId = this.get("layerId").split("_")[0],
+        const realLayerId = this.get("layerId").split("_")[0],
             layerModel = Radio.request("ModelList", "getModelByAttributes", {id: realLayerId}),
             features = this.prepareFeatureListToShow(layerModel.get("gfiAttributes")),
             tableBody = this.prepareTableBody(features, rowsToShow),
@@ -280,10 +280,10 @@ const CompareFeaturesModel = Tool.extend({
     },
 
     prepareTableBody: function (features, rowsToShow) {
-        var tableBody = [];
+        const tableBody = [];
 
         _.each(features, function (rowFeature, rowIndex) {
-            var row = [];
+            const row = [];
 
             if (rowIndex < rowsToShow) {
                 _.each(rowFeature, function (val) {
@@ -303,7 +303,7 @@ const CompareFeaturesModel = Tool.extend({
         return tableBody;
     },
     calculateRowWidth: function (firstRow, firstRowWidth) {
-        var numDataRows = firstRow.length - 1,
+        const numDataRows = firstRow.length - 1,
             rowWidth = [String(firstRowWidth) + "%"],
             dataRowsWidth = 100 - firstRowWidth,
             dataRowWidth = String(dataRowsWidth / numDataRows) + "%";

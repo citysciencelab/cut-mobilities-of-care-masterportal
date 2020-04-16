@@ -4,7 +4,7 @@ import "bootstrap/js/collapse";
 const BreadCrumbList = Backbone.Collection.extend({
     model: BreadCrumbItem,
     initialize: function () {
-        var channel = Radio.channel("BreadCrumb");
+        const channel = Radio.channel("BreadCrumb");
 
         channel.on({
             "addItem": this.addItem
@@ -42,7 +42,7 @@ const BreadCrumbList = Backbone.Collection.extend({
      * @returns {void}
      */
     removeItems: function (model) {
-        var modelIndex = this.indexOf(model),
+        const modelIndex = this.indexOf(model),
             models = this.filter(function (element, index) {
                 return index > modelIndex;
             }),

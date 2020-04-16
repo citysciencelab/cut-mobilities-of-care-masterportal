@@ -51,7 +51,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @property {String[]} obliqueModeBlacklist=["tree,"tools"] List of folder ids that are not displayed in oblique mode("Schr�gluftbilder").
      */
     initialize: function () {
-        var items,
+        let items,
             isEveryLayerSelected;
 
         // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert

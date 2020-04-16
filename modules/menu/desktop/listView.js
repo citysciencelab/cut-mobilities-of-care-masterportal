@@ -82,9 +82,9 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      */
     renderSelectedList: function () {
 
-        var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),
-            currentMap = Radio.request("Map", "getMapMode"),
-            selectedModels;
+        const selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),
+            currentMap = Radio.request("Map", "getMapMode");
+        let selectedModels;
 
         $("#SelectedLayer").html("");
         if (selectedLayerModel.get("isExpanded")) {
@@ -112,8 +112,8 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     renderSubTree: function (parentId, level, levelLimit, firstTime) {
-        var lightModels,
-            models,
+        let lightModels = "",
+            models = "",
             folders,
             layer;
 
@@ -192,7 +192,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {Array} items
      */
     addViewsToItemsOfType: function (type, items, parentId) {
-        var viewItems = items.filter(function (model) {
+        let viewItems = items.filter(function (model) {
             return model.get("type") === type;
         });
 
@@ -251,7 +251,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     startModul: function (modulId) {
-        var modul = this.collection.find(function (model) {
+        const modul = this.collection.find(function (model) {
             return model.get("id").toLowerCase() === modulId;
         });
 

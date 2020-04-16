@@ -41,7 +41,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @listens CswParser#RadioTriggerCswParserFetchedMetaData
      */
     initialize: function () {
-        var channel = Radio.channel("LayerInformation");
+        const channel = Radio.channel("LayerInformation");
 
         this.listenTo(channel, {
             "add": function (attrs) {

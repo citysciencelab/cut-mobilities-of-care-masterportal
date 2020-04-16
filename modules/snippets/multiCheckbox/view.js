@@ -22,9 +22,8 @@ const MultiCheckboxView = Backbone.View.extend({
      * @return {jQuery} - this DOM element as a jQuery object
      */
     render: function () {
-        var attr;
+        const attr = this.model.toJSON();
 
-        attr = this.model.toJSON();
         this.$el.html(this.template(attr));
         this.delegateEvents();
         return this;
@@ -36,7 +35,7 @@ const MultiCheckboxView = Backbone.View.extend({
      * @returns {void}
      */
     updateSelectedValues: function (evt) {
-        var checked = !evt.currentTarget.className.includes(" checked"),
+        const checked = !evt.currentTarget.className.includes(" checked"),
             value = evt.currentTarget.innerText;
 
         this.model.updateSelectedValues(value, checked);

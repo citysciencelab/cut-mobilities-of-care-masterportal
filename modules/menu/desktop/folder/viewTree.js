@@ -47,9 +47,10 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
      * @return {FolderViewTree} returns this
      */
     render: function () {
-        var attr = this.model.toJSON(),
-            paddingLeftValue = 0,
-            selector = "";
+        const attr = this.model.toJSON();
+
+        let selector = "",
+            paddingLeftValue = 0;
 
         this.$el.html("");
 
@@ -88,7 +89,7 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
      * @return {void}
      */
     rerender: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
     },

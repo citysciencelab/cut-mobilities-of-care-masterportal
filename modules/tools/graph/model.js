@@ -17,7 +17,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @listens Tools.Graph#RadioRequestGraphGetGraphParams
      */
     initialize: function () {
-        var channel = Radio.channel("Graph");
+        const channel = Radio.channel("Graph");
 
         channel.on({
             "createGraph": this.createGraph
@@ -117,7 +117,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Object}  - an object {minValue, maxValue}
      */
     createPeakValues: function (data, attrToShowArray, axisTicks) {
-        var peakValues = {};
+        const peakValues = {};
 
         if (typeof axisTicks === "object" && axisTicks.hasOwnProperty("start") && axisTicks.hasOwnProperty("end")) {
             peakValues.min = axisTicks.start;
@@ -569,7 +569,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Void}  -
      */
     appendLegend: function (svg, legendData) {
-        var legend = svg.append("g")
+        const legend = svg.append("g")
             .attr("class", "graph-legend")
             .style("height", "200 px")
             .selectAll("g")
@@ -611,7 +611,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {String[]} - Flattened Array.
      */
     flattenAttrToShowArray: function (attrToShowArray) {
-        var flatAttrToShowArray = [];
+        const flatAttrToShowArray = [];
 
         attrToShowArray.forEach(function (attrToShow) {
             if (typeof attrToShow === "object") {
