@@ -5,10 +5,6 @@ import moment from "moment";
 // change language from moment.js to german
 moment.locale("de");
 
-// instance of TrafficCountApi for singleton pattern as module var
-// as "Support for the experimental syntax 'classProperties' isn't currently enabled"
-let instance;
-
 /**
  * TrafficCountApi is the api for the TrafficCount GFI Theme
  * <pre>
@@ -38,13 +34,11 @@ export class TrafficCountApi {
     constructor (httpHost, sensorThingsVersion, mqttOptions, sensorThingsHttpOpt, sensorThingsMqttOpt, noSingletonOpt) {
         if (!noSingletonOpt) {
             // make this instance a singleton
-            if (instance) {
-                return instance;
+            if (TrafficCountApi.instance) {
+                return TrafficCountApi.instance;
             }
 
-            // normaly singletons would work with a class variable "static instance"
-            // use eslint disable line, as "Support for the experimental syntax 'classProperties' isn't currently enabled"
-            instance = this; // eslint-disable-line
+            TrafficCountApi.instance = this;
         }
 
         /** @private */
@@ -516,9 +510,10 @@ export class TrafficCountApi {
      * gets the data for a diagram or table for the given interval
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
-     * @param {String} interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
-     * @param {String} from the day to start from (inclusive) as String in format YYYY-MM-DD
-     * @param {String} until the day to end with (inclusive) as String in format YYYY-MM-DD
+     * @param {String} timeSettings configuration
+     * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
+     * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
+     * @param {String} timeSettings.until the day to end with (inclusive) as String in format YYYY-MM-DD
      * @param {Callback} onupdate as event function(data) fires initialy and anytime server site changes are made; with data as object {meansOfTransport: {date: value}}
      * @param {Callback} [onerror] as function(error) to fire on error
      * @param {Callback} [onstart] as function() to fire before any async action has started
@@ -526,8 +521,11 @@ export class TrafficCountApi {
      * @param {String} [todayUntilOpt=NOW] as a String marking todays date in format YYYY-MM-DD; if left false, today is set automatically
      * @returns {Void}  -
      */
-    updateDataset (thingId, meansOfTransport, interval, from, until, onupdate, onerror, onstart, oncomplete, todayUntilOpt) { // eslint-disable-line
-        const startDate = moment(from, "YYYY-MM-DD").toISOString(),
+    updateDataset (thingId, meansOfTransport, timeSettings, onupdate, onerror, onstart, oncomplete, todayUntilOpt) {
+        const from = timeSettings.from,
+            until = timeSettings.until,
+            interval = timeSettings.interval,
+            startDate = moment(from, "YYYY-MM-DD").toISOString(),
             endDate = moment(until, "YYYY-MM-DD").add(1, "day").toISOString(),
             url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_" + interval + "';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime le " + endDate + ";$orderby=phenomenonTime asc))",
             meansOfTransportFahrzeuge = "AnzFahrzeuge",
@@ -552,7 +550,7 @@ export class TrafficCountApi {
 
                 if (meansOfTransport === meansOfTransportFahrzeuge) {
                     // call SV & subscribe
-                    this.updateDataset(thingId, meansOfTransportSV, interval, from, until, resultSV => {
+                    this.updateDataset(thingId, meansOfTransportSV, timeSettings, resultSV => {
                         if (typeof onupdate === "function") {
                             Object.assign(result, resultSV);
                             onupdate(result);

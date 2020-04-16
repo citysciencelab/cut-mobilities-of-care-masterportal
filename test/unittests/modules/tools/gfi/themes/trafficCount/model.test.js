@@ -263,7 +263,13 @@ describe("tools/gfi/themes/trafficCount", function () {
 
     describe("createD3Config", function () {
         it("should return a specific object for the given data", function () {
-            const graphConfig = model.createD3Config("legendData", "selector", "selectorTooltip", "width", "height", "xAttr", "xAxisTicks", "xAxisLabel", "yAxisLabel", "attrToShowArray", "setTooltipValue", "dataset"),
+            const axis = {
+                    xAttr: "xAttr",
+                    xAxisTicks: "xAxisTicks",
+                    xAxisLabel: "xAxisLabel",
+                    yAxisLabel: "yAxisLabel"
+                },
+                graphConfig = model.createD3Config("legendData", "selector", "selectorTooltip", "width", "height", axis, "attrToShowArray", "setTooltipValue", "dataset"),
                 graphConfigExpected = {
                     legendData: "legendData",
                     graphType: "Linegraph",

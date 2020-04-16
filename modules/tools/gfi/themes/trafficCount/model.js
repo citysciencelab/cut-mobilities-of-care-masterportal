@@ -511,12 +511,15 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
-            interval = this.get("dayInterval"),
-            from = moment(date).format("YYYY-MM-DD"),
-            until = from;
+            fromDate = moment(date).format("YYYY-MM-DD"),
+            timeSettings = {
+                interval: this.get("dayInterval"),
+                from: fromDate,
+                until: fromDate
+            };
 
         api.unsubscribeEverything();
-        api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
+        api.updateDataset(thingId, meansOfTransport, timeSettings, (dataset) => {
             if (!dataset.hasOwnProperty(meansOfTransport)) {
                 return;
             }
@@ -575,12 +578,14 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
-            interval = this.get("weekInterval"),
-            from = moment(date).startOf("isoWeek").format("YYYY-MM-DD"),
-            until = moment(date).endOf("isoWeek").format("YYYY-MM-DD");
+            timeSettings = {
+                interval: this.get("weekInterval"),
+                from: moment(date).startOf("isoWeek").format("YYYY-MM-DD"),
+                until: moment(date).endOf("isoWeek").format("YYYY-MM-DD")
+            };
 
         api.unsubscribeEverything();
-        api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
+        api.updateDataset(thingId, meansOfTransport, timeSettings, (dataset) => {
             if (!dataset.hasOwnProperty(meansOfTransport)) {
                 return;
             }
@@ -631,15 +636,17 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
-            interval = this.get("yearInterval"),
-            // subtract 3 days to savely include the first thursday of january into the interval, as the first calendar week always includes the first thursday of january
-            from = moment(date).subtract(3, "days").format("YYYY-MM-DD"),
             year = moment(date).format("YYYY"),
-            // add 3 days to savely include the last thursday of december into the interval, as the last calendar week always includes the last thursday of december
-            until = moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD");
+            timeSettings = {
+                interval: this.get("yearInterval"),
+                // subtract 3 days to savely include the first thursday of january into the interval, as the first calendar week always includes the first thursday of january
+                from: moment(date).subtract(3, "days").format("YYYY-MM-DD"),
+                // add 3 days to savely include the last thursday of december into the interval, as the last calendar week always includes the last thursday of december
+                until: moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD")
+            };
 
         api.unsubscribeEverything();
-        api.updateDataset(thingId, meansOfTransport, interval, from, until, (dataset) => {
+        api.updateDataset(thingId, meansOfTransport, timeSettings, (dataset) => {
             if (!dataset.hasOwnProperty(meansOfTransport)) {
                 return;
             }
@@ -660,12 +667,26 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             selector = ".trafficCountDiagramDay_" + themeId,
             selectorTooltip = ".graph-tooltip-div-day_" + themeId,
             xAxisTickValues = this.getXAxisTickValuesDay(),
-            emptyDiagramData = this.getEmptyDiagramDataDay();
+            emptyDiagramData = this.getEmptyDiagramDataDay(),
+            generalConfigParams = {
+                dataset: dataset,
+                selector: selector,
+                selectorTooltip: selectorTooltip,
+                xAxis: {
+                    xAttr: "hour",
+                    xAxisText: "",
+                    xAxisTicks: {
+                        unit: " Uhr",
+                        values: xAxisTickValues
+                    }
+                },
+                yAxis: {
+                    yAttr: "count",
+                    yAxisText: "Anzahl / 15 Min."
+                }
+            };
 
-        this.refreshDiagramGeneral(dataset, selector, selectorTooltip, "hour", {
-            unit: " Uhr",
-            values: xAxisTickValues
-        }, "count", "", "Anzahl / 15 Min.", datetime => {
+        this.refreshDiagramGeneral(generalConfigParams, datetime => {
             // callbackRenderLegendText
             return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("DD.MM.YYYY");
         }, datetime => {
@@ -687,12 +708,26 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             selector = ".trafficCountDiagramWeek_" + themeId,
             selectorTooltip = ".graph-tooltip-div-week_" + themeId,
             xAxisTickValues = this.getXAxisTickValuesWeek(),
-            emptyDiagramData = this.getEmptyDiagramDataWeek();
+            emptyDiagramData = this.getEmptyDiagramDataWeek(),
+            generalConfigParams = {
+                dataset: dataset,
+                selector: selector,
+                selectorTooltip: selectorTooltip,
+                xAxis: {
+                    xAttr: "weekday",
+                    xAxisText: "",
+                    xAxisTicks: {
+                        unit: "",
+                        values: xAxisTickValues
+                    }
+                },
+                yAxis: {
+                    yAttr: "count",
+                    yAxisText: "Anzahl / 15 Min."
+                }
+            };
 
-        this.refreshDiagramGeneral(dataset, selector, selectorTooltip, "weekday", {
-            unit: "",
-            values: xAxisTickValues
-        }, "count", "", "Anzahl / h", datetime => {
+        this.refreshDiagramGeneral(generalConfigParams, datetime => {
             // callbackRenderLegendText
             const weeknumber = moment(datetime, "YYYY-MM-DD HH:mm:ss").week(),
                 year = moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
@@ -726,12 +761,26 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             selector = ".trafficCountDiagramYear_" + themeId,
             selectorTooltip = ".graph-tooltip-div-year_" + themeId,
             xAxisTickValues = this.getXAxisTickValuesYear(),
-            emptyDiagramData = this.getEmptyDiagramDataYear(year);
+            emptyDiagramData = this.getEmptyDiagramDataYear(year),
+            generalConfigParams = {
+                dataset: dataset,
+                selector: selector,
+                selectorTooltip: selectorTooltip,
+                xAxis: {
+                    xAttr: "month",
+                    xAxisText: "",
+                    xAxisTicks: {
+                        unit: "",
+                        values: xAxisTickValues
+                    }
+                },
+                yAxis: {
+                    yAttr: "count",
+                    yAxisText: "Anzahl / Woche"
+                }
+            };
 
-        this.refreshDiagramGeneral(dataset, selector, selectorTooltip, "month", {
-            unit: "",
-            values: xAxisTickValues
-        }, "count", "", "Anzahl / Woche", datetime => {
+        this.refreshDiagramGeneral(generalConfigParams, datetime => {
             // callbackRenderLegendText
             return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
         }, datetime => {
@@ -758,25 +807,48 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
     /**
      * refreshes the diagram with the given data
-     * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
-     * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
-     * @param {String} selectorTooltip the dom selector for the tooltip of the diagram (e.g. a class as ".(...)")
-     * @param {String} xAttr the attribute to use for x axis values (e.g. week, weekday, hour)
-     * @param {Object} xAxisTicks an object to define the behavior of the xAxis as object{unit, values}
-     * @param {String} yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
-     * @param {String} xAxisText the text of the x axis
-     * @param {String} yAxisText the text of the y axis
+     * @param {Object} generalConfigParams main configuration
+     * @param {Object} generalConfigParams.dataset the dataset to refresh the diagram with as object{date: value}
+     * @param {String} generalConfigParams.selector the dom selector of the diagram (e.g. an id as "#...")
+     * @param {String} generalConfigParams.selectorTooltip the dom selector for the tooltip of the diagram (e.g. a class as ".(...)")
+     * @param {String} generalConfigParams.xAxis configuration of xAxis-settings
+     * @param {String} generalConfigParams.xAxis.xAttr the attribute to use for x axis values (e.g. week, weekday, hour)
+     * @param {Object} generalConfigParams.xAxis.xAxisTicks an object to define the behavior of the xAxis as object{unit, values}
+     * @param {String} generalConfigParams.xAxis.xAxisText the text of the x axis
+     * @param {String} generalConfigParams.yAxis configuration of yAxis-settings
+     * @param {String} generalConfigParams.yAxis.yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
+     * @param {String} generalConfigParams.yAxis.yAxisText the text of the y axis
      * @param {Callback} callbackRenderLegendText a function (phenomenonTime) to write the legend text with
      * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to write the entry at the x axis with
      * @param {Callback} setTooltipValue a function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
      * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {class, style, xAxisAttr}}
      * @returns {Void}  -
      */
-    refreshDiagramGeneral: function (dataset, selector, selectorTooltip, xAttr, xAxisTicks, yAttr, xAxisText, yAxisText, callbackRenderLegendText, callbackRenderTextXAxis, setTooltipValue, emptyDiagramData) { // eslint-disable-line
-        const legendData = [],
+    refreshDiagramGeneral: function (generalConfigParams, callbackRenderLegendText, callbackRenderTextXAxis, setTooltipValue, emptyDiagramData) {
+        const dataset = generalConfigParams.dataset,
+            selector = generalConfigParams.selector,
+            selectorTooltip = generalConfigParams.selectorTooltip,
+            xAttr = generalConfigParams.xAxis.xAttr,
+            xAxisTicks = generalConfigParams.xAxis.xAxisTicks,
+            yAttr = generalConfigParams.yAxis.yAttr,
+            xAxisText = generalConfigParams.xAxis.xAxisText,
+            yAxisText = generalConfigParams.yAxis.yAxisText,
+            legendData = [],
             attrToShowArray = [],
             diagramWidth = 570,
-            diagramHeight = 280;
+            diagramHeight = 280,
+            axis = {
+                xAttr: xAttr,
+                xAxisTicks: xAxisTicks,
+                xAxisLabel: {
+                    label: xAxisText,
+                    translate: 6
+                },
+                yAxisLabel: {
+                    label: yAxisText,
+                    offset: 54
+                }
+            };
         let graphConfig = null,
             diagramData = [];
 
@@ -788,13 +860,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         this.addD3AttrToShowArray(yAttr, "line", attrToShowArray);
         diagramData = this.addD3LineData("dot", "circle", xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData);
 
-        graphConfig = this.createD3Config(legendData, selector, selectorTooltip, diagramWidth, diagramHeight, xAttr, xAxisTicks, {
-            label: xAxisText,
-            translate: 6
-        }, {
-            label: yAxisText,
-            offset: 54
-        }, attrToShowArray, setTooltipValue, diagramData);
+        graphConfig = this.createD3Config(legendData, selector, selectorTooltip, diagramWidth, diagramHeight, axis, attrToShowArray, setTooltipValue, diagramData);
 
         // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows up
         $(selector + " svg").remove();
@@ -1004,45 +1070,50 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @param {String} selectorTooltip the dom selector for the tooltip of the diagram (e.g. a class as ".(...)")
      * @param {Integer} width the width of the diagram
      * @param {Integer} height the height of the diagram
-     * @param {String} xAttr the attribute to use from the dataset to bind the data to the math. x axis
-     * @param {Object} xAxisTicks an object to define the behavior of the xAxis as object{unit, values}
-     * @param {Object} xAxisLabel an object {label, translate} with the label to use for the math. x axis
-     * @param {Object} yAxisLabel an object {label, offset} with the label to use for the math. y axis
+     * @param {Object} axis axis configuration
+     * @param {String} axis.xAttr the attribute to use from the dataset to bind the data to the math. x axis
+     * @param {Object} axis.xAxisTicks an object to define the behavior of the xAxis as object{unit, values}
+     * @param {Object} axis.xAxisLabel an object {label, translate} with the label to use for the math. x axis
+     * @param {Object} axis.yAxisLabel an object {label, offset} with the label to use for the math. y axis
      * @param {Object[]} attrToShowArray the classes of lines as array of object{attrName, attrClass}
      * @param {callback} setTooltipValue a function(value) to be called at the event of a tooltip
      * @param {Object[]} dataset an array of objects as Array({(xAttr), (yAttr), class, style})
      * @return {Object}  a config object to be used for d3
      */
-    createD3Config: function (legendData, selector, selectorTooltip, width, height, xAttr, xAxisTicks, xAxisLabel, yAxisLabel, attrToShowArray, setTooltipValue, dataset) { // eslint-disable-line
-        const graphConfig = {
-            legendData: legendData,
-            graphType: "Linegraph",
-            selector: selector,
-            width: width,
-            height: height,
-            margin: {
-                top: 20,
-                right: 20,
-                bottom: 40,
-                left: 60
-            },
-            svgClass: "graph-svg",
-            selectorTooltip: selectorTooltip,
-            scaleTypeX: "ordinal",
-            scaleTypeY: "linear",
-            xAxisTicks: xAxisTicks,
-            dotSize: 2,
-            yAxisTicks: {
-                ticks: 5,
-                factor: ",f"
-            },
-            data: dataset,
-            xAttr: xAttr,
-            xAxisLabel: xAxisLabel,
-            yAxisLabel: yAxisLabel,
-            attrToShowArray: attrToShowArray,
-            setTooltipValue: setTooltipValue
-        };
+    createD3Config: function (legendData, selector, selectorTooltip, width, height, axis, attrToShowArray, setTooltipValue, dataset) {
+        const xAttr = axis.xAttr,
+            xAxisTicks = axis.xAxisTicks,
+            xAxisLabel = axis.xAxisLabel,
+            yAxisLabel = axis.yAxisLabel,
+            graphConfig = {
+                legendData: legendData,
+                graphType: "Linegraph",
+                selector: selector,
+                width: width,
+                height: height,
+                margin: {
+                    top: 20,
+                    right: 20,
+                    bottom: 40,
+                    left: 60
+                },
+                svgClass: "graph-svg",
+                selectorTooltip: selectorTooltip,
+                scaleTypeX: "ordinal",
+                scaleTypeY: "linear",
+                xAxisTicks: xAxisTicks,
+                dotSize: 2,
+                yAxisTicks: {
+                    ticks: 5,
+                    factor: ",f"
+                },
+                data: dataset,
+                xAttr: xAttr,
+                xAxisLabel: xAxisLabel,
+                yAxisLabel: yAxisLabel,
+                attrToShowArray: attrToShowArray,
+                setTooltipValue: setTooltipValue
+            };
 
         return graphConfig;
     },

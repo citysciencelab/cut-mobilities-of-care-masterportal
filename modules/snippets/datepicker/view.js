@@ -65,13 +65,11 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
 
         // datepicker with target 'inputs' need listener on changeDate in order to set valuesCollection
         if (date.get("inputs")) {
-            // eslint-disable-next-line
-            date.get("inputs").on("changeDate", this.changeDate.bind(this));
+            date.get("inputs").on("changeDate", this.changeDate.bind(this), null);
 
             // listener to set classes for selectWeek
             if (date.get("selectWeek")) {
-                // eslint-disable-next-line
-                date.get("inputs").on("show", this.showWeekpicker.bind(this));
+                date.get("inputs").on("show", this.showWeekpicker.bind(this), null);
             }
         }
 

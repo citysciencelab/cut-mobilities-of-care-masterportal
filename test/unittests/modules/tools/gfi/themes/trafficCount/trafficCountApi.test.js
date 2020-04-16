@@ -1215,9 +1215,14 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-03-20 00:00:00.000").toISOString(),
-                expectedUntil = new Date("2020-03-21 00:00:00.000").toISOString();
+                expectedUntil = new Date("2020-03-21 00:00:00.000").toISOString(),
+                timeSettings = {
+                    interval: "interval",
+                    from: "2020-03-20",
+                    until: "2020-03-20"
+                };
 
-            api.updateDataset("thingId", "meansOfTransport", "interval", "2020-03-20", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "todayUntilOpt");
+            api.updateDataset("thingId", "meansOfTransport", timeSettings, "onupdate", "onerror", "onstart", "oncomplete", "todayUntilOpt");
 
             expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_interval';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime le " + expectedUntil + ";$orderby=phenomenonTime asc))");
             expect(typeof lastOnupdate === "function").to.be.true;
@@ -1250,13 +1255,18 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedDataset = {
                     meansOfTransport: {}
+                },
+                timeSettings = {
+                    interval: "interval",
+                    from: "2020-03-20",
+                    until: "2020-03-20"
                 };
 
             expectedDataset.meansOfTransport[expectedDateTimeA] = 1;
             expectedDataset.meansOfTransport[expectedDateTimeB] = 2;
             expectedDataset.meansOfTransport[expectedDateTimeC] = 3;
 
-            api.updateDataset("thingId", "meansOfTransport", "interval", "2020-03-20", "2020-03-20", (dataset) => {
+            api.updateDataset("thingId", "meansOfTransport", timeSettings, (dataset) => {
                 lastDataset = dataset;
             }, "onerror", "onstart", "oncomplete", "todayUntilOpt");
 
@@ -1285,10 +1295,15 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                         };
                     }
                 },
-                api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
+                api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt"),
+                timeSettings = {
+                    interval: "interval",
+                    from: "2020-03-20",
+                    until: "2020-03-20"
+                };
 
             // hint: until === todayUntilOpt with "until" === "today"
-            api.updateDataset("thingId", "meansOfTransport", "interval", "2020-03-20", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "2020-03-20");
+            api.updateDataset("thingId", "meansOfTransport", timeSettings, "onupdate", "onerror", "onstart", "oncomplete", "2020-03-20");
 
             expect(lastTopic).to.equal("v1234/Datastreams(foo)/Observations");
             expect(lastMqttOptions).to.deep.equal({retain: 2});
@@ -1318,6 +1333,11 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 expectedTopic = "v1234/Datastreams(foo)/Observations",
                 expectedDataset = {
                     meansOfTransport: {}
+                },
+                timeSettings = {
+                    interval: "interval",
+                    from: "2020-03-20",
+                    until: "2020-03-20"
                 };
 
             expectedDataset.meansOfTransport[expectedDateTimeA] = 1;
@@ -1327,7 +1347,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             api.setSubscriptionTopics({});
 
             // hint: until === todayUntilOpt with "until" === "today"
-            api.updateDataset("thingId", "meansOfTransport", "interval", "2020-03-20", "2020-03-20", (dataset) => {
+            api.updateDataset("thingId", "meansOfTransport", timeSettings, (dataset) => {
                 lastDataset = dataset;
             }, "onerror", "onstart", "oncomplete", "2020-03-20");
 
@@ -1381,12 +1401,17 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 expectedOutcome = {
                     AnzFahrzeuge: {},
                     AntSV: {}
+                },
+                timeSettings = {
+                    interval: "interval",
+                    from: "2020-03-20",
+                    until: "2020-03-20"
                 };
 
             api.setSubscriptionTopics({});
 
             // hint: until === todayUntilOpt with "until" === "today"
-            api.updateDataset("thingId", meansOfTransport, "interval", "2020-03-20", "2020-03-20", (dataset) => {
+            api.updateDataset("thingId", meansOfTransport, timeSettings, (dataset) => {
                 lastDataset = dataset;
             }, "onerror", "onstart", "oncomplete", "2020-03-20");
 
