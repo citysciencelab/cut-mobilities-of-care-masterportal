@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import Alerting from "./modules/Alerting";
+import Alerting from "../modules/alerting/store";
 import SupplyCoord from "./modules/SupplyCoord";
 import ScaleLine from "../modules/scaleLine/store";
 import Title from "./Title";

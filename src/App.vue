@@ -1,5 +1,5 @@
 <script>
-import Alerting from "./components/Alerting.vue";
+import Alerting from "./modules/Alerting/components/Alerting.vue";
 import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./modules/scaleLine/components/ScaleLine.vue";
 import Controls from "./components/controls/Controls.vue";

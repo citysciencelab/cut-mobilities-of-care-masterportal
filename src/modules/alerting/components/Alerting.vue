@@ -18,10 +18,10 @@ export default {
 
         myBus.listenTo(Radio.channel("Alert"), {
             "alert": function (alert) {
-                that.$store.dispatch("addAlert", alert);
+                that.$store.dispatch("Alerting/addAlert", alert);
             },
             "alert:remove": function (removeAlertId) {
-                that.$store.dispatch("removeAlert", removeAlertId);
+                that.$store.dispatch("Alerting/removeAlert", removeAlertId);
             }
         });
     },
@@ -33,7 +33,7 @@ export default {
 
         if (this.fadeOut) {
             $(".alert").fadeOut(this.fadeOut, function () {
-                that.$store.dispatch("removeAlert", $(this).attr("id"));
+                that.$store.dispatch("Alerting/removeAlert", $(this).attr("id"));
                 $(this).remove();
             });
         }
@@ -49,7 +49,7 @@ export default {
         closeAlert (mode, event) {
             const div = $(event.currentTarget).parent();
 
-            this.$store.dispatch("removeAlert", $(div[0]).attr("id"));
+            this.$store.dispatch("Alerting/removeAlert", $(div[0]).attr("id"));
             Radio.trigger("Alert", mode, $(div[0]).attr("id"));
         }
     }
