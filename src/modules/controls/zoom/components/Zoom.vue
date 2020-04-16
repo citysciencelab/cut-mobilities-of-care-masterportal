@@ -39,7 +39,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../../theme.less";
+    @import "../../../../theme.less";
 
     .zoom-buttons {
         .glyphicon {

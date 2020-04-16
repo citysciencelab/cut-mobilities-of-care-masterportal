@@ -11,8 +11,7 @@ import getters from "./getters";
 import mutations from "./mutations";
 import state from "./state";
 
-import controlsModule from "../components/controls/module";
-import backForward from "../components/controls/backForward/module";
+import controlsModule from "../modules/controls";
 
 import isMobile from "./utils/isMobile";
 
@@ -29,10 +28,7 @@ const store = new Vuex.Store({
             }
         },
         controls: {
-            ...controlsModule,
-            modules: {
-                backForward
-            }
+            ...controlsModule
         },
         ScaleLine,
         Title: Title

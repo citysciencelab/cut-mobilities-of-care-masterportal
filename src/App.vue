@@ -2,7 +2,7 @@
 import Alerting from "./modules/Alerting/components/Alerting.vue";
 import SupplyCoord from "./components/SupplyCoord.vue";
 import ScaleLine from "./modules/scaleLine/components/ScaleLine.vue";
-import Controls from "./components/controls/Controls.vue";
+import Controls from "./modules/controls/Controls.vue";
 // import Tools from "./components/tools/Tools.vue";
 import Title from "./components/Title.vue";
 import MapModuleDebug from "./store/modules/map/MapModuleDebug.vue";
