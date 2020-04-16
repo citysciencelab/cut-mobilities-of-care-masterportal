@@ -45,7 +45,7 @@ const LayerSliderView = Backbone.View.extend(/** @lends LayerSliderView.prototyp
      * @returns {void}
      */
     render: function () {
-        var attr;
+        let attr;
 
         if (this.model.get("isActive") === true) {
             attr = this.model.toJSON();
@@ -161,7 +161,7 @@ const LayerSliderView = Backbone.View.extend(/** @lends LayerSliderView.prototyp
      * @returns {void}
      */
     setProgress: function () {
-        var activeIndex = this.model.getActiveIndex(),
+        const activeIndex = this.model.getActiveIndex(),
             max = this.model.get("layerIds").length,
             progressBarWidth = this.model.get("progressBarWidth"),
             singleStep = (100 - progressBarWidth) / (max - 1);

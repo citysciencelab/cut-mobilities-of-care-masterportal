@@ -9,7 +9,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
     events: {
         "click .tab-toggle": "toggleTab",
         "change input": function (evt) {
-            var activeTab = this.$(".tab-toggle.active")[0].getAttribute("value");
+            const activeTab = this.$(".tab-toggle.active")[0].getAttribute("value");
 
             if (this.$(evt.target).prop("checked")) {
                 this.fadeIn(evt.target.id, activeTab);
@@ -39,7 +39,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
      * @return {void}
      */
     toggleTab: function (evt) {
-        var activeTab = this.$(evt.currentTarget).attr("value"),
+        const activeTab = this.$(evt.currentTarget).attr("value"),
             activeContent = this.$("#" + activeTab),
             tabContentList = [];
 
@@ -102,7 +102,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
      * @return {void}
      */
     loadDiagramm: function (activeTab) {
-        var height = this.$el.find("#chart").height(),
+        const height = this.$el.find("#chart").height(),
             width = this.$el.parent().width();
 
         this.$el.find("#chart").width(width);
@@ -159,7 +159,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
      * @return {void}
      */
     appendChildren: function () {
-        var children = this.model.get("children"),
+        const children = this.model.get("children"),
             imageContinuousCountingBikeDiv = this.$(".imageContinuousCountingBikeDiv");
 
         imageContinuousCountingBikeDiv.removeClass("has-image");
@@ -177,7 +177,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
      * @return {void}
      */
     rePositionGFIWindow: function () {
-        var mapWidth = $("#map").width(),
+        const mapWidth = $("#map").width(),
             posLeft = this.$el.closest(".ui-draggable").position().left,
             outerWidth = this.$el.closest(".ui-draggable").outerWidth(true);
 

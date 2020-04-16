@@ -100,8 +100,8 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
     },
 
     setDefaults: function () {
-        var restService,
-            serviceURL;
+        let restService = "",
+            serviceURL = "";
 
         if (this.get("parcelDenominator") === true) {
             this.setParcelDenominatorField(true);
@@ -165,7 +165,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * Der Wert "flur" ist optional und davon abhängig, ob im nutzenden Bundesland auch Fluren genutzt werden.
      */
     parse: function (obj) {
-        var districts = {},
+        const districts = {},
             cadastralDistricts = {};
 
         _.each(obj, function (value, key) {
@@ -182,10 +182,11 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         this.setFetched(true);
     },
     createReport: function (flurstueck, gemarkung) {
-        var flurst_kennz,
-            jasperService = Radio.request("RestReader", "getServiceById", this.get("reportServiceId")),
-            params = _.isUndefined(jasperService) === false ? jasperService.get("params") : undefined,
-            url = _.isUndefined(jasperService) === false ? jasperService.get("url") + "?" : undefined;
+        const jasperService = Radio.request("RestReader", "getServiceById", this.get("reportServiceId")),
+            params = _.isUndefined(jasperService) === false ? jasperService.get("params") : undefined;
+
+        let url = _.isUndefined(jasperService) === false ? jasperService.get("url") + "?" : undefined,
+            flurst_kennz = "";
 
         // setze flurst_nummer und gemarkung aus gfi Aufruf
         if (_.isUndefined(flurstueck) === false) {
@@ -209,10 +210,10 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         }
     },
     buildUrl: function (url, params) {
-        var addedUrl = url;
+        let addedUrl = url;
 
         _.each(params, function (val, key) {
-            var andSymbol = "&";
+            const andSymbol = "&";
 
             addedUrl += key + "=" + String(val) + andSymbol;
         });
@@ -224,7 +225,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
 
     },
     createFlurstKennz: function () {
-        var land = this.get("countryNumber"),
+        const land = this.get("countryNumber"),
             gemarkung = this.get("districtNumber"),
             flurst_nr = this.padLeft(this.get("parcelNumber"), 5, "0");
 
@@ -241,7 +242,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         return Array(length - String(number).length + 1).join(prefix || "0") + number;
     },
     sendRequest: function () {
-        var storedQuery = "&StoredQuery_ID=" + this.get("storedQueryID"),
+        const storedQuery = "&StoredQuery_ID=" + this.get("storedQueryID"),
             gemarkung = "&gemarkung=" + this.get("districtNumber"),
             flur = this.get("cadastralDistrictField") === true ? "&flur=" + this.get("cadastralDistrictNumber") : "",
             parcelNumber = "&flurstuecksnummer=" + this.padLeft(this.get("parcelNumber"), 5, "0"),
@@ -267,8 +268,9 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         });
     },
     getParcel: function (data) {
-        var member = $("wfs\\:member,member", data)[0],
-            parcelNumber,
+        const member = $("wfs\\:member,member", data)[0];
+
+        let parcelNumber,
             parcelDenominatorNumber,
             position,
             coordinate,

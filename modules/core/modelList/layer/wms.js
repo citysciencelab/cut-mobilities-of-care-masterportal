@@ -41,7 +41,7 @@ const WMSLayer = Layer.extend({
      * @return {void}
      */
     createLayerSource: function () {
-        var params,
+        let params,
             source;
 
         params = {
@@ -109,16 +109,17 @@ const WMSLayer = Layer.extend({
      * @return {void}
      */
     createLayer: function () {
-        var layerobjects = {
-            id: this.get("id"),
-            source: this.get("layerSource"),
-            name: this.get("name"),
-            typ: this.get("typ"),
-            legendURL: this.get("legendURL"),
-            routable: this.get("routable"),
-            gfiTheme: this.get("gfiTheme"),
-            infoFormat: this.get("infoFormat")
-        };
+        const layerobjects =
+            {
+                id: this.get("id"),
+                source: this.get("layerSource"),
+                name: this.get("name"),
+                typ: this.get("typ"),
+                legendURL: this.get("legendURL"),
+                routable: this.get("routable"),
+                gfiTheme: this.get("gfiTheme"),
+                infoFormat: this.get("infoFormat")
+            };
 
         if (this.get("singleTile") !== true) {
             this.setLayer(new Tile(layerobjects));
@@ -133,9 +134,10 @@ const WMSLayer = Layer.extend({
      * @return {void}
      */
     createLegendURL: function () {
-        var layerNames,
-            legendURL = [],
+        const legendURL = [],
             version = this.get("version");
+
+        let layerNames;
 
         if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
             layerNames = this.get("layers").split(",");
@@ -171,7 +173,7 @@ const WMSLayer = Layer.extend({
         });
 
         this.get("layerSource").on("imageloadstart", function () {
-            var startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
+            const startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
 
             this.set("loadingParts", startval + 1);
         });
@@ -193,7 +195,7 @@ const WMSLayer = Layer.extend({
         });
 
         this.get("layerSource").on("tileloadstart", function () {
-            var startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
+            const startval = this.get("loadingParts") ? this.get("loadingParts") : 0;
 
             this.set("loadingParts", startval + 1);
         });
@@ -267,7 +269,7 @@ const WMSLayer = Layer.extend({
      * @returns {String} - The created getFeature info url.
      */
     getGfiUrl: function () {
-        var resolution = Radio.request("MapView", "getOptions").resolution,
+        const resolution = Radio.request("MapView", "getOptions").resolution,
             projection = Radio.request("MapView", "getProjection"),
             coordinate = Radio.request("GFI", "getCoordinate");
 

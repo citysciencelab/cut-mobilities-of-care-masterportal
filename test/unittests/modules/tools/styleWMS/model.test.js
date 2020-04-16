@@ -95,50 +95,49 @@ describe("tools/styleWMS/model", function () {
             styleClassAttributes;
 
         before(function () {
+            let styleWMS = {},
+                sld = "";
 
-            const styleWMS = new CustomStyleWMS(),
+            const CustomStyleWMS = StyleWMS.extend({
 
-                CustomStyleWMS = StyleWMS.extend({
-
-                    get: function (value) {
+                get: function (value) {
 
 
-                        switch (value) {
-                            case "geomType":
-                                return "Polygon";
-                            case "model":
-                                return {
-                                    get: function () {
-                                        return "0";
-                                    }
-                                };
-                            case "styleClassAttributes":
-                                return [
-                                    {
-                                        startRange: "22",
-                                        stopRange: "23",
-                                        color: "someTestColor"
-                                    },
-                                    {
-                                        startRange: "24",
-                                        stopRange: "25",
-                                        color: "someOtherTestColor"
-                                    }
-                                ];
-                            case "attributeName":
-                                return "testAttribute";
-                            default:
-                                return null;
-                        }
+                    switch (value) {
+                        case "geomType":
+                            return "Polygon";
+                        case "model":
+                            return {
+                                get: function () {
+                                    return "0";
+                                }
+                            };
+                        case "styleClassAttributes":
+                            return [
+                                {
+                                    startRange: "22",
+                                    stopRange: "23",
+                                    color: "someTestColor"
+                                },
+                                {
+                                    startRange: "24",
+                                    stopRange: "25",
+                                    color: "someOtherTestColor"
+                                }
+                            ];
+                        case "attributeName":
+                            return "testAttribute";
+                        default:
+                            return null;
                     }
-                });
+                }
+            });
 
+            styleWMS = new CustomStyleWMS();
             styleWMS.setNumberOfClasses(2);
 
             // Assume that the SLD is valid xml. if it is not the before-block will fail after this line.
-            /* eslint-disable one-var */
-            const sld = $.parseXML(styleWMS.createEsriRootElement());
-
+            sld = $.parseXML(styleWMS.createEsriRootElement());
             $sld = $(sld);
         });
 

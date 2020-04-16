@@ -32,7 +32,7 @@ const Menu = Backbone.View.extend({
             containment: "#map",
             handle: ".icon-drag",
             drag: function () {
-                var rotAngle = this.model.get("rotateAngle");
+                const rotAngle = this.model.get("rotateAngle");
 
                 if (rotAngle === 0 || rotAngle === 180) {
                     this.$el.css({
@@ -60,7 +60,7 @@ const Menu = Backbone.View.extend({
                 }
             }.bind(this),
             stop: function (evt, ui) {
-                var pos = ui.helper.offset(),
+                const pos = ui.helper.offset(),
                     x = pos.left,
                     y = pos.top;
 
@@ -94,7 +94,7 @@ const Menu = Backbone.View.extend({
     },
     touchMoveMenu: function (evt) {
 
-        var touch = evt.originalEvent.touches[0],
+        const touch = evt.originalEvent.touches[0],
             x = touch.clientX - 20,
             y = touch.clientY - 20,
             rotateAngle = this.model.getRotateAngle(),
@@ -132,11 +132,9 @@ const Menu = Backbone.View.extend({
 
     },
     placeMenu: function (x, y) {
-        var currentClass = $("#table-navigation").attr("class"),
-            posClass,
-            minPos;
-
-        minPos = this.calcSnapPosition(x, y);
+        const currentClass = $("#table-navigation").attr("class"),
+            minPos = this.calcSnapPosition(x, y);
+        let posClass;
 
         if (minPos === 0) {
             posClass = "table-nav-0deg";
@@ -160,24 +158,17 @@ const Menu = Backbone.View.extend({
         this.$el.removeAttr("style");
     },
     calcSnapPosition (x, y) {
-        var mapWidth,
-            mapHeight,
-            distTop,
-            distLeft,
-            distBottom,
-            distRight,
+        const mapWidth = Math.round($(".masterportal-container").width()),
+            mapHeight = Math.round($(".masterportal-container").height()),
             distArray = [],
-            minDist,
-            minPos;
+            // calculate the distances of the current finger position to the middle positions of each side
+            distBottom = Math.sqrt((mapWidth / 2 - x) * (mapWidth / 2 - x) + (mapHeight - y) * (mapHeight - y)),
+            distLeft = Math.sqrt((0 - x) * (0 - x) + (mapHeight / 2 - y) * (mapHeight / 2 - y)),
+            distTop = Math.sqrt((mapWidth / 2 - x) * (mapWidth / 2 - x) + (0 - y) * (0 - y)),
+            distRight = Math.sqrt((mapWidth - x) * (mapWidth - x) + (mapHeight / 2 - y) * (mapHeight / 2 - y));
 
-        mapWidth = Math.round($(".masterportal-container").width());
-        mapHeight = Math.round($(".masterportal-container").height());
-
-        // calculate the distances of the current finger position to the middle positions of each side
-        distBottom = Math.sqrt((mapWidth / 2 - x) * (mapWidth / 2 - x) + (mapHeight - y) * (mapHeight - y));
-        distLeft = Math.sqrt((0 - x) * (0 - x) + (mapHeight / 2 - y) * (mapHeight / 2 - y));
-        distTop = Math.sqrt((mapWidth / 2 - x) * (mapWidth / 2 - x) + (0 - y) * (0 - y));
-        distRight = Math.sqrt((mapWidth - x) * (mapWidth - x) + (mapHeight / 2 - y) * (mapHeight / 2 - y));
+        let minDist = "",
+            minPos = "";
 
         distArray.push(distBottom);
         distArray.push(distLeft);

@@ -49,7 +49,7 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
      * @override
      */
     prepareLayerObject: function () {
-        var options;
+        let options;
 
         if (this.has("terrainProvider") === false) {
             options = {};

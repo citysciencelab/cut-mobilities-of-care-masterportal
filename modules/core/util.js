@@ -53,7 +53,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @fires Core#RadioTriggerUtilHideLoader
      */
     initialize: function () {
-        var channel = Radio.channel("Util");
+        const channel = Radio.channel("Util");
 
         channel.reply({
             "isViewMobile": function () {
@@ -125,9 +125,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {string} punctuated value
      */
     punctuate: function (value) {
-        var pattern = /(-?\d+)(\d{3})/,
-            stringValue = value.toString(),
-            decimals,
+        const pattern = /(-?\d+)(\d{3})/,
+            stringValue = value.toString();
+
+        let decimals,
             predecimals = stringValue;
 
         if (stringValue.indexOf(".") !== -1) {
@@ -371,7 +372,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     copyToClipboard: function (el) {
-        var oldReadOnly = el.readOnly,
+        const oldReadOnly = el.readOnly,
             oldContentEditable = el.contentEditable,
             range = document.createRange(),
             selection = window.getSelection();
@@ -444,7 +445,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
      */
     isChrome: function () {
-        var isChrome = false;
+        let isChrome = false;
 
         if ((/Chrome/i).test(navigator.userAgent)) {
             isChrome = true;
@@ -465,7 +466,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
      */
     isInternetExplorer: function () {
-        var ie = false;
+        let ie = false;
 
         if ((/MSIE 9/i).test(navigator.userAgent)) {
             ie = "IE9";
@@ -536,8 +537,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {String} proxy URL
      */
     getProxyURL: function (url) {
-        var parser = document.createElement("a"),
-            protocol = "",
+        const parser = document.createElement("a");
+        let protocol = "",
             result = url,
             hostname = "",
             port = "";
@@ -602,12 +603,13 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     parseConfigFromURL: function () {
-        var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-            result = {},
-            config;
+        const query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
+            result = {};
+
+        let config;
 
         query.split("&").forEach(function (keyValue) {
-            var item = keyValue.split("=");
+            const item = keyValue.split("=");
 
             result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
         });
@@ -707,7 +709,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {object} the picked object
      */
     pickKeyValuePairs: function (obj, keys) {
-        var result = {};
+        const result = {};
 
         keys.forEach(function (key) {
             if (obj.hasOwnProperty(key)) {

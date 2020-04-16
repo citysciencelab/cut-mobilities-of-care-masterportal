@@ -59,11 +59,12 @@ describe("tools/measure/model", function () {
             const geom = new LineString([[0, 0], [1000, 0]]),
                 feature = new Feature({geometry: geom});
 
+            let textPoint = {};
+
             model.setScale(1000);
             model.setUnit("m");
 
-            /* eslint-disable-next-line one-var */
-            const textPoint = model.generateTextPoint(feature);
+            textPoint = model.generateTextPoint(feature);
 
             expect(textPoint.getGeometry().getLastCoordinate()).to.deep.equal([1000, 0]);
 
@@ -71,12 +72,12 @@ describe("tools/measure/model", function () {
         it("should generate point at last position of Polygon", function () {
             const geom = new Polygon([[[0, 0], [1000, 0], [0, 1000], [0, 0]]]),
                 feature = new Feature({geometry: geom});
+            let textPoint = {};
 
             model.setScale(1000);
             model.setUnit("m");
 
-            /* eslint-disable-next-line one-var */
-            const textPoint = model.generateTextPoint(feature);
+            textPoint = model.generateTextPoint(feature);
 
             expect(textPoint.getGeometry().getLastCoordinate()).to.deep.equal([0, 1000]);
         });
@@ -85,12 +86,12 @@ describe("tools/measure/model", function () {
         it("should generate textStyles for LineString", function () {
             const geom = new LineString([[0, 0], [1000, 0]]),
                 feature = new Feature({geometry: geom});
+            let textStyles = {};
 
             model.setScale(1000);
             model.setUnit("m");
 
-            /* eslint-disable-next-line one-var */
-            const textStyles = model.generateTextStyles(feature);
+            textStyles = model.generateTextStyles(feature);
 
             expect(textStyles).to.be.an("array").of.length(2);
             expect(textStyles[0].getText().getText()).to.equal("996.54 m");

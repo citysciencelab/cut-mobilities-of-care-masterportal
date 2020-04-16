@@ -39,15 +39,15 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {void}
      */
     replaceValuesWithChildObjects: function () {
-        var element = this.get("gfiContent"),
+        const element = this.get("gfiContent"),
             children = [];
 
         if (!_.isString(element)) {
             _.each(element, function (ele, index) {
                 _.each(ele, function (val, key) {
-                    var copyright,
-                        imgView,
-                        valString = String(val);
+                    const valString = String(val);
+                    let copyright,
+                        imgView;
 
                     if (valString.substr(0, 4) === "http"
                         && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1 || valString.search(/\.jpeg/i) !== -1 || valString.search(/\.gif/i) !== -1)) {
@@ -92,12 +92,12 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {void}
      */
     parseGfiContent: function () {
-        var gfiContent,
+        const preparedInfoGFIContent = [];
+        let gfiContent,
             dayLine,
             lastSevenDaysLine,
             yearLine,
-            infoGFIContent,
-            preparedInfoGFIContent = [];
+            infoGFIContent;
 
         if (!_.isUndefined(this.get("gfiContent"))) {
             gfiContent = this.get("gfiContent")[0];
@@ -107,7 +107,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             yearLine = _.has(gfiContent, "Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
             this.setDownloadLink(_.has(gfiContent, "Download") ? gfiContent.Download : null);
             _.each(infoGFIContent, function (attribute, key) {
-                var gfiAttributes,
+                let gfiAttributes,
                     isnum,
                     editedAttribute,
                     strongestFrequentedMonth;
@@ -157,11 +157,11 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitDayDataset: function (dayLine) {
-        var dataSplit = dayLine ? dayLine.split("|") : "",
+        const dataSplit = dayLine ? dayLine.split("|") : "",
             tempArr = [];
 
         _.each(dataSplit, function (data) {
-            var splitted = data.split(","),
+            const splitted = data.split(","),
                 day = splitted[0].split(".")[0],
                 month = splitted[0].split(".")[1] - 1,
                 year = splitted[0].split(".")[2],
@@ -193,11 +193,11 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitLastSevenDaysDataset: function (lastSevenDaysLine) {
-        var dataSplit = lastSevenDaysLine ? lastSevenDaysLine.split("|") : "",
+        const dataSplit = lastSevenDaysLine ? lastSevenDaysLine.split("|") : "",
             tempArr = [];
 
         _.each(dataSplit, function (data) {
-            var splitted = data.split(","),
+            const splitted = data.split(","),
                 // weeknumber = splitted[0],
                 day = splitted[1].split(".")[0],
                 month = splitted[1].split(".")[1] - 1,
@@ -228,11 +228,11 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitYearDataset: function (yearLine) {
-        var dataSplit = yearLine ? yearLine.split("|") : "",
+        const dataSplit = yearLine ? yearLine.split("|") : "",
             tempArr = [];
 
         _.each(dataSplit, function (data) {
-            var splitted = data.split(","),
+            const splitted = data.split(","),
                 weeknumber = splitted[1],
                 year = splitted[0],
                 total = parseFloat(splitted[2]),
@@ -260,7 +260,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @returns {void}
      */
     prepareDayDataset: function (data) {
-        var date = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
+        const date = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
             newData = data ? _.map(data, function (val) {
                 val.timestamp = moment(val.timestamp).format("HH:mm");
@@ -290,7 +290,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @returns {void}
      */
     prepareLastSevenDaysDataset: function (data) {
-        var startDate = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
+        const startDate = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
             endDate = data ? moment(_.last(data).timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
             newData = data ? _.map(data, function (val) {
@@ -320,7 +320,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @returns {void}
      */
     prepareYearDataset: function (data) {
-        var graphArray = data ? this.getDataAttributes(data[0]) : "",
+        const graphArray = data ? this.getDataAttributes(data[0]) : "",
             newData = data ? _.each(data, function (val) {
                 val.timestamp = moment(val.timestamp).format("w");
                 return val;
@@ -350,7 +350,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {String[]} showData array with key values
      */
     getDataAttributes: function (inspectData) {
-        var showData = ["total"];
+        const showData = ["total"];
 
         if (inspectData && !_.isNull(inspectData.r_in)) {
             showData.push("r_in");
@@ -368,7 +368,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {Array} legendData contains an array of objecs for the graphic legend
      */
     getLegendAttributes: function (inspectData) {
-        var legendData = [{
+        const legendData = [{
             class: "dot",
             text: "Fahrräder insgesamt",
             style: "circle"
@@ -399,7 +399,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {void}
      */
     createD3Document: function (activeTab) {
-        var dataset = this.getDatasetByActiveTab(activeTab),
+        const dataset = this.getDatasetByActiveTab(activeTab),
             graphConfig = {
                 graphType: "Linegraph",
                 selector: ".graph",
@@ -431,7 +431,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {Object} dataset returns an object of the prepaired dataset for the active tab
      */
     getDatasetByActiveTab: function (activeTab) {
-        var dataset;
+        let dataset;
 
         if (activeTab === "day") {
             dataset = this.get("dayDataset");
@@ -451,7 +451,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      */
     destroy: function () {
         _.each(this.get("gfiContent"), function (element) {
-            var children;
+            let children;
 
             if (_.has(element, "children")) {
                 children = _.values(_.pick(element, "children"))[0];
@@ -482,7 +482,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {Array} tickValuesArray array of the tick values
      */
     createxAxisTickValues: function (data, xThinning) {
-        var tickValuesArray = [],
+        let tickValuesArray = [],
             startsWith = 0,
             xThinningVal = xThinning;
 
@@ -491,7 +491,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         });
 
         tickValuesArray = _.filter(tickValuesArray, function (d, i) {
-            var val;
+            let val;
 
             if (d === "1") {
                 startsWith = 1;

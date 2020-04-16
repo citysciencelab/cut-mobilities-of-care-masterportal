@@ -161,7 +161,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
      * @returns {void}
      */
     sendRequest: function (url, data) {
-        var ajax = this.get("ajaxRequest");
+        const ajax = this.get("ajaxRequest");
 
         if (ajax) {
             ajax.abort();

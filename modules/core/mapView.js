@@ -119,7 +119,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @returns {void}
      */
     changedResolutionCallback: function (evt) {
-        var mapView = evt.target,
+        const mapView = evt.target,
             constrainResolution = mapView.constrainResolution(mapView.get(evt.key)),
             params = _.findWhere(this.get("options"), {resolution: constrainResolution});
 
@@ -135,7 +135,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @returns {void}
      */
     setResolutionByScale: function (scale) {
-        var params = _.findWhere(this.get("options"), {scale: scale});
+        const params = _.findWhere(this.get("options"), {scale: scale});
 
         if (!_.isUndefined(this.get("view"))) {
             this.get("view").setResolution(params.resolution);
@@ -197,7 +197,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @returns {void}
      */
     prepareStartCenter: function (value) {
-        var startCenter = value;
+        let startCenter = value;
 
         if (!_.isUndefined(startCenter)) {
             if (!_.isUndefined(this.get("projectionFromParamUrl"))) {
@@ -249,7 +249,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @return {void}
      */
     setCenter: function (coords, zoomLevel) {
-        var first2Coords = [coords[0], coords[1]];
+        let first2Coords = [coords[0], coords[1]];
 
         // Coordinates need to be integers, otherwise open layers will go nuts when you attempt to pan the
         // map. Please fix this at the origin of those stringified numbers. However, this is to adress
@@ -289,9 +289,10 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @return {number} resolution
      */
     getResoByScale: function (scale, scaleType) {
-        var scales = _.pluck(this.get("options"), "scale"),
-            unionScales = _.union(scales, [parseInt(scale, 10)]),
-            index;
+        const scales = _.pluck(this.get("options"), "scale");
+
+        let index = "",
+            unionScales = _.union(scales, [parseInt(scale, 10)]);
 
         unionScales = _.sortBy(unionScales, function (num) {
             return -num;
@@ -320,7 +321,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @return {float} Resolution
      */
     getResolution: function (scale) {
-        var units = this.get("units"),
+        const units = this.get("units"),
             mpu = Projection.METERS_PER_UNIT[units],
             dpi = this.get("DOTS_PER_INCH"),
             resolution = scale / (mpu * 39.37 * dpi);
@@ -342,7 +343,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @return {ol.extent} extent
      */
     getCurrentExtent: function () {
-        var mapSize = Radio.request("Map", "getSize");
+        const mapSize = Radio.request("Map", "getSize");
 
         return this.get("view").calculateExtent(mapSize);
     },

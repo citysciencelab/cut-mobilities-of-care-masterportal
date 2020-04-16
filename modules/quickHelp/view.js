@@ -41,7 +41,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
      * @returns {void}
      */
     initialize: function (attr) {
-        var channel = Radio.channel("QuickHelp");
+        const channel = Radio.channel("QuickHelp");
 
         if (attr === true || _.isObject(attr)) {
             this.model = new QuickHelpModel(attr);
@@ -122,7 +122,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
      * @returns {void}
      */
     showWindow: function (value) {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         switch (value) {
             case "search": {
@@ -150,7 +150,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
      * @return {void}
      */
     printHelp: function () {
-        var htmlToPrint = document.getElementsByClassName("quick-help-window")[0],
+        const htmlToPrint = document.getElementsByClassName("quick-help-window")[0],
             newWin = window.open("");
 
         newWin.document.write(htmlToPrint.outerHTML);

@@ -111,7 +111,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
      * @fires Map#RadioTriggerMapUpdateSize
      */
     loadMenu: function () {
-        var isMobile = Radio.request("Util", "isViewMobile"),
+        const isMobile = Radio.request("Util", "isViewMobile"),
             channel = Radio.channel("Menuloader");
 
         if (this.currentMenu) {

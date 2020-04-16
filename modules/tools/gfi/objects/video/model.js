@@ -36,7 +36,7 @@ const VideoModel = Backbone.Model.extend({
      * @returns {void}
      */
     startStreaming: function (callback) {
-        var videoEle = document.getElementById(this.get("id"));
+        const videoEle = document.getElementById(this.get("id"));
 
         videojs(videoEle, {"autoplay": true, "preload": "auto", "controls": false}, callback);
     },
@@ -62,7 +62,7 @@ const VideoModel = Backbone.Model.extend({
      * @returns {void}
      */
     destroy: function () {
-        var videoEle = document.getElementById(this.get("id"));
+        const videoEle = document.getElementById(this.get("id"));
 
         videojs(videoEle).dispose();
         this.stopListening();
