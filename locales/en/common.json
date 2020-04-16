@@ -212,7 +212,7 @@
                 "coordSystemField": "Coordinate system",
                 "hdms": {
                     "eastingLabel": "Longitude",
-                    "northingLabel": "Altitude"
+                    "northingLabel": "Latitude"
                 },
                 "cartesian": {
                     "eastingLabel": "Easting",
