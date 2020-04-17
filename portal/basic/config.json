@@ -35,7 +35,8 @@
 						"name": "Koordinatensuche"
 					},
 					"coord": {
-						"name": "Koordinaten abfragen"
+            "name": "Koordinaten abfragen",
+            "glyphicon": "glyphicon-screenshot"
 					},
 					"measure": {
 						"name": "Strecke / Fläche messen"

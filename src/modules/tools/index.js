@@ -1,3 +1,5 @@
+import mutations from "./mutations";
+
 /**
  * This is here to test store/utils/composeModules.
  * However, these parameters will probably end up
@@ -14,9 +16,5 @@ export default {
         resizableWindow: false,
         keepOpen: false
     },
-    mutations: {
-        renderToWindow (state, value) {
-            state.renderToWindow = value;
-        }
-    }
+    mutations
 };

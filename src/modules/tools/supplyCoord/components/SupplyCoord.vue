@@ -1,5 +1,5 @@
 <script>
-import Tool from "./Tool.vue";
+import Tool from "../../Tool.vue";
 import {Pointer} from "ol/interaction.js";
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";

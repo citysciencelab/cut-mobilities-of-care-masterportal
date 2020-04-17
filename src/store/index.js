@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store";
-import SupplyCoord from "./modules/SupplyCoord";
+import SupplyCoord from "../modules/tools/supplyCoord/store";
 import ScaleLine from "../modules/scaleLine/store";
 import Title from "../modules/title/store";
 import Map from "../modules/map/store";

@@ -1,6 +1,6 @@
 <script>
 import Alerting from "./modules/Alerting/components/Alerting.vue";
-import SupplyCoord from "./components/SupplyCoord.vue";
+import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
 import ScaleLine from "./modules/scaleLine/components/ScaleLine.vue";
 import Controls from "./modules/controls/Controls.vue";
 // import Tools from "./components/tools/Tools.vue";
