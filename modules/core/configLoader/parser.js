@@ -545,7 +545,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             overLayers = this.get("overlayer"),
             overLayers3d = this.get("overlayer_3d"),
             baseLayersName = baseLayers && _.has(baseLayers, "name") ? baseLayers.name : i18next.t("common:tree.backgroundMaps"),
-            overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name :  i18next.t("common:tree.subjectData"),
+            overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name : i18next.t("common:tree.subjectData"),
             overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : i18next.t("common:tree.subjectData3D"),
             isQuickHelpSet = Radio.request("QuickHelp", "isSet");
 

@@ -2,7 +2,7 @@ import List from "./list";
 import View from "./view";
 import Template from "text-loader!./templateListView.html";
 
-const ListView = Backbone.View.extend({
+const ListView = Backbone.View.extend(/** @lends ListView.prototype */{
     events: {
         "click ul.back-item": "removeLastItem"
     },
@@ -42,7 +42,7 @@ const ListView = Backbone.View.extend({
      * @return {void}
      */
     render: function () {
-        const attr = { backText: i18next.t("common:button.back")};
+        const attr = {backText: i18next.t("common:button.back")};
 
         this.delegateEvents(this.events);
         $(this.targetElement).prepend(this.$el.html(this.template(attr)));

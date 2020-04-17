@@ -119,13 +119,13 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {Void} -
      */
     changeLang: function (lng) {
+        /* eslint-disable consistent-this */
         const model = this;
-        
+
         this.set({
             selectedTopicsText: i18next.t("common:tree.removeSelection"),
             infosAndLegendText: i18next.t("common:tree.infosAndLegend"),
             removeTopicText: i18next.t("common:tree.removeTopic"),
-            showTopicText: i18next.t("common:tree.showTopic"),
             showTopicText: i18next.t("common:tree.showTopic"),
             changeClassDivisionText: i18next.t("common:tree.changeClassDivision"),
             settingsText: i18next.t("common:tree.settings"),
@@ -137,7 +137,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             transparencyText: i18next.t("common:tree.transparency"),
             currentLng: lng
         });
-        //translate name, key is defined in config.json
+        // translate name, key is defined in config.json
         if (this.has("i18nextTranslate") && typeof this.get("i18nextTranslate") === "function") {
             this.get("i18nextTranslate")(function (key, value) {
                 if (!model.has(key) || typeof value !== "string") {
