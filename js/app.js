@@ -454,9 +454,6 @@ function loadApp () {
     sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
-        if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
-            new TitleView();
-        }
     }
     if (i18nextIsEnabled && Object.keys(i18nextLanguages).length > 1) {
         new LanguageView();

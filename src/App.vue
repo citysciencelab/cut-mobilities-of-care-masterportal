@@ -7,7 +7,7 @@ import Controls from "./modules/controls/Controls.vue";
 import Title from "./modules/title/components/Title.vue";
 import MapModuleDebug from "./modules/map/components/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
-import Language from "./components/Language.vue";
+import Language from "./modules/language/components/Language.vue";
 
 export default {
     name: "App",
