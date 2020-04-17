@@ -48,17 +48,21 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @property {String} pinTopicsTreeText="" will be translated
      * @property {String} hideAllTopicsText="" will be translated
      * @property {String} showAllTopicsText="" will be translated
+     * @property {String} categoryText="" will be translated
      * @property {String[]} obliqueModeBlacklist=["tree,"tools"] List of folder ids that are not displayed in oblique mode("Schr�gluftbilder").
      */
     initialize: function () {
-        var items,
-            isEveryLayerSelected;
+        let items,
+            isEveryToolInvisible = true,
+            isEveryLayerSelected = true;
 
         // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert
         if (this.get("parentId") === "Overlayer") {
             items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")});
-            isEveryLayerSelected = _.every(items, function (item) {
-                return item.isSelected === true;
+            items.forEach(function (item) {
+                if (item.isSelected === false) {
+                    isEveryLayerSelected = false;
+                }
             });
 
             if (isEveryLayerSelected === true) {
@@ -67,8 +71,10 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         }
         if (this.get("id") === "tools") {
             items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")});
-            const isEveryToolInvisible = _.every(items, function (item) {
-                return item.isVisibleInMenu === false;
+            items.forEach(function (item) {
+                if (item.isVisibleInMenu === true) {
+                    isEveryToolInvisible = false;
+                }
             });
 
             if (isEveryToolInvisible === true) {
@@ -115,7 +121,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @returns {void}
      */
     setIsSelected: function (value, silent) {
-        if (_.isUndefined(silent)) {
+        if (silent === undefined) {
             this.set("isSelected", value);
         }
         this.set("isSelected", value, {silent: silent});

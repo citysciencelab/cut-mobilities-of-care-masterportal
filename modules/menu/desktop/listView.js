@@ -215,8 +215,9 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     addOverlayViews: function (models) {
-        _.each(models, function (model) {
+        models.forEach(function (model) {
             if (model.get("type") === "folder") {
+                model.changeLang();
 
                 // Oberste ebene im Themenbaum?
                 if (model.get("parentId") === "tree") {
@@ -238,7 +239,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     addSelectionView: function (models) {
-        _.each(models, function (model) {
+        models.forEach(function (model) {
             if (!model.get("isNeverVisibleInTree")) {
                 new SelectionView({model: model});
             }
