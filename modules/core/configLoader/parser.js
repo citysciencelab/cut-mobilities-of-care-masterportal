@@ -544,14 +544,19 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             baseLayers = this.get("baselayer"),
             overLayers = this.get("overlayer"),
             overLayers3d = this.get("overlayer_3d"),
-            baseLayersName = baseLayers && _.has(baseLayers, "name") ? baseLayers.name : "Hintergrundkarten",
-            overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name : "Fachdaten",
-            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : "3D Daten",
+            baseLayersName = baseLayers && _.has(baseLayers, "name") ? baseLayers.name : i18next.t("common:tree.backgroundMaps"),
+            overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name : i18next.t("common:tree.subjectData"),
+            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : i18next.t("common:tree.subjectData3D"),
             isQuickHelpSet = Radio.request("QuickHelp", "isSet");
 
         this.addItem({
             type: "folder",
             name: baseLayersName,
+            i18nextTranslate: function (setter) {
+                if (typeof setter === "function" && i18next.exists("common:tree.backgroundMaps")) {
+                    setter("name", i18next.t("common:tree.backgroundMaps"));
+                }
+            },
             glyphicon: "glyphicon-plus-sign",
             id: "Baselayer",
             parentId: "tree",
@@ -567,6 +572,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         this.addItem({
             type: "folder",
             name: overLayersName,
+            i18nextTranslate: function (setter) {
+                if (typeof setter === "function" && i18next.exists("common:tree.subjectData")) {
+                    setter("name", i18next.t("common:tree.subjectData"));
+                }
+            },
             glyphicon: "glyphicon-plus-sign",
             id: "Overlayer",
             parentId: "tree",
@@ -578,7 +588,12 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         });
         this.addItem({
             type: "folder",
-            name: "Ausgewählte Themen",
+            name: i18next.t("common:tree.selectedTopics"),
+            i18nextTranslate: function (setter) {
+                if (typeof setter === "function" && i18next.exists("common:tree.selectedTopics")) {
+                    setter("name", i18next.t("common:tree.selectedTopics"));
+                }
+            },
             glyphicon: "glyphicon-plus-sign",
             id: "SelectedLayer",
             parentId: "tree",
@@ -608,6 +623,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             this.addItemByPosition({
                 type: "folder",
                 name: overLayers3DName,
+                i18nextTranslate: function (setter) {
+                    if (typeof setter === "function" && i18next.exists("common:tree.subjectData3D")) {
+                        setter("name", i18next.t("common:tree.subjectData3D"));
+                    }
+                },
                 id: id3d,
                 parentId: "tree",
                 isInThemen: true,

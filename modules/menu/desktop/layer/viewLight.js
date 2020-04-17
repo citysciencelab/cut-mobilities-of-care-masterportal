@@ -26,6 +26,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
      * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
@@ -35,7 +36,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
             "change:transparency": this.rerender,
-            "change:isOutOfRange": this.toggleColor
+            "change:isOutOfRange": this.toggleColor,
+            "change:currentLng": () => {
+                this.render();
+            }
         });
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleByMapMode
