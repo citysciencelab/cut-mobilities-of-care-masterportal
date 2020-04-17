@@ -18,13 +18,17 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
      * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires ModelList#RadioRequestModelListSetIsSelectedOnParent
      */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isVisibleInTree": this.removeIfNotVisible,
-            "change:isOutOfRange": this.toggleColor
+            "change:isOutOfRange": this.toggleColor,
+            "change:currentLng": () => {
+                this.render();
+            }
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
