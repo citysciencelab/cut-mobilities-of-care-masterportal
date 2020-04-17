@@ -261,7 +261,7 @@ Der Teil der config.json, den du für die Übersetzung des Themenbaums bearbeite
 {
     "Themenconfig": {
         "Fachdaten": {
-            "name": "translate##common:foo.bar.exampleSubjectData",
+            "name": "translate#common:foo.bar.exampleSubjectData",
             "Layer": [
                   {
                     "id": "2128",
