@@ -246,12 +246,20 @@ Da das Menü bereits so programmiert ist, dass es auf den Übersetzungspräfix (
 
 **Achtung**: Ein Übersetzungsschlüssel, der zu einem Eintrag im Themenbaum hinzugefügt wird, überschreibt alle Titel oder Namen, die von Diensten stammen.
 
+Ist der treeType "default" oder "custom" kann der Name des Ordners angegeben werden. Im Beispiel unten würde dann im Baum nicht "Fachdaten" sondern der Wert zum Schlüssel "foo.bar.exampleSubjectData" stehen.
+
+Default-Übersetzungen:
+Baselayer: Hintergrundkarten
+Overlayer: Fachthemen
+3d-Layer: 3D Daten
+
 
 Der Teil der config.json, den du für die Übersetzung des Themenbaums bearbeiten kannst:
 ```
 {
     "Themenconfig": {
         "Fachdaten": {
+            "name": "translate##example:foo.bar.exampleSubjectData",
             "Layer": [
                   {
                     "id": "2128",

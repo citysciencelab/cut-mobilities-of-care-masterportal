@@ -248,12 +248,19 @@ Similar to the menu the tree of topics (german: "Themenbaum") can be translated 
 
 **Please be aware**: A translation key added to an item in the tree of topics will overwrite any titles or names coming from services.
 
+If the treeType is "default" or "custom" the name of the folder can be specified. In the example below, the tree would then contain the value for the key "foo.bar.exampleSubjectData" instead of "Fachdaten".
+
+Default translations:
+Baselayer: Background maps
+Overlay: Subject data
+3d-layer: 3D data
 
 Part of the config.json you can edit for translation of the tree of topics
 ```
 {
     "Themenconfig": {
         "Fachdaten": {
+            "name": "translate##example:foo.bar.exampleSubjectData",
             "Layer": [
                   {
                     "id": "2128",
