@@ -163,6 +163,7 @@
     },
     "Themenconfig": {
         "Hintergrundkarten": {
+            "name": "translate#common:tree.backgroundMaps",
             "Layer": [
                 {
                     "id": [
@@ -310,6 +311,7 @@
             ]
         },
         "Fachdaten_3D":{
+            "name": "translate#common:tree.subjectData3D",
             "Layer":[
                 {
                     "id":"12883",
