@@ -19,7 +19,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         styleable: false,
         supported: ["2D"],
         transparency: 0,
-        isOutOfRange: undefined
+        isOutOfRange: undefined,
+        currentLng: "",
+        selectedTopicsText: "",
+        infosAndLegendText: "",
+        removeTopicText: "",
+        showTopicText: "",
+        changeClassDivisionText: "",
+        settingsText: "",
+        transparencyText: "",
+        increaseTransparencyText: "",
+        reduceTransparencyText: "",
+        removeLayerText: "",
+        levelUpText: "",
+        levelDownText: ""
     },
     /**
      * @class Layer
@@ -44,6 +57,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Number} hitTolerance=0 Hit tolerance used by layer for map interaction
      * @property {Boolean} styleable=false Flag if wms layer can be styleable via stylewms tool
      * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
+     * @property {String} currentLng="" contains the current language
+     * @property {String} isOutOfRange="" will be translated
+     * @property {String} selectedTopicsText="" will be translated
+     * @property {String} infosAndLegendText="" will be translated
+     * @property {String} removeTopicText="" will be translated
+     * @property {String} showTopicText="" will be translated
+     * @property {String} changeClassDivisionText="" will be translated
+     * @property {String} settingsText="" will be translated
+     * @property {String} transparencyText="" will be translated
+     * @property {String} increaseTransparencyText="" will be translated
+     * @property {String} reduceTransparencyText="" will be translated
+     * @property {String} removeLayerText="" will be translated
+     * @property {String} levelUpText="" will be translated
+     * @property {String} levelDownText="" will be translated
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
@@ -57,6 +84,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
      * @listens Core#RadioTriggerMapChange
      * @listens Core#RadioTriggerMapViewChangedOptions
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         const portalConfig = Radio.request("Parser", "getPortalConfig");
@@ -77,6 +105,46 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             this.setIsVisibleInMap(this.get("isSelected"));
             this.setIsRemovable(Radio.request("Parser", "getPortalConfig").layersRemovable);
             this.toggleWindowsInterval();
+        }
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        /* eslint-disable consistent-this */
+        const model = this;
+
+        this.set({
+            selectedTopicsText: i18next.t("common:tree.removeSelection"),
+            infosAndLegendText: i18next.t("common:tree.infosAndLegend"),
+            removeTopicText: i18next.t("common:tree.removeTopic"),
+            showTopicText: i18next.t("common:tree.showTopic"),
+            changeClassDivisionText: i18next.t("common:tree.changeClassDivision"),
+            settingsText: i18next.t("common:tree.settings"),
+            increaseTransparencyText: i18next.t("common:tree.increaseTransparency"),
+            reduceTransparencyText: i18next.t("common:tree.reduceTransparency"),
+            removeLayerText: i18next.t("common:tree.removeLayer"),
+            levelUpText: i18next.t("common:tree.levelUp"),
+            levelDownText: i18next.t("common:tree.levelDown"),
+            transparencyText: i18next.t("common:tree.transparency"),
+            currentLng: lng
+        });
+        // translate name, key is defined in config.json
+        if (this.has("i18nextTranslate") && typeof this.get("i18nextTranslate") === "function") {
+            this.get("i18nextTranslate")(function (key, value) {
+                if (!model.has(key) || typeof value !== "string") {
+                    return;
+                }
+                model.set(key, value);
+            });
         }
     },
 
