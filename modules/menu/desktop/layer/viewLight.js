@@ -37,7 +37,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
             "change:transparency": this.rerender,
-            "change:isOutOfRange": this.toggleColor
+            "change:isOutOfRange": this.toggleColor,
+            "change:currentLng": () => {
+                this.render();
+            }
         });
         this.listenTo(Radio.channel("Map"), {
             "change": this.toggleByMapMode
