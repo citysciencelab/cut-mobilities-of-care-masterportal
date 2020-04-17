@@ -37,7 +37,7 @@ describe("menu/desktop/layer/viewSelection", function () {
                     case "removeTopicText":
                         return "removeTopicText";
                     case "changeClassDivisionText":
-                        return "changeClassDivisionText";                    
+                        return "changeClassDivisionText";
                     case "infosAndLegendText":
                         return "infosAndLegendText";
                     case "settingsText":
@@ -53,7 +53,7 @@ describe("menu/desktop/layer/viewSelection", function () {
                     case "levelDownText":
                         return "levelDownText";
                     case "selectedTopicsText":
-                            return "selectedTopicsText";
+                        return "selectedTopicsText";
                     default:
                         return null;
                 }

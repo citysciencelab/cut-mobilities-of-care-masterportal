@@ -41,7 +41,7 @@ describe("menu/desktop/layer/viewLight", function () {
                     case "removeTopicText":
                         return "removeTopicText";
                     case "changeClassDivisionText":
-                        return "changeClassDivisionText";                    
+                        return "changeClassDivisionText";
                     case "infosAndLegendText":
                         return "infosAndLegendText";
                     case "settingsText":
