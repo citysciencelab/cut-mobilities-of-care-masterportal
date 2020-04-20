@@ -33,11 +33,11 @@ const ScaleLineView = Backbone.View.extend({
         }
         else if (document.getElementsByClassName("ol-viewport").length > 0) {
             document.getElementsByClassName("ol-viewport")[0].appendChild(this.el);
-        }
-        if (!i18nextIsEnabled || Object.keys(i18nextLanguages).length <= 1) {
-            this.$el.css({
-                "right": "0px"
-            });
+            if (!i18nextIsEnabled || Object.keys(i18nextLanguages).length <= 1) {
+                this.$el.css({
+                    "right": "0px"
+                });
+            }
         }
         return this;
     }

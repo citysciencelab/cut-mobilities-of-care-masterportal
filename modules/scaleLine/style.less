@@ -1,15 +1,24 @@
 @color_1: #777;
 
+.footer .scale-line {
+    float: right;
+}
+
+.ol-viewport > .scale-line {
+    position: absolute;
+    padding: 4px 8px;
+}
+
+
 .scale-line {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
-    border-radius: 0 5px 0 0;
+    border-radius: 5px 5px 0 0;
     bottom: 0;
     color: @color_1;
-    position: absolute;
     text-align: center;
     font-size: 10px;
-    padding: 4px 8px;
     right: 35px;
+    float:right;
 }
 .scale {
     &:first-child {
