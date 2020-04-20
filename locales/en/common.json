@@ -36,11 +36,12 @@
             "routing": "Route planner",
             "draw": "Drawing / writing",
             "saveSelection": "Save selection",
-            "getInfos": "Retrieve information"
+            "getInfos": "Retrieve information",
+            "addWms": "Add WMS"
         },
         "legend": "Explanations",
         "contact": "Mail",
-        "info": "Informations"
+        "info": "Information"
     },
     "tree": {
         "trafficCameras": "survey cameras (traffic)",
@@ -114,7 +115,7 @@
         },
         "footer":{
             "designation":"Cartography and design:",
-            "version":"Version",
+            "version":"Masterportal V.",
             "cardDiscrepancy":"Card discrepancy"
         },
         "tools": {
@@ -124,6 +125,14 @@
                     "name": "Hamburg Town",
                     "url": "https://www.hamburg.com/"
                 }
+            },
+            "addWMS": {
+                "completeMessage": "The layers of the requested WMS were added to the topic tree under the menu item <strong>External Subject Data</strong>!",
+                "error": "Unfortunately no (valid) WMS could be found under the given URL!",
+                "errorMessage": "The specified service could not be loaded. Please make sure that the URL was entered correctly.<br><br> If the problem persists, please contact the operator of the service with the following note:<br><strong>It should be ensured that a CORS header is set for the service. This is recommended by the <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> in chapter 4.7.1.</strong>",
+                "placeholder": "Please enter the WMS-URL here.",
+                "textExample": "Example: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
+                "textLoadLayer": "Load layer"
             },
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -195,6 +204,7 @@
                 "district": "District",
                 "choose": "please choose",
                 "parcelNumber": "Parcel number",
+                "plot": "Plot",
                 "parcelNumberPlaceholder": "Enter number",
                 "generateReport": "Generate report"
             },
@@ -261,7 +271,7 @@
                 "outlineColor": "Outline color",
                 "fontSize": "Font size",
                 "fontName": "Font",
-                "size": "Size",
+                "size": "Size (Radius)",
                 "lineWidth": "Line width",
                 "transparency": "Transparency",
                 "color": "Fill color",
@@ -270,6 +280,20 @@
                     "edit": "Edit geometry",
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all"
+                },
+                "iconList": {
+                    "iconPoint": "Point",
+                    "iconLeaf": "Leaf",
+                    "iconCloud": "Cloud",
+                    "iconCD": "CD",
+                    "iconHat": "Graduation Cap",
+                    "iconFire": "Fire",
+                    "iconMovie": "Movie",
+                    "iconFlag": "Flag",
+                    "iconGlobe": "Globe",
+                    "iconMusic": "Music",
+                    "iconStreet": "Street",
+                    "iconTent": "Tent"
                 }
             },
             "download": {
@@ -399,6 +423,12 @@
                 "errorMsg": "Searching with OpenStreetMap is currently not available."
             },
             "noInitialResults": "Initial search found no hits."
+        },
+        "vectorStyle": {
+          "styleModel": {
+            "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
+            "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
+          }
         }
     },
     "snippets": {
@@ -413,6 +443,9 @@
             "selectByPolygon": "Draw surface",
             "tooltipMessage": "Click to start and exit",
             "tooltipMessagePolygon": "Click to add a point"
+        },
+        "slider": {
+            "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
         }
     }
 }

@@ -71,25 +71,33 @@ const TitleModel = Backbone.Model.extend(/** @lends TitleModel.prototype */ {
         }
 
         if (portalTitle) {
-            if (portalTitle.title) {
-                this.setTitle(portalTitle.title);
+            if (portalTitle.title || portalTitle.title.trim() === "") {
+                this.setTitle(portalTitle.title.trim());
             }
-            if (portalTitle.logo) {
-                this.setLogo(portalTitle.logo);
+            if (portalTitle.logo && portalTitle.logo.trim() !== "") {
+                this.setLogo(portalTitle.logo.trim());
+                // link and tooltip are only useful if logo is available
+                if (portalTitle.link && portalTitle.link.trim() !== "") {
+                    this.setLink(portalTitle.link);
+                }
+                else {
+                    this.setLink("");
+                }
+                /**
+                 * tooltip
+                 * @deprecated in 3.0.0
+                 */
+                if (portalTitle.tooltip !== undefined) {
+                    console.warn("Attribute 'tooltip' is deprecated. Please use 'toolTip' instead.");
+                    this.setToolTip(portalTitle.tooltip);
+                }
+                if (portalTitle.toolTip) {
+                    this.setToolTip(portalTitle.toolTip);
+                }
             }
-            if (portalTitle.link) {
-                this.setLink(portalTitle.link);
-            }
-            /**
-             * tooltip
-             * @deprecated in 3.0.0
-             */
-            if (portalTitle.tooltip !== undefined) {
-                console.warn("Attribute 'tooltip' is deprecated. Please use 'toolTip' instead.");
-                this.setToolTip(portalTitle.tooltip);
-            }
-            if (portalTitle.toolTip) {
-                this.setToolTip(portalTitle.toolTip);
+            else {
+                this.setLink("");
+                this.setToolTip("");
             }
         }
     },

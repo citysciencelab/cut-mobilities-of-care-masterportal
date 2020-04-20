@@ -29,6 +29,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         searchText: "",
         generateReportText: "",
         parcelNumberText: "",
+        plotText: "",
         parcelNumberPlaceholderText: "",
         districtText: "",
         chooseText: "",
@@ -69,6 +70,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @property {String} searchText="", filled with "Suchen"- translated
      * @property {String} generateReportText="", filled with "Bericht erzeugen"- translated
      * @property {String} parcelNumberText="", filled with "Flurstücksnummer"- translated
+     * @property {String} plotText="", filled with "Flur"- translated
      * @property {String} parcelNumberPlaceholderText="", filled with "Nummer eingeben"- translated
      * @property {String} districtText="", filled with "Gemarkung"- translated
      * @property {String} chooseText="", filled with "bitte wählen"- translated
@@ -127,6 +129,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
             searchText: i18next.t("common:button.search"),
             generateReportText: i18next.t("common:modules.tools.parcelSearch.generateReport"),
             parcelNumberText: i18next.t("common:modules.tools.parcelSearch.parcelNumber"),
+            plotText: i18next.t("common:modules.tools.parcelSearch.plot"),
             parcelNumberPlaceholderText: i18next.t("common:modules.tools.parcelSearch.parcelNumberPlaceholder"),
             chooseText: i18next.t("common:modules.tools.parcelSearch.choose"),
             districtText: i18next.t("common:modules.tools.parcelSearch.district"),

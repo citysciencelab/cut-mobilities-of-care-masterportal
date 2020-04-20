@@ -33,7 +33,7 @@ Es existieren die im Folgenden aufgelisteten Konfigurationen:
 |----|-------------|---|-------|------------|------|
 |portalTitle|nein|**[portalTitle](#markdown-header-portalconfigportaltitle)**||Der Titel und weitere Parameter die  in der Menüleiste angezeigt werden können.|false|
 |treeType|nein|enum["light","default","custom"]|"light"|Legt fest, welche Themenbaumart genutzt werden soll. Es existieren die Möglichkeiten *light* (einfache Auflistung), *default* (FHH-Atlas), *custom* (benutzerdefinierte Layerliste anhand json).|false|
-|singleBaselayer|nein|Boolean|false|Legt fest, ob nur ein Baselayer gleichzeitig ausgewählt werden kann.|false|
+|singleBaselayer|nein|Boolean|false|Legt fest, ob nur ein Baselayer gleichzeitig ausgewählt werden kann, nur bei dem treeType „custom“ verfügbar.|false|
 |Baumtyp|nein|enum["light","default","custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|false|
 |mapView|nein|**[mapView](#markdown-header-portalconfigmapview)**||Mit verschiedenen  Parametern wird die Startansicht konfiguriert und der Hintergrund festgelegt, der erscheint wenn keine Karte geladen ist.|false|
 |controls|nein|**[controls](#markdown-header-portalconfigcontrols)**||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|false|
@@ -516,7 +516,7 @@ Das Attribut overviewMap kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|resolution|nein|Integer||deprecated in 3.0.0: Legt die Resolution fest, die in der Overviewmap verwendet werden soll.|
+|resolution|nein|Integer||deprecated in 3.0.0: Legt die Resolution fest, die in der Overviewmap verwendet werden soll. Falls nicht angegeben, passt sich der Kartenausschnitt per Zoom automatisch an.|
 |baselayer|nein|String||deprecated in 3.0.0, danach bitte layerId verwenden!: Über den Parameter baselayer kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
 |layerId|nein|String||Über den Parameter layerId kann ein anderer Layer für die Overviewmap verwendet werden. Hier muss eine Id aus der services.json angegeben werden die in der config.js des Portals, im Parameter layerConf steht.|
 |isInitOpen|nein|Boolean|true|Legt fest, ob die OverviewMap beim Start dargestellt oder verborgen sein soll.|
@@ -622,7 +622,7 @@ Das Attribut backForward kann vom Typ Boolean oder Object sein. Wenn es vom Typ 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|backgroundImage|nein|String||Pfad zum alternativen Hintergrund angeben.|false|
+|backgroundImage|nein|String|"https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/config.json.md#markdown-header-portalconfigmapview"|Pfad zum alternativen Hintergrund angeben.|false|
 |startCenter|nein|**[Coordinate](#markdown-header-datatypescoordinate)**|[565874, 5934140]|Die initiale Zentrumskoordinate.|false|
 |options|nein|**[option](#markdown-header-portalconfigmapviewoption)**[]|[{"resolution":66.14579761460263,"scale":250000,"zoomLevel":0}, {"resolution":26.458319045841044,"scale":100000,"zoomLevel":1}, {"resolution":15.874991427504629,"scale":60000,"zoomLevel":2}, {"resolution": 10.583327618336419,"scale":40000,"zoomLevel":3}, {"resolution":5.2916638091682096,"scale":20000,"zoomLevel":4}, {"resolution":2.6458319045841048,"scale":10000,"zoomLevel":5}, {"resolution":1.3229159522920524,"scale":5000,"zoomLevel":6}, {"resolution":0.6614579761460262,"scale":2500,"zoomLevel":7}, {"resolution":0.2645831904584105,"scale": 1000,"zoomLevel":8}, {"resolution":0.13229159522920521,"scale":500,"zoomLevel":9}]|Die initialen Maßstabsstufen und deren Auflösungen.|true|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[510000.0, 5850000.0, 625000.4, 6000000.0]|Der Map-Extent.|false|
@@ -824,6 +824,8 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:routing]: # (Portalconfig.menu.tool.routing)
 
+[type:draw]: # (Portalconfig.menu.tool.draw)
+
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 
 [type:lines]: # (Portalconfig.menu.tool.lines)
@@ -857,7 +859,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt vorraus.|false|
 |extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt vorraus.|false|
 |routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
-|draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|false|
+|draw|nein|**[draw](#markdown-header-portalconfigmenudraw)**||Zeichnen. Mithilfe dieses Werkzeuges können Punkte, Linien, Polygone, Kreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Das Gezeichnete kann auch als KML exportiert werden.|false|
 |styleWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Klassifizierung vom WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Requuest wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
 |featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektor Layers auf.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linenhafte Objekte.|false|
@@ -1337,6 +1339,121 @@ Routing Modul.
     "bkgSuggestID": "2",
     "bkgGeosearchID": "3",
     "isInitOpen": false
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.draw
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welche auch als Symbole dargestellt werden können, (Doppel-)Kreise, Polygone, Polyline und Text.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name des Werkzeugs im Menü.|false|
+|glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{caption: "translate#common:modules.tools.draw.iconList.iconPoint", type: "simple_point", value: "simple_point"}, {caption: "translate#common:modules.tools.draw.iconList.iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
+
+**Beispiel**
+
+```
+#!json
+"draw": {
+    "name": "Zeichnen / Schreiben",
+    "glyphicon": "glyphicon-pencil",
+    "iconList": [
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconPoint",
+			"type": "simple_point",
+			"value": "simple_point"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
+			"type": "glyphicon",
+			"value": "\ue103"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconCD",
+			"type": "glyphicon",
+			"value": "\ue201"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconHat",
+			"type": "glyphicon",
+			"value": "\ue233"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconFire",
+			"type": "glyphicon",
+			"value": "\ue104"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconMovie",
+			"type": "glyphicon",
+			"value": "\ue009"
+		},
+		{
+		    "caption": "translate#common:modules.tools.draw.iconList.iconFlag",
+			"type": "glyphicon",
+			"value": "\ue034"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
+			"type": "glyphicon",
+			"value": "\ue135"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconMusic",
+			"type": "glyphicon",
+			"value": "\ue002"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconStreet",
+			"type": "glyphicon",
+			"value": "\ue024"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
+			"type": "image",
+			"value": "/img/tools/draw/cloud.png"
+		},
+		{
+			"caption": "translate#common:modules.tools.draw.iconList.iconTent",
+			"type": "glyphicon",
+			"value": "\u26fa"
+		}
+	]
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.icon
+
+Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
+|type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/tools/draw/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
+|value|ja|String||Wert, des zu zeichnenden Objektes.|false|
+
+**Beispiele**
+
+```
+#!json
+{
+	"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
+	"type": "image",
+	"value": "/img/tools/draw/cloud.png"
+}
+
+{
+    "caption": "translate#common:modules.tools.draw.iconList.iconFire",
+    "type": "glyphicon",
+    "value": "\ue104"
 }
 ```
 
@@ -2054,7 +2171,7 @@ Hier werden WMS typische Attribute aufgelistet.
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
 |infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|false|
-|styles|nein|String[]||Werden styles angegeben so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
+|styles|nein|String[]||Werden styles angegeben so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück. Erfolgt die Angabe eines styles, so muss der Layername als String[] angegeben werden.|true|
 
 **Beispiel**
 ```

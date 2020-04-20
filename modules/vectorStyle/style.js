@@ -39,6 +39,45 @@ const StyleModel = Backbone.Model.extend(/** @lends StyleModel.prototype */{
 
             this.set(key, value);
         }
+    },
+    /**
+     * Returns the value of the given field. Also considers that the field can be an object path.
+     * @param {Object} featureProperties Feature properties.
+     * @param {String} field Field to get value.
+     * @returns {*} - Value from given field.
+     */
+    prepareField: function (featureProperties, field) {
+        const isPath = field.startsWith("@");
+        let value = field;
+
+        if (isPath) {
+            value = this.getValueFromPath(featureProperties, value);
+        }
+        else {
+            value = featureProperties && featureProperties.hasOwnProperty(field) ? featureProperties[field] : "undefined";
+        }
+        return value;
+    },
+
+    /**
+     * Returns the value from the given path.
+     * @param {Object} featureProperties Feature properties.
+     * @param {String} path Field as object path.
+     * @returns {*} - Value from given path.
+     */
+    getValueFromPath: function (featureProperties, path) {
+        const pathParts = path.substring(1).split(".");
+        let property = featureProperties,
+            value = "undefined";
+
+        pathParts.forEach(part => {
+            property = property ? property[part] : undefined;
+        });
+
+        if (property) {
+            value = property;
+        }
+        return value;
     }
 });
 

@@ -66,7 +66,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
         "circleBarCircleFillColor": [0, 0, 0, 1],
         "circleBarCircleStrokeColor": [0, 0, 0, 1],
         "circleBarCircleStrokeWidth": 1,
-        "circleBarLineStrokeColor": [0, 0, 0, 1]
+        "circleBarLineStrokeColor": [0, 0, 0, 1],
+        "scalingAttribute": ""
     },
 
     initialize: function (feature, styles, isClustered) {
@@ -576,7 +577,9 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             circleBarCircleStrokeColor = this.returnColor(this.get("circleBarCircleStrokeColor"), "hex"),
             circleBarCircleStrokeWidth = this.get("circleBarCircleStrokeWidth"),
             circleBarLineStrokeColor = this.returnColor(this.get("circleBarLineStrokeColor"), "hex"),
-            scalingAttribute = feature.get(this.get("scalingAttribute")),
+            featureProperties = feature.getProperties(),
+            preparedField = this.prepareField(featureProperties, this.get("scalingAttribute")),
+            scalingAttribute = preparedField === "undefined" ? undefined : preparedField,
             stateValue = scalingAttribute !== undefined && scalingAttribute.indexOf(" ") !== -1 ? scalingAttribute.split(" ")[0] : scalingAttribute,
             size = this.calculateSizeIntervalCircleBar(stateValue, circleBarScalingFactor, circleBarLineStroke, circleBarRadius),
             barLength = this.calculateLengthIntervalCircleBar(size, circleBarRadius, stateValue, circleBarScalingFactor);
