@@ -23,7 +23,12 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
             "change:isActive change:url": this.render,
             "change:positionMapProjection": this.changedPosition,
             "change:currentLng": () => {
-                this.renderToolBody();
+                if (this.model.get("isActive")) {
+                    this.renderToolBody();
+                    if (!this.model.get("updatePosition")) {
+                        this.model.positionClicked(this.model.get("positionMapProjection"));
+                    }
+                }
             }
         });
         // To initially open this tool it needs to fire change:isActive event on parent model because other
@@ -45,7 +50,6 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
         if (value) {
             this.model.createInteraction();
             this.renderToolBody();
-            this.changedPosition();
             this.delegateEvents();
         }
         else {
@@ -62,6 +66,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
     renderToolBody: function () {
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template(this.model.toJSON()));
+        this.changedPosition();
     },
 
     /*
@@ -69,7 +74,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
      * @returns {void}
      */
     changedPosition: function () {
-        var targetProjectionName = this.$("#coordSystemField option:selected").val(),
+        const targetProjectionName = this.$("#coordSystemField option:selected").val(),
             position = this.model.returnTransformedPosition(targetProjectionName),
             targetProjection = this.model.returnProjectionByName(targetProjectionName);
 
@@ -87,7 +92,7 @@ const GetCoord = Backbone.View.extend(/** @lends GetCoord.prototype */{
      * @returns {void}
      */
     adjustPosition: function (position, targetProjection) {
-        var coord, easting, northing;
+        let coord, easting, northing;
 
         // geographische Koordinaten
         if (targetProjection.projName === "longlat") {
