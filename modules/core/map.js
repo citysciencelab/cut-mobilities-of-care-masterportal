@@ -448,6 +448,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
             });
         }
+        else if (layer.getType() === "TILE") {
+            channel.trigger("removeLoadingLayer");
+        }
         else {
             layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
             layer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);

@@ -1,10 +1,11 @@
 import Layer from "./model";
-import WMTS from "ol/source/WMTS";
+import WMTS, {optionsFromCapabilities} from "ol/source/WMTS";
 import WMTSTileGrid from "ol/tilegrid/WMTS";
 import TileLayer from "ol/layer/Tile";
 import {DEVICE_PIXEL_RATIO} from "ol/has";
 import {get as getProjection} from "ol/proj";
 import {getWidth} from "ol/extent";
+import WMTSCapabilities from "ol/format/WMTSCapabilities";
 
 const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -25,7 +26,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      */
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
-
+        this.listenTo(this, "change:layerSource", this.updateLayerSource);
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }
@@ -37,39 +38,74 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      * @returns {void}
      */
     createLayerSource: function () {
-        const projection = getProjection(this.get("coordinateSystem")),
-            extent = projection.getExtent(),
-            style = this.get("style"),
-            format = this.get("format"),
-            wrapX = this.get("wrapX") ? this.get("wrapX") : false,
-            urls = this.get("urls"),
-            size = getWidth(extent) / parseInt(this.get("tileSize"), 10),
-            resLength = parseInt(this.get("resLength"), 10),
-            resolutions = new Array(resLength),
-            matrixIds = new Array(resLength);
+        if (_.isUndefined(this.get("optionsFromCapabilities"))) {
+            const projection = getProjection(this.get("coordinateSystem")),
+                extent = projection.getExtent(),
+                style = this.get("style"),
+                format = this.get("format"),
+                wrapX = this.get("wrapX") ? this.get("wrapX") : false,
+                urls = this.get("urls"),
+                size = getWidth(extent) / parseInt(this.get("tileSize"), 10),
+                resLength = parseInt(this.get("resLength"), 10),
+                resolutions = new Array(resLength),
+                matrixIds = new Array(resLength);
 
-        this.generateArrays(resolutions, matrixIds, resLength, size);
+            this.generateArrays(resolutions, matrixIds, resLength, size);
 
-        this.setLayerSource(new WMTS({
-            projection: projection,
-            attributions: this.get("olAttribution"),
-            tileGrid: new WMTSTileGrid({
-                origin: this.get("origin"),
-                resolutions: resolutions,
-                matrixIds: matrixIds,
-                tileSize: this.get("tileSize")
-            }),
-            tilePixelRatio: DEVICE_PIXEL_RATIO,
-            urls: urls,
-            matrixSet: this.get("tileMatrixSet"),
-            layer: this.get("layer"),
-            format: format,
-            style: style,
-            version: this.get("version"),
-            transparent: this.get("transparent").toString(),
-            wrapX: wrapX,
-            requestEncoding: this.get("requestEncoding")
-        }));
+            this.setLayerSource(new WMTS({
+                projection: projection,
+                attributions: this.get("olAttribution"),
+                tileGrid: new WMTSTileGrid({
+                    origin: this.get("origin"),
+                    resolutions: resolutions,
+                    matrixIds: matrixIds,
+                    tileSize: this.get("tileSize")
+                }),
+                tilePixelRatio: DEVICE_PIXEL_RATIO,
+                urls: urls,
+                matrixSet: this.get("tileMatrixSet"),
+                layer: this.get("layer"),
+                format: format,
+                style: style,
+                version: this.get("version"),
+                transparent: this.get("transparent").toString(),
+                wrapX: wrapX,
+                requestEncoding: this.get("requestEncoding")
+            }));
+        }
+        else {
+            const layerIdentifier = this.get("layers"),
+                matrixSet = this.get("matrixSet"),
+                url = this.get("capabilitiesUrl");
+
+            this.fetchWMTSCapabilities(url)
+                .then(function (result) {
+                    const options = optionsFromCapabilities(result, {
+                        layer: layerIdentifier,
+                        matrixSet: matrixSet
+                    });
+
+                    if (options !== null) {
+                        const source = new WMTS(options);
+
+                        this.set("options", options);
+                        this.setLayerSource(source);
+                    }
+                    else {
+                        throw new Error("Cannot get options from WMTS-Capabilities");
+                    }
+                }.bind(this))
+                .catch(function (error) {
+                    if (error.message.includes("Cannot get options")) {
+                        const errorMessage = "WMTS-Capabilities parsing Error" + error;
+
+                        this.showErrorMessage(errorMessage, this.get("name"));
+                        this.removeLayer();
+                        Radio.trigger("Util", "refreshTree");
+                    }
+                }.bind(this));
+        }
+
     },
 
     /**
@@ -86,6 +122,58 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             resolutions[i] = size / Math.pow(2, i);
             matrixIds[i] = i;
         }
+    },
+
+    /**
+     * Fetch the WMTS-GetCapabilities document and parse it
+     * @param {string} url url to fetch
+     * @property {number} resultStatus HTTP-Status code of response
+     * @returns {promise} promise resolves to parsed WMTS-GetCapabilities object
+     */
+    fetchWMTSCapabilities: function (url) {
+        let resultStatus = 0,
+            parser = null;
+
+        return fetch(url)
+            .then((result) => {
+                resultStatus = result.status;
+                return result.text();
+            })
+            .then(result => {
+                switch (resultStatus) {
+                    case 200:
+                        parser = new WMTSCapabilities();
+                        return parser.read(result);
+                    case 400:
+                        throw new Error("400 (Bad Request)");
+                    case 404:
+                        throw new Error("404 (Server not found)");
+                    case 500:
+                        throw new Error("500 (Server Error)");
+                    default:
+                        throw new Error(resultStatus + " Check GetCapabilities-URL");
+                }
+            })
+            .catch(function (error) {
+                const errorMessage = " WMTS-Capabilities fetch Error: " + error;
+
+                this.removeLayer();
+                Radio.trigger("Util", "refreshTree");
+                this.showErrorMessage(errorMessage, this.get("name"));
+            }.bind(this));
+    },
+
+    /**
+     * shows error message when WMTS-GetCapabilities cannot be parsed
+     * @param {string} errorMessage error message
+     * @param {string} layerName layerName
+     * @returns {void}
+     */
+    showErrorMessage: (errorMessage, layerName) => {
+        Radio.trigger("Alert", "alert", {
+            text: "Layer " + layerName + errorMessage,
+            kategorie: "alert-danger"
+        });
     },
 
     /**
@@ -107,13 +195,48 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
 
     /**
      * If no legendURL is set an Error is written on the console.
+     * For the OptionsFromCapabilities way:
+     * If legendURL is empty, WMTS-Capabilities will be searched for a legendURL (OGC Standard)
+     * If a legendURL is found, legend will be rebuild
      *
      * @returns {void}
      */
     createLegendURL: function () {
-        if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
+        let legendURL = this.get("legendURL");
+        const capabilitiesUrl = this.get("capabilitiesUrl");
+
+        if ((this.get("optionsFromCapabilities") === undefined) && (legendURL === "" || legendURL === undefined)) {
             console.error("WMTS: No legendURL is specified for the layer!");
         }
+
+        else if (this.get("optionsFromCapabilities") && (!legendURL || legendURL === "")) {
+            this.fetchWMTSCapabilities(capabilitiesUrl)
+                .then(function (result) {
+                    result.Contents.Layer.forEach(function (layer) {
+                        if (layer.Identifier === this.get("layers")) {
+                            const getLegendURL = Radio.request("Util", "searchNestedObject", layer, "LegendURL");
+
+                            if (getLegendURL !== null && getLegendURL !== undefined) {
+                                legendURL = getLegendURL.LegendURL[0].href;
+
+                                this.setLegendURL(legendURL);
+
+                                // rebuild Legend
+                                Radio.trigger("Legend", "setLayerList");
+                            }
+                            else {
+                                this.setLegendURL(null);
+                                console.warn("no legend url found for layer " + this.get("layers"));
+                            }
+
+                        }
+                    }.bind(this));
+                }.bind(this))
+                .catch((error) => {
+                    this.showErrorMessage(error, this.get("name"));
+                });
+        }
+
     },
 
     /**
