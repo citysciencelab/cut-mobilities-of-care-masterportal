@@ -2358,7 +2358,7 @@ Hier werden Entities3D typische Attribute aufgelistet.
 [inherits]: # (Themenconfig.Layer)
 [type:Extent]: # (Datatypes.Extent)
 
-Hier werden typische Attribute für ein StaticImage aufgelistet.
+Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der Karte darstellen. Es werden die Formate jpeg und png unterstützt.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2373,13 +2373,14 @@ Hier werden typische Attribute für ein StaticImage aufgelistet.
 ```
 #!json
 {
+    "id": "12345",
     "typ": "StaticImage",
     "url": "https://www.w3.org/Graphics/PNG/alphatest.png",
     "name": "Testing PNG File",
     "visibility": true,
     "extent": [560296.72, 5932154.22, 562496.72, 5933454.22]
 }
-```
+`````
 
 ***
 #### Themenconfig.Layer.Vector
