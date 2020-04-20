@@ -7,7 +7,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         geometryName: "app:geom",
         maxFeatures: 20,
         timeout: 6000,
-        definitions: null,
+        definitions: [],
         ajaxRequests: {},
         defaultNamespaces: "xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml'"
     },
@@ -39,7 +39,9 @@ const SpecialWFSModel = Backbone.Model.extend({
         if (config.maxFeatures) {
             this.setMaxFeatures(config.maxFeatures);
         }
-        this.setDefinitions(config.definitions);
+        if (config.definitions) {
+            this.setDefinitions(config.definitions);
+        }
 
         // set Listener
         this.listenTo(Radio.channel("Searchbar"), {

@@ -22,6 +22,10 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         this.listenTo(this.model, {
             "change:isActive": this.toggleIsActiveClass
         });
+        // Listener for addOns so that multilanguage geht initially adjusted.
+        this.listenTo(this.model, {
+            "change:name": this.rerender
+        });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 this.toggleSupportedVisibility(mode);
@@ -46,6 +50,16 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         }
         return this;
+    },
+
+    /**
+     * Rerenders the view. Gets triggered on name change
+     * @returns {void}
+     */
+    rerender: function () {
+        const attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
     },
 
     /**

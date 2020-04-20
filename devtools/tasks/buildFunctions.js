@@ -66,11 +66,12 @@ module.exports = function buildWebpack (answers) {
     // console.warn("NOTICE: executing command \"" + cliExecCommand + "\"");
     console.warn("NOTICE: Building portals. Please wait...");
 
+    // Comment out following 4 lines if you want only copy without build (you must already have a build)
+    fs.remove(buildTempPath).catch(error => console.error(error));
     execute(cliExecCommand).then(function (result) {
-
         console.warn(result.stdout);
-
         prependVersionNumber(path.resolve(buildTempPath, "js/masterportal.js"));
+        // ^^^
 
         fs.remove(mastercodeVersionPath).then(() => {
             // console.warn("NOTE: Deleted directory \"" + mastercodeVersionPath + "\".");
@@ -78,15 +79,20 @@ module.exports = function buildWebpack (answers) {
             fs.copy("./img", mastercodeVersionPath + "/img").then(() => {
                 // console.warn("NOTE: Copied \"./img\" to \"" + mastercodeVersionPath + "\".");
 
-                fs.copy(buildTempPath, mastercodeVersionPath).then(() => {
-                    // console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + mastercodeVersionPath + "\".");
+                fs.copy("./locales", mastercodeVersionPath + "/locales").then(() => {
 
-                    fs.remove(buildTempPath).catch(error => console.error(error));
+                    fs.copy(buildTempPath, mastercodeVersionPath).then(() => {
+                        // console.warn("NOTE: Copied \"" + buildTempPath + "\" to \"" + mastercodeVersionPath + "\".");
+
+                        replaceStrings(mastercodeVersionPath);
+                    }).catch(error => console.error(error));
                 }).catch(error => console.error(error));
             }).catch(error => console.error(error));
         }).catch(error => console.error(error));
 
         buildSinglePortal(allPortalPaths);
 
+    // Comment out following line if you want only copy without build
     }).catch(error => console.error(error));
+    // ^^^
 };

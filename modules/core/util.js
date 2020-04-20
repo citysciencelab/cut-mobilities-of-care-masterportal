@@ -7,6 +7,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         proxyHost: "",
         loaderOverlayTimeoutReference: null,
         loaderOverlayTimeout: 40,
+        // the loaderOverlayCounter has to be set to 1 initialy, because it is shown on start and hidden at the end of app.js
+        loaderOverlayCounter: 1,
         fadeOut: 2000
     },
     /**
@@ -82,7 +84,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "renameKeys": this.renameKeys,
             "renameValues": this.renameValues,
             "pickKeyValuePairs": this.pickKeyValuePairs,
-            "groupBy": this.groupBy
+            "groupBy": this.groupBy,
+            "pick": this.pick,
+            "omit": this.omit,
+            "findWhereJs": this.findWhereJs
         }, this);
 
         channel.on({
@@ -480,10 +485,12 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     showLoader: function () {
+        this.incLoaderOverlayCounter();
         clearTimeout(this.get("loaderOverlayTimeoutReference"));
         this.setLoaderOverlayTimeoutReference(setTimeout(function () {
             Radio.trigger("Util", "hideLoader");
-        }, 1000 * this.get("loaderOverlayTimeout")));
+            this.setLoaderOverlayCounter(0);
+        }.bind(this), 1000 * this.get("loaderOverlayTimeout")));
         $("#loader").show();
     },
 
@@ -492,7 +499,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     hideLoader: function () {
-        $("#loader").hide();
+        this.decLoaderOverlayCounter();
+        if (this.get("loaderOverlayCounter") <= 0) {
+            $("#loader").hide();
+        }
     },
 
     /**
@@ -739,6 +749,84 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     setUiStyle: function (value) {
         this.set("uiStyle", value);
+    },
+
+    /**
+     * sets the loaderOverlayCounter to a specific number
+     * @param {Integer} value the value to set the loaderOverlayCounter to
+     * @returns {Void}  -
+     */
+    setLoaderOverlayCounter: function (value) {
+        this.set("loaderOverlayCounter", value);
+    },
+
+    /**
+     * increments the loaderOverlayCounter
+     * @pre the loaderOverlayCounter is n
+     * @post the loaderOverlayCounter is n + 1
+     * @returns {Void}  -
+     */
+    incLoaderOverlayCounter: function () {
+        this.setLoaderOverlayCounter(this.get("loaderOverlayCounter") + 1);
+    },
+
+    /**
+     * decrements the loaderOverlayCounter
+     * @pre the loaderOverlayCounter is n
+     * @post the loaderOverlayCounter is n - 1
+     * @returns {Void}  -
+     */
+    decLoaderOverlayCounter: function () {
+        this.setLoaderOverlayCounter(this.get("loaderOverlayCounter") - 1);
+    },
+
+    /**
+     * Return a copy of the object, filtered to only have values for the whitelisted keys
+     * (or array of valid keys).
+     * @param {Object} object - the object.
+     * @param {Number[]} keys - the key(s) to search for.
+     * @returns {Object} - returns the entry/entries with the right key/keys.
+     */
+    pick: function (object, keys) {
+        return keys.reduce((obj, key) => {
+            if (object && object.hasOwnProperty(key)) {
+                obj[key] = object[key];
+            }
+            return obj;
+        }, {});
+    },
+
+    /**
+     * Returns a copy of the object, filtered to omit the keys specified
+     * (or array of blacklisted keys).
+     * @param {Object} object - the object.
+     * @param {Number[]} blacklist - blacklisted keys
+     * @returns {Object} - returns the entry/entries without the blacklisted key/keys.
+     */
+    omit: function (object, blacklist) {
+        const keys = Object.keys(object ? object : {}),
+            filteredKeys = keys.filter(key => !blacklist.includes(key)),
+            filteredObj = filteredKeys.reduce((result, key) => {
+                result[key] = object[key];
+                return result;
+            }, {});
+
+        return filteredObj;
+    },
+
+
+    /** Looks through the list and returns the firts value that matches all of the key-value pairs
+     * listed in hitId.
+     * @param {Object[]} [list=[]] - the list.
+     * @param {Object} [findId=""] - the id/entry to search for.
+     * @returns {Object} - returns the first value/entry, that matches.
+     */
+    findWhereJs: function (list = [], findId = "") {
+        return list.find(
+            item => Object.keys({id: findId}).every(
+                key => item[key] === {id: findId}[key]
+            )
+        );
     }
 });
 

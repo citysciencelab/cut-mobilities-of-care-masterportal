@@ -15,6 +15,10 @@ const SearchByCoordView = Backbone.View.extend({
                 }
             }
         });
+
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
     },
     template: _.template(SearchByCoordTemplate),
     render: function (model, value) {

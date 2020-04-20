@@ -872,6 +872,12 @@
  */
 
 /**
+ * @event Core#RadioTriggerObliqueMapIsActivated
+ * @returns {Boolean} - Flag if ObliqueMap is activated.
+ * @example Radio.Trigger("ObliqueMap", "isActivated")
+ */
+
+/**
  * @event Core#RadioTriggerObliqueMapActivateLayer
  * @param {ObliqueLayer} layer ObliqueLayer.
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
@@ -1093,7 +1099,7 @@
  */
 
 
-/** -------------------- ATTRIBUTIONS ----------------- */
+/** -------------------- CONTROLS.ATTRIBUTIONS ----------------- */
 
 /**
  * @event Controls.Attributions#RadioTriggerAttributionsRenderAttributions
@@ -1484,6 +1490,19 @@
  * @description todo
  * @example Radio.request("Util", "copyToClipboard");
  */
+
+/**
+ * @event Core#RadioTriggerUtilPick
+ * @description Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
+ * @example Radio.request("Util", "pick");
+ */
+
+/**
+ * @event Core#RadioTriggerUtilOmit
+ * @description Returns a copy of the object, filtered to omit the keys specified (or array of blacklisted keys).
+ * @example Radio.request("Util", "omit");
+ */
+
 
 /**
  * @event Core#changeIsViewMobile
@@ -2430,4 +2449,24 @@
  * @description Todo
  */
 
+/** -------------------- CONTROLS.ORIENTATION ----------------- */
 
+/**
+ * @event Controls.Orientaion#RadioTriggerGeolocationRemoveOverlay
+ * @description Todo
+ * @example Radio.trigger("geolocation", "removeOverlay");
+ */
+
+/** -------------------- CONTROLS.ORIENTATION.POI ----------------- */
+
+/**
+ * @event Controls.Orientation.Poi#RadioTriggerPOIShowPOIModal
+ * @description Trigger show POI modal.
+ * @example Radio.trigger("POI", "showPOIModal");
+ */
+
+/**
+ * @event Controls.Orientation.Poi#RadioTriggerPOIHidePOIModal
+ * @description Trigger hide POI modal.
+ * @example Radio.trigger("POI", "hidePOIModal");
+ */

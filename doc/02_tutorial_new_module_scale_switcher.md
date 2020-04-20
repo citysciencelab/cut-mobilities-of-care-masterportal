@@ -167,7 +167,7 @@ Dazu werden Default-Werte eingetragen.
 ```js
 
 const ScaleModel = Tool.extend({
-    defaults: {
+    defaults: _.extend({}, Tool.prototype.defaults, {
         glyphicon: "glyphicon-resize-full",
         renderToWindow: true,
         scales: "",

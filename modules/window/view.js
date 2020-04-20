@@ -17,8 +17,10 @@ import "jquery-ui/ui/widgets/draggable";
 const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     events: {
         "click .glyphicon-minus": "minimize",
-        "click .header > .title": "maximize",
+        "click .header-min": "maximize",
         "click .glyphicon-remove": "hide",
+        "touchend .glyphicon-remove": "hide",
+        "touchend .header-min": "maximize",
         "touchmove .title": "touchMoveWindow",
         "touchstart .title": "touchStartWindow",
         "touchend .title": "touchMoveEnd",
@@ -30,6 +32,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * @extends Backbone.View
      * @memberof Window
      * @constructs
+     * @fires Core.ModelList#RadioTriggerModelListToggleDefaultTool
+     * @fires Core#RadioRequestUtilGetUiStyle
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Core.ModelList#RadioTriggerModelListToggleDefaultTool
      * @listens WindowView#changeIsVisible
      * @listens WindowView#changeWinType
@@ -59,12 +64,12 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             }
         });
         this.$el.css({
-            "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
+            "max-height": window.innerHeight - 100 // 100 fixed value for navbar &co.
         });
 
         $(window).resize($.proxy(function () {
             this.$el.css({
-                "max-height": window.innerHeight - 100, // 100 fixer Wert für navbar &co.
+                "max-height": window.innerHeight - 100, // 100 fixed value for navbar &co.
                 "overflow": "auto"
             });
         }, this));
@@ -81,18 +86,31 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     id: "window",
     className: "tool-window ui-widget-content",
     model: new Window(),
+
+    /**
+     * @member templateMax
+     * @description todo
+     * @memberof Window
+     */
     templateMax: _.template(templateMax),
+
+    /**
+     * @member templateTable
+     * @description todo
+     * @memberof Window
+     */
     templateTable: _.template(templateTable),
     dragging: false,
 
     /**
-     * Renders the Window
-     * @return {Window} returns this
+     * Renders the Window.
+     * @fires Core#RadioRequestUtilGetUiStyle
+     * @return {Backbone.View} this context.
      */
     render: function () {
         const attr = this.model.toJSON();
-        var currentClass,
-            currentTableClass;
+        let currentClass = "",
+            currentTableClass = "";
 
         if (this.model.get("isVisible") === true) {
             this.resetSize();
@@ -104,8 +122,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
 
                 this.$el.addClass("table-tool-win-all");
 
-                _.each(currentClass, function (item) {
-
+                currentClass.forEach(item => {
                     if (item.startsWith("table-tool-window")) {
                         currentTableClass = item;
                     }
@@ -147,9 +164,10 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         }
         return this;
     },
+
     /**
-     * Minimizes the Window
-     *  @return {void}
+     * Minimizes the Window.
+     * @returns {void}
      */
     minimize: function () {
         this.model.set("maxPosTop", this.$el.css("top"));
@@ -161,9 +179,10 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         this.$el.draggable("disable");
         this.resetSize();
     },
+
     /**
-     * Maximizes the Window
-     *  @return {void}
+     * Maximizes the Window.
+     * @returns {void}
      */
     maximize: function () {
         if (this.$(".win-body").css("display") === "none") {
@@ -174,21 +193,29 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             this.$el.draggable("enable");
         }
     },
+
     /**
-     * Hides the Window
-     *  @return {void}
+     * Hides the Window.
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @fires Core.ModelList#RadioTriggerModelListToggleDefaultTool
+     * @param {event} event - Event
+     * @return {void}
      */
-    hide: function () {
-        var toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
+    hide: function (event) {
+        const toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
+
+        // Dont let event bubble to .header element which would trigger maximize again!
+        event.stopPropagation();
 
         if (toolModel) {
             toolModel.setIsActive(false);
             Radio.trigger("ModelList", "toggleDefaultTool");
         }
     },
+
     /**
-     * Triggered on TouchStart
-     * @param {Event} evt Event, window being touched
+     * Triggered on TouchStart.
+     * @param {event} evt - Event, window being touched.
      * @return {void}
      */
     touchStartWindow: function (evt) {
@@ -202,9 +229,10 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
 
         evt.preventDefault();
     },
+
     /**
-     * Triggered on TouchMove
-     * @param {Event} evt Event of moved window
+     * Triggered on TouchMove.
+     * @param {event} evt - Event of moved window.
      * @return {void}
      */
     touchMoveWindow: function (evt) {
@@ -226,8 +254,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
 
         evt.preventDefault();
     },
+
     /**
-     * Triggered on TouchEnd
+     * Triggered on TouchEnd.
      * @return {void}
      */
     touchMoveEnd: function () {
@@ -235,14 +264,15 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
             "width": ""
         });
     },
+
     /**
-     * Function to calculate the new left and top positions
-     * @param {Object} touch Object containing the touch attributes
-     * @param {Number} width Window width
-     * @param {Number} height Window height
-     * @param {Number} mapWidth Width of the map
-     * @param {Number} mapHeight Height of the map
-     * @return {Object} newPosition Object containing the new position
+     * Function to calculate the new left and top positions.
+     * @param {Object} touch Object containing the touch attributes.
+     * @param {Number} width Window width.
+     * @param {Number} height Window height.
+     * @param {Number} mapWidth Width of the map.
+     * @param {Number} mapHeight Height of the map.
+     * @return {Object} newPosition Object containing the new position.
      */
     getNewPosition: function (touch, width, height, mapWidth, mapHeight) {
         const distX = parseInt(touch.clientX, 10) - this.model.get("startX"),
@@ -362,8 +392,8 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     },
 
     /**
-     * Triggered onpointerdown .glyphicon-triangle-right
-     * @description sets dragging prop true, all pointer movements trigger resizeWindowMove until released
+     * Triggered onpointerdown .glyphicon-triangle-right.
+     * Sets dragging prop true, all pointer movements trigger resizeWindowMove until released.
      * @returns {void}
      */
     resizeWindowStart: function () {
@@ -376,9 +406,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     },
 
     /**
-     * triggers onpointermove if dragging prop is truthy
-     * @description resizes the Window if cursor is not outside the #map
-     * @param {Event} evt the pointerEvent on window Object
+     * Triggers onpointermove if dragging prop is truthy.
+     * Resizes the Window if cursor is not outside the #map.
+     * @param {event} evt - The pointerEvent on window Object.
      * @returns {void}
      */
     resizeWindowMove: function (evt) {
@@ -396,8 +426,8 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     },
 
     /**
-     * triggers onpointerup on Window Object
-     * @description sets dragging property false, ends resizing
+     * Triggers onpointerup on Window Object.
+     * Sets dragging property false, ends resizing.
      * @returns {void}
      */
     resizeWindowEnd: function () {
@@ -406,7 +436,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
     },
 
     /**
-     * resets the size to the css defined values when the window is reopened
+     * Resets the size to the css defined values when the window is reopened.
      * @returns {void}
      */
     resetSize: function () {

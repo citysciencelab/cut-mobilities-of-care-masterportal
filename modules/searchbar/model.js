@@ -15,6 +15,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         i18nextTranslate: null,
         buttonSearchTitle: "",
         buttonOpenHelpTitle: "",
+        tempCounter: 0,
+        timeoutReference: null,
         showAllResultsText: ""
     },
 

@@ -9,12 +9,6 @@
             ],
             "resolution": 5.2916638091682096
         },
-        "portalTitle": {
-            "title": "MasterDefault",
-            "logo": "https://geoportal-hamburg.de/lgv-config/img/hh-logo.png",
-            "link": "https://geoinfo.hamburg.de",
-            "toolTip": "Freie und Hansestadt Hamburg"
-        },
         "searchBar": {
             "minChars": 3,
             "placeholder": "translate#common:modules.searchbar.placeholder.addressTopicParcel",
@@ -26,6 +20,30 @@
                 "searchHouseNumbers": true,
                 "searchDistricts": true,
                 "searchParcels": true
+            },
+            "elasticSearch": {
+              "minChars":3,
+              "serviceId":"elastic_test",
+              "type": "GET",
+              "payload": {
+                 "id":"query",
+                 "params":{
+                    "query_string":""
+                 }
+              },
+              "searchStringAttribute": "query_string",
+              "responseEntryPath": "hits.hits",
+              "triggerEvent": {
+                 "channel": "Parser",
+                 "event": "addGdiLayer"
+              },
+              "hitMap": {
+                 "name": "_source.name",
+                 "id": "_source.id",
+                 "source": "_source"
+              },
+              "hitType": "Fachthema",
+              "hitGlyphicon": "glyphicon-list"
             },
             "tree": {
                 "minChars": 3
@@ -51,6 +69,10 @@
                         "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
                         "parcelDenominator": false
                     },
+                    "addWMS":{
+                        "name": "translate#common:menu.tools.addWms",
+                        "glyphicon":"glyphicon-plus"
+                     },
                     "measure": {
                         "name": "translate#common:menu.tools.measure",
                         "glyphicon": "glyphicon-resize-full"
@@ -136,7 +158,8 @@
             "attributions": true,
             "buttonOblique": true
         },
-        "treeType": "default"
+        "treeType": "default",
+        "singleBaselayer": true
     },
     "Themenconfig": {
         "Hintergrundkarten": {
@@ -283,6 +306,25 @@
                 {
                     "id": "453",
                     "visibility": true
+                }
+            ]
+        },
+        "Fachdaten_3D":{
+            "Layer":[
+                {
+                    "id":"12883",
+                    "name":"Gelände",
+                    "visibility":true
+                },
+                {
+                    "id":"16101",
+                    "name":"Brueckenflaechen HH",
+                    "visibility":true
+                },
+                {
+                    "id":"12884",
+                    "name":"Gebäude LoD2",
+                    "visibility":true
                 }
             ]
         }

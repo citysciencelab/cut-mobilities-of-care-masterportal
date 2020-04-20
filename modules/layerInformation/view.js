@@ -71,6 +71,9 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
         const contentId = $(evt.currentTarget).attr("value");
         let tabContentId;
 
+        // prevent IE for moving whole screen
+        evt.preventDefault();
+
         // deactivate all tabs and their contents
         $(evt.currentTarget).parent().find("li").each(function (index, li) {
             tabContentId = $(li).attr("value");
