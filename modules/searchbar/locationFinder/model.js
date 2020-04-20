@@ -92,8 +92,8 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
         }
 
         // Set target CRS
-        if (this.get("sref")) {
-            payload.sref = this.get("sref");
+        if (this.get("spatialReference")) {
+            payload.sref = this.get("spatialReference");
         }
         else {
             payload.sref = Radio.request("MapView", "getProjection").getCode();

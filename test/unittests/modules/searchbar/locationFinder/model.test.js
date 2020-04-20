@@ -16,7 +16,7 @@ describe("modules/searchbar/locationFinder", function () {
 
         it("Build URL and payload", function () {
 
-            model.set("sref", "testEpsgCode");
+            model.set("spatialReference", "testEpsgCode");
 
             model.sendRequest = function (url, payload) {
                 expect(url).to.eq("testServiceUrl/Lookup");
@@ -32,7 +32,7 @@ describe("modules/searchbar/locationFinder", function () {
         it("Build URL and payload with filter", function () {
 
             model.set("classes", ["Adresse", "Straßenname"]);
-            model.set("sref", "testEpsgCode");
+            model.set("spatialReference", "testEpsgCode");
 
             model.sendRequest = function (url, payload) {
                 expect(url).to.eq("testServiceUrl/Lookup");
