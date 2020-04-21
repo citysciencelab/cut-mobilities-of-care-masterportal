@@ -45,7 +45,15 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import ImportView from "../modules/tools/kmlImport/view";
+/**
+ * WFSFeatureFilterView
+ * @deprecated in 3.0.0
+ */
 import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
+/**
+ * ExtendedFilterView
+ * @deprecated in 3.0.0
+ */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
@@ -54,11 +62,13 @@ import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
-
-// @deprecated in version 3.0.0
-// remove "version" in doc and config.
-// rename "print_" to "print"
-// only load PrintView
+/**
+ * PrintView2
+ * @deprecated in 3.0.0
+ * remove "version" in doc and config.
+ * rename "print_" to "print"
+ * only load PrintView
+ */
 import PrintView2 from "../modules/tools/print/view";
 // controls
 import ControlsView from "../modules/controls/view";
@@ -227,10 +237,13 @@ function loadApp () {
                 break;
             }
             case "print": {
-                // @deprecated in version 3.0.0
-                // remove "version" in doc and config.
-                // rename "print_" to "print"
-                // only load correct view
+                /**
+                 * PrintView2
+                 * @deprecated in 3.0.0
+                 * remove "version" in doc and config.
+                 * rename "print_" to "print"
+                 * only load correct view
+                 */
                 if (tool.has("version") && (tool.get("version") === "mapfish_print_3" || tool.get("version") === "HighResolutionPlotService")) {
                     new PrintView({model: tool});
                 }
@@ -255,10 +268,18 @@ function loadApp () {
                 new ImportView({model: tool});
                 break;
             }
+            /**
+             * wfsFeatureFilter
+             * @deprecated in 3.0.0
+             */
             case "wfsFeatureFilter": {
                 new WFSFeatureFilterView({model: tool});
                 break;
             }
+            /**
+             * extendedFilter
+             * @deprecated in 3.0.0
+             */
             case "extendedFilter": {
                 new ExtendedFilterView({model: tool});
                 break;

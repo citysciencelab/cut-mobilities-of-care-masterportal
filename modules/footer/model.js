@@ -38,7 +38,11 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
      * @returns {Void}  -
      */
     changeLang: function (lng) {
-        const urls = this.get("urls");
+        let urls = this.get("urls");
+
+        if (!Array.isArray(urls)) {
+            urls = [];
+        }
 
         urls.forEach(function (url) {
             if (url.aliasKey) {
@@ -49,7 +53,12 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
                 url.alias = i18next.t(url.aliasKey);
             }
         }, this);
-        urls[0].bezeichnung = i18next.t("common:modules.footer.designation");
+
+
+        if (urls.length > 0) {
+            urls[0].bezeichnung = i18next.t("common:modules.footer.designation");
+        }
+
         this.set({
             urls: urls,
             versionText: i18next.t("common:modules.footer.version"),

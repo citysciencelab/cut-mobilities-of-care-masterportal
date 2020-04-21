@@ -46,7 +46,6 @@
     "moment": "2.x",
     "mqtt": "^2.15.x",
     "olcs": "^2.10.0",
-    "underscore": "1.x",
     "url-polyfill": "^1.1.8",
     "vcs-oblique": "^2.0.1",
     "video.js": "6.x",
