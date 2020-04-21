@@ -43,7 +43,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
      */
     initialize: function () {
         const ids = this.model.get("layerIds"),
-            incorrectIds = this.model.checkLayerConfig(ids);
+            incorrectIds = this.model.getIncorrectConfiguredLayerIds(ids);
 
         this.model.setIncorrectConfigLayers(incorrectIds);
 

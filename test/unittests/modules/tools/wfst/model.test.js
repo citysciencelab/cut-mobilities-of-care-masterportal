@@ -6,7 +6,7 @@ import Util from "@testUtil";
 import {Draw} from "ol/interaction.js";
 
 describe("WfstModel", function () {
-    var model,
+    let model,
         utilModel,
         dftNonHierXml,
         dftNonHierXmlPrefix,
@@ -25,7 +25,7 @@ describe("WfstModel", function () {
         drawLayer;
 
     before(function () {
-        var dftNonHierarchicalResponse,
+        let dftNonHierarchicalResponse,
             dftNonHierarchicalResponsePrefix,
             dftHierarchicalResponse,
             dftHierarchicalResponsePrefix,
@@ -36,8 +36,8 @@ describe("WfstModel", function () {
             wfstFieldsStr,
             newField,
             transactionJqXHRFile,
-            vectorLayer = Radio.request("Map", "createLayerIfNotExists", "wfst_Layer"),
             drawAttr;
+        const vectorLayer = Radio.request("Map", "createLayerIfNotExists", "wfst_Layer");
 
         model = new Model();
         utilModel = new Util();
@@ -87,7 +87,7 @@ describe("WfstModel", function () {
         });
         model.set("wfstFields", wfstFields);
 
-        // Example responses for transactions witht the wfst service
+        // Example responses for transactions with the wfst service
         transactionResponseInsert = utilModel.parseXML(utilModel.getFile("resources/testTransactionResponseInsert.xml"));
         transactionResponseDelete = utilModel.parseXML(utilModel.getFile("resources/testTransactionResponseDelete.xml"));
         transactionResponseUpdate = utilModel.parseXML(utilModel.getFile("resources/testTransactionResponseUpdate.xml"));
@@ -127,19 +127,19 @@ describe("WfstModel", function () {
 
     describe("handleEditDeleteBtn", function () {
         it("should return an Array with the passed configurations for displaying the delete and edit buttons and their captions.", function () {
-            var deleteConfig = "TestCaption",
+            const deleteConfig = "TestCaption",
                 editConfig = false,
                 result = [[true, false], ["TestCaption", "Geometrie bearbeiten"]];
 
             expect(model.handleEditDeleteButton(deleteConfig, editConfig)).to.deep.equal(result);
         });
         it("should return an Array with the default configutations for displaying the delete and edit buttons and their captions if no configurations was made.", function () {
-            var result = [[true, true], ["Geometrie löschen", "Geometrie bearbeiten"]];
+            const result = [[true, true], ["Geometrie löschen", "Geometrie bearbeiten"]];
 
             expect(model.handleEditDeleteButton(undefined, undefined)).to.deep.equal(result);
         });
         it("should return an Array with the default configutations for displaying the delete and edit buttons and their captions if the passed configuration is null.", function () {
-            var deleteConfig = null,
+            const deleteConfig = null,
                 editConfig = null,
                 result = [[true, true], ["Geometrie löschen", "Geometrie bearbeiten"]];
 
@@ -147,33 +147,33 @@ describe("WfstModel", function () {
         });
     });
     describe("checkLayerConfig", function () {
-        it("should return an empty array, if all passed active layers are configured correct.", function () {
+        it("should return false, if the passed active layer is configured correct.", function () {
             // Todo
             // benötigt WFS Layer
         });
-        it("should return an empty object, if no layers were passed.", function () {
+        it("should return false, if no layer was passed.", function () {
             // Todo
             // benötigt WFS Layer
         });
-        it("should return an empty object, if all passed active layers are undefined.", function () {
+        it("should return false, if the passed active layer is undefined.", function () {
             // Todo
             // benötigt WFS Layer
         });
-        it("should return an array wit all incorrect configured layers.", function () {
+        it("should return true, if the passed layer is configured incorrectly.", function () {
             // Todo
             // benötigt WFS Layer
         });
     });
     describe("handleAvailableLayers", function () {
         it("should return an empty Array if no layerIds were given", function () {
-            var ids = [],
+            const ids = [],
                 initialAlertCases = ["AvailableLayers"];
 
             model.set("initialAlertCases", ["AvailableLayers"]);
             expect(model.handleAvailableLayers(ids, initialAlertCases)).to.be.empty;
         });
         it("should return the error case 'AvailableLayers' if no layerIds were configured.", function () {
-            var ids = [],
+            const ids = [],
                 initialAlertCases = [],
                 alertCase = "AvailableLayers";
 
@@ -182,7 +182,7 @@ describe("WfstModel", function () {
             expect(model.get("initialAlertCases")).to.include(alertCase);
         });
         it("should return the error case 'AvailableLayers' only once if no layerIds were configured and the error case is already existing in the initialAlertCase parameter.", function () {
-            var ids = [],
+            const ids = [],
                 initialAlertCases = ["AvailableLayers"],
                 result = ["AvailableLayers"];
 
@@ -191,13 +191,13 @@ describe("WfstModel", function () {
             expect(model.get("initialAlertCases")).to.deep.equal(result);
         });
         it("should return an empty Array if the passed layerIds are undefined.", function () {
-            var initialAlertCases = ["AvailableLayers"];
+            const initialAlertCases = ["AvailableLayers"];
 
             model.set("initialAlertCases", ["AvailableLayers"]);
             expect(model.handleAvailableLayers(undefined, initialAlertCases)).to.be.empty;
         });
         it("should return the configured LayerIds", function () {
-            var ids = ["123", "456", "789"],
+            const ids = ["123", "456", "789"],
                 initialAlertCases = [],
                 result = ["123", "456", "789"];
 
@@ -207,7 +207,7 @@ describe("WfstModel", function () {
     });
     describe("checkActiveLayers", function () {
         it("should return the passed object, if all passed active layers are configured correct", function () {
-            var activeLayers = {
+            const activeLayers = {
                     "682": "Kindertagesstaetten",
                     "1731": "Krankenhäuser Hamburg"
                 },
@@ -216,19 +216,19 @@ describe("WfstModel", function () {
             expect(model.checkActiveLayers(activeLayers, incorrectConfigLayers)).to.deep.equal(activeLayers);
         });
         it("should return an empty object, if no active layer was passed", function () {
-            var activeLayers = {},
+            const activeLayers = {},
                 incorrectConfigLayers = [];
 
             expect(model.checkActiveLayers(activeLayers, incorrectConfigLayers)).to.be.empty;
         });
         it("should return an empty object, if all passed active layers are undefined", function () {
-            var incorrectConfigLayers = [];
+            const incorrectConfigLayers = [];
 
             expect(model.checkActiveLayers(undefined, incorrectConfigLayers)).to.be.empty;
         });
         it("should return an empty object, if all passed active layers are configured incorrect", function () {
-            var activeLayers = {},
-                incorrectConfigLayers = ["682", "1731"];
+            let activeLayers = {};
+            const incorrectConfigLayers = ["682", "1731"];
 
             activeLayers["682"] = "Kindertagesstaetten";
             activeLayers["1731"] = "Krankenhäuser Hamburg";
@@ -238,18 +238,18 @@ describe("WfstModel", function () {
     });
     describe("getActiveLayers", function () {
         it("should return no layer if none is selected in the layer tree", function () {
-            var ids = ["683", "1933"];
+            const ids = ["683", "1933"];
 
             expect(model.getActiveLayers(ids)).to.be.empty;
         });
         it("should return no layer if no layer was configured", function () {
-            var ids = [];
+            const ids = [];
 
             expect(model.getActiveLayers(ids)).to.be.empty;
         });
         it("should return the layers that are selected in the layer tree", function () {
-            var layerNames = {},
-                ids = ["682", "1731", "1933"];
+            let layerNames = {};
+            const ids = ["682", "1731", "1933"];
 
             layerNames[682] = "Kindertagesstaetten";
             layerNames[1731] = "Krankenhäuser Hamburg";
@@ -260,20 +260,20 @@ describe("WfstModel", function () {
     });
     describe("getSelectedLayer", function () {
         it("should return null if the passed activeLayer Object is empty", function () {
-            var activeLayers = {},
+            const activeLayers = {},
                 firstId = null;
 
             expect(model.getSelectedLayer(activeLayers)).to.deep.equal(firstId);
         });
         it("should return null if the passed activeLayer Object is null", function () {
-            var activeLayers = null,
+            const activeLayers = null,
                 firstId = null;
 
             expect(model.getSelectedLayer(activeLayers)).to.deep.equal(firstId);
         });
         it("should return the id of the first layer in the passed activeLayer Object if it contains at least one active layer", function () {
-            var activeLayers = {},
-                firstId = "682";
+            let activeLayers = {};
+            const firstId = "682";
 
             activeLayers[682] = "Kindertagesstaetten";
             activeLayers[1731] = "Krankenhäuser Hamburg";
@@ -282,7 +282,7 @@ describe("WfstModel", function () {
     });
     describe("getCurrentLayer", function () {
         it("should return the current active Layer", function () {
-            var currentLayer = Radio.request("ModelList", "getModelByAttributes", {id: model.get("currentLayerId")});
+            const currentLayer = Radio.request("ModelList", "getModelByAttributes", {id: model.get("currentLayerId")});
 
             // durch WFS Layer ersetzen
             expect(model.getCurrentLayer()).to.deep.equal(currentLayer);
@@ -295,26 +295,26 @@ describe("WfstModel", function () {
     });
     describe("getAlertMessage", function () {
         it("should return the appropriate error message for the passed error case", function () {
-            var alertCase = "decimalError",
+            const alertCase = "decimalError",
                 errorMessage = "Bitte geben Sie nur Dezimalzahlen ein! Das Dezimal-Trennzeichen ist ein Komma.";
 
             expect(model.getAlertMessage(alertCase)).is.equal(errorMessage);
         });
         it("should return an empty String if the passed error Case is empty", function () {
-            var alertCase = "",
+            const alertCase = "",
                 errorMessage = "";
 
             expect(model.getAlertMessage(alertCase)).is.equal(errorMessage);
         });
         it("should return an empty String if the passed error Case is undefined or null", function () {
-            var errorMessage = "";
+            const errorMessage = "";
 
             expect(model.getAlertMessage(undefined)).is.equal(errorMessage);
         });
     });
     describe("getLayerParams", function () {
         it("should return an empty object, if the passed layer is empty", function () {
-            var wfsLayer = {};
+            const wfsLayer = {};
 
             expect(model.getLayerParams(wfsLayer)).to.be.empty;
         });
@@ -323,7 +323,7 @@ describe("WfstModel", function () {
             expect(model.getLayerParams(undefined)).to.be.empty;
         });
         it("should return the respective attributes of the passed layer", function () {
-            var wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: "682"}),
+            const wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: "682"}),
                 result = {
                     url: "https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung",
                     version: "1.3.0",
@@ -339,11 +339,11 @@ describe("WfstModel", function () {
     });
     describe("parseResponse", function () {
         it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a non-hierarchical XML Schema.", function () {
-            var featureTypename = "wfstest",
+            const featureTypename = "wfstest",
                 response = model.parseResponse(dftNonHierXml, featureTypename),
-                responseNames = [],
-                i = 0,
                 result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
+            let responseNames = [],
+                i = 0;
 
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
@@ -352,11 +352,11 @@ describe("WfstModel", function () {
             expect(responseNames).to.deep.equal(result);
         });
         it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a non-hierarchical XML Schema and uses a prefix.", function () {
-            var featureTypename = "wfstest",
+            const featureTypename = "wfstest",
                 response = model.parseResponse(dftNonHierXmlPrefix, featureTypename),
-                responseNames = [],
-                i = 0,
                 result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
+            let responseNames = [],
+                i = 0;
 
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
@@ -365,12 +365,12 @@ describe("WfstModel", function () {
             expect(responseNames).to.deep.equal(result);
         });
         it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a hierarchical XML Schema.", function () {
-            var featureTypename = "wfstest",
+            const featureTypename = "wfstest",
                 response = model.parseResponse(dftHierXml, featureTypename),
-                responseNames = [],
-                i = 0,
                 result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
-
+            let responseNames = [],
+                i = 0;
+                
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
                 i++;
@@ -378,11 +378,11 @@ describe("WfstModel", function () {
             expect(responseNames).to.deep.equal(result);
         });
         it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a hierarchical XML Schema and uses a prefix.", function () {
-            var featureTypename = "wfstest",
+            const featureTypename = "wfstest",
                 response = model.parseResponse(dftHierXmlPrefix, featureTypename),
-                responseNames = [],
-                i = 0,
                 result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
+            let responseNames = [],
+                i = 0;
 
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
@@ -391,14 +391,14 @@ describe("WfstModel", function () {
             expect(responseNames).to.deep.equal(result);
         });
         it("should return an empty array, if the passed DescribeFeatureType response is undefined.", function () {
-            var featureTypename = "wfstest";
+            const featureTypename = "wfstest";
 
             expect(model.parseResponse(undefined, featureTypename)).to.be.empty;
         });
     });
     describe("filterInputFields", function () {
         it("should return an array with all attributes of the feature type, if the value of gfiAttributes is 'showAll'.", function () {
-            var gfiAttributesS = "showAll",
+            const gfiAttributesS = "showAll",
                 result = [
                     {
                         "field": "name",
@@ -433,7 +433,7 @@ describe("WfstModel", function () {
             expect(model.filterInputFields(gfiAttributesS, attributeFields)).to.deep.equal(result);
         });
         it("should return an empty array, if the value of gfiAttributes is 'ignore'.", function () {
-            var gfiAttributesI = "ignore";
+            const gfiAttributesI = "ignore";
 
             expect(model.filterInputFields(gfiAttributesI, attributeFields)).to.be.empty;
         });
@@ -441,7 +441,7 @@ describe("WfstModel", function () {
             expect(model.filterInputFields(undefined, attributeFields)).to.be.empty;
         });
         it("should return an array with the attributes of the feature type that are contained in gfiAttributes.", function () {
-            var result = [
+            const result = [
                 {
                     "field": "name",
                     "caption": "Name"
@@ -477,7 +477,7 @@ describe("WfstModel", function () {
     });
     describe("getGeometryName", function () {
         it("should return null, if the passed attributeFields are empty.", function () {
-            var attributeFieldsEmpty = [];
+            const attributeFieldsEmpty = [];
 
             expect(model.getGeometryName(attributeFieldsEmpty)).to.be.null;
         });
@@ -485,14 +485,14 @@ describe("WfstModel", function () {
             expect(model.getGeometryName(undefined)).to.be.null;
         });
         it("should return the name of the geometry, if the passed parameter contains the geometry attribute.", function () {
-            var geometry = "geom";
+            const geometry = "geom";
 
             expect(model.getGeometryName(attributeFields)).to.deep.equal(geometry);
         });
     });
     describe("getTypeOfInputFields", function () {
         it("should return an Object with inputfield type and the type of each feature attribute in the passed object.", function () {
-            var result = {
+            const result = {
                 "name": {"fieldType": "text", "type": "string"},
                 "vorhaben": {"fieldType": "text", "type": "string"},
                 "anfragedatum": {"fieldType": "date", "type": "date"},
@@ -505,7 +505,7 @@ describe("WfstModel", function () {
             expect(model.getTypeOfInputFields(attributeFields)).to.deep.equal(result);
         });
         it("should return an empty Object if the passed parameter attributeFields is empty.", function () {
-            var attributeFieldsEmpty = [];
+            const attributeFieldsEmpty = [];
 
             expect(model.getTypeOfInputFields(attributeFieldsEmpty)).to.be.empty;
         });
@@ -515,7 +515,7 @@ describe("WfstModel", function () {
     });
     describe("getMandatoryFields", function () {
         it("should return an array with true for the attributes where 'minOccurs' is not existing or 'minOccurs' is equal to 1 and with false for the attributes where 'minOccurs' is equal to 0.", function () {
-            var result = [];
+            let result = [];
 
             result.geom = true;
             result.name = true;
@@ -529,14 +529,14 @@ describe("WfstModel", function () {
             expect(model.getMandatoryFields(attributeFields)).to.deep.equal(result);
         });
         it("should return an empty array, if the passed object is empty.", function () {
-            var attributeFieldsEmpty = [];
+            const attributeFieldsEmpty = [];
 
             expect(model.getMandatoryFields(attributeFieldsEmpty)).to.be.empty;
         });
     });
     describe("handleInputFields", function () {
         it("should return an empty array, if one of the passed objects is undefined.", function () {
-            var fields = [
+            const fields = [
                     {
                         "field": "name",
                         "caption": "Name"
@@ -579,7 +579,7 @@ describe("WfstModel", function () {
             expect(model.handleInputFields(fields, type, undefined)).to.be.empty;
         });
         it("should return an array with default values for the attribute type and the mandatory flag, if the passed type or the mandatory object do not contain a value for an attribute.", function () {
-            var fields = [
+            const fields = [
                     {
                         "field": "name",
                         "caption": "Name"
@@ -616,8 +616,8 @@ describe("WfstModel", function () {
                     "vorgangsnummer": {"fieldType": "text", "type": "integer"},
                     "testnummer": {"fieldType": "text", "type": "decimal"},
                     "istest": {"fieldType": "checkbox", "type": "boolean"}
-                },
-                mandatory = [];
+                };
+            let mandatory = [];
 
             mandatory.geom = true;
             mandatory.name = true;
@@ -630,7 +630,7 @@ describe("WfstModel", function () {
             expect(model.handleInputFields(fields, type, mandatory)).to.deep.equal(wfstFields);
         });
         it("should return an array with all attributes of the feature type, that are specified in gfiAttributes and the attribute type and if the attribute is mandatory or not.", function () {
-            var fields = [
+            const fields = [
                     {
                         "field": "name",
                         "caption": "Name"
@@ -668,8 +668,8 @@ describe("WfstModel", function () {
                     "vorgangsnummer": {"fieldType": "text", "type": "integer"},
                     "testnummer": {"fieldType": "text", "type": "decimal"},
                     "istest": {"fieldType": "checkbox", "type": "boolean"}
-                },
-                mandatory = [];
+                };
+            let mandatory = [];
 
             mandatory.geom = true;
             mandatory.name = true;
@@ -685,13 +685,13 @@ describe("WfstModel", function () {
     });
     describe("getButtonTitleConfigs", function () {
         it("should return the default captions for all Buttons and the Layer Select if no configuration was made", function () {
-            var buttons = [undefined, undefined, undefined],
+            const buttons = [undefined, undefined, undefined],
                 btnCaptConfs = ["Punkt erfassen", "Linie erfassen", "Fläche erfassen", "aktueller Layer:"];
 
             expect(model.getButtonTitleConfigs(undefined, buttons, btnCaptConfs)).to.deep.equal(btnCaptConfs);
         });
         it("should return the new caption for the Layer Select of the model", function () {
-            var layerSelect = "Wfs-t Feature Types",
+            const layerSelect = "Wfs-t Feature Types",
                 buttons = [true, false, true],
                 btnCaptConfs = ["Punkt-Test", "Linie erfassen", "Fläche erfassen", "aktueller Layer:"],
                 result = ["Punkt-Test", "Linie erfassen", "Fläche erfassen", "Wfs-t Feature Types"];
@@ -699,7 +699,7 @@ describe("WfstModel", function () {
             expect(model.getButtonTitleConfigs(layerSelect, buttons, btnCaptConfs)).to.deep.equal(result);
         });
         it("should return the new caption for the Point Button of the model", function () {
-            var buttons = [[{"layerId": "682", "caption": "Baum erfassen", "show": true}], false, true],
+            const buttons = [[{"layerId": "682", "caption": "Baum erfassen", "show": true}], false, true],
                 btnCaptConfs = ["Punkt-Test", "Linie erfassen", "Fläche erfassen", "aktueller Layer:"],
                 layerId = "682",
                 result = ["Baum erfassen", "Linie erfassen", "Fläche erfassen", "aktueller Layer:"];
@@ -709,7 +709,7 @@ describe("WfstModel", function () {
     });
     describe("getButtonConfig", function () {
         it("should return true for the point button configuration and false for the configuration of the other buttons, if the passed layers geometry is point.", function () {
-            var buttons = [
+            const buttons = [
                     [
                         {
                             "layerId": "123",
@@ -731,7 +731,7 @@ describe("WfstModel", function () {
             expect(model.getButtonConfig(attributeFieldsPointGeom, layerId, buttons)).to.deep.equal(result);
         });
         it("should return an array with the configurations made for the point, line and area button, if the passed layers geometry is not of a special type.", function () {
-            var buttons = [
+            const buttons = [
                     [
                         {
                             "layerId": "123",
@@ -753,7 +753,7 @@ describe("WfstModel", function () {
             expect(model.getButtonConfig(attributeFields, layerId, buttons)).to.deep.equal(result);
         });
         it("should return an array with the configurations made for the point, line and area button, if the passed attributeFields are empty and the layers geometry is not of a special type.", function () {
-            var attributeFieldsEmpty = [],
+            const attributeFieldsEmpty = [],
                 buttons = [
                     [
                         {
@@ -776,7 +776,7 @@ describe("WfstModel", function () {
             expect(model.getButtonConfig(attributeFieldsEmpty, layerId, buttons)).to.deep.equal(result);
         });
         it("should return an array with the default configurations for the point, line and area button, if the passed layers geometry is not of a special type and no configurations were made.", function () {
-            var buttons = [undefined, undefined, undefined],
+            const buttons = [undefined, undefined, undefined],
                 layerId = "123",
                 result = [true, true, true];
 
@@ -785,25 +785,25 @@ describe("WfstModel", function () {
     });
     describe("getFieldType", function () {
         it("should return the type of the requestet input field", function () {
-            var id = "name";
+            const id = "name";
 
             expect(model.getFieldType(id, wfstFields)).to.deep.equal("string");
         });
         it("should return undefined if the passed wfstFields are empty", function () {
-            var wfstFieldsEmpty = [],
+            const wfstFieldsEmpty = [],
                 id = "name";
 
             expect(model.getFieldType(id, wfstFieldsEmpty)).to.be.undefined;
         });
         it("should return undefined if the passed id is undefined or is not included in the wfstFields", function () {
-            var id;
+            const id = undefined;
 
             expect(model.getFieldType(id, wfstFields)).to.be.undefined;
         });
     });
     describe("handleFeatureAttributes", function () {
         it("should set the feature properties from the input fields", function () {
-            var featureProperties = {
+            const featureProperties = {
                     "active": true,
                     "name": "",
                     "geom": "",
@@ -831,7 +831,7 @@ describe("WfstModel", function () {
             expect(model.handleFeatureAttributes(featureProperties, id, inputValue)).to.deep.equal(result);
         });
         it("should not set the feature properties from the input fields if the input value is no string or boolean", function () {
-            var featureProperties = {
+            const featureProperties = {
                     "active": true,
                     "name": "",
                     "geom": "",
@@ -848,7 +848,7 @@ describe("WfstModel", function () {
             expect(model.handleFeatureAttributes(featureProperties, id, inputValue)).to.deep.equal(featureProperties);
         });
         it("should not set the feature properties from the input fields if the passed id is not of type string", function () {
-            var featureProperties = {
+            const featureProperties = {
                     "active": true,
                     "name": "",
                     "geom": "",
@@ -881,19 +881,19 @@ describe("WfstModel", function () {
     });
     describe("getActionType", function () {
         it("should return 'update' if the current executet transaction is update.", function () {
-            var activeButton = "wfst-module-recordButton-save",
+            const activeButton = "wfst-module-recordButton-save",
                 result = "update";
 
             expect(model.getActionType(features[0], activeButton)).to.deep.equal(result);
         });
         it("should return 'delete' if the current executet transaction is delete.", function () {
-            var activeButton = "wfst-module-recordButton-delete",
+            const activeButton = "wfst-module-recordButton-delete",
                 result = "delete";
 
             expect(model.getActionType(features[0], activeButton)).to.deep.equal(result);
         });
         it("should return undefined if the passed feature is empty and the passed active button is the save button.", function () {
-            var featureEmpty = {},
+            const featureEmpty = {},
                 activeButton = "wfst-module-recordButton-save";
 
             expect(model.getActionType(featureEmpty, activeButton)).to.be.undefined;
@@ -904,28 +904,28 @@ describe("WfstModel", function () {
     });
     describe("proofConditions", function () {
         it("should return true if all mandatory fields are filled and a geometry was created.", function () {
-            var geometryName = "geom";
+            const geometryName = "geom";
 
             expect(model.proofConditions(features[0], wfstFields, geometryName)).to.be.true;
         });
         it("should return false if a mandatory field is not filled but a geometry was created.", function () {
-            var geometryName = "geom";
+            const geometryName = "geom";
 
             expect(model.proofConditions(features[2], wfstFields, geometryName)).to.be.false;
         });
         it("should return false if all mandatory fields are filled, but no geometry was created.", function () {
-            var geometryName = "geom";
+            const geometryName = "geom";
 
             expect(model.proofConditions(drawLayer, wfstFields, geometryName)).to.be.false;
         });
         it("should return false if the passed feature is empty.", function () {
-            var featureEmpty = {},
+            const featureEmpty = {},
                 geometryName = "geom";
 
             expect(model.proofConditions(featureEmpty, wfstFields, geometryName)).to.be.false;
         });
         it("should return false if the passed wfstFields are empty.", function () {
-            var wfstFieldsEmpty = {},
+            const wfstFieldsEmpty = {},
                 geometryName = "geom";
 
             expect(model.proofConditions(features[0], wfstFieldsEmpty, geometryName)).to.be.false;
@@ -933,7 +933,7 @@ describe("WfstModel", function () {
     });
     describe("handleFeatureProperties", function () {
         it("should return the feature with correct ordered properties, if the passed feature has missing properties.", function () {
-            var featureProperties = {
+            const featureProperties = {
                     "name": "Test handleFeatureProperties 1",
                     "vorhaben": "Testen",
                     "anfragedatum": "2020-02-18",
@@ -957,7 +957,7 @@ describe("WfstModel", function () {
             expect(correctedFeature.getProperties()).to.deep.equal(result);
         });
         it("should return the feature with correct ordered properties, if some of the passed feature properties do not have values", function () {
-            var featureProperties = {
+            const featureProperties = {
                     "name": "Test handleFeatureProperties 2",
                     "vorhaben": "Testen",
                     "anfragedatum": "2020-02-18",
@@ -981,7 +981,7 @@ describe("WfstModel", function () {
             expect(correctedFeature.getProperties()).to.deep.equal(result);
         });
         it("should return the passed feature, if the passed featureProperties are empty.", function () {
-            var featureProperties = {},
+            const featureProperties = {},
                 correctedFeature = model.handleFeatureProperties(featureProperties, features[13]),
                 result = {
                     "name": "Test handleFeatureProperties 3",
@@ -996,7 +996,7 @@ describe("WfstModel", function () {
             expect(correctedFeature.getProperties()).to.deep.equal(result);
         });
         it("sould return an empty feature if the passed feature is empty.", function () {
-            var featureEmpty = {},
+            const featureEmpty = {},
                 featureProperties = {
                     "name": "Test handleFeatureProperties 4",
                     "vorhaben": "Testen",
@@ -1012,7 +1012,7 @@ describe("WfstModel", function () {
     });
     describe("handleFlawedAttributes", function () {
         it("should return the passed feature without incorrect attributes.", function () {
-            var flawedFeature = model.handleFlawedAttributes(features[3], wfstFields),
+            const flawedFeature = model.handleFlawedAttributes(features[3], wfstFields),
                 correctedFeatureAttributes = {
                     "name": "Test handleFlawedAttributes",
                     "vorhaben": "Testen",
@@ -1026,7 +1026,7 @@ describe("WfstModel", function () {
             expect(flawedFeature.values_).to.deep.equal(correctedFeatureAttributes);
         });
         it("should return the feature with false values for not checked checkboxes.", function () {
-            var flawedFeature = model.handleFlawedAttributes(features[4], wfstFields),
+            const flawedFeature = model.handleFlawedAttributes(features[4], wfstFields),
                 correctedFeatureAttributes = {
                     "name": "Test handleFlawedAttributes2",
                     "vorhaben": "Testen",
@@ -1038,23 +1038,22 @@ describe("WfstModel", function () {
                 };
 
             delete flawedFeature.values_.geom;
-
             expect(flawedFeature.values_).to.deep.equal(correctedFeatureAttributes);
         });
         it("should return the passed feature, if the passed wfstFields are empty.", function () {
-            var wfstFieldsEmpty = [];
+            const wfstFieldsEmpty = [];
 
             expect(model.handleFlawedAttributes(features[0], wfstFieldsEmpty)).to.deep.equal(features[0]);
         });
         it("should return an empty object, if the passed feature is empty.", function () {
-            var featureEmpty = {};
+            const featureEmpty = {};
 
             expect(model.handleFlawedAttributes(featureEmpty, wfstFields)).to.be.empty;
         });
     });
     describe("handleDecimalSeperator", function () {
         it("should return the feature with the ',' decimal seperator for the display mode.", function () {
-            var mode = "display",
+            const mode = "display",
                 result = {
                     "name": "Max Mustermann",
                     "vorhaben": "Testen",
@@ -1067,11 +1066,10 @@ describe("WfstModel", function () {
                 displayFeature = model.handleDecimalSeperator(features[0].values_, mode, wfstFields);
 
             delete displayFeature.geom;
-
             expect(displayFeature).to.deep.equal(result);
         });
         it("should return the feature with the '.' decimal seperator for the transaction mode.", function () {
-            var mode = "transaction",
+            const mode = "transaction",
                 result = {
                     "name": "Max Mustermann",
                     "vorhaben": "Testen",
@@ -1084,22 +1082,21 @@ describe("WfstModel", function () {
                 displayFeature = model.handleDecimalSeperator(features[0], mode, wfstFields);
 
             delete displayFeature.values_.geom;
-
             expect(displayFeature.values_).to.deep.equal(result);
         });
         it("should return the passed feature, if the passed wfstFields are empty.", function () {
-            var mode = "display",
+            const mode = "display",
                 wfstFieldsEmpty = [];
 
             expect(model.handleDecimalSeperator(features[0], mode, wfstFieldsEmpty)).to.deep.equal(features[0]);
         });
         it("should return the passed feature, if the passed mode is undefined.", function () {
-            var wfstFieldsEmpty = [];
+            const wfstFieldsEmpty = [];
 
             expect(model.handleDecimalSeperator(features[0], undefined, wfstFieldsEmpty)).to.deep.equal(features[0]);
         });
         it("should return an empty Object, if the passed feature is empty.", function () {
-            var featureEmpty = {},
+            const featureEmpty = {},
                 mode = "display";
 
             expect(model.handleDecimalSeperator(featureEmpty, mode, wfstFields)).to.be.empty;
@@ -1107,15 +1104,15 @@ describe("WfstModel", function () {
     });
     describe("handleEmptyAttributes", function () {
         it("should return a feature without empty attributes, if the passed feature has empty attributes and the transaction mode is insert.", function () {
-            var result = {
+            const result = {
                     "name": "Test handleEmptyAttributes 1",
                     "vorhaben": "Testen",
                     "anfragedatum": "2020-02-27",
                     "vorgangsnummer": "1",
                     "istest": "true"
                 },
-                mode = "insert",
-                editedFeature;
+                mode = "insert";
+            let editedFeature;
 
             features[5].setProperties({"bemerkung": "", "testnummer": ""});
             editedFeature = model.handleEmptyAttributes(features[5], mode);
@@ -1124,7 +1121,7 @@ describe("WfstModel", function () {
             expect(editedFeature.values_).to.deep.equal(result);
         });
         it("should return a feature with null attributes, if the passed feature has empty attributes and the transaction mode is update.", function () {
-            var result = {
+            const result = {
                     "name": "Test handleEmptyAttributes 2",
                     "vorhaben": "Testen",
                     "anfragedatum": "2020-02-27",
@@ -1133,8 +1130,8 @@ describe("WfstModel", function () {
                     "testnummer": null,
                     "istest": "true"
                 },
-                mode = "update",
-                editedFeature;
+                mode = "update";
+            let editedFeature;
 
             features[6].setProperties({"bemerkung": "", "testnummer": ""});
             editedFeature = model.handleEmptyAttributes(features[6], mode);
@@ -1146,14 +1143,14 @@ describe("WfstModel", function () {
             expect(model.handleEmptyAttributes(features[0])).to.deep.equal(features[0]);
         });
         it("should return an empty object, if the passed feature is empty.", function () {
-            var featureEmpty = {};
+            const featureEmpty = {};
 
             expect(model.handleEmptyAttributes(featureEmpty)).to.be.empty;
         });
     });
     describe("handleMissingFeatureProperties", function () {
         it("should return a feature with all missing properties, if the passed feature has missing properties.", function () {
-            var geometry = "geom",
+            const geometry = "geom",
                 mode = "drawProperties",
                 properties = {
                     "active": true,
@@ -1181,7 +1178,7 @@ describe("WfstModel", function () {
             expect(editedFeature.values_).to.deep.equal(result);
         });
         it("should return an empty object, if the passed feature is empty.", function () {
-            var featureEmpty = {},
+            const featureEmpty = {},
                 geometry = "geom",
                 properties = {
                     "active": true,
@@ -1199,7 +1196,7 @@ describe("WfstModel", function () {
             expect(model.handleMissingFeatureProperties(featureEmpty, geometry, properties, mode)).to.be.empty;
         });
         it("should return a feature with empty property values, if the passed mode is undefined.", function () {
-            var geometry = "geom",
+            const geometry = "geom",
                 properties = {
                     "active": true,
                     "name": "Test handleMissingFeatureProperties",
@@ -1226,7 +1223,7 @@ describe("WfstModel", function () {
             expect(editedFeature.values_).to.deep.equal(result);
         });
         it("should return a feature with empty property values and an empty property geom, if the passed mode is 'draw'.", function () {
-            var geometry = "geom",
+            const geometry = "geom",
                 mode = "draw",
                 properties = {
                     "active": true,
@@ -1254,7 +1251,7 @@ describe("WfstModel", function () {
             expect(editedFeature.values_).to.deep.equal(result);
         });
         it("should return a feature with empty property values, if the passed properties are empty.", function () {
-            var geometry = "geom",
+            const geometry = "geom",
                 properties = {},
                 result = {
                     "name": "",
@@ -1273,7 +1270,7 @@ describe("WfstModel", function () {
     });
     describe("transactionWFS", function () {
         it("should return a xml string for an insert transaction, if the passed parameter are correct", function () {
-            var mode = "insert",
+            const mode = "insert",
                 writeOptions = {
                     featureNS: "http://cite.opengeospatial.org/gmlsf",
                     featurePrefix: "sf",
@@ -1288,7 +1285,7 @@ describe("WfstModel", function () {
             expect(model.transactionWFS(mode, features[1], writeOptions)).to.deep.equal(xmlString);
         });
         it("should return a xml string for a delete transaction, if the passed parameter are correct", function () {
-            var mode = "delete",
+            const mode = "delete",
                 writeOptions = {
                     featureNS: "http://cite.opengeospatial.org/gmlsf",
                     featurePrefix: "sf",
@@ -1302,7 +1299,7 @@ describe("WfstModel", function () {
             expect(model.transactionWFS(mode, features[1], writeOptions)).to.deep.equal(xmlString);
         });
         it("should return a xml string for an update transaction, if the passed parameter are correct", function () {
-            var mode = "update",
+            const mode = "update",
                 writeOptions = {
                     featureNS: "http://cite.opengeospatial.org/gmlsf",
                     featurePrefix: "sf",
@@ -1319,7 +1316,7 @@ describe("WfstModel", function () {
             expect(model.transactionWFS(mode, features[1], writeOptions)).to.deep.equal(xmlString);
         });
         it("should return undefined if the passed parameter mode is undefined", function () {
-            var writeOptions = {
+            const writeOptions = {
                 featureNS: "http://cite.opengeospatial.org/gmlsf",
                 featurePrefix: "sf",
                 featureType: "wfstlgv",
@@ -1329,7 +1326,7 @@ describe("WfstModel", function () {
             expect(model.transactionWFS(undefined, features[1], writeOptions)).to.be.undefined;
         });
         it("should return undefined if the passed feature is empty.", function () {
-            var featureEmpty = {},
+            const featureEmpty = {},
                 mode = "insert";
 
             expect(model.transactionWFS(mode, featureEmpty)).to.be.undefined;
@@ -1337,7 +1334,7 @@ describe("WfstModel", function () {
     });
     describe("handleIEXml", function () {
         it("should return the passed XML string, if it contains the namespace in the update tag.", function () {
-            var writeOptions = {
+            const writeOptions = {
                     featureNS: "http://cite.opengeospatial.org/gmlsf",
                     featurePrefix: "sf",
                     featureType: "wfstlgv",
@@ -1354,7 +1351,7 @@ describe("WfstModel", function () {
             expect(model.handleIEXml(xmlString, writeOptions, mode)).to.deep.equal(xmlString);
         });
         it("should return an XML string containing the namespace in the update tag if the passed XML string did not contain it.", function () {
-            var writeOptions = {
+            const writeOptions = {
                     featureNS: "http://cite.opengeospatial.org/gmlsf",
                     featurePrefix: "sf",
                     featureType: "wfstlgv",
@@ -1377,7 +1374,7 @@ describe("WfstModel", function () {
             expect(model.handleIEXml(xmlString, writeOptions, mode)).to.deep.equal(result);
         });
         it("should return the passed XML string, if the passed mode is undefined", function () {
-            var writeOptions = {
+            const writeOptions = {
                     featureNS: "http://cite.opengeospatial.org/gmlsf",
                     featurePrefix: "sf",
                     featureType: "wfstlgv",
@@ -1393,7 +1390,7 @@ describe("WfstModel", function () {
             expect(model.handleIEXml(xmlString, writeOptions, undefined)).to.deep.equal(xmlString);
         });
         it("should return the passed XML string, if it passed writeOptions are empty.", function () {
-            var writeOptions = {},
+            const writeOptions = {},
                 mode = "update",
                 xmlString = "<Transaction xmlns=\"http://www.opengis.net/wfs\" service=\"WFS\" version=\"1.1.0\" xsi:schemaLocation=\"http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">" +
                 "<Update typeName=\"sf:wfstlgv\" xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\"><Property><Name>sf:geom</Name><Value><Point xmlns=\"http://www.opengis.net/gml\" srsName=\"EPSG:25832\">" +
@@ -1407,22 +1404,22 @@ describe("WfstModel", function () {
     });
     describe("proofForCorrectTransact", function () {
         it("should return true if the passed response includes a correct insert transaction.", function () {
-            var actionType = "insert";
+            const actionType = "insert";
 
             expect(model.proofForCorrectTransact(transactionResponseInsert, actionType)).to.be.true;
         });
         it("should return true if the passed response includes a correct delete transaction.", function () {
-            var actionType = "delete";
+            const actionType = "delete";
 
             expect(model.proofForCorrectTransact(transactionResponseDelete, actionType)).to.be.true;
         });
         it("should return true if the passed response includes a correct update transaction.", function () {
-            var actionType = "update";
+            const actionType = "update";
 
             expect(model.proofForCorrectTransact(transactionResponseUpdate, actionType)).to.be.true;
         });
         it("should return false if the passed response does not includes a correct transaction.", function () {
-            var actionType = "insert";
+            const actionType = "insert";
 
             expect(model.proofForCorrectTransact(transactionFailedResponse, actionType)).to.be.false;
         });
@@ -1430,7 +1427,7 @@ describe("WfstModel", function () {
             expect(model.proofForCorrectTransact(transactionResponseInsert, undefined)).to.be.false;
         });
         it("should return false if the passed response is an empty object", function () {
-            var actionType = "insert",
+            const actionType = "insert",
                 response = {};
 
             expect(model.proofForCorrectTransact(response, actionType)).to.be.false;
@@ -1438,7 +1435,7 @@ describe("WfstModel", function () {
     });
     describe("getExceptionText", function () {
         it("should return the exception text from the passed response", function () {
-            var result = "No service with identifier 'wfstxxxy' available.";
+            const result = "No service with identifier 'wfstxxxy' available.";
 
             expect(model.getExceptionText(transactionJqXHR)).to.deep.equal(result);
         });
@@ -1448,19 +1445,19 @@ describe("WfstModel", function () {
     });
     describe("getSubstring", function () {
         it("should return a substring of a passed string", function () {
-            var exception = "This is a test and <Exception>here comes the substring</Exception>",
+            const exception = "This is a test and <Exception>here comes the substring</Exception>",
                 seperator = ["Exception", ">", "</"],
                 result = "here comes the substring";
 
             expect(model.getSubstring(exception, seperator)).to.deep.equal(result);
         });
         it("should return undefined if the passed string is undefined", function () {
-            var seperator = ["Exception", ">", "</"];
+            const seperator = ["Exception", ">", "</"];
 
             expect(model.getSubstring(undefined, seperator)).to.be.undefined;
         });
         it("should return undefined if no seperators are passed", function () {
-            var exception = "This is a test and <Exception>here comes the exception string</Exception>";
+            const exception = "This is a test and <Exception>here comes the exception string</Exception>";
 
             expect(model.getSubstring(exception, undefined)).to.be.undefined;
         });

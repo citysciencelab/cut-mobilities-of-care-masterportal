@@ -2160,7 +2160,7 @@
  * @param {String/Object} layerId The id of the layer on which the transaction is to be performed.
  * @param {String/Object} featureId The id of the affected feature.
  * @param {String/Object} mode The transaction mode insert|update|delete.
- * @param {String/Object} attributes The featrue attributes.
+ * @param {String/Object} attributes The feature attributes.
  * @example Radio.trigger("wfst", "transact", layerId, featureId, mode, attributes)
  */
 

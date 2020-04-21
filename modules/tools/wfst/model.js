@@ -178,41 +178,21 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     },
 
     /**
-     * Validates the configuration of the layer
+     * Gets all layers whose configuration is incorrect
      * @param {String[]} ids - ids of the configured layers
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
-    checkLayerConfig: function (ids) {
+    getIncorrectConfiguredLayerIds: function (ids) {
         const alertCases = this.get("alertCases"),
             incorrectIds = [];
         let wfsLayer,
-            error = false;
+            error;
 
         if (_.isArray(ids)) {
             ids.forEach(function (id) {
-                error = false;
                 wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id});
-                if (_.isObject(wfsLayer)) {
-                    if (!_.isString(wfsLayer.get("url"))) {
-                        error = true;
-                    }
-                    else if (!_.isString(wfsLayer.get("version"))) {
-                        error = true;
-                    }
-                    else if (!_.isString(wfsLayer.get("featureType"))) {
-                        error = true;
-                    }
-                    else if (!_.isString(wfsLayer.get("featureNS"))) {
-                        error = true;
-                    }
-                    else if (!_.isString(wfsLayer.get("featurePrefix"))) {
-                        error = true;
-                    }
-                    else if (!_.isObject(wfsLayer.get("gfiAttributes"))) {
-                        error = true;
-                    }
-                }
+                error = this.checkLayerConfig(wfsLayer);
                 if (error === true) {
                     if (!_.contains(this.get("incorrectConfigLayers"), id)) {
                         incorrectIds.push(id);
@@ -224,6 +204,37 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             }, this);
         }
         return incorrectIds;
+    },
+
+    /**
+     * Validates the configuration of the layer
+     * @param {Object} wfsLayer - wfs layer
+     * @return {Boolean} flag if one of the layer attributes is configured not correct
+     */
+    checkLayerConfig: function (wfsLayer) {
+        let error = false;
+
+        if (_.isObject(wfsLayer)) {
+            if (!_.isString(wfsLayer.get("url"))) {
+                error = true;
+            }
+            else if (!_.isString(wfsLayer.get("version"))) {
+                error = true;
+            }
+            else if (!_.isString(wfsLayer.get("featureType"))) {
+                error = true;
+            }
+            else if (!_.isString(wfsLayer.get("featureNS"))) {
+                error = true;
+            }
+            else if (!_.isString(wfsLayer.get("featurePrefix"))) {
+                error = true;
+            }
+            else if (!_.isObject(wfsLayer.get("gfiAttributes"))) {
+                error = true;
+            }
+        }
+        return error;
     },
 
     /**
@@ -381,6 +392,12 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                 case "wfstFields":
                     message = "Die Eingabefelder für den aktuell ausgewählte Layer mit der ID " + activeLayer + " konnten leider nicht erstellt werden. Bitte wenden Sie sich an Ihren System Administrator.";
                     break;
+                case "FailedDFT":
+                    message = "Beim Laden der WFS Layer ist leider etwas schiefgelaufen. Bitte wenden Sie sich an Ihren System Administrator.";
+                    break;
+                case "faultyDFTResponse":
+                    message = "Der WFS Layer ist leider fehlerhaft. Bitte wenden Sie sich an Ihren System Administrator.";
+                    break;
                 case "gfiAttrIgnore":
                     message = "Die Attribute für den aktuell ausgewählte Layer können leider nicht ausgelesen werden. Bitte wenden Sie sich an Ihren System Administrator.";
                     break;
@@ -472,7 +489,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         this.setCurrentLayerId(id);
 
         // Setter must be called before variable declaration
-        const wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: this.get("currentLayerId")}),
+        const wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id}),
             parameter = this.getLayerParams(wfsLayer);
 
         this.setUrl(parameter.url);
@@ -515,7 +532,10 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         $.ajax(url + "?SERVICE=WFS&REQUEST=DescribeFeatureType&VERSION=" + version + "&TYPENAME=" + typename, {
             method: "GET",
             context: this,
-            success: this.handleResponse
+            success: this.handleResponse,
+            error: function (jqXHR) {
+                this.handleError(jqXHR);
+            }
         });
     },
 
@@ -533,14 +553,46 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             type = this.getTypeOfInputFields(attributeFields),
             // Mandatory fields
             mandatory = this.getMandatoryFields(attributeFields);
-        let wfstFields;
+        let wfstFields,
+            message;
 
-        this.setAttributesField(attributeFields);
-        this.setGeometryName(geometryName);
-        wfstFields = this.filterInputFields(gfiAttributes, attributeFields);
-        wfstFields = this.handleInputFields(wfstFields, type, mandatory);
-        this.setWfstFields(wfstFields);
-        this.handleButtonConfig();
+        if (attributeFields.length <= 1) {
+            console.error("The WFS-Layer is invalid. The layer has no attributes.");
+            message = this.getAlertMessage("faultyDFTResponse");
+            Radio.trigger("Alert", "alert", {
+                id: "faultyDFTResponse",
+                kategorie: "alert-warn",
+                text: message,
+                confirmable: false
+            });
+        }
+        else {
+            this.setAttributesField(attributeFields);
+            this.setGeometryName(geometryName);
+            wfstFields = this.filterInputFields(gfiAttributes, attributeFields);
+            wfstFields = this.handleInputFields(wfstFields, type, mandatory);
+            this.setWfstFields(wfstFields);
+            this.handleButtonConfig();
+        }
+    },
+
+    /**
+     * Handles a not successfull DescribeFeaturType request
+     * @param {Object} jqXHR - response object
+     * @returns {void}
+     */
+    handleError: function (jqXHR) {
+        let exceptionText,
+            exceptionCode;
+
+        if (jqXHR.responseText.includes("Exception")) {
+            exceptionCode = this.getSubstring(jqXHR.responseText, ["exceptionCode", "\"", "\""]);
+            if (jqXHR.responseText.indexOf("ExceptionText") > 0) {
+                exceptionText = this.getExceptionText(jqXHR);
+                console.error("Saving has failed. \n ExceptionCode:" + exceptionCode + "\n StatusCode: " + jqXHR.statusText + "\n error message: " + exceptionText);
+            }
+        }
+        this.addInitialAlertCases("FailedDFT");
     },
 
     /**
@@ -802,7 +854,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
 
         buttons.forEach(function (button, index) {
             if (_.isObject(button)) {
-                layer = button.find(o => o.layerId === layerId);
+                layer = button.find(object => object.layerId === layerId);
 
                 if (!_.isObject(layer)) {
                     buttonTitles[index] = initialButtonTitleConfig[index];

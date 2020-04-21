@@ -1683,37 +1683,37 @@ Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.js
 |lineButton|nein|[lineButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Linie zur Verfügung steht und welche Beschriftung der Button haben soll.|
 |areaButton|nein|[areaButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
 |edit|nein|[edit](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit wekcher Beschriftung er angezeigt wird.|
-|delete|nein|[delete](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
+|delete|nein|[delete](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der delete Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
 
 **Beispiel**
 ```
 #!json
 {
     "wfst": {
-        "name": "WFS-T Tool"
+        "name": "WFS-T Tool",
         "glyphicon": "glyphicon-globe",
         "layerIds": ["1234", "5678"],
         "toggleLayer": true,
         "layerSelect": "TestLayer",
         "pointButton": [
             {
-                "layerId":"1234"
+                "layerId":"1234",
                 "caption": "Punkt-Test",
                 "show": true
             },
             {
-                "layerId": "5678"
+                "layerId": "5678",
                 "show": true
             }
         ],
         "lineButton": false,
         "areaButton": [
             {
-                "layerId": "4389"
+                "layerId": "4389",
                 "show": false
             }
         ],
-        "edit": "Bearbeiten"
+        "edit": "Bearbeiten",
         "delete": true
     }
 }
