@@ -47,7 +47,7 @@ export default {
         .elements-positioned-over-map {
             display: flex;
             flex-direction: column;
-            align-items: end;
+            align-items: flex-end;
             align-self: flex-end;
 
             height: 100%;
