@@ -733,13 +733,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamIds = this.getDataStreamIds(features),
             version = this.get("version"),
             client = this.get("mqttClient"),
-            subscriptionTopics = this.get("subscriptionTopics");
+            subscriptionTopics = this.get("subscriptionTopics"),
+            protocol = this.get("url").split(":")[0];
 
         dataStreamIds.forEach(function (id) {
             if (client && id && !subscriptionTopics[id]) {
                 client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {
                     rmSimulate: true,
-                    rmPath: this.get("httpSubFolder")
+                    rmPath: this.get("httpSubFolder"),
+                    rmProtocol: protocol
                 });
                 subscriptionTopics[id] = true;
             }
