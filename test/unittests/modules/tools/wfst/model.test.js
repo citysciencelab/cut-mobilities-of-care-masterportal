@@ -12,10 +12,7 @@ describe("WfstModel", function () {
         dftNonHierXmlPrefix,
         dftHierXml,
         dftHierXmlPrefix,
-        attributeFields = [],
-        attributeFieldsPointGeom = [],
         gfiAttributes,
-        wfstFields = [],
         transactionResponseInsert,
         transactionResponseDelete,
         transactionResponseUpdate,
@@ -23,47 +20,52 @@ describe("WfstModel", function () {
         transactionJqXHR,
         features,
         drawLayer;
+    const attributeFields = [],
+        attributeFieldsPointGeom = [],
+        wfstFields = [];
 
     before(function () {
-        let dftNonHierarchicalResponse,
-            dftNonHierarchicalResponsePrefix,
-            dftHierarchicalResponse,
-            dftHierarchicalResponsePrefix,
-            attributeFieldsFile,
-            attributeFieldsPointGeomFile,
-            xmlAttrFields,
-            xmlAttrFields2,
-            wfstFieldsStr,
-            newField,
-            transactionJqXHRFile,
-            drawAttr;
-        const vectorLayer = Radio.request("Map", "createLayerIfNotExists", "wfst_Layer");
-
         model = new Model();
         utilModel = new Util();
 
+        let newField;
+         // Different describe feature type responses
+        const dftNonHierarchicalResponse = utilModel.getFile("resources/testNonHierarchicalDftResponse.xml"),
+            dftNonHierarchicalResponsePrefix = utilModel.getFile("resources/testNonHierarchicalDftResponsePrefix.xml"),
+            dftHierarchicalResponse = utilModel.getFile("resources/testHierarchicalDftResponse.xml"),
+            dftHierarchicalResponsePrefix = utilModel.getFile("resources/testHierarchicalDftResponsePrefix.xml"),
+            // Attribute fields from an example feature with no special geometry type
+            attributeFieldsFile = utilModel.getFile("resources/testAttributeFields.xml"),
+            xmlAttrFields = utilModel.parseXML(attributeFieldsFile),
+            // Attribute fields from an example feature with point geometry type
+            attributeFieldsPointGeomFile = utilModel.getFile("resources/testAttributeFieldsPointGeom.xml"),
+            xmlAttrFields2 = utilModel.parseXML(attributeFieldsPointGeomFile),
+            wfstFieldsStr = utilModel.getFile("resources/wfstFields.txt").split(/(?<=},)/),
+            transactionJqXHRFile = utilModel.getFile("resources/testTransactionJqXHR.xml"),
+            vectorLayer = Radio.request("Map", "createLayerIfNotExists", "wfst_Layer"),
+            drawAttr = {
+                "active": true,
+                "name": "Max Mustermann",
+                "vorhaben": "Testen",
+                "anfragedatum": "2020-01-28",
+                "bemerkung": "Dies ist ein Punkt",
+                "vorgangsnummer": 3,
+                "testnummer": 1.3,
+                "istest": false
+            };
+
         // Different describe feature type responses
-        dftNonHierarchicalResponse = utilModel.getFile("resources/testNonHierarchicalDftResponse.xml");
         dftNonHierXml = utilModel.parseXML(dftNonHierarchicalResponse);
-        dftNonHierarchicalResponsePrefix = utilModel.getFile("resources/testNonHierarchicalDftResponsePrefix.xml");
         dftNonHierXmlPrefix = utilModel.parseXML(dftNonHierarchicalResponsePrefix);
-        dftHierarchicalResponse = utilModel.getFile("resources/testHierarchicalDftResponse.xml");
         dftHierXml = utilModel.parseXML(dftHierarchicalResponse);
-        dftHierarchicalResponsePrefix = utilModel.getFile("resources/testHierarchicalDftResponsePrefix.xml");
         dftHierXmlPrefix = utilModel.parseXML(dftHierarchicalResponsePrefix);
 
         // Attribute fields from an example feature with no special geometry type
-        attributeFieldsFile = utilModel.getFile("resources/testAttributeFields.xml");
-        xmlAttrFields = utilModel.parseXML(attributeFieldsFile);
-
         $(xmlAttrFields).find("element").each(function (index, e) {
             attributeFields.push(e);
         });
 
         // Attribute fields from an example feature with point geometry type
-        attributeFieldsPointGeomFile = utilModel.getFile("resources/testAttributeFieldsPointGeom.xml");
-        xmlAttrFields2 = utilModel.parseXML(attributeFieldsPointGeomFile);
-
         $(xmlAttrFields2).find("element").each(function (index, e) {
             attributeFieldsPointGeom.push(e);
         });
@@ -80,7 +82,6 @@ describe("WfstModel", function () {
         };
 
         // Create example wfst fields
-        wfstFieldsStr = utilModel.getFile("resources/wfstFields.txt").split(/(?<=},)/);
         wfstFieldsStr.forEach(function (field) {
             newField = field.replace("},", "}");
             wfstFields.push(JSON.parse(newField));
@@ -92,7 +93,6 @@ describe("WfstModel", function () {
         transactionResponseDelete = utilModel.parseXML(utilModel.getFile("resources/testTransactionResponseDelete.xml"));
         transactionResponseUpdate = utilModel.parseXML(utilModel.getFile("resources/testTransactionResponseUpdate.xml"));
         transactionFailedResponse = utilModel.parseXML(utilModel.getFile("resources/testTransactionFailedResponse.xml"));
-        transactionJqXHRFile = utilModel.getFile("resources/testTransactionJqXHR.xml");
         transactionJqXHR = JSON.parse(transactionJqXHRFile);
 
         // Example features
@@ -104,18 +104,6 @@ describe("WfstModel", function () {
             type: "Point",
             geometryName: "geom"
         });
-
-        // Attributes for the example layer
-        drawAttr = {
-            "active": true,
-            "name": "Max Mustermann",
-            "vorhaben": "Testen",
-            "anfragedatum": "2020-01-28",
-            "bemerkung": "Dies ist ein Punkt",
-            "vorgangsnummer": 3,
-            "testnummer": 1.3,
-            "istest": false
-        };
         drawLayer.set("values_", drawAttr);
 
         // Creates an example Modellist
@@ -227,8 +215,8 @@ describe("WfstModel", function () {
             expect(model.checkActiveLayers(undefined, incorrectConfigLayers)).to.be.empty;
         });
         it("should return an empty object, if all passed active layers are configured incorrect", function () {
-            let activeLayers = {};
-            const incorrectConfigLayers = ["682", "1731"];
+            const activeLayers = {},
+                incorrectConfigLayers = ["682", "1731"];
 
             activeLayers["682"] = "Kindertagesstaetten";
             activeLayers["1731"] = "Krankenhäuser Hamburg";
@@ -248,8 +236,8 @@ describe("WfstModel", function () {
             expect(model.getActiveLayers(ids)).to.be.empty;
         });
         it("should return the layers that are selected in the layer tree", function () {
-            let layerNames = {};
-            const ids = ["682", "1731", "1933"];
+            const layerNames = {},
+                ids = ["682", "1731", "1933"];
 
             layerNames[682] = "Kindertagesstaetten";
             layerNames[1731] = "Krankenhäuser Hamburg";
@@ -272,8 +260,8 @@ describe("WfstModel", function () {
             expect(model.getSelectedLayer(activeLayers)).to.deep.equal(firstId);
         });
         it("should return the id of the first layer in the passed activeLayer Object if it contains at least one active layer", function () {
-            let activeLayers = {};
-            const firstId = "682";
+            const activeLayers = {},
+                firstId = "682";
 
             activeLayers[682] = "Kindertagesstaetten";
             activeLayers[1731] = "Krankenhäuser Hamburg";
@@ -341,9 +329,9 @@ describe("WfstModel", function () {
         it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a non-hierarchical XML Schema.", function () {
             const featureTypename = "wfstest",
                 response = model.parseResponse(dftNonHierXml, featureTypename),
-                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
-            let responseNames = [],
-                i = 0;
+                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"],
+                responseNames = [];
+            let i = 0;
 
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
@@ -354,9 +342,9 @@ describe("WfstModel", function () {
         it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a non-hierarchical XML Schema and uses a prefix.", function () {
             const featureTypename = "wfstest",
                 response = model.parseResponse(dftNonHierXmlPrefix, featureTypename),
-                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
-            let responseNames = [],
-                i = 0;
+                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"],
+                responseNames = [];
+            let i = 0;
 
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
@@ -367,9 +355,9 @@ describe("WfstModel", function () {
         it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a hierarchical XML Schema.", function () {
             const featureTypename = "wfstest",
                 response = model.parseResponse(dftHierXml, featureTypename),
-                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
-            let responseNames = [],
-                i = 0;
+                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"],
+                responseNames = [];
+            let i = 0;
                 
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
@@ -380,9 +368,9 @@ describe("WfstModel", function () {
         it("should return the attributes of a feature type, if the passed DescribeFeatureType response is in a hierarchical XML Schema and uses a prefix.", function () {
             const featureTypename = "wfstest",
                 response = model.parseResponse(dftHierXmlPrefix, featureTypename),
-                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
-            let responseNames = [],
-                i = 0;
+                result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"],
+                responseNames = [];
+            let i = 0;
 
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
@@ -515,7 +503,7 @@ describe("WfstModel", function () {
     });
     describe("getMandatoryFields", function () {
         it("should return an array with true for the attributes where 'minOccurs' is not existing or 'minOccurs' is equal to 1 and with false for the attributes where 'minOccurs' is equal to 0.", function () {
-            let result = [];
+            const result = [];
 
             result.geom = true;
             result.name = true;
@@ -616,8 +604,8 @@ describe("WfstModel", function () {
                     "vorgangsnummer": {"fieldType": "text", "type": "integer"},
                     "testnummer": {"fieldType": "text", "type": "decimal"},
                     "istest": {"fieldType": "checkbox", "type": "boolean"}
-                };
-            let mandatory = [];
+                },
+                mandatory = [];
 
             mandatory.geom = true;
             mandatory.name = true;
@@ -668,8 +656,8 @@ describe("WfstModel", function () {
                     "vorgangsnummer": {"fieldType": "text", "type": "integer"},
                     "testnummer": {"fieldType": "text", "type": "decimal"},
                     "istest": {"fieldType": "checkbox", "type": "boolean"}
-                };
-            let mandatory = [];
+                },
+                mandatory = [];
 
             mandatory.geom = true;
             mandatory.name = true;
@@ -1112,10 +1100,9 @@ describe("WfstModel", function () {
                     "istest": "true"
                 },
                 mode = "insert";
-            let editedFeature;
 
             features[5].setProperties({"bemerkung": "", "testnummer": ""});
-            editedFeature = model.handleEmptyAttributes(features[5], mode);
+            const editedFeature = model.handleEmptyAttributes(features[5], mode);
 
             delete editedFeature.values_.geom;
             expect(editedFeature.values_).to.deep.equal(result);
@@ -1131,10 +1118,9 @@ describe("WfstModel", function () {
                     "istest": "true"
                 },
                 mode = "update";
-            let editedFeature;
 
             features[6].setProperties({"bemerkung": "", "testnummer": ""});
-            editedFeature = model.handleEmptyAttributes(features[6], mode);
+            const editedFeature = model.handleEmptyAttributes(features[6], mode);
 
             delete editedFeature.values_.geom;
             expect(editedFeature.values_).to.deep.equal(result);
