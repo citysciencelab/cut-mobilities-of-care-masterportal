@@ -50,7 +50,10 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             "change:featureProps": this.showFeatureProps,
             "gfiHit": this.selectGFIHit,
             "gfiClose": this.deselectGFIHit,
-            "switchTabToTheme": this.switchTabToTheme
+            "switchTabToTheme": this.switchTabToTheme,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
         });
 
         if (this.model.get("isActive") === true) {

@@ -22,6 +22,9 @@ const LayerSliderView = Backbone.View.extend(/** @lends LayerSliderView.prototyp
             "change:isActive": function () {
                 this.render();
             },
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            },
             "change:activeLayer": this.layerSwitched
         });
         if (this.model.get("isActive") === true) {

@@ -57,6 +57,23 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
             }
         });
         this.checkSliderType(this.get("sliderType"));
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "currentLng": lng
+        });
     },
 
     /**
