@@ -28,10 +28,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             "change:isVisibleInMap": this.rerender,
             "change:isSettingVisible": this.renderSetting,
             "change:transparency": this.rerender,
-            "change:isOutOfRange": this.toggleColor,
-            "change:currentLng": () => {
-                this.render();
-            }
+            "change:isOutOfRange": this.toggleColor
         });
         this.listenTo(Radio.channel("LayerInformation"), {
             "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon

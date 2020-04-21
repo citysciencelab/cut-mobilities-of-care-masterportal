@@ -137,7 +137,6 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
     setIsPinned: function (value, options) {
         this.set("isPinned", value, options);
     },
-
     /**
      * Setter for attribute "isSelected"
      * @param {Boolean} value Flag for isSelected.
