@@ -25,10 +25,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isVisibleInTree": this.removeIfNotVisible,
-            "change:isOutOfRange": this.toggleColor,
-            "change:currentLng": () => {
-                this.render();
-            }
+            "change:isOutOfRange": this.toggleColor
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
