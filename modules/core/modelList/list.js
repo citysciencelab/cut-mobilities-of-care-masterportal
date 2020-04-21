@@ -1,4 +1,5 @@
 import WMSLayer from "./layer/wms";
+import WMTSLayer from "./layer/wmts";
 import WFSLayer from "./layer/wfs";
 import StaticImageLayer from "./layer/staticImage";
 import GeoJSONLayer from "./layer/geojson";
@@ -15,6 +16,7 @@ import StaticLink from "./staticlink/model";
 import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
 /**
+ * PrintV2
  * @deprecated in 3.0.0
  */
 import PrintV2 from "../../tools/print/model";
@@ -30,8 +32,16 @@ import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
 import KmlImport from "../../tools/kmlImport/model";
 import Routing from "../../tools/viomRouting/model";
+/**
+ * WfsFeatureFilter
+ * @deprecated in 3.0.0
+ */
 import WfsFeatureFilter from "../../wfsFeatureFilter/model";
 import TreeFilter from "../../treeFilter/model";
+/**
+ * ExtendedFilter
+ * @deprecated in 3.0.0
+ */
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import Formular from "../../formular/grenznachweis";
 import FeatureLister from "../../featureLister/model";
@@ -185,6 +195,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             if (attrs.typ === "WMS") {
                 return new WMSLayer(attrs, options);
             }
+            else if (attrs.typ === "WMTS") {
+                return new WMTSLayer(attrs, options);
+            }
             else if (attrs.typ === "WFS") {
                 if (attrs.outputFormat === "GeoJSON") {
                     return new GeoJSONLayer(attrs, options);
@@ -224,8 +237,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                // @deprecated in version 3.0.0
-                // do not use the attribute "version"
+                /**
+                 * PrintV2
+                 * do not use the attribute "version"
+                 * @deprecated in 3.0.0
+                 */
                 if (attrs.version === undefined) {
                     return new PrintV2(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
@@ -291,10 +307,20 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "contact") {
                 return new Contact(attrs, options);
             }
+            /**
+             * wfsFeatureFilter
+             * @deprecated in 3.0.0
+             */
             else if (attrs.id === "wfsFeatureFilter") {
+                console.warn("Tool: 'wfsFeatureFilter' is deprecated. Please use 'filter' instead.");
                 return new WfsFeatureFilter(attrs, options);
             }
+            /**
+             * extendedFilter
+             * @deprecated in 3.0.0
+             */
             else if (attrs.id === "extendedFilter") {
+                console.warn("Tool: 'extendedFilter' is deprecated. Please use 'filter' instead.");
                 return new ExtendedFilter(_.extend(attrs, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
             }
             else if (attrs.id === "featureLister") {

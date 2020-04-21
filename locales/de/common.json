@@ -205,6 +205,7 @@
                 "district": "Gemarkung",
                 "choose": "bitte wählen",
                 "parcelNumber": "Flurstücksnummer",
+                "plot": "Flur",
                 "parcelNumberPlaceholder": "Nummer eingeben",
                 "generateReport": "Bericht erzeugen"
             },
@@ -280,6 +281,20 @@
                     "edit": "Geometrie bearbeiten",
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen"
+                },
+                "iconList": {
+                    "iconPoint": "Punkt",
+                    "iconLeaf": "Blatt",
+                    "iconCloud": "Wolke",
+                    "iconCD": "CD",
+                    "iconHat": "Doktorhut",
+                    "iconFire": "Feuer",
+                    "iconMovie": "Film",
+                    "iconFlag": "Flagge",
+                    "iconGlobe": "Globus",
+                    "iconMusic": "Musik",
+                    "iconStreet": "Straße",
+                    "iconTent": "Zelt"
                 }
             },
             "download": {
