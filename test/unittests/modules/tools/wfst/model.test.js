@@ -29,7 +29,7 @@ describe("WfstModel", function () {
         utilModel = new Util();
 
         let newField;
-         // Different describe feature type responses
+        // Different describe feature type responses
         const dftNonHierarchicalResponse = utilModel.getFile("resources/testNonHierarchicalDftResponse.xml"),
             dftNonHierarchicalResponsePrefix = utilModel.getFile("resources/testNonHierarchicalDftResponsePrefix.xml"),
             dftHierarchicalResponse = utilModel.getFile("resources/testHierarchicalDftResponse.xml"),
@@ -358,7 +358,7 @@ describe("WfstModel", function () {
                 result = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"],
                 responseNames = [];
             let i = 0;
-                
+
             while (i < response.length) {
                 responseNames.push($(response[i]).attr("name"));
                 i++;
@@ -1092,6 +1092,7 @@ describe("WfstModel", function () {
     });
     describe("handleEmptyAttributes", function () {
         it("should return a feature without empty attributes, if the passed feature has empty attributes and the transaction mode is insert.", function () {
+            features[5].setProperties({"bemerkung": "", "testnummer": ""});
             const result = {
                     "name": "Test handleEmptyAttributes 1",
                     "vorhaben": "Testen",
@@ -1099,15 +1100,14 @@ describe("WfstModel", function () {
                     "vorgangsnummer": "1",
                     "istest": "true"
                 },
-                mode = "insert";
-
-            features[5].setProperties({"bemerkung": "", "testnummer": ""});
-            const editedFeature = model.handleEmptyAttributes(features[5], mode);
+                mode = "insert",
+                editedFeature = model.handleEmptyAttributes(features[5], mode);
 
             delete editedFeature.values_.geom;
             expect(editedFeature.values_).to.deep.equal(result);
         });
         it("should return a feature with null attributes, if the passed feature has empty attributes and the transaction mode is update.", function () {
+            features[6].setProperties({"bemerkung": "", "testnummer": ""});
             const result = {
                     "name": "Test handleEmptyAttributes 2",
                     "vorhaben": "Testen",
@@ -1117,10 +1117,8 @@ describe("WfstModel", function () {
                     "testnummer": null,
                     "istest": "true"
                 },
-                mode = "update";
-
-            features[6].setProperties({"bemerkung": "", "testnummer": ""});
-            const editedFeature = model.handleEmptyAttributes(features[6], mode);
+                mode = "update",
+                editedFeature = model.handleEmptyAttributes(features[6], mode);
 
             delete editedFeature.values_.geom;
             expect(editedFeature.values_).to.deep.equal(result);
