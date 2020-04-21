@@ -3,7 +3,7 @@ import DesktopThemenFolderView from "./folder/viewTree";
 import CatalogFolderView from "./folder/viewCatalog";
 import DesktopLayerView from "./layer/view";
 import SelectionView from "./layer/viewSelection";
-import store from "../../../src/store/index";
+import store from "../../../src/global-store/index";
 
 const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
 

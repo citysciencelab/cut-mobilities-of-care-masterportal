@@ -1,5 +1,5 @@
 import GenericTool from "../../index";
-import composeModules from "../../../../store/utils/composeModules";
+import composeModules from "../../../../global-store/utils/composeModules";
 import mutations from "./mutations";
 
 export default composeModules([GenericTool, {

@@ -45,7 +45,7 @@ import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewPoint/model";
 import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
-import store from "../../../src/store/index";
+import store from "../../../src/global-store/index";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**

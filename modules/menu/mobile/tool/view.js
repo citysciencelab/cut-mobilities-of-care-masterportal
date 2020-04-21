@@ -1,5 +1,5 @@
 import ItemTemplate from "text-loader!./template.html";
-import store from "../../../../src/store/index";
+import store from "../../../../src/global-store/index";
 
 const ItemView = Backbone.View.extend({
     events: {
