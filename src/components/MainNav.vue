@@ -16,10 +16,7 @@ export default {
         role="navigation"
     >
         <div class="container-fluid">
-            <div
-                id="navbarRow"
-                class="row"
-            >
+            <div id="navbarRow">
                 <div class="navbar-header">
                     <button
                         type="button"
