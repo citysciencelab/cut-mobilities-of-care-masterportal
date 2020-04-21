@@ -172,7 +172,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         Radio.trigger("Map", "isReady", "gfi", false);
 
-        if (!_.isUndefined(Config.inputMap)) {
+        // potentially deprecated, replaced by drawend
+        if (typeof Config.inputMap !== "undefined" && Config.inputMap.setMarker) {
             this.registerListener("click", this.addMarker.bind(this));
         }
     },
