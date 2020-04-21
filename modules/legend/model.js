@@ -1,5 +1,6 @@
 import Feature from "ol/Feature.js";
 import Tool from "../core/modelList/tool/model";
+import WMTSLayer from "../core/modelList/layer/wmts";
 
 const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -67,6 +68,10 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         this.listenTo(this, {
             "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
         });
+        this.listenTo(Radio.channel(WMTSLayer), {
+            "change:legendURL": this.setLayerList
+        });
+
     },
 
     /**
@@ -223,6 +228,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         }
         else if (typ === "WMS") {
             return this.getLegendParamsFromWMS(layername, legendURL);
+        }
+        else if (legendURL !== null && typ === "WMTS") {
+            return this.getLegendParamsFromURL(layername, legendURL, typ);
         }
         else if (typ === "WFS") {
             if (isNewVectorStyle) {

@@ -90,7 +90,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "findWhereJs": this.findWhereJs,
             "isEqual": this.isEqual,
             "toObject": this.toObject,
-            "isEmpty": this.isEmpty
+            "isEmpty": this.isEmpty,
+            "searchNestedObject": function (object, key) {
+                return this.searchNestedObject(object, key);
+            }
         }, this);
 
         channel.on({
