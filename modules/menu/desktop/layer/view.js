@@ -25,10 +25,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isVisibleInTree": this.removeIfNotVisible,
-            "change:isOutOfRange": this.toggleColor,
-            "change:currentLng": () => {
-                this.render();
-            }
+            "change:isOutOfRange": this.toggleColor
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
@@ -46,7 +43,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(Radio.channel("LayerInformation"), {
             "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
-
+        // translates the i18n-props into current user-language. is done this way, because model's listener to languageChange reacts too late (after render, which ist riggered by creating new Menu)
+        this.model.changeLang();
         this.render();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },

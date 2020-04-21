@@ -67,6 +67,10 @@ describe("menu/desktop/layer/viewSelection", function () {
                 return true;
             },
 
+            changeLang: function () {
+                return true;
+            },
+
             toJSON: function () {
                 return {
                     styleable: this.isStyleable,
