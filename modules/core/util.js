@@ -91,6 +91,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "isEqual": this.isEqual,
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
+            "setUrlQueryParams": this.setUrlQueryParams,
             "searchNestedObject": function (object, key) {
                 return this.searchNestedObject(object, key);
             }
@@ -801,7 +802,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
                 collection.trigger("updateClassicTree");
                 break;
-
             case "light":
                 Radio.trigger("ModelList", "refreshLightTree");
                 break;
