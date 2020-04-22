@@ -43,7 +43,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                 extent = projection.getExtent(),
                 style = this.get("style"),
                 format = this.get("format"),
-                wrapX = this.get("wrapX") ? this.get("wrapX") : false,
+                wrapX = this.get("wrapX"),
                 urls = this.get("urls"),
                 size = getWidth(extent) / parseInt(this.get("tileSize"), 10),
                 resLength = parseInt(this.get("resLength"), 10),
@@ -78,7 +78,6 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                 url = this.get("capabilitiesUrl");
 
             let matrixSet = this.get("tileMatrixSet");
-
 
             this.fetchWMTSCapabilities(url)
                 .then(function (result) {
@@ -198,11 +197,11 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                     case 500:
                         throw new Error("500 (Server Error)");
                     default:
-                        throw new Error(resultStatus + " Check GetCapabilities-URL");
+                        throw new Error("Check GetCapabilities-URL: ${resultStatus}");
                 }
             })
             .catch(function (error) {
-                const errorMessage = " WMTS-Capabilities fetch Error: " + error;
+                const errorMessage = `WMTS-Capabilities fetch error: ${error}`;
 
                 this.removeLayer();
                 Radio.trigger("Util", "refreshTree");
@@ -218,7 +217,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      */
     showErrorMessage: (errorMessage, layerName) => {
         Radio.trigger("Alert", "alert", {
-            text: "Layer " + layerName + ": " + errorMessage,
+            text: `Layer ${layerName}: ${errorMessage}`,
             kategorie: "alert-danger"
         });
     },
@@ -273,9 +272,8 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                             }
                             else {
                                 this.setLegendURL(null);
-                                console.warn("no legend url found for layer " + this.get("layer"));
+                                console.warn(`No legend url found for layer ${this.get("layer")}`);
                             }
-
                         }
                     }.bind(this));
                 }.bind(this))

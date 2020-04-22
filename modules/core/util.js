@@ -92,9 +92,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
             "setUrlQueryParams": this.setUrlQueryParams,
-            "searchNestedObject": function (object, key) {
-                return this.searchNestedObject(object, key);
-            }
+            "searchNestedObject": this.searchNestedObject
         }, this);
 
         channel.on({
