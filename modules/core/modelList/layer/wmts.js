@@ -91,7 +91,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             }
 
             this.fetchWMTSCapabilities(url)
-                .then(function (result) {
+                .then((result) => {
                     const options = optionsFromCapabilities(result, capabilitiesOptions);
 
                     if (options !== null) {
@@ -99,12 +99,14 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
 
                         this.set("options", options);
                         this.setLayerSource(source);
+                        Promise.resolve();
                     }
                     else {
-                        Promise.reject("Cannot get options from WMTS-Capabilities");
+                        // reject("Cannot get options from WMTS-Capabilities");
+                        throw new Error("Cannot get options from WMTS-Capabilities");
                     }
-                }.bind(this))
-                .catch(function (error) {
+                })
+                .catch((error) => {
                     this.removeLayer();
                     Radio.trigger("Util", "refreshTree");
                     if (error === "Fetch error") {
@@ -112,7 +114,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                         return;
                     }
                     this.showErrorMessage(error, this.get("name"));
-                }.bind(this));
+                });
         }
     },
 

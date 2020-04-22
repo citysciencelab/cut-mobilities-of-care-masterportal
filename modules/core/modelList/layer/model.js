@@ -802,10 +802,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     removeLayer: function () {
-        const layer = this.get("id");
+        const layerId = this.get("id");
 
         this.setIsVisibleInMap(false);
-        this.collection.removeLayerById(layer);
+        this.collection.removeLayerById(layerId);
+        Radio.trigger("Parser", "removeItem", layerId);
     },
 
     /**
