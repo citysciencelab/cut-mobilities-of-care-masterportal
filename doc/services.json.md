@@ -81,8 +81,14 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 
 ## WMTS-Layer ##
 
+Es gibt zwei Wege, einen WMTS-Layer im Masterportal zu definieren:  
+
+A) Angabe aller nachfolgenden WMTS-Parameter  
+B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
+
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
+|capabilitiesUrl|nein|String||Capabilities URL des WMTS-Dienstes|"https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/1.0.0/WMTSCapabilities.xml"|
 |coordinateSystem|ja|String||Das Koordinatenreferenzsystem des Layers.|`"EPSG:3857"`|
 |format|ja|String||Das Graphikformat der Kacheln des Layers. Wird nur benötigt, wenn der Parameter requestEncoding="KVP" ist.|`"image/png"`|
 |id|ja|String||Frei wählbare Layer-ID|`"320"`|
@@ -92,11 +98,12 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"2500000"`|
 |minScale|nein|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Geoland Basemap"`|
+|optionsFromCapabilities|nein|Boolean||Option zur Nutzung der getOptionsFromCapabilities Methode, um den WMTS-Layer zu definieren. Siehe nachfolgende Beispiele|true|
 |origin|ja|Number[]||Der Ursprung des Kachelrasters. Dieser kann entweder den WMTS Capabilities entnommen werden oder entspricht meist der oberen linken Ecke des extents.|`[-20037508.3428, 20037508.3428]`|
 |requestEncoding|ja|enum["KVP", "REST"]||Codierung der Anfrage an den WMTS Dienst.|`"REST"`|
 |resLength|ja|String||Länge des resolutions und des matrixIds Arrays. Wird benötigt, um die maximale Zoom-Stufe des Layers einstellen zu können.|`"20"`|
 |style|nein|String|"normal"|Name des Styles, welcher dem aus den WMTS Capabilities entsprechen muss.|`"normal"`|
-|tileMatrixSet|ja|String||Set der Matrix, welcher für die Anfrage an den WMTS Dienst benötigt wird.|`"google3857"`|
+|tileMatrixSet|ja|String||Set der Matrix, das für die Anfrage an den WMTS Dienst benötigt wird. Bei der optionsFromCapabilities-Variante, ist dieser Parameter nicht zwingend notwendig (es wird ein passendes TileMatrixSet gesucht).|`"google3857"`|
 |tileSize|ja|String||Kachelgröße in Pixel.|`"256"`|
 |transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`false`|
 |typ|ja|String||Diensttyp, in diesem Fall WMS (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMTS"`|
@@ -104,7 +111,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.0.0"`|
 |wrapX|nein|Boolean|false|Gibt an, ob die Welt horizontal gewrapped werden soll.|`true`|
 
-**Beispiel WMTS:**
+**Beispiel 1 WMTS:**
 
 ```
 #!json
@@ -142,7 +149,19 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
    "requestEncoding": "REST"
 }
 ```
+**Beispiel 2 WMTS (optionsFromCapabilities Methode)**
 
+```
+{
+  "id": "2020",
+  "name": "EOC Basemap",
+  "capabilitiesUrl": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities",
+  "typ": "WMTS",
+  "layers": "eoc:basemap",
+  "optionsFromCapabilities": true
+}
+
+```
 ***
 
 ## WFS-Layer ##

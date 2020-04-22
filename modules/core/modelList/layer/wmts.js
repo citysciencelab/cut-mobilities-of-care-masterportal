@@ -75,11 +75,63 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
         }
         else {
             const layerIdentifier = this.get("layers"),
-                matrixSet = this.get("matrixSet"),
                 url = this.get("capabilitiesUrl");
+
+            let matrixSet = this.get("tileMatrixSet");
+
 
             this.fetchWMTSCapabilities(url)
                 .then(function (result) {
+                    if (_.isUndefined(matrixSet)) {
+                        // look for TileMatrixsets in capabilities
+                        // get the specific layer object from capabilities result
+                        const layers = result.Contents.Layer,
+                            layer = layers.find(function (l) {
+                                return l.Identifier === this.get("layers");
+                            }.bind(this)),
+                            tileMatrixSetLayerList = [],
+                            // get list of all available tileMatrixSets in the capabilities
+                            tileMatrixSetList = result.Contents.TileMatrixSet,
+                            // create list of supported crs in project
+                            supportedCRSCodes = [
+                                "EPSG:4326",
+                                "EPSG:3857"
+                            ];
+
+                        let tileMatrixSet = null,
+                            tileMatrixSetListFiltered = [];
+
+                        // add project defined crs to list of supported crs
+                        Config.namedProjections.forEach(function (projection) {
+                            supportedCRSCodes.push(projection[0]);
+                        });
+
+                        if (!layer) {
+                            Promise.reject("Cannot find the given layer in WMTS-Capabilities.");
+                        }
+
+                        // tileMatrixSets list of the layer
+                        layer.TileMatrixSetLink.forEach(function (tilematrix) {
+                            tileMatrixSetLayerList.push(tilematrix.TileMatrixSet);
+                        });
+
+                        // filter all available tileMatrixSets with the layer specific ones
+                        tileMatrixSetListFiltered = tileMatrixSetList.filter(function (obj) {
+                            return tileMatrixSetLayerList.includes(obj.Identifier);
+                        });
+
+                        // return first tileMatrixSet whose crs is supported
+                        tileMatrixSet = tileMatrixSetListFiltered.find(function (obj) {
+                            return supportedCRSCodes.includes("EPSG:" + obj.SupportedCRS.split("::")[1]);
+                        });
+
+                        if (!tileMatrixSet) {
+                            Promise.reject("Cannot find a suitable TileMatrixSet. Please check config of WMTS-layer");
+                        }
+
+                        matrixSet = tileMatrixSet.Identifier;
+                    }
+
                     const options = optionsFromCapabilities(result, {
                         layer: layerIdentifier,
                         matrixSet: matrixSet
@@ -92,20 +144,15 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                         this.setLayerSource(source);
                     }
                     else {
-                        throw new Error("Cannot get options from WMTS-Capabilities");
+                        Promise.reject("Cannot get options from WMTS-Capabilities");
                     }
                 }.bind(this))
-                .catch(function (error) {
-                    if (error.message.includes("Cannot get options")) {
-                        const errorMessage = "WMTS-Capabilities parsing Error" + error;
-
-                        this.showErrorMessage(errorMessage, this.get("name"));
-                        this.removeLayer();
-                        Radio.trigger("Util", "refreshTree");
-                    }
+                .catch(function (errorMessage) {
+                    this.showErrorMessage(errorMessage, this.get("name"));
+                    this.removeLayer();
+                    Radio.trigger("Util", "refreshTree");
                 }.bind(this));
         }
-
     },
 
     /**
@@ -171,7 +218,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      */
     showErrorMessage: (errorMessage, layerName) => {
         Radio.trigger("Alert", "alert", {
-            text: "Layer " + layerName + errorMessage,
+            text: "Layer " + layerName + ": " + errorMessage,
             kategorie: "alert-danger"
         });
     },
@@ -226,7 +273,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                             }
                             else {
                                 this.setLegendURL(null);
-                                console.warn("no legend url found for layer " + this.get("layers"));
+                                console.warn("no legend url found for layer " + this.get("layer"));
                             }
 
                         }
