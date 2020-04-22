@@ -944,28 +944,28 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * helper function to find a key in nested object
-     * @param {object} theObject object to search
+     * @param {object} obj object to search
      * @param {string} key name of key to search for
      * @return {mixed} returns value for the given key or null if not found
      */
     searchNestedObject: function (theObject, key) {
         let result;
 
-        if (theObject instanceof Array) {
-            for (let i = 0; i < theObject.length; i++) {
-                result = this.searchNestedObject(theObject[i], key);
+        if (obj instanceof Array) {
+            for (let i = 0; i < obj.length; i++) {
+                result = this.searchNestedObject(obj[i], key);
                 if (result) {
                     break;
                 }
             }
         }
         else {
-            for (const prop in theObject) {
+            for (const prop in obj) {
                 if (prop === key) {
-                    return theObject;
+                    return obj;
                 }
-                if (theObject[prop] instanceof Object || theObject[prop] instanceof Array) {
-                    result = this.searchNestedObject(theObject[prop], key);
+                if (obj[prop] instanceof Object || obj[prop] instanceof Array) {
+                    result = this.searchNestedObject(obj[prop], key);
                     if (result) {
                         break;
                     }
