@@ -255,9 +255,9 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         for (const meansOfTransport in dataset) {
             for (const datetime in dataset[meansOfTransport]) {
 
-                const splitted = datetime.split(" "),
-                    date = moment(splitted[0], "YYYY-MM-DD").format("YYYY-MM-DD"),
-                    hour = moment(splitted[1], "HH:mm:ss").format("HH:mm");
+                const splittedDate = datetime.split(" "),
+                    date = moment(splittedDate[0], "YYYY-MM-DD").format("YYYY-MM-DD"),
+                    hour = moment(splittedDate[1], "HH:mm:ss").format("HH:mm");
 
                 if (meansOfTransport === this.get("meansOfTransportFahrraeder")) {
                     retObj.bicycles.push({
@@ -345,129 +345,125 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     prepareTableContent (dataset, type, title) {
         const tblContent = {};
 
+        if (["day", "week", "year"].indexOf(type) === -1) {
+            return;
+        }
+
         switch (type) {
             case "day":
                 tblContent.day = {};
+                tblContent.day.title = title;
 
-                if (dataset !== undefined) {
-                    tblContent.day.title = title;
+                if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                    tblContent.day.firstColumn = moment(dataset.bicycles[0].date).format("DD.MM.YYYY");
+                    tblContent.day.headerArr = [];
+                    tblContent.day.bicyclesArr = [];
 
-                    if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
-                        tblContent.day.firstColumn = moment(dataset.bicycles[0].date).format("DD.MM.YYYY");
-                        tblContent.day.headerArr = [];
-                        tblContent.day.bicyclesArr = [];
-
-                        dataset.bicycles.forEach(element => {
-                            tblContent.day.headerArr.push(element.hour);
-                            tblContent.day.bicyclesArr.push(element.result);
-                        });
-                    }
-
-                    if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
-                        tblContent.day.firstColumn = moment(dataset.cars[0].date).format("DD.MM.YYYY");
-                        tblContent.day.headerArr = [];
-                        tblContent.day.carsArr = [];
-
-                        dataset.cars.forEach(element => {
-                            tblContent.day.headerArr.push(element.hour);
-                            tblContent.day.carsArr.push(element.result);
-                        });
-
-                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
-                            tblContent.day.trucksArr = [];
-
-                            dataset.trucks.forEach(element => {
-                                tblContent.day.trucksArr.push(element.result);
-                            });
-                        }
-                    }
-
-                    this.setDayTableContent(tblContent);
+                    dataset.bicycles.forEach(element => {
+                        tblContent.day.headerArr.push(element.hour);
+                        tblContent.day.bicyclesArr.push(element.result);
+                    });
                 }
+
+                if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                    tblContent.day.firstColumn = moment(dataset.cars[0].date).format("DD.MM.YYYY");
+                    tblContent.day.headerArr = [];
+                    tblContent.day.carsArr = [];
+
+                    dataset.cars.forEach(element => {
+                        tblContent.day.headerArr.push(element.hour);
+                        tblContent.day.carsArr.push(element.result);
+                    });
+
+                    if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                        tblContent.day.trucksArr = [];
+
+                        dataset.trucks.forEach(element => {
+                            tblContent.day.trucksArr.push(element.result);
+                        });
+                    }
+                }
+
+                this.setDayTableContent(tblContent);
                 break;
             case "week":
                 tblContent.week = {};
-                if (dataset !== undefined) {
-                    tblContent.week.title = title;
+                tblContent.week.title = title;
 
-                    if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
-                        tblContent.week.firstColumn = moment(dataset.bicycles[0].date).add(3, "days").format("WW") + "/" +
-                            moment(dataset.bicycles[0].date).format("YYYY");
+                if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                    tblContent.week.firstColumn = moment(dataset.bicycles[0].date).add(3, "days").format("WW") + "/" +
+                        moment(dataset.bicycles[0].date).format("YYYY");
 
-                        tblContent.week.headerDateArr = [];
-                        tblContent.week.headerHourArr = [];
-                        tblContent.week.bicyclesArr = [];
+                    tblContent.week.headerDateArr = [];
+                    tblContent.week.headerHourArr = [];
+                    tblContent.week.bicyclesArr = [];
 
-                        dataset.bicycles.forEach(element => {
-                            tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
-                            tblContent.week.headerHourArr.push(element.hour);
-                            tblContent.week.bicyclesArr.push(element.result);
-                        });
-                    }
-
-                    if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
-                        tblContent.week.firstColumn = moment(dataset.cars[0].date).add(3, "days").format("WW") + "/" +
-                            moment(dataset.cars[0].date).format("YYYY");
-                        tblContent.week.headerDateArr = [];
-                        tblContent.week.headerHourArr = [];
-                        tblContent.week.carsArr = [];
-
-                        dataset.cars.forEach(element => {
-                            tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
-                            tblContent.week.headerHourArr.push(element.hour);
-                            tblContent.week.carsArr.push(element.result);
-                        });
-
-                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
-                            tblContent.week.firstColumn = moment(dataset.trucks[0].date).add(3, "days").format("WW") + "/" +
-                                moment(dataset.trucks[0].date).format("YYYY");
-                            tblContent.week.trucksArr = [];
-
-                            dataset.trucks.forEach(element => {
-                                tblContent.week.trucksArr.push(element.result);
-                            });
-                        }
-                    }
-
-                    this.setWeekTableContent(tblContent);
+                    dataset.bicycles.forEach(element => {
+                        tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
+                        tblContent.week.headerHourArr.push(element.hour);
+                        tblContent.week.bicyclesArr.push(element.result);
+                    });
                 }
+
+                if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                    tblContent.week.firstColumn = moment(dataset.cars[0].date).add(3, "days").format("WW") + "/" +
+                        moment(dataset.cars[0].date).format("YYYY");
+                    tblContent.week.headerDateArr = [];
+                    tblContent.week.headerHourArr = [];
+                    tblContent.week.carsArr = [];
+
+                    dataset.cars.forEach(element => {
+                        tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
+                        tblContent.week.headerHourArr.push(element.hour);
+                        tblContent.week.carsArr.push(element.result);
+                    });
+
+                    if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                        tblContent.week.firstColumn = moment(dataset.trucks[0].date).add(3, "days").format("WW") + "/" +
+                            moment(dataset.trucks[0].date).format("YYYY");
+                        tblContent.week.trucksArr = [];
+
+                        dataset.trucks.forEach(element => {
+                            tblContent.week.trucksArr.push(element.result);
+                        });
+                    }
+
+                }
+                this.setWeekTableContent(tblContent);
                 break;
             case "year":
                 tblContent.year = {};
-                if (dataset !== undefined) {
-                    tblContent.year.title = title;
-                    if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
-                        tblContent.year.firstColumn = moment(dataset.bicycles[0].date, "YYYY-MM-DD").format("YYYY");
-                        tblContent.year.headerArr = [];
-                        tblContent.year.bicyclesArr = [];
+                tblContent.year.title = title;
+                if (Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                    tblContent.year.firstColumn = moment(dataset.bicycles[0].date, "YYYY-MM-DD").format("YYYY");
+                    tblContent.year.headerArr = [];
+                    tblContent.year.bicyclesArr = [];
 
-                        dataset.bicycles.forEach(element => {
-                            tblContent.year.headerArr.push(element.calenderWeek);
-                            tblContent.year.bicyclesArr.push(element.result);
-                        });
-                    }
-
-                    if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
-                        tblContent.year.firstColumn = moment(dataset.cars[0].date, "YYYY-MM-DD").format("YYYY");
-                        tblContent.year.headerArr = [];
-                        tblContent.year.carsArr = [];
-
-                        dataset.cars.forEach(element => {
-                            tblContent.year.headerArr.push(element.calenderWeek);
-                            tblContent.year.carsArr.push(element.result);
-                        });
-
-                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
-                            tblContent.year.trucksArr = [];
-
-                            dataset.trucks.forEach(element => {
-                                tblContent.year.trucksArr.push(element.result);
-                            });
-                        }
-                    }
-
-                    this.setYearTableContent(tblContent);
+                    dataset.bicycles.forEach(element => {
+                        tblContent.year.headerArr.push(element.calenderWeek);
+                        tblContent.year.bicyclesArr.push(element.result);
+                    });
                 }
+
+                if (Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                    tblContent.year.firstColumn = moment(dataset.cars[0].date, "YYYY-MM-DD").format("YYYY");
+                    tblContent.year.headerArr = [];
+                    tblContent.year.carsArr = [];
+
+                    dataset.cars.forEach(element => {
+                        tblContent.year.headerArr.push(element.calenderWeek);
+                        tblContent.year.carsArr.push(element.result);
+                    });
+
+                    if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                        tblContent.year.trucksArr = [];
+
+                        dataset.trucks.forEach(element => {
+                            tblContent.year.trucksArr.push(element.result);
+                        });
+                    }
+                }
+                this.setYearTableContent(tblContent);
                 break;
             default:
         }
@@ -640,7 +636,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             timeSettings = {
                 interval: this.get("yearInterval"),
                 // subtract 3 days to savely include the first thursday of january into the interval, as the first calendar week always includes the first thursday of january
-                from: moment(date).subtract(3, "days").format("YYYY-MM-DD"),
+                from: moment(date).startOf("year").subtract(3, "days").format("YYYY-MM-DD"),
                 // add 3 days to savely include the last thursday of december into the interval, as the last calendar week always includes the last thursday of december
                 until: moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD")
             };
@@ -650,9 +646,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             if (!dataset.hasOwnProperty(meansOfTransport)) {
                 return;
             }
-
             this.refreshDiagramYear(dataset[meansOfTransport], year);
-
             this.prepareTableContent(this.prepareYearDataset(dataset), "year", "Jahr");
         });
     },
@@ -825,6 +819,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     refreshDiagramGeneral: function (generalConfigParams, callbackRenderLegendText, callbackRenderTextXAxis, setTooltipValue, emptyDiagramData) {
+        if (typeof generalConfigParams.dataset !== "object") {
+            return;
+        }
+
         const dataset = generalConfigParams.dataset,
             selector = generalConfigParams.selector,
             selectorTooltip = generalConfigParams.selectorTooltip,
@@ -833,8 +831,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             yAttr = generalConfigParams.yAxis.yAttr,
             xAxisText = generalConfigParams.xAxis.xAxisText,
             yAxisText = generalConfigParams.yAxis.yAxisText,
-            legendData = [],
-            attrToShowArray = [],
             diagramWidth = 570,
             diagramHeight = 280,
             axis = {
@@ -848,62 +844,23 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     label: yAxisText,
                     offset: 54
                 }
-            };
-        let graphConfig = null,
-            diagramData = [];
-
-        if (typeof dataset !== "object") {
-            return;
-        }
-
-        this.addD3LegendData("dot", "circle", callbackRenderLegendText(Object.keys(dataset)[0]), legendData);
-        this.addD3AttrToShowArray(yAttr, "line", attrToShowArray);
-        diagramData = this.addD3LineData("dot", "circle", xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData);
-
-        graphConfig = this.createD3Config(legendData, selector, selectorTooltip, diagramWidth, diagramHeight, axis, attrToShowArray, setTooltipValue, diagramData);
+            },
+            legendData = [{
+                class: "dot",
+                style: "circle",
+                text: callbackRenderLegendText(Object.keys(dataset)[0])
+            }],
+            attrToShowArray = [{
+                attrName: yAttr,
+                attrClass: "line"
+            }],
+            diagramData = this.addD3LineData("dot", "circle", xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData),
+            graphConfig = this.createD3Config(legendData, selector, selectorTooltip, diagramWidth, diagramHeight, axis, attrToShowArray, setTooltipValue, diagramData);
 
         // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows up
         $(selector + " svg").remove();
 
         Radio.trigger("Graph", "createGraph", graphConfig);
-    },
-
-    /**
-     * adds data to be used as legend data for the diagram to the given result set
-     * @param {String} classname the name of the class to use for the dots of this legend entry
-     * @param {String} stylename the name of the style to use for the dots of this legend entry (e.g. circle)
-     * @param {String} text the text to use for the legend
-     * @param {Object[]} result the result by reference to add the new legend data to: the result is an array of objects{class, style, text} that can be used as legend data for the D3 diagram
-     * @returns {Void}  -
-     */
-    addD3LegendData: function (classname, stylename, text, result) {
-        if (!Array.isArray(result)) {
-            return;
-        }
-
-        result.push({
-            class: classname,
-            style: stylename,
-            text: text
-        });
-    },
-
-    /**
-     * adds an object{attrName, attrClass} to the given result
-     * @param {String} yAttr the name of the attribute equal to yAttr in addD3LineData
-     * @param {String} classname the name of the class to use for the line with the given yAttr
-     * @param {Object[]} result the result by reference to add the new data to: result is an array of objects{attrName, attrClass} to be used as "attrToShowArray"
-     * @returns {Void}  -
-     */
-    addD3AttrToShowArray: function (yAttr, classname, result) {
-        if (!Array.isArray(result)) {
-            return;
-        }
-
-        result.push({
-            attrName: yAttr,
-            attrClass: classname
-        });
     },
 
     /**
@@ -1129,7 +1086,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             i,
             datastream = null;
 
-        if (!Array.isArray(datastreams) || datastreams.length <= 0) {
+        if (!Array.isArray(datastreams) || datastreams.length === 0) {
             return false;
         }
 
@@ -1160,7 +1117,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             return "0";
         }
 
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d),?.*)/g, ".");
     },
 
     /**

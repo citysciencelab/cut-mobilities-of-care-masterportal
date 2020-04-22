@@ -228,37 +228,39 @@ export class TrafficCountApi {
             url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + "))";
 
         return this.http.get(url, (dataset) => {
-            if (this.checkForObservations(dataset)) {
-                sum = this.sumObservations(dataset);
-
-                if (typeof onupdate === "function") {
-                    onupdate(day, sum);
-                }
-
-                // if day equals dayToday: make a mqtt subscription to refresh sum
-                if (day === (dayTodayOpt || moment().format("YYYY-MM-DD"))) {
-                    // subscribe via mqtt
-                    const datastreamId = dataset[0].Datastreams[0]["@iot.id"],
-                        topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
-
-                    // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                    this.mqttSubscribe(topic, {retain: 2}, (payload) => {
-                        if (payload && payload.hasOwnProperty("result")) {
-                            sum += payload.result;
-
-                            if (typeof onupdate === "function") {
-                                onupdate(day, sum);
-                            }
-                        }
-                        else {
-                            (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateDay: the payload does not include a result", payload);
-                        }
-                    });
-                }
-            }
-            else {
+            if (!this.checkForObservations(dataset)) {
                 (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateDay: the dataset does not include a datastream with an observation", dataset);
+                return;
             }
+
+            sum = this.sumObservations(dataset);
+
+            if (typeof onupdate === "function") {
+                onupdate(day, sum);
+            }
+
+            // if day equals dayToday: make a mqtt subscription to refresh sum
+            if (day !== (dayTodayOpt || moment().format("YYYY-MM-DD"))) {
+                return;
+            }
+
+            // subscribe via mqtt
+            const datastreamId = dataset[0].Datastreams[0]["@iot.id"],
+                topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
+
+            // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
+            this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                if (payload && payload.hasOwnProperty("result")) {
+                    sum += payload.result;
+
+                    if (typeof onupdate === "function") {
+                        onupdate(day, sum);
+                    }
+                }
+                else {
+                    (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateDay: the payload does not include a result", payload);
+                }
+            });
         }, onstart, oncomplete, onerror || this.defaultErrorHandler);
     }
 
@@ -285,51 +287,50 @@ export class TrafficCountApi {
             urlThisWeeks15min = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + lastMonday + "))";
 
         return this.http.get(urlWeekly, (datasetWeekly) => {
-            if (this.checkForObservations(datasetWeekly)) {
-                sumWeekly = this.sumObservations(datasetWeekly);
+            if (!this.checkForObservations(datasetWeekly)) {
+                (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateYear: datasetWeekly does not include a datastream with an observation", datasetWeekly);
+                return;
+            }
 
-                if (year !== yearToday) {
-                    if (typeof onupdate === "function") {
-                        onupdate(year, sumWeekly);
-                    }
-                    return;
+            sumWeekly = this.sumObservations(datasetWeekly);
+
+            if (typeof onupdate === "function") {
+                onupdate(year, sumWeekly);
+            }
+
+
+            if (year !== yearToday) {
+                return;
+            }
+
+            // year eq todays year
+            this.http.get(urlThisWeeks15min, (dataset15min) => {
+                if (!this.checkForObservations(dataset15min)) {
+                    (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateYear: dataset15min does not include a datastream with an observation", dataset15min);
                 }
 
-                // year eq todays year
-                this.http.get(urlThisWeeks15min, (dataset15min) => {
-                    if (this.checkForObservations(dataset15min)) {
-                        sumThisWeek = this.sumObservations(dataset15min);
+                sumThisWeek = this.sumObservations(dataset15min);
 
-                        if (typeof onupdate === "function") {
-                            onupdate(year, sumWeekly + sumThisWeek);
-                        }
+                if (typeof onupdate === "function") {
+                    onupdate(year, sumWeekly + sumThisWeek);
+                }
 
-                        // subscribe via mqtt
-                        const datastreamId = dataset15min[0].Datastreams[0]["@iot.id"],
-                            topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
+                // subscribe via mqtt
+                const datastreamId = dataset15min[0].Datastreams[0]["@iot.id"],
+                    topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
-                        // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                        this.mqttSubscribe(topic, {retain: 2}, (payload) => {
-                            if (payload && payload.hasOwnProperty("result")) {
-                                sumThisWeek += payload.result;
-
-                                if (typeof onupdate === "function") {
-                                    onupdate(year, sumWeekly + sumThisWeek);
-                                }
-                            }
-                            else {
-                                (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateYear: the payload does not include a result", payload);
-                            }
-                        });
+                // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
+                this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                    if (!payload || !payload.hasOwnProperty("result")) {
+                        (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateYear: the payload does not include a result", payload);
                     }
-                    else {
-                        (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateYear: dataset15min does not include a datastream with an observation", dataset15min);
+                    sumThisWeek += payload.result;
+
+                    if (typeof onupdate === "function") {
+                        onupdate(year, sumWeekly + sumThisWeek);
                     }
-                }, false, oncomplete, onerror || this.defaultErrorHandler);
-            }
-            else {
-                (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateYear: datasetWeekly does not include a datastream with an observation", datasetWeekly);
-            }
+                });
+            }, false, oncomplete, onerror || this.defaultErrorHandler);
         }, onstart, year !== yearToday ? oncomplete : false, onerror || this.defaultErrorHandler);
     }
 
@@ -352,45 +353,39 @@ export class TrafficCountApi {
             urlThisWeeks15min = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + lastMonday + "))";
 
         return this.http.get(urlWeekly, (datasetWeekly) => {
-            if (this.checkForObservations(datasetWeekly)) {
-                sumWeekly = this.sumObservations(datasetWeekly);
-                firstDate = this.getFirstDate(datasetWeekly);
-
-                this.http.get(urlThisWeeks15min, (dataset15min) => {
-                    if (this.checkForObservations(dataset15min)) {
-                        sumThisWeek = this.sumObservations(dataset15min);
-                        firstDate = this.getFirstDate(dataset15min, firstDate);
-
-                        if (typeof onupdate === "function") {
-                            onupdate(moment(firstDate).format("YYYY-MM-DD"), sumWeekly + sumThisWeek);
-                        }
-
-                        // subscribe via mqtt
-                        const datastreamId = dataset15min[0].Datastreams[0]["@iot.id"],
-                            topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
-
-                        // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                        this.mqttSubscribe(topic, {retain: 2}, (payload) => {
-                            if (payload && payload.hasOwnProperty("result")) {
-                                sumThisWeek += payload.result;
-
-                                if (typeof onupdate === "function") {
-                                    onupdate(moment(firstDate).format("YYYY-MM-DD"), sumWeekly + sumThisWeek);
-                                }
-                            }
-                            else {
-                                (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateTotal: the payload does not include a result", payload);
-                            }
-                        });
-                    }
-                    else {
-                        (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateTotal: dataset15min does not include a datastream with an observation", dataset15min);
-                    }
-                }, false, oncomplete, onerror || this.defaultErrorHandler);
-            }
-            else {
+            if (!this.checkForObservations(datasetWeekly)) {
                 (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateTotal: datasetWeekly does not include a datastream with an observation", datasetWeekly);
             }
+            sumWeekly = this.sumObservations(datasetWeekly);
+            firstDate = this.getFirstDate(datasetWeekly);
+
+            this.http.get(urlThisWeeks15min, (dataset15min) => {
+                if (!this.checkForObservations(dataset15min)) {
+                    (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateTotal: dataset15min does not include a datastream with an observation", dataset15min);
+                }
+                sumThisWeek = this.sumObservations(dataset15min);
+                firstDate = this.getFirstDate(dataset15min, firstDate);
+
+                if (typeof onupdate === "function") {
+                    onupdate(moment(firstDate).format("YYYY-MM-DD"), sumWeekly + sumThisWeek);
+                }
+
+                // subscribe via mqtt
+                const datastreamId = dataset15min[0].Datastreams[0]["@iot.id"],
+                    topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
+
+                // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
+                this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                    if (!payload || !payload.hasOwnProperty("result")) {
+                        (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateTotal: the payload does not include a result", payload);
+                    }
+                    sumThisWeek += payload.result;
+
+                    if (typeof onupdate === "function") {
+                        onupdate(moment(firstDate).format("YYYY-MM-DD"), sumWeekly + sumThisWeek);
+                    }
+                });
+            }, false, oncomplete, onerror || this.defaultErrorHandler);
         }, onstart, false, onerror || this.defaultErrorHandler);
     }
 

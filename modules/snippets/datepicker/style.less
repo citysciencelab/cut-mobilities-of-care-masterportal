@@ -40,49 +40,47 @@
 					}
 				}
 			}
-			tbody {
-				tr {
-                    &.week {
+			tbody tr {
+                &.week {
+                    &:hover {
+                        outline: 2px solid #08589e;
+                    }
+                }
+                &.week-active {
+                    border-radius: @borderRadius0;
+                    background-color: @darkblueColor;
+                    color: @whiteColor;
+                    td {
+                        background-image: none;
                         &:hover {
-                            outline: 2px solid #08589e;
-                        }
-                    }
-                    &.week-active {
-                        border-radius: @borderRadius0;
-                        background-color: @darkblueColor;;
-                        color: @whiteColor;
-                        td {
-                            background-image: none;
-                            &:hover {
-                                background-color: @whiteColor;;
-                                color: @darkblueColor;
-                            }
-                        }
-                    }
-					&td {
-						border-radius: @borderRadius0;
-						background: none;
-						color: @darkgreyColor;
-						&:hover {
-							opacity: @hoverOpacity;
-							background-color: @darkblueColor;
-							color: @whiteColor;
-						}
-						&.today {
-							border: 2px solid @darkblueColor;
-						}
-						&.active {
-							border-radius: @borderRadius0;
-							background-color: @darkblueColor;;
-							color: @whiteColor;
-						}
-                        &.disabled {
-                            color: @lightgreyColor;
-                        }
-                        &.cw {
+                            background-color: @whiteColor;
                             color: @darkblueColor;
                         }
+                    }
+                }
+				&td {
+					border-radius: @borderRadius0;
+					background: none;
+					color: @darkgreyColor;
+					&:hover {
+						opacity: @hoverOpacity;
+						background-color: @darkblueColor;
+						color: @whiteColor;
 					}
+					&.today {
+						border: 2px solid @darkblueColor;
+					}
+					&.active {
+						border-radius: @borderRadius0;
+						background-color: @darkblueColor;
+						color: @whiteColor;
+					}
+                    &.disabled {
+                        color: @lightgreyColor;
+                    }
+                    &.cw {
+                        color: @darkblueColor;
+                    }
 				}
 			}
 		}
@@ -114,30 +112,24 @@
                     }
                 }
             }
-            tbody {
-                tr {
-                    td {
-                        span {
-                            border-radius: @borderRadius0;
-                            background: none;
-                            color: @darkgreyColor;
-                            &:hover {
-                                color: @darkblueColor;
-                                outline: 2px solid #08589e;
-                            }
-                            &.active {
-                                background: @darkblueColor;
-                                color: @whiteColor;
-                                outline: none;
-                            }
-                            &.disabled {
-                                color: @lightgreyColor;
-                                &:hover {
-                                  background: none;
-                                  outline: none;
-                                }
-                            }
-                        }
+            tbody tr td span {
+                border-radius: @borderRadius0;
+                background: none;
+                color: @darkgreyColor;
+                &:hover {
+                    color: @darkblueColor;
+                    outline: 2px solid #08589e;
+                }
+                &.active {
+                    background: @darkblueColor;
+                    color: @whiteColor;
+                    outline: none;
+                }
+                &.disabled {
+                    color: @lightgreyColor;
+                    &:hover {
+                      background: none;
+                      outline: none;
                     }
                 }
             }

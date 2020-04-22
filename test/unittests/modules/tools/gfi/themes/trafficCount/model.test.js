@@ -112,32 +112,6 @@ describe("tools/gfi/themes/trafficCount", function () {
         });
     });
 
-    describe("addD3LegendData", function () {
-        it("should create an array of objects{class, style, text} that can be used as legend data for the D3 diagram", function () {
-            const legendData = [],
-                legendDataExpected = [{
-                    class: "classname",
-                    style: "stylename",
-                    text: "text"
-                }];
-
-            model.addD3LegendData("classname", "stylename", "text", legendData);
-
-            expect(legendData).to.deep.equal(legendDataExpected);
-        });
-    });
-
-    describe("addD3AttrToShowArray", function () {
-        it("should create an array of objects{attrName, attrClass} to be used as 'attrToShowArray'", function () {
-            const attrToShowArray = [],
-                attrToShowArrayExpected = [{attrClass: "classname", attrName: "yAttr"}];
-
-            model.addD3AttrToShowArray("yAttr", "classname", attrToShowArray);
-
-            expect(attrToShowArray).to.deep.equal(attrToShowArrayExpected);
-        });
-    });
-
     describe("addD3LineData", function () {
         it("should create an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram", function () {
             const lineData = model.addD3LineData("classname", "stylename", "xAttr", "yAttr", function () {

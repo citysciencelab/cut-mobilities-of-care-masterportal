@@ -303,162 +303,27 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
     },
 
     /**
-     * creates HTML-Code for dayTableColumns
-     * @return {String} HTML
+     * Create HTML-Code for table
+     * @param   {string[]} tableColumnsArr Array of table headers
+     * @param   {string} firstColumn     text of first column
+     * @param   {string} headerPrefix    text to prefix column
+     * @param   {string} headerSuffix    test to suffix column
+     * @returns {string} html snippet
      */
-    createDayTableCars: function () {
-        const dayTableColumnsCarsArr = this.model.get("dayTableContent").day.carsArr;
-        let dayTableColumnsHtml = "";
+    createTableContent: function (tableColumnsArr, firstColumn, headerPrefix, headerSuffix) {
+        let tableColumnsHtml = "";
 
-        if (dayTableColumnsCarsArr !== undefined) {
-            dayTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("dayTableContent").day.firstColumn + " KFZ abs.</td>";
-            if (Array.isArray(dayTableColumnsCarsArr) && dayTableColumnsCarsArr.length > 0) {
-                for (const key in dayTableColumnsCarsArr) {
-                    dayTableColumnsHtml += "<td class=\"text-align-center\">" + dayTableColumnsCarsArr[key] + "</td>";
-                }
+        if (tableColumnsArr === undefined) {
+            return "";
+        }
+        tableColumnsHtml += "<td class=\"tableFirstColumn\">" + headerPrefix + firstColumn + headerSuffix + "</td>";
+        if (Array.isArray(tableColumnsArr) && tableColumnsArr.length > 0) {
+            for (const key in tableColumnsArr) {
+                tableColumnsHtml += "<td class=\"text-align-center\">" + tableColumnsArr[key] + "</td>";
             }
         }
 
-        return dayTableColumnsHtml;
-    },
-
-    /**
-     * creates HTML-Code for yearTableColumns
-     * @return {String} HTML
-     */
-    createYearTableCars: function () {
-        const yearTableColumnsCarsArr = this.model.get("yearTableContent").year.carsArr;
-        let yearTableColumnsHtml = "";
-
-        if (yearTableColumnsCarsArr !== undefined) {
-            yearTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("yearTableContent").year.firstColumn + " KFZ abs.</td>";
-            if (Array.isArray(yearTableColumnsCarsArr) && yearTableColumnsCarsArr.length > 0) {
-                for (const key in yearTableColumnsCarsArr) {
-                    yearTableColumnsHtml += "<td class=\"text-align-center\">" + yearTableColumnsCarsArr[key] + "</td>";
-                }
-            }
-        }
-
-        return yearTableColumnsHtml;
-    },
-
-    /**
-     * creates HTML-Code for yearTableColumns
-     * @return {String} HTML
-     */
-    createDayTableBicycles: function () {
-        const dayTableColumnsBicyclesArr = this.model.get("dayTableContent").day.bicyclesArr;
-        let dayTableColumnsHtml = "";
-
-        if (dayTableColumnsBicyclesArr !== undefined) {
-            dayTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("dayTableContent").day.firstColumn + "</td>";
-            if (Array.isArray(dayTableColumnsBicyclesArr) && dayTableColumnsBicyclesArr.length > 0) {
-                for (const key in dayTableColumnsBicyclesArr) {
-                    dayTableColumnsHtml += "<td class=\"text-align-center\">" + dayTableColumnsBicyclesArr[key] + "</td>";
-                }
-            }
-        }
-
-        return dayTableColumnsHtml;
-    },
-
-    /**
-     * creates HTML-Code for yearTableColumns
-     * @return {String} HTML
-     */
-    createWeekTableBicycles: function () {
-        const weekTableColumnsBicyclesArr = this.model.get("weekTableContent").week.bicyclesArr;
-        let weekTableColumnsHtml = "";
-
-        if (weekTableColumnsBicyclesArr !== undefined) {
-            weekTableColumnsHtml += "<td class=\"tableFirstColumn\">KW " + this.model.get("weekTableContent").week.firstColumn + "</td>";
-            if (Array.isArray(weekTableColumnsBicyclesArr) && weekTableColumnsBicyclesArr.length > 0) {
-                for (const key in weekTableColumnsBicyclesArr) {
-                    weekTableColumnsHtml += "<td class=\"text-align-center\">" + weekTableColumnsBicyclesArr[key] + "</td>";
-                }
-            }
-        }
-        return weekTableColumnsHtml;
-    },
-
-    /**
-     * creates HTML-Code for yearTableColumns
-     * @return {String} HTML
-     */
-    createYearTableBicycles: function () {
-        const yearTableColumnsBicyclesArr = this.model.get("yearTableContent").year.bicyclesArr;
-        let yearTableColumnsHtml = "";
-
-        if (yearTableColumnsBicyclesArr !== undefined) {
-            yearTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("yearTableContent").year.firstColumn + "</td>";
-            if (Array.isArray(yearTableColumnsBicyclesArr) && yearTableColumnsBicyclesArr.length > 0) {
-                for (const key in yearTableColumnsBicyclesArr) {
-                    yearTableColumnsHtml += "<td class=\"text-align-center\">" + yearTableColumnsBicyclesArr[key] + "</td>";
-                }
-            }
-        }
-
-        return yearTableColumnsHtml;
-    },
-
-    /**
-     * creates HTML-Code for dayTableColumns
-     * @return {String} HTML
-     */
-    createDayTableTrucks: function () {
-        const dayTableColumnsTrucksArr = this.model.get("dayTableContent").day.trucksArr;
-        let dayTableColumnsHtml = "";
-
-        if (dayTableColumnsTrucksArr !== undefined) {
-            dayTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("dayTableContent").day.firstColumn + " SV-Anteil in %</td>";
-            if (Array.isArray(dayTableColumnsTrucksArr) && dayTableColumnsTrucksArr.length > 0) {
-                for (const key in dayTableColumnsTrucksArr) {
-                    dayTableColumnsHtml += "<td class=\"text-align-center\">" + dayTableColumnsTrucksArr[key] + "</td>";
-                }
-            }
-        }
-
-        return dayTableColumnsHtml;
-    },
-
-    /**
-     * creates HTML-Code for weekTableColumns
-     * @return {String} HTML
-     */
-    createWeekTableTrucks: function () {
-        const weekTableColumnsTrucksArr = this.model.get("weekTableContent").week.trucksArr;
-        let weekTableColumnsHtml = "";
-
-        if (weekTableColumnsTrucksArr !== undefined) {
-            weekTableColumnsHtml += "<td class=\"tableFirstColumn\">KW " + this.model.get("weekTableContent").week.firstColumn + " SV-Anteil in %</td>";
-            if (Array.isArray(weekTableColumnsTrucksArr) && weekTableColumnsTrucksArr.length > 0) {
-                for (const key in weekTableColumnsTrucksArr) {
-                    weekTableColumnsHtml += "<td class=\"text-align-center\">" + weekTableColumnsTrucksArr[key] + "</td>";
-                }
-            }
-        }
-
-        return weekTableColumnsHtml;
-    },
-
-    /**
-     * creates HTML-Code for yearTableTrucks
-     * @return {String} HTML
-     */
-    createYearTableTrucks: function () {
-        const yearTableColumnsTrucksArr = this.model.get("yearTableContent").year.trucksArr;
-        let yearTableColumnsHtml = "";
-
-        if (yearTableColumnsTrucksArr !== undefined) {
-            yearTableColumnsHtml += "<td class=\"tableFirstColumn\">" + this.model.get("yearTableContent").year.firstColumn + " SV-Anteil in %</td>";
-            if (Array.isArray(yearTableColumnsTrucksArr) && yearTableColumnsTrucksArr.length > 0) {
-                for (const key in yearTableColumnsTrucksArr) {
-                    yearTableColumnsHtml += "<td class=\"text-align-center\">" + yearTableColumnsTrucksArr[key] + "</td>";
-                }
-            }
-        }
-
-        return yearTableColumnsHtml;
+        return tableColumnsHtml;
     },
 
     /**
@@ -487,26 +352,6 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
     },
 
     /**
-     * creates HTML-Code for dayTableColumns
-     * @return {String} HTML
-     */
-    createWeekTableCars: function () {
-        const weekTableColumnsCarsArr = this.model.get("weekTableContent").week.carsArr;
-        let weekTableColumnsHtml = "";
-
-        if (weekTableColumnsCarsArr !== undefined) {
-            weekTableColumnsHtml += "<td class=\"tableFirstColumn\">KW " + this.model.get("weekTableContent").week.firstColumn + " KFZ abs.</td>";
-            if (Array.isArray(weekTableColumnsCarsArr) && weekTableColumnsCarsArr.length > 0) {
-                for (const key in weekTableColumnsCarsArr) {
-                    weekTableColumnsHtml += "<td class=\"text-align-center\">" + weekTableColumnsCarsArr[key] + "</td>";
-                }
-            }
-        }
-
-        return weekTableColumnsHtml;
-    },
-
-    /**
      * creates HTML-Code for yearTableHeader
      * @return {String} HTML
      */
@@ -531,31 +376,41 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      * @returns {Void}  -
      */
     renderDayTableContent: function () {
+        const carsArr = this.model.get("dayTableContent").day.carsArr,
+            bicyclesArr = this.model.get("dayTableContent").day.bicyclesArr,
+            trucksArr = this.model.get("dayTableContent").day.trucksArr,
+            firstColumn = this.model.get("dayTableContent").day.firstColumn;
+
         this.$el.find("#dayTableContentHeader").empty();
         this.$el.find("#dayTableContentCars").empty();
         this.$el.find("#dayTableContentTrucks").empty();
         this.$el.find("#dayTableContentBicycles").empty();
 
         this.$el.find("#dayTableContentHeader").append(this.createDayTableHeader());
-        this.$el.find("#dayTableContentCars").append(this.createDayTableCars());
-        this.$el.find("#dayTableContentTrucks").append(this.createDayTableTrucks());
-        this.$el.find("#dayTableContentBicycles").append(this.createDayTableBicycles());
+        this.$el.find("#dayTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
+        this.$el.find("#dayTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+        this.$el.find("#dayTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
     },
 
     /**
-     * appends header and columns to day table
+     * appends header and columns to week table
      * @returns {Void}  -
      */
     renderWeekTableContent: function () {
+        const bicyclesArr = this.model.get("weekTableContent").week.bicyclesArr,
+            trucksArr = this.model.get("weekTableContent").week.trucksArr,
+            carsArr = this.model.get("weekTableContent").week.carsArr,
+            firstColumn = this.model.get("weekTableContent").week.firstColumn;
+
         this.$el.find("#weekTableContentHeader").empty();
         this.$el.find("#weekTableContentCars").empty();
         this.$el.find("#weekTableContentTrucks").empty();
         this.$el.find("#weekTableContentBicycles").empty();
 
         this.$el.find("#weekTableContentHeader").append(this.createWeekTableHeader());
-        this.$el.find("#weekTableContentCars").append(this.createWeekTableCars());
-        this.$el.find("#weekTableContentTrucks").append(this.createWeekTableTrucks());
-        this.$el.find("#weekTableContentBicycles").append(this.createWeekTableBicycles());
+        this.$el.find("#weekTableContentCars").append(this.createTableContent(carsArr, firstColumn, "KW ", " KFZ abs."));
+        this.$el.find("#weekTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "KW ", " SV-Anteil in %"));
+        this.$el.find("#weekTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "KW ", ""));
     },
 
     /**
@@ -563,15 +418,20 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      * @returns {Void}  -
      */
     renderYearTableContent: function () {
+        const carsArr = this.model.get("yearTableContent").year.carsArr,
+            firstColumn = this.model.get("yearTableContent").year.firstColumn,
+            trucksArr = this.model.get("yearTableContent").year.trucksArr,
+            bicyclesArr = this.model.get("yearTableContent").year.bicyclesArr;
+
         this.$el.find("#yearTableContentHeader").empty();
         this.$el.find("#yearTableContentCars").empty();
         this.$el.find("#yearTableContentTrucks").empty();
         this.$el.find("#yearTableContentBicycles").empty();
 
         this.$el.find("#yearTableContentHeader").append(this.createYearTableHeader());
-        this.$el.find("#yearTableContentCars").append(this.createYearTableCars());
-        this.$el.find("#yearTableContentTrucks").append(this.createYearTableTrucks());
-        this.$el.find("#yearTableContentBicycles").append(this.createYearTableBicycles());
+        this.$el.find("#yearTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
+        this.$el.find("#yearTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+        this.$el.find("#yearTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
     },
 
     /**
