@@ -43,7 +43,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                 extent = projection.getExtent(),
                 style = this.get("style"),
                 format = this.get("format"),
-                wrapX = this.get("wrapX"),
+                wrapX = this.get("wrapX") ? this.get("wrapX") : false,
                 urls = this.get("urls"),
                 size = getWidth(extent) / parseInt(this.get("tileSize"), 10),
                 resLength = parseInt(this.get("resLength"), 10),
@@ -75,66 +75,24 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
         }
         else {
             const layerIdentifier = this.get("layers"),
-                url = this.get("capabilitiesUrl");
+                url = this.get("capabilitiesUrl"),
+                matrixSet = this.get("tileMatrixSet"),
+                capabilitiesOptions = {
+                    layer: layerIdentifier
+                };
 
-            let matrixSet = this.get("tileMatrixSet");
+            // use the matrixSet (if defined) for optionsFromCapabilities
+            // else look for a tilematrixset in epsg:3857
+            if (matrixSet && matrixSet.length > 0) {
+                capabilitiesOptions.matrixSet = matrixSet;
+            }
+            else {
+                capabilitiesOptions.projection = "EPSG:3857";
+            }
 
             this.fetchWMTSCapabilities(url)
                 .then(function (result) {
-                    if (_.isUndefined(matrixSet)) {
-                        // look for TileMatrixsets in capabilities
-                        // get the specific layer object from capabilities result
-                        const layers = result.Contents.Layer,
-                            layer = layers.find(function (l) {
-                                return l.Identifier === this.get("layers");
-                            }.bind(this)),
-                            tileMatrixSetLayerList = [],
-                            // get list of all available tileMatrixSets in the capabilities
-                            tileMatrixSetList = result.Contents.TileMatrixSet,
-                            // create list of supported crs in project
-                            supportedCRSCodes = [
-                                "EPSG:4326",
-                                "EPSG:3857"
-                            ];
-
-                        let tileMatrixSet = null,
-                            tileMatrixSetListFiltered = [];
-
-                        // add project defined crs to list of supported crs
-                        Config.namedProjections.forEach(function (projection) {
-                            supportedCRSCodes.push(projection[0]);
-                        });
-
-                        if (!layer) {
-                            Promise.reject("Cannot find the given layer in WMTS-Capabilities.");
-                        }
-
-                        // tileMatrixSets list of the layer
-                        layer.TileMatrixSetLink.forEach(function (tilematrix) {
-                            tileMatrixSetLayerList.push(tilematrix.TileMatrixSet);
-                        });
-
-                        // filter all available tileMatrixSets with the layer specific ones
-                        tileMatrixSetListFiltered = tileMatrixSetList.filter(function (obj) {
-                            return tileMatrixSetLayerList.includes(obj.Identifier);
-                        });
-
-                        // return first tileMatrixSet whose crs is supported
-                        tileMatrixSet = tileMatrixSetListFiltered.find(function (obj) {
-                            return supportedCRSCodes.includes("EPSG:" + obj.SupportedCRS.split("::")[1]);
-                        });
-
-                        if (!tileMatrixSet) {
-                            Promise.reject("Cannot find a suitable TileMatrixSet. Please check config of WMTS-layer");
-                        }
-
-                        matrixSet = tileMatrixSet.Identifier;
-                    }
-
-                    const options = optionsFromCapabilities(result, {
-                        layer: layerIdentifier,
-                        matrixSet: matrixSet
-                    });
+                    const options = optionsFromCapabilities(result, capabilitiesOptions);
 
                     if (options !== null) {
                         const source = new WMTS(options);
@@ -146,10 +104,14 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                         Promise.reject("Cannot get options from WMTS-Capabilities");
                     }
                 }.bind(this))
-                .catch(function (errorMessage) {
-                    this.showErrorMessage(errorMessage, this.get("name"));
+                .catch(function (error) {
                     this.removeLayer();
                     Radio.trigger("Util", "refreshTree");
+                    if (error === "Fetch error") {
+                        // error message has already been printed earlier
+                        return;
+                    }
+                    this.showErrorMessage(error, this.get("name"));
                 }.bind(this));
         }
     },
@@ -173,39 +135,26 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     /**
      * Fetch the WMTS-GetCapabilities document and parse it
      * @param {string} url url to fetch
-     * @property {number} resultStatus HTTP-Status code of response
      * @returns {promise} promise resolves to parsed WMTS-GetCapabilities object
      */
     fetchWMTSCapabilities: function (url) {
-        let resultStatus = 0,
-            parser = null;
-
         return fetch(url)
             .then((result) => {
-                resultStatus = result.status;
+                if (!result.ok) {
+                    throw Error(result.statusText);
+                }
                 return result.text();
             })
             .then(result => {
-                switch (resultStatus) {
-                    case 200:
-                        parser = new WMTSCapabilities();
-                        return parser.read(result);
-                    case 400:
-                        throw new Error("400 (Bad Request)");
-                    case 404:
-                        throw new Error("404 (Server not found)");
-                    case 500:
-                        throw new Error("500 (Server Error)");
-                    default:
-                        throw new Error("Check GetCapabilities-URL: ${resultStatus}");
-                }
+                const parser = new WMTSCapabilities();
+
+                return parser.read(result);
             })
             .catch(function (error) {
-                const errorMessage = `WMTS-Capabilities fetch error: ${error}`;
+                const errorMessage = " WMTS-Capabilities fetch Error: " + error;
 
-                this.removeLayer();
-                Radio.trigger("Util", "refreshTree");
                 this.showErrorMessage(errorMessage, this.get("name"));
+                return Promise.reject("Fetch error");
             }.bind(this));
     },
 
@@ -217,7 +166,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      */
     showErrorMessage: (errorMessage, layerName) => {
         Radio.trigger("Alert", "alert", {
-            text: `Layer ${layerName}: ${errorMessage}`,
+            text: "Layer " + layerName + ": " + errorMessage,
             kategorie: "alert-danger"
         });
     },
@@ -272,14 +221,19 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                             }
                             else {
                                 this.setLegendURL(null);
-                                console.warn(`No legend url found for layer ${this.get("layer")}`);
+                                console.warn("no legend url found for layer " + this.get("layers"));
                             }
+
                         }
                     }.bind(this));
                 }.bind(this))
-                .catch((error) => {
+                .catch(function (error) {
+                    if (error === "Fetch error") {
+                        // error message has already been printed earlier
+                        return;
+                    }
                     this.showErrorMessage(error, this.get("name"));
-                });
+                }.bind(this));
         }
 
     },
