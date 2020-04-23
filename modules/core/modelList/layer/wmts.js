@@ -26,7 +26,11 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      */
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
-        this.listenTo(this, "change:layerSource", this.updateLayerSource);
+        this.listenTo(this, "change:layerSource", () => {
+            if (this.get("optionsFromCapabilities")) {
+                this.updateLayerSource();
+            }
+        });
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
         }

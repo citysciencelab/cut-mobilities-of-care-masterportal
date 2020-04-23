@@ -825,7 +825,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     updateLayerSource: function () {
         const layer = Radio.request("Map", "getLayerByName", this.get("name"));
 
-        if (this.get("layerSource") !== null && this.get("optionsFromCapabilities")) {
+        if (this.get("layerSource") !== null) {
             layer.setSource(this.get("layerSource"));
             layer.getSource().refresh();
         }
