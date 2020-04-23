@@ -293,86 +293,67 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
      * @returns {void}
      */
     inactiveButtons: function (activeButtonId, deactivateButton) {
-        const activeButton = activeButtonId,
-            buttonPoint = $("#wfst-module-recordButton-point")[0],
-            buttonLine = $("#wfst-module-recordButton-line")[0],
-            buttonArea = $("#wfst-module-recordButton-area")[0],
-            layerSelect = $("#wfstSelectLayer")[0],
-            buttonEdit = $("#wfst-module-recordButton-edit")[0],
-            buttonDel = $("#wfst-module-recordButton-delete")[0],
+        const objects = {
+                buttonPoint: {
+                    element: $("#wfst-module-recordButton-point")[0],
+                    buttonPointDisable: false
+                },
+                buttonLine: {
+                    element: $("#wfst-module-recordButton-line")[0],
+                    buttonLineDisable: false
+                },
+                buttonArea: {
+                    element: $("#wfst-module-recordButton-area")[0],
+                    buttonAreaDisable: false
+                },
+                buttonEdit: {
+                    element: $("#wfst-module-recordButton-edit")[0],
+                    buttonEditDisable: false
+                },
+                buttonDel: {
+                    element: $("#wfst-module-recordButton-delete")[0],
+                    buttonDeleteDisable: false
+                },
+                layerSelect: {
+                    element: $("#wfstSelectLayer")[0],
+                    layerSelectDisable: false
+                }
+            },
+            activeButton = activeButtonId,
             buttonSave = $("#wfst-module-recordButton-save")[0],
             buttonDiscard = $("#wfst-module-recordButton-discard")[0],
             deactivateAll = "deactivate-all";
 
-        if (_.isObject(buttonPoint)) {
-            if (activeButton === buttonPoint.id) {
-                this.toggleObj(buttonLine, true);
-                this.toggleObj(buttonArea, true);
-                this.toggleObj(buttonEdit, true);
-                this.toggleObj(buttonDel, true);
-                this.toggleObj(layerSelect, true);
-            }
+        if (typeof objects.buttonPoint === "object" && activeButton === objects.buttonPoint.element.id) {
+            Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonPointDisable === undefined ? true : objects[key].buttonPointDisable));
         }
-        if (_.isObject(buttonLine)) {
-            if (activeButton === buttonLine.id) {
-                this.toggleObj(buttonPoint, true);
-                this.toggleObj(buttonArea, true);
-                this.toggleObj(buttonEdit, true);
-                this.toggleObj(buttonDel, true);
-                this.toggleObj(layerSelect, true);
-            }
+        if (typeof objects.buttonLine === "object" && activeButton === objects.buttonLine.element.id) {
+            Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonLineDisable === undefined ? true : objects[key].buttonLineDisable));
         }
-        if (_.isObject(buttonArea)) {
-            if (activeButton === buttonArea.id) {
-                this.toggleObj(buttonPoint, true);
-                this.toggleObj(buttonLine, true);
-                this.toggleObj(buttonEdit, true);
-                this.toggleObj(buttonDel, true);
-                this.toggleObj(layerSelect, true);
-            }
+        if (typeof objects.buttonArea === "object" && activeButton === objects.buttonArea.element.id) {
+            Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonAreaDisable === undefined ? true : objects[key].buttonAreaDisable));
         }
-        if (activeButton === buttonEdit.id) {
-            this.toggleObj(buttonPoint, true);
-            this.toggleObj(buttonLine, true);
-            this.toggleObj(buttonArea, true);
-            this.toggleObj(buttonDel, true);
-            this.toggleObj(layerSelect, true);
+        if (typeof objects.buttonEdit === "object" && activeButton === objects.buttonEdit.element.id) {
+            Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonEditDisable === undefined ? true : objects[key].buttonEditDisable));
         }
-        if (activeButton === buttonDel.id) {
-            this.toggleObj(buttonPoint, true);
-            this.toggleObj(buttonLine, true);
-            this.toggleObj(buttonArea, true);
-            this.toggleObj(buttonEdit, true);
-            this.toggleObj(layerSelect, true);
+        if (typeof objects.buttonDel === "object" && activeButton === objects.buttonDel.element.id) {
+            Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonDeleteDisable === undefined ? true : objects[key].buttonDeleteDisable));
         }
-        if (_.isObject(buttonSave) && _.isObject(buttonDiscard)) {
+        if (typeof objects.layerSelect === "object" && activeButton === objects.layerSelect.element.id) {
+            Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].layerSelectDisable === undefined ? true : objects[key].layerSelectDisable));
+        }
+        if (typeof buttonSave === "object" && typeof buttonDiscard === "object") {
             if (activeButton === buttonSave.id || activeButton === buttonDiscard.id) {
-                this.toggleObj(buttonPoint, false);
-                this.toggleObj(buttonLine, false);
-                this.toggleObj(buttonArea, false);
-                this.toggleObj(buttonEdit, false);
-                this.toggleObj(buttonDel, false);
-                this.toggleObj(layerSelect, false);
+                Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, false));
             }
         }
-        if (_.isString(deactivateButton)) {
-            if (deactivateButton === buttonDel.id) {
-                this.toggleObj(buttonPoint, false);
-                this.toggleObj(buttonLine, false);
-                this.toggleObj(buttonArea, false);
-                this.toggleObj(buttonEdit, false);
-                this.toggleObj(layerSelect, false);
-            }
+        if (typeof deactivateButton === "string" && deactivateButton === objects.buttonDel.element.id) {
+            Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, false));
             $("#" + deactivateButton)[0].classList.remove("record-active");
             this.unregisterCursorGlyph();
         }
         if (activeButton === deactivateAll) {
-            this.toggleObj(buttonPoint, true);
-            this.toggleObj(buttonLine, true);
-            this.toggleObj(buttonArea, true);
-            this.toggleObj(buttonEdit, true);
-            this.toggleObj(buttonDel, true);
-            this.toggleObj(layerSelect, true);
+            Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, true));
         }
     },
 

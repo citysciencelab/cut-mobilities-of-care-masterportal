@@ -1,7 +1,5 @@
 import Model from "@modules/tools/wfst/model.js";
-import ModelList from "@modules/core/modelList/list.js";
 import {expect} from "chai";
-import testServices from "../../../resources/testServices.json";
 import Util from "@testUtil";
 import {Draw} from "ol/interaction.js";
 
@@ -105,10 +103,6 @@ describe("WfstModel", function () {
             geometryName: "geom"
         });
         drawLayer.set("values_", drawAttr);
-
-        // Creates an example Modellist
-        model.collection = new ModelList(testServices);
-
         model.set("layerIds", []);
         model.set("currentLayerId", "682");
     });
@@ -136,20 +130,35 @@ describe("WfstModel", function () {
     });
     describe("checkLayerConfig", function () {
         it("should return false, if the passed active layer is configured correct.", function () {
-            // Todo
-            // benötigt WFS Layer
+            const testWFSTModel = new Backbone.Model({
+                "url": "http://test.org/test",
+                "version": "1.1.0",
+                "featureType": "wfstTest",
+                "featureNS": "http://namespace.org/test",
+                "featurePrefix": "ab",
+                "gfiAttributes": "showAll"
+            });
+
+            expect(model.checkLayerConfig(testWFSTModel)).to.be.false;
         });
-        it("should return false, if no layer was passed.", function () {
-            // Todo
-            // benötigt WFS Layer
+        it("should return true, if no layer was passed.", function () {
+            expect(model.checkLayerConfig()).to.be.true;
         });
-        it("should return false, if the passed active layer is undefined.", function () {
-            // Todo
-            // benötigt WFS Layer
+        it("should return true, if the passed active layer is undefined.", function () {
+            const testWFSTModel = undefined;
+
+            expect(model.checkLayerConfig(testWFSTModel)).to.be.true;
         });
         it("should return true, if the passed layer is configured incorrectly.", function () {
-            // Todo
-            // benötigt WFS Layer
+            const testWFSTModel = new Backbone.Model({
+                "url": "http://test.org/test",
+                "version": "1.1.0",
+                "featureType": "wfstTest",
+                "featureNS": "http://namespace.org/test",
+                "gfiAttributes": "showAll"
+            });
+
+            expect(model.checkLayerConfig(testWFSTModel)).to.be.true;
         });
     });
     describe("handleAvailableLayers", function () {
@@ -224,28 +233,6 @@ describe("WfstModel", function () {
             expect(model.checkActiveLayers(activeLayers, incorrectConfigLayers)).to.be.empty;
         });
     });
-    describe("getActiveLayers", function () {
-        it("should return no layer if none is selected in the layer tree", function () {
-            const ids = ["683", "1933"];
-
-            expect(model.getActiveLayers(ids)).to.be.empty;
-        });
-        it("should return no layer if no layer was configured", function () {
-            const ids = [];
-
-            expect(model.getActiveLayers(ids)).to.be.empty;
-        });
-        it("should return the layers that are selected in the layer tree", function () {
-            const layerNames = {},
-                ids = ["682", "1731", "1933"];
-
-            layerNames[682] = "Kindertagesstaetten";
-            layerNames[1731] = "Krankenhäuser Hamburg";
-            Radio.trigger("ModelList", "setModelAttributesById", "682", {isSelected: true});
-            Radio.trigger("ModelList", "setModelAttributesById", "1731", {isSelected: true});
-            expect(model.getActiveLayers(ids)).to.deep.equal(layerNames);
-        });
-    });
     describe("getSelectedLayer", function () {
         it("should return null if the passed activeLayer Object is empty", function () {
             const activeLayers = {},
@@ -266,19 +253,6 @@ describe("WfstModel", function () {
             activeLayers[682] = "Kindertagesstaetten";
             activeLayers[1731] = "Krankenhäuser Hamburg";
             expect(model.getSelectedLayer(activeLayers)).to.deep.equal(firstId);
-        });
-    });
-    describe("getCurrentLayer", function () {
-        it("should return the current active Layer", function () {
-            const currentLayer = Radio.request("ModelList", "getModelByAttributes", {id: model.get("currentLayerId")});
-
-            // durch WFS Layer ersetzen
-            expect(model.getCurrentLayer()).to.deep.equal(currentLayer);
-        });
-        it("should return null if the there is currently no active layer", function () {
-            model.set("currentLayerId", null);
-
-            expect(model.getCurrentLayer()).to.be.null;
         });
     });
     describe("getAlertMessage", function () {
@@ -311,18 +285,24 @@ describe("WfstModel", function () {
             expect(model.getLayerParams(undefined)).to.be.empty;
         });
         it("should return the respective attributes of the passed layer", function () {
-            const wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: "682"}),
+            const testWFSTModel = new Backbone.Model({
+                    "url": "http://test.org/test",
+                    "version": "1.1.0",
+                    "featureType": "wfstTest",
+                    "featureNS": "http://namespace.org/test",
+                    "featurePrefix": "ab",
+                    "gfiAttributes": "showAll"
+                }),
                 result = {
-                    url: "https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung",
-                    version: "1.3.0",
-                    featureType: undefined,
-                    featureNS: undefined,
-                    featurePrefix: undefined,
+                    url: "http://test.org/test",
+                    version: "1.1.0",
+                    featureType: "wfstTest",
+                    featureNS: "http://namespace.org/test",
+                    featurePrefix: "ab",
                     gfiAttributes: "showAll"
                 };
 
-            // WFS Layer verwenden
-            expect(model.getLayerParams(wfsLayer)).to.deep.equal(result);
+            expect(model.getLayerParams(testWFSTModel)).to.deep.equal(result);
         });
     });
     describe("parseResponse", function () {

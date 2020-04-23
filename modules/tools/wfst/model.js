@@ -230,9 +230,12 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             else if (!_.isString(wfsLayer.get("featurePrefix"))) {
                 error = true;
             }
-            else if (!_.isObject(wfsLayer.get("gfiAttributes"))) {
+            else if (!_.isObject(wfsLayer.get("gfiAttributes")) && !_.isString(wfsLayer.get("gfiAttributes"))) {
                 error = true;
             }
+        }
+        else {
+            error = true;
         }
         return error;
     },
