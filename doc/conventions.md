@@ -17,4 +17,5 @@ Konventionen für das Master-Portal
 9. Beachte die **[Abwärts-Kompatibilität](conventions/backwardsCompatibility.md)** der Konfigurationsdateien.
 10. Pre-push Hooks **[Pre-push Hooks](conventions/pre-push_hooks.md)**
 11. Erweitere die **[Mehrsprachigkeit](conventions/i18n.md)**
+12. Schreibe deine Änderungen in den **[Changelog](conventions/changelog.md)**
 
