@@ -54,15 +54,16 @@ myMasterPortalFolder/
 1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner aus relativen Pfade zu deren *Entrypoints* als Values. Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
 
 #### Beispiel **addonsConf.json** ####
-```
+```json
 {
   "exampleAddon": "entrypoint.js",
   "myAddon1": "view.js",
   "myAddon2": "subFolder/init.js"
 }
 ```
+1.3. Entrypoint des Addons sollte wenn vorhanden der View Contrustor sein.
 
-1.3. Es sollen hier ausschließlich nur die Dateien landen, welche zu *addons* gehören.
+1.4. Es sollen hier ausschließlich nur die Dateien landen, welche zu *addons* gehören.
 
 ## 2. Beispiel-Addon ##
 
@@ -84,7 +85,7 @@ myMasterPortalFolder/
 
 2.2. Addon-Code schreiben:
 
-```
+```js
 // myMasterPortalFolder/addons/exampleAddon/model.js
 import Tool from "../../modules/core/modelList/tool/model";
 
@@ -103,14 +104,14 @@ const exampleAddon = Tool.extend({
 export default exampleAddon;
 
 ```
-```
+```js
 // myMasterPortalFolder/addons/exampleAddon/view.js
 import ExampleTemplate from "text-loader!./template.html";
 import ExampleModel from "./model";
 
 const ExampleView = Backbone.View.extend({
-    
-    initialize: function () 
+
+    initialize: function ()
      {
         this.model = new ExampleModel();
         this.listenTo(this.model, {
@@ -125,7 +126,7 @@ const ExampleView = Backbone.View.extend({
     // Konvention: Die Methode fürs zeichnen der View, heißt render.
     render: function (model, value) {
         const attr = model.toJSON();
-    
+
         if (value) {
             //do something like this
             this.setElement(document.getElementsByClassName("win-body")[0]);
@@ -138,16 +139,15 @@ const ExampleView = Backbone.View.extend({
 ```
 2.3. Die Addons-Config-Datei erstellen:
 
-```
 // myMasterPortalFolder/addons/addonsConf.json
-
+```json
 {
   "exampleAddon": "view.js"
 }
 ```
 
 2.4. Das Beispiel-Addon in der config.js Datei des Portals aktivieren:
-```
+```js
 // myMasterPortalFolder/config.js
 
 const Config = {
@@ -171,7 +171,7 @@ const Config = {
 
 2.5. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
 
-```
+```js
 /**
  * @namespace ExampleAddon
  * @memberof Addons
@@ -180,9 +180,9 @@ const Config = {
 
 2.6. In der model.js muss bei memberOf als Prefix Addons. angegeben werden.
 
-```
+```js
 /**
-* @class exampleAddon
+* @class ExampleAddonModel
 * @extends Tool
 * @memberof Addons.ExampleAddon
 * @constructs
