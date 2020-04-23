@@ -42,7 +42,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      * @returns {void}
      */
     createLayerSource: function () {
-        if (_.isUndefined(this.get("optionsFromCapabilities"))) {
+        if (this.get("optionsFromCapabilities") === undefined) {
             const projection = getProjection(this.get("coordinateSystem")),
                 extent = projection.getExtent(),
                 style = this.get("style"),
