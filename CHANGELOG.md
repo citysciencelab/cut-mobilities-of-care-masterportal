@@ -11,7 +11,7 @@
 - Ein GFI-Theme trafficCount, zum Anzeigen von Verkehrsmengen wurde hinzugefügt.
 - Das Zeichenmodul wurde erweitert, um beim Zeichnen von Punkten verschiedene Glyphicons zu verwenden.
 - Es können nun Web Map Tile Services (WMTS) als Layer eingebunden werden.
-- Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und scalingAttribute zu konfigurieren.
+- Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
 
 ### Changed
 
