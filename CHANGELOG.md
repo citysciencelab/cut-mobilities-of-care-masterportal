@@ -1,6 +1,7 @@
 # Changelog Masterportal
  Alle wichtigen Änderungen in diesem Projekt werden in dieser Datei abgelegt.
- Es wird die [Semantische Versionierung] (https://semver.org/spec/v2.0.0.html) verwendet.
+ 
+ Es wird die [Semantische Versionierung](https://semver.org/spec/v2.0.0.html) verwendet.
 
 
 ## Unreleased - in development
@@ -22,6 +23,7 @@
 
 ### Fixed
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
+
 ---
 
 ## v2.5.0 - 2020-04-06
@@ -119,6 +121,7 @@
 - Mobile: Es kann nun in den Suchergebnissen gescrollt werden
 - BackgroundCanvas kann nun wieder konfiguriert werden.
 - diverse Bugfixes.
+
 ---
 
 ## v2.4.3 - 2019-11-14
@@ -131,6 +134,7 @@
   - 3D-Modus: Die 3D-Navigation per Mausrad im Firefox funktioniert nun.
   - 3D-Modus: Die 3D-Navigation über den Kompass lässt sich nun wieder deaktivieren.
   - GFI: Für sich überlagernde WFS- und WMS-Features werden nun die jeweils richtigen Informationen abgerufen.
+
 ---
 
 ## v2.4.2 - 2019-09-09
@@ -143,6 +147,7 @@
   - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den enstprechenden Eintrag gescrollt
   - Searchbar: Ein Fehler wurde behoben der die Hausnummernsuche in der Gazetteer-Suche blockiert hat
   - WFS: Geoserver-WFS werden nun angezeigt
+
 ---
 
 ## v2.4.1 - 2019-08-23
@@ -151,6 +156,7 @@
   - Print: Ein Fehler wurde behoben der dazu führte, dass die Beschreibungen der WFS-Features nicht gedruckt wurden
   - LayerTree: Layer mit dem Attribut "styles" werden nun wieder im Themenbaum dargestellt
   - PortalTitle: Attribute zur Konfiguration des Portaltitels sind nun Abwärtskompatibel
+
 ---
 
 ## v2.4.0 - 2019-08-21
@@ -177,6 +183,7 @@
   - GFI: Beim Klick auf mehrere Features werden nun alle nicht fehlerhaften GFI angezeigt
   - Print: Das Druckmodul wurde verbessert
   - Diverse Bugfixes
+
 ---
 
 ## v2.3.2 - 2019-06-20
@@ -189,6 +196,7 @@
 ### Fixed
   - Reihenfolge von Layern: Render-Reihenfolge von Layern im Themenbaum sowie auf der Karte war nicht immer korrekt
   - Flurstücksuche: Bug der Zoomfunktionalität bei der Flächeninfo behoben
+
 ---
 
 ## v2.3.1 - 2019-05-08
@@ -198,6 +206,7 @@
   - GFI: Klick auf Features von externen Diensten funktioniert wieder
   - Suche: Bei Verwendung des Parameters query; bei eindeutigem Suchtreffer direkter Zoom auf Ergebnis
   - Themenbaum: Richtige Reihenfolge der Layer wird beim Ein- und Ausblenden nun beibehalten
+
 ---
 
 ## v2.3.0 - 2019-04-16
@@ -224,11 +233,13 @@
 ## v2.2.6 - 2019-02-28
 ### Fixed
   - 184198d7f Cesium wird nun über die index.html geladen
+
 ---
 
 ## v2.2.5 - 2019-02-25
 ### Fixed
   - 61eaf2c18 Der Filter zeigt jetzt bei jedem öffnen die detailview an
+
 ---
 
 ## v2.2.4 - 2019-02-20
@@ -237,12 +248,14 @@
   - a3c1fbcaa Die Darstellung der Symbole beim Verwenden von zoomToFeature kann jetzt über die style_v2.json konfiguriert werden
   - ba18ea631 PLZ und Ort wurden vom Schulwegrouting entfernt
   - e3c3c1fd2 Die Layerreihenfolge wird beim verwenden von Auswahl speichern nun beibehalten
+
 ---
 
 ## v2.2.3 - 2019-01-31
 ### Fixed
   - ed565a391 Die Information im Filter werden nun wieder dargestellt. Ein Fehler der das Starten in einer lokalen Entwicklungsumgebung verhindert wurde behoben.
   - 1ef6166db Hinweise im Einwohnertool wurden angepasst
+
 ---
 
 ## v2.2.2 - 2019-01-21
@@ -253,6 +266,7 @@
   - d28cc48f6 Beim schließen des Measuretools werden nicht beendete Zeichnungen nun entfernt.
   - 2ba7934f3 Diverse Fehler im Einwohnertool wurden behoben.
   - 907afb415 Ein Fehler in der Metadatenkopplung wurde behoben.
+
 ---
 
 ## v2.2.1 - 2018-12-10
@@ -267,6 +281,7 @@
   - ff65eab95 Der Titel wird nun beim Drucken richtig dargestellt
   - 8627b6579 Das Them für die Radverkehrszählsäulen wird nun wieder richtig dargestellt
   - 7a03233c6 Fehler in der Searchbar wurden behoben
+
 ---
 
 ## v2.2.0 - 2018-11-29
@@ -359,6 +374,7 @@
   - 409a65c02 Fehler im KML Import der nach erneutem Export auftrat
   - 6fe334a4f parcelSearch flur getter
   - ee0793d51 metaidtomerge nicht alle objekte wurden gruppiert
+
 ---
 
 ## v2.1.3 - 2018-09-21
@@ -366,17 +382,20 @@
   - 48b55e8f8 Fehler wurden behoben, durch die keine Schulen im Schulwegrouting zu einer gefundenen Adresse in den Browsern Internet Explorer und Edge angezeigt wurden
   - 62e9c8da0 Schulen mit dem gleichen Namen im Schulwegrouting können nun durch die Anzeige der Adresse unterschieden werden
   - 8dd4f82b5 Ein Fehler in der Nomatim-Suche (OSM), durch den einige Suchergebnisse nicht angezeigt worden sind, wurde behoben
+
 ---
 
 ## v2.1.2 - 2018-09-05
 ### Fixed
   - 688f637b Es wurde ein Problem im Schulwegrouting behoben, welches den Aufruf einiger Adressen verhinderte. Das GFI wird beim wechseln der Schule oder Adresse im Schulwegrouting nun automatisch geschlossen.
+
 ---
 
 ## v2.1.1 - 2018-08-14
 ### Fixed
   - a2bce8dc metaidtomerge nicht alle objekte wurden gruppiert
   - 3ec4b257 parcelSearch view getter entfernt, wms crossOrigiin entfernt, wfsfeaturefilter feature übergeben bei defaultStyle und marker und zoomlevel bei suche nach Schulstandorten
+
 ---
 
 ## v2.1.0 - 2018-08-07
@@ -414,18 +433,21 @@
   - dd8e5d30 contact tests wenn keine portalconfig geladen wird
   - 2f9102eb betrieb contact configjson new portaltitleObject
   - 8db97eed filter dropdown css overflow-y hinzugefügt
+
 ---
 
 ## v2.0.4 - 2018-06-20
 ### Fixed
   - c128bf6f template layerinformation legendurl
   - a6d8b6e5 bootstrap-select Version auf 1.12 beschränken, weil 1.13 noch buggy
+
 ---
 
 ## v2.0.3 - 2018-05-09
 ### Fixed
   - 817a2f0 bkg search triggers searchbar to render recommended list
   - 69342d6 Flurstückssuche löscht default Flurstücksnenner beim Wechsel der Gemarkung bei parcelDenominator = true
+
 ---
 
 ## v2.0.2 - 2018-04-17
@@ -433,12 +455,14 @@
   - 8ddf9ebd contact tests wenn keine portalconfig geladen wird
   - f774a5c1 contact an neues object in config.json angepasst
   - 85083af4 filter dropdown css overflow-y hinzugefügt
+
 ---
 
 ## v2.0.1 - 2018-04-05
 ### Fixed
   - b8bae19dd Theme Radverkehrsstellen falsche Sortierung bei Wochenansicht
   - d7ff9768d Theme Radverkehrsstellen falsche Sortierung bei Tagesansicht
+
 ---
 
 ## v2.0.0 - 2018-03-29
@@ -464,6 +488,7 @@
   - 4ed4fcdbe nach Auswahl einer Adresse wird name nicht in searchbar übernommen
   - d7706e58c configYAML wurde nicht aus config.json ausgelesen
   - da18c6567 Util.getPath Error
+
 ---
 
 # v1.5.2 - 2018-03-12
@@ -472,6 +497,7 @@
   - 5b6d8e01 betrieb 238 metaIdToMerge fehlerunanfälliger
   - 70e08d3e light tree auswahl speichern
   - 03317d46 wfs legendURL Parameter aus json in Legende nutzbar
+
 ---
 
 ## v1.5.1 - 2018-01-17
@@ -479,6 +505,7 @@
   - c39c1122 falsche reihenfolge des mapView Parameters zoomlevel führte zu Laufzeitfehler
   - 1815d4f9 nach Auswahl einer Adresse wird name nicht in searchbar übernommen
   - 615635b7 configYAML
+
 ---
 
 ## v1.5.0 - 2017-12-13
@@ -496,47 +523,56 @@
   - f029a7b gfi always on
   - 3786af7 Scrollleiste in Themenbaum light
   - cf931a1 fix UrlParams zoomlevel und Center fix Canvas wird defaultmäßig nicht erzeugt fix UrlParam featureId über LayerIds Parameter StartupModul behalten
+
 ---
 
 ## v1.4.8 - 2017-12-13
 ### Fixed
   - c54708ef sgvonline theme attr amtliche adresse immer nein
+
 ---
 
 ## v1.4.7 - 2017-11-20
 ### Fixed
   - d1db2bd fix csw Parameter aus config.js Pfad angepasst
   - 340700f fix legende zeichnet sich nicht über Tabelle von fluechtlingsunterkuenfte
+
 ---
 
 # v1.4.6 - 2017-10-27
 ### Fixed
   - 1a7337a Drucken mit GFI
+
 ---
 
 ## v1.4.5 - 2017-10-18
 ### Fixed
   - b033e0e gfi mobil rendert sich auf volle breite Merged in hotfix_gif_mobil (pull request #567)
   - d176616 gfi initial links im ie
+
 ---
 
 ## v1.4.4 - 2017-10-12
 ### Fixed
   - d1766166 gfi initial links im ie
+
 ---
 
 ## v1.4.3 - 2017-10-12
 - Keine Einträge
+
 ---
 
 ## v1.4.2 - 2017-10-10
 - Keine Einträge
+
 ---
 
 ## v1.4.1 - 2017-10-06
 ### Fixed
   - 427a269 Adresssuche in der Searchbar führte zum Füllen der Suggestliste vom viomRouting
   - 73114e6 WMS-Adresse für Bezirkslayer wurde nicht angezeigt, weil id nicht in RawLayerList gefunden werden konnte
+
 ---
 
 ## v1.4.0 - 2017-09-18
@@ -571,19 +607,23 @@
   - 9cd072c safari drucken
   - a3c4633 mrh drucken
   - ed8b4c6 layerinfos gruppenlayer unvollstaendig
+
 ---
 
 ## v1.3.3 - 2017-08-16
 - Keine Einträge
+
 ---
 
 ## v1.3.2 - 2017-06-21
 ### Fixed
   - d7d98f21 mrh print benötigt _print für speziellen proxy
+
 ---
 
 ## v1.3.1 - 2017-06-06
 - Keine Einträge
+
 ---
 
 ## v1.3.0 - 2017-05-31
@@ -617,16 +657,19 @@
   - 8d721c8 Layerinformationen von Hintergrundlayern wurden  nicht angezeigt und Title war nicht Datensatzname
   - 3da16b7 GFI wird beim drucken immer mit ausgegeben, auch wenn GFI wieder geschlossen
   - 22811e5 Fehler beim Suchen von Baselayern in Suchschlitz behoben
+
 ---
 
 ## v1.2.4 - 2017-02-07
 ### Fixed
   - 760c7c1 hotfix 332 flurstueckssuche
+
 ---
 
 ## v1.2.3 - 2017-01-30
 ### Fixed
   - 3b2e44b layerid URL-parameter werden zugeladen falls vorhanden aber nicht konfiguriert
+
 ---
 
 ## v1.2.2 - 2017-01-24
@@ -635,11 +678,13 @@
   - ccd07347 viomrouting
   - 8f6aca60 Portal wird nicht geladen, wenn LayerID in JSON nicht definiert
   - c8be5d5d Layerinformationen von Hintergrundlayern wurden nicht angezeigt und Title war nicht Datensatzname
+
 ---
 
 ## v1.2.1 - 2017-01-06
 ### Fixed
   - 00917df Portal-Titel wurde in "kleinen" Themenportalen initial nicht angezeigt
+
 ---
 
 # v1.2.0 - 2016-12-16
@@ -673,37 +718,44 @@
   - 32f0022 Routenplaner verwendet den richtigen Routing-Dienst
   - b6ea8d3 "in meiner Nähe" - Attribute nicht mehr doppelt
   - b12c6d5 portallogo configurierbar
+
 ---
 
 ##  v1.1.6 - No Data
 ### Fixed
   - 97ad0aa csw falsches Datum ausgelesen, da erneut über ganze csw Datei gesucht wurde
   - 59fae85 Parameter &LAYERIDS in URL wurden nicht mit SimpleTree ausgewertet. &CLICKCOUNTER jetzt überflüssig.
+
 ---
 
 # v1.1.5 - 2016-11-15
 ### Fixed
   - 658d016 startcenter wurde nicht ausgelesen aus config.json
+
 ---
 
 # v1.1.4 - 2016-10-27
 ### Fixed
   - 11e3138 Die Reihenfolge der Themen auf der Karte entsprach nicht immer der korrekten Reihenfolge der Themen in der Auswahl
+
 ---
 
 ## v1.1.3 - 2016-10-26
 ### Fixed
   - c05d205 Zeichnungen werden nicht gedruckt
+
 ---
 
 ## v1.1.2 - 2016-10-24
 ### Fixed
   - a27eb17 gfi Attribute werden nur noch nach Datum formatiert wenn sie ISO 8601 entsprechen
+
 ---
 
 # v1.1.1 - 2016-10-20
 ### Fixed
   - b759d17 Auswahl speichern - Beim Öffnen einer gespeicherten Auswahl wurden immer alle Layer auf der Karte angezeigt, unabhängig davon ob der Layer sichtbar war oder nicht.
+
 ---
 
 ## v1.1.0 - 2016-10-18
@@ -727,20 +779,25 @@
   - ffc0bcc drucken von KML-Features möglich
   - 4304704 GFI-Reihenfolge wird in der richtigen Reihenfolge dargestellt
   - faa9133 GFIPopup hat eine maximale Höhe in Relation zur Fensterhöhe
+
 ---
 
 ## v1.0.6 - 2015-03-18
 - Keine Einträge
+
 ---
 
 ## v1.0.5 - 2015-03-12
 - Keine Einträge
+
 ---
 
 ## v1.0.4 - 2015-03-06
 - Keine Einträge
+
 ---
 
 ## v1.0.3 - 2015-02-29
 - Keine Einträge
+
 ---
