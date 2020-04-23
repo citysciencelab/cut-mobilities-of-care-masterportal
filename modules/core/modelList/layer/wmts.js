@@ -108,6 +108,9 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                 })
                 .catch((error) => {
                     this.removeLayer();
+                    // remove layer from project completely
+                    Radio.trigger("Parser", "removeItem", this.get("id"));
+                    // refresh layer tree
                     Radio.trigger("Util", "refreshTree");
                     if (error === "Fetch error") {
                         // error message has already been printed earlier
