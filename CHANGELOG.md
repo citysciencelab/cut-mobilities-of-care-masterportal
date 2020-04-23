@@ -8,7 +8,7 @@
 
 ### Added
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
-- Ein GFI-Theme trafficCount, zum anzeigen von Verkehrsmengen wurde hinzugefügt.
+- Ein GFI-Theme trafficCount, zum Anzeigen von Verkehrsmengen wurde hinzugefügt.
 - Das Zeichenmodul wurde erweitert, um beim Zeichnen von Punkten verschiedene Glyphicons zu verwenden.
 - Es können nun Web Map Tile Services (WMTS) als Layer eingebunden werden.
 - Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und scalingAttribute zu konfigurieren.
@@ -50,7 +50,7 @@
     - StyleIds können nun vom Typ Array sein
     - Zeichnen: Das Tool wurde erweitert und verbessert. Es können nun beispielsweise auch Doppelkreise gezeichnet werden.
     - Zeichnung Herunterladen: Funktion wurde erweitert
-- Internationalisierung wurde in einige Modulen hinzugefügt
+- Internationalisierung wurde in einigen Modulen hinzugefügt
 - Sidebar: Breite ist nun konfigurierbar
 - Layerslider: Das Tool wurde erweitert und verbessert.
 - 3D:
@@ -86,8 +86,8 @@
 
 ### Deprecated
 - Das **[alte Vektorstyling](doc/style.json-deprecated.md)** ist deprecated. Bitte das **[neue Vektorstyling](doc/style.json.md)** benutzen.
-- Der URL-Parameter STARTUPMODUL ist deprercated. Bitte ISINITOPEN benutzen.
-- Der URL-Parameter BEZIRK ist deprercated. Bitte ZOOMTOGEOMETRY benutzen.
+- Der URL-Parameter STARTUPMODUL ist deprecated. Bitte ISINITOPEN benutzen.
+- Der URL-Parameter BEZIRK ist deprecated. Bitte ZOOMTOGEOMETRY benutzen.
 
 ### Fixed
 - Draw-Tool: Gezeichnete Features werden im gleichen Stil gedruckt, in dem sie gezeichnet wurden. Text behält auch im Druck seine Position bei.
