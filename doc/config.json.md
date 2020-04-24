@@ -149,7 +149,7 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer. Wird nur durch Klic
 ***
 
 #### Portalconfig.searchBar.locationFinder ####
-Konfiguration eines LocationFinder-Suchdienstes.
+Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
