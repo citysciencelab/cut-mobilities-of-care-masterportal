@@ -64,7 +64,7 @@ import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
 import MousePositionView from "../modules/controls/mousePosition/view";
-import FullScreenView from "../modules/controls/fullScreen/view";
+// import FullScreenView from "../modules/controls/fullScreen/view";
 import TotalView from "../modules/controls/totalView/view";
 import AttributionsView from "../modules/controls/attributions/view";
 import OverviewmapView from "../modules/controls/overviewMap/view";
@@ -86,7 +86,7 @@ let sbconfig, controls, controlsView;
  * load the configuration of master portal
  * @return {void}.
  */
-function loadApp () {
+function loadApp() {
     /* eslint-disable no-undef */
     const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
@@ -94,7 +94,7 @@ function loadApp () {
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
-        /* eslint-disable no-undef */
+    /* eslint-disable no-undef */
     let app = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
@@ -137,8 +137,8 @@ function loadApp () {
     new Autostarter();
     new Util(utilConfig);
     // Pass null to create an empty Collection with options
-    new RestReaderList(null, {url: Config.restConf});
-    new Preparser(null, {url: Config.portalConf});
+    new RestReaderList(null, { url: Config.restConf });
+    new Preparser(null, { url: Config.portalConf });
 
     app.$store.commit("addConfigJsonToStore", Radio.request("Parser", "getPortalConfig"));
 
@@ -191,34 +191,34 @@ function loadApp () {
     // Tools
     new SidebarView();
 
-    Radio.request("ModelList", "getModelsByAttributes", {type: "tool"}).forEach(tool => {
+    Radio.request("ModelList", "getModelsByAttributes", { type: "tool" }).forEach(tool => {
         switch (tool.id) {
             case "compareFeatures": {
-                new CompareFeaturesView({model: tool});
+                new CompareFeaturesView({ model: tool });
                 break;
             }
             case "lines": {
-                new LineView({model: tool});
+                new LineView({ model: tool });
                 break;
             }
             case "animation": {
-                new AnimationView({model: tool});
+                new AnimationView({ model: tool });
                 break;
             }
             case "filter": {
-                new FilterView({model: tool});
+                new FilterView({ model: tool });
                 break;
             }
             case "shadow": {
-                new ShadowView({model: tool});
+                new ShadowView({ model: tool });
                 break;
             }
             case "measure": {
-                new MeasureView({model: tool});
+                new MeasureView({ model: tool });
                 break;
             }
             case "draw": {
-                new DrawView({model: tool});
+                new DrawView({ model: tool });
                 break;
             }
             case "print": {
@@ -227,59 +227,59 @@ function loadApp () {
                 // rename "print_" to "print"
                 // only load correct view
                 if (tool.has("version") && (tool.get("version") === "mapfish_print_3" || tool.get("version") === "HighResolutionPlotService")) {
-                    new PrintView({model: tool});
+                    new PrintView({ model: tool });
                 }
                 else {
-                    new PrintView2({model: tool});
+                    new PrintView2({ model: tool });
                 }
                 break;
             }
             case "parcelSearch": {
-                new ParcelSearchView({model: tool});
+                new ParcelSearchView({ model: tool });
                 break;
             }
             case "searchByCoord": {
-                new SearchByCoordView({model: tool});
+                new SearchByCoordView({ model: tool });
                 break;
             }
             case "saveSelection": {
-                new SaveSelectionView({model: tool});
+                new SaveSelectionView({ model: tool });
                 break;
             }
             case "kmlimport": {
-                new ImportView({model: tool});
+                new ImportView({ model: tool });
                 break;
             }
             case "wfsFeatureFilter": {
-                new WFSFeatureFilterView({model: tool});
+                new WFSFeatureFilterView({ model: tool });
                 break;
             }
             case "extendedFilter": {
-                new ExtendedFilterView({model: tool});
+                new ExtendedFilterView({ model: tool });
                 break;
             }
             case "treeFilter": {
-                new TreeFilterView({model: tool});
+                new TreeFilterView({ model: tool });
                 break;
             }
             case "routing": {
-                new RoutingView({model: tool});
+                new RoutingView({ model: tool });
                 break;
             }
             case "contact": {
-                new Contact({model: tool});
+                new Contact({ model: tool });
                 break;
             }
             case "addWMS": {
-                new AddWMSView({model: tool});
+                new AddWMSView({ model: tool });
                 break;
             }
             case "featureLister": {
-                new FeatureLister({model: tool});
+                new FeatureLister({ model: tool });
                 break;
             }
             case "formular": {
-                new Formular({model: tool});
+                new Formular({ model: tool });
                 break;
             }
             case "legend": {
@@ -287,7 +287,7 @@ function loadApp () {
                 break;
             }
             case "styleWMS": {
-                new StyleWMSView({model: tool});
+                new StyleWMSView({ model: tool });
                 break;
             }
             /**
@@ -295,11 +295,11 @@ function loadApp () {
              * @deprecated in 3.0.0
              */
             case "layerslider": {
-                new LayerSliderView({model: tool});
+                new LayerSliderView({ model: tool });
                 break;
             }
             case "layerSlider": {
-                new LayerSliderView({model: tool});
+                new LayerSliderView({ model: tool });
                 break;
             }
             case "virtualCity": {
@@ -313,34 +313,35 @@ function loadApp () {
     });
 
     if (!style || style !== "SIMPLE") {
-        controls = Radio.request("Parser", "getItemsByAttributes", {type: "control"});
+        controls = Radio.request("Parser", "getItemsByAttributes", { type: "control" });
         controlsView = new ControlsView();
 
         controls.forEach(control => {
-            const orientationConfigAttr = typeof control.attr === "string" ? {zoomMode: control.attr} : control;
+            const orientationConfigAttr = typeof control.attr === "string" ? { zoomMode: control.attr } : control;
             let element;
 
             switch (control.id) {
                 case "zoom": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
-                        new ZoomControlView({el: element});
+                        new ZoomControlView({ el: element });
                     }
                     break;
                 }
                 case "orientation": {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
-                    new OrientationView({el: element, config: orientationConfigAttr});
+                    new OrientationView({ el: element, config: orientationConfigAttr });
                     break;
                 }
                 case "mousePosition": {
                     if (control.attr === true) {
                         element = controlsView.addRowBL(control.id);
-                        new MousePositionView({el: element});
+                        new MousePositionView({ el: element });
                     }
                     break;
                 }
+                /*
                 case "fullScreen": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
@@ -348,6 +349,7 @@ function loadApp () {
                     }
                     break;
                 }
+                */
                 /**
                  * totalView
                  * @deprecated in 3.0.0
@@ -368,7 +370,7 @@ function loadApp () {
                 case "attributions": {
                     if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id, true);
-                        new AttributionsView({el: element});
+                        new AttributionsView({ el: element });
                     }
                     break;
                 }
@@ -415,28 +417,28 @@ function loadApp () {
                 case "freeze": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
-                        new FreezeModel({uiStyle: style, el: element});
+                        new FreezeModel({ uiStyle: style, el: element });
                     }
                     break;
                 }
                 case "button3d": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
-                        new Button3DView({el: element});
+                        new Button3DView({ el: element });
                     }
                     break;
                 }
                 case "buttonOblique": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
-                        new ButtonObliqueView({el: element});
+                        new ButtonObliqueView({ el: element });
                     }
                     break;
                 }
                 case "orientation3d": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
-                        new Orientation3DView({el: element});
+                        new Orientation3DView({ el: element });
                     }
                     break;
                 }
@@ -449,8 +451,8 @@ function loadApp () {
 
     new MapMarkerView(mapMarkerConfig);
 
-    sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});
-    sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
+    sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? { quickHelp: Config.quickHelp } : {});
+    sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", { type: "searchBar" })[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
     }
@@ -531,4 +533,4 @@ function loadApp () {
     Radio.trigger("Util", "hideLoader");
 }
 
-export {loadApp};
+export { loadApp };

@@ -1,6 +1,7 @@
 import Attributions from "./Attributions.vue";
 import BackForward from "./backForward/BackForward.vue";
 import Zoom from "./Zoom.vue";
+import Fullscreen from "./Fullscreen.vue";
 
 /**
  * controls-Module is required to be able to nest controls
@@ -15,11 +16,13 @@ export default {
         componentMap: {
             attributions: Attributions,
             backForward: BackForward,
-            zoom: Zoom
+            zoom: Zoom,
+            fullScreen: Fullscreen
         },
         mobileHiddenControls: [
             "backForward",
-            "mousePosition"
+            "mousePosition",
+            "fullScreen"
         ],
         bottomControls: ["attributions", "overviewMap"]
     },
