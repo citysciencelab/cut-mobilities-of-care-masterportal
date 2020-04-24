@@ -66,7 +66,8 @@
         "reduceTransparency": "Transparenz verringern",
         "removeLayer": "Layer entfernen",
         "levelUp": "Ebene nach oben",
-        "levelDown": "Ebene nach unten"
+        "levelDown": "Ebene nach unten",
+        "externalTechnicalData": "Externe Fachdaten"
     },
     "date": "Datum",
     "time": "Zeit",
