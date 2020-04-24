@@ -72,10 +72,10 @@ describe("js/layerList", function () {
             expect(mergeLayersByMetaIds(testServices, undefined)).to.be.an("array").that.is.not.empty;
         });
         it("should return an object where layer objects are merged by md_id", function () {
-            var mdObj;
+            let mdObj;
 
             _.each(mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge), function (obj) {
-                var foundMdObj = _.findWhere(obj.datasets, {md_id: "C1AC42B2-C104-45B8-91F9-DA14C3C88A1F"});
+                const foundMdObj = _.findWhere(obj.datasets, {md_id: "C1AC42B2-C104-45B8-91F9-DA14C3C88A1F"});
 
                 if (_.isUndefined(foundMdObj) === false) {
                     mdObj = foundMdObj;
@@ -84,7 +84,7 @@ describe("js/layerList", function () {
             expect(mdObj).not.to.be.undefined;
         });
         it("should return an object where layer KitaEinrichtungen and KitaEinrichtungen_Details are merged in layers", function () {
-            var layerObj;
+            let layerObj;
 
             _.each(mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge), function (obj) {
                 if (obj.layers.indexOf("KitaEinrichtungen_Details") >= 0 && obj.layers.indexOf("KitaEinrichtungen") >= 0) {

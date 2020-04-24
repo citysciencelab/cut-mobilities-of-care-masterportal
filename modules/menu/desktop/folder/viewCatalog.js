@@ -115,7 +115,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
      * @return {void}
      */
     toggleGlyphicon: function () {
-        var elem = $("ul#" + this.model.get("id")).prev().find(".glyphicon:first");
+        const elem = $("ul#" + this.model.get("id")).prev().find(".glyphicon:first");
 
         if (!this.model.get("isExpanded")) {
             elem.removeClass("glyphicon-minus-sign");

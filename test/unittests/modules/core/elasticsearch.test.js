@@ -3,7 +3,7 @@ import {expect} from "chai";
 
 describe("check Elastic Search Helper Functions", function () {
 
-    var elasticSearchModel;
+    let elasticSearchModel;
 
     before(function () {
         elasticSearchModel = new ElasticSearch();

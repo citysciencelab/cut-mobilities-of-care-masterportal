@@ -2,10 +2,10 @@ import ViewTree from "@modules/menu/desktop/folder/viewTree.js";
 import {expect} from "chai";
 
 describe("menu/desktop/folder/viewTree", function () {
-    var viewTree;
+    let viewTree;
 
     before(function () {
-        var fakeModel = {
+        const fakeModel = {
             get: function () {
                 return true;
             },

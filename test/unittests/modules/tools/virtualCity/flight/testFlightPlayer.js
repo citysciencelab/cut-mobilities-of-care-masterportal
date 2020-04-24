@@ -4,141 +4,141 @@ import {parseFlightOptions} from "@modules/tools/virtualCity/flight";
 import FlightPlayer from "@modules/tools/virtualCity/flightPlayer";
 
 describe("flightPlayer", function () {
-    var flightInstance,
-        flightPlayer,
-        flightOptions = {
-            "type": "FeatureCollection",
-            "features": [
-                {
-                    "type": "Feature",
-                    "properties": {
-                        "distance": 1660.0290142521517,
-                        "cameraPosition": [
-                            9.982163927085617,
-                            53.532817572762475,
-                            1180.9805498821436
-                        ],
-                        "groundPosition": [
-                            9.983171185370468,
-                            53.54328139366739,
-                            -0.00449886760542777
-                        ],
-                        "heading": 3.281512334248587,
-                        "pitch": -45.35612834848329,
-                        "roll": 0.015054499334397243,
-                        "animate": false,
-                        "duration": 1
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [
-                            9.982163927085617,
-                            53.53281757276244,
-                            1180.9805498821436
-                        ]
-                    },
-                    "vcsMeta": {}
+    let flightInstance,
+        flightPlayer;
+    const flightOptions = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "distance": 1660.0290142521517,
+                    "cameraPosition": [
+                        9.982163927085617,
+                        53.532817572762475,
+                        1180.9805498821436
+                    ],
+                    "groundPosition": [
+                        9.983171185370468,
+                        53.54328139366739,
+                        -0.00449886760542777
+                    ],
+                    "heading": 3.281512334248587,
+                    "pitch": -45.35612834848329,
+                    "roll": 0.015054499334397243,
+                    "animate": false,
+                    "duration": 1
                 },
-                {
-                    "type": "Feature",
-                    "properties": {
-                        "distance": 1705.907088455769,
-                        "cameraPosition": [
-                            9.96041221854439,
-                            53.542118113676594,
-                            873.4567728474242
-                        ],
-                        "groundPosition": [
-                            9.982398029904456,
-                            53.540770835322895,
-                            -0.00460393526485022
-                        ],
-                        "heading": 95.86491739737984,
-                        "pitch": -30.805154901441753,
-                        "roll": 0.21319256465688782,
-                        "animate": false,
-                        "duration": 2
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [
-                            9.96041221854439,
-                            53.542118113676594,
-                            873.4567728474242
-                        ]
-                    },
-                    "vcsMeta": {}
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        9.982163927085617,
+                        53.53281757276244,
+                        1180.9805498821436
+                    ]
                 },
-                {
-                    "type": "Feature",
-                    "properties": {
-                        "distance": 1721.9241572409096,
-                        "cameraPosition": [
-                            9.96741704029211,
-                            53.55979021716194,
-                            1000.3674142046754
-                        ],
-                        "groundPosition": [
-                            9.976594426460109,
-                            53.54844621820403,
-                            -0.00455025970730299
-                        ],
-                        "heading": 154.27408943822633,
-                        "pitch": -35.52452990189671,
-                        "roll": 0.09797416457143884,
-                        "animate": false,
-                        "duration": 3
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [
-                            9.96741704029211,
-                            53.55979021716195,
-                            1000.3674142046754
-                        ]
-                    },
-                    "vcsMeta": {}
+                "vcsMeta": {}
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "distance": 1705.907088455769,
+                    "cameraPosition": [
+                        9.96041221854439,
+                        53.542118113676594,
+                        873.4567728474242
+                    ],
+                    "groundPosition": [
+                        9.982398029904456,
+                        53.540770835322895,
+                        -0.00460393526485022
+                    ],
+                    "heading": 95.86491739737984,
+                    "pitch": -30.805154901441753,
+                    "roll": 0.21319256465688782,
+                    "animate": false,
+                    "duration": 2
                 },
-                {
-                    "type": "Feature",
-                    "properties": {
-                        "distance": 1718.8341567940654,
-                        "cameraPosition": [
-                            10.013016284898717,
-                            53.55614227861584,
-                            979.2726750181796
-                        ],
-                        "groundPosition": [
-                            9.995089524833372,
-                            53.549279147554216,
-                            -0.003979305788798702
-                        ],
-                        "heading": 237.27037454138943,
-                        "pitch": -34.73796369256651,
-                        "roll": 359.8117797719654,
-                        "animate": false,
-                        "duration": 6
-                    },
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [
-                            10.013016284898718,
-                            53.55614227861585,
-                            979.2726750181796
-                        ]
-                    },
-                    "vcsMeta": {}
-                }
-            ],
-            "vcsMeta": {
-                "flightOptions": {
-                    "name": "Name | Name eingeben",
-                    "loop": false,
-                    "interpolation": "spline"
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        9.96041221854439,
+                        53.542118113676594,
+                        873.4567728474242
+                    ]
                 },
-                "version": "1.0"
+                "vcsMeta": {}
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "distance": 1721.9241572409096,
+                    "cameraPosition": [
+                        9.96741704029211,
+                        53.55979021716194,
+                        1000.3674142046754
+                    ],
+                    "groundPosition": [
+                        9.976594426460109,
+                        53.54844621820403,
+                        -0.00455025970730299
+                    ],
+                    "heading": 154.27408943822633,
+                    "pitch": -35.52452990189671,
+                    "roll": 0.09797416457143884,
+                    "animate": false,
+                    "duration": 3
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        9.96741704029211,
+                        53.55979021716195,
+                        1000.3674142046754
+                    ]
+                },
+                "vcsMeta": {}
+            },
+            {
+                "type": "Feature",
+                "properties": {
+                    "distance": 1718.8341567940654,
+                    "cameraPosition": [
+                        10.013016284898717,
+                        53.55614227861584,
+                        979.2726750181796
+                    ],
+                    "groundPosition": [
+                        9.995089524833372,
+                        53.549279147554216,
+                        -0.003979305788798702
+                    ],
+                    "heading": 237.27037454138943,
+                    "pitch": -34.73796369256651,
+                    "roll": 359.8117797719654,
+                    "animate": false,
+                    "duration": 6
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        10.013016284898718,
+                        53.55614227861585,
+                        979.2726750181796
+                    ]
+                },
+                "vcsMeta": {}
             }
-        };
+        ],
+        "vcsMeta": {
+            "flightOptions": {
+                "name": "Name | Name eingeben",
+                "loop": false,
+                "interpolation": "spline"
+            },
+            "version": "1.0"
+        }
+    };
 
     afterEach(function () {
         sinon.restore();

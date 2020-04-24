@@ -33,7 +33,7 @@ const MobileMenu = Backbone.View.extend({
     attributes: {role: "navigation"},
     breadCrumbListView: {},
     render: function () {
-        var rootModels = this.collection.where({parentId: "root"});
+        const rootModels = this.collection.where({parentId: "root"});
 
         this.$("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
         this.$("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
@@ -56,8 +56,8 @@ const MobileMenu = Backbone.View.extend({
     },
 
     updateLightTree: function () {
-        var models = [],
-            lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "tree"});
+        const lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: "tree"});
+        let models = [];
 
         models = this.collection.add(lightModels);
 
@@ -73,7 +73,7 @@ const MobileMenu = Backbone.View.extend({
     },
 
     renderSelection: function (withAnimation) {
-        var models = this.collection.where({isSelected: true, type: "layer"});
+        let models = this.collection.where({isSelected: true, type: "layer"});
 
         if (withAnimation) {
             this.slideModels("descent", models, "tree", "Selection");
@@ -92,8 +92,8 @@ const MobileMenu = Backbone.View.extend({
     },
 
     descentInTree: function (model) {
-        var models = [],
-            lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")});
+        const lightModels = Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")});
+        let models = [];
 
         models = this.collection.add(lightModels);
 
@@ -104,18 +104,18 @@ const MobileMenu = Backbone.View.extend({
     },
 
     ascentInTree: function (model) {
-        var models = this.collection.where({parentId: model.get("parentId")});
+        const models = this.collection.where({parentId: model.get("parentId")});
 
         model.setIsVisibleInTree(false);
         this.slideModels("ascent", models, model.get("id"));
     },
 
     slideModels: function (direction, modelsToShow, parentIdOfModelsToHide, currentList) {
-        var slideIn,
+        const that = this;
+        let slideIn,
             slideOut,
             groupedModels,
-            modelsToShowSelection,
-            that = this;
+            modelsToShowSelection;
 
         if (direction === "descent") {
             slideIn = "right";
@@ -177,12 +177,12 @@ const MobileMenu = Backbone.View.extend({
      * @returns {void}
      */
     addViews: function (models) {
-        var nodeView,
-            attr,
-            treeType = this.doRequestTreeType(),
+        const treeType = this.doRequestTreeType(),
             newModels = _.reject(models, function (model) {
                 return model.get("onlyDesktop") === true;
             });
+        let nodeView,
+            attr;
 
         _.each(newModels, function (model) {
             model.setIsVisibleInTree(true);
@@ -243,7 +243,7 @@ const MobileMenu = Backbone.View.extend({
         this.$("#map").before(this.el);
     },
     startModul: function (modulId) {
-        var modul = this.collection.find(function (model) {
+        const modul = this.collection.find(function (model) {
             return model.get("id").toLowerCase() === modulId;
         });
 

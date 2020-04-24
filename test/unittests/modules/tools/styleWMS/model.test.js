@@ -2,56 +2,53 @@ import StyleWMS from "@modules/tools/styleWMS/model.js";
 const chai = require("chai");
 
 describe("tools/styleWMS/model", function () {
-    var errors,
-        expect = chai.expect;
+    let errors;
+    const expect = chai.expect;
 
     describe("Validation of user input", function () {
 
         before(function () {
-            var attributes,
-                styleWMS;
 
-            attributes = {
-                styleClassAttributes: [
-                    {
-                        startRange: 1,
-                        stopRange: 2,
-                        color: "someColor"
-                    },
-                    {
-                        startRange: "nan",
-                        stopRange: "42",
-                        color: "someColor"
-                    },
-                    {
-                        startRange: "43",
-                        stopRange: "nan",
-                        color: "someColor"
-                    },
-                    {
-                        startRange: "50",
-                        stopRange: "60",
-                        color: ""
-                    },
-                    {
-                        startRange: "80",
-                        stopRange: "70",
-                        color: "someColor"
-                    },
-                    {
-                        startRange: "90",
-                        stopRange: "100",
-                        color: "someColor"
-                    },
-                    {
-                        startRange: "95",
-                        stopRange: "105",
-                        color: "someColor"
-                    }
-                ]
-            };
-
-            styleWMS = new StyleWMS();
+            const styleWMS = new StyleWMS(),
+                attributes = {
+                    styleClassAttributes: [
+                        {
+                            startRange: 1,
+                            stopRange: 2,
+                            color: "someColor"
+                        },
+                        {
+                            startRange: "nan",
+                            stopRange: "42",
+                            color: "someColor"
+                        },
+                        {
+                            startRange: "43",
+                            stopRange: "nan",
+                            color: "someColor"
+                        },
+                        {
+                            startRange: "50",
+                            stopRange: "60",
+                            color: ""
+                        },
+                        {
+                            startRange: "80",
+                            stopRange: "70",
+                            color: "someColor"
+                        },
+                        {
+                            startRange: "90",
+                            stopRange: "100",
+                            color: "someColor"
+                        },
+                        {
+                            startRange: "95",
+                            stopRange: "105",
+                            color: "someColor"
+                        }
+                    ]
+                };
 
             errors = styleWMS.validate(attributes);
         });
@@ -94,15 +91,14 @@ describe("tools/styleWMS/model", function () {
     });
 
     describe("Creation of a SLD with two classes", function () {
-        var $sld,
+        let $sld,
             styleClassAttributes;
 
         before(function () {
-            var CustomStyleWMS,
-                styleWMS,
-                sld;
+            let styleWMS = {},
+                sld = "";
 
-            CustomStyleWMS = StyleWMS.extend({
+            const CustomStyleWMS = StyleWMS.extend({
 
                 get: function (value) {
 
@@ -137,7 +133,6 @@ describe("tools/styleWMS/model", function () {
                 }
             });
 
-
             styleWMS = new CustomStyleWMS();
             styleWMS.setNumberOfClasses(2);
 
@@ -166,7 +161,7 @@ describe("tools/styleWMS/model", function () {
                 // Select rule with expected attributes by removing the rules with other attributes. Expect one rule to remain.
                 /* eslint max-nested-callbacks: ["error", 5]*/
 
-                var rule = $sld.find("sld\\:NamedLayer")
+                const rule = $sld.find("sld\\:NamedLayer")
                     .children("sld\\:UserStyle")
                     .children("sld\\:FeatureTypeStyle")
                     .children("sld\\:Rule")
@@ -213,7 +208,7 @@ describe("tools/styleWMS/model", function () {
     });
 
     describe("Request parameter", function () {
-        var CustomStyleWMS;
+        let CustomStyleWMS;
 
         before(function () {
             CustomStyleWMS = StyleWMS.extend({
@@ -275,14 +270,14 @@ describe("tools/styleWMS/model", function () {
         });
 
         it("should vanish after reseting the style", function () {
-            var styleWMS,
-                params;
 
-            styleWMS = new CustomStyleWMS();
+            const styleWMS = new CustomStyleWMS();
+
             styleWMS.createSLD();
             styleWMS.removeSLDBody();
 
-            params = styleWMS.get("model").get("layer").getSource().getParams();
+            /* eslint-disable one-var */
+            const params = styleWMS.get("model").get("layer").getSource().getParams();
 
             /* eslint-disable-next-line no-undefined */
             expect(_.isEqual({testParam: "yes", SLD_BODY: undefined, STYLES: ""}, params)).to.be.equal(true);

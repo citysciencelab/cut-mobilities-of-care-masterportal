@@ -69,7 +69,7 @@ const MietenspiegelThemeView = ThemeView.extend({
      * @returns {void}
      */
     changedMerkmal: function (evt) {
-        var id;
+        let id;
 
         if (evt) {
             this.$(".msmerkmal").each(function (index) {
@@ -86,7 +86,7 @@ const MietenspiegelThemeView = ThemeView.extend({
      * Erzeugt eine Liste mit gewählten Merkmalen
      */
     returnMerkmaleListe: function () {
-        var merkmale = _.object(["Wohnlage"], [this.$(".mswohnlage").text()]);
+        let merkmale = _.object(["Wohnlage"], [this.$(".mswohnlage").text()]);
 
         this.$(".msmerkmal").each(function () {
             if (this.value !== "-1") { // = bitte wählen
@@ -99,7 +99,7 @@ const MietenspiegelThemeView = ThemeView.extend({
      * Combobox mit Werten füllen. Initial leer.
      */
     fillMerkmaleInCombobox: function (comboboxId) {
-        var merkmale = this.returnMerkmaleListe(),
+        const merkmale = this.returnMerkmaleListe(),
             validMerkmale = this.model.returnValidMerkmale(comboboxId, merkmale);
 
         // Combobox erst leeren
@@ -122,7 +122,7 @@ const MietenspiegelThemeView = ThemeView.extend({
      * Startet fillMerkmaleInCombobox;  //index in ComboboxArray
      */
     focusNextMerkmal: function (activateIndex) {
-        var id,
+        let id,
             merkmale;
 
         this.$(".msmerkmal").each(function (index) {
@@ -178,7 +178,7 @@ const MietenspiegelThemeView = ThemeView.extend({
 
     },
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
     }

@@ -39,7 +39,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     template: _.template(Template),
     templateSettings: _.template(TemplateSettings),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         if (this.model.get("isSettingVisible") === true) {
@@ -57,7 +57,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     * @returns {void}
     */
     renderSetting: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
@@ -80,7 +80,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     * @returns {void}
     */
     toggleIsSelected: function () {
-        var layerCollection = Radio.request("ModelList", "getCollection").where({type: "layer"});
+        const layerCollection = Radio.request("ModelList", "getCollection").where({type: "layer"});
 
         this.setSettingsVisibility(layerCollection, this.model);
         this.unsetJustAdded();
@@ -95,7 +95,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     * @returns {void}
     */
     setSettingsVisibility: function (layerCollection, model) {
-        var thislayerId = model.get("id");
+        const thislayerId = model.get("id");
 
         if (!model.get("isSelected")) {
             _.each(layerCollection, function (layer) {

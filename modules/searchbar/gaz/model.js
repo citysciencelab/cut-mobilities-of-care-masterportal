@@ -78,7 +78,8 @@ const GazetteerModel = Backbone.Model.extend({
     },
 
     search: function (pattern) {
-        var gemarkung, flurstuecksnummer,
+        let gemarkung,
+            flurstuecksnummer,
             searchString = pattern;
 
         this.set("searchString", searchString);

@@ -12,7 +12,7 @@ const GFIDetachedTableView = DesktopView.extend({
         "click .pager-left": "renderPrevious"
     },
     render: function () {
-        var attr = this.model.toJSON(),
+        const attr = this.model.toJSON(),
             that = this;
 
         $("#map").append(this.$el.html(this.template(attr)));
@@ -20,7 +20,7 @@ const GFIDetachedTableView = DesktopView.extend({
             containment: "#map",
             handle: ".gfi-header",
             drag: function () {
-                var rotAngle = that.model.get("rotateAngle");
+                const rotAngle = that.model.get("rotateAngle");
 
                 if (rotAngle === 0 || rotAngle === -180) {
                     $(".gfi-detached-table").css({
@@ -55,16 +55,15 @@ const GFIDetachedTableView = DesktopView.extend({
     },
 
     moveGFI: function (evt) {
-        var touch = evt.originalEvent.touches[0],
+        const touch = evt.originalEvent.touches[0],
             headerWidth = this.$el.find(".gfi-header").width(),
             width = this.$el.find(".gfi-header").width() / 2,
             height = this.$el.height(),
             headerHeight = this.$el.find(".gfi-header").height(),
             rotAngle = this.model.get("rotateAngle"),
-            transformOrigin = headerWidth - 20 + "px " + headerHeight + "px",
-            x,
+            transformOrigin = headerWidth - 20 + "px " + headerHeight + "px";
+        let x,
             y;
-
 
         if (rotAngle === 0) {
 
@@ -160,7 +159,7 @@ const GFIDetachedTableView = DesktopView.extend({
     },
 
     rotateGFI: function () {
-        var width = this.$el.find(".gfi-header").width(),
+        const width = this.$el.find(".gfi-header").width(),
             headerHeight = this.$el.find(".gfi-header").height();
 
         this.model.set("rotateAngle", this.model.get("rotateAngle") - 90);

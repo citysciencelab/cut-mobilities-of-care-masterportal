@@ -3,7 +3,7 @@ import Util from "@testUtil";
 import Model from "@modules/cswParser/model.js";
 
 describe("modules/cswParser", function () {
-    var model,
+    let model,
         utilModel,
         xmlDoc,
         citation,

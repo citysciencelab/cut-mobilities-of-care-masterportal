@@ -3,7 +3,7 @@ import List from "@modules/vectorStyle/list";
 
 
 describe("vectorStyleList", function () {
-    var list;
+    let list;
 
     before(function () {
         list = new List();

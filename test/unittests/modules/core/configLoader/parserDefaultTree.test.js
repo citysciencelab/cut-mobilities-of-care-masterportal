@@ -13,7 +13,7 @@ describe("core/configLoader/parserDefaultTree", function () {
      * @returns {Backbone.Model} - Model.
      */
     function getDefaultModel (options) {
-        var model = new DefaultTreeParser(options);
+        const model = new DefaultTreeParser(options);
 
         model.setItemList([]);
         model.parseTree(testServices);

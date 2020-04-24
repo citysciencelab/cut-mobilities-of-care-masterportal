@@ -4,9 +4,9 @@ import {expect} from "chai";
 import sinon from "sinon";
 
 describe("tools/virtualCity/VirtualcityModel", function () {
-    var virtualcity,
-        server,
-        serviceResponse = [
+    let virtualcity,
+        server;
+    const serviceResponse = [
             {
                 "_id": "heYiQW6uqcimdKzsh",
                 "public": true,

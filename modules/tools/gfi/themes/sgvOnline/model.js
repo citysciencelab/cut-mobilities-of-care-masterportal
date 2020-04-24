@@ -36,8 +36,8 @@ const SgvOnlineTheme = Theme.extend({
      * @returns {void}
      */
     replaceValuesWithChildObjects: function () {
-        var element = this.get("gfiContent"),
-            children = [];
+        const children = [];
+        let element = this.get("gfiContent");
 
         if (_.isString(element) && element.match(/content="text\/html/g)) {
             children.push(element);
@@ -45,7 +45,7 @@ const SgvOnlineTheme = Theme.extend({
         else {
             _.each(element, function (ele) {
                 _.each(ele, function (val, key) {
-                    var imgView,
+                    let imgView,
                         videoView;
 
                     if (key === "Bild") {
@@ -94,8 +94,8 @@ const SgvOnlineTheme = Theme.extend({
         this.set("gfiContent", element);
     },
     getAmtlVergAddr: function () {
-        var key = "Amtlich vergebene Adresse",
-            val;
+        const key = "Amtlich vergebene Adresse";
+        let val;
 
         if (this.get("gfiContent")[0].hasOwnProperty(key)) {
             val = this.get("gfiContent")[0][key];
