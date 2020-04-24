@@ -137,7 +137,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             }
             else if (this.get("isOpen")) {
                 this.currentMenu = new Menu({firstTime: false});
-                $(".dropdown.dropdown-folder").addClass("open");
+                $(".nav-menu.nav.navbar-nav.desktop:first-child").addClass("open");
             }
             else {
                 this.currentMenu = new Menu();
