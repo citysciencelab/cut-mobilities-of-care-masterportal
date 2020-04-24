@@ -544,8 +544,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      */
     addTreeMenuItems: function (treeType) {
         const menu = this.get("portalConfig").hasOwnProperty("menu") ? this.get("portalConfig").menu : undefined,
-        tree = menu !== undefined && menu.hasOwnProperty("tree") ? menu.tree : undefined,
-        isAlwaysExpandedList = tree !== undefined && tree.hasOwnProperty("isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
+            tree = menu !== undefined && menu.hasOwnProperty("tree") ? menu.tree : undefined,
+            isAlwaysExpandedList = tree !== undefined && tree.hasOwnProperty("isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
             isMobile = Radio.request("Util", "isViewMobile"),
             baseLayers = this.get("baselayer"),
             overLayers = this.get("overlayer"),
@@ -559,26 +559,25 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         let baseLayerI18nextTranslate = null,
             overLayerI18nextTranslate = null;
 
-            if (!baseLayersName && !baseLayers.i18nextTranslate) {
-                // no name and no translation-function found: provide translation of default key
-                baseLayerI18nextTranslate = function (setter) {
-                    if (typeof setter === "function" && i18next.exists(baseLayersDefaultKey)) {
-                        setter("name", i18next.t(baseLayersDefaultKey));
-                    }
-                };
-            }
-            if (!overLayersName && !overLayers.i18nextTranslate) {
-                // no name and no translation-function found: provide translation of default key
-                overLayerI18nextTranslate = function (setter) {
-                    if (typeof setter === "function" && i18next.exists(overLayersDefaultKey)) {
-                        setter("name", i18next.t(overLayersDefaultKey));
-                    }
-                };
-            }
-    
+        if (!baseLayersName && !baseLayers.i18nextTranslate) {
+            // no name and no translation-function found: provide translation of default key
+            baseLayerI18nextTranslate = function (setter) {
+                if (typeof setter === "function" && i18next.exists(baseLayersDefaultKey)) {
+                    setter("name", i18next.t(baseLayersDefaultKey));
+                }
+            };
+        }
+        if (!overLayersName && !overLayers.i18nextTranslate) {
+            // no name and no translation-function found: provide translation of default key
+            overLayerI18nextTranslate = function (setter) {
+                if (typeof setter === "function" && i18next.exists(overLayersDefaultKey)) {
+                    setter("name", i18next.t(overLayersDefaultKey));
+                }
+            };
+        }
         this.addItem({
             type: "folder",
-           name: baseLayersName ? baseLayersName : i18next.t(baseLayersDefaultKey),
+            name: baseLayersName ? baseLayersName : i18next.t(baseLayersDefaultKey),
             i18nextTranslate: baseLayers.i18nextTranslate ? baseLayers.i18nextTranslate : baseLayerI18nextTranslate,
             glyphicon: "glyphicon-plus-sign",
             id: "Baselayer",
