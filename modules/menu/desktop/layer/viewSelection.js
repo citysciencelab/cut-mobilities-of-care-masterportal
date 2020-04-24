@@ -22,17 +22,13 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @memberof Menu.Desktop.Layer
      * @constructs
      * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
-     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         this.listenTo(this.model, {
             "change:isVisibleInMap": this.rerender,
             "change:isSettingVisible": this.renderSetting,
             "change:transparency": this.rerender,
-            "change:isOutOfRange": this.toggleColor,
-            "change:currentLng": () => {
-                this.render();
-            }
+            "change:isOutOfRange": this.toggleColor
         });
         this.listenTo(Radio.channel("LayerInformation"), {
             "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
