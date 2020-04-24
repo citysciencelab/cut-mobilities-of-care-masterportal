@@ -91,7 +91,6 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         attr.backgroundImage = Radio.request("MapView", "getBackgroundImage");
         this.$el.find(".header").toggleClass("closed");
         $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
-        
         if (attr.isPinned) {
             this.fixTree();
         }
