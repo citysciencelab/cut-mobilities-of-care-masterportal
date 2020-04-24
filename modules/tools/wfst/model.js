@@ -489,11 +489,13 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     updateActiveLayer: function (id) {
+        let wfsLayer = {},
+            parameter = {};
+
         this.setCurrentLayerId(id);
 
-        // Setter must be called before variable declaration
-        const wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id}),
-            parameter = this.getLayerParams(wfsLayer);
+        wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id});
+        parameter = this.getLayerParams(wfsLayer);
 
         this.setUrl(parameter.url);
         this.setFeatureType(parameter.featureType);

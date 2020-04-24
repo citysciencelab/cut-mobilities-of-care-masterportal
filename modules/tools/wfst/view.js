@@ -324,22 +324,22 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             buttonDiscard = $("#wfst-module-recordButton-discard")[0],
             deactivateAll = "deactivate-all";
 
-        if (typeof objects.buttonPoint === "object" && activeButton === objects.buttonPoint.element.id) {
+        if (typeof objects.buttonPoint.element === "object" && activeButton === objects.buttonPoint.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonPointDisable === undefined ? true : objects[key].buttonPointDisable));
         }
-        if (typeof objects.buttonLine === "object" && activeButton === objects.buttonLine.element.id) {
+        if (typeof objects.buttonLine.element === "object" && activeButton === objects.buttonLine.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonLineDisable === undefined ? true : objects[key].buttonLineDisable));
         }
-        if (typeof objects.buttonArea === "object" && activeButton === objects.buttonArea.element.id) {
+        if (typeof objects.buttonArea.element === "object" && activeButton === objects.buttonArea.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonAreaDisable === undefined ? true : objects[key].buttonAreaDisable));
         }
-        if (typeof objects.buttonEdit === "object" && activeButton === objects.buttonEdit.element.id) {
+        if (typeof objects.buttonEdit.element === "object" && activeButton === objects.buttonEdit.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonEditDisable === undefined ? true : objects[key].buttonEditDisable));
         }
-        if (typeof objects.buttonDel === "object" && activeButton === objects.buttonDel.element.id) {
+        if (typeof objects.buttonDel.element === "object" && activeButton === objects.buttonDel.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonDeleteDisable === undefined ? true : objects[key].buttonDeleteDisable));
         }
-        if (typeof objects.layerSelect === "object" && activeButton === objects.layerSelect.element.id) {
+        if (typeof objects.layerSelect.element === "object" && activeButton === objects.layerSelect.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].layerSelectDisable === undefined ? true : objects[key].layerSelectDisable));
         }
         if (typeof buttonSave === "object" && typeof buttonDiscard === "object") {
