@@ -24,7 +24,7 @@ const ScaleLineModel = Backbone.Model.extend({
      * @returns {void}
      */
     modifyScale: function (obj) {
-        const scaleNumber = obj.scale.toString();
+        let scaleNumber = obj.scale.toString();
 
         if (scaleNumber >= 10000) {
             scaleNumber = scaleNumber.substring(0, scaleNumber.length - 3) + " " + scaleNumber.substring(scaleNumber.length - 3);
