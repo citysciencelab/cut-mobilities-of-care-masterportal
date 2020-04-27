@@ -1,8 +1,8 @@
 <script>
 import {mapGetters, mapMutations, mapActions} from "vuex";
-import getters from "../store/getters";
-import mutations from "../store/mutations";
-import actions from "../store/actions";
+import getters from "../store/gettersMap";
+import mutations from "../store/mutationsMap";
+import actions from "../store/actions/actionsMap";
 
 const keyStore = {
     getters: Object.keys(getters),

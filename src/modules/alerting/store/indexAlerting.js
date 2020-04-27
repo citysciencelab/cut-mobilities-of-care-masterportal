@@ -1,5 +1,5 @@
-import actions from "./actions";
-import mutations from "./mutations";
+import actions from "./actionsAlerting";
+import mutations from "./mutationsAlerting";
 
 export default {
     namespaced: true,

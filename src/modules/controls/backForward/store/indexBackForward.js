@@ -1,5 +1,5 @@
-import getters from "./getters";
-import mutations from "./mutations";
+import getters from "./gettersBackForward";
+import mutations from "./mutationsBackForward";
 
 export default {
     namespaced: true,

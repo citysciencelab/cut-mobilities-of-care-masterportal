@@ -1,17 +1,17 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
-import Alerting from "../modules/alerting/store";
-import SupplyCoord from "../modules/tools/supplyCoord/store";
-import ScaleLine from "../modules/scaleLine/store";
-import Title from "../modules/title/store";
-import Map from "../modules/map/store";
+import Alerting from "../modules/alerting/store/indexAlerting";
+import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
+import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
+import Title from "../modules/title/store/indexTitle";
+import Map from "../modules/map/store/indexMap";
 
 import getters from "./getters";
 import mutations from "./mutations";
 import state from "./state";
 
-import controlsModule from "../modules/controls";
+import controlsModule from "../modules/controls/indexControls";
 
 import isMobile from "./utils/isMobile";
 

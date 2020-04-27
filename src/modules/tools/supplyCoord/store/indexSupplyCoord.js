@@ -1,6 +1,6 @@
-import GenericTool from "../../index";
+import GenericTool from "../../indexSupplyCoord";
 import composeModules from "../../../../global-store/utils/composeModules";
-import mutations from "./mutations";
+import mutations from "./mutationsSupplyCoord";
 
 export default composeModules([GenericTool, {
     namespaced: true,

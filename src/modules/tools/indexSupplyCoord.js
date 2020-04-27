@@ -1,4 +1,4 @@
-import mutations from "./mutations";
+import mutations from "./mutationsSupplyCoord";
 
 /**
  * This is here to test global-store/utils/composeModules.

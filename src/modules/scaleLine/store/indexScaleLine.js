@@ -1,5 +1,5 @@
-import actions from "./actions";
-import mutations from "./mutations";
+import actions from "./actionsScaleLine";
+import mutations from "./mutationsScaleLine";
 
 export default {
     namespaced: true,
