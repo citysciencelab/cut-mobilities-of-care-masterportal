@@ -60,6 +60,16 @@ const Config = {
         },
         maximumScreenSpaceError: 2,
         fxaa: true
+    },
+    portalLanguage: {
+        enabled: true,
+        debug: false,
+        languages: {
+            de: "deutsch",
+            en: "englisch"
+        },
+        fallbackLanguage: "de",
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
     }
 };
 
