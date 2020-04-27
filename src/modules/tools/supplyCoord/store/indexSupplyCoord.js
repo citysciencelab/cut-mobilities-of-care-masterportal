@@ -1,4 +1,4 @@
-import GenericTool from "../../indexSupplyCoord";
+import GenericTool from "../../indexTools";
 import composeModules from "../../../../global-store/utils/composeModules";
 import mutations from "./mutationsSupplyCoord";
 
