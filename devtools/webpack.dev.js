@@ -36,7 +36,7 @@ module.exports = function () {
                 "Access-Control-Allow-Origin": "*"
             },
             https: true,
-            open: true,
+            open: false,
             openPage: "portal/master",
             overlay: true,
             port: 9001,

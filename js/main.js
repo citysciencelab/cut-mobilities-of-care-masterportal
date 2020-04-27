@@ -2,7 +2,8 @@
  * @file
  * <h1>Welcome to the Open Source Project "Masterportal" of the [Landesbetrieb Geoinformation und Vermessung]{@link http://www.geoinfo.hamburg.de}</h1>
  */
-import "@babel/polyfill";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import {fetch} from "./layerList";
 import "../css/bootstrap.less";
 // CSS-Handling: Importieren von Css damit Webpack das verarbeitet.
