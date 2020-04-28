@@ -71,7 +71,8 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../../theme.less";
+    @import "~variables";
+
 
     .attributions-button {
         position: relative;

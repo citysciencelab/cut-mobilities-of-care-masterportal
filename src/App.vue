@@ -38,6 +38,5 @@ export default {
     </div>
 </template>
 
-<style>
-
+<style lang="less">
 </style>

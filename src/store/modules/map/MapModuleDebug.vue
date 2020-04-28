@@ -57,6 +57,9 @@ export default {
             >
             open
         </label>
+        <div class="global-variable-test">
+            This element is only visible in dev mode.
+        </div>
         <ul v-if="open">
             <li
                 v-for="([key, value], index) in dataList"

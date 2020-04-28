@@ -72,7 +72,7 @@ export default {
 </template>
 
 <style lang="less">
-    @import "../../theme.less";
+    @import "~variables";
 
     .open-tool {
         font-weight: bold;
@@ -94,7 +94,7 @@ export default {
 </style>
 
 <style lang="less" scoped>
-    @import "../../theme.less";
+    @import "~variables";
 
     .tool-box {
         left: 0px;

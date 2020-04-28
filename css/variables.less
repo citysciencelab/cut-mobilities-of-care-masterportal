@@ -1,0 +1,49 @@
+/*
+ * This file contains and imports less variables, mixins, and functions.
+ *
+ * WARNING:
+ * It MUST NOT contain any actual css rules. Since this file is imported
+ * in lots of places, that would result in a copy of all css rules per import.
+ */
+
+/*
+ * Bootstrap variables and mixins
+ */
+@import "../node_modules/bootstrap/less/variables.less";
+@import "../node_modules/bootstrap/less/mixins.less";
+
+/*
+ * Masterportal "Default Style" Override of Bootstrap Variables
+ */
+@border-radius-base: 0;
+@border-radius-large: 0;
+@border-radius-small: 0;
+@badge-border-radius: 10px;
+@font-family-sans-serif: MasterPortalFont , Arial, sans-serif;
+@icon-font-path: "../fonts/";
+
+/*
+ * "Theme" - these variables have initially been used as theme.
+ * Concept for extended theme in MPR-21 branch includes "primary", "secondary", "navigation", ...
+ * colours, Bootstrap 3 seems to only provide a primary ("brand") color.
+ * Discussion point: How to handle variables? Use Bootstrap 3 more or own theme? Or mix them?
+ * Also, it should probably all be documented so that users may override variables for custom portal designs.
+ */
+
+@color_1: #f3f3f3;
+@color_2: #E10019;
+@color_3: #F3F3F3;
+@font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+@background_color_1: #E10019;
+@background_color_2: rgb(8,88,158);
+@background_color_3: #f3f3f3;
+
+/*
+ * "Customer" Overrides - modify variables after this comment to
+ * individually style a specific Masterportal.
+ * Alternative could be something like @import "../customize/styles.less".
+ * NOTE This is a PoC. It will only fully work when the Masterportal
+ * consequently uses Bootstrap variables throughout all of its components.
+ */
+
+@brand-primary: #000;
