@@ -28,8 +28,8 @@ const ScaleLineView = Backbone.View.extend({
             i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
 
         this.$el.html(this.template(attr));
-        if (document.getElementsByClassName("footer").length > 0) {
-            document.getElementsByClassName("footer")[0].appendChild(this.el);
+        if ($("#map > div.ol-viewport > div.footer").length > 0) {
+            $("#map > div.ol-viewport > div.footer").append(this.el);
         }
         else if (document.getElementsByClassName("ol-viewport").length > 0) {
             document.getElementsByClassName("ol-viewport")[0].appendChild(this.el);

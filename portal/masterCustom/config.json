@@ -441,7 +441,6 @@
         "buttonOblique":true,
         "button3d":true
      },
-     "scaleLine":true,
      "treeType":"custom",
      "singleBaselayer": true,
      "layersRemovable":false
