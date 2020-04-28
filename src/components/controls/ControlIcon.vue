@@ -109,4 +109,18 @@ export default {
             cursor: default;
         }
     }
+
+    /* corrections for glyphicons that don't exactly center */
+    .glyphicon-plus::before {
+        margin-top: -1px;
+        margin-left: 1px;
+    }
+    .glyphicon-minus::before {
+        margin-left: -1px;
+        margin-top: -1px;
+    }
+    .glyphicon-forward::before {
+        margin-left: 2px;
+        margin-top: -1px;
+    }
 </style>

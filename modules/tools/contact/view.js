@@ -55,7 +55,7 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
      * @returns {void}
      */
     setMaxHeight: function () {
-        var height = document.getElementById("vue-app").offsetHeight - 130;
+        var height = document.getElementById("masterportal-container").offsetHeight - 130;
 
         this.$el.css("max-height", height);
         this.$el.css("max-width", 400);

@@ -117,7 +117,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
 
             if (Radio.request("Util", "getUiStyle") === "TABLE") {
                 this.$el.html(this.templateTable(attr));
-                document.getElementById("vue-app").appendChild(this.el);
+                document.getElementById("masterportal-container").appendChild(this.el);
                 currentClass = $("#window").attr("class").split(" ");
 
                 this.$el.addClass("table-tool-win-all");

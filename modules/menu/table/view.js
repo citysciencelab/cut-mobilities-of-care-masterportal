@@ -27,7 +27,7 @@ const Menu = Backbone.View.extend({
     render: function () {
 
         $(this.el).html(this.template());
-        $("#vue-app").append(this.$el);
+        $("#masterportal-container").append(this.$el);
         this.$el.draggable({
             containment: "#map",
             handle: ".icon-drag",
@@ -170,8 +170,8 @@ const Menu = Backbone.View.extend({
             minDist,
             minPos;
 
-        mapWidth = Math.round($("#vue-app").width());
-        mapHeight = Math.round($("#vue-app").height());
+        mapWidth = Math.round($("#masterportal-container").width());
+        mapHeight = Math.round($("#masterportal-container").height());
 
         // calculate the distances of the current finger position to the middle positions of each side
         distBottom = Math.sqrt((mapWidth / 2 - x) * (mapWidth / 2 - x) + (mapHeight - y) * (mapHeight - y));

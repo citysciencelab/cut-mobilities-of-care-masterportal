@@ -8,7 +8,7 @@ const CloseClickView = Backbone.View.extend({
     id: "closeclick-view",
     className: "closeclick-view closeclick-deactivated",
     render: function () {
-        $("#vue-app").append(this.$el);
+        $("#masterportal-container").append(this.$el);
         return this;
     },
     closeSelfAndLayertree: function () {

@@ -18,7 +18,10 @@ export default {
 </script>
 
 <template>
-    <div id="vue-app">
+    <div
+        id="masterportal-container"
+        class="masterportal-container"
+    >
         <!-- layout at its heart is two elements - navigation bar and map with elements on it -->
         <MainNav />
         <MapRegion class="map-region" />
@@ -31,7 +34,7 @@ export default {
 <style lang="less" scoped>
     @import "./variables.less";
 
-    #vue-app {
+    #masterportal-container {
         display: flex;
         flex-direction: column;
 
