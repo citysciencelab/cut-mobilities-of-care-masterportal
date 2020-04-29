@@ -1,131 +1,232 @@
 <script>
+
+import Modal from "../../modal/components/Modal.vue";
+import axios from "axios";
+import {mapGetters} from "vuex";
+import {mapActions} from "vuex";
+
 export default {
     name: "Alerting",
+
+    components: {
+        Modal
+    },
+
+    data: function () {
+        return {
+            showModal: false
+        };
+    },
+
     computed: {
-        alerts () {
-            return this.$store.state.Alerting.alerts;
-        },
-        fadeOut () {
-            return this.$store.state.Alerting.fadeOut;
-        },
-        position () {
-            return this.$store.state.Alerting.position;
+        ...mapGetters("Alerting", [
+            "displayedAlerts",
+            "fetchBroadcastUrl",
+            "localStorageDisplayedAlertsKey",
+            "readyToShow",
+            "sortedAlerts"
+        ]),
+
+        console: () => console
+    },
+
+    watch: {
+        displayedAlerts (newDisplayedAlerts) {
+            // Local storage is synced with this.displayedAlerts
+            localStorage[this.localStorageDisplayedAlertsKey] = JSON.stringify(newDisplayedAlerts);
         }
     },
-    created () {
-        const that = this,
-            myBus = Backbone.Events;
 
-        myBus.listenTo(Radio.channel("Alert"), {
-            "alert": function (alert) {
-                that.$store.dispatch("Alerting/addAlert", alert);
-            },
-            "alert:remove": function (removeAlertId) {
-                that.$store.dispatch("Alerting/removeAlert", removeAlertId);
+    created () {
+        Backbone.Events.listenTo(Radio.channel("Alert"), {
+            "alert": newAlert => {
+                this.addSingleAlert(newAlert);
             }
         });
     },
-    mounted () {
-        document.getElementsByTagName("body")[0].appendChild(this.$el);
-    },
-    updated () {
-        const that = this;
 
-        if (this.fadeOut) {
-            $(".alert").fadeOut(this.fadeOut, function () {
-                that.$store.dispatch("Alerting/removeAlert", $(this).attr("id"));
-                $(this).remove();
-            });
+    mounted () {
+        let initialDisplayedAlerts;
+
+        this.initialize();
+
+        if (localStorage[this.localStorageDisplayedAlertsKey] !== undefined) {
+            try {
+                initialDisplayedAlerts = JSON.parse(localStorage[this.localStorageDisplayedAlertsKey]);
+
+                this.setDisplayedAlerts(initialDisplayedAlerts);
+            }
+            catch (e) {
+                localStorage[this.localStorageDisplayedAlertsKey] = JSON.stringify({});
+            }
+        }
+        else {
+            this.setDisplayedAlerts({});
+        }
+
+        if (this.fetchBroadcastUrl !== undefined && this.fetchBroadcastUrl !== false) {
+            this.fetchBroadcast(this.fetchBroadcastUrl);
+            /* DEBUG: This will enable constant alerts to test *
+            setInterval(() => {
+                this.fetchBroadcast(this.fetchBroadcastUrl);
+            }, 5000);
+            /**/
         }
     },
-    methods: {
-        /**
-         * Reacts to click on dismiss or confirm button.
-         * @param {string} mode mode that closes the alert.
-         * @param {Event} event Click event on dismissable alert.
-         * @fires AlertingView#RadioTriggerAlertClosed
-         * @return {void}
-         */
-        closeAlert (mode, event) {
-            const div = $(event.currentTarget).parent();
 
-            this.$store.dispatch("Alerting/removeAlert", $(div[0]).attr("id"));
-            Radio.trigger("Alert", mode, $(div[0]).attr("id"));
+    methods: {
+        ...mapActions("Alerting", [
+            "addSingleAlert",
+            "alertHasBeenRead",
+            "cleanup",
+            "initialize",
+            "setDisplayedAlerts"
+        ]),
+
+        fetchBroadcast: function (fetchBroadcastUrl) {
+            // remove hashes
+            let urlToCheck = document.URL.replace(/#.*$/, "");
+
+            // then remove get params and make it end with slash
+            urlToCheck = urlToCheck.replace(/\/*\?.*$/, "/");
+
+            axios.get(fetchBroadcastUrl).then(response => {
+                // handle success
+                const data = response.data,
+                    collectedAlerts = [];
+
+                let collectedAlertIds = [];
+
+                if (data.alerts === undefined || typeof data.alerts !== "object") {
+                    console.warn("No alerts defined.");
+                    return;
+                }
+
+                if (Array.isArray(data.globalAlerts)) {
+                    collectedAlertIds = [...collectedAlertIds, ...data.globalAlerts];
+                }
+
+                if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object") {
+                    collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[urlToCheck]];
+                }
+
+                for (const alertId in data.alerts) {
+                    if (collectedAlertIds.includes(alertId)) {
+                        collectedAlerts.push(data.alerts[alertId]);
+                    }
+                }
+
+                collectedAlerts.forEach(singleAlert => {
+                    this.addSingleAlert(singleAlert);
+                });
+            }).catch(function (error) {
+                console.warn(error);
+            });
+        },
+
+        onModalHid: function () {
+            this.cleanup();
+        },
+
+        markAsRead: function (hash) {
+            this.alertHasBeenRead(hash);
         }
     }
 };
 </script>
 
 <template>
-    <div
-        id="messages"
-        :class="[position]"
-    >
-        <div
-            v-for="alert in alerts"
-            :key="alert.id"
+    <div>
+        <Modal
+            :show-modal="readyToShow"
+            @modalHid="onModalHid"
         >
             <div
-                :id="alert.id"
-                :class="['alert', alert.category]"
-                role="alert"
+                v-for="(alertCategory, categoryIndex) in sortedAlerts"
+                :key="alertCategory.category"
+                class="alertCategoryContainer"
+                :class="{ last: categoryIndex === sortedAlerts.length-1 }"
             >
-                <button
-                    v-if="alert.isDismissable===true"
-                    type="button"
-                    class="close"
-                    aria-label="Close"
-                    @click="closeAlert('closed', $event)"
+                <h3>
+                    {{ alertCategory.category }}
+                </h3>
+
+                <div
+                    v-for="(singleAlert, singleAlertIndex) in alertCategory.content"
+                    :key="singleAlert.hash"
                 >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <p>
-                    <span
-                        v-html="alert.message"
-                    />
-                </p>
-                <button
-                    v-if="alert.isConfirmable"
-                    type="button"
-                    class="btn btn-primary alert-confirm"
-                    aria-label="Close"
-                    @:click="closeAlert('confirmed', $event)"
-                >
-                    OK
-                </button>
+                    <div
+                        class="singleAlertContainer"
+                        :class="{
+                            singleAlertIsImportant: singleAlert.mustBeConfirmed,
+                            last: singleAlertIndex === alertCategory.content.length-1
+                        }"
+                    >
+                        <p>
+                            {{ singleAlert.content }}
+                        </p>
+
+                        <p
+                            v-if="singleAlert.mustBeConfirmed"
+                            class="confirm"
+                        >
+                            <a
+                                @click="markAsRead(singleAlert.hash)"
+                            >
+                                diese Meldung nicht mehr anzeigen
+                            </a>
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </Modal>
     </div>
 </template>
 
+<style lang="less" scoped>
+    div.alertCategoryContainer {
+        margin-bottom:24px;
 
-<style lang="less">
-div#messages {
-    max-width: 100%;
-    z-index: 2001;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    .alert {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        &.last {
+            margin-bottom:12px;
+        }
+
+        h3 {
+            border:none;
+            color:#333333;
+            font-size:14px;
+            font-weight:bold;
+            letter-spacing:initial;
+            line-height:18px;
+            margin:0 0 8px 0;
+            padding:0;
+        }
+
+        div.singleAlertContainer {
+            border-bottom:1px dotted #CCCCCC;
+            color:#777777;
+            font-size:12px;
+            margin-bottom:12px;
+            padding-bottom:12px;
+
+            &.singleAlertIsImportant p {
+                color:#EE7777;
+
+                &.confirm a {
+                    color:#777777;
+                    cursor:pointer;
+                    text-decoration:underline;
+
+                    &:hover {
+                        text-decoration:none;
+                    }
+                }
+            }
+
+            &.last {
+                border-bottom:none;
+                padding-bottom:0px;
+            }
+        }
     }
-}
-div#messages.top-center {
-    top: 25%;
-    left: 50%;
-}
-div#messages.center-center {
-    top: 50%;
-    left: 50%;
-}
-div#messages.bottom-center {
-    top: 75%;
-    left: 50%;
-}
-.alert-confirm {
-    margin-top: 10px;
-    width: 100%;
-}
-.close {
-    outline: none;
-}
 </style>

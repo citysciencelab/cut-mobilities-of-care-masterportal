@@ -119,7 +119,7 @@ function loadApp () {
 
     Vue.config.productionTip = false;
 
-    store.commit("addConfigJsToStore", Config);
+    store.commit("setConfigJs", Config);
 
     Vue.use(VueI18Next);
 
@@ -131,7 +131,6 @@ function loadApp () {
         i18n: new VueI18Next(i18next)
     });
 
-    app.$mount();
 
     // Core laden
     new Autostarter();
@@ -140,7 +139,6 @@ function loadApp () {
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
 
-    app.$store.commit("addConfigJsonToStore", Radio.request("Parser", "getPortalConfig"));
 
     new StyleList();
     new ParametricURL();
@@ -148,6 +146,8 @@ function loadApp () {
     new WPS();
     new AddGeoJSON();
     new WindowView();
+
+    app.$mount();
 
     if (Config.hasOwnProperty("cswId")) {
         cswParserSettings.cswId = Config.cswId;
