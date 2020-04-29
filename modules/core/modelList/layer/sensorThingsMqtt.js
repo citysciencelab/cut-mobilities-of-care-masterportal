@@ -177,7 +177,6 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
      * @param {Number} [optionsOpt.retain=0] flag of how to use retained messages for this subscription - see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc385349265
      * @param {Boolean} [optionsOpt.rmSimulate=true] false if no simulation of retained messages should take place, otherwise true
      * @param {String} [optionsOpt.rmPath=""] a path on the server in case the path differs from the standard implementation
-     * @param {String} [optionsOpt.rmProtocol="https"] the protocol to use for the simulation (http, https, ...)
      * @param {SensorThingsClientHttp} [optionsOpt.rmHttpClient] a function to call an url with for the simulation instead of using the default (defaultHttpClient)
      * @param {SensorThingsMqttCallbackMessage} [onmessageOpt] a function to be called for receiving the message, default: messageHandler
      * @returns {Void}  -
@@ -188,7 +187,6 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
             retain: 0,
             rmSimulate: false,
             rmPath: "",
-            rmProtocol: "https",
             rmHttpClient: defaultHttpClient
         }, optionsOpt);
 
