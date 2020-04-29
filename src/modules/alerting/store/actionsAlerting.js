@@ -68,9 +68,6 @@ export default {
     initialize: ({rootState}) => {
         const configFetchSuccess = fetchFirstModuleConfig(rootState, configPaths, "Alerting");
 
-        console.log(rootState);
-
-
         if (!configFetchSuccess) {
             // insert fallback: recursive config dearch for backwards compatibility
             // see helpers.js@fetchFirstModuleConfig() for alternative place for this
