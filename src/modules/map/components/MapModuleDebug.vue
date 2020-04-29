@@ -57,6 +57,7 @@ export default {
             >
             open
         </label>
+        <div>This element is only visible in dev mode.</div>
         <ul v-if="open">
             <li
                 v-for="([key, value], index) in dataList"

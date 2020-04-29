@@ -1,8 +1,12 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
+import ControlIcon from "../../ControlIcon.vue";
 
 export default {
     name: "BackForward",
+    components: {
+        ControlIcon
+    },
     props: {
         glyphiconFor: {
             type: String,
@@ -26,10 +30,10 @@ export default {
     },
      */
     mounted () {
-        this.unsubscribe = this.map.on("moveend", this.memorizeMap);
+        this.map.on("moveend", this.memorizeMap);
     },
     beforeDestroy () {
-        this.unsubscribe();
+        this.map.un("moveend", this.memorizeMap);
     },
     methods: {
         ...mapMutations(
@@ -38,6 +42,12 @@ export default {
         ),
         memorizeMap () {
             this.memorize(this.map);
+        },
+        moveForward () {
+            this.forward(this.map);
+        },
+        moveBackward () {
+            this.backward(this.map);
         }
     }
 };
@@ -45,35 +55,21 @@ export default {
 
 <template>
     <div class="back-forward-buttons">
-        <span
-            :class="['forward', 'glyphicon', glyphiconFor, forthAvailable ? '' : 'inactive']"
+        <ControlIcon
             title="Schritt voran"
-            @click="forward(map)"
+            :active="forthAvailable"
+            :icon-name="glyphiconFor"
+            :on-click="moveForward"
         />
-        <span
-            :class="['backward', 'glyphicon', glyphiconBack, backAvailable ? '' : 'inactive']"
+        <ControlIcon
             title="Schritt zurück"
-            @click="backward(map)"
+            :icon-name="glyphiconBack"
+            :active="backAvailable"
+            :on-click="moveBackward"
         />
     </div>
 </template>
 
 <style lang="less" scoped>
-    @import "../../../../theme.less";
-
-    .back-forward-buttons {
-        .forward {
-            display: block;
-        }
-        .glyphicon {
-            cursor: pointer;
-            font-size: 22px;
-            padding: 5px 7px 6px 7px;
-            margin-top: 4px;
-        }
-        .inactive {
-            pointer-events: none;
-            background-color: grey;
-        }
-    }
+    @import "../../../../variables.less";
 </style>

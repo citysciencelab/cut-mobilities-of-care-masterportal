@@ -6,9 +6,10 @@ export default {
      * @param {string} name name of control in config.json
      * @param {object} control Vue Component
      * @param {boolean} [hiddenMobile=false] whether component is visible in mobile resolution
+     * @param {boolean} [bottomControlsFlag=false] whether component is to be shown at lower end of the page
      * @returns {void}
      */
-    registerModule (state, name, control, hiddenMobile = false) {
+    registerModule (state, name, control, hiddenMobile = false, bottomControlsFlag = false) {
         state.componentMap = {
             ...state.componentMap,
             [name]: control
@@ -16,6 +17,12 @@ export default {
         if (hiddenMobile) {
             state.hiddenMobile = [
                 ...state.hiddenMobile,
+                name
+            ];
+        }
+        if (bottomControlsFlag) {
+            state.bottomControls = [
+                ...state.bottomControls,
                 name
             ];
         }
@@ -33,5 +40,6 @@ export default {
 
         state.componentMap = nextMap;
         state.mobileHiddenControls = state.mobileHiddenControls.filter(s => s !== name);
+        state.bottomControls = state.bottomControls.filter(s => s !== name);
     }
 };

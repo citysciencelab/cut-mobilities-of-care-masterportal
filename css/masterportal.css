@@ -3,9 +3,10 @@ html, body {
     width: 100%;
 }
 
-.masterportal-container {
-    height: 100%;
-    font-family: MasterPortalFont, Arial, sans-serif;
+#cursorGlyph {
+    position: absolute;
+    z-index: 1000;
+    cursor: none;
 }
 
 .font-bold {
@@ -18,12 +19,6 @@ label {
 
 #map {
     position: relative;
-}
-
-.masterportal-container #cursorGlyph {
-    position: absolute;
-    z-index: 1000;
-    cursor: none;
 }
 
 .glyphicon-check, .glyphicon-unchecked, .glyphicon-download, .glyphicon-upload, .glyphicon-chevron-down, .glyphicon-plus-sign, .glyphicon-minus-sign, .glyphicon-refresh, .glyphicon-folder-close, .glyphicon-folder-open, .glyphicon-question-sign {
@@ -83,39 +78,6 @@ label {
 
 .form-group:last-child {
     margin-bottom: 0px;
-}
-
-/******* Ajax Loader *******/
-#loader {
-    background-color: rgba(0, 0, 0, 0.4);
-    color: #FFFFFF;
-    height: 100%;
-    position: absolute;
-    width: 100%;
-    z-index: 2000;
-}
-
-#loader img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -21px;
-    margin-top: -5px;
-}
-
-.loading {
-    position: absolute;
-    top: 30%;
-    left: 32.5%;
-    z-index: 9999;
-    text-align: center;
-    width: 35%;
-}
-
-.loading div {
-    font-size:5vmin;
-    line-height: 130%;
-    margin-top: 5%;
 }
 
 .cluster {

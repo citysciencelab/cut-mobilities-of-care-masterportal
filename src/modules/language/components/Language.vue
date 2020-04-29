@@ -6,14 +6,11 @@ export default {
             showWindow: false
         };
     },
-    mounted () {
-        document.getElementsByTagName("body")[0].appendChild(this.$el);
-    },
     methods: {
         translate (language) {
             i18next.changeLanguage(language);
         },
-        languageWindow () {
+        toggleLanguageWindow () {
             this.showWindow = !this.showWindow;
         }
     }
@@ -26,7 +23,8 @@ export default {
     >
         <a
             class="current-language"
-            @click="languageWindow"
+            aria-role="button"
+            @click="toggleLanguageWindow"
         >
             {{ this.$i18n.i18next.language }}
         </a>
@@ -40,7 +38,7 @@ export default {
                 >{{ $t("modules.language.languageTitle") }}</label>
                 <a
                     class="buttons pull-right"
-                    @click="languageWindow"
+                    @click="toggleLanguageWindow"
                 >
                     <span
                         class="glyphicon glyphicon-remove"
@@ -68,39 +66,32 @@ export default {
 </template>
 
 <style lang="less">
+    @import "../../../variables.less";
+
     #language-bar {
-        position: absolute;
-        right: 10px;
-        width: 25px;
-        min-height: 22px;
-        bottom: 0;
-        padding-bottom: 2px;
-        z-index: 2000;
         .current-language {
-            width: 25px;
-            height: 22px;
-            cursor: pointer;
             display: block;
-            text-align: center;
-            padding-top: 5px;
-            /* font-size: 12px; */
+            position: relative;
+
+            cursor: pointer;
+
             text-transform: uppercase;
-            color: #23527c;
-            font-weight: 900;
+            font-weight: bold;
         }
         .popup-language {
-            display: block;
             position: absolute;
-            right: 10px;
+
+            bottom: calc(100% + 8px);
+            right: 8px;
+
             padding: 10px 0 20px;
+
             min-width: 400px;
-            background: rgba(255, 255, 255, 1);
-            padding: 10px 0 20px;
-            z-index: 10010;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-            bottom: 50px;
+
+            background: @secondary;
+            box-shadow: @shadow;
+
             .language-header {
-                display: block;
                 float: right;
                 width: 100%;
                 border-bottom: 1px solid #e5e5e5;
@@ -131,7 +122,6 @@ export default {
 
     @media (max-width: 767px) {
         #language-bar {
-            width: 100%;
             .current-language {
                 float: right;
                 text-align: right;
@@ -139,7 +129,7 @@ export default {
             .popup-language {
                 width: calc(100% - 20px);
                 min-width: inherit;
-                right: 0;
+                right: 10px;
             }
         }
     }

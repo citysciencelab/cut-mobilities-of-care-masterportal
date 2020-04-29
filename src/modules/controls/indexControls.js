@@ -24,8 +24,10 @@ export default {
             zoom: Zoom
         },
         mobileHiddenControls: [
-            "backForward"
-        ]
+            "backForward",
+            "mousePosition"
+        ],
+        bottomControls: ["attributions", "overviewMap"]
     },
     mutations,
     getters

@@ -24,7 +24,7 @@ import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
 import LayerinformationModel from "../modules/layerInformation/model";
-import FooterView from "../modules/footer/view";
+// import FooterView from "../modules/footer/view";
 import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
@@ -95,8 +95,7 @@ function loadApp () {
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
         /* eslint-disable no-undef */
-    let app = {},
-        i18n = {};
+    let app = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -119,17 +118,17 @@ function loadApp () {
     }
 
     Vue.config.productionTip = false;
-    Vue.use(VueI18Next);
-
-    i18n = new VueI18Next(i18next);
 
     store.commit("addConfigJsToStore", Config);
 
+    Vue.use(VueI18Next);
+
     app = new Vue({
+        el: "#vue-root",
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n
+        i18n: new VueI18Next(i18next)
     });
 
     app.$mount();
@@ -177,7 +176,7 @@ function loadApp () {
     new LayerinformationModel(layerInformationModelSettings);
 
     if (Config.hasOwnProperty("footer")) {
-        new FooterView(Config.footer);
+        // new FooterView(Config.footer);
     }
 
     if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {
@@ -455,28 +454,32 @@ function loadApp () {
     if (sbconfig) {
         new SearchbarView(sbconfig);
     }
-    if (i18nextIsEnabled && Object.keys(i18nextLanguages).length > 1) {
-        new LanguageView();
-    }
 
     new HighlightFeature();
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
-        let initCounter = 0;
+        /*
+          TODO initCounter and related code currently commented out since variable "i18nextLanguages"
+               was not defined. Found this section in its currently broken state - not sure if this
+               is to be fixed or to be removed in favour of a different approach?
+        */
+        // let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
-                initCounter++;
+                // initCounter++;
             }
         });
+
+        /*
         initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
 
                 Object.keys(i18nextLanguages).forEach((lng) => {
-                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
+                    import(/* webpackChunkName: "additionalLocales" * / `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales);
                             initCounter--;
@@ -496,11 +499,11 @@ function loadApp () {
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
                 import(
-                    /* webpackChunkName: "[request]" */
-                    /* webpackExclude: /.+unittests.+/ */
+                    /* webpackChunkName: "[request]" * /
+                    /* webpackExclude: /.+unittests.+/ * /
                     "../addons/" + entryPoint + ".js"
                 ).then(module => {
-                    /* eslint-disable new-cap */
+                    /* eslint-disable new-cap * /
                     const addon = new module.default();
 
                     // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
@@ -522,6 +525,7 @@ function loadApp () {
                 });
             }
         });
+        */
     }
 
     Radio.trigger("Util", "hideLoader");

@@ -97,6 +97,8 @@ const mutations = {
      * @returns {void}
      */
     addConfigJsToStore (state, Config = {}) {
+        // TODO isn't this the only line we need, rest is destructured via getters (like for configJSON)?
+        state.configJs = Config;
         parseConfigToStore(state, Config, getConfigToStateModules());
     },
     /**

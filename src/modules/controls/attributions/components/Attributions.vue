@@ -2,8 +2,13 @@
 <script>
 import {mapGetters} from "vuex";
 
+import ControlIcon from "../../ControlIcon.vue";
+
 export default {
     name: "Attributions",
+    components: {
+        ControlIcon
+    },
     props: {
         isInitOpenDesktop: {
             type: Boolean,
@@ -20,11 +25,7 @@ export default {
         };
     },
     computed: {
-        /* TODO
-         * Requires a way to actually read the active attributions.
-         * Should the map get a vuex module that does this or will
-         * such issues be resolved within the respective vue files?
-         */
+        /* TODO Requires the vuex map module to support giving a list of attributions. */
         attributionList () {
             return [
                 {name: "Platzhalter", text: "gehaltener Platz"},
@@ -45,16 +46,17 @@ export default {
 </script>
 
 <template>
-    <div
-        class="attributions-button"
-        aria-role="button"
-        :title="'Layer-Attributions ' + (open ? 'ausblenden' : 'anzeigen')"
-        @click="toggleAttributionsFlyout"
-    >
-        <span :class="'glyphicon ' + (open ? 'glyphicon-forward' : 'glyphicon-info-sign')" />
+    <div class="attributions-wrapper">
+        <ControlIcon
+            class="attributions-button"
+            aria-role="button"
+            :title="'Layer-Attributions ' + (open ? 'ausblenden' : 'anzeigen')"
+            :icon-name="open ? 'forward' : 'info-sign'"
+            :on-click="toggleAttributionsFlyout"
+        />
         <div
             v-if="open"
-            class="attributions-div"
+            class="attributions-view"
         >
             <dl>
                 <template v-for="(attribution, index) in attributionList">
@@ -71,57 +73,41 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../../../theme.less";
+    @import "../../../../variables.less";
 
-    .attributions-button {
+    .attributions-wrapper {
         position: relative;
+    }
 
-        .glyphicon {
-            font-size: 22px;
+    .attributions-view {
+        color: @secondary_contrast;
+        font-size: @font_size_default;
+        font-family: @font_family_accent;
+        background-color: @secondary;
+
+        border: 1px solid @secondary_border;
+        box-shadow: 0 6px 12px @shadow;
+
+        cursor: initial;
+        text-align: initial;
+
+        position: absolute;
+        padding: 5px;
+        bottom: 0;
+        right: 100%;
+
+        dt {
+            font-size: @font_size_huge;
+            color: @primary;
         }
-
-        .glyphicon-forward {
-            padding: 6px 4px 6px 8px;
+        dl {
+            margin-bottom: 0;
         }
-
-        .glyphicon-info-sign {
-            padding: 6px;
+        dd {
+            margin-bottom: 8px;
         }
-
-        .attributions-div {
-            position: absolute;
-            padding: 5px;
-            background-color: @background_color_3;
-            margin-right: 40px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-            border: 1px solid rgb(229, 229, 229);
-            top: 0;
-            right: 0;
-
-            dt {
-                color: @color_2;
-                font-size: 15px;
-                font-family: @font_family_1;
-            }
-            dl {
-                margin-bottom: 0;
-            }
-            dd {
-                margin-bottom: 8px;
-            }
-            .glyphicon {
-                font-size: 22px;
-                top: 0;
-            }
-            .glyphicon-info-sign {
-                padding: 6px;
-            }
-            .glyphicon-forward {
-                padding: 6px 4px 6px 8px;
-            }
-            img {
-                max-height: 2em;
-            }
+        img {
+            max-height: 2em;
         }
     }
 </style>

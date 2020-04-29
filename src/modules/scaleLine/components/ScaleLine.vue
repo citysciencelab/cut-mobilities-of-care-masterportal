@@ -1,37 +1,13 @@
 <script>
+import {mapGetters} from "vuex";
+
 export default {
     name: "ScaleLine",
     computed: {
-        scaleLineValue () {
-            return this.$store.state.ScaleLine.scaleLineValue;
-        },
-        scaleNumber () {
-            return this.$store.state.ScaleLine.scaleNumber;
-        },
-        mapMode () {
-            return this.$store.state.ScaleLine.mapMode;
-        },
-        insideFooter () {
-            return this.$store.state.ScaleLine.insideFooter;
-        }
-    },
-    created () {
-        const that = this,
-            myBus = Backbone.Events;
-
-        if (this.$store.state.ScaleLine.scaleLine) {
-            myBus.listenTo(Radio.channel("MapView"), {
-                changedOptions: function (options) {
-                    that.$store.dispatch("ScaleLine/modifyScale", options);
-                    that.$store.dispatch("ScaleLine/updateScaleLineValue", options);
-                    document.getElementsByClassName("ol-viewport")[0].appendChild(that.$el);
-                }
-            }, this);
-            myBus.listenTo(Radio.channel("Map"), {
-                change: function (mode) {
-                    that.$store.state.ScaleLine.mapMode = mode;
-                }
-            });
+        ...mapGetters("Map", ["scaleToOne", "scaleWithUnit", "mapMode"]),
+        ...mapGetters(["mobile"]),
+        showScale () {
+            return !this.mobile && this.mapMode !== "Oblique";
         }
     }
 };
@@ -39,50 +15,37 @@ export default {
 
 <template>
     <div
-        v-if="mapMode !== 'Oblique'"
-        id="scale-line"
+        v-if="showScale"
+        id="scales"
     >
-        <span>
-            {{ scaleLineValue }}
+        <span class="scale-line">
+            {{ scaleWithUnit }}
         </span>
-        <span>
-            1: {{ scaleNumber }}
+        <span class="scale-as-a-ratio">
+            {{ scaleToOne }}
         </span>
     </div>
 </template>
 
 <style lang="less">
-div#scale-line {
-    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
-    bottom: 0;
-    color: #777;
-    position: absolute;
-    text-align: center;
-    font-size: 10px;
-    padding: 4px 40px;
-    right: 0px;
-    z-index: 1;
-}
-div#scale-line > span {
-    &:first-child {
-        border-bottom: 1px solid;
-        border-left: 1px solid;
-        border-right: 1px solid;
+    @import "../../../variables.less";
+
+    #scales {
         display: inline-block;
-        width: 2cm;
+        color: @secondary_contrast;
+        text-align: center;
+        font-size: 10px;
+
+        .scale-line {
+            border-bottom: 1px solid;
+            border-left: 1px solid;
+            border-right: 1px solid;
+            display: inline-block;
+            width: 2cm;
+        }
+
+        .scale-as-a-ratio {
+            padding: 0 16px;
+        }
     }
-    &:last-child {
-        padding: 0 16px;
-    }
-}
-@media (max-width: 767px) {
-    .scale-line {
-        display: none;
-    }
-}
-@media (min-width: 768px) {
-    .scale-line {
-        display: block;
-    }
-}
 </style>

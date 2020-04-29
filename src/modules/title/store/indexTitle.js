@@ -1,4 +1,4 @@
-
+// TODO it's probably simpler to have this information as selectors from the store.state.configJSON
 export default {
     state: {
         link: "https://geoinfo.hamburg.de",

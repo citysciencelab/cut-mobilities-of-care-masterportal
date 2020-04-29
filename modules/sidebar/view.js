@@ -129,9 +129,11 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
             const diffToHundred = 100 - parseFloat(width.substring(0, width.length - 1));
 
             $("#map").css("width", diffToHundred + "%");
+            $(".elements-positioned-over-map").css("width", diffToHundred + "%");
         }
         else {
             $("#map").css("width", "100%");
+            $(".elements-positioned-over-map").css("width", "100%");
         }
     },
 
