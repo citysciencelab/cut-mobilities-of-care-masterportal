@@ -30,10 +30,10 @@ export default {
     },
      */
     mounted () {
-        this.unsubscribe = this.map.on("moveend", this.memorizeMap);
+        this.map.on("moveend", this.memorizeMap);
     },
     beforeDestroy () {
-        this.unsubscribe();
+        this.map.un("moveend", this.memorizeMap);
     },
     methods: {
         ...mapMutations(
