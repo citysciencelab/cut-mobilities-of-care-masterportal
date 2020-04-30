@@ -657,7 +657,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * returns an empty Object if no init happened previously (= no layer set)
      * by default single geometries are added to the GeoJSON
      * if geomType is set to "multiGeometry" multiGeometry Features of all drawn Features are created for each geometry type individually
-     * @param {String} para_object - an Object which includes the parameters
+     * @param {String} paraObject - an Object which includes the parameters
      *                 {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
      *                 {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
      * @param {Feature} currentFeature last drawn feature used in drawend
