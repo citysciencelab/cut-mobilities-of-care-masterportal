@@ -21,7 +21,7 @@ describe("POI (In meiner Nähe)", function () {
             expect(model.getFeatureTitle(feature)).to.be.an("string").to.equal("123");
         });
         it("should return layerName when name is unset", function () {
-            feature = _.extend(feature, {
+            feature = Object.assign(feature, {
                 layerName: "LayerName"
             });
             expect(model.getFeatureTitle(feature)).to.be.an("string").to.equal("LayerName");

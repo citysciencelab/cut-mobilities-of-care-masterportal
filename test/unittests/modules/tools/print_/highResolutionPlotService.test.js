@@ -112,9 +112,12 @@ describe("tools/print_/HighResolutionPlotService", function () {
         it("should return an array for scaleList with the scales from the response", function () {
             const scales = [];
 
-            _.each(response.scales, function (scale) {
-                scales.push(scale.value);
-            });
+            if (Array.isArray(response.scales)) {
+                response.scales.forEach(scale => {
+                    scales.push(scale.value);
+                });
+            }
+
             print2Model.setScaleList(response.scales);
             expect(print2Model.get("scaleList")).to.deep.equal(scales);
         });
@@ -134,9 +137,12 @@ describe("tools/print_/HighResolutionPlotService", function () {
         it("should return an array for formatList with the outputFormats from the response", function () {
             const formats = [];
 
-            _.each(response.outputFormats, function (format) {
-                formats.push(format.name);
-            });
+            if (Array.isArray(response.outputFormats)) {
+                response.outputFormats.forEach(format => {
+                    formats.push(format.name);
+                });
+            }
+
             print2Model.setFormatList(response.outputFormats);
             expect(print2Model.get("formatList")).to.deep.equal(formats);
         });

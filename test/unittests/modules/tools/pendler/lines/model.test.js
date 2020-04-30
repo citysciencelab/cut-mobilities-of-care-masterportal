@@ -76,9 +76,11 @@ describe("Pendler-Lines", function () {
                     5
                 ];
 
-            _.forEach(model.get("relevantFeatures"), function (feature) {
-                top10PendlerAnzahlen.push(feature.get("pendlerAnzahl"));
-            });
+            if (Array.isArray(model.get("relevantFeatures"))) {
+                model.get("relevantFeatures").forEach(feature => {
+                    top10PendlerAnzahlen.push(feature.get("pendlerAnzahl"));
+                });
+            }
 
             expect(top10PendlerAnzahlen).to.deep.equal(expectedTop10PendlerAnzahlen);
         });
@@ -87,10 +89,11 @@ describe("Pendler-Lines", function () {
 
             expect(model.get("pendlerLegend")).to.have.lengthOf(10);
 
-            _.forEach(model.get("pendlerLegend"), function (feature) {
+            model.get("pendlerLegend").forEach(feature => {
                 expect(feature.name.length).to.be.above(0);
                 expect(feature.anzahlPendler).to.be.above(0);
             });
+
         });
     });
 });

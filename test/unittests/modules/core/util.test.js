@@ -418,19 +418,16 @@ describe("core/Util", function () {
     });
     describe("findWhereJs", function () {
         it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, "bkgSuggest3")).to.deep.equal(list[0]);
+            expect(model.findWhereJs(list, {"id": "bkgSuggest3"})).to.deep.equal(list[0]);
         });
-        it("should return", function () {
-            expect(model.findWhereJs(list, undefined)).to.be.undefined;
+        it("should return the second entry in the list", function () {
+            expect(model.findWhereJs(list, {"name": "20535 Hamburg - Hamm"})).to.deep.equal(list[1]);
         });
-        it("should return", function () {
+        it("should return undefined", function () {
             expect(model.findWhereJs(undefined, undefined)).to.be.undefined;
         });
-        it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, "")).to.be.undefined;
-        });
-        it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, 0)).to.be.undefined;
+        it("should return undefined", function () {
+            expect(model.findWhereJs(list, "{}")).to.be.undefined;
         });
     });
     describe("isEqual", function () {
@@ -492,3 +489,4 @@ describe("core/Util", function () {
         });
     });
 });
+

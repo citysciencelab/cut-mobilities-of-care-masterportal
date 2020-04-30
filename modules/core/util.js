@@ -842,16 +842,16 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         return filteredObj;
     },
 
-    /** Looks through the list and returns the firts value that matches all of the key-value pairs
-     * listed in hitId.
+    /**
+     *  Looks through the list and returns the first value that matches all of the key-value pairs listed in properties
      * @param {Object[]} [list=[]] - the list.
-     * @param {Object} [findId=""] - the id/entry to search for.
+     * @param {Object} properties property/entry to search for.
      * @returns {Object} - returns the first value/entry, that matches.
      */
-    findWhereJs: function (list = [], findId = "") {
+    findWhereJs: function (list = [], properties = "") {
         return list.find(
-            item => Object.keys({id: findId}).every(
-                key => item[key] === {id: findId}[key]
+            item => Object.keys(properties).every(
+                key => item[key] === properties[key]
             )
         );
     },
