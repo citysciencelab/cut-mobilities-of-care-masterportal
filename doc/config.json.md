@@ -155,10 +155,19 @@ Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 |----|-------------|---|-------|------------|------|
 |incrementalSearch|nein|Boolean|true|Gibt an ob eine Suchverfollständigung (Autocomplete) stattfinden soll. Wenn `incrementalSearch` auf `false` gesetzt wird, so wird eine Surche nur durch einen Klick auf die Lupe bzw. durch Enter gestartet. Dies ist sinvoll, wenn die Anzahl erlaubter Anfragen an den eingebundenen Dienst kontigentiert ist.|false|
 |serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.md)** vor.|false|
-|classes|nein|String[]|[]|Kann Klassen enthalten die berücksichtigt werden sollen. Wenn hier nichts angegeben wird, so werden alle Klassen berücksichtigt.|false|
+|classes|nein|**[LocationFinderClass](#markdown-header-portalconfigsearchbarlocationfinderLocationFinderClass)**||Kann Klassen (mit Eigenschaften) enthalten die berücksichtigt werden sollen. Wenn hier nichts angegeben wird, so werden alle Klassen berücksichtigt.|false|
 |useProxy|nein|Boolean|false|Gibt an ob ein Proxy verwendet werden soll.|false|
 |spatialReference|nein|String||Koordinatensystem, in dem das Ergebnis angefragt werden soll. Standardmäßig wird  hier der Wert von Portalconfig.mapView.epsg verwendet.|false|
 
+##### Portalconfig.searchbar.locationFinder.LocationFinderClass #####
+
+Definitiion von Klassen, welche als Ergebnis berücksichtigt werden sollen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name des Klasse|false|
+|icon|nein|String|"glyphicon-road"|Visualisierung der Klasse durch ein Glyphicon|false|
+|zoom|nein|String|"center"|Legt fest wie auf einen ausgewählten Treffer gezoomt werden soll. Wenn `center` ausgewählt ist, so wird auf die Zentrumskoordinate (`cx` und `cy`) gezoomt und ein Marker angezeigt. Im Falle von `bbox` wird auf die durch den LocationFinder angegebene BoundingBox (`xmin`, `ymin`, `xmax` und `ymax`) gezoomt. Ein Marker wird in dem Fall nicht angezeigt.|false|
 
 **Beispiel**
 
@@ -167,7 +176,20 @@ Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 
 "locationFinder": {
     "serviceId": "10",
-    "classes": ["Adresse", "Straßenname", "Stadtteil"]
+    "classes": [
+        {
+			"name": "Haltestelle",
+			"icon": "glyphicon-record"
+		},
+		{
+			"name": "Adresse",
+			"icon": "glyphicon-home"
+		},
+		{
+			"name": "Straßenname",
+			"zoom": "bbox"
+		}
+    ]
 }
 ```
 
