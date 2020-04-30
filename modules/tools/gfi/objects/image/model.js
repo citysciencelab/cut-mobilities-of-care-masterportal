@@ -25,7 +25,7 @@ const ImgModel = Backbone.Model.extend({
         this.listenTo(this, "change:zufallszahl", this.reloadImage);
     },
     reloadImage: function () {
-        var img = document.getElementById(this.get("id"));
+        const img = document.getElementById(this.get("id"));
 
         if (img) {
             img.src = img.src.split("?")[0] + "?" + this.get("zufallszahl");

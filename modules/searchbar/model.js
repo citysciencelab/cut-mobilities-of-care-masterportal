@@ -6,10 +6,9 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         quickHelp: false,
         searchString: "",
         hitList: [],
-        minChars: "",
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
-        knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm"],
+        knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"],
         activeInitialSearchTasks: [],
         // translations
         i18nextTranslate: null,
@@ -32,10 +31,9 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @property {Boolean} quickHelp=false todo
      * @property {String} searchString="" the current string in the search mask
      * @property {Array} hitList=[] todo
-     * @property {String} minChars="" todo
      * @property {Boolean} isInitialSearch=true Flag that is set to false at the end of the initial search (ParametricURL).
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
-     * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm"] Search algorithms for which an initial search is possible
+     * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"] Search algorithms for which an initial search is possible
      * @property {Array} activeInitialSearchTasks=[] Search algorithms for which an initial search is activated
      * @property {function} i18nextTranslate=null translation function named i18nextTranslate := function(setter), set during parsing the file "config.json"
      * @property {String} buttonSearchTitle="", filled with "Suchen"- translated
@@ -120,11 +118,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @returns {void}
      */
     checkInitialSearch: function () {
-        var allDone = true;
+        let allDone = true;
         // Ist mindestens ein Suchalgorithmus noch als ausstehend markiert?
 
         _.forEach(this.get("activeInitialSearchTasks"), function (taskName) {
-            var status = this.get("initialSearch_" + taskName);
+            const status = this.get("initialSearch_" + taskName);
 
             if (!status) {
                 allDone = false;
@@ -163,7 +161,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @returns {void}
      */
     setInitialSearchTasks: function (config) {
-        var searchTasks = this.get("knownInitialSearchTasks"),
+        const searchTasks = this.get("knownInitialSearchTasks"),
             activeSearchTasks = [];
 
         // Prüfe für jeden bekannten Suchalgorithmus ob er aktiviert ist. Wenn ja markiere ihn als
@@ -205,8 +203,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
     * @returns {void}
     */
     setSearchString: function (value, eventType) {
-        var splitAdress = value.split(" "),
-            houseNumber,
+        const splitAdress = value.split(" ");
+        let houseNumber,
             streetName;
 
         // für Copy/Paste bei Adressen
@@ -235,7 +233,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @return {void}
      */
     pushHits: function (attribute, value, evtType) {
-        var tempArray = _.clone(this.get(attribute)),
+        let tempArray = _.clone(this.get(attribute)),
             valueWithNumbers;
 
         tempArray.push(value);
@@ -243,7 +241,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         // removes addresses without house number, if more than one exists
         if (evtType === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
             valueWithNumbers = tempArray.filter(function (val) {
-                var valueArray = val.name.split(",")[0].split(" ");
+                const valueArray = val.name.split(",")[0].split(" ");
 
                 return !_.isNaN(parseInt(valueArray[valueArray.length - 1], 10));
             });
@@ -265,8 +263,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @return {Void} Nothing
      */
     removeHits: function (attribute, filter) {
-        var toRemove, i,
-            tempArray = _.clone(this.get(attribute));
+        const tempArray = _.clone(this.get(attribute));
+        let toRemove;
 
         if (_.isObject(filter)) {
             toRemove = _.where(tempArray, filter);
@@ -275,7 +273,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             });
         }
         else {
-            for (i = tempArray.length - 1; i >= 0; i--) {
+            for (let i = tempArray.length - 1; i >= 0; i--) {
                 if (tempArray[i] === filter) {
                     tempArray.splice(i, 1);
                 }

@@ -1,6 +1,5 @@
-var testModul;
 
-testModul = Backbone.Model.extend({
+const testModul = Backbone.Model.extend({
     defaults: {
         employees: []
     },

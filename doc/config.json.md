@@ -54,7 +54,7 @@ Konfiguration der Searchbar
 |gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes. Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.|false|
 |elasticSearch|nein|**[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)**||Konfiguration des ElasticSearch Suchdienstes.|false|
 |osm|nein|**[osm](#markdown-header-portalconfigsearchbarosm)**||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|false|
-|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
+|locationFinder|nein|**[locationFinder](#markdown-header-portalconfigsearchbarlocationfinder)**||Konfiguration des LocationFinder-Suchdienstes.|false|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|false|
 |recommendedListLength|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|false|
 |quickHelp|nein|Boolean|false|Gibt an ob eine Schnellhilfe angeboten wird.|false|
@@ -143,6 +143,31 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer. Wird nur durch Klic
     "limit": 60,
     "states": "Hamburg, Nordrhein-Westfalen, Niedersachsen, Rhineland-Palatinate Rheinland-Pfalz",
     "classes": "place,highway,building,shop,historic,leisure,city,county"
+}
+```
+
+***
+
+#### Portalconfig.searchBar.locationFinder ####
+Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|incrementalSearch|nein|Boolean|true|Gibt an ob eine Suchverfollständigung (Autocomplete) stattfinden soll. Wenn `incrementalSearch` auf `false` gesetzt wird, so wird eine Surche nur durch einen Klick auf die Lupe bzw. durch Enter gestartet. Dies ist sinvoll, wenn die Anzahl erlaubter Anfragen an den eingebundenen Dienst kontigentiert ist.|false|
+|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.md)** vor.|false|
+|classes|nein|String[]|[]|Kann Klassen enthalten die berücksichtigt werden sollen. Wenn hier nichts angegeben wird, so werden alle Klassen berücksichtigt.|false|
+|useProxy|nein|Boolean|false|Gibt an ob ein Proxy verwendet werden soll.|false|
+|spatialReference|nein|String||Koordinatensystem, in dem das Ergebnis angefragt werden soll. Standardmäßig wird  hier der Wert von Portalconfig.mapView.epsg verwendet.|false|
+
+
+**Beispiel**
+
+```
+#!json
+
+"locationFinder": {
+    "serviceId": "10",
+    "classes": ["Adresse", "Straßenname", "Stadtteil"]
 }
 ```
 

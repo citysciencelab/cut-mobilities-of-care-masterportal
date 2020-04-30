@@ -172,17 +172,16 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      */
     replaceMultiNodes: function (multiTags, childNode) {
         _.each(multiTags, function (tagName) {
-            var nodeList = childNode.getElementsByTagName(tagName),
+            const nodeList = childNode.getElementsByTagName(tagName),
                 nodeListValue = _.map(nodeList, function (node) {
                     return node.innerHTML;
                 }),
-                firstNode = nodeList[0],
-                i;
+                firstNode = nodeList[0];
 
             firstNode.innerHTML = JSON.stringify({
                 multiTag: nodeListValue
             });
-            for (i = nodeList.length - 1; i >= 1; i--) {
+            for (let i = nodeList.length - 1; i >= 1; i--) {
                 childNode.firstElementChild.removeChild(nodeList[i]);
             }
         });
@@ -194,10 +193,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     parseMultiElementNodes: function (xml) {
-        var childNodes = $(xml).find("msGMLOutput,gml\\:featureMember,featureMember");
+        const childNodes = $(xml).find("msGMLOutput,gml\\:featureMember,featureMember");
 
         _.each(childNodes, function (childNode) {
-            var multiTags = this.getMultiTags(childNode);
+            const multiTags = this.getMultiTags(childNode);
 
             this.replaceMultiNodes(multiTags, childNode);
         }, this);
@@ -210,11 +209,12 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     parseWmsGfi: function (data) {
-        var gfiList = [],
-            gfiFormat,
-            pgfi = [],
-            gfiFeatures,
+        const gfiList = [],
             dat = _.isString(data) ? $.parseXML(data) : data; // handle non text/xml responses arriving as string
+
+        let gfiFormat = {},
+            pgfi = [],
+            gfiFeatures = {};
 
         this.parseMultiElementNodes(dat);
         // parse result, try built-in Ol-format first
@@ -228,10 +228,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         if (_.isEmpty(gfiFeatures)) {
             if (dat.getElementsByTagName("FIELDS")[0] !== undefined) {
                 _.each(dat.getElementsByTagName("FIELDS"), function (element) {
-                    var gfi = {};
+                    const gfi = {};
 
                     _.each(element.attributes, function (attribute) {
-                        var key = attribute.localName;
+                        const key = attribute.localName;
 
                         if (this.isValidValue(attribute.value)) {
                             gfi[key] = attribute.value;
@@ -277,7 +277,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     cloneCollModels: function (pgfi) {
-        var clone;
+        let clone;
 
         _.each(pgfi, function (singlePgfi, index) {
             if (index > 0 && !_.isUndefined(this.collection)) {
@@ -300,7 +300,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     get3DFeatureGfi: function () {
-        var gfiContent;
+        let gfiContent;
 
         gfiContent = this.translateGFI([this.get("attributes")], this.get("gfiAttributes"));
         gfiContent = this.getManipulateDate(gfiContent);
@@ -313,8 +313,8 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     getVectorGfi: function () {
-        var gfiContent,
-            gfiFeatureList = this.get("gfiFeatureList");
+        const gfiFeatureList = this.get("gfiFeatureList");
+        let gfiContent;
 
         if (!_.isEmpty(gfiFeatureList)) {
             gfiContent = this.translateGFI([gfiFeatureList[0].getProperties()], this.get("gfiAttributes"));
@@ -334,7 +334,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {boolean}   isValidKey  returns the validita of a key
      */
     isValidKey: function (key) {
-        var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+        const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
 
         if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
             return false;
@@ -377,7 +377,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     isMultiTag: function (str) {
-        var test;
+        let test;
 
         try {
             test = JSON.parse(str);
@@ -398,7 +398,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
       * @returns {object[]}         pgfi           List of objects
       */
     translateGFI: function (gfiList, gfiAttributes) {
-        var pgfi = [];
+        const pgfi = [];
 
         if (gfiAttributes === "ignore") {
             return pgfi;
@@ -619,7 +619,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {object} obj with lowercase keys
      */
     allKeysToLowerCase: function (obj) {
-        var lowerObj = {};
+        const lowerObj = {};
 
         _.each(obj, function (value, key) {
             lowerObj[key.toLowerCase()] = value;

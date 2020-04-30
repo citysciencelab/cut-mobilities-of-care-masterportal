@@ -1,4 +1,4 @@
-var default3DTileStyleValues;
+let default3DTileStyleValues = {};
 
 /**
  * @type {ol.Color}

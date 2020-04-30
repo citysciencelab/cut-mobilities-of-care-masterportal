@@ -10,9 +10,9 @@
 
 3.5. Nutze die Getter-Funktionen von Backbone im **Model**.
 
-3.6. Die **View** rendert das *Template* mit den Daten aus dem *Model* und kommuniziert zwischen User und dem *Model*. Sie enthält keine Logik.
+3.6. Die **View** rendert das *Template* mit den Daten aus dem *Model* und kommuniziert zwischen User und dem *Model*. Sie enthält keine Logik und erzeugt keine HTML-Elemente.
 
-3.7. Das **Template** beinhaltet die HTML-Vorlage des Moduls. Das Template enthält keine Style-Informationen, lediglich Ids und Klassen.
+3.7. Das **Template** beinhaltet die HTML-Vorlage des Moduls. Das Template enthält keine Style-Informationen, lediglich Ids und Klassen. HTML-Elemente sollen ausschließlich im Template erzeugt werden!
 
 3.8. Im **CSS/LESS** ist das Styling des *Templates* hinterlegt.
 

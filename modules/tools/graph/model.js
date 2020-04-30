@@ -17,7 +17,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @listens Tools.Graph#RadioRequestGraphGetGraphParams
      */
     initialize: function () {
-        var channel = Radio.channel("Graph");
+        const channel = Radio.channel("Graph");
 
         channel.on({
             "createGraph": this.createGraph
@@ -117,7 +117,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Object}  - an object {minValue, maxValue}
      */
     createPeakValues: function (data, attrToShowArray, axisTicks) {
-        var peakValues = {};
+        const peakValues = {};
 
         if (typeof axisTicks === "object" && axisTicks.hasOwnProperty("start") && axisTicks.hasOwnProperty("end")) {
             peakValues.min = axisTicks.start;
@@ -455,7 +455,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} yAttrToShow Attribute name for line point on y-axis.
      * @param {Selection} tooltipDiv Selection of the tooltip-div.
      * @param {Number} dotSize The size of the dots.
-     * @param {Function} [setTooltipValue] (optional) a function value:=function(value) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
+     * @param {Function} [setTooltipValue] (optional) a function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
      * @returns {Void}  -
      */
     appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue) {
@@ -500,7 +500,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             })
             .on("mouseover", function (d) {
                 if (typeof setTooltipValue === "function") {
-                    yAttributeToShow = setTooltipValue(d[yAttrToShow]);
+                    yAttributeToShow = setTooltipValue(d[yAttrToShow], d);
                 }
                 else {
                     yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -524,7 +524,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             }, tooltipDiv)
             .on("click", function (d) {
                 if (typeof setTooltipValue === "function") {
-                    yAttributeToShow = setTooltipValue(d[yAttrToShow]);
+                    yAttributeToShow = setTooltipValue(d[yAttrToShow], d);
                 }
                 else {
                     yAttributeToShow = d[yAttrToShow].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -569,7 +569,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Void}  -
      */
     appendLegend: function (svg, legendData) {
-        var legend = svg.append("g")
+        const legend = svg.append("g")
             .attr("class", "graph-legend")
             .style("height", "200 px")
             .selectAll("g")
@@ -611,7 +611,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {String[]} - Flattened Array.
      */
     flattenAttrToShowArray: function (attrToShowArray) {
-        var flatAttrToShowArray = [];
+        const flatAttrToShowArray = [];
 
         attrToShowArray.forEach(function (attrToShow) {
             if (typeof attrToShow === "object") {
@@ -661,7 +661,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object[]} graphConfig.legendData Data for legend.
      * @param {String} graphConfig.legendData.class CSS class for legend object.
      * @param {String} graphConfig.legendData.text Text for legend object.
-     * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
+     * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
      * @returns {Void}  -
      */
     createLineGraph: function (graphConfig) {
@@ -784,7 +784,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object[]} graphConfig.legendData Data for legend.
      * @param {String} graphConfig.legendData.class CSS class for legend object.
      * @param {String} graphConfig.legendData.text Text for legend object.
-     * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
+     * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
      * @returns {Void}  -
      */
     createBarGraph: function (graphConfig) {
@@ -830,7 +830,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} xAttr as defined in graphConfig - the name of the key to address the valueX in dataToAdd
      * @param {String[]} attrToShowArray as defined in graphConfig - the array of keys to find the data of valueY in dataToAdd
      * @param {Number} barWidth the width of a single bar - note that if zero or negative, barWidth will be automatically set to 0
-     * @param {Function} [setTooltipValue] (optional) a function value:=function(value) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
+     * @param {Function} [setTooltipValue] (optional) a function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
      * @returns {Void}  -
      */
     drawBars: function (svg, dataToAdd, x, y, selector, xAttr, attrToShowArray, barWidth, setTooltipValue) {
@@ -884,7 +884,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             .append("title")
             .text(function (d) {
                 if (typeof setTooltipValue === "function") {
-                    return setTooltipValue(d[attrToShowArray[0]]);
+                    return setTooltipValue(d[attrToShowArray[0]], d);
                 }
 
                 // default

@@ -41,7 +41,7 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
     * @returns {*} returns this
     */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.addContentHTML();
         this.$el.html(this.template(attr));
@@ -53,7 +53,7 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
      * @returns {void}
      */
     addContentHTML: function () {
-        var legends = this.model.get("legend");
+        const legends = this.model.get("legend");
 
         _.each(legends.legend, function (legend) {
             legend.html = this.contentTemplate(legend);

@@ -4,12 +4,12 @@ const fs = require("fs-extra"),
     stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))();
 
 module.exports = function prependVersionAndTime (filepath) {
-    var
-        jsContent = fs.readFileSync(filepath),
+    const jsContent = fs.readFileSync(filepath),
         fd = fs.openSync(filepath, "w+"),
-        dt = new Date(),
-        currentFormattedDt,
-        contentToPrepend;
+        dt = new Date();
+
+    let currentFormattedDt = "",
+        contentToPrepend = "";
 
     currentFormattedDt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
     contentToPrepend = "/*v" + stableVersionNumber + ",built@" + currentFormattedDt + "*/";

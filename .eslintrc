@@ -28,7 +28,7 @@
         "sourceType": "module",
         "allowImportExportEverywhere": true
     },
-    "extends": "plugin:backbone/recommended",
+    "extends": ["plugin:backbone/recommended"],
     "rules": {
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
         "for-direction": "error",
@@ -168,6 +168,7 @@
         "no-tabs": "error",
         "no-trailing-spaces": "error",
         "no-unneeded-ternary": "error",
+        "no-var": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": "error",
         "object-property-newline": 0,

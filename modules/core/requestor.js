@@ -31,7 +31,7 @@ const Requestor = Backbone.Model.extend({
     },
 
     groupContentByTyp: function (content) {
-        var groupByTyp = _.groupBy(content, function (obj) {
+        const groupByTyp = _.groupBy(content, function (obj) {
             // WMS || WFS || GeoJSON
             return obj.model.get("typ");
         });
@@ -58,7 +58,7 @@ const Requestor = Backbone.Model.extend({
     },
 
     openHTMLContent: function (visibleLayer) {
-        var featurecount,
+        let featurecount,
             gfiFeatures;
 
         // Für das Bohrdatenportal werden die GFI-Anfragen in einem neuen Fenster geöffnet, gefiltert nach der ID aus dem DM.
@@ -98,7 +98,7 @@ const Requestor = Backbone.Model.extend({
     },
 
     getGFIFeatureContent: function () {
-        var gfiContent;
+        let gfiContent;
 
         if (this.has("gfiWFSContent")) {
             _.each(this.get("gfiWFSContent"), function (visibleLayer) {
@@ -125,7 +125,7 @@ const Requestor = Backbone.Model.extend({
     },
 
     setGeoJSONPopupContent: function (feature) {
-        var featureList = [];
+        const featureList = [];
 
         if (_.has(feature.getProperties(), "gfiAttributes")) {
             featureList.push(feature.getProperties().gfiAttributes);
@@ -139,8 +139,8 @@ const Requestor = Backbone.Model.extend({
     },
 
     setWMSPopupContent: function (obj) {
-        var url,
-            data = "FEATURE_COUNT=" + obj.model.get("featureCount").toString(),
+        const data = "FEATURE_COUNT=" + obj.model.get("featureCount").toString();
+        let url,
             pgfi = [];
 
         if (obj.model.getGfiUrl().search(location.host) === -1) {
@@ -158,9 +158,9 @@ const Requestor = Backbone.Model.extend({
             type: "GET",
             context: this, // das model
             success: function () {
-                var gfiList = [],
-                    gfiFormat,
-                    gfiFeatures;
+                const gfiList = [];
+                let gfiFormat = "",
+                    gfiFeatures = "";
 
                 // handle non text/xml responses arriving as string
                 // unused responsedata deleted
@@ -179,10 +179,10 @@ const Requestor = Backbone.Model.extend({
                 if (_.isEmpty(gfiFeatures)) {
                     if (data.getElementsByTagName("FIELDS")[0] !== undefined) {
                         _.each(data.getElementsByTagName("FIELDS"), function (element) {
-                            var gfi = {};
+                            const gfi = {};
 
                             _.each(element.attributes, function (attribute) {
-                                var key = attribute.localName;
+                                const key = attribute.localName;
 
                                 if (this.isValidValue(attribute.value)) {
                                     gfi[key] = attribute.value;
@@ -242,7 +242,7 @@ const Requestor = Backbone.Model.extend({
     },
 
     isValidKey: function (key) {
-        var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+        const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
 
         if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
             return false;
@@ -271,13 +271,13 @@ const Requestor = Backbone.Model.extend({
         return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
     },
     translateGFI: function (gfiList, gfiAttributes, theme, typ) {
-        var pgfi = [];
+        const pgfi = [];
 
         _.each(gfiList, function (element) {
-            var preGfi = {},
-                gfi = {},
+            const preGfi = {},
                 keys = [],
                 values = [];
+            let gfi = {};
 
             // get rid of invalid keys and keys with invalid values; trim values
             _.each(element, function (value, key) {

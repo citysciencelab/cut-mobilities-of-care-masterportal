@@ -6,7 +6,7 @@ const Config = {
         visibility: true,
         urls: [
             {
-                "bezeichnung": "Kartographie und Gestaltung: ",
+                "bezeichnung": "translate#common:modules.footer.designation",
                 "url": "http://www.geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
@@ -60,6 +60,16 @@ const Config = {
         },
         maximumScreenSpaceError: 2,
         fxaa: true
+    },
+    portalLanguage: {
+        enabled: true,
+        debug: false,
+        languages: {
+            de: "deutsch",
+            en: "englisch"
+        },
+        fallbackLanguage: "de",
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
     }
 };
 

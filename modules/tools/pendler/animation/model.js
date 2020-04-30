@@ -133,6 +133,20 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         }
         Radio.trigger("MapMarker", "hideMarker");
     },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        if (this.model.get("isActive") === true) {
+            this.model.set({
+                "currentLng": lng
+            });
+        }
+    },
+
     /**
      * Creates random colors if amount of colors are too less and stores it at each feature
      * @param {Object[]} features amount of features = amount of colors

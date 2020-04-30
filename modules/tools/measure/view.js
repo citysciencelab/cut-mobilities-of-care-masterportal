@@ -43,7 +43,7 @@ const MeasureView = Backbone.View.extend(/** @lends MeasureView.prototype */{
      * @returns {this} this
      */
     render: function (model, value) {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         if (value) {
             this.setElement(document.getElementsByClassName("win-body")[0]);

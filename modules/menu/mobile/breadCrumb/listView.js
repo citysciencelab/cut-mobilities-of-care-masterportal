@@ -39,7 +39,7 @@ const ListView = Backbone.View.extend({
      * @returns {void}
      */
     addViews: function (model) {
-        var breadCrumbView = new View({model: model});
+        const breadCrumbView = new View({model: model});
 
         this.$el.find(".breadcrumb").append(breadCrumbView.render().el);
     },

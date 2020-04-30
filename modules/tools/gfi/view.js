@@ -34,7 +34,7 @@ const GFIView = Backbone.View.extend({
     },
 
     renderNext: function () {
-        var preWidth = 0;
+        let preWidth = 0;
 
         if (this.$(".pager-right").hasClass("disabled") === false) {
             preWidth = this.$(".gfi-attached").width();
@@ -52,7 +52,7 @@ const GFIView = Backbone.View.extend({
         Radio.trigger("MouseHover", "hide");
     },
     renderPrevious: function () {
-        var preWidth = 0;
+        let preWidth = 0;
 
         if (this.$(".pager-left").hasClass("disabled") === false) {
             preWidth = this.$(".gfi-attached").width();
