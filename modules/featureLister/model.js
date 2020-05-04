@@ -1,4 +1,3 @@
-import Requestor from "../core/requestor";
 import Tool from "../core/modelList/tool/model";
 
 const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype */{
@@ -84,8 +83,8 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             layername = this.get("layer").name;
 
         this.trigger("gfiClose"); // entfernt evtl. Highlights
-        _.each(features, function (feature) {
-            _.each(mapFeatures, function (mapFeature) {
+        features.forEach(function (feature) {
+            mapFeatures.forEach(function (mapFeature) {
                 if (mapFeature.typ === "WFS" && mapFeature.name === layername) {
                     if (_.isEqual(feature.geometry, mapFeature.feature.getGeometry().getExtent())) {
                         this.trigger("gfiHit", feature);
@@ -258,8 +257,8 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             let props, geom;
 
             if (feature.get("features")) {
-                _.each(feature.get("features"), function (feat, idx) {
-                    props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0];
+                feature.get("features").forEach(function (feat, idx) {
+                    props = this.translateGFI([feat.getProperties()], gfiAttributes)[0];
                     geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                     ll.push({
@@ -271,7 +270,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
                 });
             }
             else {
-                props = Requestor.translateGFI([feature.getProperties()], gfiAttributes)[0];
+                props = this.translateGFI([feature.getProperties()], gfiAttributes)[0];
                 geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
 
                 ll.push({
@@ -285,6 +284,81 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
 
         layerFromList.features = ll;
     },
+
+    /**
+     * identifies and extracts the features of the given layer. 
+     * @param {Array[Object]} gfiList - todo
+     * @param {Object} gfiAttributes - todo
+     * @return {string} - desc
+     */
+    translateGFI: function (gfiList, gfiAttributes) {
+        var pgfi = [];
+
+        gfiList.forEach(function (element) {
+            var preGfi = {},
+                gfi = {};
+
+            // get rid of invalid keys and keys with invalid values; trim values
+            element.forEach(function (value, key) {
+                if (this.isValidKey(key) && this.isValidValue(value)) {
+                    preGfi[key] = value.trim();
+                }
+            }, this);
+            if (gfiAttributes === "showAll") {
+                // beautify keys
+                preGfi.forEach(function (value, key) {
+                    gfi[this.beautifyString(key)] = value;
+                }, this);
+            }
+            else {
+                gfiAttributes.forEach(function (value, key) {
+                    if (preGfi[key]) {
+                        gfi[value] = preGfi[key];
+                    }
+                });
+            }
+            if (_.isEmpty(gfi) !== true) {
+                pgfi.push(gfi);
+            }
+        }, this);
+        return pgfi;
+    },
+
+    /**
+     * helper function: first letter becomes an upperCase, _ becomes a blank space
+     * @param {string} str parameter
+     * @returns {string} desc
+     */
+    beautifyString: function (str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
+    },
+
+    /**
+     * helper function: check, if key has a valid value
+     * @param {string} key parameter
+     * @returns {boolean} desc
+     */
+    isValidKey: function (key) {
+        var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+
+        if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
+            return false;
+        }
+        return true;
+    },
+
+    /**
+     * helper function: check, if str has a valid value
+     * @param {string} str parameter
+     * @returns {boolean} desc
+     */
+    isValidValue: function (str) {
+        if (str && _.isString(str) && str !== "" && str.toUpperCase() !== "NULL") {
+            return true;
+        }
+        return false;
+    },
+
     /**
      * Adds layers to the list
      * @param {Object} layer layer to add to the list
