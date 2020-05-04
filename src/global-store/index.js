@@ -10,6 +10,7 @@ import Map from "../modules/map/store/indexMap";
 import getters from "./getters";
 import mutations from "./mutations";
 import state from "./state";
+import actions from "./actions";
 
 import controlsModule from "../modules/controls/indexControls";
 
@@ -35,7 +36,8 @@ const store = new Vuex.Store({
     },
     state,
     mutations,
-    getters
+    getters,
+    actions
 });
 
 export default store;

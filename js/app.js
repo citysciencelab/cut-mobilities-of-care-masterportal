@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
 import store from "../src/global-store";
+import loadAddons from "../src/addons";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -86,7 +87,7 @@ let sbconfig, controls, controlsView;
  * load the configuration of master portal
  * @return {void}.
  */
-function loadApp () {
+async function loadApp () {
     /* eslint-disable no-undef */
     const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
@@ -116,6 +117,9 @@ function loadApp () {
     if (Config.hasOwnProperty("quickHelp")) {
         new QuickHelpView(Config.quickHelp);
     }
+
+    // import and register Vue addons according the config.js
+    await loadAddons(Config.addons);
 
     Vue.config.productionTip = false;
 
