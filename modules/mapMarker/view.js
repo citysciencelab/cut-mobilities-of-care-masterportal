@@ -42,11 +42,11 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
 
-        if (!_.isUndefined(Radio.request("ParametricURL", "getProjectionFromUrl"))) {
+        if (Radio.request("ParametricURL", "getProjectionFromUrl") !== undefined) {
             this.model.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
         }
 
-        if (!_.isUndefined(Radio.request("ParametricURL", "getMarkerFromUrl"))) {
+        if (Radio.request("ParametricURL", "getMarkerFromUrl") !== undefined) {
             this.model.setMarkerFromParamUrl(Radio.request("ParametricURL", "getMarkerFromUrl"));
         }
 
@@ -319,7 +319,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
         const projectionFromParamUrl = this.model.get("projectionFromParamUrl");
         let startMarker = this.model.get("startMarker");
 
-        if (!_.isUndefined(startMarker)) {
+        if (startMarker !== undefined) {
             if (!_.isUndefined(projectionFromParamUrl)) {
                 startMarker = transformToMapProjection(Radio.request("Map", "getMap"), projectionFromParamUrl, startMarker);
             }

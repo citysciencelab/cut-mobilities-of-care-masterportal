@@ -49,7 +49,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         });
 
         // initiale Suche
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
             this.search(Radio.request("ParametricURL", "getInitString"));
         }
     },
@@ -243,11 +243,11 @@ const SpecialWFSModel = Backbone.Model.extend({
         let identifier,
             geom;
 
-        _.each(elements, function (element) {
+        elements.forEach(function (element) {
             const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
                 elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
                 polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember"),
-                length_index = elementGeometryNames[0].children[0].children.length;
+                lengthIndex = elementGeometryNames[0].children[0].children.length;
             let coordinateArray = [],
                 geomType;
 
@@ -256,7 +256,7 @@ const SpecialWFSModel = Backbone.Model.extend({
 
                 if (polygonMembers.length > 1) {
 
-                    for (let i = 0; i < length_index; i++) {
+                    for (let i = 0; i < lengthIndex; i++) {
                         const coords = polygonMembers[i].getElementsByTagNameNS("*", "posList")[0].innerHTML;
 
                         coordinateArray.push(Object.values(coords.replace(/\s\s+/g, " ").split(" ")));
@@ -301,7 +301,7 @@ const SpecialWFSModel = Backbone.Model.extend({
     removeNameSpaceFromArray: function (propertyNames) {
         const propertynamesWithoutNamespace = [];
 
-        _.each(propertyNames, function (propertyname) {
+        propertyNames.forEach(function (propertyname) {
             propertynamesWithoutNamespace.push(propertyname.split(":")[1]);
         });
 
@@ -326,7 +326,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      */
     polishAjax: function (type) {
         const ajax = this.get("ajaxRequests"),
-            cleanedAjax = _.omit(ajax, type);
+            cleanedAjax = Radio.request("Util", "omit", ajax, type);
 
         this.set("ajaxRequests", cleanedAjax);
     },

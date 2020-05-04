@@ -59,7 +59,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
 
         Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
 
-        if (_.has(searchConf, "zoomLevel")) {
+        if (searchConf.hasOwnProperty("zoomLevel")) {
             this.setZoomLevel(searchConf.zoomLevel);
         }
         if (parcelSearchConf && parcelSearchConf.styleId) {
@@ -189,7 +189,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
 
         if (type === "POLYGON") {
             wkt = type + "((";
-            _.each(geom, function (element, index, list) {
+            geom.forEach(function (element, index, list) {
                 if (index % 2 === 0) {
                     wkt += element + " ";
                 }
@@ -208,7 +208,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
         }
         else if (type === "MULTIPOLYGON") {
             wkt = type + "(((";
-            _.each(geom, function (element, index) {
+            geom.forEach(function (element, index) {
 
                 geom[index].forEach(function (coord, index2, list) {
                     if (index2 % 2 === 0) {
