@@ -71,5 +71,4 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../../../variables.less";
 </style>

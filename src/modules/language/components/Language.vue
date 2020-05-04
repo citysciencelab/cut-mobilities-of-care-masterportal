@@ -66,7 +66,7 @@ export default {
 </template>
 
 <style lang="less">
-    @import "../../../variables.less";
+    @import "~variables";
 
     #language-bar {
         .current-language {

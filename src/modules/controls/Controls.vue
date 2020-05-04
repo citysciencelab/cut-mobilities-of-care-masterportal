@@ -57,7 +57,7 @@ export default {
 </template>
 
 <style lang="less">
-    @import "../../theme.less";
+    @import "~variables";
 
     .control-box {
         .glyphicon {
@@ -77,7 +77,7 @@ export default {
 </style>
 
 <style lang="less" scoped>
-    @import "../../theme.less";
+    @import "~variables";
 
     .control-box {
         right: 0px;
