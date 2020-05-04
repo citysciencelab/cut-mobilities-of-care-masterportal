@@ -185,7 +185,6 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      */
     getWKTGeom: function (type, geom) {
         let wkt,
-            split,
             regExp;
 
         if (type === "POLYGON") {
@@ -210,9 +209,8 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
         else if (type === "MULTIPOLYGON") {
             wkt = type + "(((";
             _.each(geom, function (element, index) {
-                split = geom[index].split(" ");
 
-                _.each(split, function (coord, index2, list) {
+                geom[index].forEach(function (coord, index2, list) {
                     if (index2 % 2 === 0) {
                         wkt += coord + " ";
                     }
@@ -233,7 +231,6 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
             regExp = new RegExp(", \\)\\?\\(", "g");
             wkt = wkt.replace(regExp, "),(");
         }
-
         return wkt;
     },
 

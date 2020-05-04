@@ -197,9 +197,16 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                     Radio.trigger("Map", "zoomToExtent", coord);
                 }
                 else if (coord.length > 4) {
-                    this.model.setWkt("POLYGON", coord);
-                    this.model.showFeature(); // bei Flächen soll diese sichtbar sein
-                    Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    if (hit.geometryType === "POLYGON") {
+                        this.model.setWkt("POLYGON", coord);
+                    }
+                    else if (hit.geometryType === "MULTIPOLYGON") {
+                        this.model.setWkt("MULTIPOLYGON", coord);
+                    }
+                    if (hit.geometryType === "POLYGON" || hit.geometryType === "MULTIPOLYGON") {
+                        this.model.showFeature(); // bei Flächen soll diese sichtbar sein
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    }
                 }
                 Radio.trigger("Filter", "resetFilter", hit.feature);
                 break;

@@ -240,30 +240,47 @@ const SpecialWFSModel = Backbone.Model.extend({
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
             elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]);
-
         let identifier,
-            geom,
-            coordinateArray;
+            geom;
 
         _.each(elements, function (element) {
             const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
-                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]);
+                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
+                polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember"),
+                length_index = elementGeometryNames[0].children[0].children.length;
+            let coordinateArray = [],
+                geomType;
 
             if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
                 identifier = elementPropertyNames[0].textContent;
-                geom = elementGeometryNames[0].firstElementChild;
 
-                // searching for first simple geometry avoiding multipolygons
-                while (geom.childElementCount > 0) {
-                    geom = geom.firstElementChild;
+                if (polygonMembers.length > 1) {
+
+                    for (let i = 0; i < length_index; i++) {
+                        const coords = polygonMembers[i].getElementsByTagNameNS("*", "posList")[0].innerHTML;
+
+                        coordinateArray.push(Object.values(coords.replace(/\s\s+/g, " ").split(" ")));
+                    }
+                    geomType = "MULTIPOLYGON";
                 }
+                else {
+                    geom = elementGeometryNames[0].firstElementChild;
 
-                coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
+                    // searching for first simple geometry avoiding multipolygons
+                    while (geom.childElementCount > 0) {
+                        geom = geom.firstElementChild;
+                    }
+
+                    coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
+
+                    geomType = "POLYGON";
+                }
 
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     id: _.uniqueId(type.toString()),
                     name: identifier.trim(),
+                    geometryType: geomType,
                     type: type,
                     coordinate: coordinateArray,
                     glyphicon: glyphicon
