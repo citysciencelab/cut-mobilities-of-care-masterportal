@@ -415,7 +415,8 @@
         "searchbar": {
             "placeholder": {
                 "addressHospitalBplan" : "Suche nach Adresse/Krankenhaus/B-Plan",
-                "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück"
+                "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück",
+                "address" : "Suche nach Adresse"
             },
             "locationFinder": {
                 "unknownProjection": "Ergebnisse in unbekanntem Koordinatensystem",

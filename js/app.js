@@ -149,7 +149,9 @@ function loadApp () {
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
     new StyleList();
-    new ParametricURL();
+    if (!Config.hasOwnProperty("allowParametricURL")) {
+        new ParametricURL();
+    }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WPS();
     new AddGeoJSON();
