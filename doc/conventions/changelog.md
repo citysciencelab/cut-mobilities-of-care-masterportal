@@ -1,4 +1,4 @@
-**12. Backbone**
+**12. Changelog**
 
 12.1. Schreibe für jeden Pull request einen Eintrag im **[CHANGELOG](../../CHANGELOG.md)** unter dem Punkt Unreleased.
 
