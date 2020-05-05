@@ -17,6 +17,7 @@ Folgende Struktur ist dabei zu beachten:
 ## 1. Dateistruktur von Addons ##
 
 1.1. Jedes *Addon* liegt in einem eigenen Ordner, welcher so heißt, wie in **addonsConf.json** als key definiert. In diesen Ordnern liegen alle für die jeweiligen *Addons* benötigten Dateien. Dazu gehören auch die Ordner **doc**, **jsdoc** und **unittests** mit den jeweiligen **.md**, **.js** und **.test.js** Dateien.
+Es ist möglich, dass Addons eine eigene `package.json` Datei besitzen, um weitere Dependencies zu definieren.
 
 #### Beispiel entsprechende Ordnerstruktur ####
 ```
@@ -32,6 +33,7 @@ myMasterPortalFolder/
                 namespaces.js
             unittests/
                 model.test.js
+            package.json
             [...]
         myAddon2/
             subFolder/
@@ -51,7 +53,7 @@ myMasterPortalFolder/
     [...]
 ```
 
-1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner aus relativen Pfade zu deren *Entrypoints* als Values. Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
+1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner aus relativen Pfade zu deren *Entrypoints* als Values. Das nachfolgende Beispiel basiert auf der oben beschriebenen beispielhaften Ordnerstruktur.
 
 #### Beispiel **addonsConf.json** ####
 ```json
@@ -61,9 +63,24 @@ myMasterPortalFolder/
   "myAddon2": "subFolder/init.js"
 }
 ```
-1.3. Entrypoint des Addons sollte wenn vorhanden der View Contrustor sein.
+1.3. Entrypoint des Addons sollte wenn vorhanden der View Constructor sein.
 
 1.4. Es sollen hier ausschließlich nur die Dateien landen, welche zu *addons* gehören.
+
+1.5 Falls weitere Dependencies die noch nicht im Masterportal vorhanden sind für ein Addon benötigt werden, können diese
+über eine eigene `package.json` installiert werde. Dazu reicht eine minimale `package.json` aus:
+
+```json
+{
+  "name": "exampleAddon",
+  "version": "1.0.0",
+  "description": "I'm an example! I can say hello world.",
+  "dependencies": {
+    "hello": "^0.3.2"
+  }
+}
+```
+`npm install` muss für jedes Addon separat ausgeführt werden!
 
 ## 2. Beispiel-Addon ##
 
