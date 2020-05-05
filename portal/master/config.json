@@ -246,9 +246,7 @@
           "coord":
           {
             "name": "translate#common:menu.tools.coord",
-            "glyphicon": "glyphicon-screenshot",
-            "renderToWindow": false,
-            "resizableWindow": true
+            "glyphicon": "glyphicon-screenshot"
           },
           "shadow":
           {
