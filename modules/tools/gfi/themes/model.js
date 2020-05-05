@@ -210,7 +210,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      */
     parseWmsGfi: function (data) {
         const gfiList = [],
-            dat = _.isString(data) ? $.parseXML(data) : data; // handle non text/xml responses arriving as string
+            dat = typeof data === "string" ? $.parseXML(data) : data; // handle non text/xml responses arriving as string
 
         let gfiFormat = {},
             pgfi = [],
@@ -225,7 +225,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         }).reverse();
 
         // ESRI is not parsed by the Ol-format
-        if (_.isEmpty(gfiFeatures)) {
+        if (gfiFeatures.length === 0) {
             if (dat.getElementsByTagName("FIELDS")[0] !== undefined) {
                 _.each(dat.getElementsByTagName("FIELDS"), function (element) {
                     const gfi = {};
@@ -249,7 +249,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
         }
         else { // OS (deegree, UMN, Geoserver) is parsed by Ol-format
-            _.each(gfiFeatures, function (feature) {
+            gfiFeatures.forEach(feature => {
                 gfiList.push(feature.getProperties());
             });
         }
@@ -279,10 +279,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     cloneCollModels: function (pgfi) {
         let clone;
 
-        _.each(pgfi, function (singlePgfi, index) {
-            if (index > 0 && !_.isUndefined(this.collection)) {
+        pgfi.forEach((singlePgfi, index) => {
+            if (index > 0 && this.collection) {
                 clone = this.clone();
-
                 clone.set("gfiContent", [singlePgfi]);
                 clone.set("id", _.uniqueId());
                 clone.set("isReady", true);
@@ -316,13 +315,14 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         const gfiFeatureList = this.get("gfiFeatureList");
         let gfiContent;
 
-        if (!_.isEmpty(gfiFeatureList)) {
+        if (gfiFeatureList.length > 0) {
             gfiContent = this.translateGFI([gfiFeatureList[0].getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
 
-            this.setGfiContent(_.extend(gfiContent, {
+            gfiContent = Object.assign(gfiContent, {
                 allProperties: gfiFeatureList[0].getProperties()
-            }));
+            });
+            this.setGfiContent(gfiContent);
             this.setIsReady(true);
         }
     },
@@ -335,12 +335,13 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      */
     isValidKey: function (key) {
         const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+        let isValidKey = true;
 
-        if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
-            return false;
+        if (ignoredKeys.includes(key.toUpperCase())) {
+            isValidKey = false;
         }
 
-        return true;
+        return isValidKey;
     },
 
     /**
@@ -350,16 +351,18 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {boolean} true or false
      */
     isValidValue: function (value) {
-        if (value && _.isString(value) && value !== "" && value.toUpperCase() !== "NULL") {
-            return true;
+        let isValid = false;
+
+        if (value && typeof value === "string" && value !== "" && value.toUpperCase() !== "NULL") {
+            isValid = true;
         }
-        else if (_.isArray(value)) {
-            return true;
+        else if (Array.isArray(value)) {
+            isValid = true;
         }
-        else if (_.isNumber(value)) {
-            return true;
+        else if (typeof value === "number") {
+            isValid = true;
         }
-        return false;
+        return isValid;
     },
 
     /**
@@ -385,7 +388,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         catch (e) {
             return false;
         }
-        if (_.isObject(test) && _.has(test, "multiTag")) {
+        if (typeof test === "object" && test.hasOwnProperty("multiTag")) {
             return true;
         }
         return false;
@@ -413,7 +416,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             else {
                 gfi = this.prepareGfiByAttributes(gfi, gfiAttributes);
             }
-            if (_.isEmpty(gfi) !== true) {
+            if (Object.keys(gfi).length > 0) {
                 pgfi.push(gfi);
             }
         });
@@ -622,10 +625,12 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @return {object} content
      */
     getManipulateDate: function (content) {
-        _.each(content, function (element) {
-            _.each(element, function (value, key, list) {
+        content.forEach(element => {
+            Object.keys(element).forEach(key => {
+                const value = element[key];
+
                 if (moment(value, "DD-MM-YYYY", true).isValid() === true) {
-                    list[key] = moment(value).format("DD.MM.YYYY");
+                    element[key] = moment(value).format("DD.MM.YYYY");
                 }
             });
         });
