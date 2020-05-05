@@ -51,12 +51,13 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @returns {void}
      */
     prepSearch: function (searchString) {
-        var prepSearchString = "",
+        const visibleGroupLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}),
+            layerTypes = this.get("layerTypes");
+
+        let prepSearchString = "",
             vectorLayerModels = [],
             foundMatchingFeatures = [],
-            visibleGroupLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}),
-            filteredModels = [],
-            layerTypes = this.get("layerTypes");
+            filteredModels = [];
 
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.setInUse(true);
@@ -131,11 +132,11 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @returns {array} Array of features containing searched string
      */
     filterFeaturesArrayRec: function (aFeatures, sSearchField, sSearchString) {
-        var aFilteredFeatures = [];
+        let aFilteredFeatures = [];
 
         aFilteredFeatures = aFeatures.filter(function (oFeature) {
-            var aFilteredSubFeatures = [],
-                sTestFieldValue;
+            let aFilteredSubFeatures = [],
+                sTestFieldValue = "";
 
             // if feature is clustered
             if (this.isClusteredFeature(oFeature)) {
@@ -171,12 +172,13 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @returns {array} Array of features containing searched string
      */
     findMatchingFeatures: function (models, searchString) {
-        var resultFeatures = [];
+        const resultFeatures = [];
 
         _.each(models, function (model) {
-            var features = model.get("layer").getSource().getFeatures(),
-                searchFields = model.get("searchField"),
-                filteredFeatures;
+            const features = model.get("layer").getSource().getFeatures();
+
+            let filteredFeatures,
+                searchFields = model.get("searchField");
 
             if (_.isArray(searchFields) === false) {
                 searchFields = [searchFields];
@@ -199,10 +201,10 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @return {array} array with feature objects
      */
     getFeatureObject: function (searchField, filteredFeatures, model) {
-        var featureArray = [];
+        const featureArray = [];
 
         _.each(filteredFeatures, function (feature) {
-            var featureObject = {
+            const featureObject = {
                 // "bezeichnung" hard coded? Or use searchField?
                 name: this.getWithClusterFallback(feature, searchField),
                 type: model.get("name"),
@@ -252,7 +254,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @returns {Number[]} center coordinate
      */
     getCenterFromExtent: function (extent) {
-        var deltaY = extent[2] - extent[0],
+        const deltaY = extent[2] - extent[0],
             deltaX = extent[3] - extent[1],
             centerY = extent[0] + deltaY / 2,
             centerX = extent[1] + deltaX / 2;
@@ -267,7 +269,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @return {String|undefined} imagesource
      */
     getImageSource: function (feature, model) {
-        var layerStyle,
+        let layerStyle,
             imageSource;
 
         if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
@@ -312,7 +314,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @returns {mixed} found additional info
      */
     getAdditionalInfo: function (model, feature) {
-        var additionalInfo;
+        let additionalInfo;
 
         if (!_.isUndefined(model.get("additionalInfoField"))) {
             additionalInfo = this.getWithClusterFallback(feature, model.get("additionalInfoField"));

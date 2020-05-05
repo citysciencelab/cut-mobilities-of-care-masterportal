@@ -1,7 +1,6 @@
 import Model from "@modules/tools/searchByCoord/model.js";
-const chai = require("chai");
-
-var etrs89Coord = [{"coord": "5935103,67", "key": "Wert der Länge"}, {"coord": "564459.13", "key": "Wert der Breite"}],
+const chai = require("chai"),
+    etrs89Coord = [{"coord": "5935103,67", "key": "Wert der Länge"}, {"coord": "564459.13", "key": "Wert der Breite"}],
     etrs89ErrCoordNorthing = [{"coord": "5935103,67", "key": "Wert der Länge"}, {"coord": "qwertz", "key": "Wert der Breite"}],
     etrs89ErrCoordEasting = [{"coord": "qwertz", "key": "Wert der Länge"}, {"coord": "564459.13", "key": "Wert der Breite"}],
     wgs84Coord = [{"coord": "9° 30` 50``", "key": "Wert der Länge"}, {"coord": "53° 10' 55\"", "key": "Wert der Breite"}],
@@ -10,15 +9,15 @@ var etrs89Coord = [{"coord": "5935103,67", "key": "Wert der Länge"}, {"coord": 
     wgsDezimalCoord = [{"coord": "53.5555°", "key": "Wert der Länge"}, {"coord": "10,01234", "key": "Wert der Breite"}],
     wgsDezimalErrCoordNorthing = [{"coord": "53.5555°", "key": "Wert der Länge"}, {"coord": "qwertz", "key": "Wert der Breite"}],
     wgsDezimalErrCoordEasting = [{"coord": "qwertz", "key": "Wert der Länge"}, {"coord": "10,01234", "key": "Wert der Breite"}],
-    undefCoord = [{"key": "Wert der Länge"}, {"key": "Wert der Breite"}],
-    model;
+    undefCoord = [{"key": "Wert der Länge"}, {"key": "Wert der Breite"}];
+let model;
 
 before(function () {
     model = new Model();
 });
 
 describe("function for validate input", function () {
-    var expect = chai.expect;
+    const expect = chai.expect;
 
     describe("validate for etrs89", function () {
         it("should return true if valid", function () {

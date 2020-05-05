@@ -1,7 +1,7 @@
 import Model from "@modules/tools/gfi/themes/model.js";
 import {expect} from "chai";
 
-var model;
+let model;
 
 before(function () {
     model = new Model();
@@ -13,7 +13,7 @@ describe("tools/gfi/themes/Model", function () {
             expect(model.allKeysToLowerCase(undefined)).to.be.an("object").that.is.empty;
         });
         it("should return an object with keys that be lowercase for object input", function () {
-            var obj = {
+            const obj = {
                 Test1: "value1",
                 Test2: "value2"
             };
@@ -30,7 +30,7 @@ describe("tools/gfi/themes/Model", function () {
             expect(model.translateGFI(undefined, undefined)).to.be.an("array").that.is.empty;
         });
         it("should return an correct array for gfiList and gfiAttributes input", function () {
-            var gfiList = [
+            const gfiList = [
                     {
                         strasse: "Teststraße",
                         ort: "Testort"

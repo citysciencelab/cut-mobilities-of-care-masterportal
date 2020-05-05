@@ -36,7 +36,7 @@ const LegendLoader = Backbone.Model.extend(/** @lends LegendLoader.prototype */{
     * @returns {void}
     */
     loadMenu: function (LegendModel) {
-        var isMobile = Radio.request("Util", "isViewMobile");
+        const isMobile = Radio.request("Util", "isViewMobile");
 
         if (isMobile) {
             this.currentLegend = new MobileLegend({model: LegendModel});

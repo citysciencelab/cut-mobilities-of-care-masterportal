@@ -35,7 +35,7 @@ const MietenspiegelTheme = Theme.extend({
      * @returns {object} print content
      */
     returnPrintContent: function () {
-        var ms = {
+        let ms = {
             "Strasse": this.get("msStrasse"),
             "Stadtteil": this.get("msStadtteil"),
             "Ort": this.get("msPLZ") + " Hamburg",
@@ -87,12 +87,13 @@ const MietenspiegelTheme = Theme.extend({
      * Wird aus View gerufen und gibt Liste möglicher Merkmale zurück
      */
     returnValidMerkmale: function (merkmalId, setted) {
-        var daten = this.get("msDaten"),
-            merkmale,
-            merkmaleReduced,
-            possibleValues,
-            uniqueValues,
-            sortedValues;
+        const daten = this.get("msDaten");
+
+        let merkmale = "",
+            merkmaleReduced = "",
+            possibleValues = "",
+            uniqueValues = "",
+            sortedValues = "";
 
         merkmale = _.map(daten, function (value) {
             return value.merkmale;
@@ -123,7 +124,7 @@ const MietenspiegelTheme = Theme.extend({
      * Lese Mietenspiegel-Daten aus msLayerMetaDaten und msLayerDaten. REQUESTOR kann nicht verwendet werden, weil es geometrielose Dienste sind.
      */
     ladeMetaDaten: function () {
-        var urlMetaDaten = "http://geodienste.hamburg.de/HH_WFS_Mietenspiegel",
+        const urlMetaDaten = "http://geodienste.hamburg.de/HH_WFS_Mietenspiegel",
             featureTypeMetaDaten = "app:mietenspiegel_metadaten";
 
         Radio.trigger("Util", "showLoader");
@@ -142,7 +143,7 @@ const MietenspiegelTheme = Theme.extend({
                 }
             },
             success: function (data) {
-                var hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
+                const hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
                     datum = $(hits).find("app\\:erhebungsstand,erhebungsstand")[0].textContent.split("-"),
                     herausgeber = $(hits).find("app\\:herausgeber,herausgeber")[0].textContent,
                     hinweis = $(hits).find("app\\:hinweis,hinweis")[0].textContent,
@@ -160,7 +161,7 @@ const MietenspiegelTheme = Theme.extend({
     },
     ladeDaten: function () {
         // Lade Mietenspiegel-Daten
-        var urlDaten = "http://geodienste.hamburg.de/HH_WFS_Mietenspiegel",
+        const urlDaten = "http://geodienste.hamburg.de/HH_WFS_Mietenspiegel",
             featureTypeDaten = "app:mietenspiegel_daten";
 
         Radio.trigger("Util", "showLoader");
@@ -179,7 +180,7 @@ const MietenspiegelTheme = Theme.extend({
                 }
             },
             success: function (data) {
-                var hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
+                const hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
                     mietenspiegel_daten = $(hits).find("app\\:mietenspiegel_daten,mietenspiegel_daten"),
                     daten = [],
                     keys = this.get("msMerkmaleText");
@@ -209,7 +210,7 @@ const MietenspiegelTheme = Theme.extend({
      * Wird nicht mehr genutzt, da returnValidMerkmale
      */
     calculateMerkmale: function () {
-        var daten = this.get("msDaten"),
+        const daten = this.get("msDaten"),
             merkmalnamen = _.object(_.keys(daten[0].merkmale), []),
             merkmale = _.map(daten, function (value) {
                 return value.merkmale;
@@ -225,12 +226,11 @@ const MietenspiegelTheme = Theme.extend({
      * Berechnet die Vergleichsmiete anhand der gesetzten Merkmale aus msDaten.
      */
     calculateVergleichsmiete: function (merkmale) {
-        var daten = this.get("msDaten"),
-            vergleichsmiete;
+        const daten = this.get("msDaten"),
+            vergleichsmiete = daten.filter(function (value) {
+                return _.isMatch(value.merkmale, merkmale);
+            });
 
-        vergleichsmiete = daten.filter(function (value) {
-            return _.isMatch(value.merkmale, merkmale);
-        });
         if (vergleichsmiete.length !== 1) {
             this.defaultErgebnisse();
             this.trigger("hideErgebnisse");

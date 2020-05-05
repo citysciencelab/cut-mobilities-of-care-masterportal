@@ -4,7 +4,7 @@ import Model from "./testModel.js";
 
 describe("testModul", function () {
     describe("getEmployeesByName", function () {
-        var model;
+        let model;
 
         before(function () {
             /* runs before the first it() is executed */
@@ -29,7 +29,7 @@ describe("testModul", function () {
         });
     });
     describe("giveCoffee", function () {
-        var model;
+        let model;
 
         before(function () {
             /* runs before the first it() is executed */
@@ -50,7 +50,7 @@ describe("testModul", function () {
         });
     });
     describe("getIsAwake", function () {
-        var model;
+        let model;
 
         before(function () {
             /* runs before the first it() is executed */
@@ -71,7 +71,7 @@ describe("testModul", function () {
         });
     });
     describe("getSleepingEmployeeNames", function () {
-        var model;
+        let model;
 
         before(function () {
             /* runs before the first it() is executed */

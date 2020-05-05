@@ -38,7 +38,7 @@ const ReisezeitenTheme = Theme.extend({
      * @returns {void}
      */
     requestRouten: function () {
-        var layer = this.get("routenLayer"),
+        const layer = this.get("routenLayer"),
             standort = this.get("standort"),
             request_str = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:reisezeit_routen'><Filter xmlns='http://www.opengis.net/ogc'><PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><PropertyName>app:start_ort</PropertyName><Literal>" + standort + "</Literal></PropertyIsLike></Filter></wfs:Query></wfs:GetFeature>";
 
@@ -61,12 +61,12 @@ const ReisezeitenTheme = Theme.extend({
                 }
             },
             success: function (data) {
-                var hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
+                const hits = $("wfs\\:FeatureCollection,FeatureCollection", data),
                     routen = $(hits).find("app\\:reisezeit_routen,reisezeit_routen"),
                     ziele = [];
 
                 _.each(routen, function (route) {
-                    var zielort = $(route).find("app\\:ziel_ort,ziel_ort")[0].textContent,
+                    const zielort = $(route).find("app\\:ziel_ort,ziel_ort")[0].textContent,
                         anzeige = $(route).find("app\\:anzeige,anzeige")[0].textContent,
                         routenid = $(route).find("app\\:id,id")[0].textContent;
 
@@ -113,9 +113,9 @@ const ReisezeitenTheme = Theme.extend({
      * Fragt Layer mit LevelOfService Info ab, um Geometrien anzeigen zu können
      */
     requestVerkehrslagelayer: function (routenid) {
-        var layer = this.get("routenLayer"),
-            request_str = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:reisezeit_verkehrslage'><Filter xmlns='http://www.opengis.net/ogc'><PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><PropertyName>app:route_id</PropertyName><Literal>" + routenid + "</Literal></PropertyIsLike></Filter></wfs:Query></wfs:GetFeature>",
-            source;
+        const layer = this.get("routenLayer"),
+            request_str = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:gml='http://www.opengis.net/gml' xmlns:ogc='http://www.opengis.net/ogc' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd'><wfs:Query typeName='app:reisezeit_verkehrslage'><Filter xmlns='http://www.opengis.net/ogc'><PropertyIsLike wildCard='*' singleChar='#' escapeChar='!'><PropertyName>app:route_id</PropertyName><Literal>" + routenid + "</Literal></PropertyIsLike></Filter></wfs:Query></wfs:GetFeature>";
+        let source;
 
         Radio.trigger("Util", "showLoader");
         $.ajax({
@@ -136,7 +136,7 @@ const ReisezeitenTheme = Theme.extend({
                 }
             },
             success: function (data) {
-                var wfsReader = new WFS({
+                const wfsReader = new WFS({
                         featureNS: this.get("verkehrslagelayer").featureNS,
                         featureType: this.get("verkehrslagelayer").featureType
                     }),
@@ -156,8 +156,8 @@ const ReisezeitenTheme = Theme.extend({
      * @returns {void}
      */
     showRoute: function (routeId) {
-        var strokestyle,
-            source = this.requestVerkehrslagelayer(routeId);
+        const source = this.requestVerkehrslagelayer(routeId);
+        let strokestyle;
 
         this.removeRouteLayer();
         this.createRouteLayer();

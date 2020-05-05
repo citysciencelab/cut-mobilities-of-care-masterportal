@@ -24,7 +24,7 @@ const ScaleLineModel = Backbone.Model.extend({
      * @returns {void}
      */
     modifyScale: function (obj) {
-        var scaleNumber = obj.scale.toString();
+        let scaleNumber = obj.scale.toString();
 
         if (scaleNumber >= 10000) {
             scaleNumber = scaleNumber.substring(0, scaleNumber.length - 3) + " " + scaleNumber.substring(scaleNumber.length - 3);
@@ -38,8 +38,8 @@ const ScaleLineModel = Backbone.Model.extend({
     * @returns {void}
     */
     createScaleLineValue: function () {
-        var scaleLineValue,
-            scaleNumber = Math.round(0.02 * this.get("scaleNumber").replace(" ", ""));
+        const scaleNumber = Math.round(0.02 * this.get("scaleNumber").replace(" ", ""));
+        let scaleLineValue;
 
         if (scaleNumber >= 1000) {
             scaleLineValue = (scaleNumber / 1000).toString() + " km";

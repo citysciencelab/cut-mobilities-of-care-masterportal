@@ -40,11 +40,12 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * @returns {void}
      */
     parseGfiContent: function () {
-        var gfiContent,
+        const dataPerYear = [];
+
+        let gfiContent,
             rowNames,
             newRowNames = [],
             yearData,
-            dataPerYear = [],
             year,
             years = [];
 
@@ -53,7 +54,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
             rowNames = _.keys(this.get("gfiContent")[0]);
 
             _.each(rowNames, function (rowName) {
-                var newRowName;
+                let newRowName;
 
                 year = parseInt(rowName.slice(-4), 10);
 
@@ -95,11 +96,11 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * @returns {String} - New row name withour the year at the end
      */
     createNewRowName: function (rowName, year) {
-        var newRowName = "",
-            yearAsString = String(year),
+        const yearAsString = String(year),
             index = rowName.indexOf(yearAsString) - 1,
             yearDigits = rowName.slice(-4).length,
             charBeforeYear = rowName.slice(index, -yearDigits);
+        let newRowName = "";
 
         if (charBeforeYear === "_") {
             newRowName = rowName.replace("_" + yearAsString, "").trim();
@@ -117,10 +118,10 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * @returns {void}
      */
     combineYearsData: function (dataPerYear, years) {
-        var dataset = [];
+        let dataset = [];
 
         _.each(years, function (year) {
-            var attrDataArray = _.where(dataPerYear, {year: year}),
+            const attrDataArray = _.where(dataPerYear, {year: year}),
                 yearObject = {year: year};
 
             _.each(attrDataArray, function (attrData) {
@@ -160,7 +161,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      */
     destroy: function () {
         _.each(this.get("gfiContent"), function (element) {
-            var children;
+            let children;
 
             if (_.has(element, "children")) {
                 children = _.values(_.pick(element, "children"))[0];
@@ -183,16 +184,16 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
     * @returns {Object[]} - parsed data.
     */
     parseData: function (dataArray) {
-        var parsedDataArray = [];
+        const parsedDataArray = [];
 
         _.each(dataArray, function (dataObj) {
-            var parsedDataObj = {
+            const parsedDataObj = {
                 class: "dot",
                 style: "circle"
             };
 
             _.each(dataObj, function (dataVal, dataAttr) {
-                var parseDataVal = this.parseDataValue(dataVal),
+                const parseDataVal = this.parseDataValue(dataVal),
                     parseFloatVal = parseFloat(parseDataVal);
 
                 if (dataAttr === "Baustelleneinfluss") {
@@ -232,7 +233,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * @returns {Object[]} - Definitions for diagram legend
      */
     legendData: function (value) {
-        var attr = [];
+        const attr = [];
 
         if (value === "DTV") {
             attr.push({
@@ -287,7 +288,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      */
     createD3Document: function (key) {
-        var heightTabContent = parseInt($(".verkehrsstaerken .tab-content").css("height").slice(0, -2), 10),
+        const heightTabContent = parseInt($(".verkehrsstaerken .tab-content").css("height").slice(0, -2), 10),
             heightBtnGroup = parseInt($(".verkehrsstaerken #diagramm .btn-group").css("height").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-top").slice(0, -2), 10) + parseInt($(".verkehrsstaerken #diagramm .btn-group").css("padding-bottom").slice(0, -2), 10),
             height = heightTabContent - heightBtnGroup,
             width = parseInt($(".verkehrsstaerken .tab-content").css("width").slice(0, -2), 10),

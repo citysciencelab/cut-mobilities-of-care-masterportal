@@ -657,37 +657,49 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * returns an empty Object if no init happened previously (= no layer set)
      * by default single geometries are added to the GeoJSON
      * if geomType is set to "multiGeometry" multiGeometry Features of all drawn Features are created for each geometry type individually
-     * @param {String} para_object - an Object which includes the parameters
+     * @param {String} paraObject - an Object which includes the parameters
      *                 {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
      *                 {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
+     * @param {Feature} currentFeature last drawn feature used in drawend
      * @returns {String} GeoJSON all Features as String
      */
-    downloadFeaturesWithoutGUI: function (para_object) {
+    downloadFeaturesWithoutGUI: function (paraObject, currentFeature = undefined) {
         let features = null,
             geomType = null,
-            transformWGS = null,
             multiGeomFeature = null,
             circleFeature = null,
             circularPoly = null,
             featureType = null,
             singleGeom = null,
             multiGeom = null,
-            featuresConverted = {"type": "FeatureCollection", "features": []};
+            featuresConverted = {"type": "FeatureCollection", "features": []},
+            targetProjection = null;
         const multiPolygon = new MultiPolygon([]),
             featureArray = [],
             format = new GeoJSON(),
             multiPoint = new MultiPoint([]),
-            multiLine = new MultiLine([]);
+            multiLine = new MultiLine([]),
+            map = Radio.request("Map", "getMap");
 
-        if (para_object !== undefined && para_object.geomType === "multiGeometry") {
+
+        if (paraObject !== undefined && paraObject.geomType === "multiGeometry") {
             geomType = "multiGeometry";
         }
-        if (para_object !== undefined && para_object.transformWGS === true) {
-            transformWGS = true;
+        if (paraObject !== undefined && paraObject.transformWGS === true) {
+            targetProjection = "EPSG:4326";
+        }
+
+        if (paraObject !== undefined && paraObject.targetProjection !== undefined) {
+            targetProjection = paraObject.targetProjection;
         }
 
         if (this.get("layer") !== undefined && this.get("layer") !== null) {
             features = this.get("layer").getSource().getFeatures();
+
+            if (currentFeature !== undefined) {
+                features.push(currentFeature);
+            }
+
 
             if (geomType === "multiGeometry") {
 
@@ -695,24 +707,24 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     featureType = item.getGeometry().getType();
 
                     if (featureType === "Polygon") {
-                        if (transformWGS === true) {
-                            multiPolygon.appendPolygon(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        if (targetProjection !== null) {
+                            multiPolygon.appendPolygon(item.getGeometry().clone().transform(getMapProjection(map), targetProjection));
                         }
                         else {
                             multiPolygon.appendPolygon(item.getGeometry());
                         }
                     }
                     else if (featureType === "Point") {
-                        if (transformWGS === true) {
-                            multiPoint.appendPoint(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        if (targetProjection !== null) {
+                            multiPoint.appendPoint(item.getGeometry().clone().transform(getMapProjection(map), targetProjection));
                         }
                         else {
                             multiPoint.appendPoint(item.getGeometry());
                         }
                     }
                     else if (featureType === "LineString") {
-                        if (transformWGS === true) {
-                            multiLine.appendLineString(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        if (targetProjection !== null) {
+                            multiLine.appendLineString(item.getGeometry().clone().transform(getMapProjection(map), targetProjection));
                         }
                         else {
                             multiLine.appendLineString(item.getGeometry());
@@ -721,8 +733,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     // Circles cannot be added to a featureCollection
                     // They must therefore be converted into a polygon
                     else if (featureType === "Circle") {
-                        if (transformWGS === true) {
-                            circularPoly = circPoly(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"), 64);
+                        if (targetProjection !== null) {
+                            circularPoly = circPoly(item.getGeometry().clone().transform(getMapProjection(map), targetProjection), 64);
                             multiPolygon.appendPolygon(circularPoly);
                         }
                         else {
@@ -731,9 +743,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                         }
                     }
                     else if (featureType === "MultiPolygon" || featureType === "MultiPoint" || featureType === "MultiLineString") {
-                        if (transformWGS === true) {
+                        if (targetProjection !== null) {
                             multiGeom = item.clone();
-                            multiGeom.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                            multiGeom.getGeometry().transform(getMapProjection(map), targetProjection);
                         }
                         else {
                             multiGeom = item;
@@ -767,9 +779,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 features.forEach(function (item) {
                     featureType = item.getGeometry().getType();
 
-                    if (transformWGS === true) {
+                    if (targetProjection !== null) {
                         singleGeom = item.clone();
-                        singleGeom.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                        singleGeom.getGeometry().transform(getMapProjection(map), targetProjection);
                     }
                     else {
                         singleGeom = item;
@@ -902,7 +914,28 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
         modifyInteraction.setActive(isActive);
         this.setModifyInteraction(modifyInteraction);
+        this.createModifyInteractionListener(modifyInteraction);
         Radio.trigger("Map", "addInteraction", modifyInteraction);
+    },
+
+    /**
+     * Listener to change the entries for the next drawing.
+     * @param {ol/interaction/Modify} modifyInteraction - modifyInteraction
+     * @return {void}
+     */
+    createModifyInteractionListener: function (modifyInteraction) {
+
+        modifyInteraction.on("modifyend", function (evt) {
+
+            let geojson = {};
+
+            if (typeof Config.inputMap !== "undefined") {
+
+                geojson = this.downloadFeaturesWithoutGUI({"targetProjection": Config.inputMap.targetProjection}, evt.feature);
+                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geojson});
+            }
+
+        }.bind(this));
     },
 
     /**
@@ -930,14 +963,26 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     createDrawInteractionListener: function (drawInteraction, maxFeatures, doubleIsActive) {
         const that = this,
             layer = this.get("layer");
+        let geojson = {};
 
         drawInteraction.on("drawend", function (evt) {
             evt.feature.set("styleId", that.uniqueId());
+
+            if (typeof Config.inputMap !== "undefined") {
+
+                that.cancelDrawWithoutGUI();
+                that.editFeaturesWithoutGUI();
+
+                geojson = that.downloadFeaturesWithoutGUI({"targetProjection": Config.inputMap.targetProjection}, evt.feature);
+                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geojson});
+            }
+
         });
 
         drawInteraction.on("drawstart", function () {
             that.drawInteractionOnDrawevent(drawInteraction, doubleIsActive, layer);
         });
+
 
         if (maxFeatures && maxFeatures > 0) {
 

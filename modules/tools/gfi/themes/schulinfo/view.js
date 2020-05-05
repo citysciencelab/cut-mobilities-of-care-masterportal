@@ -61,7 +61,7 @@ const SchulInfoThemeView = ThemeView.extend({
      */
     toggleStarGlyphicon: function (feature) {
         // glyphicon-star || glyphicon-star-empty
-        var glyphiconElement = this.$("span:nth-child(2)");
+        const glyphiconElement = this.$("span:nth-child(2)");
 
         if (feature.get("isOnCompareList")) {
             this.highlightStarGlyphicon(glyphiconElement);

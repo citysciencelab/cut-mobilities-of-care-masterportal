@@ -1,4 +1,4 @@
-var webpack = require("webpack"),
+const webpack = require("webpack"),
     path = require("path"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 

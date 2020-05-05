@@ -63,7 +63,7 @@ const TreeFilterView = Backbone.View.extend({
     },
     template: _.template(TreeFilterTemplate),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         if (this.model.get("isActive")) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
@@ -95,7 +95,7 @@ const TreeFilterView = Backbone.View.extend({
      * @returns {void}
      */
     focusOnEnd: function (element) {
-        var strLength = element.val().length * 2;
+        const strLength = element.val().length * 2;
 
         element.focus();
         element[0].setSelectionRange(strLength, strLength);

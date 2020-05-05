@@ -46,9 +46,10 @@ const PrintModel = Tool.extend({
      * Ermittelt die URL zum Fetchen in setStatus durch Abfrage der ServiceId
      */
     url: function () {
-        var resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
-            url = resp && resp.get("url") ? resp.get("url") : null,
-            printurl;
+        const resp = Radio.request("RestReader", "getServiceById", this.get("printID")),
+            url = resp && resp.get("url") ? resp.get("url") : null;
+
+        let printurl;
 
         if (url) {
             printurl = url + this.get("configYAML");
@@ -88,14 +89,14 @@ const PrintModel = Tool.extend({
     },
     // Setzt den Maßstab für den Ausdruck über die Druckeinstellungen.
     setScale: function (index) {
-        var scaleval = this.get("scales")[index].valueInt;
+        const scaleval = this.get("scales")[index].valueInt;
 
         Radio.trigger("MapView", "setScale", scaleval);
     },
 
     // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
     setScaleByMapView: function () {
-        var newScale = _.find(this.get("scales"), function (scale) {
+        const newScale = _.find(this.get("scales"), function (scale) {
             return scale.valueInt === Radio.request("MapView", "getOptions").scale;
         });
 
@@ -109,7 +110,7 @@ const PrintModel = Tool.extend({
 
     //
     setStatus: function (bmodel, value) {
-        var scaletext;
+        let scaletext;
 
         if (value && this.get("layouts") === undefined) {
             if (this.get("fetched") === false) {
@@ -163,7 +164,7 @@ const PrintModel = Tool.extend({
     },
 
     getLayersForPrint: function () {
-        var drawLayer = Radio.request("Draw", "getLayer");
+        const drawLayer = Radio.request("Draw", "getLayer");
 
         this.set("layerToPrint", []);
         this.setWMSLayerToPrint(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WMS", isOutOfRange: false}));
@@ -176,20 +177,17 @@ const PrintModel = Tool.extend({
     },
 
     setGROUPLayerToPrint: function (layers) {
-        var sortedLayers;
+        let sortedLayers = "";
 
         sortedLayers = _.sortBy(layers, function (layer) {
             return layer.get("selectionIDX");
         });
         _.each(sortedLayers, function (groupLayer) {
-            var layerList = groupLayer.get("layerSource");
+            const layerList = groupLayer.get("layerSource");
 
             _.each(layerList, function (layer) {
-                var params = {},
-                    style = [],
-                    numberOfLayer,
-                    i,
-                    defaultStyle;
+                const params = {},
+                    style = [];
 
                 if (layer.get("typ") === "WMS") {
                     if (layer.has("styles")) {
@@ -199,10 +197,10 @@ const PrintModel = Tool.extend({
                     // Wenn ein Style mit einem Blank angegeben wird,
                     // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
                     else {
-                        numberOfLayer = layer.get("layers").split(",").length;
-                        defaultStyle = "";
+                        const numberOfLayer = layer.get("layers").split(",").length;
+                        let defaultStyle = "";
 
-                        for (i = 1; i < numberOfLayer; i++) {
+                        for (let i = 1; i < numberOfLayer; i++) {
                             defaultStyle += ",";
                         }
                         style.push(defaultStyle);
@@ -223,19 +221,16 @@ const PrintModel = Tool.extend({
     },
 
     setWMSLayerToPrint: function (layers) {
-        var sortedLayers;
 
-        sortedLayers = _.sortBy(layers, function (layer) {
+        const sortedLayers = _.sortBy(layers, function (layer) {
             return layer.get("selectionIDX");
         });
+
         _.each(sortedLayers, function (layer) {
             // nur wichtig für treeFilter
-            var params = {},
-                style = [],
-                layerURL = layer.get("url"),
-                numberOfLayer,
-                i,
-                defaultStyle;
+            const params = {},
+                style = [];
+            let layerURL = layer.get("url");
 
             if (layer.has("SLDBody")) {
                 params.SLD_BODY = layer.get("SLDBody");
@@ -250,10 +245,10 @@ const PrintModel = Tool.extend({
             // Wenn ein Style mit einem Blank angegeben wird,
             // wird der Default-Style des Layers verwendet. Beispiel für 3 Layer: countries,,cities
             else {
-                numberOfLayer = layer.get("layers").split(",").length;
-                defaultStyle = "";
+                const numberOfLayer = layer.get("layers").split(",").length;
+                let defaultStyle = "";
 
-                for (i = 1; i < numberOfLayer; i++) {
+                for (let i = 1; i < numberOfLayer; i++) {
                     defaultStyle += ",";
                 }
                 style.push(defaultStyle);
@@ -282,12 +277,13 @@ const PrintModel = Tool.extend({
     },
 
     setLayer: function (layer) {
-        var features = [],
+        const features = [],
             featureStyles = {},
-            printStyleObj = {},
-            layerId = layer.get("id"),
-            layerModel,
+            layerId = layer.get("id");
+
+        let layerModel,
             isClustered,
+            printStyleObj = {},
             styleModel;
 
         if (!_.isUndefined(layer)) {
@@ -308,7 +304,7 @@ const PrintModel = Tool.extend({
             });
 
             _.each(layer.getSource().getFeatures(), function (feature, index) {
-                var type = feature.getGeometry().getType(),
+                const type = feature.getGeometry().getType(),
                     styles = !_.isUndefined(feature.getStyleFunction()) ? feature.getStyleFunction().call(feature) : styleModel.createStyle(feature, isClustered),
                     style = _.isArray(styles) ? styles[0] : styles,
                     coordinates = feature.getGeometry().getCoordinates();
@@ -350,7 +346,7 @@ const PrintModel = Tool.extend({
         }
     },
     createPointStyleForPrint: function (style) {
-        var pointStyleObject = {},
+        let pointStyleObject = {},
             imgPath = this.createImagePath(),
             imgName = style.getImage() instanceof Icon ? style.getImage().getSrc() : undefined;
 
@@ -391,7 +387,7 @@ const PrintModel = Tool.extend({
         return pointStyleObject;
     },
     createImagePath: function () {
-        var imgPath = window.location.origin + "/lgv-config/img/";
+        let imgPath = window.location.origin + "/lgv-config/img/";
 
         // for local IDE take path to
         if (imgPath.indexOf("localhost") !== -1) {
@@ -401,14 +397,15 @@ const PrintModel = Tool.extend({
     },
 
     setSpecification: function (gfiPosition) {
-        var layers = Radio.request("Map", "getLayers").getArray(),
+        const layers = Radio.request("Map", "getLayers").getArray(),
             animationLayer = layers.filter(function (layer) {
                 return layer.get("name") === "animationLayer";
             }),
             wfsLayer = layers.filter(function (layer) {
                 return layer.get("typ") === "WFS" && layer.get("visible") === true && layer.getSource().getFeatures().length > 0;
-            }),
-            specification;
+            });
+
+        let specification = {};
 
         if (animationLayer.length > 0) {
             this.setLayer(animationLayer[0]);
@@ -493,7 +490,7 @@ const PrintModel = Tool.extend({
     * @returns {void}
     */
     getGfiForPrint: function () {
-        var gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
+        const gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
             gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
             gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
             gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
@@ -560,7 +557,7 @@ const PrintModel = Tool.extend({
      * @returns {void}
      */
     push: function (attribute, value) {
-        var tempArray = _.clone(this.get(attribute));
+        const tempArray = _.clone(this.get(attribute));
 
         tempArray.push(value);
         this.set(attribute, _.flatten(tempArray));
@@ -571,7 +568,7 @@ const PrintModel = Tool.extend({
     // Wenn vorhanden, wird die Opacity(default = 1) überschrieben.
     // Gibt den hexadezimal String und die Opacity zurück.
     getColor: function (value) {
-        var color = value,
+        let color = value,
             opacity = 1;
 
         // color kommt als array--> parsen als String
@@ -604,19 +601,19 @@ const PrintModel = Tool.extend({
 
     // Ein Integer (color) wird in ein hexadezimal String umgewandelt und zurückgegeben.
     componentToHex: function (color) {
-        var hex = color.toString(16);
+        const hex = color.toString(16);
 
         return hex.length === 1 ? "0" + hex : hex;
     },
 
     handlePreCompose: function (evt) {
-        var ctx = evt.context;
+        const ctx = evt.context;
 
         ctx.save();
     },
 
     handlePostCompose: function (evt) {
-        var ctx = evt.context,
+        const ctx = evt.context,
             size = evt.target.getSize(),
             height = size[1] * DEVICE_PIXEL_RATIO,
             width = size[0] * DEVICE_PIXEL_RATIO,
@@ -647,7 +644,7 @@ const PrintModel = Tool.extend({
     },
 
     calculatePageBoundsPixels: function (mapSize) {
-        var s = this.get("scale").value,
+        const s = this.get("scale").value,
             width = this.get("layout").map.width,
             height = this.get("layout").map.height,
             resolution = Radio.request("MapView", "getOptions").resolution,
@@ -655,12 +652,11 @@ const PrintModel = Tool.extend({
             h = height / this.get("POINTS_PER_INCH") * this.get("MM_PER_INCHES") / 1000.0 * s / resolution * DEVICE_PIXEL_RATIO,
             center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2,
                 mapSize[1] * DEVICE_PIXEL_RATIO / 2],
-            minx, miny, maxx, maxy;
+            minx = center[0] - (w / 2),
+            miny = center[1] - (h / 2),
+            maxx = center[0] + (w / 2),
+            maxy = center[1] + (h / 2);
 
-        minx = center[0] - (w / 2);
-        miny = center[1] - (h / 2);
-        maxx = center[0] + (w / 2);
-        maxy = center[1] + (h / 2);
         return [minx, miny, maxx, maxy];
     },
 

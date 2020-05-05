@@ -2,7 +2,7 @@ import {expect} from "chai";
 import Model from "@modules/snippets/dropdown/model.js";
 
 describe("snippets/dropdown/model", function () {
-    var model;
+    let model;
 
     before(function () {
         model = new Model({
@@ -11,7 +11,7 @@ describe("snippets/dropdown/model", function () {
     });
 
     describe("updateValues", function () {
-        var updatedValue;
+        let updatedValue;
 
         it("should update values", function () {
             model.updateValues(["m²", "km²"]);

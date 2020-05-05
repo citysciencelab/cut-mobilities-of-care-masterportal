@@ -85,7 +85,7 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
      * @returns {void}
      */
     filterExternalLayer: function (layerList) {
-        var filteredLayerList = layerList.filter(function (model) {
+        let filteredLayerList = layerList.filter(function (model) {
             return !model.get("isExternal");
         });
 
@@ -101,7 +101,7 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
      * @return {void}
      */
     createParamsValues: function () {
-        var layerVisibilities = [],
+        const layerVisibilities = [],
             layerTrancparence = [];
 
         _.each(this.get("layerList"), function (model) {

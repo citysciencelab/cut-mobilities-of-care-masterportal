@@ -44,7 +44,7 @@ const VerkehrsStaerkenThemeView = ThemeView.extend(/** @lends VerkehrsStaerkenTh
      * @returns {void}
      */
     loadDiagramm: function () {
-        var attr = this.$("#diagramm").find(".active")[0].value;
+        const attr = this.$("#diagramm").find(".active")[0].value;
 
         this.$(".graph svg").remove();
         this.model.createD3Document(attr);
@@ -56,11 +56,11 @@ const VerkehrsStaerkenThemeView = ThemeView.extend(/** @lends VerkehrsStaerkenTh
      * @returns {void}
      */
     toggleTab: function (evt) {
-        var contentId = this.$(evt.currentTarget).attr("value");
+        const contentId = this.$(evt.currentTarget).attr("value");
 
         // deactivate all tabs and their contents
         this.$(evt.currentTarget).parent().find("li").each(function (index, li) {
-            var tabContentId = $(li).attr("value");
+            const tabContentId = $(li).attr("value");
 
             $(li).removeClass("active");
             $("#" + tabContentId).removeClass("active");

@@ -50,7 +50,24 @@
         "pinTopicsTree": "Themenbaum fixieren/lösen",
         "hideAllTopics": "Alle Themen entfernen",
         "showAllTopics": "Alle Themen darstellen",
-        "category": "Kategorie"
+        "category": "Kategorie",
+        "backgroundMaps": "Hintergrundkarten",
+        "subjectData": "Fachdaten",
+        "subjectData3D": "3D Daten",
+        "selectedTopics": "Ausgewählte Themen",
+        "removeSelection": "Auswahl entfernen",
+        "infosAndLegend": "Informationen und Legende",
+        "removeTopic": "Thema entfernen",
+        "showTopic": "Thema darstellen",
+        "changeClassDivision":"Klasseneinteilung ändern",
+        "settings": "Einstellungen",
+        "transparency": "Transparenz",
+        "increaseTransparency": "Transparenz erhöhen",
+        "reduceTransparency": "Transparenz verringern",
+        "removeLayer": "Layer entfernen",
+        "levelUp": "Ebene nach oben",
+        "levelDown": "Ebene nach unten",
+        "externalTechnicalData": "Externe Fachdaten"
     },
     "date": "Datum",
     "time": "Zeit",
@@ -395,6 +412,13 @@
             "placeholder": {
                 "addressHospitalBplan" : "Suche nach Adresse/Krankenhaus/B-Plan",
                 "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück"
+            },
+            "locationFinder": {
+                "unknownProjection": "Ergebnisse in unbekanntem Koordinatensystem",
+                "serverError": "Fehler während der serverseitigen Verarbeitung der Anfrage",
+                "invalidServiceId": "Fehler während der Initialisierung des LocationFinder-Suchmoduls: Ungültige Service-ID",
+                "errorMsg": "Suche per LocationFinder fehlgeschlagen",
+                "notFound": "Dienst nicht erreichbar"
             },
             "showAllResults": "alle Ergebnisse anzeigen",
             "type": {

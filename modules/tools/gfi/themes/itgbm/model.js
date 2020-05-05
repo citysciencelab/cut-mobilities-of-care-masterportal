@@ -47,8 +47,8 @@ const ItGbmTheme = Theme.extend({
      * @return {String} newValue - feature attribute values as string with new punctuation
      */
     punctuate: function (value) {
-        var pattern = /(-?\d+)(\d{3})/,
-            newValue = value.toString();
+        const pattern = /(-?\d+)(\d{3})/;
+        let newValue = value.toString();
 
         newValue = newValue.replace(".", ",");
         while (pattern.test(newValue)) {
@@ -61,7 +61,7 @@ const ItGbmTheme = Theme.extend({
      * @returns {void}
      */
     postMessageToItGbm: function () {
-        var featureProperties = _.omit(this.get("feature").getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]);
+        const featureProperties = _.omit(this.get("feature").getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]);
 
         featureProperties.extent = this.get("feature").getGeometry().getExtent();
         featureProperties.id = this.get("feature").getId();
