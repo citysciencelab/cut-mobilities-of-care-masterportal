@@ -243,7 +243,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         let identifier,
             geom;
 
-        elements.forEach(function (element) {
+        for (const element of elements) {
             const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
                 elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
                 polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember"),
@@ -289,7 +289,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             else {
                 console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
             }
-        }, this);
+        }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
     },
 
@@ -331,19 +331,27 @@ const SpecialWFSModel = Backbone.Model.extend({
         this.set("ajaxRequests", cleanedAjax);
     },
 
-    // setter for minChars
+    /**
+     * Setter for minChars
+     * @param {number} value - Amount of minChars.
+     * @returns {void}
+     */
     setMinChars: function (value) {
         this.set("minChars", value);
     },
 
-    // setter for timeout
+    /**
+     * Setter for timeout
+     * @param {number} value - time.
+     * @returns {void}
+     */
     setTimeout: function (value) {
         this.set("timeout", value);
     },
 
-    /*
+    /**
     * setter for maxFeatures
-    * @param {integer} value maxFeatures
+    * @param {integer} value - maxFeatures
     * @returns {void}
     */
     setMaxFeatures: function (value) {

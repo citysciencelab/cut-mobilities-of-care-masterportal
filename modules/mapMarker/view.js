@@ -320,7 +320,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
         let startMarker = this.model.get("startMarker");
 
         if (startMarker !== undefined) {
-            if (!_.isUndefined(projectionFromParamUrl)) {
+            if (projectionFromParamUrl !== undefined) {
                 startMarker = transformToMapProjection(Radio.request("Map", "getMap"), projectionFromParamUrl, startMarker);
             }
             Radio.trigger("MapMarker", "showMarker", startMarker);
