@@ -350,6 +350,8 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {boolean} true or false
      */
     isValidValue: function (value) {
+        console.log(value);
+
         if (value && _.isString(value) && value !== "" && value.toUpperCase() !== "NULL") {
             return true;
         }
@@ -601,7 +603,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                     gfiWithValidEntries[key] = value;
                 }
             }
-            else if (this.isValidKey(key)) {
+            else if (this.isValidKey(key) && this.isValidValue(value)) {
                 if (this.isMultiTag(value)) {
                     value = JSON.parse(value).multiTag;
                     if (Array.isArray(value)) {
@@ -613,21 +615,6 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
         });
         return gfiWithValidEntries;
-    },
-
-    /**
-     * set all keys from object to lowercase
-     * @param {object} obj - key value pairs
-     * @returns {object} obj with lowercase keys
-     */
-    allKeysToLowerCase: function (obj) {
-        const lowerObj = {};
-
-        _.each(obj, function (value, key) {
-            lowerObj[key.toLowerCase()] = value;
-        });
-
-        return lowerObj;
     },
 
     /**
