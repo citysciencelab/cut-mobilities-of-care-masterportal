@@ -171,7 +171,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     replaceMultiNodes: function (multiTags, childNode) {
-        _.each(multiTags, function (tagName) {
+        multiTags.forEach(tagName => {
             const nodeList = childNode.getElementsByTagName(tagName),
                 nodeListValue = _.map(nodeList, function (node) {
                     return node.innerHTML;
@@ -195,12 +195,11 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     parseMultiElementNodes: function (xml) {
         const childNodes = $(xml).find("msGMLOutput,gml\\:featureMember,featureMember");
 
-        _.each(childNodes, function (childNode) {
+        childNodes.toArray().forEach(childNode => {
             const multiTags = this.getMultiTags(childNode);
 
             this.replaceMultiNodes(multiTags, childNode);
-        }, this);
-
+        });
     },
 
     /**
