@@ -498,19 +498,19 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
         if (condition === "contains") {
             match = Object.keys(gfi).filter(key2 => {
-                return key2.length !== length && key2.includes(key);
+                return key2.includes(key);
             })[0];
             valueFromCondition = gfi[match];
         }
         else if (condition === "startsWith") {
             match = Object.keys(gfi).filter(key2 => {
-                return key2.length !== length && key2.startsWith(key);
+                return key2.startsWith(key);
             })[0];
             valueFromCondition = gfi[match];
         }
         else if (condition === "endsWith") {
             match = Object.keys(gfi).filter(key2 => {
-                return key2.length !== length && key2.endsWith(key);
+                return key2.endsWith(key);
             })[0];
             valueFromCondition = gfi[match];
         }
