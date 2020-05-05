@@ -88,6 +88,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "pick": this.pick,
             "omit": this.omit,
             "findWhereJs": this.findWhereJs,
+            "whereJs": this.whereJs,
             "isEqual": this.isEqual,
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
@@ -850,6 +851,20 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     findWhereJs: function (list = [], properties = "") {
         return list.find(
+            item => Object.keys(properties).every(
+                key => item[key] === properties[key]
+            )
+        );
+    },
+
+    /**
+     *  Looks through each value in the list, returning an array of all the values that matches the key-value pairs listed in properties
+     * @param {Object[]} [list=[]] - the list.
+     * @param {Object} properties property/entry to search for.
+     * @returns {array} - returns an array of all the values that matches.
+     */
+    whereJs: function (list = [], properties = "") {
+        return list.filter(
             item => Object.keys(properties).every(
                 key => item[key] === properties[key]
             )
