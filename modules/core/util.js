@@ -948,7 +948,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @param {string} key name of key to search for
      * @return {mixed} returns value for the given key or null if not found
      */
-    searchNestedObject: function (theObject, key) {
+    searchNestedObject: function (obj, key) {
         let result;
 
         if (obj instanceof Array) {
