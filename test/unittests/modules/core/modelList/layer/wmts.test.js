@@ -4,16 +4,11 @@ import WMTSLayer from "@modules/core/modelList/layer/wmts.js";
 import {get as getProjection} from "ol/proj";
 import {getWidth} from "ol/extent";
 import WMTSCapabilities from "ol/format/WMTSCapabilities";
+import OlWMTSSource from "ol/source/WMTS.js";
+import TileLayer from "ol/layer/Tile";
 import * as WMTSResult1 from "../../../../resources/testWMTSResponse1.xml";
 import * as WMTSResult2 from "../../../../resources/testWMTSResponse2.xml";
 import "@babel/polyfill";
-import Preparser from "@modules/core/configLoader/preparser";
-import ParametricURL from "@modules/core/parametricURL";
-import {registerProjections} from "masterportalAPI/src/crs";
-import Util from "@modules/core/util.js";
-import TileLayer from "ol/layer/Tile";
-import OlWMTSSource from "ol/source/WMTS.js";
-import Map from "@modules/core/map";
 
 describe("core/modelList/layer/wmts", function () {
     let wmts;
@@ -111,16 +106,8 @@ describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
         {"id": "2", layerName: "webatlasde", result: WMTSResult2}
     ];
 
-    // instantiate util to request Radio channel
-    new Util();
-
     before(async function () {
-        new Preparser(null, {url: Config.portalConf});
-        new ParametricURL();
-        registerProjections();
         const parser = new WMTSCapabilities();
-
-        new Map();
 
         model = new WMTSLayer();
         model.fetchWMTSCapabilities = async function (WMTSResult) {
