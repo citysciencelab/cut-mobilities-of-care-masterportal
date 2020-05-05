@@ -3,7 +3,7 @@ import Tool from "../../Tool.vue";
 import {Pointer} from "ol/interaction.js";
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
-import { mapActions, mapState } from 'vuex';
+import {mapActions, mapState} from "vuex";
 
 export default {
     name: "SupplyCoord",
