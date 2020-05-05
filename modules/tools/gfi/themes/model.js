@@ -604,7 +604,9 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             else if (this.isValidKey(key)) {
                 if (this.isMultiTag(value)) {
                     value = JSON.parse(value).multiTag;
-                    value = value.join("</br>");
+                    if (Array.isArray(value)) {
+                        value = value.join("</br>");
+                    }
                 }
                 value = typeof value === "string" ? value.trim() : value;
                 gfiWithValidEntries[key] = value;
