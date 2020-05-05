@@ -100,19 +100,21 @@ function createKeyPathArray (path, separator = ".") {
  * Module configs must be objects.
  * Module must have default values for those properties.
  *
- * @param {object} rootState - The Root state object
+ * @param {object} context - The store's context
  * @param {array} configPaths - Array of paths to search for in root state
  * @param {string} moduleName - Name of the module
+ * @param {boolean} [recursiveFallback=true] - (optional) determines whether the fallbackOption is executed
  * @returns {boolean} True, if successfully merged
  */
-function fetchFirstModuleConfig (rootState, configPaths, moduleName) {
+function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFallback = true) {
     const missingSources = [],
         missingDefaultValues = [];
 
-    let success = false;
+    let source,
+        success = false;
 
     for (const path of configPaths) {
-        const source = getByDotSyntax(rootState, path);
+        source = getByDotSyntax(context.rootState, path);
 
         if (source === undefined) {
             missingSources.push(createKeyPathArray(path));
@@ -128,18 +130,14 @@ function fetchFirstModuleConfig (rootState, configPaths, moduleName) {
 
         // Check for missing default values in module state
         for (const sourceProp in source) {
-            if (rootState[moduleName][sourceProp] === undefined) {
+            if (context.state[sourceProp] === undefined) {
                 missingDefaultValues.push(sourceProp);
             }
         }
         if (missingDefaultValues.length > 0) {
-            console.error("Config für \"" + moduleName + "\" wurde ignoriert, da Standardwerte fehlen.", missingDefaultValues);
-            console.warn("Pfad der fehlerhaften Config:", createKeyPathArray(path));
-            continue;
+            console.warn("Im Modul \"" + moduleName + "\" wurden folgende Standardwerte nicht gefunden. Diese werden aus der Config übernommen, haben möglicherweise aber keinen Effekt.", missingDefaultValues);
+            console.warn("Pfad des Moduls:", createKeyPathArray(path));
         }
-
-        rootState[moduleName] = deepMerge(source, rootState[moduleName]);
-        success = true;
 
         // only use the first found config
         break;
@@ -149,9 +147,14 @@ function fetchFirstModuleConfig (rootState, configPaths, moduleName) {
         console.warn("Config für \"" + moduleName + "\" wurde an folgenden Orten nicht gefunden.", missingSources);
     }
 
-    if (!success) {
-        // here a fallback option may be added
-        // success = fallbackFetchRecursive(rootState, moduleName);
+    if (!source && recursiveFallback) {
+        console.warn("Config für \"" + moduleName + "\" konnte an keinem der angegebenen Pfade gefunden werden. Es wird versucht die PortalConfig automatisch zu durchsuchen.");
+        source = context.rootGetters.toolConfig(moduleName);
+    }
+
+    if (source) {
+        context.state = deepMerge(source, context.state);
+        success = true;
     }
 
     if (!success) {

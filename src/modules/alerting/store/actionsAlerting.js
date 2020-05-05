@@ -65,8 +65,8 @@ function checkAlertViewRestriction (displayedAlerts, alertToCheck) {
 }
 
 export default {
-    initialize: ({rootState}) => {
-        const configFetchSuccess = fetchFirstModuleConfig(rootState, configPaths, "Alerting");
+    initialize: context => {
+        const configFetchSuccess = fetchFirstModuleConfig(context, configPaths, "Alerting");
 
         if (!configFetchSuccess) {
             // insert fallback: recursive config dearch for backwards compatibility

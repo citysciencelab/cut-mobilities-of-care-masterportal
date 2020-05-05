@@ -3,6 +3,7 @@ import Tool from "../../Tool.vue";
 import {Pointer} from "ol/interaction.js";
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
+import { mapActions, mapState } from 'vuex';
 
 export default {
     name: "SupplyCoord",
@@ -17,6 +18,9 @@ export default {
         };
     },
     computed: {
+        ...mapState([
+            "configJson"
+        ]),
         active: {
             get () {
                 return this.storePath.active;
@@ -88,6 +92,17 @@ export default {
         }
     },
     watch: {
+        /**
+         * since the parsing of the configJson happens after mount,
+         * we need to wait with initialize until configJson is parsed to store
+         * either here or centrally in App / MapRegionlistening
+         * if mounting occurs after config parsing, put the init function to mounted lifecycle hook
+         * @listens mapState#configJson
+         * @returns {void}
+         */
+        configJson () {
+            // this.initialize();
+        },
         active (newValue) {
             const myBus = Backbone.Events;
 
@@ -113,7 +128,17 @@ export default {
     created () {
         this.$on("close", this.close);
     },
+    /**
+     * Put initialize here if mounting occurs after config parsing
+     * @returns {void}
+     */
+    mounted () {
+        this.initialize();
+    },
     methods: {
+        ...mapActions("Tools/SupplyCoord", [
+            "initialize"
+        ]),
         selectionChanged (event) {
             this.currentSelection = event.target.value;
             this.changedPosition(event.target.value);

@@ -1,6 +1,7 @@
 import GenericTool from "../../indexTools";
 import composeModules from "../../../../global-store/utils/composeModules";
 import mutations from "./mutationsSupplyCoord";
+import actions from "./actionsSupplyCoord";
 
 export default composeModules([GenericTool, {
     namespaced: true,
@@ -21,5 +22,6 @@ export default composeModules([GenericTool, {
         currentProjectionName: "EPSG:25832",
         currentSelection: "EPSG:4326"
     },
-    mutations
+    mutations,
+    actions
 }]);
