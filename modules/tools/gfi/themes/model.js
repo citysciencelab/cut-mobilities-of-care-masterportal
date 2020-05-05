@@ -350,8 +350,6 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {boolean} true or false
      */
     isValidValue: function (value) {
-        console.log(value);
-
         if (value && _.isString(value) && value !== "" && value.toUpperCase() !== "NULL") {
             return true;
         }
