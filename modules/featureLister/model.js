@@ -1,7 +1,7 @@
 import Tool from "../core/modelList/tool/model";
 
 const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         maxFeatures: 20, // über Config konfigurierbare Max-Anzahl an pro Layer geladenen Features
         isActive: false,
         layerlist: [], // Array aus {id, name, features}
@@ -105,7 +105,10 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             feature = _.find(features, function (feat) {
                 return feat.id.toString() === featureid;
             });
+<<<<<<< HEAD
 
+=======
+>>>>>>> d56c5b545... modify: underscore MPR-15
         let geometry,
             properties;
 
@@ -139,7 +142,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
         const layer = this.get("layer"),
             features = layer.features,
-            feature = _.find(features, function (feat) {
+            feature = features.find(function (feat) {
                 return feat.id.toString() === id;
             }).feature,
             style = feature.getStyle() ? feature.getStyle() : layer.style(feature),
@@ -253,16 +256,16 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             ll = [];
 
         // Es muss sichergetellt werden, dass auch Features ohne Geometrie verarbeitet werden können. Z.B. KitaEinrichtunen
-        _.each(features, function (feature, index) {
+        features.forEach(function (feature, index) {
+            const that = this;
             let props, geom;
 
             if (feature.get("features")) {
-                feature.get("features").forEach(function (feat, idx) {
-                    props = this.translateGFI([feat.getProperties()], gfiAttributes)[0];
+                feature.get("features").forEach(function (feat) {
+                    props = that.translateGFI([feat.getProperties()], gfiAttributes)[0];
                     geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
-
                     ll.push({
-                        id: idx,
+                        id: index,
                         properties: props,
                         geometry: geom,
                         feature: feat
@@ -270,7 +273,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
                 });
             }
             else {
-                props = this.translateGFI([feature.getProperties()], gfiAttributes)[0];
+                props = that.translateGFI([feature.getProperties()], gfiAttributes)[0];
                 geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
 
                 ll.push({
@@ -286,38 +289,52 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     },
 
     /**
-     * identifies and extracts the features of the given layer. 
-     * @param {Array[Object]} gfiList - todo
+     * identifies and extracts the features of the given layer.
+     * @param {Array} gfiList - todo
      * @param {Object} gfiAttributes - todo
+     * @param {string} typ - type of the layer/service
      * @return {string} - desc
      */
-    translateGFI: function (gfiList, gfiAttributes) {
-        var pgfi = [];
+    translateGFI: function (gfiList, gfiAttributes, typ) {
+        const pgfi = [];
 
         gfiList.forEach(function (element) {
-            var preGfi = {},
-                gfi = {};
+            const preGfi = {},
+                keys = [],
+                values = [];
+            let gfi = {};
 
             // get rid of invalid keys and keys with invalid values; trim values
-            element.forEach(function (value, key) {
+            for (const [key, value] of Object.entries(element)) {
                 if (this.isValidKey(key) && this.isValidValue(value)) {
                     preGfi[key] = value.trim();
                 }
-            }, this);
+            }
             if (gfiAttributes === "showAll") {
                 // beautify keys
-                preGfi.forEach(function (value, key) {
+                for (const [key, value] of Object.entries(preGfi)) {
+                // preGfi.forEach(function (value, key) {
                     gfi[this.beautifyString(key)] = value;
-                }, this);
+                }
+                // im IE müssen die Attribute für WMS umgedreht werden
+                if (Radio.request("Util", "isInternetExplorer") !== false && typ === "WMS") {
+                    for (const [key, value] of Object.entries(gfi)) {
+                        keys.push(key);
+                        values.push(value);
+                    }
+                    keys.reverse();
+                    values.reverse();
+                    gfi = _.object(keys, values);
+                }
             }
             else {
-                gfiAttributes.forEach(function (value, key) {
+                for (const [key, value] of Object.entries(gfiAttributes)) {
                     if (preGfi[key]) {
                         gfi[value] = preGfi[key];
                     }
-                });
+                }
             }
-            if (_.isEmpty(gfi) !== true) {
+            if (Object.keys(gfi).length !== 0) {
                 pgfi.push(gfi);
             }
         }, this);
@@ -339,9 +356,9 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @returns {boolean} desc
      */
     isValidKey: function (key) {
-        var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+        const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
 
-        if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
+        if (ignoredKeys.indexOf(key.toUpperCase()) !== -1) {
             return false;
         }
         return true;
@@ -353,7 +370,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @returns {boolean} desc
      */
     isValidValue: function (str) {
-        if (str && _.isString(str) && str !== "" && str.toUpperCase() !== "NULL") {
+        if (str && typeof str.valueOf() === "string" && str !== "" && str.toUpperCase() !== "NULL") {
             return true;
         }
         return false;
