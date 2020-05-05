@@ -1,7 +1,7 @@
 import Tool from "../core/modelList/tool/model";
 
 const TreeFilter = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         filter: "",
         filterHits: "", // Filtertreffer
         isFilter: false,
@@ -30,7 +30,7 @@ const TreeFilter = Tool.extend({
             "change:isActive": this.setStatus
         });
 
-        if (!_.isUndefined(model)) {
+        if (model !== undefined) {
             this.setListenerForVisibility(model);
         }
         else {
@@ -49,7 +49,7 @@ const TreeFilter = Tool.extend({
                 // speichert alle Baumgattung in ein Array
                 const catArray = [];
 
-                _.each(treeModel.get("trees"), function (tree) {
+                treeModel.get("trees").forEach(tree => {
                     catArray.push(tree.displayGattung);
                 });
                 treeModel.set("categoryArray", catArray);
@@ -73,7 +73,7 @@ const TreeFilter = Tool.extend({
     parse: function (response) {
         this.set("trees", response.trees);
         // macht aus "Ailanthus / Götterbaum" = Götterbaum(Ailanthus)
-        _.each(this.get("trees"), function (tree) {
+        this.get("trees").forEach(tree => {
             const treeArray = [];
             let split = tree.Gattung.split("/"),
                 categorySplit;
@@ -86,7 +86,7 @@ const TreeFilter = Tool.extend({
             }
             tree.displayGattung = categorySplit;
 
-            _.each(tree.Arten, function (type) {
+            tree.Arten.forEach(type => {
                 let typeSplit;
 
                 split = type.split("/");
@@ -98,13 +98,15 @@ const TreeFilter = Tool.extend({
                 }
                 treeArray.push({species: type, display: typeSplit});
             });
+
             // Arten nach den deutschen Namen sortierien
-            tree.Arten = _.sortBy(treeArray, function (type) {
+            tree.Arten = Radio.request("Util", "sortBy", treeArray, function (type) {
                 return type.display;
             });
-        }, this);
+
+        });
         // Bäume nach Gattung sortieren
-        this.set("trees", _.sortBy(this.get("trees"), function (tree) {
+        this.set("trees", Radio.request("Util", "sortBy", this.get("trees"), function (tree) {
             return tree.displayGattung;
         }));
     },
@@ -181,7 +183,7 @@ const TreeFilter = Tool.extend({
             }
         }
         this.set("errors", errors);
-        if (_.isEmpty(errors) === false) {
+        if (Radio.request("Util", "isEmpty", errors) === false) {
             return errors;
         }
         return false;
@@ -196,13 +198,13 @@ const TreeFilter = Tool.extend({
     setCategoryArray: function () {
         const catArray = [];
 
-        _.each(this.get("trees"), function (tree) {
+        this.get("trees").forEach(tree => {
             const myRegExp = new RegExp(this.get("searchCategoryString"), "i");
 
             if (tree.displayGattung.search(myRegExp) !== -1) {
                 catArray.push(tree.displayGattung);
             }
-        }, this);
+        });
         if (catArray.length === 0) {
             catArray.push("Keine Treffer");
         }
@@ -217,10 +219,10 @@ const TreeFilter = Tool.extend({
     },
     setTypeArray: function () {
         const typeArray = [],
-            tree = _.where(this.get("trees"), {displayGattung: this.get("treeCategory")});
+            tree = Radio.request("Util", "whereJs", this.get("trees"), {displayGattung: this.get("treeCategory")});
 
         if (tree[0] !== undefined) {
-            _.each(tree[0].Arten, function (type) {
+            tree[0].Arten.forEach(type => {
                 let myRegExp;
 
                 if (this.get("searchTypeString").length === 0) {
@@ -232,12 +234,13 @@ const TreeFilter = Tool.extend({
                         typeArray.push(type.display);
                     }
                 }
-            }, this);
+            });
         }
         this.set("typeArray", typeArray);
     },
     setFilterParams: function () { // NOTE aufbröseln in einzelMethoden...irgendwann
-        const tree = _.where(this.get("trees"), {displayGattung: $("#categoryInput").val()});
+        const tree = Radio.request("Util", "whereJs", this.get("trees"), {displayGattung: $("#categoryInput").val()});
+
         let treeType;
 
         if (tree[0] === undefined) {
@@ -246,7 +249,8 @@ const TreeFilter = Tool.extend({
         }
         else {
             this.set("treeFilterCategory", tree[0].Gattung);
-            treeType = _.where(tree[0].Arten, {display: $("#typeInput").val()});
+            treeType = Radio.request("Util", "whereJs", tree[0].Arten, {display: $("#typeInput").val()});
+
             if (treeType[0] !== undefined) {
                 this.set("treeFilterType", treeType[0].species);
             }
