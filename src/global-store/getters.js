@@ -6,6 +6,7 @@ export default {
     footerConfig: state => state?.configJs?.footer || null,
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
+    portalConfig: state => state?.configJson?.Portalconfig || null,
 
     /**
      * recursively read out the menu config for tools
