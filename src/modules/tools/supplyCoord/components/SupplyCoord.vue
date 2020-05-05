@@ -21,6 +21,12 @@ export default {
         ...mapState([
             "configJson"
         ]),
+        ...mapState("Tools/SupplyCoord", [
+            "renderToWindow",
+            "resizableWindow",
+            "glyphicon",
+            "title"
+        ]),
         active: {
             get () {
                 return this.storePath.active;
@@ -45,9 +51,6 @@ export default {
                 this.$store.commit("Tools/SupplyCoord/currentSelection", newValue);
             }
         },
-        icon () {
-            return this.storePath.glyphicon;
-        },
         mapProjection: {
             get () {
                 return this.storePath.mapProjection;
@@ -70,9 +73,6 @@ export default {
             }, set (val) {
                 this.$store.commit("Tools/SupplyCoord/positionMapProjection", val);
             }
-        },
-        renderToWindow () {
-            return this.storePath.renderToWindow;
         },
         selectPointerMove: {
             get () {
@@ -256,9 +256,10 @@ export default {
 <template lang="html">
     <Tool
         :title="$t('modules.tools.getCoord.title')"
-        :icon="icon"
+        :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
+        :resizable-window="resizableWindow"
     >
         <template v-slot:toolBody>
             <form
