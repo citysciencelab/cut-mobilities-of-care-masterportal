@@ -30,6 +30,10 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             if (this.get("optionsFromCapabilities")) {
                 this.updateLayerSource();
             }
+            if (this.get("layerSource").getState() === "ready") {
+                // state of wmts source is ready, trigger removeloadinglayer
+                Radio.trigger("Map", "removeLoadingLayer");
+            }
         });
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
@@ -42,7 +46,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
      * @returns {void}
      */
     createLayerSource: function () {
-        if (this.get("optionsFromCapabilities") === undefined) {
+        if (_.isUndefined(this.get("optionsFromCapabilities"))) {
             const projection = getProjection(this.get("coordinateSystem")),
                 extent = projection.getExtent(),
                 style = this.get("style"),
@@ -68,7 +72,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                 tilePixelRatio: DEVICE_PIXEL_RATIO,
                 urls: urls,
                 matrixSet: this.get("tileMatrixSet"),
-                layer: this.get("layer"),
+                layer: this.get("layers"),
                 format: format,
                 style: style,
                 version: this.get("version"),
@@ -213,7 +217,7 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             console.error("WMTS: No legendURL is specified for the layer!");
         }
 
-        else if (this.get("optionsFromCapabilities") && (!legendURL || legendURL === "")) {
+        else if (this.get("optionsFromCapabilities") && !legendURL) {
             this.fetchWMTSCapabilities(capabilitiesUrl)
                 .then(function (result) {
                     result.Contents.Layer.forEach(function (layer) {

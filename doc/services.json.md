@@ -92,7 +92,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |coordinateSystem|ja|String||Das Koordinatenreferenzsystem des Layers.|`"EPSG:3857"`|
 |format|ja|String||Das Graphikformat der Kacheln des Layers. Wird nur benötigt, wenn der Parameter requestEncoding="KVP" ist.|`"image/png"`|
 |id|ja|String||Frei wählbare Layer-ID|`"320"`|
-|layer|ja|String||Name des Layers, welcher dem aus den WMTS Capabilities entsprechen muss.|`"geolandbasemap"`|
+|layers|ja|String||Name des Layers, welcher dem aus den WMTS Capabilities entsprechen muss.|`"geolandbasemap"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`"ignore"`|
 |maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"2500000"`|
