@@ -82,8 +82,8 @@ export default {
 
     .tool-box {
         .glyphicon {
-            color: @color_1;
-            background-color: @background_color_1;
+            color: @primary_contrast;
+            background-color: @primary;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
                 cursor: pointer;

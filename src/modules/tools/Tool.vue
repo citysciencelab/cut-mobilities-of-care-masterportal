@@ -160,9 +160,9 @@ export default {
 </template>
 
 <style lang="less" scoped>
+@import "~variables";
 @color_1: rgb(85, 85, 85);
 @color_2: rgb(255, 255, 255);
-@font_family_1: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
 @font_family_2: "MasterPortalFont", sans-serif;
 @background_color_1: rgb(255, 255, 255);
 @background_color_2: #e10019;
@@ -173,7 +173,7 @@ export default {
     > .header {
         padding-left: 10px;
         border-bottom: 1px solid rgb(229, 229, 229);
-        font-family: @font_family_1;
+        font-family: @font_family_narrow;
         > .move {
             cursor: move;
         }

@@ -162,8 +162,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-@color_1: rgb(51,51,51);
-@font_family_1: 'MasterPortalFont','Arial Narrow',Arial,sans-serif;
+@import "~variables";
 
 .portal-title {
     margin-left: 10px;
@@ -180,10 +179,10 @@ export default {
             vertical-align: middle;
         }
         span {
-            color: @color_1;
+            color: @secondary_contrast;
             margin-left: 5px;
             font-size: 26px;
-            font-family: @font_family_1;
+            font-family: @font_family_narrow;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
