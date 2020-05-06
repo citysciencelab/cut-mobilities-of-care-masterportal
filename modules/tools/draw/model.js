@@ -38,6 +38,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         glyphicon: "glyphicon-pencil",
         addFeatureListener: {},
         zIndex: 0,
+        freehand: true,
+        redoArray: [],
+        fId: 0,
         earthRadius: 6378137,
         transparencyOptions: [
             {caption: "0 %", value: 1.0},
@@ -96,6 +99,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         drawPoint: "",
         writeText: "",
         drawLine: "",
+        drawCurve: "",
         drawArea: "",
         drawCircle: "",
         drawDoubleCircle: "",
@@ -124,6 +128,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         black: "",
         white: "",
         drawBtnText: "",
+        undoBtnText: "",
+        redoBtnText: "",
         editBtnText: "",
         downloadBtnText: "",
         deleteBtnText: "",
@@ -167,6 +173,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {String} drawPoint: "" contains the translated text
      * @property {String} writeText: "" contains the translated text
      * @property {String} drawLine: "" contains the translated text
+     * @property {String} drawCurve: "" contains the translated text
      * @property {String} drawArea: "" contains the translated text
      * @property {String} drawCircle: "" contains the translated text
      * @property {String} drawDoubleCircle: "" contains the translated text
@@ -195,6 +202,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {String} black: "" contains the translated text
      * @property {String} white: "" contains the translated text
      * @property {String} drawBtnText: "" contains the translated text
+     * @property {String} undoBtnText: "" contains the translated text
+     * @property {String} redoBtnText: "" contains the translated text
      * @property {String} editBtnText: "" contains the translated text
      * @property {String} downloadBtnText: "" contains the translated text
      * @property {String} deleteBtnText: "" contains the translated text
@@ -271,6 +280,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             drawPoint = i18next.t("common:modules.tools.draw.drawPoint"),
             writeText = i18next.t("common:modules.tools.draw.writeText"),
             drawLine = i18next.t("common:modules.tools.draw.drawLine"),
+            drawCurve = i18next.t("common:modules.tools.draw.drawCurve"),
             drawArea = i18next.t("common:modules.tools.draw.drawArea"),
             drawCircle = i18next.t("common:modules.tools.draw.drawCircle"),
             drawDoubleCircle = i18next.t("common:modules.tools.draw.drawDoubleCircle"),
@@ -288,6 +298,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             drawPoint: drawPoint,
             writeText: writeText,
             drawLine: drawLine,
+            drawCurve: drawCurve,
             drawArea: drawArea,
             drawCircle: drawCircle,
             drawDoubleCircle: drawDoubleCircle,
@@ -316,6 +327,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             black: black,
             white: white,
             drawBtnText: i18next.t("common:modules.tools.draw.button.draw"),
+            undoBtnText: i18next.t("common:modules.tools.draw.button.undo"),
+            redoBtnText: i18next.t("common:modules.tools.draw.button.redo"),
             editBtnText: i18next.t("common:modules.tools.draw.button.edit"),
             deleteBtnText: i18next.t("common:modules.tools.draw.button.delete"),
             deleteAllBtnText: i18next.t("common:modules.tools.draw.button.deleteAll"),
@@ -334,6 +347,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("drawTypeOptions", [
             {caption: drawPoint, value: "Point", id: "drawPoint"},
             {caption: drawLine, value: "LineString", id: "drawLine"},
+            {caption: drawCurve, value: "LineString free", id: "drawCurve"},
             {caption: drawArea, value: "Polygon", id: "drawArea"},
             {caption: drawCircle, value: "Circle", id: "drawCircle"},
             {caption: drawDoubleCircle, value: "Circle", id: "drawDoubleCircle"},
@@ -949,7 +963,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         return new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
-            style: this.getStyle()
+            style: this.getStyle(),
+            freehand: this.getFreehand()
         });
     },
 
@@ -1110,7 +1125,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
-* Creates and returns a feature style for points.
+     * Creates and returns a feature style for points.
      *
      * @param {Number} color - of drawings
      * @param {Number} pointSize - from geometry
@@ -1166,7 +1181,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
-     * Creates and returns a feature style for lines or polygons and returns it
+     * Returns the boolean value for whether the lines should be drawn smooth or not
+     * @return {boolean} smooth or naw
+     */
+    getFreehand: function () {
+        return this.get("freehand");
+    },
+
+    /**
+     * Creates and returns a feature style for points, lines, or polygon and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
@@ -1214,6 +1237,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setCircleRadiusOuter(this.defaults.circleRadiusOuter);
         this.setOpacity(this.defaults.opacity);
         this.setColor(defaultColor);
+        this.setFreehand(true);
         this.setColorContour(defaultColorContour);
         this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
         this.combineColorOpacityContour(this.defaults.opacityContour);
@@ -1417,6 +1441,57 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             formats: ["KML", "GEOJSON", "GPX"]
         });
     },
+    /*
+     * Deletes the last element in the feature array in "layer"
+     * @returns {void}
+     */
+    undoLastStep: function () {
+        const features = this.get("layer").getSource().getFeatures(),
+            featureToRemove = features[features.length - 1];
+
+        if (featureToRemove) {
+            this.updateRedoArray(featureToRemove, false);
+            this.get("layer").getSource().removeFeature(featureToRemove);
+        }
+    },
+
+    /*
+     * restores the last deleted element to the feature array in "layer"
+     * @returns {void}
+     */
+    redoLastStep: function () {
+        const redoArray = this.get("redoArray"),
+            featureToRestore = redoArray[redoArray.length - 1];
+
+        if (featureToRestore) {
+            const featureId = this.get("fId"),
+                featureStyle = featureToRestore.getStyle();
+
+            featureToRestore.setId(featureId);
+            this.countupFId();
+            this.get("layer").getSource().addFeature(featureToRestore);
+            this.get("layer").getSource().getFeatureById(featureId).setStyle(featureStyle);
+            this.updateRedoArray(undefined, true);
+        }
+    },
+
+    /**
+     * adds or removes one element from the redoArray
+     * @param {object} feature - feature to be added to the array
+     * @param {boolean} remove - if true: remove one object
+     * @return {void}
+     */
+    updateRedoArray: function (feature, remove) {
+        const redoArray = this.get("redoArray");
+
+        if (remove) {
+            redoArray.pop();
+        }
+        else {
+            redoArray.push(feature);
+        }
+        this.setRedoArray(redoArray);
+    },
 
     /**
      * activate the method "defined", to define a circle by diameter.
@@ -1570,6 +1645,24 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         else {
             this.set("color", value);
         }
+    },
+
+    /**
+     * setter for freehand
+     * @param {boolean} value - smooth or naw
+     * @return {void}
+     */
+    setFreehand: function (value) {
+        this.set("freehand", value);
+    },
+
+    /**
+     * setter for redoArray
+     * @param {array} value - new redoArray
+     * @return {void}
+     */
+    setRedoArray (value) {
+        this.set("redoArray", value);
     },
 
     /**
@@ -1750,6 +1843,25 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     */
     setZIndex: function (value) {
         this.set("zIndex", value);
+    },
+
+    /*
+    * count up fId
+    * @returns {void}
+    */
+    countupFId: function () {
+        const value = this.get("fId") + 1;
+
+        this.setFId(value);
+    },
+
+    /*
+    * setter for fId
+    * @param {number} value fId
+    * @returns {void}
+    */
+    setFId: function (value) {
+        this.set("fId", value);
     },
 
     /**
