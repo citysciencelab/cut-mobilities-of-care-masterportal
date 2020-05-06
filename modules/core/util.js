@@ -90,7 +90,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "findWhereJs": this.findWhereJs,
             "isEqual": this.isEqual,
             "toObject": this.toObject,
-            "isEmpty": this.isEmpty
+            "isEmpty": this.isEmpty,
+            "setUrlQueryParams": this.setUrlQueryParams,
+            "searchNestedObject": this.searchNestedObject
         }, this);
 
         channel.on({
@@ -784,6 +786,27 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     decLoaderOverlayCounter: function () {
         this.setLoaderOverlayCounter(this.get("loaderOverlayCounter") - 1);
     },
+    /**
+     * Refresh LayerTree dependant on TreeType
+     * supports light and custom
+     * @returns {void}
+     */
+    refreshTree: () => {
+        let collection = null;
+
+        switch (Radio.request("Parser", "getTreeType")) {
+            case "classic":
+                collection = Radio.request("ModelList", "getCollection");
+
+                collection.trigger("updateClassicTree");
+                break;
+            case "light":
+                Radio.trigger("ModelList", "refreshLightTree");
+                break;
+            default:
+                Radio.trigger("ModelList", "renderTree");
+        }
+    },
 
     /**
      * Return a copy of the object, filtered to only have values for the whitelisted keys
@@ -917,7 +940,41 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     isEmpty: function (obj) {
         return [Object, Array].includes((obj || {}).constructor) && !Object.entries(obj || {}).length;
+    },
+
+    /**
+     * helper function to find a key in nested object
+     * @param {object} obj object to search
+     * @param {string} key name of key to search for
+     * @return {mixed} returns value for the given key or null if not found
+     */
+    searchNestedObject: function (obj, key) {
+        let result;
+
+        if (obj instanceof Array) {
+            for (let i = 0; i < obj.length; i++) {
+                result = this.searchNestedObject(obj[i], key);
+                if (result) {
+                    break;
+                }
+            }
+        }
+        else {
+            for (const prop in obj) {
+                if (prop === key) {
+                    return obj;
+                }
+                if (obj[prop] instanceof Object || obj[prop] instanceof Array) {
+                    result = this.searchNestedObject(obj[prop], key);
+                    if (result) {
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
     }
+
 });
 
 export default Util;

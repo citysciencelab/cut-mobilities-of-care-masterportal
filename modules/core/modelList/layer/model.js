@@ -802,10 +802,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     removeLayer: function () {
-        const layer = this.get("id");
+        const layerId = this.get("id");
 
         this.setIsVisibleInMap(false);
-        this.collection.removeLayerById(layer);
+        this.collection.removeLayerById(layerId);
     },
 
     /**
@@ -815,7 +815,22 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setVisible: function (value) {
         this.get("layer").setVisible(value);
+    },
+
+    /**
+     * refresh layerSource when updated
+     * e.g. needed because wmts source is created asynchronously
+     * @returns {void}
+     */
+    updateLayerSource: function () {
+        const layer = Radio.request("Map", "getLayerByName", this.get("name"));
+
+        if (this.get("layerSource") !== null) {
+            layer.setSource(this.get("layerSource"));
+            layer.getSource().refresh();
+        }
     }
+
 });
 
 export default Layer;

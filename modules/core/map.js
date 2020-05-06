@@ -11,6 +11,7 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
+import WMTSLayer from "./modelList/layer/wmts";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
@@ -433,6 +434,12 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             channel = Radio.channel("Map"),
             layersCollection = this.get("map").getLayers();
 
+        let layerModel;
+
+        if (layer) {
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {"name": layer.get("name")});
+        }
+
         // if the layer is already at the correct position, do nothing
         if (layersCollection.item(index) === layer) {
             return;
@@ -447,6 +454,14 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 singleLayer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
                 singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
             });
+        }
+        else if (layerModel instanceof WMTSLayer) {
+            if (layerModel.attributes.optionsFromCapabilities) {
+                // wmts source will load asynchonously
+                // -> source=null at this step
+                // listener to remove loading layer is set in WMTS class (on change:layerSource)
+                channel.trigger("addLoadingLayer");
+            }
         }
         else {
             layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
@@ -505,7 +520,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
             extentToUse = transformedLeftBottom.concat(transformedTopRight);
         }
-        this.get("view").fit(extentToUse, this.get("map").getSize(), options);
+        this.get("view").fit(extentToUse, {size: this.get("map").getSize(), ...options});
     },
 
     /**
