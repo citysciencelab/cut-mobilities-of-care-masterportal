@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
 import store from "../src/global-store";
+import loadAddons from "../src/addons";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -86,7 +87,7 @@ let sbconfig, controls, controlsView;
  * load the configuration of master portal
  * @return {void}.
  */
-function loadApp () {
+async function loadApp () {
     /* eslint-disable no-undef */
     const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
@@ -117,9 +118,12 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
+    // import and register Vue addons according the config.js
+    await loadAddons(Config.addons);
+
     Vue.config.productionTip = false;
 
-    store.commit("addConfigJsToStore", Config);
+    store.commit("setConfigJs", Config);
 
     Vue.use(VueI18Next);
 
@@ -131,7 +135,6 @@ function loadApp () {
         i18n: new VueI18Next(i18next)
     });
 
-    app.$mount();
 
     // Core laden
     new Autostarter();
@@ -140,7 +143,6 @@ function loadApp () {
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
 
-    app.$store.commit("addConfigJsonToStore", Radio.request("Parser", "getPortalConfig"));
 
     new StyleList();
     new ParametricURL();
@@ -148,6 +150,8 @@ function loadApp () {
     new WPS();
     new AddGeoJSON();
     new WindowView();
+
+    app.$mount();
 
     if (Config.hasOwnProperty("cswId")) {
         cswParserSettings.cswId = Config.cswId;

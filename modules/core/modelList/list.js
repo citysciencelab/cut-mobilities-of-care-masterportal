@@ -251,9 +251,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "filter") {
                 return new Filter(attrs, options);
             }
-            else if (attrs.id === "coord") {
-                store.commit("setToolConfig", attrs);
-            }
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
             }
