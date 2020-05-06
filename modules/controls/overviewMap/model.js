@@ -109,7 +109,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
             mapView = map.getView(),
             layers = map.getLayers().getArray(),
             initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
-            initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
+            initVisibBaselayerId = initVisibBaselayer !== undefined ? initVisibBaselayer.id : initVisibBaselayer,
             baselayer = this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId),
             newOlView = new View(Object.assign({
                 center: mapView.getCenter(),
@@ -167,7 +167,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
         const modelFromCollection = getLayerWhere({id: baselayer});
         let baseLayerParams;
 
-        if (_.isUndefined(modelFromCollection) === false) {
+        if (modelFromCollection !== undefined) {
             baseLayerParams = {
                 layerUrl: modelFromCollection.url,
                 params: {
