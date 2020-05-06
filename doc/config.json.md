@@ -760,6 +760,18 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 ***
 
+#### Portalconfig.menu.legend
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Konfigurations-Optionen der Legende.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|showCollapseAllButton|nein|Boolean|false|Option zum Ein- bzw. Ausblenden aller Legenden|false|
+
+***
+
 #### Portalconfig.menu.info
 
 [inherits]: # (Portalconfig.menu.folder)
@@ -886,7 +898,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
-|legend|nein|**[tool](#markdown-header-portalconfigmenutool)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
+|legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linienhafte Objekte.|false|
 |measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
