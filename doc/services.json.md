@@ -412,7 +412,19 @@ Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden imme
 }
 ```
 
-Wird `gfiAttributes` als Objekt übergeben, kann der Value auch ein Objekt sein. Dann wird ein Key erst verwendet, wenn eine Bedingung erfüllt ist
+Beispiel gfiAttributes als Objekt mit [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise).
+```
+#!json
+{
+   "gfiAttributes": {
+      "key1": "Key der im Portal gezeigt wird 1",
+      "key2": "Key der im Portal gezeigt wird 2",
+      "@Datastreams.0.Observations.0.result": "Key der im Portal gezeigt wird 3"
+   }
+}
+
+```
+Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. Dann wird ein Key erst verwendet, wenn eine Bedingung erfüllt ist
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
@@ -457,7 +469,19 @@ Wird `gfiAttributes` als Objekt übergeben, kann der Value auch ein Objekt sein.
 }
 ```
 
-***
+Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) und Value als Objekt.
+```
+#!json
+{
+   "gfiAttributes": {
+      "key1": "Key der im Portal gezeigt wird 1",
+      "key2": "Key der im Portal gezeigt wird 2",
+      "@Datastreams.0.Observations.0.result": {
+        "name": "Temperatur",
+        "suffix": "°C"
+      }
+   }
+}
 
 ## GeoJSON-Layer ##
 
