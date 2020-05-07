@@ -4,7 +4,7 @@ import * as moment from "moment";
 const ElektroladesaeulenTheme = Theme.extend({
 
     initialize: function () {
-        var channel = Radio.channel("elektroladesaeulenTheme");
+        const channel = Radio.channel("elektroladesaeulenTheme");
 
         this.listenTo(this, {
             "change:isReady": this.parseProperties,
@@ -21,8 +21,8 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @returns {void}
      */
     parseProperties: function () {
-        var gfiContent = this.get("gfiContent"),
-            gfiProperties = this.splitProperties(gfiContent[0]),
+        let gfiProperties = this.splitProperties(gfiContent[0]);
+        const gfiContent = this.get("gfiContent"),
             allProperties = this.splitProperties(gfiContent.allProperties),
             dataStreamIds = allProperties.dataStreamId,
             requestUrl = allProperties.requestUrl[0],
@@ -50,7 +50,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @returns {void}
      */
     loadData: function () {
-        var gfiContent,
+        let gfiContent,
             allProperties,
             dataStreamIds,
             gfiParams,
@@ -81,7 +81,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @returns {void}
      */
     changeData: function () {
-        var value;
+        let value;
 
         this.parseProperties();
         this.loadData();
@@ -103,7 +103,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object} propertiesObj
      */
     splitProperties: function (properties) {
-        var propertiesObj = {};
+        const propertiesObj = {};
 
         _.each(properties, function (value, key) {
             if (value === "|" || _.contains(value, "|")) {
@@ -131,7 +131,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object} headTitleObject
      */
     createGfiHeadingChargingStation: function (allProperties) {
-        var headTitleObject = {};
+        const headTitleObject = {};
 
         headTitleObject.StandortId = _.has(allProperties, "chargings_station_nr") ? String(allProperties.chargings_station_nr[0]) : "";
         headTitleObject.Adresse = _.has(allProperties, "chargings_station_nr") && _.has(allProperties, "postal_code") && _.has(allProperties, "city")
@@ -147,7 +147,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} tableheadArray
      */
     createGfiTableHeadingChargingStation: function (allProperties) {
-        var stationNumbers = _.has(allProperties, "sms_no_charging_station") ? allProperties.sms_no_charging_station : [],
+        const stationNumbers = _.has(allProperties, "sms_no_charging_station") ? allProperties.sms_no_charging_station : [],
             tableheadArray = [];
 
         _.each(stationNumbers, function (num) {
@@ -163,7 +163,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object} gfiProperties - with german state
      */
     changeStateToGerman: function (gfiProperties) {
-        var translateObj = {
+        const translateObj = {
                 available: "Frei",
                 charging: "Belegt",
                 outoforder: "Außer Betrieb"
@@ -192,11 +192,12 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object[]} historicalData
      */
     createHistoricalData: function (async, dataStreamIds, gfiParams) {
-        var historicalData,
-            query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
-            requestUrl = this.get("requestUrl"),
-            versionUrl = this.get("versionUrl"),
-            completeUrl;
+        const requestUrl = this.get("requestUrl"),
+            versionUrl = this.get("versionUrl");
+
+        let query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
+            historicalData = "",
+            completeUrl = "";
 
         // add gfiParams an filter to query
         query = this.addGfiParams(query, gfiParams);
@@ -207,10 +208,10 @@ const ElektroladesaeulenTheme = Theme.extend({
 
         // if with one request not all data can be fetched
         _.each(historicalData, function (data) {
-            var observationsId = data["@iot.id"],
+            const observationsId = data["@iot.id"],
                 observationsCount = data["Observations@iot.count"],
-                observationsLength = data.Observations.length,
-                skipCompleteUrl,
+                observationsLength = data.Observations.length;
+            let skipCompleteUrl,
                 skipHistoricalData;
 
             // this.moreHistoricalData(data, observationsCount, completeUrl, observationsLength, observationsId, async);
@@ -233,10 +234,10 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object[]} workingQuery
      */
     addFilter: function (query, dataStreamIds) {
-        var workingQuery = query + ")&$filter=";
+        let workingQuery = query + ")&$filter=";
 
         _.each(dataStreamIds, function (id, index) {
-            var dataStreamIdLen = dataStreamIds.length - 1;
+            const dataStreamIdLen = dataStreamIds.length - 1;
 
             workingQuery = workingQuery + "@iot.id eq'" + id + "'";
             if (index !== dataStreamIdLen) {
@@ -254,11 +255,12 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {String} extended query
      */
     addGfiParams: function (query, gfiParams) {
-        var startDate = _.has(gfiParams, "startDate") ? gfiParams.startDate : undefined,
-            endDate = _.has(gfiParams, "endDate") ? gfiParams.endDate : undefined,
+        const startDate = _.has(gfiParams, "startDate") ? gfiParams.startDate : undefined,
             periodTime = _.has(gfiParams, "periodTime") ? gfiParams.periodTime : undefined,
-            periodUnit = _.has(gfiParams, "periodUnit") ? gfiParams.periodUnit : undefined,
-            workingQuery = _.isUndefined(query) ? "" : query,
+            periodUnit = _.has(gfiParams, "periodUnit") ? gfiParams.periodUnit : undefined;
+
+        let workingQuery = _.isUndefined(query) ? "" : query,
+            endDate = _.has(gfiParams, "endDate") ? gfiParams.endDate : undefined,
             lastDate,
             time,
             translateUnit,
@@ -311,7 +313,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {String} complete Url
      */
     buildRequestFromQuery: function (query, requestUrl, versionUrl) {
-        var completeUrl;
+        let completeUrl;
 
         if (_.isUndefined(query || requestUrl) || _.isNaN(parseFloat(versionUrl, 10))) {
             completeUrl = "";
@@ -332,7 +334,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object[]} historicalData
      */
     sendRequest: function (requestUrlHistoricaldata, async) {
-        var response;
+        let response;
 
         $.ajax({
             url: requestUrlHistoricaldata,
@@ -363,16 +365,17 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} workingArray - without doublicates
      */
     dataCleaning: function (dataArray) {
-        var workingArray = _.isUndefined(dataArray) ? [] : dataArray;
+        const workingArray = _.isUndefined(dataArray) ? [] : dataArray;
 
         _.each(workingArray, function (loadingPoint) {
-            var observations = loadingPoint.Observations,
-                lastTime = 0,
-                lastState = "",
+            const observations = loadingPoint.Observations,
                 indexArray = [];
 
+            let lastTime = 0,
+                lastState = "";
+
             _.each(observations, function (data, index) {
-                var time = moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
+                const time = moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
                     state = data.result;
 
                 if (index === 0) {
@@ -405,10 +408,10 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} dataByWeekday
      */
     processDataForAllWeekdays: function (historicalData, lastDay, endDay) {
-        var historicalDataThisTimeZone,
+        const utc = _.isUndefined(this.get("utc")) ? "+1" : this.get("utc");
+        let historicalDataThisTimeZone,
             historicalDataWithIndex,
-            dataByWeekday,
-            utc = _.isUndefined(this.get("utc")) ? "+1" : this.get("utc");
+            dataByWeekday;
 
         // Check if data is available
         if (this.checkObservationsNotEmpty(historicalData)) {
@@ -429,7 +432,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Boolean} boolean
      */
     checkObservationsNotEmpty: function (historicalData) {
-        var boolean = false;
+        let boolean = false;
 
         _.each(historicalData, function (data) {
             if (!_.isEmpty(data.Observations)) {
@@ -448,15 +451,16 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object[]} data
      */
     changeTimeZone: function (historicalData, utc) {
-        var data = _.isUndefined(historicalData) ? [] : historicalData;
+        const data = _.isUndefined(historicalData) ? [] : historicalData;
 
         _.each(data, function (loadingPointData) {
             _.each(loadingPointData.Observations, function (obs) {
-                var phenomenonTime = obs.phenomenonTime,
+                const phenomenonTime = obs.phenomenonTime,
                     utcAlgebraicSign = utc.substring(0, 1),
-                    utcSub,
-                    utcNumber,
                     utcString = _.isUndefined(utc) ? "+1" : utc;
+
+                let utcSub,
+                    utcNumber;
 
                 if (utcString.length === 2) {
                     // check for winter- and summertime
@@ -484,7 +488,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object[]} data
      */
     addIndex: function (historicalData) {
-        var data = _.isUndefined(historicalData) ? [] : historicalData;
+        const data = _.isUndefined(historicalData) ? [] : historicalData;
 
         _.each(data, function (loadingPointData) {
             _.each(loadingPointData.Observations, function (obs, index) {
@@ -504,16 +508,17 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} weekArray
      */
     divideDataByWeekday: function (historicalDataWithIndex, lastDay, endDay) {
-        var weekArray = [
+        const weekArray = [
             [], [], [], [], [], [], []
         ];
 
         _.each(historicalDataWithIndex, function (historicalData) {
-            var observations = _.has(historicalData, "Observations") ? historicalData.Observations : [],
-                arrayIndex = 0,
+            const observations = _.has(historicalData, "Observations") ? historicalData.Observations : [];
+
+            let thisLastDay,
                 booleanLoop = true,
-                thisLastDay,
-                actualDay = _.isUndefined(endDay) ? moment().format("YYYY-MM-DD") : endDay;
+                actualDay = _.isUndefined(endDay) ? moment().format("YYYY-MM-DD") : endDay,
+                arrayIndex = 0;
 
             if (!_.isEmpty(observations)) {
                 thisLastDay = _.isUndefined(lastDay) || lastDay === "" ? moment(observations[observations.length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay;
@@ -521,8 +526,8 @@ const ElektroladesaeulenTheme = Theme.extend({
             }
 
             _.each(observations, function (data) {
-                var phenomenonDay = moment(data.phenomenonTime).format("YYYY-MM-DD"),
-                    zeroTime,
+                const phenomenonDay = moment(data.phenomenonTime).format("YYYY-MM-DD");
+                let zeroTime,
                     zeroResult,
                     weekArrayIndexLength;
 
@@ -573,13 +578,14 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @returns {void}
      */
     triggerToBarGraph: function (targetResult, graphTag, index) {
-        var width = this.get("gfiWidth"),
+        const width = this.get("gfiWidth"),
             height = this.get("gfiHeight"),
             dataByWeekday = this.get("weekday"),
-            dataPerHour,
-            processedData,
-            graphConfig,
             day = moment().subtract(index, "days").format("dddd");
+
+        let dataPerHour = [],
+            processedData = [],
+            graphConfig = {};
 
         // need to toggle weekdays
         this.setDayIndex(index);
@@ -645,7 +651,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @returns {void}
      */
     drawErrorMessage: function (graphTag, width, height, index) {
-        var today = moment().subtract(index, "days").format("dddd");
+        const today = moment().subtract(index, "days").format("dddd");
 
         $(".ladesaeulen .day").text(today);
         $("<div class='noData' style='height: " + height + "px; width: " + width + "px;'>")
@@ -661,13 +667,13 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} allDataArray
      */
     calculateWorkloadPerDayPerHour: function (dataByWeekday, targetResult) {
-        var allDataArray = [];
+        const allDataArray = [];
 
         _.each(dataByWeekday, function (dayData) {
-            var zeroTime = moment(moment(dayData[0].phenomenonTime).format("YYYY-MM-DD")).format("YYYY-MM-DDTHH:mm:ss"),
+            const zeroTime = moment(moment(dayData[0].phenomenonTime).format("YYYY-MM-DD")).format("YYYY-MM-DDTHH:mm:ss"),
                 firstTimeDayData = moment(dayData[0].phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
-                emptyDayObj = this.createInitialDayPerHour(),
-                dayObj;
+                emptyDayObj = this.createInitialDayPerHour();
+            let dayObj = {};
 
             if (firstTimeDayData !== zeroTime && _.isArray(dayData)) {
                 dayData.reverse();
@@ -686,10 +692,9 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object} dayObj
      */
     createInitialDayPerHour: function () {
-        var dayObj = {},
-            i;
+        const dayObj = {};
 
-        for (i = 0; i < 24; i++) {
+        for (let i = 0; i < 24; i++) {
             dayObj[i] = 0;
         }
 
@@ -704,14 +709,15 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object} dayObj
      */
     calculateWorkloadforOneDay: function (emptyDayObj, dayData, targetResult) {
-        var dataFromDay = _.isUndefined(dayData) ? [] : dayData,
-            actualState = _.has(dataFromDay[0], "result") ? dataFromDay[0].result : "",
-            actualStateAsNumber = targetResult === actualState ? 1 : 0,
+        const dataFromDay = _.isUndefined(dayData) ? [] : dayData,
             startDate = _.has(dataFromDay[0], "phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
             dayObj = _.isUndefined(emptyDayObj) ? {} : emptyDayObj;
 
+        let actualState = _.has(dataFromDay[0], "result") ? dataFromDay[0].result : "",
+            actualStateAsNumber = targetResult === actualState ? 1 : 0;
+
         _.each(dayObj, function (value, key) {
-            var i = parseFloat(key, 10),
+            const i = parseFloat(key, 10),
                 actualTimeStep = moment(startDate).add(i, "hour").format("YYYY-MM-DDTHH:mm:ss"),
                 nextTimeStep = moment(startDate).add(i + 1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
                 dataByActualTimeStep = this.filterDataByActualTimeStep(dataFromDay, actualTimeStep, nextTimeStep);
@@ -745,7 +751,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             return [];
         }
         return dayData.filter(function (data) {
-            var dataToCheck = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
+            const dataToCheck = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
 
             return dataToCheck >= actualTimeStep && dataToCheck < nextTimeStep;
         });
@@ -763,16 +769,17 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Number} workload
      */
     calculateOneHour: function (dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult) {
-        var actualPhenomenonTime = moment(actualTimeStep).toDate().getTime(),
-            endTime = moment(nextTimeStep).toDate().getTime(),
+        const endTime = moment(nextTimeStep).toDate().getTime();
+
+        let betweenRes = "",
             timeDiff = 0,
             currentState = actualState,
             currentStateAsNumber = actualStateAsNumber,
-            betweenRes;
+            actualPhenomenonTime = moment(actualTimeStep).toDate().getTime();
 
         _.each(dataByActualTimeStep, function (data) {
-            var state = _.has(data, "result") ? data.result : currentState,
-                phenomenonTime,
+            const state = _.has(data, "result") ? data.result : currentState;
+            let phenomenonTime,
                 res;
 
             if (state !== currentState) {
@@ -802,14 +809,14 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} dayMeanArray
      */
     calculateSumAndArithmeticMean: function (dataPerHour) {
-        var dayLength = 24,
-            dayMeanArray = [],
-            i,
-            sum,
+        const dayLength = 24,
+            dayMeanArray = [];
+
+        let sum,
             mean,
             arrayPerHour;
 
-        for (i = 0; i <= dayLength; i++) {
+        for (let i = 0; i <= dayLength; i++) {
             // initialize
             sum = 0;
             mean = 0;
@@ -854,10 +861,10 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} arrayPerHour
      */
     arrayPerHour: function (dataPerHour, position) {
-        var arrayPerHour = [];
+        const arrayPerHour = [];
 
         _.each(dataPerHour, function (day) {
-            var positionData = parseFloat(_.pick(day, String(position))[position], 10);
+            const positionData = parseFloat(_.pick(day, String(position))[position], 10);
 
             if (!_.isUndefined(positionData) && !_.isNaN(positionData)) {
                 arrayPerHour.push(positionData);
@@ -888,8 +895,8 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {String} label
      */
     createXAxisLabel: function (day, targetResult) {
-        var stateLabel,
-            label;
+        let stateLabel,
+            label = "";
 
         if (targetResult === "available") {
             stateLabel = "Durchschnittliche Verfügbarkeit ";

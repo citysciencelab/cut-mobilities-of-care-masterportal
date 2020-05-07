@@ -48,8 +48,8 @@ const LanguageModel = Backbone.Model.extend(/** @lends LanguageModel.prototype *
         }
 
         if (languageCodes) {
-            this.set("languageCodes", languageCodes);
             this.set({
+                languageCodes: languageCodes,
                 closeButton: i18next.t("common:button.close"),
                 languageTitle: i18next.t("common:modules.language.languageTitle")
             });

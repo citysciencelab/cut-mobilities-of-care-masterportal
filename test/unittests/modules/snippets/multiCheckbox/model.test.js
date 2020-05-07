@@ -2,7 +2,7 @@ import Model from "@modules/snippets/multiCheckbox/model.js";
 import {expect} from "chai";
 
 describe("Multicheckbox Model", function () {
-    var model;
+    let model;
 
     before(function () {
         model = new Model({
@@ -12,7 +12,7 @@ describe("Multicheckbox Model", function () {
 
 
     describe("updateSelectedValues", function () {
-        var initialValue, updatedValue;
+        let initialValue, updatedValue;
 
         before(function () {
             initialValue = model.get("valuesCollection").models.filter(function (value) {
@@ -33,10 +33,10 @@ describe("Multicheckbox Model", function () {
     });
 
     describe("resetValues", function () {
-        var initialValue, updatedValue;
+        let initialValue, updatedValue;
 
         before(function () {
-            var valueModel = model.get("valuesCollection").models.filter(function (value) {
+            const valueModel = model.get("valuesCollection").models.filter(function (value) {
                 return value.get("value") === "Freizeit";
             });
 
@@ -56,32 +56,30 @@ describe("Multicheckbox Model", function () {
     });
 
     describe("addValueModels", function () {
-        var initialValue, updatedValue;
+        let initialValue, updatedValue;
 
         before(function () {
-            var countTest1, countTest2;
 
-            countTest1 = model.get("valuesCollection").models.filter(function (value) {
-                return value.get("value") === "Test1";
-            }).length;
-            countTest2 = model.get("valuesCollection").models.filter(function (value) {
-                return value.get("value") === "Test2";
-            }).length;
+            const countTest1 = model.get("valuesCollection").models.filter(function (value) {
+                    return value.get("value") === "Test1";
+                }).length,
+                countTest2 = model.get("valuesCollection").models.filter(function (value) {
+                    return value.get("value") === "Test2";
+                }).length;
 
             initialValue = countTest1 + countTest2;
         });
 
         it("should add Value Models", function () {
-            var countTest1, countTest2;
 
             model.addValueModels(["Test1", "Test2"]);
 
-            countTest1 = model.get("valuesCollection").models.filter(function (value) {
-                return value.get("value") === "Test1";
-            }).length;
-            countTest2 = model.get("valuesCollection").models.filter(function (value) {
-                return value.get("value") === "Test2";
-            }).length;
+            const countTest1 = model.get("valuesCollection").models.filter(function (value) {
+                    return value.get("value") === "Test1";
+                }).length,
+                countTest2 = model.get("valuesCollection").models.filter(function (value) {
+                    return value.get("value") === "Test2";
+                }).length;
 
             updatedValue = countTest1 + countTest2;
 
@@ -91,10 +89,10 @@ describe("Multicheckbox Model", function () {
     });
 
     describe("updateSelectableValues", function () {
-        var initialValue, updatedValue;
+        let initialValue, updatedValue;
 
         before(function () {
-            var valueModel = model.get("valuesCollection").models.filter(function (value) {
+            const valueModel = model.get("valuesCollection").models.filter(function (value) {
                 return value.get("value") === "Freizeit";
             });
 
@@ -104,13 +102,13 @@ describe("Multicheckbox Model", function () {
         });
 
         it("should update Selectable Values", function () {
-            var valueModel;
 
             model.updateSelectableValues("Freizeit");
 
-            valueModel = model.get("valuesCollection").models.filter(function (value) {
+            const valueModel = model.get("valuesCollection").models.filter(function (value) {
                 return value.get("value") === "Freizeit";
             });
+
             updatedValue = valueModel[0].get("isSelectable");
 
             expect(initialValue).to.be.true;

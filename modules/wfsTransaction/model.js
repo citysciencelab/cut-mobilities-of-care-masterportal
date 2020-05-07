@@ -3,7 +3,7 @@ import {WFS} from "ol/format.js";
 const WFSTransaction = Backbone.Model.extend({
     defaults: {},
     initialize: function () {
-        var channel = Radio.channel("wfsTransaction");
+        const channel = Radio.channel("wfsTransaction");
 
         channel.on({
             "transact": this.transact
@@ -19,8 +19,9 @@ const WFSTransaction = Backbone.Model.extend({
      * @returns {void}
      */
     transact: function (layerId, featureId, mode, attributes) {
-        var model = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-            feature,
+        const model = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+
+        let feature,
             xmlString,
             dom;
 
@@ -46,8 +47,8 @@ const WFSTransaction = Backbone.Model.extend({
      * @return {DOM} node
      */
     writeTransaction: function (mode, features, writeOptions) {
-        var formatWFS = new WFS(),
-            dom;
+        const formatWFS = new WFS();
+        let dom;
 
         switch (mode) {
             case "insert": {

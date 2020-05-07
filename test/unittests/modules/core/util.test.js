@@ -433,5 +433,62 @@ describe("core/Util", function () {
             expect(model.findWhereJs(list, 0)).to.be.undefined;
         });
     });
-});
+    describe("isEqual", function () {
+        const obj = {a: "foo", b: "bar", c: "baz"},
+            obj2 = {a: "foo", c: "bar", b: "baz"},
+            obj3 = {a: "foo", b: "bar"},
+            obj4 = {name: "moe", luckyNumbers: [13, 27, 34]};
 
+        it("should return false", function () {
+            expect(model.isEqual(obj, obj2)).to.be.false;
+        });
+        it("should return false", function () {
+            expect(model.isEqual(obj, obj3)).to.be.false;
+        });
+        it("should return true", function () {
+            expect(model.isEqual(obj, {a: "foo", b: "bar", c: "baz"})).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEqual(obj4, {name: "moe", luckyNumbers: [13, 27, 34]})).to.be.true;
+        });
+    });
+    describe("isEmpty", function () {
+        it("should return true", function () {
+            expect(model.isEmpty(null)).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty("")).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty({})).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty([])).to.be.true;
+        });
+        it("should return false", function () {
+            expect(model.isEmpty({a: "1"})).to.be.false;
+        });
+    });
+    describe("toObject", function () {
+        const arr1 = ["Akash", "Amit", "Aviral"],
+            arr2 = [1, 2, 3],
+            arr3 = [["Akash", "Amit"], ["pass", "pass"]],
+            obj12 = {
+                Akash: 1,
+                Amit: 2,
+                Aviral: 3
+            },
+            obj3 = {
+                Akash: "Amit",
+                pass: "pass"
+            };
+
+        it("should return an object", function () {
+            expect(model.toObject(arr1, arr2)).to.deep.equal(obj12);
+        });
+
+        it("should return an object", function () {
+            expect(model.toObject(arr3)).to.deep.equal(obj3);
+        });
+    });
+});

@@ -8,11 +8,12 @@ import sinonChai from "sinon-chai";
 chai.use(sinonChai);
 
 describe("tools/virtualCity/planning", function () {
-    var planning,
+    let planning,
         server,
         scene,
-        datasourceCollection,
-        planningOptions = {
+        datasourceCollection;
+
+    const planningOptions = {
             "_id": "QaDu3L3wWpjCKaL9a",
             "public": true,
             "name": "Testing",

@@ -1,5 +1,5 @@
-var replace = require("replace-in-file"),
-    replacements = [];
+const replace = require("replace-in-file");
+let replacements = [];
 
 module.exports = function (destination, stableVersionNumber) {
     replacements = [];

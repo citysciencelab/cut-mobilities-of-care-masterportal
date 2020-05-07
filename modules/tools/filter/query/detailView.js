@@ -112,7 +112,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @returns {void}
      */
     renderSnippets: function () {
-        var view;
+        let view;
 
         if (this.model.get("isLayerVisible")) {
             _.each(this.model.get("snippetCollection").models, function (snippet) {
@@ -148,7 +148,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @returns {void}
      */
     renderValueViews: function () {
-        var countSelectedValues = 0,
+        let countSelectedValues = 0,
             view;
 
         _.each(this.model.get("snippetCollection").models, function (snippet) {
@@ -185,7 +185,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      */
     renderSnippetCheckBoxView: function () {
         // this.$el.find(".detailview-head button").before("<label>" + this.model.get("name") + "-Filter</label>");
-        var view;
+        let view;
 
         if (!this.model.get("activateOnSelection")) {
             view = new SnippetCheckBoxView({model: this.model.get("btnIsActive")});

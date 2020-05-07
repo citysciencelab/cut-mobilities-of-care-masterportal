@@ -32,21 +32,17 @@
               {
                  "url":"/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
                  "typeName":"app:hh_hh_festgestellt",
-                 "propertyNames":[
-                    "app:geltendes_planrecht"
-                 ],
+                 "propertyNames":["app:geltendes_planrecht"],
                  "geometryName":"app:geom",
-                 "name":"festgestellt",
+                 "name":"translate#common:modules.searchbar.specialWFS.terminated",
                  "namespaces": "xmlns:app='http://www.deegree.org/app'"
               },
               {
                  "url":"/geodienste_hamburg_de/HH_WFS_Bebauungsplaene",
                  "typeName":"app:prosin_imverfahren",
-                 "propertyNames":[
-                    "app:plan"
-                 ],
+                 "propertyNames":["app:plan"],
                  "geometryName":"app:the_geom",
-                 "name":"im Verfahren",
+                 "name":"translate#common:modules.searchbar.specialWFS.ongoing",
                  "namespaces": "xmlns:app='http://www.deegree.org/app'"
               }
            ]
@@ -81,11 +77,11 @@
          "hitType": "Fachthema",
          "hitGlyphicon": "glyphicon-list"
          },
-        "placeholder":"Suche nach Adresse/Krankenhaus/B-Plan"
+        "placeholder":"translate#common:modules.searchbar.placeholder.addressHospitalBplan"
      },
      "menu":{
         "tree":{
-           "name":"Themen",
+           "name":"translate#common:menu.topics",
            "glyphicon":"glyphicon-list",
            "isInitOpen":true,
            "isAlwaysExpanded":[
@@ -93,7 +89,7 @@
            ]
         },
         "filter":{
-           "name":"Filter",
+           "name":"translate#common:menu.filter",
            "glyphicon":"glyphicon-filter",
            "deactivateGFI":false,
            "isGeneric":false,
@@ -212,11 +208,11 @@
            ]
         },
         "tools":{
-           "name":"Werkzeuge",
+           "name":"translate#common:menu.tools.name",
            "glyphicon":"glyphicon-wrench",
            "children":{
               "parcelSearch":{
-                 "name":"Flurstückssuche",
+                 "name":"translate#common:menu.tools.parcelSearch",
                  "glyphicon":"glyphicon-search",
                  "serviceId":"6",
                  "storedQueryID":"Flurstueck",
@@ -224,20 +220,20 @@
                  "parcelDenominator":false
               },
               "measure":{
-                 "name":"Strecke / Fläche messen",
+                 "name":"translate#common:menu.tools.measure",
                  "glyphicon":"glyphicon-resize-full"
               },
               "coord":{
-                 "name":"Koordinaten abfragen",
+                 "name":"translate#common:menu.tools.coord",
                  "glyphicon":"glyphicon-screenshot"
               },
               "gfi":{
-                 "name":"Informationen abfragen",
+               "name": "translate#common:menu.tools.getInfos",
                  "glyphicon":"glyphicon-info-sign",
                  "isActive":true
               },
               "print":{
-                 "name":"Karte drucken",
+               "name": "translate#common:menu.tools.print",
                  "glyphicon":"glyphicon-print",
                  "mapfishServiceId":"mapfish_qs",
                  "printAppId":"master",
@@ -246,11 +242,11 @@
                  "version":"mapfish_print_3"
               },
               "searchByCoord":{
-                 "name":"Koordinatensuche",
+               "name": "translate#common:menu.tools.searchByCoord",
                  "glyphicon":"glyphicon-record"
               },
               "kmlimport":{
-                 "name":"KML Import",
+               "name": "translate#common:menu.tools.kmlimport",
                  "glyphicon":"glyphicon-import"
               },
               "wfsFeatureFilter":{
@@ -264,7 +260,7 @@
                  "deactivateGFI":false
               },
               "routing":{
-                 "name":"Routenplaner",
+                 "name": "translate#common:menu.tools.routing",
                  "glyphicon":"glyphicon-road",
                  "viomRoutingID":"7",
                  "bkgSuggestID":"4",
@@ -371,11 +367,11 @@
                  ]
               },
               "saveSelection":{
-                 "name":"Auswahl speichern",
+               "name": "translate#common:menu.tools.saveSelection",
                  "glyphicon":"glyphicon-share"
               },
               "addWMS":{
-                 "name":"WMS hinzufügen",
+               "name": "translate#common:menu.tools.addWms",
                  "glyphicon":"glyphicon-plus"
               },
               "styleWMS":{
@@ -386,29 +382,29 @@
            }
         },
         "legend":{
-           "name":"Legende",
+         "name": "translate#common:menu.legend",
            "glyphicon":"glyphicon-book"
         },
         "contact":{
-           "name":"Kontakt",
+         "name": "translate#common:menu.contact",
            "glyphicon":"glyphicon-envelope",
            "serviceID":"80001",
            "includeSystemInfo":true
         },
         "info":{
-           "name":"Informationen",
-           "glyphicon":"glyphicon-info-sign",
+         "name": "translate#common:menu.info",
+           "glyphicon": "glyphicon-info-sign",
            "children":{
               "staticlinks":[
                  {
-                    "name":"Haftungsausschluss",
-                    "glyphicon":"glyphicon-globe",
-                    "url":"https://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+                  "name": "translate#common:modules.tools.info.disclaimer",
+                    "glyphicon": "glyphicon-globe",
+                    "url": "https://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
                  },
                  {
-                    "name":"Hamburg",
-                    "glyphicon":"glyphicon-globe",
-                    "url":"https://www.hamburg.de"
+                  "name": "translate#common:modules.tools.info.home.name",
+                    "glyphicon": "glyphicon-globe",
+                    "url": "translate#common:modules.tools.info.home.url"
                  }
               ]
            }
@@ -441,7 +437,6 @@
         "buttonOblique":true,
         "button3d":true
      },
-     "scaleLine":true,
      "treeType":"custom",
      "singleBaselayer": true,
      "layersRemovable":false

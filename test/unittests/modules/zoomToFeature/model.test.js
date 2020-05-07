@@ -3,11 +3,11 @@ import Feature from "ol/Feature";
 const chai = require("chai");
 
 describe("zoomToFeature", function () {
-    var model,
-        expect = chai.expect;
+    let model;
+    const expect = chai.expect;
 
     before(function () {
-        var CustomZoomToFeatureModel = Model.extend({
+        const CustomZoomToFeatureModel = Model.extend({
             requestFeaturesFromWFS: function () {
                 // This function is mocked since it triggers an ajax request.
             }
@@ -18,29 +18,29 @@ describe("zoomToFeature", function () {
 
     describe("createIconFeature", function () {
         it("should be an ol/feature that contains a given name", function () {
-            var featureCenter = [55, 44],
+            const featureCenter = [55, 44],
                 featureName = "abc";
 
             expect(model.createIconFeature(featureCenter, featureName).get("name")).to.equal("abc");
         });
 
         it("should be an ol/feature that contains coordinates", function () {
-            var featureCenter = [55, 44],
+            const featureCenter = [55, 44],
                 featureName = "abc";
 
             expect(model.createIconFeature(featureCenter, featureName).getGeometry().getCoordinates()).to.have.deep.members([55, 44]);
         });
 
         it("should be an ol/feature that have empty coordinates by empty input array", function () {
-            var featureCenter = [],
+            const featureCenter = [],
                 featureName = "abc";
 
             expect(model.createIconFeature(featureCenter, featureName).getGeometry().getCoordinates()).to.be.an("array").that.is.empty;
         });
 
         it("should be an ol/feature that have undefined name by undefined input", function () {
-            var featureCenter = [],
-                featureName;
+            const featureCenter = [];
+            let featureName;
 
             expect(model.createIconFeature(featureCenter, featureName).get("name")).to.be.undefined;
         });
@@ -48,7 +48,7 @@ describe("zoomToFeature", function () {
 
     describe("createIconVectorLayer", function () {
         it("should return an VectorLayer with Source and given Features with given name", function () {
-            var iconFeature = new Feature({
+            const iconFeature = new Feature({
                 name: "testName"
             });
 
@@ -56,7 +56,7 @@ describe("zoomToFeature", function () {
         });
 
         it("should return an VectorLayer with Source and given Features with given name as undefined", function () {
-            var iconFeature = new Feature({
+            const iconFeature = new Feature({
                 name: undefined
             });
 

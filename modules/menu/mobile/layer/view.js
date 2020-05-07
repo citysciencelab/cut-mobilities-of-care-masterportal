@@ -76,7 +76,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {Backbone.View} todo
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         if (Radio.request("BreadCrumb", "getLastItem").get("id") === "SelectedLayer") {
             this.$el.html(this.templateSelected(attr));
@@ -96,7 +96,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     renderSetting: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");

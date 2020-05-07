@@ -11,7 +11,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * @fires GFI#RadioRequestGFIGetCurrentView
      */
     initialize: function () {
-        var gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached",
+        const gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached",
             channel = Radio.channel("gfiView");
 
         this.listenTo(this.model, {
@@ -35,7 +35,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     * @returns {*} todo
     */
     render: function () {
-        var attr;
+        let attr;
 
         if (_.isUndefined(this.model.get("gfiContent")) === false) {
             attr = this.model.toJSON();
@@ -94,11 +94,8 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     * @returns {*} todo
     */
     adjustGfiWindow: function (currentView, oldGfiWidth, oldLeft) {
-        var newGfiWidth,
-            newLeft;
-
-        newGfiWidth = currentView.$el.width();
-        newLeft = $("#map").width() - newGfiWidth - 40;
+        const newGfiWidth = currentView.$el.width(),
+            newLeft = $("#map").width() - newGfiWidth - 40;
 
         // initial left of gfi. can never be 0 after drag, due to render-function in desktop/detached/view
         if (oldLeft === 0) {
@@ -124,7 +121,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * @returns {*} todo
      */
     appendChildren: function () {
-        var children = this.model.get("children");
+        const children = this.model.get("children");
 
         this.$(".gfi-content").removeClass("has-image");
         _.each(children, function (element) {
@@ -142,7 +139,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * @returns {*} todo
      */
     appendRoutableButton: function () {
-        var rb;
+        let rb;
 
         if (this.model.get("routable") !== undefined) {
             rb = this.model.get("routable");

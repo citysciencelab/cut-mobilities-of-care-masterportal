@@ -2,33 +2,36 @@ import Model from "@modules/tools/layerSlider/model.js";
 import {expect} from "chai";
 
 describe("modules/layerslider", function () {
-    var model,
-        layerIds = [
-            {
-                "title": "Dienst 1",
-                "layerId": "8730"
-            },
-            {
-                "title": "Dienst 2",
-                "layerId": "2426"
-            },
-            {
-                "title": "Dienst 3",
-                "layerId": "4561"
-            },
-            {
-                "title": "Dienst 4",
-                "layerId": "4567"
-            },
-            {
-                "title": "Dienst 5",
-                "layerId": "4568"
-            }
-        ];
+
+    const layerIds = [
+        {
+            "title": "Dienst 1",
+            "layerId": "8730"
+        },
+        {
+            "title": "Dienst 2",
+            "layerId": "2426"
+        },
+        {
+            "title": "Dienst 3",
+            "layerId": "4561"
+        },
+        {
+            "title": "Dienst 4",
+            "layerId": "4567"
+        },
+        {
+            "title": "Dienst 5",
+            "layerId": "4568"
+        }
+    ];
+
+    let model;
 
     before(function () {
         model = new Model({layerIds: layerIds, title: "Test", timeInterval: 500});
     });
+
     describe("sliderType:player", function () {
         describe("creates correct width for progress bar", function () {
             it("should return min width", function () {

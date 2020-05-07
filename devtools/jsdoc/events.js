@@ -2147,6 +2147,12 @@
   * @example Radio.trigger("GraphicalSelect", "featureToGeoJson", feature);
   */
 
+ /**
+ * @event Snippets#ValuesChanged
+ * @description Triggered when a snippet changed its values
+ * @param {object}
+ */
+
 /** -------------------- TOOLS.ADDGEOJSON -------------------- */
 
 /**

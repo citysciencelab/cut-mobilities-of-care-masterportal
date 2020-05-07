@@ -53,7 +53,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @fires Core#RadioTriggerUtilHideLoader
      */
     initialize: function () {
-        var channel = Radio.channel("Util");
+        const channel = Radio.channel("Util");
 
         channel.reply({
             "isViewMobile": function () {
@@ -87,7 +87,12 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "groupBy": this.groupBy,
             "pick": this.pick,
             "omit": this.omit,
-            "findWhereJs": this.findWhereJs
+            "findWhereJs": this.findWhereJs,
+            "isEqual": this.isEqual,
+            "toObject": this.toObject,
+            "isEmpty": this.isEmpty,
+            "setUrlQueryParams": this.setUrlQueryParams,
+            "searchNestedObject": this.searchNestedObject
         }, this);
 
         channel.on({
@@ -125,9 +130,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {string} punctuated value
      */
     punctuate: function (value) {
-        var pattern = /(-?\d+)(\d{3})/,
-            stringValue = value.toString(),
-            decimals,
+        const pattern = /(-?\d+)(\d{3})/,
+            stringValue = value.toString();
+
+        let decimals,
             predecimals = stringValue;
 
         if (stringValue.indexOf(".") !== -1) {
@@ -371,7 +377,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     copyToClipboard: function (el) {
-        var oldReadOnly = el.readOnly,
+        const oldReadOnly = el.readOnly,
             oldContentEditable = el.contentEditable,
             range = document.createRange(),
             selection = window.getSelection();
@@ -444,7 +450,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
      */
     isChrome: function () {
-        var isChrome = false;
+        let isChrome = false;
 
         if ((/Chrome/i).test(navigator.userAgent)) {
             isChrome = true;
@@ -465,7 +471,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
      */
     isInternetExplorer: function () {
-        var ie = false;
+        let ie = false;
 
         if ((/MSIE 9/i).test(navigator.userAgent)) {
             ie = "IE9";
@@ -536,8 +542,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {String} proxy URL
      */
     getProxyURL: function (url) {
-        var parser = document.createElement("a"),
-            protocol = "",
+        const parser = document.createElement("a");
+        let protocol = "",
             result = url,
             hostname = "",
             port = "";
@@ -602,12 +608,13 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     parseConfigFromURL: function () {
-        var query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
-            result = {},
-            config;
+        const query = location.search.substr(1), // URL --> alles nach ? wenn vorhanden
+            result = {};
+
+        let config;
 
         query.split("&").forEach(function (keyValue) {
-            var item = keyValue.split("=");
+            const item = keyValue.split("=");
 
             result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
         });
@@ -621,8 +628,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             else {
                 Radio.trigger("Alert", "alert", {
                     text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
-                    + "<br> Der URL-Paramater <strong>Config</strong> verlangt eine Datei mit der Endung \".json\"."
-                    + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
+                        + "<br> Der URL-Paramater <strong>Config</strong> verlangt eine Datei mit der Endung \".json\"."
+                        + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
                     kategorie: "alert-warning"
                 });
             }
@@ -707,7 +714,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {object} the picked object
      */
     pickKeyValuePairs: function (obj, keys) {
-        var result = {};
+        const result = {};
 
         keys.forEach(function (key) {
             if (obj.hasOwnProperty(key)) {
@@ -779,6 +786,27 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     decLoaderOverlayCounter: function () {
         this.setLoaderOverlayCounter(this.get("loaderOverlayCounter") - 1);
     },
+    /**
+     * Refresh LayerTree dependant on TreeType
+     * supports light and custom
+     * @returns {void}
+     */
+    refreshTree: () => {
+        let collection = null;
+
+        switch (Radio.request("Parser", "getTreeType")) {
+            case "classic":
+                collection = Radio.request("ModelList", "getCollection");
+
+                collection.trigger("updateClassicTree");
+                break;
+            case "light":
+                Radio.trigger("ModelList", "refreshLightTree");
+                break;
+            default:
+                Radio.trigger("ModelList", "renderTree");
+        }
+    },
 
     /**
      * Return a copy of the object, filtered to only have values for the whitelisted keys
@@ -814,7 +842,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         return filteredObj;
     },
 
-
     /** Looks through the list and returns the firts value that matches all of the key-value pairs
      * listed in hitId.
      * @param {Object[]} [list=[]] - the list.
@@ -827,7 +854,127 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 key => item[key] === {id: findId}[key]
             )
         );
+    },
+
+    /**
+     * Check if two objects are same
+     * @param {Object} first the first object
+     * @param {Object} second the second object
+     * @returns {Boolean} true or false
+     */
+    isEqual: function (first, second) {
+        // If the value of either variable is empty, we can instantly compare them and check for equality.
+        if (first === null || first === undefined || second === null || second === undefined) {
+            return first === second;
+        }
+
+        // If neither are empty, we can check if their constructors are equal. Because constructors are objects, if they are equal, we know the objects are of the same type (though not necessarily of the same value).
+        if (first.constructor !== second.constructor) {
+            return false;
+        }
+
+        // If we reach this point, we know both objects are of the same type so all we need to do is check what type one of the objects is, and then compare them
+        if (first instanceof Function || first instanceof RegExp) {
+            return first === second;
+        }
+
+        // Throught back to the equlity check we started with. Just incase we are comparing simple objects.
+        if (first === second || first.valueOf() === second.valueOf()) {
+            return true;
+        }
+
+        // If the value of check we saw above failed and the objects are Dates, we know they are not Dates because Dates would have equal valueOf() values.
+        if (first instanceof Date) {
+            return false;
+        }
+
+        // If the objects are arrays, we know they are not equal if their lengths are not the same.
+        if (Array.isArray(first) && first.length !== second.length) {
+            return false;
+        }
+
+        // If we have gotten to this point, we need to just make sure that we are working with objects so that we can do a recursive check of the keys and values.
+        if (!(first instanceof Object) || !(second instanceof Object)) {
+            return false;
+        }
+
+        // We now need to do a recursive check on all children of the object to make sure they are deeply equal
+        const firstKeys = Object.keys(first),
+            // Here we just make sure that all the object keys on this level of the object are the same.
+            allKeysExist = Object.keys(second).every(
+                i => firstKeys.indexOf(i) !== -1
+            ),
+
+            // Finally, we pass all the values of our of each object into this function to make sure everything matches
+            allKeyValuesMatch = firstKeys.every(
+                i => this.isEqual(first[i], second[i])
+            );
+
+        return allKeysExist && allKeyValuesMatch;
+    },
+
+    /**
+     * Converts lists into objects
+     * @param {Array} list to be converted
+     * @param {Array} values the corresponding values of parallel array
+     * @returns {Object} result
+     */
+    toObject: function (list, values) {
+        const result = {};
+
+        for (let i = 0, length = list.length; i < length; i++) {
+            if (values) {
+                result[list[i]] = values[i];
+            }
+            else {
+                result[list[i][0]] = list[i][1];
+            }
+        }
+        return result;
+    },
+
+    /**
+     * Checks if value is an empty object or collection.
+     * @param {Object} obj the object to be checked
+     * @returns {boolean} true or false
+     */
+    isEmpty: function (obj) {
+        return [Object, Array].includes((obj || {}).constructor) && !Object.entries(obj || {}).length;
+    },
+
+    /**
+     * helper function to find a key in nested object
+     * @param {object} obj object to search
+     * @param {string} key name of key to search for
+     * @return {mixed} returns value for the given key or null if not found
+     */
+    searchNestedObject: function (obj, key) {
+        let result;
+
+        if (obj instanceof Array) {
+            for (let i = 0; i < obj.length; i++) {
+                result = this.searchNestedObject(obj[i], key);
+                if (result) {
+                    break;
+                }
+            }
+        }
+        else {
+            for (const prop in obj) {
+                if (prop === key) {
+                    return obj;
+                }
+                if (obj[prop] instanceof Object || obj[prop] instanceof Array) {
+                    result = this.searchNestedObject(obj[prop], key);
+                    if (result) {
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
     }
+
 });
 
 export default Util;

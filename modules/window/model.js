@@ -40,7 +40,7 @@ const Window = Backbone.Model.extend(/** @lends Window.prototype */{
      * @listens Window#RadioTriggerWindowCollapseWin
      */
     initialize: function () {
-        var channel = Radio.channel("Window");
+        const channel = Radio.channel("Window");
 
         this.listenTo(channel, {
             "setIsVisible": this.setIsVisible,

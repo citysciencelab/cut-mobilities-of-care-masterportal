@@ -81,22 +81,29 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 
 ## WMTS-Layer ##
 
+Es gibt zwei Wege, einen WMTS-Layer im Masterportal zu definieren:  
+
+A) Angabe aller nachfolgenden WMTS-Parameter  
+B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
+
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
+|capabilitiesUrl|nein|String||Capabilities URL des WMTS-Dienstes|"https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/1.0.0/WMTSCapabilities.xml"|
 |coordinateSystem|ja|String||Das Koordinatenreferenzsystem des Layers.|`"EPSG:3857"`|
 |format|ja|String||Das Graphikformat der Kacheln des Layers. Wird nur benötigt, wenn der Parameter requestEncoding="KVP" ist.|`"image/png"`|
 |id|ja|String||Frei wählbare Layer-ID|`"320"`|
-|layer|ja|String||Name des Layers, welcher dem aus den WMTS Capabilities entsprechen muss.|`"geolandbasemap"`|
+|layers|ja|String||Name des Layers, welcher dem aus den WMTS Capabilities entsprechen muss.|`"geolandbasemap"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`"ignore"`|
 |maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"2500000"`|
 |minScale|nein|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Geoland Basemap"`|
+|optionsFromCapabilities|nein|Boolean||Option zur Nutzung der getOptionsFromCapabilities Methode, um den WMTS-Layer zu definieren. Siehe nachfolgende Beispiele|true|
 |origin|ja|Number[]||Der Ursprung des Kachelrasters. Dieser kann entweder den WMTS Capabilities entnommen werden oder entspricht meist der oberen linken Ecke des extents.|`[-20037508.3428, 20037508.3428]`|
 |requestEncoding|ja|enum["KVP", "REST"]||Codierung der Anfrage an den WMTS Dienst.|`"REST"`|
 |resLength|ja|String||Länge des resolutions und des matrixIds Arrays. Wird benötigt, um die maximale Zoom-Stufe des Layers einstellen zu können.|`"20"`|
 |style|nein|String|"normal"|Name des Styles, welcher dem aus den WMTS Capabilities entsprechen muss.|`"normal"`|
-|tileMatrixSet|ja|String||Set der Matrix, welcher für die Anfrage an den WMTS Dienst benötigt wird.|`"google3857"`|
+|tileMatrixSet|ja|String||Set der Matrix, das für die Anfrage an den WMTS Dienst benötigt wird. Bei der optionsFromCapabilities-Variante, ist dieser Parameter nicht zwingend notwendig (es wird ein passendes TileMatrixSet gesucht).|`"google3857"`|
 |tileSize|ja|String||Kachelgröße in Pixel.|`"256"`|
 |transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`false`|
 |typ|ja|String||Diensttyp, in diesem Fall WMS (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMTS"`|
@@ -104,7 +111,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.0.0"`|
 |wrapX|nein|Boolean|false|Gibt an, ob die Welt horizontal gewrapped werden soll.|`true`|
 
-**Beispiel WMTS:**
+**Beispiel 1 WMTS:**
 
 ```
 #!json
@@ -142,7 +149,19 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
    "requestEncoding": "REST"
 }
 ```
+**Beispiel 2 WMTS (optionsFromCapabilities Methode)**
 
+```
+{
+  "id": "2020",
+  "name": "EOC Basemap",
+  "capabilitiesUrl": "https://tiles.geoservice.dlr.de/service/wmts?SERVICE=WMTS&REQUEST=GetCapabilities",
+  "typ": "WMTS",
+  "layers": "eoc:basemap",
+  "optionsFromCapabilities": true
+}
+
+```
 ***
 
 ## WFS-Layer ##
@@ -254,6 +273,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
 |useProxyUrlForGfi|nein|boolean|undefined|Flag um die GFI-Abfrage für einen Layer über einen reverse proxy laufen zu lassen.|false|
+|timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 **Beispiel Sensor:**
 
 ```
@@ -434,7 +454,19 @@ Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden imme
 }
 ```
 
-Wird `gfiAttributes` als Objekt übergeben, kann der Value auch ein Objekt sein. Dann wird ein Key erst verwendet, wenn eine Bedingung erfüllt ist
+Beispiel gfiAttributes als Objekt mit [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise).
+```
+#!json
+{
+   "gfiAttributes": {
+      "key1": "Key der im Portal gezeigt wird 1",
+      "key2": "Key der im Portal gezeigt wird 2",
+      "@Datastreams.0.Observations.0.result": "Key der im Portal gezeigt wird 3"
+   }
+}
+
+```
+Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. Dann wird ein Key erst verwendet, wenn eine Bedingung erfüllt ist
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
@@ -479,7 +511,19 @@ Wird `gfiAttributes` als Objekt übergeben, kann der Value auch ein Objekt sein.
 }
 ```
 
-***
+Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) und Value als Objekt.
+```
+#!json
+{
+   "gfiAttributes": {
+      "key1": "Key der im Portal gezeigt wird 1",
+      "key2": "Key der im Portal gezeigt wird 2",
+      "@Datastreams.0.Observations.0.result": {
+        "name": "Temperatur",
+        "suffix": "°C"
+      }
+   }
+}
 
 ## GeoJSON-Layer ##
 

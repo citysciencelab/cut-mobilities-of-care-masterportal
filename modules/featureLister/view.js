@@ -50,7 +50,10 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             "change:featureProps": this.showFeatureProps,
             "gfiHit": this.selectGFIHit,
             "gfiClose": this.deselectGFIHit,
-            "switchTabToTheme": this.switchTabToTheme
+            "switchTabToTheme": this.switchTabToTheme,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
         });
 
         if (this.model.get("isActive") === true) {
@@ -74,11 +77,11 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     selectGFIHit: function (evt) {
-        var gesuchteId = evt.id;
+        const gesuchteId = evt.id;
 
         this.deselectGFIHit();
         this.$("#featurelist-list-table tr").each(function (inte, tr) {
-            var trId = parseInt(this.$(tr).attr("id"), 10);
+            const trId = parseInt(this.$(tr).attr("id"), 10);
 
             if (trId === gesuchteId) {
                 this.$(tr).addClass("info");
@@ -92,7 +95,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     orderList: function (evt) {
-        var spanTarget = this.$(evt.target).find("span")[0] ? this.$(evt.target).find("span")[0] : evt.target,
+        const spanTarget = this.$(evt.target).find("span")[0] ? this.$(evt.target).find("span")[0] : evt.target,
             sortOrder = this.$(spanTarget).hasClass("glyphicon-sort-by-alphabet-alt") ? "ascending" : "descending",
             sortColumn = spanTarget.parentElement.textContent,
             tableLength = this.$("#featurelist-list-table tr").length - 1,
@@ -101,8 +104,9 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             }),
             featuresExtended = _.each(features, function (feature) {
                 _.extend(feature, feature.properties);
-            }),
-            featuresSorted = _.sortBy(featuresExtended, sortColumn);
+            });
+
+        let featuresSorted = _.sortBy(featuresExtended, sortColumn);
 
         this.$(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
         if (sortOrder === "ascending") {
@@ -126,7 +130,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     moreFeatures: function () {
-        var countFeatures = this.$("#featurelist-list-table tbody").children().length,
+        const countFeatures = this.$("#featurelist-list-table tbody").children().length,
             maxFeatures = this.model.get("maxFeatures"),
             toFeatures = countFeatures + maxFeatures - 1;
 
@@ -137,7 +141,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     showFeatureProps: function () {
-        var props = this.model.get("featureProps");
+        const props = this.model.get("featureProps");
 
         if (_.keys(props).length > 0) {
             this.$("#featurelistFeaturedetails").removeClass("disabled");
@@ -223,7 +227,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     selectTr: function (evt) {
-        var featureid = evt.currentTarget.id;
+        const featureid = evt.currentTarget.id;
 
         this.model.set("featureid", featureid);
     },
@@ -233,7 +237,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     hoverTr: function (evt) {
-        var featureid = evt.currentTarget.id;
+        const featureid = evt.currentTarget.id;
 
         this.model.downlightFeature();
         this.model.highlightFeature(featureid);
@@ -258,7 +262,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      */
     updateLayerList: function () {
         // lt. Mathias liefern Dienste, bei denen ein Feature in einem Attribut ein null-Value hat, dieses nicht aus und es erscheint gar nicht am Feature.
-        var layer = this.model.get("layer"),
+        const layer = this.model.get("layer"),
             features = layer.features,
             maxFeatures = this.model.get("maxFeatures") - 1,
             keyslist = [];
@@ -296,7 +300,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     readFeatures: function (from, to, dropTableFirst) {
-        var features = this.model.get("layer").features.filter(function (feature) {
+        const features = this.model.get("layer").features.filter(function (feature) {
             return feature.id >= from && feature.id <= to;
         });
 
@@ -313,17 +317,19 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     writeFeaturesToTable: function (features) {
-        var totalFeaturesCount = this.model.get("layer").features.length,
-            shownFeaturesCount,
-            properties = "",
+        const totalFeaturesCount = this.model.get("layer").features.length,
             headers = this.model.get("headers");
+
+        let shownFeaturesCount = "",
+            properties = "";
+
 
         // Schreibe jedes Feature in tbody
         _.each(features, function (feature) {
             properties += "<tr id='" + feature.id + "' class='featurelist-list-table-tr'>";
             // entsprechend der Reihenfolge der Überschriften...
             _.each(headers, function (header) {
-                var attvalue = "";
+                let attvalue = "";
 
                 _.each(feature.properties, function (value, key) {
                     if (header === key) {
@@ -356,7 +362,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     updateLayerHeader: function () {
-        var name = this.model.get("layer").name ? this.model.get("layer").name : "";
+        const name = this.model.get("layer").name ? this.model.get("layer").name : "";
 
         this.$("#featurelist-list-header").text(name);
     },
@@ -365,7 +371,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     updateVisibleLayer: function () {
-        var ll = this.model.get("layerlist");
+        const ll = this.model.get("layerlist");
 
         this.$("#featurelist-themes-ul").empty();
         _.each(ll, function (layer) {
@@ -411,7 +417,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     setMaxHeight: function () {
-        var totalFeaturesCount = this.model.get("layer").features ? this.model.get("layer").features.length : -1,
+        const totalFeaturesCount = this.model.get("layer").features ? this.model.get("layer").features.length : -1,
             shownFeaturesCount = $("#featurelist-list-table tr").length - 1,
             posY = this.$el[0].style.top ? parseInt(this.$el[0].style.top, 10) : parseInt(this.$el.css("top"), 10),
             winHeight = $(window).height(),

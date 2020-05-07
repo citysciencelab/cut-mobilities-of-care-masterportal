@@ -3,8 +3,8 @@ import FlightInstance, {parseFlightOptions} from "@modules/tools/virtualcity/fli
 
 
 describe("flightInstance", function () {
-    var flightInstance,
-        viewpoints = [{
+    let flightInstance;
+    const viewpoints = [{
             "distance": 1660.0290142521517,
             "cameraPosition": [
                 9.982163927085617,

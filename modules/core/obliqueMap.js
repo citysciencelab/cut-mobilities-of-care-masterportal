@@ -9,7 +9,7 @@ const ObliqueMap = Backbone.Model.extend({
         active: false
     },
     initialize: function () {
-        var channel = Radio.channel("ObliqueMap");
+        const channel = Radio.channel("ObliqueMap");
 
         this.pausedInteractions = [];
 
@@ -65,7 +65,7 @@ const ObliqueMap = Backbone.Model.extend({
     activateNewLayer: function (layer) {
         if (this.currentDirection && this.isActive()) {
             return this.getCenter().then(function (center) {
-                var resolution = this.currentDirection.currentView.view.getResolution();
+                const resolution = this.currentDirection.currentView.view.getResolution();
 
                 return this.activateLayer(layer, center.coords, resolution);
             }.bind(this));
@@ -83,7 +83,7 @@ const ObliqueMap = Backbone.Model.extend({
         }
         this.currentLayer = layer;
         return layer.getObliqueCollection().then(function (collection) {
-            var direction = collection.directions[ViewDirection.NORTH];
+            let direction = collection.directions[ViewDirection.NORTH];
 
             this.currentCollection = collection;
             if (!direction) {
@@ -110,9 +110,10 @@ const ObliqueMap = Backbone.Model.extend({
      * @return {void} -
      */
     deactivate: function () {
-        var interactions,
-            map2D,
-            gfi = Radio.request("ModelList", "getModelByAttributes", {id: "gfi"});
+        const gfi = Radio.request("ModelList", "getModelByAttributes", {id: "gfi"});
+
+        let map2D = "",
+            interactions;
 
         gfi.setIsActive(true);
         map2D = Radio.request("Map", "getMap");
@@ -121,10 +122,9 @@ const ObliqueMap = Backbone.Model.extend({
             Radio.trigger("Map", "beforeChange", "2D");
             Radio.trigger("ObliqueMap", "isActivated", false);
             this.getCenter().then(function (center) {
-                var resolution,
-                    resolutionFactor = this.currentLayer.get("resolution");
+                const resolutionFactor = this.currentLayer.get("resolution"),
+                    resolution = this.currentDirection.currentView.view.getResolution() / resolutionFactor;
 
-                resolution = this.currentDirection.currentView.view.getResolution() / resolutionFactor;
                 this.container.style.visibility = "hidden";
                 this.set("active", false);
                 map2D.getViewport().querySelector(".ol-overlaycontainer").classList.remove("olcs-hideoverlay");
@@ -144,16 +144,17 @@ const ObliqueMap = Backbone.Model.extend({
     },
 
     changeDirection: function (directionName) {
-        var direction = viewDirectionNames[directionName];
+        const direction = viewDirectionNames[directionName];
+        let newDirection = {};
 
         if (!direction || direction === this.currentDirection.direction) {
             return;
         }
-        const newDirection = this.currentCollection.directions[direction];
+        newDirection = this.currentCollection.directions[direction];
 
         if (newDirection) {
             this.getCenter().then(function (center) {
-                var resolution = this.currentDirection.currentView.view.getResolution();
+                const resolution = this.currentDirection.currentView.view.getResolution();
 
                 this.currentDirection.deactivate();
                 this.currentDirection = newDirection;
@@ -194,7 +195,7 @@ const ObliqueMap = Backbone.Model.extend({
      * @returns {Promise<{coords: ol.Coordinate, estimate: (boolean|undefined)}>} -
      */
     getCenter: function () {
-        var center;
+        let center;
 
         if (this.currentCollection && this.currentDirection && this.currentDirection.currentImage) {
             center = this.get("map").getView().getCenter();
@@ -211,7 +212,7 @@ const ObliqueMap = Backbone.Model.extend({
      * @return {void} -
      */
     activate: function () {
-        var fillArea, oc, containerAttribute, map2D, interactions;
+        let fillArea, oc, containerAttribute, map2D, interactions;
 
         if (!this.isActive()) {
             Radio.trigger("Map", "beforeChange", "Oblique");

@@ -1,9 +1,15 @@
 import Model from "@modules/tools/pendler/lines/model.js";
 import {expect} from "chai";
 
-var model, createTestFeature;
+let model;
 
-createTestFeature = function (pendlerAnzahl, wohnort) {
+/**
+ * creates testFeature
+ * @param {Integer} pendlerAnzahl Anzahl der Pendler
+ * @param {String} wohnort Wohnort
+ * @return {Object} get
+ */
+function createTestFeature (pendlerAnzahl, wohnort) {
     return {
         "get": function (value) {
             switch (value) {
@@ -16,15 +22,14 @@ createTestFeature = function (pendlerAnzahl, wohnort) {
             }
         }
     };
-};
+}
 
 describe("Pendler-Lines", function () {
     describe("Verarbeitung der abgefragten Daten", function () {
         before(function () {
-            var featuresInput = [],
-                i;
+            const featuresInput = [];
 
-            for (i = 2; i <= 11; i++) {
+            for (let i = 2; i <= 11; i++) {
                 featuresInput.push(createTestFeature(i, "TestOrt" + i));
             }
 
@@ -57,7 +62,7 @@ describe("Pendler-Lines", function () {
 
         it("Es wurden nur die Top10 übernommen", function () {
 
-            var top10PendlerAnzahlen = [],
+            const top10PendlerAnzahlen = [],
                 expectedTop10PendlerAnzahlen = [
                     11,
                     10,

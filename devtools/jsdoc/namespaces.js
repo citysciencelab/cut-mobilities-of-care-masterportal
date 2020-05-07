@@ -289,6 +289,12 @@
  */
 
 /**
+ * @namespace LocationFinder
+ * @memberof Searchbar
+ * @description Configures LocationFinder search
+ */
+
+/**
  * @namespace SpecialWFS
  * @memberof Searchbar
  * @description foobar
@@ -607,6 +613,12 @@
  * @namespace VerkehrsStaerken
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for VerkehrsStaerken
+ */
+
+/**
+ * @namespace TrafficCount
+ * @memberof Tools.GFI.Themes
+ * @description GFI Theme for traffic counter
  */
 
 /**

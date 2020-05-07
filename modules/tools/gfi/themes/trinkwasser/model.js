@@ -8,7 +8,7 @@ const TrinkwasserTheme = Theme.extend({
         });
     },
     splitContent: function () {
-        var allgemContent = {},
+        const allgemContent = {},
             mikrobioContent = {},
             chemContent = {};
 

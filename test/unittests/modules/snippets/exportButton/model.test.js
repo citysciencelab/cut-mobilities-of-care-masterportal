@@ -2,7 +2,7 @@ import {expect} from "chai";
 import Model from "@modules/snippets/exportButton/model.js";
 
 describe("snippets/exportButton/model", function () {
-    var model;
+    let model;
 
     before(function () {
         model = new Model({rawData: []});

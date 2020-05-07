@@ -1,4 +1,4 @@
-var webpack = require("webpack"),
+const webpack = require("webpack"),
     path = require("path"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
@@ -48,6 +48,10 @@ module.exports = {
             {
                 test: /\.(le|c|sa)ss$/,
                 use: "null-loader"
+            },
+            {
+                test: /\.xml$/i,
+                use: "raw-loader"
             }
         ]
     },

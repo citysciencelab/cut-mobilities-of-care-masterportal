@@ -45,12 +45,29 @@
     },
     "tree": {
         "trafficCameras": "survey cameras (traffic)",
-        "topicsHelp": "Topics help Hilfe",
+        "topicsHelp": "Topics help",
         "mapBackground": "Map background grey/white",
         "pinTopicsTree": "Fix/remove topic tree",
         "hideAllTopics": "Hide all topics",
         "showAllTopics": "Show all topics",
-        "category": "Categorie"
+        "category": "Categorie",
+        "backgroundMaps": "Background maps",
+        "subjectData": "Subject data",
+        "subjectData3D": "3D data",
+        "selectedTopics": "Selected topics",
+        "removeSelection": "Remove selection",
+        "infosAndLegend": "Information und explanations",
+        "removeTopic": "Remove topic",
+        "showTopic": "Present topic",
+        "changeClassDivision":"Change class division",
+        "settings":"Settings",
+        "transparency": "Transparency",
+        "increaseTransparency": "Increase transparency",
+        "reduceTransparency": "Reduce transparency",
+        "removeLayer": "Remove Layer",
+        "levelUp": "Level up",
+        "levelDown": "Level down",
+        "externalTechnicalData": "External technical data"
     },
     "date": "Date",
     "time": "Time",
@@ -212,7 +229,7 @@
                 "coordSystemField": "Coordinate system",
                 "hdms": {
                     "eastingLabel": "Longitude",
-                    "northingLabel": "Altitude"
+                    "northingLabel": "Latitude"
                 },
                 "cartesian": {
                     "eastingLabel": "Easting",
@@ -256,6 +273,7 @@
                 "drawPoint": "Draw point",
                 "writeText": "Write text",
                 "drawLine": "Draw line",
+                "drawCurve": "Draw curve",
                 "drawArea": "Draw area",
                 "drawCircle": "Draw circle",
                 "drawDoubleCircle": "Draw double circle",
@@ -277,6 +295,8 @@
                 "color": "Fill color",
                 "button": {
                     "draw": "Draw geometry / text",
+                    "undo": "Undo",
+                    "redo": "Redo",
                     "edit": "Edit geometry",
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all"
@@ -397,6 +417,13 @@
                 "addressTopicParcel" : "Search address, district, topics, parcel"
             },
             "showAllResults": "Show all results",
+            "locationFinder": {
+                "unknownProjection": "Result provided within a unknown coordinate system",
+                "serverError": "Server error",
+                "invalidServiceId": "Error while initializing of LocationFinder-Module: Invalid Service-ID",
+                "errorMsg": "Searching with LocationFinder failed",
+                "notFound": "Service not avialable"
+            },
             "type": {
                 "street": "street",
                 "district": "district",
@@ -429,6 +456,11 @@
             "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
             "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
           }
+        },
+        "legend": {
+            "title": "Legend",
+            "collapseAll": "Collapse all",
+            "foldOutAll": "Fold out all"
         }
     },
     "snippets": {

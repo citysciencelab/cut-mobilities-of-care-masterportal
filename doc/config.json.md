@@ -54,7 +54,7 @@ Konfiguration der Searchbar
 |gdi|nein|**[gdi](#markdown-header-portalconfigsearchbargdi)**||Konfiguration des GDI (elastic) Suchdienstes. Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)** verwenden.|false|
 |elasticSearch|nein|**[elasticSearch](#markdown-header-portalconfigsearchbarelasticsearch)**||Konfiguration des ElasticSearch Suchdienstes.|false|
 |osm|nein|**[osm](#markdown-header-portalconfigsearchbarosm)**||Konfiguration des OpenStreetMap (OSM) Suchdienstes.|false|
-|minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
+|locationFinder|nein|**[locationFinder](#markdown-header-portalconfigsearchbarlocationfinder)**||Konfiguration des LocationFinder-Suchdienstes.|false|
 |placeholder|nein|String|"Suche"|Placeholder für das Freitextfeld.|false|
 |recommendedListLength|nein|Integer|5|Anzahl der Einträge in der Vorschlagsliste.|false|
 |quickHelp|nein|Boolean|false|Gibt an ob eine Schnellhilfe angeboten wird.|false|
@@ -64,6 +64,8 @@ Konfiguration der Searchbar
 |visibleVector|nein|**[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)**||Konfiguration der Suche über die sichtbaren WFS Layer.|false|
 |zoomLevel|nein|Integer||ZoomLevel, auf das die Searchbar maximal hineinzoomt.|false|
 |renderToDOM|nein|String||HTML-Id an diese sich die Searchbar rendert. Bei "#searchbarInMap" zeichnet sich die Searchbar auf der Karte. Wird verwendet in MeldeMichel.|true|
+|sortByName|nein|Boolean|true|Legt fest ob die Ergebnisse einer Suche alphabetisch nach Namen sortiert werden sollen|false|
+|selectRandomHits|nein|Boolean|true|Wenn `true` wird zufällig ausgewählt, welche Ergebnisse angezeigt werden sollen, wenn die Anzahl der Treffer `recomendedListLength` überschreitet. Wenn `false`, so wird die Liste an Treffern bei `recomendedListLength` abgeschnitten. Möglicherweise werden in diesem Fall trotz nur die Ergebnisse des Suchdienstes verwendet, welcher zuerst eine Liste mit Treffern zurück liefert.|false|
 
 ***
 
@@ -143,6 +145,31 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer. Wird nur durch Klic
     "limit": 60,
     "states": "Hamburg, Nordrhein-Westfalen, Niedersachsen, Rhineland-Palatinate Rheinland-Pfalz",
     "classes": "place,highway,building,shop,historic,leisure,city,county"
+}
+```
+
+***
+
+#### Portalconfig.searchBar.locationFinder ####
+Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|incrementalSearch|nein|Boolean|true|Gibt an ob eine Suchverfollständigung (Autocomplete) stattfinden soll. Wenn `incrementalSearch` auf `false` gesetzt wird, so wird eine Surche nur durch einen Klick auf die Lupe bzw. durch Enter gestartet. Dies ist sinvoll, wenn die Anzahl erlaubter Anfragen an den eingebundenen Dienst kontigentiert ist.|false|
+|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.md)** vor.|false|
+|classes|nein|String[]|[]|Kann Klassen enthalten die berücksichtigt werden sollen. Wenn hier nichts angegeben wird, so werden alle Klassen berücksichtigt.|false|
+|useProxy|nein|Boolean|false|Gibt an ob ein Proxy verwendet werden soll.|false|
+|spatialReference|nein|String||Koordinatensystem, in dem das Ergebnis angefragt werden soll. Standardmäßig wird  hier der Wert von Portalconfig.mapView.epsg verwendet.|false|
+
+
+**Beispiel**
+
+```
+#!json
+
+"locationFinder": {
+    "serviceId": "10",
+    "classes": ["Adresse", "Straßenname", "Stadtteil"]
 }
 ```
 
@@ -735,6 +762,18 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 ***
 
+#### Portalconfig.menu.legend
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Konfigurations-Optionen der Legende.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|showCollapseAllButton|nein|Boolean|false|Option zum Ein- bzw. Ausblenden aller Legenden|false|
+
+***
+
 #### Portalconfig.menu.info
 
 [inherits]: # (Portalconfig.menu.folder)
@@ -863,7 +902,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
-|legend|nein|**[tool](#markdown-header-portalconfigmenutool)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
+|legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linienhafte Objekte.|false|
 |measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|

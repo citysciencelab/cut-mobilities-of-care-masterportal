@@ -28,8 +28,8 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires Core#RadioRequestUtilIsViewMobile
      */
     initialize: function (config) {
-        var markerPosition,
-            channel = Radio.channel("MapMarker");
+        const channel = Radio.channel("MapMarker");
+        let markerPosition = "";
 
         this.model = new MapMarkerModel(config);
 
@@ -309,8 +309,8 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     showStartMarker: function () {
-        var startMarker = this.model.get("startMarker"),
-            projectionFromParamUrl = this.model.get("projectionFromParamUrl");
+        const projectionFromParamUrl = this.model.get("projectionFromParamUrl");
+        let startMarker = this.model.get("startMarker");
 
         if (!_.isUndefined(startMarker)) {
             if (!_.isUndefined(projectionFromParamUrl)) {

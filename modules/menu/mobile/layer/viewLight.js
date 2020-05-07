@@ -79,7 +79,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         if (this.model.get("isSettingVisible") === true) {
@@ -93,7 +93,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     renderSetting: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
