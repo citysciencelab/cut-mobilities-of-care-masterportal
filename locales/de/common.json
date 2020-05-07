@@ -273,6 +273,7 @@
                 "drawPoint": "Punkt zeichnen",
                 "writeText": "Text schreiben",
                 "drawLine": "Linie zeichnen",
+                "drawCurve": "Freihandlinie zeichnen",
                 "drawArea": "Fläche zeichnen",
                 "drawCircle": "Kreis zeichnen",
                 "drawDoubleCircle": "Doppelkreis zeichnen",
@@ -294,6 +295,8 @@
                 "color": "Füllfarbe",
                 "button": {
                     "draw": "Geometrie / Text zeichnen",
+                    "undo": "Rückgängig machen",
+                    "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen"
