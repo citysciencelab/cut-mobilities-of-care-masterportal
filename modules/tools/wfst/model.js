@@ -304,7 +304,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let activeLayers = selectedLayers;
 
         // tests if the configuration of the active layers is incorrect and remove the incorrect layers
-        if (activeLayers !== undefined) {
+        if (activeLayers !== undefined && activeLayers !== null) {
             Object.entries(activeLayers).forEach(([key]) => {
                 if (incorrectConfigLayers.includes(key)) {
                     delete activeLayers[key];
@@ -732,37 +732,39 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let name,
             type;
 
-        Object.entries(attributeFields).forEach(([key, value]) => {
-            type = $(value).attr("type");
-            name = $(value).attr("name");
+        if (attributeFields !== undefined && attributeFields !== null) {
+            Object.entries(attributeFields).forEach(([key, value]) => {
+                type = $(value).attr("type");
+                name = $(value).attr("name");
 
-            if (typeof type === "string") {
-                if (type === "string") {
-                    types[name] = {
-                        fieldType: "text",
-                        type: type
-                    };
+                if (typeof type === "string") {
+                    if (type === "string") {
+                        types[name] = {
+                            fieldType: "text",
+                            type: type
+                        };
+                    }
+                    if (type === "integer" || type === "int" || type === "decimal") {
+                        types[name] = {
+                            fieldType: "text",
+                            type: type
+                        };
+                    }
+                    if (type === "boolean") {
+                        types[name] = {
+                            fieldType: "checkbox",
+                            type: type
+                        };
+                    }
+                    if (type === "date") {
+                        types[name] = {
+                            fieldType: "date",
+                            type: type
+                        };
+                    }
                 }
-                if (type === "integer" || type === "int" || type === "decimal") {
-                    types[name] = {
-                        fieldType: "text",
-                        type: type
-                    };
-                }
-                if (type === "boolean") {
-                    types[name] = {
-                        fieldType: "checkbox",
-                        type: type
-                    };
-                }
-                if (type === "date") {
-                    types[name] = {
-                        fieldType: "date",
-                        type: type
-                    };
-                }
-            }
-        });
+            });
+        }
         return types;
     },
 
@@ -958,7 +960,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     handleFeatureAttributes: function (featureProperties, id, inputValue) {
-        if ((typeof inputValue === "string" || typeof inputValue === "boolean") && typeof id === "string") {
+        if ((typeof inputValue === "string" || typeof inputValue === "boolean") && typeof id === "string" && featureProperties !== undefined && featureProperties !== null) {
             Object.entries(featureProperties).forEach(([key, value]) => {
                 if (id === key) {
                     featureProperties[key] = inputValue;
@@ -1020,14 +1022,14 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             activeButton = this.get("activeButton"),
             geometryName = this.get("geometryName"),
             featureProperties = this.get("featureProperties"),
-            attributeFields = this.get("attributesField");
+            orderedAttributes = this.getOrderedAttributes(this.get("attributesField"));
         let action,
             featureWithProperties,
             featureToSend,
             isConditionProofed;
 
         if (typeof feature === "object" && feature !== null) {
-            featureWithProperties = this.handleFeatureProperties(featureProperties, feature, attributeFields);
+            featureWithProperties = this.handleFeatureProperties(featureProperties, feature, orderedAttributes);
             action = this.getActionType(featureWithProperties, activeButton);
             featureToSend = this.handleFeature(featureWithProperties, action);
 
@@ -1115,13 +1117,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     },
 
     /**
-     * Adds the feature properties in the correct order
-     * @param {Object} featureProperties - properties of from input fields
-     * @param {Object} feature - current feature
-     * @param {Object[]} attributeFields - atrributes of the feature
-     * @return {Object} feature with correct ordered properties
+     * gets the names of the attributes in the correct order
+     * @param {Object} attributeFields attributes from DescribeFeatureType response
+     * @return {String[]} ordered attribute names
      */
-    handleFeatureProperties: function (featureProperties, feature, attributeFields) {
+    getOrderedAttributes: function (attributeFields) {
         const orderedAttributes = [];
 
         if (attributeFields !== undefined && attributeFields !== null) {
@@ -1130,7 +1130,19 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             });
         }
 
-        if (Object.entries(feature).length > 0 && Object.entries(featureProperties).length > 0) {
+        return orderedAttributes;
+    },
+
+    /**
+     * Adds the feature properties in the correct order
+     * @param {Object} featureProperties - properties of from input fields
+     * @param {Object} feature - current feature
+     * @param {Object[]} orderedAttributes - ordered atrribute names of the feature
+     * @return {Object} feature with correct ordered properties
+     */
+    handleFeatureProperties: function (featureProperties, feature, orderedAttributes) {
+
+        if (featureProperties !== undefined && featureProperties !== null && Object.entries(feature).length > 0 && Object.entries(featureProperties).length > 0 && orderedAttributes !== undefined) {
             Object.entries(feature.getProperties()).forEach(([key]) => {
                 feature.unset(key);
             });

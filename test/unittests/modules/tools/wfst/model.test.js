@@ -910,7 +910,8 @@ describe("WfstModel", function () {
                     "testnummer": "1.1",
                     "istest": "true"
                 },
-                correctedFeature = model.handleFeatureProperties(featureProperties, features[11]),
+                orderedAttributes = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"],
+                correctedFeature = model.handleFeatureProperties(featureProperties, features[11], orderedAttributes),
                 result = {
                     "name": "Test handleFeatureProperties 1",
                     "vorhaben": "Testen",
@@ -934,7 +935,8 @@ describe("WfstModel", function () {
                     "testnummer": "",
                     "istest": "true"
                 },
-                correctedFeature = model.handleFeatureProperties(featureProperties, features[12]),
+                orderedAttributes = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"],
+                correctedFeature = model.handleFeatureProperties(featureProperties, features[12], orderedAttributes),
                 result = {
                     "name": "Test handleFeatureProperties 2",
                     "vorhaben": "Testen",
@@ -950,7 +952,8 @@ describe("WfstModel", function () {
         });
         it("should return the passed feature, if the passed featureProperties are empty.", function () {
             const featureProperties = {},
-                correctedFeature = model.handleFeatureProperties(featureProperties, features[13]),
+                orderedAttributes = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"],
+                correctedFeature = model.handleFeatureProperties(featureProperties, features[13], orderedAttributes),
                 result = {
                     "name": "Test handleFeatureProperties 3",
                     "vorhaben": "Testen",
@@ -973,9 +976,10 @@ describe("WfstModel", function () {
                     "vorgangsnummer": "3",
                     "testnummer": "1.1",
                     "istest": "true"
-                };
+                },
+                orderedAttributes = ["geom", "name", "vorhaben", "anfragedatum", "bemerkung", "vorgangsnummer", "testnummer", "istest"];
 
-            expect(model.handleFeatureProperties(featureProperties, featureEmpty)).to.be.empty;
+            expect(model.handleFeatureProperties(featureProperties, featureEmpty, orderedAttributes)).to.be.empty;
         });
     });
     describe("handleFlawedAttributes", function () {
