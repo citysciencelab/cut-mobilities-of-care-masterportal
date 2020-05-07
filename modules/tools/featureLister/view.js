@@ -102,11 +102,11 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             features = this.model.get("layer").features.filter(function (feature) {
                 return feature.id >= 0 && feature.id <= tableLength;
             }),
-            featuresExtended = _.each(features, function (feature) {
-                _.extend(feature, feature.properties);
+            featuresExtended = features.forEach(feature => {
+                Object.assign(feature, feature.properties);
             });
 
-        let featuresSorted = _.sortBy(featuresExtended, sortColumn);
+        let featuresSorted = Radio.request("Util", "sortBy", featuresExtended, sortColumn);
 
         this.$(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
         if (sortOrder === "ascending") {
@@ -143,13 +143,13 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
     showFeatureProps: function () {
         const props = this.model.get("featureProps");
 
-        if (_.keys(props).length > 0) {
+        if (Object.keys(props).length > 0) {
             this.$("#featurelistFeaturedetails").removeClass("disabled");
             this.$(".featurelist-details-li").remove();
-            _.each(props, function (value, key) {
+            Object.entries(props).forEach(([key, value]) => {
                 this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
                 this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
-            }, this);
+            });
             this.switchTabToDetails();
         }
         else {
@@ -166,7 +166,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
         if (evt && this.$("#featurelistFeaturelist").hasClass("disabled")) {
             return;
         }
-        _.each(this.$(".featurelist-navtabs").children(), function (child) {
+        Object.entries(this.$(".featurelist-navtabs").children()).forEach(([, child]) => {
             if (child.id === "featurelistFeaturelist") {
                 this.$(child).removeClass("disabled");
                 this.$(child).addClass("active");
@@ -174,7 +174,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             else {
                 this.$(child).removeClass("active");
             }
-        }, this);
+        });
         this.$("#featurelist-themes").hide();
         this.$("#featurelist-list").show();
         this.$("#featurelist-details").hide();
@@ -184,7 +184,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     switchTabToTheme: function () {
-        _.each(this.$(".featurelist-navtabs").children(), function (child) {
+        Object.entries(this.$(".featurelist-navtabs").children()).forEach(([, child]) => {
             if (child.id === "featurelistThemeChooser") {
                 this.$(child).removeClass("disabled");
                 this.$(child).addClass("active");
@@ -192,7 +192,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             else {
                 this.$(child).removeClass("active");
             }
-        }, this);
+        });
         this.$("#featurelist-themes").show();
         this.$("#featurelist-list").hide();
         this.$("#featurelist-details").hide();
@@ -208,7 +208,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
         if (evt && this.$("#featurelistFeaturedetails").hasClass("disabled")) {
             return;
         }
-        _.each(this.$(".featurelist-navtabs").children(), function (child) {
+        Object.entries(this.$(".featurelist-navtabs").children()).forEach(([, child]) => {
             if (child.id === "featurelistFeaturedetails") {
                 this.$(child).removeClass("disabled");
                 this.$(child).addClass("active");
@@ -216,7 +216,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             else {
                 this.$(child).removeClass("active");
             }
-        }, this);
+        });
         this.$("#featurelist-themes").hide();
         this.$("#featurelist-list").hide();
         this.$("#featurelist-details").show();
@@ -250,9 +250,9 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
     newTheme: function (evt) {
         this.model.set("layerid", evt.currentTarget.id);
         // setze active Class
-        _.each(this.$(evt.currentTarget.parentElement.children), function (li) {
+        Object.entries(this.$(evt.currentTarget.parentElement.children)).forEach(li => {
             this.$(li).removeClass("active");
-        }, this);
+        });
         this.$(evt.currentTarget).addClass("active");
     },
     /**
@@ -269,13 +269,13 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
 
         if (layer && features && features.length > 0) {
             // Extrahiere vollständige Überschriftenliste, funktioniert nicht, sollten Kommas im Key stehen. Darf aber wohl nicht vorkommen.
-            _.each(features, function (feature) {
-                _.each(_.keys(feature.properties), function (key) {
-                    if (_.contains(keyslist, key) === false) {
+            features.forEach(feature => {
+                Object.keys(feature.properties).forEach(key => {
+                    if (!keyslist.includes(key)) {
                         keyslist.push(key);
                     }
-                }, this);
-            }, this);
+                });
+            });
             this.model.set("headers", keyslist);
             this.$("#featurelist-list-table thead").remove(); // leere Tabelle
             this.$("#featurelist-list-table tbody").remove(); // leere Tabelle
@@ -323,23 +323,22 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
         let shownFeaturesCount = "",
             properties = "";
 
-
         // Schreibe jedes Feature in tbody
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             properties += "<tr id='" + feature.id + "' class='featurelist-list-table-tr'>";
             // entsprechend der Reihenfolge der Überschriften...
-            _.each(headers, function (header) {
+            headers.forEach(header => {
                 let attvalue = "";
 
-                _.each(feature.properties, function (value, key) {
+                Object.entries(feature.properties).forEach(([key, value]) => {
                     if (header === key) {
                         attvalue = value;
                     }
-                }, this);
+                });
                 properties += "<td headers='" + header + "'><div class='featurelist-list-table-td' title='" + attvalue + "'>";
                 properties += attvalue;
                 properties += "</div></td>";
-            }, this);
+            });
             properties += "</tr>";
         }, this);
         this.$("#featurelist-list-table tbody").append(properties);
@@ -374,9 +373,9 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
         const ll = this.model.get("layerlist");
 
         this.$("#featurelist-themes-ul").empty();
-        _.each(ll, function (layer) {
+        ll.forEach(layer => {
             this.$("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
-        }, this);
+        });
     },
     /**
      * Renders the feature lister
