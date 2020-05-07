@@ -1,4 +1,4 @@
-import {generateSimpleMutations} from "../../../global-store/utils/generators";
+import {generateSimpleMutations} from "../../../app-store/utils/generators";
 
 import initialState from "./state";
 import getters from "./gettersMap";

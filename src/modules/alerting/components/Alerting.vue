@@ -1,6 +1,6 @@
 <script>
 
-import Modal from "../../modal/components/Modal.vue";
+import Modal from "../../../share-components/modals/Modal.vue";
 import axios from "axios";
 import {mapGetters} from "vuex";
 import {mapActions} from "vuex";

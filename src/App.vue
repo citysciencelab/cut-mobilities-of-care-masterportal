@@ -10,7 +10,7 @@
 // import Language from "./modules/language/components/Language.vue";
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
-import Loader from "./components/Loader.vue";
+import Loader from "./share-components/Loader.vue";
 import MapModuleDebug from "./modules/map/components/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
 

@@ -11,7 +11,7 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
-import Store from "../../src/global-store";
+import Store from "../../src/app-store";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {

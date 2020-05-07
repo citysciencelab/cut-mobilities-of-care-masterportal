@@ -1,4 +1,4 @@
-import store from "./global-store";
+import store from "./app-store";
 import Vue from "vue";
 
 /* eslint-disable no-undef */
