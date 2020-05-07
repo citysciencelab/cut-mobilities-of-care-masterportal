@@ -149,7 +149,7 @@ function loadApp () {
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
     new StyleList();
-    if (!Config.hasOwnProperty("allowParametricURL")) {
+    if (!Config.hasOwnProperty("allowParametricURL") || Config.allowParametricURL === true) {
         new ParametricURL();
     }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
