@@ -6,7 +6,7 @@ import VectorSource from "ol/source/Vector";
 import {Feature} from "ol";
 
 const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         deactivateGFI: true,
         modelId: "WFS-T",
         channel: Radio.channel("wfst"),
@@ -122,9 +122,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let feature,
             xmlString;
 
-        if (!_.isUndefined(model)) {
+        if (model !== undefined) {
             feature = model.get("layer").getSource().getFeatureById(featureId);
-            if (_.isNull(feature)) {
+            if (feature === null) {
                 feature = new Feature();
             }
             feature.setProperties(attributes);
@@ -161,17 +161,17 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         const deleteEditTitle = [this.get("deleteButtonTitle"), this.get("editButtonTitle")],
             deleteEditConf = [true, true];
 
-        if (_.isString(deleteConfig)) {
+        if (typeof deleteConfig === "string") {
             deleteEditTitle[0] = deleteConfig;
         }
-        else if (_.isBoolean(deleteConfig) && deleteConfig === false) {
+        else if (typeof deleteConfig === "boolean" && deleteConfig === false) {
             deleteEditConf[0] = false;
         }
 
-        if (_.isString(editConfig)) {
+        if (typeof editConfig === "string") {
             deleteEditTitle[1] = editConfig;
         }
-        else if (_.isBoolean(editConfig) && editConfig === false) {
+        else if (typeof editConfig === "boolean" && editConfig === false) {
             deleteEditConf[1] = false;
         }
         return [deleteEditConf, deleteEditTitle];
@@ -181,7 +181,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * Gets all layers whose configuration is incorrect
      * @param {String[]} ids - ids of the configured layers
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
-     * @returns {void}
+     * @return {String[]} ids of the incorrect configured layers
      */
     getIncorrectConfiguredLayerIds: function (ids) {
         const alertCases = this.get("alertCases"),
@@ -189,15 +189,15 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let wfsLayer,
             error;
 
-        if (_.isArray(ids)) {
+        if (Array.isArray(ids)) {
             ids.forEach(function (id) {
                 wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id});
                 error = this.checkLayerConfig(wfsLayer);
                 if (error === true) {
-                    if (!_.contains(this.get("incorrectConfigLayers"), id)) {
+                    if (!this.get("incorrectConfigLayers").includes(id)) {
                         incorrectIds.push(id);
                     }
-                    if (!_.contains(alertCases, "missingLayerParam")) {
+                    if (!alertCases.includes("missingLayerParam")) {
                         this.setAlertCases("missingLayerParam");
                     }
                 }
@@ -214,23 +214,23 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     checkLayerConfig: function (wfsLayer) {
         let error = false;
 
-        if (_.isObject(wfsLayer)) {
-            if (!_.isString(wfsLayer.get("url"))) {
+        if (typeof wfsLayer === "object" && wfsLayer !== null) {
+            if (typeof wfsLayer.get("url") !== "string") {
                 error = true;
             }
-            else if (!_.isString(wfsLayer.get("version"))) {
+            else if (typeof wfsLayer.get("version") !== "string") {
                 error = true;
             }
-            else if (!_.isString(wfsLayer.get("featureType"))) {
+            else if (typeof wfsLayer.get("featureType") !== "string") {
                 error = true;
             }
-            else if (!_.isString(wfsLayer.get("featureNS"))) {
+            else if (typeof wfsLayer.get("featureNS") !== "string") {
                 error = true;
             }
-            else if (!_.isString(wfsLayer.get("featurePrefix"))) {
+            else if (typeof wfsLayer.get("featurePrefix") !== "string") {
                 error = true;
             }
-            else if (!_.isObject(wfsLayer.get("gfiAttributes")) && !_.isString(wfsLayer.get("gfiAttributes"))) {
+            else if ((typeof wfsLayer.get("gfiAttributes") !== "object" || wfsLayer === null) && typeof wfsLayer.get("gfiAttributes") !== "string") {
                 error = true;
             }
         }
@@ -244,15 +244,15 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * Handles the configured layers
      * @param {{String}} ids - Ids of the configured layers
      * @param {Array} initialAlertCases - Array with all alert cases
-     * @returns {void}
+     * @return {String[]} layer ids
      */
     handleAvailableLayers: function (ids, initialAlertCases) {
         let layerIds = [];
 
-        if (_.isArray(ids) && ids.length) {
+        if (Array.isArray(ids) && ids.length) {
             layerIds = ids;
         }
-        else if (!_.contains(initialAlertCases, "AvailableLayers")) {
+        else if (!initialAlertCases.includes("AvailableLayers")) {
             this.addInitialAlertCases("AvailableLayers");
         }
         return layerIds;
@@ -269,16 +269,16 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             incorrectConfigLayers = this.get("incorrectConfigLayers"),
             initialAlertCases = this.get("initialAlertCases");
 
-        if (_.isString(this.get("currentLayerId")) && _.isUndefined(_.find(event, {"id": this.get("currentLayerId")}))) {
+        if (typeof this.get("currentLayerId") === "string" && event.find(layer => layer.id === this.get("currentLayerId")) === undefined) {
             this.setIsDeselectedLayer(true);
         }
-        if (!_.isEmpty(activeLayers)) {
+        if (Object.entries(activeLayers).length > 0) {
             // if there are active layers remove appropriate error case
-            if (_.contains(initialAlertCases, "ActiveLayers")) {
-                initialAlertCases.splice(_.indexOf(initialAlertCases, "ActiveLayers"), 1);
+            if (initialAlertCases.includes("ActiveLayers")) {
+                initialAlertCases.splice(initialAlertCases.indexOf("ActiveLayers"), 1);
             }
-            if (_.isString(firstId) || _.isString(activeLayers[firstId])) {
-                if (!_.isObject(this.getCurrentLayer())) {
+            if (typeof firstId === "string" || typeof activeLayers[firstId] === "string") {
+                if (typeof this.getCurrentLayer() !== "object" || this.getCurrentLayer() === null) {
                     this.updateActiveLayer(firstId);
                 }
                 else if (this.getCurrentLayer().get("isSelected") === false) {
@@ -288,7 +288,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             activeLayers = this.checkActiveLayers(activeLayers, incorrectConfigLayers);
             this.setActiveLayers(activeLayers);
         }
-        else if (!_.contains(initialAlertCases, "ActiveLayers") && !_.contains(initialAlertCases, "AvailableLayers") && this.get("layerIds")) {
+        else if (!initialAlertCases.includes("ActiveLayers") && !initialAlertCases.includes("AvailableLayers") && this.get("layerIds")) {
             this.addInitialAlertCases("ActiveLayers");
         }
     },
@@ -304,13 +304,13 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let activeLayers = selectedLayers;
 
         // tests if the configuration of the active layers is incorrect and remove the incorrect layers
-        if (!_.isUndefined(activeLayers)) {
-            _.each(activeLayers, function (layer, index) {
-                if (_.contains(incorrectConfigLayers, index)) {
-                    delete activeLayers[index];
+        if (activeLayers !== undefined) {
+            Object.entries(activeLayers).forEach(([key]) => {
+                if (incorrectConfigLayers.includes(key)) {
+                    delete activeLayers[key];
                 }
-            }, this);
-            if (!_.contains(initialAlertCases, "allLayersWithIncorrectConfig") && !_.contains(initialAlertCases, "AvailableLayers") && _.isEmpty(activeLayers)) {
+            });
+            if (!initialAlertCases.includes("allLayersWithIncorrectConfig") && !initialAlertCases.includes("AvailableLayers") && Object.entries(activeLayers).length <= 0) {
                 this.addInitialAlertCases("allLayersWithIncorrectConfig");
             }
         }
@@ -330,10 +330,10 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let wfsLayer;
         const activeLayers = {};
 
-        if (_.isArray(ids)) {
+        if (Array.isArray(ids)) {
             ids.forEach(function (id) {
                 wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id});
-                if (_.isObject(wfsLayer) && wfsLayer.get("isSelected")) {
+                if (typeof wfsLayer === "object" && wfsLayer !== null && wfsLayer.get("isSelected")) {
                     activeLayers[id] = wfsLayer.get("name");
                 }
             }, this);
@@ -349,7 +349,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     getSelectedLayer: function (activeLayers) {
         let firstId;
 
-        if (_.isObject(activeLayers) && !_.isEmpty(activeLayers)) {
+        if (typeof activeLayers === "object" && activeLayers !== null && Object.entries(activeLayers).length > 0) {
             firstId = Object.keys(activeLayers)[0];
         }
         else {
@@ -384,7 +384,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             layerSelect = this.get("layerSelect");
         let message = "";
 
-        if (_.isString(alert)) {
+        if (typeof alert === "string") {
             switch (alert) {
                 case "AvailableLayers":
                     message = "Es wurden keine Layer für das " + toolName + " konfiguriert. Bitte geben Sie in der Konfiguration mindestens einen Layer an, um das " + toolName + " nutzen zu können.";
@@ -515,7 +515,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     getLayerParams: function (wfsLayer) {
         const parameter = {};
 
-        if (_.isObject(wfsLayer) && !_.isEmpty(wfsLayer)) {
+        if (typeof wfsLayer === "object" && wfsLayer !== null && Object.entries(wfsLayer).length > 0) {
             parameter.url = wfsLayer.get("url");
             parameter.version = wfsLayer.get("version");
             parameter.featureType = wfsLayer.get("featureType");
@@ -615,7 +615,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             complexTypes;
         const attributeFields = [];
 
-        if (_.isObject(response)) {
+        if (typeof response === "object" && response !== null) {
             attrElement = $(response).find("*").filter(function () {
                 return $(this).attr("name") === featureTypename;
             });
@@ -695,8 +695,8 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             });
             console.error("The gfiAttributes are configured with 'ignore' in the configuration of the currently selected layer. Therefore, no attributes of the layer are read and processed.");
         }
-        else if (_.isObject(gfiAttributes)) {
-            _.each(gfiAttributes, function (value, key) {
+        else if (typeof gfiAttributes === "object" && gfiAttributes !== null) {
+            Object.entries(gfiAttributes).forEach(([key, value]) => {
                 wfstFields.push({
                     "field": key,
                     "caption": value
@@ -732,11 +732,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let name,
             type;
 
-        _.each(attributeFields, function (field) {
-            type = $(field).attr("type");
-            name = $(field).attr("name");
+        Object.entries(attributeFields).forEach(([key, value]) => {
+            type = $(value).attr("type");
+            name = $(value).attr("name");
 
-            if (_.isString(type)) {
+            if (typeof type === "string") {
                 if (type === "string") {
                     types[name] = {
                         fieldType: "text",
@@ -777,18 +777,18 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         const mandatory = [];
         let name;
 
-        if (_.isObject(attributeFields)) {
-            _.each(attributeFields, function (field) {
-                name = $(field).attr("name");
-                if (!_.isUndefined($(field).attr("minOccurs"))) {
-                    if ($(field).attr("minOccurs") === "1") {
+        if (typeof attributeFields === "object" && attributeFields !== null) {
+            Object.entries(attributeFields).forEach(([key, value]) => {
+                name = $(value).attr("name");
+                if ($(value).attr("minOccurs") !== undefined) {
+                    if ($(value).attr("minOccurs") === "1") {
                         mandatory[name] = true;
                     }
-                    else if ($(field).attr("minOccurs") === "0") {
+                    else if ($(value).attr("minOccurs") === "0") {
                         mandatory[name] = false;
                     }
                 }
-                else if (_.isUndefined($(field).attr("minOccurs"))) {
+                else if ($(value).attr("minOccurs") === undefined) {
                     mandatory[name] = true;
                 }
             });
@@ -806,9 +806,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     handleInputFields: function (attributeFields, type, mandatory) {
         let wfstFields = attributeFields;
 
-        if (_.isArray(wfstFields) && _.isObject(type) && _.isArray(mandatory)) {
+        if (Array.isArray(wfstFields) && typeof type === "object" && type !== null && Array.isArray(mandatory)) {
             wfstFields.forEach(function (field) {
-                if (_.isObject(type[field.field])) {
+                if (typeof type[field.field] === "object" && type[field.field] !== null) {
                     field.type = type[field.field].type;
                     field.inputFieldType = type[field.field].fieldType;
                 }
@@ -816,7 +816,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                     field.type = "string";
                     field.inputFieldType = "text";
                 }
-                if (_.isBoolean(mandatory[field.field])) {
+                if (typeof mandatory[field.field] === "boolean") {
                     field.mandatory = mandatory[field.field];
                 }
                 else {
@@ -858,16 +858,16 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let layer;
 
         buttons.forEach(function (button, index) {
-            if (_.isObject(button)) {
+            if (typeof button === "object" && button !== null) {
                 layer = button.find(object => object.layerId === layerId);
 
-                if (!_.isObject(layer)) {
+                if (typeof layer !== "object" || layer === null) {
                     buttonTitles[index] = initialButtonTitleConfig[index];
                 }
-                else if (_.isString(layer.caption)) {
+                else if (typeof layer.caption === "string") {
                     buttonTitles[index] = layer.caption;
                 }
-                else if (!_.isString(layer.caption)) {
+                else if (typeof layer.caption !== "string") {
                     buttonTitles[index] = initialButtonTitleConfig[index];
                 }
             }
@@ -875,7 +875,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                 buttonTitles[index] = initialButtonTitleConfig[index];
             }
         });
-        if (_.isString(layerSelect) && layerSelect !== "") {
+        if (typeof layerSelect === "string" && layerSelect !== "") {
             buttonTitles[3] = layerSelect;
         }
         else {
@@ -907,18 +907,18 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         });
         // if the layer does not expect a special geometry type, use the configurations for
         // displaying the point, line and area buttons
-        if (!_.contains(layerGeometry, true)) {
+        if (!layerGeometry.includes(true)) {
             buttons.forEach(function (button, index) {
-                if (_.isBoolean(button) && button === true) {
+                if (typeof button === "boolean" && button === true) {
                     layerGeometry[index] = true;
                 }
-                else if (_.isUndefined(button)) {
+                else if (button === undefined) {
                     layerGeometry[index] = true;
                 }
-                else if (_.isObject(button)) {
+                else if (typeof button === "object" && button !== null) {
                     layer = button.find(o => o.layerId === layerId);
 
-                    if (!_.isObject(layer)) {
+                    if (typeof layer !== "object" || layer === null) {
                         layerGeometry[index] = true;
                     }
                     else if (layer.show) {
@@ -958,13 +958,13 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     handleFeatureAttributes: function (featureProperties, id, inputValue) {
-        if ((_.isString(inputValue) || _.isBoolean(inputValue)) && _.isString(id)) {
-            _.each(featureProperties, function (value, key, list) {
+        if ((typeof inputValue === "string" || typeof inputValue === "boolean") && typeof id === "string") {
+            Object.entries(featureProperties).forEach(([key, value]) => {
                 if (id === key) {
-                    list[key] = inputValue;
+                    featureProperties[key] = inputValue;
                 }
                 else {
-                    list[key] = value;
+                    featureProperties[key] = value;
                 }
             });
         }
@@ -980,9 +980,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     inheritModelListAttributes: function (featureId, wfsLayers) {
         let wfsLayerId;
 
-        if (_.isString(featureId)) {
+        if (typeof featureId === "string") {
             wfsLayers.forEach(function (layer) {
-                if (!_.isNull(layer.get("layerSource").getFeatureById(featureId))) {
+                if (layer.get("layerSource").getFeatureById(featureId) !== null) {
                     wfsLayerId = layer.get("id");
                 }
             });
@@ -999,12 +999,12 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     getActionType: function (feature, activeButton) {
         let actionType;
 
-        if (!_.isUndefined(activeButton)) {
+        if (activeButton !== undefined) {
             if (activeButton !== "wfst-module-recordButton-save") {
                 actionType = "delete";
             }
-            else if (_.isObject(feature) && !_.isEmpty(feature)) {
-                actionType = _.isUndefined(feature.id_) || _.isNull(feature.id_) ? "insert" : "update";
+            else if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0) {
+                actionType = feature.id_ === undefined || feature.id_ === null ? "insert" : "update";
             }
         }
         return actionType;
@@ -1019,14 +1019,15 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             wfstFields = this.get("wfstFields"),
             activeButton = this.get("activeButton"),
             geometryName = this.get("geometryName"),
-            featureProperties = this.get("featureProperties");
+            featureProperties = this.get("featureProperties"),
+            attributeFields = this.get("attributesField");
         let action,
             featureWithProperties,
             featureToSend,
             isConditionProofed;
 
-        if (_.isObject(feature)) {
-            featureWithProperties = this.handleFeatureProperties(featureProperties, feature);
+        if (typeof feature === "object" && feature !== null) {
+            featureWithProperties = this.handleFeatureProperties(featureProperties, feature, attributeFields);
             action = this.getActionType(featureWithProperties, activeButton);
             featureToSend = this.handleFeature(featureWithProperties, action);
 
@@ -1059,7 +1060,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         const target = this.get("interaction").getFeatures().item(0);
         let xmlString;
 
-        if (_.isObject(target)) {
+        if (typeof target === "object" && target !== null) {
             xmlString = this.transactionWFS("delete", target);
             this.sendTransaction(xmlString);
         }
@@ -1078,10 +1079,10 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             isConditionProofed = true;
 
         // Test for mandatory fields
-        if ((_.isArray(wfstFields) && wfstFields.length) && (_.isObject(feature) && !_.isEmpty(feature))) {
+        if ((Array.isArray(wfstFields) && wfstFields.length) && (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0)) {
             wfstFields.forEach(function (field) {
                 if (field.mandatory === true) {
-                    if (!_.isString(feature.get(field.field)) || feature.get(field.field === "")) {
+                    if (typeof feature.get(field.field) !== "string" || feature.get(field.field === "")) {
                         isConditionProofed = false;
                         message = this.getAlertMessage("mandatoryFieldMissing");
                         Radio.trigger("Alert", "alert", {
@@ -1099,7 +1100,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         }
 
         // Test if geometry was created
-        if (_.isObject(feature) && !_.isEmpty(feature) && !_.contains(feature.getKeys(), geometryName)) {
+        if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0 && !feature.getKeys().includes(geometryName)) {
             isConditionProofed = false;
             message = this.getAlertMessage("noGeometry");
             Radio.trigger("Alert", "alert", {
@@ -1117,19 +1118,29 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * Adds the feature properties in the correct order
      * @param {Object} featureProperties - properties of from input fields
      * @param {Object} feature - current feature
+     * @param {Object[]} attributeFields - atrributes of the feature
      * @return {Object} feature with correct ordered properties
      */
-    handleFeatureProperties: function (featureProperties, feature) {
-        if (!_.isEmpty(feature) && !_.isEmpty(featureProperties)) {
-            _.each(feature.getKeys(), function (key) {
+    handleFeatureProperties: function (featureProperties, feature, attributeFields) {
+        const orderedAttributes = [];
+
+        if (attributeFields !== undefined && attributeFields !== null) {
+            attributeFields.forEach(function (field) {
+                orderedAttributes.push(field.getAttribute("name"));
+            });
+        }
+
+        if (Object.entries(feature).length > 0 && Object.entries(featureProperties).length > 0) {
+            Object.entries(feature.getProperties()).forEach(([key]) => {
                 feature.unset(key);
             });
-            _.each(featureProperties, function (val, key) {
-                if (_.isUndefined(featureProperties[key]) || _.isEmpty(val) && !_.isBoolean(val)) {
-                    feature.set(key, "");
+
+            orderedAttributes.forEach(function (attr) {
+                if (featureProperties[attr] === undefined || Object.entries(featureProperties[attr]).length <= 0 && typeof featureProperties[attr] !== "boolean") {
+                    feature.set(attr, "");
                 }
                 else {
-                    feature.set(key, val);
+                    feature.set(attr, featureProperties[attr]);
                 }
             });
         }
@@ -1158,12 +1169,12 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @return {Object} the corrected feature
      */
     handleFlawedAttributes: function (feature, wfstFields) {
-        if (_.isObject(feature) && !_.isEmpty(feature)) {
+        if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0) {
             wfstFields.forEach(function (field) {
-                if (_.isUndefined(feature.get(field.field)) || _.isNull(feature.get(field.field))) {
+                if (feature.get(field.field) === undefined || feature.get(field.field) === null) {
                     feature.unset(field.field);
                 }
-                if (field.type === "boolean" && _.isUndefined(feature.get(field.field))) {
+                if (field.type === "boolean" && feature.get(field.field) === undefined) {
                     feature.set(field.field, false);
                 }
             });
@@ -1181,16 +1192,16 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     handleDecimalSeperator: function (feature, mode, wfstFields) {
         let decimal;
 
-        if (_.isObject(feature) && !_.isEmpty(feature)) {
+        if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0) {
             wfstFields.forEach(function (field) {
                 if (mode === "transaction") {
-                    if (field.type === "decimal" && !_.isUndefined(feature.get(field.field))) {
+                    if (field.type === "decimal" && feature.get(field.field) !== undefined) {
                         decimal = feature.get(field.field).replace(",", ".");
                         feature.set(field.field, decimal);
                     }
                 }
                 else if (mode === "display") {
-                    if (field.type === "decimal" && !_.isUndefined(feature[field.field])) {
+                    if (field.type === "decimal" && feature[field.field] !== undefined) {
                         feature[field.field] = feature[field.field].replace(".", ",");
                     }
                 }
@@ -1206,9 +1217,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @return {Object} modyfied feature
      */
     handleEmptyAttributes: function (feature, mode) {
-        if (_.isObject(feature) && !_.isEmpty(feature)) {
-            _.each(feature.getKeys(), function (key) {
-                if (typeof feature.getProperties()[key] === "string" && (feature.getProperties()[key] === "" || _.isEmpty(feature.getProperties()[key]))) {
+        if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0) {
+            Object.entries(feature.getProperties()).forEach(([key]) => {
+                if (typeof feature.getProperties()[key] === "string" && (feature.getProperties()[key] === "" || Object.entries(feature.getProperties()[key]).length <= 0)) {
                     if (mode === "insert") {
                         feature.unset(key);
                     }
@@ -1230,10 +1241,10 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @return {Object} adjusted feature
      */
     handleMissingFeatureProperties: function (feature, geometry, properties, mode) {
-        if (_.isObject(feature) && !_.isEmpty(feature)) {
+        if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0) {
             this.get("wfstFields").forEach(function (field) {
-                if (!_.has(feature.getProperties(), field.field)) {
-                    if (mode === "drawProperties" && _.isObject(properties) && !_.isEmpty(properties)) {
+                if (!feature.getProperties().hasOwnProperty(field.field)) {
+                    if (mode === "drawProperties" && typeof properties === "object" && properties !== null && Object.entries(properties > 0)) {
                         feature.set(field.field, properties[field.field]);
                     }
                     else {
@@ -1269,7 +1280,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             formatWFS = new WFS();
 
         // As soon as ol can handle wfs 2.0.0 add a differentiation between the version numbers and write xml for wfs 2.0.0
-        if (_.isObject(feature) && !_.isEmpty(feature)) {
+        if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0) {
             switch (mode) {
                 case "insert":
                 {
@@ -1314,7 +1325,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             tag,
             index;
 
-        if (xmlString.indexOf(namespace) <= 0 && _.isString(mode) && _.isObject(writeOptions) && !_.isEmpty(writeOptions)) {
+        if (xmlString.indexOf(namespace) <= 0 && typeof mode === "string" && typeof writeOptions === "object" && writeOptions !== null && Object.entries(writeOptions).length > 0) {
             if (mode === "update") {
                 tag = "<Update typeName=\"" + writeOptions.featurePrefix + ":" + writeOptions.featureType + "\"";
                 index = xmlString.indexOf(tag);
@@ -1418,7 +1429,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         // if response contains an exception, give an appropriate feedback to the exception code
         if (jqXHR.responseText.includes("Exception")) {
             exceptionCode = this.getSubstring(jqXHR.responseText, ["exceptionCode", "\"", "\""]);
-            if (_.contains(exceptionCodes, exceptionCode)) {
+            if (exceptionCodes.includes(exceptionCode)) {
                 message = this.getAlertMessage(exceptionCode);
             }
             else {
@@ -1457,7 +1468,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     proofForCorrectTransact: function (response, actionType) {
         let isCorrect = false;
 
-        if (_.isObject(response)) {
+        if (typeof response === "object" && response !== null) {
             $(response).find("*").each(function () {
                 switch (actionType) {
                     case "insert":
@@ -1491,8 +1502,8 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     getExceptionText: function (response) {
         let exceptionText;
 
-        if (_.isObject(response) && !_.isEmpty(response)) {
-            if (!_.isUndefined($(response.responseText).find("ExceptionText").prevObject[2])) {
+        if (typeof response === "object" && response !== null && Object.entries(response).length > 0) {
+            if ($(response.responseText).find("ExceptionText").prevObject[2] !== undefined) {
                 exceptionText = $(response.responseText).find("ExceptionText").prevObject[2].innerText;
             }
             else {
@@ -1516,7 +1527,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             string2,
             string3;
 
-        if (_.isString(exception) && _.isArray(seperator) && seperator.length) {
+        if (typeof exception === "string" && Array.isArray(seperator) && seperator.length) {
             index1 = exception.indexOf(seperator[0]);
             string1 = exception.substring(index1);
 
@@ -1538,126 +1549,272 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         this.get("initialAlertCases").push(value);
     },
 
+    /**
+     * Setter for activeButton
+     * @param {String} value - activeButton
+     * @returns {void}
+     */
     setActiveButton: function (value) {
         this.set("activeButton", value);
     },
 
+    /**
+     * Setter for activeLayers
+     * @param {Object} value - activeLayers
+     * @returns {void}
+     */
     setActiveLayers: function (value) {
         this.set("activeLayers", value);
     },
 
+    /**
+     * Setter for alertCases
+     * @param {String[]} value - alertCases
+     * @returns {void}
+     */
     setAlertCases: function (value) {
         this.get("alertCases").push(value);
     },
 
+    /**
+     * Setter for attributesField
+     * @param {Object[]} value - attributesField
+     * @returns {void}
+     */
     setAttributesField: function (value) {
         this.set("attributesField", value);
     },
 
+    /**
+     * Setter for buttonTitleConfig
+     * @param {String[]} value - buttonTitleConfig
+     * @returns {void}
+     */
     setButtonTitleConfigs: function (value) {
         this.set("buttonTitleConfig", value);
     },
 
+    /**
+     * Setter for buttonConfig
+     * @param {Boolean[]} value - buttonConfig
+     * @returns {void}
+     */
     setButtonConfig: function (value) {
         this.set("buttonConfig", value);
     },
 
+    /**
+     * Setter for currentFeature
+     * @param {Object} value - currentFeature
+     * @returns {void}
+     */
     setCurrentFeature: function (value) {
         this.set("currentFeature", value);
     },
 
+    /**
+     * Setter for currentLayerId
+     * @param {String} value - currentLayerId
+     * @returns {void}
+     */
     setCurrentLayerId: function (value) {
         this.set("currentLayerId", value);
     },
 
+    /**
+     * Setter for deleteButton
+     * @param {Boolean} value - deleteButton
+     * @returns {void}
+     */
     setDeleteButton: function (value) {
         this.set("deleteButton", value);
     },
 
+    /**
+     * Setter for deleteButtonTitle
+     * @param {String} value - deleteButtonTitle
+     * @returns {void}
+     */
     setDeleteButtonTitle: function (value) {
         this.set("deleteButtonTitle", value);
     },
 
+    /**
+     * Setter for isDeselectedLayer
+     * @param {Boolean} value - isDeselectedLayer
+     * @returns {void}
+     */
     setIsDeselectedLayer: function (value) {
         this.set("isDeselectedLayer", value);
     },
 
+    /**
+     * Setter for editButton
+     * @param {Boolean} value - editButton
+     * @returns {void}
+     */
     setEditButton: function (value) {
         this.set("editButton", value);
     },
 
+    /**
+     * Setter for editButtonTitle
+     * @param {String} value - editButtonTitle
+     * @returns {void}
+     */
     setEditButtonTitle: function (value) {
         this.set("editButtonTitle", value);
     },
 
+    /**
+     * Setter for featureNS
+     * @param {String} value - featureNS
+     * @returns {void}
+     */
     setFeatureNS: function (value) {
         this.set("featureNS", value);
     },
 
+    /**
+     * Setter for featurePrefix
+     * @param {String} value - featurePrefix
+     * @returns {void}
+     */
     setFeaturePrefix: function (value) {
         this.set("featurePrefix", value);
     },
 
+    /**
+     * Setter for featureProperties
+     * @param {Object} value - featureProperties
+     * @returns {void}
+     */
     setFeatureProperties: function (value) {
         this.set("featureProperties", value);
     },
 
+    /**
+     * Setter for featureType
+     * @param {String} value - featureType
+     * @returns {void}
+     */
     setFeatureType: function (value) {
         this.set("featureType", value);
     },
 
+    /**
+     * Setter for geometryName
+     * @param {String} value - geometryName
+     * @returns {void}
+     */
     setGeometryName: function (value) {
         this.set("geometryName", value);
     },
 
+    /**
+     * Setter for gfiAttributes
+     * @param {Object} value - gfiAttributes
+     * @returns {void}
+     */
     setGfiAttributes: function (value) {
         this.set("gfiAttributes", value);
     },
 
+    /**
+     * Setter for incorrectConfigLayers
+     * @param {String[]} value - incorrectConfigLayers
+     * @returns {void}
+     */
     setIncorrectConfigLayers: function (value) {
         this.get("incorrectConfigLayers").push(value);
     },
 
+    /**
+     * Setter for showInfoText
+     * @param {Boolean} value - showInfoText
+     * @returns {void}
+     */
     setShowInfoText: function (value) {
         this.set("showInfoText", value);
     },
 
+    /**
+     * Setter for interaction
+     * @param {Object} value - interaction
+     * @returns {void}
+     */
     setInteractions: function (value) {
         this.set("interaction", value);
     },
 
+    /**
+     * Setter for layerIds
+     * @param {String[]} value - layerIds
+     * @returns {void}
+     */
     setLayerIds: function (value) {
         this.set("layerIds", value);
     },
 
-    setRecordNamespaces: function (value) {
-        this.set("recordNamespaces", value);
-    },
-
+    /**
+     * Setter for showAttrTable
+     * @param {Boolean} value - showAttrTable
+     * @returns {void}
+     */
     setShowAttrTable: function (value) {
         this.set("showAttrTable", value);
     },
 
+    /**
+     * Setter for showCancel
+     * @param {Boolean} value - showCancel
+     * @returns {void}
+     */
     setShowCancel: function (value) {
         this.set("showCancel", value);
     },
 
+    /**
+     * Setter for successfullTransaction
+     * @param {String} value - successfullTransaction
+     * @returns {void}
+     */
     setSuccessfullTransaction: function (value) {
         this.set("successfullTransaction", value);
     },
 
+    /**
+     * Setter for url
+     * @param {String} value - url
+     * @returns {void}
+     */
     setUrl: function (value) {
         this.set("url", value);
     },
 
+    /**
+     * Setter for vectorLayer
+     * @param {Object} value - vectorLayer
+     * @returns {void}
+     */
     setVectorLayer: function (value) {
         this.set("vectorLayer", value);
     },
 
+    /**
+     * Setter for version
+     * @param {String} value - version
+     * @returns {void}
+     */
     setVersion: function (value) {
         this.set("version", value);
     },
 
+    /**
+     * Setter for wfstFields
+     * @param {Object[]} value - wfstFields
+     * @returns {void}
+     */
     setWfstFields: function (value) {
         this.set("wfstFields", value);
     }

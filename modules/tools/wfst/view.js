@@ -129,11 +129,11 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
         }
         else {
             this.reloadLayer();
-            if (!_.isUndefined(this.model.get("interaction"))) {
+            if (this.model.get("interaction") !== undefined) {
                 Radio.trigger("Map", "removeInteraction", this.model.get("interaction"));
                 this.model.get("interaction").removeEventListener("select");
             }
-            if (!_.isUndefined(this.model.get("editInteraction"))) {
+            if (this.model.get("editInteraction") !== undefined) {
                 Radio.trigger("Map", "removeInteraction", this.model.get("editInteraction"));
             }
             this.model.setShowAttrTable(false);
@@ -174,7 +174,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
 
         if (activeButton === "point" || activeButton === "line" || activeButton === "area") {
             $("#" + activeButtonId)[0].classList.add("record-active");
-            if (!_.isNull($("#cursorGlyph"))) {
+            if ($("#cursorGlyph") !== null) {
                 this.registerListener(event.currentTarget);
             }
         }
@@ -189,7 +189,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
         const buttonPrefix = "wfst-module-recordButton-";
         let activeButton;
 
-        if (_.isString(buttonId) && buttonId.indexOf(buttonPrefix) === 0) {
+        if (typeof buttonId === "string" && buttonId.indexOf(buttonPrefix) === 0) {
             activeButton = buttonId.substring(buttonPrefix.length);
         }
         else {
@@ -264,7 +264,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
         let message;
 
         if (activeButton === "point" || activeButton === "line" || activeButton === "area") {
-            if (_.isArray(wfstFields) && wfstFields.length) {
+            if (Array.isArray(wfstFields) && wfstFields.length) {
                 this.model.setShowAttrTable(true);
             }
             // if the wfstFields are incorrect trigger a warning
@@ -324,25 +324,25 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             buttonDiscard = $("#wfst-module-recordButton-discard")[0],
             deactivateAll = "deactivate-all";
 
-        if (typeof objects.buttonPoint.element === "object" && activeButton === objects.buttonPoint.element.id) {
+        if (typeof objects.buttonPoint.element === "object" && objects.buttonPoint.element !== null && activeButton === objects.buttonPoint.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonPointDisable === undefined ? true : objects[key].buttonPointDisable));
         }
-        if (typeof objects.buttonLine.element === "object" && activeButton === objects.buttonLine.element.id) {
+        if (typeof objects.buttonLine.element === "object" && objects.buttonLine.element !== null && activeButton === objects.buttonLine.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonLineDisable === undefined ? true : objects[key].buttonLineDisable));
         }
-        if (typeof objects.buttonArea.element === "object" && activeButton === objects.buttonArea.element.id) {
+        if (typeof objects.buttonArea.element === "object" && objects.buttonArea.element !== null && activeButton === objects.buttonArea.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonAreaDisable === undefined ? true : objects[key].buttonAreaDisable));
         }
-        if (typeof objects.buttonEdit.element === "object" && activeButton === objects.buttonEdit.element.id) {
+        if (typeof objects.buttonEdit.element === "object" && objects.buttonEdit.element !== null && activeButton === objects.buttonEdit.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonEditDisable === undefined ? true : objects[key].buttonEditDisable));
         }
-        if (typeof objects.buttonDel.element === "object" && activeButton === objects.buttonDel.element.id) {
+        if (typeof objects.buttonDel.element === "object" && objects.buttonDel.element !== null && activeButton === objects.buttonDel.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].buttonDeleteDisable === undefined ? true : objects[key].buttonDeleteDisable));
         }
-        if (typeof objects.layerSelect.element === "object" && activeButton === objects.layerSelect.element.id) {
+        if (typeof objects.layerSelect.element === "object" && objects.layerSelect.element !== null && activeButton === objects.layerSelect.element.id) {
             Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, objects[key].layerSelectDisable === undefined ? true : objects[key].layerSelectDisable));
         }
-        if (typeof buttonSave === "object" && typeof buttonDiscard === "object") {
+        if (typeof buttonSave === "object" && buttonSave !== null && typeof buttonDiscard === "object" && buttonDiscard !== null) {
             if (activeButton === buttonSave.id || activeButton === buttonDiscard.id) {
                 Object.keys(objects).forEach(key => this.toggleObj(objects[key].element, false));
             }
@@ -364,7 +364,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
      * @returns {void}
      */
     toggleObj: function (button, add) {
-        if (_.isObject(button)) {
+        if (typeof button === "object" && button !== null) {
             $("#" + button.id).prop("disabled", add);
         }
     },
@@ -514,7 +514,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
                 featureLayerId = that.model.inheritModelListAttributes(event.element.getId(), wfsLayers);
 
                 // checks whether the selected feature belongs to the current layer. If not, create a warning message
-                if (!_.isUndefined(featureLayerId) && currentLayerId !== featureLayerId) {
+                if (featureLayerId !== undefined && currentLayerId !== featureLayerId) {
                     that.model.setShowAttrTable(false);
                     message = that.model.getAlertMessage("editNotActiveLayer");
                     Radio.trigger("Alert", "alert", {
@@ -535,7 +535,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
                     that.model.setFeatureProperties(feature);
                     that.model.setShowAttrTable(true);
                 }
-                else if (_.isUndefined(featureLayerId)) {
+                else if (featureLayerId !== undefined) {
                     delete event.element;
                 }
                 that.model.setCurrentFeature(event.element);
@@ -607,7 +607,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
         let message;
 
         this.model.setShowCancel(false);
-        if (!_.isNull(this.model.get("currentFeature"))) {
+        if (this.model.get("currentFeature") !== null) {
             if (this.model.get("toggleLayer")) {
                 this.hideFeatures(false);
             }
@@ -690,7 +690,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
 
         if (wfsLayer.length === 1) {
             wfsLayer[0].updateSource();
-            if (_.isObject(vectorLayer) && !_.isNull(vectorLayer.getSource())) {
+            if (typeof vectorLayer === "object" && vectorLayer !== null && vectorLayer.getSource() !== null) {
                 vectorLayer.getSource().clear();
             }
         }
@@ -769,7 +769,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             if (!(/^(\d+(,\d*|)|)$/).test(value)) {
                 $("#" + id)[0].setAttribute("style", "border: 1px solid red");
                 message = this.model.getAlertMessage("decimalError");
-                if (_.isEmpty(document.getElementById("warning-text " + id).innerHTML)) {
+                if (Object.entries(document.getElementById("warning-text " + id).innerHTML).length <= 0) {
                     document.getElementById("warning-text " + id).innerHTML = message;
                 }
             }
@@ -784,7 +784,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             if ((/\D/g).test(value)) {
                 $("#" + id)[0].setAttribute("style", "border: 1px solid red");
                 message = this.model.getAlertMessage("integerError");
-                if (_.isEmpty(document.getElementById("warning-text " + id).innerHTML)) {
+                if (Object.entries(document.getElementById("warning-text " + id).innerHTML).length <= 0) {
                     document.getElementById("warning-text " + id).innerHTML = message;
                 }
             }
@@ -799,7 +799,7 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             if ((/\D/g).test(value)) {
                 $("#" + id)[0].setAttribute("style", "border: 1px solid red");
                 message = this.model.getAlertMessage("integerError");
-                if (_.isEmpty(document.getElementById("warning-text " + id).innerHTML)) {
+                if (Object.entries(document.getElementById("warning-text " + id).innerHTML).length <= 0) {
                     document.getElementById("warning-text " + id).innerHTML = message;
                 }
             }
