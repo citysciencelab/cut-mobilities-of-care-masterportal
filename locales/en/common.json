@@ -75,6 +75,12 @@
         "language": {
             "languageTitle": "Please choose a language"
         },
+        "cswParser": {
+            "noMetadataMessage": "No metadata available."
+        },
+        "layerInformation": {
+            "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
+        },
         "quickHelp": {
             "titleTag": "Open help",
             "search":{
@@ -234,6 +240,11 @@
                 "cartesian": {
                     "eastingLabel": "Easting",
                     "northingLabel": "Northing"
+                }
+            },
+            "gfi": {
+                "themes": {
+                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service."
                 }
             },
             "viomRouting": {

@@ -76,6 +76,12 @@
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus"
         },
+        "cswParser": {
+           "noMetadataMessage": "Keine Metadaten vorhanden."
+        },
+        "layerInformation": {
+            "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
+        },
         "quickHelp": {
             "titleTag": "Hilfe öffnen",
             "search":{
@@ -235,6 +241,11 @@
                 "cartesian": {
                     "eastingLabel": "Rechtswert",
                     "northingLabel": "Hochwert"
+                }
+            },
+            "gfi": {
+                "themes": {
+                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes."
                 }
             },
             "viomRouting": {
