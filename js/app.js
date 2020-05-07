@@ -66,7 +66,6 @@ import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
 import MousePositionView from "../modules/controls/mousePosition/view";
 import FullScreenView from "../modules/controls/fullScreen/view";
-import TotalView from "../modules/controls/totalView/view";
 import AttributionsView from "../modules/controls/attributions/view";
 import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
@@ -349,23 +348,6 @@ async function loadApp () {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
                         new FullScreenView({el: element});
-                    }
-                    break;
-                }
-                /**
-                 * totalView
-                 * @deprecated in 3.0.0
-                 */
-                case "totalview": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'totalview' is deprecated. Please use 'totalView' instead");
-                        new TotalView(control.id);
-                    }
-                    break;
-                }
-                case "totalView": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        new TotalView(control.id);
                     }
                     break;
                 }

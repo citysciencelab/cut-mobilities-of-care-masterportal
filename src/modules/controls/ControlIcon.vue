@@ -123,4 +123,7 @@ export default {
         margin-left: 2px;
         margin-top: -1px;
     }
+    .glyphicon-fast-backward::before {
+        margin-top: -1px;
+    }
 </style>

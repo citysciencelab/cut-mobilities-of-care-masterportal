@@ -52,6 +52,11 @@ const actions = {
         // currently has no change mechanism
         commit("setProjection", mapView.getProjection());
 
+        // note initial values for quick comparisons/resets
+        commit("setInitialZoomLevel", mapView.getZoom());
+        commit("setInitialCenter", mapView.getCenter());
+        commit("setInitialResolution", mapView.getResolution());
+
         // register listeners with state update functions
         unsubscribes = [
             map.on("moveend", () => dispatch("updateViewState")),
@@ -132,7 +137,7 @@ const actions = {
     },
     /**
      * Sets the opacity of a layer.
-     * @param {object} state state object
+     * @param {object} actionParams first action parameter
      * @param {object} payload parameter object
      * @param {string} payload.layerId id of layer to change opacity of
      * @param {number} payload.value opacity value in range (0, 1)
@@ -148,6 +153,21 @@ const actions = {
 
         layer.olLayer.setOpacity(value);
         commit("setLayerOpacity", {layerId, opacity: value});
+    },
+    /**
+     * Sets center and resolution to initial values.
+     * @param {object} actionParams first action parameter
+     * @returns {void}
+     */
+    resetView ({state}) {
+        const {initialCenter, initialResolution, map} = state,
+            view = map.getView();
+
+        view.setCenter(initialCenter);
+        view.setResolution(initialResolution);
+
+        // TODO replace trigger when MapMarker is migrated
+        Radio.trigger("MapMarker", "hideMarker");
     }
 };
 

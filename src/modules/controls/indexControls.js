@@ -3,6 +3,7 @@ import mutations from "./mutationsControls";
 import backForward from "./backForward/store/indexBackForward";
 import Attributions from "./attributions/components/Attributions.vue";
 import BackForward from "./backForward/components/BackForward.vue";
+import TotalView from "./totalView/components/TotalView.vue";
 import Zoom from "./zoom/components/Zoom.vue";
 
 /**
@@ -16,16 +17,20 @@ export default {
     modules: {
         backForward
     },
+    // initial state - information on all controls that are not addons.
     state: {
-        // initial state - information on all controls that are not addons.
+        // maps config.json.md control key to component
         componentMap: {
             attributions: Attributions,
             backForward: BackForward,
+            totalView: TotalView,
             zoom: Zoom
         },
+        // config.json.md control keys where the matching element is to be hidden in mobile mode
         mobileHiddenControls: [
             "backForward",
-            "mousePosition"
+            "mousePosition",
+            "totalView"
         ],
         bottomControls: ["attributions", "overviewMap"]
     },

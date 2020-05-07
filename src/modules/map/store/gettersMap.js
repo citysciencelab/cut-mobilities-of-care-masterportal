@@ -4,6 +4,18 @@ import {generateSimpleGetters} from "../../../global-store/utils/generators";
 const getters = {
     ...generateSimpleGetters(state),
     /**
+     * @param {object} s state
+     * @returns {boolean} true if map is not in initial zoom/center
+     */
+    hasMoved: ({map, initialZoomLevel, initialCenter}) => {
+        const view = map.getView(),
+            center = view.getCenter();
+
+        return initialCenter[0] !== center[0] ||
+            initialCenter[1] !== center[1] ||
+            initialZoomLevel !== view.getZoom();
+    },
+    /**
      * @param {object} _ state
      * @param {object} g getters
      * @returns {function} layer getter by id
