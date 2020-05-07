@@ -273,6 +273,7 @@
                 "drawPoint": "Draw point",
                 "writeText": "Write text",
                 "drawLine": "Draw line",
+                "drawCurve": "Draw curve",
                 "drawArea": "Draw area",
                 "drawCircle": "Draw circle",
                 "drawDoubleCircle": "Draw double circle",
@@ -294,6 +295,8 @@
                 "color": "Fill color",
                 "button": {
                     "draw": "Draw geometry / text",
+                    "undo": "Undo",
+                    "redo": "Redo",
                     "edit": "Edit geometry",
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all"
