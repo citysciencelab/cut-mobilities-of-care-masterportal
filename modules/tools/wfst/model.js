@@ -733,7 +733,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             type;
 
         if (attributeFields !== undefined && attributeFields !== null) {
-            Object.entries(attributeFields).forEach(([key, value]) => {
+            Object.entries(attributeFields).forEach(([, value]) => {
                 type = $(value).attr("type");
                 name = $(value).attr("name");
 
@@ -780,7 +780,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let name;
 
         if (typeof attributeFields === "object" && attributeFields !== null) {
-            Object.entries(attributeFields).forEach(([key, value]) => {
+            Object.entries(attributeFields).forEach(([, value]) => {
                 name = $(value).attr("name");
                 if ($(value).attr("minOccurs") !== undefined) {
                     if ($(value).attr("minOccurs") === "1") {
