@@ -452,6 +452,7 @@
           "styleModel": {
             "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
             "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
+          }
         },
         "legend": {
             "title": "Legend",
