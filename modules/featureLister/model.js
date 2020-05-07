@@ -105,10 +105,6 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             feature = _.find(features, function (feat) {
                 return feat.id.toString() === featureid;
             });
-<<<<<<< HEAD
-
-=======
->>>>>>> d56c5b545... modify: underscore MPR-15
         let geometry,
             properties;
 
@@ -264,6 +260,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
                 feature.get("features").forEach(function (feat) {
                     props = that.translateGFI([feat.getProperties()], gfiAttributes)[0];
                     geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
+
                     ll.push({
                         id: index,
                         properties: props,
@@ -313,7 +310,6 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             if (gfiAttributes === "showAll") {
                 // beautify keys
                 for (const [key, value] of Object.entries(preGfi)) {
-                // preGfi.forEach(function (value, key) {
                     gfi[this.beautifyString(key)] = value;
                 }
                 // im IE müssen die Attribute für WMS umgedreht werden
