@@ -70,6 +70,7 @@ import PrintView from "../modules/tools/print_/view";
  * only load PrintView
  */
 import PrintView2 from "../modules/tools/print/view";
+import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
@@ -314,6 +315,10 @@ function loadApp () {
             }
             case "styleWMS": {
                 new StyleWMSView({model: tool});
+                break;
+            }
+            case "wfst": {
+                new WfstView({model: tool});
                 break;
             }
             /**

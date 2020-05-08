@@ -56,6 +56,7 @@ import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewPoint/model";
 import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
+import WfstModel from "../../tools/wfst/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -334,6 +335,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "colorScale") {
                 return new ColorScale(attrs, options);
             }
+            else if (attrs.id === "wfst") {
+                return new WfstModel(attrs, options);
+            }
+
             /**
              * layerslider
              * @deprecated in 3.0.0
