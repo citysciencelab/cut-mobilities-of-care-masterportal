@@ -68,7 +68,6 @@ import MousePositionView from "../modules/controls/mousePosition/view";
 import FullScreenView from "../modules/controls/fullScreen/view";
 import TotalView from "../modules/controls/totalView/view";
 import AttributionsView from "../modules/controls/attributions/view";
-import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -397,25 +396,6 @@ async function loadApp () {
                     break;
                 }
                 */
-                /**
-                 * overviewmap
-                 * @deprecated in 3.0.0
-                 */
-                case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
-                        element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView(element, control.id, control.attr);
-                    }
-                    break;
-                }
-                case "overviewMap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView(element, control.id, control.attr);
-                    }
-                    break;
-                }
                 case "freeze": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
