@@ -1,4 +1,4 @@
-import {generateSimpleGetters} from "../../../../global-store/utils/generators";
+import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import state from "./stateDraw";
 
 const getters = {
