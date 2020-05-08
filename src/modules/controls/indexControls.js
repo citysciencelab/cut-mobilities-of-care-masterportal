@@ -23,6 +23,10 @@ export default {
         componentMap: {
             attributions: Attributions,
             backForward: BackForward,
+            get "totalview" () {
+                console.warn("'totalview' is deprecated. Please use 'totalView' instead.");
+                return TotalView;
+            },
             totalView: TotalView,
             zoom: Zoom
         },
