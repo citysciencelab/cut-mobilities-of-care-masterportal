@@ -1,5 +1,5 @@
 import "../model";
-import {transformToMapProjection, getProjection} from "masterportalAPI/src/crs";
+import {transformFromMapProjection as mpapiTransformToMapProjection, getProjection as mpapiGetProjection} from "masterportalAPI/src/crs";
 
 const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel.prototype */{
     defaults: {
@@ -88,7 +88,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
 
         // Filter results by classes
         if (Array.isArray(this.get("classes")) && this.get("classes").length > 0) {
-            payload.filter = "type:" + this.get("classes").join(",");
+            payload.filter = "type:" + this.get("classes").map(item => item.name).join(",");
         }
 
         // Set target CRS
@@ -100,6 +100,26 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
         }
 
         this.sendRequest(url, payload);
+    },
+
+    /**
+     * Call MasterportalAPI for transforming coordinates to map crs. introduced to make class testable.
+     * @param {Object} map - The map object
+     * @param {String} fromCRS - CRS of coordinates
+     * @param {Array} coordinate - coordinates
+     * @return {Array} transformed coordinate
+     */
+    transformToMapProjection: function (map, fromCRS, coordinate) {
+        return mpapiTransformToMapProjection(map, fromCRS, coordinate);
+    },
+
+    /**
+     * Call MasterportalAPI for checking if crs is known. Introduced to make class testable.
+     * @param {String} crs - epsg-code for crs
+     * @return {Boolean} true if CRS is known
+     */
+    getProjection: function (crs) {
+        return mpapiGetProjection(crs);
     },
 
     /**
@@ -129,7 +149,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
         }
 
         // Test for valid/usable crs
-        if (!getProjection(crs)) {
+        if (!this.getProjection(crs)) {
             this.showError({
                 statusText: i18next.t("common:modules.searchbar.locationFinder.unknownProjection") + " (" + crs + ")"
             });
@@ -140,14 +160,47 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
         if (Array.isArray(data.locs)) {
             data.locs.forEach(locationFinderResult => {
 
-                Radio.trigger("Searchbar", "pushHits", "hitList", {
+                const hit = {
                     name: locationFinderResult.name,
                     id: "locationFinder_" + locationFinderResult.id,
-                    coordinate: transformToMapProjection(Radio.request("Map", "getMap"), crs, [parseFloat(locationFinderResult.cx), parseFloat(locationFinderResult.cy)]),
-                    glyphicon: "glyphicon-road",
                     locationFinder: true,
                     type: locationFinderResult.type
-                });
+                };
+
+                if (Array.isArray(this.get("classes")) && this.get("classes").length > 0) {
+                    // Apply configured properties for the results class.
+                    const classDefinition = this.get("classes").find(item => item.name === locationFinderResult.type);
+
+                    if (!classDefinition) {
+                        // Skip unknown class
+                        return;
+                    }
+
+                    if (typeof classDefinition.icon === "string") {
+                        hit.glyphicon = classDefinition.icon;
+                    }
+                    else {
+                        hit.glyphicon = "glyphicon-road";
+                    }
+
+                    if (classDefinition.zoom === "bbox") {
+                        const min = this.transformToMapProjection(Radio.request("Map", "getMap"), crs, [parseFloat(locationFinderResult.xmin), parseFloat(locationFinderResult.ymin)]),
+                            max = this.transformToMapProjection(Radio.request("Map", "getMap"), crs, [parseFloat(locationFinderResult.xmax), parseFloat(locationFinderResult.ymax)]);
+
+                        hit.coordinate = [
+                            min[0], min[1], max[0], max[1]
+                        ];
+                    }
+                    else {
+                        hit.coordinate = this.transformToMapProjection(Radio.request("Map", "getMap"), crs, [parseFloat(locationFinderResult.cx), parseFloat(locationFinderResult.cy)]);
+                    }
+                }
+                else {
+                    hit.glyphicon = "glyphicon-road";
+                    hit.coordinate = this.transformToMapProjection(Radio.request("Map", "getMap"), crs, [parseFloat(locationFinderResult.cx), parseFloat(locationFinderResult.cy)]);
+                }
+
+                Radio.trigger("Searchbar", "pushHits", "hitList", hit);
             });
         }
 
