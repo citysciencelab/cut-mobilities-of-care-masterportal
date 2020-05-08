@@ -397,6 +397,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         this.model.startDownloadTool();
     },
 
+    // TODO: Look at the setter methods when the final implementation is done
+
     /**
      * deletes the last added geometry from the layer
      * @return {void}
