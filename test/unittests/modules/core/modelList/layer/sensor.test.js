@@ -136,22 +136,35 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("changeTimeZone", function () {
+    describe("getFirstPhenomenonTime", function () {
+        it("should return undefined", function () {
+            expect(sensorLayer.getFirstPhenomenonTime(undefined)).to.be.undefined;
+            expect(sensorLayer.getFirstPhenomenonTime({})).to.be.undefined;
+        });
+        it("should return time", function () {
+            expect(sensorLayer.getFirstPhenomenonTime("2020-04-02T14:00:01.000Z")).to.equal("2020-04-02T14:00:01.000Z");
+        });
+        it("should return first time if interval is given", function () {
+            expect(sensorLayer.getFirstPhenomenonTime("2020-04-02T14:00:01.000Z/2020-04-02T14:15:00.000Z")).to.equal("2020-04-02T14:00:01.000Z");
+        });
+    });
+
+    describe("getLocalTimeFormat", function () {
         it("should return an empty for undefined input", function () {
-            expect(sensorLayer.changeTimeZone(undefined, undefined)).that.have.string("");
+            expect(sensorLayer.getLocalTimeFormat(undefined, undefined)).that.have.string("");
         });
         it("should return an empty  string for undefined phenomenontime and utc +1", function () {
-            expect(sensorLayer.changeTimeZone(undefined, "+1")).that.have.string("");
+            expect(sensorLayer.getLocalTimeFormat(undefined, "Europe/Berlin")).that.have.string("");
         });
         it("should return an string in summertime", function () {
             const summerTime = "2018-06-05T12:11:47.922Z";
 
-            expect(sensorLayer.changeTimeZone(summerTime, "+1")).to.have.string("05 Juni 2018, 14:11:47");
+            expect(sensorLayer.getLocalTimeFormat(summerTime, "Europe/Berlin")).to.have.string("5. Juni 2018 14:11");
         });
         it("should return an string in wintertime", function () {
             const winterTime = "2018-01-01T12:11:47.922Z";
 
-            expect(sensorLayer.changeTimeZone(winterTime, "+1")).to.have.string("01 Januar 2018, 13:11:47");
+            expect(sensorLayer.getLocalTimeFormat(winterTime, "Europe/Berlin")).to.have.string("1. Januar 2018 13:11");
         });
     });
 
@@ -572,6 +585,7 @@ describe("core/modelList/layer/sensor", function () {
         it("should set one Thing in a simple way without aggregation", function () {
             const allThings = [
                     {
+                        "@iot.id": "quix",
                         name: "foo",
                         description: "bar",
                         properties: {
@@ -598,6 +612,7 @@ describe("core/modelList/layer/sensor", function () {
                         baz: "qux",
                         name: "foo",
                         description: "bar",
+                        "@iot.id": "quix",
                         requestUrl: "http://example.com",
                         versionUrl: "1.0",
                         Datastreams: [{"foobar": 1}]
@@ -612,6 +627,7 @@ describe("core/modelList/layer/sensor", function () {
         it("should aggregate Things if there is more than one thing", function () {
             const allThings = [[
                     {
+                        "@iot.id": "quix",
                         name: "foo",
                         description: "bar",
                         properties: {
@@ -626,6 +642,7 @@ describe("core/modelList/layer/sensor", function () {
                         Datastreams: [{"foobar": 10}]
                     },
                     {
+                        "@iot.id": "xiuq",
                         name: "oof",
                         description: "rab",
                         properties: {
@@ -653,6 +670,7 @@ describe("core/modelList/layer/sensor", function () {
                         baz: "qux | xuq",
                         name: "foo | oof",
                         description: "bar | rab",
+                        "@iot.id": "quix | xiuq",
                         requestUrl: "http://example.com",
                         versionUrl: "1.0"
                     }

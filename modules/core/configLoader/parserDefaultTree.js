@@ -21,7 +21,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     parseTree: function (layerList, Layer3dList) {
         // Im Default-Tree(FHH-Atlas / GeoOnline) werden nur WMS angezeigt
         // Und nur Layer die min. einem Metadatensatz zugeordnet sind
-        var newLayerList = this.filterList(layerList);
+        let newLayerList = this.filterList(layerList);
 
         // Entfernt alle Layer, die bereits im Cache dargestellt werden
         newLayerList = this.deleteLayersIncludeCache(newLayerList);
@@ -53,7 +53,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @return {Object[]} layerList - Objekte from services.json
      */
     deleteLayersIncludeCache: function (layerList) {
-        var cacheLayerMetaIDs = [],
+        const cacheLayerMetaIDs = [],
             cacheLayer = _.where(layerList, {cache: true});
 
         _.each(cacheLayer, function (layer) {
@@ -72,13 +72,13 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @return {Object[]} layerList - Objects from services.json that are assigned to exactly one dataset
      */
     createLayerPerDataset: function (layerList) {
-        var layerListPerDataset = layerList.filter(function (element) {
+        const layerListPerDataset = layerList.filter(function (element) {
             return element.datasets.length > 1;
         });
 
         _.each(layerListPerDataset, function (layer) {
             _.each(layer.datasets, function (ds, key) {
-                var newLayer = _.clone(layer);
+                const newLayer = _.clone(layer);
 
                 newLayer.id = layer.id + "_" + key;
                 newLayer.datasets = [ds];
@@ -97,7 +97,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     parseLayerList: function (layerList, Layer3dList) {
-        var baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
+        const baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
             // Unterscheidung nach Overlay und Baselayer
             typeGroup = _.groupBy(layerList, function (layer) {
                 if (layer.typ === "Terrain3D" || layer.typ === "TileSet3D" || layer.typ === "Entities3D") {
@@ -141,14 +141,19 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
         const isMobile = Radio.request("Util", "isViewMobile"),
             isVisibleInTree = isMobile ? "false" : "true";
 
-        let layer3DVisibility;
+        let layer3DVisibility,
+            layer3DVisible;
 
         if (layerList && Array.isArray(layerList)) {
             layerList.forEach(function (layer) {
                 if (Layer3dList && typeof Layer3dList === "object" && Layer3dList.Layer && Layer3dList.Layer.length > 0) {
+
                     layer3DVisibility = Layer3dList.Layer.filter(function (layer3D) {
                         return layer3D.id === layer.id;
-                    })[0].visibility;
+                    });
+                    if (layer3DVisibility[0] !== undefined) {
+                        layer3DVisible = layer3DVisibility[0].visibility;
+                    }
                 }
 
                 this.addItem(_.extend({
@@ -156,7 +161,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     parentId: "3d_daten",
                     level: 0,
                     isVisibleInTree: isVisibleInTree,
-                    isSelected: layer3DVisibility ? layer3DVisibility : false
+                    isSelected: layer3DVisible ? layer3DVisible : false
                 }, layer));
             }, this);
         }
@@ -170,7 +175,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      */
     createBaselayer: function (layerList) {
         _.each(this.get("baselayer").Layer, function (layer) {
-            var newLayer;
+            let newLayer;
 
             if (_.isArray(layer.id)) {
                 newLayer = _.extend(this.mergeObjectsByIds(layer.id, layerList), _.omit(layer, "id"));
@@ -203,7 +208,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {object} categories
     */
     splitIntoFolderAndLayer: function (metaNameGroups, name) {
-        var folder = [],
+        const folder = [],
             layer = [],
             categories = {};
 
@@ -233,7 +238,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     groupDefaultTreeOverlays: function (overlays) {
-        var tree = {},
+        const tree = {},
             categoryGroups = _.groupBy(overlays, function (layer) {
                 // Gruppierung nach Opendatakategorie
                 if (this.get("category") === "Opendata") {
@@ -251,7 +256,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
         // Gruppierung nach MetaName
         _.each(categoryGroups, function (group, name) {
-            var metaNameGroups = _.groupBy(group, function (layer) {
+            const metaNameGroups = _.groupBy(group, function (layer) {
                 return layer.datasets[0].md_name;
             });
 
@@ -268,7 +273,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     createModelsForDefaultTree: function (tree) {
-        var sortedKeys = Object.keys(tree).sort(),
+        const sortedKeys = Object.keys(tree).sort(),
             sortedCategories = [],
             isQuickHelpSet = Radio.request("QuickHelp", "isSet");
 

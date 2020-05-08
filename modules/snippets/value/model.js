@@ -12,7 +12,7 @@ const SnippetValueModel = Backbone.Model.extend({
         this.set("isSelected", value);
     },
     getDisplayString: function () {
-        var displayString = "";
+        let displayString = "";
 
         switch (this.get("type")) {
             case "boolean": {

@@ -6,7 +6,7 @@ const GFIDetachedView = DesktopView.extend({
     template: _.template(Template),
 
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         $("#map").append(this.$el.html(this.template(attr)));
         this.$el.css("maxWidth", Math.round($("#map").width() / 2.2));

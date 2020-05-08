@@ -101,7 +101,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @listens Print#CreatePrintJob
      */
     initialize: function () {
-        var channel = Radio.channel("Print");
+        const channel = Radio.channel("Print");
 
         this.superInitialize();
 
@@ -167,7 +167,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     createMapFishServiceUrl: function (id) {
-        var service = Radio.request("RestReader", "getServiceById", id),
+        const service = Radio.request("RestReader", "getServiceById", id),
             serviceUrl = _.isUndefined(service) ? "" : service.get("url");
 
         this.setMapfishServiceUrl(serviceUrl);
@@ -179,7 +179,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     getCapabilites: function (model, value) {
-        var serviceUrl;
+        let serviceUrl;
 
         if (value) {
             if (this.get("mapfishServiceId") !== undefined) {
@@ -214,7 +214,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     print: function () {
-        var visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
+        const visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(function (layer) {
                 return layer.getVisible() === true;
             }),
             attr = {
@@ -230,10 +230,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                         "scale": this.get("currentScale")
                     }
                 }
-            },
-            spec;
+            };
 
-        spec = new BuildSpecModel(attr);
+        let spec = new BuildSpecModel(attr);
+
         if (this.get("isMetaDataAvailable")) {
             spec.setMetadata(true);
         }
@@ -264,7 +264,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {array} sorted visibleLayerList
      */
     sortVisibleLayerListByZindex: function (visibleLayerList) {
-        var visibleLayerListWithZIndex = _.filter(visibleLayerList, function (layer) {
+        const visibleLayerListWithZIndex = _.filter(visibleLayerList, function (layer) {
                 return !_.isUndefined(layer.getZIndex());
             }),
             visibleLayerListWithoutZIndex = _.difference(visibleLayerList, visibleLayerListWithZIndex);
@@ -284,7 +284,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     createPrintJob: function (printAppId, payload, format) {
-        var url = this.get("mapfishServiceUrl") + printAppId + "/report." + format;
+        const url = this.get("mapfishServiceUrl") + printAppId + "/report." + format;
 
         Radio.trigger("Util", "showLoader");
         this.sendRequest(url, "POST", this.waitForPrintJob, payload);
@@ -296,7 +296,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     waitForPrintJob: function (response) {
-        var url = this.get("mapfishServiceUrl") + "status/" + response.ref + ".json";
+        const url = this.get("mapfishServiceUrl") + "status/" + response.ref + ".json";
 
         this.sendRequest(url, "GET", function (status) {
             // Fehlerverarbeitung...
@@ -334,9 +334,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     createPrintMask: function (evt) {
-        var frameState = evt.frameState,
-            context = evt.context,
-            scale;
+        const frameState = evt.frameState,
+            context = evt.context;
+
+        let scale;
 
         // scale was selected by the user over the view
         if (this.get("isScaleSelectedManually")) {
@@ -359,7 +360,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     drawMask: function (mapSize, context) {
-        var mapWidth = mapSize[0] * DEVICE_PIXEL_RATIO,
+        const mapWidth = mapSize[0] * DEVICE_PIXEL_RATIO,
             mapHeight = mapSize[1] * DEVICE_PIXEL_RATIO;
 
         context.beginPath();
@@ -382,7 +383,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     drawPrintPage: function (mapSize, resolution, printMapSize, scale, context) {
-        var center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2, mapSize[1] * DEVICE_PIXEL_RATIO / 2],
+        const center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2, mapSize[1] * DEVICE_PIXEL_RATIO / 2],
             boundWidth = printMapSize[0] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * DEVICE_PIXEL_RATIO,
             boundHeight = printMapSize[1] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * DEVICE_PIXEL_RATIO,
             minx = center[0] - (boundWidth / 2),
@@ -408,12 +409,13 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {number} the optimal scale
      */
     getOptimalScale: function (mapSize, resolution, printMapSize, scaleList) {
-        var mapWidth = mapSize[0] * resolution,
+        const mapWidth = mapSize[0] * resolution,
             mapHeight = mapSize[1] * resolution,
             scaleWidth = mapWidth * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[0],
             scaleHeight = mapHeight * this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH") / printMapSize[1],
-            scale = Math.min(scaleWidth, scaleHeight),
-            optimalScale = scaleList[0];
+            scale = Math.min(scaleWidth, scaleHeight);
+
+        let optimalScale = scaleList[0];
 
         scaleList.forEach(function (printMapScale) {
             if (scale > printMapScale) {
@@ -432,7 +434,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {number} the optimal resolution
      */
     getOptimalResolution: function (scale, mapSize, printMapSize) {
-        var dotsPerMeter = this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH"),
+        const dotsPerMeter = this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH"),
             resolutionX = printMapSize[0] * scale / (dotsPerMeter * mapSize[0]),
             resolutiony = printMapSize[1] * scale / (dotsPerMeter * mapSize[1]);
 
@@ -444,7 +446,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {number[]} width and height
      */
     getPrintMapSize: function () {
-        var layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
+        const layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
 
         return [layoutMapInfo.width, layoutMapInfo.height];
     },
@@ -454,7 +456,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {number[]} scale list
      */
     getPrintMapScales: function () {
-        var layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
+        const layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
 
         return layoutMapInfo.scales.sort(this.sortNumbers);
     },

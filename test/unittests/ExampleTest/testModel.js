@@ -1,6 +1,5 @@
-var testModul;
 
-testModul = Backbone.Model.extend({
+const testModul = Backbone.Model.extend({
     defaults: {
         employees: []
     },
@@ -14,9 +13,14 @@ testModul = Backbone.Model.extend({
         return employee.coffeeCount > 1;
     },
     getSleepingEmployeeNames: function () {
-        return _.pluck(this.getEmployees().filter(function (employee) {
-            return !this.getIsAwake(employee);
-        }, this), "name");
+        const tmpArray = this.getEmployees().filter(function (employee) {
+                return !this.getIsAwake(employee);
+            }, this),
+            ret = tmpArray.map(function (obj) {
+                return obj.name;
+            });
+
+        return ret;
     },
     // getter for employees
     getEmployeesByName: function (name) {

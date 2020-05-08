@@ -4,11 +4,12 @@ import {getTilesetStyle} from "./tilesetHelper";
 /**
  * @type {symbol}
  */
-var lastUpdatedSymbol = Symbol("_lastUpdated");
+const lastUpdatedSymbol = Symbol("_lastUpdated");
+let TileSetLayer = {};
 
 export {lastUpdatedSymbol};
 
-const TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
+TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     /**
      * @class TileSetLayer
      * @description Class to represent a cesium TileSet Layer

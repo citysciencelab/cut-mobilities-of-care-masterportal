@@ -4,8 +4,9 @@ import Feature from "ol/Feature.js";
 import {expect} from "chai";
 
 describe("POI (In meiner Nähe)", function () {
-    var model,
-        distances = [500, 1000, 2000];
+    let model;
+
+    const distances = [500, 1000, 2000];
 
     before(function () {
         model = Model;
@@ -13,14 +14,14 @@ describe("POI (In meiner Nähe)", function () {
     });
 
     describe("getFeatureTitle", function () {
-        var feature = new Feature();
+        let feature = new Feature();
 
         it("should return featureId when other info is unset", function () {
             feature.setId("123");
             expect(model.getFeatureTitle(feature)).to.be.an("string").to.equal("123");
         });
         it("should return layerName when name is unset", function () {
-            feature = _.extend(feature, {
+            feature = Object.assign(feature, {
                 layerName: "LayerName"
             });
             expect(model.getFeatureTitle(feature)).to.be.an("string").to.equal("LayerName");
@@ -32,7 +33,7 @@ describe("POI (In meiner Nähe)", function () {
     });
 
     describe("SVG Functions", function () {
-        var style = new Style();
+        const style = new Style();
 
         it("createPolygonSVG should return an SVG", function () {
             expect(model.createPolygonSVG(style)).to.be.an("string").to.equal("<svg height='35' width='35'><polygon points='5,5 30,5 30,30 5,30' style='fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:2;'/></svg>");
@@ -46,7 +47,7 @@ describe("POI (In meiner Nähe)", function () {
     });
 
     describe("Imagenamen bei StyleFieldAngaben", function () {
-        var feature = new Feature(),
+        const feature = new Feature(),
             style = new Style();
 
         feature.set("kategorie", "Test");

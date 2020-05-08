@@ -65,7 +65,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @fires StyleWMSModel#changeIsactive
      */
     initialize: function () {
-        var channel = Radio.channel("StyleWMS");
+        const channel = Radio.channel("StyleWMS");
 
         this.superInitialize();
         channel.on({
@@ -124,11 +124,10 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @returns {void}
      */
     refreshStyleableLayerList: function () {
-        var styleableLayerList = [],
-            layerModelList,
-            result;
+        const styleableLayerList = [],
+            layerModelList = Radio.request("ModelList", "getModelsByAttributes", {styleable: true, isSelected: true});
 
-        layerModelList = Radio.request("ModelList", "getModelsByAttributes", {styleable: true, isSelected: true});
+        let result;
 
         _.each(layerModelList, function (layerModel) {
             styleableLayerList.push({name: layerModel.get("name"), id: layerModel.get("id")});
@@ -157,12 +156,14 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @see {@link http://backbonejs.org/#Model-validate|Backbone}
      */
     validate: function (attributes) {
-        var prevMax = -1,
-            errors = [],
+
+        const errors = [],
             regExp = new RegExp("^[0-9]+$");
 
+        let prevMax = -1;
+
         _.each(attributes.styleClassAttributes, function (element, index) {
-            var min = parseInt(element.startRange, 10),
+            const min = parseInt(element.startRange, 10),
                 max = parseInt(element.stopRange, 10);
 
             if (regExp.test(element.startRange) === false) {
@@ -212,7 +213,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @returns {void}
      */
     createSLD: function () {
-        var sld = "";
+        let sld = "";
 
         if (this.isValid() === true) {
             if (this.get("wmsSoftware") === "ESRI") {
@@ -231,7 +232,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @returns {void}
      */
     removeSLDBody: function () {
-        var source = this.get("model").get("layer").getSource(),
+        const source = this.get("model").get("layer").getSource(),
             params = source.getParams();
 
         /* eslint-disable-next-line no-undefined */
@@ -267,7 +268,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @returns {void}
      */
     setModelById: function (id) {
-        var model = null;
+        let model = null;
 
         if (id !== "") {
             model = Radio.request("ModelList", "getModelByAttributes", {id: id});
@@ -412,7 +413,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @return {string} rules-tags
      */
     createEsriRules: function () {
-        var rule = "";
+        let rule = "";
 
         if (this.get("geomType") === "Polygon") {
             _.each(this.get("styleClassAttributes"), function (obj) {
@@ -433,7 +434,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @return {string} rules-tags
      */
     createOgcRules: function () {
-        var rule = "";
+        let rule = "";
 
         if (this.get("geomType") === "Polygon") {
             _.each(this.get("styleClassAttributes"), function (obj) {

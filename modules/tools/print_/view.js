@@ -54,7 +54,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
      * @return {Backbone.View} itself
      */
     render: function (model) {
-        var attributes = model.toJSON();
+        const attributes = model.toJSON();
 
         if (model.get("isActive") && model.get("currentLayout")) {
             _.extend(attributes, {"scaleList": model.getPrintMapScales()});
@@ -76,7 +76,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
      * @returns {void}
      */
     setCurrentLayout: function (evt) {
-        var newLayout = this.model.getLayoutByName(this.model.get("layoutList"), evt.target.value);
+        const newLayout = this.model.getLayoutByName(this.model.get("layoutList"), evt.target.value);
 
         this.model.setCurrentLayout(newLayout);
         this.model.setIsScaleSelectedManually(false);
@@ -101,7 +101,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
      * @returns {void}
      */
     setCurrentScale: function (evt) {
-        var scale = parseInt(evt.target.value, 10),
+        const scale = parseInt(evt.target.value, 10),
             optimalResolution = this.model.getOptimalResolution(scale, Radio.request("Map", "getSize"), this.model.getPrintMapSize());
 
         this.model.setCurrentScale(scale);

@@ -68,7 +68,7 @@ describe("modules/searchbar", function () {
             });
 
             it("keep multiple items if filter-attributes are not matching", function () {
-                var hitListObj = [
+                const hitListObj = [
                     {
                         "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
                         "type": "Thema",
@@ -89,28 +89,25 @@ describe("modules/searchbar", function () {
             });
 
             it("handle items with matching and not matching filter attributes", function () {
-                var hitListObjInput,
-                    hitListObijOutput;
 
-                hitListObjInput = [
-                    {
-                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
-                        "type": "Thema",
-                        "id": "1562"
-                    },
-                    {
-                        "name": "Hamburg",
-                        "type": "OpenStreetMap"
-                    }
-                ];
-
-                hitListObijOutput = [
-                    {
-                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
-                        "type": "Thema",
-                        "id": "1562"
-                    }
-                ];
+                const hitListObjInput = [
+                        {
+                            "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                            "type": "Thema",
+                            "id": "1562"
+                        },
+                        {
+                            "name": "Hamburg",
+                            "type": "OpenStreetMap"
+                        }
+                    ],
+                    hitListObijOutput = [
+                        {
+                            "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                            "type": "Thema",
+                            "id": "1562"
+                        }
+                    ];
 
                 model.set("hitList", hitListObjInput);
 
@@ -120,29 +117,26 @@ describe("modules/searchbar", function () {
             });
 
             it("handle items with matching and not matching multi-key filter attributes", function () {
-                var hitListObjInput,
-                    hitListObijOutput;
 
-                hitListObjInput = [
-                    {
-                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
-                        "type": "Thema",
-                        "id": "1562"
-                    },
-                    {
-                        "name": "Festgestellte Bebauungspläne (§ 10 BauGB)",
-                        "type": "Thema",
-                        "id": "1561"
-                    }
-                ];
-
-                hitListObijOutput = [
-                    {
-                        "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
-                        "type": "Thema",
-                        "id": "1562"
-                    }
-                ];
+                const hitListObjInput = [
+                        {
+                            "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                            "type": "Thema",
+                            "id": "1562"
+                        },
+                        {
+                            "name": "Festgestellte Bebauungspläne (§ 10 BauGB)",
+                            "type": "Thema",
+                            "id": "1561"
+                        }
+                    ],
+                    hitListObijOutput = [
+                        {
+                            "name": "Bebauungspläne im Verfahren (§ 2 BauGB)",
+                            "type": "Thema",
+                            "id": "1562"
+                        }
+                    ];
 
                 model.set("hitList", hitListObjInput);
 

@@ -2147,6 +2147,12 @@
   * @example Radio.trigger("GraphicalSelect", "featureToGeoJson", feature);
   */
 
+ /**
+ * @event Snippets#ValuesChanged
+ * @description Triggered when a snippet changed its values
+ * @param {object}
+ */
+
 /** -------------------- TOOLS.ADDGEOJSON -------------------- */
 
 /**
@@ -2163,6 +2169,63 @@
 /**
  * @event Tools.Kmlimport#ChangeIsActive
  * @description Fired when param isActive changes
+ */
+
+/** -------------------- TOOLS.WFST -------------------- */
+
+/**
+ * @event Tools.Wfst#RadioTrigerWfstTransact
+ * @description performs a wfs transaction
+ * @param {String/Object} layerId The id of the layer on which the transaction is to be performed.
+ * @param {String/Object} featureId The id of the affected feature.
+ * @param {String/Object} mode The transaction mode insert|update|delete.
+ * @param {String/Object} attributes The feature attributes.
+ * @example Radio.trigger("wfst", "transact", layerId, featureId, mode, attributes)
+ */
+
+/**
+ * @event Tools.Wfst#ChangeIsActive
+ * @description Fired when param isActive changes.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeActiveButton
+ * @description Triggered when a button ist clicked.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeCurrentLayerId
+ * @description Triggered when the current active layer has changed.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeShowAttrTable
+ * @description Triggered when the status of the attribute table has changed.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeActiveLayers
+ * @description Triggered when the list of active layers has changed.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeButtonTitleConfig
+ * @description Triggered when the buttons and their captions were updatet.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeButtonConfig
+ * @description Triggered when the configuration for the feature generating buttons has changed.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeSuccessfullTransaction
+ * @description Triggered when a transaction was successfull.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeInteraction
+ * @description Triggered when an interaction was added or has changed.
  */
 
 /** -------------------- CORE.MODELLIST.TOOL -------------------- */

@@ -1,7 +1,7 @@
 import Model from "@modules/tools/gfi/themes/bildungsatlas/balkendiagramm/model.js";
 import {expect} from "chai";
 
-var model;
+let model;
 
 before(function () {
     model = new Model();

@@ -3,7 +3,7 @@ import Model from "@modules/tools/compareFeatures/model.js";
 import Util from "@testUtil";
 
 describe("tools/compareFeatures", function () {
-    var model,
+    let model,
         utilModel,
         gfiAttributes,
         themeConfig,
@@ -55,7 +55,7 @@ describe("tools/compareFeatures", function () {
 
     describe("groupedFeaturesBy", function () {
         it("should return an object with the keys '1711' and '1234'", function () {
-            var groupedFeatures = model.groupedFeaturesBy(model.get("featureList"), "layerId");
+            const groupedFeatures = model.groupedFeaturesBy(model.get("featureList"), "layerId");
 
             expect(groupedFeatures).to.have.all.key("1711", "1234");
         });

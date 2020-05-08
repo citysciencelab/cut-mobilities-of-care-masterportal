@@ -204,7 +204,7 @@ const ZoomToFeature = Backbone.Model.extend({
             attribute = this.get("attribute") || null,
             features = this.get("features");
 
-        if (ids.length > 0) {
+        if (ids && ids.length > 0) {
             ids.forEach(function (id, index) {
                 const feature = features.filter(function (feat) {
                         return feat.get(attribute) === id ? 1 : 0;

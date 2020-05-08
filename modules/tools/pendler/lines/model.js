@@ -183,6 +183,19 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
         Radio.trigger("MapMarker", "hideMarker");
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        if (this.model.get("isActive") === true) {
+            this.model.set({
+                "currentLng": lng
+            });
+        }
     }
 });
 

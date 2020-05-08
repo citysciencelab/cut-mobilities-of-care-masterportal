@@ -2,7 +2,7 @@ import ListView from "@modules/menu/mobile/listView.js";
 import {expect} from "chai";
 
 describe("menu/mobile/folder/view", function () {
-    var fakeModel,
+    let fakeModel,
         FakeListView;
 
     before(function () {
@@ -99,7 +99,7 @@ describe("menu/mobile/folder/view", function () {
 
     describe("the \"SelectAll\" checkbox", function () {
         it("should be hidden if the folder-property \"isFolderSelectable\" is false", function () {
-            var fakeListView = new FakeListView();
+            const fakeListView = new FakeListView();
 
             fakeModel.setIsFolderSelectable(false);
             fakeListView.addViews([fakeModel]);
@@ -107,7 +107,7 @@ describe("menu/mobile/folder/view", function () {
             expect(fakeListView.wasAppendCalled()).to.be.equal(false);
         });
         it("should be visible if the folder-property \"isFolderSelectable\" is true", function () {
-            var fakeListView = new FakeListView();
+            const fakeListView = new FakeListView();
 
             fakeModel.setIsFolderSelectable(true);
             fakeListView.addViews([fakeModel]);

@@ -1,9 +1,10 @@
 import Model from "@modules/tools/getCoord/model.js";
 import {expect} from "chai";
 
-var position1 = [564337.37, 5935980.05],
-    position2 = [586519.54, 5935688.88],
-    model;
+const position1 = [564337.37, 5935980.05],
+    position2 = [586519.54, 5935688.88];
+
+let model;
 
 before(function () {
     model = new Model();

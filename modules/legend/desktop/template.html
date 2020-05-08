@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <div class="legend-win-header">
     <p class="buttons pull-right">
+        <% if (showCollapseAllButton === true) { %>
+        <span id="collapseAll-btn" class="glyphicon glyphicon-arrow-down fold-in" title="<%= collapseAllText %>">
+        </span>
+        <% } %> 
         <span class="glyphicon glyphicon-remove" title="Schließen"></span>
     </p>
     <p class="buttons pull-left">
         <span class="glyphicon glyphicon-book win-icon"></span>
     </p>
     <p class="title">
-        <span>Legende</span>
+        <span><%= legendTitle %></span>
     </p>
 </div>
 

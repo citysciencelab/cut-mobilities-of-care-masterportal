@@ -82,7 +82,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      */
     initialize: function () {
         // lese WPS-Url aus JSON ein
-        var wpsService = Radio.request("RestReader", "getServiceById", Config.wpsID),
+        const wpsService = Radio.request("RestReader", "getServiceById", Config.wpsID),
             wpsURL = wpsService && wpsService && wpsService.get("url") ? wpsService.get("url") : null,
             newURL = wpsURL ? Radio.request("Util", "getProxyURL", wpsURL) : null;
 
@@ -142,7 +142,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      * @return {Object} returns Collection of errors or null if valid
      */
     validate: function (attributes, identifier) {
-        var errors = {};
+        const errors = {};
 
         if (identifier.validate === true) {
             if (this.get("activeDIV") === "kundendaten") {
@@ -390,7 +390,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      * @return {void}
      */
     checkInputKundendaten: function () {
-        var checker = this.isValid({validate: true});
+        const checker = this.isValid({validate: true});
 
         if (checker === true) {
             this.writeCookie();
@@ -403,7 +403,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      * @return {void}
      */
     checkInputBestelldaten: function () {
-        var checker = this.isValid();
+        const checker = this.isValid();
 
         if (checker === true) {
             this.set("activeDIV", "kundendaten");
@@ -421,7 +421,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      */
     transmitOrder: function () {
         // kopiere Attributwerte in für den FME-Prozess taugliche Form
-        var zweckGebaeudeeinmessung, zweckGebaeudeabsteckung, zweckLageplan, zweckSonstiges, request_str;
+        let zweckGebaeudeeinmessung, zweckGebaeudeabsteckung, zweckLageplan, zweckSonstiges, request_str;
 
         if (this.get("zweckGebaeudeeinmessung") === true) {
             zweckGebaeudeeinmessung = "ja";
@@ -608,7 +608,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      * @return {void}
      */
     showSuccessMessage: function () {
-        var ergMsg;
+        let ergMsg;
 
         if (this.get("auftragsnummer") !== "") {
             ergMsg = "mit der Auftragsnummer " + this.get("auftragsnummer") + " ";
@@ -626,17 +626,16 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      * @return {Object} json
      */
     buildJSONGeom: function () {
-        var featurearray = [];
+        const featurearray = [];
 
         _.each(this.get("source").getFeatures(), function (item, index) {
-            var geom, feature;
+            const geom = item.getGeometry(),
+                feature = {
+                    type: geom.getType(),
+                    index: index,
+                    coordinates: geom.getCoordinates()
+                };
 
-            geom = item.getGeometry();
-            feature = {
-                type: geom.getType(),
-                index: index,
-                coordinates: geom.getCoordinates()
-            };
             featurearray.push(feature);
         });
         return JSON.stringify(featurearray);
@@ -646,7 +645,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      * @return {void}
      */
     readCookie: function () {
-        var pCookie = JSON.parse(cookie.model.getItem());
+        const pCookie = JSON.parse(cookie.model.getItem());
 
         if (pCookie !== null) {
             this.set("kundennummer", pCookie.kundennummer);
@@ -666,7 +665,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
      * @return {void}
      */
     writeCookie: function () {
-        var newCookie = {};
+        const newCookie = {};
 
         if (cookie.model.get("approved") === true) {
             // schreibe cookie

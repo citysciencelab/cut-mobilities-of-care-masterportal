@@ -210,6 +210,7 @@
         "no-tabs": "error",
         "no-trailing-spaces": "error",
         "no-unneeded-ternary": "error",
+        "no-var": "error",
         "no-whitespace-before-property": "error",
         "object-curly-spacing": "error",
         "object-property-newline": 0,

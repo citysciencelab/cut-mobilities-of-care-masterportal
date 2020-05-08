@@ -69,8 +69,8 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
     * @returns {void}
     */
     getMouseHoverInfosFromConfig: function () {
-        var groupLayers = [],
-            layerGroups = [],
+        const groupLayers = [];
+        let layerGroups = [],
             wfsLayers = [],
             geoJsonLayers = [],
             sensorThingsLayers = [],
@@ -140,7 +140,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @returns {Array} features Array of features at the pixel
      */
     getFeaturesAtPixel: function (evt, mouseHoverInfos) {
-        var features = [],
+        const features = [],
             layerIds = _.pluck(mouseHoverInfos, "id");
 
         evt.map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
@@ -171,8 +171,8 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @returns {Array} pFeatureArray Array of features at pixel
      */
     fillFeatureArray: function (featureAtPixel) {
-        var pFeatureArray = [],
-            selFeature,
+        const pFeatureArray = [];
+        let selFeature,
             list;
 
         // featuresAtPixel.layer !== null --> quick little hack to avoid showing the popup while drawing SD 01.09.2015
@@ -217,9 +217,9 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @returns {void}
      */
     checkForFeaturesAtPixel: function (evt) {
-        var featuresArray = [],
-            featureArray = [],
-            featuresAtPixel = this.getFeaturesAtPixel(evt, this.get("mouseHoverInfos"));
+        const featuresAtPixel = this.getFeaturesAtPixel(evt, this.get("mouseHoverInfos"));
+        let featuresArray = [],
+            featureArray = [];
 
         _.each(featuresAtPixel, function (featureAtPixel) {
             featureArray = this.fillFeatureArray(featureAtPixel);
@@ -236,7 +236,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @returns {void}
      */
     checkAction: function (featuresArray, evt) {
-        var textArray;
+        let textArray = [];
 
         // no Features at MousePosition
         if (featuresArray.length === 0) {
@@ -267,7 +267,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @return {Boolean} boolean True or False result of the check
      */
     isTextEqual: function (array1, array2) {
-        var diff1 = _.difference(array1, array2),
+        const diff1 = _.difference(array1, array2),
             diff2 = _.difference(array2, array1);
 
         if (diff1.length > 0 || diff2.length > 0) {
@@ -282,7 +282,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @returns {void}
      */
     checkTextPosition: function (evt) {
-        var lastPixel = this.get("textPosition"),
+        const lastPixel = this.get("textPosition"),
             newPixel = evt.pixel,
             minShift = this.get("minShift");
 
@@ -299,7 +299,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @returns {String} value String of popup content
      */
     pickValue: function (mouseHoverField, featureProperties) {
-        var value = "";
+        let value = "";
 
         if (mouseHoverField && _.isString(mouseHoverField)) {
             if (_.has(featureProperties, mouseHoverField)) {
@@ -308,7 +308,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
         }
         else if (mouseHoverField && _.isArray(mouseHoverField)) {
             _.each(mouseHoverField, function (element, index) {
-                var pickedString = "",
+                let pickedString = "",
                     cssClass = "";
 
                 if (index === 0) {
@@ -333,14 +333,14 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @returns {Array} textArrayBroken Array containing text to show
      */
     checkTextArray: function (featureArray) {
-        var mouseHoverInfos = this.get("mouseHoverInfos"),
-            textArray = [],
-            textArrayCheckedLength,
-            textArrayBroken;
+        const mouseHoverInfos = this.get("mouseHoverInfos"),
+            textArray = [];
+        let textArrayCheckedLength = "",
+            textArrayBroken = "";
 
         // for each hovered over Feature...
         _.each(featureArray, function (element) {
-            var featureProperties = element.feature.getProperties(),
+            const featureProperties = element.feature.getProperties(),
                 layerInfos = _.find(mouseHoverInfos, function (mouseHoverInfo) {
                     return mouseHoverInfo.id === element.layerId;
                 });
@@ -361,8 +361,8 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @return {Array} Array Array containing correct number of texts
      */
     checkMaxFeaturesToShow: function (textArray) {
-        var maxNum = this.get("numFeaturesToShow"),
-            textArrayCorrected = [];
+        const maxNum = this.get("numFeaturesToShow");
+        let textArrayCorrected = [];
 
         if (textArray.length > maxNum) {
             textArrayCorrected = _.sample(textArray, maxNum);
@@ -383,7 +383,7 @@ const MouseHoverPopupModel = Backbone.Model.extend(/** @lends MouseHoverPopupMod
      * @return {Array} textArrayBroken Array with html br
      */
     addBreak: function (textArray) {
-        var textArrayBroken = [];
+        const textArrayBroken = [];
 
         _.each(textArray, function (value, index) {
             textArrayBroken.push(value);

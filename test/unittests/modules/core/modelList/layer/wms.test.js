@@ -2,7 +2,7 @@ import WMSLayer from "@modules/core/modelList/layer/wms.js";
 import {expect} from "chai";
 
 describe("core/modelList/layer/wms", function () {
-    var model = {};
+    let model = {};
 
     before(function () {
         model = new WMSLayer();

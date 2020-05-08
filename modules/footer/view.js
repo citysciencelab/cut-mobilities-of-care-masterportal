@@ -30,11 +30,14 @@ const FooterView = Backbone.View.extend(/** @lends FooterView.prototype */{
      * @return {FooterView} returns this
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
+        let urls = [];
 
         attr.masterPortalVersionNumber = Radio.request("Util", "getMasterPortalVersionNumber");
+        // remove footer before render it, else it is duplicated after language changed
+        $("#map > div.ol-viewport > div.footer").remove();
         $(".ol-viewport").append(this.$el.html(this.template(attr)));
-        const urls = this.model.get("urls");
+        urls = this.model.get("urls");
 
         if (urls) {
             urls.forEach(function (url) {

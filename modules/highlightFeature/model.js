@@ -27,9 +27,9 @@ const HighlightFeatureModel = Backbone.Model.extend(/** @lends HighlightFeatureM
      * @listens HighlightFeature#RadioTriggerHighlightfeatureHighlightPolygon
      */
     initialize: function () {
-        var featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
-            channel = Radio.channel("Highlightfeature"),
-            temp;
+        const featureToAdd = Radio.request("ParametricURL", "getHighlightFeature"),
+            channel = Radio.channel("Highlightfeature");
+        let temp;
 
         channel.on({
             "highlightfeature": this.highlightFeature,
@@ -47,7 +47,7 @@ const HighlightFeatureModel = Backbone.Model.extend(/** @lends HighlightFeatureM
      * @return {void}
      */
     highlightFeature: function (featureToAdd) {
-        var temp = featureToAdd.split(",");
+        const temp = featureToAdd.split(",");
 
         this.getAndAddFeature(temp[0], temp[1]);
     },
@@ -60,8 +60,8 @@ const HighlightFeatureModel = Backbone.Model.extend(/** @lends HighlightFeatureM
      * @return {void}
      */
     getAndAddFeature: function (layerId, featureId) {
-        var layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
-            features;
+        const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
+        let features;
 
         if (layer && layer.get("layerSource")) {
             features = layer.get("layerSource").getFeatures();
@@ -87,7 +87,7 @@ const HighlightFeatureModel = Backbone.Model.extend(/** @lends HighlightFeatureM
      * @return {void}
      */
     addFeature: function (feature) {
-        var highlightLayer,
+        let highlightLayer,
             source;
 
         if (feature) {

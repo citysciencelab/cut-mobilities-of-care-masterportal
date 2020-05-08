@@ -30,7 +30,7 @@ const LightMenu = listViewMain.extend(/** @lends LightMenu.prototype */{
      * @return {void}
      */
     render: function () {
-        var models = this.collection.where({type: "layer"});
+        let models = this.collection.where({type: "layer"});
 
         $("#tree").html("");
         models = _.sortBy(models, function (model) {
@@ -58,7 +58,7 @@ const LightMenu = listViewMain.extend(/** @lends LightMenu.prototype */{
      * @return {void}
      */
     startModul: function (modulId) {
-        var modul = this.collection.find(function (model) {
+        const modul = this.collection.find(function (model) {
             return model.get("id").toLowerCase() === modulId;
         });
 

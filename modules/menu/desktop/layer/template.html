@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <% if (typeof treeType === "undefined") { %>
 <div class="layer-info-item pull-right">
-    <span class="glyphicon glyphicon-info-sign" title="Informationen und Legende"></span>
+    <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
 </div>
 <% } else { %>
 <div class="layer-info-item pull-right">
@@ -10,9 +10,9 @@
 <% } %>
 <div class="layer-item">
     <% if (isSelected) { %>
-        <span class="glyphicon glyphicon-check" title="Thema entfernen"></span>
+        <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
     <% } else { %>
-        <span class="glyphicon glyphicon-unchecked" title="Thema darstellen"></span>
+        <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
     <% } %>
     <span class="title" title="<%= name %>"><%= name %></span>
 </div>

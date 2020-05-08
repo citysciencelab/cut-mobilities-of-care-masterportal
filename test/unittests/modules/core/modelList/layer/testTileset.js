@@ -5,7 +5,7 @@ import TilesetLayerModel, {lastUpdatedSymbol} from "@modules/core/modelList/laye
 import {createDummyCesium3DTileContent} from "./getDummyCesiumClasses";
 
 describe("core/modelList/layer/tileset", function () {
-    var tilesetLayer,
+    let tilesetLayer,
         scene,
         clock;
 

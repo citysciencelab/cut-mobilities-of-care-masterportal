@@ -36,8 +36,8 @@ const ImportView = Backbone.View.extend({
     },
 
     setText: function (evt) {
-        var file,
-            reader;
+        let file = "",
+            reader = "";
 
         if (evt.target.files.length === 0) {
             return;

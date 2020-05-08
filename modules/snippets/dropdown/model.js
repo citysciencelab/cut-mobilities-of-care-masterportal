@@ -161,7 +161,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      * @return {void}
      */
     updateValues: function (value) {
-        var collection = this.get("valuesCollection").models;
+        const collection = this.get("valuesCollection").models;
 
         _.each(collection, function (model, index) {
             model.set("value", value[index]);
@@ -179,7 +179,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      * @returns {void}
      */
     updateSelectedValues: function (values) {
-        var vals = values;
+        let vals = values;
 
         if (!_.isArray(values)) {
             if (!this.get("isMultiple")) {
@@ -250,7 +250,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      * @returns {object} value object
     */
     getSelectedValues: function () {
-        var selectedModels = this.get("valuesCollection").where({isSelected: true}),
+        const selectedModels = this.get("valuesCollection").where({isSelected: true}),
             obj = {
                 attrName: this.get("name"),
                 type: this.get("type"),
