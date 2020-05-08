@@ -23,6 +23,10 @@ describe("core/Util", function () {
         {
             "name": "22089 Hamburg - Hamm",
             "id": "bkgSuggest7"
+        },
+        {
+            "name": "22089 Hamburg - Hamm",
+            "id": "bkgSuggest8"
         }
     ];
 
@@ -418,19 +422,30 @@ describe("core/Util", function () {
     });
     describe("findWhereJs", function () {
         it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, "bkgSuggest3")).to.deep.equal(list[0]);
+            expect(model.findWhereJs(list, {"id": "bkgSuggest3"})).to.deep.equal(list[0]);
         });
-        it("should return", function () {
-            expect(model.findWhereJs(list, undefined)).to.be.undefined;
+        it("should return the second entry in the list", function () {
+            expect(model.findWhereJs(list, {"name": "20535 Hamburg - Hamm"})).to.deep.equal(list[1]);
         });
-        it("should return", function () {
+        it("should return undefined", function () {
             expect(model.findWhereJs(undefined, undefined)).to.be.undefined;
         });
-        it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, "")).to.be.undefined;
+        it("should return undefined", function () {
+            expect(model.findWhereJs(list, "{}")).to.be.undefined;
         });
-        it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, 0)).to.be.undefined;
+    });
+    describe("whereJs", function () {
+        it("should return the last two entry in the list", function () {
+            expect(model.whereJs(list, {"name": "22089 Hamburg - Hamm"}).length).to.equal(2);
+        });
+        it("should return a empty list", function () {
+            expect(model.whereJs(list, {"name": "22089 Hamburg - Hamm - xxx"}).length).to.equal(0);
+        });
+        it("should return the given list", function () {
+            expect(model.whereJs(list, undefined).length).to.be.equal(6);
+        });
+        it("should return a empty list", function () {
+            expect(model.whereJs(undefined, undefined).length).to.equal(0);
         });
     });
     describe("isEqual", function () {
@@ -492,3 +507,4 @@ describe("core/Util", function () {
         });
     });
 });
+

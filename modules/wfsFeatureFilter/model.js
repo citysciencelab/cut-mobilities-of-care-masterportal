@@ -1,7 +1,7 @@
 import Tool from "../core/modelList/tool/model";
 
 const WfsFeatureFilter = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         wfsList: [],
         renderToWindow: true,
         glyphicon: "glyphicon-filter"
@@ -23,7 +23,7 @@ const WfsFeatureFilter = Tool.extend({
             }),
             wfsList = [];
 
-        _.each(filterLayers, function (layer) {
+        filterLayers.forEach(layer => {
             wfsList.push({
                 id: layer.id,
                 name: layer.get("name"),

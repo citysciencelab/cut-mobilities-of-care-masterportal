@@ -427,7 +427,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         else if (evt.hasOwnProperty("currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
-            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), hitID);
+            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitID});
+
         }
         else if (modelHitList.length > 1) {
             return;
@@ -897,7 +898,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         if (evt !== undefined) {
             hitId = evt.currentTarget.id;
-            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), hitId);
+            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitId});
         }
 
         if (hit && hit.hasOwnProperty("triggerEvent")) {

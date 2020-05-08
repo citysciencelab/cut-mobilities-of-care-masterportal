@@ -37,7 +37,8 @@
             "draw": "Zeichnen / Schreiben",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
-            "addWms": "WMS hinzufügen"
+            "addWms": "WMS hinzufügen",
+            "wfsTransaction": "WFS-T Tool"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -414,7 +415,8 @@
         "searchbar": {
             "placeholder": {
                 "addressHospitalBplan" : "Suche nach Adresse/Krankenhaus/B-Plan",
-                "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück"
+                "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück",
+                "address" : "Suche nach Adresse"
             },
             "locationFinder": {
                 "unknownProjection": "Ergebnisse in unbekanntem Koordinatensystem",
