@@ -166,7 +166,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "TILT": this.evaluateCameraParameters.bind(this),
             "ZOOMLEVEL": this.setZoomLevel.bind(this),
             "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
-            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
+            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this),
+            "LNG": this.checkIfLanguageEnabled
         };
     },
 
