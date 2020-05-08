@@ -246,6 +246,7 @@
                 "hdmsNorthingText": "Wert der $t(common:modules.tools.getCoord.hdms.northingLabel)"
             },
             "draw": {
+                "title": "Zeichnungen erstellen",
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
                 "draw": "zeichnen",
                 "geometryDrawFailed": "Die übergebene Geometrie konnte nicht dargestellt werden.",

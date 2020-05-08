@@ -1,5 +1,6 @@
 <script>
 import Alerting from "./modules/alerting/components/Alerting.vue";
+import Draw from "./modules/tools/draw/components/Draw.vue";
 import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
@@ -9,6 +10,7 @@ export default {
     components: {
         ControlBar,
         Alerting,
+        Draw,
         SupplyCoord,
         Footer
     }
@@ -29,6 +31,7 @@ export default {
         </div>
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
         <Alerting />
+        <Draw />
         <SupplyCoord />
     </div>
 </template>

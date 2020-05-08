@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
+import Draw from "../modules/tools/draw/store/indexDraw";
 import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
 import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
 import Title from "../modules/title/store/indexTitle";
@@ -24,6 +25,7 @@ const store = new Vuex.Store({
         Tools: {
             namespaced: true,
             modules: {
+                Draw,
                 SupplyCoord // hier die stores von weiteren Tools eintragen
             }
         },

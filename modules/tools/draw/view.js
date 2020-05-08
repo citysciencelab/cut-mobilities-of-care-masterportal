@@ -376,6 +376,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         this.model.startDownloadTool();
     },
 
+    // TODO: Look at the setter methods when the final implementation is done
+
     /**
      * setter for font on the model
      * @param {event} evt - with new font

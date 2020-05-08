@@ -206,26 +206,26 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @constructs
      */
     initialize: function () {
-        const channel = Radio.channel("Draw");
+        const channel = Radio.channel("Draw"); // Needed because the layer of the Tool is needed in the two print modules
 
-        this.superInitialize();
-        this.changeLang(i18next.language, true);
+        this.superInitialize(); // Not needed
+        this.changeLang(i18next.language, true); // Not needed, values directly in the template
 
-        this.setMethodCircle("interactiv");
+        this.setMethodCircle("interactiv"); // Method not needed, directly in the state
 
         channel.reply({
             "getLayer": function () {
                 return this.get("layer");
             },
-            "downloadWithoutGUI": this.downloadFeaturesWithoutGUI
+            "downloadWithoutGUI": this.downloadFeaturesWithoutGUI // TODO: Not used?
         }, this);
 
         channel.on({
-            "initWithoutGUI": this.inititalizeWithoutGUI,
-            "deleteAllFeatures": this.deleteFeatures,
-            "editWithoutGUI": this.editFeaturesWithoutGUI,
-            "cancelDrawWithoutGUI": this.cancelDrawWithoutGUI,
-            "downloadViaRemoteInterface": this.downloadViaRemoteInterface
+            "initWithoutGUI": this.inititalizeWithoutGUI, // TODO: Not used?
+            "deleteAllFeatures": this.deleteFeatures, // TODO: Not used?
+            "editWithoutGUI": this.editFeaturesWithoutGUI, // TODO: Not used?
+            "cancelDrawWithoutGUI": this.cancelDrawWithoutGUI, // TODO: Not used?
+            "downloadViaRemoteInterface": this.downloadViaRemoteInterface // TODO: Not used?
         }, this);
 
         this.listenTo(this, {
@@ -1370,7 +1370,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setIdCounter(id);
         return prefix ? prefix + id : id;
     },
-
+    // TODO: Bis hier die Klasse betrachtet und in den State übernommen (von unten aus gesehen)
     /**
      * setter for drawType
      * @param {string} value1 - geometry type
@@ -1523,6 +1523,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("methodCircle", value);
     },
 
+    // TODO: Methode setEventualFeatureToDelete nirgends genutzt?
     /**
      * setter for a draw feature to eventual delete it in
      * another iteration.
