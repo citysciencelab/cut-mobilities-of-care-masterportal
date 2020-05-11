@@ -29,11 +29,12 @@
 - ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
 
 ### Removed
- - @babel/polyfill wurde aus der package.json entfernt.
- - stylel-loader wurde aus der package.json entfernt.
- - es6-promise wurde aus der package.json entfernt.
- - url-polyfill wurde aus der package.json entfernt.
- - fs wurde aus der package.json entfernt.
+- @babel/polyfill wurde aus der package.json entfernt.
+- stylel-loader wurde aus der package.json entfernt.
+- es6-promise wurde aus der package.json entfernt.
+- url-polyfill wurde aus der package.json entfernt.
+- fs wurde aus der package.json entfernt.
+- Der Requestor wurde direkt in dem Tool featurelister integriert und daher entfernt.
 
 ### Fixed
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
