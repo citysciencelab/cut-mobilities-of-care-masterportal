@@ -129,6 +129,36 @@ const MultiCheckboxModel = SnippetModel.extend({
     },
 
     /**
+     * Creates an SVG for a circle
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createCircleSVG: function (style) {
+        let svg = "";
+        const circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
+            circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
+            circleStrokeWidth = style.get("circleStrokeWidth"),
+            circleFillColor = style.get("circleFillColor") ? this.colorToRgb(style.get("circleFillColor")) : "black",
+            circleFillOpacity = style.get("circleFillColor")[3] || 0;
+
+        svg += "<svg height='35' width='35'>";
+        svg += "<circle cx='17.5' cy='17.5' r='15' stroke='";
+        svg += circleStrokeColor;
+        svg += "' stroke-opacity='";
+        svg += circleStrokeOpacity;
+        svg += "' stroke-width='";
+        svg += circleStrokeWidth;
+        svg += "' fill='";
+        svg += circleFillColor;
+        svg += "' fill-opacity='";
+        svg += circleFillOpacity;
+        svg += "'/>";
+        svg += "</svg>";
+
+        return svg;
+    },
+
+    /**
      * Creates an SVG for a line
      * @param   {vectorStyle} style feature styles
      * @returns {string} svg
