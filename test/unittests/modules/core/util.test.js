@@ -23,6 +23,10 @@ describe("core/Util", function () {
         {
             "name": "22089 Hamburg - Hamm",
             "id": "bkgSuggest7"
+        },
+        {
+            "name": "22089 Hamburg - Hamm",
+            "id": "bkgSuggest8"
         }
     ];
 
@@ -428,6 +432,20 @@ describe("core/Util", function () {
         });
         it("should return undefined", function () {
             expect(model.findWhereJs(list, "{}")).to.be.undefined;
+        });
+    });
+    describe("whereJs", function () {
+        it("should return the last two entry in the list", function () {
+            expect(model.whereJs(list, {"name": "22089 Hamburg - Hamm"}).length).to.equal(2);
+        });
+        it("should return a empty list", function () {
+            expect(model.whereJs(list, {"name": "22089 Hamburg - Hamm - xxx"}).length).to.equal(0);
+        });
+        it("should return the given list", function () {
+            expect(model.whereJs(list, undefined).length).to.be.equal(6);
+        });
+        it("should return a empty list", function () {
+            expect(model.whereJs(undefined, undefined).length).to.equal(0);
         });
     });
     describe("isEqual", function () {
