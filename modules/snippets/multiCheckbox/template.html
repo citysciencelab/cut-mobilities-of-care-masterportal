@@ -4,7 +4,7 @@
         <% if (model.get('iconPath')) { %>
             <span>
             <% if (model.get('iconPath').startsWith('<svg ')) { %>
-                <span class="multicheckbox-svg"><%= model.get('iconPath') %></span>
+                <%= model.get('iconPath') %>
             <%  } else { %>
                 <img class="multicheckbox-icon" src="<%= model.get('iconPath') %>">
             <% } %>

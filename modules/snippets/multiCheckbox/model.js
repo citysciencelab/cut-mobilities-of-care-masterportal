@@ -77,7 +77,6 @@ const MultiCheckboxModel = SnippetModel.extend({
 
             styleModel.getLegendInfos().forEach(function (legendInfo) {
                 if (legendInfo.label === value) {
-                    // always show icon if configured, independend of geometry type
                     if (legendInfo.styleObject.get("type") === "icon") {
                         iconPath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
                     }
@@ -112,8 +111,8 @@ const MultiCheckboxModel = SnippetModel.extend({
             fillOpacity = style.get("polygonFillColor")[3] || 0,
             strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
 
-        svg += "<svg height='25' width='25'>";
-        svg += "<polygon points='5,5 20,5 20,20 5,20' style='fill:";
+        svg += "<svg height='35' width='35'>";
+        svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
         svg += fillColor;
         svg += ";fill-opacity:";
         svg += fillOpacity;
@@ -124,36 +123,6 @@ const MultiCheckboxModel = SnippetModel.extend({
         svg += ";stroke-width:";
         svg += strokeWidth;
         svg += ";'/>";
-        svg += "</svg>";
-
-        return svg;
-    },
-
-    /**
-     * Creates an SVG for a circle
-     * @param   {vectorStyle} style feature styles
-     * @returns {string} svg
-     */
-    createCircleSVG: function (style) {
-        let svg = "";
-        const circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
-            circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
-            circleStrokeWidth = style.get("circleStrokeWidth"),
-            circleFillColor = style.get("circleFillColor") ? this.colorToRgb(style.get("circleFillColor")) : "black",
-            circleFillOpacity = style.get("circleFillColor")[3] || 0;
-
-        svg += "<svg height='25' width='25'>";
-        svg += "<circle cx='12.5' cy='12.5' r='10' stroke='";
-        svg += circleStrokeColor;
-        svg += "' stroke-opacity='";
-        svg += circleStrokeOpacity;
-        svg += "' stroke-width='";
-        svg += circleStrokeWidth;
-        svg += "' fill='";
-        svg += circleFillColor;
-        svg += "' fill-opacity='";
-        svg += circleFillOpacity;
-        svg += "'/>";
         svg += "</svg>";
 
         return svg;
@@ -171,8 +140,8 @@ const MultiCheckboxModel = SnippetModel.extend({
             strokeOpacity = style.get("lineStrokeColor")[3] || 0,
             strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
 
-        svg += "<svg height='25' width='25'>";
-        svg += "<path d='M 05 20 L 20 05' stroke='";
+        svg += "<svg height='35' width='35'>";
+        svg += "<path d='M 05 30 L 30 05' stroke='";
         svg += strokeColor;
         svg += "' stroke-opacity='";
         svg += strokeOpacity;
