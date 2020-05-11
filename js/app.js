@@ -60,7 +60,7 @@ import RoutingView from "../modules/tools/viomRouting/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
-import FeatureLister from "../modules/featureLister/view";
+import FeatureLister from "../modules/tools/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 /**
  * PrintView2
