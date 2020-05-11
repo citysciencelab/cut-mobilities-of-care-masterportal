@@ -97,13 +97,9 @@ module.exports = function () {
                 // take all files ending with ".js" but not with ".test.js".
                 {
                     test: /\.js$/,
-                    exclude: /\.test\.js$/,
+                    exclude: /\bcore-js\b/,
                     use: {
-                        loader: "babel-loader",
-                        options: {
-                            presets: ["@babel/preset-env"],
-                            plugins: ["@babel/plugin-syntax-dynamic-import"]
-                        }
+                        loader: "babel-loader"
                     }
                 },
                 {
