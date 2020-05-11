@@ -1,4 +1,4 @@
-import Tool from "../core/modelList/tool/model";
+import Tool from "../../core/modelList/tool/model";
 
 const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -83,8 +83,8 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             layername = this.get("layer").name;
 
         this.trigger("gfiClose"); // entfernt evtl. Highlights
-        features.forEach(function (feature) {
-            mapFeatures.forEach(function (mapFeature) {
+        features.forEach(feature => {
+            mapFeatures.forEach(mapFeature => {
                 if (mapFeature.typ === "WFS" && mapFeature.name === layername) {
                     if (_.isEqual(feature.geometry, mapFeature.feature.getGeometry().getExtent())) {
                         this.trigger("gfiHit", feature);
@@ -138,7 +138,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
         const layer = this.get("layer"),
             features = layer.features,
-            feature = features.find(function (feat) {
+            feature = _.find(features, function (feat) {
                 return feat.id.toString() === id;
             }).feature,
             style = feature.getStyle() ? feature.getStyle() : layer.style(feature),
@@ -257,7 +257,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             let props, geom;
 
             if (feature.get("features")) {
-                feature.get("features").forEach(function (feat) {
+                feature.get("features").forEach(feat => {
                     props = that.translateGFI([feat.getProperties()], gfiAttributes)[0];
                     geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
