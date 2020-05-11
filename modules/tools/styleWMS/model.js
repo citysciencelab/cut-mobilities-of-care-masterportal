@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 
 const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         isCurrentWin: false,
         isCollapsed: false,
         glyphicon: "glyphicon-tint",
@@ -129,7 +129,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
 
         let result;
 
-        _.each(layerModelList, function (layerModel) {
+        layerModelList.forEach(layerModel => {
             styleableLayerList.push({name: layerModel.get("name"), id: layerModel.get("id")});
         });
 
@@ -137,9 +137,9 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
 
         // If current layer model is not selected any more, remove it
         if (this.get("model") !== null && this.get("model") !== undefined) {
-            result = _.find(styleableLayerList, function (styleableLayer) {
+            result = styleableLayerList.find(styleableLayer => {
                 return styleableLayer.id === this.get("model").get("id");
-            }, this);
+            });
 
             if (result === undefined) {
                 this.setModel(null);
@@ -162,7 +162,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
 
         let prevMax = -1;
 
-        _.each(attributes.styleClassAttributes, function (element, index) {
+        attributes.styleClassAttributes.forEach(function (element, index) {
             const min = parseInt(element.startRange, 10),
                 max = parseInt(element.stopRange, 10);
 
@@ -198,10 +198,10 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
                 });
             }
             prevMax = max;
-        }, this);
+        });
 
         this.setErrors(errors);
-        if (_.isEmpty(errors) === false) {
+        if (errors.length !== 0) {
             return errors;
         }
 
@@ -416,12 +416,12 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
         let rule = "";
 
         if (this.get("geomType") === "Polygon") {
-            _.each(this.get("styleClassAttributes"), function (obj) {
+            this.get("styleClassAttributes").forEach(obj => {
                 rule += "<sld:Rule>" +
                             this.createFilter(obj.startRange, obj.stopRange) +
                             this.createEsriPolygonSymbolizer(obj.color) +
                         "</sld:Rule>";
-            }, this);
+            });
         }
         else {
             console.error("Type of geometry is not supported, abort styling.");
@@ -437,12 +437,12 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
         let rule = "";
 
         if (this.get("geomType") === "Polygon") {
-            _.each(this.get("styleClassAttributes"), function (obj) {
+            this.get("styleClassAttributes").forEach(obj => {
                 rule += "<Rule>" +
                             this.createFilter(obj.startRange, obj.stopRange) +
                             this.createOgcPolygonSymbolizer(obj.color) +
                         "</Rule>";
-            }, this);
+            });
         }
         else {
             console.error("Type of geometry is not supported, abort styling.");
