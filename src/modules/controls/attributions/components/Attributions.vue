@@ -49,7 +49,6 @@ export default {
     <div class="attributions-wrapper">
         <ControlIcon
             class="attributions-button"
-            aria-role="button"
             :title="'Layer-Attributions ' + (open ? 'ausblenden' : 'anzeigen')"
             :icon-name="open ? 'forward' : 'info-sign'"
             :on-click="toggleAttributionsFlyout"
