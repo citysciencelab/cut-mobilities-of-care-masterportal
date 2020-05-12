@@ -19,7 +19,12 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Map", ["prettyMouseCoord"])
+        ...mapGetters("Map", ["prettyMouseCoord"]),
+        ...mapGetters(["mobile"]),
+        // MousePosition is the only control that needs to do this itself since it's not a ControlBar child
+        show () {
+            return !this.mobile;
+        }
     },
     methods: {
         toggleOpen () {
@@ -31,12 +36,13 @@ export default {
 
 <template>
     <div
+        v-if="show"
         :class="['mouse-position', open ? 'open' : 'closed']"
     >
         <span
             :class="['mouse-position-span', open ? 'open' : 'closed']"
         >
-            {{ prettyMouseCoord || `common:modules.controls.mousePosition.hint` }}
+            {{ prettyMouseCoord || $t(`common:modules.controls.mousePosition.hint`) }}
         </span>
         <ControlIcon
             :icon-name="`chevron-${open ? 'left' : 'right'}`"

@@ -24,8 +24,8 @@ export default {
             zoom: Zoom
         },
         mobileHiddenControls: [
-            "backForward",
-            "mousePosition"
+            "backForward"
+            // NOTE "mousePosition" is not rendered as a child here
         ],
         bottomControls: ["attributions", "overviewMap"]
     },
