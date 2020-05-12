@@ -8,8 +8,6 @@ import {fetch} from "./layerList";
 import "../css/bootstrap.less";
 // CSS-Handling: Importieren von Css damit Webpack das verarbeitet.
 import "../css/style.css";
-// polyfill für Promises im IE
-import "es6-promise/auto";
 import HttpApi from "i18next-http-backend";
 import i18nextBrowserLanguageDetector from "i18next-browser-languagedetector";
 

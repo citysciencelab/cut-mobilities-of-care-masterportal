@@ -4,7 +4,7 @@ const merge = require("webpack-merge"),
     // auskommentieren um eine grafische Darstellung vom bundle als html zu erzeugen
     // Visualizer = require("webpack-visualizer-plugin"),
     Common = require("./webpack.common.js"),
-    fs = require("fs"),
+    fse = require("fs-extra"),
     HttpsProxyAgent = require("https-proxy-agent"),
     /* eslint-disable no-process-env */
     proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY,
@@ -14,7 +14,7 @@ const merge = require("webpack-merge"),
 
 let proxies;
 
-if (fs.existsSync("./devtools/proxyconf.json")) {
+if (fse.existsSync("./devtools/proxyconf.json")) {
     proxies = require("./proxyconf.json");
 }
 else {
