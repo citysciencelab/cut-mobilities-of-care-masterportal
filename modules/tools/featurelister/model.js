@@ -292,14 +292,12 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @param {string} typ - type of the layer/service
      * @return {string} - desc
      */
-    translateGFI: function (gfiList, gfiAttributes, typ) {
+    translateGFI: function (gfiList, gfiAttributes) {
         const pgfi = [];
 
-        gfiList.forEach(function (element) {
+        gfiList.forEach(element => {
             const preGfi = {},
-                keys = [],
-                values = [];
-            let gfi = {};
+                gfi = {};
 
             // get rid of invalid keys and keys with invalid values; trim values
             for (const [key, value] of Object.entries(element)) {
@@ -308,19 +306,8 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
                 }
             }
             if (gfiAttributes === "showAll") {
-                // beautify keys
                 for (const [key, value] of Object.entries(preGfi)) {
                     gfi[this.beautifyString(key)] = value;
-                }
-                // im IE müssen die Attribute für WMS umgedreht werden
-                if (Radio.request("Util", "isInternetExplorer") !== false && typ === "WMS") {
-                    for (const [key, value] of Object.entries(gfi)) {
-                        keys.push(key);
-                        values.push(value);
-                    }
-                    keys.reverse();
-                    values.reverse();
-                    gfi = _.object(keys, values);
                 }
             }
             else {
@@ -334,6 +321,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
                 pgfi.push(gfi);
             }
         }, this);
+
         return pgfi;
     },
 

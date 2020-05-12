@@ -55,12 +55,6 @@ describe("featurelister/model", function () {
         it("should be an empty Array for empty school", function () {
             expect(model.translateGFI([], exampleGfiList, undefined)).to.deep.equal([]);
         });
-        it("should be equal if WMS is configured", function () {
-            expect(model.translateGFI(exampleSchool, exampleGfiList, "WMS")).to.deep.equal(expectedResult);
-        });
-        it("should return a result that is equal with the expectedResult, if WFS is configured", function () {
-            expect(model.translateGFI(exampleSchool, exampleGfiList, "WFS")).to.deep.equal(expectedResult);
-        });
     });
     describe("beautifyString", function () {
         model = new Model();
