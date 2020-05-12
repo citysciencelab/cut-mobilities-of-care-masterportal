@@ -5,11 +5,10 @@ module.exports = function (api) {
                 "@babel/preset-env", {
                     "useBuiltIns": "entry",
                     "corejs": {
-                        "version": 3,
-                        "proposals": true
+                        "version": 3
                     },
                     "targets": {
-                        "browsers": ["> 0.25%, not dead"]
+                        "browsers": ["defaults"]
                     }
                 }
             ]
