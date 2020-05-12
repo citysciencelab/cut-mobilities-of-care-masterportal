@@ -38,22 +38,22 @@ describe("featurelister/model", function () {
         model = new Model();
 
         it("should return the correct entries with modified keys for the entered school", function () {
-            expect(model.translateGFI(exampleSchool, exampleGfiList, undefined)).to.deep.equal(expectedResult);
+            expect(model.translateGFI(exampleSchool, exampleGfiList)).to.deep.equal(expectedResult);
         });
         it("should not be equal", function () {
             delete exampleGfiList.schultyp;
-            expect(model.translateGFI(exampleSchool, exampleGfiList, undefined)).to.not.deep.equal(expectedResult);
+            expect(model.translateGFI(exampleSchool, exampleGfiList)).to.not.deep.equal(expectedResult);
         });
         it("should be equal", function () {
             delete exampleGfiList.schultyp;
             delete expectedResult[0].Schulstandort;
-            expect(model.translateGFI(exampleSchool, exampleGfiList, undefined)).to.deep.equal(expectedResult);
+            expect(model.translateGFI(exampleSchool, exampleGfiList)).to.deep.equal(expectedResult);
         });
         it("should be an empty Array for empty GfiList", function () {
-            expect(model.translateGFI(exampleSchool, {}, undefined)).to.deep.equal([]);
+            expect(model.translateGFI(exampleSchool, {})).to.deep.equal([]);
         });
         it("should be an empty Array for empty school", function () {
-            expect(model.translateGFI([], exampleGfiList, undefined)).to.deep.equal([]);
+            expect(model.translateGFI([], exampleGfiList)).to.deep.equal([]);
         });
     });
     describe("beautifyString", function () {
