@@ -16,12 +16,24 @@
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
 
 ### Changed
+- Babel wurde, um einen support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.
+- Die Version des Packages fs-extra wurde in der package.json aktualisert.
+- Die Version des Packages replace-in-file wurde in der package.json aktualisert.
+- Die Version des Packages mini-css-extract-plugin wurde in der package.json aktualisert.
+- Die Version des Packages null-loader wurde in der package.json aktualisert.
+- Die Version des Packages https-proxy-agent wurde in der package.json aktualisert.
+- Die Version des Packages zip-a-folder wurde in der package.json aktualisert.
 
 ### Deprecated
 - WfsFeatureFilter ist deprecated. Bitte das Modul Filter benutzen.
 - ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
 
 ### Removed
+ - @babel/polyfill wurde aus der package.json entfernt.
+ - stylel-loader wurde aus der package.json entfernt.
+ - es6-promise wurde aus der package.json entfernt.
+ - url-polyfill wurde aus der package.json entfernt.
+ - fs wurde aus der package.json entfernt.
 
 ### Fixed
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
