@@ -85,7 +85,7 @@ const RoutingView = Backbone.View.extend({
 
         if (fromList.length > 0) {
             this.$("#input-group-start ul").empty();
-            _.each(fromList, function (value) {
+            fromList.forEach(function (value) {
                 this.$("#input-group-start ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
             }.bind(this));
             this.$("#input-group-start ul").show();
@@ -101,7 +101,7 @@ const RoutingView = Backbone.View.extend({
 
         if (toList.length > 0) {
             this.$("#input-group-ziel ul").empty();
-            _.each(toList, function (value) {
+            toList.forEach(function (value) {
                 this.$("#input-group-ziel ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
             }.bind(this));
             this.$("#input-group-ziel ul").show();
@@ -121,7 +121,7 @@ const RoutingView = Backbone.View.extend({
         this.model.set("zielAdresse", "gewähltes Ziel");
     },
     addDescription: function () {
-        if (!_.isNull(this.model.get("description"))) {
+        if (this.model.get("description") !== null) {
             this.renderWin(); // Template schreibt Ergebnisse in Div
         }
     },
