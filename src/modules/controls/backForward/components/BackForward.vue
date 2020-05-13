@@ -56,13 +56,13 @@ export default {
 <template>
     <div class="back-forward-buttons">
         <ControlIcon
-            title="Schritt voran"
+            :title="$t(`common:modules.controls.backForward.stepForward`)"
             :active="forthAvailable"
             :icon-name="glyphiconFor"
             :on-click="moveForward"
         />
         <ControlIcon
-            title="Schritt zurück"
+            :title="$t(`common:modules.controls.backForward.stepBackward`)"
             :icon-name="glyphiconBack"
             :active="backAvailable"
             :on-click="moveBackward"
