@@ -1,9 +1,23 @@
 
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 
 import ControlIcon from "../../ControlIcon.vue";
 
+/**
+ * TODO
+ * OL provides ol/control/Attribution that could be used like OverviewMap in
+ * branch MPR-102-Overview-Map; however, for it to work, all sources would have
+ * to be supplied with the correct attribution, and the attribution element would
+ * have probably to be restyled.
+ * Alternatively, the VueX Map Module may learn to collect attributions-to-show
+ * when it starts controlling layers, and this element purely gets and shows them.
+ *
+ * For a first iteration, Radio is used as before.
+ * @listens Core.ModelList#RadioTriggerModelListUpdateVisibleInMapList
+ * @listens Controls.Attributions#RadioTriggerAttributionsCreateAttribution
+ * @listens Controls.Attributions#RadioTriggerAttributionsRemoveAttribution
+ */
 export default {
     name: "Attributions",
     components: {
@@ -19,25 +33,31 @@ export default {
             default: false
         }
     },
-    data: function () {
+    data () {
         return {
-            open: null
+            open: !this.mobile ? this.isInitOpenMobile : this.isInitOpenDesktop,
+            attributionsChannel: Radio.channel("Attributions"),
+            modelListChannel: Radio.channel("ModelList")
         };
     },
     computed: {
-        /* TODO Requires the vuex map module to support giving a list of attributions. */
-        attributionList () {
-            return [
-                {name: "Platzhalter", text: "gehaltener Platz"},
-                {name: "Platzhalter", text: "gehaltener Platz"}
-            ];
-        },
+        ...mapGetters("controls/attributions", ["attributionList"]),
         ...mapGetters(["mobile"])
     },
     created () {
-        this.open = this.mobile ? this.isInitOpenMobile : this.isInitOpenDesktop;
+        this.attributionsChannel.on("createAttribution", this.addAttribution);
+        this.attributionsChannel.on("removeAttribution", this.removeAttribution);
+        this.modelListChannel.on("updateVisibleInMapList", this.updateAttributions);
+        this.updateAttributions();
+    },
+    beforeDestroy () {
+        this.attributionsChannel.off("createAttribution", this.addAttribution);
+        this.attributionsChannel.off("removeAttribution", this.removeAttribution);
+        this.modelListChannel.off("updateVisibleInMapList", this.updateAttributions);
     },
     methods: {
+        ...mapMutations("controls/attributions", ["addAttribution", "removeAttribution"]),
+        ...mapActions("controls/attributions", ["updateAttributions"]),
         toggleAttributionsFlyout: function () {
             this.open = !this.open;
         }
@@ -54,7 +74,7 @@ export default {
             :on-click="toggleAttributionsFlyout"
         />
         <div
-            v-if="open"
+            v-if="open && attributionList.length > 0"
             class="attributions-view"
         >
             <dl>
@@ -62,9 +82,10 @@ export default {
                     <dt :key="'attributions-' + index + '-dt'">
                         {{ attribution.name }}:
                     </dt>
-                    <dd :key="'attributions-' + index + '-dd'">
-                        {{ attribution.text }}
-                    </dd>
+                    <dd
+                        :key="'attributions-' + index + '-dd'"
+                        v-html="attribution.text"
+                    />
                 </template>
             </dl>
         </div>
@@ -76,38 +97,38 @@ export default {
 
     .attributions-wrapper {
         position: relative;
-    }
 
-    .attributions-view {
-        color: @secondary_contrast;
-        font-size: @font_size_default;
-        font-family: @font_family_default;
-        font-weight: 400;
-        background-color: @secondary;
+        .attributions-view {
+            color: @secondary_contrast;
+            font-size: @font_size_default;
+            font-family: @font_family_default;
+            font-weight: 400;
+            background-color: @secondary;
 
-        border: 1px solid @secondary_border;
-        box-shadow: 0 6px 12px @shadow;
+            border: 1px solid @secondary_border;
+            box-shadow: 0 6px 12px @shadow;
 
-        cursor: initial;
-        text-align: initial;
+            cursor: initial;
+            text-align: initial;
 
-        position: absolute;
-        padding: 5px;
-        bottom: 0;
-        right: 100%;
+            position: absolute;
+            padding: 5px;
+            bottom: 0;
+            right: 100%;
 
-        dt {
-            font-size: @font_size_huge;
-            color: @primary;
-        }
-        dl {
-            margin-bottom: 0;
-        }
-        dd {
-            margin-bottom: 8px;
-        }
-        img {
-            max-height: 2em;
+            dt {
+                font-size: @font_size_huge;
+                color: @primary;
+            }
+            dl {
+                margin-bottom: 0;
+            }
+            dd {
+                margin-bottom: 8px;
+            }
+            img {
+                max-height: 2em;
+            }
         }
     }
 </style>
