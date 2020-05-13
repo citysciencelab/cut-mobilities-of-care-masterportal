@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <span class="layer-item pull-left">
-    <span class="glyphicon glyphicon-remove-circle pull-left" title="Auswahl entfernen"></span>
+    <span class="glyphicon glyphicon-remove-circle pull-left" title="<%=selectedTopicsText%>"></span>
     <span class="pull-left">
         <% if (isVisibleInMap === true) { %>
-            <span class="glyphicon glyphicon-check pull-left" title="Thema entfernen"></span>
+            <span class="glyphicon glyphicon-check pull-left" title="<%=removeTopicText%>"></span>
         <% } else { %>
-            <span class="glyphicon glyphicon-unchecked pull-left" title="Thema darstellen"></span>
+            <span class="glyphicon glyphicon-unchecked pull-left" title="<%=showTopicText%>"></span>
         <% } %>
         <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
     </span>
 </span>
 <span class="pull-right">
     <% if (styleable === true) { %>
-            <span class="glyphicon glyphicon-tint" data-toggle="tooltip" data-placement="bottom" title="Klasseneinteilung ändern"></span>
+            <span class="glyphicon glyphicon-tint" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
     <% } %>
-    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Informationen und Legende"></span>
+    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="<%=infosAndLegendText%>"></span>
     <% if (showSettings === true) { %>
-        <span class="glyphicon glyphicon-cog rotate" title="Einstellungen"></span>
+        <span class="glyphicon glyphicon-cog rotate" title="<%=settingsText%>"></span>
     <% } %>
 </span>

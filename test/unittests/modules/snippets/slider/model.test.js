@@ -13,11 +13,12 @@ describe("snippets/slider/model", function () {
             type: "integer"
         });
     });
+
     describe("parseValues", function () {
         it("should return an array of numbers", function () {
             const parsedValues = model.parseValues(model.get("values")),
-                allValues = _.every(parsedValues, function (value) {
-                    return _.isNumber(value);
+                allValues = parsedValues.every(function (value) {
+                    return typeof value === "number";
                 });
 
             expect(allValues).to.be.true;

@@ -15,6 +15,8 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         buttonSearchTitle: "",
         buttonOpenHelpTitle: "",
         tempCounter: 0,
+        sortByName: true,
+        selectRandomHits: true,
         timeoutReference: null,
         showAllResultsText: ""
     },
@@ -326,7 +328,10 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         let recommendedList = [],
             hitList = this.get("hitList");
 
-        hitList = Radio.request("Util", "sort", "address", hitList, "name");
+        if (this.get("sortByName")) {
+            hitList = Radio.request("Util", "sort", "address", hitList, "name");
+        }
+
         this.setHitList(hitList);
 
         // Die Funktion "createRecommendedList" wird vielfach (von jedem Suchalgorithmus) aufgerufen.
@@ -342,12 +347,23 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         }
 
         if (hitList.length > max) {
-            recommendedList = this.getRandomEntriesOfEachType(hitList, max);
+
+            if (this.get("selectRandomHits")) {
+                recommendedList = this.getRandomEntriesOfEachType(hitList, max);
+            }
+            else {
+                recommendedList = hitList.slice(0, max);
+            }
+
         }
         else {
             recommendedList = hitList;
         }
-        recommendedList = Radio.request("Util", "sort", "address", recommendedList, "name");
+
+        if (this.get("sortByName")) {
+            recommendedList = Radio.request("Util", "sort", "address", recommendedList, "name");
+        }
+
         this.setRecommendedList(recommendedList);
         this.setTypeList(this.prepareTypeList(hitList));
         this.trigger("renderRecommendedList");

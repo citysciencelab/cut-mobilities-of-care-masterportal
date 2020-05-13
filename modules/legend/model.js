@@ -1,5 +1,6 @@
 import Feature from "ol/Feature.js";
 import Tool from "../core/modelList/tool/model";
+import WMTSLayer from "../core/modelList/layer/wmts";
 
 const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -14,7 +15,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         startX: 0,
         startY: 0,
         windowLeft: 0,
-        windowTop: 0
+        windowTop: 0,
+        currentLng: "",
+        showCollapseAllButton: false
     }),
 
     /**
@@ -63,10 +66,17 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             "updateParamsStyleWMS": this.updateParamsStyleWMSArray,
             "resetParamsStyleWMS": this.resetParamsStyleWMSArray
         });
-
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang(i18next.language);
         this.listenTo(this, {
             "change:paramsStyleWMSArray": this.updateLegendFromStyleWMSArray
         });
+        this.listenTo(Radio.channel(WMTSLayer), {
+            "change:legendURL": this.setLayerList
+        });
+
     },
 
     /**
@@ -223,6 +233,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         }
         else if (typ === "WMS") {
             return this.getLegendParamsFromWMS(layername, legendURL);
+        }
+        else if (legendURL !== null && typ === "WMTS") {
+            return this.getLegendParamsFromURL(layername, legendURL, typ);
         }
         else if (typ === "WFS") {
             if (isNewVectorStyle) {
@@ -1056,6 +1069,19 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
     */
     setStartY: function (value) {
         this.set("startY", value);
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set({
+            currentLng: lng,
+            legendTitle: i18next.t("common:modules.legend.title"),
+            collapseAllText: i18next.t("common:modules.legend.collapseAll"),
+            foldOutAllText: i18next.t("common:modules.legend.foldOutAll")
+        });
     }
 });
 

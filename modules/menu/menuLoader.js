@@ -6,7 +6,8 @@ import TableMenu from "./table/view";
 const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
     defaults: {
         treeType: "light",
-        currentMenu: ""
+        currentMenu: "",
+        isOpen: false
     },
     /**
      * @class MenuLoader
@@ -67,6 +68,13 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
      * @return {Void}  -
      */
     reloadMenu: function () {
+        if ($(".glyphicon-pushpin") && $(".glyphicon-pushpin").hasClass("rotate-pin")) {
+            // tree is pinned
+            if ($(".dropdown.dropdown-folder").hasClass("open")) {
+                // menu is open
+                this.set("isOpen", true);
+            }
+        }
         $("div.collapse.navbar-collapse ul.nav-menu").empty();
         $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
         this.loadMenu();
@@ -126,6 +134,10 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             }
             else if (this.treeType === "light") {
                 this.currentMenu = new LightMenu();
+            }
+            else if (this.get("isOpen")) {
+                this.currentMenu = new Menu({firstTime: false});
+                $(".nav-menu.nav.navbar-nav.desktop:first-child").addClass("open");
             }
             else {
                 this.currentMenu = new Menu();

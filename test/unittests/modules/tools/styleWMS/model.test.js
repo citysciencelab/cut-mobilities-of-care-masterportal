@@ -1,4 +1,5 @@
 import StyleWMS from "@modules/tools/styleWMS/model.js";
+import Util from "@modules/core/util.js";
 const chai = require("chai");
 
 describe("tools/styleWMS/model", function () {
@@ -8,6 +9,8 @@ describe("tools/styleWMS/model", function () {
     describe("Validation of user input", function () {
 
         before(function () {
+
+            new Util();
 
             const styleWMS = new StyleWMS(),
                 attributes = {
@@ -156,54 +159,57 @@ describe("tools/styleWMS/model", function () {
         });
 
         it("the SLD should deliver rules for given classes", function () {
-            _.each(styleClassAttributes, function (styleClassAttribute) {
 
-                // Select rule with expected attributes by removing the rules with other attributes. Expect one rule to remain.
-                /* eslint max-nested-callbacks: ["error", 5]*/
+            if (Array.isArray(styleClassAttributes)) {
+                styleClassAttributes.forEach(styleClassAttribute => {
 
-                const rule = $sld.find("sld\\:NamedLayer")
-                    .children("sld\\:UserStyle")
-                    .children("sld\\:FeatureTypeStyle")
-                    .children("sld\\:Rule")
-                    .filter(function () {
-                        // keep elements with expected filter constrains (attribute name and ranges) only.
-                        return $(this).children("ogc\\:Filter")
-                            .children("ogc\\:And")
-                            .filter(function () {
-                                return $(this).children("ogc\\:PropertyIsGreaterThanOrEqualTo")
-                                    .filter(function () {
-                                        return $(this).children("ogc\\:PropertyName")
-                                            .text() === "testAttribute";
-                                    })
-                                    .filter(function () {
-                                        return $(this).children("ogc\\:Literal")
-                                            .text() === styleClassAttribute.startRange;
-                                    })
-                                    .length === 1;
-                            })
-                            .filter(function () {
-                                return $(this).children("ogc\\:PropertyIsLessThanOrEqualTo")
-                                    .filter(function () {
-                                        return $(this).children("ogc\\:PropertyName")
-                                            .text() === "testAttribute";
-                                    })
-                                    .filter(function () {
-                                        return $(this).children("ogc\\:Literal")
-                                            .text() === styleClassAttribute.stopRange;
-                                    })
-                                    .length === 1;
-                            }).length === 1;
-                    })
-                    .filter(function () {
-                        // keep elements with expected color only.
-                        return $(this).children("sld\\:PolygonSymbolizer")
-                            .children("sld\\:Fill")
-                            .children("sld\\:CssParameter[name='fill']")
-                            .text() === styleClassAttribute.color;
-                    });
+                    // Select rule with expected attributes by removing the rules with other attributes. Expect one rule to remain.
+                    /* eslint max-nested-callbacks: ["error", 5]*/
 
-                expect(rule.length).to.be.equal(1);
-            });
+                    const rule = $sld.find("sld\\:NamedLayer")
+                        .children("sld\\:UserStyle")
+                        .children("sld\\:FeatureTypeStyle")
+                        .children("sld\\:Rule")
+                        .filter(function () {
+                            // keep elements with expected filter constrains (attribute name and ranges) only.
+                            return $(this).children("ogc\\:Filter")
+                                .children("ogc\\:And")
+                                .filter(function () {
+                                    return $(this).children("ogc\\:PropertyIsGreaterThanOrEqualTo")
+                                        .filter(function () {
+                                            return $(this).children("ogc\\:PropertyName")
+                                                .text() === "testAttribute";
+                                        })
+                                        .filter(function () {
+                                            return $(this).children("ogc\\:Literal")
+                                                .text() === styleClassAttribute.startRange;
+                                        })
+                                        .length === 1;
+                                })
+                                .filter(function () {
+                                    return $(this).children("ogc\\:PropertyIsLessThanOrEqualTo")
+                                        .filter(function () {
+                                            return $(this).children("ogc\\:PropertyName")
+                                                .text() === "testAttribute";
+                                        })
+                                        .filter(function () {
+                                            return $(this).children("ogc\\:Literal")
+                                                .text() === styleClassAttribute.stopRange;
+                                        })
+                                        .length === 1;
+                                }).length === 1;
+                        })
+                        .filter(function () {
+                            // keep elements with expected color only.
+                            return $(this).children("sld\\:PolygonSymbolizer")
+                                .children("sld\\:Fill")
+                                .children("sld\\:CssParameter[name='fill']")
+                                .text() === styleClassAttribute.color;
+                        });
+
+                    expect(rule.length).to.be.equal(1);
+                });
+            }
         });
     });
 
@@ -236,7 +242,7 @@ describe("tools/styleWMS/model", function () {
                             },
 
                             updateParams: function (parameters) {
-                                _.extend(this.params, parameters);
+                                Object.assign(this.params, parameters);
                             },
 
                             params: {
@@ -272,16 +278,13 @@ describe("tools/styleWMS/model", function () {
         it("should vanish after reseting the style", function () {
 
             const styleWMS = new CustomStyleWMS();
+            let params = [];
 
             styleWMS.createSLD();
             styleWMS.removeSLDBody();
 
-            /* eslint-disable one-var */
-            const params = styleWMS.get("model").get("layer").getSource().getParams();
-
-            /* eslint-disable-next-line no-undefined */
-            expect(_.isEqual({testParam: "yes", SLD_BODY: undefined, STYLES: ""}, params)).to.be.equal(true);
-
+            params = styleWMS.get("model").get("layer").getSource().getParams();
+            expect(Radio.request("Util", "isEqual", {testParam: "yes", SLD_BODY: undefined, STYLES: ""}, params)).to.be.equal(true);
         });
     });
 });

@@ -25,7 +25,7 @@ const WFSTransaction = Backbone.Model.extend({
             xmlString,
             dom;
 
-        if (!_.isUndefined(model)) {
+        if (model !== undefined) {
             feature = model.get("layer").getSource().getFeatureById(featureId);
             feature.setProperties(attributes);
             feature.unset("extent");

@@ -48,6 +48,10 @@ module.exports = {
             {
                 test: /\.(le|c|sa)ss$/,
                 use: "null-loader"
+            },
+            {
+                test: /\.xml$/i,
+                use: "raw-loader"
             }
         ]
     },

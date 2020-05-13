@@ -37,7 +37,8 @@
             "draw": "Zeichnen / Schreiben",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
-            "addWms": "WMS hinzufügen"
+            "addWms": "WMS hinzufügen",
+            "wfsTransaction": "WFS-T Tool"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -50,13 +51,36 @@
         "pinTopicsTree": "Themenbaum fixieren/lösen",
         "hideAllTopics": "Alle Themen entfernen",
         "showAllTopics": "Alle Themen darstellen",
-        "category": "Kategorie"
+        "category": "Kategorie",
+        "backgroundMaps": "Hintergrundkarten",
+        "subjectData": "Fachdaten",
+        "subjectData3D": "3D Daten",
+        "selectedTopics": "Ausgewählte Themen",
+        "removeSelection": "Auswahl entfernen",
+        "infosAndLegend": "Informationen und Legende",
+        "removeTopic": "Thema entfernen",
+        "showTopic": "Thema darstellen",
+        "changeClassDivision":"Klasseneinteilung ändern",
+        "settings": "Einstellungen",
+        "transparency": "Transparenz",
+        "increaseTransparency": "Transparenz erhöhen",
+        "reduceTransparency": "Transparenz verringern",
+        "removeLayer": "Layer entfernen",
+        "levelUp": "Ebene nach oben",
+        "levelDown": "Ebene nach unten",
+        "externalTechnicalData": "Externe Fachdaten"
     },
     "date": "Datum",
     "time": "Zeit",
     "modules": {
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus"
+        },
+        "cswParser": {
+           "noMetadataMessage": "Keine Metadaten vorhanden."
+        },
+        "layerInformation": {
+            "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
         },
         "quickHelp": {
             "titleTag": "Hilfe öffnen",
@@ -219,6 +243,11 @@
                     "northingLabel": "Hochwert"
                 }
             },
+            "gfi": {
+                "themes": {
+                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes."
+                }
+            },
             "viomRouting": {
                 "startAddressLabel": "Startadresse",
                 "destinationAddressLabel": "Zieladresse",
@@ -256,6 +285,7 @@
                 "drawPoint": "Punkt zeichnen",
                 "writeText": "Text schreiben",
                 "drawLine": "Linie zeichnen",
+                "drawCurve": "Freihandlinie zeichnen",
                 "drawArea": "Fläche zeichnen",
                 "drawCircle": "Kreis zeichnen",
                 "drawDoubleCircle": "Doppelkreis zeichnen",
@@ -277,6 +307,8 @@
                 "color": "Füllfarbe",
                 "button": {
                     "draw": "Geometrie / Text zeichnen",
+                    "undo": "Rückgängig machen",
+                    "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen"
@@ -394,7 +426,8 @@
         "searchbar": {
             "placeholder": {
                 "addressHospitalBplan" : "Suche nach Adresse/Krankenhaus/B-Plan",
-                "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück"
+                "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück",
+                "address" : "Suche nach Adresse"
             },
             "locationFinder": {
                 "unknownProjection": "Ergebnisse in unbekanntem Koordinatensystem",
@@ -436,6 +469,11 @@
             "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
             "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
           }
+        },
+        "legend": {
+            "title": "Legende",
+            "collapseAll": "Alle einklappen",
+            "foldOutAll": "Alle ausklappen"
         }
     },
     "snippets": {

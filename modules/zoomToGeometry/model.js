@@ -36,7 +36,7 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
             "setIsRender": this.setIsRender
         }, this);
 
-        if (name.length > 0) {
+        if (name && name.length > 0) {
             this.zoomToGeometry(name, this.get("layerId"), this.get("attribute"));
         }
 

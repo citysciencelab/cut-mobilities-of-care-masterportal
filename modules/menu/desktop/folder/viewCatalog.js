@@ -91,6 +91,14 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         attr.backgroundImage = Radio.request("MapView", "getBackgroundImage");
         this.$el.find(".header").toggleClass("closed");
         $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+        if (attr.isPinned) {
+            this.fixTree();
+        }
+        if (attr.isExpanded) {
+            // to provoke reaction of listener ModelList#ChangeIsExpanded
+            this.model.setIsExpanded(false);
+            this.model.setIsExpanded(true);
+        }
         return this;
     },
 
@@ -159,6 +167,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         $("body").on("click", "#searchbar", this.helpForFixing);
         $(".glyphicon-pushpin").addClass("rotate-pin");
         $(".glyphicon-pushpin").removeClass("rotate-pin-back");
+        this.model.setIsPinned(true);
     },
 
     /**
@@ -170,6 +179,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         $("body").off("click", "#searchbar", this.helpForFixing);
         $(".glyphicon-pushpin").removeClass("rotate-pin");
         $(".glyphicon-pushpin").addClass("rotate-pin-back");
+        this.model.setIsPinned(false);
     },
 
     /**

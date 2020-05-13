@@ -12,6 +12,7 @@
 - Das Zeichenmodul wurde erweitert, um beim Zeichnen von Punkten verschiedene Glyphicons zu verwenden.
 - Es können nun Web Map Tile Services (WMTS) als Layer eingebunden werden.
 - Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
+- Die “gfiAttribute”-keys können jetzt auch Objektpfade sein, analog zum neuen Styling.
 
 ### Changed
 
@@ -23,6 +24,7 @@
 
 ### Fixed
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
+- Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
 
 ---
 
