@@ -1488,6 +1488,15 @@
  */
 
 /**
+ * @event Core#RadioRequestUtilDifferenceJs
+ * @description Looks through each value in the array a, returning an array of all the values that are not present in the array b
+ * @param {array} a - elements to check
+ * @param {array} b - elements to check
+ * @returns {array} - returns diffrence between array a and b
+ * @example Radio.request("Util", "DifferenceJs", array-a, array-b);
+ */
+
+/**
  * @event Core#RadioTriggerUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");

@@ -467,6 +467,31 @@ describe("core/Util", function () {
             expect(model.isEqual(obj4, {name: "moe", luckyNumbers: [13, 27, 34]})).to.be.true;
         });
     });
+    describe("differenceJs", function () {
+        it("should return the last three entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, [1, 2])).to.deep.equal([3, 4, 5]);
+        });
+        it("should return the given five entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, [])).to.deep.equal([1, 2, 3, 4, 5]);
+        });
+        it("should return the last two entries in the array", function () {
+            const array = ["Hamburg", "Bremen", "Berlin", "Delmenhosrt"];
+
+            expect(model.differenceJs(array, ["Hamburg", "Bremen"])).to.deep.equal(["Berlin", "Delmenhosrt"]);
+        });
+        it("should return the given five entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, undefined)).to.deep.equal([1, 2, 3, 4, 5]);
+        });
+        it("should return an empty array", function () {
+            expect(model.differenceJs(undefined, undefined)).to.deep.equal([]);
+        });
+    });
     describe("isEmpty", function () {
         it("should return true", function () {
             expect(model.isEmpty(null)).to.be.true;
