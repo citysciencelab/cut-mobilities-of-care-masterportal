@@ -46,7 +46,7 @@ export default {
         </span>
         <ControlIcon
             :icon-name="`chevron-${open ? 'left' : 'right'}`"
-            :title="`common:modules.controls.mousePosition.${open ? 'hide' : 'show'}MousePosition`"
+            :title="$t(`common:modules.controls.mousePosition.${open ? 'hide' : 'show'}MousePosition`)"
             :active="true"
             :on-click="toggleOpen"
             inline
