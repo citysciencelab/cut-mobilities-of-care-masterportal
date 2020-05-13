@@ -247,7 +247,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
                 elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
                 polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember"),
-                lengthIndex = elementGeometryNames[0].children[0].children.length;
+                lengthIndex = polygonMembers.length;
             let coordinateArray = [],
                 geomType;
 
@@ -257,7 +257,7 @@ const SpecialWFSModel = Backbone.Model.extend({
                 if (polygonMembers.length > 1) {
 
                     for (let i = 0; i < lengthIndex; i++) {
-                        const coords = polygonMembers[i].getElementsByTagNameNS("*", "posList")[0].innerHTML;
+                        const coords = polygonMembers[i].getElementsByTagNameNS("*", "posList").item(0).textContent;
 
                         coordinateArray.push(Object.values(coords.replace(/\s\s+/g, " ").split(" ")));
                     }
@@ -272,7 +272,6 @@ const SpecialWFSModel = Backbone.Model.extend({
                     }
 
                     coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
-
                     geomType = "POLYGON";
                 }
 
