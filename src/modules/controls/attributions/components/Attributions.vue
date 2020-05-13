@@ -69,7 +69,7 @@ export default {
     <div class="attributions-wrapper">
         <ControlIcon
             class="attributions-button"
-            :title="'Layer-Attributions ' + (open ? 'ausblenden' : 'anzeigen')"
+            :title="$t(`common:modules.controls.attributions.${open ? 'hideAttributions' : 'showAttributions'}`)"
             :icon-name="open ? 'forward' : 'info-sign'"
             :on-click="toggleAttributionsFlyout"
         />
