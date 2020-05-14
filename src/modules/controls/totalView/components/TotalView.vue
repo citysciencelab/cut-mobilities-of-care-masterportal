@@ -2,16 +2,22 @@
 import {mapGetters, mapActions} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
 
+/**
+ * TotalView adds a control that lets the user reset the
+ * view's state to the initial zoom and center coordinates.
+ */
 export default {
     name: "TotalView",
     components: {
         ControlIcon
     },
     props: {
+        /** glyphicon name for the control icon */
         glyphicon: {
             type: String,
             default: "fast-backward"
         },
+        /** glyphicon name for the control icon in style table */
         tableGlyphicon: {
             type: String,
             default: "home"
