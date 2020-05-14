@@ -24,10 +24,12 @@ export default {
         ControlIcon
     },
     props: {
+        /** whether the attributions flyout is open initially in desktop resolutions */
         isInitOpenDesktop: {
             type: Boolean,
             default: true
         },
+        /** whether the attributions flyout is open initially in mobile resolutions */
         isInitOpenMobile: {
             type: Boolean,
             default: false
@@ -58,6 +60,10 @@ export default {
     methods: {
         ...mapMutations("controls/attributions", ["addAttribution", "removeAttribution"]),
         ...mapActions("controls/attributions", ["updateAttributions"]),
+        /**
+         * Toggles whether attributions flyout is visible.
+         * @returns {void}
+         */
         toggleAttributionsFlyout: function () {
             this.open = !this.open;
         }
