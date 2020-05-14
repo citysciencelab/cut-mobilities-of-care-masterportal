@@ -1,4 +1,3 @@
-
 <script>
 import ControlIcon from "../../ControlIcon.vue";
 
@@ -54,6 +53,17 @@ function closeFullScreen () {
     return false;
 }
 
+
+/** @returns {boolean} whether the browser is currently in fullscreen mode */
+function isFullScreen () {
+    return Boolean(
+        document.fullscreenElement ||
+        document.mozFullScreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement
+    );
+}
+
 export default {
     name: "FullScreen",
     components: {
@@ -61,19 +71,10 @@ export default {
     },
     data: function () {
         return {
-            active: this.isFullScreen()
+            active: isFullScreen()
         };
     },
     methods: {
-        /** @returns {boolean} whether the browser is currently in fullscreen mode */
-        isFullScreen () {
-            return Boolean(
-                document.fullscreenElement ||
-                document.mozFullScreenElement ||
-                document.webkitFullscreenElement ||
-                document.msFullscreenElement
-            );
-        },
         /**
          * Toggles between fullscreen and normal screen.
          * @returns {void}
