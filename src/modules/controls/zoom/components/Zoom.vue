@@ -8,6 +8,7 @@ import ControlIcon from "../../ControlIcon.vue";
  * NOTE This should eventually listen to the VueX map module
  * as soon as 3D/OB mode are implemented in it. The flag
  * "mapMode" is already prepared in it, but not used yet.
+ * Hence it's currently listening to the radio.
  * @listens Map#RadioTriggerMapChange
  */
 export default {
@@ -37,6 +38,12 @@ export default {
     },
     methods: {
         ...mapActions("Map", ["increaseZoomLevel", "decreaseZoomLevel"]),
+        /**
+         * Checks the map mode to note whether the zoom control is supposed to be
+         * visible, which is only the case in 2D mode. In all other modes, more
+         * complex navigation elements provide this element's function.
+         * @returns {void}
+         */
         checkModeVisibility () {
             this.visibleInMapMode = Radio.request("Map", "getMapMode") === "2D";
         }
