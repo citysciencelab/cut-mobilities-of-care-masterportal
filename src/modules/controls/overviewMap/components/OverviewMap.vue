@@ -4,29 +4,35 @@ import {mapGetters} from "vuex";
 import {getOverviewMapLayer, getOverviewMapView} from "./utils";
 import ControlIcon from "../../ControlIcon.vue";
 
+/**
+ * Overview control that shows a mini-map to support a user's
+ * sense of orientation within the map.
+ */
 export default {
     name: "OverviewMap",
     components: {
         ControlIcon
     },
     props: {
-        /** @deprecated */
+        /** @deprecated resolution of mini-map view */
         resolution: {
             type: Number,
             required: false,
             default: null
         },
-        /** @deprecated */
+        /** @deprecated id of layer to show in mini-map */
         baselayer: {
             type: String,
             required: false,
             default: null
         },
+        /** id of layer to show in mini-map */
         layerId: {
             type: String,
             required: false,
             default: null
         },
+        /** whether the mini-map is visible initially */
         isInitOpen: {
             type: Boolean,
             default: true
@@ -73,6 +79,10 @@ export default {
         }
     },
     methods: {
+        /**
+         * Toggles the visibility of the mini-map.
+         * @returns {void}
+         */
         toggleOverviewMapFlyout () {
             this.open = !this.open;
             if (this.overviewMap !== null) {
