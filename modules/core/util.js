@@ -42,6 +42,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
+     * @listens Core#RadioRequestUtilUniqueId
      * @listens Core#RadioTriggerUtilHideLoader
      * @listens Core#RadioTriggerUtilShowLoader
      * @listens Core#RadioTriggerUtilSetUiStyle
@@ -85,6 +86,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "renameValues": this.renameValues,
             "pickKeyValuePairs": this.pickKeyValuePairs,
             "groupBy": this.groupBy,
+            "uniqueId": this.uniqueId,
             "pick": this.pick,
             "omit": this.omit,
             "findWhereJs": this.findWhereJs,
@@ -742,6 +744,36 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
+     * Generate a globally-unique id for client-side models or DOM elements that need one. If prefix is passed, the id will be appended to it.
+     * @param {String} [prefix=""] prefix for the id
+     * @returns {String}  a globally-unique id
+     */
+    uniqueId: function (prefix) {
+        const idCounter = String(this.getIdCounter());
+
+        this.incIdCounter();
+
+        return prefix ? prefix + idCounter : idCounter;
+    },
+
+    /**
+     * gets the current idCounter
+     * @returns {Integer}  the current idCounter
+     */
+    getIdCounter: function () {
+        return Util.idCounter;
+    },
+
+    /**
+     * increments the idCounter
+     * @post the static idCounter (Util.idCounter) is incremented by 1
+     * @returns {Void}  -
+     */
+    incIdCounter: function () {
+        Util.idCounter++;
+    },
+
+    /**
      * Setter for config
      * @param {*} value todo
      * @returns {void}
@@ -989,7 +1021,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         }
         return result;
     }
-
+}, {
+    // globally-unique id for Util.uniqueId([prefix]) - this is a static backbone variable (Util.idCounter)
+    idCounter: 1
 });
 
 export default Util;

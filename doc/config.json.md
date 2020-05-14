@@ -2556,7 +2556,7 @@ Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der K
     "visibility": true,
     "extent": [560296.72, 5932154.22, 562496.72, 5933454.22]
 }
-`````
+```
 
 ***
 #### Themenconfig.Layer.Vector

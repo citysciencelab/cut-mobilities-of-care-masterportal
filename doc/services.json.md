@@ -241,7 +241,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
     "legendURL" : "",
     "datasets" : []
   }
-  ```
+```
 
 ***
 
@@ -533,6 +533,9 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
       }
    }
 }
+```
+
+***
 
 ## GeoJSON-Layer ##
 

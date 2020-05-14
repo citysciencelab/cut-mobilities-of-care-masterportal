@@ -506,5 +506,30 @@ describe("core/Util", function () {
             expect(model.toObject(arr3)).to.deep.equal(obj3);
         });
     });
+    describe("uniqueId", () => {
+        it("should increment the uniqueId internaly", () => {
+            const currentId = model.uniqueId(),
+                expectedId = String(parseInt(currentId, 10) + 1);
+
+            expect(currentId).to.not.be.NaN;
+            expect(model.uniqueId()).to.equal(expectedId);
+        });
+        it("should prefix the id with the given prefix", () => {
+            const currentId = model.uniqueId(),
+                prefix = "foo",
+                expectedId = prefix + String(parseInt(currentId, 10) + 1);
+
+            expect(currentId).to.not.be.NaN;
+            expect(model.uniqueId(prefix)).to.equal(expectedId);
+        });
+        it("should increment the same id independent of the models instance", () => {
+            const currentId = model.uniqueId(),
+                expectedId = String(parseInt(currentId, 10) + 1),
+                modelB = new Model();
+
+            expect(currentId).to.not.be.NaN;
+            expect(modelB.uniqueId()).to.equal(expectedId);
+        });
+    });
 });
 
