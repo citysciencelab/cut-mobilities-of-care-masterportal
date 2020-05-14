@@ -1,4 +1,6 @@
 <script>
+import {mapGetters} from "vuex";
+
 /* TODO
  * Idea: control loader visibility via store module
  * Concept:
@@ -8,17 +10,40 @@
  *  - When done, they must remove their own key
  * => As long as anything has its key registered, the loader is shown
  */
+
+/**
+ * Loader Component.
+ * Not completely implemented, but partially migrated to vue.
+ * Previous methods to show/hide loading screen are still in use
+ * and work on the id #loader of this element.
+ * @listens Core#RadioTriggerUtilHideLoader
+ */
 export default {
     name: "Loader",
     data () {
         return {
-            imgUrl: "/img/ajax-loader.gif"
+            imgUrl: "/img/ajax-loader.gif",
+            /** simple mode has no logo - activated after first loading ends */
+            simple: false,
+            utilChannel: Radio.channel("Util")
         };
     },
     computed: {
-        simple () {
-            // TODO not yet controlled - should be in config.JSON or config.JS maybe?
-            return false;
+        ...mapGetters(["loaderText"])
+    },
+    created () {
+        this.utilChannel.on("hideLoader", this.turnSimple);
+    },
+    beforeDestroy () {
+        this.utilChannel.off("hideLoader", this.turnSimple);
+    },
+    methods: {
+        /**
+         * Turns simple mode off.
+         * @returns {void}
+         */
+        turnSimple () {
+            this.simple = true;
         }
     }
 };
@@ -43,8 +68,11 @@ export default {
                 src="https://geoportal-hamburg.de/lgv-config/img/Logo_Masterportal.svg"
                 alt="Masterportal"
             >
-            <div class="loader-text">
-                Masterportal
+            <div
+                v-if="loaderText"
+                class="loader-text"
+            >
+                {{ loaderText }}
             </div>
             <img
                 class="loader-icon"

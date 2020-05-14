@@ -93,7 +93,8 @@ const Config = {
      * @property {boolean} Config.useVectorStyleBeta Flag to use the new vectorStyling module for backward compatibility
      * @default false
      */
-    useVectorStyleBeta: true
+    useVectorStyleBeta: true,
+    loaderText: "Master"
 };
 
 /* eslint-enable no-unused-vars */

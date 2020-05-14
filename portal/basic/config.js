@@ -27,7 +27,8 @@ const Config = {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
     },
-    useVectorStyleBeta: true
+    useVectorStyleBeta: true,
+    loaderText: "Basic"
 };
 
 /* eslint-enable no-unused-vars */

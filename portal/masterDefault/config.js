@@ -123,7 +123,8 @@ const Config = {
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
-    }
+    },
+    loaderText: "Master Default"
 };
 
 /* eslint-enable no-unused-vars */
