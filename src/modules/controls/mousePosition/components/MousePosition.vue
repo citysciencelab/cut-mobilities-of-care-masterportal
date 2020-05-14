@@ -27,6 +27,10 @@ export default {
         }
     },
     methods: {
+        /**
+         * Toggle function that shows/hides the mousePosition control.
+         * @returns {void}
+         */
         toggleOpen () {
             this.open = !this.open;
         }
