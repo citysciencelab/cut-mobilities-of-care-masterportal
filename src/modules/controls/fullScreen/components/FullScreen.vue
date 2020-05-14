@@ -64,6 +64,11 @@ function isFullScreen () {
     );
 }
 
+/**
+ * FullScreen control that allows switching between fullscreen
+ * and normal mode for the map. May also open a new tab if the
+ * instance is running in an iFrame.
+ */
 export default {
     name: "FullScreen",
     components: {
