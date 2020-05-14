@@ -2,16 +2,22 @@
 import {mapGetters, mapMutations} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
 
+/**
+ * The BackForward control element allows stepping back
+ * and forth through view states regarding zoom and center.
+ */
 export default {
     name: "BackForward",
     components: {
         ControlIcon
     },
     props: {
+        /** glyphicon name of the forward button */
         glyphiconFor: {
             type: String,
             default: "glyphicon-step-forward"
         },
+        /** glyphicon name of the backward button */
         glyphiconBack: {
             type: String,
             default: "glyphicon-step-backward"
@@ -21,14 +27,6 @@ export default {
         ...mapGetters("controls/backForward", ["forthAvailable", "backAvailable"]),
         ...mapGetters("Map", ["map"])
     },
-    /*
-     * NOTE This is how an addon could register itself to the appropriate store region
-     *      Maybe it's also desirable to offer an ["addons"] module for such cases?
-    created () {
-        // import storeModule from "./module.js"; (above!)
-        this.$store.registerModule(["controls", "backForward"], storeModule);
-    },
-     */
     mounted () {
         this.map.on("moveend", this.memorizeMap);
     },
