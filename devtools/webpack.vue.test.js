@@ -8,7 +8,6 @@ module.exports = {
     externals: [nodeExternals()],
     devtool: "inline-cheap-module-source-map",
     output: {
-        // todo inka debug testen
         // use absolute paths in sourcemaps (important for debugging via IDE)
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
         devtoolFallbackModuleFilenameTemplate: "[absolute-resource-path]?[hash]"
