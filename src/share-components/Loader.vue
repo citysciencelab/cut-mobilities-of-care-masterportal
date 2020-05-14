@@ -88,6 +88,10 @@ export default {
         position: absolute;
         height: 100%;
         width: 100%;
+        /* TODO highest possible value - loader is supposed to be on top;
+         * this can be removed after the vue migration is done since loader is
+         * then the last item on the stack */
+        z-index: 2147483647;
 
         background-color: @secondary;
         color: @secondary_contrast;
