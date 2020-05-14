@@ -126,7 +126,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test && npm run test:vue"
+      "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
     }
   }
 }

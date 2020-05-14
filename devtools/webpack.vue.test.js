@@ -16,11 +16,9 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                loader: "babel-loader",
-                exclude: /node_modules/,
-                options: {
-                    presets: ["@babel/preset-env"],
-                    plugins: ["@babel/plugin-syntax-dynamic-import"]
+                exclude: /\bcore-js\b/,
+                use: {
+                    loader: "babel-loader"
                 }
             },
             {
