@@ -338,7 +338,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     /**
      * helper function: check, if key has a valid value
      * @param {string} key parameter
-     * @param {string} ignoredKeys - todo
+     * @param {string} ignoredKeys keys to ignore
      * @returns {boolean} desc
      */
     isValidKey: function (key, ignoredKeys) {
