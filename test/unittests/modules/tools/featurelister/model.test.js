@@ -68,9 +68,6 @@ describe("featurelister/model", function () {
         it("should return an error for a number", function () {
             expect(() => model.beautifyString(1234)).to.throw(Error);
         });
-        it("should return an error for undefined", function () {
-            expect(() => model.beautifyString(undefined)).to.throw(Error);
-        });
         it("should return an error for NaN", function () {
             expect(() => model.beautifyString(NaN)).to.throw(Error);
         });
@@ -85,35 +82,43 @@ describe("featurelister/model", function () {
         });
     });
     describe("isValidKey", function () {
+        const ignoredKeys = [
+            "ignoredKey1",
+            "ignoredKey2",
+            "ignoredKey3",
+            "ignoredKey4",
+            "ignoredKey5"
+        ];
+
         model = new Model();
 
         it("should return true for a valid key", function () {
-            expect(model.isValidKey("TestKey")).to.be.true;
+            expect(model.isValidKey("TestKey", ignoredKeys)).to.be.true;
         });
         it("should return true for an empty key", function () {
-            expect(model.isValidKey("")).to.be.true;
+            expect(model.isValidKey("", ignoredKeys)).to.be.true;
         });
         it("should return false for a key which is listed under the ignoredKeys in the config", function () {
-            Config.ignoredKeys.push("TESTKEY");
-            expect(model.isValidKey("TESTKEY")).to.be.false;
+            ignoredKeys.push("TESTKEY");
+            expect(model.isValidKey("TESTKEY", ignoredKeys)).to.be.false;
         });
         it("should return an error for a number", function () {
-            expect(() => model.isValidKey(1234)).to.throw(Error);
+            expect(() => model.isValidKey(1234, ignoredKeys)).to.throw(Error);
         });
         it("should return an error for undefined", function () {
-            expect(() => model.isValidKey(undefined)).to.throw(Error);
+            expect(() => model.isValidKey(undefined, ignoredKeys)).to.throw(Error);
         });
         it("should return  an error for NaN", function () {
-            expect(() => model.isValidKey(NaN)).to.throw(Error);
+            expect(() => model.isValidKey(NaN, ignoredKeys)).to.throw(Error);
         });
         it("should return  an error for null", function () {
-            expect(() => model.isValidKey(null)).to.throw(Error);
+            expect(() => model.isValidKey(null, ignoredKeys)).to.throw(Error);
         });
         it("should return  an error for an array", function () {
-            expect(() => model.isValidKey([])).to.throw(Error);
+            expect(() => model.isValidKey([], ignoredKeys)).to.throw(Error);
         });
         it("should return  an error for an object", function () {
-            expect(() => model.isValidKey({})).to.throw(Error);
+            expect(() => model.isValidKey({}, ignoredKeys)).to.throw(Error);
         });
     });
     describe("isValidValue", function () {
