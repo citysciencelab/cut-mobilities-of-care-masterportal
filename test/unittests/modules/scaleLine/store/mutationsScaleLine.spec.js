@@ -1,7 +1,7 @@
 import mutations from "../../../../../src/modules/scaleLine/store/mutationsScaleLine";
 import {expect} from "chai";
 
-describe("mutations", () => {
+describe("mutationsScaleLine", () => {
 
     it("updateScaleNumber", () => {
         const state = {scaleNumber: ""},
