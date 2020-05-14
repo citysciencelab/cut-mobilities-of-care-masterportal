@@ -1,5 +1,17 @@
 <script>
 import {mapGetters} from "vuex";
+import ControlBarBackwardsCompatibility from "./ControlBarBackwardsCompatibility.vue";
+
+const fallbackTopRight = {
+        component: ControlBarBackwardsCompatibility,
+        props: {id: "top-right-fallback"},
+        key: "top-right-fallback"
+    },
+    fallbackBottomRight = {
+        component: ControlBarBackwardsCompatibility,
+        props: {id: "bottom-right-fallback"},
+        key: "bottom-right-fallback"
+    };
 
 /* TODO
  * This was the planned concept:
@@ -38,7 +50,10 @@ export default {
             };
 
             if (this.controlsConfig === null) {
-                return categorizedControls;
+                return {
+                    top: [fallbackTopRight],
+                    bottom: [fallbackBottomRight]
+                };
             }
 
             Object
@@ -53,7 +68,7 @@ export default {
                     }
                     return key;
                 })
-                .filter(x => typeof x === "string" ? console.warn(`Control "${x}" not implemented; ignoring key.`) : true)
+                .filter(x => typeof x === "string" ? console.warn(`Control "${x}" not implemented; ignoring key in ControlBar.vue.`) : true)
                 .forEach(c => {
                     if (this.bottomControls.includes(c.key)) {
                         categorizedControls.bottom.push(c);
@@ -63,6 +78,9 @@ export default {
                         categorizedControls.top.push(c);
                     }
                 });
+
+            categorizedControls.top.push(fallbackTopRight);
+            categorizedControls.bottom.unshift(fallbackBottomRight);
 
             return categorizedControls;
         }
