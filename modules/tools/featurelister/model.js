@@ -252,13 +252,12 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             ll = [];
 
         // Es muss sichergetellt werden, dass auch Features ohne Geometrie verarbeitet werden können. Z.B. KitaEinrichtunen
-        features.forEach(function (feature, index) {
-            const that = this;
+        features.forEach((feature, index) => {
             let props, geom;
 
             if (feature.get("features")) {
                 feature.get("features").forEach(feat => {
-                    props = that.translateGFI([feat.getProperties()], gfiAttributes)[0];
+                    props = this.translateGFI([feat.getProperties()], gfiAttributes)[0];
                     geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                     ll.push({
@@ -270,7 +269,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
                 });
             }
             else {
-                props = that.translateGFI([feature.getProperties()], gfiAttributes)[0];
+                props = this.translateGFI([feature.getProperties()], gfiAttributes)[0];
                 geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
 
                 ll.push({
@@ -298,10 +297,12 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         gfiList.forEach(element => {
             const preGfi = {},
                 gfi = {};
+            let ignoredKeys = "";
 
             // get rid of invalid keys and keys with invalid values; trim values
             for (const [key, value] of Object.entries(element)) {
-                if (this.isValidKey(key) && this.isValidValue(value)) {
+                ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+                if (this.isValidKey(key, ignoredKeys) && this.isValidValue(value)) {
                     preGfi[key] = value.trim();
                 }
             }
@@ -320,7 +321,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             if (Object.keys(gfi).length !== 0) {
                 pgfi.push(gfi);
             }
-        }, this);
+        });
 
         return pgfi;
     },
@@ -330,18 +331,17 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @param {string} str parameter
      * @returns {string} desc
      */
-    beautifyString: function (str) {
+    beautifyString: function (str = "") {
         return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
     },
 
     /**
      * helper function: check, if key has a valid value
      * @param {string} key parameter
+     * @param {string} ignoredKeys - todo
      * @returns {boolean} desc
      */
-    isValidKey: function (key) {
-        const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
-
+    isValidKey: function (key, ignoredKeys) {
         if (ignoredKeys.indexOf(key.toUpperCase()) !== -1) {
             return false;
         }
