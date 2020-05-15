@@ -93,6 +93,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "findWhereJs": this.findWhereJs,
             "whereJs": this.whereJs,
             "isEqual": this.isEqual,
+            "differenceJs": this.differenceJs,
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
             "setUrlQueryParams": this.setUrlQueryParams,
