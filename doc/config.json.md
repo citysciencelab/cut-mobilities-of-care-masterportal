@@ -1081,7 +1081,7 @@ Todo
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Der Filter bietet eine Vielzahl von Möglichkeiten um Vektor-Daten filtern zu können.
+Der Filter bietet eine Vielzahl von Möglichkeiten um Vektor-Daten filtern zu können. Er kann jedoch keine geclusterten Features filtern.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2556,7 +2556,7 @@ Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der K
     "visibility": true,
     "extent": [560296.72, 5932154.22, 562496.72, 5933454.22]
 }
-`````
+```
 
 ***
 #### Themenconfig.Layer.Vector

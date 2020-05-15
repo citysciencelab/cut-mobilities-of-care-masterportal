@@ -3,7 +3,7 @@
 * kann mit node servicesToProxies.js Pfad_zur_services.json aufgerufen werden
 * erstellt
 */
-const fs = require("fs"),
+const fse = require("fs-extra"),
     _ = require("underscore"),
     url = require("url");
     // arguments kommt von Note.js und enthält die in der Konsole übergebenen Argumente
@@ -63,7 +63,7 @@ function appendToLocalProxies (proxyName, domain, port, isLast, proxyForFHHNet) 
     /* eslint-disable vars-on-top */
     console.log(entry);
 
-    fs.appendFile(targetFileLocal,
+    fse.appendFile(targetFileLocal,
         entry,
         function (err) {
             if (err) {
@@ -104,7 +104,7 @@ function appendToApacheProxies (protocol, domain, port, proxyName, proxyForFHHNe
     }
     console.log(outputString);
 
-    fs.appendFile(targetFile, outputString, function (err) {
+    fse.appendFile(targetFile, outputString, function (err) {
         if (err) {
             return console.log(err);
         }
@@ -219,13 +219,13 @@ function main () {
         targetFileLocal = "local_" + targetFile;
 
         // datei löschen
-        fs.writeFile(targetFile, "");
-        fs.writeFile(targetFileLocal, "");
+        fse.writeFile(targetFile, "");
+        fse.writeFile(targetFileLocal, "");
 
         allDomains = [];
 
         for (let i = 4; i < args.length; i++) {
-            const data = fs.readFileSync(args[i], "utf8"),
+            const data = fse.readFileSync(args[i], "utf8"),
                 obj = JSON.parse(data.toString("utf8").replace(/^\uFEFF/, ""));
 
             allDomains = allDomains.concat(obj);

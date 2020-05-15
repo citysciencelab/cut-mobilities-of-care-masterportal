@@ -467,6 +467,31 @@ describe("core/Util", function () {
             expect(model.isEqual(obj4, {name: "moe", luckyNumbers: [13, 27, 34]})).to.be.true;
         });
     });
+    describe("differenceJs", function () {
+        it("should return the last three entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, [1, 2])).to.deep.equal([3, 4, 5]);
+        });
+        it("should return the given five entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, [])).to.deep.equal([1, 2, 3, 4, 5]);
+        });
+        it("should return the last two entries in the array", function () {
+            const array = ["Hamburg", "Bremen", "Berlin", "Delmenhosrt"];
+
+            expect(model.differenceJs(array, ["Hamburg", "Bremen"])).to.deep.equal(["Berlin", "Delmenhosrt"]);
+        });
+        it("should return the given five entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, undefined)).to.deep.equal([1, 2, 3, 4, 5]);
+        });
+        it("should return an empty array", function () {
+            expect(model.differenceJs(undefined, undefined)).to.deep.equal([]);
+        });
+    });
     describe("isEmpty", function () {
         it("should return true", function () {
             expect(model.isEmpty(null)).to.be.true;
@@ -504,6 +529,31 @@ describe("core/Util", function () {
 
         it("should return an object", function () {
             expect(model.toObject(arr3)).to.deep.equal(obj3);
+        });
+    });
+    describe("uniqueId", () => {
+        it("should increment the uniqueId internaly", () => {
+            const currentId = model.uniqueId(),
+                expectedId = String(parseInt(currentId, 10) + 1);
+
+            expect(currentId).to.not.be.NaN;
+            expect(model.uniqueId()).to.equal(expectedId);
+        });
+        it("should prefix the id with the given prefix", () => {
+            const currentId = model.uniqueId(),
+                prefix = "foo",
+                expectedId = prefix + String(parseInt(currentId, 10) + 1);
+
+            expect(currentId).to.not.be.NaN;
+            expect(model.uniqueId(prefix)).to.equal(expectedId);
+        });
+        it("should increment the same id independent of the models instance", () => {
+            const currentId = model.uniqueId(),
+                expectedId = String(parseInt(currentId, 10) + 1),
+                modelB = new Model();
+
+            expect(currentId).to.not.be.NaN;
+            expect(modelB.uniqueId()).to.equal(expectedId);
         });
     });
 });

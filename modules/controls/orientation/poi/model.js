@@ -68,7 +68,7 @@ const POIModel = Backbone.Model.extend({
         let poi,
             first;
 
-        if (!_.isNumber(this.get("activeCategory"))) {
+        if (typeof this.get("activeCategory") !== "number") {
             poi = this.get("poiFeatures");
             first = poi.find(function (dist) {
                 return dist.features.length > 0;
