@@ -1,5 +1,6 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
+import Store from "../../../src/app-store";
 
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     defaults: {
@@ -113,14 +114,17 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     },
 
     /**
-    * todo
-    * @param {*} response todo
-    * @returns {*} todo
+    * Parses the specifications from the config.json.
+    * If the portalconfigparameters are parsed, this will trigger the Preparser.
+    * @param {Object} response - Parameters from the config.json.
+    * @returns {void} - no value is returned.
     */
     parse: function (response) {
         let attributes;
 
         this.addTranslationToRawConfig(response, "translate#");
+
+        Store.commit("setConfigJson", response);
 
         attributes = {
             portalConfig: response.Portalconfig,

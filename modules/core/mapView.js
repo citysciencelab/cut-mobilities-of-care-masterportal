@@ -1,12 +1,13 @@
 import {Projection} from "ol/proj.js";
 import defaults from "masterportalAPI/src/defaults";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
+import store from "../../src/app-store";
 
 const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     defaults: {
         background: "",
         units: "m",
-        DOTS_PER_INCH: $("#dpidiv").outerWidth()
+        DOTS_PER_INCH: store.getters.dpi
     },
 
     /**
@@ -105,6 +106,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
             Radio.trigger("MapView", "changedCenter", this.getCenter());
             Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
         }, this);
+        Radio.trigger("MapView", "changedOptions", _.findWhere(this.get("options"), {resolution: this.get("view").constrainResolution(this.get("view").getResolution())}));
     },
 
     /**

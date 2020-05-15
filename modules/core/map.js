@@ -11,6 +11,7 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
+import Store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
@@ -698,6 +699,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     setMap: function (value) {
         this.set("map", value);
+        Store.dispatch("Map/setMap", {map: value});
     }
 
 });

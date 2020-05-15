@@ -51,7 +51,7 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
     render: function () {
         const attr = this.model.toJSON();
 
-        $(".masterportal-container").append(this.$el.html(this.template(attr)));
+        $("#masterportal-container").append(this.$el.html(this.template(attr)));
         return this;
     },
     /**

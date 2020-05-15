@@ -126,7 +126,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             channel.trigger("ready", this.currentMenu.id);
         }
         else if (this.menuStyle === "DEFAULT") {
-            $("#map").css("height", "calc(100% - 50px)");
+            // $("#map").css("height", "calc(100% - 50px)");
             $("#main-nav").show();
 
             if (isMobile) {

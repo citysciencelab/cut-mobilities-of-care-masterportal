@@ -73,7 +73,9 @@
     "time": "Time",
     "modules": {
         "language": {
-            "languageTitle": "Please choose a language"
+            "languageTitle": "Please choose a language",
+            "de": "German",
+            "en": "English"
         },
         "cswParser": {
             "noMetadataMessage": "No metadata available."
@@ -232,6 +234,7 @@
                 "generateReport": "Generate report"
             },
             "getCoord": {
+                "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
                 "hdms": {
                     "eastingLabel": "Longitude",

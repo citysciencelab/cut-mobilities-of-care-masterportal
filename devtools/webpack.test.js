@@ -49,6 +49,14 @@ module.exports = {
                 use: "null-loader"
             },
             {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    {
+                        loader: "file-loader"
+                    }
+                ]
+            },
+            {
                 test: /\.xml$/i,
                 use: "raw-loader"
             }
@@ -68,6 +76,11 @@ module.exports = {
             requestAnimationFrame: "raf"
         }),
         new VueLoaderPlugin(),
-        new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js")
+        new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js"),
+        // ADDONS wird hier global definiert, da der pre-push den Fehler ADDONS is undefined in ./src/addons.js wirft,
+        // obwohl der linter die Zeile ignorieren soll
+        new webpack.DefinePlugin({
+            ADDONS: {}
+        })
     ]
 };
