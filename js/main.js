@@ -134,7 +134,6 @@ function initLanguage (portalLanguageConfig) {
     }
     i18next
         .use(HttpApi)
-        .use(i18nextXHRBackend)
         .on("languageChanged", function (lng) {
             Radio.trigger("i18next", "languageChanged", lng);
         }, this)
