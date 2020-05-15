@@ -7,6 +7,11 @@ import ControlIcon from "../../ControlIcon.vue";
 /**
  * Overview control that shows a mini-map to support a user's
  * sense of orientation within the map.
+ *
+ * TODO Currently using radio to detect 3D mode. Should eventually
+ * listen to the vuex map module as soon as modes are modeled
+ * there.
+ * @listens Map#RadioTriggerMapChange
  */
 export default {
     name: "OverviewMap",
@@ -40,15 +45,19 @@ export default {
     },
     data: function () {
         return {
-            supportedIn3d: false, // TODO not used yet, figure out how to use this
             open: this.isInitOpen,
-            overviewMap: null
+            overviewMap: null,
+            mapChannel: Radio.channel("Map"),
+            visibleInMapMode: null // set in .created
         };
     },
     computed: {
         ...mapGetters("Map", ["map"])
     },
     created () {
+        this.checkModeVisibility();
+        this.mapChannel.on("change", this.checkModeVisibility);
+
         // deprecation warnings
         if (this.baselayer !== null) {
             console.warn("Using 'baselayer' in 'overviewMap'. Please note this is deprecated. Use 'layerId' instead.");
@@ -57,6 +66,9 @@ export default {
         if (this.resolution !== null) {
             console.warn("Using 'resolution' in 'overviewMap'. Please note this is deprecated.");
         }
+    },
+    beforeDestroy () {
+        this.mapChannel.off("change", this.checkModeVisibility);
     },
     mounted () {
         const id = this.layerId || this.baselayer,
@@ -88,13 +100,23 @@ export default {
             if (this.overviewMap !== null) {
                 this.map[`${this.open ? "add" : "remove"}Control`](this.overviewMap);
             }
+        },
+        /**
+         * Sets visibility flag depending on map mode; OverviewMap is not available in 3D mode.
+         * @returns {void}
+         */
+        checkModeVisibility () {
+            this.visibleInMapMode = Radio.request("Map", "getMapMode") !== "3D";
         }
     }
 };
 </script>
 
 <template>
-    <div id="overviewmap-wrapper">
+    <div
+        v-if="visibleInMapMode"
+        id="overviewmap-wrapper"
+    >
         <ControlIcon
             class="overviewmap-button"
             :title="$t(`common:modules.controls.overviewMap.${open ? 'hide' : 'show'}OverviewControl`)"
