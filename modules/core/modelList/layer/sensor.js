@@ -71,7 +71,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         this.setSubscriptionTopics({});
         this.setHttpSubFolder(this.get("url") && String(this.get("url")).split("/").length > 3 ? "/" + String(this.get("url")).split("/").slice(3).join("/") : "");
 
-        this.createMqttConnectionToSensorThings();
+        try {
+            this.createMqttConnectionToSensorThings();
+        }
+        catch (err) {
+            console.error("Connecting to mqtt-broker failed. Won't receive live updates. Reason:", err);
+        }
 
         if (!this.get("isChildLayer")) {
             Layer.prototype.initialize.apply(this);
@@ -716,12 +721,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }
 
         const mqtt = new SensorThingsMqtt(),
-            client = mqtt.connect({
+            mqttOptions = Object.assign({
                 host: this.get("url").split("/")[2],
                 protocol: "wss",
                 path: this.get("mqttPath"),
                 context: this
-            });
+            }, this.get("mqttOptions")),
+            client = mqtt.connect(mqttOptions);
 
         this.setMqttClient(client);
 
@@ -743,15 +749,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamIds = this.getDataStreamIds(features),
             version = this.get("version"),
             client = this.get("mqttClient"),
-            subscriptionTopics = this.get("subscriptionTopics"),
-            protocol = this.get("url").split(":")[0];
+            subscriptionTopics = this.get("subscriptionTopics");
 
         dataStreamIds.forEach(function (id) {
             if (client && id && !subscriptionTopics[id]) {
                 client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {
                     rmSimulate: true,
-                    rmPath: this.get("httpSubFolder"),
-                    rmProtocol: protocol
+                    rmUrl: this.get("url")
                 });
                 subscriptionTopics[id] = true;
             }
