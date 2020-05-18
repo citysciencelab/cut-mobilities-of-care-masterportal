@@ -567,6 +567,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
         this.parseURL(location.search.substr(1), this.possibleUrlParameters());
     },
+    /**
+     * Checks, if the language is dis- or enabled in the config.js
+     * @returns {void}
+     */
+    checkIfLanguageEnabled: function () {
+        if (Config.portalLanguage !== undefined && !Config.portalLanguage.enabled) {
+            console.warn("You specified the URL-parameter lng, but disabled the language in the config.js.");
+        }
+    },
 
     /**
      * Setter for brwId.
