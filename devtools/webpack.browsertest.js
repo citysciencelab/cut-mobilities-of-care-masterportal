@@ -2,13 +2,11 @@
 /* eslint-disable global-require */
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
-    fs = require("fs"),
-    _ = require("underscore");
-
+    fse = require("fs-extra");
 
 let proxies;
 
-if (fs.existsSync("./devtools/proxyconf.json")) {
+if (fse.existsSync("./devtools/proxyconf.json")) {
     proxies = require("./proxyconf.json");
 }
 else {
@@ -17,7 +15,7 @@ else {
 
 
 module.exports = function (env, args) {
-    const path2Addon = _.isString(args.ADDON) && args.ADDON !== "" ? args.ADDON : "";
+    const path2Addon = typeof args.ADDON === "string" && args.ADDON !== "" ? args.ADDON : "";
 
     return merge.smart({
         mode: "development",

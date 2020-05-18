@@ -241,7 +241,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
     "legendURL" : "",
     "datasets" : []
   }
-  ```
+```
 
 ***
 
@@ -274,6 +274,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
 |useProxyUrlForGfi|nein|boolean|undefined|Flag um die GFI-Abfrage für einen Layer über einen reverse proxy laufen zu lassen.|false|
 |timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
+|***[mqttOptions](#markdown-header-mqtt_options)**|nein|Object||Konfiuration der Websocket-Verbindung für mqtt||
 **Beispiel Sensor:**
 
 ```
@@ -301,8 +302,16 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
       "mergeThingsByCoordinates": true
    }
 ```
+## mqtt_options ##
 
-***
+Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt definiert werden. Wird hier nichts angegeben so wird veruscht die Parameter aus der Server-URL zu extrahieren.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|host|nein|String||Adresse des Hosts|`"example.com"`|
+|port|nein|String||Port am Host|`"9876"`|
+|path|nein|String||Pfad|`"/mqtt"`|
+|protocol|nein|String||Verwendetes Protokol|`"ws"`, `"wss"`|
 
 ## url_Parameter ##
 
@@ -524,6 +533,9 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
       }
    }
 }
+```
+
+***
 
 ## GeoJSON-Layer ##
 

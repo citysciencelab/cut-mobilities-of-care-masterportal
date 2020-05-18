@@ -59,7 +59,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
 
         Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
 
-        if (_.has(searchConf, "zoomLevel")) {
+        if (searchConf.hasOwnProperty("zoomLevel")) {
             this.setZoomLevel(searchConf.zoomLevel);
         }
         if (parcelSearchConf && parcelSearchConf.styleId) {
@@ -185,12 +185,11 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      */
     getWKTGeom: function (type, geom) {
         let wkt,
-            split,
             regExp;
 
         if (type === "POLYGON") {
             wkt = type + "((";
-            _.each(geom, function (element, index, list) {
+            geom.forEach(function (element, index, list) {
                 if (index % 2 === 0) {
                     wkt += element + " ";
                 }
@@ -209,10 +208,9 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
         }
         else if (type === "MULTIPOLYGON") {
             wkt = type + "(((";
-            _.each(geom, function (element, index) {
-                split = geom[index].split(" ");
+            geom.forEach(function (element, index) {
 
-                _.each(split, function (coord, index2, list) {
+                geom[index].forEach(function (coord, index2, list) {
                     if (index2 % 2 === 0) {
                         wkt += coord + " ";
                     }
@@ -233,7 +231,6 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
             regExp = new RegExp(", \\)\\?\\(", "g");
             wkt = wkt.replace(regExp, "),(");
         }
-
         return wkt;
     },
 
