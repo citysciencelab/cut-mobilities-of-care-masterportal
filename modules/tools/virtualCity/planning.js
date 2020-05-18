@@ -5,7 +5,7 @@ import {parseFlightOptions} from "./flight";
 import StaticImageLayer from "../../core/modelList/layer/staticImage";
 
 const Planning = Backbone.Model.extend(/** @lends Planning.prototype */ {
-    defaults: _.extend({}, Backbone.Model.defaults, {
+    defaults: Object.assign({}, Backbone.Model.defaults, {
         id: null,
         url: null,
         hiddenObjects: [],

@@ -1,3 +1,5 @@
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import {expect} from "chai";
 import sinon from "sinon";
 import WMTSLayer from "@modules/core/modelList/layer/wmts.js";
@@ -8,7 +10,6 @@ import OlWMTSSource from "ol/source/WMTS.js";
 import TileLayer from "ol/layer/Tile";
 import * as WMTSResult1 from "../../../../resources/testWMTSResponse1.xml";
 import * as WMTSResult2 from "../../../../resources/testWMTSResponse2.xml";
-import "@babel/polyfill";
 
 describe("core/modelList/layer/wmts", function () {
     let wmts;
