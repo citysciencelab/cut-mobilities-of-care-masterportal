@@ -113,7 +113,7 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel mit Namespace eine Moduls:*  
+*Beispiel mit Namespace eines Moduls:*  
 *Beispiel eines Events, das zum Namespace "Alerting" gehört:*  
 ```javascript
 /**
@@ -216,7 +216,7 @@ Weitere Informationen zu Unit-Tests [hier](./unittesting.md).
 Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mocha](https://mochajs.org/)** verwendet.  
 ---
 #### A.6.2
-Erweitere die Dokumentation in den md-Dateien wie im folgenden beschrieben:  
+Erweitere die Dokumentation in den .md-Dateien wie im Folgenden beschrieben:  
 a) Erweitere die **[config.js.md](./config.js.md)**, wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.  
 b) Erweitere die **[config.json.md](./config.json.md)**, wenn du neue Konfigurationsparameter für die Portaloberfläche erzeugt hast oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.  
 c) Es werden immer die folgenden Parameter in der Dokumentation für die Konfigurationsparameter befüllt:  
@@ -224,7 +224,7 @@ c) Es werden immer die folgenden Parameter in der Dokumentation für die Konfigu
 "Expert" gibt es nur in der config.json.  
 d) Ein Parameter endet in der .md Datei immer mit einer horizontalen Trennlinie.  
 e) Je nach Verschachtelung des Parameters wird die Überschrift ausgewählt. Auf der obersten Ebene mit # darunter mit ##.  
-f) Konfigurationsparamter die ein Objekt sind und selber weitere Parameter enthalten werden in einem eigenen Bereich einzeln beschrieben und verlinkt.  
+f) Konfigurationsparameter die ein Objekt sind und selber weitere Parameter enthalten werden in einem eigenen Bereich einzeln beschrieben und verlinkt.  
 g) Bei komplexen Konfigurationsparametern ist eine Beispielkonfiguration gefordert.  
 h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[rest-services.json.md](./rest-services.json.md)** und **[style.json.md](./style.json.md)**, wenn du für diese globalen Konfigurationsdateien neue Parameter benötigst/verwendest.  
 
