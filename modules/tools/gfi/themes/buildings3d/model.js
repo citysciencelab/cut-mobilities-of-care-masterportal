@@ -31,7 +31,7 @@ const Buildings3dTheme = Theme.extend({
     }),
 
     initialize: function () {
-        var channel = Radio.channel("defaultTheme");
+        const channel = Radio.channel("defaultTheme");
 
         this.listenTo(this, {
             "change:isReady": function () {

@@ -26,7 +26,7 @@ For advanced users and experts we recommend to read the short but sharp document
 
 Following i18next plugins are used:
 
-* [i18next-xhr-backend](https://github.com/i18next/i18next-xhr-backend) to use of language files rather then hard coded translations
+* [i18next-http-backend](https://github.com/i18next/i18next-http-backend) to use of language files rather then hard coded translations
 * [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector) for detecting the language of the browser, use of the localStorage and reacting of the query url
 
 i18next broadcasts a change in language with this Radio Event: "i18next#RadioTriggerLanguageChanged".
@@ -120,8 +120,8 @@ const ExampleModel = Backbone.Model.extend(/** @lends ExampleModel.prototype */ 
     changeLang: function (lng) {
         this.set({
             currentLng: lng,
-            exampleTitle: i18next.t("example:foo.bar.exampleTitle"),
-            exampleText: i18next.t("example:foo.bar.exampleText")
+            exampleTitle: i18next.t("common:foo.bar.exampleTitle"),
+            exampleText: i18next.t("common:foo.bar.exampleText")
         });
     }
 });
@@ -207,13 +207,14 @@ This formated value must than be placed into the translation files.
 If the part of the config.json is considered for translation by the Masterportal, the translation will take place as required.
 Only the field *"name"* is considered during translation!
 
-Translation File example.js
+Translation File common.json
 ```
 {
     "foo": {
         "bar": {
             "exampleMenuTitle": "titulum menu",
-            "exampleLayerName": "aliquid"
+            "exampleLayerName": "aliquid",
+            "exampleSubjectData": "subject data"
         }
     }
 }
@@ -227,7 +228,7 @@ Part of the config.json you can edit for translation of the menu:
     "Portalconfig": {
         "menu": {
             "example": {
-                "name": "translate#example:foo.bar.exampleMenuTitle",
+                "name": "translate#common:foo.bar.exampleMenuTitle",
                 "glyphicon": "glyphicon-list",
                 "isInitOpen": false
             }
@@ -238,7 +239,7 @@ Part of the config.json you can edit for translation of the menu:
 The translation key must be preceded by the following text: translate#.
 
 Structure:
-translate#[Sprachdateiname]:[Pfad zum Key] = translate#example:foo.bar.exampleMenuTitle
+translate#[Sprachdateiname]:[Pfad zum Key] = translate#common:foo.bar.exampleMenuTitle
 
 As the menu is already programmed to react for the translation prefix ("translate#") correctly, this is all to do for a menu entry.
 
@@ -248,22 +249,35 @@ Similar to the menu the tree of topics (german: "Themenbaum") can be translated 
 
 **Please be aware**: A translation key added to an item in the tree of topics will overwrite any titles or names coming from services.
 
+If the treeType is "default" or "custom" the name of the folder can be specified. In the example below, the tree would then contain the value for the key "foo.bar.exampleSubjectData" instead of "Fachdaten".
+
+Default translations:
+
+* Baselayer: Background maps
+* Overlay: Subject data
+* 3d-layer: 3D data
 
 Part of the config.json you can edit for translation of the tree of topics
 ```
 {
     "Themenconfig": {
         "Fachdaten": {
+            "name": "translate#common:foo.bar.exampleSubjectData",
             "Layer": [
                   {
                     "id": "2128",
-                    "name": "translate#example:foo.bar.exampleLayerName"
+                    "name": "translate#common:foo.bar.exampleLayerName"
                   }
             ]
         }
     }
 }
 ```
+There are the following possibilities and the following hierarchy:
+
+* "name": "my special subjects" --> will never be translated
+* "name": "translate#common:foo.bar.exampleMenuTitle" --> will be translated, if the key exists
+* no name specified (the field name does not exist) --> default translation (see above)
 
 ### Tools
 
@@ -279,7 +293,7 @@ Part of the config.json you can edit for translation of the tools
         "children": {
           "draw":
           {
-            "name": "translate#example:foo.bar.exampleMenuTitle",
+            "name": "translate#common:foo.bar.exampleMenuTitle",
             "glyphicon": "glyphicon-pencil"
           },
           ...

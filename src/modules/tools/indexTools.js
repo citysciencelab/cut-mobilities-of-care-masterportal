@@ -1,7 +1,7 @@
 import mutations from "./mutationsTools";
 
 /**
- * This is here to test global-store/utils/composeModules.
+ * This is here to test app-store/utils/composeModules.
  * However, these parameters will probably end up
  * as props and not as state.
  */

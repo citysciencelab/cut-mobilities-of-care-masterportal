@@ -2,25 +2,27 @@ import Model from "@modules/searchbar/gdi/model.js";
 import {expect} from "chai";
 
 describe("modules/searchbar/gdi", function () {
-    var model = {},
-        config = {
-            "searchBar": {
-                "gdi": {
-                    "minChars": 4,
-                    "serviceId": "elastic",
-                    "queryObject": {
-                        "id": "query",
-                        "params": {
-                            "query_string": "%%searchString%%"
-                        }
+    let model = {};
+
+    const config = {
+        "searchBar": {
+            "gdi": {
+                "minChars": 4,
+                "serviceId": "elastic",
+                "queryObject": {
+                    "id": "query",
+                    "params": {
+                        "query_string": "%%searchString%%"
                     }
                 }
             }
-        };
+        }
+    };
 
     before(function () {
         model = new Model(config);
     });
+
     describe("appendSearchStringToPayload", function () {
         it("should append string to searchStringAttribute", function () {
             const payload = {

@@ -14,7 +14,7 @@ const ImgView = Backbone.View.extend({
     template: _.template(ImgTemplate),
 
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         return this;

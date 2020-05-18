@@ -252,7 +252,7 @@ describe("core/modelList/layer/SensorThingsHttp", function () {
             expect(httpClientLastUrl).to.equal("https://iot.hamburg.de/v1.0/Things?%24count=true");
         });
 
-        it("should return any array from the response that was found under the value key", function () {
+        it("should return any array from the response that was found under the value key ereasing the value key", function () {
             lastResponse = false;
             http.getHelper(url, onsuccess, false, false, false, function (httpClientUrl, httpClientOnSuccess) {
                 httpClientOnSuccess({
@@ -260,22 +260,21 @@ describe("core/modelList/layer/SensorThingsHttp", function () {
                 });
             });
             expect(lastResponse).to.deep.equal(["foo", "bar"]);
-
+        });
+        it("should return anything as array if response does not include a key value as array", function () {
             lastResponse = false;
             http.getHelper(url, onsuccess, false, false, false, function (httpClientUrl, httpClientOnSuccess) {
                 httpClientOnSuccess({
                     value: "foo"
                 });
             });
-            expect(lastResponse).to.be.empty;
-        });
+            expect(lastResponse).to.deep.equal([{value: "foo"}]);
 
-        it("should ignore any data from the response if no data was found at the value key", function () {
             lastResponse = false;
             http.getHelper(url, onsuccess, false, false, false, function (httpClientUrl, httpClientOnSuccess) {
-                httpClientOnSuccess(false);
+                httpClientOnSuccess(undefined);
             });
-            expect(lastResponse).to.be.empty;
+            expect(lastResponse).to.deep.equal([undefined]);
         });
 
         it("should call any url that was found under the @iot.nextLink key recursive", function () {

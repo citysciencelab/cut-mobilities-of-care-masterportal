@@ -16,7 +16,13 @@ const LinesView = Backbone.View.extend({
             "change:isActive": this.render,
             // ändert sich eins dieser Attribute wird neu gezeichnet
             "change:gemeinden change:gemeinde change:trefferAnzahl change:direction change:animating change:emptyResult change:pendlerLegend": this.render,
-            "render": this.render
+            "render": this.render,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
+        });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.model.changeLang
         });
     },
 

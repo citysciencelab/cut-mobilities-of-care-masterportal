@@ -1,9 +1,13 @@
-var xmlserializer = require("xmlserializer"),
-    XMLSerializer;
+const xmlserializer = require("xmlserializer");
 
-XMLSerializer = function () {
+/**
+ * XMLSerializer return boolean
+ * @return {boolean} true
+ * @constructor
+ */
+function XMLSerializer () {
     return true;
-};
+}
 
 XMLSerializer.prototype.serializeToString = function (node) {
     return xmlserializer.serializeToString(node);

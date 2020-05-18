@@ -15,6 +15,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         selectAllGlyphicon: "glyphicon-unchecked",
         glyphicon: "glyphicon-folder-open",
         obliqueModeBlacklist: ["tree", "tools"],
+        isPinned: false,
         // translate
         currentLng: "",
         saveSelectionText: "",
@@ -35,6 +36,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @property {Boolean} isExpanded=false Flag if folder is expanded.
      * @property {Boolean} isInitiallyExpanded=false Flag if folder is expanded initially.
      * @property {Boolean} isSelected=false Flag if all children are selected.
+     * @property {Boolean} isPinned=false Flag if tree is pinned
      * @property {String} type="" Flag what kind of item it is. "folder".
      * @property {String} parentId="" Id of parent node.
      * @property {Boolean} isLeafFolder=false Flag if folder does not have subfolders.
@@ -48,18 +50,18 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @property {String} pinTopicsTreeText="" will be translated
      * @property {String} hideAllTopicsText="" will be translated
      * @property {String} showAllTopicsText="" will be translated
+     * @property {String} categoryText="" will be translated
      * @property {String[]} obliqueModeBlacklist=["tree,"tools"] List of folder ids that are not displayed in oblique mode("Schr�gluftbilder").
      */
     initialize: function () {
-        var items,
-            isEveryLayerSelected;
+        let items,
+            isEveryToolInvisible = true,
+            isEveryLayerSelected = true;
 
         // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert
         if (this.get("parentId") === "Overlayer") {
             items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")});
-            isEveryLayerSelected = _.every(items, function (item) {
-                return item.isSelected === true;
-            });
+            isEveryLayerSelected = items.every(item => item.isSelected === true);
 
             if (isEveryLayerSelected === true) {
                 this.setIsSelected(true);
@@ -67,9 +69,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         }
         if (this.get("id") === "tools") {
             items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")});
-            const isEveryToolInvisible = _.every(items, function (item) {
-                return item.isVisibleInMenu === false;
-            });
+            isEveryToolInvisible = items.every(item => item.isVisibleInMenu === false);
 
             if (isEveryToolInvisible === true) {
                 this.setIsVisibleInMenu(false);
@@ -82,10 +82,14 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
     },
     /**
      * change language - sets default values for the language
+     * and translates the name of the folder, if translation-key was set in config.json
      * @param {String} lng the language changed to
      * @returns {Void}  -
      */
     changeLang: function (lng) {
+        /* eslint-disable consistent-this */
+        const model = this;
+
         this.set({
             saveSelectionText: i18next.t("common:menu.tools.saveSelection"),
             topicsHelpText: i18next.t("common:tree.topicsHelp"),
@@ -96,6 +100,15 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
             categoryText: i18next.t("common:tree.category"),
             currentLng: lng
         });
+        // translate name of folder, key is defined in config.json
+        if (this.has("i18nextTranslate") && typeof this.get("i18nextTranslate") === "function") {
+            this.get("i18nextTranslate")(function (key, value) {
+                if (!model.has(key) || typeof value !== "string") {
+                    return;
+                }
+                model.set(key, value);
+            });
+        }
     },
 
     /**
@@ -107,6 +120,15 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
     setIsExpanded: function (value, options) {
         this.set("isExpanded", value, options);
     },
+    /**
+     * Setter for attribute "isPinned".
+     * @param {Boolean} value Flag for isPinned.
+     * @param {Object} options Backbone options for setter
+     * @returns {void}
+     */
+    setIsPinned: function (value, options) {
+        this.set("isPinned", value, options);
+    },
 
     /**
      * Setter for attribute "isSelected"
@@ -115,7 +137,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @returns {void}
      */
     setIsSelected: function (value, silent) {
-        if (_.isUndefined(silent)) {
+        if (silent === undefined) {
             this.set("isSelected", value);
         }
         this.set("isSelected", value, {silent: silent});

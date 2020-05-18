@@ -52,7 +52,25 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
         this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
         this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
     },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "currentLng": lng
+        });
+    },
+
     /**
      * When a gfi opens, this function trys to find the corresponding feature in the list and select it
      * @param {Event} evt Event, which feature shall be highlighted
@@ -61,7 +79,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     highlightMouseFeature: function (evt) {
-        var features = this.get("layer").features,
+        const features = this.get("layer").features,
             mapFeatures = evt[0],
             layername = this.get("layer").name;
 
@@ -83,12 +101,13 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     getFeatureWithFeatureId: function () {
-        var featureid = this.get("featureid"),
+        const featureid = this.get("featureid"),
             features = this.get("layer").features,
             feature = _.find(features, function (feat) {
                 return feat.id.toString() === featureid;
-            }),
-            geometry,
+            });
+
+        let geometry,
             properties;
 
         if (feature) {
@@ -119,7 +138,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      */
     highlightFeature: function (id) {
         // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
-        var layer = this.get("layer"),
+        const layer = this.get("layer"),
             features = layer.features,
             feature = _.find(features, function (feat) {
                 return feat.id.toString() === id;
@@ -142,7 +161,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     downlightFeature: function () {
-        var highlightedFeature = this.get("highlightedFeature"),
+        const highlightedFeature = this.get("highlightedFeature"),
             highlightedFeatureStyle = this.get("highlightedFeatureStyle");
 
         if (highlightedFeature) {
@@ -156,7 +175,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     getLayerWithLayerId: function () {
-        var layers = this.get("layerlist"),
+        const layers = this.get("layerlist"),
             layer = _.find(layers, {id: this.get("layerid")});
 
         // wenn Layer wechselt, kann auch kein Feature mehr aktiv sein.
@@ -176,13 +195,13 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     checkVisibleLayer: function () {
-        var layerlist = this.get("layerlist"),
+        const layerlist = this.get("layerlist"),
             modelList = Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, typ: "WFS"}),
             activeLayerId = this.get("layerid");
 
         // entferne nicht mehr sichtbare Layer
         _.each(layerlist, function (layer) {
-            var tester = modelList.filter(function (lay) {
+            const tester = modelList.filter(function (lay) {
                 return lay.id === layer.id;
             });
 
@@ -198,7 +217,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         }, this);
         // füge neue Layer hinzu
         _.each(modelList, function (layer) {
-            var tester = layerlist.filter(function (lay) {
+            const tester = layerlist.filter(function (lay) {
                 return lay.id === layer.id;
             });
 
@@ -213,7 +232,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     removeLayerFromList: function (layer) {
-        var layerlist = this.get("layerlist"),
+        const layerlist = this.get("layerlist"),
             remainLayer = layerlist.filter(function (lay) {
                 return lay.id !== layer.id;
             });
@@ -228,7 +247,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     getFeatureList: function (layerId) {
-        var layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
+        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             gfiAttributes = layerModel.get("gfiAttributes"),
             layerFromList = _.findWhere(this.get("layerlist"), {id: layerId}),
             features = layerModel.get("layer").getSource().getFeatures(),
@@ -236,7 +255,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
 
         // Es muss sichergetellt werden, dass auch Features ohne Geometrie verarbeitet werden können. Z.B. KitaEinrichtunen
         _.each(features, function (feature, index) {
-            var props, geom;
+            let props, geom;
 
             if (feature.get("features")) {
                 _.each(feature.get("features"), function (feat, idx) {
@@ -272,7 +291,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     addLayerToList: function (layer) {
-        var layerlist = this.get("layerlist");
+        const layerlist = this.get("layerlist");
 
         layerlist.push({
             id: layer.id,

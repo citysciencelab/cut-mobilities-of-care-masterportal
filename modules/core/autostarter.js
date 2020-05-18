@@ -7,7 +7,7 @@ const Autostarter = Backbone.Model.extend({
         channel: Radio.channel("Autostart")
     },
     initialize: function () {
-        var channel = this.get("channel");
+        const channel = this.get("channel");
 
         channel.on({
             "initializedModul": this.setInitializedModul
@@ -21,7 +21,7 @@ const Autostarter = Backbone.Model.extend({
      * speichert sich alle geladenen Module, die geladen wurden und prinzipiell geöffnet werden können.
      */
     setInitializedModul: function (id) {
-        var initializedModuls = this.get("initializedModuls");
+        const initializedModuls = this.get("initializedModuls");
 
         initializedModuls.push(id.toLowerCase());
         this.set("initializedModuls", initializedModuls);
@@ -31,7 +31,7 @@ const Autostarter = Backbone.Model.extend({
      * erst nachdem das Menü geladen ist kann der Parser per Radio abgefragt werden. In der config.json wird nach Modulen mit isInitOpen: true gesucht.
      */
     menuLoaded: function () {
-        var configAutostart = Radio.request("Parser", "getItemsByAttributes", {isInitOpen: true});
+        const configAutostart = Radio.request("Parser", "getItemsByAttributes", {isInitOpen: true});
 
         _.each(configAutostart, function (modul) {
             if (_.has(modul, "id")) {
@@ -45,7 +45,7 @@ const Autostarter = Backbone.Model.extend({
      * wenn die Paramter der URL untersucht wurden, werden die isInitOpen Module in Erfahrung gebracht
      */
     parametersAnalysed: function () {
-        var isInitOpen = Radio.request("ParametricURL", "getIsInitOpen"),
+        const isInitOpen = Radio.request("ParametricURL", "getIsInitOpen"),
             parametricAutostart = !_.isUndefined(isInitOpen) ? isInitOpen.toString() : undefined,
             autostartParameter = parametricAutostart ? parametricAutostart : null,
             autostartModuls = this.get("autostartModuls");
@@ -66,7 +66,7 @@ const Autostarter = Backbone.Model.extend({
      * Parameter werden vor der config gelesen.
      */
     check: function () {
-        var autostartModuls,
+        let autostartModuls,
             initializedModuls;
 
         if (this.get("parametersAnalysed") === true && this.get("configAnalysed") === true) {
@@ -92,7 +92,7 @@ const Autostarter = Backbone.Model.extend({
         }
     },
     unloadModule: function () {
-        var channel = this.get("channel");
+        const channel = this.get("channel");
 
         channel.reset(); // reset all channels from the radio object
         this.clear();

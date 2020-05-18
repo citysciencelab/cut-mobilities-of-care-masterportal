@@ -3,14 +3,16 @@ import Model from "@modules/tools/gfi/themes/schulinfo/model.js";
 import Util from "@testUtil";
 
 describe("tools/gfi/themes/schulinfo", function () {
-    var model,
+
+    const gfiContent = {
+        Name: "Katharinenschule in der HafenCity",
+        Schulform: "Vorschulklasse|Grundschule",
+        Bezirk: "Hamburg-Mitte"
+    };
+
+    let model,
         utilModel,
         testFeatures,
-        gfiContent = {
-            Name: "Katharinenschule in der HafenCity",
-            Schulform: "Vorschulklasse|Grundschule",
-            Bezirk: "Hamburg-Mitte"
-        },
         featureInfos;
 
     before(function () {

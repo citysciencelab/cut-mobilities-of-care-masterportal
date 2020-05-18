@@ -2,7 +2,7 @@ import {expect} from "chai";
 import Model from "@modules/tools/filter/query/source/wfs.js";
 
 describe("modules/tools/filter/query/source/wfs", function () {
-    var model;
+    let model;
 
     beforeEach(function () {
         model = new Model();
@@ -12,7 +12,7 @@ describe("modules/tools/filter/query/source/wfs", function () {
 
         it("should parse a XML-string without namespace", function () {
 
-            var xmlString = `
+            const xmlString = `
                 <?xml version='1.0' encoding='UTF-8'?>
                 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml">
                     <element name="krankenhaeuser_hh" substitutionGroup="gml:_Feature">
@@ -58,7 +58,7 @@ describe("modules/tools/filter/query/source/wfs", function () {
 
         it("should parse a XML with namespace (formated)", function () {
 
-            var parser = new DOMParser(),
+            const parser = new DOMParser(),
                 xmlString = `<?xml version="1.0" encoding="UTF-8"?>
                     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml">
                         <xsd:complexType name="hfpType">
@@ -102,7 +102,7 @@ describe("modules/tools/filter/query/source/wfs", function () {
         });
 
         it("should parse a XML with namespace (unformated)", function () {
-            var parser = new DOMParser(),
+            const parser = new DOMParser(),
                 xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:gml=\"http://www.opengis.net/gml\">" +
                     "<xsd:import namespace=\"http://www.opengis.net/gml\" schemaLocation=\"http://localhost:8080/geoserver/schemas/gml/2.1.2/feature.xsd\"/><xsd:complexType " +
                     "name=\"hfpType\"><xsd:complexContent><xsd:extension base=\"gml:AbstractFeatureType\"><xsd:sequence><xsd:element maxOccurs=\"1\" minOccurs=\"0\" " +

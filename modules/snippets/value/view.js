@@ -21,7 +21,7 @@ const SnippetValueView = Backbone.View.extend({
         title: "Auswahl löschen"
     },
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         return this;

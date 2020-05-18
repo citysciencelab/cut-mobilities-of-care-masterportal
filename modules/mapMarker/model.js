@@ -146,7 +146,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {Feature} - The feature from wkt.
      */
     getFeature: function () {
-        var format = new WKT(),
+        const format = new WKT(),
             feature = format.readFeature(this.get("wkt"));
 
         return feature;
@@ -157,7 +157,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {ol/Extent} - the extent.
      */
     getExtent: function () {
-        var feature = this.getFeature(),
+        const feature = this.getFeature(),
             extent = feature.getGeometry().getExtent();
 
         return extent;
@@ -169,7 +169,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {Number[]} center coordinate
      */
     getCenterFromExtent: function (extent) {
-        var deltaY = extent[2] - extent[0],
+        const deltaY = extent[2] - extent[0],
             deltaX = extent[3] - extent[1],
             centerY = extent[0] + deltaY / 2,
             centerX = extent[1] + deltaX / 2;
@@ -184,7 +184,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {string} wkt WellKnownText-Geom
      */
     getWKTGeom: function (type, geom) {
-        var wkt,
+        let wkt,
             split,
             regExp;
 
@@ -242,7 +242,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @return {void}
      */
     showFeature: function () {
-        var feature = this.getFeature();
+        const feature = this.getFeature();
 
         this.get("polygon").getSource().addFeature(feature);
         this.get("polygon").setVisible(true);
@@ -264,7 +264,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @return {void}
      */
     setMapMarkerPolygonStyle: function (mapMarkerStyleId) {
-        var styleListModel = Radio.request("StyleList", "returnModelById", mapMarkerStyleId);
+        const styleListModel = Radio.request("StyleList", "returnModelById", mapMarkerStyleId);
 
         if (styleListModel) {
             this.get("polygon").setStyle(styleListModel.createStyle(this.get("polygon"), false));
@@ -287,7 +287,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {void}
      */
     setWkt: function (type, geom) {
-        var value = this.getWKTGeom(type, geom);
+        const value = this.getWKTGeom(type, geom);
 
         this.set("wkt", value);
     },

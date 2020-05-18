@@ -2,7 +2,7 @@ import LayerView from "@modules/menu/desktop/layer/viewSelection.js";
 import {expect} from "chai";
 
 describe("menu/desktop/layer/viewSelection", function () {
-    var fakeModel,
+    let fakeModel,
         CustomLayerView;
 
     before(function () {
@@ -34,6 +34,26 @@ describe("menu/desktop/layer/viewSelection", function () {
                         return this.supported;
                     case "isRemovable":
                         return this.isRemovable;
+                    case "removeTopicText":
+                        return "removeTopicText";
+                    case "changeClassDivisionText":
+                        return "changeClassDivisionText";
+                    case "infosAndLegendText":
+                        return "infosAndLegendText";
+                    case "settingsText":
+                        return "settingsText";
+                    case "transparencyText":
+                        return "transparencyText";
+                    case "increaseTransparencyText":
+                        return "increaseTransparencyText";
+                    case "reduceTransparencyText":
+                        return "reduceTransparencyText";
+                    case "levelUpText":
+                        return "levelUpText";
+                    case "levelDownText":
+                        return "levelDownText";
+                    case "selectedTopicsText":
+                        return "selectedTopicsText";
                     default:
                         return null;
                 }
@@ -47,6 +67,10 @@ describe("menu/desktop/layer/viewSelection", function () {
                 return true;
             },
 
+            changeLang: function () {
+                return true;
+            },
+
             toJSON: function () {
                 return {
                     styleable: this.isStyleable,
@@ -55,7 +79,17 @@ describe("menu/desktop/layer/viewSelection", function () {
                     showSettings: this.showSettings,
                     transparency: 42,
                     isVisibleInMap: true,
-                    isRemovable: false
+                    isRemovable: false,
+                    removeTopicText: "removeTopicText",
+                    changeClassDivisionText: "changeClassDivisionText",
+                    infosAndLegendText: "infosAndLegendText",
+                    settingsText: "settingsText",
+                    transparencyText: "transparencyText",
+                    increaseTransparencyText: "increaseTransparencyText",
+                    reduceTransparencyText: "reduceTransparencyText",
+                    levelUpText: "levelUpText",
+                    levelDownText: "levelDownText",
+                    selectedTopicsText: "selectedTopicsText"
                 };
             }
         };
@@ -65,16 +99,21 @@ describe("menu/desktop/layer/viewSelection", function () {
                 return $("<div></div>");
             }
         });
+        i18next.init({
+            lng: "cimode",
+            debug: false
+
+        });
     });
 
     describe("The style-icon", function () {
 
         it("should be visible for stylable layers", function () {
-            var layerView;
 
             fakeModel.setIsStyleable(true);
             fakeModel.setIsSettingVisible(true);
-            layerView = new CustomLayerView({model: fakeModel});
+
+            const layerView = new CustomLayerView({model: fakeModel});
 
             expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
 
@@ -84,11 +123,10 @@ describe("menu/desktop/layer/viewSelection", function () {
         });
 
         it("should be hidden for other not styleable layers", function () {
-            var layerView;
 
             fakeModel.setIsStyleable(false);
             fakeModel.setIsSettingVisible(true);
-            layerView = new CustomLayerView({model: fakeModel});
+            const layerView = new CustomLayerView({model: fakeModel});
 
             expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(0);
 

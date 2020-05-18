@@ -13,7 +13,7 @@
     </div>
     <% if (cadastralDistrictField === true) { %>
     <div class="form-group form-group-sm">
-        <label for="districtField" class="col-md-5 col-sm-5 control-label">Flur</label>
+        <label for="districtField" class="col-md-5 col-sm-5 control-label"><%=plotText%></label>
         <div class="col-md-7 col-sm-7">
             <fieldset <% if (districtNumber === "0") {print ("disabled ");} %>id="cadastralDistrictFieldSet">
                 <select class="form-control input-sm pull-left" id="cadastralDistrictField">

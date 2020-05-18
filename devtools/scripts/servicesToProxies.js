@@ -3,11 +3,12 @@
 * kann mit node servicesToProxies.js Pfad_zur_services.json aufgerufen werden
 * erstellt
 */
-var fs = require("fs"),
+const fse = require("fs-extra"),
     _ = require("underscore"),
-    url = require("url"),
+    url = require("url");
     // arguments kommt von Note.js und enthält die in der Konsole übergebenen Argumente
-    targetFile = "",
+
+let targetFile = "",
     targetFileLocal = "";
 
 /**
@@ -62,7 +63,7 @@ function appendToLocalProxies (proxyName, domain, port, isLast, proxyForFHHNet) 
     /* eslint-disable vars-on-top */
     console.log(entry);
 
-    fs.appendFile(targetFileLocal,
+    fse.appendFile(targetFileLocal,
         entry,
         function (err) {
             if (err) {
@@ -103,7 +104,7 @@ function appendToApacheProxies (protocol, domain, port, proxyName, proxyForFHHNe
     }
     console.log(outputString);
 
-    fs.appendFile(targetFile, outputString, function (err) {
+    fse.appendFile(targetFile, outputString, function (err) {
         if (err) {
             return console.log(err);
         }
@@ -119,10 +120,11 @@ function appendToApacheProxies (protocol, domain, port, proxyName, proxyForFHHNe
  * @returns {void}
  */
 function writeEntry (entry, isLast, proxyForFHHNet) {
-    var protocol = entry[0],
-        domain = entry[1],
-        port = entry[2],
-        proxyName;
+    const protocol = entry[0],
+        domain = entry[1];
+
+    let proxyName,
+        port = entry[2];
 
     if (!port) {
         port = "80";
@@ -153,10 +155,10 @@ function writeEntry (entry, isLast, proxyForFHHNet) {
 function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
 
     // In entry array werden alle aus der Json extrahierten url eintraege gespeichert
-    var entryArray = [];
+    let entryArray = [];
 
     _.each(allDomains, function (layer) {
-        var hostname = url.parse(layer.url).hostname;
+        const hostname = url.parse(layer.url).hostname;
 
         if (hostname) {
 
@@ -172,7 +174,7 @@ function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
     });
     // für jeden eintrag im array einen Proxy schreiben
     _.each(entryArray, function (entry, index) {
-        var isLast = false;
+        let isLast = false;
 
         if ((entryArray.length - 1) === index) {
             isLast = true;
@@ -217,13 +219,13 @@ function main () {
         targetFileLocal = "local_" + targetFile;
 
         // datei löschen
-        fs.writeFile(targetFile, "");
-        fs.writeFile(targetFileLocal, "");
+        fse.writeFile(targetFile, "");
+        fse.writeFile(targetFileLocal, "");
 
         allDomains = [];
 
-        for (const i = 4; i < args.length; i++) {
-            var data = fs.readFileSync(args[i], "utf8"),
+        for (let i = 4; i < args.length; i++) {
+            const data = fse.readFileSync(args[i], "utf8"),
                 obj = JSON.parse(data.toString("utf8").replace(/^\uFEFF/, ""));
 
             allDomains = allDomains.concat(obj);

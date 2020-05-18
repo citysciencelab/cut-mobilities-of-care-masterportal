@@ -1,5 +1,5 @@
 import {Select, Modify, Draw} from "ol/interaction.js";
-import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
+import {Circle, Fill, Stroke, Style, Text, Icon} from "ol/style.js";
 import {GeoJSON} from "ol/format.js";
 import MultiPolygon from "ol/geom/MultiPolygon.js";
 import MultiPoint from "ol/geom/MultiPoint.js";
@@ -31,11 +31,16 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             geometry: "Point",
             text: "Punkt zeichnen"
         },
+        symbol: "",
+        pointSize: 6,
         renderToWindow: true,
         deactivateGFI: true,
         glyphicon: "glyphicon-pencil",
         addFeatureListener: {},
         zIndex: 0,
+        freehand: true,
+        redoArray: [],
+        fId: 0,
         earthRadius: 6378137,
         transparencyOptions: [
             {caption: "0 %", value: 1.0},
@@ -81,6 +86,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             {caption: "Times New Roman", value: "Times New Roman"}
         ],
         drawTypeOptions: [], // is set later on
+        iconList: [], // is set later on
         // translations
         currentLng: "",
         clickToPlaceText: "",
@@ -93,6 +99,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         drawPoint: "",
         writeText: "",
         drawLine: "",
+        drawCurve: "",
         drawArea: "",
         drawCircle: "",
         drawDoubleCircle: "",
@@ -121,6 +128,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         black: "",
         white: "",
         drawBtnText: "",
+        undoBtnText: "",
+        redoBtnText: "",
         editBtnText: "",
         downloadBtnText: "",
         deleteBtnText: "",
@@ -144,6 +153,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {Number} strokeWidth=1 Selected stroke width.
      * @property {Number} opacity=1 Selected opacity.
      * @property {Object} drawType The drawType.
+     * @property {String} symbol: "" The symbol for the point.
+     * @property {Number} pointSize: 6 The size of the point.
      * @property {String} drawType.geometry The geometry of the draw type.
      * @property {String} drawType.text The placeholder text.
      * @property {Boolean} renderToWindow=true Flag to render in tool window.
@@ -162,6 +173,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {String} drawPoint: "" contains the translated text
      * @property {String} writeText: "" contains the translated text
      * @property {String} drawLine: "" contains the translated text
+     * @property {String} drawCurve: "" contains the translated text
      * @property {String} drawArea: "" contains the translated text
      * @property {String} drawCircle: "" contains the translated text
      * @property {String} drawDoubleCircle: "" contains the translated text
@@ -190,6 +202,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {String} black: "" contains the translated text
      * @property {String} white: "" contains the translated text
      * @property {String} drawBtnText: "" contains the translated text
+     * @property {String} undoBtnText: "" contains the translated text
+     * @property {String} redoBtnText: "" contains the translated text
      * @property {String} editBtnText: "" contains the translated text
      * @property {String} downloadBtnText: "" contains the translated text
      * @property {String} deleteBtnText: "" contains the translated text
@@ -266,9 +280,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             drawPoint = i18next.t("common:modules.tools.draw.drawPoint"),
             writeText = i18next.t("common:modules.tools.draw.writeText"),
             drawLine = i18next.t("common:modules.tools.draw.drawLine"),
+            drawCurve = i18next.t("common:modules.tools.draw.drawCurve"),
             drawArea = i18next.t("common:modules.tools.draw.drawArea"),
             drawCircle = i18next.t("common:modules.tools.draw.drawCircle"),
-            drawDoubleCircle = i18next.t("common:modules.tools.draw.drawDoubleCircle");
+            drawDoubleCircle = i18next.t("common:modules.tools.draw.drawDoubleCircle"),
+            iconPoint = i18next.t("common:modules.tools.draw.iconList.iconPoint"),
+            iconLeaf = i18next.t("common:modules.tools.draw.iconList.iconLeaf");
 
         this.set({
             clickToPlaceText: i18next.t("common:modules.tools.draw.clickToPlaceText"),
@@ -281,6 +298,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             drawPoint: drawPoint,
             writeText: writeText,
             drawLine: drawLine,
+            drawCurve: drawCurve,
             drawArea: drawArea,
             drawCircle: drawCircle,
             drawDoubleCircle: drawDoubleCircle,
@@ -309,6 +327,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             black: black,
             white: white,
             drawBtnText: i18next.t("common:modules.tools.draw.button.draw"),
+            undoBtnText: i18next.t("common:modules.tools.draw.button.undo"),
+            redoBtnText: i18next.t("common:modules.tools.draw.button.redo"),
             editBtnText: i18next.t("common:modules.tools.draw.button.edit"),
             deleteBtnText: i18next.t("common:modules.tools.draw.button.delete"),
             deleteAllBtnText: i18next.t("common:modules.tools.draw.button.deleteAll"),
@@ -327,6 +347,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("drawTypeOptions", [
             {caption: drawPoint, value: "Point", id: "drawPoint"},
             {caption: drawLine, value: "LineString", id: "drawLine"},
+            {caption: drawCurve, value: "LineString free", id: "drawCurve"},
             {caption: drawArea, value: "Polygon", id: "drawArea"},
             {caption: drawCircle, value: "Circle", id: "drawCircle"},
             {caption: drawDoubleCircle, value: "Circle", id: "drawDoubleCircle"},
@@ -334,6 +355,18 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         ]);
         if (initial) {
             this.setDrawType("Point", this.get("drawPoint"));
+            this.setSymbol({
+                caption: iconPoint,
+                type: "simple_point",
+                value: "simple_point"
+            });
+            // If no values are set in config.json, initial values have to be set here
+            if (this.get("iconList").length === 0) {
+                this.set("iconList", [
+                    {caption: iconPoint, type: "simple_point", value: "simple_point"},
+                    {caption: iconLeaf, type: "glyphicon", value: "\ue103"}
+                ]);
+            }
         }
         this.set("currentLng", lng);
     },
@@ -638,37 +671,49 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * returns an empty Object if no init happened previously (= no layer set)
      * by default single geometries are added to the GeoJSON
      * if geomType is set to "multiGeometry" multiGeometry Features of all drawn Features are created for each geometry type individually
-     * @param {String} para_object - an Object which includes the parameters
+     * @param {String} paraObject - an Object which includes the parameters
      *                 {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
      *                 {Boolean} transformWGS if true, the coordinates will be transformed from WGS84 to UTM
+     * @param {Feature} currentFeature last drawn feature used in drawend
      * @returns {String} GeoJSON all Features as String
      */
-    downloadFeaturesWithoutGUI: function (para_object) {
+    downloadFeaturesWithoutGUI: function (paraObject, currentFeature = undefined) {
         let features = null,
             geomType = null,
-            transformWGS = null,
             multiGeomFeature = null,
             circleFeature = null,
             circularPoly = null,
             featureType = null,
             singleGeom = null,
             multiGeom = null,
-            featuresConverted = {"type": "FeatureCollection", "features": []};
+            featuresConverted = {"type": "FeatureCollection", "features": []},
+            targetProjection = null;
         const multiPolygon = new MultiPolygon([]),
             featureArray = [],
             format = new GeoJSON(),
             multiPoint = new MultiPoint([]),
-            multiLine = new MultiLine([]);
+            multiLine = new MultiLine([]),
+            map = Radio.request("Map", "getMap");
 
-        if (para_object !== undefined && para_object.geomType === "multiGeometry") {
+
+        if (paraObject !== undefined && paraObject.geomType === "multiGeometry") {
             geomType = "multiGeometry";
         }
-        if (para_object !== undefined && para_object.transformWGS === true) {
-            transformWGS = true;
+        if (paraObject !== undefined && paraObject.transformWGS === true) {
+            targetProjection = "EPSG:4326";
+        }
+
+        if (paraObject !== undefined && paraObject.targetProjection !== undefined) {
+            targetProjection = paraObject.targetProjection;
         }
 
         if (this.get("layer") !== undefined && this.get("layer") !== null) {
             features = this.get("layer").getSource().getFeatures();
+
+            if (currentFeature !== undefined) {
+                features.push(currentFeature);
+            }
+
 
             if (geomType === "multiGeometry") {
 
@@ -676,24 +721,24 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     featureType = item.getGeometry().getType();
 
                     if (featureType === "Polygon") {
-                        if (transformWGS === true) {
-                            multiPolygon.appendPolygon(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        if (targetProjection !== null) {
+                            multiPolygon.appendPolygon(item.getGeometry().clone().transform(getMapProjection(map), targetProjection));
                         }
                         else {
                             multiPolygon.appendPolygon(item.getGeometry());
                         }
                     }
                     else if (featureType === "Point") {
-                        if (transformWGS === true) {
-                            multiPoint.appendPoint(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        if (targetProjection !== null) {
+                            multiPoint.appendPoint(item.getGeometry().clone().transform(getMapProjection(map), targetProjection));
                         }
                         else {
                             multiPoint.appendPoint(item.getGeometry());
                         }
                     }
                     else if (featureType === "LineString") {
-                        if (transformWGS === true) {
-                            multiLine.appendLineString(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"));
+                        if (targetProjection !== null) {
+                            multiLine.appendLineString(item.getGeometry().clone().transform(getMapProjection(map), targetProjection));
                         }
                         else {
                             multiLine.appendLineString(item.getGeometry());
@@ -702,8 +747,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                     // Circles cannot be added to a featureCollection
                     // They must therefore be converted into a polygon
                     else if (featureType === "Circle") {
-                        if (transformWGS === true) {
-                            circularPoly = circPoly(item.getGeometry().clone().transform("EPSG:25832", "EPSG:4326"), 64);
+                        if (targetProjection !== null) {
+                            circularPoly = circPoly(item.getGeometry().clone().transform(getMapProjection(map), targetProjection), 64);
                             multiPolygon.appendPolygon(circularPoly);
                         }
                         else {
@@ -712,9 +757,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                         }
                     }
                     else if (featureType === "MultiPolygon" || featureType === "MultiPoint" || featureType === "MultiLineString") {
-                        if (transformWGS === true) {
+                        if (targetProjection !== null) {
                             multiGeom = item.clone();
-                            multiGeom.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                            multiGeom.getGeometry().transform(getMapProjection(map), targetProjection);
                         }
                         else {
                             multiGeom = item;
@@ -748,9 +793,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 features.forEach(function (item) {
                     featureType = item.getGeometry().getType();
 
-                    if (transformWGS === true) {
+                    if (targetProjection !== null) {
                         singleGeom = item.clone();
-                        singleGeom.getGeometry().transform("EPSG:25832", "EPSG:4326");
+                        singleGeom.getGeometry().transform(getMapProjection(map), targetProjection);
                     }
                     else {
                         singleGeom = item;
@@ -883,7 +928,28 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
         modifyInteraction.setActive(isActive);
         this.setModifyInteraction(modifyInteraction);
+        this.createModifyInteractionListener(modifyInteraction);
         Radio.trigger("Map", "addInteraction", modifyInteraction);
+    },
+
+    /**
+     * Listener to change the entries for the next drawing.
+     * @param {ol/interaction/Modify} modifyInteraction - modifyInteraction
+     * @return {void}
+     */
+    createModifyInteractionListener: function (modifyInteraction) {
+
+        modifyInteraction.on("modifyend", function (evt) {
+
+            let geojson = {};
+
+            if (typeof Config.inputMap !== "undefined") {
+
+                geojson = this.downloadFeaturesWithoutGUI({"targetProjection": Config.inputMap.targetProjection}, evt.feature);
+                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geojson});
+            }
+
+        }.bind(this));
     },
 
     /**
@@ -897,7 +963,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         return new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
-            style: this.getStyle()
+            style: this.getStyle(),
+            freehand: this.getFreehand()
         });
     },
 
@@ -911,14 +978,26 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     createDrawInteractionListener: function (drawInteraction, maxFeatures, doubleIsActive) {
         const that = this,
             layer = this.get("layer");
+        let geojson = {};
 
         drawInteraction.on("drawend", function (evt) {
             evt.feature.set("styleId", that.uniqueId());
+
+            if (typeof Config.inputMap !== "undefined") {
+
+                that.cancelDrawWithoutGUI();
+                that.editFeaturesWithoutGUI();
+
+                geojson = that.downloadFeaturesWithoutGUI({"targetProjection": Config.inputMap.targetProjection}, evt.feature);
+                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geojson});
+            }
+
         });
 
         drawInteraction.on("drawstart", function () {
             that.drawInteractionOnDrawevent(drawInteraction, doubleIsActive, layer);
         });
+
 
         if (maxFeatures && maxFeatures > 0) {
 
@@ -960,7 +1039,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             fontSize = this.get("fontSize"),
             strokeWidth = this.get("strokeWidth"),
             radius = this.get("radius"),
-            zIndex = this.get("zIndex");
+            zIndex = this.get("zIndex"),
+            symbol = this.get("symbol"),
+            pointSize = this.get("pointSize"),
+            glyphBool = symbol.type ? symbol.type !== "simple_point" : symbol.indexOf("simple_point") === -1;
         let style = new Style();
 
         if (drawType.hasOwnProperty("text") && drawType.text === this.get("writeText")) {
@@ -969,8 +1051,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         else if (drawType.hasOwnProperty("geometry") && (drawType.hasOwnProperty("text") && drawType.text === this.get("drawCircle") || drawType.text === this.get("drawDoubleCircle"))) {
             style = this.getCircleStyle(color, colorContour, strokeWidth, radius, zIndex);
         }
+        // If a point should be drawn there also needs to be checked if an icon should be drawn or a simple point
+        else if (drawType.hasOwnProperty("text") && drawType.text === this.get("drawPoint") && glyphBool) {
+            style = this.getPointStyle(color, pointSize, symbol, zIndex);
+        }
         else {
-            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, radius, zIndex, colorContour);
+            style = this.getDrawStyle(color, drawType.geometry, strokeWidth, pointSize, zIndex, colorContour);
         }
 
         return style.clone();
@@ -1039,16 +1125,80 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
+     * Creates and returns a feature style for points.
+     *
+     * @param {Number} color - of drawings
+     * @param {Number} pointSize - from geometry
+     * @param {String} symbol - to be drawn consisting of value and type divided by '@@'
+     * @param {Number} zIndex - of Element
+     * @return {ol/style/Style} style
+     * @throws Error if the type of the symbol is not supported.
+     */
+    getPointStyle: function (color, pointSize, symbol, zIndex) {
+        let style,
+            sym = [];
+
+        // sym[0] = value, sym[1] = type
+        // Different ways of creatin the array occur because of needed parsing for the combobox.
+        // However, the data is normally saved as an object
+        if (typeof symbol === "string") {
+            sym = symbol.split("@@");
+        }
+        else {
+            sym[0] = symbol.value;
+            sym[1] = symbol.type;
+        }
+
+        if (sym[1] === "glyphicon") {
+            style = new Style({
+                text: new Text({
+                    text: sym[0],
+                    font: "normal " + pointSize + "px \"Glyphicons Halflings\"",
+                    fill: new Fill({
+                        color: color
+                    })
+                }),
+                zIndex: zIndex
+            });
+        }
+        // The Size of the image needs to be fixed. As the example picture has a width / height of 96, this is used.
+        // To use the opacity given by the color parameter it has to be separately added
+        else if (sym[1] === "image") {
+            style = new Style({
+                image: new Icon({
+                    src: sym[0],
+                    scale: 1 / (96 / pointSize),
+                    opacity: color[3],
+                    color: color.slice(0, 3)
+                }),
+                zIndex: zIndex
+            });
+        }
+        else {
+            throw new Error(`The given type ${sym[1]} of the symbol is not supported!`);
+        }
+        return style;
+    },
+
+    /**
+     * Returns the boolean value for whether the lines should be drawn smooth or not
+     * @return {boolean} smooth or naw
+     */
+    getFreehand: function () {
+        return this.get("freehand");
+    },
+
+    /**
      * Creates and returns a feature style for points, lines, or polygon and returns it
      * @param {number} color - of drawings
      * @param {string} drawGeometryType - geometry type of drawings
      * @param {number} strokeWidth - from geometry
-     * @param {number} radius - from geometry
+     * @param {number} pointSize - from geometry
      * @param {number} zIndex - zIndex of Element
      * @param {number} colorContour - color of the contours
      * @return {ol/style/Style} style
      */
-    getDrawStyle: function (color, drawGeometryType, strokeWidth, radius, zIndex, colorContour) {
+    getDrawStyle: function (color, drawGeometryType, strokeWidth, pointSize, zIndex, colorContour) {
         return new Style({
             fill: new Fill({
                 color: color
@@ -1058,7 +1208,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 width: strokeWidth
             }),
             image: new Circle({
-                radius: drawGeometryType === "Point" ? radius : 6,
+                radius: drawGeometryType === "Point" ? pointSize / 2 : 6,
                 fill: new Fill({
                     color: drawGeometryType === "Point" ? color : colorContour
                 })
@@ -1087,6 +1237,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setCircleRadiusOuter(this.defaults.circleRadiusOuter);
         this.setOpacity(this.defaults.opacity);
         this.setColor(defaultColor);
+        this.setFreehand(true);
         this.setColorContour(defaultColorContour);
         this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
         this.combineColorOpacityContour(this.defaults.opacityContour);
@@ -1265,7 +1416,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     putGlyphToCursor: function (glyphicon) {
-        if (glyphicon.indexOf("trash") !== -1) {
+        if (glyphicon.indexOf("trash") !== -1 || glyphicon.indexOf("wrench") !== -1) {
             $("#map").removeClass("no-cursor");
             $("#map").addClass("cursor-crosshair");
         }
@@ -1289,6 +1440,57 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             features: features,
             formats: ["KML", "GEOJSON", "GPX"]
         });
+    },
+    /*
+     * Deletes the last element in the feature array in "layer"
+     * @returns {void}
+     */
+    undoLastStep: function () {
+        const features = this.get("layer").getSource().getFeatures(),
+            featureToRemove = features[features.length - 1];
+
+        if (featureToRemove) {
+            this.updateRedoArray(featureToRemove, false);
+            this.get("layer").getSource().removeFeature(featureToRemove);
+        }
+    },
+
+    /*
+     * restores the last deleted element to the feature array in "layer"
+     * @returns {void}
+     */
+    redoLastStep: function () {
+        const redoArray = this.get("redoArray"),
+            featureToRestore = redoArray[redoArray.length - 1];
+
+        if (featureToRestore) {
+            const featureId = this.get("fId"),
+                featureStyle = featureToRestore.getStyle();
+
+            featureToRestore.setId(featureId);
+            this.countupFId();
+            this.get("layer").getSource().addFeature(featureToRestore);
+            this.get("layer").getSource().getFeatureById(featureId).setStyle(featureStyle);
+            this.updateRedoArray(undefined, true);
+        }
+    },
+
+    /**
+     * adds or removes one element from the redoArray
+     * @param {object} feature - feature to be added to the array
+     * @param {boolean} remove - if true: remove one object
+     * @return {void}
+     */
+    updateRedoArray: function (feature, remove) {
+        const redoArray = this.get("redoArray");
+
+        if (remove) {
+            redoArray.pop();
+        }
+        else {
+            redoArray.push(feature);
+        }
+        this.setRedoArray(redoArray);
     },
 
     /**
@@ -1320,6 +1522,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         $(".opacityContour select")[0].disabled = disAble;
         $(".color select")[0].disabled = disAble;
         $(".colorContour select")[0].disabled = disAble;
+        $(".symbol select")[0].disabled = disAble;
+        $(".pointSize select")[0].disabled = disAble;
         if (disAble === false && this.get("methodCircle") === "defined") {
             this.enableMethodDefined(disAble);
         }
@@ -1394,6 +1598,24 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     },
 
     /**
+     * setter for symbol
+     * @param {Object|String} value - symbol with value, caption and type
+     * @return {void}
+     */
+    setSymbol: function (value) {
+        this.set("symbol", value);
+    },
+
+    /**
+     * setter for pointSize
+     * @param {*} value - pointSize
+     * @return {void}
+     */
+    setPointSize: function (value) {
+        this.set("pointSize", parseInt(value, 10));
+    },
+
+    /**
      * setter for font
      * @param {string} value - font
      * @return {void}
@@ -1423,6 +1645,24 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         else {
             this.set("color", value);
         }
+    },
+
+    /**
+     * setter for freehand
+     * @param {boolean} value - smooth or naw
+     * @return {void}
+     */
+    setFreehand: function (value) {
+        this.set("freehand", value);
+    },
+
+    /**
+     * setter for redoArray
+     * @param {array} value - new redoArray
+     * @return {void}
+     */
+    setRedoArray (value) {
+        this.set("redoArray", value);
     },
 
     /**
@@ -1603,6 +1843,25 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     */
     setZIndex: function (value) {
         this.set("zIndex", value);
+    },
+
+    /*
+    * count up fId
+    * @returns {void}
+    */
+    countupFId: function () {
+        const value = this.get("fId") + 1;
+
+        this.setFId(value);
+    },
+
+    /*
+    * setter for fId
+    * @param {number} value fId
+    * @returns {void}
+    */
+    setFId: function (value) {
+        this.set("fId", value);
     },
 
     /**

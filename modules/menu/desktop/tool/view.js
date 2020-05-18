@@ -1,5 +1,5 @@
 import ItemTemplate from "text-loader!./template.html";
-import store from "../../../../src/global-store/index";
+import store from "../../../../src/app-store/index";
 /**
  * @member ToolTemplate
  * @description Template for a Tool

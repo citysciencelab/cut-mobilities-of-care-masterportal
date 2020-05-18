@@ -1,5 +1,5 @@
 import GenericTool from "../../indexTools";
-import composeModules from "../../../../global-store/utils/composeModules";
+import composeModules from "../../../../app-store/utils/composeModules";
 import mutations from "./mutationsSupplyCoord";
 import actions from "./actionsSupplyCoord";
 

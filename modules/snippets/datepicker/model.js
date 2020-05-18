@@ -23,33 +23,38 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
      * @returns {void}
      */
     initialize: function (model) {
-        const startDate = model.startDate,
-            endDate = model.endDate,
-            selectedDate = model.preselectedValue ? model.preselectedValue : moment().toDate();
-
         this.superInitialize();
-        this.addValueModel(selectedDate, startDate, endDate);
+        this.addValueModel(model);
         this.listenTo(this.get("valuesCollection"), {
             "change:date": function (valueModel, value) {
                 this.triggerValuesChanged(model, value);
+                this.trigger("updateDOM", value);
             }
         });
     },
 
     /**
-     * Add Model to valuesCollection representing the choosen date
-     * @param {Date} value the preselectedValue Date
-     * @param {Date} startDate earliest selectable date
-     * @param {Date} endDate latest selectable date
+     * Add Model to valuesCollection representing the choosen date. Most parameter are values of bootstrap.datepicker.
+     * @see https://bootstrap-datepicker.readthedocs.io/en/latest/
+     * @param {object} model the preselectedValue Date
      * @returns {void}
      */
-    addValueModel: function (value, startDate, endDate) {
+    addValueModel: function (model) {
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
-            date: value,
-            startDate: startDate,
-            endDate: endDate,
-            type: this.get("type")
+            date: model.preselectedValue ? model.preselectedValue : moment().toDate(),
+            startDate: model.startDate,
+            endDate: model.endDate,
+            inputs: model.inputs ? model.inputs : undefined,
+            minViewMode: model.minViewMode ? model.minViewMode : "days",
+            maxViewMode: model.maxViewMode ? model.maxViewMode : "days",
+            calendarWeeks: model.calendarWeeks ? model.calendarWeeks : false,
+            format: model.format ? model.format : "dd.mm.yyyy",
+            autoclose: model.autoclose ? model.autoclose : false,
+            type: this.get("type"),
+            todayHighlight: model.todayHighlight ? model.todayHighlight : false,
+            selectWeek: model.selectWeek ? model.selectWeek : false,
+            language: model.language ? model.language : "de"
         }));
     },
 
@@ -70,7 +75,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
      */
     updateValuesSilently: function (value) {
         this.get("valuesCollection").at(0).set("date", value, {silent: true});
-        this.trigger("updateDOMSlider", value);
+        this.trigger("updateDOM", value);
     },
 
     /**

@@ -39,7 +39,7 @@ const LayerView = Backbone.View.extend({
         return this;
     },
     renderList: function () {
-        var models = this.collection.where({type: "layer"});
+        let models = this.collection.where({type: "layer"});
 
         models = _.sortBy(models, function (model) {
             return model.get("selectionIDX");
@@ -47,7 +47,7 @@ const LayerView = Backbone.View.extend({
         this.addViews(models);
     },
     addViews: function (models) {
-        var childElement = {};
+        let childElement = {};
 
         _.each(models, function (model) {
             if (!model.get("isNeverVisibleInTree")) {

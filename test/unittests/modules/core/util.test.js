@@ -23,6 +23,10 @@ describe("core/Util", function () {
         {
             "name": "22089 Hamburg - Hamm",
             "id": "bkgSuggest7"
+        },
+        {
+            "name": "22089 Hamburg - Hamm",
+            "id": "bkgSuggest8"
         }
     ];
 
@@ -418,19 +422,138 @@ describe("core/Util", function () {
     });
     describe("findWhereJs", function () {
         it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, "bkgSuggest3")).to.deep.equal(list[0]);
+            expect(model.findWhereJs(list, {"id": "bkgSuggest3"})).to.deep.equal(list[0]);
         });
-        it("should return", function () {
-            expect(model.findWhereJs(list, undefined)).to.be.undefined;
+        it("should return the second entry in the list", function () {
+            expect(model.findWhereJs(list, {"name": "20535 Hamburg - Hamm"})).to.deep.equal(list[1]);
         });
-        it("should return", function () {
+        it("should return undefined", function () {
             expect(model.findWhereJs(undefined, undefined)).to.be.undefined;
         });
-        it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, "")).to.be.undefined;
+        it("should return undefined", function () {
+            expect(model.findWhereJs(list, "{}")).to.be.undefined;
         });
-        it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, 0)).to.be.undefined;
+    });
+    describe("whereJs", function () {
+        it("should return the last two entry in the list", function () {
+            expect(model.whereJs(list, {"name": "22089 Hamburg - Hamm"}).length).to.equal(2);
+        });
+        it("should return a empty list", function () {
+            expect(model.whereJs(list, {"name": "22089 Hamburg - Hamm - xxx"}).length).to.equal(0);
+        });
+        it("should return the given list", function () {
+            expect(model.whereJs(list, undefined).length).to.be.equal(6);
+        });
+        it("should return a empty list", function () {
+            expect(model.whereJs(undefined, undefined).length).to.equal(0);
+        });
+    });
+    describe("isEqual", function () {
+        const obj = {a: "foo", b: "bar", c: "baz"},
+            obj2 = {a: "foo", c: "bar", b: "baz"},
+            obj3 = {a: "foo", b: "bar"},
+            obj4 = {name: "moe", luckyNumbers: [13, 27, 34]};
+
+        it("should return false", function () {
+            expect(model.isEqual(obj, obj2)).to.be.false;
+        });
+        it("should return false", function () {
+            expect(model.isEqual(obj, obj3)).to.be.false;
+        });
+        it("should return true", function () {
+            expect(model.isEqual(obj, {a: "foo", b: "bar", c: "baz"})).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEqual(obj4, {name: "moe", luckyNumbers: [13, 27, 34]})).to.be.true;
+        });
+    });
+    describe("differenceJs", function () {
+        it("should return the last three entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, [1, 2])).to.deep.equal([3, 4, 5]);
+        });
+        it("should return the given five entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, [])).to.deep.equal([1, 2, 3, 4, 5]);
+        });
+        it("should return the last two entries in the array", function () {
+            const array = ["Hamburg", "Bremen", "Berlin", "Delmenhosrt"];
+
+            expect(model.differenceJs(array, ["Hamburg", "Bremen"])).to.deep.equal(["Berlin", "Delmenhosrt"]);
+        });
+        it("should return the given five entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, undefined)).to.deep.equal([1, 2, 3, 4, 5]);
+        });
+        it("should return an empty array", function () {
+            expect(model.differenceJs(undefined, undefined)).to.deep.equal([]);
+        });
+    });
+    describe("isEmpty", function () {
+        it("should return true", function () {
+            expect(model.isEmpty(null)).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty("")).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty({})).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty([])).to.be.true;
+        });
+        it("should return false", function () {
+            expect(model.isEmpty({a: "1"})).to.be.false;
+        });
+    });
+    describe("toObject", function () {
+        const arr1 = ["Akash", "Amit", "Aviral"],
+            arr2 = [1, 2, 3],
+            arr3 = [["Akash", "Amit"], ["pass", "pass"]],
+            obj12 = {
+                Akash: 1,
+                Amit: 2,
+                Aviral: 3
+            },
+            obj3 = {
+                Akash: "Amit",
+                pass: "pass"
+            };
+
+        it("should return an object", function () {
+            expect(model.toObject(arr1, arr2)).to.deep.equal(obj12);
+        });
+
+        it("should return an object", function () {
+            expect(model.toObject(arr3)).to.deep.equal(obj3);
+        });
+    });
+    describe("uniqueId", () => {
+        it("should increment the uniqueId internaly", () => {
+            const currentId = model.uniqueId(),
+                expectedId = String(parseInt(currentId, 10) + 1);
+
+            expect(currentId).to.not.be.NaN;
+            expect(model.uniqueId()).to.equal(expectedId);
+        });
+        it("should prefix the id with the given prefix", () => {
+            const currentId = model.uniqueId(),
+                prefix = "foo",
+                expectedId = prefix + String(parseInt(currentId, 10) + 1);
+
+            expect(currentId).to.not.be.NaN;
+            expect(model.uniqueId(prefix)).to.equal(expectedId);
+        });
+        it("should increment the same id independent of the models instance", () => {
+            const currentId = model.uniqueId(),
+                expectedId = String(parseInt(currentId, 10) + 1),
+                modelB = new Model();
+
+            expect(currentId).to.not.be.NaN;
+            expect(modelB.uniqueId()).to.equal(expectedId);
         });
     });
 });

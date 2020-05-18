@@ -32,7 +32,7 @@ const BKGSearchModel = Backbone.Model.extend({
      * @returns {void}
      */
     initialize: function (config) {
-        var suggestService = Radio.request("RestReader", "getServiceById", config.suggestServiceId),
+        const suggestService = Radio.request("RestReader", "getServiceById", config.suggestServiceId),
             geosearchService = Radio.request("RestReader", "getServiceById", config.geosearchServiceId);
 
         if (suggestService && suggestService.get("url")) {
@@ -76,7 +76,7 @@ const BKGSearchModel = Backbone.Model.extend({
     * @returns {void}
     */
     directSearch: function (searchString) {
-        var request;
+        let request;
 
         if (searchString.length >= this.get("minChars")) {
             $("#searchInput").val(searchString);
@@ -136,7 +136,7 @@ const BKGSearchModel = Backbone.Model.extend({
     },
 
     suggestByBKG: function (searchString) {
-        var request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
+        const request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&query=" + encodeURIComponent(searchString) + "&" + this.get("filter") + "&count=" + this.get("suggestCount");
 
         this.setTypeOfRequest("suggest");
         this.sendRequest(this.get("bkgSuggestURL"), request, this.pushSuggestions, true, this.get("typeOfRequest"));
@@ -174,7 +174,7 @@ const BKGSearchModel = Backbone.Model.extend({
      * @return {void}
      */
     bkgSearch: function (hit, showOrHideMarker) {
-        var name = hit.name,
+        const name = hit.name,
             request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&count=1&query=" + encodeURIComponent(name);
 
         this.setShowOrHideMarker(showOrHideMarker);
@@ -208,7 +208,7 @@ const BKGSearchModel = Backbone.Model.extend({
      * @returns {void}
      */
     sendRequest: function (url, data, successFunction, asyncBool, type) {
-        var ajax = this.get("ajaxRequests");
+        const ajax = this.get("ajaxRequests");
 
         if (ajax[type] !== null && ajax[type] !== undefined) {
             ajax[type].abort();
@@ -257,7 +257,7 @@ const BKGSearchModel = Backbone.Model.extend({
      * @returns {void}
      */
     polishAjax: function (type) {
-        var ajax = this.get("ajaxRequests"),
+        const ajax = this.get("ajaxRequests"),
             cleanedAjax = _.omit(ajax, type);
 
         this.set("ajaxRequests", cleanedAjax);
