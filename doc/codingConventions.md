@@ -27,7 +27,7 @@ A.2.5 Das Hinzufügen großer Packages/Libraries wurde mit dem Team *LGV* abgesp
 A.3.1 Neue Dateien wurden gemäß der vorhandenen Struktur angelegt.  
 A.3.2 Variablen, Funktionen, Ordner, Dateien haben sprechende englische Namen.  
 A.3.3 Kommentare sind in englischer Sprache verfasst.  
-A.3.4 Block-Kommentare von Funktionen beschreiben stets den deren Zweck.  
+A.3.4 Block-Kommentare von Funktionen beschreiben stets deren Zweck.  
 A.3.5 Styles sind im .less Format verfasst.  
 A.3.6 Es wird kein !important in Styles benutzt.  
 A.3.7 Module und Komponenten beeinflussen lediglich das Verhalten und die Styles ihrer eigenen (Kind-) Elemente.  
