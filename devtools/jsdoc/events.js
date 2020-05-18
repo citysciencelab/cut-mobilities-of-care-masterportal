@@ -1480,6 +1480,23 @@
  */
 
 /**
+ * @event Core#RadioRequestUtilUniqueId
+ * @description Generate a globally-unique id for client-side models or DOM elements that need one.
+ * @param {String} [prefix=""] prefix for the id
+ * @returns {String}  a globally-unique id
+ * @example Radio.request("Util", "uniqueId", prefix);
+ */
+
+/**
+ * @event Core#RadioRequestUtilDifferenceJs
+ * @description Looks through each value in the array a, returning an array of all the values that are not present in the array b
+ * @param {array} a - elements to check
+ * @param {array} b - elements to check
+ * @returns {array} - returns diffrence between array a and b
+ * @example Radio.request("Util", "DifferenceJs", array-a, array-b);
+ */
+
+/**
  * @event Core#RadioTriggerUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");
