@@ -151,35 +151,35 @@ describe("core/modelList/layer/SensorThingsMqtt", function () {
                 client.subscribe("baz", {
                     retain: 0,
                     rmSimulate: true,
-                    rmProtocol: "foo",
+                    rmUrl: "https://example.com:8080",
                     rmHttpClient: httpTestClient
                 });
-                expect(httpLastUrl).to.equal("foo://testhost/baz");
+                expect(httpLastUrl).to.equal("https://example.com:8080/baz");
 
                 client.subscribe("qux", {
                     retain: 1,
                     rmSimulate: true,
-                    rmProtocol: "foo",
+                    rmUrl: "https://example.com:8080",
                     rmHttpClient: httpTestClient
                 });
-                expect(httpLastUrl).to.equal("foo://testhost/qux");
+                expect(httpLastUrl).to.equal("https://example.com:8080/qux");
             });
 
             it("should extent the simulation url in case Observations are subscribed", function () {
                 client.subscribe("baz/Observations", {
                     rmSimulate: true,
-                    rmProtocol: "foo",
+                    rmUrl: "https://example.com:8080",
                     rmHttpClient: httpTestClient
                 });
-                expect(httpLastUrl).to.equal("foo://testhost/baz/Observations?%24orderby=phenomenonTime%20desc&%24top=1");
+                expect(httpLastUrl).to.equal("https://example.com:8080/baz/Observations?%24orderby=phenomenonTime%20desc&%24top=1");
             });
             it("should not extent the simulation url in case a Observation is subscribed with an exact identifier", function () {
                 client.subscribe("baz/Observations(123456)", {
                     rmSimulate: true,
-                    rmProtocol: "foo",
+                    rmUrl: "https://example.com:8080",
                     rmHttpClient: httpTestClient
                 });
-                expect(httpLastUrl).to.equal("foo://testhost/baz/Observations(123456)");
+                expect(httpLastUrl).to.equal("https://example.com:8080/baz/Observations(123456)");
             });
         });
 

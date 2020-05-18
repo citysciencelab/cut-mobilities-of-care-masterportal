@@ -42,7 +42,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {void}
      */
     initialize: function (config) {
-        var service = Radio.request("RestReader", "getServiceById", config.serviceId);
+        const service = Radio.request("RestReader", "getServiceById", config.serviceId);
 
         if (!_.isUndefined(config.minChars)) {
             this.setMinChars(config.minChars);
@@ -97,9 +97,9 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {void}
      */
     suggestByOSM: function (searchString) {
-        var request,
-            searchStrings = [],
+        const searchStrings = [],
             tmp = searchString.split(",");
+        let request;
 
         _.each(tmp, function (elem) {
             if (elem.indexOf(" ") > -1) {
@@ -130,7 +130,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {void}
      */
     pushSuggestions: function (data) {
-        var display,
+        let display,
             metaName,
             bbox,
             north,
@@ -206,7 +206,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {boolean} true | false
      */
     isSearched: function (searched, params) {
-        var hits = [],
+        const hits = [],
             address = searched.address;
 
         if (this.canShowHit(searched)) {
@@ -236,8 +236,8 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {boolean} true | false
      */
     canShowHit: function (hit) {
-        var result = false,
-            classesToShow = this.get("classes");
+        const classesToShow = this.get("classes");
+        let result = false;
 
         if (classesToShow.length === 0) {
             return true;
@@ -260,7 +260,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {void}
      */
     sendRequest: function (url, data, successFunction) {
-        var ajax = this.get("ajaxRequest");
+        const ajax = this.get("ajaxRequest");
 
         if (!_.isNull(ajax)) {
             ajax.abort();

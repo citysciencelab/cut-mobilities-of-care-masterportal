@@ -1,0 +1,204 @@
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://cite.opengeospatial.org/gmlsf http://127.0.0.1:8080/core-services/services/wfstlgv?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=text%2Fxml%3B+subtype%3Dgml%2F3.1.1&amp;TYPENAME=sf:wfstlgv&amp;NAMESPACE=xmlns(sf=http%3A%2F%2Fcite.opengeospatial.org%2Fgmlsf)" xmlns:wfs="http://www.opengis.net/wfs" timeStamp="2020-02-25T10:20:20Z" xmlns:gml="http://www.opengis.net/gml" numberOfFeatures="1">
+	<gml:featureMember>
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_106">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_106_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_106_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566776.881 5936145.508</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Max Mustermann</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:anfragedatum>2020-01-28</sf:anfragedatum>
+			<sf:bemerkung>Dies ist ein Punkt</sf:bemerkung>
+			<sf:vorgangsnummer>3</sf:vorgangsnummer>
+			<sf:testnummer>1.3</sf:testnummer>
+			<sf:istest>false</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_107">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_107_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_107_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566776.881 5936145.508</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test transactionWFS</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:anfragedatum>2020-01-29</sf:anfragedatum>
+			<sf:bemerkung>Dies ist ein Punkt</sf:bemerkung>
+			<sf:vorgangsnummer>2</sf:vorgangsnummer>
+			<sf:testnummer>1.2</sf:testnummer>
+			<sf:istest>false</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_113">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_113_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_113_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test proofConditions</sf:name>
+			<sf:anfragedatum>2020-02-18</sf:anfragedatum>
+			<sf:bemerkung>Ein Test Punkt</sf:bemerkung>
+			<sf:testnummer>1.1</sf:testnummer>
+			<sf:istest>true</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_114">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_114_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_114_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test handleFlawedAttributes</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:anfragedatum></sf:anfragedatum>
+			<sf:bemerkung>Ein Test Punkt</sf:bemerkung>
+			<sf:vorgangsnummer>3</sf:vorgangsnummer>
+			<sf:testnummer>1.1</sf:testnummer>
+			<sf:istest>true</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_115">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_115_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_115_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test handleFlawedAttributes2</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:anfragedatum>2020-02-18</sf:anfragedatum>
+			<sf:bemerkung>Ein Test Punkt</sf:bemerkung>
+			<sf:vorgangsnummer>3</sf:vorgangsnummer>
+			<sf:testnummer>1.1</sf:testnummer>
+			<sf:istest></sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_116">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_116_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_116_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test handleEmptyAttributes 1</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:anfragedatum>2020-02-27</sf:anfragedatum>
+			<sf:bemerkung></sf:bemerkung>
+			<sf:vorgangsnummer>1</sf:vorgangsnummer>
+			<sf:testnummer></sf:testnummer>
+			<sf:istest>true</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_117">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_117_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_117_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test handleEmptyAttributes 2</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:anfragedatum>2020-02-27</sf:anfragedatum>
+			<sf:bemerkung></sf:bemerkung>
+			<sf:vorgangsnummer>1</sf:vorgangsnummer>
+			<sf:testnummer></sf:testnummer>
+			<sf:istest>true</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<!-- Test handleMissingFeatureProperties 1-->
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_117">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_117_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_117_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<!-- Test handleMissingFeatureProperties 2-->
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_118">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_118_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_118_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<!-- Test handleMissingFeatureProperties 3-->
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_119">
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<!-- Test handleMissingFeatureProperties 4-->
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_120">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_120_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_120_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<!-- Test handleFeatureProperties 1-->
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_121">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_121_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_121_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test handleFeatureProperties 1</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:testnummer>1.1</sf:testnummer>
+			<sf:istest>true</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<!-- Test handleFeatureProperties 2-->
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_122">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_122_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_122_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test handleFeatureProperties 2</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:testnummer>1.1</sf:testnummer>
+			<sf:istest>true</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+	<gml:featureMember>
+		<!-- Test handleFeatureProperties 3-->
+		<sf:wfstlgv xmlns:sf="http://cite.opengeospatial.org/gmlsf" gml:id="SF_AGGREGATEGEOFEATURE_123">
+			<sf:geom>
+				<!--Inlined geometry 'SF_AGGREGATEGEOFEATURE_123_SF_GEOM'-->
+				<gml:Point gml:id="SF_AGGREGATEGEOFEATURE_123_SF_GEOM" srsName="EPSG:25832">
+					<gml:pos>566596.965 5936304.258</gml:pos>
+				</gml:Point>
+			</sf:geom>
+			<sf:name>Test handleFeatureProperties 3</sf:name>
+			<sf:vorhaben>Testen</sf:vorhaben>
+			<sf:anfragedatum>2020-02-27</sf:anfragedatum>
+			<sf:vorgangsnummer>1</sf:vorgangsnummer>
+			<sf:testnummer>1.1</sf:testnummer>
+			<sf:istest>true</sf:istest>
+		</sf:wfstlgv>
+	</gml:featureMember>
+</wfs:FeatureCollection>

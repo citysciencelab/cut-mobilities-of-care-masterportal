@@ -31,10 +31,12 @@ describe("snippets/slider/model", function () {
     describe("update values works correctly", function () {
         it("input values are set like they should", function () {
             const today = new Date("2019, 06, 16");
-            var values;
 
             model.updateValues(today);
-            values = model.getSelectedValues();
+
+            /* eslint-disable-next-line one-var */
+            const values = model.getSelectedValues();
+
             expect(values).to.be.an("object").to.include({type: "datepicker"});
             expect(values.values).to.be.an("array");
             expect(values.values[0].toString()).to.equal("Sun Jun 16 2019 00:00:00 GMT+0200 (Mitteleuropäische Sommerzeit)");
@@ -44,10 +46,12 @@ describe("snippets/slider/model", function () {
     describe("update values silently works also", function () {
         it("input values are set like they should", function () {
             const today = new Date("2019, 06, 17");
-            var values;
 
             model.updateValuesSilently(today);
-            values = model.getSelectedValues();
+
+            /* eslint-disable-next-line one-var */
+            const values = model.getSelectedValues();
+
             expect(values).to.be.an("object").to.include({type: "datepicker"});
             expect(values.values).to.be.an("array");
             expect(values.values[0].toString()).to.equal("Mon Jun 17 2019 00:00:00 GMT+0200 (Mitteleuropäische Sommerzeit)");

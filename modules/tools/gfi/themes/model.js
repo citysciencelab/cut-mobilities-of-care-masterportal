@@ -140,7 +140,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     gfiErrorHandler: function (jqXHR) {
         this.setIsReady(true);
         console.warn("Error occured requesting GFI with status '" + jqXHR.status + "' and errorMessage '" + jqXHR.statusText + "'");
-        Radio.trigger("Alert", "alert", "Nicht alle Informationen zu den ausgewählten Objekten können derzeit abgefragt werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");
+        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.gfi.themes.errorMessage", {name: this.get("name"), id: this.get("id")}));
     },
 
     /**
@@ -171,18 +171,17 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     replaceMultiNodes: function (multiTags, childNode) {
-        _.each(multiTags, function (tagName) {
-            var nodeList = childNode.getElementsByTagName(tagName),
+        multiTags.forEach(tagName => {
+            const nodeList = childNode.getElementsByTagName(tagName),
                 nodeListValue = _.map(nodeList, function (node) {
                     return node.innerHTML;
                 }),
-                firstNode = nodeList[0],
-                i;
+                firstNode = nodeList[0];
 
             firstNode.innerHTML = JSON.stringify({
                 multiTag: nodeListValue
             });
-            for (i = nodeList.length - 1; i >= 1; i--) {
+            for (let i = nodeList.length - 1; i >= 1; i--) {
                 childNode.firstElementChild.removeChild(nodeList[i]);
             }
         });
@@ -194,14 +193,13 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     parseMultiElementNodes: function (xml) {
-        var childNodes = $(xml).find("msGMLOutput,gml\\:featureMember,featureMember");
+        const childNodes = $(xml).find("msGMLOutput,gml\\:featureMember,featureMember");
 
-        _.each(childNodes, function (childNode) {
-            var multiTags = this.getMultiTags(childNode);
+        childNodes.toArray().forEach(childNode => {
+            const multiTags = this.getMultiTags(childNode);
 
             this.replaceMultiNodes(multiTags, childNode);
-        }, this);
-
+        });
     },
 
     /**
@@ -210,11 +208,12 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     parseWmsGfi: function (data) {
-        var gfiList = [],
-            gfiFormat,
+        const gfiList = [],
+            dat = typeof data === "string" ? $.parseXML(data) : data; // handle non text/xml responses arriving as string
+
+        let gfiFormat = {},
             pgfi = [],
-            gfiFeatures,
-            dat = _.isString(data) ? $.parseXML(data) : data; // handle non text/xml responses arriving as string
+            gfiFeatures = {};
 
         this.parseMultiElementNodes(dat);
         // parse result, try built-in Ol-format first
@@ -225,13 +224,13 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         }).reverse();
 
         // ESRI is not parsed by the Ol-format
-        if (_.isEmpty(gfiFeatures)) {
+        if (gfiFeatures.length === 0) {
             if (dat.getElementsByTagName("FIELDS")[0] !== undefined) {
                 _.each(dat.getElementsByTagName("FIELDS"), function (element) {
-                    var gfi = {};
+                    const gfi = {};
 
                     _.each(element.attributes, function (attribute) {
-                        var key = attribute.localName;
+                        const key = attribute.localName;
 
                         if (this.isValidValue(attribute.value)) {
                             gfi[key] = attribute.value;
@@ -249,7 +248,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             }
         }
         else { // OS (deegree, UMN, Geoserver) is parsed by Ol-format
-            _.each(gfiFeatures, function (feature) {
+            gfiFeatures.forEach(feature => {
                 gfiList.push(feature.getProperties());
             });
         }
@@ -277,12 +276,11 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     cloneCollModels: function (pgfi) {
-        var clone;
+        let clone;
 
-        _.each(pgfi, function (singlePgfi, index) {
-            if (index > 0 && !_.isUndefined(this.collection)) {
+        pgfi.forEach((singlePgfi, index) => {
+            if (index > 0 && this.collection) {
                 clone = this.clone();
-
                 clone.set("gfiContent", [singlePgfi]);
                 clone.set("id", _.uniqueId());
                 clone.set("isReady", true);
@@ -300,7 +298,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     get3DFeatureGfi: function () {
-        var gfiContent;
+        let gfiContent;
 
         gfiContent = this.translateGFI([this.get("attributes")], this.get("gfiAttributes"));
         gfiContent = this.getManipulateDate(gfiContent);
@@ -313,16 +311,17 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     getVectorGfi: function () {
-        var gfiContent,
-            gfiFeatureList = this.get("gfiFeatureList");
+        const gfiFeatureList = this.get("gfiFeatureList");
+        let gfiContent;
 
-        if (!_.isEmpty(gfiFeatureList)) {
+        if (gfiFeatureList.length > 0) {
             gfiContent = this.translateGFI([gfiFeatureList[0].getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent);
 
-            this.setGfiContent(_.extend(gfiContent, {
+            gfiContent = Object.assign(gfiContent, {
                 allProperties: gfiFeatureList[0].getProperties()
-            }));
+            });
+            this.setGfiContent(gfiContent);
             this.setIsReady(true);
         }
     },
@@ -334,13 +333,14 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {boolean}   isValidKey  returns the validita of a key
      */
     isValidKey: function (key) {
-        var ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+        const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+        let isValidKey = true;
 
-        if (_.indexOf(ignoredKeys, key.toUpperCase()) !== -1) {
-            return false;
+        if (ignoredKeys.includes(key.toUpperCase())) {
+            isValidKey = false;
         }
 
-        return true;
+        return isValidKey;
     },
 
     /**
@@ -350,16 +350,18 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {boolean} true or false
      */
     isValidValue: function (value) {
-        if (value && _.isString(value) && value !== "" && value.toUpperCase() !== "NULL") {
-            return true;
+        let isValid = false;
+
+        if (value && typeof value === "string" && value !== "" && value.toUpperCase() !== "NULL") {
+            isValid = true;
         }
-        else if (_.isArray(value)) {
-            return true;
+        else if (Array.isArray(value)) {
+            isValid = true;
         }
-        else if (_.isNumber(value)) {
-            return true;
+        else if (typeof value === "number") {
+            isValid = true;
         }
-        return false;
+        return isValid;
     },
 
     /**
@@ -377,7 +379,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @returns {void}
      */
     isMultiTag: function (str) {
-        var test;
+        let test;
 
         try {
             test = JSON.parse(str);
@@ -385,7 +387,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         catch (e) {
             return false;
         }
-        if (_.isObject(test) && _.has(test, "multiTag")) {
+        if (typeof test === "object" && test.hasOwnProperty("multiTag")) {
             return true;
         }
         return false;
@@ -398,199 +400,221 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
       * @returns {object[]}         pgfi           List of objects
       */
     translateGFI: function (gfiList, gfiAttributes) {
-        var pgfi = [];
+        const pgfi = [];
 
         if (gfiAttributes === "ignore") {
             return pgfi;
         }
 
-        _.each(gfiList, function (element) {
-            var preGfi = {},
-                gfi = {};
+        gfiList.forEach(element => {
+            let gfi = this.removeInvalidEntries(element);
 
-            // get rid of invalid keys and keys with invalid values; trim values
-            _.each(element, function (value, key) {
-                var valueName = value;
-
-                if (this.get("gfiTheme") === "table") {
-                    if (this.isValidKey(key)) {
-                        preGfi[key] = valueName;
-                    }
-                }
-                else if (this.isValidKey(key) && this.isValidValue(valueName)) {
-                    if (this.isMultiTag(value)) {
-                        valueName = JSON.parse(valueName).multiTag;
-                    }
-                    if (_.isArray(valueName)) {
-                        valueName = valueName.join("</br>");
-                    }
-                    preGfi[key] = _.isString(valueName) ? valueName.trim() : valueName;
-                }
-            }, this);
             if (gfiAttributes === "showAll") {
-                // beautify keys
-                _.each(preGfi, function (value, key) {
-                    var keyName = this.beautifyString(key);
-
-                    gfi[keyName] = value;
-                }, this);
+                gfi = this.beautifyGfiKeys(gfi);
             }
             else {
-                preGfi = this.allKeysToLowerCase(preGfi);
-                if (this.get("gfiParams") && this.get("gfiParams").hasOwnProperty("iFrameAttributesPrefix")) {
-                    preGfi = this.removeIFrameAttributes(preGfi, this.get("gfiParams").iFrameAttributesPrefix);
-                }
-                _.each(gfiAttributes, function (value, key) {
-                    var name,
-                        origName = key,
-                        translatedName = value;
-
-                    if (typeof translatedName === "string") {
-                        name = preGfi[origName.toLowerCase()];
-                    }
-                    if (typeof translatedName === "object") {
-                        name = this.getNameFromObject(preGfi, origName.toLowerCase(), translatedName);
-                        translatedName = translatedName.name;
-                    }
-
-                    if (name) {
-                        gfi[translatedName] = name;
-                    }
-                }, this);
+                gfi = this.prepareGfiByAttributes(gfi, gfiAttributes);
             }
-            if (_.isEmpty(gfi) !== true) {
+            if (Object.keys(gfi).length > 0) {
                 pgfi.push(gfi);
             }
-        }, this);
+        });
 
         return pgfi;
     },
 
     /**
-     * Removes Attributes from the preGfi object that start with the given string.
-     * Currently used only for sensor-Theme.
-     * @param {Object} preGfi preGfi.
-     * @param {String} prefix String condition each attributes starts with.
-     * @returns {Object} - The pregfi without the attributes starting with string.
+     * Prepares the gfi by the configured attributes.
+     * @param {Object} gfi Gfi object.
+     * @param {Object} attributes Gfi attributes.
+     * @returns {Object} - Prepared gfi by configured attributes.
      */
-    removeIFrameAttributes: function (preGfi, prefix) {
-        let gfi = preGfi;
+    prepareGfiByAttributes: function (gfi, attributes) {
+        const preparedGfi = {};
 
-        if (this.get("gfiTheme") === "sensor") {
-            gfi = Object.keys(gfi).filter(key => {
-                return !key.startsWith(prefix);
-            }).reduce((obj, key) => {
-                obj[key] = gfi[key];
-                return obj;
-            }, {});
-        }
-        return gfi;
-    },
+        Object.keys(attributes).forEach(key => {
+            let newKey = attributes[key],
+                value = this.prepareGfiValue(gfi, key);
 
-    getNameFromObject: function (preGfi, origName, translatedName) {
-        let name = this.translateNameFromObject(preGfi, origName, translatedName.condition),
-            date;
-
-        const type = translatedName.hasOwnProperty("type") ? translatedName.type : "string",
-            format = translatedName.hasOwnProperty("format") ? translatedName.format : "DD.MM.YYYY HH:mm:ss";
-
-        if (name) {
-            if (translatedName.hasOwnProperty("suffix")) {
-                name = String(name) + " " + translatedName.suffix;
+            if (typeof newKey === "object") {
+                value = this.prepareGfiValueFromObject(key, newKey, gfi);
+                newKey = newKey.name;
             }
-            if (type === "date") {
-                date = moment(String(name));
-
-                if (date.isValid()) {
-                    name = moment(String(name)).format(format);
-                }
+            if (value && value !== "undefined") {
+                preparedGfi[newKey] = value;
             }
-            else if (type === "string") {
-                name = String(name);
-            }
-            else {
-                console.error("getNameFromObject:Could not transform " + name + "into a data. Taking default value");
-            }
-        }
-        return name;
-    },
-
-    /**
-     * Translates the given name from gfiAttribute Object based on the condition type
-     * @param {Object} preGfi Object of all values that the feature has.
-     * @param {String} origName The name to be proofed against the keys.
-     * @param {Object} condition GFI-Attribute Object.
-     * @returns {String} - name if condition matches exactly one key.
-     */
-    translateNameFromObject: function (preGfi, origName, condition) {
-        const length = origName.length;
-        let name,
-            matches = [];
-
-        if (condition === "contains") {
-            matches = Object.keys(preGfi).filter(key => {
-                return key.length !== length && key.includes(origName);
-            });
-            if (this.checkIfMatchesValid(origName, condition, matches)) {
-                name = preGfi[matches[0]];
-            }
-        }
-        else if (condition === "startsWith") {
-            matches = Object.keys(preGfi).filter(key => {
-                return key.length !== length && key.startsWith(origName);
-            });
-            if (this.checkIfMatchesValid(origName, condition, matches)) {
-                name = preGfi[matches[0]];
-            }
-        }
-        else if (condition === "endsWith") {
-            matches = Object.keys(preGfi).filter(key => {
-                return key.length !== length && key.endsWith(origName);
-            });
-            if (this.checkIfMatchesValid(origName, condition, matches)) {
-                name = preGfi[matches[0]];
-            }
-        }
-        else {
-            name = preGfi[origName];
-        }
-        return name;
-    },
-
-    /**
-     * Checks if the matches have exact one entry.
-     * @param {String} origName The name to be proofed against the keys.
-     * @param {String} condition Matching conditon.
-     * @param {String[]} matches An array of all keys matching the condition.
-     * @returns {Boolean} - Flag of array has exacly one entry.
-     */
-    checkIfMatchesValid: function (origName, condition, matches) {
-        let isValid = false;
-
-        if (matches.length === 0) {
-            console.error("no match found for gfi translation: '" + condition + "', '" + origName + "'");
-        }
-        else if (matches.length > 1) {
-            console.error("more than 1 match found for gfi translation: " + condition + "', '" + origName + "'");
-        }
-        else {
-            isValid = true;
-        }
-        return isValid;
-    },
-    /**
-     * set all keys from object to lowercase
-     * @param {object} obj - key value pairs
-     * @returns {object} obj with lowercase keys
-     */
-    allKeysToLowerCase: function (obj) {
-        var lowerObj = {};
-
-        _.each(obj, function (value, key) {
-            lowerObj[key.toLowerCase()] = value;
         });
 
-        return lowerObj;
+        return preparedGfi;
+    },
+
+    /**
+     * Derives the gfi value if the value is an object.
+     * @param {*} key Key of gfi Attribute.
+     * @param {Object} obj Value of gfi attribute.
+     * @param {Object} gfi Gfi object.
+     * @returns {*} - Prepared Value from gfi.
+     */
+    prepareGfiValueFromObject: function (key, obj, gfi) {
+        const type = obj.hasOwnProperty("type") ? obj.type : "string",
+            format = obj.hasOwnProperty("format") ? obj.format : "DD.MM.YYYY HH:mm:ss",
+            condition = obj.hasOwnProperty("condition") ? obj.condition : null;
+        let preparedValue = this.prepareGfiValue(gfi, key),
+            date;
+
+        if (condition) {
+            preparedValue = this.getValueFromCondition(key, condition, gfi);
+        }
+        switch (type) {
+            case "date": {
+                date = moment(String(preparedValue));
+                if (date.isValid()) {
+                    preparedValue = moment(String(preparedValue)).format(format);
+                }
+                break;
+            }
+            // default equals to obj.type === "string"
+            default: {
+                preparedValue = String(preparedValue);
+            }
+        }
+        if (preparedValue && preparedValue !== "undefined") {
+            preparedValue = this.appendSuffix(preparedValue, obj.suffix);
+        }
+
+        return preparedValue;
+    },
+
+    /**
+     * Derives the value from the given condition.
+     * @param {String} key Key.
+     * @param {String} condition Condition to filter gfi.
+     * @param {Object} gfi Gfi object.
+     * @returns {*} - Value that matches the given condition.
+     */
+    getValueFromCondition: function (key, condition, gfi) {
+        let valueFromCondition,
+            match;
+
+        if (condition === "contains") {
+            match = Object.keys(gfi).filter(key2 => {
+                return key2.includes(key);
+            })[0];
+            valueFromCondition = gfi[match];
+        }
+        else if (condition === "startsWith") {
+            match = Object.keys(gfi).filter(key2 => {
+                return key2.startsWith(key);
+            })[0];
+            valueFromCondition = gfi[match];
+        }
+        else if (condition === "endsWith") {
+            match = Object.keys(gfi).filter(key2 => {
+                return key2.endsWith(key);
+            })[0];
+            valueFromCondition = gfi[match];
+        }
+        else {
+            valueFromCondition = gfi[key];
+        }
+
+        return valueFromCondition;
+
+    },
+
+    /**
+     * Appends a suffix if available.
+     * @param {*} value Value to append suffix.
+     * @param {*} suffix Suffix
+     * @returns {String} - Value with suffix.
+     */
+    appendSuffix: function (value, suffix) {
+        let valueWithSuffix = value;
+
+        if (suffix) {
+            valueWithSuffix = String(valueWithSuffix) + " " + suffix;
+        }
+        return valueWithSuffix;
+    },
+
+    /**
+     * Returns the value of the given key. Also considers, that the key may be an object path.
+     * @param {Object} gfi Gfi object.
+     * @param {String} key Key to derive value from.
+     * @returns {*} - Value from key.
+     */
+    prepareGfiValue: function (gfi, key) {
+        const isPath = key.startsWith("@");
+        let value = gfi[key];
+
+        if (isPath) {
+            value = this.getValueFromPath(gfi, key);
+        }
+        return value;
+    },
+
+    /**
+     * Parses the path and returns the value at the position of the path.
+     * @param {Object} gfi Gfi object.
+     * @param {String} path Key that is an object path.
+     * @returns {*} - Value of gfi from path.
+     */
+    getValueFromPath: function (gfi, path) {
+        const pathParts = path.substring(1).split(".");
+        let value = gfi;
+
+        pathParts.forEach(part => {
+            value = value ? value[part] : undefined;
+        });
+
+        return value;
+    },
+
+    /**
+     * Beautifies the keys of the gfi.
+     * @param {Object} gfi Gfi object.
+     * @returns {Object} - Gfi with beautified keys.
+     */
+    beautifyGfiKeys: function (gfi) {
+        const beautifiedGfi = {};
+
+        Object.keys(gfi).forEach(key => {
+            const value = gfi[key],
+                beautifiedKey = this.beautifyString(key);
+
+            beautifiedGfi[beautifiedKey] = value;
+        });
+        return beautifiedGfi;
+    },
+
+    /**
+     * Removes invalid entries from gfi
+     * @param {Object} gfi Gfi object.
+     * @returns {Object} - Gfi with valid entries.
+     */
+    removeInvalidEntries: function (gfi) {
+        const gfiWithValidEntries = {};
+
+        Object.keys(gfi).forEach(key => {
+            let value = gfi[key];
+
+            if (this.get("gfiTheme") === "table") {
+                if (this.isValidKey(key)) {
+                    gfiWithValidEntries[key] = value;
+                }
+            }
+            else if (this.isValidKey(key) && this.isValidValue(value)) {
+                if (this.isMultiTag(value)) {
+                    value = JSON.parse(value).multiTag;
+                    if (Array.isArray(value)) {
+                        value = value.join("</br>");
+                    }
+                }
+                value = typeof value === "string" ? value.trim() : value;
+                gfiWithValidEntries[key] = value;
+            }
+        });
+        return gfiWithValidEntries;
     },
 
     /**
@@ -600,10 +624,12 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
      * @return {object} content
      */
     getManipulateDate: function (content) {
-        _.each(content, function (element) {
-            _.each(element, function (value, key, list) {
+        content.forEach(element => {
+            Object.keys(element).forEach(key => {
+                const value = element[key];
+
                 if (moment(value, "DD-MM-YYYY", true).isValid() === true) {
-                    list[key] = moment(value).format("DD.MM.YYYY");
+                    element[key] = moment(value).format("DD.MM.YYYY");
                 }
             });
         });

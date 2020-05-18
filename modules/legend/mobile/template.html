@@ -3,7 +3,10 @@
     <div class="modal-content">
         <div class="modal-header legendModal">
             <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></button>
-            <h4 class="modal-title"><span class="glyphicon glyphicon-book"></span>Legende</h4>
+            <% if (showCollapseAllButton === true) { %>
+            <button type="button" class="close"><span id="collapseAll-btn" class="glyphicon glyphicon-arrow-down fold-in" title="<%= collapseAllText %>"></span></button>
+            <% } %>
+            <h4 class="modal-title"><span class="glyphicon glyphicon-book"></span><span><%= legendTitle %></span></h4>
         </div>
         <div id="legendbody" class="modal-body">
             <div class="panel-group" role="tablist" aria-multiselectable="true">

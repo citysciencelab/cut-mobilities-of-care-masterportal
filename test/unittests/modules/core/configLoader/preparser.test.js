@@ -2,7 +2,7 @@ import {expect} from "chai";
 import Preparser from "@modules/core/configLoader/preparser.js";
 
 describe("core/configLoader/preparser", function () {
-    var preparser;
+    let preparser;
 
     before(function () {
         preparser = new Preparser(null, {url: Config.portalConf});

@@ -131,7 +131,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @returns {*} todo
      */
     positionClicked: function (position) {
-        var isViewMobile = Radio.request("Util", "isViewMobile"),
+        const isViewMobile = Radio.request("Util", "isViewMobile"),
             updatePosition = isViewMobile ? true : this.get("updatePosition");
 
         this.setPositionMapProjection(position);
@@ -145,8 +145,9 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @returns {*} todo
      */
     returnTransformedPosition: function (targetProjection) {
-        var positionMapProjection = this.get("positionMapProjection"),
-            positionTargetProjection = [0, 0];
+        const positionMapProjection = this.get("positionMapProjection");
+
+        let positionTargetProjection = [0, 0];
 
         if (positionMapProjection.length > 0) {
             positionTargetProjection = transformFromMapProjection(Radio.request("Map", "getMap"), targetProjection, positionMapProjection);
@@ -161,7 +162,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @returns {*} todo
      */
     returnProjectionByName: function (name) {
-        var projections = this.get("projections");
+        const projections = this.get("projections");
 
         return _.find(projections, function (projection) {
             return projection.name === name;
@@ -246,7 +247,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @returns {void}
      */
     setCoordinates: function (evt) {
-        var position = evt.coordinate;
+        const position = evt.coordinate;
 
         if (this.get("updatePosition")) {
             this.setPositionMapProjection(position);

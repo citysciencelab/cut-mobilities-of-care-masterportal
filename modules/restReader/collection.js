@@ -1,7 +1,7 @@
 const RestList = Backbone.Collection.extend({
     model: Backbone.Model,
     initialize: function (models, options) {
-        var channel = Radio.channel("RestReader");
+        const channel = Radio.channel("RestReader");
 
         channel.reply({
             "getServiceById": this.getServiceById

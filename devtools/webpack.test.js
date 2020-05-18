@@ -1,4 +1,4 @@
-var webpack = require("webpack"),
+const webpack = require("webpack"),
     path = require("path"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
@@ -23,10 +23,9 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                loader: "babel-loader",
-                options: {
-                    presets: ["@babel/preset-env"],
-                    plugins: ["@babel/plugin-syntax-dynamic-import"]
+                exclude: /\bcore-js\b/,
+                use: {
+                    loader: "babel-loader"
                 }
             },
             {
@@ -56,6 +55,10 @@ module.exports = {
                         loader: "file-loader"
                     }
                 ]
+            },
+            {
+                test: /\.xml$/i,
+                use: "raw-loader"
             }
         ]
     },

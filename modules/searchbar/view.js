@@ -8,6 +8,7 @@ import VisibleVectorModel from "./visibleVector/model";
 import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
 import OSMModel from "./osm/model";
+import LocationFinderModel from "./locationFinder/model";
 import GdiModel from "./gdi/model";
 import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
@@ -143,6 +144,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         if (config.hasOwnProperty("osm")) {
             new OSMModel(config.osm);
+        }
+        if (config.hasOwnProperty("locationFinder")) {
+            new LocationFinderModel(config.locationFinder);
         }
         if (config.hasOwnProperty("gdi")) {
             new GdiModel(config.gdi);
@@ -369,10 +373,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * todo
-     * @returns {*} todo
+     * Trigger searching via all registered services. Update searchString to enable patterns with less then three chars.
+     * @returns {void}
      */
     searchAll: function () {
+        this.model.setSearchString($("#searchInput").val());
         Radio.trigger("Searchbar", "searchAll", this.model.get("searchString"));
     },
 
@@ -422,7 +427,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
         else if (evt.hasOwnProperty("currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
-            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), hitID);
+            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitID});
+
         }
         else if (modelHitList.length > 1) {
             return;
@@ -892,7 +898,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         if (evt !== undefined) {
             hitId = evt.currentTarget.id;
-            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), hitId);
+            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitId});
         }
 
         if (hit && hit.hasOwnProperty("triggerEvent")) {

@@ -2,8 +2,8 @@ import Model from "@modules/tools/filter/query/model.js";
 import {expect} from "chai";
 
 describe("modules/tools/filter/query/model", function () {
-    var model,
-        featureAttributesMap = [
+    let model;
+    const featureAttributesMap = [
             {
                 "displayName": "Bezirk",
                 "name": "bezirk",
@@ -39,25 +39,25 @@ describe("modules/tools/filter/query/model", function () {
 
     describe("mapRules", function () {
         it("should return an array", function () {
-            var returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
+            const returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
 
             expect(returnedFeatureAttributesMap).to.be.an("array");
         });
 
         it("should return an array with length three", function () {
-            var returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
+            const returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
 
             expect(returnedFeatureAttributesMap).to.have.lengthOf(3);
         });
 
         it("should have 'preselectedValues' with the value 'Altona'", function () {
-            var returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
+            const returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
 
             expect(returnedFeatureAttributesMap[0].preselectedValues).to.have.members(["Altona"]);
         });
 
         it("should be undefined for 'preselectedValues'", function () {
-            var returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
+            const returnedFeatureAttributesMap = model.mapRules(featureAttributesMap, rules);
 
             expect(returnedFeatureAttributesMap[1].preselectedValues).to.be.an("undefined");
         });

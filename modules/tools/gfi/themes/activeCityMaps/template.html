@@ -2,7 +2,7 @@
 <tbody>
 <%
 _.each(featureInfos, function(attr) {
-    var key= attr.attrName,
+    const key= attr.attrName,
         value = attr.attrValue;
 
     if (_.isString(key) === false) return;

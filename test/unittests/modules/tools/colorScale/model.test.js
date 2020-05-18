@@ -2,7 +2,7 @@ import {expect} from "chai";
 import Model from "@modules/tools/colorScale/model.js";
 
 describe("tools/colorScale", function () {
-    var model;
+    let model;
 
     before(function () {
         model = new Model();

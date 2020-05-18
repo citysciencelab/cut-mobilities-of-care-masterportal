@@ -3,7 +3,7 @@ import Model from "@modules/tools/filter/query/source/model.js";
 import Util from "@testUtil";
 
 describe("modules/tools/filter/query/source/model", function () {
-    var model,
+    let model,
         utilModel,
         testFeatures;
 
@@ -13,29 +13,29 @@ describe("modules/tools/filter/query/source/model", function () {
         testFeatures = utilModel.createTestFeatures("resources/testFeatures.xml");
     });
     describe("isValueMatch", function () {
-        var featureAttributesMap = [{name: "teilnahme_geburtsklinik", matchingMode: "OR"}];
+        const featureAttributesMap = [{name: "teilnahme_geburtsklinik", matchingMode: "OR"}];
 
         before(function () {
             model.setFeatureAttributesMap(featureAttributesMap);
         });
         it("should match when feature matches at least one attribute value", function () {
-            var attribute = {attrName: "teilnahme_geburtsklinik", values: ["Nein"], matchingMode: "OR"};
+            const attribute = {attrName: "teilnahme_geburtsklinik", values: ["Nein"], matchingMode: "OR"};
 
             expect(model.isValueMatch(testFeatures[0], attribute)).to.be.true;
         });
         it("should not match when feature matches none of the attribute values", function () {
-            var attribute = {attrName: "teilnahme_geburtsklinik", values: ["haha"]};
+            const attribute = {attrName: "teilnahme_geburtsklinik", values: ["haha"]};
 
             expect(model.isValueMatch(testFeatures[1], attribute)).to.be.false;
         });
         it("should not match when attribute values is empty", function () {
-            var attribute = {attrName: "teilnahme_geburtsklinik", values: []};
+            const attribute = {attrName: "teilnahme_geburtsklinik", values: []};
 
             expect(model.isValueMatch(testFeatures[1], attribute)).to.be.false;
         });
     });
     describe("getValuesFromFeature", function () {
-        var testFeature = {};
+        let testFeature = {};
 
         before(function () {
             testFeature = utilModel.createTestFeatures("resources/testFeatures.xml")[0];
@@ -59,7 +59,7 @@ describe("modules/tools/filter/query/source/model", function () {
         });
     });
     describe("collectSelectableOptions", function () {
-        var featureAttributesMap = [],
+        const featureAttributesMap = [],
             selectedAttributes = [];
 
         before(function () {

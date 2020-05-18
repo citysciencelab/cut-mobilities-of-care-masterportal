@@ -16,9 +16,9 @@ const ElektroladesaeulenThemeView = ThemeView.extend({
      * @returns {void}
      */
     changeGraph: function (evt) {
-        var actualIndex = this.model.get("dayIndex"),
-            buttonId = evt.currentTarget.id,
-            graphTyp;
+        const buttonId = evt.currentTarget.id;
+        let graphTyp,
+            actualIndex = this.model.get("dayIndex");
 
         // search for atcivated data/graph
         $("li").each(function () {
@@ -48,10 +48,10 @@ const ElektroladesaeulenThemeView = ThemeView.extend({
      * @returns {void}
      */
     toggleTab: function (evt) {
-        var contentId = $(evt.currentTarget).attr("value"),
+        const contentId = $(evt.currentTarget).attr("value"),
             modelDayIndex = this.model.get("dayIndex"),
-            index = _.isUndefined(modelDayIndex) ? 0 : modelDayIndex,
-            gfiSize;
+            index = _.isUndefined(modelDayIndex) ? 0 : modelDayIndex;
+        let gfiSize = {};
 
         // sets the window size so that it is always the same
         if (_.isUndefined(this.model.get("gfiHeight")) || _.isUndefined(this.model.get("gfiWidth"))) {
@@ -69,7 +69,7 @@ const ElektroladesaeulenThemeView = ThemeView.extend({
 
         // deactivate all tabs and their contents
         $(evt.currentTarget).parent().find("li").each(function (i, li) {
-            var tabContentId = $(li).attr("value");
+            const tabContentId = $(li).attr("value");
 
             $(li).removeClass("active");
             $("#" + tabContentId).removeClass("active");
@@ -90,7 +90,7 @@ const ElektroladesaeulenThemeView = ThemeView.extend({
      * @return {String} availableHeight
      */
     calculateHeight: function (gfiHeight) {
-        var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
+        const heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
             heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2),
             heightbutton = $(".ladesaeulen .buttonDiv").css("height").slice(0, -2);
 
@@ -103,7 +103,7 @@ const ElektroladesaeulenThemeView = ThemeView.extend({
      * @return {number} gfiHeight - without height from arrow buttons
      */
     calculateIndicatorHeight: function (gfiHeight) {
-        var heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
+        const heightladesaeulenHeader = $(".ladesaeulenHeader").css("height").slice(0, -2),
             heightNavbar = $(".ladesaeulen .nav").css("height").slice(0, -2);
 
         return gfiHeight - heightladesaeulenHeader - heightNavbar;

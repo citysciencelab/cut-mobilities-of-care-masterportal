@@ -82,7 +82,8 @@ export default {
     .attributions-view {
         color: @secondary_contrast;
         font-size: @font_size_default;
-        font-family: @font_family_accent;
+        font-family: @font_family_default;
+        font-weight: 400;
         background-color: @secondary;
 
         border: 1px solid @secondary_border;

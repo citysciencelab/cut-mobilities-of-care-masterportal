@@ -1,0 +1,434 @@
+<?xml version="1.0"?>
+<Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd" version="1.0.0">
+  <ows:ServiceIdentification>
+    <ows:Title>WMTS NW DTK</ows:Title>
+    <ows:Abstract>Dieser Dienst enthält alle topographischen Kartenwerke des Landes Nordrhein-Westfalen. Angefangen von der NRW Übersicht und der DNRW250 über die topographischen Karten TK100, TK50, DTK25, DTK10 bis hin zu ALKIS sind alle diese Kartenwerke in diesem Dienst in einem Layer vereint. Durch die voreingestellten Maßstabsbereiche wird gewährleistet, dass in jedem Maßstab die ideale Karte präsentiert wird. Dieser Dienst wurde nach dem GDI-DE- und AdV-Profil für WMS-Dienste aufgebaut und ist mit den Diensten der Nachbarländer kombinierbar. Nutzungsmöglichkeiten: Der WMS-Dienst verbindet alle topographischen Kartenwerke von Nordrhein-Westfalen in einem Dienst. Somit ist der Dienst der ideale Hintergrund für Fachanwendungen aus allen Bereichen, wenn es darum geht über einen großen Maßstabsbereich immer die passende topographische Karte als Hintergrundinformation zu hinterlegen. Gerade die Graustufenvariante bietet sich für diese Aufgabenstellung hervoragend an, da sich farbliche Fachdaten gut von den Graustufen Hintergrundinformationen unterscheiden lassen.</ows:Abstract>
+    <ows:Keywords>
+        <ows:Keyword>ProduktgruppeDTK</ows:Keyword>
+        <ows:Keyword>ALKIS</ows:Keyword>
+        <ows:Keyword>ABK</ows:Keyword>
+        <ows:Keyword>DTK</ows:Keyword>
+        <ows:Keyword>DTK10</ows:Keyword>
+        <ows:Keyword>DTK 10</ows:Keyword>
+        <ows:Keyword>DTK25</ows:Keyword>
+        <ows:Keyword>DTK 25</ows:Keyword>
+        <ows:Keyword>DTK50</ows:Keyword>
+        <ows:Keyword>DTK 50</ows:Keyword>
+        <ows:Keyword>DTK100</ows:Keyword>
+        <ows:Keyword>DTK 100</ows:Keyword>
+        <ows:Keyword>DNRW250</ows:Keyword>
+        <ows:Keyword>NRW 250</ows:Keyword>
+        <ows:Keyword>1:10000</ows:Keyword>
+        <ows:Keyword>1:10.000</ows:Keyword>
+        <ows:Keyword>1:25000</ows:Keyword>
+        <ows:Keyword>1:25.000</ows:Keyword>
+        <ows:Keyword>1:50000</ows:Keyword>
+        <ows:Keyword>1:50.000</ows:Keyword>
+        <ows:Keyword>1:100000</ows:Keyword>
+        <ows:Keyword>1:100.000</ows:Keyword>
+        <ows:Keyword>1:500000</ows:Keyword>
+        <ows:Keyword>1:500.000</ows:Keyword>
+        <ows:Keyword>NW</ows:Keyword>
+        <ows:Keyword>NRW</ows:Keyword>
+        <ows:Keyword>Nordrhein-Westfalen</ows:Keyword>
+        <ows:Keyword>Bezirksregierung Köln</ows:Keyword>
+        <ows:Keyword>Abteilung 7</ows:Keyword>
+        <ows:Keyword>Geobasis NRW</ows:Keyword>
+        <ows:Keyword>Geobasisdaten</ows:Keyword>
+        <ows:Keyword>Landesvermessung</ows:Keyword>
+        <ows:Keyword>ATKIS</ows:Keyword>
+        <ows:Keyword>Amtlich Topographisch-Kartographisches Informationssystem</ows:Keyword>
+        <ows:Keyword>AdV</ows:Keyword>
+        <ows:Keyword>Arbeitsgemeinschaft der Vermessungsverwaltungen der Länder</ows:Keyword>
+        <ows:Keyword>WMTS</ows:Keyword>
+        <ows:Keyword>WMTS_NW_DTK</ows:Keyword>
+    </ows:Keywords> 
+    <ows:ServiceType>OGC WMTS</ows:ServiceType>
+    <ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+    <ows:Fees>Die Geobasisdaten des amtlichen Vermessungswesens werden als öffentliche Aufgabe gem. VermKatG NRW und gebührenfrei nach Open Data-Prinzipien über online-Verfahren breitgestellt. Nutzungsbedingungen: siehe http://www.bezreg-koeln.nrw.de/brk_internet/geobasis/lizenzbedingungen_geobasis_nrw.pdf</ows:Fees>
+    <ows:AccessConstraints>NONE</ows:AccessConstraints>
+  </ows:ServiceIdentification>
+  <ows:ServiceProvider>
+    <ows:ProviderName>Geobasis NRW</ows:ProviderName>
+    <ows:ProviderSite xlink:href=""/>
+    <ows:ServiceContact>
+      <ows:IndividualName></ows:IndividualName>
+      <ows:PositionName></ows:PositionName>
+      <ows:ContactInfo>
+        <ows:Phone>
+          <ows:Voice>+49(0)221-147-4994</ows:Voice>
+          <ows:Facsimile>+49(0)221-147-4874</ows:Facsimile>
+        </ows:Phone>
+        <ows:Address>
+          <ows:DeliveryPoint>Geobasis NRW</ows:DeliveryPoint>
+          <ows:City>Bonn</ows:City>
+          <ows:AdministrativeArea>Nordrhein-Westfalen</ows:AdministrativeArea>
+          <ows:PostalCode>53177</ows:PostalCode>
+          <ows:Country>Deutschland</ows:Country>
+          <ows:ElectronicMailAddress>geobasis@bezreg-koeln.nrw.de</ows:ElectronicMailAddress>
+        </ows:Address>
+      </ows:ContactInfo>
+    </ows:ServiceContact>
+  </ows:ServiceProvider>
+  <Contents>
+    <Layer>
+      <ows:Title>Kombination Farbe</ows:Title>
+      <ows:Abstract></ows:Abstract>
+      <ows:WGS84BoundingBox>
+        <ows:LowerCorner>5.6989 50.2651</ows:LowerCorner>
+        <ows:UpperCorner>9.6835 52.5704</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+      <ows:Identifier>nw_dtk_col</ows:Identifier>
+      <Style isDefault="true">
+        <ows:Title>default</ows:Title>
+        <ows:Identifier>default</ows:Identifier>
+        <LegendURL xlink:href="https://www.wmts.nrw.de/legends/geobasis/wmts_nw_dtk/nw_dtk_col.png" format="image/png"/>
+      </Style>
+      <Format>image/png</Format>
+      <TileMatrixSetLink>
+        <TileMatrixSet>EPSG_25832_16</TileMatrixSet>
+      </TileMatrixSetLink>
+      <TileMatrixSetLink>
+        <TileMatrixSet>EPSG_3857_16</TileMatrixSet>
+      </TileMatrixSetLink>
+      <ResourceURL format="image/png" resourceType="tile" template="https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/tiles/nw_dtk_col/{TileMatrixSet}/{TileMatrix}/{TileCol}/{TileRow}.png"/>
+    </Layer>
+    <Layer>
+      <ows:Title>Kombination Graustufen</ows:Title>
+      <ows:Abstract></ows:Abstract>
+      <ows:WGS84BoundingBox>
+        <ows:LowerCorner>5.6989 50.2651</ows:LowerCorner>
+        <ows:UpperCorner>9.6835 52.5704</ows:UpperCorner>
+      </ows:WGS84BoundingBox>
+      <ows:Identifier>nw_dtk_pan</ows:Identifier>
+      <Style isDefault="true">
+        <ows:Title>default</ows:Title>
+        <ows:Identifier>default</ows:Identifier>
+        <LegendURL xlink:href="https://www.wmts.nrw.de/legends/geobasis/wmts_nw_dtk/nw_dtk_pan.png" format="image/png"/>
+      </Style>
+      <Format>image/png</Format>
+      <TileMatrixSetLink>
+        <TileMatrixSet>EPSG_25832_16</TileMatrixSet>
+      </TileMatrixSetLink>
+      <TileMatrixSetLink>
+        <TileMatrixSet>EPSG_3857_16</TileMatrixSet>
+      </TileMatrixSetLink>
+      <ResourceURL format="image/png" resourceType="tile" template="https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/tiles/nw_dtk_pan/{TileMatrixSet}/{TileMatrix}/{TileCol}/{TileRow}.png"/>
+    </Layer>
+    <TileMatrixSet>
+      <ows:Identifier>EPSG_25832_16</ows:Identifier>
+      <ows:SupportedCRS>EPSG:25832</ows:SupportedCRS>
+      <TileMatrix>
+        <ows:Identifier>00</ows:Identifier>
+        <ScaleDenominator>17471320.750897426</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1</MatrixWidth>
+        <MatrixHeight>1</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>01</ows:Identifier>
+        <ScaleDenominator>8735660.375448713</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>2</MatrixWidth>
+        <MatrixHeight>2</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>02</ows:Identifier>
+        <ScaleDenominator>4367830.187724357</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>4</MatrixWidth>
+        <MatrixHeight>4</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>03</ows:Identifier>
+        <ScaleDenominator>2183915.0938621783</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>8</MatrixWidth>
+        <MatrixHeight>8</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>04</ows:Identifier>
+        <ScaleDenominator>1091957.5469310884</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>16</MatrixWidth>
+        <MatrixHeight>16</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>05</ows:Identifier>
+        <ScaleDenominator>545978.7734655446</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>32</MatrixWidth>
+        <MatrixHeight>32</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>06</ows:Identifier>
+        <ScaleDenominator>272989.3867327723</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>64</MatrixWidth>
+        <MatrixHeight>64</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>07</ows:Identifier>
+        <ScaleDenominator>136494.69336638614</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>128</MatrixWidth>
+        <MatrixHeight>128</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>08</ows:Identifier>
+        <ScaleDenominator>68247.34668319307</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>256</MatrixWidth>
+        <MatrixHeight>256</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>09</ows:Identifier>
+        <ScaleDenominator>34123.673341596535</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>511</MatrixWidth>
+        <MatrixHeight>512</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>10</ows:Identifier>
+        <ScaleDenominator>17061.836670798268</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1021</MatrixWidth>
+        <MatrixHeight>1024</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>11</ows:Identifier>
+        <ScaleDenominator>8530.918335399134</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>2042</MatrixWidth>
+        <MatrixHeight>2048</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>12</ows:Identifier>
+        <ScaleDenominator>4265.459167699567</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>4084</MatrixWidth>
+        <MatrixHeight>4096</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>13</ows:Identifier>
+        <ScaleDenominator>2132.7295838497835</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>8167</MatrixWidth>
+        <MatrixHeight>8192</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>14</ows:Identifier>
+        <ScaleDenominator>1066.3647919248929</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>16334</MatrixWidth>
+        <MatrixHeight>16384</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>15</ows:Identifier>
+        <ScaleDenominator>533.1823959624464</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>32667</MatrixWidth>
+        <MatrixHeight>32768</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>16</ows:Identifier>
+        <ScaleDenominator>266.5911979812214</ScaleDenominator>
+        <TopLeftCorner>-46133.17 6301219.54</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>65334</MatrixWidth>
+        <MatrixHeight>65536</MatrixHeight>
+      </TileMatrix>
+    </TileMatrixSet>
+    <TileMatrixSet>
+      <ows:Identifier>EPSG_3857_16</ows:Identifier>
+      <ows:SupportedCRS>EPSG:3857</ows:SupportedCRS>
+      <TileMatrix>
+        <ows:Identifier>00</ows:Identifier>
+        <ScaleDenominator>17471320.750897426</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>32</MatrixWidth>
+        <MatrixHeight>32</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>01</ows:Identifier>
+        <ScaleDenominator>8735660.375448713</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>64</MatrixWidth>
+        <MatrixHeight>64</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>02</ows:Identifier>
+        <ScaleDenominator>4367830.187724357</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>128</MatrixWidth>
+        <MatrixHeight>128</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>03</ows:Identifier>
+        <ScaleDenominator>2183915.0938621783</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>256</MatrixWidth>
+        <MatrixHeight>256</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>04</ows:Identifier>
+        <ScaleDenominator>1091957.5469310884</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>512</MatrixWidth>
+        <MatrixHeight>512</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>05</ows:Identifier>
+        <ScaleDenominator>545978.7734655446</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1024</MatrixWidth>
+        <MatrixHeight>1024</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>06</ows:Identifier>
+        <ScaleDenominator>272989.3867327723</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>2048</MatrixWidth>
+        <MatrixHeight>2048</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>07</ows:Identifier>
+        <ScaleDenominator>136494.69336638614</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>4096</MatrixWidth>
+        <MatrixHeight>4096</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>08</ows:Identifier>
+        <ScaleDenominator>68247.34668319307</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>8192</MatrixWidth>
+        <MatrixHeight>8192</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>09</ows:Identifier>
+        <ScaleDenominator>34123.673341596535</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>16384</MatrixWidth>
+        <MatrixHeight>16384</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>10</ows:Identifier>
+        <ScaleDenominator>17061.836670798268</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>32768</MatrixWidth>
+        <MatrixHeight>32768</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>11</ows:Identifier>
+        <ScaleDenominator>8530.918335399134</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>65536</MatrixWidth>
+        <MatrixHeight>65536</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>12</ows:Identifier>
+        <ScaleDenominator>4265.459167699567</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>131072</MatrixWidth>
+        <MatrixHeight>131072</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>13</ows:Identifier>
+        <ScaleDenominator>2132.7295838497835</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>262144</MatrixWidth>
+        <MatrixHeight>262144</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>14</ows:Identifier>
+        <ScaleDenominator>1066.3647919248929</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>524288</MatrixWidth>
+        <MatrixHeight>524288</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>15</ows:Identifier>
+        <ScaleDenominator>533.1823959624464</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>1048576</MatrixWidth>
+        <MatrixHeight>1048576</MatrixHeight>
+      </TileMatrix>
+      <TileMatrix>
+        <ows:Identifier>16</ows:Identifier>
+        <ScaleDenominator>266.5911979812214</ScaleDenominator>
+        <TopLeftCorner>-20037508.342787 20037508.342787</TopLeftCorner>
+        <TileWidth>256</TileWidth>
+        <TileHeight>256</TileHeight>
+        <MatrixWidth>2097152</MatrixWidth>
+        <MatrixHeight>2097152</MatrixHeight>
+      </TileMatrix>
+    </TileMatrixSet>
+  </Contents>
+  <ServiceMetadataURL xlink:href="https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/1.0.0/WMTSCapabilities.xml"/>
+</Capabilities>

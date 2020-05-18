@@ -9,6 +9,7 @@
 /img/*.db
 /jsdoc
 /nbproject/private/
+styleguide
 
 addons/*
 !addons/readme.txt

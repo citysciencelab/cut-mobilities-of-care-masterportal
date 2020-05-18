@@ -276,7 +276,7 @@
  * @description Configures search in geodata infrastructure with elastic search
  */
 
- /**
+/**
  * @namespace ElasticSearch
  * @memberof Searchbar
  * @description Configures search in geodata infrastructure with elastic search
@@ -286,6 +286,12 @@
  * @namespace Osm
  * @memberof Searchbar
  * @description Configures OpenStreetMap search
+ */
+
+/**
+ * @namespace LocationFinder
+ * @memberof Searchbar
+ * @description Configures LocationFinder search
  */
 
 /**
@@ -585,7 +591,7 @@
  * @description GFI Theme for SolarAtlas
  */
 
- /**
+/**
  * @namespace Sensor
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for Sensordata
@@ -607,6 +613,12 @@
  * @namespace VerkehrsStaerken
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for VerkehrsStaerken
+ */
+
+/**
+ * @namespace TrafficCount
+ * @memberof Tools.GFI.Themes
+ * @description GFI Theme for traffic counter
  */
 
 /**
@@ -705,6 +717,12 @@
  * @namespace VirtualCity
  * @memberof Tools
  * @description Tool to show virtual city data
+ */
+
+/**
+ * @namespace Wfst
+ * @memberof Tools
+ * @description Tool to visualize, insert, edit, delete and update WFS features.
  */
 
 /**

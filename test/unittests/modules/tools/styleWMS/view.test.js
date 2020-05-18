@@ -3,15 +3,15 @@ import StyleWMSModel from "@modules/tools/styleWMS/model.js";
 const chai = require("chai");
 
 describe("tools/styleWMS/view", function () {
-    var styleWMS,
-        expect = chai.expect;
+    let styleWMS;
+
+    const expect = chai.expect;
 
     before(function () {
-        var errors,
-            node,
+        let node,
             i;
 
-        errors = [
+        const errors = [
             {
                 minText: "Bitte tragen Sie eine natürliche Zahl ein.",
                 minIndex: 1

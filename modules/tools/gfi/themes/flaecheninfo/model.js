@@ -9,7 +9,7 @@ const FlaecheninfoTheme = Theme.extend({
     },
 
     initialize: function () {
-        var channel = Radio.channel("GFI");
+        const channel = Radio.channel("GFI");
 
         this.listenToOnce(channel, {
             "hideGFI": this.resetIsMapMarkerVisible
@@ -21,7 +21,7 @@ const FlaecheninfoTheme = Theme.extend({
 
         this.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": function () {
-                var layerModelFlaecheninfo = Radio.request("ModelList", "getModelByAttributes", {gfiTheme: this.get("gfiTheme")});
+                const layerModelFlaecheninfo = Radio.request("ModelList", "getModelByAttributes", {gfiTheme: this.get("gfiTheme")});
 
                 if (!layerModelFlaecheninfo.get("isVisibleInMap") || !layerModelFlaecheninfo.get("isSelected")) {
                     this.setIsVisible(false);
@@ -71,7 +71,7 @@ const FlaecheninfoTheme = Theme.extend({
      * @returns {void}
      */
     setGeometry: function (umring) {
-        var coordinatesString,
+        let coordinatesString,
             coordinates;
 
         if (umring) {
@@ -90,7 +90,7 @@ const FlaecheninfoTheme = Theme.extend({
      * @returns {void}
      */
     showUmring: function () {
-        var coordinates = this.get("geometry");
+        const coordinates = this.get("geometry");
 
         Radio.trigger("GFI", "isMapMarkerVisible", this.get("isMapMarkerVisible"));
         if (coordinates) {

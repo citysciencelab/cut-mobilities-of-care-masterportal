@@ -1,0 +1,7 @@
+{"field": "name","caption": "Name","type": "string","inputFieldType": "text","mandatory": true},
+{"field": "vorhaben","caption": "Vorhaben","type": "string","inputFieldType": "text","mandatory": true},
+{"field": "anfragedatum","caption": "Anfragedatum","type": "date","inputFieldType": "date","mandatory": true},
+{"field": "bemerkung","caption": "Bemerkung","type": "string","inputFieldType": "text","mandatory": false},
+{"field": "vorgangsnummer","caption": "Vorgangsnummer","type": "integer","inputFieldType": "text","mandatory": true},
+{"field": "testnummer","caption": "Testnummer","type": "decimal","inputFieldType": "text","mandatory": false},
+{"field": "istest","caption": "Ist es ein Test?","type": "boolean","inputFieldType": "checkbox","mandatory": false}

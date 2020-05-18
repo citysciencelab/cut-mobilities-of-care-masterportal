@@ -6,14 +6,14 @@
         </div>
         <div>
           <ul class="nav nav-pills" role="tablist">
-            <%  _.each(poiFeatures, function (feature) { %>
+            <%  poiFeatures.forEach(function (feature) { %>
                 <li role="presentation" <% if (feature.category === activeCategory) {print ("class='active'");} %>>
                     <a href="#<%= feature.category %>" aria-controls="<%= feature.category %>" role="pill" data-toggle="pill"><% print (feature.category + "m"); %><span class="badge"><%= feature.features.length %></span></a>
                 </li>
             <% }); %>
           </ul>
           <div class="tab-content">
-            <%  _.each(poiFeatures, function (feature) {
+            <%  poiFeatures.forEach(function (feature) {
                 if (feature.category === activeCategory) { %>
                     <div role="tabpanel" class="tab-pane fade in active" id="<%= feature.category %>">
                 <% } else { %>
@@ -21,7 +21,7 @@
                 <% } %>
                         <div class="table-responsive">
                             <table class="table table-striped table-hover">
-                                <% _.each (feature.features, function (feat) { %>
+                                <% feature.features.forEach(function (feat) { %>
                                 <tr id="<%= feat.getId() %>">
                                     <% if (feat.imgPath.indexOf("</svg>") !== -1) { %>
                                     <td>

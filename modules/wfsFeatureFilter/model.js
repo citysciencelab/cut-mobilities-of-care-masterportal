@@ -1,7 +1,7 @@
 import Tool from "../core/modelList/tool/model";
 
 const WfsFeatureFilter = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         wfsList: [],
         renderToWindow: true,
         glyphicon: "glyphicon-filter"
@@ -14,7 +14,7 @@ const WfsFeatureFilter = Tool.extend({
         this.superInitialize();
     },
     getLayers: function () {
-        var layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
+        const layers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"}),
             featureLayers = layers.filter(function (layer) {
                 return layer.get("layer").getSource().getFeatures().length > 0;
             }),
@@ -23,7 +23,7 @@ const WfsFeatureFilter = Tool.extend({
             }),
             wfsList = [];
 
-        _.each(filterLayers, function (layer) {
+        filterLayers.forEach(layer => {
             wfsList.push({
                 id: layer.id,
                 name: layer.get("name"),

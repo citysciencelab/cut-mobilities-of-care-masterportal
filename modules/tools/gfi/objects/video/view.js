@@ -11,7 +11,7 @@ const VideoView = Backbone.View.extend({
     },
     template: _.template(VideoTemplate),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         return this;

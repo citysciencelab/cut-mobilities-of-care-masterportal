@@ -16,7 +16,8 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
         "click .glyphicon-remove": "hide",
         "touchmove .title": "touchMoveWindow",
         "touchstart .title": "touchStartWindow",
-        "touchend .title": "touchMoveEnd"
+        "touchend .title": "touchMoveEnd",
+        "click #collapseAll-btn": "toggleCollapsePanels"
     },
     /**
      * @class LegendView
@@ -46,7 +47,8 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
                 else {
                     this.hide();
                 }
-            }
+            },
+            "change:currentLng": this.render
         });
 
         this.listenTo(Radio.channel("Map"), {
@@ -64,7 +66,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
     * @returns {Legend.Desktop.LegendView} returns this
     */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         $("#masterportal-container").append(this.$el.html(this.template(attr)));
@@ -81,7 +83,7 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
      * @returns {void}
      */
     paramsChanged: function () {
-        var legendParams = this.model.get("legendParams");
+        const legendParams = this.model.get("legendParams");
 
         // Filtern von this.unset("legendParams")
         if (!_.isUndefined(legendParams) && legendParams.length > 0) {
@@ -226,6 +228,31 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
         }
 
         return newPosition;
+    },
+    /**
+     * collapse or folds out all legend panels
+     * toogles the icon of the collapse-all button
+     * @param {object} evt trigger event
+     * @returns {void}
+    */
+    toggleCollapsePanels: function (evt) {
+        const panels = this.$(".panel-collapse");
+
+        if (evt.target.classList.contains("fold-in")) {
+            evt.target.title = this.model.get("foldOutAllText");
+            panels.each((i, panel) => {
+                $(panel).collapse("hide");
+            });
+        }
+        else {
+            evt.target.title = this.model.get("collapseAllText");
+            panels.each((i, panel) => {
+                $(panel).collapse("show");
+            });
+        }
+
+        $("#collapseAll-btn").toggleClass("glyphicon-arrow-down glyphicon-arrow-up");
+        $("#collapseAll-btn").toggleClass("fold-in fold-out");
     }
 });
 
