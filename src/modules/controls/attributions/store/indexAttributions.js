@@ -53,7 +53,7 @@ export default {
     actions: {
         /**
          * Re-fetches all currently active layer attributions. Preserves attributions with type unequal to "layer".
-         * @param {obkect} params vuex action parameter object
+         * @param {object} params vuex action parameter object
          * @returns {void}
          */
         updateAttributions ({commit, getters}) {
@@ -90,7 +90,7 @@ export default {
             state.attributionList = attributionList;
         },
         /**
-         * Filters item from attributionList if name, text, and type are equal.
+         * Remove item from attributionList if name, text, and type are equal.
          * @param {object} state previous state
          * @param {AttributionListItem} item to be removed
          * @returns {void}
