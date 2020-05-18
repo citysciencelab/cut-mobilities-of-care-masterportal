@@ -42,11 +42,11 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
 
-        if (!_.isUndefined(Radio.request("ParametricURL", "getProjectionFromUrl"))) {
+        if (Radio.request("ParametricURL", "getProjectionFromUrl") !== undefined) {
             this.model.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
         }
 
-        if (!_.isUndefined(Radio.request("ParametricURL", "getMarkerFromUrl"))) {
+        if (Radio.request("ParametricURL", "getMarkerFromUrl") !== undefined) {
             this.model.setMarkerFromParamUrl(Radio.request("ParametricURL", "getMarkerFromUrl"));
         }
 
@@ -197,9 +197,16 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                     Radio.trigger("Map", "zoomToExtent", coord);
                 }
                 else if (coord.length > 4) {
-                    this.model.setWkt("POLYGON", coord);
-                    this.model.showFeature(); // bei Flächen soll diese sichtbar sein
-                    Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    if (hit.geometryType === "POLYGON") {
+                        this.model.setWkt("POLYGON", coord);
+                    }
+                    else if (hit.geometryType === "MULTIPOLYGON") {
+                        this.model.setWkt("MULTIPOLYGON", coord);
+                    }
+                    if (hit.geometryType === "POLYGON" || hit.geometryType === "MULTIPOLYGON") {
+                        this.model.showFeature(); // bei Flächen soll diese sichtbar sein
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    }
                 }
                 Radio.trigger("Filter", "resetFilter", hit.feature);
                 break;
@@ -312,8 +319,8 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
         const projectionFromParamUrl = this.model.get("projectionFromParamUrl");
         let startMarker = this.model.get("startMarker");
 
-        if (!_.isUndefined(startMarker)) {
-            if (!_.isUndefined(projectionFromParamUrl)) {
+        if (startMarker !== undefined) {
+            if (projectionFromParamUrl !== undefined) {
                 startMarker = transformToMapProjection(Radio.request("Map", "getMap"), projectionFromParamUrl, startMarker);
             }
             Radio.trigger("MapMarker", "showMarker", startMarker);

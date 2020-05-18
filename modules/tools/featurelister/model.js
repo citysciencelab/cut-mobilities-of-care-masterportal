@@ -1,8 +1,7 @@
-import Requestor from "../core/requestor";
-import Tool from "../core/modelList/tool/model";
+import Tool from "../../core/modelList/tool/model";
 
 const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         maxFeatures: 20, // über Config konfigurierbare Max-Anzahl an pro Layer geladenen Features
         isActive: false,
         layerlist: [], // Array aus {id, name, features}
@@ -84,8 +83,8 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             layername = this.get("layer").name;
 
         this.trigger("gfiClose"); // entfernt evtl. Highlights
-        _.each(features, function (feature) {
-            _.each(mapFeatures, function (mapFeature) {
+        features.forEach(feature => {
+            mapFeatures.forEach(mapFeature => {
                 if (mapFeature.typ === "WFS" && mapFeature.name === layername) {
                     if (_.isEqual(feature.geometry, mapFeature.feature.getGeometry().getExtent())) {
                         this.trigger("gfiHit", feature);
@@ -106,7 +105,6 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             feature = _.find(features, function (feat) {
                 return feat.id.toString() === featureid;
             });
-
         let geometry,
             properties;
 
@@ -254,16 +252,16 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             ll = [];
 
         // Es muss sichergetellt werden, dass auch Features ohne Geometrie verarbeitet werden können. Z.B. KitaEinrichtunen
-        _.each(features, function (feature, index) {
+        features.forEach((feature, index) => {
             let props, geom;
 
             if (feature.get("features")) {
-                _.each(feature.get("features"), function (feat, idx) {
-                    props = Requestor.translateGFI([feat.getProperties()], gfiAttributes)[0];
+                feature.get("features").forEach(feat => {
+                    props = this.translateGFI([feat.getProperties()], gfiAttributes)[0];
                     geom = feat.getGeometry() ? feat.getGeometry().getExtent() : null;
 
                     ll.push({
-                        id: idx,
+                        id: index,
                         properties: props,
                         geometry: geom,
                         feature: feat
@@ -271,7 +269,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
                 });
             }
             else {
-                props = Requestor.translateGFI([feature.getProperties()], gfiAttributes)[0];
+                props = this.translateGFI([feature.getProperties()], gfiAttributes)[0];
                 geom = feature.getGeometry() ? feature.getGeometry().getExtent() : null;
 
                 ll.push({
@@ -285,6 +283,83 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
 
         layerFromList.features = ll;
     },
+
+    /**
+     * identifies and extracts the features of the given layer.
+     * @param {Array} gfiList - todo
+     * @param {Object} gfiAttributes - todo
+     * @param {string} typ - type of the layer/service
+     * @return {string} - desc
+     */
+    translateGFI: function (gfiList, gfiAttributes) {
+        const pgfi = [];
+
+        gfiList.forEach(element => {
+            const preGfi = {},
+                gfi = {};
+            let ignoredKeys = "";
+
+            // get rid of invalid keys and keys with invalid values; trim values
+            for (const [key, value] of Object.entries(element)) {
+                ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+                if (this.isValidKey(key, ignoredKeys) && this.isValidValue(value)) {
+                    preGfi[key] = value.trim();
+                }
+            }
+            if (gfiAttributes === "showAll") {
+                for (const [key, value] of Object.entries(preGfi)) {
+                    gfi[this.beautifyString(key)] = value;
+                }
+            }
+            else {
+                for (const [key, value] of Object.entries(gfiAttributes)) {
+                    if (preGfi[key]) {
+                        gfi[value] = preGfi[key];
+                    }
+                }
+            }
+            if (Object.keys(gfi).length !== 0) {
+                pgfi.push(gfi);
+            }
+        });
+
+        return pgfi;
+    },
+
+    /**
+     * helper function: first letter becomes an upperCase, _ becomes a blank space
+     * @param {string} str parameter
+     * @returns {string} desc
+     */
+    beautifyString: function (str = "") {
+        return str.substring(0, 1).toUpperCase() + str.substring(1).replace("_", " ");
+    },
+
+    /**
+     * helper function: check, if key has a valid value
+     * @param {string} key parameter
+     * @param {string} ignoredKeys keys to ignore
+     * @returns {boolean} desc
+     */
+    isValidKey: function (key, ignoredKeys) {
+        if (ignoredKeys.indexOf(key.toUpperCase()) !== -1) {
+            return false;
+        }
+        return true;
+    },
+
+    /**
+     * helper function: check, if str has a valid value
+     * @param {string} str parameter
+     * @returns {boolean} desc
+     */
+    isValidValue: function (str) {
+        if (str && typeof str.valueOf() === "string" && str !== "" && str.toUpperCase() !== "NULL") {
+            return true;
+        }
+        return false;
+    },
+
     /**
      * Adds layers to the list
      * @param {Object} layer layer to add to the list
