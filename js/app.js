@@ -88,7 +88,6 @@ import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
-import "url-polyfill";
 
 let sbconfig, controls, controlsView;
 
@@ -461,27 +460,22 @@ async function loadApp () {
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
-        /*
-          TODO initCounter and related code currently commented out since variable "i18nextLanguages"
-               was not defined. Found this section in its currently broken state - not sure if this
-               is to be fixed or to be removed in favour of a different approach?
-        */
-        // let initCounter = 0;
+        const i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
+        let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
-                // initCounter++;
+                initCounter++;
             }
         });
 
-        /*
         initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
 
                 Object.keys(i18nextLanguages).forEach((lng) => {
-                    import(/* webpackChunkName: "additionalLocales" * / `../addons/${addonKey}/locales/${lng}/additional.json`)
+                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales);
                             initCounter--;
@@ -501,11 +495,11 @@ async function loadApp () {
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
                 import(
-                    /* webpackChunkName: "[request]" * /
-                    /* webpackExclude: /.+unittests.+/ * /
+                    /* webpackChunkName: "[request]" */
+                    /* webpackExclude: /.+unittests.+/ */
                     "../addons/" + entryPoint + ".js"
                 ).then(module => {
-                    /* eslint-disable new-cap * /
+                    /* eslint-disable new-cap */
                     const addon = new module.default();
 
                     // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
@@ -527,7 +521,6 @@ async function loadApp () {
                 });
             }
         });
-        */
     }
 
     Radio.trigger("Util", "hideLoader");
