@@ -4,6 +4,7 @@ import backForward from "./backForward/store/indexBackForward";
 import Attributions from "./attributions/components/Attributions.vue";
 import BackForward from "./backForward/components/BackForward.vue";
 import FullScreen from "./fullScreen/components/FullScreen.vue";
+import OverviewMap from "./overviewMap/components/OverviewMap.vue";
 import Zoom from "./zoom/components/Zoom.vue";
 
 /**
@@ -23,14 +24,20 @@ export default {
             attributions: Attributions,
             backForward: BackForward,
             fullScreen: FullScreen,
+            get "overviewmap" () {
+                console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead.");
+                return OverviewMap;
+            },
+            overviewMap: OverviewMap,
             zoom: Zoom
         },
         mobileHiddenControls: [
             "backForward",
             "fullScreen",
-            "mousePosition"
+            "mousePosition",
+            "overviewMap"
         ],
-        bottomControls: ["attributions", "overviewMap"]
+        bottomControls: ["attributions", "overviewmap", "overviewMap"]
     },
     mutations,
     getters
