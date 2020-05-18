@@ -52,11 +52,11 @@ const FooterModel = Backbone.Model.extend(/** @lends FooterModel.prototype */{
             if (url.aliasKey) {
                 url.alias = i18next.t(url.aliasKey);
             }
-            else if (url.alias.indexOf("translate#") > -1) {
+            else if (url.alias !== undefined && url.alias.indexOf("translate#") > -1) {
                 url.aliasKey = url.alias.substring("translate#".length);
                 url.alias = i18next.t(url.aliasKey);
             }
-            if (url.bezeichnung.indexOf("translate#") === 0 || translateFooter === true) {
+            if (url.bezeichnung !== undefined && (url.bezeichnung.indexOf("translate#") === 0 || translateFooter === true)) {
                 translateFooter = true;
                 urls[0].bezeichnung = i18next.t("common:modules.footer.designation");
             }
