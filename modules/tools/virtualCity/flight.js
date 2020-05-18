@@ -21,7 +21,7 @@ const FlightInstance = Backbone.Model.extend(/** @lends FlightInstance.prototype
      * @property {Boolean} loop - if the flight should be looped
      * @property {String} interpolation - interpolation method
      */
-    defaults: _.extend({}, Backbone.Model.defaults, {
+    defaults: Object.assign({}, Backbone.Model.defaults, {
         name: "",
         viewpoints: [],
         loop: false,
@@ -53,7 +53,7 @@ export default FlightInstance;
 export function parseFlightOptions (source) {
     const features = source.features;
 
-    if (_.isArray(features)) {
+    if (Array.isArray(features)) {
         const viewpoints = features.map(item => item.properties),
             loop = source.vcsMeta.flightOptions.loop,
             interpolation = source.vcsMeta.flightOptions.interpolation,

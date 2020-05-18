@@ -15,7 +15,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      * @fires Core#RadioTriggerMapSetShadowTime
 -    * @fires Core#RadioRequestGetMap3d
      */
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         glyphicon: "glyphicon-screenshot",
         timeslider: null,
         dateslider: null,
