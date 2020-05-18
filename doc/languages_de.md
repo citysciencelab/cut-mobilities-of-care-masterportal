@@ -26,7 +26,7 @@ Für fortgeschrittene Benutzer und Experten empfehlen wir die kurze aber scharfe
 
 Es werden folgende i18next-Plugins verwendet:
 
-* [i18next-xhr-backend](https://github.com/i18next/i18next-xhr-backend) zur Verwendung von Sprachdateien anstelle von hartkodierten Übersetzungen
+* [i18next-http-backend](https://github.com/i18next/i18next-http-backend) zur Verwendung von Sprachdateien anstelle von hartkodierten Übersetzungen
 * [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector) zur Erkennung der Sprache des Browsers, Verwendung des localStorage und Auslesen der Sprache aus der query Url
 
 i18next sendet mit diesem Radio-Event einen Sprachwechsel: "i18next#RadioTriggerLanguageChanged".

@@ -42,6 +42,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
+     * @listens Core#RadioRequestUtilDifferenceJs
+     * @listens Core#RadioRequestUtilUniqueId
      * @listens Core#RadioTriggerUtilHideLoader
      * @listens Core#RadioTriggerUtilShowLoader
      * @listens Core#RadioTriggerUtilSetUiStyle
@@ -85,11 +87,13 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "renameValues": this.renameValues,
             "pickKeyValuePairs": this.pickKeyValuePairs,
             "groupBy": this.groupBy,
+            "uniqueId": this.uniqueId,
             "pick": this.pick,
             "omit": this.omit,
             "findWhereJs": this.findWhereJs,
             "whereJs": this.whereJs,
             "isEqual": this.isEqual,
+            "differenceJs": this.differenceJs,
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
             "setUrlQueryParams": this.setUrlQueryParams,
@@ -742,6 +746,36 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
+     * Generate a globally-unique id for client-side models or DOM elements that need one. If prefix is passed, the id will be appended to it.
+     * @param {String} [prefix=""] prefix for the id
+     * @returns {String}  a globally-unique id
+     */
+    uniqueId: function (prefix) {
+        const idCounter = String(this.getIdCounter());
+
+        this.incIdCounter();
+
+        return prefix ? prefix + idCounter : idCounter;
+    },
+
+    /**
+     * gets the current idCounter
+     * @returns {Integer}  the current idCounter
+     */
+    getIdCounter: function () {
+        return Util.idCounter;
+    },
+
+    /**
+     * increments the idCounter
+     * @post the static idCounter (Util.idCounter) is incremented by 1
+     * @returns {Void}  -
+     */
+    incIdCounter: function () {
+        Util.idCounter++;
+    },
+
+    /**
      * Setter for config
      * @param {*} value todo
      * @returns {void}
@@ -872,6 +906,22 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
+     * Looks through each value in the array a, returning an array of all the values that are not present in the array b
+     * @param {array} [a=[]] - elements to check
+     * @param {array} [b=[]] - elements to check
+     * @returns {array} - returns diffrence between array a and b
+     */
+    differenceJs: function (a = [], b = []) {
+        if (!Array.isArray(a) || !Array.isArray(b) || a.length === 0) {
+            return [];
+        }
+        if (b.length === 0) {
+            return a;
+        }
+        return a.filter(e => !b.includes(e));
+    },
+
+    /**
      * Check if two objects are same
      * @param {Object} first the first object
      * @param {Object} second the second object
@@ -989,7 +1039,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         }
         return result;
     }
-
+}, {
+    // globally-unique id for Util.uniqueId([prefix]) - this is a static backbone variable (Util.idCounter)
+    idCounter: 1
 });
 
 export default Util;
