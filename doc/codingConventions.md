@@ -24,7 +24,7 @@ A.2.4 JQuery wird nur noch im Zusammenhang mit Backbone.js verwendet.
 A.2.5 Das Hinzufügen großer Packages/Libraries wurde mit dem Team *LGV* abgesprochen.  
 ---
 #### A.3 Code
-A.4.1 Neue Dateien wurden gemäß der vorhandenen Struktur angelegt.  
+A.3.1 Neue Dateien wurden gemäß der vorhandenen Struktur angelegt.  
 A.3.2 Variablen, Funktionen, Ordner, Dateien haben sprechende englische Namen.  
 A.3.3 Kommentare sind in englischer Sprache verfasst.  
 A.3.4 Block-Kommentare von Funktionen beschreiben stets den deren Zweck.  
