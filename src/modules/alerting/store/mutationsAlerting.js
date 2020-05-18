@@ -1,47 +1,26 @@
+import * as moment from "moment";
+
 export default {
-    /**
-     * Adds an alert to state if the message to report is not a duplicate.
-     * @param {object} state - vuex store
-     * @param {object} newAlert - new alert
-     * @returns {void}
-     */
-    addAlert (state, newAlert) {
-        const findAlert = state.alerts.find(alert => {
-            return alert.message.trim() === newAlert.message.trim();
-        });
-
-        if (findAlert === undefined) {
-            state.alerts.push(newAlert);
-        }
+    setConfigs (state, configs) {
+        state.configJs = configs;
     },
-
-    /**
-     * Update the uuid + 1.
-     * @param {object} state  - vuex store
-     * @returns {void}
-     */
-    updateUuid (state) {
-        state.uuid += 1;
+    addToAlerts (state, newAlert) {
+        state.alerts.push(newAlert);
     },
-
-    /**
-     * Removes an alert by a given Id.
-     * @param {object} state - vuex store
-     * @param {string} removeAlertId - Id of the alert to be removed
-     * @returns {void}
-     */
-    removeAlertById (state, removeAlertId) {
-        state.alerts = state.alerts.filter(alert => {
-            return alert.id !== removeAlertId;
-        });
+    removeFromAlerts (state, alertToRemove) {
+        state.alerts = state.alerts.filter(singleAlert => singleAlert.hash !== alertToRemove.hash);
     },
-
-    /**
-     * Clears the state alerts.
-     * @param {object} state - vuex store
-     * @returns {void}
-     */
-    removeAlerts (state) {
-        state.alerts = [];
+    setReadyToShow (state, readyToShow) {
+        state.readyToShow = readyToShow;
+    },
+    setAlertAsRead (state, singleAlert) {
+        singleAlert.mustBeConfirmed = false;
+    },
+    addToDisplayedAlerts (state, newAlert) {
+        // for reactivity
+        state.displayedAlerts = {...state.displayedAlerts, [newAlert.hash]: moment().format()};
+    },
+    setDisplayedAlerts (state, alerts) {
+        state.displayedAlerts = alerts;
     }
 };

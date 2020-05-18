@@ -2,7 +2,7 @@ import Model from "@modules/tools/filter/model.js";
 import {expect} from "chai";
 
 describe("modules/tools/filter/model", function () {
-    var model;
+    let model;
 
     before(function () {
         model = new Model();

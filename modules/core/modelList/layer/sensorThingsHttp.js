@@ -244,6 +244,10 @@ export function SensorThingsHttp () {
             if (response && response.hasOwnProperty("value") && Array.isArray(response.value)) {
                 completeResult = completeResult.concat(response.value);
             }
+            else {
+                // if no value key is found: concat anything in response
+                completeResult = completeResult.concat(response);
+            }
 
             if (response && response.hasOwnProperty("@iot.nextLink")) {
                 if (typeof onwait === "function") {

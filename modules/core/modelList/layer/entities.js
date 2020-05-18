@@ -84,12 +84,15 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
      * @returns {Cesium.Entity} cesium entity
      */
     addEntityFromOptions (model) {
-        var position,
-            headingPitchRoll,
-            orientation,
-            modelOptions,
-            entityOptions,
-            entity;
+        let position = "",
+            headingPitchRoll = "",
+            orientation = "",
+            modelOptions = "",
+            entityOptions = {},
+            entity = "",
+            heading = 0,
+            pitch = 0,
+            roll = 0;
 
         const allowPicking = _.isBoolean(model.allowPicking) ? model.allowPicking : true,
             attributes = model.attributes ? model.attributes : {};
@@ -103,10 +106,6 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
         }
 
         position = Cesium.Cartesian3.fromDegrees(model.longitude, model.latitude, model.height);
-
-        let heading = 0,
-            pitch = 0,
-            roll = 0;
 
         if (_.isNumber(model.heading)) {
             heading = model.heading / 180 * Math.PI;

@@ -6,7 +6,7 @@ const GFIMobileView = GFIView.extend({
     className: "modal fade gfi-mobile",
     template: _.template(Template),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         this.$el.modal({

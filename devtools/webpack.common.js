@@ -1,8 +1,9 @@
 const webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     path = require("path"),
-    fs = require("fs"),
+    fse = require("fs-extra"),
     VueLoaderPlugin = require("vue-loader/lib/plugin"),
+    MomentTimezoneDataPlugin = require("moment-timezone-data-webpack-plugin"),
 
     rootPath = path.resolve(__dirname, "../"),
     addonPath = path.resolve(rootPath, "addons/"),
@@ -12,14 +13,14 @@ const webpack = require("webpack"),
 
 let addonEntryPoints = {};
 
-if (!fs.existsSync(portalconfigsIdaPath)) {
+if (!fse.existsSync(portalconfigsIdaPath)) {
     console.warn("NOTICE: " + portalconfigsIdaPath + " not found. Skipping entrypoint for \"IDA\"");
 }
 else {
     entryPoints.ida = portalconfigsIdaPath;
 }
 
-if (!fs.existsSync(addonConfigPath)) {
+if (!fse.existsSync(addonConfigPath)) {
     console.warn("NOTICE: " + addonConfigPath + " not found. Skipping all addons.");
 }
 else {
@@ -37,7 +38,7 @@ module.exports = function () {
 
         const addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
 
-        if (!fs.existsSync(addonFilePath)) {
+        if (!fse.existsSync(addonFilePath)) {
             console.error("############\n------------");
             throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
         }
@@ -97,13 +98,9 @@ module.exports = function () {
                 // take all files ending with ".js" but not with ".test.js".
                 {
                     test: /\.js$/,
-                    exclude: /\.test\.js$/,
+                    exclude: /\bcore-js\b|\.test\.js$/,
                     use: {
-                        loader: "babel-loader",
-                        options: {
-                            presets: ["@babel/preset-env"],
-                            plugins: ["@babel/plugin-syntax-dynamic-import"]
-                        }
+                        loader: "babel-loader"
                     }
                 },
                 {
@@ -166,6 +163,13 @@ module.exports = function () {
             // create global constant at compile time
             new webpack.DefinePlugin({
                 ADDONS: JSON.stringify(addonsRelPaths)
+            }),
+            // import only a very limited number of timezones
+            // @see https://www.npmjs.com/package/moment-timezone-data-webpack-plugin
+            new MomentTimezoneDataPlugin({
+                matchZones: /Europe\/(Berlin|London)/,
+                startYear: 2019,
+                endYear: new Date().getFullYear()
             })
         ]
     };

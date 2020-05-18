@@ -167,11 +167,12 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @returns {void}
      */
     handleData: function (data) {
-        var mapCrs = Radio.request("MapView", "getProjection"),
+        const mapCrs = Radio.request("MapView", "getProjection"),
             jsonCrs = this.getJsonProjection(data),
-            features = this.parseDataToFeatures(data, mapCrs, jsonCrs),
             newFeatures = [],
             isClustered = this.has("clusterDistance");
+
+        let features = this.parseDataToFeatures(data, mapCrs, jsonCrs);
 
         if (!features) {
             return;
@@ -186,7 +187,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         // für it-gbm
         if (!this.has("autoRefresh")) {
             features.forEach(function (feature) {
-                var geometry = feature.getGeometry();
+                const geometry = feature.getGeometry();
 
                 if (geometry) {
                     feature.set("extent", geometry.getExtent());
@@ -210,7 +211,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @returns {void}
      */
     styling: function (isClustered) {
-        var stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (stylelistmodel) {
             this.setStyle(function (feature) {
@@ -395,7 +396,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
 
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
-            var feature = this.get("layerSource").getFeatureById(id);
+            const feature = this.get("layerSource").getFeatureById(id);
 
             if (feature !== null) {
                 feature.setStyle(undefined);
@@ -410,7 +411,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @return {void}
      */
     hideAllFeatures: function () {
-        var collection = this.get("layerSource").getFeatures();
+        const collection = this.get("layerSource").getFeatures();
 
         collection.forEach(function (feature) {
             feature.setStyle(function () {
@@ -424,7 +425,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @returns {void}
      */
     showAllFeatures: function () {
-        var collection = this.get("layerSource").getFeatures();
+        const collection = this.get("layerSource").getFeatures();
 
         collection.forEach(function (feature) {
             feature.setStyle(undefined);

@@ -4,6 +4,8 @@ Sehe dich als Autor eines Buches. Was du schreibst, soll jemand anderes auch wie
 ***
 Konventionen für das Master-Portal
 
+**Hinweis: Funktionen aus dem Package Underscore.js sollen nicht mehr verwendet werden! [Siehe Punkt 2. ES6-Funktionalitäten](conventions/es6Functions.md)**
+
 1. Schreibe **[Clean Code](conventions/cleanCode.md)**.
 2. Verwende native **[ES6-Funktionalitäten](conventions/es6Functions.md)**.
 3. Beachte das **[MV*](https://www.infragistics.com/community/blogs/b/nanil/posts/exploring-javascript-mv-frameworks-part-1-hello-backbonejs)**-Muster von **[Backbone](conventions/backbone.md)**.
@@ -15,4 +17,5 @@ Konventionen für das Master-Portal
 9. Beachte die **[Abwärts-Kompatibilität](conventions/backwardsCompatibility.md)** der Konfigurationsdateien.
 10. Pre-push Hooks **[Pre-push Hooks](conventions/pre-push_hooks.md)**
 11. Erweitere die **[Mehrsprachigkeit](conventions/i18n.md)**
+12. Schreibe deine Änderungen in den **[Changelog](conventions/changelog.md)**
 

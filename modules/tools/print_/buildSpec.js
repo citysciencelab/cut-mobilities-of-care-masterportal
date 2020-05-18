@@ -774,7 +774,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @return {Backbone.Model} found layer model
      */
     getChildModelIfGroupLayer: function (model, layerId) {
-        const layerModel = model;
+        let layerModel = model;
 
         if (layerModel.get("typ") === "GROUP") {
             layerModel = _.filter(layerModel.get("layerSource"), function (childLayer) {

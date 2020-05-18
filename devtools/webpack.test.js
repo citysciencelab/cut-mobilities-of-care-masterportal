@@ -1,4 +1,4 @@
-var webpack = require("webpack"),
+const webpack = require("webpack"),
     path = require("path"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
@@ -23,10 +23,9 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                loader: "babel-loader",
-                options: {
-                    presets: ["@babel/preset-env"],
-                    plugins: ["@babel/plugin-syntax-dynamic-import"]
+                exclude: /\bcore-js\b/,
+                use: {
+                    loader: "babel-loader"
                 }
             },
             {
@@ -56,6 +55,10 @@ module.exports = {
                         loader: "file-loader"
                     }
                 ]
+            },
+            {
+                test: /\.xml$/i,
+                use: "raw-loader"
             }
         ]
     },
@@ -73,6 +76,11 @@ module.exports = {
             requestAnimationFrame: "raf"
         }),
         new VueLoaderPlugin(),
-        new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js")
+        new webpack.NormalModuleReplacementPlugin(/^mqtt$/, "mqtt/dist/mqtt.js"),
+        // ADDONS wird hier global definiert, da der pre-push den Fehler ADDONS is undefined in ./src/addons.js wirft,
+        // obwohl der linter die Zeile ignorieren soll
+        new webpack.DefinePlugin({
+            ADDONS: {}
+        })
     ]
 };

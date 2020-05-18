@@ -26,7 +26,7 @@ Für fortgeschrittene Benutzer und Experten empfehlen wir die kurze aber scharfe
 
 Es werden folgende i18next-Plugins verwendet:
 
-* [i18next-xhr-backend](https://github.com/i18next/i18next-xhr-backend) zur Verwendung von Sprachdateien anstelle von hartkodierten Übersetzungen
+* [i18next-http-backend](https://github.com/i18next/i18next-http-backend) zur Verwendung von Sprachdateien anstelle von hartkodierten Übersetzungen
 * [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector) zur Erkennung der Sprache des Browsers, Verwendung des localStorage und Auslesen der Sprache aus der query Url
 
 i18next sendet mit diesem Radio-Event einen Sprachwechsel: "i18next#RadioTriggerLanguageChanged".
@@ -119,8 +119,8 @@ const ExampleModel = Backbone.Model.extend(/** @lends ExampleModel.prototype */ 
     changeLang: function (lng) {
         this.set({
             currentLng: lng,
-            exampleTitle: i18next.t("example:foo.bar.exampleTitle"),
-            exampleText: i18next.t("example:foo.bar.exampleText")
+            exampleTitle: i18next.t("common:foo.bar.exampleTitle"),
+            exampleText: i18next.t("common:foo.bar.exampleText")
         });
     }
 });
@@ -204,13 +204,14 @@ Dieser formatierte Wert muss dann in die Übersetzungsdateien übernommen werden
 Wird der Teil der config.json vom Masterportal für die Übersetzung berücksichtigt, erfolgt die Übersetzung wie gewünscht.
 Nur das Feld *"name"* wird bei der Übersetzung berücksichtigt!
 
-Übersetzungsdatei beispiel.js
+Übersetzungsdatei common.json
 ```
 {
-    "Foo": {
-        "Bar": {
-            "beispielMenuTitle": "titulum menu",
-            "exampleLayerName": "aliquid"
+    "foo": {
+        "bar": {
+            "exampleMenuTitle": "titulum menu",
+            "exampleLayerName": "aliquid",
+            "exampleSubjectData": "subject data"
         }
     }
 }
@@ -224,7 +225,7 @@ Teil der config.json, den du für die Übersetzung des Menüs bearbeiten kannst:
     "Portalconfig": {
         "menu": {
             "example": {
-                "name": "translate#example:foo.bar.exampleMenuTitle",
+                "name": "translate#common:foo.bar.exampleMenuTitle",
                 "glyphicon": "glyphicon-list",
                 "isInitOpen": false
             }
@@ -235,7 +236,7 @@ Teil der config.json, den du für die Übersetzung des Menüs bearbeiten kannst:
 Dem Übersetzungs-Key muss folgender Text vorangestellt werden: translate#.
 
 Aufbau:
-translate#[Sprachdateiname]:[Pfad zum Key] = translate#example:foo.bar.exampleMenuTitle
+translate#[Sprachdateiname]:[Pfad zum Key] = translate#common:foo.bar.exampleMenuTitle
 
 
 Da das Menü bereits so programmiert ist, dass es auf den Übersetzungspräfix ("translate#") korrekt reagiert, ist dies für einen Menüeintrag alles, was zu tun ist.
@@ -246,22 +247,36 @@ Da das Menü bereits so programmiert ist, dass es auf den Übersetzungspräfix (
 
 **Achtung**: Ein Übersetzungsschlüssel, der zu einem Eintrag im Themenbaum hinzugefügt wird, überschreibt alle Titel oder Namen, die von Diensten stammen.
 
+Ist der treeType "default" oder "custom" kann der Name des Ordners angegeben werden. Im Beispiel unten würde dann im Baum nicht "Fachdaten" sondern der Wert zum Schlüssel "foo.bar.exampleSubjectData" stehen.
+
+Default-Übersetzungen:
+
+* Baselayer: "Hintergrundkarten"
+* Overlayer: "Fachthemen"
+* 3d-Layer: "3D Daten"
+
 
 Der Teil der config.json, den du für die Übersetzung des Themenbaums bearbeiten kannst:
 ```
 {
     "Themenconfig": {
         "Fachdaten": {
+            "name": "translate#common:foo.bar.exampleSubjectData",
             "Layer": [
                   {
                     "id": "2128",
-                    "name": "translate#example:foo.bar.exampleLayerName"
+                    "name": "translate#common:foo.bar.exampleLayerName"
                   }
             ]
         }
     }
 }
 ```
+Es gibt folgende Möglichkeiten und folgende Hierarchie:
+
+* "name": "Meine Fachthemen" --> wird nie übersetzt
+* "name": "translate#common:foo.bar.exampleMenuTitle" --> wird übersetzt, wenn der Key existiert
+* kein Name angegeben (das Feld Name existiert nicht) --> Default-Übersetzung (siehe oben)
 
 ### Werkzeuge
 
@@ -277,7 +292,7 @@ Dieser Teil der config.json kann für die Übersetzung der Tools bearbeitet werd
         "children": {
           "draw":
           {
-            "name": "translate#example:foo.bar.exampleMenuTitle",
+            "name": "translate#common:foo.bar.exampleMenuTitle",
             "glyphicon": "glyphicon-pencil"
           },
           ...
@@ -285,7 +300,7 @@ Dieser Teil der config.json kann für die Übersetzung der Tools bearbeitet werd
 Es gibt folgende Möglichkeiten und folgende Hierarchie:
 
 * "name": "Zeichnen / Schreiben" --> wird nie übersetzt
-* "name": "translate#example:foo.bar.exampleMenuTitle" --> wird übersetzt, wenn der Key existiert
+* "name": "translate#common:foo.bar.exampleMenuTitle" --> wird übersetzt, wenn der Key existiert
 * kein Name angegeben (das Feld Name existiert nicht) --> Name kommt aus der model.js (hier ../tools/draw/model.js)
 
 #### Werkzeugname in der model.js definieren

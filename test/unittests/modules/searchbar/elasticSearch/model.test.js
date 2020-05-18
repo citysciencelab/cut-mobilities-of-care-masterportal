@@ -2,31 +2,32 @@ import Model from "@modules/searchbar/elasticSearch/model.js";
 import {expect} from "chai";
 
 describe("modules/searchbar/elasticSearch", function () {
-    var model = {},
-        config = {
-            "minChars": 3,
-            "serviceId": "elastic_hh",
-            "type": "GET",
-            "payload": {
-                "id": "query",
-                "params": {
-                    "query_string": ""
-                }
-            },
-            "searchStringAttribute": "query_string",
-            "responseEntryPath": "hits.hits",
-            "triggerEvent": {
-                "channel": "Parser",
-                "event": "addGDILayer"
-            },
-            "hitMap": {
-                "name": "_source.name",
-                "id": "_source.id",
-                "source": "_source"
-            },
-            "hitType": "Fachthema",
-            "hitGlyphicon": "glyphicon-list"
-        };
+    let model = {};
+
+    const config = {
+        "minChars": 3,
+        "serviceId": "elastic_hh",
+        "type": "GET",
+        "payload": {
+            "id": "query",
+            "params": {
+                "query_string": ""
+            }
+        },
+        "searchStringAttribute": "query_string",
+        "responseEntryPath": "hits.hits",
+        "triggerEvent": {
+            "channel": "Parser",
+            "event": "addGDILayer"
+        },
+        "hitMap": {
+            "name": "_source.name",
+            "id": "_source.id",
+            "source": "_source"
+        },
+        "hitType": "Fachthema",
+        "hitGlyphicon": "glyphicon-list"
+    };
 
     before(function () {
         model = new Model(config);

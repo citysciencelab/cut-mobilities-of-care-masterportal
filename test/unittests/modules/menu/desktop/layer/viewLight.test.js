@@ -2,7 +2,7 @@ import LayerView from "@modules/menu/desktop/layer/viewLight.js";
 import {expect} from "chai";
 
 describe("menu/desktop/layer/viewLight", function () {
-    var fakeModel,
+    let fakeModel,
         CustomLayerView;
 
     before(function () {
@@ -38,6 +38,24 @@ describe("menu/desktop/layer/viewLight", function () {
                         return this.supported;
                     case "isRemovable":
                         return this.isRemovable;
+                    case "removeTopicText":
+                        return "removeTopicText";
+                    case "changeClassDivisionText":
+                        return "changeClassDivisionText";
+                    case "infosAndLegendText":
+                        return "infosAndLegendText";
+                    case "settingsText":
+                        return "settingsText";
+                    case "transparencyText":
+                        return "transparencyText";
+                    case "increaseTransparencyText":
+                        return "increaseTransparencyText";
+                    case "reduceTransparencyText":
+                        return "reduceTransparencyText";
+                    case "levelUpText":
+                        return "levelUpText";
+                    case "levelDownText":
+                        return "levelDownText";
                     default:
                         return null;
                 }
@@ -55,7 +73,16 @@ describe("menu/desktop/layer/viewLight", function () {
                     showSettings: this.showSettings,
                     transparency: 42,
                     isVisibleInMap: true,
-                    isRemovable: false
+                    isRemovable: false,
+                    removeTopicText: "removeTopicText",
+                    changeClassDivisionText: "changeClassDivisionText",
+                    infosAndLegendText: "infosAndLegendText",
+                    settingsText: "settingsText",
+                    transparencyText: "transparencyText",
+                    increaseTransparencyText: "increaseTransparencyText",
+                    reduceTransparencyText: "reduceTransparencyText",
+                    levelUpText: "levelUpText",
+                    levelDownText: "levelDownText"
                 };
             }
         };
@@ -65,16 +92,20 @@ describe("menu/desktop/layer/viewLight", function () {
                 return $("<div></div>");
             }
         });
+        i18next.init({
+            lng: "cimode",
+            debug: false
+
+        });
     });
 
     describe("The style-icon", function () {
         it("should be visible for stylable layers", function () {
-            var layerView;
 
             fakeModel.setIsStyleable(true);
             fakeModel.setIsSettingVisible(true);
 
-            layerView = new CustomLayerView({model: fakeModel});
+            const layerView = new CustomLayerView({model: fakeModel});
 
             expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
 
@@ -83,11 +114,12 @@ describe("menu/desktop/layer/viewLight", function () {
             expect(layerView.$el.find(".pull-right").find(".glyphicon-tint").length).to.be.equal(1);
         });
         it("should be hidden for other not styleable layers", function () {
-            var layerView;
 
             fakeModel.setIsStyleable(false);
             fakeModel.setIsSettingVisible(true);
-            layerView = new CustomLayerView({model: fakeModel});
+
+            const layerView = new CustomLayerView({model: fakeModel});
+
             expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(0);
 
             layerView.rerender();

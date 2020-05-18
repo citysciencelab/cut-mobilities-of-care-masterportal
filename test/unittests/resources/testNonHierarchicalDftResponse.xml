@@ -1,0 +1,21 @@
+<schema xmlns='http://www.w3.org/2001/XMLSchema' xmlns:gml='http://www.opengis.net/gml' xmlns:sf='http://cite.opengeospatial.org/gmlsf' xmlns:smil20='http://www.w3.org/2001/SMIL20/' xmlns:smil20lang='http://www.w3.org/2001/SMIL20/Language' xmlns:xlink='http://www.w3.org/1999/xlink' targetNamespace='http://cite.opengeospatial.org/gmlsf' elementFormDefault='qualified' attributeFormDefault='unqualified'>
+  <import namespace='http://www.opengis.net/gml' schemaLocation='http://schemas.opengis.net/gml/3.1.1/base/gml.xsd'/>
+  <element name='_Feature' type='gml:AbstractFeatureType' abstract='true' substitutionGroup='gml:_Feature'/>
+  <element name='wfstest' type='sf:wfstestType' substitutionGroup='gml:_Feature'/>
+  <complexType name='wfstestType'>
+    <complexContent>
+        <extension base='gml:AbstractFeatureType'>
+          <sequence>
+            <element name='geom' minOccurs='0' type='gml:GeometryPropertyType'/>
+            <element name='name' minOccurs='0' type='string'/>
+            <element name='vorhaben' minOccurs='0' type='string'/>
+            <element name='anfragedatum' minOccurs='0' type='date'/>
+            <element name='bemerkung' minOccurs='0' type='string'/>
+            <element name='vorgangsnummer' minOccurs='0' type='integer'/>
+            <element name='testnummer' minOccurs='0' type='decimal'/>
+            <element name='istest' minOccurs='0' type='boolean'/>
+          </sequence>
+        </extension>
+      </complexContent>
+   </complexType>
+</schema>

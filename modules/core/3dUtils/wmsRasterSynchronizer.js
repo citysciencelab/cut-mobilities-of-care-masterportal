@@ -94,11 +94,11 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
      */
     convertLayerToCesiumImageries (olLayer, viewProj) {
         let layerOptions = {
-            "show": false
-        };
-        var source,
-            provider = null,
-            cesiumLayer;
+                "show": false
+            },
+            source = {},
+            cesiumLayer = {},
+            provider = null;
 
         if (!(olLayer instanceof Tile) && !(olLayer instanceof ImageLayer)) {
             return null;

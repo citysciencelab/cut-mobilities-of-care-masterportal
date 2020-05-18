@@ -19,7 +19,7 @@ const CheckboxSnippetView = Backbone.View.extend({
     templateClassic: _.template(TemplateClassic),
 
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         if (attr.snippetType === "checkbox-classic") {
             this.$el.html(this.templateClassic(attr));
@@ -50,7 +50,7 @@ const CheckboxSnippetView = Backbone.View.extend({
         this.model.setIsSelected($(evt.target).prop("checked"));
     },
     toggleInfoText: function () {
-        var isInfoTextVisible = this.$el.find(".info-text").is(":visible");
+        const isInfoTextVisible = this.$el.find(".info-text").is(":visible");
 
         this.model.trigger("hideAllInfoText");
         if (!isInfoTextVisible) {

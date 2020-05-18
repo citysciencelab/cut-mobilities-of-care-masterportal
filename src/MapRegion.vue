@@ -3,6 +3,7 @@ import Alerting from "./modules/alerting/components/Alerting.vue";
 import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
+import {mapState} from "vuex";
 
 export default {
     name: "MapRegion",
@@ -11,6 +12,12 @@ export default {
         Alerting,
         SupplyCoord,
         Footer
+    },
+    computed: {
+        ...mapState([
+            // listen to configJson changes for mounting the tools
+            "configJson"
+        ])
     }
 };
 </script>
@@ -29,7 +36,15 @@ export default {
         </div>
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
         <Alerting />
-        <SupplyCoord />
+        <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
+        <SupplyCoord v-if="configJson" />
+        <template v-if="configJson">
+            <component
+                :is="$options.components[addonKey]"
+                v-for="addonKey in $addons"
+                :key="addonKey"
+            />
+        </template>
     </div>
 </template>
 

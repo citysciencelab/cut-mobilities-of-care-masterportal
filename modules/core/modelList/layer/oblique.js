@@ -55,7 +55,11 @@ const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
      * @returns {Promise} - Oblique Collection
      */
     getObliqueCollection: function () {
-        var projection, proj, obliqueCollection, hideLevels, minZoom;
+        let projection = "",
+            proj = "",
+            obliqueCollection = "",
+            hideLevels = "",
+            minZoom = "";
 
         if (this.has("obliqueCollection")) {
             return Promise.resolve(this.get("obliqueCollection"));

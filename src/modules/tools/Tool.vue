@@ -17,15 +17,26 @@ export default {
         renderToWindow: {
             type: Boolean,
             required: true
+        },
+        resizableWindow: Boolean,
+        initialWidth: {
+            type: Number,
+            default: 0.3
         }
     },
     data () {
         return {
             draggable: false,
             maxPosTop: 0,
-            maxPosLeft: 0
-
+            maxPosLeft: 0,
+            width: this.initialWidth,
+            isDragging: false
         };
+    },
+    computed: {
+        clientWidth () {
+            return this.width * window.innerWidth + "px";
+        }
     },
     watch: {
         active (newValue) {
@@ -38,9 +49,6 @@ export default {
             }
             this.updateMap();
         }
-    },
-    mounted () {
-        document.getElementsByTagName("body")[0].appendChild(this.$el);
     },
     updated () {
         if (this.renderToWindow && this.draggable === false && this.active) {
@@ -63,6 +71,12 @@ export default {
             });
             this.draggable = true;
         }
+        if (!this.renderToWindow) {
+            this.addEventListeners();
+        }
+        else {
+            this.removeEventListeners();
+        }
     },
     methods: {
         /**
@@ -70,14 +84,14 @@ export default {
          *  @return {void}
          */
         updateMap () {
-            if (!this.renderToWindow) {
+            if (!this.renderToWindow && this.active) {
                 // only set the map to full width, if not another sidebar is open
-                document.getElementById("map").style.width = "100%";
-                Radio.trigger("Map", "updateSize");
+                document.getElementById("map").style.width = (1 - this.width) * 100 + "%";
             }
             else {
                 document.getElementById("map").style.width = "100%";
             }
+            Radio.trigger("Map", "updateSize");
         },
         /**
          * Minimizes the Window
@@ -118,7 +132,75 @@ export default {
             this.updateMap();
             // emit event to parent e.g. SupplyCoord (which uses the tool as component and is therefor the parent)
             this.$parent.$emit("close", event);
+        },
+        /**
+         * adds the eventListeners to the window Object
+         * responsible for handling the drag Events on Keyboard and Touch
+         * @returns {void}
+         */
+        addEventListeners () {
+            window.addEventListener("mouseup", () => {
+                this.dragEnd();
+            });
+            window.addEventListener("mousemove", (event) => {
+                this.dragMove(event);
+            });
+            window.addEventListener("touchend", () => {
+                this.dragEnd();
+            });
+            window.addEventListener("touchmove", (event) => {
+                this.dragMove(event);
+            });
+        },
+        /**
+         * adds the eventListeners to the window Object
+         * responsible for handling the drag Events on Keyboard and Touch
+         * @returns {void}
+         */
+        removeEventListeners () {
+            window.removeEventListener("mouseup", () => {
+                this.dragEnd();
+            });
+            window.removeEventListener("mousemove", (event) => {
+                this.dragMove(event);
+            });
+            window.removeEventListener("touchend", () => {
+                this.dragEnd();
+            });
+            window.removeEventListener("touchmove", (event) => {
+                this.dragMove(event);
+            });
+        },
+        /**
+         * handles the drag Start event to resize the sidebar
+         * @param {*} event the DOM-event
+         * @returns {void}
+         */
+        dragStart: function (event) {
+            event.preventDefault();
+            this.isDragging = true;
+        },
+        /**
+         * handles the drag move event to resize the sidebar
+         * @param {Event} event the DOM-event
+         * @returns {void}
+         */
+        dragMove: function (event) {
+            if (this.isDragging) {
+                const eventX = event.type === "touchmove" ? event.touches[0].clientX : event.clientX;
+
+                this.width = (window.innerWidth - eventX) / window.innerWidth;
+                this.updateMap();
+            }
+        },
+        /**
+         * handles the drag End event to resize the sidebar
+         * @returns {void}
+         */
+        dragEnd () {
+            this.isDragging = false;
         }
+
     }
 };
 </script>
@@ -127,10 +209,20 @@ export default {
     <div
         v-if="active"
         :class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']"
+        :style="[renderToWindow ? '' : {width: clientWidth}]"
     >
+        <div
+            v-if="resizableWindow"
+            :class="['drag-bar', {dragging: isDragging}]"
+            @mousedown="dragStart"
+            @touchstart="dragStart"
+        >
+            &#8942;
+        </div>
         <div class="win-heading header">
             <p class="buttons pull-right">
                 <span
+                    v-if="renderToWindow"
                     class="glyphicon glyphicon-minus"
                     title="Minimieren"
                     @click="minimize"
@@ -140,14 +232,14 @@ export default {
                     @click="close($event)"
                 />
             </p>
-            <p class="buttons pull-left move">
+            <p :class="['buttons', 'pull-left', {move: renderToWindow}]">
                 <span
                     class="glyphicon win-icon"
                     :class="icon"
                 />
             </p>
             <p
-                class="title move"
+                :class="['title', {move: renderToWindow}]"
                 @click="maximize"
             >
                 <span>{{ title }}</span>
@@ -174,6 +266,7 @@ export default {
         padding-left: 10px;
         border-bottom: 1px solid rgb(229, 229, 229);
         font-family: @font_family_narrow;
+        background: white;
         > .move {
             cursor: move;
         }
@@ -287,17 +380,37 @@ export default {
     transform: rotate(270deg);
 }
 .sidebar-vue {
-    height: calc(100% - 50px);
     float: left;
-    overflow: auto;
     display: block;
     position: absolute;
-    top: 50px;
+    top: 0;
     right: 0;
-    width: 30%;
     background-color: @background_color_1;
     .header();
+    .win-body-vue {
+        max-height: calc(100vh - 50px);
+    }
+
+    .drag-bar {
+        position:absolute;
+        display: inline-block;
+        height: calc(100vh - 50px);
+        line-height: calc(100vh - 50px);
+        vertical-align: top;
+        width:20px;
+        text-align: center;
+        font-size: 24px;
+        border-right: 1px solid #fafafa;
+        cursor: grab;
+        &:hover {
+            background: rgb(250, 250, 250);
+        }
+        &.dragging {
+            cursor:grabbing;
+        }
+    }
 }
+
 @media (max-width: 767px) {
     .tool-window {
         right: 0;

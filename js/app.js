@@ -1,7 +1,8 @@
 import Vue from "vue";
 import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
-import store from "../src/global-store";
+import store from "../src/app-store";
+import loadAddons from "../src/addons";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -44,7 +45,15 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import ImportView from "../modules/tools/kmlImport/view";
+/**
+ * WFSFeatureFilterView
+ * @deprecated in 3.0.0
+ */
 import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
+/**
+ * ExtendedFilterView
+ * @deprecated in 3.0.0
+ */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
@@ -53,12 +62,15 @@ import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
-
-// @deprecated in version 3.0.0
-// remove "version" in doc and config.
-// rename "print_" to "print"
-// only load PrintView
+/**
+ * PrintView2
+ * @deprecated in 3.0.0
+ * remove "version" in doc and config.
+ * rename "print_" to "print"
+ * only load PrintView
+ */
 import PrintView2 from "../modules/tools/print/view";
+import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
@@ -75,10 +87,8 @@ import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
-// import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
-import "url-polyfill";
 
 let sbconfig, controls, controlsView;
 
@@ -86,7 +96,7 @@ let sbconfig, controls, controlsView;
  * load the configuration of master portal
  * @return {void}.
  */
-function loadApp () {
+async function loadApp () {
     /* eslint-disable no-undef */
     const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
@@ -117,9 +127,12 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
+    // import and register Vue addons according the config.js
+    await loadAddons(Config.addons);
+
     Vue.config.productionTip = false;
 
-    store.commit("addConfigJsToStore", Config);
+    store.commit("setConfigJs", Config);
 
     Vue.use(VueI18Next);
 
@@ -131,7 +144,6 @@ function loadApp () {
         i18n: new VueI18Next(i18next)
     });
 
-    app.$mount();
 
     // Core laden
     new Autostarter();
@@ -140,14 +152,17 @@ function loadApp () {
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
 
-    app.$store.commit("addConfigJsonToStore", Radio.request("Parser", "getPortalConfig"));
 
     new StyleList();
-    new ParametricURL();
+    if (!Config.hasOwnProperty("allowParametricURL") || Config.allowParametricURL === true) {
+        new ParametricURL();
+    }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WPS();
     new AddGeoJSON();
     new WindowView();
+
+    app.$mount();
 
     if (Config.hasOwnProperty("cswId")) {
         cswParserSettings.cswId = Config.cswId;
@@ -222,10 +237,13 @@ function loadApp () {
                 break;
             }
             case "print": {
-                // @deprecated in version 3.0.0
-                // remove "version" in doc and config.
-                // rename "print_" to "print"
-                // only load correct view
+                /**
+                 * PrintView2
+                 * @deprecated in 3.0.0
+                 * remove "version" in doc and config.
+                 * rename "print_" to "print"
+                 * only load correct view
+                 */
                 if (tool.has("version") && (tool.get("version") === "mapfish_print_3" || tool.get("version") === "HighResolutionPlotService")) {
                     new PrintView({model: tool});
                 }
@@ -250,10 +268,18 @@ function loadApp () {
                 new ImportView({model: tool});
                 break;
             }
+            /**
+             * wfsFeatureFilter
+             * @deprecated in 3.0.0
+             */
             case "wfsFeatureFilter": {
                 new WFSFeatureFilterView({model: tool});
                 break;
             }
+            /**
+             * extendedFilter
+             * @deprecated in 3.0.0
+             */
             case "extendedFilter": {
                 new ExtendedFilterView({model: tool});
                 break;
@@ -288,6 +314,10 @@ function loadApp () {
             }
             case "styleWMS": {
                 new StyleWMSView({model: tool});
+                break;
+            }
+            case "wfst": {
+                new WfstView({model: tool});
                 break;
             }
             /**
@@ -373,27 +403,6 @@ function loadApp () {
                     break;
                 }
                 /**
-                 * backforward
-                 * @deprecated in 3.0.0
-                 */
-                /* commented out to avoid conflicts with prototype
-                case "backforward": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'backforward' is deprecated. Please use 'backForward' instead");
-                        element = controlsView.addRowTR(control.id, false);
-                        new BackForwardView({el: element});
-                    }
-                    break;
-                }
-                case "backForward": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowTR(control.id, false);
-                        new BackForwardView({el: element});
-                    }
-                    break;
-                }
-                */
-                /**
                  * overviewmap
                  * @deprecated in 3.0.0
                  */
@@ -459,27 +468,22 @@ function loadApp () {
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
-        /*
-          TODO initCounter and related code currently commented out since variable "i18nextLanguages"
-               was not defined. Found this section in its currently broken state - not sure if this
-               is to be fixed or to be removed in favour of a different approach?
-        */
-        // let initCounter = 0;
+        const i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
+        let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
-                // initCounter++;
+                initCounter++;
             }
         });
 
-        /*
         initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
 
                 Object.keys(i18nextLanguages).forEach((lng) => {
-                    import(/* webpackChunkName: "additionalLocales" * / `../addons/${addonKey}/locales/${lng}/additional.json`)
+                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales);
                             initCounter--;
@@ -499,11 +503,11 @@ function loadApp () {
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
                 import(
-                    /* webpackChunkName: "[request]" * /
-                    /* webpackExclude: /.+unittests.+/ * /
+                    /* webpackChunkName: "[request]" */
+                    /* webpackExclude: /.+unittests.+/ */
                     "../addons/" + entryPoint + ".js"
                 ).then(module => {
-                    /* eslint-disable new-cap * /
+                    /* eslint-disable new-cap */
                     const addon = new module.default();
 
                     // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
@@ -525,7 +529,6 @@ function loadApp () {
                 });
             }
         });
-        */
     }
 
     Radio.trigger("Util", "hideLoader");

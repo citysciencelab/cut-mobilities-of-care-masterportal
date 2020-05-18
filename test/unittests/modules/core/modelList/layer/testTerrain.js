@@ -3,7 +3,7 @@ import sinon from "sinon";
 import TerrainLayerModel from "@modules/core/modelList/layer/terrain.js";
 
 describe("core/modelList/layer/terrain", function () {
-    var terrainLayer,
+    let terrainLayer,
         scene;
 
     beforeEach(function () {

@@ -134,7 +134,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {void}
      */
     setAttributes: function (configJson) {
-        var portalTitle = _.has(configJson, "portalTitle") && _.has(configJson.portalTitle.portalTitle, "title") ? configJson.portalTitle.title : document.title,
+        const portalTitle = _.has(configJson, "portalTitle") && _.has(configJson.portalTitle.portalTitle, "title") ? configJson.portalTitle.title : document.title,
             hrefString = "<br>==================<br>Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
             platformString = "<br>Platform: " + navigator.platform + "<br>",
             cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
@@ -166,7 +166,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {String} The generated id
      */
     generateTicketId: function () {
-        var date = new Date(),
+        const date = new Date(),
             day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
             month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
             ticketId = month + day + "-" + _.random(1000, 9999);
@@ -210,7 +210,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @return {Boolean} Flag if validation failed or not
      */
     validate: function (attributes) {
-        var userNameValid = _.isUndefined(attributes.userName) === false ? attributes.userName.length >= 3 : false,
+        const userNameValid = _.isUndefined(attributes.userName) === false ? attributes.userName.length >= 3 : false,
             userEmailValid1 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.length >= 1 : false,
             userEmailValid2 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.match(/^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,4}$/igm) !== null : false,
             userTelValid = _.isUndefined(attributes.userTel) === false ? attributes.userTel.match(/^[0-9]{1}[0-9\-+()]*[0-9]$/ig) !== null : false,
@@ -237,11 +237,12 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {void}
      */
     send: function () {
-        var cc = _.map(this.get("cc"), _.clone), // deep copy instead of passing object by reference
-            text,
-            dataToSend,
+        const cc = _.map(this.get("cc"), _.clone), // deep copy instead of passing object by reference
             closeAndDelete = this.get("closeAndDelete"),
             withTicketNo = this.get("withTicketNo");
+
+        let text = "",
+            dataToSend = {};
 
         if (this.get("ccToUser") === true) {
             cc.push({
@@ -249,6 +250,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
                 name: this.get("userName")
             });
         }
+
         text = "Name: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo");
         dataToSend = {
             from: this.get("from"),

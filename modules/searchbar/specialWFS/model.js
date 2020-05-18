@@ -89,7 +89,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {object}            aufbereitetes Objekt zur WFS Abfrage
      */
     getDataParameters: function (value) {
-        var parameters = {};
+        const parameters = {};
 
         value.data.split("&").forEach(function (keyValue) {
             parameters[keyValue.split("=")[0].toUpperCase()] = decodeURIComponent(keyValue.split("=")[1]);
@@ -114,12 +114,12 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {string}               XML String
      */
     getWFS110Xml: function (definition, searchString) {
-        var typeName = definition.typeName,
+        const typeName = definition.typeName,
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             maxFeatures = definition.maxFeatures ? definition.maxFeatures : this.get("maxFeatures"),
-            namespaces = definition.namespaces ? this.get("defaultNamespaces") + " " + definition.namespaces : this.get("defaultNamespaces"),
-            data, propertyName;
+            namespaces = definition.namespaces ? this.get("defaultNamespaces") + " " + definition.namespaces : this.get("defaultNamespaces");
+        let data, propertyName;
 
         data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' ";
         data += namespaces + " traverseXlinkDepth='*' version='1.1.0'>";
@@ -151,8 +151,8 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     search: function (searchString) {
-        var definitions = this.get("definitions"),
-            data;
+        const definitions = this.get("definitions");
+        let data;
 
         if (searchString.length >= this.get("minChars")) {
             definitions.forEach(function (def) {
@@ -186,7 +186,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     sendRequest: function (def, data) {
-        var ajax = this.get("ajaxRequests");
+        const ajax = this.get("ajaxRequests");
 
         if (ajax[def.name] !== null && ajax[def.name] !== undefined) {
             ajax[def.name].abort();
@@ -246,7 +246,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             coordinateArray;
 
         _.each(elements, function (element) {
-            var elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
+            const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
                 elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]);
 
             if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
@@ -282,7 +282,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {String[]} propertynamesWithoutNamespace
      */
     removeNameSpaceFromArray: function (propertyNames) {
-        var propertynamesWithoutNamespace = [];
+        const propertynamesWithoutNamespace = [];
 
         _.each(propertyNames, function (propertyname) {
             propertynamesWithoutNamespace.push(propertyname.split(":")[1]);
@@ -297,7 +297,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     showError: function (err) {
-        var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+        const detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
         console.error("Service unavailable. " + detail);
     },
@@ -308,7 +308,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     polishAjax: function (type) {
-        var ajax = this.get("ajaxRequests"),
+        const ajax = this.get("ajaxRequests"),
             cleanedAjax = _.omit(ajax, type);
 
         this.set("ajaxRequests", cleanedAjax);

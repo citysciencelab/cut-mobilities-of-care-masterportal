@@ -112,7 +112,7 @@ const SchulInfoTheme = Theme.extend({
         this.get("feature").set("layerName", this.get("name"));
     },
     getVectorGfi: function () {
-        var gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
+        let gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
 
         gfiContent = this.getManipulateDate([gfiContent]);
         this.setGfiContent(gfiContent);
@@ -124,7 +124,7 @@ const SchulInfoTheme = Theme.extend({
      * @returns {void}
      */
     parseGfiContent: function () {
-        var gfiContent,
+        let gfiContent,
             featureInfos = [];
 
         if (!_.isUndefined(this.get("gfiContent")[0])) {
@@ -142,18 +142,18 @@ const SchulInfoTheme = Theme.extend({
      * @return {Object[]}             [description]
      */
     createFeatureInfos: function (gfiContent, themeConfig) {
-        var featureInfos = [];
+        const featureInfos = [];
 
         if (!_.isUndefined(themeConfig)) {
 
             _.each(themeConfig, function (kategory) {
-                var kategoryObj = {
+                const kategoryObj = {
                     name: kategory.name,
                     isSelected: kategory.isSelected ? kategory.isSelected : false,
                     attributes: []};
 
                 _.each(kategory.attributes, function (attribute) {
-                    var isAttributeFound = this.checkForAttribute(gfiContent, attribute);
+                    const isAttributeFound = this.checkForAttribute(gfiContent, attribute);
 
                     if (isAttributeFound) {
                         kategoryObj.attributes.push({
@@ -168,7 +168,7 @@ const SchulInfoTheme = Theme.extend({
         return featureInfos;
     },
     beautifyAttribute: function (attribute, key) {
-        var newVal,
+        let newVal,
             beautifiedAttribute = attribute;
 
         if (key === "oberstufenprofil" && _.isString(attribute)) {
@@ -209,7 +209,7 @@ const SchulInfoTheme = Theme.extend({
      * @return {void}
      */
     determineSelectedContent: function (featureInfos) {
-        var selectedContent = featureInfos.filter(function (featureInfo) {
+        const selectedContent = featureInfos.filter(function (featureInfo) {
             return featureInfo.isSelected;
         })[0];
 
@@ -222,7 +222,7 @@ const SchulInfoTheme = Theme.extend({
      * @return {Boolean} Flag if Attribute is found
      */
     checkForAttribute: function (gfiContent, attribute) {
-        var isAttributeFound = false;
+        let isAttributeFound = false;
 
         if (!_.isUndefined(gfiContent[attribute])) {
             isAttributeFound = true;
@@ -236,7 +236,7 @@ const SchulInfoTheme = Theme.extend({
      * @return {void}
      */
     updateFeatureInfos: function (newName) {
-        var featureInfos = this.get("featureInfos");
+        let featureInfos = this.get("featureInfos");
 
         featureInfos = this.setIsSelected(newName, featureInfos);
         this.setFeatureInfos(featureInfos);
@@ -249,7 +249,7 @@ const SchulInfoTheme = Theme.extend({
      * @returns {Object[]} featureInfos
      */
     setIsSelected: function (newName, featureInfos) {
-        var newNameFound = false;
+        let newNameFound = false;
 
         newNameFound = this.isNewNameInFeatureInfos(newName, featureInfos);
         if (newNameFound) {
@@ -271,15 +271,15 @@ const SchulInfoTheme = Theme.extend({
      * @return {Boolean}  Flag if new name is found
      */
     isNewNameInFeatureInfos: function (newName, featureInfos) {
-        var newNameFound = false,
-            filterArray;
+        let newNameFound = false;
 
-        filterArray = featureInfos.filter(function (featureObject) {
+        const filterArray = featureInfos.filter(function (featureObject) {
             if (featureObject.name === newName) {
                 return true;
             }
             return false;
         });
+
         if (filterArray.length > 0) {
             newNameFound = true;
         }

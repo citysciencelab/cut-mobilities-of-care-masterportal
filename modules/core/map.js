@@ -11,7 +11,8 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
-import Store from "../../src/global-store";
+import Store from "../../src/app-store";
+import WMTSLayer from "./modelList/layer/wmts";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
@@ -173,7 +174,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         Radio.trigger("Map", "isReady", "gfi", false);
 
-        if (!_.isUndefined(Config.inputMap)) {
+        // potentially deprecated, replaced by drawend
+        if (typeof Config.inputMap !== "undefined" && Config.inputMap.setMarker) {
             this.registerListener("click", this.addMarker.bind(this));
         }
     },
@@ -204,7 +206,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     addMarker: function (event) {
-        var coords = event.coordinate;
+        let coords = event.coordinate;
 
         // Set the marker on the map.
         Radio.trigger("MapMarker", "showMarker", coords);
@@ -229,7 +231,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     * @return {ol.layer} - found layer
     */
     getLayerByName: function (layerName) {
-        var layers = this.get("map").getLayers().getArray();
+        const layers = this.get("map").getLayers().getArray();
 
         return _.find(layers, function (layer) {
             return layer.get("name") === layerName;
@@ -287,7 +289,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {*} todo
      */
     getWGS84MapSizeBBOX: function () {
-        var bbox = this.get("view").calculateExtent(this.get("map").getSize()),
+        const bbox = this.get("view").calculateExtent(this.get("map").getSize()),
             firstCoord = [bbox[0], bbox[1]],
             secondCoord = [bbox[2], bbox[3]],
             firstCoordTransform = transformCoord("EPSG:25832", "EPSG:4326", firstCoord),
@@ -428,10 +430,16 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     * @returns {void}
     */
     addLayerToIndex: function (args) {
-        var layer = args[0],
+        const layer = args[0],
             index = args[1],
             channel = Radio.channel("Map"),
             layersCollection = this.get("map").getLayers();
+
+        let layerModel;
+
+        if (layer) {
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {"name": layer.get("name")});
+        }
 
         // if the layer is already at the correct position, do nothing
         if (layersCollection.item(index) === layer) {
@@ -447,6 +455,14 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 singleLayer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
                 singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
             });
+        }
+        else if (layerModel instanceof WMTSLayer) {
+            if (layerModel.attributes.optionsFromCapabilities) {
+                // wmts source will load asynchonously
+                // -> source=null at this step
+                // listener to remove loading layer is set in WMTS class (on change:layerSource)
+                channel.trigger("addLoadingLayer");
+            }
         }
         else {
             layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
@@ -505,7 +521,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
             extentToUse = transformedLeftBottom.concat(transformedTopRight);
         }
-        this.get("view").fit(extentToUse, this.get("map").getSize(), options);
+        this.get("view").fit(extentToUse, {size: this.get("map").getSize(), ...options});
     },
 
     /**
@@ -516,11 +532,12 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     zoomToFilteredFeatures: function (ids, layerId) {
-        var extent,
-            features,
-            layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId, type: "layer"}),
-            layerFeatures = [],
+        const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId, type: "layer"}),
             olLayer = layer.get("layer");
+
+        let extent,
+            features = [],
+            layerFeatures = [];
 
         if (!_.isUndefined(layer) && olLayer instanceof LayerGroup) {
             olLayer.getLayers().forEach(function (child) {
@@ -547,10 +564,10 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     calculateExtent: function (features) {
         // extent = [xMin, yMin, xMax, yMax]
-        var extent = [9999999, 9999999, 0, 0];
+        const extent = [9999999, 9999999, 0, 0];
 
         _.each(features, function (feature) {
-            var featureExtent = feature.getGeometry().getExtent();
+            const featureExtent = feature.getGeometry().getExtent();
 
             if (feature.getId() === "APP_STAATLICHE_SCHULEN_4099") {
                 return;
@@ -595,7 +612,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     * @returns {void}
     */
     initalLoadingChanged: function () {
-        var num = this.get("initalLoading");
+        const num = this.get("initalLoading");
 
         if (num > 0) {
             Radio.trigger("Util", "showLoader");
@@ -616,8 +633,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {*} todo
      */
     createLayerIfNotExists: function (name) {
-        var layers = this.getLayers(),
-            found = false,
+        const layers = this.getLayers();
+
+        let found = false,
             layer,
             source,
             resultLayer = {};

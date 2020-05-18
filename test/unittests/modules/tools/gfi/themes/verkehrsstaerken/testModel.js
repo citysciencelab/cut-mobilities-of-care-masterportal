@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import Model from "@modules/tools/gfi/themes/verkehrsstaerken/model.js";
 
-var model;
+let model;
 
 before(function () {
     model = new Model();

@@ -2,7 +2,7 @@ import Model from "@modules/tools/gfi/themes/elektroladesaeulen/model.js";
 import * as moment from "moment";
 import {expect} from "chai";
 
-var model;
+let model;
 
 before(function () {
     model = new Model();
@@ -20,7 +20,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.splitProperties({})).to.be.an("object").that.is.empty;
         });
         it("should return an object with values as array for object with Pipes input", function () {
-            var properties = {
+            const properties = {
                 Stecker: "Typ2/Schuko | Typ2/Schuko",
                 DatastreamID: "100 | 200"
             };
@@ -32,7 +32,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                 .and.to.nested.include({"DatastreamID[1]": "200"});
         });
         it("should return an empty object for incorrect object without Pipes input", function () {
-            var properties = {
+            const properties = {
                 Stecker: "Typ2/Schuko",
                 DatastreamID: 100
             };
@@ -42,7 +42,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                 .and.to.nested.include({"DatastreamID[0]": "100"});
         });
         it("should return an empty object for incorrect object with values as array and object input", function () {
-            var properties = {
+            const properties = {
                 Stecker: ["Typ2/Schuko"],
                 DatastreamID: {a: "b"}
             };
@@ -68,7 +68,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             });
         });
         it("should return an object with adress as object for correct object input", function () {
-            var allProperties = {
+            const allProperties = {
                 chargings_station_nr: ["100", "100"],
                 location_name: ["Musterstrasse", "Musterstrasse"],
                 postal_code: ["99999", "99999"],
@@ -83,7 +83,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             });
         });
         it("should return an object with adress as object for correct object input", function () {
-            var allProperties = {
+            const allProperties = {
                 chargings_station_nr: [100],
                 dd: ["Musterstrasse", "Musterstrasse"],
                 thtbeefvvw: ["99999", "99999"],
@@ -106,14 +106,14 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.createGfiTableHeadingChargingStation({})).to.be.an("array").that.is.empty;
         });
         it("should return an array with Ladezeiten for correct object input", function () {
-            var allProperties = {
+            const allProperties = {
                 sms_no_charging_station: ["1001", "1002"]
             };
 
             expect(model.createGfiTableHeadingChargingStation(allProperties)).to.be.an("array").that.includes("Ladepunkt: 1001", "Ladepunkt: 1002");
         });
         it("should return an empty array for incorrect object input", function () {
-            var allProperties = {
+            const allProperties = {
                 sms_noa_chargiaasng_station: ["1001", "1002"]
             };
 
@@ -128,7 +128,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.changeStateToGerman({})).to.be.an("object").that.is.empty;
         });
         it("should return an empty object for correct object input", function () {
-            var gfiProperties = {
+            const gfiProperties = {
                 Zustand: ["available", "charging", "outoforder"]
             };
 
@@ -138,7 +138,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                 .and.to.nested.include({"Zustand[2]": "Außer Betrieb"});
         });
         it("should return an empty object for incorrect object input", function () {
-            var gfiProperties = {
+            const gfiProperties = {
                 Zustand: ["xxx", "yyy", "zzz"]
             };
 
@@ -178,7 +178,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             ])).to.be.an("array").that.includes("xyz", 123, "xyz", "abcde");
         });
         it("should return an array without doublicates for correct array input", function () {
-            var dataArray = [{
+            const dataArray = [{
                 Observations: [{
                     phenomenonTime: "2018-06-17T10:55:52",
                     result: "available"
@@ -228,7 +228,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.checkObservationsNotEmpty(["test", "abc"])).to.be.false;
         });
         it("should return true for correct array input", function () {
-            var historicalData = [{
+            const historicalData = [{
                 Observations: [{
                     phenomenonTime: "2018-06-17T10:55:52",
                     result: "available"
@@ -253,7 +253,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.changeTimeZone(["test", "abc"], "+1")).to.be.an("array").that.includes("test", "abc");
         });
         it("should return array with changend phenomenonTime for correct array and timezone +5 input", function () {
-            var historicalData = [{
+            const historicalData = [{
                 Observations: [{
                     phenomenonTime: "2018-06-19T07:13:57.421Z",
                     result: "available"
@@ -278,7 +278,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.addIndex(["test", "abc"])).to.be.an("array").that.includes("test", "abc");
         });
         it("should return array with index for correct array input", function () {
-            var historicalData = [{
+            const historicalData = [{
                 Observations: [{
                     phenomenonTime: "2018-06-17T10:55:52",
                     result: "available"
@@ -333,7 +333,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             ]);
         });
         it("should return an array with seven arrays that contains divided data for correct data without lastDay input", function () {
-            var historicalDataWithIndex = [{
+            const historicalDataWithIndex = [{
                     Observations: [{
                         phenomenonTime: "2018-06-17T10:55:52",
                         result: "available",
@@ -402,7 +402,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.processDataForAllWeekdays(["xyz", 83247], "", "")).to.be.an("array").that.is.empty;
         });
         it("should return an array with seven arrays that contains divided data for correct data without lastDay input", function () {
-            var historicalData = [{
+            const historicalData = [{
                     Observations: [{
                         phenomenonTime: "2018-06-17T10:55:52",
                         result: "available",
@@ -471,7 +471,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.addGfiParams("abc", {xyz: 2})).to.be.an("string").that.includes("abc");
         });
         it("should return query with date as string for correct input", function () {
-            var query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
+            const query = "?$select=@iot.id&$expand=Observations($select=result,phenomenonTime;$orderby=phenomenonTime desc",
                 gfiParams = {
                     startDate: "31.01.2018"
                 };
@@ -492,7 +492,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.filterDataByActualTimeStep([{test: "text"}], "123", "abc")).to.be.an("array").that.is.empty;
         });
         it("should return an array with objects between the timesteps for correct input", function () {
-            var dayData = [{
+            const dayData = [{
                     phenomenonTime: "2018-06-21T00:00:00",
                     result: "charging"
                 },
@@ -520,7 +520,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.calculateOneHour([{test: "123"}], "abc", -999, "1123", "hhh", "bbb")).to.be.a("number").to.equal(0);
         });
         it("should return number 0.167 for a result change after 10 minutes input", function () {
-            var dataByActualTimeStep = [{
+            const dataByActualTimeStep = [{
                     phenomenonTime: "2018-06-21T01:10:00",
                     result: "available"
                 }],
@@ -542,7 +542,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.calculateWorkloadforOneDay({}, [], "")).to.be.an("object").that.is.empty;
         });
         it("should return object that includes data from input object for incorrect input", function () {
-            var emptyDayObj = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
+            const emptyDayObj = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
                     8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0, 15: 0,
                     16: 0, 17: 0, 18: 0, 19: 0, 20: 0, 21: 0, 22: 0, 23: 0},
                 dayData = [{
@@ -577,7 +577,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             }]);
         });
         it("should return an array with 24 objects representing the workload array for correct input", function () {
-            var divideDataByWeekday = [[{
+            const divideDataByWeekday = [[{
                     phenomenonTime: "2018-06-07T00:00:00",
                     result: "available"
                 },
@@ -605,7 +605,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.arrayPerHour(["abc"], 1)).to.be.an("array").that.is.empty;
         });
         it("should return an array with data for correct input", function () {
-            var dataPerHour = [{
+            const dataPerHour = [{
                 0: 1,
                 1: 0
             },
@@ -632,7 +632,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.calculateSumAndArithmeticMean(["abc"])).to.be.an("array").that.is.empty;
         });
         it("should return an empty array for undefined input", function () {
-            var dataPerHour = [{
+            const dataPerHour = [{
                 0: 1,
                 1: 0
             },
@@ -668,7 +668,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.checkValue(["abc"], "def")).to.be.an("undefined");
         });
         it("should return data for correct input", function () {
-            var processedData = [{
+            const processedData = [{
                 hour: 0,
                 sum: 2,
                 mean: 0.667
@@ -698,7 +698,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.createXAxisLabel("abc", "def")).to.be.an("string").that.is.empty;
         });
         it("should return empty string for incorrect input", function () {
-            var day = moment("2018-06-22T10:05:52").format("dddd");
+            const day = moment("2018-06-22T10:05:52").format("dddd");
 
             expect(model.createXAxisLabel(day, "charging")).to.be.an("string").to.equal("Durchschnittliche "
             + "Auslastung Freitags");

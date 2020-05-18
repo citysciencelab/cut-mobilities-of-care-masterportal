@@ -2,7 +2,7 @@ import {expect} from "chai";
 import Print2Model from "@modules/tools/print_/highResolutionPlotService.js";
 
 describe("tools/print_/HighResolutionPlotService", function () {
-    var print2Model,
+    let print2Model,
         response,
         responseEmpty,
         responseUndef,
@@ -110,11 +110,14 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
 
         it("should return an array for scaleList with the scales from the response", function () {
-            var scales = [];
+            const scales = [];
 
-            _.each(response.scales, function (scale) {
-                scales.push(scale.value);
-            });
+            if (Array.isArray(response.scales)) {
+                response.scales.forEach(scale => {
+                    scales.push(scale.value);
+                });
+            }
+
             print2Model.setScaleList(response.scales);
             expect(print2Model.get("scaleList")).to.deep.equal(scales);
         });
@@ -132,11 +135,14 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
 
         it("should return an array for formatList with the outputFormats from the response", function () {
-            var formats = [];
+            const formats = [];
 
-            _.each(response.outputFormats, function (format) {
-                formats.push(format.name);
-            });
+            if (Array.isArray(response.outputFormats)) {
+                response.outputFormats.forEach(format => {
+                    formats.push(format.name);
+                });
+            }
+
             print2Model.setFormatList(response.outputFormats);
             expect(print2Model.get("formatList")).to.deep.equal(formats);
         });
@@ -246,7 +252,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("setEventListener", function () {
         it("should return the passed event for eventListener", function () {
-            var event = Radio.request("Map", "registerListener", "postcompose", print2Model.createPrintMask.bind(print2Model));
+            const event = Radio.request("Map", "registerListener", "postcompose", print2Model.createPrintMask.bind(print2Model));
 
             print2Model.setEventListener(event);
             expect(print2Model.get("eventListener")).to.deep.equal(event);
@@ -255,7 +261,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("setCenter", function () {
         it("schould return the passed value for 'center'", function () {
-            var center = [567291.68, 5931096.07];
+            const center = [567291.68, 5931096.07];
 
             print2Model.setCenter(center);
             expect(print2Model.get("center")).to.deep.equal(center);
@@ -264,7 +270,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("setCurrentFormat", function () {
         it("should return the passed value for currentFormat", function () {
-            var format = {"name": "pdf"};
+            const format = {"name": "pdf"};
 
             print2Model.setCurrentFormat(format);
             expect(print2Model.get("currentFormat")).to.deep.equal(format);
@@ -295,7 +301,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("setTitle", function () {
         it("should return the passed value for title", function () {
-            var title = "Test Title";
+            const title = "Test Title";
 
             print2Model.setTitle(title);
             expect(print2Model.get("title")).to.deep.equal(title);
@@ -314,14 +320,14 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
 
         it("should return true for isGfiActive if the passed value is true", function () {
-            var GFI = true;
+            const GFI = true;
 
             print2Model.setIsGfiActive(GFI);
             expect(print2Model.get("isGfiActive")).to.deep.equal(GFI);
         });
 
         it("should return false for isGfiActive if the passed value is false", function () {
-            var GFI = false;
+            const GFI = false;
 
             print2Model.setIsGfiActive(GFI);
             expect(print2Model.get("isGfiActive")).to.deep.equal(GFI);
@@ -340,14 +346,14 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
 
         it("should return true for isGfiSelected if the passed value is true", function () {
-            var GFI = true;
+            const GFI = true;
 
             print2Model.setIsGfiSelected(GFI);
             expect(print2Model.get("isGfiSelected")).to.deep.equal(GFI);
         });
 
         it("should return false for isGfiSelected if the passed value is false", function () {
-            var GFI = false;
+            const GFI = false;
 
             print2Model.setIsGfiSelected(GFI);
             expect(print2Model.get("isGfiSelected")).to.deep.equal(GFI);
@@ -356,7 +362,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("setPostcomposeListener", function () {
         it("should return the passed value for postcomposeListener", function () {
-            var eventListener = Radio.request("Map", "registerListener", "postcompose", print2Model.handlePostCompose.bind(print2Model));
+            const eventListener = Radio.request("Map", "registerListener", "postcompose", print2Model.handlePostCompose.bind(print2Model));
 
             print2Model.setPostcomposeListener(eventListener);
             expect(print2Model.get("postcomposeListener")).to.deep.equal(eventListener);
@@ -365,7 +371,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("setPrecomposeListener", function () {
         it("should return the passed value for precomposeListener", function () {
-            var eventListener = Radio.request("Map", "registerListener", "precompose", print2Model.handlePreCompose.bind(print2Model));
+            const eventListener = Radio.request("Map", "registerListener", "precompose", print2Model.handlePreCompose.bind(print2Model));
 
             print2Model.setPrecomposeListener(eventListener);
             expect(print2Model.get("precomposeListener")).to.deep.equal(eventListener);
@@ -374,7 +380,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("setScaleByMapView", function () {
         it("should return the scale for the print based on the zoom of the map", function () {
-            var result = Radio.request("MapView", "getOptions").scale.toString();
+            const result = Radio.request("MapView", "getOptions").scale.toString();
 
             print2Model.setScaleByMapView();
             expect(print2Model.get("scale")).to.deep.equal(result);
@@ -394,28 +400,28 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("getAttributeInLayoutByName", function () {
         it("should return undefined if the passed value do not exist in currentLayout", function () {
-            var currentLayout = response.layouts[0];
+            const currentLayout = response.layouts[0];
 
             print2Model.setCurrentLayout(currentLayout);
             expect(print2Model.getAttributeInLayoutByName("legend")).to.be.undefined;
         });
 
         it("should return undefined if the passed value is undefined", function () {
-            var currentLayout = response.layouts[0];
+            const currentLayout = response.layouts[0];
 
             print2Model.setCurrentLayout(currentLayout);
             expect(print2Model.getAttributeInLayoutByName(undefined)).to.be.undefined;
         });
 
         it("should return undefined if the passed value is not of type String", function () {
-            var currentLayout = response.layouts[0];
+            const currentLayout = response.layouts[0];
 
             print2Model.setCurrentLayout(currentLayout);
             expect(print2Model.getAttributeInLayoutByName(2)).to.be.undefined;
         });
 
         it("should return the object from currentLayout with the name of the passed value", function () {
-            var currentLayout = response.layouts[0];
+            const currentLayout = response.layouts[0];
 
             print2Model.setCurrentLayout(currentLayout);
             expect(print2Model.getAttributeInLayoutByName("map")).to.deep.equal(currentLayout.map);
@@ -444,27 +450,27 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("getColor", function () {
         it("should return a hexadecimal string if the passed value is a rgb(a) string", function () {
-            var color = "255, 0, 0",
+            const color = "255, 0, 0",
                 hexcolor = {color: "#ff0000", opacity: 1};
 
             expect(print2Model.getColor(color)).to.deep.equal(hexcolor);
         });
 
         it("should return a hexadecimal string if the passed value is a hexadecimal string", function () {
-            var color = "#ff0000",
+            const color = "#ff0000",
                 hexcolor = {color: "#ff0000", opacity: 1};
 
             expect(print2Model.getColor(color)).to.deep.equal(hexcolor);
         });
 
         it("should return an Error if the passed value is neither a hexadecimal string nor a rgb string", function () {
-            var color = true;
+            const color = true;
 
             expect(print2Model.getColor(color)).to.deep.equal("Error");
         });
 
         it("should return an Error if the passed value is null or undefined", function () {
-            var color = null;
+            const color = null;
 
             expect(print2Model.getColor(color)).to.deep.equal("Error");
         });
@@ -472,21 +478,21 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("getLayoutByName", function () {
         it("should return the correct Layout from the layoutList with the passed name of the layout", function () {
-            var layoutList = print2Model.get("layoutList"),
+            const layoutList = print2Model.get("layoutList"),
                 layoutName = layoutList[3];
 
             expect(print2Model.getLayoutByName(layoutList, layoutName.name)).to.deep.equal(layoutName);
         });
 
         it("should return undefined if the passed name of the layout does not exist in the layoutList", function () {
-            var layoutList = print2Model.get("layoutList"),
+            const layoutList = print2Model.get("layoutList"),
                 layoutName = "test";
 
             expect(print2Model.getLayoutByName(layoutList, layoutName)).to.deep.equal(undefined);
         });
 
         it("should return undefined if the passed name is null", function () {
-            var layoutList = print2Model.get("layoutList"),
+            const layoutList = print2Model.get("layoutList"),
                 layoutName = null;
 
             expect(print2Model.getLayoutByName(layoutList, layoutName)).to.deep.equal(undefined);
@@ -495,7 +501,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("getPrintMapSize", function () {
         it("should return the size of the map", function () {
-            var size = [504, 640];
+            const size = [504, 640];
 
             expect(print2Model.getPrintMapSize()).to.deep.equal(size);
         });
@@ -503,7 +509,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("getOptimalResolution", function () {
         it("should return the optimal resolution for the map with passed scale, mapSize and printMapSize", function () {
-            var scale = 2500,
+            const scale = 2500,
                 mapSize = [1920, 887],
                 printMapSize = [504, 640],
                 optimalResolution = 0.6363535212351648;
@@ -512,7 +518,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
 
         it("should return an Error if the passed values for scale, mapSize and printMapSize are not valid", function () {
-            var scale = "test",
+            const scale = "test",
                 mapSize = ["mapSize1", "mapSize2"],
                 printMapSize = ["test", "test"];
 
@@ -527,7 +533,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("getOptimalScale", function () {
         it("should return the optimalScale with passed mapSize, resolution, printMapSize and scaleList", function () {
-            var mapSize = [1904, 870],
+            const mapSize = [1904, 870],
                 resolution = 15.874991427504629,
                 printMapSize = [504, 640],
                 scaleList = ["500", "1000", "2500", "5000", "10000", "20000", "40000", "60000", "100000", "250000"],
@@ -537,7 +543,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
 
         it("should return an Error if the passed values for mapSize, resolution, printMapSize or scaleList are not valid", function () {
-            var mapSize = ["test", "test1"],
+            const mapSize = ["test", "test1"],
                 resolution = "test",
                 printMapSize = ["test", "test"],
                 scaleList = ["500", "1000", "2500", "5000", "10000", "20000", "40000", "60000", "100000", "250000"];
@@ -576,14 +582,14 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("calculatePageBoundsPixels", function () {
         it("should return the pixels of the page bound with a passed mapSize", function () {
-            var mapSize = [1920, 887],
+            const mapSize = [1920, 887],
                 result = [623.99981856, 16.83310293333335, 1296.00018144, 870.1668970666667];
 
             expect(print2Model.calculatePageBoundsPixels(mapSize)).to.deep.equal(result);
         });
 
         it("should retrun an Error if the passed mapSize is not valid", function () {
-            var mapSize = ["x", "y"];
+            const mapSize = ["x", "y"];
 
             expect(print2Model.calculatePageBoundsPixels(mapSize)).to.deep.equal("Error");
         });
@@ -598,7 +604,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
         it("should return the path of an image", function () {
             // Sonderlocke da create imagePath auf das window zugreift. dies gibt es aber im consolen test nicht
             // var result = "http://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/";
-            var result = "null/lgv-config/img/";
+            const result = "null/lgv-config/img/";
 
             expect(print2Model.createImagePath()).to.deep.equal(result);
         });
@@ -606,7 +612,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
 
     describe("push", function () {
         it("should return a the passed array of numbers for the respective, passed attribute", function () {
-            var attribute = "layerToPrint",
+            const attribute = "layerToPrint",
                 value = [[1], [2], [[3.1], [[3.21], [3.22]]], [4]],
                 result = [1, 2, 3.1, 3.21, 3.22, 4];
 
@@ -615,7 +621,7 @@ describe("tools/print_/HighResolutionPlotService", function () {
         });
 
         it("should return a the passed array of numbers and objects for the respective, passed attribute", function () {
-            var attribute = "layerToPrint",
+            const attribute = "layerToPrint",
                 value = [[{"test": 1}], [2], [[3.1], [{"first": 3.21, "second": 3.22}]], [4]],
                 result = [{"test": 1}, 2, 3.1, {"first": 3.21, "second": 3.22}, 4];
 

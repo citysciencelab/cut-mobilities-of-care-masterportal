@@ -166,7 +166,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "TILT": this.evaluateCameraParameters.bind(this),
             "ZOOMLEVEL": this.setZoomLevel.bind(this),
             "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
-            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this)
+            "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this),
+            "LNG": this.checkIfLanguageEnabled
         };
     },
 
@@ -214,7 +215,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     pushToIsInitOpen: function (value) {
-        const isInitOpenArray = this.get("isInitOpen"),
+        let isInitOpenArray = this.get("isInitOpen"),
             msg = "";
 
         isInitOpenArray.push(value);
@@ -565,6 +566,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         }
 
         this.parseURL(location.search.substr(1), this.possibleUrlParameters());
+    },
+    /**
+     * Checks, if the language is dis- or enabled in the config.js
+     * @returns {void}
+     */
+    checkIfLanguageEnabled: function () {
+        if (Config.portalLanguage !== undefined && !Config.portalLanguage.enabled) {
+            console.warn("You specified the URL-parameter lng, but disabled the language in the config.js.");
+        }
     },
 
     /**

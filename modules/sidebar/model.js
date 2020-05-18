@@ -21,7 +21,7 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
      * @constructs
      */
     initialize: function () {
-        var channel = Radio.channel("Sidebar");
+        const channel = Radio.channel("Sidebar");
 
         this.listenTo(channel, {
             "toggle": this.toggle,

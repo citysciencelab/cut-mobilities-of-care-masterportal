@@ -1,6 +1,6 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
-import Store from "../../../src/global-store";
+import Store from "../../../src/app-store";
 
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     defaults: {
@@ -269,7 +269,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @deprecated in 3.0.0. Remove whole function and call!
      */
     changeLgvContainer: function () {
-        var container = $("div.lgv-container");
+        const container = $("div.lgv-container");
 
         if (container.length) {
             container.removeClass("lgv-container").addClass("masterportal-container");
@@ -294,7 +294,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     * @returns {*} todo
     */
     requestSnippetInfos: function () {
-        var infos,
+        let infos,
             url;
 
         if (_.has(Config, "infoJson")) {

@@ -7,3 +7,5 @@
 2.3. Nutze die nativen ES6-Funktionen für **[Arrays](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Array)**.
 
 2.4. Instanziiere neue Objekte ohne den *new*-Operator, ansonsten nutze die nativen ES6-Funktionen für **[Objekte](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Object)**.
+
+2.5 Verwende keine Underscore Funktionalitäten. Einzige Ausnahme ist **_.template** in Backbone.View Dateien.

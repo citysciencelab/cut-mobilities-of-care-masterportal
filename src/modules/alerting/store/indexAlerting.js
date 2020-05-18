@@ -1,17 +1,12 @@
-import actions from "./actionsAlerting";
+import state from "./stateAlerting";
 import mutations from "./mutationsAlerting";
+import getters from "./gettersAlerting";
+import actions from "./actionsAlerting";
 
 export default {
     namespaced: true,
-    state: {
-        alerts: [],
-        category: "alert-info",
-        isDismissable: true,
-        isConfirmable: false,
-        position: "top-center",
-        fadeOut: null,
-        uuid: 0
-    },
+    state,
     actions,
-    mutations
+    mutations,
+    getters
 };

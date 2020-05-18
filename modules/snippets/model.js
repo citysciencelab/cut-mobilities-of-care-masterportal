@@ -82,6 +82,7 @@ const SnippetModel = Backbone.Model.extend(/** @lends SnippetModel.prototype */{
 
     /**
      * Trigger valuesChanged to children
+     * @fires Snippets#ValuesChanged
      * @param   {object} model Model to be transmitted
      * @param   {string} value Value to be transmitted
      * @returns {void}

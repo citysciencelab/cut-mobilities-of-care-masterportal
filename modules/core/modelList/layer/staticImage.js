@@ -14,7 +14,7 @@ const StaticImageLayer = Layer.extend({
      * @return {void}
      */
     createLayerSource: function () {
-        var extent = this.get("extent"),
+        const extent = this.get("extent"),
             projection = new Projection({
                 code: "static-image",
                 units: "pixels",

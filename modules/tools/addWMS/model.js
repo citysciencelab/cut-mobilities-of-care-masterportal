@@ -30,7 +30,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
             "languageChanged": this.changeLang
         });
 
-        this.changeLang();
+        this.changeLang(i18next.language);
     },
 
     /**
@@ -38,12 +38,13 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      * @param {String} lng the language changed to
      * @returns {Void}  -
      */
-    changeLang: function () {
+    changeLang: function (lng) {
         this.set({
             placeholder: i18next.t("common:modules.tools.addWMS.placeholder"),
             textExample: i18next.t("common:modules.tools.addWMS.textExample"),
             textLoadLayer: i18next.t("common:modules.tools.addWMS.textLoadLayer")
         });
+        this.set("currentLng", lng);
     },
 
     /**
