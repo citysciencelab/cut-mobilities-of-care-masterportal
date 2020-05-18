@@ -5,6 +5,7 @@ import Attributions from "./attributions/components/Attributions.vue";
 import BackForward from "./backForward/components/BackForward.vue";
 import FullScreen from "./fullScreen/components/FullScreen.vue";
 import OverviewMap from "./overviewMap/components/OverviewMap.vue";
+import TotalView from "./totalView/components/TotalView.vue";
 import Zoom from "./zoom/components/Zoom.vue";
 
 /**
@@ -18,8 +19,9 @@ export default {
     modules: {
         backForward
     },
+    // initial state - information on all controls that are not addons.
     state: {
-        // initial state - information on all controls that are not addons.
+        // maps config.json.md control key to component
         componentMap: {
             attributions: Attributions,
             backForward: BackForward,
@@ -29,13 +31,20 @@ export default {
                 return OverviewMap;
             },
             overviewMap: OverviewMap,
+            get "totalview" () {
+                console.warn("'totalview' is deprecated. Please use 'totalView' instead.");
+                return TotalView;
+            },
+            totalView: TotalView,
             zoom: Zoom
         },
+        // config.json.md control keys where the matching element is to be hidden in mobile mode
         mobileHiddenControls: [
             "backForward",
             "fullScreen",
             "mousePosition",
-            "overviewMap"
+            "overviewMap",
+            "totalView"
         ],
         bottomControls: ["attributions", "overviewmap", "overviewMap"]
     },

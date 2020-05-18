@@ -123,5 +123,8 @@ export default {
         margin-left: 2px;
         margin-top: -1px;
     }
+    .glyphicon-fast-backward::before {
+        margin-top: -1px;
+    }
     /* TODO: Since every glyphicon is supported via config, rules for every glyphicon should exist here */
 </style>
