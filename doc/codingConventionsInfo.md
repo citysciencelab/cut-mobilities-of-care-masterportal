@@ -5,6 +5,9 @@ Es folgen - falls vorhanden - Erläuterungen und Beispiele zu den jeweiligen Pun
 #### A.1.6
 Derzeit ist Babel nicht in der Lage, TPL Dateien zu übersetzen und Internet Explorer unterstützt keine Pfeil-Funktionen.
 ---
+#### A.4.1
+Weitere Infos bezüglich Vue befinden sich [hier](./conventions/vue.md).
+---
 #### A.4.3
 *Beispiel des JSDoc zweier Funktionen*  
 ```javascript
@@ -208,6 +211,8 @@ function nichtTestbareFunktion (param) {
 ```
 ---
 #### A.5.2
+Weitere Informationen zu Unit-Tests [hier](./unittesting.md).
+
 Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mocha](https://mochajs.org/)** verwendet.  
 ---
 #### A.6.2
@@ -304,6 +309,8 @@ updateTreeType: function (attributes, response) {
 Es wird die Bibliothek [i18next](https://www.i18next.com/) verwendet.  
 ---
 #### A.8.3
+Weitere Informationen zur Versionierung [hier](./Versionierung.md).
+
 Schreibe für jeden Pull request einen Eintrag im [CHANGELOG](../CHANGELOG.md) unter dem Punkt Unreleased. Vermeide Fachjargon. Der Changelog soll die NutzerIn und EntwicklerIn informieren.  
 
 
