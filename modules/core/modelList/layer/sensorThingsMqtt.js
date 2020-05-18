@@ -176,7 +176,6 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
      * @param {Number} [optionsOpt.qos=0] flag of how to set quality of service for this subscription - see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169
      * @param {Number} [optionsOpt.retain=0] flag of how to use retained messages for this subscription - see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc385349265
      * @param {Boolean} [optionsOpt.rmSimulate=true] false if no simulation of retained messages should take place, otherwise true
-     * @param {String} [optionsOpt.rmPath=""] a path on the server in case the path differs from the standard implementation
      * @param {SensorThingsClientHttp} [optionsOpt.rmHttpClient] a function to call an url with for the simulation instead of using the default (defaultHttpClient)
      * @param {SensorThingsMqttCallbackMessage} [onmessageOpt] a function to be called for receiving the message, default: messageHandler
      * @returns {Void}  -
@@ -186,7 +185,6 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
             qos: 0,
             retain: 0,
             rmSimulate: false,
-            rmPath: "",
             rmHttpClient: defaultHttpClient
         }, optionsOpt);
 
@@ -194,7 +192,7 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
 
         if (options.rmSimulate && (options.retain !== 2)) {
             // simulate retained message
-            simulateRetainedMessage(options.rmProtocol + "://" + mqttHost + options.rmPath, topic, options.rmHttpClient, onmessageOpt || messageHandler);
+            simulateRetainedMessage(options.rmUrl, topic, options.rmHttpClient, onmessageOpt || messageHandler);
         }
     };
 
