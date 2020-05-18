@@ -3,6 +3,10 @@
  * Component that renders an entry to the table style tool box.
  * In table style mode, some controls are put in the tool box.
  *
+ * As this component is currently used exchangeably with ControlIcon,
+ * the props used here should be a subset of the props used in
+ * Control Icon.
+ *
  * This component does render itself to the spot where toolbox
  * children are, #table-tools-menu.
  */
@@ -19,7 +23,7 @@ export default {
             type: Boolean,
             default: true
         },
-        /** Hover text of the control. */
+        /** For TableStyle Control, title text is used as display text. */
         title: {
             type: String,
             required: true
@@ -39,7 +43,10 @@ export default {
         }
     },
     mounted () {
-        // NOTE As soon as the toolbox itself is written in vue, this component should be used as a child of it instead of this current cross-rendering.
+        /* NOTE As soon as the toolbox itself is written in vue, this component should be used as a child
+         * of it instead of this current cross-rendering. Another mechanism is then needed to make the
+         * ControlBar not render the affected controls.
+         */
         $("#table-tools-menu").append(this.$el);
     }
 };
@@ -50,18 +57,17 @@ export default {
         type="button"
         class="control-icon-table-style"
         tabindex="-1"
-        :title="title"
         :disabled="!active"
         @click="onClick"
         @keyup.space.stop.prevent="onClick"
     >
         <a
+            aria-role="button"
             href="#"
             :tabindex="active ? '0' : '-1'"
         >
             <span :class="['glyphicon', glyphiconClass]" />
-            <!-- use slot for button text -->
-            <slot />
+            {{ title }}
         </a>
     </button>
 </template>
@@ -101,6 +107,8 @@ export default {
         /* pseudo-class state effects */
         /* NOTE these do not yet exist; when all table style controls are
                 done with this component, they should be decided on for all
+                elements. Right now, this would lead to inconsistencies
+                regarding the not yet migrated entries.
         &:hover {}
         &:focus {}
         &:active {}

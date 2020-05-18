@@ -1,5 +1,6 @@
 <script>
 import ControlIcon from "../../ControlIcon.vue";
+import TableStyleControl from "../../TableStyleControl.vue";
 
 /**
  * Enables fullscreen using browser tools.
@@ -71,13 +72,15 @@ function isFullScreen () {
  */
 export default {
     name: "FullScreen",
-    components: {
-        ControlIcon
-    },
     data: function () {
         return {
             active: isFullScreen()
         };
+    },
+    computed: {
+        component () {
+            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+        }
     },
     methods: {
         /**
@@ -104,12 +107,12 @@ export default {
 
 <template>
     <div class="fullscreen-button">
-        <ControlIcon
+        <component
+            :is="component"
             :title="$t(`common:modules.controls.fullScreen.${active ? 'disable' : 'enable'}`)"
             :icon-name="active ? 'resize-small' : 'fullscreen'"
             :on-click="toggleFullScreen"
         />
-        <!-- TODO table version must be implemented, too -->
     </div>
 </template>
 

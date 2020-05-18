@@ -3,6 +3,7 @@ import {OverviewMap} from "ol/control.js";
 import {mapGetters} from "vuex";
 import {getOverviewMapLayer, getOverviewMapView} from "./utils";
 import ControlIcon from "../../ControlIcon.vue";
+import TableStyleControl from "../../TableStyleControl.vue";
 
 /**
  * Overview control that shows a mini-map to support a user's
@@ -52,7 +53,13 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Map", ["map"])
+        ...mapGetters("Map", ["map"]),
+        component () {
+            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+        },
+        localeSuffix () {
+            return Radio.request("Util", "getUiStyle") === "TABLE" ? "Table" : "Control";
+        }
     },
     created () {
         this.checkModeVisibility();
@@ -117,24 +124,14 @@ export default {
         v-if="visibleInMapMode"
         id="overviewmap-wrapper"
     >
-        <ControlIcon
+        <component
+            :is="component"
             class="overviewmap-button"
-            :title="$t(`common:modules.controls.overviewMap.${open ? 'hide' : 'show'}OverviewControl`)"
+            :title="$t(`common:modules.controls.overviewMap.${open ? 'hide' : 'show'}Overview${localeSuffix}`)"
             icon-name="globe"
             :on-click="toggleOverviewMapFlyout"
         />
     </div>
-    <!-- TODO Table Mode
-        <div id="mini-map" class="table-tool">
-            <a href="#">
-                <span class="glyphicon glyphicon-globe"></span>
-                <span id="mini-map_title"><% if(isInitOpen === true) {print (hideOverviewTableText);} else {print (showOverviewTableText);} %></span>
-            </a>
-        </div>
-
-        "showOverviewTable": "Mini-Map einschalten",
-        "hideOverviewTable": "Mini-Map ausschalten"
-    -->
 </template>
 
 <style lang="less">
