@@ -48,14 +48,17 @@ export default {
 <template>
     <button
         type="button"
-        :tabindex="active ? '0' : '-1'"
         class="control-icon-table-style"
+        tabindex="-1"
         :title="title"
         :disabled="!active"
         @click="onClick"
         @keyup.space.stop.prevent="onClick"
     >
-        <a href="#">
+        <a
+            href="#"
+            :tabindex="active ? '0' : '-1'"
+        >
             <span :class="['glyphicon', glyphiconClass]" />
             <!-- use slot for button text -->
             <slot />
