@@ -239,7 +239,7 @@ h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[r
     ## Portalconfig
 ```
 
-*8.3.6 - Parameter sind verschaltelt, wenn Sie selber ein Objekt sind*  
+*8.3.6 - Parameter sind verschachtelt, wenn Sie selber ein Objekt sind*  
 ```
     ## Portalconfig
     |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
