@@ -41,7 +41,7 @@ async function prepareOB (driver) {
  */
 async function loadUrl (driver, url, mode) {
     await driver.get(url);
-    await driver.wait(until.elementLocated(By.id("loader")), 50000);
+    await driver.wait(until.elementLocated(By.id("loader")), 90000);
 
     if (isMaster(url)) {
         // wait for logo to disappear (only appears in master)
