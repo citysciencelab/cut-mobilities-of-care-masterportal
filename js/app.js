@@ -76,7 +76,6 @@ import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
 import TotalView from "../modules/controls/totalView/view";
-import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -375,25 +374,6 @@ async function loadApp () {
                 case "totalView": {
                     if (control.attr === true || typeof control.attr === "object") {
                         new TotalView(control.id);
-                    }
-                    break;
-                }
-                /**
-                 * overviewmap
-                 * @deprecated in 3.0.0
-                 */
-                case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
-                        element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView(element, control.id, control.attr);
-                    }
-                    break;
-                }
-                case "overviewMap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView(element, control.id, control.attr);
                     }
                     break;
                 }
