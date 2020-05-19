@@ -75,7 +75,6 @@ import WfstView from "../modules/tools/wfst/view";
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
-import TotalView from "../modules/controls/totalView/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -358,23 +357,6 @@ async function loadApp () {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
                     new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
-                /**
-                 * totalView
-                 * @deprecated in 3.0.0
-                 */
-                case "totalview": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'totalview' is deprecated. Please use 'totalView' instead");
-                        new TotalView(control.id);
-                    }
-                    break;
-                }
-                case "totalView": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        new TotalView(control.id);
-                    }
                     break;
                 }
                 case "freeze": {
