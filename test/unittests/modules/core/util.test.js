@@ -571,8 +571,8 @@ describe("core/Util", function () {
         });
 
         it("should handle undefined as infinit and null as zero", function () {
-            const input = [undefined, null, -1, 1, 0],
-                expected = [-1, 0, null, 1, undefined];
+            const input = [undefined, null, -1, 1],
+                expected = [-1, null, 1, undefined];
 
             expect(model.sortBy(input)).to.deep.equal(expected);
         });
