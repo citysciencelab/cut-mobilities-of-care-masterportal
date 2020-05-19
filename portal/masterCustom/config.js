@@ -71,7 +71,8 @@ const Config = {
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
         loadPath: "/locales/{{lng}}/{{ns}}.json"
-    }
+    },
+    loaderText: "Master Custom"
 };
 
 /* eslint-enable no-unused-vars */
