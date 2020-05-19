@@ -55,9 +55,11 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
     addContentHTML: function () {
         const legends = this.model.get("legend");
 
-        _.each(legends.legend, function (legend) {
-            legend.html = this.contentTemplate(legend);
-        }, this);
+        if (legends.legend !== null) {
+            legends.legend.forEach(legend => {
+                legend.html = this.contentTemplate(legend);
+            });
+        }
     },
     /**
     * todo
