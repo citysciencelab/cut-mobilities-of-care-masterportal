@@ -1,25 +1,4 @@
-const {isBasic, is2D} = require("./settings"),
-    modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
-    modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
-    modulesControlsButton3DTests = require("./tests/modules/controls/Button3D.js"),
-    modulesControlsButtonObliqueTests = require("./tests/modules/controls/ButtonOblique.js"),
-    modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
-    modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
-    modulesControlsOrientationTests = require("./tests/modules/controls/Orientation.js"),
-    modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
-    modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
-    modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
-    modulesCoreParametricUrlTests = require("./tests/modules/core/ParametricUrl.js"),
-    modulesSearchbarSearchCategories = require("./tests/modules/searchbar/SearchCategories.js"),
-    modulesSearchbarGdiSearch = require("./tests/modules/searchbar/GdiSearch.js"),
-    modulesToolsCoord = require("./tests/modules/tools/Coord.js"),
-    modulesToolsGfi = require("./tests/modules/tools/Gfi.js"),
-    modulesToolsMeasure = require("./tests/modules/tools/Measure.js"),
-    modulesToolsParcelSearch = require("./tests/modules/tools/ParcelSearch.js"),
-    modulesToolsSearchByCoord = require("./tests/modules/tools/SearchByCoord.js"),
-    panTests = require("./tests/Pan.js"),
-    zoomTests = require("./tests/Zoom.js"),
-    legendTests = require("./tests/Legend.js");
+const {isBasic, is2D} = require("./settings");
 
 /**
  * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
@@ -49,50 +28,54 @@ const {isBasic, is2D} = require("./settings"),
  */
 function tests (builder, url, browsername, resolution, config, mode) {
     describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
-        this.timeout(150000);
+        this.timeout(360000); // timeout after an hour - changes also to be done in package.json
 
         if (isBasic(url) && !is2D(mode)) {
             // portal/basic does not offer any mode besides 2D; skip all suites for non-2D basic
             return;
         }
 
-        // TODO remove to activate OB/2D testing (not used in first iteration, and OB may be moved to a different test run)
+        // TODO remove to activate OB/3D testing (not used in first iteration, and OB may be moved to a different test run)
         if (mode === "OB" || mode === "3D") {
             return;
         }
 
+        /*
+         * TODO Check/Fix/Implement and re-activate tests one by one. Each running
+         * test shall then be PR'd back to dev to avoid tests and dev diverging again.
+         */
         const suites = [
-                // // // modules/controls
-                modulesControlsAttributionsTests,
-                modulesControlsBackForwardTests,
-                modulesControlsButton3DTests,
+                // modules/controls
+                // require("./tests/modules/controls/Attributions.js"),
+                // require("./tests/modules/controls/BackForward.js"),
+                // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
-                modulesControlsButtonObliqueTests,
-                modulesControlsFreezeTests,
-                modulesControlsFullScreenTests,
-                modulesControlsOrientationTests,
-                modulesControlsOverviewMapTests,
-                modulesControlsTotalViewTests,
-                modulesControlsZoomTests,
+                // require("./tests/modules/controls/ButtonOblique.js"),
+                // require("./tests/modules/controls/Freeze.js"),
+                // require("./tests/modules/controls/FullScreen.js"),
+                // require("./tests/modules/controls/Orientation.js"),
+                // require("./tests/modules/controls/OverviewMap.js"),
+                // require("./tests/modules/controls/TotalView.js"),
+                require("../../src/modules/controls/zoom/test/end2end/Zoom.js")
 
-                // // // modules/core
-                modulesCoreParametricUrlTests,
+                // modules/core
+                // require("./tests/modules/core/ParametricUrl.js"),
 
-                // // // modules/searchbar
-                modulesSearchbarGdiSearch,
-                modulesSearchbarSearchCategories,
+                // modules/searchbar
+                // require("./tests/modules/searchbar/SearchCategories.js"),
+                // require("./tests/modules/searchbar/GdiSearch.js"),
 
-                // // // modules/tools
-                modulesToolsCoord,
-                modulesToolsGfi,
-                modulesToolsMeasure,
-                modulesToolsParcelSearch,
-                modulesToolsSearchByCoord,
+                // modules/tools
+                // require("./tests/modules/tools/Coord.js"),
+                // require("./tests/modules/tools/Gfi.js"),
+                // require("./tests/modules/tools/Measure.js"),
+                // require("./tests/modules/tools/ParcelSearch.js"),
+                // require("./tests/modules/tools/SearchByCoord.js"),
 
-                // // // non-module tests
-                legendTests,
-                panTests,
-                zoomTests
+                // non-module tests
+                // require("./tests/Pan.js"),
+                // require("./tests/Zoom.js"),
+                // require("./tests/Legend.js")
             ],
             e2eTestParams = {builder, url, resolution, config, mode, browsername};
 

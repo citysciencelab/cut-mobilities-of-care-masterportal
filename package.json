@@ -23,7 +23,7 @@
     "test:all": "npm run test && npm run test:vue",
     "test:all:watch": "npm-run-all --parallel test:watch test:vue:watch",
     "browsertestserver": "webpack-dev-server --config devtools/webpack.browsertest.js",
-    "browsertest": "./node_modules/.bin/mocha --timeout 150000 ./test/end2end/TestRunner.js",
+    "browsertest": "./node_modules/.bin/mocha --timeout 360000 ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js",
     "buildJsDoc": "node devtools/tasks/buildJsDoc.js"
