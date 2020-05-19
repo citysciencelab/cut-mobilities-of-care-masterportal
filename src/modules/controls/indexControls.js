@@ -4,6 +4,7 @@ import attributions from "./attributions/store/indexAttributions";
 import backForward from "./backForward/store/indexBackForward";
 import Attributions from "./attributions/components/Attributions.vue";
 import BackForward from "./backForward/components/BackForward.vue";
+import FullScreen from "./fullScreen/components/FullScreen.vue";
 import Zoom from "./zoom/components/Zoom.vue";
 
 /**
@@ -23,10 +24,12 @@ export default {
         componentMap: {
             attributions: Attributions,
             backForward: BackForward,
+            fullScreen: FullScreen,
             zoom: Zoom
         },
         mobileHiddenControls: [
             "backForward",
+            "fullScreen",
             "mousePosition"
         ],
         bottomControls: ["attributions", "overviewMap"]
