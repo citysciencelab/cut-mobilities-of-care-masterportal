@@ -32,7 +32,7 @@ A.3.5 Styles sind im .less Format verfasst.
 A.3.6 Es wird kein !important in Styles benutzt.  
 A.3.7 Module und Komponenten beeinflussen lediglich das Verhalten und die Styles ihrer eigenen (Kind-) Elemente.  
 A.3.8 Es werden keine Styles mit JavaScript verändert.  
-A.3.9 Vue: Alle Stylesheets sind "Soft-Scoped".  
+A.3.9 Alle Styles haben eine modulabhängige ID als Präfix oder sind im "scoped" Modus verfasst.  
 ---
 #### A.4 Dokumentation im Code (JS-Doc)
 A.4.1 Die Dokumentationssprache ist Englisch.  
@@ -55,7 +55,7 @@ A.6.3 Alle bisherigen Konfigurationsparameter sind weiterhin verwendbar.
 A.6.4 Vor einer Löschung oder Umbenennung eines Parameters wurde dieser bereits hinreichend lang als Depricated markiert.  
 ---
 #### A.7 Mehrsprachigkeit
-A.7.1 Es wurde in allen relevanten Dateien die Mehrsprachigkeit erweitert oder hinzugefügt.  
+A.7.1 Bei jeglichem Code, welcher Sprache ausgeben kann, wurde die Mehrsprachigkeit erweitert oder hinzugefügt.  
 A.7.2 Es wurden die Sprachdateien in mindestens Englisch und Deutsch gepflegt.  
 A.7.3 Die Fallback-Sprache ist Deutsch.  
 A.7.4 Die Dokumentation (z.B. languages_de.md und languages_en.md) wurde auf Englisch, Deutsch und der entsprechenden Sprache gepflegt.  
