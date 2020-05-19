@@ -73,7 +73,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../variables.less";
+    @import "~variables";
 
     .control-icon-table-style {
         display: flex;
