@@ -9,46 +9,10 @@
 
     <title>Basic - Portal</title>
     <link rel="stylesheet" href="../../build/css/masterportal.css">
-    <style>
-        #portal-text {
-            display: none;
-        }
-        #dpidiv {
-            height: 1in;
-            left: -100%;
-            position: absolute;
-            top: -100%;
-            width: 1in;
-        }
-    </style>
+    <link rel="stylesheet" href="https://geoportal-hamburg.de/lgv-config/css/fonts.css">
 </head>
 <body>
-    <div class="masterportal-container">
-        <div class="loading">
-            <img id="portal-logo" src="../../img/Logo_Masterportal.svg">
-            <div id="portal-text">Basic - Portal</div>
-            <div id="init-loader"><img src="../../img/ajax-loader.gif"></div>
-        </div>
-        <div id='dpidiv'></div>
-        <div id="popup"></div>
-        <nav id="main-nav" class="navbar navbar-default" role="navigation">
-            <div id="navbarRow">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Navigation ein-/ausblenden</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav-menu" id="root">
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <div id="map"></div>
-        <script type="text/javascript" src="../../build/js/masterportal.js"></script>
-    </div>
+    <div id="vue-root"></div>
+    <script type="text/javascript" src="../../build/js/masterportal.js"></script>
 </body>
 </html>
