@@ -1,5 +1,6 @@
 import getters from "./gettersControls";
 import mutations from "./mutationsControls";
+import attributions from "./attributions/store/indexAttributions";
 import backForward from "./backForward/store/indexBackForward";
 import Attributions from "./attributions/components/Attributions.vue";
 import BackForward from "./backForward/components/BackForward.vue";
@@ -14,6 +15,7 @@ import Zoom from "./zoom/components/Zoom.vue";
 export default {
     namespaced: true,
     modules: {
+        attributions,
         backForward
     },
     state: {

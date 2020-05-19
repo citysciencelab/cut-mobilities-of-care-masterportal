@@ -78,7 +78,6 @@ import OrientationView from "../modules/controls/orientation/view";
 import MousePositionView from "../modules/controls/mousePosition/view";
 import FullScreenView from "../modules/controls/fullScreen/view";
 import TotalView from "../modules/controls/totalView/view";
-import AttributionsView from "../modules/controls/attributions/view";
 import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
@@ -392,13 +391,6 @@ async function loadApp () {
                 case "totalView": {
                     if (control.attr === true || typeof control.attr === "object") {
                         new TotalView(control.id);
-                    }
-                    break;
-                }
-                case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id, true);
-                        new AttributionsView({el: element});
                     }
                     break;
                 }
