@@ -13,7 +13,7 @@ const TableTheme = Theme.extend({
      * @returns {void}
      */
     identifyColNames: function () {
-        var colNames;
+        let colNames;
 
         if (_.isUndefined(this.get("gfiContent")) === false) {
             colNames = _.keys(this.get("gfiContent")[0]);
@@ -37,7 +37,7 @@ const TableTheme = Theme.extend({
      */
     destroy: function () {
         _.each(this.get("gfiContent"), function (element) {
-            var children;
+            let children;
 
             if (_.has(element, "children")) {
                 children = _.values(_.pick(element, "children"))[0];

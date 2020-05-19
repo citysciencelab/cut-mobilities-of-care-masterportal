@@ -10,6 +10,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         isSettingVisible: false,
         isVisibleInMap: false,
         layerInfoClicked: false,
+        singleBaselayer: false,
         legendURL: "",
         maxScale: "1000000",
         minScale: "0",
@@ -17,7 +18,21 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         showSettings: true,
         styleable: false,
         supported: ["2D"],
-        transparency: 0
+        transparency: 0,
+        isOutOfRange: undefined,
+        currentLng: "",
+        selectedTopicsText: "",
+        infosAndLegendText: "",
+        removeTopicText: "",
+        showTopicText: "",
+        changeClassDivisionText: "",
+        settingsText: "",
+        transparencyText: "",
+        increaseTransparencyText: "",
+        reduceTransparencyText: "",
+        removeLayerText: "",
+        levelUpText: "",
+        levelDownText: ""
     },
     /**
      * @class Layer
@@ -33,6 +48,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Number} transparency=0 Transparency in percent
      * @property {Number} selectionIDX=0 Index of rendering order in layer selection
      * @property {Boolean} layerInfoClicked=false Flag if layerInfo was clicked
+     * @property {Boolean} singleBaselayer=false - Flag if only a single baselayer should be selectable at once
      * @property {String} minScale="0" Minimum scale for layer to be displayed
      * @property {String} maxScale="1000000" Maximum scale for layer to be displayed
      * @property {String} legendURL="" LegendURL to request legend from
@@ -41,6 +57,20 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Number} hitTolerance=0 Hit tolerance used by layer for map interaction
      * @property {Boolean} styleable=false Flag if wms layer can be styleable via stylewms tool
      * @property {Boolean} isNeverVisibleInTree=false Flag if layer is never visible in layertree
+     * @property {String} currentLng="" contains the current language
+     * @property {String} isOutOfRange="" will be translated
+     * @property {String} selectedTopicsText="" will be translated
+     * @property {String} infosAndLegendText="" will be translated
+     * @property {String} removeTopicText="" will be translated
+     * @property {String} showTopicText="" will be translated
+     * @property {String} changeClassDivisionText="" will be translated
+     * @property {String} settingsText="" will be translated
+     * @property {String} transparencyText="" will be translated
+     * @property {String} increaseTransparencyText="" will be translated
+     * @property {String} reduceTransparencyText="" will be translated
+     * @property {String} removeLayerText="" will be translated
+     * @property {String} levelUpText="" will be translated
+     * @property {String} levelDownText="" will be translated
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
@@ -54,8 +84,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Layer#RadioTriggerLayerSetLayerInfoChecked
      * @listens Core#RadioTriggerMapChange
      * @listens Core#RadioTriggerMapViewChangedOptions
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
+        const portalConfig = Radio.request("Parser", "getPortalConfig");
+
+        if (portalConfig && portalConfig.singleBaselayer !== undefined) {
+            this.setSingleBaselayer(portalConfig.singleBaselayer);
+        }
+
         this.registerInteractionTreeListeners(this.get("channel"));
         this.registerInteractionMapViewListeners();
 
@@ -68,6 +105,46 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             this.setIsVisibleInMap(this.get("isSelected"));
             this.setIsRemovable(Radio.request("Parser", "getPortalConfig").layersRemovable);
             this.toggleWindowsInterval();
+        }
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        /* eslint-disable consistent-this */
+        const model = this;
+
+        this.set({
+            selectedTopicsText: i18next.t("common:tree.removeSelection"),
+            infosAndLegendText: i18next.t("common:tree.infosAndLegend"),
+            removeTopicText: i18next.t("common:tree.removeTopic"),
+            showTopicText: i18next.t("common:tree.showTopic"),
+            changeClassDivisionText: i18next.t("common:tree.changeClassDivision"),
+            settingsText: i18next.t("common:tree.settings"),
+            increaseTransparencyText: i18next.t("common:tree.increaseTransparency"),
+            reduceTransparencyText: i18next.t("common:tree.reduceTransparency"),
+            removeLayerText: i18next.t("common:tree.removeLayer"),
+            levelUpText: i18next.t("common:tree.levelUp"),
+            levelDownText: i18next.t("common:tree.levelDown"),
+            transparencyText: i18next.t("common:tree.transparency"),
+            currentLng: lng
+        });
+        // translate name, key is defined in config.json
+        if (this.has("i18nextTranslate") && typeof this.get("i18nextTranslate") === "function") {
+            this.get("i18nextTranslate")(function (key, value) {
+                if (!model.has(key) || typeof value !== "string") {
+                    return;
+                }
+                model.set(key, value);
+            });
         }
     },
 
@@ -267,6 +344,9 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             },
             "setLayerInfoChecked": function (layerInfoChecked) {
                 this.setLayerInfoChecked(layerInfoChecked);
+            },
+            "toggleIsSelected": function () {
+                this.toggleIsSelected();
             }
         });
         this.listenTo(Radio.channel("Map"), {
@@ -363,14 +443,27 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Toggles the attribute isSelected
+     * Toggles the attribute isSelected.
+     * If the layer is a baselayer, the other selected baselayers are deselected.
+     *
      * @return {void}
      */
     toggleIsSelected: function () {
+        const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
+            singleBaseLayer = this.get("singleBaseLayer") && this.get("parentId") === "Baselayer";
+
         if (this.get("isSelected") === true) {
             this.setIsSelected(false);
         }
         else {
+            // This only works for treeType Custom, otherwise the parentId is not set on the layer
+            if (singleBaseLayer) {
+                layerGroup.forEach(layer => {
+                    layer.setIsSelected(false);
+                    // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
+                    layer.checkForScale(Radio.request("MapView", "getOptions"));
+                });
+            }
             this.setIsSelected(true);
         }
     },
@@ -675,6 +768,16 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
+     * Setter for the singleBaselayer
+     *
+     * @param {Boolean} value - Flag if only a single baselayer should be selectable at once
+     * @returns {void}
+     */
+    setSingleBaselayer: function (value) {
+        this.set("singleBaselayer", value);
+    },
+
+    /**
      * Setter for isRemovable
      * @param {Boolean} value Flag if layer is removable from the tree
      * @returns {void}
@@ -699,10 +802,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     removeLayer: function () {
-        const layer = this.get("id");
+        const layerId = this.get("id");
 
         this.setIsVisibleInMap(false);
-        this.collection.removeLayerById(layer);
+        this.collection.removeLayerById(layerId);
     },
 
     /**
@@ -715,13 +818,19 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Setter for layerInfoClicked
-     * @param {Boolean} value Flag if layerinfo is opened
-     * @returns {void} -
+     * refresh layerSource when updated
+     * e.g. needed because wmts source is created asynchronously
+     * @returns {void}
      */
-    setLayerInfoClicked: function (value) {
-        this.set("layerInfoClicked", value);
+    updateLayerSource: function () {
+        const layer = Radio.request("Map", "getLayerByName", this.get("name"));
+
+        if (this.get("layerSource") !== null) {
+            layer.setSource(this.get("layerSource"));
+            layer.getSource().refresh();
+        }
     }
+
 });
 
 export default Layer;

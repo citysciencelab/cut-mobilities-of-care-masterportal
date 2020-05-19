@@ -8,6 +8,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
+|**useVectorStyleBeta**|nein|Boolean|false|Konfigurationswert ob anstelle des produktiven vectorStyle-Moduls ein sich in der Entwicklung befindliches neues Modul zum Styling von Vektordaten verwendet werden soll. Die Verwendung bedingt eine neue Syntax der style.json. Deprecated mit Version 3.0.|useVectorStyleBeta: true|
 |**[clickCounter](#markdown-header-clickcounter)**|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
 |cswId|nein|String|"3"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"meine CSW-ID"`|
 |addons|nein|Array|[]|Angabe der Namen der gewünschten Custom-Module. Diese befinden sich im Ordner /addons/ und deren Entrypoints werden mithilfe der Datei addonsConf.json definiert.|`["myAddon1", "myAddon2"]`|
@@ -45,6 +46,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
 |**[alerting](#markdown-header-alerting)**|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
 |mapMarker|nein|**[mapMarker](#markdown-header-mapMarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer fefiniert werden.||
+
 *********
 ## quickHelp ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
@@ -292,6 +294,8 @@ zoomToGeometry: {
 |languages|ja|Object|de: "deutsch", en: "englisch"|Kurzbezeichnung und Langbezeichnung der Sprachen|
 |fallbackLanguage|nein|String|"de"|Sprache die benutzt wird, wenn Übersetzungen in der gewählten Sprache nicht verfügbar sind|
 |changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator", "htmlTag"]|Reihenfolge und woher die Benutzersprache erkannt werden soll, siehe auch https://github.com/i18next/i18next-browser-languageDetector|
+|loadPath|nein|String|"/locales/{{lng}}/{{ns}}.json"|Pfad, von dem Sprachdateien geladen werden, oder eine Funktion, die einen Pfad zurückgibt: function(lngs, Namensräume) { return path; } Der zurückgegebene Pfad interpoliert lng, ns, falls angegeben, wie bei einem statischen Pfad. Es kann auch eine Url angegebn werden, wie https://localhost:9001/locales/{{lng}}/{{ns}}.json. Siehe auch https://github.com/i18next/i18next-http-backend|
+
 
 **Beispiel:**
 ```
@@ -303,7 +307,8 @@ portalLanguage: {
             en: "englisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        loadPath: "/locales/{{lng}}/{{ns}}.json"
     }
 ```
 ********

@@ -8,7 +8,10 @@ const ExtendedFilterView = Backbone.View.extend({
     },
     initialize: function () {
         this.listenTo(this.model, {
-            "change:isActive": this.render
+            "change:isActive": this.render,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
         }, this); // Fenstermanagement
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);

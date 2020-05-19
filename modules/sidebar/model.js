@@ -21,7 +21,7 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
      * @constructs
      */
     initialize: function () {
-        var channel = Radio.channel("Sidebar");
+        const channel = Radio.channel("Sidebar");
 
         this.listenTo(channel, {
             "toggle": this.toggle,
@@ -68,6 +68,9 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
             else {
                 this.setWidth("30%");
             }
+        }
+        else {
+            this.setWidth("100%");
         }
         this.trigger("resize");
         this.setIsVisible(isVisible);

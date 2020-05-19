@@ -11,7 +11,7 @@ const RoutingView = Backbone.View.extend({
         "click .pagination": "paginationSwitcher"
     },
     initialize: function () {
-        var channel = Radio.channel("ViomRouting");
+        const channel = Radio.channel("ViomRouting");
 
         this.model.setParams();
         this.template = _.template(RoutingWin);
@@ -81,11 +81,11 @@ const RoutingView = Backbone.View.extend({
         this.$("#zielAdresse").focus();
     },
     fromListChanged: function () {
-        var fromList = this.model.get("fromList");
+        const fromList = this.model.get("fromList");
 
         if (fromList.length > 0) {
             this.$("#input-group-start ul").empty();
-            _.each(fromList, function (value) {
+            fromList.forEach(function (value) {
                 this.$("#input-group-start ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
             }.bind(this));
             this.$("#input-group-start ul").show();
@@ -97,11 +97,11 @@ const RoutingView = Backbone.View.extend({
         }
     },
     toListChanged: function () {
-        var toList = this.model.get("toList");
+        const toList = this.model.get("toList");
 
         if (toList.length > 0) {
             this.$("#input-group-ziel ul").empty();
-            _.each(toList, function (value) {
+            toList.forEach(function (value) {
                 this.$("#input-group-ziel ul").append("<li id='" + value[0] + "' class='list-group-item addressLi'><span>" + value[1] + "</span></li>");
             }.bind(this));
             this.$("#input-group-ziel ul").show();
@@ -121,7 +121,7 @@ const RoutingView = Backbone.View.extend({
         this.model.set("zielAdresse", "gewähltes Ziel");
     },
     addDescription: function () {
-        if (!_.isNull(this.model.get("description"))) {
+        if (this.model.get("description") !== null) {
             this.renderWin(); // Template schreibt Ergebnisse in Div
         }
     },
@@ -140,13 +140,13 @@ const RoutingView = Backbone.View.extend({
         }
     },
     addressSelected: function (evt) {
-        var value = evt.currentTarget.id,
+        const value = evt.currentTarget.id,
             ref = $(evt.currentTarget).parent()[0].id;
 
         this.model.geosearchByBKG(value, ref);
     },
     toggleDown: function (target) {
-        var ul = $("#" + target)[0],
+        const ul = $("#" + target)[0],
             liList = $(ul).find("li"),
             selectedLi = liList.filter(function (li) {
                 return $(li).hasClass("active");
@@ -161,7 +161,7 @@ const RoutingView = Backbone.View.extend({
         }
     },
     toggleUp: function (target) {
-        var ul = $("#" + target)[0],
+        const ul = $("#" + target)[0],
             liList = $(ul).find("li"),
             selectedLi = liList.filter(function (li) {
                 return $(li).hasClass("active");
@@ -176,7 +176,7 @@ const RoutingView = Backbone.View.extend({
         }
     },
     selectEnter: function (target) {
-        var selectedLi = $("#" + target).find(".active");
+        const selectedLi = $("#" + target).find(".active");
 
         if (selectedLi.length === 1) {
             this.model.geosearchByBKG(selectedLi[0].id, target);
@@ -187,7 +187,7 @@ const RoutingView = Backbone.View.extend({
         }
     },
     adresseKeyup: function (evt) {
-        var value = evt.target.value,
+        const value = evt.target.value,
             target = evt.target.id === "startAdresse" ? "start" : "ziel";
 
         if (evt.keyCode === 40) { // down
@@ -218,7 +218,7 @@ const RoutingView = Backbone.View.extend({
         }
     },
     changedRoutingTime: function () {
-        var rt = this.$("#timeButton").val(),
+        const rt = this.$("#timeButton").val(),
             rd = this.$("#dayOfWeekButton").val();
 
         if (rt && rt !== "" && rd && rd !== "") {

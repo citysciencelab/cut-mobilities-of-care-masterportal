@@ -2,19 +2,19 @@
 <div class="layer-settings">
     <span class="">
         <span class="transparency">
-            <span class="text">Transparenz:</span>
-            <span class="glyphicon glyphicon-plus-sign" data-toggle="tooltip" data-placement="bottom" title="Transparenz erhöhen"></span>
+            <span class="text"><%=transparencyText%>:</span>
+            <span class="glyphicon glyphicon-plus-sign" data-toggle="tooltip" data-placement="bottom" title="<%=increaseTransparencyText%>"></span>
             <span class="badge"> <%= transparency + '%' %></span>
-            <span class="glyphicon glyphicon-minus-sign" data-toggle="tooltip" data-placement="bottom" title="Transparenz verringern"></span>
+            <span class="glyphicon glyphicon-minus-sign" data-toggle="tooltip" data-placement="bottom" title="<%=reduceTransparencyText%>"></span>
         </span>
         <% if (isRemovable === true) { %>
             <span class="remove-layer">
-                <span class="text" data-toggle="tooltip" data-placement="bottom">Layer entfernen</span>
+                <span class="text" data-toggle="tooltip" data-placement="bottom"><%=removeLayerText%></span>
             </span>
         <% } %>
         <span class="arrows pull-right">
-            <span class="glyphicon glyphicon-arrow-up" data-toggle="tooltip" data-placement="bottom" title="Ebene nach oben"></span>
-            <span class="glyphicon glyphicon-arrow-down" data-toggle="tooltip" data-placement="bottom" title="Ebene nach unten"></span>
+            <span class="glyphicon glyphicon-arrow-up" data-toggle="tooltip" data-placement="bottom" title="<%=levelUpText%>"></span>
+            <span class="glyphicon glyphicon-arrow-down" data-toggle="tooltip" data-placement="bottom" title="<%=levelDownText%>"></span>
         </span>
     </span>
 </div>

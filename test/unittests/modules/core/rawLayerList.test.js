@@ -1,8 +1,11 @@
 import testServices from "../../resources/testServices.json";
 import {expect} from "chai";
+import Util from "@modules/core/util.js";
 import {deleteLayersByIds, deleteLayersByMetaIds, mergeLayersByMetaIds, cloneByStyle} from "../../../../js/layerList.js";
 
 describe("js/layerList", function () {
+    new Util();
+
     describe("deleteLayersByIds", function () {
         it("should return an array", function () {
             expect(deleteLayersByIds(testServices, Config.tree.layerIDsToIgnore)).to.be.an("array");
@@ -44,7 +47,7 @@ describe("js/layerList", function () {
              * @returns {string} result
              */
             function eachArrayObject (obj) {
-                _.find(obj.datasets, function (dataset) {
+                obj.datasets.find(dataset => {
                     return expect(dataset).to.not.have.property("9329C2CB-4552-4780-B343-0CC847538896");
                 });
             }
@@ -72,28 +75,38 @@ describe("js/layerList", function () {
             expect(mergeLayersByMetaIds(testServices, undefined)).to.be.an("array").that.is.not.empty;
         });
         it("should return an object where layer objects are merged by md_id", function () {
-            var mdObj;
+            let mdObj;
 
-            _.each(mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge), function (obj) {
-                var foundMdObj = _.findWhere(obj.datasets, {md_id: "C1AC42B2-C104-45B8-91F9-DA14C3C88A1F"});
+            if (mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge) !== undefined &&
+                    Array.isArray(mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge))) {
 
-                if (_.isUndefined(foundMdObj) === false) {
-                    mdObj = foundMdObj;
-                }
-            });
+                mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge).forEach(obj => {
+                    const foundMdObj = Radio.request("Util", "findWhereJs", obj.datasets, {md_id: "C1AC42B2-C104-45B8-91F9-DA14C3C88A1F"});
+
+                    if (foundMdObj !== undefined) {
+                        mdObj = foundMdObj;
+                    }
+                });
+            }
+
             expect(mdObj).not.to.be.undefined;
         });
-        it("should return an object where layer KitaEinrichtungen and KitaEinrichtungen_Details are merged in layers", function () {
-            var layerObj;
 
-            _.each(mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge), function (obj) {
-                if (obj.layers.indexOf("KitaEinrichtungen_Details") >= 0 && obj.layers.indexOf("KitaEinrichtungen") >= 0) {
-                    layerObj = obj;
-                }
-            });
+        it("should return an object where layer KitaEinrichtungen and KitaEinrichtungen_Details are merged in layers", function () {
+            let layerObj;
+
+            if (Array.isArray(mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge))) {
+                mergeLayersByMetaIds(testServices, Config.tree.metaIDsToMerge).forEach(obj => {
+                    if (obj.layers.indexOf("KitaEinrichtungen_Details") >= 0 && obj.layers.indexOf("KitaEinrichtungen") >= 0) {
+                        layerObj = obj;
+                    }
+                });
+            }
+
             expect(layerObj).not.to.be.undefined;
         });
     });
+
     describe("setStyleForHVVLayer", function () {
         it("should return an array", function () {
             expect(cloneByStyle(testServices)).to.be.an("array");
@@ -102,16 +115,9 @@ describe("js/layerList", function () {
             expect(cloneByStyle(testServices)).to.be.an("array").that.is.not.empty;
         });
         it("should return array with layerobject which includes the style geofox_stations", function () {
-            /**
-             *
-             * check the style
-             * @param {object} obj - the test object
-             * @returns {string} result
-             */
-            function eachArrayObject (obj) {
-                return _.isUndefined(obj.styles) || obj.styles === "geofox_stations";
-            }
-            expect(cloneByStyle(testServices).every(eachArrayObject));
+            expect(cloneByStyle(testServices).every(function (obj) {
+                return obj.styles === undefined || obj.styles === "geofox_stations";
+            }));
         });
     });
 });

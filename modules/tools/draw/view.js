@@ -5,6 +5,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     events: {
         "change .interaction": "setDrawType",
         "keyup .text input": "setText",
+        "change .symbol select": "setSymbol",
+        "change .pointSize select": "setPointSize",
         "change .font-size select": "setFontSize",
         "change .font select": "setFont",
         "change .radius select": "setRadius",
@@ -21,6 +23,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         "change .colorContour select": "setColorContour",
         "click .delete": "deleteFeatures",
         "click .draw": "toggleInteraction",
+        "click .undo": "undoLastStep",
+        "click .redo": "redoLastStep",
         "click .modify": "toggleInteraction",
         "click .trash": "toggleInteraction",
         "click .downloadDrawing": "startDownloadTool"
@@ -63,7 +67,6 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @return {Backbone.View} DrawView
      */
     render: function (model, isActive) {
-
         if (isActive && this.model.get("renderToWindow")) {
             this.renderSurface(model);
         }
@@ -81,7 +84,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      */
     renderAfterLngChanged: function (model, isActive) {
         if (isActive && this.model.get("renderToWindow")) {
-            this.renderSurface(model, model.get("lastDrawTypeIndex"));
+            this.renderSurface(model, model.get("lastDrawTypeIndex"), true);
         }
         else {
             this.removeSurface();
@@ -93,14 +96,17 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * render this tool
      * @param {Backbone.model} model - draw model
      * @param {Number} lastDrawTypeIndex - index of the last select for drawtype
+     * @param {boolean} afterLngChange - states if the render-function is called after a language change or not.
      * @return {void}
      */
-    renderSurface: function (model, lastDrawTypeIndex) {
+    renderSurface: function (model, lastDrawTypeIndex, afterLngChange = false) {
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template(model.toJSON()));
         this.delegateEvents();
         this.renewSurface(lastDrawTypeIndex);
-        this.registerListener();
+        if (afterLngChange === false) {
+            this.registerListener();
+        }
         this.model.toggleInteraction("draw");
     },
 
@@ -145,10 +151,12 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownUnit,
                         .dropdownMethod,
                         .colorContour,
-                        .opacityContour`
+                        .opacityContour,
+                        .radius`
                     ).hide();
                     this.$el.find(
-                        `.radius,
+                        `.pointSize,
+                        .symbol
                         .color,
                         .opacity`
                     ).show();
@@ -163,7 +171,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownUnit,
                         .dropdownMethod,
                         .colorContour,
-                        .opacityContour`
+                        .opacityContour,
+                        .symbol`
                     ).hide();
                     this.$el.find(
                         `.text,
@@ -181,7 +190,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .font,
                         .radius,
                         .circleRadiusOuter,
-                        .opacityContour`
+                        .opacityContour,
+                        .symbol`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -201,7 +211,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .font,
                         .radius,
                         .dropdownMethod,
-                        .opacityContour`
+                        .opacityContour,
+                        .symbol`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -217,7 +228,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                 case "drawLine": {
                     this.$el.find(
                         `.text,
-                        .font.size,
+                        .font-size,
                         .font,
                         .radius,
                         .color,
@@ -225,7 +236,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownMethod,
                         .circleRadiusInner,
                         .circleRadiusOuter,
-                        .opacity`
+                        .opacity,
+                        .symbol`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -244,12 +256,14 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .dropdownMethod,
                         .circleRadiusInner,
                         .circleRadiusOuter,
-                        .opacityContour`
+                        .opacityContour,
+                        .symbol`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
                         .color,
-                        .opacity`
+                        .opacity,
+                        .colorContour`
                     ).show();
                     break;
                 }
@@ -262,7 +276,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
                         .circleRadiusInner,
                         .circleRadiusOuter,
                         .dropdownUnit,
-                        .dropdownMethod`
+                        .dropdownMethod,
+                        .symbol`
                     ).hide();
                     this.$el.find(
                         `.stroke-width,
@@ -319,7 +334,14 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         if (selectedElement.text === this.model.get("drawDoubleCircle")) {
             this.model.enableMethodDefined(false);
         }
-        this.model.setDrawType(selectedElement.value, selectedElement.text);
+        if (selectedElement.text === this.model.get("drawCurve")) {
+            this.model.setFreehand(true);
+            this.model.setDrawType("LineString", selectedElement.text);
+        }
+        else {
+            this.model.setFreehand(false);
+            this.model.setDrawType(selectedElement.value, selectedElement.text);
+        }
         this.model.updateDrawInteraction();
         this.renewSurface();
         this.startDrawInteraction();
@@ -373,6 +395,41 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      */
     startDownloadTool: function () {
         this.model.startDownloadTool();
+    },
+
+    /**
+     * deletes the last added geometry from the layer
+     * @return {void}
+     */
+    undoLastStep: function () {
+        this.model.undoLastStep();
+    },
+
+    /**
+     * restores the last deleted geometry
+     * @return {void}
+     */
+    redoLastStep: function () {
+        this.model.redoLastStep();
+    },
+    /**
+     * Setter for the Symbol on the model.
+     * @param {*} evt - With a new Symbol.
+     * @return {void}
+     */
+    setSymbol: function (evt) {
+        this.model.setSymbol(evt.target.value);
+        this.model.updateDrawInteraction();
+    },
+
+    /**
+     * Setter for the PointSize on the model.
+     * @param {*} evt - With a new PointSize.
+     * @return {void}
+     */
+    setPointSize: function (evt) {
+        this.model.setPointSize(evt.target.value);
+        this.model.updateDrawInteraction();
     },
 
     /**

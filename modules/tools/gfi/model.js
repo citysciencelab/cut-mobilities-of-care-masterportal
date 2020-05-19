@@ -44,7 +44,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @constructs
      */
     initialize: function () {
-        var channel = Radio.channel("GFI");
+        const channel = Radio.channel("GFI");
 
         // check and initiate module to highlight selected Feature
         if (this.get("highlightVectorRules")) {
@@ -165,7 +165,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @returns {void}
      */
     changeFeature: function (feature) {
-        var gfiFeature,
+        let gfiFeature,
             gfiTheme;
 
         if (this.get("isVisible")) {
@@ -196,7 +196,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @return {undefined}
      */
     initView: function () {
-        var CurrentView;
+        let CurrentView;
 
         // Beim ersten Initialisieren ist CurrentView noch undefined
         if (_.isUndefined(this.get("currentView")) === false) {
@@ -225,17 +225,19 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @return {void}
      */
     setGfiParams: function (evt) {
-        var visibleLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
+        const visibleLayerList = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
             gfiParamsList = this.getGFIParamsList(visibleLayerList),
             visibleWMSLayerList = gfiParamsList.wmsLayerList,
-            visibleVectorLayerList = gfiParamsList.vectorLayerList,
+            visibleVectorLayerList = gfiParamsList.vectorLayerList;
+
+        let GFIParams3d = [],
+            coordinate = [],
             vectorGFIParams = [],
             wmsGFIParams = [],
-            GFIParams3d = [],
-            unionParams = [],
-            coordinate = [];
+            unionParams = [];
 
         Radio.trigger("ClickCounter", "gfi");
+
         if (Radio.request("Map", "isMap3d")) {
             GFIParams3d = this.setGfiParams3d(evt);
             // use pickedPosition in 3D Mode, to get the 3d position directly at the 3d object
@@ -259,13 +261,13 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
     },
 
     setGfiParams3d: function (evt) {
-        var features,
-            gfiParams3d = [];
+        const gfiParams3d = [],
+            features = Radio.request("Map", "getFeatures3dAtPosition", evt.position);
 
-        features = Radio.request("Map", "getFeatures3dAtPosition", evt.position);
         _.each(features, function (feature) {
-            var properties = {},
-                propertyNames,
+            const properties = {};
+
+            let propertyNames,
                 modelAttributes,
                 layerModel,
                 olFeature,
@@ -386,7 +388,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
             maxScale = layer.get("maxScale");
             typ = layer.get("typ");
 
-            if (maxScale && currentScale && parseFloat(currentScale, 10) >= parseInt(maxScale, 10)) {
+            if (maxScale && currentScale && parseFloat(currentScale, 10) > parseInt(maxScale, 10)) {
                 return;
             }
 
@@ -421,10 +423,10 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @return {object[]}           GFI-Parameter von Vektorlayern
      */
     getVectorGFIParams: function (layerlist, eventPixel) {
-        var vectorGfiParams = [];
+        const vectorGfiParams = [];
 
         _.each(layerlist, function (vectorLayer) {
-            var features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
+            const features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
                     layerFilter: function (layer) {
                         return layer.get("id") === vectorLayer.get("id");
                     },
@@ -475,8 +477,9 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @return {void}
      */
     getVectorGfiParams3d: function (featureAtPixel, olLayer) {
-        var model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")}),
-            modelAttributes;
+        const model = Radio.request("ModelList", "getModelByAttributes", {id: olLayer.get("id")});
+
+        let modelAttributes;
 
         if (_.isUndefined(model) === false) {
             modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
@@ -504,7 +507,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      */
     getWMSGFIParams: function (layerlist) {
 
-        var wmsGfiParams = [];
+        const wmsGfiParams = [];
 
         _.each(layerlist, function (layer) {
             if (layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true) {
@@ -523,11 +526,12 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @returns {void}
      */
     setGfiOfLayerAtPosition: function (layerId, coordinate) {
-        var layerList = Radio.request("ModelList", "getModelsByAttributes", {id: layerId}),
+        const layerList = Radio.request("ModelList", "getModelsByAttributes", {id: layerId}),
             gfiParamsList = this.getGFIParamsList(layerList),
             visibleWMSLayerList = gfiParamsList.wmsLayerList,
-            visibleVectorLayerList = gfiParamsList.vectorLayerList,
-            vectorGFIParams,
+            visibleVectorLayerList = gfiParamsList.vectorLayerList;
+
+        let vectorGFIParams,
             wmsGFIParams;
 
         Radio.trigger("ClickCounter", "gfi");
@@ -552,9 +556,10 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @returns {void}
      */
     setGfiOfFeature: function (hit) {
-        var vectorGFIParams = {},
-            coordinate = Radio.request("Map", "getMap").getPixelFromCoordinate(hit.coordinate),
+        const coordinate = Radio.request("Map", "getMap").getPixelFromCoordinate(hit.coordinate),
             model = Radio.request("ModelList", "getModelByAttributes", {id: hit.layer_id});
+
+        let vectorGFIParams = {};
 
         Radio.trigger("ClickCounter", "gfi");
         this.setCoordinate(coordinate);
@@ -613,8 +618,9 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
     * @description Liefert die GFI-Infos ans Print-Modul.
     */
     getGfiForPrint: function () {
-        var theme = this.get("themeList").at(this.get("themeIndex")),
-            responseArray = [];
+        const theme = this.get("themeList").at(this.get("themeIndex"));
+
+        let responseArray = [];
 
         if (!_.isUndefined(theme)) {
             responseArray = [theme.get("gfiContent")[0], theme.get("name"), this.get("coordinate")];
@@ -633,7 +639,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @return {undefined}
      */
     checkInsideSearchMarker: function (top, left) {
-        var button = Radio.request("MapMarker", "getCloseButtonCorners"),
+        const button = Radio.request("MapMarker", "getCloseButtonCorners"),
             bottomSM = button.bottom,
             leftSM = button.left,
             topSM = button.top,

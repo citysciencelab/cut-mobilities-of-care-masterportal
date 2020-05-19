@@ -2,7 +2,7 @@ import {expect} from "chai";
 import Model from "@modules/snippets/graphicalSelect/model.js";
 
 describe("snippets/graphicalSelect/model", function () {
-    var model;
+    let model;
 
     before(function () {
         model = new Model({
@@ -61,7 +61,7 @@ describe("snippets/graphicalSelect/model", function () {
             expect(model.get("circleOverlay").getElement().innerHTML).to.equal("50 m");
         });
         it("should update overlay position on geometry changes", function () {
-            var outerCoord = [556440.777563342, 5935149.148611423];
+            const outerCoord = [556440.777563342, 5935149.148611423];
 
             model.showOverlayOnSketch(50, outerCoord);
             expect(outerCoord).to.deep.equal(model.get("circleOverlay").getPosition());

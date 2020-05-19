@@ -1,4 +1,5 @@
 import ItemTemplate from "text-loader!./template.html";
+import store from "../../../../src/app-store/index";
 /**
  * @member ToolTemplate
  * @description Template for a Tool
@@ -20,6 +21,10 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.toggleIsActiveClass
+        });
+        // Listener for addOns so that multilanguage geht initially adjusted.
+        this.listenTo(this.model, {
+            "change:name": this.rerender
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
@@ -45,6 +50,16 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         }
         return this;
+    },
+
+    /**
+     * Rerenders the view. Gets triggered on name change
+     * @returns {void}
+     */
+    rerender: function () {
+        const attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
     },
 
     /**
@@ -128,6 +143,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         Radio.trigger("ClickCounter", "toolChanged");
         if (this.model.get("id") === "legend") {
             this.model.setIsActive(true);
+            store.commit("setToolActive", {id: this.model.id, active: true});
         }
         else {
             if (!this.model.collection) {
@@ -144,10 +160,12 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
                 // deactivate all other modules as long as the tool is not set to "keepOpen"
                 this.model.collection.setActiveToolsToFalse(this.model);
                 this.model.setIsActive(true);
+                store.commit("setToolActive", {id: this.model.id, active: true});
             }
             else {
                 // deactivate tool if it is already active
                 this.model.setIsActive(false);
+                store.commit("setToolActive", {id: this.model.id, active: false});
             }
         }
 

@@ -5,7 +5,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import {WFS} from "ol/format.js";
 
 const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true,
         isClustered: false,
@@ -107,6 +107,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (this.get("isSelected")) {
             this.updateSource(true);
         }
+        this.createLegendURL();
     },
 
     /**
@@ -126,7 +127,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     updateSource: function (showLoader) {
-        var params = {
+        const params = {
             REQUEST: "GetFeature",
             SERVICE: "WFS",
             SRSNAME: Radio.request("MapView", "getProjection").getCode(),
@@ -162,7 +163,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     handleResponse: function (data) {
-        var features = this.getFeaturesFromData(data);
+        let features = this.getFeaturesFromData(data);
 
         features = this.getFeaturesIntersectsGeometry(this.get("bboxGeometry"), features);
         this.get("layerSource").clear(true);
@@ -195,17 +196,16 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @return {ol.feature[]} Array aus ol/Feature.
      */
     getFeaturesFromData: function (data) {
-        var wfsReader,
-            features;
-
-        wfsReader = new WFS({
+        let features;
+        const wfsReader = new WFS({
             featureNS: this.get("featureNS")
         });
+
         features = wfsReader.readFeatures(data);
 
         // Nur die Features verwenden, die eine Geometrie haben. Aufgefallen bei KITAs am 05.01.2018 (JW)
         features = features.filter(function (feature) {
-            return !_.isUndefined(feature.getGeometry());
+            return feature.getGeometry() !== undefined;
         });
 
         return features;
@@ -219,13 +219,13 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
         let isClusterfeature;
 
-        if (!_.isUndefined(stylelistmodel)) {
+        if (stylelistmodel !== undefined) {
             this.setStyle(function (feature) {
                 // in manchen Fällen war feature undefined und in "this" geschrieben.
                 // konnte nicht nachvollziehen, wann das so ist.
                 const feat = feature !== undefined ? feature : this;
 
-                isClusterfeature = _.isObject(feat.get("features")) === true;
+                isClusterfeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
 
                 return stylelistmodel.createStyle(feat, isClusterfeature);
             });
@@ -239,12 +239,14 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     createLegendURL: function () {
-        var style;
+        let style;
 
-        if (!_.isUndefined(this.get("legendURL")) && !this.get("legendURL").length) {
+        if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-
-            if (!_.isUndefined(style)) {
+            if (style !== undefined) {
+                if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+                    style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
+                }
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
@@ -255,7 +257,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     hideAllFeatures: function () {
-        var collection = this.get("layerSource").getFeatures();
+        const collection = this.get("layerSource").getFeatures();
 
         collection.forEach(function (feature) {
             feature.setStyle(function () {
@@ -269,8 +271,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     showAllFeatures: function () {
-        var collection = this.get("layerSource").getFeatures(),
-            style;
+        const collection = this.get("layerSource").getFeatures();
+        let style;
 
         collection.forEach(function (feature) {
             style = this.getStyleAsFunction(this.get("style"));
@@ -289,9 +291,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         const features = [];
 
         this.hideAllFeatures();
-        _.each(featureIdList, function (id) {
-            var feature = this.get("layerSource").getFeatureById(id),
-                style = [];
+        featureIdList.forEach(id => {
+            const feature = this.get("layerSource").getFeatureById(id);
+            let style = [];
 
             style = this.getStyleAsFunction(this.get("style"));
 
@@ -307,7 +309,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {function} - style as function.
      */
     getStyleAsFunction: function (style) {
-        if (_.isFunction(style)) {
+        if (style && {}.toString.call(style) === "[object Function]") {
             return style;
         }
 

@@ -36,11 +36,19 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
      * @return {void}
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         if (this.model.get("isVisibleInMenu")) {
             $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
         }
+
+        if (this.model.get("isInitOpen")) {
+            this.$el.addClass("open");
+        }
+        else {
+            this.$el.removeClass("open");
+        }
+
         return this;
     },
 
@@ -51,7 +59,7 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
      * @returns {void}
      */
     toggleDisplayByMapMode: function (mapMode) {
-        var obliqueModeBlacklist = this.model.get("obliqueModeBlacklist"),
+        const obliqueModeBlacklist = this.model.get("obliqueModeBlacklist"),
             modelId = this.model.get("id");
 
         if (mapMode === "Oblique" && _.contains(obliqueModeBlacklist, modelId)) {

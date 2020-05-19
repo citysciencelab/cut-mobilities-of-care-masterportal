@@ -50,31 +50,31 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @fires Core#RadioTriggerMapRegisterListener
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
-    initialize: function () {
-        this.superInitialize();
-        this.listenTo(this, {
-            "change:isActive": function (model, value) {
-                Radio.trigger("MapMarker", "hideMarker");
-                Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
-                if (value) {
-                    this.listenTo(Radio.channel("Map"), {
-                        "clickedWindowPosition": function (evt) {
-                            this.positionClicked(evt.coordinate);
-                        }
-                    });
-                }
-                else {
-                    this.stopListening(Radio.channel("Map", "clickedWindowPosition"));
-                }
-            }
-        });
+    // initialize: function () {
+    //     this.superInitialize();
+    //     this.listenTo(this, {
+    //         "change:isActive": function (model, value) {
+    //             Radio.trigger("MapMarker", "hideMarker");
+    //             Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
+    //             if (value) {
+    //                 this.listenTo(Radio.channel("Map"), {
+    //                     "clickedWindowPosition": function (evt) {
+    //                         this.positionClicked(evt.coordinate);
+    //                     }
+    //                 });
+    //             }
+    //             else {
+    //                 this.stopListening(Radio.channel("Map", "clickedWindowPosition"));
+    //             }
+    //         }
+    //     });
 
-        this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.changeLang
-        });
+    //     this.listenTo(Radio.channel("i18next"), {
+    //         "languageChanged": this.changeLang
+    //     });
 
-        this.changeLang();
-    },
+    //     this.changeLang();
+    // },
 
     /**
      * change language - sets default values for the language
@@ -91,7 +91,6 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
             "currentLng": lng
         });
     },
-
     /**
      * Stores the projections and adds interaction pointermove to map
      * @fires Core#RadioRequestMapViewGetProjection
@@ -132,7 +131,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @returns {*} todo
      */
     positionClicked: function (position) {
-        var isViewMobile = Radio.request("Util", "isViewMobile"),
+        const isViewMobile = Radio.request("Util", "isViewMobile"),
             updatePosition = isViewMobile ? true : this.get("updatePosition");
 
         this.setPositionMapProjection(position);
@@ -146,8 +145,9 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @returns {*} todo
      */
     returnTransformedPosition: function (targetProjection) {
-        var positionMapProjection = this.get("positionMapProjection"),
-            positionTargetProjection = [0, 0];
+        const positionMapProjection = this.get("positionMapProjection");
+
+        let positionTargetProjection = [0, 0];
 
         if (positionMapProjection.length > 0) {
             positionTargetProjection = transformFromMapProjection(Radio.request("Map", "getMap"), targetProjection, positionMapProjection);
@@ -162,7 +162,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @returns {*} todo
      */
     returnProjectionByName: function (name) {
-        var projections = this.get("projections");
+        const projections = this.get("projections");
 
         return _.find(projections, function (projection) {
             return projection.name === name;
@@ -247,7 +247,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
      * @returns {void}
      */
     setCoordinates: function (evt) {
-        var position = evt.coordinate;
+        const position = evt.coordinate;
 
         if (this.get("updatePosition")) {
             this.setPositionMapProjection(position);

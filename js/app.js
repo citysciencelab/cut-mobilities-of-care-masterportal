@@ -1,6 +1,8 @@
 import Vue from "vue";
+import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
-import store from "../src/store";
+import store from "../src/app-store";
+import loadAddons from "../src/addons";
 import RestReaderList from "../modules/restReader/collection";
 import Autostarter from "../modules/core/autostarter";
 import Util from "../modules/core/util";
@@ -23,16 +25,14 @@ import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
 import LayerinformationModel from "../modules/layerInformation/model";
-import FooterView from "../modules/footer/view";
+// import FooterView from "../modules/footer/view";
 import ClickCounterModel from "../modules/clickCounter/model";
 import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
-import ScaleLineView from "../modules/scaleLine/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
 import MeasureView from "../modules/tools/measure/view";
-import CoordPopupView from "../modules/tools/getCoord/view";
 import ShadowView from "../modules/tools/shadow/view";
 import DrawView from "../modules/tools/draw/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
@@ -45,21 +45,32 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import ImportView from "../modules/tools/kmlImport/view";
+/**
+ * WFSFeatureFilterView
+ * @deprecated in 3.0.0
+ */
 import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
+/**
+ * ExtendedFilterView
+ * @deprecated in 3.0.0
+ */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
-import FeatureLister from "../modules/featureLister/view";
+import FeatureLister from "../modules/tools/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
-
-// @deprecated in version 3.0.0
-// remove "version" in doc and config.
-// rename "print_" to "print"
-// only load PrintView
+/**
+ * PrintView2
+ * @deprecated in 3.0.0
+ * remove "version" in doc and config.
+ * rename "print_" to "print"
+ * only load PrintView
+ */
 import PrintView2 from "../modules/tools/print/view";
+import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
@@ -72,13 +83,10 @@ import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
-import TitleView from "../modules/title/view";
-import LanguageView from "../modules/language/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
-import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 
@@ -88,16 +96,16 @@ let sbconfig, controls, controlsView;
  * load the configuration of master portal
  * @return {void}.
  */
-function loadApp () {
+async function loadApp () {
     /* eslint-disable no-undef */
     const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
-        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {};
+        mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
+        style = Radio.request("Util", "getUiStyle");
         /* eslint-disable no-undef */
-    let app = {},
-        style = "";
+    let app = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -119,14 +127,23 @@ function loadApp () {
         new QuickHelpView(Config.quickHelp);
     }
 
+    // import and register Vue addons according the config.js
+    await loadAddons(Config.addons);
+
     Vue.config.productionTip = false;
+
+    store.commit("setConfigJs", Config);
+
+    Vue.use(VueI18Next);
+
     app = new Vue({
+        el: "#vue-root",
+        name: "VueApp",
         render: h => h(App),
-        store
+        store,
+        i18n: new VueI18Next(i18next)
     });
 
-    app.$store.commit("addConfigToStore", Config);
-    app.$mount();
 
     // Core laden
     new Autostarter();
@@ -134,12 +151,18 @@ function loadApp () {
     // Pass null to create an empty Collection with options
     new RestReaderList(null, {url: Config.restConf});
     new Preparser(null, {url: Config.portalConf});
+
+
     new StyleList();
-    new ParametricURL();
+    if (!Config.hasOwnProperty("allowParametricURL") || Config.allowParametricURL === true) {
+        new ParametricURL();
+    }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
     new WPS();
     new AddGeoJSON();
     new WindowView();
+
+    app.$mount();
 
     if (Config.hasOwnProperty("cswId")) {
         cswParserSettings.cswId = Config.cswId;
@@ -168,7 +191,7 @@ function loadApp () {
     new LayerinformationModel(layerInformationModelSettings);
 
     if (Config.hasOwnProperty("footer")) {
-        new FooterView(Config.footer);
+        // new FooterView(Config.footer);
     }
 
     if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {
@@ -178,12 +201,6 @@ function loadApp () {
     if (Config.hasOwnProperty("mouseHover")) {
         new MouseHoverPopupView(Config.mouseHover);
     }
-
-    if (Config.hasOwnProperty("scaleLine") && Config.scaleLine === true) {
-        new ScaleLineView();
-    }
-
-    style = Radio.request("Util", "getUiStyle");
 
     // Module laden
     // Tools
@@ -207,10 +224,6 @@ function loadApp () {
                 new FilterView({model: tool});
                 break;
             }
-            case "coord": {
-                new CoordPopupView({model: tool});
-                break;
-            }
             case "shadow": {
                 new ShadowView({model: tool});
                 break;
@@ -224,10 +237,13 @@ function loadApp () {
                 break;
             }
             case "print": {
-                // @deprecated in version 3.0.0
-                // remove "version" in doc and config.
-                // rename "print_" to "print"
-                // only load correct view
+                /**
+                 * PrintView2
+                 * @deprecated in 3.0.0
+                 * remove "version" in doc and config.
+                 * rename "print_" to "print"
+                 * only load correct view
+                 */
                 if (tool.has("version") && (tool.get("version") === "mapfish_print_3" || tool.get("version") === "HighResolutionPlotService")) {
                     new PrintView({model: tool});
                 }
@@ -252,10 +268,18 @@ function loadApp () {
                 new ImportView({model: tool});
                 break;
             }
+            /**
+             * wfsFeatureFilter
+             * @deprecated in 3.0.0
+             */
             case "wfsFeatureFilter": {
                 new WFSFeatureFilterView({model: tool});
                 break;
             }
+            /**
+             * extendedFilter
+             * @deprecated in 3.0.0
+             */
             case "extendedFilter": {
                 new ExtendedFilterView({model: tool});
                 break;
@@ -290,6 +314,10 @@ function loadApp () {
             }
             case "styleWMS": {
                 new StyleWMSView({model: tool});
+                break;
+            }
+            case "wfst": {
+                new WfstView({model: tool});
                 break;
             }
             /**
@@ -375,25 +403,6 @@ function loadApp () {
                     break;
                 }
                 /**
-                 * backforward
-                 * @deprecated in 3.0.0
-                 */
-                case "backforward": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'backforward' is deprecated. Please use 'backForward' instead");
-                        element = controlsView.addRowTR(control.id, false);
-                        new BackForwardView({el: element});
-                    }
-                    break;
-                }
-                case "backForward": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowTR(control.id, false);
-                        new BackForwardView({el: element});
-                    }
-                    break;
-                }
-                /**
                  * overviewmap
                  * @deprecated in 3.0.0
                  */
@@ -453,19 +462,13 @@ function loadApp () {
     sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
     if (sbconfig) {
         new SearchbarView(sbconfig);
-        if (Radio.request("Parser", "getPortalConfig").PortalTitle || Radio.request("Parser", "getPortalConfig").portalTitle) {
-            new TitleView();
-        }
-    }
-
-    if (i18next.options.isEnabled() && Object.keys(i18next.options.getLanguages()).length > 1) {
-        new LanguageView();
     }
 
     new HighlightFeature();
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
+        const i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
         let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
@@ -473,12 +476,13 @@ function loadApp () {
                 initCounter++;
             }
         });
-        initCounter = initCounter * Object.keys(i18next.options.getLanguages()).length;
+
+        initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
 
-                Object.keys(i18next.options.getLanguages()).forEach((lng) => {
+                Object.keys(i18nextLanguages).forEach((lng) => {
                     import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales);
@@ -494,10 +498,15 @@ function loadApp () {
                 });
 
 
-                // .js need to be removed so webpack only searches for .js files
+                // .js need to be removed so we can specify specifically in the import statement that
+                // webpack only searches for .js files
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
-                import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".js").then(module => {
+                import(
+                    /* webpackChunkName: "[request]" */
+                    /* webpackExclude: /.+unittests.+/ */
+                    "../addons/" + entryPoint + ".js"
+                ).then(module => {
                     /* eslint-disable new-cap */
                     const addon = new module.default();
 

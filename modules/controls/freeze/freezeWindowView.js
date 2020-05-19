@@ -24,7 +24,7 @@ const FreezeView = Backbone.View.extend({
         const attr = this.model.toJSON();
 
         $(this.$el).html(this.template(attr));
-        $(".masterportal-container").append(this.$el);
+        $("#vue-app").append(this.$el);
 
         return this;
     },

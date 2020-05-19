@@ -56,8 +56,13 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     toggleColor: function (model, value) {
         if (model.has("minScale") === true) {
             if (value === true) {
+                const statusCheckbox = this.$el.find(".glyphicon.glyphicon-unchecked").length;
+
                 this.$el.addClass("disabled");
                 this.$el.find("*").css("pointer-events", "none");
+                if (statusCheckbox === 0) {
+                    this.$el.find("div.pull-left").css("pointer-events", "auto");
+                }
             }
             else {
                 this.$el.removeClass("disabled");
@@ -71,7 +76,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {Backbone.View} todo
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         if (Radio.request("BreadCrumb", "getLastItem").get("id") === "SelectedLayer") {
             this.$el.html(this.templateSelected(attr));
@@ -91,7 +96,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     renderSetting: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
@@ -117,6 +122,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.toggleIsSelected();
         Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
         this.render();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**
@@ -135,6 +141,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**

@@ -1,7 +1,27 @@
 import WFSStyle from "./model";
+import StyleModel from "./styleModel";
 
 const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
-    model: WFSStyle,
+    /**
+     * Returns style model according to Config setting.
+     * @deprecated since new styleModel. Should be removed with version 3.0.
+     * @param {object} attrs Attribute from collection
+     * @param {object} options Attribute from collection
+     * @returns {object} style model
+     */
+    model: function (attrs, options) {
+        if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta) {
+            return new StyleModel(attrs, options);
+        }
+
+        return new WFSStyle(attrs, options);
+    },
+    url: function () {
+        if (!Config.hasOwnProperty("styleConf") || Config.styleConf === "") {
+            return "keine Style JSON";
+        }
+        return Config.styleConf;
+    },
     /**
      * @class StyleList
      * @extends Backbone.Collection
@@ -17,7 +37,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      * @listens VectorStyle#RadioRequestStyleListReturnModelById
      */
     initialize: function () {
-        var channel = Radio.channel("StyleList");
+        const channel = Radio.channel("StyleList");
 
         channel.reply({
             "returnModelById": this.returnModelById,
@@ -70,8 +90,18 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         };
         xhr.send();
     },
+    /**
+     * Returns model or by styleId or by layerId
+     * @deprecated since new styleModel. Should be adjusted with version 3.0. Should always deliver .styleId
+     * @param {string} layerId layerId
+     * @returns {object} style model
+    */
     returnModelById: function (layerId) {
         return this.find(function (slmodel) {
+            if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta) {
+                return slmodel.attributes.styleId === layerId;
+            }
+
             return slmodel.attributes.layerId === layerId;
         });
     },
@@ -96,7 +126,15 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         styleIds = Array.isArray(styleIds) ? styleIds.reduce((acc, val) => acc.concat(val), []) : styleIds;
         filteredData = data.filter(function (styleModel) {
-            return styleIds.includes(styleModel.layerId);
+            /**
+             * filter for .layerId and styleId as well
+             * @deprecated since v 3.0
+             */
+            if (!Config.hasOwnProperty("useVectorStyleBeta") || Config.useVectorStyleBeta !== true) {
+                return styleIds.includes(styleModel.layerId);
+            }
+
+            return styleIds.includes(styleModel.styleId);
         });
 
         this.add(filteredData);
@@ -165,7 +203,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      * @returns {String} - Style id
      */
     getStyleIdForZoomToFeature: function () {
-        var styleId;
+        let styleId;
 
         if (Config && Config.hasOwnProperty("zoomToFeature") && Config.zoomToFeature.hasOwnProperty("styleId")) {
             styleId = Config.zoomToFeature.styleId;

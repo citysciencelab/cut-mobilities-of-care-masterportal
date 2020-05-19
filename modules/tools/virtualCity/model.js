@@ -3,7 +3,7 @@ import Planning from "./planning";
 import Tool from "../../core/modelList/tool/model";
 
 const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         planningCache: {},
         readyPromise: null
     }),
@@ -82,7 +82,7 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
                 .then((response) => {
                     const data = response.data;
 
-                    if (_.isArray(data)) {
+                    if (Array.isArray(data)) {
                         data.forEach((planningData)=> {
                             const planning = new Planning(Object.assign(planningData, {url: service.get("url"), id: planningData._id}));
 

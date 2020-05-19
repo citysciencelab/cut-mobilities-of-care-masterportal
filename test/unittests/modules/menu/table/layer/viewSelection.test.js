@@ -2,7 +2,7 @@ import SingleLayerView from "@modules/menu/table/layer/singleLayerView.js";
 import {expect} from "chai";
 
 describe("menu/table/layer/singleLayerView", function () {
-    var layerCollection,
+    let layerCollection,
         CustomLayerView;
 
     before(function () {
@@ -25,7 +25,7 @@ describe("menu/table/layer/singleLayerView", function () {
     });
 
     describe("The LayerSettings", function () {
-        var settings, model, layers;
+        let settings, model, layers;
 
         it("should stay visible if corresponding Layer is switched on", function () {
             layerCollection.get("713").set("isSettingVisible", true);

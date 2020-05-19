@@ -70,7 +70,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
     initialize: function () {
-        var channel = Radio.channel("Parser");
+        const channel = Radio.channel("Parser");
 
         channel.reply({
             "getItemByAttributes": this.getItemByAttributes,
@@ -108,7 +108,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
         this.listenTo(this, {
             "change:category": function () {
-                var modelList = Radio.request("ModelList", "getCollection"),
+                const modelList = Radio.request("ModelList", "getCollection"),
                     modelListToRemove = modelList.filter(function (model) {
                         // Alle Fachdaten Layer
                         return model.get("type") === "layer" && model.get("parentId") !== "Baselayer";
@@ -149,7 +149,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         }
         else {
             this.addTreeMenuItems(this.get("treeType"));
-            this.parseTree(getLayerList());
+            this.parseTree(getLayerList(), this.get("overlayer_3d") ? this.get("overlayer_3d") : null);
         }
         this.createModelList();
     },
@@ -163,7 +163,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      */
     parseMenu: function (items, parentId) {
         _.each(items, function (value, key) {
-            var item,
+            let item,
                 toolitem,
                 ansicht,
                 downloadItem;
@@ -289,19 +289,25 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} name - todo
-     * @param {*} id - todo
-     * @param {*} parentId - todo
-     * @param {*} level - todo
-     * @param {*} isExpanded - todo
+     * Creates a new folder and adds it.
+     * @param {String} name - name of the folder
+     * @param {String} id - id of the layer
+     * @param {String} parentId - id of the parent
+     * @param {Number} level - level of the folder
+     * @param {Boolean} isExpanded - if true, folder will be expanded
+     * @param {String} i18nKey - key for the name to translate
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
-    addFolder: function (name, id, parentId, level, isExpanded) {
-        var folder = {
+    addFolder: function (name, id, parentId, level, isExpanded, i18nKey) {
+        const folder = {
             type: "folder",
-            name: name,
+            name: i18nKey ? i18next.t(i18nKey) : name,
+            i18nextTranslate: i18nKey ? function (setter) {
+                if (typeof setter === "function" && i18next.exists(i18nKey)) {
+                    setter("name", i18next.t(i18nKey));
+                }
+            } : null,
             glyphicon: "glyphicon-plus-sign",
             id: id,
             parentId: parentId,
@@ -325,7 +331,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addLayer: function (name, id, parentId, level, layers, url, version) {
-        var layer = {
+        const layer = {
             cache: false,
             datasets: [],
             featureCount: 3,
@@ -364,7 +370,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addGeoJSONLayer: function (name, id, geojson) {
-        var layer = {
+        const layer = {
             type: "layer",
             name: name,
             id: id,
@@ -433,12 +439,12 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     parentId = "extthema";
                     level = 2;
                     if (!this.getItemByAttributes({id: "ExternalLayer"})) {
-                        this.addFolder("Externe Fachdaten", "ExternalLayer", "tree", 0);
+                        this.addFolder("Externe Fachdaten", "ExternalLayer", "tree", 0, false, "common:tree.externalTechnicalData");
                         Radio.trigger("ModelList", "renderTree");
                         $("#Overlayer").parent().after($("#ExternalLayer").parent());
                     }
                     if (!this.getItemByAttributes({id: parentId})) {
-                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, true);
+                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, true, "common:tree.subjectData");
                     }
                 }
                 gdiLayer = Object.assign(gdiLayer, {
@@ -505,7 +511,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     removeItem: function (id) {
-        var itemList = this.get("itemList").filter(function (item) {
+        const itemList = this.get("itemList").filter(function (item) {
             return item.id !== id;
         });
 
@@ -537,21 +543,42 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     addTreeMenuItems: function (treeType) {
-        const menu = _.has(this.get("portalConfig"), "menu") ? this.get("portalConfig").menu : undefined,
-            tree = !_.isUndefined(menu) && _.has(menu, "tree") ? menu.tree : undefined,
-            isAlwaysExpandedList = !_.isUndefined(tree) && _.has(tree, "isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
+        const menu = this.get("portalConfig").hasOwnProperty("menu") ? this.get("portalConfig").menu : undefined,
+            tree = menu !== undefined && menu.hasOwnProperty("tree") ? menu.tree : undefined,
+            isAlwaysExpandedList = tree !== undefined && tree.hasOwnProperty("isAlwaysExpanded") ? tree.isAlwaysExpanded : [],
             isMobile = Radio.request("Util", "isViewMobile"),
             baseLayers = this.get("baselayer"),
             overLayers = this.get("overlayer"),
             overLayers3d = this.get("overlayer_3d"),
-            baseLayersName = baseLayers && _.has(baseLayers, "name") ? baseLayers.name : "Hintergrundkarten",
-            overLayersName = overLayers && _.has(overLayers, "name") ? overLayers.name : "Fachdaten",
-            overLayers3DName = baseLayers && _.has(overLayers3d, "name") ? overLayers3d.name : "3D Daten",
-            isQuickHelpSet = Radio.request("QuickHelp", "isSet");
+            baseLayersName = baseLayers && baseLayers.hasOwnProperty("name") ? baseLayers.name : null,
+            overLayersName = overLayers && overLayers.hasOwnProperty("name") ? overLayers.name : null,
+            overLayers3DName = overLayers3d && overLayers3d.hasOwnProperty("name") ? overLayers3d.name : null,
+            isQuickHelpSet = Radio.request("QuickHelp", "isSet"),
+            baseLayersDefaultKey = "common:tree.backgroundMaps",
+            overLayersDefaultKey = "common:tree.subjectData";
+        let baseLayerI18nextTranslate = null,
+            overLayerI18nextTranslate = null;
 
+        if (!baseLayersName && !baseLayers.i18nextTranslate) {
+            // no name and no translation-function found: provide translation of default key
+            baseLayerI18nextTranslate = function (setter) {
+                if (typeof setter === "function" && i18next.exists(baseLayersDefaultKey)) {
+                    setter("name", i18next.t(baseLayersDefaultKey));
+                }
+            };
+        }
+        if (!overLayersName && !overLayers.i18nextTranslate) {
+            // no name and no translation-function found: provide translation of default key
+            overLayerI18nextTranslate = function (setter) {
+                if (typeof setter === "function" && i18next.exists(overLayersDefaultKey)) {
+                    setter("name", i18next.t(overLayersDefaultKey));
+                }
+            };
+        }
         this.addItem({
             type: "folder",
-            name: baseLayersName,
+            name: baseLayersName ? baseLayersName : i18next.t(baseLayersDefaultKey),
+            i18nextTranslate: baseLayers.i18nextTranslate ? baseLayers.i18nextTranslate : baseLayerI18nextTranslate,
             glyphicon: "glyphicon-plus-sign",
             id: "Baselayer",
             parentId: "tree",
@@ -566,7 +593,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
         this.addItem({
             type: "folder",
-            name: overLayersName,
+            name: overLayersName ? overLayersName : i18next.t(overLayersDefaultKey),
+            i18nextTranslate: overLayers.i18nextTranslate ? overLayers.i18nextTranslate : overLayerI18nextTranslate,
             glyphicon: "glyphicon-plus-sign",
             id: "Overlayer",
             parentId: "tree",
@@ -578,7 +606,12 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         });
         this.addItem({
             type: "folder",
-            name: "Ausgewählte Themen",
+            name: i18next.t("common:tree.selectedTopics"),
+            i18nextTranslate: function (setter) {
+                if (typeof setter === "function" && i18next.exists("common:tree.selectedTopics")) {
+                    setter("name", i18next.t("common:tree.selectedTopics"));
+                }
+            },
             glyphicon: "glyphicon-plus-sign",
             id: "SelectedLayer",
             parentId: "tree",
@@ -596,18 +629,30 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {String} treeType type of tree
      * @param {boolean} isMobile vsible map mode from portal
      * @param {object} overLayer3d contains layer fro 3d mode
-     * @param {String} overLayers3DName Name of folder.
+     * @param {String} overLayers3DName name of the layer
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @fires Core.ModelList#RadioTriggerModelListRemoveModelsById
      * @returns {void}
      */
     addOrRemove3DFolder: function (treeType, isMobile, overLayer3d, overLayers3DName) {
-        var id3d = "3d_daten";
+        const id3d = "3d_daten";
 
-        if (!isMobile && (treeType === "default" || !_.isUndefined(overLayer3d))) {
+        if (!isMobile && (treeType === "default" || overLayer3d !== undefined)) {
+            const defaultKey = "common:tree.subjectData3D";
+            let i18nextTranslate = null;
+
+            if (!overLayers3DName && !overLayer3d.i18nextTranslate) {
+                // no name and no translation-function found: provide translation of default key
+                i18nextTranslate = function (setter) {
+                    if (typeof setter === "function" && i18next.exists(defaultKey)) {
+                        setter("name", i18next.t(defaultKey));
+                    }
+                };
+            }
             this.addItemByPosition({
                 type: "folder",
-                name: overLayers3DName,
+                name: overLayers3DName ? overLayers3DName : i18next.t(defaultKey),
+                i18nextTranslate: overLayer3d.i18nextTranslate ? overLayer3d.i18nextTranslate : i18nextTranslate,
                 id: id3d,
                 parentId: "tree",
                 isInThemen: true,
@@ -628,7 +673,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {number} postion for 3d folder
      */
     postionFor3DFolder: function (itemList) {
-        var position = itemList.length + 1;
+        let position = itemList.length + 1;
 
         _.each(itemList, function (item, index) {
             if (item.name === "Hintergrundkarten") {
@@ -646,12 +691,12 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {Object[]} layerlist - Objects from the services.json
      */
     mergeObjectsByIds: function (ids, layerlist) {
-        var objectsByIds = [],
-            newObject;
+        const objectsByIds = [];
+        let newObject = {};
 
         // Objekte die gruppiert werden
         _.each(ids, function (id) {
-            var lay = _.findWhere(layerlist, {id: id});
+            const lay = _.findWhere(layerlist, {id: id});
 
             if (lay) {
                 objectsByIds.push(lay);
@@ -687,7 +732,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {String} value - Uniq-Id
      */
     createUniqId: function (value) {
-        var trimmedValue = value.replace(/[^a-zA-Z0-9]/g, "");
+        const trimmedValue = value.replace(/[^a-zA-Z0-9]/g, "");
 
         return _.uniqueId(trimmedValue);
     },
@@ -698,7 +743,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {*} todo
      */
     getItemsByMetaID: function (metaID) {
-        var layers = this.get("itemList").filter(function (item) {
+        const layers = this.get("itemList").filter(function (item) {
             if (item.type === "layer") {
                 if (item.datasets.length > 0) {
                     return item.datasets[0].md_id === metaID;
@@ -716,7 +761,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {String} layer inital visible baselayer
      */
     getInitVisibBaselayer: function () {
-        var layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
+        const layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
 
         if (_.isUndefined(layer)) {
             return undefined;

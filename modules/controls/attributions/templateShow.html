@@ -1,8 +1,8 @@
 <div class="attributions-div">
     <dl>
-        <% _.each(attributionList, function (model) { %>
+        <% attributionList.forEach(function (model) { %>
             <dt><%= model.name %>:</dt>
-            <dd><%= model.text %></d>
+            <dd><%= model.text %></dd>
         <% }); %>
     </dl>
 </div>

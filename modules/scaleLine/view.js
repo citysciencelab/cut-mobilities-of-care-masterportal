@@ -23,19 +23,21 @@ const ScaleLineView = Backbone.View.extend({
     className: "scale-line",
     template: _.template(ScaleLineTemplate),
     render: function () {
-        const attr = this.model.toJSON();
+        const attr = this.model.toJSON(),
+            i18nextIsEnabled = i18next && i18next.options.hasOwnProperty("isEnabled") ? i18next.options.isEnabled() : false,
+            i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
 
         this.$el.html(this.template(attr));
-        if (document.getElementsByClassName("footer").length > 0) {
-            document.getElementsByClassName("footer")[0].appendChild(this.el);
+        if ($("#map > div.ol-viewport > div.footer").length > 0) {
+            $("#map > div.ol-viewport > div.footer").append(this.el);
         }
         else if (document.getElementsByClassName("ol-viewport").length > 0) {
             document.getElementsByClassName("ol-viewport")[0].appendChild(this.el);
-        }
-        if (!i18next.options.isEnabled()) {
-            this.$el.css({
-                "right": "0px"
-            });
+            if (!i18nextIsEnabled || Object.keys(i18nextLanguages).length <= 1) {
+                this.$el.css({
+                    "right": "0px"
+                });
+            }
         }
         return this;
     }

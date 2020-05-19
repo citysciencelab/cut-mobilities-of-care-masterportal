@@ -2,24 +2,25 @@ import {expect} from "chai";
 import EntitiesLayerModel from "@modules/core/modelList/layer/entities.js";
 
 describe("core/modelList/layer/entities", function () {
-    var entitiesLayer,
-        entityOptions = [
-            {
-                "url": "https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb",
-                "attributes": {
-                    "name": "Fernsehturm.kmz"
-                },
-                "latitude": 53.541831,
-                "longitude": 9.917963,
-                "height": 10,
-                "heading": -1.2502079000000208,
-                "pitch": 0,
-                "roll": 0,
-                "scale": 5,
-                "allowPicking": true,
-                "show": true
-            }
-        ];
+    let entitiesLayer;
+
+    const entityOptions = [
+        {
+            "url": "https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb",
+            "attributes": {
+                "name": "Fernsehturm.kmz"
+            },
+            "latitude": 53.541831,
+            "longitude": 9.917963,
+            "height": 10,
+            "heading": -1.2502079000000208,
+            "pitch": 0,
+            "roll": 0,
+            "scale": 5,
+            "allowPicking": true,
+            "show": true
+        }
+    ];
 
 
     beforeEach(function () {

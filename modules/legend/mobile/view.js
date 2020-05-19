@@ -13,7 +13,8 @@ import ContentTemplate from "text-loader!../content.html";
  */
 const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.prototype */{
     events: {
-        "click .glyphicon-remove": "hide"
+        "click .glyphicon-remove": "hide",
+        "click #collapseAll-btn": "toggleCollapsePanels"
     },
     /**
      * @class MobileLegendView
@@ -48,9 +49,9 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
     * @returns {Legend.Mobile.MobileLegendView} returns this
     */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
-        $(".masterportal-container").append(this.$el.html(this.template(attr)));
+        $("#masterportal-container").append(this.$el.html(this.template(attr)));
         return this;
     },
     /**
@@ -58,7 +59,7 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
      * @returns {void}
      */
     paramsChanged: function () {
-        var legendParams = this.model.get("legendParams");
+        const legendParams = this.model.get("legendParams");
 
         // Filtern von this.unset("legendParams")
         if (!_.isUndefined(legendParams) && legendParams.length > 0) {
@@ -106,6 +107,31 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
     removeView: function () {
         this.$el.modal("hide");
         this.remove();
+    },
+    /**
+     * collapse or folds out all legend panels
+     * toogles the icon of the collapse-all button
+     * @param {object} evt trigger event
+     * @returns {void}
+    */
+    toggleCollapsePanels: function (evt) {
+        const panels = this.$(".panel-collapse");
+
+        if (evt.target.classList.contains("fold-in")) {
+            evt.target.title = this.model.get("foldOutAllText");
+            panels.each((i, panel) => {
+                $(panel).collapse("hide");
+            });
+        }
+        else {
+            evt.target.title = this.model.get("collapseAllText");
+            panels.each((i, panel) => {
+                $(panel).collapse("show");
+            });
+        }
+
+        $("#collapseAll-btn").toggleClass("glyphicon-arrow-down glyphicon-arrow-up");
+        $("#collapseAll-btn").toggleClass("fold-in fold-out");
     }
 });
 

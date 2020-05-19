@@ -59,8 +59,13 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     toggleColor: function (model, value) {
         if (model.has("minScale") === true) {
             if (value === true) {
+                const statusCheckbox = this.$el.find(".glyphicon.glyphicon-unchecked").length;
+
                 this.$el.addClass("disabled");
                 this.$el.find("*").css("pointer-events", "none");
+                if (statusCheckbox === 0) {
+                    this.$el.find("div.pull-left").css("pointer-events", "auto");
+                }
             }
             else {
                 this.$el.removeClass("disabled");
@@ -74,7 +79,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.$el.html(this.template(attr));
         if (this.model.get("isSettingVisible") === true) {
@@ -88,7 +93,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     renderSetting: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         // Animation Zahnrad
         this.$(".glyphicon-cog").toggleClass("rotate rotate-back");
@@ -111,6 +116,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**
@@ -119,6 +125,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     toggleIsVisibleInMap: function () {
         this.model.toggleIsVisibleInMap();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**

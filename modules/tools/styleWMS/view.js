@@ -76,7 +76,7 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      * @return {Backbone.View} returns itself when rendered
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.setElement(document.getElementsByClassName("win-body")[0]);
         if (this.model.get("isActive") === true) {
@@ -142,11 +142,10 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      * @returns {void}
      */
     setStyleClassAttributes: function () {
-        var styleClassAttributes = [],
-            i;
+        const styleClassAttributes = [];
 
         this.removeErrorMessages();
-        for (i = 0; i < this.model.get("numberOfClasses"); i++) {
+        for (let i = 0; i < this.model.get("numberOfClasses"); i++) {
             styleClassAttributes.push({
                 startRange: this.$(".start-range" + i).val(),
                 stopRange: this.$(".stop-range" + i).val(),
@@ -169,31 +168,31 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      * @returns {void}
      */
     showErrorMessages: function () {
-        _.each(this.model.get("errors"), function (error) {
-            if (_.has(error, "colorText") === true) {
+        this.model.get("errors").forEach(error => {
+            if (error.hasOwnProperty("colorText")) {
                 this.$el.find(".selected-color" + error.colorIndex).parent().addClass("has-error");
                 this.$el.find(".selected-color" + error.colorIndex).parent().after("<span class='error'>" + error.colorText + "</span>");
             }
-            if (_.has(error, "rangeText") === true) {
+            if (error.hasOwnProperty("rangeText")) {
                 this.$el.find(".start-range" + error.rangeIndex).parent().addClass("has-error");
                 this.$el.find(".stop-range" + error.rangeIndex).parent().addClass("has-error");
                 this.$el.find(".start-range" + error.rangeIndex).after("<span class='error'>" + error.rangeText + "</span>");
             }
-            if (_.has(error, "intersectText") === true) {
+            if (error.hasOwnProperty("intersectText")) {
                 this.$el.find(".start-range" + error.intersectIndex).parent().addClass("has-error");
                 this.$el.find(".stop-range" + error.prevIndex).parent().addClass("has-error");
                 this.$el.find(".start-range" + error.intersectIndex).after("<span class='error'>" + error.intersectText + "</span>");
                 this.$el.find(".stop-range" + error.prevIndex).after("<span class='error'>" + error.intersectText + "</span>");
             }
-            if (_.has(error, "minText") === true) {
+            if (error.hasOwnProperty("minText")) {
                 this.$el.find(".start-range" + error.minIndex).parent().addClass("has-error");
                 this.$el.find(".start-range" + error.minIndex).after("<span class='error'>" + error.minText + "</span>");
             }
-            if (_.has(error, "maxText") === true) {
+            if (error.hasOwnProperty("maxText")) {
                 this.$el.find(".stop-range" + error.maxIndex).parent().addClass("has-error");
                 this.$el.find(".stop-range" + error.maxIndex).after("<span class='error'>" + error.maxText + "</span>");
             }
-        }, this);
+        });
     },
 
     /**

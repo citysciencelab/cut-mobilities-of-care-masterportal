@@ -2,7 +2,7 @@ import Model from "@modules/core/wps.js";
 import {expect} from "chai";
 
 describe("core/WPS", function () {
-    var model;
+    let model;
 
     before(function () {
         model = new Model();
@@ -17,7 +17,7 @@ describe("core/WPS", function () {
         });
     });
     describe("buildXML", function () {
-        var expectedOutput = "<xml><ows:Identifier>workbench.fmw</ows:Identifier>" +
+        const expectedOutput = "<xml><ows:Identifier>workbench.fmw</ows:Identifier>" +
                                 "<wps:DataInputs>" +
                                 "<wps:Input><ows:Identifier>test</ows:Identifier><wps:Data><wps:LiteralData>123</wps:LiteralData></wps:Data></wps:Input>" +
                                 "</wps:DataInputs></xml>";
@@ -26,7 +26,7 @@ describe("core/WPS", function () {
             expect(model.buildXML(undefined, undefined, undefined, undefined)).to.be.a("string").to.have.a.lengthOf(0);
         });
         it("should return xml if input object is JSON ", function () {
-            var identifier = "workbench.fmw",
+            const identifier = "workbench.fmw",
                 data = {"test": 123},
                 xmlTemplate = "<xml><ows:Identifier></ows:Identifier><wps:DataInputs></wps:DataInputs></xml>",
                 dataInputXmlTemplate = "<wps:Input><ows:Identifier></ows:Identifier><wps:Data><wps:LiteralData></wps:LiteralData></wps:Data></wps:Input>";
@@ -34,7 +34,7 @@ describe("core/WPS", function () {
             expect(model.buildXML(identifier, data, xmlTemplate, dataInputXmlTemplate)).to.have.string(expectedOutput);
         });
         it("should return xml if input object is object ", function () {
-            var identifier = "workbench.fmw",
+            const identifier = "workbench.fmw",
                 data = {test: 123},
                 xmlTemplate = "<xml><ows:Identifier></ows:Identifier><wps:DataInputs></wps:DataInputs></xml>",
                 dataInputXmlTemplate = "<wps:Input><ows:Identifier></ows:Identifier><wps:Data><wps:LiteralData></wps:LiteralData></wps:Data></wps:Input>";
@@ -44,7 +44,7 @@ describe("core/WPS", function () {
     });
     describe("buildUrl", function () {
         // eslint-disable-next-line no-unused-vars
-        var restModel = new Backbone.Model({
+        const restModel = new Backbone.Model({
             "id": "1001",
             "name": "Deegree WPS RZ2 Produktion",
             "url": "https://geodienste.hamburg.de/HH_WPS",
@@ -63,7 +63,7 @@ describe("core/WPS", function () {
             expect(model.parseXmlToObject("")).to.be.undefined;
         });
         it("return empty object if input xml string is undefined and object is {}", function () {
-            var xml = "<xml><data1>test</data1><data2>123</data2></wps:Input></xml>";
+            const xml = "<xml><data1>test</data1><data2>123</data2></wps:Input></xml>";
 
             expect(model.parseXmlToObject(xml)).to.deep.equal({data1: "test", data2: "123"});
         });

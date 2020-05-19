@@ -45,8 +45,8 @@ const MouseHoverPopupView = Backbone.View.extend(/** @lends MouseHoverPopupView.
      * @returns {void}
      */
     render: function (text) {
-        var element = this.model.get("overlay").getElement(),
-            textString = "",
+        const element = this.model.get("overlay").getElement();
+        let textString = "",
             template = "";
 
         _.each(text, function (textElement) {
@@ -64,7 +64,7 @@ const MouseHoverPopupView = Backbone.View.extend(/** @lends MouseHoverPopupView.
      * @returns {void}
      */
     createOverlayElement: function () {
-        var element = document.createElement("DIV");
+        const element = document.createElement("DIV");
 
         document.getElementById("map").appendChild(element);
         this.model.get("overlay").setElement(element);

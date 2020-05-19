@@ -28,8 +28,8 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires Core#RadioRequestUtilIsViewMobile
      */
     initialize: function (config) {
-        var markerPosition,
-            channel = Radio.channel("MapMarker");
+        const channel = Radio.channel("MapMarker");
+        let markerPosition = "";
 
         this.model = new MapMarkerModel(config);
 
@@ -42,11 +42,11 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
 
-        if (!_.isUndefined(Radio.request("ParametricURL", "getProjectionFromUrl"))) {
+        if (Radio.request("ParametricURL", "getProjectionFromUrl") !== undefined) {
             this.model.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
         }
 
-        if (!_.isUndefined(Radio.request("ParametricURL", "getMarkerFromUrl"))) {
+        if (Radio.request("ParametricURL", "getMarkerFromUrl") !== undefined) {
             this.model.setMarkerFromParamUrl(Radio.request("ParametricURL", "getMarkerFromUrl"));
         }
 
@@ -88,16 +88,17 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @returns {void}
      */
     zoomTo: function (hit) {
-        // Lese index mit Maßstab 1:1000 als maximal Scale, sonst höchstmögliche Zommstufe
-        var resolutions = Radio.request("MapView", "getResolutions"),
-            index = _.indexOf(resolutions, 0.2645831904584105) === -1 ? resolutions.length : _.indexOf(resolutions, 0.2645831904584105),
+        // read index in scale 1:1000 as max scale, else highest possible zoomfactor
+        const resolutions = Radio.request("MapView", "getResolutions"),
+            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
+        let zoomLevel = this.model.get("zoomLevel"),
             isMobile,
             coord;
 
-        if (!_.isUndefined(hit.coordinate) && _.isArray(hit.coordinate)) {
+        if (hit.coordinate !== undefined && Array.isArray(hit.coordinate)) {
             coord = hit.coordinate;
         }
-        else if (!_.isUndefined(hit.coordinate) && !_.isArray(hit.coordinate)) {
+        else if (hit.coordinate !== undefined && !Array.isArray(hit.coordinate)) {
             coord = hit.coordinate.split(" ");
         }
 
@@ -112,19 +113,22 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                 break;
             }
             case i18next.t("common:modules.searchbar.type.parcel"): {
-                Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                Radio.trigger("MapView", "setCenter", coord, zoomLevel);
                 this.showMarker(coord);
                 break;
             }
             case i18next.t("common:modules.searchbar.type.address"): {
                 this.showMarker(coord);
-                Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
+                Radio.trigger("MapView", "setCenter", coord, zoomLevel);
                 break;
             }
             case i18next.t("common:modules.searchbar.type.district"): {
                 if (coord.length === 2) {
                     this.showMarker(coord);
-                    Radio.trigger("MapView", "setCenter", coord.map(singleCoord => parseInt(singleCoord, 10)), this.model.get("zoomLevel"));
+                    if (zoomLevel >= 7) {
+                        zoomLevel = Math.max(Math.floor(zoomLevel / 2), 4);
+                    }
+                    Radio.trigger("MapView", "setCenter", coord.map(singleCoord => parseInt(singleCoord, 10)), zoomLevel);
                 }
                 else if (coord.length > 2) {
                     this.model.setWkt("POLYGON", coord);
@@ -137,13 +141,13 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             case i18next.t("common:modules.searchbar.type.topic"): {
                 isMobile = Radio.request("Util", "isViewMobile");
 
-                // desktop - Themenbaum wird aufgeklappt
+                // desktop - topics tree is expanded
                 if (isMobile === false) {
                     Radio.trigger("ModelList", "showModelInTree", hit.id);
                 }
                 // mobil
                 else {
-                    // Fügt das Model zur Liste hinzu, falls noch nicht vorhanden
+                    // adds the model to list, if not contained
                     Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
                     Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
                 }
@@ -193,9 +197,16 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                     Radio.trigger("Map", "zoomToExtent", coord);
                 }
                 else if (coord.length > 4) {
-                    this.model.setWkt("POLYGON", coord);
-                    this.model.showFeature(); // bei Flächen soll diese sichtbar sein
-                    Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    if (hit.geometryType === "POLYGON") {
+                        this.model.setWkt("POLYGON", coord);
+                    }
+                    else if (hit.geometryType === "MULTIPOLYGON") {
+                        this.model.setWkt("MULTIPOLYGON", coord);
+                    }
+                    if (hit.geometryType === "POLYGON" || hit.geometryType === "MULTIPOLYGON") {
+                        this.model.showFeature(); // bei Flächen soll diese sichtbar sein
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    }
                 }
                 Radio.trigger("Filter", "resetFilter", hit.feature);
                 break;
@@ -305,11 +316,11 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     showStartMarker: function () {
-        var startMarker = this.model.get("startMarker"),
-            projectionFromParamUrl = this.model.get("projectionFromParamUrl");
+        const projectionFromParamUrl = this.model.get("projectionFromParamUrl");
+        let startMarker = this.model.get("startMarker");
 
-        if (!_.isUndefined(startMarker)) {
-            if (!_.isUndefined(projectionFromParamUrl)) {
+        if (startMarker !== undefined) {
+            if (projectionFromParamUrl !== undefined) {
                 startMarker = transformToMapProjection(Radio.request("Map", "getMap"), projectionFromParamUrl, startMarker);
             }
             Radio.trigger("MapMarker", "showMarker", startMarker);

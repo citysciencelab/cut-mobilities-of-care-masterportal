@@ -2,7 +2,7 @@ import Model from "@modules/tools/gfi/highlightFeature.js";
 import {expect} from "chai";
 import {Fill, Image, Text, Stroke} from "ol/style";
 
-var model;
+let model;
 
 before(function () {
     model = new Model();

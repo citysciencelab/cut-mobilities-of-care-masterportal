@@ -3,6 +3,7 @@ import DesktopThemenFolderView from "./folder/viewTree";
 import CatalogFolderView from "./folder/viewCatalog";
 import DesktopLayerView from "./layer/view";
 import SelectionView from "./layer/viewSelection";
+import store from "../../../src/app-store/index";
 
 const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
 
@@ -10,6 +11,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @class ListView
      * @extends ListViewMain
      * @memberof Menu.Desktop
+     * @param {?} args attributes of the model
      * @constructs
      * @fires Core.ModelList#RadioRequestModelListGetCollection
      * @fires Core.ModelList#UpdateLightTree
@@ -21,7 +23,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @listens Core.ModelList#UpdateSelection
      * @listens Core.ModelList#RenderTree
      */
-    initialize: function () {
+    initialize: function (args) {
         this.collection = Radio.request("ModelList", "getCollection");
 
         Radio.on("Autostart", "startModul", this.startModul, this);
@@ -43,20 +45,26 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
                 this.renderSelectedList();
             }
         });
+        let firstTime = true;
+
+        if (args && args.hasOwnProperty("firstTime")) {
+            firstTime = args.firstTime;
+        }
         this.renderMain();
-        this.render();
+        this.render(firstTime);
         this.renderSelectedList();
         Radio.trigger("Autostart", "initializedModul", "tree");
     },
 
     /**
      * Renders the data to DOM.
+     * @param {Boolean} firstTime true, if first time
      * @return {void}
      */
-    render: function () {
+    render: function (firstTime = true) {
         $("#tree").html("");
         // Renders a Theme level
-        this.renderSubTree("tree", 0, 0, true);
+        this.renderSubTree("tree", 0, 0, firstTime);
         $("ul#tree ul#Overlayer").addClass("LayerListMaxHeight");
         $("ul#tree ul#SelectedLayer").addClass("LayerListMaxHeight");
         $("ul#tree ul#Baselayer").addClass("LayerListMaxHeight");
@@ -82,9 +90,9 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      */
     renderSelectedList: function () {
 
-        var selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),
-            currentMap = Radio.request("Map", "getMapMode"),
-            selectedModels;
+        const selectedLayerModel = this.collection.findWhere({id: "SelectedLayer"}),
+            currentMap = Radio.request("Map", "getMapMode");
+        let selectedModels;
 
         $("#SelectedLayer").html("");
         if (selectedLayerModel.get("isExpanded")) {
@@ -112,8 +120,8 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     renderSubTree: function (parentId, level, levelLimit, firstTime) {
-        var lightModels,
-            models,
+        let lightModels = "",
+            models = "",
             folders,
             layer;
 
@@ -192,7 +200,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {Array} items
      */
     addViewsToItemsOfType: function (type, items, parentId) {
-        var viewItems = items.filter(function (model) {
+        let viewItems = items.filter(function (model) {
             return model.get("type") === type;
         });
 
@@ -215,8 +223,9 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     addOverlayViews: function (models) {
-        _.each(models, function (model) {
+        models.forEach(function (model) {
             if (model.get("type") === "folder") {
+                model.changeLang();
 
                 // Oberste ebene im Themenbaum?
                 if (model.get("parentId") === "tree") {
@@ -238,7 +247,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     addSelectionView: function (models) {
-        _.each(models, function (model) {
+        models.forEach(function (model) {
             if (!model.get("isNeverVisibleInTree")) {
                 new SelectionView({model: model});
             }
@@ -251,12 +260,13 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
      * @return {void}
      */
     startModul: function (modulId) {
-        var modul = this.collection.find(function (model) {
+        const modul = this.collection.find(function (model) {
             return model.get("id").toLowerCase() === modulId;
         });
 
         if (modul.get("type") === "tool") {
             modul.setIsActive(true);
+            store.commit("setToolActive", {id: modul.id, active: true});
         }
         else {
             $("#" + modulId).parent().addClass("open");

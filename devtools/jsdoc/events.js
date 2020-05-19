@@ -872,6 +872,12 @@
  */
 
 /**
+ * @event Core#RadioTriggerObliqueMapIsActivated
+ * @returns {Boolean} - Flag if ObliqueMap is activated.
+ * @example Radio.Trigger("ObliqueMap", "isActivated")
+ */
+
+/**
  * @event Core#RadioTriggerObliqueMapActivateLayer
  * @param {ObliqueLayer} layer ObliqueLayer.
  * @example Radio.trigger("ObliqueMap", "activateLayer", layer)
@@ -1093,7 +1099,7 @@
  */
 
 
-/** -------------------- ATTRIBUTIONS ----------------- */
+/** -------------------- CONTROLS.ATTRIBUTIONS ----------------- */
 
 /**
  * @event Controls.Attributions#RadioTriggerAttributionsRenderAttributions
@@ -1474,6 +1480,23 @@
  */
 
 /**
+ * @event Core#RadioRequestUtilUniqueId
+ * @description Generate a globally-unique id for client-side models or DOM elements that need one.
+ * @param {String} [prefix=""] prefix for the id
+ * @returns {String}  a globally-unique id
+ * @example Radio.request("Util", "uniqueId", prefix);
+ */
+
+/**
+ * @event Core#RadioRequestUtilDifferenceJs
+ * @description Looks through each value in the array a, returning an array of all the values that are not present in the array b
+ * @param {array} a - elements to check
+ * @param {array} b - elements to check
+ * @returns {array} - returns diffrence between array a and b
+ * @example Radio.request("Util", "DifferenceJs", array-a, array-b);
+ */
+
+/**
  * @event Core#RadioTriggerUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");
@@ -1484,6 +1507,19 @@
  * @description todo
  * @example Radio.request("Util", "copyToClipboard");
  */
+
+/**
+ * @event Core#RadioTriggerUtilPick
+ * @description Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
+ * @example Radio.request("Util", "pick");
+ */
+
+/**
+ * @event Core#RadioTriggerUtilOmit
+ * @description Returns a copy of the object, filtered to omit the keys specified (or array of blacklisted keys).
+ * @example Radio.request("Util", "omit");
+ */
+
 
 /**
  * @event Core#changeIsViewMobile
@@ -2128,6 +2164,12 @@
   * @example Radio.trigger("GraphicalSelect", "featureToGeoJson", feature);
   */
 
+ /**
+ * @event Snippets#ValuesChanged
+ * @description Triggered when a snippet changed its values
+ * @param {object}
+ */
+
 /** -------------------- TOOLS.ADDGEOJSON -------------------- */
 
 /**
@@ -2144,6 +2186,63 @@
 /**
  * @event Tools.Kmlimport#ChangeIsActive
  * @description Fired when param isActive changes
+ */
+
+/** -------------------- TOOLS.WFST -------------------- */
+
+/**
+ * @event Tools.Wfst#RadioTrigerWfstTransact
+ * @description performs a wfs transaction
+ * @param {String/Object} layerId The id of the layer on which the transaction is to be performed.
+ * @param {String/Object} featureId The id of the affected feature.
+ * @param {String/Object} mode The transaction mode insert|update|delete.
+ * @param {String/Object} attributes The feature attributes.
+ * @example Radio.trigger("wfst", "transact", layerId, featureId, mode, attributes)
+ */
+
+/**
+ * @event Tools.Wfst#ChangeIsActive
+ * @description Fired when param isActive changes.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeActiveButton
+ * @description Triggered when a button ist clicked.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeCurrentLayerId
+ * @description Triggered when the current active layer has changed.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeShowAttrTable
+ * @description Triggered when the status of the attribute table has changed.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeActiveLayers
+ * @description Triggered when the list of active layers has changed.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeButtonTitleConfig
+ * @description Triggered when the buttons and their captions were updatet.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeButtonConfig
+ * @description Triggered when the configuration for the feature generating buttons has changed.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeSuccessfullTransaction
+ * @description Triggered when a transaction was successfull.
+ */
+
+/**
+ * @event Tools.Wfst#ChangeInteraction
+ * @description Triggered when an interaction was added or has changed.
  */
 
 /** -------------------- CORE.MODELLIST.TOOL -------------------- */
@@ -2430,4 +2529,24 @@
  * @description Todo
  */
 
+/** -------------------- CONTROLS.ORIENTATION ----------------- */
 
+/**
+ * @event Controls.Orientaion#RadioTriggerGeolocationRemoveOverlay
+ * @description Todo
+ * @example Radio.trigger("geolocation", "removeOverlay");
+ */
+
+/** -------------------- CONTROLS.ORIENTATION.POI ----------------- */
+
+/**
+ * @event Controls.Orientation.Poi#RadioTriggerPOIShowPOIModal
+ * @description Trigger show POI modal.
+ * @example Radio.trigger("POI", "showPOIModal");
+ */
+
+/**
+ * @event Controls.Orientation.Poi#RadioTriggerPOIHidePOIModal
+ * @description Trigger hide POI modal.
+ * @example Radio.trigger("POI", "hidePOIModal");
+ */

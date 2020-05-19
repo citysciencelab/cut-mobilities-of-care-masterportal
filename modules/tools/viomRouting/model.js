@@ -6,7 +6,7 @@ import {GeoJSON} from "ol/format.js";
 import {Stroke, Style} from "ol/style.js";
 
 const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         bkgSuggestURL: "",
         bkgGeosearchURL: "",
         viomRoutingURL: "",
@@ -145,14 +145,14 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
         }
     },
     suggestByBKG: function (value, target) {
-        var arr = value.split(/,| /),
+        const arr = value.split(/,| /),
             plz = arr.filter(function (val) {
                 return val.match(/^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$/);
             }),
             hsnr = arr.filter(function (val, index, list) {
-                var patt = /^\D*$/,
-                    preString = patt.test(list[index - 1]),
-                    isHouseNr = false;
+                const patt = /^\D*$/,
+                    preString = patt.test(list[index - 1]);
+                let isHouseNr = false;
 
                 if (index >= 1) {
                     if (preString) { // vorher ein String
@@ -161,9 +161,10 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
                 }
                 return isHouseNr;
             }),
-            query = "&query=" + _.without(arr, plz[0], hsnr[0]),
-            bbox = _.isNull(this.get("bbox")) === false ? this.get("bbox") : "",
-            filter = "";
+            bbox = this.get("bbox") !== null ? this.get("bbox") : "";
+
+        let filter = "",
+            query = "&query=" + Radio.request("Util", "differenceJs", arr, [plz[0], hsnr[0]]);
 
         if (plz.length === 1 && hsnr.length === 1) {
             filter = "&filter=(plz:" + plz + ") AND (typ:Haus) AND haus:(" + hsnr + "*)";
@@ -186,10 +187,10 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
             async: true,
             type: "GET",
             success: function (data) {
-                var treffer = [];
+                const treffer = [];
 
                 try {
-                    _.each(data, function (strasse) {
+                    data.forEach(strasse => {
                         treffer.push([strasse.suggestion, strasse.highlighted]);
                     });
                     if (target === "start") {
@@ -243,7 +244,7 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
         }
     },
     requestRoute: function () {
-        var request = "PROVIDERID=" + this.get("viomProviderID") + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE",
+        let request = "PROVIDERID=" + this.get("viomProviderID") + "&REQUEST=VI-ROUTE&START-X=" + this.get("fromCoord")[0] + "&START-Y=" + this.get("fromCoord")[1] + "&DEST-X=" + this.get("toCoord")[0] + "&DEST-Y=" + this.get("toCoord")[1] + "&USETRAFFIC=TRUE",
             splitter,
             utcHour,
             utcMinute;
@@ -270,7 +271,7 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
             async: true,
             context: this,
             success: function (data) {
-                var geoJsonFormat = new GeoJSON(),
+                const geoJsonFormat = new GeoJSON(),
                     olFeature = geoJsonFormat.readFeature(data),
                     vectorlayer = new VectorLayer({
                         source: new VectorSource({
@@ -310,8 +311,8 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
         }
     },
     addOverlay: function (olFeature) {
-        var html = "<div id='routingoverlay' class=''>",
-            position = olFeature.getGeometry().getLastCoordinate();
+        const position = olFeature.getGeometry().getLastCoordinate();
+        let html = "<div id='routingoverlay' class=''>";
 
         html += "<span class='glyphicon glyphicon-flag'></span>";
         html += "<span>" + olFeature.get("EndDescription").substr(olFeature.get("EndDescription").indexOf(". ") + 1) + "</span>";

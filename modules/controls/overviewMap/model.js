@@ -109,7 +109,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
             mapView = map.getView(),
             layers = map.getLayers().getArray(),
             initVisibBaselayer = Radio.request("Parser", "getInitVisibBaselayer"),
-            initVisibBaselayerId = _.isUndefined(initVisibBaselayer) === false ? initVisibBaselayer.id : initVisibBaselayer,
+            initVisibBaselayerId = initVisibBaselayer !== undefined ? initVisibBaselayer.id : initVisibBaselayer,
             baselayer = this.get("layerId") ? this.getBaseLayerFromCollection(layers, this.get("layerId")) : this.getBaseLayerFromCollection(layers, initVisibBaselayerId),
             newOlView = new View(Object.assign({
                 center: mapView.getCenter(),
@@ -164,11 +164,10 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @returns {object} - Baselayer params.
      */
     getBaseLayerFromCollection: function (layers, baselayer) {
-        var modelFromCollection,
-            baseLayerParams;
+        const modelFromCollection = getLayerWhere({id: baselayer});
+        let baseLayerParams;
 
-        modelFromCollection = getLayerWhere({id: baselayer});
-        if (_.isUndefined(modelFromCollection) === false) {
+        if (modelFromCollection !== undefined) {
             baseLayerParams = {
                 layerUrl: modelFromCollection.url,
                 params: {
@@ -191,7 +190,7 @@ const OverviewMapModel = Backbone.Model.extend(/** @lends OverviewMapModel.proto
      * @returns {ol/Image} - The open layer image layer
      */
     getOvmLayer: function (baselayer) {
-        var imageLayer;
+        let imageLayer;
 
         if (baselayer instanceof Image === false) {
             imageLayer = new Image({

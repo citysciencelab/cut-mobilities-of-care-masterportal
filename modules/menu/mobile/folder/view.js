@@ -17,7 +17,7 @@ const FolderView = Backbone.View.extend({
     template: _.template(FolderTemplate),
     templateLeaf: _.template(FolderLeafTemplate),
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         if (this.model.get("isExpanded") === true && this.model.get("parentId") !== "tree") {
             this.$el.html(this.templateLeaf(attr));

@@ -24,7 +24,7 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      * @listens FlightPlayer#RadioRequestFlightPlayerPlay
      * @listens FlightPlayer#RadioRequestFlightPlayerGetValues
      */
-    defaults: _.extend({}, Backbone.Model.defaults, {
+    defaults: Object.assign({}, Backbone.Model.defaults, {
         /**
          * @type {Cesium.LinearSpline|Cesium.CatmullRomSpline}
          * @private
@@ -181,12 +181,15 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      */
     cesiumPostRender (scene) {
         const time = Date.now() / 1000;
-        var seconds, view;
+        let seconds = "",
+            view = {};
 
         if (!this.get("currentSystemTime")) {
             this.setCurrentSystemTime(time);
         }
+
         seconds = time - this.get("currentSystemTime");
+
         this.setCurrentSystemTime(time);
         if (this.get("paused")) {
             if (this.get("screenSpaceCameraController")) {
@@ -219,6 +222,7 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
             destination: this.get("destinationSpline").evaluate(this.get("currentTime")),
             orientation: Cesium.HeadingPitchRoll.fromQuaternion(this.get("quaternionSpline").evaluate(this.get("currentTime")))
         };
+
         scene.camera.setView(view);
         if (this.get("screenSpaceCameraController")) {
             this.get("screenSpaceCameraController").enableInputs = false;

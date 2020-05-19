@@ -3,7 +3,7 @@
 
 .sidebar {
     height: calc(100% - 50px);
-    float: left;
+    float: right;
     display: none;
     position: relative;
     width: 30%;
@@ -11,7 +11,6 @@
     z-index: 2;
     .dragable {
         width: calc(100% - 25px);
-        margin-left: 25px;;
     }
 }
 .sidebar-mobile {
@@ -23,9 +22,8 @@
     right: 0;
     bottom: 0;
     z-index: 1050;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
-    margin: 3%;
     .drag-bar {
         display: none;
     }
@@ -41,7 +39,6 @@
 }
 #sidebar-content {
     overflow: auto;
-    display: inline-block;
     height: 100%;
     width: 100%;
 }

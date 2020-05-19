@@ -8,7 +8,7 @@ import {expect} from "chai";
 import {registerProjections} from "masterportalAPI/src/crs";
 
 describe("core/map", function () {
-    var model,
+    let model,
         utilModel,
         features;
 

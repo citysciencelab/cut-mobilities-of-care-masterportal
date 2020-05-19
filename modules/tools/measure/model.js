@@ -44,7 +44,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                     })
                 }),
                 geometry: function (feature) {
-                    var geom = feature.getGeometry(),
+                    const geom = feature.getGeometry(),
                         coords = [];
 
                     coords.push(geom.getFirstCoordinate());
@@ -65,7 +65,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                     })
                 }),
                 geometry: function (feature) {
-                    var geom = feature.getGeometry(),
+                    const geom = feature.getGeometry(),
                         coords = [];
 
                     if (geom instanceof LineString) {
@@ -224,7 +224,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             "valuesChanged": function () {
                 selectedValues = this.get("snippetDropdownModelGeometry").getSelectedValues();
                 selectedUnit = this.get("snippetDropdownModelUnit").getSelectedValues();
-                if (!this.getIsDrawn()) {
+                if (!this.getIsDrawing()) {
                     this.createInteraction(selectedValues.values[0] || Object.keys(this.getLocalizedValues())[0]);
                 }
                 this.setUnit(selectedUnit.values[0]);
@@ -239,8 +239,9 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     getLocalizedValues: function () {
         const localizedValues = {};
 
-        localizedValues[this.get("area")] = "Polygon";
         localizedValues[this.get("stretch")] = "LineString";
+        localizedValues[this.get("area")] = "Polygon";
+
         return localizedValues;
     },
 
@@ -277,9 +278,10 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} this
      */
     setStatus: function (model, value) {
-        var layers = Radio.request("Map", "getLayers"),
-            quickHelpSet = Radio.request("QuickHelp", "isSet"),
-            measureLayer,
+        const layers = Radio.request("Map", "getLayers"),
+            quickHelpSet = Radio.request("QuickHelp", "isSet");
+
+        let measureLayer,
             selectedValues;
 
         if (value) {
@@ -308,7 +310,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} this
      */
     changeMap: function (map) {
-        var selectedValues;
+        let selectedValues;
 
         this.deleteFeatures();
         if (map === "3D") {
@@ -335,19 +337,19 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} this
      */
     handle3DClicked: function (obj) {
-        var scene = Radio.request("Map", "getMap3d").getCesiumScene(),
+        const scene = Radio.request("Map", "getMap3d").getCesiumScene(),
             object = scene.pick(obj.position),
-            hit,
-            cartographic,
-            ray,
-            coords,
             mapProjection = Radio.request("MapView", "getProjection"),
             hits3d = this.get("hits3d"),
             firstHit = hits3d[0],
             pointId = "__3dMeasurmentFirstPoint",
-            source = this.get("source"),
-            lon,
-            lat,
+            source = this.get("source");
+        let hit,
+            cartographic,
+            ray,
+            coords,
+            lon = "",
+            lat = "",
             feature,
             distance,
             textPoint,
@@ -400,7 +402,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {object} feature
      */
     createPointFeature: function (coords, id) {
-        var feature = new Feature({
+        const feature = new Feature({
             geometry: new Point(coords)
         });
 
@@ -416,7 +418,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {object} feature - line feature
      */
     createLineFeature: function (firstCoord, lastCoord) {
-        var feature = new Feature({
+        const feature = new Feature({
             geometry: new LineString([
                 firstCoord,
                 lastCoord
@@ -449,7 +451,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
-                that.setIsDrawn(true);
+                that.setIsDrawing(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
                 that.setTextPoint(textPoint);
@@ -457,7 +459,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 that.registerClickListener(that);
             }, this);
             this.get("draw").on("drawend", function (evt) {
-                that.setIsDrawn(false);
+                that.setIsDrawing(false);
                 evt.feature.set("styleId", evt.feature.ol_uid);
                 that.unregisterPointerMoveListener(that);
                 that.unregisterClickListener(that);
@@ -506,7 +508,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} this
      */
     moveTextPoint: function (evt) {
-        var point = this.get("textPoint"),
+        const point = this.get("textPoint"),
             geom = point.getGeometry(),
             currentLine = this.get("draw").getOverlay().getSource().getFeatures()[0],
             styles = this.generateTextStyles(currentLine);
@@ -522,15 +524,16 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {object} styles
      */
     generate3dTextStyles: function (distance, heightDiff) {
-        var output = {},
+        const output = {},
             fill = new Fill({
                 color: [255, 255, 255, 1]
             }),
             stroke = new Stroke({
                 color: [0, 0, 0, 1],
                 width: 2
-            }),
-            styles = [];
+            });
+
+        let styles = [];
 
         if (this.get("unit") === "km") {
             output.measure = "Länge: " + (distance / 1000).toFixed(3) + this.get("unit");
@@ -688,7 +691,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} this
      */
     place3dMeasureTooltip: function (distance, heightDiff, position) {
-        var output = "<span class='glyphicon glyphicon-resize-horizontal'/> ";
+        let output = "<span class='glyphicon glyphicon-resize-horizontal'/> ";
 
         if (this.get("unit") === "km") {
             output += (distance / 1000).toFixed(3) + " " + this.get("unit");
@@ -760,16 +763,16 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @return {undefined}
      */
     formatLength: function (line) {
-        var length = line.getLength(),
+        const length = line.getLength(),
             output = {},
             coords = line.getCoordinates(),
-            rechtswertMittel = 0,
-            lengthRed,
-            fehler = 0,
-            scaleError = this.get("scale") / 1000, // Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
-            i;
+            scaleError = this.get("scale") / 1000; // Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
 
-        for (i = 0; i < coords.length; i++) {
+        let lengthRed = "",
+            fehler = 0,
+            rechtswertMittel = 0;
+
+        for (let i = 0; i < coords.length; i++) {
             rechtswertMittel += coords[i][0];
             if (i < coords.length - 1) {
                 // http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
@@ -807,16 +810,16 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @return {undefined}
      */
     formatArea: function (polygon) {
-        var area = polygon.getArea(),
+        const area = polygon.getArea(),
             output = {},
             coords = polygon.getLinearRing(0).getCoordinates(),
-            rechtswertMittel = 0,
-            areaRed,
-            fehler = 0,
-            scaleError = this.get("scale") / 1000,
-            i;
+            scaleError = this.get("scale") / 1000;
 
-        for (i = 0; i < coords.length; i++) {
+        let areaRed = "",
+            rechtswertMittel = 0,
+            fehler = 0;
+
+        for (let i = 0; i < coords.length; i++) {
             rechtswertMittel += parseInt(coords[i][0], 10);
             if (i === coords.length - 1) {
                 fehler += this.calcDeltaPow(coords, i, 0);
@@ -825,9 +828,11 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 fehler += this.calcDeltaPow(coords, i, i + 1);
             }
         }
+
         fehler = 0.5 * scaleError * Math.sqrt(fehler);
         rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
         areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2))) - (0.0008 * area);
+
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km²") {
                 output.measure = (areaRed / 1000000).toFixed(1) + " " + this.get("unit");
@@ -857,7 +862,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         let source = null,
             actualFeature = null;
 
-        if (this.get("isDrawn")) {
+        if (this.get("isDrawing")) {
+            this.get("draw").finishDrawing();
             source = this.get("source");
             if (source.getFeatures().length > 0) {
                 actualFeature = source.getFeatures().slice(-1)[0];
@@ -916,13 +922,11 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @param {boolean} value - true or false
      * @returns {this} this
      */
-    setIsDrawn: function (value) {
-        var dropdownmenu,
-            button;
+    setIsDrawing: function (value) {
+        const dropdownmenu = document.querySelector(".dropdown_geometry"),
+            button = dropdownmenu.querySelector("button");
 
-        dropdownmenu = document.querySelector(".dropdown_geometry");
-        button = dropdownmenu.querySelector("button");
-        this.set("isDrawn", value);
+        this.set("isDrawing", value);
         /* wird geprüft, ob es gemessen wird, falls ja, wird dropdown menu für Geometry ausgegraut*/
         if (value) {
             button.setAttribute("disabled", "disabled");
@@ -936,8 +940,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * getter for drawn function
      * @returns {void}
      */
-    getIsDrawn: function () {
-        return this.get("isDrawn");
+    getIsDrawing: function () {
+        return this.get("isDrawing");
     },
 
     /**

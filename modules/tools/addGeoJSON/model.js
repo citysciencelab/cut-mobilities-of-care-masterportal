@@ -12,7 +12,7 @@ const AddGeoJSON = Backbone.Model.extend(/** @lends AddGeoJSON.prototype */{
      * @fires Core.ModelList#RadioTriggerModelListAddModelsByAttributes
      */
     initialize: function () {
-        var channel = Radio.channel("AddGeoJSON");
+        const channel = Radio.channel("AddGeoJSON");
 
         this.listenTo(channel, {
             "addGeoJsonToMap": this.addGeoJsonToMap

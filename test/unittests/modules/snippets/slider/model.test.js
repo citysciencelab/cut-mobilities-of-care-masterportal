@@ -3,7 +3,7 @@ import Util from "@modules/core/util.js";
 import {expect} from "chai";
 
 describe("snippets/slider/model", function () {
-    var model;
+    let model;
 
     new Util();
 
@@ -13,11 +13,12 @@ describe("snippets/slider/model", function () {
             type: "integer"
         });
     });
+
     describe("parseValues", function () {
         it("should return an array of numbers", function () {
-            var parsedValues = model.parseValues(model.get("values")),
-                allValues = _.every(parsedValues, function (value) {
-                    return _.isNumber(value);
+            const parsedValues = model.parseValues(model.get("values")),
+                allValues = parsedValues.every(function (value) {
+                    return typeof value === "number";
                 });
 
             expect(allValues).to.be.true;
@@ -82,6 +83,18 @@ describe("snippets/slider/model", function () {
             model.get("valuesCollection").at(1).setValue(2000);
 
             expect(model.changeValuesByText(undefined, undefined)).to.be.an("array").includes(100, 2000);
+        });
+    });
+
+    describe("checkAreAllValuesInRange", function () {
+        it("should return true for all numbers in range", function () {
+            expect(model.checkAreAllValuesInRange([1, 5, 7, 15, 99, 100], 1, 100)).to.be.true;
+        });
+        it("should return false if a number is out of range ", function () {
+            expect(model.checkAreAllValuesInRange([1, 5, 10], 5, 20)).to.be.false;
+        });
+        it("should return true if the passed array is empty", function () {
+            expect(model.checkAreAllValuesInRange([], 1, 10)).to.be.true;
         });
     });
 });

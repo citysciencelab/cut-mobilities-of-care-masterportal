@@ -1,0 +1,10 @@
+<sequence>
+	"<element name='geom' type='gml:GeometryPropertyType'/>" +
+	"<element name='name' minOccurs='1' type='string'/>" +
+    "<element name='vorhaben' type='string'/>" +
+    "<element name='anfragedatum' minOccurs='1' type='date'/>" +
+    "<element name='bemerkung' minOccurs='0' type='string'/>" +
+    "<element name='vorgangsnummer' minOccurs='1' type='integer'/>" +
+    "<element name='testnummer' minOccurs='0' type='decimal'/>" +
+    "<element name='istest' minOccurs='0' type='boolean'/>" +
+</sequence>

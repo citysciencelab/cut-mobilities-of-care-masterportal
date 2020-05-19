@@ -5,7 +5,7 @@ import RoutableView from "../../objects/routingButton/view";
 
 const DefaultTheme = Theme.extend({
     initialize: function () {
-        var channel = Radio.channel("defaultTheme");
+        const channel = Radio.channel("defaultTheme");
 
         this.listenTo(this, {
             "change:isReady": function () {
@@ -41,7 +41,7 @@ const DefaultTheme = Theme.extend({
      * @returns {void}
      */
     replaceValuesWithChildObjects: function () {
-        var element = this.get("gfiContent"),
+        const element = this.get("gfiContent"),
             children = [];
 
         if (_.isString(element) && element.match(/content="text\/html/g)) {
@@ -50,10 +50,10 @@ const DefaultTheme = Theme.extend({
         else {
             _.each(element, function (ele, index) {
                 _.each(ele, function (val, key) {
-                    var copyright,
+                    const valString = String(val);
+                    let copyright,
                         imgView,
-                        videoView,
-                        valString = String(val);
+                        videoView;
 
                     if (valString.substr(0, 4) === "http"
                         && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1 || valString.search(/\.jpeg/i) !== -1 || valString.search(/\.gif/i) !== -1)) {

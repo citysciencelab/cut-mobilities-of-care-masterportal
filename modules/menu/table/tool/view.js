@@ -15,7 +15,7 @@ const ToolView = Backbone.View.extend({
     className: "table-nav table-tools col-md-2",
     template: _.template(MenuTemplate),
     render: function () {
-        var collection = Radio.request("ModelList", "getCollection"),
+        const collection = Radio.request("ModelList", "getCollection"),
             models = collection.models.filter(function (model) {
                 return model.get("type") === "tool" || model.get("type") === "folder";
             });

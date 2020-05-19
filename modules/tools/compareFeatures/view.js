@@ -28,7 +28,7 @@ const CompareFeaturesView = Backbone.View.extend({
             "change:isActive": this.render,
             "renderFeedbackModal": this.renderFeedbackModal
         });
-        document.getElementsByClassName("masterportal-container")[0].appendChild(this.el);
+        document.getElementById("masterportal-container").appendChild(this.el);
 
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
@@ -128,7 +128,7 @@ const CompareFeaturesView = Backbone.View.extend({
         this.$el.find("." + evt.target.classList[0]).remove();
         this.model.removeFeatureFromList(featureToRemoved);
         if (this.model.get("featureList").length === 0) {
-            this.renderErrorModal();
+            this.renderErrorModal(this.model);
         }
     },
     preparePrint: function () {
@@ -143,7 +143,7 @@ const CompareFeaturesView = Backbone.View.extend({
      * @returns {void}
      */
     toggleRows: function (evt) {
-        const text = this.model.get("moreInfo");
+        let text = this.model.get("moreInfo");
 
         this.$el.find(".toggle-row").toggle();
         if (evt.target.textContent === text) {

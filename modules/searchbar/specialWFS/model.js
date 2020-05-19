@@ -7,7 +7,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         geometryName: "app:geom",
         maxFeatures: 20,
         timeout: 6000,
-        definitions: null,
+        definitions: [],
         ajaxRequests: {},
         defaultNamespaces: "xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml'"
     },
@@ -39,7 +39,9 @@ const SpecialWFSModel = Backbone.Model.extend({
         if (config.maxFeatures) {
             this.setMaxFeatures(config.maxFeatures);
         }
-        this.setDefinitions(config.definitions);
+        if (config.definitions) {
+            this.setDefinitions(config.definitions);
+        }
 
         // set Listener
         this.listenTo(Radio.channel("Searchbar"), {
@@ -47,7 +49,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         });
 
         // initiale Suche
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
             this.search(Radio.request("ParametricURL", "getInitString"));
         }
     },
@@ -87,7 +89,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {object}            aufbereitetes Objekt zur WFS Abfrage
      */
     getDataParameters: function (value) {
-        var parameters = {};
+        const parameters = {};
 
         value.data.split("&").forEach(function (keyValue) {
             parameters[keyValue.split("=")[0].toUpperCase()] = decodeURIComponent(keyValue.split("=")[1]);
@@ -112,12 +114,12 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {string}               XML String
      */
     getWFS110Xml: function (definition, searchString) {
-        var typeName = definition.typeName,
+        const typeName = definition.typeName,
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             maxFeatures = definition.maxFeatures ? definition.maxFeatures : this.get("maxFeatures"),
-            namespaces = definition.namespaces ? this.get("defaultNamespaces") + " " + definition.namespaces : this.get("defaultNamespaces"),
-            data, propertyName;
+            namespaces = definition.namespaces ? this.get("defaultNamespaces") + " " + definition.namespaces : this.get("defaultNamespaces");
+        let data, propertyName;
 
         data = "<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' ";
         data += namespaces + " traverseXlinkDepth='*' version='1.1.0'>";
@@ -149,8 +151,8 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     search: function (searchString) {
-        var definitions = this.get("definitions"),
-            data;
+        const definitions = this.get("definitions");
+        let data;
 
         if (searchString.length >= this.get("minChars")) {
             definitions.forEach(function (def) {
@@ -184,7 +186,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     sendRequest: function (def, data) {
-        var ajax = this.get("ajaxRequests");
+        const ajax = this.get("ajaxRequests");
 
         if (ajax[def.name] !== null && ajax[def.name] !== undefined) {
             ajax[def.name].abort();
@@ -238,30 +240,46 @@ const SpecialWFSModel = Backbone.Model.extend({
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
             elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]);
-
         let identifier,
-            geom,
-            coordinateArray;
+            geom;
 
-        _.each(elements, function (element) {
-            var elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
-                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]);
+        for (const element of elements) {
+            const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
+                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
+                polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember"),
+                lengthIndex = polygonMembers.length;
+            let coordinateArray = [],
+                geomType;
 
             if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
                 identifier = elementPropertyNames[0].textContent;
-                geom = elementGeometryNames[0].firstElementChild;
 
-                // searching for first simple geometry avoiding multipolygons
-                while (geom.childElementCount > 0) {
-                    geom = geom.firstElementChild;
+                if (polygonMembers.length > 1) {
+
+                    for (let i = 0; i < lengthIndex; i++) {
+                        const coords = polygonMembers[i].getElementsByTagNameNS("*", "posList").item(0).textContent;
+
+                        coordinateArray.push(Object.values(coords.replace(/\s\s+/g, " ").split(" ")));
+                    }
+                    geomType = "MULTIPOLYGON";
                 }
+                else {
+                    geom = elementGeometryNames[0].firstElementChild;
 
-                coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
+                    // searching for first simple geometry avoiding multipolygons
+                    while (geom.childElementCount > 0) {
+                        geom = geom.firstElementChild;
+                    }
+
+                    coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
+                    geomType = "POLYGON";
+                }
 
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     id: _.uniqueId(type.toString()),
                     name: identifier.trim(),
+                    geometryType: geomType,
                     type: type,
                     coordinate: coordinateArray,
                     glyphicon: glyphicon
@@ -270,7 +288,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             else {
                 console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
             }
-        }, this);
+        }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
     },
 
@@ -280,9 +298,9 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {String[]} propertynamesWithoutNamespace
      */
     removeNameSpaceFromArray: function (propertyNames) {
-        var propertynamesWithoutNamespace = [];
+        const propertynamesWithoutNamespace = [];
 
-        _.each(propertyNames, function (propertyname) {
+        propertyNames.forEach(function (propertyname) {
             propertynamesWithoutNamespace.push(propertyname.split(":")[1]);
         });
 
@@ -295,7 +313,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     showError: function (err) {
-        var detail = err.statusText && err.statusText !== "" ? err.statusText : "";
+        const detail = err.statusText && err.statusText !== "" ? err.statusText : "";
 
         console.error("Service unavailable. " + detail);
     },
@@ -306,25 +324,33 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @returns {void}
      */
     polishAjax: function (type) {
-        var ajax = this.get("ajaxRequests"),
-            cleanedAjax = _.omit(ajax, type);
+        const ajax = this.get("ajaxRequests"),
+            cleanedAjax = Radio.request("Util", "omit", ajax, type);
 
         this.set("ajaxRequests", cleanedAjax);
     },
 
-    // setter for minChars
+    /**
+     * Setter for minChars
+     * @param {number} value - Amount of minChars.
+     * @returns {void}
+     */
     setMinChars: function (value) {
         this.set("minChars", value);
     },
 
-    // setter for timeout
+    /**
+     * Setter for timeout
+     * @param {number} value - time.
+     * @returns {void}
+     */
     setTimeout: function (value) {
         this.set("timeout", value);
     },
 
-    /*
+    /**
     * setter for maxFeatures
-    * @param {integer} value maxFeatures
+    * @param {integer} value - maxFeatures
     * @returns {void}
     */
     setMaxFeatures: function (value) {

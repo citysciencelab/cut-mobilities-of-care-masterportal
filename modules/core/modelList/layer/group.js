@@ -1,6 +1,7 @@
 import {Group as LayerGroup} from "ol/layer.js";
 import Layer from "./model";
 import WMSLayer from "./wms";
+import WMTSLayer from "./wmts";
 import WFSLayer from "./wfs";
 import GeoJSONLayer from "./geojson";
 import SensorLayer from "./sensor";
@@ -23,6 +24,16 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      */
     initialize: function () {
         Layer.prototype.initialize.apply(this);
+
+        if (this.get("isVisibleInMap")) {
+            this.updateSource();
+        }
+
+        this.listenTo(this, {
+            "change:isVisibleInMap": function () {
+                this.updateSource();
+            }
+        });
     },
 
     /**
@@ -37,6 +48,9 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
         this.get("children").forEach(childLayerDefinition => {
             if (childLayerDefinition.typ === "WMS") {
                 layerSource.push(new WMSLayer(childLayerDefinition));
+            }
+            else if (childLayerDefinition.typ === "WMTS") {
+                layerSource.push(new WMTSLayer(childLayerDefinition));
             }
             else if (childLayerDefinition.typ === "WFS") {
                 if (childLayerDefinition.outputFormat === "GeoJSON") {

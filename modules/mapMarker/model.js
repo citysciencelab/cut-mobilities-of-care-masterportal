@@ -59,7 +59,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
 
         Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
 
-        if (_.has(searchConf, "zoomLevel")) {
+        if (searchConf.hasOwnProperty("zoomLevel")) {
             this.setZoomLevel(searchConf.zoomLevel);
         }
         if (parcelSearchConf && parcelSearchConf.styleId) {
@@ -146,7 +146,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {Feature} - The feature from wkt.
      */
     getFeature: function () {
-        var format = new WKT(),
+        const format = new WKT(),
             feature = format.readFeature(this.get("wkt"));
 
         return feature;
@@ -157,7 +157,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {ol/Extent} - the extent.
      */
     getExtent: function () {
-        var feature = this.getFeature(),
+        const feature = this.getFeature(),
             extent = feature.getGeometry().getExtent();
 
         return extent;
@@ -169,7 +169,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {Number[]} center coordinate
      */
     getCenterFromExtent: function (extent) {
-        var deltaY = extent[2] - extent[0],
+        const deltaY = extent[2] - extent[0],
             deltaX = extent[3] - extent[1],
             centerY = extent[0] + deltaY / 2,
             centerX = extent[1] + deltaX / 2;
@@ -184,13 +184,12 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {string} wkt WellKnownText-Geom
      */
     getWKTGeom: function (type, geom) {
-        var wkt,
-            split,
+        let wkt,
             regExp;
 
         if (type === "POLYGON") {
             wkt = type + "((";
-            _.each(geom, function (element, index, list) {
+            geom.forEach(function (element, index, list) {
                 if (index % 2 === 0) {
                     wkt += element + " ";
                 }
@@ -209,10 +208,9 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
         }
         else if (type === "MULTIPOLYGON") {
             wkt = type + "(((";
-            _.each(geom, function (element, index) {
-                split = geom[index].split(" ");
+            geom.forEach(function (element, index) {
 
-                _.each(split, function (coord, index2, list) {
+                geom[index].forEach(function (coord, index2, list) {
                     if (index2 % 2 === 0) {
                         wkt += coord + " ";
                     }
@@ -233,7 +231,6 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
             regExp = new RegExp(", \\)\\?\\(", "g");
             wkt = wkt.replace(regExp, "),(");
         }
-
         return wkt;
     },
 
@@ -242,7 +239,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @return {void}
      */
     showFeature: function () {
-        var feature = this.getFeature();
+        const feature = this.getFeature();
 
         this.get("polygon").getSource().addFeature(feature);
         this.get("polygon").setVisible(true);
@@ -264,7 +261,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @return {void}
      */
     setMapMarkerPolygonStyle: function (mapMarkerStyleId) {
-        var styleListModel = Radio.request("StyleList", "returnModelById", mapMarkerStyleId);
+        const styleListModel = Radio.request("StyleList", "returnModelById", mapMarkerStyleId);
 
         if (styleListModel) {
             this.get("polygon").setStyle(styleListModel.createStyle(this.get("polygon"), false));
@@ -287,7 +284,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * @returns {void}
      */
     setWkt: function (type, geom) {
-        var value = this.getWKTGeom(type, geom);
+        const value = this.getWKTGeom(type, geom);
 
         this.set("wkt", value);
     },

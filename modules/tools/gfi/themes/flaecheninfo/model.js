@@ -9,7 +9,7 @@ const FlaecheninfoTheme = Theme.extend({
     },
 
     initialize: function () {
-        var channel = Radio.channel("GFI");
+        const channel = Radio.channel("GFI");
 
         this.listenToOnce(channel, {
             "hideGFI": this.resetIsMapMarkerVisible
@@ -21,7 +21,7 @@ const FlaecheninfoTheme = Theme.extend({
 
         this.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": function () {
-                var layerModelFlaecheninfo = Radio.request("ModelList", "getModelByAttributes", {gfiTheme: this.get("gfiTheme")});
+                const layerModelFlaecheninfo = Radio.request("ModelList", "getModelByAttributes", {gfiTheme: this.get("gfiTheme")});
 
                 if (!layerModelFlaecheninfo.get("isVisibleInMap") || !layerModelFlaecheninfo.get("isSelected")) {
                     this.setIsVisible(false);
@@ -37,32 +37,29 @@ const FlaecheninfoTheme = Theme.extend({
      * @returns {void}
      */
     parseGfiContent: function () {
-        var requestedParcelId = Radio.request("GFI", "getRequestedParcelId"),
-            textContent,
-            umring,
+        const requestedParcelId = Radio.request("GFI", "getRequestedParcelId");
+        let textContent,
+            ring,
             gfiContent = this.get("gfiContent");
 
         // Sometimes parcel service returns multiple results as center points parcels may be inside another
         // parcel. Because this, results are sorted this way.
-        gfiContent = gfiContent.sort(foundGfiContent => {
-            return foundGfiContent.Flurstück === requestedParcelId ? -1 : 1;
-        });
+        if (gfiContent && typeof gfiContent.sort === "function") {
+            gfiContent = gfiContent.sort(foundGfiContent => {
+                return foundGfiContent.Flurstück === requestedParcelId ? -1 : 1;
+            });
 
-        textContent = _.omit(gfiContent[0], this.get("geometryKey"));
-        umring = _.find(gfiContent[0], function (val, key) {
-            if (key === this.get("geometryKey")) {
-                return val;
-            }
-            return null;
-        }, this);
+            textContent = Radio.request("Util", "omit", gfiContent[0], this.get("geometryKey"));
+            ring = gfiContent[0].hasOwnProperty(this.get("geometryKey")) ? gfiContent[0][this.get("geometryKey")] : "";
 
-        this.setGfiContent([textContent]);
-        this.setGeometry(umring);
-        this.showUmring();
+            this.setGfiContent([textContent]);
+            this.setGeometry(ring);
+            this.showUmring();
+        }
     },
 
     createReport: function () {
-        var flurst = this.get("gfiContent")[0].Flurstück,
+        const flurst = this.get("gfiContent")[0].Flurstück,
             gemarkung = this.get("gfiContent")[0].Gemarkung;
 
         Radio.trigger("ParcelSearch", "createReport", flurst, gemarkung);
@@ -74,7 +71,7 @@ const FlaecheninfoTheme = Theme.extend({
      * @returns {void}
      */
     setGeometry: function (umring) {
-        var coordinatesString,
+        let coordinatesString,
             coordinates;
 
         if (umring) {
@@ -93,7 +90,7 @@ const FlaecheninfoTheme = Theme.extend({
      * @returns {void}
      */
     showUmring: function () {
-        var coordinates = this.get("geometry");
+        const coordinates = this.get("geometry");
 
         Radio.trigger("GFI", "isMapMarkerVisible", this.get("isMapMarkerVisible"));
         if (coordinates) {

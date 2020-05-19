@@ -38,9 +38,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         if (this.has("clusterDistance")) {
             this.set("isClustered", true);
         }
-
-        this.setStyleId(this.get("styleId") || this.get("id"));
-        this.setStyleFunction(Radio.request("StyleList", "returnModelById", this.get("styleId")));
     },
 
     /**
@@ -170,10 +167,12 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @returns {void}
      */
     handleData: function (data) {
-        var mapCrs = Radio.request("MapView", "getProjection"),
+        const mapCrs = Radio.request("MapView", "getProjection"),
             jsonCrs = this.getJsonProjection(data),
-            features = this.parseDataToFeatures(data, mapCrs, jsonCrs),
-            newFeatures = [];
+            newFeatures = [],
+            isClustered = this.has("clusterDistance");
+
+        let features = this.parseDataToFeatures(data, mapCrs, jsonCrs);
 
         if (!features) {
             return;
@@ -188,7 +187,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         // für it-gbm
         if (!this.has("autoRefresh")) {
             features.forEach(function (feature) {
-                var geometry = feature.getGeometry();
+                const geometry = feature.getGeometry();
 
                 if (geometry) {
                     feature.set("extent", geometry.getExtent());
@@ -199,6 +198,26 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         }
         this.prepareFeaturesFor3D(features);
         this.featuresLoaded(features);
+        if (features) {
+            this.styling(isClustered);
+            this.get("layer").setStyle(this.get("style"));
+        }
+    },
+
+    /**
+     * create style, function triggers to style_v2.json
+     * @param  {boolean} isClustered - should
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     * @returns {void}
+     */
+    styling: function (isClustered) {
+        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+
+        if (stylelistmodel) {
+            this.setStyle(function (feature) {
+                return stylelistmodel.createStyle(feature, isClustered);
+            });
+        }
     },
 
     /**
@@ -350,22 +369,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     /**
-     * sets style function for features or layer
-     * @param  {Backbone.Model} stylelistmodel Model für Styles
-     * @returns {void}
-     */
-    setStyleFunction: function (stylelistmodel) {
-        if (_.isUndefined(stylelistmodel)) {
-            this.set("styleFunction", undefined);
-        }
-        else {
-            this.set("styleFunction", function (feature) {
-                return stylelistmodel.createStyle(feature, this.get("isClustered"));
-            }.bind(this));
-        }
-    },
-
-    /**
      * creates the legendUrl used by layerinformation
      * @fires StyleList#RadioRequestReturnModelById
      * @returns {void}
@@ -393,7 +396,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
 
         this.hideAllFeatures();
         _.each(featureIdList, function (id) {
-            var feature = this.get("layerSource").getFeatureById(id);
+            const feature = this.get("layerSource").getFeatureById(id);
 
             if (feature !== null) {
                 feature.setStyle(undefined);
@@ -408,7 +411,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @return {void}
      */
     hideAllFeatures: function () {
-        var collection = this.get("layerSource").getFeatures();
+        const collection = this.get("layerSource").getFeatures();
 
         collection.forEach(function (feature) {
             feature.setStyle(function () {
@@ -422,16 +425,11 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @returns {void}
      */
     showAllFeatures: function () {
-        var collection = this.get("layerSource").getFeatures();
+        const collection = this.get("layerSource").getFeatures();
 
         collection.forEach(function (feature) {
             feature.setStyle(undefined);
         }, this);
-    },
-
-    // setter for styleId
-    setStyleId: function (value) {
-        this.set("styleId", value);
     },
 
     // setter for style

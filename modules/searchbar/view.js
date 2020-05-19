@@ -8,6 +8,7 @@ import VisibleVectorModel from "./visibleVector/model";
 import BKGModel from "./bkg/model";
 import TreeModel from "./tree/model";
 import OSMModel from "./osm/model";
+import LocationFinderModel from "./locationFinder/model";
 import GdiModel from "./gdi/model";
 import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
@@ -34,9 +35,9 @@ import Searchbar from "./model";
  */
 const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */{
     events: {
-        "paste input": "waitForEvent",
-        "keyup input": "waitForEvent",
-        "contextmenu input": "waitForEvent",
+        "paste input": "controlEvent",
+        "keyup input": "controlEvent",
+        "contextmenu input": "controlEvent",
         "focusin input": "toggleStyleForRemoveIcon",
         "focusout input": "toggleStyleForRemoveIcon",
         "click .form-control-feedback": "deleteSearchString",
@@ -118,10 +119,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             this.$("#searchInput").val(this.model.get("placeholder"));
         }
         this.$("#searchInput").blur();
-        // Verwalte Suchalgorithmen zur initialen Suche
+        // Manage search algorithms for initial search.
         this.model.setInitialSearchTasks(config);
 
-        // Bedarfsweises Laden der Suchalgorythmen
+        // On-demand loading of the search algorithms.
         if (config.hasOwnProperty("gazetteer")) {
             new GAZModel(config.gazetteer);
         }
@@ -132,7 +133,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             new VisibleVectorModel(config.visibleVector);
         }
         else if (config.hasOwnProperty("visibleWFS")) {
-            // Deprecated mit neuer Stable
+            // Deprecated in new stable
             new VisibleVectorModel(config.visibleWFS);
         }
         if (config.hasOwnProperty("bkg")) {
@@ -144,6 +145,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (config.hasOwnProperty("osm")) {
             new OSMModel(config.osm);
         }
+        if (config.hasOwnProperty("locationFinder")) {
+            new LocationFinderModel(config.locationFinder);
+        }
         if (config.hasOwnProperty("gdi")) {
             new GdiModel(config.gdi);
         }
@@ -153,11 +157,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         this.model.setHitIsClick(false);
 
-        // Hack für flexible Suchleiste
+        // Hack for flexible search bar
         $(window).on("resize", this.onresizeCallback.bind(this));
     },
-    id: "searchbar", // wird ignoriert, bei renderToDOM
-    className: "navbar-form col-xs-9", // wird ignoriert, bei renderToDOM
+    id: "searchbar", // is ignored, with renderToDOM
+    className: "navbar-form col-xs-9", // is ignored, with renderToDOM
     searchbarKeyNavSelector: "#searchInputUL",
     template: _.template(SearchbarTemplate),
     templateTable: _.template(TemplateTable),
@@ -168,16 +172,16 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     render: function () {
-        var attr = this.model.toJSON(),
+        const attr = this.model.toJSON(),
             menuStyle = Radio.request("Util", "getUiStyle");
 
         if (menuStyle !== "TABLE") {
             this.$el.html(this.template(attr));
             if (window.innerWidth < 768) {
-                $(".navbar-toggle").before(this.$el); // vor dem toggleButton
+                $(".navbar-toggle").before(this.$el); // prior of toggleButton
             }
             else {
-                $(".navbar-collapse").append(this.$el); // rechts in der Menuebar
+                $(".navbar-collapse").append(this.$el); // right in the menubar
             }
             if (this.model.get("searchString").length !== 0) {
                 $("#searchInput:focus").css("border-right-width", "0");
@@ -198,7 +202,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     onresizeCallback: function () {
         this.setSearchInputWidth();
         $(".dropdown-menu-search").css({
-            "max-height": window.innerHeight - 100 // 100 fixer Wert für navbar &co.
+            "max-height": window.innerHeight - 100 // 100 fix value for navbar &co.
         });
         if (Radio.request("Util", "getUiStyle") !== "TABLE") {
             $(".dropdown-menu-search").css({
@@ -213,7 +217,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     initialRender: function () {
         this.render();
-        if (!_.isUndefined(this.model.get("initSearchString"))) {
+        if (this.model.get("initSearchString") !== undefined) {
             this.renderRecommendedList();
             this.$("#searchInput").val(this.model.get("initSearchString"));
             this.model.unset("initSearchString", true);
@@ -227,7 +231,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     clickListGroupItem: function (e) {
-        // fix für Firefox
+        // fix for Firefox
         const event = e || window.event;
         let target = $(event.target);
 
@@ -272,7 +276,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     menuLoaderReady: function (parentElementId) {
         this.render(parentElementId);
-        if (!_.isUndefined(this.model.get("initSearchString"))) {
+        if (this.model.get("initSearchString") !== undefined) {
             if (this.model.get("isInitialRecommendedListCreated") === true) {
                 this.renderRecommendedList();
                 this.$("#searchInput").val(this.model.get("initSearchString"));
@@ -312,8 +316,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {integer} div height
      */
     getDropdownHeight: function () {
-        if (document.getElementsByClassName("masterportal-container").length > 0) {
-            return document.getElementsByClassName("masterportal-container")[0].offsetHeight - 130;
+        if (document.getElementById("masterportal-container")) {
+            return document.getElementById("masterportal-container").offsetHeight - 130;
         }
         return 100;
     },
@@ -323,19 +327,18 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     renderRecommendedList: function () {
-        var attr = this.model.toJSON(),
+        const attr = this.model.toJSON(),
             height = this.getDropdownHeight(),
             width = this.$("#searchForm").width();
 
         attr.uiStyle = Radio.request("Util", "getUiStyle");
 
-        // Falls der Themenbaum auf dem Tisch geöffnet ist, soll dieser bei der Initialisierung der Suche
-        // geschlossen werden.
+        // If the topic tree is open on the table, it should be closed when the search is initialized.
         if ($("#table-nav-layers-panel").length > 0) {
             $("#table-nav-layers-panel").collapse("hide");
             Radio.trigger("TableMenu", "deactivateCloseClickFrame");
         }
-        // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+        // sz, does not want to work in a local environment, so first use the template as variable
         // $("ul.dropdown-menu-search").html(_.template(SearchbarRecommendedListTemplate, attr));
 
         this.prepareAttrStrings(attr.hitList);
@@ -344,9 +347,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.$("ul.dropdown-menu-search").css("width", width);
         this.$("ul.dropdown-menu-search").css("max-width", width);
 
-        // Bei nur einem Treffer in der RecommendedList wird direkt der Marker darauf gesetzt
-        // und im Falle eines Tree-Search auch das Menü aufgeklappt.
-        if (!_.isUndefined(this.model.get("initSearchString")) && this.model.get("hitList").length === 1) {
+        // With only one hit in the recommendedList, the marker is set directly
+        // and in case of a Tree-Search the menu folds out.
+        if (this.model.get("initSearchString") !== undefined && this.model.get("hitList").length === 1) {
             this.hitSelected();
         }
         this.$("#searchInput + span").show();
@@ -358,9 +361,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     prepareAttrStrings: function (hitlist) {
-        // kepps hit.names from overflowing
-        _.each(hitlist, function (hit) {
-            if (!_.isUndefined(hit.additionalInfo)) {
+        // keps hit.names from overflowing
+        hitlist.forEach(function (hit) {
+            if (hit.additionalInfo !== undefined) {
                 if (hit.name.length + hit.additionalInfo.length > 50) {
                     hit.shortName = this.model.shortenString(hit.name, 30);
                     hit.additionalInfo = this.model.shortenString(hit.additionalInfo, 20);
@@ -370,10 +373,11 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * todo
-     * @returns {*} todo
+     * Trigger searching via all registered services. Update searchString to enable patterns with less then three chars.
+     * @returns {void}
      */
     searchAll: function () {
+        this.model.setSearchString($("#searchInput").val());
         Radio.trigger("Searchbar", "searchAll", this.model.get("searchString"));
     },
 
@@ -382,15 +386,15 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     renderHitList: function () {
-        var attr;
+        let attr;
 
         if (this.model.get("hitList").length === 1) {
-            this.hitSelected(); // erster und einziger Eintrag in Liste
+            this.hitSelected(); // first and only entry in list
         }
         else {
             attr = this.model.toJSON();
             attr.uiStyle = Radio.request("Util", "getUiStyle");
-            // sz, will in lokaler Umgebung nicht funktionieren, daher erst das Template als Variable
+            // sz, does not want to work in a local environment, so first use the template as variable
             // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
         }
         this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
@@ -405,22 +409,26 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * Vorschlag wurde ausgewählt.
+     * Proposal was selected.
      * @param  {evt} evt Event
      * @return {void}
      */
     hitSelected: function (evt) {
-        var hit,
+        let hit,
             hitID,
-            modelHitList = this.model.get("hitList");
+            pick;
+        const modelHitList = this.model.get("hitList");
 
-        // Ermittle Hit
-        if (_.has(evt, "cid")) { // in diesem Fall ist evt = model
-            hit = _.values(_.pick(modelHitList, "0"))[0];
+        // distingiush hit
+        if (evt.hasOwnProperty("cid")) { // in this case, evt = model
+            pick = Radio.request("Util", "pick", modelHitList, [0]);
+
+            hit = Object.values(pick)[0];
         }
-        else if (_.has(evt, "currentTarget") === true && evt.currentTarget.id) {
+        else if (evt.hasOwnProperty("currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
-            hit = _.findWhere(modelHitList, {id: hitID});
+            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitID});
+
         }
         else if (modelHitList.length > 1) {
             return;
@@ -428,24 +436,24 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         else {
             hit = modelHitList[0];
         }
-        // 1. Schreibe Text in Searchbar
+        // 1. Write text in Searchbar
         this.setSearchbarString(hit.name);
-        // 2. Verberge Suchmenü
+        // 2. hide searchmenuü
         this.hideMenu();
-        // 3. Hide das GFI
+        // 3. Hide the GFI
         Radio.trigger("GFI", "setIsVisible", false);
-        // 4. Zoome ggf. auf Ergebnis oder Sonderbehandlung
-        if (_.has(hit, "triggerEvent")) {
+        // 4. Zoom if necessary on the result otherwise special handling
+        if (hit.hasOwnProperty("triggerEvent")) {
             this.model.setHitIsClick(true);
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
         }
         else {
             Radio.trigger("MapMarker", "zoomTo", hit, 5000);
         }
-        // 5. Triggere Treffer über Radio
-        // Wird benötigt für IDA und sgv-online, ...
+        // 5. Triggere hit by the radio
+        // is needed for IDA and sgv-online, ...
         Radio.trigger("Searchbar", "hit", hit);
-        // 6. Beende Event
+        // 6. finishes event
         if (evt) {
             evt.preventDefault();
             evt.stopImmediatePropagation();
@@ -458,10 +466,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     navigateList: function (e) {
-        var selected = {},
-            firstListElement = {},
-            // fix für Firefox
-            event = e || window.event;
+        let selected = {},
+            firstListElement = {};
+            // fix for Firefox
+        const event = e || window.event;
 
         if (event.keyCode === 38 || event.keyCode === 40 || event.keyCode === 13) {
             selected = this.getSelectedElement();
@@ -560,7 +568,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     scrollToNext: function (li) {
-        var parent = li.parent(),
+        const parent = li.parent(),
             pos = parent.scrollTop(),
             scrollHeight = pos + li.outerHeight(true);
 
@@ -573,7 +581,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     scrollToPrev: function (li) {
-        var parent = li.parent(),
+        const parent = li.parent(),
             pos = parent.scrollTop(),
             scrollHeight = pos - li.outerHeight(true);
 
@@ -595,7 +603,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     nextElement: function (selected) {
-        var next = {};
+        let next = {};
 
         selected.removeClass("selected");
 
@@ -639,7 +647,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     prevElement: function (selected) {
-        var prev = {};
+        let prev = {};
 
         selected.removeClass("selected");
 
@@ -683,20 +691,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
-     * wait until event is loaded complete
-     * @param {event} evt - a keyup, paste or contextmenu event
-     * @returns {void}
-     */
-    waitForEvent: function (evt) {
-        var that = this;
-
-        // The paste event occurs before the value is inserted into the element
-        setTimeout(function () {
-            that.controlEvent(evt);
-        }, 0);
-    },
-
-    /**
      * controls the input sequence of events,
      * so that the paste works with shortcut and with contextmenu
      * because with ctrl + c comes 1 paste and 2 keyup events,
@@ -705,7 +699,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     controlEvent: function (evt) {
-        var count = this.model.get("tempCounter");
+        let count = this.model.get("tempCounter");
 
         if (evt.type === "contextmenu") {
             this.model.setTempCounter(0);
@@ -713,8 +707,16 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         else if (evt.type === "paste") {
             this.handlePasteEvent(evt, count);
         }
-        else if (evt.type === "keyup" && count < 2) {
-            this.model.setTempCounter(++count);
+        else if (evt.type === "keyup") {
+            if (count < 2) {
+                this.model.setTempCounter(++count);
+            }
+            else {
+                clearTimeout(this.model.get("timeoutReference"));
+                this.model.set("timeoutReference", setTimeout(() => {
+                    this.setSearchString(evt);
+                }, 200));
+            }
         }
         else {
             this.setSearchString(evt);
@@ -728,7 +730,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     handlePasteEvent: function (evt, count) {
-        if (_.isUndefined(count)) {
+        if (count === undefined) {
             this.model.setTempCounter(0);
         }
         else {
@@ -744,7 +746,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     setSearchString: function (evt) {
         if (evt.target.value.length === 0) {
-            // suche zurücksetzten, wenn der letzte Buchstabe gelöscht wurde
+            // reset search, if last letter is deleted
             this.deleteSearchString();
         }
         else if (evt.target.value.length < 3) {
@@ -757,7 +759,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             else if (evt.keyCode !== 37 && evt.keyCode !== 38 && evt.keyCode !== 39 && evt.keyCode !== 40 && !(this.getSelectedElement("#searchInputUL").length > 0 && this.getSelectedElement("#searchInputUL").hasClass("type"))) {
                 if (evt.key === "Enter" || evt.keyCode === 13) {
                     if (this.model.get("hitList").length === 1) {
-                        this.hitSelected(); // erster und einziger Eintrag in Liste
+                        this.hitSelected(); // first and only entry in list
                     }
                     else {
                         this.renderHitList();
@@ -765,14 +767,14 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
                     }
                 }
                 else {
-                    this.model.setSearchString(evt.target.value); // evt.target.value = Wert aus der Suchmaske
+                    this.model.setSearchString(evt.target.value); // evt.target.value = value from the searchmask
                 }
             }
             else if (evt.keyCode === 38 || evt.keyCode === 40) {
                 this.positionOfCursorToEnd();
             }
 
-            // Der "x-Button" in der Suchleiste
+            // the "x-button" in the searchbar
             if (evt.target.value.length > 0) {
                 this.$("#searchInput + span").show();
             }
@@ -788,12 +790,12 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {void}
      */
     positionOfCursorToEnd: function () {
-        var selectedElement = _.find(this.$(".list-group-item"), function (element) {
+        const selectedElement = this.$(".list-group-item").find(function (element) {
                 return this.$(element).hasClass("selected");
             }, this),
             lastSelectedItem = this.model.get("searchFieldisSelected");
 
-        if (!_.isUndefined(lastSelectedItem) || (!_.isUndefined(lastSelectedItem) && this.$(".list-group-item").length !== 0)) {
+        if (lastSelectedItem !== undefined || (lastSelectedItem !== undefined && this.$(".list-group-item").length !== 0)) {
             this.focusOnEnd(this.$("#searchInput"));
         }
 
@@ -806,7 +808,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @returns {*} todo
      */
     collapseHits: function (target) {
-        this.$(".list-group-item.type + div").hide("slow"); // schließt alle Reiter
+        this.$(".list-group-item.type + div").hide("slow"); // closes all tabs
         if (target.next().css("display") === "block") {
             target.next().hide("slow");
             target.removeClass("open");
@@ -850,6 +852,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setSearchString("");
         this.setSearchbarString("");
         this.hideMarker();
+        Radio.trigger("MapMarker", "hideMarker");
         this.hideMenu();
         this.$("#searchInputUL").html("");
     },
@@ -866,7 +869,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             hit = isEvent ? this.model.get("hitList").find(obj => obj.id === hitId) : null,
             hitName = isEvent ? hit.name : "undefined";
 
-        // bei gdi-Suche kein Aktion bei Maushover oder bei GFI on Click
+        // with gdi-search no action on mousehover or on GFI onClick
         if (hit && hit.hasOwnProperty("triggerEvent") && hit.type !== i18next.t("common:modules.searchbar.type.subject") && hit.triggerEvent.event !== "gfiOnClick") {
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true);
             return;
@@ -884,22 +887,37 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
     /**
      * Hides all map markers.
+     * @param {event} evt mouse leave event
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires MapMarker#RadioTriggerMapMarkerHidePolygon
      * @returns {void}
      */
-    hideMarker: function () {
-        Radio.trigger("MapMarker", "hideMarker");
-        Radio.trigger("MapMarker", "hidePolygon");
+    hideMarker: function (evt) {
+        let hitId,
+            hit;
+
+        if (evt !== undefined) {
+            hitId = evt.currentTarget.id;
+            hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitId});
+        }
+
+        if (hit && hit.hasOwnProperty("triggerEvent")) {
+            if (hit.type !== "Fachthema" && hit.triggerEvent.event !== "gfiOnClick" && !this.model.get("hitIsClick")) {
+                Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, false);
+            }
+        }
+        else if (this.$(".dropdown-menu-search").css("display") === "block") {
+            Radio.trigger("MapMarker", "hideMarker");
+        }
     },
 
     /**
-    * Platziert den Cursor am Ende vom String
-    * @param {Element} element - Das Dom-Element
+    * Places the cursor at the end of the string
+    * @param {Element} element - the DOM-element
     * @returns {void}
     */
     focusOnEnd: function (element) {
-        var strLength = element.val().length * 2;
+        const strLength = element.val().length * 2;
 
         element.focus();
         element[0].setSelectionRange(strLength, strLength);

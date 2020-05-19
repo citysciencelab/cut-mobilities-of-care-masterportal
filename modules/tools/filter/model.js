@@ -3,7 +3,7 @@ import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";
 
 const FilterModel = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         isGeneric: false,
         isInitOpen: false,
         isVisible: false,
@@ -20,7 +20,7 @@ const FilterModel = Tool.extend({
         uiStyle: "DEFAULT"
     }),
     initialize: function () {
-        var channel = Radio.channel("Filter");
+        const channel = Radio.channel("Filter");
 
         this.superInitialize();
         this.listenTo(channel, {
@@ -32,7 +32,7 @@ const FilterModel = Tool.extend({
                 return this.get("isInitialLoad");
             },
             "getFilterName": function (layerId) {
-                var predefinedQuery = this.get("predefinedQueries").filter(function (query) {
+                const predefinedQuery = this.get("predefinedQueries").filter(function (query) {
                     return query.layerId === layerId;
                 });
 
@@ -70,9 +70,9 @@ const FilterModel = Tool.extend({
                         return query.layerId === layerId;
                     });
 
-                    _.each(filterModels, function (filterModel) {
+                    filterModels.forEach(filterModel => {
                         this.createQuery(filterModel);
-                    }, this);
+                    });
                 }
             }
         }, this);
@@ -87,71 +87,71 @@ const FilterModel = Tool.extend({
         }
     },
     activateDefaultQuery: function () {
-        var defaultQuery = this.get("queryCollection").findWhere({isDefault: true});
+        const defaultQuery = this.get("queryCollection").findWhere({isDefault: true});
 
-        if (!_.isUndefined(defaultQuery)) {
+        if (defaultQuery !== undefined) {
             defaultQuery.setIsActive(true);
             defaultQuery.setIsSelected(true);
         }
         defaultQuery.runFilter();
     },
     resetAllQueries: function () {
-        _.each(this.get("queryCollection").models, function (model) {
+        this.get("queryCollection").models.forEach(model => {
             model.deselectAllValueModels();
-        }, this);
+        });
     },
     deselectAllModels: function () {
-        _.each(this.get("queryCollection").models, function (model) {
+        this.get("queryCollection").models.forEach(model => {
             model.setIsSelected(false);
-        }, this);
+        });
     },
     deactivateAllModels: function () {
-        _.each(this.get("queryCollection").models, function (model) {
+        this.get("queryCollection").models.forEach(model => {
             model.setIsActive(false);
-        }, this);
+        });
     },
 
     deactivateOtherModels: function (selectedModel) {
         if (!this.get("allowMultipleQueriesPerLayer")) {
-            _.each(this.get("queryCollection").models, function (model) {
-                if (!_.isUndefined(model) &&
+            this.get("queryCollection").models.forEach(model => {
+                if (model !== undefined &&
                     selectedModel.cid !== model.cid &&
                     selectedModel.get("layerId") === model.get("layerId")) {
                     model.setIsActive(false);
                 }
-            }, this);
+            });
         }
     },
     /**
-     * updates the Features shown on the Map
+     * Updates the Features shown on the Map.
+     * If at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures.
      * @return {void}
      */
     updateMap: function () {
-        // if at least one query is selected zoomToFilteredFeatures, otherwise showAllFeatures
-        var allFeatureIds;
+        let allFeatureIds;
 
-        if (_.contains(this.get("queryCollection").pluck("isSelected"), true)) {
+        if (this.get("queryCollection").pluck("isSelected").includes(true)) {
             allFeatureIds = this.groupFeatureIdsByLayer(this.get("queryCollection"));
 
-            _.each(allFeatureIds, function (layerFeatures) {
+            allFeatureIds.forEach(layerFeatures => {
                 Radio.trigger("ModelList", "showFeaturesById", layerFeatures.layer, layerFeatures.ids);
             });
         }
         else {
-            _.each(this.get("queryCollection").groupBy("layerId"), function (group, layerId) {
-                Radio.trigger("ModelList", "showAllFeatures", layerId);
+            Object.entries(this.get("queryCollection").groupBy("layerId")).forEach((group) => {
+                Radio.trigger("ModelList", "showAllFeatures", group[0]);
             });
         }
     },
 
     updateGFI: function (featureIds, layerId) {
-        var getVisibleTheme = Radio.request("GFI", "getVisibleTheme"),
-            featureId;
+        const getVisibleTheme = Radio.request("GFI", "getVisibleTheme");
+        let featureId;
 
         if (getVisibleTheme && getVisibleTheme.get("id") === layerId) {
             featureId = getVisibleTheme.get("feature").getId();
 
-            if (!_.contains(featureIds, featureId)) {
+            if (!featureIds.includes(featureId)) {
                 Radio.trigger("GFI", "setIsVisible", false);
             }
         }
@@ -162,15 +162,20 @@ const FilterModel = Tool.extend({
      * @return {void}
      */
     updateFilterObject: function () {
-        var filterObjects = [];
+        const filterObjects = [];
+        let snippetValuesWithoutType;
 
         this.get("queryCollection").forEach(function (query) {
-            var ruleList = [];
+            const ruleList = [];
 
             query.get("snippetCollection").forEach(function (snippet) {
                 // searchInMapExtent is ignored
                 if (snippet.getSelectedValues().values.length > 0 && snippet.get("type") !== "searchInMapExtent") {
-                    ruleList.push(_.omit(snippet.getSelectedValues(), "type"));
+                    snippetValuesWithoutType = Object.fromEntries(
+                        Object.entries(snippet.getSelectedValues())
+                            .filter(([key]) => !["type", "keys"].includes(key))
+                    );
+                    ruleList.push(snippetValuesWithoutType);
                 }
             });
             filterObjects.push({name: query.get("name"), isSelected: query.get("isSelected"), rules: ruleList});
@@ -184,86 +189,98 @@ const FilterModel = Tool.extend({
      * @return {Object} Map object mapping layers to featuresids
      */
     groupFeatureIdsByLayer: function (queries) {
-        var allFeatureIds = [],
-            featureIds;
+        const allFeatureIds = [];
+        let featureIds;
 
-        if (!_.isUndefined(queries)) {
-
-            _.each(queries.groupBy("layerId"), function (group, layerId) {
-                var isEveryQueryActive = _.every(group, function (model) {
+        if (queries !== undefined) {
+            Object.entries(queries.groupBy("layerId")).forEach((group) => {
+                const isEveryQueryActive = group[1].every(model => {
                     return !model.get("isActive");
                 });
 
-                featureIds = this.collectFilteredIds(group);
+                featureIds = this.collectFilteredIds(group[1]);
 
                 if (isEveryQueryActive) {
-                    Radio.trigger("ModelList", "showAllFeatures", layerId);
+                    Radio.trigger("ModelList", "showAllFeatures", group[0]);
                 }
                 else {
                     allFeatureIds.push({
-                        layer: layerId,
+                        layer: group[0],
                         ids: featureIds
                     });
                 }
-            }, this);
+            });
         }
+
         return allFeatureIds;
     },
 
     /**
      * collects all featureIds of a group of queries into a list of uniqueIds
-     * @param  {Object[]} queryGroup group of queries
+     * @param  {Object[]} [queryGroup=[]] group of queries
      * @return {String[]} unique list of all feature ids
      */
-    collectFilteredIds: function (queryGroup) {
-        var featureIdList = [];
+    collectFilteredIds: function (queryGroup = []) {
+        const featureIdList = [];
 
-        _.each(queryGroup, function (query) {
+        queryGroup.forEach(query => {
             if (query.get("isActive") === true) {
-                _.each(query.get("featureIds"), function (featureId) {
+                query.get("featureIds").forEach(featureId => {
                     featureIdList.push(featureId);
                 });
             }
         });
-        return _.unique(featureIdList);
+
+        return [...new Set(featureIdList)];
     },
 
+    /**
+     * Creates queries for filter.
+     * @param {object[]} queries - Contains the layer.
+     * @returns {void}
+     */
     createQueries: function (queries) {
-        var queryObjects = Radio.request("ParametricURL", "getFilter"),
-            queryObject,
+        const queryObjects = Radio.request("ParametricURL", "getFilter");
+        let queryObject,
             oneQuery;
 
-        _.each(queries, function (query) {
+        queries.forEach(query => {
             oneQuery = query;
 
-            if (!_.isUndefined(queryObjects)) {
-                queryObject = _.findWhere(queryObjects, {name: oneQuery.name});
+            if (queryObjects !== undefined) {
+                queryObject = queryObjects.find(element => element.name === oneQuery.name);
 
-                oneQuery = _.extend(oneQuery, queryObject);
+                oneQuery = Object.assign(oneQuery, queryObject);
             }
-            this.createQuery(oneQuery);
-        }, this);
+            this.createQuery(oneQuery, Radio.request("ModelList", "getModelByAttributes", {id: oneQuery.layerId}));
+        });
     },
 
-    createQuery: function (model) {
-        const layer = Radio.request("ModelList", "getModelByAttributes", {id: model.layerId});
+    /**
+     * Creates a query for a layer.
+     * This can also be a group layer
+     * @param {object} model - layer for which a query is created.
+     * @param {Backbone.Model} layer - BackboneModel for check the layerTyp.
+     * @returns {void}
+     */
+    createQuery: function (model, layer) {
         let query;
 
-        if (typeof layer !== "undefined" && layer.has("layer") && layer.get("layerSource").getFeatures().length > 0) {
+        if (typeof layer !== "undefined" && layer.has("layer") && layer.get("layerSource")) {
             query = this.getQueryByTyp(layer.get("typ"), model);
-            if (!_.isNull(query)) {
-                if (!_.isUndefined(this.get("allowMultipleQueriesPerLayer"))) {
-                    _.extend(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
+            if (query !== null) {
+                if (this.get("allowMultipleQueriesPerLayer") !== undefined) {
+                    Object.assign(query.set("activateOnSelection", !this.get("allowMultipleQueriesPerLayer")));
                 }
 
-                if (!_.isUndefined(this.get("liveZoomToFeatures"))) {
+                if (this.get("liveZoomToFeatures") !== undefined) {
                     query.set("liveZoomToFeatures", this.get("liveZoomToFeatures"));
                 }
 
-                if (!_.isUndefined(this.get("sendToRemote"))) {
+                if (this.get("sendToRemote") !== undefined) {
                     query.set("sendToRemote", this.get("sendToRemote"));
                 }
-                if (!_.isUndefined(this.get("minScale"))) {
+                if (this.get("minScale") !== undefined) {
                     query.set("minScale", this.get("minScale"));
                 }
 
@@ -278,7 +295,7 @@ const FilterModel = Tool.extend({
     },
 
     getQueryByTyp: function (layerTyp, model) {
-        var query = null;
+        let query = null;
 
         if (layerTyp === "WFS" || layerTyp === "GROUP") {
             query = new WfsQueryModel(model);
@@ -296,24 +313,24 @@ const FilterModel = Tool.extend({
         Radio.trigger("MapMarker", "hideMarker");
     },
     collapseOpenSnippet: function () {
-        var selectedQuery = this.get("queryCollection").findWhere({isSelected: true}),
-            snippetCollection,
+        const selectedQuery = this.get("queryCollection").findWhere({isSelected: true});
+        let snippetCollection,
             openSnippet;
 
-        if (!_.isUndefined(selectedQuery)) {
+        if (selectedQuery !== undefined) {
             snippetCollection = selectedQuery.get("snippetCollection");
 
             openSnippet = snippetCollection.findWhere({isOpen: true});
-            if (!_.isUndefined(openSnippet)) {
+            if (openSnippet !== undefined) {
                 openSnippet.setIsOpen(false);
             }
         }
     },
 
     isModelInQueryCollection: function (layerId, queryCollection) {
-        var searchQuery = queryCollection.findWhere({layerId: layerId.toString()});
+        const searchQuery = queryCollection.findWhere({layerId: layerId.toString()});
 
-        return !_.isUndefined(searchQuery);
+        return searchQuery !== undefined;
     },
 
     /**

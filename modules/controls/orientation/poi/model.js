@@ -28,12 +28,18 @@ const POIModel = Backbone.Model.extend({
      * @returns {void}
      */
     getFeatures: function () {
-        var poiDistances = Radio.request("geolocation", "getPoiDistances"),
-            poiFeatures = [],
-            featInCircle = [],
+        /**
+         * Selector for old or new way to set vector legend
+         * @deprecated with new vectorStyle module
+         * @type {Boolean}
+         */
+        const isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false,
+            poiDistances = Radio.request("geolocation", "getPoiDistances"),
+            poiFeatures = [];
+        let featInCircle = [],
             sortedFeatures = [];
 
-        _.each(poiDistances, function (distance) {
+        poiDistances.forEach(distance => {
             featInCircle = Radio.request("geolocation", "getFeaturesInCircle", distance);
             sortedFeatures = _.sortBy(featInCircle, function (feature) {
                 return feature.dist2Pos;
@@ -42,16 +48,14 @@ const POIModel = Backbone.Model.extend({
                 "category": distance,
                 "features": sortedFeatures
             });
-        }, this);
+        });
 
-        _.each(poiFeatures, function (category) {
-            _.each(category.features, function (feat) {
-                _.extend(feat, {
-                    imgPath: this.getImgPath(feat),
-                    name: this.getFeatureTitle(feat)
-                });
-            }, this);
-        }, this);
+        poiFeatures.forEach(category => {
+            category.features.forEach(feat => {
+                feat.imgPath = isNewVectorStyle ? this.getImgPath(feat) : this.getImgPathOld(feat);
+                feat.name = this.getFeatureTitle(feat);
+            });
+        });
 
         this.setPoiFeatures(poiFeatures);
     },
@@ -61,12 +65,12 @@ const POIModel = Backbone.Model.extend({
      * @returns {void}
      */
     initActiveCategory: function () {
-        var poi,
+        let poi,
             first;
 
-        if (!_.isNumber(this.get("activeCategory"))) {
+        if (typeof this.get("activeCategory") !== "number") {
             poi = this.get("poiFeatures");
-            first = _.find(poi, function (dist) {
+            first = poi.find(function (dist) {
                 return dist.features.length > 0;
             });
 
@@ -93,14 +97,15 @@ const POIModel = Backbone.Model.extend({
 
     /**
      * Ermittelt zum Feature den img-Path und gibt ihn zurück.
+     * @deprecated with new vectorStyle module
      * @param  {ol.feature} feat Feature
      * @return {string}      imgPath
      */
-    getImgPath: function (feat) {
-        var imagePath = "",
-            style = Radio.request("StyleList", "returnModelById", feat.styleId),
+    getImgPathOld: function (feat) {
+        let imagePath = "",
             styleClass,
             styleSubClass;
+        const style = Radio.request("StyleList", "returnModelById", feat.styleId);
 
         if (style) {
             styleClass = style.get("class");
@@ -128,16 +133,50 @@ const POIModel = Backbone.Model.extend({
     },
 
     /**
+     * Ermittelt zum Feature den img-Path und gibt ihn zurück.
+     * @param  {ol.feature} feat Feature
+     * @return {string}      imgPath
+     */
+    getImgPath: function (feat) {
+        let imagePath = "";
+        const style = Radio.request("StyleList", "returnModelById", feat.styleId);
+
+        if (style) {
+            style.getLegendInfos().forEach(legendInfo => {
+                if (legendInfo.geometryType === "Point") {
+                    const type = legendInfo.styleObject.get("type");
+
+                    if (type === "icon") {
+                        imagePath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
+                    }
+                    else if (type === "circle") {
+                        imagePath = this.createCircleSVG(style);
+                    }
+                }
+                else if (legendInfo.geometryType === "LineString") {
+                    imagePath = this.createLineSVG(legendInfo.styleObject);
+                }
+                else if (legendInfo.geometryType === "Polygon") {
+                    imagePath = this.createPolygonSVG(legendInfo.styleObject);
+                }
+            });
+        }
+
+        return imagePath;
+    },
+
+    /**
      * Sucht nach dem ImageName bei styleField-Angaben im Style
+     * @deprecated with new vectorStyle module
      * @param  {ol.feature} feature      Feature mit allen Angaben
      * @param  {object} style       Style des Features
      * @return {string}                  Name des Bildes
      */
     createStyleFieldImageName: function (feature, style) {
-        var styleField = style.get("styleField"),
+        const styleField = style.get("styleField"),
             styleFields = style.get("styleFieldValues"),
             value = feature.get(styleField),
-            image = _.find(styleFields, function (field) {
+            image = styleFields.find(function (field) {
                 return field.styleFieldValue === value;
             });
 
@@ -150,12 +189,12 @@ const POIModel = Backbone.Model.extend({
      * @returns {void}
      */
     zoomFeature: function (id) {
-        var poiFeatures = this.get("poiFeatures"),
+        const poiFeatures = this.get("poiFeatures"),
             activeCategory = this.get("activeCategory"),
-            selectedPoiFeatures = _.find(poiFeatures, function (poi) {
+            selectedPoiFeatures = poiFeatures.find(function (poi) {
                 return poi.category === activeCategory;
             }),
-            feature = _.find(selectedPoiFeatures.features, function (feat) {
+            feature = selectedPoiFeatures.features.find(function (feat) {
                 return feat.getId() === id;
             }),
             extent = feature.getGeometry().getExtent();
@@ -172,8 +211,8 @@ const POIModel = Backbone.Model.extend({
      * @return {string}       SVG
      */
     createCircleSVG: function (style) {
-        var svg = "",
-            circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
+        let svg = "";
+        const circleStrokeColor = style.returnColor(style.get("circleStrokeColor"), "hex"),
             circleStrokeOpacity = style.get("circleStrokeColor")[3].toString() || 0,
             circleStrokeWidth = style.get("circleStrokeWidth"),
             circleFillColor = style.returnColor(style.get("circleFillColor"), "hex"),
@@ -202,8 +241,8 @@ const POIModel = Backbone.Model.extend({
      * @return {string}       SVG
      */
     createLineSVG: function (style) {
-        var svg = "",
-            strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
+        let svg = "";
+        const strokeColor = style.returnColor(style.get("lineStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("lineStrokeWidth"), 10),
             strokeOpacity = style.get("lineStrokeColor")[3].toString() || 0;
 
@@ -226,8 +265,8 @@ const POIModel = Backbone.Model.extend({
      * @return {string}       SVG
      */
     createPolygonSVG: function (style) {
-        var svg = "",
-            fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
+        let svg = "";
+        const fillColor = style.returnColor(style.get("polygonFillColor"), "hex"),
             strokeColor = style.returnColor(style.get("polygonStrokeColor"), "hex"),
             strokeWidth = parseInt(style.get("polygonStrokeWidth"), 10),
             fillOpacity = style.get("polygonFillColor")[3].toString() || 0,

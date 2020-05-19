@@ -29,12 +29,12 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @returns {void}
      */
     parseTree: function (object, parentId, level) {
-        var isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree"),
+        const isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree"),
             treeType = Radio.request("Parser", "getTreeType");
 
         if (_.has(object, "Layer")) {
             _.each(object.Layer, function (layer) {
-                var objFromRawList,
+                let objFromRawList,
                     objsFromRawList,
                     layerExtended = layer,
                     mergedObjsFromRawList,
@@ -96,7 +96,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
 
                 if (_.has(layerExtended, "styles") && layerExtended.styles.length >= 1) {
                     _.each(layerExtended.styles, function (style, index) {
-                        var subItem = _.extend({
+                        let subItem = _.extend({
                             id: layerExtended.id + style,
                             isBaseLayer: isBaseLayer,
                             legendURL: layerExtended.legendURL[index],
@@ -129,8 +129,8 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
         }
         if (_.has(object, "Ordner")) {
             _.each(object.Ordner, function (folder) {
-                var isLeafFolder = !_.has(folder, "Ordner"),
-                    isFolderSelectable;
+                const isLeafFolder = !_.has(folder, "Ordner");
+                let isFolderSelectable;
 
                 // Visiblity of SelectAll-Box. Use item property first, if not defined use global setting.
                 if (folder.isFolderSelectable === true) {
@@ -197,7 +197,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @returns {Boolean} - Flag if layer is visible in layertree
      */
     getIsVisibleInTree: function (level, type, isInThemen, treeType) {
-        var isInThemenBool = _.isUndefined(isInThemen) ? false : isInThemen;
+        const isInThemenBool = _.isUndefined(isInThemen) ? false : isInThemen;
 
         return (type === "layer" && (isInThemenBool || treeType === "light"))
             ||

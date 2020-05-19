@@ -40,7 +40,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
 
         this.listenTo(this, {
             "change:isActive": function (model, value) {
-                var drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+                const drawLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
 
                 if (value && this.get("layer") === undefined) {
                     this.set("layer", drawLayer);
@@ -100,7 +100,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {void}
      */
     getFeaturesFromKML: function () {
-        var features;
+        let features;
 
         if (this.get("text") !== "") {
             features = this.get("format").readFeatures(this.get("text"));
@@ -257,10 +257,10 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {void}
      */
     transformFeatures: function () {
-        var features = this.get("features");
+        const features = this.get("features");
 
         _.each(features, function (feature) {
-            var transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:4326", "EPSG:25832"));
+            const transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:4326", "EPSG:25832"));
 
             feature.getGeometry().setCoordinates(transCoord, "XY");
         }, this);
@@ -288,7 +288,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {Array} todo
      */
     transformCoords: function (geometry, projections) {
-        var transCoord = [];
+        let transCoord = [];
 
         switch (geometry.getType()) {
             case "Polygon": {
@@ -318,7 +318,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {*} todo
      */
     transformPolygon: function (coords, projections, context) {
-        var transCoord = [];
+        const transCoord = [];
 
         // multiple Points
         _.each(coords, function (points) {
@@ -337,7 +337,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {*} todo
      */
     transformLine: function (coords, projections, context) {
-        var transCoord = [];
+        const transCoord = [];
 
         // multiple Points
         _.each(coords, function (point) {
@@ -362,7 +362,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
      * @returns {void}
      */
     featuresToMap: function () {
-        var features = this.get("features"),
+        const features = this.get("features"),
             source = this.get("source");
 
         source.addFeatures(features);

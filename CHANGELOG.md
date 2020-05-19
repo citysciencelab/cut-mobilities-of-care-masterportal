@@ -1,15 +1,147 @@
-# Changelog LGV Master-Portal 2.4.3
+# Changelog Masterportal
+ Alle wichtigen Änderungen in diesem Projekt werden in dieser Datei abgelegt.
+ 
+ Es wird die [Semantische Versionierung](https://semver.org/spec/v2.0.0.html) verwendet.
 
-NEU:
 
-  (none)
+## Unreleased - in development
 
-REFACTOR:
+### Added
+- Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
+- Ein GFI-Theme trafficCount, zum Anzeigen von Verkehrsmengen wurde hinzugefügt.
+- Das Zeichenmodul wurde erweitert, um beim Zeichnen von Punkten verschiedene Glyphicons zu verwenden.
+- Es können nun Web Map Tile Services (WMTS) als Layer eingebunden werden.
+- Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
+- Die “gfiAttribute”-keys können jetzt auch Objektpfade sein, analog zum neuen Styling.
+- Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
 
-  (none)
+### Changed
+- Babel wurde, um einen Support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.
+- Die Version des Packages fs-extra wurde in der package.json aktualisiert.
+- Die Version des Packages replace-in-file wurde in der package.json aktualisiert.
+- Die Version des Packages mini-css-extract-plugin wurde in der package.json aktualisiert.
+- Die Version des Packages null-loader wurde in der package.json aktualisiert.
+- Die Version des Packages https-proxy-agent wurde in der package.json aktualisiert.
+- Die Version des Packages zip-a-folder wurde in der package.json aktualisiert.
 
-FIXES:
+### Deprecated
+- WfsFeatureFilter ist deprecated. Bitte das Modul Filter benutzen.
+- ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
 
+### Removed
+- @babel/polyfill wurde aus der package.json entfernt.
+- style-loader wurde aus der package.json entfernt.
+- es6-promise wurde aus der package.json entfernt.
+- url-polyfill wurde aus der package.json entfernt.
+- fs wurde aus der package.json entfernt.
+- Der Requestor wurde direkt in dem Tool featurelister integriert und daher entfernt.
+
+### Fixed
+- Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
+- Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
+
+---
+
+## v2.5.0 - 2020-04-06
+### Added
+- CustomTree: Der Parameter singleBaselayer wurde hinzugefügt. Steuert, ob nur ein einzelner Baselayer auf einmal wählbar sein soll oder nicht.
+- Sensordaten:
+    - Ladestrategien für http- und mqtt-Protokolle wurden in extra Module ausgelagert.
+    - Abonnements können auf Browserextent reduziert werden.
+    - Abruf von sämtlichen Daten läuft nun komplett asynchron.
+    - Letzter Status kann direkt beim Abonnieren geholt werden (Retain-Message).
+    - Konfigurierbarkeit für Sensordaten im GFI wurde erweitert.
+- GeoJson: Werden als default in EPSG:4326 gelesen, können aber über crs einen eigenen EPSG Code mitgeben.
+- ParametricURL: Neue Parameter zoomToExtent und zoomToGeometry, zoomt auf einen in der URL angegebenen Kartenausschnitt bzw. auf eine ausgewählte Geometrie.
+- MasterportalAPI: Einbinden der MasterportalAPI als Kern des Masterportals.
+- Heatmap: Erweitert für WFS und GeoJson.
+- end2end-Test: Die Möglichkeit end2end-Tests zu schreiben wurde implementiert.
+- Snippet graphicalsselect: Neues Snippet um verschiedene graphische Auswahlmöglichkeiten in der Karte zu haben.
+- Logo von *MasterPortal* wird beim Laden angezeigt
+- Es können nun eigene Module - sogenannte *Addons* - in Portale eingebunden werden. Weitere Infos siehe **addons.md**.
+- Suche:
+    - Nach Klicken auf *alle Ergebnisse anzeigen* kann nun auch auf eine Gruppe geklickt werden, um diese zu öffnen.
+    - Wenn ein Thema ausgewählt wird, wird die entsprechende Ebene aktiviert.
+- Tools
+    - StyleIds können nun vom Typ Array sein
+    - Zeichnen: Das Tool wurde erweitert und verbessert. Es können nun beispielsweise auch Doppelkreise gezeichnet werden.
+    - Zeichnung Herunterladen: Funktion wurde erweitert
+- Internationalisierung wurde in einigen Modulen hinzugefügt
+- Sidebar: Breite ist nun konfigurierbar
+- Layerslider: Das Tool wurde erweitert und verbessert.
+- 3D:
+    - 3D: Features eines Layers können zum Ausblenden in 3D in der config.json konfiguriert werden.
+    - Map-Marker kann nun 3D-Koordinaten bekommen. Dies ist möglich durch eine Konfiguration des Markers als Ebene.
+    - VectorLayer können nun ihre 3D-Koordinate oder duch Konfiguration erhöht dargestellt werden.
+- GFI:
+    - Konfigurierbar, um Vektordaten bei GFI Abfrage anders darzustellen.
+    - Neues GFI-Theme *sensor*, *bildungatlas*
+- Layer:
+    - GeoJson-Layer um subTyp *opensensemap* für *Opensensemap API* erweitert
+    - URL in Layer-Information kann nun durch Konfiguration versteckt werden
+- Neuer Pre-Push-Hook erstellt Documentation und überprüft diese
+- Dokumentation für *Addons* hinzugefügt
+
+### Changed
+- VectorStyling: Neues Vektorstyling. Ermöglicht das Einlesen von gemischten Geometrien über GeoJSON oder WFS, und das Verarbeiten von Multigeometrien.
+- Suche: Die Konfigurierbarkeit der Elastic-Search Suche wurde erweitert.
+- Build-Script:
+    - Erstellt nun sämtliche Portale in angegebenen Ordner
+    - Erstellt nun Mastercode-Ordner
+    - Für Cross-Plattform angepasst
+- Konsolidierung:
+    - Hamburg-spezifischer Code wurden entfernt
+    - Hamburg-spezifische Tools wurden in die neuen *Addons* umgezogen
+- Doku:
+    - *setup.md* wurde angepasst
+- Konventionen: Wurden erweitert und überarbeitet.
+- Eslint: Überarbeitung der Regel function-paren-newline, sobald bei einem Paramter einer Funktion ein Zeilenumbruch verwendet wird ist dies bei allen Parametern erforderlich.
+- master Portale: Intranet URL's entfernt.
+- Fonts: Erzeugung einer eigenen Fontclass MasterportalFont, um den Font des Masterportals zentral setzen zu können.
+- camelCase: Umbenennung diverser Ordner und Dateien entsprechend der camelCase Konvention.
+
+### Deprecated
+- Das **[alte Vektorstyling](doc/style.json-deprecated.md)** ist deprecated. Bitte das **[neue Vektorstyling](doc/style.json.md)** benutzen.
+- Der URL-Parameter STARTUPMODUL ist deprecated. Bitte ISINITOPEN benutzen.
+- Der URL-Parameter BEZIRK ist deprecated. Bitte ZOOMTOGEOMETRY benutzen.
+
+### Fixed
+- Draw-Tool: Gezeichnete Features werden im gleichen Stil gedruckt, in dem sie gezeichnet wurden. Text behält auch im Druck seine Position bei.
+- Layer: Gemergde Layer behalten ihre GFI-Attribute und können abgefragt werden.
+- Layer: Fortan können auch Layer deaktiviert werden, die im aktuellen Maßstab nicht sichtbar sind.
+- Filter: Der Filter kann im Internet Explorer wieder geöffnet werden.
+- Filter: Ein Fehler verhinderte die Verwendung des Filters. Dieser wurde behoben.
+- Elastic-Search: Es kann wieder nach konfigurierten Fachtemen gesucht werden.
+- Suche: Ein Fehler wurde beseitig, der beim Entfernen des eingegebenen Suchbegriffs aufgetreten ist.
+- Messtool: Die voreingestellte Einheit (m² oder m) wurde auf die jeweilige Auswahl (Fläche oder Strecke) abgestimmt.
+- Themenbaum: Der Themenbaum lässt sich wieder inital öffnen.
+- Legende: Die Symbole in der Legende wurden sehr klein skaliert, nun werden sie in einer annehmbaren Größe dargestellt.
+- Graph: Verschiedene fixes für das graph Modul.
+- Case-sensitive Dateisysteme: Doppeltes Module quickhelp gelöscht.
+- Arrow functions: Arrow functions(=>) in Templates führen zu Fehlern im IE 11, daher entfernt.
+- Gruppenlayer: Fehlerhändling, wenn die Dienste nicht antworten.
+- Layerinformation: Fehlerhandling, wenn keine Metadaten gefunden werden.
+- FreezeWindow: Drehte sich mit der Table Navigation
+- Filter: Keine Filter-Inhalte vorhanden bei isIntiOpen = true
+- Fehler beseitigt, durch welchen unsichtbare Ebenen in der Legende angezeigt wurden
+- Fehler beseitigt, durch welchen Ebenen fälschlicherweise ausgeblendet wurden
+- Fehler beseitigt, durch welchen man nur im initialen Maßstab drucken konnte
+- Legende: Darstellungsreihenfolge der Ebenen in der Legende war nicht gleich der Reihenfolge in der Themenauswahl
+- Hintergrundgrafik kann nun korrekt deaktiviert werden
+- Filter: Funktioniert nun auch mit Heatmaps in Kombination mit deren DataLayern.
+- Karte:
+    - Maßstabsdarstellung ändert sich in seiner Länge nicht mehr beim Zoomen
+- Header bricht nicht mehr um bei bestimmten Breiten
+- Anpinnen einer Ebene beeinträchtigt nicht mehr die Usability im Layerinfo-Fenster
+- Überflüssige Projektionen wurden entfernt
+- Mobile: Es kann nun in den Suchergebnissen gescrollt werden
+- BackgroundCanvas kann nun wieder konfiguriert werden.
+- diverse Bugfixes.
+
+---
+
+## v2.4.3 - 2019-11-14
+### Fixed
   - KML-Import: Ein Fehler wurde behoben, der verhindert hat, dass von QGIS exportierte KML-Dateien geladen werden.
   - GFI: Das GFI wird nun auch bei größeren Datenmengen innerhalb des Portals dargestellt.
   - GFI: Das GFI wird nun immer nach dem Schließen eines anderen Werkzeugs aktiviert.
@@ -19,48 +151,32 @@ FIXES:
   - 3D-Modus: Die 3D-Navigation über den Kompass lässt sich nun wieder deaktivieren.
   - GFI: Für sich überlagernde WFS- und WMS-Features werden nun die jeweils richtigen Informationen abgerufen.
 
+---
 
-# Changelog LGV Master-Portal 2.4.2
-
-NEU:
-
-  (none)
-
-REFACTOR:
-
+## v2.4.2 - 2019-09-09
+### Changed
   - GFI: Links die mit dem Prefix "file" beginnen sind nun klickbar
 
-FIXES:
-
+### Fixed
   - Shadow-Tool: Das Schattentool ist nun mobil nicht mehr verfügbar
   - QuickHelp: Ein Bug wurde gefixt, der verhindert hat, dass die Bilder über den angegebenen Dateipfad geladen werden
   - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den enstprechenden Eintrag gescrollt
   - Searchbar: Ein Fehler wurde behoben der die Hausnummernsuche in der Gazetteer-Suche blockiert hat
   - WFS: Geoserver-WFS werden nun angezeigt
 
+---
 
-# Changelog LGV Master-Portal 2.4.1
-
-NEU:
-
-  (none)
-
-REFACTOR:
-
-  (none)
-
-FIXES:
-
+## v2.4.1 - 2019-08-23
+### Fixed
   - Shadow-Tool: Das Schattentool ist nun nur noch im 3D-Modus verfügbar
   - Print: Ein Fehler wurde behoben der dazu führte, dass die Beschreibungen der WFS-Features nicht gedruckt wurden
   - LayerTree: Layer mit dem Attribut "styles" werden nun wieder im Themenbaum dargestellt
   - PortalTitle: Attribute zur Konfiguration des Portaltitels sind nun Abwärtskompatibel
 
+---
 
-# Changelog LGV Master-Portal 2.4.0
-
-NEU:
-
+## v2.4.0 - 2019-08-21
+### Added
   - Dependencies: Die Äbhängigkeit "lgv-config" wird nicht mehr benötigt, extern geladene Dateien (z.B. "services.json") werden über einen direkten Pfad oder eine URL bezogen
   - Dependencies: Aktualisierung der Versionen diverser Abhängigkeiten
   - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "ressources" Ordner mit Beispiel Daten
@@ -69,8 +185,7 @@ NEU:
   - Shadow-Tool: Im 3D-Modus gibt es jetzt ein Werkzeug zur Darstellung des Schattenwurfes, mit einstellbarem Datum und Uhrzeit-
   - Buildprozess: Es gibt nun einen Buildprozess, der es ermöglicht mehrerer Portale zu bauen
 
-REFACTOR:
-
+### Deprecated
   - HTML-Container: Id "lgv-container" wurde in "masterportal-container" umbenannt (index.html)
   - config.json: Das Attribut "Baumtyp" wurde in "treeType" umbenannt
   - config.json: Das Attribut "totalview" wurde in "totalView" umbenannt
@@ -80,45 +195,38 @@ REFACTOR:
   - config.json: Das Attribut "tootip" im portalTitle wurde in "toolTip" umbenannt
   - config.json: Das Attribut "layerslider" wurde in "layerSlider" umbenannt
 
-FIXES:
-
+### Fixed
   - GFI: Beim Klick auf mehrere Features werden nun alle nicht fehlerhaften GFI angezeigt
   - Print: Das Druckmodul wurde verbessert
   - Diverse Bugfixes
 
+---
 
-# Changelog LGV Master-Portal 2.3.2
-
-NEU:
-
+## v2.3.2 - 2019-06-20
+### Added
   - Config: Neuer Config-Parameter "metaDataCatalogueId" in config.js; Metadatenkatalog-URL kann nun gepflegt werden
   - Themenbaum: Neue Datenlayer werden initial immer über allen anderen Datenlayern platziert
   - Themenbaum: Neue Hintergrundlayer werden initial immer über allen anderen Hintergrundlayern platziert
   - Build-Script für Portale verbessert
 
-FIXES:
-
+### Fixed
   - Reihenfolge von Layern: Render-Reihenfolge von Layern im Themenbaum sowie auf der Karte war nicht immer korrekt
   - Flurstücksuche: Bug der Zoomfunktionalität bei der Flächeninfo behoben
 
+---
 
-# Changelog LGV Master-Portal 2.3.1
-
-NEU:
-
-  (none)
-
-FIXES:
+## v2.3.1 - 2019-05-08
+### Fixed
 
   - GFI: lässt sich nun bei geöffnetem Filter nutzen
   - GFI: Klick auf Features von externen Diensten funktioniert wieder
   - Suche: Bei Verwendung des Parameters query; bei eindeutigem Suchtreffer direkter Zoom auf Ergebnis
   - Themenbaum: Richtige Reihenfolge der Layer wird beim Ein- und Ausblenden nun beibehalten
 
-# Changelog LGV Master-Portal 2.3.0
+---
 
-NEU:
-
+## v2.3.0 - 2019-04-16
+### Added
   - Neues GFI-Theme: "Dauerradzählstellen"
   - Neues Control: "Backforward", zum Vor- und Zurückspulen des Kartenzustandes
   - JSDOC: teilweise implementiert
@@ -134,75 +242,54 @@ NEU:
   - GFI: Hit-Tolerance bei Vektor-Layern konfigurierbar
   - Zeichnen-Modul: Per Remote-Interface steuerbar
 
-FIXES:
+### Fixed
+ - Diverse Bugfixes
 
-  - Diverse Bugfixes
 
-
-# Changelog LGV Master-Portal 2.2.6
-
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.2.6 - 2019-02-28
+### Fixed
   - 184198d7f Cesium wird nun über die index.html geladen
 
-# Changelog LGV Master-Portal 2.2.5
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.2.5 - 2019-02-25
+### Fixed
   - 61eaf2c18 Der Filter zeigt jetzt bei jedem öffnen die detailview an
 
-# Changelog LGV Master-Portal 2.2.4
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.2.4 - 2019-02-20
+### Fixed
   - 49cee3555 Die Reihenfolge der Pendleranimationen wird nun beim Drucken korrekt eingehalten
   - a3c1fbcaa Die Darstellung der Symbole beim Verwenden von zoomToFeature kann jetzt über die style_v2.json konfiguriert werden
   - ba18ea631 PLZ und Ort wurden vom Schulwegrouting entfernt
   - e3c3c1fd2 Die Layerreihenfolge wird beim verwenden von Auswahl speichern nun beibehalten
 
-# Changelog LGV Master-Portal 2.2.3
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.2.3 - 2019-01-31
+### Fixed
   - ed565a391 Die Information im Filter werden nun wieder dargestellt. Ein Fehler der das Starten in einer lokalen Entwicklungsumgebung verhindert wurde behoben.
   - 1ef6166db Hinweise im Einwohnertool wurden angepasst
 
-# Changelog LGV Master-Portal 2.2.2
+---
 
-NEU:
-
+## v2.2.2 - 2019-01-21
+### Added
   - 4154b06a1 Nun werden auch zu einer Adresse mit dem Adresszusatz "Haus" Schulen im Schulwegrouting gefunden.
 
-FIXES:
-
+### Fixed
   - d28cc48f6 Beim schließen des Measuretools werden nicht beendete Zeichnungen nun entfernt.
   - 2ba7934f3 Diverse Fehler im Einwohnertool wurden behoben.
   - 907afb415 Ein Fehler in der Metadatenkopplung wurde behoben.
 
-# Changelog LGV Master-Portal 2.2.1
+---
 
-NEU:
-
+## v2.2.1 - 2018-12-10
+### Added
   - f84b1fe74 hotfix Funktion zum bauen der Portale für eine Stable Version geht jetzt function for build all portals for new stable version and git ignore new portals
 
-FIXES:
-
+### Fixed
   - d8723bb51 - Schrägluftbildmodus springt in die richtige Zoomstufe
   - 24d3849f2 Die Videokameras funktionieren jetzt wieder mobil. Die Darstellungsreihenfolge der Attribute im GFI sind nun in allen Browsern gleich
   - 87e208519 der Marker wird im Tool Koordinaten Abfragen jetzt wieder richtig positioniert
@@ -211,10 +298,10 @@ FIXES:
   - 8627b6579 Das Them für die Radverkehrszählsäulen wird nun wieder richtig dargestellt
   - 7a03233c6 Fehler in der Searchbar wurden behoben
 
-# Changelog LGV Master-Portal 2.2.0
+---
 
-NEU:
-
+## v2.2.0 - 2018-11-29
+### Added
   - 8de8d34a5 Darstellung im GFI (WMS) mehrfach vergebener Attribute mit gleichem Namen
   - cb7b25aa2 - 3d Modus inkl. Geländemodell und Gebäude Layer für Hamburg.
   - 9f4a21ad5 import of customModules  to webpack
@@ -240,8 +327,7 @@ NEU:
   - 54e86c51b Konventionen für Änderungen der Konfigurationsparamter
   - 7a5c1fa79 Layerkonfiguration auch als openlayers layerGroup möglich
 
-FIXES:
-
+### Fixed
   - 93bbf9961 Graph für mobile ansichten optimiert Merged in fix_stabel_23_iphone (pull request #981)
   - 9ad3722b5 Schulwegrouting zeigt auch kurze Strecken
   - 4bee2580e Druckmodul kann auch WFS Gruppenlayer drucken
@@ -286,7 +372,6 @@ FIXES:
   - 767ab71a9 layerslider funktionierte nicht mit treetype=custom
   - 79583f9e8 Die Reihenfolge der aktiven Layer im CustomTree entspricht nun der des Themenbaumes
   - b9437ecf1 Ein Fehler wurde behoben der durch Konfiguration eines Custom-Stylings auftrat, wenn kein Alpha-Wert (Opazität bzw. Transparenz) angegeben wurde
-  - f9ada14fd merge - conflicts
   - f9f7ee677 renderToDOM parcelSearch und searchbar ohne Funktion
   - 3a2743278 Ein Fehler wurde behoben der verhindert hat, dass bei einigen Layern das GFI nicht mehr funktionierte, wenn bestimmte Layer aktiviert waren
   - 91f9578ff Fehler wurden behoben, durch die keine Schulen im Schulwegrouting zu einer gefundenen Adresse in den Browsern Internet Explorer und Edge angezeigt wurden
@@ -306,39 +391,31 @@ FIXES:
   - 6fe334a4f parcelSearch flur getter
   - ee0793d51 metaidtomerge nicht alle objekte wurden gruppiert
 
-# Changelog LGV Master-Portal 2.1.3
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.1.3 - 2018-09-21
+### Fixed
   - 48b55e8f8 Fehler wurden behoben, durch die keine Schulen im Schulwegrouting zu einer gefundenen Adresse in den Browsern Internet Explorer und Edge angezeigt wurden
   - 62e9c8da0 Schulen mit dem gleichen Namen im Schulwegrouting können nun durch die Anzeige der Adresse unterschieden werden
   - 8dd4f82b5 Ein Fehler in der Nomatim-Suche (OSM), durch den einige Suchergebnisse nicht angezeigt worden sind, wurde behoben
 
-# Changelog LGV Master-Portal 2.1.2
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.1.2 - 2018-09-05
+### Fixed
   - 688f637b Es wurde ein Problem im Schulwegrouting behoben, welches den Aufruf einiger Adressen verhinderte. Das GFI wird beim wechseln der Schule oder Adresse im Schulwegrouting nun automatisch geschlossen.
 
-# Changelog LGV Master-Portal 2.1.1
+---
 
-FIXES:
-
+## v2.1.1 - 2018-08-14
+### Fixed
   - a2bce8dc metaidtomerge nicht alle objekte wurden gruppiert
   - 3ec4b257 parcelSearch view getter entfernt, wms crossOrigiin entfernt, wfsfeaturefilter feature übergeben bei defaultStyle und marker und zoomlevel bei suche nach Schulstandorten
 
-# Changelog LGV Master-Portal 2.1.0
+---
 
-NEU:
-
+## v2.1.0 - 2018-08-07
+### Added
   - b5e4ece5 new layertype sensorLayer for sensorThings-API
   - 966711f0 groupLayer rawlayerlist
   - 4e53968d osm search by grid
@@ -354,8 +431,7 @@ NEU:
   - 9d090108 menutemplate for table
   - 595af610 parameter for table ui
 
-FIXES:
-
+### Fixed
   - f1147895 Videostreaming mobil wurde nicht mit HLS sondern Flash gestreamt
   - 714df6f7 bkg query neuenfelder straße
   - 77bee217 mapMarker view Fehler bei Layer sichtbar schalten über searchbar
@@ -374,58 +450,45 @@ FIXES:
   - 2f9102eb betrieb contact configjson new portaltitleObject
   - 8db97eed filter dropdown css overflow-y hinzugefügt
 
-# Changelog LGV Master-Portal 2.0.4
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.0.4 - 2018-06-20
+### Fixed
   - c128bf6f template layerinformation legendurl
   - a6d8b6e5 bootstrap-select Version auf 1.12 beschränken, weil 1.13 noch buggy
 
-# Changelog LGV Master-Portal 2.0.3
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.0.3 - 2018-05-09
+### Fixed
   - 817a2f0 bkg search triggers searchbar to render recommended list
   - 69342d6 Flurstückssuche löscht default Flurstücksnenner beim Wechsel der Gemarkung bei parcelDenominator = true
 
-# Changelog LGV Master-Portal 2.0.2
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v2.0.2 - 2018-04-17
+### Fixed
   - 8ddf9ebd contact tests wenn keine portalconfig geladen wird
   - f774a5c1 contact an neues object in config.json angepasst
   - 85083af4 filter dropdown css overflow-y hinzugefügt
 
-# Changelog LGV Master-Portal 2.0.1
+---
 
-FIXES:
-
+## v2.0.1 - 2018-04-05
+### Fixed
   - b8bae19dd Theme Radverkehrsstellen falsche Sortierung bei Wochenansicht
   - d7ff9768d Theme Radverkehrsstellen falsche Sortierung bei Tagesansicht
 
-# Changelog LGV Master-Portal 2.0.0
+---
 
-NEU:
-
+## v2.0.0 - 2018-03-29
+### Added
   - f4f34f02e Totalview Button (switch auf default-Ansicht)
   - 63679a50a fehlende dokus ergänzt
   - dd56e0885 multipoint Layer
   - a338b9339 GFI-Theme für radverkehr mit Diagram
 
-FIXES:
-
+### Fixed
   - 31b061f5e attributions glyph passt sich an wenn ovm versteckt
   - 2cd457956 diverse Bugs, die beim Testen mit FF aufgefallen sind
   - 3b32ea5ed overviewmap in mastertree wirft console Fehler
@@ -442,33 +505,32 @@ FIXES:
   - d7706e58c configYAML wurde nicht aus config.json ausgelesen
   - da18c6567 Util.getPath Error
 
-# Changelog LGV Master-Portal 1.5.2
+---
 
-FIXES:
-
+# v1.5.2 - 2018-03-12
+### Fixed
   - 798923ae betrieb 647 contact cc array mehrmaliges Absenden ließ array volllaufen
   - 5b6d8e01 betrieb 238 metaIdToMerge fehlerunanfälliger
   - 70e08d3e light tree auswahl speichern
   - 03317d46 wfs legendURL Parameter aus json in Legende nutzbar
 
-# Changelog LGV Master-Portal 1.5.1
+---
 
-FIXES:
-
+## v1.5.1 - 2018-01-17
+### Fixed
   - c39c1122 falsche reihenfolge des mapView Parameters zoomlevel führte zu Laufzeitfehler
   - 1815d4f9 nach Auswahl einer Adresse wird name nicht in searchbar übernommen
   - 615635b7 configYAML
 
-# Changelog LGV Master-Portal 1.5.0
+---
 
-NEU:
-
+## v1.5.0 - 2017-12-13
+### Added
   - 9a74933 end2end-test-infrastruktur
   - ee4dd43 overviewmap als control
   - 8279f7f Merge branch '81_add_removeFilter' into 80_suche_nach_schulnamen reset Filter on Search
 
-FIXES:
-
+### Fixed
   - f789319 hotfixes kw 45 fix csw Parameter aus config.js Pfad angepasst, legende zeichnet sich nicht über Tabelle von fluechtlingsunterkuenfte, verkehrsstaerken Theme Pfad zu Datei angepasst ohne Datum
   - ca4cd86 gfi-detached opens initially on right side
   - 6f0c43f Adresssuche in der Searchbar führte zum Füllen der Suggestliste vom viomRouting
@@ -478,82 +540,63 @@ FIXES:
   - 3786af7 Scrollleiste in Themenbaum light
   - cf931a1 fix UrlParams zoomlevel und Center fix Canvas wird defaultmäßig nicht erzeugt fix UrlParam featureId über LayerIds Parameter StartupModul behalten
 
-# Changelog LGV Master-Portal 1.4.8
+---
 
-FIXES:
-
+## v1.4.8 - 2017-12-13
+### Fixed
   - c54708ef sgvonline theme attr amtliche adresse immer nein
 
-# Changelog LGV Master-Portal 1.4.7
+---
 
-FIXES:
-
+## v1.4.7 - 2017-11-20
+### Fixed
   - d1db2bd fix csw Parameter aus config.js Pfad angepasst
   - 340700f fix legende zeichnet sich nicht über Tabelle von fluechtlingsunterkuenfte
 
-# Changelog LGV Master-Portal 1.4.6
+---
 
-FIXES:
-
+# v1.4.6 - 2017-10-27
+### Fixed
   - 1a7337a Drucken mit GFI
 
-# Changelog LGV Master-Portal 1.4.5
+---
 
-NEU:
-
-  (none)
-
-FIXES:
-
+## v1.4.5 - 2017-10-18
+### Fixed
   - b033e0e gfi mobil rendert sich auf volle breite Merged in hotfix_gif_mobil (pull request #567)
   - d176616 gfi initial links im ie
 
-# Changelog LGV Master-Portal 1.4.4
+---
 
-FIXES:
-
+## v1.4.4 - 2017-10-12
+### Fixed
   - d1766166 gfi initial links im ie
 
-# Changelog LGV Master-Portal 1.4.3
+---
 
-NEU:
+## v1.4.3 - 2017-10-12
+- Keine Einträge
 
-  (none)
+---
 
-FIXES:
+## v1.4.2 - 2017-10-10
+- Keine Einträge
 
-  (none)
+---
 
-# Changelog LGV Master-Portal 1.4.2
-
-NEU:
-
-  (none)
-
-FIXES:
-
-  (none)
-
-# Changelog LGV Master-Portal 1.4.1
-
-NEU:
-
-  (none)
-
-FIXES:
-
+## v1.4.1 - 2017-10-06
+### Fixed
   - 427a269 Adresssuche in der Searchbar führte zum Füllen der Suggestliste vom viomRouting
   - 73114e6 WMS-Adresse für Bezirkslayer wurde nicht angezeigt, weil id nicht in RawLayerList gefunden werden konnte
 
-# Changelog LGV Master-Portal 1.4.0
+---
 
-NEU:
-
+## v1.4.0 - 2017-09-18
+### Added
   - 35ae3ff 1.Version Features-Filter
   - 1b9ed32 epsg code in wfs-request ergänzt
 
-FIXES:
-
+### Fixed
   - 118a569 Änderung der Layerreihenfolge wurde im Tree nicht umgesetzt
   - f36cf06 wenn android tastatur aufpoppt wurde window vom footer geteilt und eine Eingabe war nur schlecht möglich
   - 442ef1a im IE wird bei abfragen der Layerinformationen ein Fehler geworfen, wenn keine Layerattribute definiert sind.
@@ -581,33 +624,32 @@ FIXES:
   - a3c4633 mrh drucken
   - ed8b4c6 layerinfos gruppenlayer unvollstaendig
 
-# Changelog LGV Master-Portal 1.3.2
+---
 
-FIXES:
+## v1.3.3 - 2017-08-16
+- Keine Einträge
 
+---
+
+## v1.3.2 - 2017-06-21
+### Fixed
   - d7d98f21 mrh print benötigt _print für speziellen proxy
 
-# Changelog LGV Master-Portal 1.3.1
+---
 
-NEU:
+## v1.3.1 - 2017-06-06
+- Keine Einträge
 
-  (none)
+---
 
-FIXES:
-
-  (none)
-
-# Changelog LGV Master-Portal 1.3.0
-
-NEU:
-
+## v1.3.0 - 2017-05-31
+### Added
   - 798a35e gfi-theme für sgv-online
   - 81bb340 Anwender-Dokumentation
   - 6907236 modul autostarter, um Tools per Parameter STARTUPMODUL starten zu können
   - ac54221 Merge branch 'dev' into RemoteInterface + EPSG definitions for masterTree && FHH Atlas
 
-FIXES:
-
+### Fixed
   - d735d0c Ungültiger Wert für Flurstücksnummer wird bei der Eingabe abgefangen.
   - 3c94d2f portaltitel geoportal-verkehr springt nicht mehr in zweite zeile
   - 7b14c38 - Animation Tool wirft beim Schließen einen Fehler
@@ -632,36 +674,37 @@ FIXES:
   - 3da16b7 GFI wird beim drucken immer mit ausgegeben, auch wenn GFI wieder geschlossen
   - 22811e5 Fehler beim Suchen von Baselayern in Suchschlitz behoben
 
-# Changelog LGV Master-Portal 1.2.4
+---
 
-FIXES:
-
+## v1.2.4 - 2017-02-07
+### Fixed
   - 760c7c1 hotfix 332 flurstueckssuche
 
-# Changelog LGV Master-Portal 1.2.3
+---
 
-FIXES:
-
+## v1.2.3 - 2017-01-30
+### Fixed
   - 3b2e44b layerid URL-parameter werden zugeladen falls vorhanden aber nicht konfiguriert
 
-# Changelog LGV Master-Portal 1.2.2
-FIXES:
+---
 
+## v1.2.2 - 2017-01-24
+### Fixed
   - ce3e3ae7 gfipopup größe verändert sich nicht durch verschieben vom popup
   - ccd07347 viomrouting
   - 8f6aca60 Portal wird nicht geladen, wenn LayerID in JSON nicht definiert
   - c8be5d5d Layerinformationen von Hintergrundlayern wurden nicht angezeigt und Title war nicht Datensatzname
 
-# Changelog LGV Master-Portal 1.2.1
+---
 
-FIXES:
-
+## v1.2.1 - 2017-01-06
+### Fixed
   - 00917df Portal-Titel wurde in "kleinen" Themenportalen initial nicht angezeigt
 
-# Changelog LGV Master-Portal 1.2.0
+---
 
-NEU:
-
+# v1.2.0 - 2016-12-16
+### Added
   - c1ad7b6 Bei der Animation wird auf die Gemeinde gezoomt und ein Marker auf der karte gesetzt
   - 0932b5d Legende für Pendler-Animation in der Werkzeug-Oberfläche implementiert
   - f8d8e61 Unterstützung von setElement() für parcelSearch
@@ -669,8 +712,7 @@ NEU:
   - 97517de Bei der Animation werden dei Punkte anhängig von Pendlerdanzahl und Landkreis dargestellt
   - 90be2d3 Themenbaum kann in kleinen Themenportalen initial aufgeklappt werden
 
-FIXES:
-
+### Fixed
   - d466fb5 keinStartupModul in URL möglich
   - d32423e KML Import Problem im Internet-Explorer
   - b44b62c länge Portaltitel - Die Länge des Portaltitels passt sich an verfügbaren Platz in der Menüleiste an
@@ -693,53 +735,53 @@ FIXES:
   - b6ea8d3 "in meiner Nähe" - Attribute nicht mehr doppelt
   - b12c6d5 portallogo configurierbar
 
-# Changelog LGV Master-Portal 1.1.6
+---
 
-FIXES:
+##  v1.1.6 - No Data
+### Fixed
   - 97ad0aa csw falsches Datum ausgelesen, da erneut über ganze csw Datei gesucht wurde
   - 59fae85 Parameter &LAYERIDS in URL wurden nicht mit SimpleTree ausgewertet. &CLICKCOUNTER jetzt überflüssig.
 
-# Changelog LGV Master-Portal 1.1.5
+---
 
-FIXES:
-
+# v1.1.5 - 2016-11-15
+### Fixed
   - 658d016 startcenter wurde nicht ausgelesen aus config.json
 
-# Changelog LGV Master-Portal 1.1.4
+---
 
-FIXES:
-
+# v1.1.4 - 2016-10-27
+### Fixed
   - 11e3138 Die Reihenfolge der Themen auf der Karte entsprach nicht immer der korrekten Reihenfolge der Themen in der Auswahl
 
-# Changelog LGV Master-Portal 1.1.3
+---
 
-FIXES:
-
+## v1.1.3 - 2016-10-26
+### Fixed
   - c05d205 Zeichnungen werden nicht gedruckt
 
-# Changelog LGV Master-Portal 1.1.2
+---
 
-FIXES:
-
+## v1.1.2 - 2016-10-24
+### Fixed
   - a27eb17 gfi Attribute werden nur noch nach Datum formatiert wenn sie ISO 8601 entsprechen
 
-# Changelog LGV Master-Portal 1.1.1
+---
 
-FIXES:
-
+# v1.1.1 - 2016-10-20
+### Fixed
   - b759d17 Auswahl speichern - Beim Öffnen einer gespeicherten Auswahl wurden immer alle Layer auf der Karte angezeigt, unabhängig davon ob der Layer sichtbar war oder nicht.
 
-# Changelog LGV Master-Portal 1.1.0
+---
 
-NEU:
-
+## v1.1.0 - 2016-10-18
+### Added
   - 32964b6 Style WMS - Layer können jetzt im Client neu gestylt werden. Vorläufige Einschränkung: Nur mit Flächengeometrien im Zusammenspiel mit SLD v1.0.0 möglich
   - 6f0dff6 kml import tool zugefügt
   - d448742 Navigation für mobile Endgeraete bzw. fuer Bildschirmbreiten bis zu 768px komplett ueberarbeitet (Design und Usability)
   - 2b8bb1b custom js für bauinfo
 
-FIXES:
-
+### Fixed
   - 06935f3 Legende wird im Infofenster erst angezeigt wenn der Layer sichtbar ist
   - df8d671 Measure- und Zeichenlayer immer an oberster Stelle
   - 9639ab9 maxscale initial ignoriert
@@ -753,3 +795,25 @@ FIXES:
   - ffc0bcc drucken von KML-Features möglich
   - 4304704 GFI-Reihenfolge wird in der richtigen Reihenfolge dargestellt
   - faa9133 GFIPopup hat eine maximale Höhe in Relation zur Fensterhöhe
+
+---
+
+## v1.0.6 - 2015-03-18
+- Keine Einträge
+
+---
+
+## v1.0.5 - 2015-03-12
+- Keine Einträge
+
+---
+
+## v1.0.4 - 2015-03-06
+- Keine Einträge
+
+---
+
+## v1.0.3 - 2015-02-29
+- Keine Einträge
+
+---

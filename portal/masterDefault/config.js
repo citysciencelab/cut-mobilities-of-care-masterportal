@@ -59,7 +59,7 @@ const Config = {
         visibility: true,
         urls: [
             {
-                "bezeichnung": "Kartographie und Gestaltung: ",
+                "bezeichnung": "translate#common:modules.footer.designation",
                 "url": "https://www.geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV Hamburg"
@@ -120,7 +120,8 @@ const Config = {
             en: "englisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        loadPath: "/locales/{{lng}}/{{ns}}.json"
     }
 };
 

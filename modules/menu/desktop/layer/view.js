@@ -42,7 +42,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(Radio.channel("LayerInformation"), {
             "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
-
+        // translates the i18n-props into current user-language. is done this way, because model's listener to languageChange reacts too late (after render, which ist riggered by creating new Menu)
+        this.model.changeLang();
         this.render();
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
@@ -51,7 +52,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     template: _.template(Template),
 
     /**
-     * todo
+     * Renders the selection view.
      * @returns {void}
      */
     render: function () {
@@ -96,28 +97,39 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Rerenders the model with updated elements.
      * @returns {void}
      */
     rerender: function () {
-        const attr = this.model.toJSON();
+        const attr = this.model.toJSON(),
+            scale = Radio.request("MapView", "getOptions").scale;
 
         this.$el.html("");
         this.$el.html(this.template(attr));
+
+        if (this.model.get("layerInfoChecked")) {
+            this.highlightLayerInformationIcon();
+        }
+        // If the the model should not be selectable make sure that is not selectable!
+        if (!this.model.get("isSelected") && (this.model.get("maxScale") < scale || this.model.get("minScale") > scale)) {
+            this.addDisableClass();
+        }
     },
 
     /**
-     * todo
+     * Executes toggleIsSelected in the model
      * @returns {void}
      */
     toggleIsSelected: function () {
         this.model.toggleIsSelected();
         Radio.trigger("ModelList", "setIsSelectedOnParent", this.model);
         this.rerender();
+        this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
 
     /**
-     * todo
+     * Executes setIsSettingVisible and setIsSelected in the model
+     * removes the element
      * @returns {void}
      */
     removeFromSelection: function () {
@@ -126,7 +138,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Init the LayerInformation window and inits the highlighting of the informationIcon.
      * @returns {void}
      */
     showLayerInformation: function () {
@@ -137,7 +149,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes toggleIsSettingVisible in the model
      * @returns {void}
      */
     toggleIsSettingVisible: function () {
@@ -145,7 +157,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes moveDown in the model
      * @returns {void}
      */
     moveModelDown: function () {
@@ -153,7 +165,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * todo
+     * Executes moveUp in the model
      * @returns {void}
      */
     moveModelUp: function () {
@@ -176,9 +188,14 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     addDisableClass: function (text) {
+        const statusCheckbox = this.$el.find("span.glyphicon.glyphicon-unchecked").length;
+
         this.$el.addClass("disabled");
-        this.$el.find("*").css("pointer-events", "none");
         this.$el.find("*").css("cursor", "not-allowed");
+        this.$el.find("*").css("pointer-events", "none");
+        if (statusCheckbox === 0) {
+            this.$el.find("span.pull-left").css({"pointer-events": "auto", "cursor": "pointer"});
+        }
         this.$el.attr("title", text);
     },
 
@@ -198,7 +215,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     highlightLayerInformationIcon: function () {
-        this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+        if (this.model.get("layerInfoChecked")) {
+            this.$el.find("span.glyphicon-info-sign").addClass("highlightLayerInformationIcon");
+        }
     },
 
     /**
@@ -207,6 +226,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      */
     unhighlightLayerInformationIcon: function () {
         this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
+        this.model.setLayerInfoChecked(false);
     }
 });
 

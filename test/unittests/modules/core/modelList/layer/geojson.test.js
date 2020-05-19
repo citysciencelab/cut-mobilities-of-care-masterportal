@@ -5,7 +5,7 @@ import Feature from "ol/Feature.js";
 import {expect} from "chai";
 
 describe("core/modelList/layer/geojson", function () {
-    var geojsonLayer,
+    let geojsonLayer,
         geojson,
         utilModel;
 
@@ -36,7 +36,7 @@ describe("core/modelList/layer/geojson", function () {
 
     describe("parseDataToFeatures", function () {
         it("should return an array with the length 100", function () {
-            var features = geojsonLayer.parseDataToFeatures(geojson);
+            const features = geojsonLayer.parseDataToFeatures(geojson);
 
             expect(features).to.have.lengthOf(100);
         });
