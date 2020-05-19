@@ -73,7 +73,6 @@ import PrintView2 from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
-import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
@@ -346,13 +345,6 @@ async function loadApp () {
             let element;
 
             switch (control.id) {
-                case "zoom": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowTR(control.id);
-                        new ZoomControlView({el: element});
-                    }
-                    break;
-                }
                 case "orientation": {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
