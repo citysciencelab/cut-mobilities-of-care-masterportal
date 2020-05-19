@@ -323,7 +323,6 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
         if (typeof dateTimeString === "undefined") {
             dateTimeString = this.getDateTimeStringByStatus(dates, "publication", "creation");
         }
-        console.info(dateTimeString);
         return dateTimeString;
     },
     /**
