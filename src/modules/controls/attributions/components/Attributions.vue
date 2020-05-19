@@ -37,7 +37,7 @@ export default {
     },
     data () {
         return {
-            open: !this.mobile ? this.isInitOpenMobile : this.isInitOpenDesktop,
+            open: null,
             attributionsChannel: Radio.channel("Attributions"),
             modelListChannel: Radio.channel("ModelList")
         };
@@ -51,6 +51,7 @@ export default {
         this.attributionsChannel.on("removeAttribution", this.removeAttribution);
         this.modelListChannel.on("updateVisibleInMapList", this.updateAttributions);
         this.updateAttributions();
+        this.open = this.mobile ? this.isInitOpenMobile : this.isInitOpenDesktop;
     },
     beforeDestroy () {
         this.attributionsChannel.off("createAttribution", this.addAttribution);
