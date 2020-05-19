@@ -106,10 +106,10 @@ export default {
 
         .attributions-view {
             color: @secondary_contrast;
-            font-size: @font_size_default;
-            font-family: @font_family_default;
-            font-weight: 400;
             background-color: @secondary;
+
+            max-width: calc(100vw - 410px);
+            width: max-content;
 
             border: 1px solid @secondary_border;
             box-shadow: 0 6px 12px @shadow;
@@ -122,15 +122,21 @@ export default {
             bottom: 0;
             right: 100%;
 
-            dt {
-                font-size: @font_size_huge;
-                color: @primary;
-            }
             dl {
                 margin-bottom: 0;
             }
+            dt {
+                color: @primary;
+                font-size: @font_size_big;
+                font-family: @font_family_narrow;
+                font-weight: 400;
+                /* required for ie11, else text will break asap */
+                display: flex;
+            }
             dd {
                 margin-bottom: 8px;
+                /* required for ie11, else text will break asap */
+                display: flex;
             }
             img {
                 max-height: 2em;
