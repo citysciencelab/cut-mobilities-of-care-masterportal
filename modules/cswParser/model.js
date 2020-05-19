@@ -323,6 +323,7 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
         if (typeof dateTimeString === "undefined") {
             dateTimeString = this.getDateTimeStringByStatus(dates, "publication", "creation");
         }
+        console.info(dateTimeString);
         return dateTimeString;
     },
     /**
@@ -348,7 +349,7 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
                 }
             });
         }
-        if (typeof fallbackStatus !== "undefined" && typeof dateTimeString !== "undefined") {
+        if (typeof fallbackStatus !== "undefined" && typeof dateTimeString === "undefined") {
             dateTimeString = this.getDateTimeStringByStatus(dates, fallbackStatus);
         }
         return dateTimeString;
