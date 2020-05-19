@@ -1,4 +1,3 @@
-
 <script>
 export default {
     name: "ControlIcon",
@@ -123,11 +122,8 @@ export default {
         margin-left: 2px;
         margin-top: -1px;
     }
-<<<<<<< HEAD
-    /* TODO: Since every glyphicon is supported via config, rules for every glyphicon should exist here */
-=======
     .glyphicon-fast-backward::before {
         margin-top: -1px;
     }
->>>>>>> 6be259a1358941e17620a0d8e3fb003ebfe45cbc
+    /* TODO: Since every glyphicon is supported via config, rules for every glyphicon should exist here */
 </style>
