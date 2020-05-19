@@ -29,8 +29,8 @@ export default {
         },
         mobileHiddenControls: [
             "backForward",
-            "fullScreen",
-            "mousePosition"
+            "fullScreen"
+            // NOTE "mousePosition" is not rendered as a child here
         ],
         bottomControls: ["attributions", "overviewMap"]
     },

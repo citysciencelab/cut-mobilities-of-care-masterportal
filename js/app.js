@@ -75,7 +75,6 @@ import WfstView from "../modules/tools/wfst/view";
 import ControlsView from "../modules/controls/view";
 import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
-import MousePositionView from "../modules/controls/mousePosition/view";
 import TotalView from "../modules/controls/totalView/view";
 import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
@@ -360,13 +359,6 @@ async function loadApp () {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
                     new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
-                case "mousePosition": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowBL(control.id);
-                        new MousePositionView({el: element});
-                    }
                     break;
                 }
                 /**
