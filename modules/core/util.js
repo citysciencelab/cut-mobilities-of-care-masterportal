@@ -23,6 +23,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @property {String} proxyHost="" Hostname of a remote proxy (CORS must be activated there).
      * @property {String} loaderOverlayTimeoutReference=null todo
      * @property {String} loaderOverlayTimeout="20" Timeout for the loadergif.
+     * @listens Core#RadioRequestUtilChangeTimeZone
      * @listens Core#RadioRequestUtilIsViewMobile
      * @listens Core#RadioRequestUtilGetProxyURL
      * @listens Core#RadioRequestUtilIsApple
@@ -87,7 +88,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "groupBy": this.groupBy,
             "pick": this.pick,
             "omit": this.omit,
-            "findWhereJs": this.findWhereJs
+            "findWhereJs": this.findWhereJs,
+            "changeTimeZone": this.changeTimeZone
         }, this);
 
         channel.on({
@@ -816,7 +818,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         return filteredObj;
     },
 
-
     /** Looks through the list and returns the firts value that matches all of the key-value pairs
      * listed in hitId.
      * @param {Object[]} [list=[]] - the list.
@@ -829,6 +830,45 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 key => item[key] === {id: findId}[key]
             )
         );
+    },
+
+    /**
+     * change the timzone for the historicalData
+     *
+     * @param  {Object[]} historicalData data from feature
+     * @param  {Object[]} utc timezone
+     * @return {Object[]} data
+     */
+    changeTimeZone: function (historicalData, utc) {
+        const data = _.isUndefined(historicalData) ? [] : historicalData;
+
+        _.each(data, function (loadingPointData) {
+            _.each(loadingPointData.Observations, function (obs) {
+                const phenomenonTime = obs.phenomenonTime,
+                    utcAlgebraicSign = utc.substring(0, 1),
+                    utcString = _.isUndefined(utc) ? "+1" : utc;
+
+                let utcSub,
+                    utcNumber;
+
+                if (utcString.length === 2) {
+                    // check for winter- and summertime
+                    utcSub = parseInt(utcString.substring(1, 2), 10);
+                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                    utcNumber = "0" + utcSub + "00";
+                }
+                else if (utcString.length > 2) {
+                    utcSub = parseInt(utcString.substring(1, 3), 10);
+                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                    utcNumber = utc.substring(1, 3) + "00";
+                }
+
+                obs.phenomenonTime = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
+
+            });
+        });
+
+        return data;
     }
 });
 

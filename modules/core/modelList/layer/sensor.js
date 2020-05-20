@@ -455,7 +455,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 timezone = this.get("timezone");
             let phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
 
-            phenomenonTime = this.changeTimeZone(phenomenonTime, this.get("utc"));
+            phenomenonTime = Radio.request("Util", "changeTimeZone", phenomenonTime, this.get("utc"));
 
             if (this.get("showNoDataValue") && !value) {
                 thing.properties[key] = this.get("noDataValue");
