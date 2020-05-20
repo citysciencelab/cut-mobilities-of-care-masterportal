@@ -1,5 +1,4 @@
 import Model from "@modules/core/util.js";
-import * as moment from "moment";
 import {expect} from "chai";
 
 describe("core/Util", function () {
