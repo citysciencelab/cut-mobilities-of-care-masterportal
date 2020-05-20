@@ -1,4 +1,5 @@
 import Model from "@modules/core/util.js";
+import * as moment from "moment";
 import {expect} from "chai";
 
 describe("core/Util", function () {
@@ -431,6 +432,31 @@ describe("core/Util", function () {
         });
         it("should return the first entry in the list", function () {
             expect(model.findWhereJs(list, 0)).to.be.undefined;
+        });
+    });
+    describe("changeTimeZone", function () {
+        it("should return an empty array for undefined input", function () {
+            expect(model.changeTimeZone(undefined, undefined)).to.be.an("array").that.is.empty;
+        });
+        it("should return an empty array for empty array and timezone +3 input", function () {
+            expect(model.changeTimeZone([], "+3")).to.be.an("array").that.is.empty;
+        });
+        it("should return an array that is equal to input array for incorrect array and timezone +1 input", function () {
+            expect(model.changeTimeZone(["test", "abc"], "+1")).to.be.an("array").that.includes("test", "abc");
+        });
+        it("should return array with changend phenomenonTime for correct array and timezone +5 input", function () {
+            const historicalData = [{
+                Observations: [{
+                    phenomenonTime: "2018-06-19T07:13:57.421Z",
+                    result: "available"
+                },
+                {
+                    phenomenonTime: "2018-01-19T07:13:57.421Z",
+                    result: "charging"
+                }]
+            }];
+
+            expect(model.changeTimeZone(historicalData, "+5")).to.be.an("array");
         });
     });
 });
