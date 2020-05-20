@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<table class="wfst-module">
+    <tr>
+        <td colspan="5">
+            <div class = "form-group form-group-sm layerSelect">
+                <div class="row">
+                    <label for="wfstSelectLayer" class="col-sm-5 control-label"> <%= buttonTitleConfig[3] + ":"%> </label>
+                    <div class="col-sm-5">
+                        <select class="form-control input-sm" id="wfstSelectLayer">
+                            <% for (let key in activeLayers) {
+                                if (activeLayers.hasOwnProperty(key)) { %>
+                                    <option value="<%= key %>" <% if (key==currentLayerId){ %> selected <%}%>><%= activeLayers[key] %></option>
+                            <% }} %>
+                        </select>
+                    </div>
+                    <div class="col-sm-1">
+                        <span class="glyphicon glyphicon-info-sign info-sign" aria-hidden="true"></span>
+                    </div>
+                </div>
+                <div id="wfst-module-infoText">Es können nur WFS-T Layer ausgewählt werden, welche im Themenbaum aktiv sind.</div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <% if (buttonConfig[0]) { %>
+            <td>
+                <button id="wfst-module-recordButton-point" class="btn btn-sm btn-lgv-grey record-button inactive" glyphicon="glyphicon-pencil">
+                    <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
+                    <br>
+                    <span class="record-label"> <%= buttonTitleConfig[0] %></span>
+                </button>
+            </td>
+                
+        <% } %>
+        <% if (buttonConfig[1]) { %>
+            <td>
+                <button id="wfst-module-recordButton-line" class="btn btn-sm btn-lgv-grey record-button" glyphicon="glyphicon-pencil">
+                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                    <br>
+                    <span class="record-label"><%= buttonTitleConfig[1] %></span>
+                </button>
+            </td>
+        <% } %>
+        <% if (buttonConfig[2]) { %>
+            <td>
+                <button id="wfst-module-recordButton-area" class="btn btn-sm btn-lgv-grey record-button" glyphicon="glyphicon-pencil">
+                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                    <br>
+                    <span class="record-label"><%= buttonTitleConfig[2] %></span>
+                </button>
+            </td>
+        <% } %>
+        <% if (editButton) { %>
+        <td>
+            <button id="wfst-module-recordButton-edit" class="btn btn-sm btn-lgv-grey record-button" glyphicon="glyphicon-wrench">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                <br>
+                <span class="record-label"><%= editButtonTitle %></span>
+            </button>
+        </td>
+        <% } %>
+        <% if (deleteButton) { %>
+        <td>
+            <button id="wfst-module-recordButton-delete" class="btn btn-sm btn-lgv-grey record-button" glyphicon="glyphicon-trash">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                <br>
+                <span class="record-label"> <%= deleteButtonTitle %></span>
+            </button>
+        </td>
+        <% } %>
+    </tr>
+    <% if (showAttrTable === true) { %>
+    <tr>
+        <td>
+            <button id="wfst-module-recordButton-save" class="btn btn-sm btn-lgv-grey record-button" title="Änderung der Attribute Speichern">
+                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                <br>
+                <span class="record-label">Speichern</span>
+            </button>
+        </td>
+        <td colspan="5" rowspan="2">
+            <form class="form-horizontal record-form">
+                <% wfstFields.forEach(function (field, index) { %>
+                    <% let fieldValue, mandatory, mandatoryLabel; %>
+                <div class="form-group form-group-sm">
+                    <% if (field.mandatory === true) {
+                        mandatoryLabel = "mandatory";
+                        if (featureProperties === undefined || featureProperties[field.field] === "") {
+                            mandatory = "mandatory";
+                        }
+                    } %>
+                    <% if (featureProperties === undefined || featureProperties[field.field] === "") {
+                        fieldValue = "";
+                    }
+                    else if (featureProperties !== undefined || featureProperties[field.field] !== "") {
+                        fieldValue = featureProperties[field.field];
+                    } %>
+                    <label for="<%= field.field %>" class="col-sm-5 control-label <%= mandatoryLabel %>" style="text-align: left;"><%= field.caption %></label>
+                    <div class="col-sm-7">
+                        <% if (field.type && field.inputFieldType === "checkbox") { %>
+                            <input type="checkbox" class="form-check-input input-xs input <%= mandatory %>" id="<%= field.field %>" <% if (fieldValue === "true") { %> checked <% } %>>
+                        <% } 
+                        else if (field.type && field.inputFieldType === "date") { %> 
+                            <div class="input-group">
+                                <div class="input-group-addon input-sm">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </div>
+                                <div class="testDate">
+                                    <input data-provide="datepicker" class="form-control input-sm <%= field.type%> <%= mandatory %> datepicker" data-date-format="yyyy-mm-dd" data-date-language="de" data-date-autoclose=true data-date-today-highlight=true id="<%= field.field %>" autocomplete="off" placeholder="yyyy-mm-dd" type="text" value="<%= fieldValue %>"/>
+                                </div>
+                            </div>
+                        <% }
+                        else if (field.type && field.inputFieldType) { %>
+                            <input type="<%= field.inputFieldType %>" class="form-control input-sm input <%= field.type%> <%= mandatory %>" id="<%= field.field %>" autocomplete="off" value="<%= fieldValue %>">
+                        <% } %>
+                    </div>
+                    <div id="warning-text <%= field.field %>" class="col-sm-offset-5 col-sm-7 warning-text"></div>
+                </div>
+                <% }); %>
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button id="wfst-module-recordButton-discard" class="btn btn-lgv-grey record-button" title="Änderungen der Attribute verwerfen">
+                <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                <br>
+                <span class="record-label">Verwerfen</span>
+            </button>
+        </td>
+    </tr>
+    <% } else if (showCancel === true) { %>
+        <tr>
+            <td colspan="5">
+                <div class="col-sm-5">
+                    <button id="wfst-module-recordButton-cancel" class="btn btn-danger record-button" title="Aktion Abbrechen">
+                        <span class="record-label">Abbrechen</span>
+                    </button>
+
+                </div>
+            </td>
+        </tr>    
+        
+    <% } %>
+</table>

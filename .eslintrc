@@ -18,18 +18,60 @@
         "i18next": true
     },
     "plugins": [
-        "chai-friendly",
-        "vue"
+        "chai-friendly"
     ],
-    "parser": "vue-eslint-parser",
     "parserOptions": {
         "parser": "babel-eslint",
         "ecmaVersion": 2017,
         "sourceType": "module",
         "allowImportExportEverywhere": true
     },
-    "extends": ["plugin:backbone/recommended"],
+    "extends": [
+        "plugin:backbone/recommended",
+        // version 6.x.x
+        "plugin:vue/essential"
+    ],
     "rules": {
+        // vue plugin Base Rules
+        "vue/comment-directive": ["off"],
+        "vue/jsx-uses-vars": ["off"],
+        // vue plugin Strongly Recommended Rules
+        "vue/component-definition-name-casing": ["error"],
+        "vue/html-closing-bracket-newline": ["error"],
+        "vue/html-closing-bracket-spacing": ["error"],
+        "vue/html-end-tags": ["error"],
+        "vue/html-indent": ["error", 4],
+        "vue/html-quotes": ["error"],
+        "vue/max-attributes-per-line": ["error"],
+        "vue/multiline-html-element-content-newline": ["error"],
+        "vue/mustache-interpolation-spacing": ["error"],
+        "vue/no-multi-spaces": ["error"],
+        "vue/no-spaces-around-equal-signs-in-attribute": ["error"],
+        "vue/no-template-shadow": ["error"],
+        "vue/prop-name-casing": ["error"],
+        "vue/require-default-prop": ["error"],
+        "vue/require-prop-types": ["error"],
+        "vue/singleline-html-element-content-newline": ["error"],
+        "vue/v-bind-style": ["error"],
+        "vue/v-on-style": ["error"],
+        // vue plugin Recommended Rules
+        "vue/attributes-order": ["error"],
+        "vue/component-tags-order": ["error"],
+        "vue/order-in-components": ["error"],
+        "vue/this-in-template": ["error"],
+        // vue plugin Uncategorizied Rules
+        "vue/array-bracket-spacing": ["error"],
+        "vue/component-name-in-template-casing": ["error"],
+        "vue/eqeqeq": ["error"],
+        "vue/key-spacing": ["error"],
+        "vue/match-component-file-name": ["error", {
+            "extensions": ["vue"],
+            "shouldMatchCase": true
+        }],
+        "vue/no-static-inline-styles": ["error"],
+        "vue/padding-line-between-blocks": ["error"],
+        "vue/require-direct-export": ["error"],
+        "vue/require-name-property": ["error"],
         // Possible Errors - These rules relate to possible syntax or logic errors in JavaScript code
         "for-direction": "error",
         "getter-return": "error",

@@ -38,6 +38,24 @@ describe("menu/desktop/layer/viewLight", function () {
                         return this.supported;
                     case "isRemovable":
                         return this.isRemovable;
+                    case "removeTopicText":
+                        return "removeTopicText";
+                    case "changeClassDivisionText":
+                        return "changeClassDivisionText";
+                    case "infosAndLegendText":
+                        return "infosAndLegendText";
+                    case "settingsText":
+                        return "settingsText";
+                    case "transparencyText":
+                        return "transparencyText";
+                    case "increaseTransparencyText":
+                        return "increaseTransparencyText";
+                    case "reduceTransparencyText":
+                        return "reduceTransparencyText";
+                    case "levelUpText":
+                        return "levelUpText";
+                    case "levelDownText":
+                        return "levelDownText";
                     default:
                         return null;
                 }
@@ -55,7 +73,16 @@ describe("menu/desktop/layer/viewLight", function () {
                     showSettings: this.showSettings,
                     transparency: 42,
                     isVisibleInMap: true,
-                    isRemovable: false
+                    isRemovable: false,
+                    removeTopicText: "removeTopicText",
+                    changeClassDivisionText: "changeClassDivisionText",
+                    infosAndLegendText: "infosAndLegendText",
+                    settingsText: "settingsText",
+                    transparencyText: "transparencyText",
+                    increaseTransparencyText: "increaseTransparencyText",
+                    reduceTransparencyText: "reduceTransparencyText",
+                    levelUpText: "levelUpText",
+                    levelDownText: "levelDownText"
                 };
             }
         };
@@ -64,6 +91,11 @@ describe("menu/desktop/layer/viewLight", function () {
             doGetParentObject: function () {
                 return $("<div></div>");
             }
+        });
+        i18next.init({
+            lng: "cimode",
+            debug: false
+
         });
     });
 

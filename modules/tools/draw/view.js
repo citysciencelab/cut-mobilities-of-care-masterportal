@@ -23,6 +23,8 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         "change .colorContour select": "setColorContour",
         "click .delete": "deleteFeatures",
         "click .draw": "toggleInteraction",
+        "click .undo": "undoLastStep",
+        "click .redo": "redoLastStep",
         "click .modify": "toggleInteraction",
         "click .trash": "toggleInteraction",
         "click .downloadDrawing": "startDownloadTool"
@@ -332,7 +334,14 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         if (selectedElement.text === this.model.get("drawDoubleCircle")) {
             this.model.enableMethodDefined(false);
         }
-        this.model.setDrawType(selectedElement.value, selectedElement.text);
+        if (selectedElement.text === this.model.get("drawCurve")) {
+            this.model.setFreehand(true);
+            this.model.setDrawType("LineString", selectedElement.text);
+        }
+        else {
+            this.model.setFreehand(false);
+            this.model.setDrawType(selectedElement.value, selectedElement.text);
+        }
         this.model.updateDrawInteraction();
         this.renewSurface();
         this.startDrawInteraction();
@@ -388,6 +397,21 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         this.model.startDownloadTool();
     },
 
+    /**
+     * deletes the last added geometry from the layer
+     * @return {void}
+     */
+    undoLastStep: function () {
+        this.model.undoLastStep();
+    },
+
+    /**
+     * restores the last deleted geometry
+     * @return {void}
+     */
+    redoLastStep: function () {
+        this.model.redoLastStep();
+    },
     /**
      * Setter for the Symbol on the model.
      * @param {*} evt - With a new Symbol.

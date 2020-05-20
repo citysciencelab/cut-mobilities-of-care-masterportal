@@ -1,4 +1,5 @@
 import ItemTemplate from "text-loader!./template.html";
+import store from "../../../../src/app-store/index";
 
 const ItemView = Backbone.View.extend({
     events: {
@@ -26,6 +27,7 @@ const ItemView = Backbone.View.extend({
         }
 
         this.model.setIsActive(true);
+        store.commit("setToolActive", {id: this.model.id, active: true});
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
     },

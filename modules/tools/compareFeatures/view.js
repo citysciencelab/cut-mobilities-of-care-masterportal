@@ -28,7 +28,7 @@ const CompareFeaturesView = Backbone.View.extend({
             "change:isActive": this.render,
             "renderFeedbackModal": this.renderFeedbackModal
         });
-        document.getElementsByClassName("masterportal-container")[0].appendChild(this.el);
+        document.getElementById("masterportal-container").appendChild(this.el);
 
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);

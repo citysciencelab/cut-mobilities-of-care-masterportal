@@ -45,18 +45,43 @@
     },
     "tree": {
         "trafficCameras": "survey cameras (traffic)",
-        "topicsHelp": "Topics help Hilfe",
+        "topicsHelp": "Topics help",
         "mapBackground": "Map background grey/white",
         "pinTopicsTree": "Fix/remove topic tree",
         "hideAllTopics": "Hide all topics",
         "showAllTopics": "Show all topics",
-        "category": "Categorie"
+        "category": "Categorie",
+        "backgroundMaps": "Background maps",
+        "subjectData": "Subject data",
+        "subjectData3D": "3D data",
+        "selectedTopics": "Selected topics",
+        "removeSelection": "Remove selection",
+        "infosAndLegend": "Information und explanations",
+        "removeTopic": "Remove topic",
+        "showTopic": "Present topic",
+        "changeClassDivision":"Change class division",
+        "settings":"Settings",
+        "transparency": "Transparency",
+        "increaseTransparency": "Increase transparency",
+        "reduceTransparency": "Reduce transparency",
+        "removeLayer": "Remove Layer",
+        "levelUp": "Level up",
+        "levelDown": "Level down",
+        "externalTechnicalData": "External technical data"
     },
     "date": "Date",
     "time": "Time",
     "modules": {
         "language": {
-            "languageTitle": "Please choose a language"
+            "languageTitle": "Please choose a language",
+            "de": "German",
+            "en": "English"
+        },
+        "cswParser": {
+            "noMetadataMessage": "No metadata available."
+        },
+        "layerInformation": {
+            "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
         },
         "quickHelp": {
             "titleTag": "Open help",
@@ -209,6 +234,7 @@
                 "generateReport": "Generate report"
             },
             "getCoord": {
+                "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
                 "hdms": {
                     "eastingLabel": "Longitude",
@@ -217,6 +243,11 @@
                 "cartesian": {
                     "eastingLabel": "Easting",
                     "northingLabel": "Northing"
+                }
+            },
+            "gfi": {
+                "themes": {
+                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service."
                 }
             },
             "viomRouting": {
@@ -256,6 +287,7 @@
                 "drawPoint": "Draw point",
                 "writeText": "Write text",
                 "drawLine": "Draw line",
+                "drawCurve": "Draw curve",
                 "drawArea": "Draw area",
                 "drawCircle": "Draw circle",
                 "drawDoubleCircle": "Draw double circle",
@@ -277,6 +309,8 @@
                 "color": "Fill color",
                 "button": {
                     "draw": "Draw geometry / text",
+                    "undo": "Undo",
+                    "redo": "Redo",
                     "edit": "Edit geometry",
                     "delete": "Delete geometry / text",
                     "deleteAll": "Delete all"
@@ -394,7 +428,8 @@
         "searchbar": {
             "placeholder": {
                 "addressHospitalBplan" : "Search for Address/Hospital/B-Plan",
-                "addressTopicParcel" : "Search address, district, topics, parcel"
+                "addressTopicParcel" : "Search address, district, topics, parcel",
+                "address" : "Search for Address"
             },
             "showAllResults": "Show all results",
             "locationFinder": {
@@ -436,6 +471,11 @@
             "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
             "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
           }
+        },
+        "legend": {
+            "title": "Legend",
+            "collapseAll": "Collapse all",
+            "foldOutAll": "Fold out all"
         }
     },
     "snippets": {

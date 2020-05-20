@@ -23,6 +23,10 @@ describe("core/Util", function () {
         {
             "name": "22089 Hamburg - Hamm",
             "id": "bkgSuggest7"
+        },
+        {
+            "name": "22089 Hamburg - Hamm",
+            "id": "bkgSuggest8"
         }
     ];
 
@@ -418,21 +422,33 @@ describe("core/Util", function () {
     });
     describe("findWhereJs", function () {
         it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, "bkgSuggest3")).to.deep.equal(list[0]);
+            expect(model.findWhereJs(list, {"id": "bkgSuggest3"})).to.deep.equal(list[0]);
         });
-        it("should return", function () {
-            expect(model.findWhereJs(list, undefined)).to.be.undefined;
+        it("should return the second entry in the list", function () {
+            expect(model.findWhereJs(list, {"name": "20535 Hamburg - Hamm"})).to.deep.equal(list[1]);
         });
-        it("should return", function () {
+        it("should return undefined", function () {
             expect(model.findWhereJs(undefined, undefined)).to.be.undefined;
         });
-        it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, "")).to.be.undefined;
-        });
-        it("should return the first entry in the list", function () {
-            expect(model.findWhereJs(list, 0)).to.be.undefined;
+        it("should return undefined", function () {
+            expect(model.findWhereJs(list, "{}")).to.be.undefined;
         });
     });
+    describe("whereJs", function () {
+        it("should return the last two entry in the list", function () {
+            expect(model.whereJs(list, {"name": "22089 Hamburg - Hamm"}).length).to.equal(2);
+        });
+        it("should return a empty list", function () {
+            expect(model.whereJs(list, {"name": "22089 Hamburg - Hamm - xxx"}).length).to.equal(0);
+        });
+        it("should return the given list", function () {
+            expect(model.whereJs(list, undefined).length).to.be.equal(6);
+        });
+        it("should return a empty list", function () {
+            expect(model.whereJs(undefined, undefined).length).to.equal(0);
+        });
+    });
+<<<<<<< HEAD
     describe("changeTimeZone", function () {
         it("should return an empty array for undefined input", function () {
             expect(model.changeTimeZone(undefined, undefined)).to.be.an("array").that.is.empty;
@@ -459,4 +475,207 @@ describe("core/Util", function () {
         });
     });
 });
+=======
+    describe("isEqual", function () {
+        const obj = {a: "foo", b: "bar", c: "baz"},
+            obj2 = {a: "foo", c: "bar", b: "baz"},
+            obj3 = {a: "foo", b: "bar"},
+            obj4 = {name: "moe", luckyNumbers: [13, 27, 34]};
 
+        it("should return false", function () {
+            expect(model.isEqual(obj, obj2)).to.be.false;
+        });
+        it("should return false", function () {
+            expect(model.isEqual(obj, obj3)).to.be.false;
+        });
+        it("should return true", function () {
+            expect(model.isEqual(obj, {a: "foo", b: "bar", c: "baz"})).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEqual(obj4, {name: "moe", luckyNumbers: [13, 27, 34]})).to.be.true;
+        });
+    });
+    describe("differenceJs", function () {
+        it("should return the last three entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, [1, 2])).to.deep.equal([3, 4, 5]);
+        });
+        it("should return the given five entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, [])).to.deep.equal([1, 2, 3, 4, 5]);
+        });
+        it("should return the last two entries in the array", function () {
+            const array = ["Hamburg", "Bremen", "Berlin", "Delmenhosrt"];
+
+            expect(model.differenceJs(array, ["Hamburg", "Bremen"])).to.deep.equal(["Berlin", "Delmenhosrt"]);
+        });
+        it("should return the given five entries in the array", function () {
+            const array = [1, 2, 3, 4, 5];
+
+            expect(model.differenceJs(array, undefined)).to.deep.equal([1, 2, 3, 4, 5]);
+        });
+        it("should return an empty array", function () {
+            expect(model.differenceJs(undefined, undefined)).to.deep.equal([]);
+        });
+    });
+    describe("isEmpty", function () {
+        it("should return true", function () {
+            expect(model.isEmpty(null)).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty("")).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty({})).to.be.true;
+        });
+        it("should return true", function () {
+            expect(model.isEmpty([])).to.be.true;
+        });
+        it("should return false", function () {
+            expect(model.isEmpty({a: "1"})).to.be.false;
+        });
+    });
+    describe("toObject", function () {
+        const arr1 = ["Akash", "Amit", "Aviral"],
+            arr2 = [1, 2, 3],
+            arr3 = [["Akash", "Amit"], ["pass", "pass"]],
+            obj12 = {
+                Akash: 1,
+                Amit: 2,
+                Aviral: 3
+            },
+            obj3 = {
+                Akash: "Amit",
+                pass: "pass"
+            };
+
+        it("should return an object", function () {
+            expect(model.toObject(arr1, arr2)).to.deep.equal(obj12);
+        });
+
+        it("should return an object", function () {
+            expect(model.toObject(arr3)).to.deep.equal(obj3);
+        });
+    });
+
+    describe("uniqueId", () => {
+        it("should increment the uniqueId internaly", () => {
+            const currentId = model.uniqueId(),
+                expectedId = String(parseInt(currentId, 10) + 1);
+
+            expect(currentId).to.not.be.NaN;
+            expect(model.uniqueId()).to.equal(expectedId);
+        });
+        it("should prefix the id with the given prefix", () => {
+            const currentId = model.uniqueId(),
+                prefix = "foo",
+                expectedId = prefix + String(parseInt(currentId, 10) + 1);
+
+            expect(currentId).to.not.be.NaN;
+            expect(model.uniqueId(prefix)).to.equal(expectedId);
+        });
+        it("should increment the same id independent of the models instance", () => {
+            const currentId = model.uniqueId(),
+                expectedId = String(parseInt(currentId, 10) + 1),
+                modelB = new Model();
+
+            expect(currentId).to.not.be.NaN;
+            expect(modelB.uniqueId()).to.equal(expectedId);
+        });
+    });
+
+    describe("sortBy", function () {
+        it("should only sort arrays, objects and strings", function () {
+            expect(model.sortBy(undefined)).to.be.an("array").to.be.empty;
+            expect(model.sortBy(false)).to.be.an("array").to.be.empty;
+            expect(model.sortBy(null)).to.be.an("array").to.be.empty;
+            expect(model.sortBy("")).to.be.an("array").to.be.empty;
+            expect(model.sortBy(0)).to.be.an("array").to.be.empty;
+            expect(model.sortBy(123)).to.be.an("array").to.be.empty;
+            expect(model.sortBy([])).to.be.an("array").to.be.empty;
+            expect(model.sortBy({})).to.be.an("array").to.be.empty;
+        });
+
+        it("should handle undefined as infinit and null as zero", function () {
+            const input = [undefined, null, -1, 1],
+                expected = [-1, null, 1, undefined];
+
+            expect(model.sortBy(input)).to.deep.equal(expected);
+        });
+        it("should sort a string alphabetically", function () {
+            const input = "Hello World!",
+                expected = [" ", "!", "H", "W", "d", "e", "l", "l", "l", "o", "o", "r"];
+
+            expect(model.sortBy(input)).to.deep.equal(expected);
+        });
+        it("should sort an array of numbers numerically", function () {
+            const input = [4, 8, 2, 99, 23, 11, 101],
+                expected = [2, 4, 8, 11, 23, 99, 101];
+>>>>>>> geowerkstatt/dev
+
+            expect(model.sortBy(input)).to.deep.equal(expected);
+        });
+        it("should sort an array of numbers as strings alphabetically", function () {
+            const input = ["4", "8", "2", "99", "23", "11", "101"],
+                expected = ["101", "11", "2", "23", "4", "8", "99"];
+
+            expect(model.sortBy(input)).to.deep.equal(expected);
+        });
+        it("should sort an array of numbers as strings and letters alphabetically by ascii code", function () {
+            const input = ["1", "2", "b", "c", "A", "D", "3", "0"],
+                expected = ["0", "1", "2", "3", "A", "D", "b", "c"];
+
+            expect(model.sortBy(input)).to.deep.equal(expected);
+        });
+        it("should not sort an array of objects without iteratee", function () {
+            const input = [{a: 1, b: 2, c: 3}, {d: 1, e: 2, f: 3}, {a: 5, b: 4, c: 3}, {a: 9, b: 8, c: 4}, {a: 0, b: 1, c: 2}],
+                expected = input;
+
+            expect(model.sortBy(input)).to.deep.equal(expected);
+        });
+        it("should sort an array of objects with a string as iteratee, putting objects without an iteratee key in the back", function () {
+            const input = [{a: 1, b: 2, c: 3}, {d: 1, e: 2, f: 3}, {a: 5, b: 4, c: 3}, {a: 9, b: 8, c: 4}, {a: 0, b: 1, c: 2}],
+                expected = [{a: 0, b: 1, c: 2}, {a: 1, b: 2, c: 3}, {a: 5, b: 4, c: 3}, {a: 9, b: 8, c: 4}, {d: 1, e: 2, f: 3}],
+                iteratee = "a";
+
+            expect(model.sortBy(input, iteratee)).to.deep.equal(expected);
+        });
+        it("should sort an array of objects with a number as iteratee, putting objects without an iteratee key in the back", function () {
+            const input = [{"1": 4, a: 1, b: 2, c: 3}, {"1": 3, d: 1, e: 2, f: 3}, {"1": 1, a: 5, b: 4, c: 3}, {"1": 2, a: 9, b: 8, c: 4}, {a: 0, b: 1, c: 2}],
+                expected = [{1: 1, a: 5, b: 4, c: 3}, {1: 2, a: 9, b: 8, c: 4}, {1: 3, d: 1, e: 2, f: 3}, {1: 4, a: 1, b: 2, c: 3}, {a: 0, b: 1, c: 2}],
+                iteratee = 1;
+
+            expect(model.sortBy(input, iteratee)).to.deep.equal(expected);
+        });
+        it("should sort an array of numbers with an iteratee function", function () {
+            const input = [4, 8, 2, 99, 23, 11, 101],
+                expected = [11, 99, 23, 4, 101, 2, 8];
+
+            expect(model.sortBy(input, (sum) => {
+                return Math.sin(sum);
+            })).to.deep.equal(expected);
+        });
+        it("should use the given context as scope for the iteratee", function () {
+            const input = [4, 8, 2, 99, 23, 11, 101],
+                expected = [11, 99, 23, 4, 101, 2, 8],
+                context = new function () {
+                    this.sin = (num) => {
+                        return Math.sin(num);
+                    };
+                }();
+
+            /**
+             * iteratee of sortBy
+             * @param {*} value the value
+             * @returns {*}  the value to sort by
+             */
+            function iteratee (value) {
+                return this.sin(value);
+            }
+
+            expect(model.sortBy(input, iteratee, context)).to.deep.equal(expected);
+        });
+    });
+});

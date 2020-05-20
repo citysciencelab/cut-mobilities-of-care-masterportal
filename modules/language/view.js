@@ -13,8 +13,6 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
 
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "change:closeButton": this.render,
-            "change:languageTitle": this.render,
             "change:activeCode": this.render
         });
 
@@ -38,7 +36,7 @@ const LanguageView = Backbone.View.extend(/** @lends LanguageView.prototype */{
         this.model.setOverlayElement(this.$el[0]);
 
         // Add languagebar to footer if availible. For both cases different styles are apllied (by style.less).
-        if ($(".footer").length > 0) {
+        if ($("#map > div.ol-viewport > div.footer").length > 0) {
 
             const scaleLineElement = $("#map > div.ol-viewport > div.footer > div.scale-line");
 

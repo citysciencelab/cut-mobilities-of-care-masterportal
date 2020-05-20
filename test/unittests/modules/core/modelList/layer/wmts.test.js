@@ -1,10 +1,17 @@
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 import {expect} from "chai";
 import sinon from "sinon";
 import WMTSLayer from "@modules/core/modelList/layer/wmts.js";
 import {get as getProjection} from "ol/proj";
 import {getWidth} from "ol/extent";
+import WMTSCapabilities from "ol/format/WMTSCapabilities";
+import OlWMTSSource from "ol/source/WMTS.js";
+import TileLayer from "ol/layer/Tile";
+import * as WMTSResult1 from "../../../../resources/testWMTSResponse1.xml";
+import * as WMTSResult2 from "../../../../resources/testWMTSResponse2.xml";
 
-describe("core/modelList/layer/", function () {
+describe("core/modelList/layer/wmts", function () {
     let wmts;
 
     before(function () {
@@ -86,6 +93,140 @@ describe("core/modelList/layer/", function () {
             const projectionExtent = getProjection("EPSG:3857").getExtent();
 
             expect(wmts.getExtent()).to.equal(projectionExtent);
+        });
+    });
+});
+
+describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
+    let model,
+        legendURL,
+        result;
+
+    const tests = [
+        {"id": "1", layerName: "nw_dtk_col", result: WMTSResult1},
+        {"id": "2", layerName: "webatlasde", result: WMTSResult2}
+    ];
+
+    before(async function () {
+        const parser = new WMTSCapabilities();
+
+        model = new WMTSLayer();
+        model.fetchWMTSCapabilities = async function (WMTSResult) {
+            return parser.read(WMTSResult);
+        };
+    });
+
+    describe("test WMTS Capabilities methods", function () {
+
+        before(async function () {
+            result = await model.fetchWMTSCapabilities(tests[0].result);
+        });
+
+        it("fetchWMTSCapabilities should return an object", () => {
+            expect(result).to.be.an("object");
+        });
+    });
+
+    describe("test createLayerSource function", () => {
+        before(async () => {
+            model.set("capabilitiesUrl", tests[0].result);
+            model.set("layers", tests[0].layerName);
+            model.set("optionsFromCapabilities", true);
+
+            result = await model.createLayerSource();
+        });
+
+        after(() => {
+            result = null;
+        });
+
+        it("should exist", () => {
+            expect(model.createLayerSource).to.be.a("function");
+        });
+
+        it("should create valid wmts options", function () {
+            expect(model.get("options")).to.be.an("object");
+        });
+
+        it("should create a valid wmts source", () => {
+            expect(model.get("layerSource")).to.be.an.instanceOf(OlWMTSSource);
+        });
+    });
+
+    describe("test createLayerFunction", () => {
+        before(async () => {
+            model.set("capabilitiesUrl", tests[0].result);
+            model.set("layers", tests[0].layerName);
+            model.set("optionsFromCapabilities", true);
+
+            result = await model.createLayerSource();
+        });
+
+        after(() => {
+            result = null;
+        });
+
+        it("function exist", function () {
+            expect(model.createLayer).to.be.a("function");
+        });
+
+        it("should create valid WMTS-Layer", function () {
+            model.set("typ", "WMTS");
+            model.set("layers", tests[0].layerName);
+            model.createLayer();
+
+            expect(model.get("layer")).to.be.an.instanceOf(TileLayer);
+        });
+    });
+
+    describe("test createlegend success", () => {
+
+        before(async function () {
+            model.set("capabilitiesUrl", tests[0].result);
+            model.set("optionsFromCapabilities", true);
+            model.createLegendURL();
+        });
+
+        after(() => {
+            model.unset("legendURL");
+            legendURL = undefined;
+        });
+
+        it("legendURL should be valid url", () => {
+            /**
+            * checkURL for img format
+            * @param {string} url the url to be checked
+            * @returns {void}
+            */
+            function checkUrlImg (url) {
+                let valid = false;
+
+                if (url.toLowerCase().match("png|gif|jpg|jpeg")) {
+                    valid = true;
+                }
+                return valid;
+            }
+
+            legendURL = model.get("legendURL");
+
+            expect(legendURL).to.contain("http");
+
+            expect(checkUrlImg(legendURL)).to.be.true;
+        });
+    });
+
+    describe("test createlegend failure", () => {
+
+        before(async function () {
+            model.set("capabilitiesUrl", tests[1].result);
+            model.set("layers", tests[1].layerName);
+            model.set("optionsFromCapabilities", true);
+            model.createLegendURL();
+        });
+
+        it("should be null", () => {
+            legendURL = model.get("legendURL");
+            expect(legendURL).to.be.null;
         });
     });
 });

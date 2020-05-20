@@ -27,7 +27,7 @@ const Menu = Backbone.View.extend({
     render: function () {
 
         $(this.el).html(this.template());
-        $(".masterportal-container").append(this.$el);
+        $("#masterportal-container").append(this.$el);
         this.$el.draggable({
             containment: "#map",
             handle: ".icon-drag",

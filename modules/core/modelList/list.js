@@ -44,9 +44,8 @@ import TreeFilter from "../../treeFilter/model";
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import Formular from "../../formular/grenznachweis";
-import FeatureLister from "../../featureLister/model";
+import FeatureLister from "../../tools/featureLister/model";
 import AddWms from "../../tools/addWMS/model";
-import GetCoord from "../../tools/getCoord/model";
 import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
@@ -56,6 +55,8 @@ import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewPoint/model";
 import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
+import store from "../../../src/app-store/index";
+import WfstModel from "../../tools/wfst/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -267,9 +268,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "filter") {
                 return new Filter(attrs, options);
             }
-            else if (attrs.id === "coord") {
-                return new GetCoord(attrs, options);
-            }
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
             }
@@ -334,6 +332,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "colorScale") {
                 return new ColorScale(attrs, options);
             }
+            else if (attrs.id === "wfst") {
+                return new WfstModel(attrs, options);
+            }
+
             /**
              * layerslider
              * @deprecated in 3.0.0
@@ -564,7 +566,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
 
         activeToolsToDeactivate = activeTools.filter(tool => !alwaysActiveTools.includes(tool));
-        activeToolsToDeactivate.forEach(tool => tool.setIsActive(false));
+        activeToolsToDeactivate.forEach((tool) => {
+            tool.setIsActive(false);
+            store.commit("setToolActive", {id: tool.id, active: false});
+        });
     },
 
     /**
@@ -580,6 +585,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         activeTools = _.without(activeTools, legendModel);
         if (activeTools.length === 0 && defaultTool !== undefined) {
             defaultTool.setIsActive(true);
+            store.commit("setToolActive", {id: defaultTool.id, active: true});
         }
     },
 

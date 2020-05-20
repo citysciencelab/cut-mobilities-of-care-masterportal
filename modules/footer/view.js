@@ -34,6 +34,8 @@ const FooterView = Backbone.View.extend(/** @lends FooterView.prototype */{
         let urls = [];
 
         attr.masterPortalVersionNumber = Radio.request("Util", "getMasterPortalVersionNumber");
+        // remove footer before render it, else it is duplicated after language changed
+        $("#map > div.ol-viewport > div.footer").remove();
         $(".ol-viewport").append(this.$el.html(this.template(attr)));
         urls = this.model.get("urls");
 

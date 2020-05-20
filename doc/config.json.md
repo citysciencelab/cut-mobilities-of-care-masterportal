@@ -64,6 +64,8 @@ Konfiguration der Searchbar
 |visibleVector|nein|**[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)**||Konfiguration der Suche über die sichtbaren WFS Layer.|false|
 |zoomLevel|nein|Integer||ZoomLevel, auf das die Searchbar maximal hineinzoomt.|false|
 |renderToDOM|nein|String||HTML-Id an diese sich die Searchbar rendert. Bei "#searchbarInMap" zeichnet sich die Searchbar auf der Karte. Wird verwendet in MeldeMichel.|true|
+|sortByName|nein|Boolean|true|Legt fest ob die Ergebnisse einer Suche alphabetisch nach Namen sortiert werden sollen|false|
+|selectRandomHits|nein|Boolean|true|Wenn `true` wird zufällig ausgewählt, welche Ergebnisse angezeigt werden sollen, wenn die Anzahl der Treffer `recomendedListLength` überschreitet. Wenn `false`, so wird die Liste an Treffern bei `recomendedListLength` abgeschnitten. Möglicherweise werden in diesem Fall trotz nur die Ergebnisse des Suchdienstes verwendet, welcher zuerst eine Liste mit Treffern zurück liefert.|false|
 
 ***
 
@@ -155,10 +157,19 @@ Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 |----|-------------|---|-------|------------|------|
 |incrementalSearch|nein|Boolean|true|Gibt an ob eine Suchverfollständigung (Autocomplete) stattfinden soll. Wenn `incrementalSearch` auf `false` gesetzt wird, so wird eine Surche nur durch einen Klick auf die Lupe bzw. durch Enter gestartet. Dies ist sinvoll, wenn die Anzahl erlaubter Anfragen an den eingebundenen Dienst kontigentiert ist.|false|
 |serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.md)** vor.|false|
-|classes|nein|String[]|[]|Kann Klassen enthalten die berücksichtigt werden sollen. Wenn hier nichts angegeben wird, so werden alle Klassen berücksichtigt.|false|
+|classes|nein|**[LocationFinderClass](#markdown-header-portalconfigsearchbarlocationfinderLocationFinderClass)**||Kann Klassen (mit Eigenschaften) enthalten die berücksichtigt werden sollen. Wenn hier nichts angegeben wird, so werden alle Klassen berücksichtigt.|false|
 |useProxy|nein|Boolean|false|Gibt an ob ein Proxy verwendet werden soll.|false|
 |spatialReference|nein|String||Koordinatensystem, in dem das Ergebnis angefragt werden soll. Standardmäßig wird  hier der Wert von Portalconfig.mapView.epsg verwendet.|false|
 
+##### Portalconfig.searchbar.locationFinder.LocationFinderClass #####
+
+Definitiion von Klassen, welche als Ergebnis berücksichtigt werden sollen.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name der Klasse|false|
+|icon|nein|String|"glyphicon-road"|Visualisierung der Klasse durch ein Glyphicon|false|
+|zoom|nein|String|"center"|Legt fest wie auf einen ausgewählten Treffer gezoomt werden soll. Wenn `center` ausgewählt ist, so wird auf die Zentrumskoordinate (`cx` und `cy`) gezoomt und ein Marker angezeigt. Im Falle von `bbox` wird auf die durch den LocationFinder angegebene BoundingBox (`xmin`, `ymin`, `xmax` und `ymax`) gezoomt. Ein Marker wird in dem Fall nicht angezeigt.|false|
 
 **Beispiel**
 
@@ -167,7 +178,20 @@ Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 
 "locationFinder": {
     "serviceId": "10",
-    "classes": ["Adresse", "Straßenname", "Stadtteil"]
+    "classes": [
+        {
+			"name": "Haltestelle",
+			"icon": "glyphicon-record"
+		},
+		{
+			"name": "Adresse",
+			"icon": "glyphicon-home"
+		},
+		{
+			"name": "Straßenname",
+			"zoom": "bbox"
+		}
+    ]
 }
 ```
 
@@ -760,6 +784,18 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 ***
 
+#### Portalconfig.menu.legend
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Konfigurations-Optionen der Legende.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|showCollapseAllButton|nein|Boolean|false|Option zum Ein- bzw. Ausblenden aller Legenden|false|
+
+***
+
 #### Portalconfig.menu.info
 
 [inherits]: # (Portalconfig.menu.folder)
@@ -869,7 +905,9 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
 
-Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen Attribute konfiguiert bekommen.
+[type:wfst]: # (Portalconfig.menu.tool.wfst)
+
+Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -886,7 +924,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
-|legend|nein|**[tool](#markdown-header-portalconfigmenutool)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
+|legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linienhafte Objekte.|false|
 |measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
@@ -898,6 +936,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |styleWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
+|wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
 ***
 
 #### Portalconfig.menu.tool
@@ -1042,7 +1081,7 @@ Todo
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Der Filter bietet eine Vielzahl von Möglichkeiten um Vektor-Daten filtern zu können.
+Der Filter bietet eine Vielzahl von Möglichkeiten um Vektor-Daten filtern zu können. Er kann jedoch keine geclusterten Features filtern.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1805,6 +1844,119 @@ Todo
 
 ***
 
+#### Portalconfig.menu.tool.wfst
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Das WFS-T Tool bietet die Möglichkeit Features aus Web Feature Services (WFS) in der Oberfläche sowohl zu visualisieren (Get Feature), zu aktualisieren (update) und zu löschen (delete), als auch die Möglichkeit neue Features hizuzufügen (insert).
+Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.json.md).
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|ja|String||Name dieses Tools, wie er im Portal angezeigt werden soll.|
+|layerIds|ja|[layerId](#markdown-header-portalconfigmenutoolwfstlayerid)[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
+|toggleLayer|nein|Boolean|false|Flag ob die Features eines Layers beim Hinzufügen eines neuen Features sichtbar bleiben.|
+|layerSelect|nein|String|"aktueller Layer:"|Möglichkeit die Beschriftung der Layer Auswahl zu konfigurieren.|
+|pointButton|nein|[pointButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen eines Punktes zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|lineButton|nein|[lineButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Linie zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|areaButton|nein|[areaButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|edit|nein|[edit](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit wekcher Beschriftung er angezeigt wird.|
+|delete|nein|[delete](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der delete Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
+
+**Beispiel**
+```
+#!json
+{
+    "wfst": {
+        "name": "WFS-T Tool",
+        "glyphicon": "glyphicon-globe",
+        "layerIds": ["1234", "5678"],
+        "toggleLayer": true,
+        "layerSelect": "TestLayer",
+        "pointButton": [
+            {
+                "layerId":"1234",
+                "caption": "Punkt-Test",
+                "show": true
+            },
+            {
+                "layerId": "5678",
+                "show": true
+            }
+        ],
+        "lineButton": false,
+        "areaButton": [
+            {
+                "layerId": "4389",
+                "show": false
+            }
+        ],
+        "edit": "Bearbeiten",
+        "delete": true
+    }
+}
+```
+#### Portalconfig.menu.tool.wfst.Button
+Das Attribut pointButton/lineButton/areaButton kann vom Typ Boolean oder Object sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob die Funktion zum Erfassen einer Geometrie für alle Layer zur Verfügung stehen soll. Ist es vom Typ Object so gelten folgende Attribute:
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|layerId|ja|String||Der Layer für den die Konfiguration vorgenommen werden soll|false|
+|show|ja|Boolean|true|Flag ob der Button zur Verfügung stehen soll.|false|
+|caption|nein|String|"Punkt erfassen"/ "Linie erfassen"/ "Fläche erfassen"|Beschriftung des Buttons.|false|
+
+
+**Beispiel als Boolean**
+```
+#!json
+"pointButton": true
+```
+
+**Beispiel als Object**
+```
+#!json
+"pointButton": {
+    {
+        "layerId":"1234"
+        "show": true
+        "caption": "Punkt-Test",
+    },
+    {
+        "layerId": "5678"
+        "show": true
+    },
+    {
+        "layerId": "5489"
+        "show": false
+    }
+}
+```
+
+#### Portalconfig.menu.tool.wfst.EditDelete
+Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Typ Boolean ist, zeigt diese flag ob der Editier-/ Lösch-Button zur Verfügung stehen soll. Ist es vom Typ String so wird der Button mit der dort angegebenen Beschriftung angezeigt.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|edit|ja|Boolean|true|Flag ob der Editier-Button angezeigt werden soll|false|
+|edit|ja|String|"Geometrie bearbeiten"|Beschriftung des Editier-Buttons|false|
+|delete|ja|Boolean|true|Flag ob der Lösch-Button angezeigt werden soll|false|
+|delete|ja|String|"Geometrie löschen"|Beschriftung des lösch-Buttons|false|
+
+**Beispiel als Boolean**
+```
+#!json
+"edit": true
+```
+
+**Beispiel als String**
+```
+#!json
+"edit": "Editieren"
+```
+
+
+***
+
 ### Portalconfig.menu.staticlinks
 Das Array staticlink beinhaltet Objekte die entweder als Link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events.
 
@@ -2404,7 +2556,7 @@ Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der K
     "visibility": true,
     "extent": [560296.72, 5932154.22, 562496.72, 5933454.22]
 }
-`````
+```
 
 ***
 #### Themenconfig.Layer.Vector

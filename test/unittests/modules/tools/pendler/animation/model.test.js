@@ -70,23 +70,26 @@ describe("Pendler-Animation", function () {
                     8
                 ];
 
-            _.forEach(model.get("relevantFeatures"), function (feature) {
-                top5PendlerAnzahlen.push(feature.get("pendlerAnzahl"));
-            });
+            if (Array.isArray(model.get("relevantFeatures"))) {
+                model.get("relevantFeatures").forEach(feature => {
+                    top5PendlerAnzahlen.push(feature.get("pendlerAnzahl"));
+                });
+            }
 
             expect(top5PendlerAnzahlen).to.deep.equal(expectedTop5PendlerAnzahlen);
         });
 
         it("Jedem Feature wird eine eigene eindeutige Farbe zugewiesen", function () {
-
             const colors = [];
 
-            _.forEach(model.get("relevantFeatures"), function (feature) {
-                expect(feature.color).to.exist;
-                colors.push(feature.color);
-            });
+            if (Array.isArray(model.get("relevantFeatures"))) {
+                model.get("relevantFeatures").forEach(feature => {
+                    expect(feature.color).to.exist;
+                    colors.push(feature.color);
+                });
+            }
 
-            expect(_.uniq(colors).length).to.be.equal(colors.length);
+            expect([...new Set(colors)].length).to.be.equal(colors.length);
 
         });
 
@@ -94,7 +97,7 @@ describe("Pendler-Animation", function () {
 
             expect(model.get("pendlerLegend")).to.have.lengthOf(5);
 
-            _.forEach(model.get("pendlerLegend"), function (feature) {
+            model.get("pendlerLegend").forEach(feature => {
                 expect(feature.name.length).to.be.above(0);
                 expect(feature.color).to.exist;
                 expect(feature.anzahlPendler).to.be.above(0);

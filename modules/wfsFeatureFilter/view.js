@@ -50,8 +50,8 @@ const WfsFeatureFilterView = Backbone.View.extend({
         let id,
             value;
 
-        _.each(wfsList, function (layer) {
-            _.each(layer.filterOptions, function (filter) {
+        wfsList.forEach(layer => {
+            layer.filterOptions.forEach(filter => {
                 id = "#" + layer.id + "_" + filter.fieldName;
                 value = $(id).val();
                 filters.push({
@@ -71,18 +71,18 @@ const WfsFeatureFilterView = Backbone.View.extend({
         }
     },
     filterLayers: function (layerfilters) {
-        _.each(layerfilters, function (layerfilter) {
+        layerfilters.forEach(layerfilter => {
             // Prüfe, ob alle Filter des Layers auf * stehen, damit evtl. der defaultStyle geladen werden kann
             let showall = true;
 
             const layers = this.model.get("wfsList"),
-                wfslayer = _.find(layers, function (layer) {
+                wfslayer = layers.find(function (layer) {
                     return layer.id === layerfilter.layerId;
                 }),
                 layer = wfslayer.layer,
                 features = layer.getSource().getFeatures();
 
-            _.each(layerfilter.filter, function (filter) {
+            layerfilter.filter.forEach(filter => {
                 if (filter.fieldValue !== "*") {
                     showall = false;
                 }
@@ -92,7 +92,7 @@ const WfsFeatureFilterView = Backbone.View.extend({
                 if (layer.defaultStyle) {
                     layer.setStyle(layer.defaultStyle);
                     delete layer.defaultStyle;
-                    layer.getSource().getFeatures().forEach(function (feature) {
+                    layer.getSource().getFeatures().forEach(feature => {
                         if (feature.defaultStyle) {
                             feature.setStyle(feature.defaultStyle);
                             delete feature.defaultStyle;
@@ -106,19 +106,19 @@ const WfsFeatureFilterView = Backbone.View.extend({
                     layer.setStyle(null);
                 }
 
-                features.forEach(function (feature) {
+                features.forEach(feature => {
                     let featuredarstellen = true,
                         featureattribute,
                         attributname, attributvalue, featurevalue0, featurevalue;
 
                     // Prüfung, ob Feature dargestellt werden soll
-                    _.each(layerfilter.filter, function (elementfilter) {
+                    layerfilter.filter.forEach(elementfilter => {
                         attributname = elementfilter.fieldName;
                         attributvalue = elementfilter.fieldValue;
                         if (attributvalue !== "*") {
-                            featureattribute = _.pick(feature.getProperties(), attributname);
-                            if (featureattribute && !_.isNull(featureattribute)) {
-                                featurevalue0 = _.values(featureattribute)[0];
+                            featureattribute = Radio.request("Util", "pick", feature.getProperties(), attributname);
+                            if (featureattribute && featureattribute !== null) {
+                                featurevalue0 = featureattribute.values[0];
                                 if (featurevalue0) {
                                     featurevalue = featurevalue0.trim();
                                     if (featurevalue !== attributvalue) {
@@ -159,16 +159,16 @@ const WfsFeatureFilterView = Backbone.View.extend({
             this.setMaxHeight();
             this.delegateEvents();
             if (layerfilters) {
-                _.each(layerfilters, function (layerfilter) {
-                    _.each(layerfilter.filter, function (filter) {
+                layerfilters.forEach(layerfilter => {
+                    layerfilter.filter.forEach(filter => {
                         $(filter.id).val(filter.fieldValue);
                     });
                 });
             }
         }
         else if (layerfilters) {
-            _.each(layerfilters, function (layerfilter) {
-                _.each(layerfilter.filter, function (filter) {
+            layerfilters.forEach(layerfilter => {
+                layerfilter.filter.forEach(filter => {
                     filter.fieldValue = "*";
                 });
             });
