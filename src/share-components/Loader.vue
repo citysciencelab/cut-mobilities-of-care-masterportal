@@ -39,7 +39,7 @@ export default {
     },
     methods: {
         /**
-         * Turns simple mode off.
+         * Turns simple mode on.
          * @returns {void}
          */
         turnSimple () {
