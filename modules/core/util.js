@@ -1,3 +1,5 @@
+import * as moment from "moment";
+
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
         config: "",
@@ -847,7 +849,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 const phenomenonTime = obs.phenomenonTime,
                     utcAlgebraicSign = utc.substring(0, 1),
                     utcString = _.isUndefined(utc) ? "+1" : utc;
-
                 let utcSub,
                     utcNumber;
 
@@ -864,10 +865,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 }
 
                 obs.phenomenonTime = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
-
             });
         });
-
         return data;
     }
 });
