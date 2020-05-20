@@ -75,8 +75,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Core#RadioTriggerMapCameraChanged
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
-     * @fires Core#RadioTriggerUtilShowLoader
-     * @fires Core#RadioTriggerUtilHideLoader
+     * @fires Core#RadioTriggerUtilHideLoadingModule
      * @fires Core#RadioTriggerMapAddLayerToIndex
      */
     initialize: function (mapViewSettings) {
@@ -611,8 +610,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     /**
     * Initial loading. "initialLoading" is incremented across layers if several tiles are loaded and incremented again if the tiles are loaded.
     * Listener is then stopped so that the loader is only displayed during initial loading - not when zoom/pan is selected. [...]
-    * @fires Core#RadioTriggerUtilShowLoader
-    * @fires Core#RadioTriggerUtilHideLoader
+    * @fires Core#RadioTriggerUtilHideLoadingModule
     * @returns {void}
     */
     initialLoadingChanged: function () {
