@@ -48,7 +48,9 @@ export default {
     namespaced: true,
     state: {
         /** @type {AttributionListItem[]} list of active attributions */
-        attributionList: []
+        attributionList: [],
+        /** @type {?boolean} whether the flyout is to be rendered */
+        open: null
     },
     actions: {
         /**
@@ -63,48 +65,69 @@ export default {
                 ...nonLayerAttributions,
                 ...generateLayerAttributions()
             ]);
+        },
+        /**
+         * Adds an attribution if no samey object is already present.
+         * @param {object} context action context
+         * @param {AttributionListItem} item to be added
+         * @returns {void}
+         */
+        addAttribution ({state, commit}, item) {
+            const {attributionList} = state;
+
+            // do not add objects considered identical
+            if (!attributionList.some(
+                ({name, text, type}) => name === item.name && text === item.text && type === item.type)
+            ) {
+                commit("setAttributions", [...attributionList, item]);
+            }
+        },
+        /**
+         * Remove item from attributionList if name, text, and type are equal.
+         * @param {object} context action context
+         * @param {AttributionListItem} item to be removed
+         * @returns {void}
+         */
+        removeAttribution ({state, commit}, item) {
+            commit("setAttributions", state.attributionList.filter(
+                ({name, text, type}) => name !== item.name || text !== item.text || type !== item.type
+            ));
         }
     },
     mutations: {
         /**
-         * Adds an attribution if no samey object is already present.
-         * @param {object} state previous state
-         * @param {AttributionListItem} item to be added
-         * @returns {void}
-         */
-        addAttribution (state, item) {
-            // do not add objects considered identical
-            if (!state.attributionList.some(
-                ({name, text, type}) => name === item.name && text === item.text && type === item.type)
-            ) {
-                state.attributionList.push(item);
-            }
-        },
-        /**
          * Replaces current attribution array with a new one.
+         * If list was extended, attributions flyout is also opened.
+         * If list was cleared, attributions flyout is also closed.
          * @param {object} state previous state
          * @param {AttributionListItem[]} attributionList new list
          * @returns {void}
          */
         setAttributions (state, attributionList) {
+            if (attributionList.length > state.attributionList.length) {
+                state.open = true;
+            }
+            else if (attributionList.length === 0) {
+                state.open = false;
+            }
             state.attributionList = attributionList;
         },
         /**
-         * Remove item from attributionList if name, text, and type are equal.
+         * Used to open/close the attributions flyout.
          * @param {object} state previous state
-         * @param {AttributionListItem} item to be removed
+         * @param {boolean} open whether the flyout should be rendered
          * @returns {void}
          */
-        removeAttribution (state, item) {
-            state.attributionList = state.attributionList.filter(
-                ({name, text, type}) => name !== item.name || text !== item.text || type !== item.type
-            );
+        setOpen (state, open) {
+            state.open = open;
         }
     },
     getters: {
-        /**
-         * @returns {AttributionListItem[]} currently active attributions
-         */
-        attributionList: ({attributionList}) => attributionList
+        /** @returns {AttributionListItem[]} currently active attributions */
+        attributionList: ({attributionList}) => attributionList,
+        /** @returns {?boolean} whether the flyout is to be rendered */
+        open: ({open}) => open,
+        /** @returns {boolean} whether attributions element is openable */
+        openable: ({attributionList}) => attributionList.length > 0
     }
 };

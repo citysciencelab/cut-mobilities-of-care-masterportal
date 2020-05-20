@@ -37,13 +37,12 @@ export default {
     },
     data () {
         return {
-            open: null,
             attributionsChannel: Radio.channel("Attributions"),
             modelListChannel: Radio.channel("ModelList")
         };
     },
     computed: {
-        ...mapGetters("controls/attributions", ["attributionList"]),
+        ...mapGetters("controls/attributions", ["attributionList", "open", "openable"]),
         ...mapGetters(["mobile"])
     },
     created () {
@@ -51,7 +50,7 @@ export default {
         this.attributionsChannel.on("removeAttribution", this.removeAttribution);
         this.modelListChannel.on("updateVisibleInMapList", this.updateAttributions);
         this.updateAttributions();
-        this.open = this.mobile ? this.isInitOpenMobile : this.isInitOpenDesktop;
+        this.setOpen(this.mobile ? this.isInitOpenMobile : this.isInitOpenDesktop);
     },
     beforeDestroy () {
         this.attributionsChannel.off("createAttribution", this.addAttribution);
@@ -59,14 +58,14 @@ export default {
         this.modelListChannel.off("updateVisibleInMapList", this.updateAttributions);
     },
     methods: {
-        ...mapMutations("controls/attributions", ["addAttribution", "removeAttribution"]),
-        ...mapActions("controls/attributions", ["updateAttributions"]),
+        ...mapMutations("controls/attributions", ["setOpen"]),
+        ...mapActions("controls/attributions", ["addAttribution", "removeAttribution", "updateAttributions"]),
         /**
          * Toggles whether attributions flyout is visible.
          * @returns {void}
          */
         toggleAttributionsFlyout: function () {
-            this.open = !this.open;
+            this.setOpen(!this.open);
         }
     }
 };
@@ -76,6 +75,7 @@ export default {
     <div class="attributions-wrapper">
         <ControlIcon
             class="attributions-button"
+            :active="openable"
             :title="$t(`common:modules.controls.attributions.${open ? 'hideAttributions' : 'showAttributions'}`)"
             :icon-name="open ? 'forward' : 'info-sign'"
             :on-click="toggleAttributionsFlyout"
