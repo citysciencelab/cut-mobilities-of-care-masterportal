@@ -16,7 +16,7 @@ import WMTSLayer from "./modelList/layer/wmts";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
-        initalLoading: 0,
+        initialLoading: 0,
         shadowTime: null
     },
 
@@ -27,7 +27,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @memberOf Core
      * @constructs
      * @param {Object} mapViewSettings Settings for the map.
-     * @property {Number} initalLoading=0 todo
+     * @property {Number} initialLoading=0 todo
      * @listens Core#RadioRequestMapGetLayers
      * @listens Core#RadioRequestMapGetWGS84MapSizeBBOX
      * @listens Core#RadioRequestMapCreateLayerIfNotExists
@@ -82,7 +82,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     initialize: function (mapViewSettings) {
         const channel = Radio.channel("Map");
 
-        this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
+        this.listenTo(this, "change:initialLoading", this.initialLoadingChanged);
 
         channel.reply({
             "getLayers": this.getLayers,
@@ -597,7 +597,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     addLoadingLayer: function () {
-        this.set("initalLoading", this.get("initalLoading") + 1);
+        this.set("initialLoading", this.get("initialLoading") + 1);
     },
 
     /**
@@ -605,22 +605,22 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     removeLoadingLayer: function () {
-        this.set("initalLoading", this.get("initalLoading") - 1);
+        this.set("initialLoading", this.get("initialLoading") - 1);
     },
 
     /**
-    * Initial loading. "initalLoading" is incremented across layers if several tiles are loaded and incremented again if the tiles are loaded.
+    * Initial loading. "initialLoading" is incremented across layers if several tiles are loaded and incremented again if the tiles are loaded.
     * Listener is then stopped so that the loader is only displayed during initial loading - not when zoom/pan is selected. [...]
     * @fires Core#RadioTriggerUtilShowLoader
     * @fires Core#RadioTriggerUtilHideLoader
     * @returns {void}
     */
-    initalLoadingChanged: function () {
-        const num = this.get("initalLoading");
+    initialLoadingChanged: function () {
+        const num = this.get("initialLoading");
 
         if (num === 0) {
             Radio.trigger("Util", "hideLoadingModule");
-            this.stopListening(this, "change:initalLoading");
+            this.stopListening(this, "change:initialLoading");
         }
     },
 
