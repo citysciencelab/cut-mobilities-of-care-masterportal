@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 
 const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         maxLines: "5",
         from: [{
             "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -134,26 +134,21 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {void}
      */
     setAttributes: function (configJson) {
-        const portalTitle = _.has(configJson, "portalTitle") && _.has(configJson.portalTitle.portalTitle, "title") ? configJson.portalTitle.title : document.title,
+        const portalTitle = configJson.hasOwnProperty("portalTitle") && configJson.portalTitle.hasOwnProperty("title") ? configJson.portalTitle.title : document.title,
             hrefString = "<br>==================<br>Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
             platformString = "<br>Platform: " + navigator.platform + "<br>",
             cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
             userAgentString = "UserAgent: " + navigator.userAgent,
             systemInfo = hrefString + platformString + cookiesString + userAgentString,
             subject = this.get("subject") !== "" ? this.get("subject") : "Supportanfrage zum Portal " + portalTitle,
-            resp = _.isUndefined(this) === false ? Radio.request("RestReader", "getServiceById", this.get("serviceID")) : undefined,
+            resp = Radio.request("RestReader", "getServiceById", this.get("serviceID")),
             closeAndDelete = this.get("deleteAfterSend"),
             withTicketNo = this.get("withTicketNo");
 
-        if (_.isUndefined(closeAndDelete) === false) {
-            this.setCloseAndDelete(closeAndDelete);
-        }
+        this.setCloseAndDelete(Boolean(closeAndDelete));
+        this.setWithTicketNo(Boolean(withTicketNo));
 
-        if (_.isUndefined(withTicketNo) === false) {
-            this.setWithTicketNo(withTicketNo);
-        }
-
-        if (_.isUndefined(resp) === false && resp.get("url")) {
+        if (resp !== undefined && resp.get("url")) {
             this.setUrl(resp.get("url"));
             this.setTicketId(this.generateTicketId());
             this.setSystemInfo(this.get("includeSystemInfo") === true ? systemInfo : "");
@@ -169,7 +164,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         const date = new Date(),
             day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
             month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
-            ticketId = month + day + "-" + _.random(1000, 9999);
+            ticketId = month + day + "-" + (Math.floor(Math.random() * 9000) + 1000);
 
         return ticketId;
     },
@@ -210,11 +205,11 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @return {Boolean} Flag if validation failed or not
      */
     validate: function (attributes) {
-        const userNameValid = _.isUndefined(attributes.userName) === false ? attributes.userName.length >= 3 : false,
-            userEmailValid1 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.length >= 1 : false,
-            userEmailValid2 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.match(/^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,4}$/igm) !== null : false,
-            userTelValid = _.isUndefined(attributes.userTel) === false ? attributes.userTel.match(/^[0-9]{1}[0-9\-+()]*[0-9]$/ig) !== null : false,
-            textValid = _.isUndefined(attributes.text) === false ? attributes.text.length >= 10 : false;
+        const userNameValid = attributes.userName !== undefined ? attributes.userName.length >= 3 : false,
+            userEmailValid1 = attributes.userEmail !== undefined ? attributes.userEmail.length >= 1 : false,
+            userEmailValid2 = attributes.userEmail !== undefined ? attributes.userEmail.match(/^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,4}$/igm) !== null : false,
+            userTelValid = attributes.userTel !== undefined ? attributes.userTel.match(/^[0-9]{1}[0-9\-+()]*[0-9]$/ig) !== null : false,
+            textValid = attributes.text !== undefined ? attributes.text.length >= 10 : false;
 
         if (userNameValid === false || userEmailValid1 === false || userEmailValid2 === false || userTelValid === false || textValid === false) {
             return {
@@ -262,6 +257,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         };
 
         Radio.trigger("Util", "showLoader");
+
         $.ajax({
             url: this.get("url"),
             data: dataToSend,

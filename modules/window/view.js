@@ -205,7 +205,9 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         const toolModel = Radio.request("ModelList", "getModelByAttributes", {id: this.model.get("winType")});
 
         // Dont let event bubble to .header element which would trigger maximize again!
-        event.stopPropagation();
+        if (event !== undefined) {
+            event.stopPropagation();
+        }
 
         if (toolModel) {
             toolModel.setIsActive(false);
