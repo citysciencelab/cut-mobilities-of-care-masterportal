@@ -1,5 +1,5 @@
 import DrawTemplate from "text-loader!./template.html";
-import DownloadView from "../download/view";
+// import DownloadView from "../download/view";
 
 const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
     events: {
@@ -36,7 +36,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @memberof Tools.Draw
      * @constructs
      */
-    initialize: function () {
+    /* initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render,
             "change:currentLng": function () {
@@ -51,7 +51,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
-    },
+    },*/
 
     /**
      * @member DrawTemplate
@@ -66,7 +66,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @param {boolean} isActive - from tool
      * @return {Backbone.View} DrawView
      */
-    render: function (model, isActive) {
+    /* render: function (model, isActive) {
         if (isActive && this.model.get("renderToWindow")) {
             this.renderSurface(model);
         }
@@ -74,7 +74,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             this.removeSurface();
         }
         return this;
-    },
+    },*/
 
     /**
      * render the tool draw after the language changed
@@ -82,7 +82,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @param {boolean} isActive - from tool
      * @return {Backbone.View} DrawView
      */
-    renderAfterLngChanged: function (model, isActive) {
+    /* renderAfterLngChanged: function (model, isActive) {
         if (isActive && this.model.get("renderToWindow")) {
             this.renderSurface(model, model.get("lastDrawTypeIndex"), true);
         }
@@ -90,7 +90,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             this.removeSurface();
         }
         return this;
-    },
+    },*/
 
     /**
      * render this tool
@@ -99,7 +99,7 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
      * @param {boolean} afterLngChange - states if the render-function is called after a language change or not.
      * @return {void}
      */
-    renderSurface: function (model, lastDrawTypeIndex, afterLngChange = false) {
+    /* renderSurface: function (model, lastDrawTypeIndex, afterLngChange = false) {
         this.setElement(document.getElementsByClassName("win-body")[0]);
         this.$el.html(this.template(model.toJSON()));
         this.delegateEvents();
@@ -108,13 +108,13 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             this.registerListener();
         }
         this.model.toggleInteraction("draw");
-    },
+    },*/
 
     /**
      * clears the tool when it is closed
      * @return {void}
      */
-    removeSurface: function () {
+    /* removeSurface: function () {
         const layerSource = this.model.get("layer").getSource();
 
         this.model.resetModule();
@@ -124,14 +124,14 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         $("#map").off("mousemove");
         this.unregisterListeners(layerSource);
         this.undelegateEvents();
-    },
+    },*/
 
     /**
      * renews the surface of the drawtool
      * @param {Number} lastDrawTypeIndex - index of the last select for drawtype
      * @return {void}
      */
-    renewSurface: function (lastDrawTypeIndex) {
+    /* renewSurface: function (lastDrawTypeIndex) {
         const element = this.$el.find(".interaction")[0];
 
         if (lastDrawTypeIndex) {
@@ -289,45 +289,45 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
             }
             this.model.set("lastDrawTypeIndex", element.selectedIndex);
         }
-    },
+    }, */
 
     /**
      * register the listeners on the map
      * @return {void}
      */
-    registerListener: function () {
+    /* registerListener: function () {
         $("#map").after("<span id='cursorGlyph' class='glyphicon glyphicon-pencil'></span>");
         this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
-    },
+    },*/
 
     /**
      * unregister the listeners from the map and from layerSource
      * @param {ol/source/vector} layerSource - vector LayerSource
      * @return {void}
      */
-    unregisterListeners: function (layerSource) {
+    /* unregisterListeners: function (layerSource) {
         Radio.trigger("Map", "unregisterListener", this.listener);
         layerSource.un("addfeature", this.model.get("addFeatureListener").listener);
-    },
+    },*/
 
     /**
      * render the glyphicon on mouse
      * @param {event} evt - MapBrwoserPointerEvent
      * @return {void}
      */
-    renderGlyphicon: function (evt) {
+    /* renderGlyphicon: function (evt) {
         const element = document.getElementById("cursorGlyph");
 
         $(element).css("left", evt.originalEvent.offsetX + 5);
         $(element).css("top", evt.originalEvent.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
-    },
+    },*/
 
     /**
      * set drawtype on model
      * @param {event} evt - with selectedElement
      * @return {void}
      */
-    setDrawType: function (evt) {
+    /* setDrawType: function (evt) {
         const element = evt.target,
             selectedElement = element.options[element.selectedIndex];
 
@@ -345,75 +345,75 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         this.model.updateDrawInteraction();
         this.renewSurface();
         this.startDrawInteraction();
-    },
+    },*/
 
     /**
      * starts the interaction with a new drawing and the map
      * @returns {void}
      */
-    startDrawInteraction: function () {
+    /* startDrawInteraction: function () {
         this.unsetAllSelected();
         this.$el.find(".draw").toggleClass("btn-primary");
         this.$el.find(".draw").toggleClass("btn-lgv-grey");
         this.model.toggleInteraction("draw");
-    },
+    },*/
 
     /**
      * toggle the various interactions by event
      * @param {event} evt - with the interactions
      * @return {void}
      */
-    toggleInteraction: function (evt) {
+    /* toggleInteraction: function (evt) {
         this.unsetAllSelected();
         $(evt.target).toggleClass("btn-primary");
         $(evt.target).toggleClass("btn-lgv-grey");
         this.model.toggleInteraction($(evt.target).attr("class"));
-    },
+    },*/
 
     /**
      * deselects all buttons
      * @return {void}
      */
-    unsetAllSelected: function () {
+    /* unsetAllSelected: function () {
         this.$el.find(".btn-primary").each(function () {
             $(this).removeClass("btn-primary");
             $(this).addClass("btn-lgv-grey");
         });
-    },
+    },*/
 
     /**
      * deletes all geometries from the layer
      * @return {void}
      */
-    deleteFeatures: function () {
+    /* deleteFeatures: function () {
         this.model.deleteFeatures();
-    },
+    },*/
 
     /**
      * starts the download of the drawn features
      * @return {void}
      */
-    startDownloadTool: function () {
+    /* startDownloadTool: function () {
         this.model.startDownloadTool();
-    },
-
-    // TODO: Look at the setter methods when the final implementation is done
+    },*/
 
     /**
      * deletes the last added geometry from the layer
      * @return {void}
      */
-    undoLastStep: function () {
+    /* undoLastStep: function () {
         this.model.undoLastStep();
-    },
+    },*/
 
     /**
      * restores the last deleted geometry
      * @return {void}
      */
-    redoLastStep: function () {
+    /* redoLastStep: function () {
         this.model.redoLastStep();
-    },
+    },*/
+
+    // TODO: Functions below are implemented
     /**
      * Setter for the Symbol on the model.
      * @param {*} evt - With a new Symbol.

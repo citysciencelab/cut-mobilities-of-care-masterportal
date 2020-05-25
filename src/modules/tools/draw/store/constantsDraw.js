@@ -1,8 +1,31 @@
+import actions from "./actionsDraw";
 import getters from "./gettersDraw";
 import mutations from "./mutationsDraw";
 
-const colorOptions = [], // TODO: The caption is translated --> Maybe this needs to be somewhere else!
-    drawTypeOptions = [{caption: "Punkt zeichnen", value: "Point", id: "drawPoint"}], // TODO: The caption is translated --> Maybe this needs to be somewhere else!
+const colorOptions = [
+        {color: "blue", value: [55, 126, 184]},
+        {color: "black", value: [0, 0, 0]},
+        {color: "green", value: [77, 175, 74]},
+        {color: "grey", value: [153, 153, 153]},
+        {color: "orange", value: [255, 127, 0]},
+        {color: "red", value: [228, 26, 28]},
+        {color: "white", value: [255, 255, 255]},
+        {color: "yellow", value: [255, 255, 51]}
+    ],
+    colorContourOptions = [
+        colorOptions[1],
+        colorOptions[0],
+        ...colorOptions.slice(2)
+    ],
+    drawTypeOptions = [
+        {value: "Point", id: "drawPoint"},
+        {value: "LineString", id: "drawLine"},
+        {value: "LineString", id: "drawCurve"},
+        {value: "Polygon", id: "drawArea"},
+        {value: "Circle", id: "drawCircle"},
+        {value: "Circle", id: "drawDoubleCircle"},
+        {value: "Point", id: "writeText"}
+    ],
     earthRadius = 6378137,
     fontOptions = [
         {caption: "Arial", value: "Arial"},
@@ -19,7 +42,8 @@ const colorOptions = [], // TODO: The caption is translated --> Maybe this needs
     ],
     keyStore = {
         getters: Object.keys(getters),
-        mutations: Object.keys(mutations)
+        mutations: Object.keys(mutations),
+        actions: Object.keys(actions)
     },
     pointSizeOptions = [
         {caption: "6 px", value: 6},
@@ -53,6 +77,7 @@ const colorOptions = [], // TODO: The caption is translated --> Maybe this needs
 
 export {
     colorOptions,
+    colorContourOptions,
     drawTypeOptions,
     earthRadius,
     fontOptions,

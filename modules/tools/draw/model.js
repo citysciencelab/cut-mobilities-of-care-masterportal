@@ -1,14 +1,14 @@
-import {Select, Modify, Draw} from "ol/interaction.js";
-import {Circle, Fill, Stroke, Style, Text, Icon} from "ol/style.js";
-import {GeoJSON} from "ol/format.js";
-import MultiPolygon from "ol/geom/MultiPolygon.js";
-import MultiPoint from "ol/geom/MultiPoint.js";
-import MultiLine from "ol/geom/MultiLineString.js";
-import {fromCircle as circPoly} from "ol/geom/Polygon.js";
-import Feature from "ol/Feature";
+// import {Select, Modify, Draw} from "ol/interaction.js";
+// import {Circle, Fill, Stroke, Style, Text, Icon} from "ol/style.js";
+// import {GeoJSON} from "ol/format.js";
+// import MultiPolygon from "ol/geom/MultiPolygon.js";
+// import MultiPoint from "ol/geom/MultiPoint.js";
+// import MultiLine from "ol/geom/MultiLineString.js";
+// import {fromCircle as circPoly} from "ol/geom/Polygon.js";
+// import Feature from "ol/Feature";
 import Tool from "../../core/modelList/tool/model";
-import {getMapProjection} from "masterportalAPI/src/crs";
-import {toLonLat, transform} from "ol/proj";
+// import {getMapProjection} from "masterportalAPI/src/crs";
+// import {toLonLat, transform} from "ol/proj";
 
 const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -219,7 +219,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      * @constructs
      */
-    initialize: function () {
+    /* initialize: function () {
         const channel = Radio.channel("Draw"); // Needed because the layer of the Tool is needed in the two print modules
 
         this.superInitialize(); // Not needed
@@ -231,15 +231,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             "getLayer": function () {
                 return this.get("layer");
             },
-            "downloadWithoutGUI": this.downloadFeaturesWithoutGUI // TODO: Not used?
+            "downloadWithoutGUI": this.downloadFeaturesWithoutGUI
         }, this);
 
         channel.on({
-            "initWithoutGUI": this.inititalizeWithoutGUI, // TODO: Not used?
-            "deleteAllFeatures": this.deleteFeatures, // TODO: Not used?
-            "editWithoutGUI": this.editFeaturesWithoutGUI, // TODO: Not used?
-            "cancelDrawWithoutGUI": this.cancelDrawWithoutGUI, // TODO: Not used?
-            "downloadViaRemoteInterface": this.downloadViaRemoteInterface // TODO: Not used?
+            "initWithoutGUI": this.inititalizeWithoutGUI,
+            "deleteAllFeatures": this.deleteFeatures, --> Function also needed if not used in withoutGUI
+            "editWithoutGUI": this.editFeaturesWithoutGUI,
+            "cancelDrawWithoutGUI": this.cancelDrawWithoutGUI,
+            "downloadViaRemoteInterface": this.downloadViaRemoteInterface
         }, this);
 
         this.listenTo(this, {
@@ -260,7 +260,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         });
 
         Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
-    },
+    }, */
 
     /**
      * change language - sets default values for the language
@@ -268,7 +268,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {Boolean} initial initial set of lng
      * @returns {Void}  -
      */
-    changeLang: function (lng, initial) {
+    /* changeLang: function (lng, initial) {
         const blue = i18next.t("common:colors.blue"),
             yellow = i18next.t("common:colors.yellow"),
             grey = i18next.t("common:colors.grey"),
@@ -369,7 +369,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             }
         }
         this.set("currentLng", lng);
-    },
+    },*/
 
     /**
      * Creates an addfeature-Listener. This feature-listener checks the method how to draw the
@@ -381,7 +381,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param   {ol.layer} layer - Layer, to which the Listener is registered.
      * @returns {void}
      */
-    drawInteractionOnDrawevent: function (drawInteraction, doubleIsActive, layer) {
+    /* drawInteractionOnDrawevent: function (drawInteraction, doubleIsActive, layer) {
         const layerSource = layer.getSource(),
             drawType = this.get("drawType");
 
@@ -435,16 +435,16 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         if (this.get("methodCircle") === "defined" && this.get("drawType").geometry === "Circle") {
             drawInteraction.finishDrawing();
         }
-    },
+    },*/
 
     /**
      * Function to transform value "not a number (NaN)" to undefined.
      * @param   {Boolean} radius - radius of the circle.
      * @returns {undefined} - returns undefined.
      */
-    transformNaNToUndefined: function (radius) {
+    /* transformNaNToUndefined: function (radius) {
         return isNaN(radius) ? undefined : radius;
-    },
+    },*/
 
     /**
      * Getter to get the radius of the inner or outer circle.
@@ -454,9 +454,9 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param   {Number} circleRadiusInner - Diameter of the inner / single circle.
      * @returns {Number} - returns the circle radius.
      */
-    getDefinedRadius: function (doubleIsActive, circleRadiusOuter, circleRadiusInner) {
+    /* getDefinedRadius: function (doubleIsActive, circleRadiusOuter, circleRadiusInner) {
         return doubleIsActive ? circleRadiusOuter : circleRadiusInner;
-    },
+    },*/
 
     /**
      * Function to coordinate the circle calculation.
@@ -465,7 +465,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param   {Number} circleRadius - Diameter of the circle.
      * @returns {void}
      */
-    calculateCircle: function (evt, circleCenter, circleRadius) {
+    /* calculateCircle: function (evt, circleCenter, circleRadius) {
         const map = Radio.request("Map", "getMap"),
             earthRadius = this.get("earthRadius"),
             resultCoordinates = [
@@ -478,7 +478,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
         this.overwriteExtentCoordinates(evt, resultCoordinates);
         this.overwriteFlatCoordinates(evt, assortedCoordinates);
-    },
+    },*/
 
     /**
      * Merges the coordinates of the circle center and the calculated ones for the defined radius in one array and the right order together.
@@ -486,13 +486,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param   {Number} resultCoordinates - Calculated coordinates for defined radius.
      * @returns {Array} - returns an array with the extent coordinates of the circle feature.
      */
-    assortResultCoordinates: function (circleCenter, resultCoordinates) {
+    /* assortResultCoordinates: function (circleCenter, resultCoordinates) {
         return [
             circleCenter[0],
             circleCenter[1],
             resultCoordinates[3][0],
             resultCoordinates[3][1]];
-    },
+    },*/
 
     /**
      * Overwrites the extent coordinates of an existing (circle-) feature with recalculated ones.
@@ -505,7 +505,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * They must be added to the array in the following order: [3, 1, 2, 0]
      * @returns {Object} - returns the feature with the new extent coordinates.
      */
-    overwriteExtentCoordinates: function (evt, resultCoordinates) {
+    /* overwriteExtentCoordinates: function (evt, resultCoordinates) {
         evt.feature.getGeometry().extent_ = [
             resultCoordinates[3][0],
             resultCoordinates[1][1],
@@ -513,7 +513,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             resultCoordinates[0][1]
         ];
         return evt.feature.getGeometry().extent_;
-    },
+    },*/
 
     /**
      * Overwrites the flat coordinates of an existing (circle-) feature with recalculated ones.
@@ -521,11 +521,11 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param   {Number} flatCoordinates - new flat coordinates of the drawn feature.
      * @returns {Object} - returns the feature with the new flat coordinates.
      */
-    overwriteFlatCoordinates: function (evt, flatCoordinates) {
+    /* overwriteFlatCoordinates: function (evt, flatCoordinates) {
         evt.feature.getGeometry().flatCoordinates = flatCoordinates;
 
         return evt.feature.getGeometry().flatCoordinates;
-    },
+    },*/
 
     /**
      * Alert function that shows up the alert, if the user has not defined the radius.
@@ -536,12 +536,12 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param   {String} textMessage - Message shown up in the alert window.
      * @returns {Layer} - returns the layer without the event feature.
      */
-    alertForgetToDefineRadius: function (evt, layer, textMessage) {
+    /* alertForgetToDefineRadius: function (evt, layer, textMessage) {
         Radio.trigger("Alert", "alert", textMessage);
         layer.getSource().removeFeature(evt.feature);
 
         return layer;
-    },
+    },*/
 
     /**
      * Calculates new flat and extent latitude coordinates for the (circle-) feature.
@@ -552,14 +552,14 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param   {Number} earthRadius - Radius of the earth.
      * @returns {Array} - returns new and transformed flat / extent coordinates of the circle.
      */
-    getCircleExtentByDistanceLat: function (circleCenter, diameter, map, earthRadius) {
+    /* getCircleExtentByDistanceLat: function (circleCenter, diameter, map, earthRadius) {
         const offsetLat = diameter / 2,
             circleCenterWGS = toLonLat(circleCenter, getMapProjection(map)),
             deltaLat = offsetLat / earthRadius,
             newPositionLat = circleCenterWGS[1] + deltaLat * 180 / Math.PI;
 
         return transform([circleCenterWGS[0], newPositionLat], "EPSG:4326", getMapProjection(map));
-    },
+    },*/
 
     /**
      * Calculates new flat and extent longitude coordinates for the (circle-) feature.
@@ -570,14 +570,14 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param   {Number} earthRadius - Radius of the earth.
      * @returns {Array} - returns new and transformed flat coordinates of the circle.
      */
-    getCircleExtentByDistanceLon: function (circleCenter, diameter, map, earthRadius) {
+    /* getCircleExtentByDistanceLon: function (circleCenter, diameter, map, earthRadius) {
         const offsetLon = diameter / 2,
             circleCenterWGS = toLonLat(circleCenter, getMapProjection(map)),
             deltaLon = offsetLon / (earthRadius * Math.cos(Math.PI * circleCenterWGS[1] / 180)),
             newPositionLon = circleCenterWGS[0] + deltaLon * 180 / Math.PI;
 
         return transform([newPositionLon, circleCenterWGS[1]], "EPSG:4326", getMapProjection(map));
-    },
+    },*/
 
     /**
      * initialises the drawing functionality without a GUI
@@ -592,7 +592,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      *                 {Boolean} zoomToExtent - The map will be zoomed to the extent of the GeoJson if set to true
      * @returns {String} GeoJSON of all Features as a String
      */
-    inititalizeWithoutGUI: function (para_object) {
+    /* inititalizeWithoutGUI: function (para_object) {
         let featJSON,
             newColor,
             format = new GeoJSON();
@@ -655,16 +655,16 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
                 }
             }
         }
-    },
+    },*/
     /**
      * enable editing of already drawn Features without a GUI
      * usefule for instance for the use via RemoteInterface
      * @returns {void}
      */
-    editFeaturesWithoutGUI: function () {
+    /* editFeaturesWithoutGUI: function () {
         this.deactivateDrawInteraction();
         this.createModifyInteractionAndAddToMap(this.get("layer"), true);
-    },
+    },*/
 
     /**
      * creates and returns a GeoJSON of all drawn Features without a GUI
@@ -677,7 +677,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {Feature} currentFeature last drawn feature used in drawend
      * @returns {String} GeoJSON all Features as String
      */
-    downloadFeaturesWithoutGUI: function (paraObject, currentFeature = undefined) {
+    /* downloadFeaturesWithoutGUI: function (paraObject, currentFeature = undefined) {
         let features = null,
             geomType = null,
             multiGeomFeature = null,
@@ -823,13 +823,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
 
         return JSON.stringify(featuresConverted);
-    },
+    },*/
     /**
      * sends the generated GeoJSON to the RemoteInterface in order to communicate with an iframe
      * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
      * @returns {void}
      */
-    downloadViaRemoteInterface: function (geomType) {
+    /* downloadViaRemoteInterface: function (geomType) {
         const result = this.downloadFeaturesWithoutGUI(geomType);
 
         Radio.trigger("RemoteInterface", "postMessage", {
@@ -837,13 +837,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             "success": true,
             "response": result
         });
-    },
+    },*/
     /**
      * finishes the draw interaction via Radio
      * @param {String} cursor check and receive the parameter from Cockpit
      * @returns {void}
      */
-    cancelDrawWithoutGUI: function (cursor) {
+    /* cancelDrawWithoutGUI: function (cursor) {
         this.deactivateDrawInteraction();
         this.deactivateSelectInteraction();
         this.deactivateModifyInteraction();
@@ -853,7 +853,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         if (cursor !== undefined && cursor.cursor) {
             $("#map").removeClass("no-cursor");
         }
-    },
+    },*/
 
     /**
      * creates a vector layer for drawn features, if layer input is undefined
@@ -862,7 +862,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {ol/layer/Vector} layer - could be undefined
      * @return {ol/layer/Vector} vectorLayer
      */
-    createLayer: function (layer) {
+    /* createLayer: function (layer) {
         let vectorLayer = layer;
 
         if (vectorLayer === undefined) {
@@ -870,7 +870,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
 
         return vectorLayer;
-    },
+    },*/
 
     /**
      * creates a single new draw interactions. If the drawType "Doppelkreis" is selected,
@@ -881,7 +881,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {integer} maxFeatures - maximal number of features to be drawn.
      * @return {ol/layer/Vector} vectorLayer
      */
-    createDrawInteractionAndAddToMap: function (layer, drawType, isActive, maxFeatures) {
+    /* createDrawInteractionAndAddToMap: function (layer, drawType, isActive, maxFeatures) {
         const drawInteraction1 = this.createDrawInteraction(drawType, layer),
             drawInteraction2 = this.createDrawInteraction(drawType, layer);
 
@@ -900,7 +900,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             Radio.trigger("Map", "addInteraction", drawInteraction2);
         }
         return [drawInteraction1, drawInteraction2];
-    },
+    },*/
 
     /**
      * creates a select interaction and adds it to the map.
@@ -908,14 +908,14 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {Boolean} isActive - true or false. Sets the draw interaction active or deactive.
      * @return {void}
      */
-    createSelectInteractionAndAddToMap: function (layer, isActive) {
+    /* createSelectInteractionAndAddToMap: function (layer, isActive) {
         const selectInteraction = this.createSelectInteraction(layer);
 
         selectInteraction.setActive(isActive);
         this.setSelectInteraction(selectInteraction);
         this.createSelectInteractionListener(selectInteraction, layer);
         Radio.trigger("Map", "addInteraction", selectInteraction);
-    },
+    },*/
 
     /**
      * creates a modify interaction and adds it to the map, so the features can be modified.
@@ -923,21 +923,21 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {Boolean} isActive - true or false. Sets the draw interaction active or deactive.
      * @return {void}
      */
-    createModifyInteractionAndAddToMap: function (layer, isActive) {
+    /* createModifyInteractionAndAddToMap: function (layer, isActive) {
         const modifyInteraction = this.createModifyInteraction(layer);
 
         modifyInteraction.setActive(isActive);
         this.setModifyInteraction(modifyInteraction);
         this.createModifyInteractionListener(modifyInteraction);
         Radio.trigger("Map", "addInteraction", modifyInteraction);
-    },
+    },*/
 
     /**
      * Listener to change the entries for the next drawing.
      * @param {ol/interaction/Modify} modifyInteraction - modifyInteraction
      * @return {void}
      */
-    createModifyInteractionListener: function (modifyInteraction) {
+    /* createModifyInteractionListener: function (modifyInteraction) {
 
         modifyInteraction.on("modifyend", function (evt) {
 
@@ -950,7 +950,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             }
 
         }.bind(this));
-    },
+    },*/
 
     /**
      * creates the draw interaction to draw in the map
@@ -959,14 +959,14 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {array} color - of geometries
      * @return {ol/interaction/Draw} draw
      */
-    createDrawInteraction: function (drawType, layer) {
+    /* createDrawInteraction: function (drawType, layer) {
         return new Draw({
             source: layer.getSource(),
             type: drawType.geometry,
             style: this.getStyle(),
             freehand: this.getFreehand()
         });
-    },
+    },*/
 
     /**
      * Listener to change the entries for the next drawing.
@@ -975,7 +975,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {Boolean} doubleIsActive -  - Boolean to compute a double circle or single circle.
      * @return {void}
      */
-    createDrawInteractionListener: function (drawInteraction, maxFeatures, doubleIsActive) {
+    /* createDrawInteractionListener: function (drawInteraction, maxFeatures, doubleIsActive) {
         const that = this,
             layer = this.get("layer");
         let geojson = {};
@@ -1013,16 +1013,17 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             }, this);
         }
         return drawInteraction;
-    },
+    },*/
 
     /**
      * Updates the draw interaction if some changes are made by the user.
      * @return {void}
      */
-    updateDrawInteraction: function () {
+    /* updateDrawInteraction: function () {
         Radio.trigger("Map", "removeInteraction", this.get("drawInteraction"));
         this.createDrawInteractionAndAddToMap(this.get("layer"), this.get("drawType"), true);
-    },
+    },*/
+
 
     /**
      * Creates and returns the ol.style
@@ -1030,7 +1031,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {array} color - of drawings
      * @return {ol/style/Style} style
      */
-    getStyle: function () {
+    /* getStyle: function () {
         const drawType = this.get("drawType"),
             color = this.get("color"),
             colorContour = this.get("colorContour"),
@@ -1060,7 +1061,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         }
 
         return style.clone();
-    },
+    },*/
 
     /**
      * Creates a feature style for text and returns it
@@ -1071,7 +1072,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getTextStyle: function (color, text, fontSize, font, zIndex) {
+    /* getTextStyle: function (color, text, fontSize, font, zIndex) {
         return new Style({
             text: new Text({
                 textAlign: "left",
@@ -1084,7 +1085,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             }),
             zIndex: zIndex
         });
-    },
+    },*/
 
     /**
      * Creates and returns a feature style for points, lines, or faces and returns it
@@ -1094,7 +1095,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {number} zIndex - zIndex of Element
      * @return {ol/style/Style} style
      */
-    getCircleStyle: function (color, colorContour, strokeWidth, zIndex) {
+    /* getCircleStyle: function (color, colorContour, strokeWidth, zIndex) {
         return new Style({
             text: new Text({
                 textAlign: "left",
@@ -1122,7 +1123,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             }),
             zIndex: zIndex
         });
-    },
+    },*/
 
     /**
      * Creates and returns a feature style for points.
@@ -1134,7 +1135,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {ol/style/Style} style
      * @throws Error if the type of the symbol is not supported.
      */
-    getPointStyle: function (color, pointSize, symbol, zIndex) {
+    /* getPointStyle: function (color, pointSize, symbol, zIndex) {
         let style,
             sym = [];
 
@@ -1178,15 +1179,15 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             throw new Error(`The given type ${sym[1]} of the symbol is not supported!`);
         }
         return style;
-    },
+    },*/
 
     /**
      * Returns the boolean value for whether the lines should be drawn smooth or not
      * @return {boolean} smooth or naw
      */
-    getFreehand: function () {
+    /* getFreehand: function () {
         return this.get("freehand");
-    },
+    },*/
 
     /**
      * Creates and returns a feature style for points, lines, or polygon and returns it
@@ -1198,7 +1199,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {number} colorContour - color of the contours
      * @return {ol/style/Style} style
      */
-    getDrawStyle: function (color, drawGeometryType, strokeWidth, pointSize, zIndex, colorContour) {
+    /* getDrawStyle: function (color, drawGeometryType, strokeWidth, pointSize, zIndex, colorContour) {
         return new Style({
             fill: new Fill({
                 color: color
@@ -1215,13 +1216,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             }),
             zIndex: zIndex
         });
-    },
+    },*/
 
     /**
      * resets the module to its initial state
      * @return {void}
      */
-    resetModule: function () {
+    /* resetModule: function () {
         const defaultColor = this.defaults.color,
             defaultColorContour = this.defaults.colorContour;
 
@@ -1241,7 +1242,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setColorContour(defaultColorContour);
         this.setDrawType(this.defaults.drawType.geometry, this.defaults.drawType.text);
         this.combineColorOpacityContour(this.defaults.opacityContour);
-    },
+    },*/
 
     /**
      * creates and sets an interaction for selecting vector features
@@ -1260,11 +1261,11 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {ol/layer/Vector} layer - for the selected(deleted) features
      * @return {ol/interaction/Select} selectInteraction
      */
-    createSelectInteraction: function (layer) {
+    /* createSelectInteraction: function (layer) {
         return new Select({
             layers: [layer]
         });
-    },
+    },*/
 
     /**
      * craete an listener for select interaction
@@ -1272,40 +1273,40 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {ol/layer/Vector} layer - for the selected(deleted) features
      * @return {void}
      */
-    createSelectInteractionListener: function (selectInteraction, layer) {
+    /* createSelectInteractionListener: function (selectInteraction, layer) {
         selectInteraction.on("select", function (evt) {
             // remove feature from source
             layer.getSource().removeFeature(evt.selected[0]);
             // remove feature from interaction
             this.getFeatures().clear();
         });
-    },
+    },*/
 
     /**
      * creates and sets a interaction for modify vector features
      * @param {ol/layer/Vector} layer - for the selected(deleted) features
      * @returns {void}
      */
-    createModifyInteraction: function (layer) {
+    /* createModifyInteraction: function (layer) {
         return new Modify({
             source: layer.getSource()
         });
-    },
+    },*/
 
     /**
      * deletes all geometries from the layer
      * @return {void}
      */
-    deleteFeatures: function () {
+    /* deleteFeatures: function () {
         this.get("layer").getSource().clear();
-    },
+    },*/
 
     /**
      * toggle between modify, trash and draw modes
      * @param {string} mode - from active button
      * @return {void}
      */
-    toggleInteraction: function (mode) {
+    /* toggleInteraction: function (mode) {
         if (mode.indexOf("modify") !== -1) {
             this.deactivateDrawInteraction();
             this.activateModifyInteraction();
@@ -1322,92 +1323,92 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             this.deactivateSelectInteraction();
             this.activateDrawInteraction();
         }
-    },
+    },*/
 
     /**
      * activate draw interaction
      * @return {void}
      */
-    activateDrawInteraction: function () {
+    /* activateDrawInteraction: function () {
         if (this.get("drawInteraction") !== undefined) {
             this.get("drawInteraction").setActive(true);
         }
         if (this.get("drawInteraction2") !== undefined) {
             this.get("drawInteraction2").setActive(true);
         }
-    },
+    },*/
 
     /**
      * deactivates draw interaction
      * @return {void}
      */
-    deactivateDrawInteraction: function () {
+    /* deactivateDrawInteraction: function () {
         if (this.get("drawInteraction") !== undefined) {
             this.get("drawInteraction").setActive(false);
         }
         if (this.get("drawInteraction2") !== undefined) {
             this.get("drawInteraction2").setActive(false);
         }
-    },
+    },*/
 
     /**
      * removes previous draw interaction
      * @return {void}
      */
-    checkAndRemovePreviousDrawInteraction: function () {
+    /* checkAndRemovePreviousDrawInteraction: function () {
         if (this.get("drawInteraction") !== undefined) {
             this.setDrawInteraction(undefined);
         }
         if (this.get("drawInteraction2") !== undefined) {
             this.setDrawInteraction2(undefined);
         }
-    },
+    },*/
 
     /**
      * activate modify interaction
      * and change glyphicon to wrench
      * @return {void}
      */
-    activateModifyInteraction: function () {
+    /* activateModifyInteraction: function () {
         if (this.get("modifyInteraction") !== undefined) {
             this.get("modifyInteraction").setActive(true);
             this.putGlyphToCursor("glyphicon glyphicon-wrench");
         }
-    },
+    },*/
 
     /**
      * deactivate modify interaction
      * and change glyphicon to pencil
      * @return {void}
      */
-    deactivateModifyInteraction: function () {
+    /* deactivateModifyInteraction: function () {
         if (this.get("modifyInteraction") !== undefined) {
             this.get("modifyInteraction").setActive(false);
             this.putGlyphToCursor("glyphicon glyphicon-pencil");
         }
-    },
+    },*/
 
     /**
      * activate selct interaction
      * and change glyphicon to trash
      * @return {void}
      */
-    activateSelectInteraction: function () {
+    /* activateSelectInteraction: function () {
         this.get("selectInteraction").setActive(true);
         this.putGlyphToCursor("glyphicon glyphicon-trash");
-    },
+    },*/
 
     /**
      * deactivate selct interaction
      * and change glyphicon to pencil
      * @return {void}
      */
-    deactivateSelectInteraction: function () {
+    /* deactivateSelectInteraction: function () {
         if (this.get("selectInteraction") !== undefined) {
             this.get("selectInteraction").setActive(false);
             this.putGlyphToCursor("glyphicon glyphicon-pencil");
         }
-    },
+    },*/
 
     /**
      * Creates an HTML element,
@@ -1433,19 +1434,20 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * Starts the download tool
      * @returns {void}
      */
-    startDownloadTool: function () {
+    /* startDownloadTool: function () {
         const features = this.get("layer").getSource().getFeatures();
 
         Radio.trigger("Download", "start", {
             features: features,
             formats: ["KML", "GEOJSON", "GPX"]
         });
-    },
+    },*/
+
     /*
      * Deletes the last element in the feature array in "layer"
      * @returns {void}
      */
-    undoLastStep: function () {
+    /* undoLastStep: function () {
         const features = this.get("layer").getSource().getFeatures(),
             featureToRemove = features[features.length - 1];
 
@@ -1453,13 +1455,13 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             this.updateRedoArray(featureToRemove, false);
             this.get("layer").getSource().removeFeature(featureToRemove);
         }
-    },
+    },*/
 
     /*
      * restores the last deleted element to the feature array in "layer"
      * @returns {void}
      */
-    redoLastStep: function () {
+    /* redoLastStep: function () {
         const redoArray = this.get("redoArray"),
             featureToRestore = redoArray[redoArray.length - 1];
 
@@ -1473,7 +1475,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             this.get("layer").getSource().getFeatureById(featureId).setStyle(featureStyle);
             this.updateRedoArray(undefined, true);
         }
-    },
+    },*/
 
     /**
      * adds or removes one element from the redoArray
@@ -1481,7 +1483,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {boolean} remove - if true: remove one object
      * @return {void}
      */
-    updateRedoArray: function (feature, remove) {
+    /* updateRedoArray: function (feature, remove) {
         const redoArray = this.get("redoArray");
 
         if (remove) {
@@ -1491,26 +1493,26 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             redoArray.push(feature);
         }
         this.setRedoArray(redoArray);
-    },
+    },*/
 
     /**
      * activate the method "defined", to define a circle by diameter.
      * @param {boolean} deEnable - true or false to enable or disable.
      * @return {void}
      */
-    enableMethodDefined: function (deEnable) {
+    /* enableMethodDefined: function (deEnable) {
         if ($(".dropdownUnit select")[0] !== undefined && $(".circleRadiusInner input")[0] !== undefined) {
             $(".dropdownUnit select")[0].disabled = deEnable;
             $(".circleRadiusInner input")[0].disabled = deEnable;
         }
-    },
+    },*/
 
     /**
      * enables or disables the input/select options
      * @param {boolean} disAble - true or false to disable or enable.
      * @return {void}
      */
-    disAbleAllDrawOptions: function (disAble) {
+    /* disAbleAllDrawOptions: function (disAble) {
         $(".text input")[0].disabled = disAble;
         $(".font-size select")[0].disabled = disAble;
         $(".font select")[0].disabled = disAble;
@@ -1530,7 +1532,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         else {
             this.enableMethodDefined(true);
         }
-    },
+    },*/
 
     /**
      * Function to adjust the value / radius to the units meters or kilometers.
@@ -1538,16 +1540,16 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @param {string} unit - unit of thfe diameter.
      * @return {string} - returns value / string without comma.
      */
-    adjustValueToUnits: function (diameter, unit) {
+    /* adjustValueToUnits: function (diameter, unit) {
         return unit === "km" ? diameter * 1000 : diameter;
-    },
+    },*/
 
     /**
      * Function to add the information about the opacity to the colorcode.
      * @param {Number} value - the opacity as value.
      * @return {void}
      */
-    combineColorOpacityContour: function (value) {
+    /* combineColorOpacityContour: function (value) {
         const newColor = this.get("colorContour"),
             drawType = this.get("drawType");
 
@@ -1560,20 +1562,20 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
             this.setOpacityContour(this.defaults.opacityContour);
         }
         this.setColorContour(newColor);
-    },
+    },*/
 
     /**
      * Returns a unique id, starts with the given prefix
      * @param {string} prefix prefix for the id
      * @returns {string} a unique id
      */
-    uniqueId: function (prefix) {
+    /* uniqueId: function (prefix) {
         let counter = this.get("idCounter");
         const id = ++counter;
 
         this.setIdCounter(id);
         return prefix ? prefix + id : id;
-    },
+    },*/
     // TODO: Bis hier die Klasse betrachtet und in den State übernommen (von unten aus gesehen)
     /**
      * setter for drawType
@@ -1656,6 +1658,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("freehand", value);
     },
 
+    // TODO: When is this used?
     /**
      * setter for redoArray
      * @param {array} value - new redoArray

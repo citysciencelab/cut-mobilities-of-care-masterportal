@@ -1,60 +1,93 @@
 /**
  * @property {Boolean} active Current status of the Tool.
- * @property {Object} addFeatureListener TODO: What is this for?
- * @property {Number} circleInnerRadius The inner radius for feature of drawType "Circle".
- * @property {Number} circleOuterRadius The outer radius for feature of drawType "Circle".
+ * @property {Object} addFeatureListener Listens to the the event "addfeature" which is fired after a feature has been added to the map.
+ * @property {Number} circleInnerDiameter The inner diameter for feature of drawType "Circle".
+ * @property {String} circleMethod The method for drawing features of drawType "Circle".
+ * @property {Number} circleOuterDiameter The outer diameter for feature of drawType "Circle".
+ * @property {String} currentInteraction The current interaction. Could be either "draw", "modify" or "delete"
  * @property {Array} color The color of the drawn feature represented as an array.
  * @property {Array} colorContour The color of the contours of the drawn feature represented as an array.
- * @property {ol/interaction/Draw} drawInteractionOne The draw interaction of the draw tool.
- * @property {ol/interaction/Draw} drawInteractionTwo The second draw interaction of the draw tool. TODO: WHEN IS THIS NEEDED?
- * @property {Object} drawType The type of the draw interaction. The first parameter represents the type of the geometry as a String and the second parameter represents the displayed text in the dropdown menu as a String.
+ * @property {module:ol/interaction/Draw} drawInteraction The draw interaction of the draw tool.
+ * @property {module:ol/interaction/Draw} drawInteractionTwo The second draw interaction of the draw tool needed if a double circle is to be drawn.
+ * @property {Object} drawType The type of the draw interaction. The first parameter represents the type unique identifier of the draw interaction as a String and the second parameter represents the geometry of the drawType as a String.
+ * @property {Number} fId ID of the last feature that was added to the redoArray.
  * @property {String} font The font used for the text interaction.
  * @property {Number} fontSize The size of the font used for the text interaction.
+ * @property {Boolean} freeHand Distinction between a freeHand line drawing or a static one.
+ * @property {String} glyphicon The symbol for the entry of the tool in the menu.
+ * @property {Array} iconList List of symbols to be used for Point features.
  * @property {String} id Internal Identifier for the Tool.
- * @property {String} idCounter TODO: What is this for? Is it really a String?
- * @property {ol/layer/Vector} layer The layer in which the features are drawn.
- * @property {String} methodCircle The method for drawing features of drawType "Circle".
- * @property {ol/interaction/Modify} modifyInteraction The modify interaction of the draw tool.
- * @property {Number} opacity The opacity of the color of the drawn features.
- * @property {Number} opacityContour The opacity of the color of the contours for features of drawType "Line".
- * @property {Number} radius The radius of the feature.
+ * @property {Integer} idCounter Amount of features drawn.
+ * @property {String} innerBorderColor The color of the border of the dropdown menu for the selection of the inner radius of a circle.
+ * @property {module:ol/layer/Vector} layer The layer in which the features are drawn.
+ * @property {module:ol/interaction/Modify} modifyInteraction The modify interaction of the draw tool.
+ * @property {Number} opacity The opacity of the color of the drawn features. NOTE: The values of the transparencyOptions are opacity values.
+ * @property {Number} opacityContour The opacity of the color of the contours for features of drawType "LineString". NOTE: The values of the transparencyOptions are opacity values.
+ * @property {String} outerBorderColor The color of the border of the dropdown menu for the selection of the outer radius of a circle.
+ * @property {Number} pointSize The size of the point.
+ * @property {Number[]} redoArray Array of the IDs of features removed through the undo button.
  * @property {Boolean} renderToWindow Decides whether the Tool should be displayed.
- * @property {ol/interaction/Select} selectInteraction The select interaction of the draw tool.
- * @property {Number} strokeWidth TODO: What is this?
- * @property {String} text The text to be written if the drawType "Text" is chosen.
+ * @property {module:ol/interaction/Select} selectInteraction The select interaction of the draw tool.
+ * @property {Number} strokeWidth Stroke width.
+ * @property {Object} symbol The symbol for the point.
+ * @property {String} text The text to be written if the drawType "writeText" is chosen.
  * @property {String} unit The unit of measurement (e.g. "km").
- * @property {Number} zIndex TODO: What is this?
+ * @property {Number} zIndex Determines in which order features are rendered on the view.
  */
 const state = {
     active: false,
     addFeatureListener: {},
-    circleInnerRadius: null, // TODO: The value needs to be adjusted to the correct units and then the float needs to be parsed
-    circleOuterRadius: null, // TODO: The value needs to be adjusted to the correct units and then the float needs to be parsed
-    color: [55, 126, 184, 1], // TODO: There is a check for null values in the current setter --> Still needed or can be avoided?
+    circleInnerDiameter: null,
+    circleMethod: "interactive",
+    circleOuterDiameter: null,
+    currentInteraction: "draw",
+    color: [55, 126, 184, 1],
     colorContour: [0, 0, 0, 1],
     deactivateGFI: true, // --> Needed as in modelList/list.js it decides whether to deactivate the GFI (there should be a better way!)
-    drawInteractionOne: null,
+    drawInteraction: null,
     drawInteractionTwo: null,
-    drawType: { // TODO: Besides the translation of the text, a bigger setter method is needed
-        geometry: "Point",
-        text: "Punkt zeichnen" // --> translate?
+    drawType: {
+        id: "drawPoint",
+        geometry: "Point"
     },
+    fId: 0,
     font: "Arial",
     fontSize: 10,
-    id: "draw", // --> TODO: Is it needed in the state or could it be moved to the constants?
-    idCounter: null,
-    layer: null, // TODO: Init on Tool start
-    methodCircle: "interactive",
+    freeHand: false,
+    glyphicon: "glyphicon-pencil",
+    iconList: [
+        {
+            id: "iconPoint",
+            type: "simple_point",
+            value: "simple_point"
+        },
+        {
+            id: "iconLeaf",
+            type: "glyphicon",
+            value: "\ue103"
+        }
+    ],
+    id: "draw",
+    idCounter: 0,
+    innerBorderColor: "",
+    layer: null,
     modifyInteraction: null,
-    opacity: 1, // TODO: Should need a new setter method as it directly corresponds with the color of the feature
+    opacity: 1,
     opacityContour: 1,
-    radius: 6, // TODO: Is it needed to parse the input to an integer or can this simply be handled somewhere else?
+    outerBorderColor: "",
+    pointSize: 6,
+    redoArray: [],
     renderToWindow: true,
     selectInteraction: null,
-    strokeWidth: 1, // TODO: Is it needed to parse the input to an integer or can this simply be handled somewhere else?
-    text: "Klicken Sie auf die Karte um den Text zu platzieren", // --> translate?
+    strokeWidth: 1,
+    symbol: {
+        id: "iconPoint",
+        type: "simple_point",
+        value: "simple_point"
+    },
+    text: "Klicken Sie auf die Karte um den Text zu platzieren",
     unit: null,
-    zIndex: 0 // countUp (+1) needed
+    zIndex: 0
 };
 
 export default state;

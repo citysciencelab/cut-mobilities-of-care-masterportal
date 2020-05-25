@@ -27,7 +27,8 @@ const ItemView = Backbone.View.extend({
         }
 
         this.model.setIsActive(true);
-        store.commit("setToolActive", {id: this.model.id, active: true});
+        // store.commit("setToolActive", {id: this.model.id, active: true});
+        store.dispatch("setToolActive", {id: this.model.id, active: true});
         // Navigation wird geschlossen
         $("div.collapse.navbar-collapse").removeClass("in");
     },

@@ -23,7 +23,7 @@ import PrintV2 from "../../tools/print/model";
 import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Measure from "../../tools/measure/model";
-import Draw from "../../tools/draw/model";
+// import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
@@ -274,9 +274,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "measure") {
                 return new Measure(attrs, options);
             }
-            else if (attrs.id === "draw") {
+            /* else if (attrs.id === "draw") {
                 return new Draw(attrs, options);
-            }
+            }*/
             else if (attrs.id === "download") {
                 return new Download(attrs, options);
             }
@@ -568,7 +568,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         activeToolsToDeactivate = activeTools.filter(tool => !alwaysActiveTools.includes(tool));
         activeToolsToDeactivate.forEach((tool) => {
             tool.setIsActive(false);
-            store.commit("setToolActive", {id: tool.id, active: false});
+            // store.commit("setToolActive", {id: tool.id, active: false});
+            store.dispatch("setToolActive", {id: tool.id, active: false});
         });
     },
 
@@ -585,7 +586,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         activeTools = _.without(activeTools, legendModel);
         if (activeTools.length === 0 && defaultTool !== undefined) {
             defaultTool.setIsActive(true);
-            store.commit("setToolActive", {id: defaultTool.id, active: true});
+            // store.commit("setToolActive", {id: defaultTool.id, active: true});
+            store.dispatch("setToolActive", {id: defaultTool.id, active: true});
         }
     },
 

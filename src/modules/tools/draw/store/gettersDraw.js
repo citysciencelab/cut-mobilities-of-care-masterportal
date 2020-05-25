@@ -1,10 +1,8 @@
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
-import state from "./stateDraw";
+import initialState from "./stateDraw";
 
 const getters = {
-    ...generateSimpleGetters(state)
-    // All additional getters will override already existing ones
-    // First parameter of a methods is the state object, second one the preexisting getters object
+    ...generateSimpleGetters(initialState)
 };
 
 export default getters;
