@@ -128,18 +128,19 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      */
     updateSource: function (showLoader) {
         const params = {
-            REQUEST: "GetFeature",
-            SERVICE: "WFS",
-            SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-            TYPENAME: this.get("featureType"),
-            VERSION: this.get("version"),
-            // loads only the features in the extent of this geometry
-            BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
-        };
+                REQUEST: "GetFeature",
+                SERVICE: "WFS",
+                SRSNAME: Radio.request("MapView", "getProjection").getCode(),
+                TYPENAME: this.get("featureType"),
+                VERSION: this.get("version"),
+                // loads only the features in the extent of this geometry
+                BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
+            },
+            mapInitialLoading = Radio.request("Map", "getInitialLoading");
 
         $.ajax({
             beforeSend: function () {
-                if (showLoader) {
+                if (mapInitialLoading === 0 && showLoader) {
                     Radio.trigger("Util", "showLoader");
                 }
             },

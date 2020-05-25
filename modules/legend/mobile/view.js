@@ -62,7 +62,7 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
         const legendParams = this.model.get("legendParams");
 
         // Filtern von this.unset("legendParams")
-        if (!_.isUndefined(legendParams) && legendParams.length > 0) {
+        if (typeof legendParams !== "undefined" && legendParams.length > 0) {
             this.addContentHTML(legendParams);
             if (this.model.get("isActive")) {
                 this.render();
@@ -75,11 +75,11 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
      * @returns {void}
      */
     addContentHTML: function (legendParams) {
-        _.each(legendParams, function (legendDefinition) {
-            _.each(legendDefinition.legend, function (legend) {
+        legendParams.forEach(legendDefinition => {
+            legendDefinition.legend.forEach(legend => {
                 legend.html = this.contentTemplate(legend);
-            }, this);
-        }, this);
+            });
+        });
     },
     /**
     * todo

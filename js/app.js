@@ -60,7 +60,7 @@ import RoutingView from "../modules/tools/viomRouting/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
-import FeatureLister from "../modules/featureLister/view";
+import FeatureLister from "../modules/tools/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 /**
  * PrintView2
@@ -73,12 +73,10 @@ import PrintView2 from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
-import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
 import MousePositionView from "../modules/controls/mousePosition/view";
 import FullScreenView from "../modules/controls/fullScreen/view";
 import AttributionsView from "../modules/controls/attributions/view";
-import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -350,13 +348,6 @@ async function loadApp () {
             let element;
 
             switch (control.id) {
-                case "zoom": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowTR(control.id);
-                        new ZoomControlView({el: element});
-                    }
-                    break;
-                }
                 case "orientation": {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
@@ -381,25 +372,6 @@ async function loadApp () {
                     if (control.attr === true || typeof control.attr === "object") {
                         element = controlsView.addRowBR(control.id, true);
                         new AttributionsView({el: element});
-                    }
-                    break;
-                }
-                /**
-                 * overviewmap
-                 * @deprecated in 3.0.0
-                 */
-                case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
-                        element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView(element, control.id, control.attr);
-                    }
-                    break;
-                }
-                case "overviewMap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView(element, control.id, control.attr);
                     }
                     break;
                 }

@@ -122,7 +122,7 @@ const LayerSliderView = Backbone.View.extend(/** @lends LayerSliderView.prototyp
      * @returns {void}
      */
     stopSlider: function () {
-        if (!_.isNull(this.model.get("windowsInterval"))) {
+        if (this.model.get("windowsInterval") !== null) {
             this.toggleGlyphicon("glyphicon-stop");
             this.model.stopInterval();
         }

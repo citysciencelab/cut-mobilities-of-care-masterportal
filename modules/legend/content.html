@@ -1,12 +1,12 @@
 <% if (typ === "svg") { %>
     <table>
-        <% _.each(img, function (image, index2) { %>
+        <% img.forEach(function (image, index2) { %>
             <tr>
                 <td class="tdLegend">
                     <% if (image.indexOf("<svg") !== -1){%>
                         <div class="tdLegend-no-image"><%= image %></div>
                     <% }
-                    else if (_.isArray(image)){%>
+                    else if (Array.isArray(image)){%>
                         <div class="imageArray" style="background:url('<%= image[1] %>');  background-size:35px;">
                             <img src="<%= image[0] %>">
                         </div>
@@ -23,9 +23,9 @@
     </table>
 
 <% }
-else if (typ === "styleWMS") {%>
+else if (typ === "styleWMS") { %>
     <table>
-        <% _.each(params, function(param) { %>
+        <% params.forEach(function(param) { %>
             <tr>
                 <td>
                     <div class="styleWMS" style="background-color:<%=param.color%>"></div>
@@ -49,7 +49,7 @@ else {
     }
     else {
         if (img.length > 1) {
-            _.each(img, function (image) { %>
+            img.forEach(function (image) { %>
                 <p>
                     <img src=<%= image %>>
                 </p>
