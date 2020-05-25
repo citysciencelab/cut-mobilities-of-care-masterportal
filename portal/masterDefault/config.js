@@ -124,8 +124,7 @@ const Config = {
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
         loadPath: "/locales/{{lng}}/{{ns}}.json"
-    },
-    loaderText: "Master Default"
+    }
 };
 
 /* eslint-enable no-unused-vars */
