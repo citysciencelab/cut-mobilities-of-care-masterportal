@@ -21,29 +21,17 @@
                 "searchDistricts": true,
                 "searchParcels": true
             },
-            "elasticSearch": {
-              "minChars":3,
-              "serviceId":"elastic_test",
-              "type": "GET",
-              "payload": {
-                 "id":"query",
-                 "params":{
-                    "query_string":""
-                 }
-              },
-              "searchStringAttribute": "query_string",
-              "responseEntryPath": "hits.hits",
-              "triggerEvent": {
-                 "channel": "Parser",
-                 "event": "addGdiLayer"
-              },
-              "hitMap": {
-                 "name": "_source.name",
-                 "id": "_source.id",
-                 "source": "_source"
-              },
-              "hitType": "Fachthema",
-              "hitGlyphicon": "glyphicon-list"
+            "bkg":
+            {
+              "minChars": 3,
+              "suggestServiceId": "4",
+              "geosearchServiceId": "5",
+              "extent": [454591, 5809000, 700000, 6075769],
+              "suggestCount": 10,
+              "epsg": "EPSG:25832",
+              "filter": "filter=(typ:*)",
+              "score": 0.6,
+              "zoomToResult": true
             },
             "tree": {
                 "minChars": 3
