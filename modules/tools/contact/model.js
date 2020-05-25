@@ -11,9 +11,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
             "email": "lgvgeoportal-hilfe@gv.hamburg.de",
             "name": "LGVGeoportalHilfe"
         }],
-        cc: [],
-        ccToUser: false,
-        bcc: [],
         text: "",
         url: "",
         ticketId: "",
@@ -55,13 +52,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @property {Object[]} [to=[{"email":"lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]] Default receiver of email. Email object existst of:
      * @property {String} to.email Email address
      * @property {String} to.name Email name to be shown
-     * @property {Object[]} [cc=[]] CC emails. Email object existst of:
-     * @property {String} cc.email Email address
-     * @property {String} cc.name Email name to be shown
-     * @property {Boolean} ccToUser=false Flag if user should get an email.
-     * @property {Object[]} [bcc=[]] BCC emails. Email object existst of:
-     * @property {String} bcc.email Email address
-     * @property {String} bcc.name Email name to be shown
      * @property {String} text="" Users text
      * @property {String} url="" Url of email service
      * @property {String} ticketId="" Generated Id of user ticket. Format "mm.dd.-[Id]"
@@ -232,26 +222,16 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {void}
      */
     send: function () {
-        const cc = _.map(this.get("cc"), _.clone), // deep copy instead of passing object by reference
-            closeAndDelete = this.get("closeAndDelete"),
+        const closeAndDelete = this.get("closeAndDelete"),
             withTicketNo = this.get("withTicketNo");
 
         let text = "",
             dataToSend = {};
 
-        if (this.get("ccToUser") === true) {
-            cc.push({
-                email: this.get("userEmail"),
-                name: this.get("userName")
-            });
-        }
-
         text = "Name: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo");
         dataToSend = {
             from: this.get("from"),
             to: this.get("to"),
-            cc: cc,
-            bcc: this.get("bcc"),
             subject: this.get("ticketId") + ": " + this.get("subject"),
             text: text
         };
@@ -385,24 +365,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     },
 
     /**
-     * Setter for cc
-     * @param {Object[]} value cc
-     * @returns {void}
-     */
-    setCc: function (value) {
-        this.set("cc", value);
-    },
-
-    /**
-     * Setter for ccToUser
-     * @param {Boolean} value ccToUser
-     * @returns {void}
-     */
-    setCcToUser: function (value) {
-        this.set("ccToUser", value);
-    },
-
-    /**
      * Setter for from
      * @param {Object[]} value from
      * @returns {void}
@@ -421,15 +383,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     },
 
     /**
-     * Setter for bcc
-     * @param {Object[]} value bcc
-     * @returns {void}
-     */
-    setBcc: function (value) {
-        this.set("bcc", value);
-    },
-    /**
-     * Setter for closeAndDelte
+     * Setter for closeAndDelete
      * @param {Boolean} value true: close and delete contact after send, false: do not close after send
      * @returns {void}
      */
