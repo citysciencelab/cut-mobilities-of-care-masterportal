@@ -4,7 +4,7 @@ import {Circle, Fill, Stroke, Style, Text} from "ol/style.js";
 import {KML} from "ol/format.js";
 
 const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         text: "",
         features: [],
         format: new KML({extractStyles: true}),
@@ -259,11 +259,11 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
     transformFeatures: function () {
         const features = this.get("features");
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             const transCoord = this.transformCoords(feature.getGeometry(), this.getProjections("EPSG:4326", "EPSG:25832"));
 
             feature.getGeometry().setCoordinates(transCoord, "XY");
-        }, this);
+        });
         this.setFeatures(features);
     },
 
@@ -321,11 +321,11 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
         const transCoord = [];
 
         // multiple Points
-        _.each(coords, function (points) {
-            _.each(points, function (point) {
+        coords.forEach(points => {
+            points.forEach(point => {
                 transCoord.push(context.transformPoint(point, projections));
             });
-        }, this);
+        });
         return [transCoord];
     },
 
@@ -340,9 +340,9 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
         const transCoord = [];
 
         // multiple Points
-        _.each(coords, function (point) {
+        coords.forEach(point => {
             transCoord.push(context.transformPoint(point, projections));
-        }, this);
+        });
         return transCoord;
     },
 

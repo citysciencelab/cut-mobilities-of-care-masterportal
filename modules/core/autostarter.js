@@ -1,9 +1,9 @@
 const Autostarter = Backbone.Model.extend({
     defaults: {
-        autostartModuls: [], // Liste aller zu startenden Module
-        initializedModuls: [], // Liste aller geladenen Module
-        parametersAnalysed: false, // Boolean, ob ParametricURL abgefragt wurde
-        configAnalysed: false, // Boolean, ob config.json abgefragt wurde
+        autostartModuls: [], // array of all modules to open on startup
+        initializedModuls: [], // array of all initialized modules
+        parametersAnalysed: false, // boolean, if ParametricURL was checked already
+        configAnalysed: false, // boolean, if config.json was checked already
         channel: Radio.channel("Autostart")
     },
     initialize: function () {
@@ -17,8 +17,10 @@ const Autostarter = Backbone.Model.extend({
 
         Radio.once("ParametricURL", "ready", this.parametersAnalysed, this);
     },
-    /*
-     * speichert sich alle geladenen Module, die geladen wurden und prinzipiell geöffnet werden können.
+    /**
+     * fills defaults.initializedModuls with ids of initialized modules - from now on these modules can be used
+     * @param {Number} id the id of the module to be flaged as initialized
+     * @returns {Void}  -
      */
     setInitializedModul: function (id) {
         const initializedModuls = this.get("initializedModuls");
@@ -27,31 +29,38 @@ const Autostarter = Backbone.Model.extend({
         this.set("initializedModuls", initializedModuls);
         this.check();
     },
-    /*
-     * erst nachdem das Menü geladen ist kann der Parser per Radio abgefragt werden. In der config.json wird nach Modulen mit isInitOpen: true gesucht.
+    /**
+     * looks for modules with isInitOpen = true in config.json to add them to defaults.autostartModules
+     * @info the parser can only be questioned (via Radio) after the menue was loaded
+     * @pre defaults.configAnalysed is false, defaults.autostartModuls might be empty
+     * @post defaults.configAnalysed is true, ids of layers marked with isInitOpen in config.json are added to defaults.autostartModuls
+     * @returns {Void}  -
      */
     menuLoaded: function () {
         const configAutostart = Radio.request("Parser", "getItemsByAttributes", {isInitOpen: true});
 
-        _.each(configAutostart, function (modul) {
-            if (_.has(modul, "id")) {
+        configAutostart.forEach(function (modul) {
+            if (modul.hasOwnProperty("id")) {
                 this.get("autostartModuls").push(modul.id.toLowerCase());
             }
         }, this);
         this.set("configAnalysed", true);
         this.check();
     },
-    /*
-     * wenn die Paramter der URL untersucht wurden, werden die isInitOpen Module in Erfahrung gebracht
+    /**
+     * uses Radio ParametricURL to look for parameter isInitOpen in the url, adds found module names unchecked into autostartModuls
+     * @pre defaults.parametersAnalysed is false, defaults.autostartModuls might be empty
+     * @post defaults.parametersAnalysed is true, names of layers given by url are added to defaults.autostartModuls
+     * @returns {Void}  -
      */
     parametersAnalysed: function () {
         const isInitOpen = Radio.request("ParametricURL", "getIsInitOpen"),
-            parametricAutostart = !_.isUndefined(isInitOpen) ? isInitOpen.toString() : undefined,
+            parametricAutostart = isInitOpen !== undefined ? isInitOpen.toString() : undefined,
             autostartParameter = parametricAutostart ? parametricAutostart : null,
             autostartModuls = this.get("autostartModuls");
 
         if (autostartParameter) {
-            _.each(autostartParameter.toLowerCase().split(","), function (paramEl) {
+            autostartParameter.toLowerCase().split(",").forEach(function (paramEl) {
                 autostartModuls.push(paramEl);
             });
         }
@@ -59,11 +68,12 @@ const Autostarter = Backbone.Model.extend({
         this.set("parametersAnalysed", true);
         this.check();
     },
-    /*
-     * sofern das Modul in Erfahrung gebracht hat, welche Module gestartet werden sollen, werden alle zwischenzeitlich geladenen Module verglichen und ggf. gestartet.
-     * Jedes gestartete Modul wird aus "autostartModuls" wieder entfernt, damit dieses Modul sich am Ende selbst destroyen kann.
-     * Jedes später geladene Tool, welches initial geöffnet sein soll schließt bereits vorher geöffnete.
-     * Parameter werden vor der config gelesen.
+    /**
+     * If the module has found out which modules are to be started, all modules loaded in the meantime are compared and started if necessary
+     * Every started module is removed from "autostartModul", so that this module can destroy itself in the end.
+     * Every later loaded tool, which should be opened initially, closes previously opened tools.
+     * Parameters are read before the config has been read.
+     * @returns {Void}  -
      */
     check: function () {
         let autostartModuls,
@@ -73,15 +83,15 @@ const Autostarter = Backbone.Model.extend({
             autostartModuls = this.get("autostartModuls");
             initializedModuls = this.get("initializedModuls");
             if (autostartModuls.length === 0) {
-                // es werden keine Module automatisch gestartet. Autostarter wird nicht benötigt.
+                // no modules are started automatically. Autostarter is not required.
                 this.unloadModule();
             }
             else if (initializedModuls.length > 0) {
-                // sofern Module schon initialisiert sind, können sie gestartet werden.
-                _.each(autostartModuls, function (idToStart) {
-                    if (_.indexOf(initializedModuls, idToStart) !== -1) {
+                // if modules are already initialized, they can be started.
+                autostartModuls.forEach(function (idToStart) {
+                    if (initializedModuls.indexOf(idToStart) !== -1) {
                         Radio.trigger("Autostart", "startModul", idToStart);
-                        this.set("autostartModuls", _.without(autostartModuls, idToStart));
+                        this.set("autostartModuls", Radio.request("Util", "differenceJs", autostartModuls, [idToStart]));
                     }
                 }, this);
 
@@ -91,10 +101,15 @@ const Autostarter = Backbone.Model.extend({
             }
         }
     },
+    /**
+     * unloads this module, resets all channels, clears and destroys this module
+     * @returns {Void}  -
+     */
     unloadModule: function () {
         const channel = this.get("channel");
 
-        channel.reset(); // reset all channels from the radio object
+        // reset all channels from the radio object
+        channel.reset();
         this.clear();
         this.destroy();
     }

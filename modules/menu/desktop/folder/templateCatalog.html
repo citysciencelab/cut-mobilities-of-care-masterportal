@@ -23,7 +23,7 @@
             <div class="form-group catalog-selection">
                 <span class="control-label"><%= categoryText %></span>
                 <select class="form-control">
-                    <% _.each(categories, function (cat) { %>
+                    <% categories.forEach(function (cat) { %>
                         <% if (cat === category) { %>
                             <option <% print ("SELECTED") %>><%= cat %></option>
                         <% } else { %>
