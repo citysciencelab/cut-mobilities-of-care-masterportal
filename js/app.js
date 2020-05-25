@@ -60,7 +60,7 @@ import RoutingView from "../modules/tools/viomRouting/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
-import FeatureLister from "../modules/featureLister/view";
+import FeatureLister from "../modules/tools/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 /**
  * PrintView2
@@ -73,10 +73,7 @@ import PrintView2 from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
-import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
-import MousePositionView from "../modules/controls/mousePosition/view";
-import AttributionsView from "../modules/controls/attributions/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -348,31 +345,10 @@ async function loadApp () {
             let element;
 
             switch (control.id) {
-                case "zoom": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowTR(control.id);
-                        new ZoomControlView({el: element});
-                    }
-                    break;
-                }
                 case "orientation": {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
                     new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
-                case "mousePosition": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowBL(control.id);
-                        new MousePositionView({el: element});
-                    }
-                    break;
-                }
-                case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id, true);
-                        new AttributionsView({el: element});
-                    }
                     break;
                 }
                 case "freeze": {

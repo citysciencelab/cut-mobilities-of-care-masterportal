@@ -11,7 +11,7 @@
         <div id="legendbody" class="modal-body">
             <div class="panel-group" role="tablist" aria-multiselectable="true">
             <%
-            _.each(legendParams, function(element, index) {
+            legendParams.forEach(function(element, index) {
             %>
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="überschriftEins<%=index%>" data-toggle="collapse" href="#collapseEins<%=index%>" aria-expanded="true" aria-controls"collapseEins<%=index%>">
@@ -19,7 +19,7 @@
                             <%= element.layername %>
                         </h4>
                     </div>
-                    <% _.each(element.legend, function (layerdefinition) { %>
+                    <% element.legend.forEach(function (layerdefinition) { %>
                     <div id="collapseEins<%=index%>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="überschriftEins<%=index%>">
                         <div class="panel-body panel-legend">
                             <%= layerdefinition.html %>
