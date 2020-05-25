@@ -10,9 +10,8 @@ const allAddons = ADDONS || {};
  * @returns {void}
  */
 export default async function (config) {
+    Vue.prototype.$addons = []; // add .$addons in any case to make sure it's always defined
     if (config) {
-        Vue.prototype.$addons = [];
-
         const addons = config.map(async addonKey => {
             try {
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, ""),
