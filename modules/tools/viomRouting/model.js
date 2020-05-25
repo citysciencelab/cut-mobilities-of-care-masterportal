@@ -6,7 +6,7 @@ import {GeoJSON} from "ol/format.js";
 import {Stroke, Style} from "ol/style.js";
 
 const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         bkgSuggestURL: "",
         bkgGeosearchURL: "",
         viomRoutingURL: "",
@@ -161,10 +161,10 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
                 }
                 return isHouseNr;
             }),
-            bbox = _.isNull(this.get("bbox")) === false ? this.get("bbox") : "";
+            bbox = this.get("bbox") !== null ? this.get("bbox") : "";
 
         let filter = "",
-            query = "&query=" + _.without(arr, plz[0], hsnr[0]);
+            query = "&query=" + Radio.request("Util", "differenceJs", arr, [plz[0], hsnr[0]]);
 
         if (plz.length === 1 && hsnr.length === 1) {
             filter = "&filter=(plz:" + plz + ") AND (typ:Haus) AND haus:(" + hsnr + "*)";
@@ -190,7 +190,7 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
                 const treffer = [];
 
                 try {
-                    _.each(data, function (strasse) {
+                    data.forEach(strasse => {
                         treffer.push([strasse.suggestion, strasse.highlighted]);
                     });
                     if (target === "start") {

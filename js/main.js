@@ -129,7 +129,7 @@ function initLanguage (portalLanguageConfig) {
     }, portalLanguageConfig);
 
     // init i18next
-    if (Config.portalLanguage.enabled) {
+    if (Config.portalLanguage !== undefined && Config.portalLanguage.enabled) {
         i18next.use(i18nextBrowserLanguageDetector);
     }
     i18next

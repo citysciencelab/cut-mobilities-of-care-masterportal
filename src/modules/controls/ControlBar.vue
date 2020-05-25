@@ -45,6 +45,7 @@ export default {
                     }
                     return key;
                 })
+                .filter(x => x !== "mousePosition") // "mousePosition" is currently handled in footer
                 .filter(x => typeof x === "string" ? console.warn(`Control "${x}" not implemented; ignoring key.`) : true)
                 .forEach(c => {
                     if (this.bottomControls.includes(c.key)) {
