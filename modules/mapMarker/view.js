@@ -42,11 +42,11 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             "zoomToBKGSearchResult": this.zoomToBKGSearchResult
         }, this);
 
-        if (!_.isUndefined(Radio.request("ParametricURL", "getProjectionFromUrl"))) {
+        if (Radio.request("ParametricURL", "getProjectionFromUrl") !== undefined) {
             this.model.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));
         }
 
-        if (!_.isUndefined(Radio.request("ParametricURL", "getMarkerFromUrl"))) {
+        if (Radio.request("ParametricURL", "getMarkerFromUrl") !== undefined) {
             this.model.setMarkerFromParamUrl(Radio.request("ParametricURL", "getMarkerFromUrl"));
         }
 
@@ -197,9 +197,16 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                     Radio.trigger("Map", "zoomToExtent", coord);
                 }
                 else if (coord.length > 4) {
-                    this.model.setWkt("POLYGON", coord);
-                    this.model.showFeature(); // bei Flächen soll diese sichtbar sein
-                    Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    if (hit.geometryType === "POLYGON") {
+                        this.model.setWkt("POLYGON", coord);
+                    }
+                    else if (hit.geometryType === "MULTIPOLYGON") {
+                        this.model.setWkt("MULTIPOLYGON", coord);
+                    }
+                    if (hit.geometryType === "POLYGON" || hit.geometryType === "MULTIPOLYGON") {
+                        this.model.showFeature(); // bei Flächen soll diese sichtbar sein
+                        Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    }
                 }
                 Radio.trigger("Filter", "resetFilter", hit.feature);
                 break;
@@ -215,13 +222,15 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     * @returns {void}
     */
     zoomToBKGSearchResult: function (data) {
-        if (data.features.length !== 0 && !_.isNull(data.features[0].geometry) && data.features[0].geometry.type === "Point") {
+        if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
             Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, this.model.get("zoomLevel"));
             this.showMarker(data.features[0].geometry.coordinates);
         }
-        else if (data.features.length !== 0 && !_.isNull(data.features[0].properties) && !_.isNull(data.features[0].properties.bbox) &&
-            !_.isNull(data.features[0].properties.bbox.type) && data.features[0].properties.bbox.type === "Polygon") {
-            this.model.setWkt("POLYGON", _.flatten(data.features[0].properties.bbox.coordinates[0]));
+        else if (data.features.length !== 0 && data.features[0].properties !== null && data.features[0].properties.bbox !== null &&
+            data.features[0].properties.bbox.type !== null && data.features[0].properties.bbox.type === "Polygon") {
+            const polygon = data.features[0].properties.bbox.coordinates[0].reduce((a, b) => a.concat(b), []);
+
+            this.model.setWkt("POLYGON", polygon);
             Radio.trigger("Map", "zoomToExtent", this.model.getExtent());
         }
     },
@@ -312,8 +321,8 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
         const projectionFromParamUrl = this.model.get("projectionFromParamUrl");
         let startMarker = this.model.get("startMarker");
 
-        if (!_.isUndefined(startMarker)) {
-            if (!_.isUndefined(projectionFromParamUrl)) {
+        if (startMarker !== undefined) {
+            if (projectionFromParamUrl !== undefined) {
                 startMarker = transformToMapProjection(Radio.request("Map", "getMap"), projectionFromParamUrl, startMarker);
             }
             Radio.trigger("MapMarker", "showMarker", startMarker);

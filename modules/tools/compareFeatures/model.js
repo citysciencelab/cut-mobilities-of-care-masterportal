@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 
 const CompareFeaturesModel = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         // true if the tool is activated
         // isActivated: false,
         // all comparable features
@@ -83,7 +83,7 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {void}
      */
     removeFeatureFromList: function (featureToRemoved) {
-        const featureIndex = _.findIndex(this.get("featureList"), function (feature) {
+        const featureIndex = this.get("featureList").findIndex(feature => {
             return feature.getId() === featureToRemoved.getId();
         });
 
@@ -129,7 +129,7 @@ const CompareFeaturesModel = Tool.extend({
     checkForAttribute: function (gfiAttributes, attribute) {
         let isAttributeFound = false;
 
-        if (!_.isUndefined(gfiAttributes[attribute])) {
+        if (typeof gfiAttributes[attribute] !== "undefined") {
             isAttributeFound = true;
         }
 
@@ -142,7 +142,7 @@ const CompareFeaturesModel = Tool.extend({
      * @returns {object} object grouped by property
      */
     groupedFeaturesBy: function (featureList, property) {
-        return _.groupBy(featureList, function (feature) {
+        return Radio.request("Util", "groupBy", featureList, function (feature) {
             // In reaction to modules/tools/gfi/model.js @ prepareVectorGfiParam(), only use 1st part of underscore delimited layerId
             if (property === "layerId") {
                 // Only use the first digit group delimited by underscore
@@ -233,8 +233,8 @@ const CompareFeaturesModel = Tool.extend({
                 feature.set(key, "nein");
             }
             if (key === "oberstufenprofil") {
-                if (_.isArray(feature.get(key))) {
-                    _.each(feature.get(key), function (value) {
+                if (Array.isArray(feature.get(key))) {
+                    feature.get(key).forEach(function (value) {
                         newVal = value;
 
                         // make part before first ";" bold
@@ -282,19 +282,19 @@ const CompareFeaturesModel = Tool.extend({
     prepareTableBody: function (features, rowsToShow) {
         const tableBody = [];
 
-        _.each(features, function (rowFeature, rowIndex) {
+        features.forEach(function (rowFeature, rowIndex) {
             const row = [];
 
             if (rowIndex < rowsToShow) {
-                _.each(rowFeature, function (val) {
-                    if (_.isUndefined(val)) {
+                Object.keys(rowFeature).forEach(function (key) {
+                    if (typeof rowFeature[key] === "undefined") {
                         row.push("");
                     }
-                    else if (_.isArray(val)) {
-                        row.push(String(val).replace(/,/g, ",\n"));
+                    else if (Array.isArray(rowFeature[key])) {
+                        row.push(String(rowFeature[key]).replace(/,/g, ",\n"));
                     }
                     else {
-                        row.push(String(val));
+                        row.push(String(rowFeature[key]));
                     }
                 });
                 tableBody.push(row);
@@ -308,7 +308,7 @@ const CompareFeaturesModel = Tool.extend({
             dataRowsWidth = 100 - firstRowWidth,
             dataRowWidth = String(dataRowsWidth / numDataRows) + "%";
 
-        _.each(firstRow, function (row, index) {
+        firstRow.forEach(function (row, index) {
             if (index > 0) {
                 rowWidth.push(dataRowWidth);
             }
