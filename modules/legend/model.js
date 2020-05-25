@@ -155,7 +155,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             legendParams = this.get("legendParams");
 
         this.get("legendParams").forEach(function (legendParam, i) {
-            _.find(paramsStyleWMSArray, function (paramsStyleWMS) {
+            paramsStyleWMSArray.forEach(paramsStyleWMS => {
                 let layername,
                     isVisibleInMap;
 

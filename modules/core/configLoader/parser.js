@@ -758,7 +758,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     /**
      * Returns the initial visible baselayer from config.json.
      * for array several id only the first one is passed
-     * @return {String} layer inital visible baselayer
+     * @return {String} layer initial visible baselayer
      */
     getInitVisibBaselayer: function () {
         const layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});

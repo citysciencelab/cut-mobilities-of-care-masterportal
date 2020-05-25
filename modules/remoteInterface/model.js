@@ -73,7 +73,7 @@ const RemoteInterface = Backbone.Model.extend({
      * @returns {void}
      */
     postMessage: function (content) {
-        if (!_.isUndefined(parent)) {
+        if (typeof parent !== "undefined") {
             parent.postMessage(content, this.get("postMessageUrl"));
         }
     },
