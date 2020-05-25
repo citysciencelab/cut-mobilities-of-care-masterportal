@@ -1478,6 +1478,16 @@
  * @returns {String} - masterportal version number
  * @example Radio.request("Util", "getMasterPortalVersionNumber");
  */
+ 
+/**
+ * @event Core#RadioRequestUtilSortBy
+ * @description This sort function sorts arrays, objects and strings. This is a replacement for underscores sortBy
+ * @param {(Array|Object|String)} [list=undefined] the array, object or string to sort
+ * @param {(String|Number|Function)} [iteratee=undefined] may be a function (value, key, list) returning a number to sort by or the name of the key to sort objects with
+ * @param {Object} [context=undefined] the context to be used for iteratee, if iteratee is a function
+ * @returns {Array}  a new list as array
+ * @example Radio.request("Util", "sortBy", [3, 2, 1], (num) => num, this);
+ */
 
 /**
  * @event Core#RadioRequestUtilUniqueId
