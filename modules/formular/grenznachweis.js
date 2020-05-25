@@ -6,7 +6,7 @@ import {Stroke, Style} from "ol/style.js";
 import {Draw} from "ol/interaction.js";
 
 const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         nutzungsbedingungakzeptiert: false,
         gebuehrenordnungakzeptiert: false,
         lage: "",
@@ -212,7 +212,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
         }
         // return die Errors
         this.set("errors", errors);
-        if (_.isEmpty(errors) === false) {
+        if (Object.keys(errors).length > 0) {
             return errors;
         }
         return null;
@@ -628,7 +628,7 @@ const GrenznachweisModel = Tool.extend(/** @lends GrenznachweisModel.prototype *
     buildJSONGeom: function () {
         const featurearray = [];
 
-        _.each(this.get("source").getFeatures(), function (item, index) {
+        this.get("source").getFeatures().forEach(function (item, index) {
             const geom = item.getGeometry(),
                 feature = {
                     type: geom.getType(),
