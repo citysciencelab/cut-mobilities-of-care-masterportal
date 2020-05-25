@@ -222,13 +222,15 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     * @returns {void}
     */
     zoomToBKGSearchResult: function (data) {
-        if (data.features.length !== 0 && !_.isNull(data.features[0].geometry) && data.features[0].geometry.type === "Point") {
+        if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
             Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, this.model.get("zoomLevel"));
             this.showMarker(data.features[0].geometry.coordinates);
         }
-        else if (data.features.length !== 0 && !_.isNull(data.features[0].properties) && !_.isNull(data.features[0].properties.bbox) &&
-            !_.isNull(data.features[0].properties.bbox.type) && data.features[0].properties.bbox.type === "Polygon") {
-            this.model.setWkt("POLYGON", _.flatten(data.features[0].properties.bbox.coordinates[0]));
+        else if (data.features.length !== 0 && data.features[0].properties !== null && data.features[0].properties.bbox !== null &&
+            data.features[0].properties.bbox.type !== null && data.features[0].properties.bbox.type === "Polygon") {
+            const polygon = data.features[0].properties.bbox.coordinates[0].reduce((a, b) => a.concat(b), []);
+
+            this.model.setWkt("POLYGON", polygon);
             Radio.trigger("Map", "zoomToExtent", this.model.getExtent());
         }
     },

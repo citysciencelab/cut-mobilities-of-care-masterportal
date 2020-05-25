@@ -34,7 +34,7 @@
                                             <span class="<%= key %> glyphicon glyphicon-remove pull-right" id="<%= featureIds[idx - 1] %>"></span>
                                         <% } %>
                                         <span>
-                                        <% if (_.isArray(obj[key])) {
+                                        <% if (Array.isArray(obj[key])) {
                                             obj[key].forEach(function (value) { %>
                                                 <%= value %>
                                                 <br>
