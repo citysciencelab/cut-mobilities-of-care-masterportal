@@ -46,7 +46,7 @@ const ListViewMain = Backbone.View.extend(/** @lends ListViewMain.prototype */{
      * @return {void}
      */
     parseViews: function (models) {
-        _.each(models, function (model) {
+        models.forEach(model => {
             switch (model.get("type")) {
                 case "tool": {
                     this.addToolView(model);
@@ -74,7 +74,7 @@ const ListViewMain = Backbone.View.extend(/** @lends ListViewMain.prototype */{
                     break;
                 }
             }
-        }, this);
+        });
     },
     /**
      * Add Catalog Folder View

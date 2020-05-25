@@ -74,7 +74,6 @@ import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import OrientationView from "../modules/controls/orientation/view";
-import AttributionsView from "../modules/controls/attributions/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -350,13 +349,6 @@ async function loadApp () {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
                     new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
-                case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id, true);
-                        new AttributionsView({el: element});
-                    }
                     break;
                 }
                 case "freeze": {

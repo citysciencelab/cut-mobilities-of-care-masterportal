@@ -33,9 +33,11 @@ const LightMenu = listViewMain.extend(/** @lends LightMenu.prototype */{
         let models = this.collection.where({type: "layer"});
 
         $("#tree").html("");
-        models = _.sortBy(models, function (model) {
-            return model.get("selectionIDX");
-        });
+
+        // models = _.sortBy(models, function (model) {
+        //     return model.get("selectionIDX");
+        // });
+        models = Radio.request("Util", "sortBy", models, (model) => model.get("selectionIDX"), this);
 
         this.addViews(models);
         $("ul#tree.light").css("max-height", $("#map").height() - 160);
@@ -46,11 +48,11 @@ const LightMenu = listViewMain.extend(/** @lends LightMenu.prototype */{
      * @return {void}
      */
     addViews: function (models) {
-        _.each(models, function (model) {
+        models.forEach(model => {
             if (!model.get("isNeverVisibleInTree")) {
                 new DesktopLayerViewLight({model: model});
             }
-        }, this);
+        });
     },
     /**
      * Start Modul
