@@ -129,9 +129,11 @@ function initLanguage (portalLanguageConfig) {
     }, portalLanguageConfig);
 
     // init i18next
+    if (Config.portalLanguage !== undefined && Config.portalLanguage.enabled) {
+        i18next.use(i18nextBrowserLanguageDetector);
+    }
     i18next
         .use(HttpApi)
-        .use(i18nextBrowserLanguageDetector)
         .on("languageChanged", function (lng) {
             Radio.trigger("i18next", "languageChanged", lng);
         }, this)

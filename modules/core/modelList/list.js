@@ -44,7 +44,7 @@ import TreeFilter from "../../treeFilter/model";
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import Formular from "../../formular/grenznachweis";
-import FeatureLister from "../../featureLister/model";
+import FeatureLister from "../../tools/featureLister/model";
 import AddWms from "../../tools/addWMS/model";
 import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
