@@ -1,7 +1,7 @@
 <script>
 import {mapGetters} from "vuex";
 
-/* TODO
+/* TODO Draft Status, currently not in use
  * Idea: control loader visibility via store module
  * Concept:
  *  - Store Module holds an array of keys (= strings)
@@ -9,6 +9,11 @@ import {mapGetters} from "vuex";
  *  - Anything may add its own key to the array of keys
  *  - When done, they must remove their own key
  * => As long as anything has its key registered, the loader is shown
+ */
+
+/*
+ * Snippet for config.js.md - loaderText could be defined like this.
+ * |loaderText|nein|String|""|Ein hier hinterlegter String wird auf dem initial angezeigten Ladebildschirm des Masterportals unter dem Logo angezeigt. Per default existiert ein solcher Anzeigetext nicht.|
  */
 
 /**
