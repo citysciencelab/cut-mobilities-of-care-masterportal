@@ -1148,10 +1148,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @return {Object[]} data
      */
     changeTimeZone: function (historicalData, utc) {
-        const data = _.isUndefined(historicalData) ? [] : historicalData;
+        const data = historicalData === undefined ? [] : historicalData;
 
-        _.each(data, function (loadingPointData) {
-            _.each(loadingPointData.Observations, function (obs) {
+        data.forEach(loadingPointData => {
+            loadingPointData.Observations.forEach(obs => {
                 const phenomenonTime = obs.phenomenonTime,
                     utcAlgebraicSign = utc.substring(0, 1),
                     utcString = _.isUndefined(utc) ? "+1" : utc;
