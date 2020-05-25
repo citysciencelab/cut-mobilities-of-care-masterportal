@@ -105,10 +105,12 @@ async function hoverFeature (driver, coordinates, spread = null) {
  * @returns {void}
  */
 async function reclickUntilNotStale (driver, selector) {
-    let error;
+    let error,
+        counter = 0;
 
     do {
         error = null;
+        counter++;
         try {
             await (await driver.findElement(selector)).click();
         }
@@ -116,7 +118,12 @@ async function reclickUntilNotStale (driver, selector) {
             error = e;
             await driver.wait(new Promise(r => setTimeout(r, 100)));
         }
-    } while (error !== null);
+    } while (error !== null && counter < 10);
+
+    if (error) {
+        console.error(`reclickUntilNotStale reclicked ${counter} times, but was not successful.`);
+        throw error;
+    }
 }
 
 module.exports = {
