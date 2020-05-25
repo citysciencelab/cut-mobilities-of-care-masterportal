@@ -74,7 +74,6 @@ import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import OrientationView from "../modules/controls/orientation/view";
-import FullScreenView from "../modules/controls/fullScreen/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -99,7 +98,7 @@ async function loadApp () {
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
-        /* eslint-disable no-undef */
+    /* eslint-disable no-undef */
     let app = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
@@ -350,13 +349,6 @@ async function loadApp () {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
                     new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
-                case "fullScreen": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowTR(control.id);
-                        new FullScreenView({el: element});
-                    }
                     break;
                 }
                 case "freeze": {

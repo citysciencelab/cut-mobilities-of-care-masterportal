@@ -169,7 +169,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.set("obliqueMap", new ObliqueMap({}));
         }
         Radio.trigger("ModelList", "addInitiallyNeededModels");
-        if (!_.isUndefined(Radio.request("ParametricURL", "getZoomToExtent"))) {
+
+        if (Radio.request("ParametricURL", "getZoomToExtent") !== undefined) {
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
 
@@ -215,12 +216,12 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         Radio.trigger("MapMarker", "showMarker", coords);
 
         // If the marker should be centered, center the map around it.
-        if (!_.isUndefined(Config.inputMap.setCenter) && Config.inputMap.setCenter) {
+        if (Config.inputMap.setCenter) {
             Radio.trigger("MapView", "setCenter", coords);
         }
 
         // Should the coordinates get transformed to another coordinate system for broadcast?
-        if (!_.isUndefined(Config.inputMap.targetProjection)) {
+        if (Config.inputMap.targetProjection !== undefined) {
             coords = transformFromMapProjection(this.get("map"), Config.inputMap.targetProjection, coords);
         }
 
@@ -236,7 +237,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     getLayerByName: function (layerName) {
         const layers = this.get("map").getLayers().getArray();
 
-        return _.find(layers, function (layer) {
+        return layers.find(layer => {
             return layer.get("name") === layerName;
         });
     },
@@ -501,9 +502,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 return layer.get("alwaysOnTop") === true;
             });
 
-        _.each(layersOnTop, function (layer) {
+        layersOnTop.forEach(layer => {
             this.setLayerToIndex(layer, newIndex);
-        }, this);
+        });
     },
 
     /**
@@ -542,17 +543,17 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             features = [],
             layerFeatures = [];
 
-        if (!_.isUndefined(layer) && olLayer instanceof LayerGroup) {
+        if (layer !== undefined && olLayer instanceof LayerGroup) {
             olLayer.getLayers().forEach(function (child) {
                 layerFeatures = child.getSource().getFeatures();
             });
         }
-        else if (!_.isUndefined(layer) && !_.isUndefined(olLayer.getSource())) {
+        else if (layer !== undefined && olLayer.getSource() !== undefined) {
             layerFeatures = olLayer.getSource().getFeatures();
         }
 
         features = layerFeatures.filter(function (feature) {
-            return _.contains(ids, feature.getId());
+            return ids.indexOf(feature.getId()) > -1;
         });
         if (features.length > 0) {
             extent = this.calculateExtent(features);
@@ -561,15 +562,15 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} features - todo
-     * @returns {*} todo
+     * Calculates the extent in which all given features are displayed.
+     * @param {ol/Feature[]} features an array of features to be displayed in the extent
+     * @returns {(Number[])}  the extent as an array [xMin, yMin, xMax, yMax]
      */
     calculateExtent: function (features) {
         // extent = [xMin, yMin, xMax, yMax]
         const extent = [9999999, 9999999, 0, 0];
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             const featureExtent = feature.getGeometry().getExtent();
 
             if (feature.getId() === "APP_STAATLICHE_SCHULEN_4099") {
@@ -623,10 +624,10 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * Checks if the layer with the name "Name" already exists and uses it, if not, creates a new layer.
-     * @param {*} name - todo
+     * Checks if the layer with the given name already exists and uses it, creates a new layer and returns it if not.
+     * @param {String} name the name of the layer to check
      * @fires Core#RadioTriggerMapAddLayerToIndex
-     * @returns {*} todo
+     * @returns {ol/layer/Layer}  the found layer or a new layer with the given name
      */
     createLayerIfNotExists: function (name) {
         const layers = this.getLayers();
@@ -636,7 +637,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             source,
             resultLayer = {};
 
-        _.each(layers.getArray(), function (ollayer) {
+        layers.getArray().forEach(ollayer => {
             if (ollayer.get("name") === name) {
                 found = true;
                 resultLayer = ollayer;
@@ -654,6 +655,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             resultLayer = layer;
             Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
         }
+
         return resultLayer;
     },
 
