@@ -43,7 +43,7 @@ const QuickHelpView = Backbone.View.extend(/** @lends QuickHelpView.prototype */
     initialize: function (attr) {
         const channel = Radio.channel("QuickHelp");
 
-        if (attr === true || typeof attr === "object") {
+        if (attr === true || attr instanceof Object) {
             this.model = new QuickHelpModel(attr);
 
             channel.on({
