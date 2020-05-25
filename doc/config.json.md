@@ -797,25 +797,24 @@ Konfigurations-Optionen der Legende.
 ***
 
 #### Portalconfig.menu.info
-
 [inherits]: # (Portalconfig.menu.folder)
 
-Informations-Ordner in dem Werkzeuge oder Staticlinks eingetragen werden können.
+Dies ist ein Menüreiter, in dem typischerweise Links *("staticlinks")* zu Informationen angelegt werden. Es können aber auch Werkzeuge *("tools")* hinterlegt werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|children|nein|**[children](#markdown-header-portalconfigmenuinfochildren)**||Konfiguration der Kindelemente des Informations Ordners.|false|
+|children|nein|**[children](#markdown-header-portalconfigmenuinfochildren)**||Konfiguration der Kindelemente des Menüreiters.|false|
 
 ***
 
 ##### Portalconfig.menu.info.children
-[type:staticlinks]: # (Portalconfig.menu.staticlinks)
+[type:staticlink]: # (Portalconfig.menu.staticlinks.staticlink)
 
-Liste der Werkzeuge oder Staticlinks die im Info-Ordner erscheinen sollen.
+Liste der Werkzeuge *("tools")* oder Links *("staticlinks")*, die im Menüreiter *"info"* erscheinen sollen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|children|nein|**[staticlinks](#markdown-header-portalconfigmenustaticlinks)**||Konfiguration der Kindelemente des Informations Ordners.|false|
+|staticlinks|nein|**[staticlink](#markdown-header-portalconfigmenustaticlinks)**[]||Konfigurationsobjekt zur Erstellung von Links im Menüreiter.|false|
 
 ***
 
