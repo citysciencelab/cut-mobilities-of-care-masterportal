@@ -121,7 +121,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../variables.less";
+    @import "~variables";
 
     .hidden {
         display: none;

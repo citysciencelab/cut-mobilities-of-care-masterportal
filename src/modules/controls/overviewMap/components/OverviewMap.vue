@@ -143,7 +143,7 @@ export default {
      * overriding with global rule that avoids leaks
      * by using local id #overviewmap-wrapper */
 
-    @import "../../../../variables.less";
+    @import "~variables";
     @box-shadow: 0 6px 12px @shadow;
 
     #overviewmap-wrapper {
