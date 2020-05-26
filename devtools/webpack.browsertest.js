@@ -2,6 +2,8 @@
 /* eslint-disable global-require */
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
+    Mocha = require("mocha"),
+    mocha = new Mocha({}),
     fse = require("fs-extra");
 
 let proxies;
@@ -19,7 +21,7 @@ module.exports = function (env, args) {
 
     return merge.smart({
         mode: "development",
-        devtool: "cheap-module-eval-source-map",
+        devtool: "eval-cheap-module-source-map",
         devServer: {
             port: 9001,
             publicPath: "/build/",
@@ -49,6 +51,21 @@ module.exports = function (env, args) {
                     }
                 }
             ]
-        }
+        },
+        plugins: [
+            {
+                apply: (compiler) => {
+                    compiler.hooks.afterEmit.tap("AfterEmitPlugin", () => {
+                        /* eslint-disable-next-line no-process-env */
+                        if (process.env.NODE_ENV === "e2eTest") {
+                            /* eslint-disable-next-line no-console */
+                            console.log("after emitting AfterEmitPlugin: starting e2e-tests");
+                            mocha.addFile("./test/end2end/TestRunner.js");
+                            mocha.run();
+                        }
+                    });
+                }
+            }
+        ]
     }, new Common(path2Addon));
 };
