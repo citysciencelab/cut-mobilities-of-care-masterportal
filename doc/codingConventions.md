@@ -36,7 +36,7 @@ A.3.5 Styles sind im .less Format verfasst.
 A.3.6 Es wird kein !important in Styles benutzt.  
 A.3.7 Module und Komponenten beeinflussen lediglich das Verhalten und die Styles ihrer eigenen (Kind-) Elemente.  
 A.3.8 Es werden keine Styles mit JavaScript verändert.  
-A.3.9 Vue: Alle Stylesheets sind "Soft-Scoped".  
+A.3.9 Alle Styles haben eine modulabhängige ID als Präfix oder sind im "scoped" Modus verfasst.  
 A.3.10 Es gibt keine Inline-Styles.  
 
 ---
