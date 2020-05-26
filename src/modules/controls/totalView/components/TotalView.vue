@@ -50,17 +50,5 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../../../variables.less";
-
-    // TODO implement ControlIcon-like component for DIPAS to use alternatively; this css probably removable then
-    .total-view-menuelement {
-        display: block;
-        text-align: center;
-        color: @menu_element_color;
-        padding-bottom: 5px;
-        font-size: 12px;
-        >.glyphicon {
-            font-size: 16px;
-        }
-    }
+    @import "~variables";
 </style>

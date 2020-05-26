@@ -57,12 +57,12 @@ export default {
 </template>
 
 <style lang="less">
-    @import "../../theme.less";
+    @import "~variables";
 
     .control-box {
         .glyphicon {
-            color: @color_1;
-            background-color: @background_color_1;
+            color: @primary_contrast;
+            background-color: @primary;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
             &:hover {
                 cursor: pointer;
@@ -77,7 +77,7 @@ export default {
 </style>
 
 <style lang="less" scoped>
-    @import "../../theme.less";
+    @import "~variables";
 
     .control-box {
         right: 0px;
