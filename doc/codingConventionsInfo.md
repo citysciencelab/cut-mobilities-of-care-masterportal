@@ -1,13 +1,19 @@
 # Weitere Informationen zu den Coding-Konventions
 
 Es folgen - falls vorhanden - Erläuterungen und Beispiele zu den jeweiligen Punkten aus [codingConventions.md](./codingConventions.md).
+
 ---
+
 #### A.1.6
 Derzeit ist Babel nicht in der Lage, TPL Dateien zu übersetzen und Internet Explorer unterstützt keine Pfeil-Funktionen.
+
 ---
+
 #### A.4.1
 Weitere Infos bezüglich Vue befinden sich [hier](./conventions/vue.md).
+
 ---
+
 #### A.4.3
 *Beispiel des JSDoc zweier Funktionen*  
 ```javascript
@@ -30,7 +36,9 @@ functionWithParamsAndReturn: function (param1) {
     return param1 + "foobar";
 }
 ```
+
 ---
+
 #### A.4.4
 *Beispiel einer initialize() Funktion*  
 ```javascript
@@ -76,13 +84,17 @@ initialize: function () {
  */
 template: _.template(AlertingTemplate),
 ```
+
 ---
+
 #### A.4.5
 *Kommentar bei Vererbung*  
 ```javascript
     const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
 ```
+
 ---
+
 #### A.4.6
 *Definition von Namespaces:*  
 *Beispiel des Namespaces Alerting in Root:*  
@@ -122,7 +134,9 @@ template: _.template(AlertingTemplate),
  * @example Radio.trigger("Alert", "alert", alert)
  */
 ```
+
 ---
+
 #### A.4.7
 *Definition von Events:*  
 *Beispiel: Radio.trigger("Channel", "Event");*  
@@ -191,7 +205,9 @@ template: _.template(AlertingTemplate),
  * @description FooBar.
  */
 ```
+
 ---
+
 #### A.5.1
 *Beispiele einer testbaren und einer nicht testbaren Funktion*  
 ```javascript
@@ -209,12 +225,16 @@ function nichtTestbareFunktion (param) {
 }
 
 ```
+
 ---
+
 #### A.5.2
 Weitere Informationen zu Unit-Tests [hier](./unittesting.md).
 
 Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mocha](https://mochajs.org/)** verwendet.  
+
 ---
+
 #### A.6.2
 Erweitere die Dokumentation in den .md-Dateien wie im Folgenden beschrieben:  
 a) Erweitere die **[config.js.md](./config.js.md)**, wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.  
@@ -261,7 +281,9 @@ h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[r
         "classes": "place,highway,building,shop,historic,leisure,city,county"
     }
 ```
+
 ---
+
 #### A.6.4
 Bei Veränderung/Refactoring/Löschen eines Parameters:  
 a) Markiere den Parameter in der Doku mit "Deprecated in [nächstes Major-Release]".  
@@ -291,10 +313,10 @@ attributes = this.updateTreeType(attributes, response);
  * @deprecated in 3.0.0. Remove whole function and call!
  */
 updateTreeType: function (attributes, response) {
-    if (_.has(response.Portalconfig, "treeType")) {
+    if (response.Portalconfig.treeType !== undefined) {
         attributes.treeType = response.Portalconfig.treeType;
     }
-    else if (_.has(response.Portalconfig, "Baumtyp")) {
+    else if (response.Portalconfig.Baumtyp !== undefined) {
         attributes.treeType = response.Portalconfig.Baumtyp;
         console.warn("Attribute 'Baumtyp' is deprecated. Please use 'treeType' instead.");
     }
@@ -304,13 +326,16 @@ updateTreeType: function (attributes, response) {
     return attributes;
 },
 ```
+
 ---
+
 #### A.7.1
 Es wird die Bibliothek [i18next](https://www.i18next.com/) verwendet.  
----
-#### A.8.3
-Weitere Informationen zur Versionierung [hier](./Versionierung.md).
 
+---
+
+#### A.8.3
+Weitere Informationen zur Versionierung [hier](./Versionierung.md).  
 Schreibe für jeden Pull request einen Eintrag im [CHANGELOG](../CHANGELOG.md) unter dem Punkt Unreleased. Vermeide Fachjargon. Der Changelog soll die NutzerIn und EntwicklerIn informieren.  
 
 
