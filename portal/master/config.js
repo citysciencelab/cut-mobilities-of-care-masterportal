@@ -39,7 +39,7 @@ const Config = {
     ],
     footer: {
         urls: [{
-            "bezeichnung": "translate#common:modules.footer.designation",
+            "bezeichnung": "common:modules.footer.designation",
             "url": "https://www.geoinfo.hamburg.de/",
             "alias": "Landesbetrieb Geoinformation und Vermessung",
             "alias_mobil": "LGV"

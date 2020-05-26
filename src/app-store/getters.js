@@ -4,6 +4,7 @@ export default {
     dpi: state => state.dpi,
     // configJS destructuring
     footerConfig: state => state?.configJs?.footer || null,
+    loaderText: state => state?.configJs?.loaderText || "",
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     portalConfig: state => state?.configJson?.Portalconfig || null,

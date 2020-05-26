@@ -16,7 +16,7 @@ import WMTSLayer from "./modelList/layer/wmts";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
-        initalLoading: 0,
+        initialLoading: 0,
         shadowTime: null
     },
 
@@ -27,7 +27,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @memberOf Core
      * @constructs
      * @param {Object} mapViewSettings Settings for the map.
-     * @property {Number} initalLoading=0 todo
+     * @property {Number} initialLoading=0 todo
      * @listens Core#RadioRequestMapGetLayers
      * @listens Core#RadioRequestMapGetWGS84MapSizeBBOX
      * @listens Core#RadioRequestMapCreateLayerIfNotExists
@@ -35,6 +35,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @listens Core#RadioRequestMapGetFeaturesAtPixel
      * @listens Core#RadioRequestMapRegisterListener
      * @listens Core#RadioRequestMapGetMap
+     * @listens Core#RadioRequestMapGetInitialLoading
      * @listens Core#RadioRequestMapGetMapMode
      * @listens Core#RadioTriggerMapAddLayer
      * @listens Core#RadioTriggerMapAddLayerToIndex
@@ -74,14 +75,13 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Core#RadioTriggerMapCameraChanged
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
-     * @fires Core#RadioTriggerUtilShowLoader
-     * @fires Core#RadioTriggerUtilHideLoader
+     * @fires Core#RadioTriggerUtilHideLoadingModule
      * @fires Core#RadioTriggerMapAddLayerToIndex
      */
     initialize: function (mapViewSettings) {
         const channel = Radio.channel("Map");
 
-        this.listenTo(this, "change:initalLoading", this.initalLoadingChanged);
+        this.listenTo(this, "change:initialLoading", this.initialLoadingChanged);
 
         channel.reply({
             "getLayers": this.getLayers,
@@ -92,6 +92,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "registerListener": this.registerListener,
             "getMap": function () {
                 return this.get("map");
+            },
+            "getInitialLoading": function () {
+                return this.get("initialLoading");
             },
             "getLayerByName": this.getLayerByName,
             "getOverlayById": this.getOverlayById,
@@ -166,7 +169,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             this.set("obliqueMap", new ObliqueMap({}));
         }
         Radio.trigger("ModelList", "addInitiallyNeededModels");
-        if (!_.isUndefined(Radio.request("ParametricURL", "getZoomToExtent"))) {
+
+        if (Radio.request("ParametricURL", "getZoomToExtent") !== undefined) {
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
 
@@ -212,12 +216,12 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         Radio.trigger("MapMarker", "showMarker", coords);
 
         // If the marker should be centered, center the map around it.
-        if (!_.isUndefined(Config.inputMap.setCenter) && Config.inputMap.setCenter) {
+        if (Config.inputMap.setCenter) {
             Radio.trigger("MapView", "setCenter", coords);
         }
 
         // Should the coordinates get transformed to another coordinate system for broadcast?
-        if (!_.isUndefined(Config.inputMap.targetProjection)) {
+        if (Config.inputMap.targetProjection !== undefined) {
             coords = transformFromMapProjection(this.get("map"), Config.inputMap.targetProjection, coords);
         }
 
@@ -233,7 +237,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     getLayerByName: function (layerName) {
         const layers = this.get("map").getLayers().getArray();
 
-        return _.find(layers, function (layer) {
+        return layers.find(layer => {
             return layer.get("name") === layerName;
         });
     },
@@ -498,9 +502,9 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
                 return layer.get("alwaysOnTop") === true;
             });
 
-        _.each(layersOnTop, function (layer) {
+        layersOnTop.forEach(layer => {
             this.setLayerToIndex(layer, newIndex);
-        }, this);
+        });
     },
 
     /**
@@ -539,17 +543,17 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             features = [],
             layerFeatures = [];
 
-        if (!_.isUndefined(layer) && olLayer instanceof LayerGroup) {
+        if (layer !== undefined && olLayer instanceof LayerGroup) {
             olLayer.getLayers().forEach(function (child) {
                 layerFeatures = child.getSource().getFeatures();
             });
         }
-        else if (!_.isUndefined(layer) && !_.isUndefined(olLayer.getSource())) {
+        else if (layer !== undefined && olLayer.getSource() !== undefined) {
             layerFeatures = olLayer.getSource().getFeatures();
         }
 
         features = layerFeatures.filter(function (feature) {
-            return _.contains(ids, feature.getId());
+            return ids.indexOf(feature.getId()) > -1;
         });
         if (features.length > 0) {
             extent = this.calculateExtent(features);
@@ -558,15 +562,15 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} features - todo
-     * @returns {*} todo
+     * Calculates the extent in which all given features are displayed.
+     * @param {ol/Feature[]} features an array of features to be displayed in the extent
+     * @returns {(Number[])}  the extent as an array [xMin, yMin, xMax, yMax]
      */
     calculateExtent: function (features) {
         // extent = [xMin, yMin, xMax, yMax]
         const extent = [9999999, 9999999, 0, 0];
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             const featureExtent = feature.getGeometry().getExtent();
 
             if (feature.getId() === "APP_STAATLICHE_SCHULEN_4099") {
@@ -593,7 +597,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     addLoadingLayer: function () {
-        this.set("initalLoading", this.get("initalLoading") + 1);
+        this.set("initialLoading", this.get("initialLoading") + 1);
     },
 
     /**
@@ -601,36 +605,29 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @returns {void}
      */
     removeLoadingLayer: function () {
-        this.set("initalLoading", this.get("initalLoading") - 1);
+        this.set("initialLoading", this.get("initialLoading") - 1);
     },
 
     /**
-    * Initial loading. "initalLoading" is incremented across layers if several tiles are loaded and incremented again if the tiles are loaded.
+    * Initial loading. "initialLoading" is incremented across layers if several tiles are loaded and incremented again if the tiles are loaded.
     * Listener is then stopped so that the loader is only displayed during initial loading - not when zoom/pan is selected. [...]
-    * @fires Core#RadioTriggerUtilShowLoader
-    * @fires Core#RadioTriggerUtilHideLoader
+    * @fires Core#RadioTriggerUtilHideLoadingModule
     * @returns {void}
     */
-    initalLoadingChanged: function () {
-        const num = this.get("initalLoading");
+    initialLoadingChanged: function () {
+        const num = this.get("initialLoading");
 
-        if (num > 0) {
-            Radio.trigger("Util", "showLoader");
-        }
-        else if (num === 0) {
+        if (num === 0) {
             Radio.trigger("Util", "hideLoadingModule");
-            this.stopListening(this, "change:initalLoading");
-            if (document.getElementById("loader") !== null && document.getElementById("loader").style.display !== "") {
-                Radio.trigger("Util", "hideLoader");
-            }
+            this.stopListening(this, "change:initialLoading");
         }
     },
 
     /**
-     * Checks if the layer with the name "Name" already exists and uses it, if not, creates a new layer.
-     * @param {*} name - todo
+     * Checks if the layer with the given name already exists and uses it, creates a new layer and returns it if not.
+     * @param {String} name the name of the layer to check
      * @fires Core#RadioTriggerMapAddLayerToIndex
-     * @returns {*} todo
+     * @returns {ol/layer/Layer}  the found layer or a new layer with the given name
      */
     createLayerIfNotExists: function (name) {
         const layers = this.getLayers();
@@ -640,7 +637,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             source,
             resultLayer = {};
 
-        _.each(layers.getArray(), function (ollayer) {
+        layers.getArray().forEach(ollayer => {
             if (ollayer.get("name") === name) {
                 found = true;
                 resultLayer = ollayer;
@@ -658,6 +655,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             resultLayer = layer;
             Radio.trigger("Map", "addLayerToIndex", [layer, layers.getArray().length]);
         }
+
         return resultLayer;
     },
 

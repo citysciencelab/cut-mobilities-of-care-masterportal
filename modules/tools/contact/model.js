@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 
 const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         maxLines: "5",
         from: [{
             "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -11,9 +11,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
             "email": "lgvgeoportal-hilfe@gv.hamburg.de",
             "name": "LGVGeoportalHilfe"
         }],
-        cc: [],
-        ccToUser: false,
-        bcc: [],
         text: "",
         url: "",
         ticketId: "",
@@ -55,13 +52,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @property {Object[]} [to=[{"email":"lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]] Default receiver of email. Email object existst of:
      * @property {String} to.email Email address
      * @property {String} to.name Email name to be shown
-     * @property {Object[]} [cc=[]] CC emails. Email object existst of:
-     * @property {String} cc.email Email address
-     * @property {String} cc.name Email name to be shown
-     * @property {Boolean} ccToUser=false Flag if user should get an email.
-     * @property {Object[]} [bcc=[]] BCC emails. Email object existst of:
-     * @property {String} bcc.email Email address
-     * @property {String} bcc.name Email name to be shown
      * @property {String} text="" Users text
      * @property {String} url="" Url of email service
      * @property {String} ticketId="" Generated Id of user ticket. Format "mm.dd.-[Id]"
@@ -134,26 +124,21 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {void}
      */
     setAttributes: function (configJson) {
-        const portalTitle = _.has(configJson, "portalTitle") && _.has(configJson.portalTitle.portalTitle, "title") ? configJson.portalTitle.title : document.title,
+        const portalTitle = configJson.hasOwnProperty("portalTitle") && configJson.portalTitle.hasOwnProperty("title") ? configJson.portalTitle.title : document.title,
             hrefString = "<br>==================<br>Referer: <a href='" + window.location.href + "'>" + portalTitle + "</a>",
             platformString = "<br>Platform: " + navigator.platform + "<br>",
             cookiesString = "Cookies enabled: " + navigator.cookieEnabled + "<br>",
             userAgentString = "UserAgent: " + navigator.userAgent,
             systemInfo = hrefString + platformString + cookiesString + userAgentString,
             subject = this.get("subject") !== "" ? this.get("subject") : "Supportanfrage zum Portal " + portalTitle,
-            resp = _.isUndefined(this) === false ? Radio.request("RestReader", "getServiceById", this.get("serviceID")) : undefined,
+            resp = Radio.request("RestReader", "getServiceById", this.get("serviceID")),
             closeAndDelete = this.get("deleteAfterSend"),
             withTicketNo = this.get("withTicketNo");
 
-        if (_.isUndefined(closeAndDelete) === false) {
-            this.setCloseAndDelete(closeAndDelete);
-        }
+        this.setCloseAndDelete(Boolean(closeAndDelete));
+        this.setWithTicketNo(Boolean(withTicketNo));
 
-        if (_.isUndefined(withTicketNo) === false) {
-            this.setWithTicketNo(withTicketNo);
-        }
-
-        if (_.isUndefined(resp) === false && resp.get("url")) {
+        if (resp !== undefined && resp.get("url")) {
             this.setUrl(resp.get("url"));
             this.setTicketId(this.generateTicketId());
             this.setSystemInfo(this.get("includeSystemInfo") === true ? systemInfo : "");
@@ -169,7 +154,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
         const date = new Date(),
             day = date.getUTCDate() < 10 ? "0" + date.getUTCDate().toString() : date.getUTCDate().toString(),
             month = date.getMonth() < 10 ? "0" + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString(),
-            ticketId = month + day + "-" + _.random(1000, 9999);
+            ticketId = month + day + "-" + (Math.floor(Math.random() * 9000) + 1000);
 
         return ticketId;
     },
@@ -210,11 +195,11 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @return {Boolean} Flag if validation failed or not
      */
     validate: function (attributes) {
-        const userNameValid = _.isUndefined(attributes.userName) === false ? attributes.userName.length >= 3 : false,
-            userEmailValid1 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.length >= 1 : false,
-            userEmailValid2 = _.isUndefined(attributes.userEmail) === false ? attributes.userEmail.match(/^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,4}$/igm) !== null : false,
-            userTelValid = _.isUndefined(attributes.userTel) === false ? attributes.userTel.match(/^[0-9]{1}[0-9\-+()]*[0-9]$/ig) !== null : false,
-            textValid = _.isUndefined(attributes.text) === false ? attributes.text.length >= 10 : false;
+        const userNameValid = attributes.userName !== undefined ? attributes.userName.length >= 3 : false,
+            userEmailValid1 = attributes.userEmail !== undefined ? attributes.userEmail.length >= 1 : false,
+            userEmailValid2 = attributes.userEmail !== undefined ? attributes.userEmail.match(/^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,4}$/igm) !== null : false,
+            userTelValid = attributes.userTel !== undefined ? attributes.userTel.match(/^[0-9]{1}[0-9\-+()]*[0-9]$/ig) !== null : false,
+            textValid = attributes.text !== undefined ? attributes.text.length >= 10 : false;
 
         if (userNameValid === false || userEmailValid1 === false || userEmailValid2 === false || userTelValid === false || textValid === false) {
             return {
@@ -237,31 +222,22 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
      * @returns {void}
      */
     send: function () {
-        const cc = _.map(this.get("cc"), _.clone), // deep copy instead of passing object by reference
-            closeAndDelete = this.get("closeAndDelete"),
+        const closeAndDelete = this.get("closeAndDelete"),
             withTicketNo = this.get("withTicketNo");
 
         let text = "",
             dataToSend = {};
 
-        if (this.get("ccToUser") === true) {
-            cc.push({
-                email: this.get("userEmail"),
-                name: this.get("userName")
-            });
-        }
-
         text = "Name: " + this.get("userName") + "<br>Email: " + this.get("userEmail") + "<br>Tel: " + this.get("userTel") + "<br>==================<br>" + this.get("text") + this.get("systemInfo");
         dataToSend = {
             from: this.get("from"),
             to: this.get("to"),
-            cc: cc,
-            bcc: this.get("bcc"),
             subject: this.get("ticketId") + ": " + this.get("subject"),
             text: text
         };
 
         Radio.trigger("Util", "showLoader");
+
         $.ajax({
             url: this.get("url"),
             data: dataToSend,
@@ -389,24 +365,6 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     },
 
     /**
-     * Setter for cc
-     * @param {Object[]} value cc
-     * @returns {void}
-     */
-    setCc: function (value) {
-        this.set("cc", value);
-    },
-
-    /**
-     * Setter for ccToUser
-     * @param {Boolean} value ccToUser
-     * @returns {void}
-     */
-    setCcToUser: function (value) {
-        this.set("ccToUser", value);
-    },
-
-    /**
      * Setter for from
      * @param {Object[]} value from
      * @returns {void}
@@ -425,15 +383,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     },
 
     /**
-     * Setter for bcc
-     * @param {Object[]} value bcc
-     * @returns {void}
-     */
-    setBcc: function (value) {
-        this.set("bcc", value);
-    },
-    /**
-     * Setter for closeAndDelte
+     * Setter for closeAndDelete
      * @param {Boolean} value true: close and delete contact after send, false: do not close after send
      * @returns {void}
      */
