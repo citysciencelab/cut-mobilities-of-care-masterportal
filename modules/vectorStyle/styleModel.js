@@ -490,7 +490,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         for (let i = 0; i < pathArray.length; i++) {
             const element = pathArray[i];
 
-            if (!featureProperty.hasOwnProperty(element)) {
+            if (!(featureProperty.hasOwnProperty(element) && featureProperty[element])) {
                 return null;
             }
             featureProperty = featureProperty[element];
