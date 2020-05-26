@@ -216,7 +216,7 @@
                  "glyphicon":"glyphicon-search",
                  "serviceId":"6",
                  "storedQueryID":"Flurstueck",
-                 "configJSON": "/portal/masterCustom/gemarkungen.json",
+                 "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
                  "parcelDenominator":false
               },
               "measure":{

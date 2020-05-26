@@ -6,6 +6,8 @@ const webdriver = require("selenium-webdriver"),
     {By, until} = webdriver;
 
 /**
+ * TODO before running this test again, the gemarkungen.json in test/end2end/resources
+ * has to be programmatically copied over and activated to a testable portal configuration.
  * Tests regarding parcel search feature.
  * @param {e2eTestParams} params parameter set
  * @returns {void}
