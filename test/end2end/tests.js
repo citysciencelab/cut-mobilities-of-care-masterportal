@@ -28,8 +28,6 @@ const {isBasic, is2D} = require("./settings");
  */
 function tests (builder, url, browsername, resolution, config, mode) {
     describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
-        this.timeout(360000); // timeout after an hour - changes also to be done in package.json
-
         if (isBasic(url) && !is2D(mode)) {
             // portal/basic does not offer any mode besides 2D; skip all suites for non-2D basic
             return;
