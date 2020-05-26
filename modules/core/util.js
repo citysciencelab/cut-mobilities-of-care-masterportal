@@ -1155,7 +1155,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 loadingPointData.Observations.forEach(obs => {
                     const phenomenonTime = obs.phenomenonTime,
                         utcAlgebraicSign = utc.substring(0, 1),
-                        utcString = _.isUndefined(utc) ? "+1" : utc;
+                        utcString = utc === undefined ? "+1" : utc;
                     let utcSub,
                         utcNumber;
 
