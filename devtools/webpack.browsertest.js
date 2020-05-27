@@ -3,7 +3,9 @@
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
     Mocha = require("mocha"),
-    mocha = new Mocha({}),
+    mocha = new Mocha({
+        exit: true
+    }),
     fse = require("fs-extra");
 
 let proxies;
@@ -61,7 +63,10 @@ module.exports = function (env, args) {
                             /* eslint-disable-next-line no-console */
                             console.log("after emitting AfterEmitPlugin: starting e2e-tests");
                             mocha.addFile("./test/end2end/TestRunner.js");
+                            // exit with non-zero status if there were test failures
+                            // mocha.run(failures => process.exitCode = failures ? 1 : 0);
                             mocha.run();
+                            // killwebpack="taskkill //pid \`netstat -aon | grep 9001 | grep -P '(?<=LISTENING).*' -o | grep -P '\\d*' -o\` //f"
                         }
                     });
                 }
