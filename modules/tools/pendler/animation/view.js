@@ -26,6 +26,16 @@ const AnimationView = Backbone.View.extend({
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.model.changeLang
         });
+        this.model.set({
+            "workplace": i18next.t("common:modules.tools.pendler.lines.workplace"),
+            "domicile": i18next.t("common:modules.tools.pendler.lines.domicile"),
+            "chooseDistrict": i18next.t("common:modules.tools.pendler.lines.chooseDistrict"),
+            "chooseBorough": i18next.t("common:modules.tools.pendler.lines.chooseBorough"),
+            "relationshipsToDisplay": i18next.t("common:modules.tools.pendler.lines.relationshipsToDisplay"),
+            "deleteGeometries": i18next.t("common:modules.tools.pendler.lines.deleteGeometries"),
+            "noCommutersKnown": i18next.t("common:modules.tools.pendler.lines.noCommutersKnown"),
+            "people": i18next.t("common:modules.tools.pendler.lines.people")
+        });
     },
 
     tagName: "form",

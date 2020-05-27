@@ -196,7 +196,10 @@
                     "workplace": "Arbeitsort",
                     "chooseDistrict": "Landkreis auswählen",
                     "chooseBorough": "Amt/Samtgemeinde auswählen",
-                    "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen"
+                    "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen",
+                    "deleteGeometries": "Geometrien löschen",
+                    "noCommutersKnown": "Keine pendelnden Personen bekannt!",
+                    "people": "Personen"
                 }
             },
             "compareFeatures": {

@@ -44,12 +44,12 @@
 <% if (typeof trefferAnzahl !== "undefined") { %>
 <div class="radio">
     <label class=" radio-inline">
-        <input type="radio" name="direction" value="<%=domicile%>"
+        <input type="radio" name="direction" value="wohnort"
             <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
         <%=domicile%>
     </label>
     <label class=" radio-inline">
-        <input type="radio" name="direction" value="<%=workplace%>"
+        <input type="radio" name="direction" value="arbeitsort"
             <% if (typeof direction !== "undefined" && direction === "arbeitsort") { print ("checked")} %>>
         <%=workplace%>
     </label>
@@ -60,7 +60,7 @@
 <table class="table">
     <% _.each(pendlerLegend, function(gemeinde){ %>
     <tr>
-        <td><%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> Personen</td>
+        <td><%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> <%=people%></td>
     </tr>
     <% }); %>
 </table>
@@ -72,11 +72,11 @@
 </div>
 <div class="form-group">
     <button class="btn btn-default btn-remove-features">
-        <span class="glyphicon glyphicon-trash"></span>&nbsp;Geometrien löschen
+        <span class="glyphicon glyphicon-trash"></span>&nbsp;<%=deleteGeometries%>
     </button>
 </div>
 <% }
     else if (emptyResult) { %>
-<p class="keinePendlerBewegungen">Keine pendelnden Personen bekannt!</p>
+<p class="keinePendlerBewegungen"><%=noCommutersKnown%></p>
 <% } %>
 <% } %>

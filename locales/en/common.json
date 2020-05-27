@@ -195,7 +195,10 @@
                     "workplace": "Workplace",
                     "chooseDistrict": "Choose District",
                     "chooseBorough": "Choose Borough",
-                    "relationshipsToDisplay": "Number of relationships to display"
+                    "relationshipsToDisplay": "Number of relationships to display",
+                    "deleteGeometries": "Delete Geometries",
+                    "noCommutersKnown": "No commuting people known!",
+                    "people": "People"
                 }
             },
             "compareFeatures": {
