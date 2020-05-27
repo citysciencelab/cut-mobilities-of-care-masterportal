@@ -29,6 +29,87 @@
             },
             "tree": {
                 "minChars": 3
+            },
+            "bkg":
+              {
+                "minChars": 3,
+                "suggestServiceId": "4",
+                "geosearchServiceId": "5",
+                "extent": [454591, 5809000, 700000, 6075769],
+                "suggestCount": 10,
+                "epsg": "EPSG:25832",
+                "filter": "filter=(typ:*)",
+                "score": 0.6,
+                "zoomToResult": true
+              },
+              "osm": {
+                "minChars": 3,
+                "serviceId": "10",
+                "limit": 60,
+                "states": "Hamburg Thüringen Hessen Nordrhein-Westfalen",
+                "classes": "place,highway,building,shop,historic,leisure,county"
+              },
+              "elasticSearch": {
+                "minChars":3,
+                "serviceId":"elastic_test",
+                "type": "GET",
+                "payload": {
+                  "id":"query",
+                  "params":{
+                      "query_string":""
+                  }
+                },
+                "searchStringAttribute": "query_string",
+                "responseEntryPath": "hits.hits",
+                "triggerEvent": {
+                  "channel": "Parser",
+                  "event": "addGdiLayer"
+                },
+                "hitMap": {
+                  "name": "_source.name",
+                  "id": "_source.id",
+                  "source": "_source"
+                },
+                "hitType": "Fachthema",
+                "hitGlyphicon": "glyphicon-list"
+            },
+            "specialWFS": {
+              "minChars": 3,
+              "timeout": 10000,
+              "definitions": [
+                {
+                  "url": "/geodienste.hamburg.de/MRH_WFS_Rotenburg",
+                  "typeName": "app:mrh_row_bplan",
+                  "propertyNames": ["app:name"],
+                  "name": "B-Plan"
+                },
+                {
+                  "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
+                  "typeName": "app:hh_hh_festgestellt",
+                  "propertyNames": ["app:geltendes_planrecht"],
+                  "geometryName": "app:geom",
+                  "name": "festgestellt"
+                },
+                {
+                  "url": "/geodienste.hamburg.de/HH_WFS_Bebauungsplaene",
+                  "typeName": "app:prosin_imverfahren",
+                  "propertyNames": ["app:plan"],
+                  "geometryName": "app:the_geom",
+                  "name": "im Verfahren"
+                },
+                {
+                  "url": "/geodienste.hamburg.de/HH_WFS_KitaEinrichtung",
+                  "typeName": "app:KitaEinrichtungen",
+                  "propertyNames": ["app:Name"],
+                  "name": "Kita"
+                },
+                {
+                  "url": "/geodienste.hamburg.de/HH_WFS_Stoerfallbetriebe",
+                  "typeName": "app:stoerfallbetrieb",
+                  "propertyNames": ["app:standort"],
+                  "name": "Störfallbetrieb"
+                }
+              ]
             }
         },
         "menu": {
@@ -39,6 +120,22 @@
                     "SelectedLayer"
                 ]
             },
+            "ansichten": {
+              "name" : "Ansichten",
+              "glyphicon": "glyphicon-list",
+              "children": {
+                "view1": {
+                  "name": "Ansicht1",
+                  "type" : "viewpoint",
+                  "glyphicon": "glyphicon-screenshot",
+                  "heading": -0.30858728378862876,
+                  "tilt": 0.9321791580603296,
+                  "altitude" :272.3469798217454,
+                  "center" : [564028.7954571751,5934555.967867207],
+                  "zoomLevel" :  7.456437968949651
+                }
+              }
+            },
             "tools": {
                 "name": "Werkzeuge",
                 "glyphicon": "glyphicon-wrench",
@@ -48,7 +145,7 @@
                         "glyphicon": "glyphicon-search",
                         "serviceId": "6",
                         "storedQueryID": "Flurstueck",
-                        "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+                        "configJSON": "/test/end2end/resources/configs/default/gemarkungen.json",
                         "parcelDenominator": false
                     },
                     "einwohnerabfrage": {

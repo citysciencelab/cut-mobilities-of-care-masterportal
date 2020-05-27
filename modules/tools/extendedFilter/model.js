@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 
 const ExtendedFilter = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         currentContent: {
             step: 1,
             name: "Bitte wählen Sie die Filteroption",
@@ -69,19 +69,19 @@ const ExtendedFilter = Tool.extend({
             attributes = [],
             attributes_with_values = [];
 
-        _.each(filterLayers, function (layer) {
-            _.each(layer.get("layer").getSource().getFeatures()[0].getKeys(), function (key) {
-                if (!_.contains(this.get("ignoredKeys"), key.toUpperCase())) {
+        filterLayers.forEach(layer => {
+            layer.get("layer").getSource().getFeatures()[0].getKeys().forEach(key => {
+                if (!this.get("ignoredKeys").includes(key.toUpperCase())) {
                     attributes.push(key);
                 }
-            }, this);
-            _.each(attributes, function (attr) {
-                _.each(layer.get("layer").getSource().getFeatures(), function (feature) {
+            });
+            attributes.forEach(attr => {
+                layer.get("layer").getSource().getFeatures().forEach(feature => {
                     values.push(feature.get(attr));
                 });
                 attributes_with_values.push({
                     attr: attr,
-                    values: _.uniq(values)
+                    values: [...new Set(values)]
                 });
                 values = [];
             });
@@ -222,7 +222,7 @@ const ExtendedFilter = Tool.extend({
             this.setCurrentFilterType("Neuen Filter erstellen");
             this.getLayers();
             wfsList = this.get("wfsList");
-            _.each(wfsList, function (layer) {
+            wfsList.forEach(layer => {
                 options.push(layer.name);
             });
             content = {step: newStep,
@@ -234,7 +234,7 @@ const ExtendedFilter = Tool.extend({
         else { // Filter erweitern
             this.setCurrentFilterType("Bestehenden Filter verfeinern");
             currentFilters = this.get("currentFilters");
-            _.each(currentFilters, function (filter) {
+            currentFilters.forEach(filter => {
                 options.push(filter.layername);
             });
             content = {step: newStep,
@@ -260,14 +260,14 @@ const ExtendedFilter = Tool.extend({
 
         if (val.split(" ")[0] !== "Filter") {
             this.setCurrentFilterType("Neuen Filter erstellen");
-            layer = _.findWhere(wfsList, {name: val});
+            layer = Radio.request("Util", "findWhereJs", wfsList, {name: val});
         }
         else {
             this.setCurrentFilterType("Bestehenden Filter verfeinern");
-            layer = _.findWhere(wfsList, {name: val.split(" ")[2]});
+            layer = Radio.request("Util", "findWhereJs", wfsList, {name: val.split(" ")[2]});
         }
 
-        _.each(layer.attributes, function (attribute) {
+        layer.attributes.forEach(attribute => {
             options.push(attribute.attr);
         });
 
@@ -294,10 +294,10 @@ const ExtendedFilter = Tool.extend({
 
         newStep++;
         this.getLayers();
-        layer = _.findWhere(wfsList, {name: layername});
-        attribute = _.findWhere(layer.attributes, {attr: val});
+        layer = Radio.request("Util", "findWhereJs", wfsList, {name: layername});
+        attribute = Radio.request("Util", "findWhereJs", layer.attributes, {attr: val});
 
-        _.each(attribute.values, function (value) {
+        attribute.values.forEach(value => {
             options.push(value);
         });
         content = {
@@ -360,7 +360,7 @@ const ExtendedFilter = Tool.extend({
         let layer,
             features;
 
-        _.each(layers, function (wfslayer) {
+        layers.forEach(wfslayer => {
             layer = wfslayer.layer;
             features = layer.getSource().getFeatures();
 
@@ -369,16 +369,16 @@ const ExtendedFilter = Tool.extend({
                 layer.setStyle(null);
             }
 
-            _.each(features, function (feature) {
+            features.forEach(feature => {
                 let featuredarstellen2 = true,
                     preVal2 = false;
 
-                _.each(currentFilters, function (filter) {
+                currentFilters.forEach(filter => {
                     let featuredarstellen = true,
                         preVal = true;
 
                     if (filter.layername.split(" ")[2] === wfslayer.name) {
-                        _.each(filter.attributes, function (attribute) {
+                        filter.attributes.forEach(attribute => {
                             featuredarstellen = this.checkFeatureForFilter(feature, attribute);
                             if (preVal === true && featuredarstellen === true) {
                                 featuredarstellen = true;
@@ -388,7 +388,7 @@ const ExtendedFilter = Tool.extend({
                                 featuredarstellen = false;
                                 preVal = false;
                             }
-                        }, this);
+                        });
 
                         if (preVal2 === true || featuredarstellen === true) {
                             featuredarstellen2 = true;
@@ -422,14 +422,14 @@ const ExtendedFilter = Tool.extend({
     checkFeatureForFilter: function (feature, attr) {
         const attributname = attr.attribute,
             attributvalue = attr.value,
-            featureattribute = _.pick(feature.getProperties(), attributname);
+            featureattribute = Radio.request("Util", "pick", feature.getProperties(), [attributname]);
 
         let featuredarstellen = true,
             featurevalue0,
             featurevalue;
 
-        if (featureattribute && !_.isNull(featureattribute)) {
-            featurevalue0 = _.values(featureattribute)[0];
+        if (featureattribute && featureattribute !== null) {
+            featurevalue0 = Object.values(featureattribute)[0];
             if (featurevalue0) {
                 featurevalue = featurevalue0.trim();
                 if (featurevalue !== attributvalue) {

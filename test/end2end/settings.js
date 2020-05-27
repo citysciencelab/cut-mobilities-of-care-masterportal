@@ -1,23 +1,28 @@
 const webdriver = require("selenium-webdriver"),
     capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: webdriver.Capabilities.chrome(),
+        chrome: {"browserName": "chrome", version: "80", acceptSslCerts: true, acceptInsecureCerts: true},
         ie: webdriver.Capabilities.ie()
     },
+    /** TODO
+     * when changing the following values, also change the functions beneath; the values there should eventually
+     * be replaced with references to these arrays, but during test writing, cases are oftentimes commented out,
+     * effectively changing indices lots of time; do this when all e2e tests have been written
+     */
     resolutions = [
         "1024x768"
-        // TODO commented out for dev branch until ready
         // "600x800"
     ],
     configs = new Map([
-        ["CT", "/test/end2end/resources/configs/custom"], // CT = Custom Tree (like portal/masterTree)
-        ["DT", "/test/end2end/resources/configs/default"], // DT = Default Tree (like portal/master)
-        ["LT", "/test/end2end/resources/configs/basic"] // LT = Light Tree (like portal/basic)
+        // ["basic", "/portal/basic"],
+        ["master", "/portal/master"]
+        // ["custom", "/portal/masterCustom"],
+        // ["default", "/portal/masterDefault"]
     ]),
     modes = [
-        "2D",
-        "3D",
-        "OB"
+        "2D"
+        // "3D",
+        // "OB"
     ];
 
 /**
@@ -26,7 +31,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {boolean} whether resolution is supposed to model mobile view
  */
 function isMobile (resolution) {
-    return resolution === resolutions[1];
+    return resolution === "600x800";
 }
 
 /**
@@ -35,7 +40,7 @@ function isMobile (resolution) {
  * @returns {boolean} whether mode is 2D
  */
 function is2D (mode) {
-    return mode === modes[0];
+    return mode === "2D";
 }
 
 /**
@@ -44,7 +49,7 @@ function is2D (mode) {
  * @returns {boolean} whether mode is 3D
  */
 function is3D (mode) {
-    return mode === modes[1];
+    return mode === "3D";
 }
 
 /**
@@ -53,34 +58,61 @@ function is3D (mode) {
  * @returns {boolean} whether mode is OB
  */
 function isOB (mode) {
-    return mode === modes[0];
+    return mode === "OB";
 }
 
 /**
- * Returns true for url indicating basic (LT) configuration.
+ * Returns true for url indicating basic configuration.
  * @param {String} url url in use
  * @returns {boolean} whether configuration is basic
  */
 function isBasic (url) {
-    return url.includes(configs.get("LT"));
+    return url.split("?")[0].endsWith(configs.get("basic"));
 }
 
 /**
- * Returns true for url indicating default (DT) configuration.
+ * Returns true for url indicating master configuration.
+ * @param {String} url url in use
+ * @returns {boolean} whether configuration is basic
+ */
+function isMaster (url) {
+    return url.split("?")[0].endsWith(configs.get("master"));
+}
+
+/**
+ * Returns true for url indicating default configuration.
  * @param {String} url url in use
  * @returns {boolean} whether configuration is default
  */
 function isDefault (url) {
-    return url.includes(configs.get("DT"));
+    return url.split("?")[0].endsWith(configs.get("default"));
 }
 
 /**
- * Returns true for url indicating custom (CT) configuration.
+ * Returns true for url indicating custom configuration.
  * @param {String} url url in use
  * @returns {boolean} whether configuration is custom
  */
 function isCustom (url) {
-    return url.includes(configs.get("CT"));
+    return url.split("?")[0].endsWith(configs.get("custom"));
+}
+
+/**
+ * Returns true for browsername indicating chrome is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether running browser is chrome
+ */
+function isChrome (browsername) {
+    return browsername.toLowerCase().includes("chrome");
+}
+
+/**
+ * Returns true for browsername indicating firefox is running.
+ * @param {String} browsername is browsername or contains browsername
+ * @returns {boolean} whether running browser is firefox
+ */
+function isFirefox (browsername) {
+    return browsername.toLowerCase().includes("firefox");
 }
 
 /**
@@ -92,6 +124,7 @@ function isCustom (url) {
 function getBsCapabilities (browserstackuser, browserstackkey) {
     const base = {
         "seleniumVersion": "4.0.0-alpha.5",
+        "acceptSslCerts": true,
         "project": "MasterPortal",
         "browserstack.local": true,
         "browserstack.user": browserstackuser,
@@ -104,10 +137,10 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
         {
             ...base,
             "browserName": "Chrome",
-            "browser_version": "74.0",
+            "browser_version": "80.0",
             "os": "Windows",
             "os_version": "10"
-        }/* , TODO commented out for dev branch until ready
+        }/*
         {
             ...base,
             "browserName": "Safari",
@@ -127,7 +160,10 @@ module.exports = {
     is3D,
     isOB,
     isMobile,
+    isChrome,
+    isFirefox,
     isBasic,
+    isMaster,
     isDefault,
     isCustom,
     getBsCapabilities

@@ -69,7 +69,7 @@ export default {
             class="complex-loader"
         >
             <img
-                class="portal-logo"
+                id="loader-portal-logo"
                 src="https://geoportal-hamburg.de/lgv-config/img/Logo_Masterportal.svg"
                 alt="Masterportal"
             >
@@ -130,7 +130,7 @@ export default {
 
             text-align: center;
 
-            .portal-logo {
+            #loader-portal-logo {
                 width: 35vw;
             }
 
