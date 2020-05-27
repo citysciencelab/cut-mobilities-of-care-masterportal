@@ -63,7 +63,6 @@ const ControlsView = Backbone.View.extend(/** @lends ControlsView.prototype */{
      * @returns {object} - JQueryObject of the generated element
      */
     addRowTR: function (id, showMobile) {
-        console.warn(`Control ${id} is rendered in backwards compatibility mode and should be migrated to vue.`);
         const fallback = $("#top-right-fallback");
 
         if (showMobile === true) {
@@ -85,7 +84,6 @@ const ControlsView = Backbone.View.extend(/** @lends ControlsView.prototype */{
      * @returns {object} - JQueryObject of the generated element
      */
     addRowBR: function (id, showMobile) {
-        console.warn(`Control ${id} is rendered in backwards compatibility mode and should be migrated to vue.`);
         const fallback = $("#bottom-right-fallback");
 
         if (showMobile === true) {
