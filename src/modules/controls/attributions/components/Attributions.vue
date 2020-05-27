@@ -111,6 +111,7 @@ export default {
 
             max-width: calc(100vw - 410px);
             width: max-content;
+            min-width: min-content;
 
             border: 1px solid @secondary_border;
             box-shadow: 0 6px 12px @shadow;

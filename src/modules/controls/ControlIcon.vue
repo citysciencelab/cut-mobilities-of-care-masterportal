@@ -1,31 +1,39 @@
 <script>
+/**
+ * ControlIcon component to be used by controls to display
+ * clickable control buttons.
+ */
 export default {
     name: "ControlIcon",
     props: {
+        /** Name of the glyphicon, with or without prefix 'glyphicon-' */
         iconName: {
             type: String,
             required: true
         },
+        /** Whether the icon is currently clickable or marked disabled */
         active: {
             type: Boolean,
             default: true
         },
+        /** Tooltip text */
         title: {
             type: String,
             required: true
         },
+        /** onClick function of the button element */
         onClick: {
             type: Function,
-            default: () => {
-                /* noop */
-            }
+            default: () => console.warn("No onClick function was defined on this ControlIcon.")
         },
+        /** if true, icon is rendered as smaller inline-block */
         inline: {
             type: Boolean,
             default: false
         }
     },
     computed: {
+        /** @returns {string} glyphicon name with added prefix 'glyphicon-' if it was missing */
         glyphiconClass () {
             return this.iconName.startsWith("glyphicon-") ? this.iconName : `glyphicon-${this.iconName}`;
         }

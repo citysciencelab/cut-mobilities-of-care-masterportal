@@ -126,13 +126,21 @@ export default {
     >
         <component
             :is="component"
-            class="overviewmap-button"
+            :class="['overviewmap-button', open ? 'space-above' : '']"
             :title="$t(`common:modules.controls.overviewMap.${open ? 'hide' : 'show'}Overview${localeSuffix}`)"
             icon-name="globe"
             :on-click="toggleOverviewMapFlyout"
         />
     </div>
 </template>
+
+<style lang="less" scoped>
+    /* .ol-overviewmap has fixed height in openlayers css;
+     * measured this value for 12px space between control contents */
+    .space-above {
+        margin-top: 136px;
+    }
+</style>
 
 <style lang="less">
     /* ⚠️ unscoped css, extend with care;
