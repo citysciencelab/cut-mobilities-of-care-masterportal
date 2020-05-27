@@ -10,4 +10,4 @@ pipelines:
                 - npm install
                 - apt-get install unzip
                 - ./devtools/scripts/run_browserstack_local.bash
-                - npm run browsertestWithServer &
+                - npm run browsertestWithServer
