@@ -10,8 +10,8 @@ const merge = require("webpack-merge"),
         reporter: "list"
     }),
     fse = require("fs-extra"),
-    execute = require("child-process-promise").exec,
-    {fork: forkProcess} = require("child_process");
+    execute = require("child-process-promise").exe;
+    // {fork: forkProcess} = require("child_process");
 
 let proxies;
 
@@ -86,13 +86,15 @@ module.exports = function (env, args) {
                                     // todo retry if timeout error (ETIMEDOUT)?
                                 })
                                 .on("end", function () {
-                                    const devServerProcess = forkProcess("node_modules/webpack-dev-server/bin/webpack-dev-server.js", []);
+                                    // const devServerProcess = forkProcess("node_modules/webpack-dev-server/bin/webpack-dev-server.js", []);
 
                                     console.log("All done");
-                                    setTimeout(_ => {
-                                        devServerProcess.kill();
-                                        console.log("Trying to kill webpack-dev-server...");
-                                    }, 5000);
+                                    // setTimeout(() => {
+                                    //     devServerProcess.kill('SIGTERM', {
+                                    //         forceKillAfterTimeout: 2000
+                                    //     });
+                                    // }, 1000);
+                                    execute("bash -c \"trap 'exec bash' SIGINT; node_modules/.bin/webpack-dev-server;\"");
                                 });
                         }
                     });
