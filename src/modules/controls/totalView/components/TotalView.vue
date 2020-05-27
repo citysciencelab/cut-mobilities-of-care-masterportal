@@ -1,6 +1,7 @@
 <script>
 import {mapGetters, mapActions} from "vuex";
 import ControlIcon from "../../ControlIcon.vue";
+import TableStyleControl from "../../TableStyleControl.vue";
 
 /**
  * TotalView adds a control that lets the user reset the
@@ -8,9 +9,6 @@ import ControlIcon from "../../ControlIcon.vue";
  */
 export default {
     name: "TotalView",
-    components: {
-        ControlIcon
-    },
     props: {
         /** glyphicon name for the control icon */
         glyphicon: {
@@ -24,7 +22,13 @@ export default {
         }
     },
     computed: {
-        ...mapGetters("Map", ["hasMoved"])
+        ...mapGetters("Map", ["hasMoved"]),
+        component () {
+            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+        },
+        glyphiconToUse () {
+            return Radio.request("Util", "getUiStyle") === "TABLE" ? this.tableGlyphicon : this.glyphicon;
+        }
     },
     methods: {
         ...mapActions("Map", ["resetView"])
@@ -34,18 +38,15 @@ export default {
 
 <template>
     <div class="back-forward-buttons">
-        <ControlIcon
+        <component
+            :is="component"
             id="start-totalview"
             class="total-view-button"
             :title="$t('common:modules.controls.totalView.titleButton')"
             :active="hasMoved"
-            :icon-name="glyphicon"
+            :icon-name="glyphiconToUse"
             :on-click="resetView"
         />
-        <!-- TODO style === TABLE
-            $t common:modules.controls.totalView.titleMenu
-            <div class='total-view-menuelement' id='start-totalview'><span class='glyphicon icon-home'></span></br>" + title + "</div>
-        -->
     </div>
 </template>
 
