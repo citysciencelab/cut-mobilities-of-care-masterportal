@@ -86,7 +86,7 @@ module.exports = function (env, args) {
                                     // todo retry if timeout error (ETIMEDOUT)?
                                 })
                                 .on("end", function () {
-                                    const devServerProcess = forkProcess(".\\node_modules\\webpack-dev-server\\bin\\webpack-dev-server.js", []);
+                                    const devServerProcess = forkProcess("node_modules/webpack-dev-server/bin/webpack-dev-server.js", []);
 
                                     console.log("All done");
                                     setTimeout(_ => {
