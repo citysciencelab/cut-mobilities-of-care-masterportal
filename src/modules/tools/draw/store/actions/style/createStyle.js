@@ -22,27 +22,20 @@ import {createTextStyle} from "./createTextStyle";
  * @returns {module:ol/style/Style} style of the draw interaction
  */
 export function createStyle ({color, colorContour, font, fontSize, drawType, pointSize, strokeWidth, symbol, text, zIndex}) {
-    const glyphBool = symbol.type !== "simple_point", // Normal point or icon
-        stroke = new Stroke({
-            color: colorContour,
-            width: strokeWidth
-        }),
-        fill = new Fill({
-            color: color
-        });
+    const glyphBool = symbol.type !== "simple_point"; // Normal point or icon
     let style = new Style();
 
     if (drawType.id === "drawCircle" || drawType.id === "drawDoubleCircle") {
-        style = createCircleStyle(fill, stroke, zIndex);
+        style = createCircleStyle(color, colorContour, strokeWidth, zIndex);
     }
     else if (drawType.id === "drawPoint" && glyphBool) {
         style = createIconStyle(color, pointSize, symbol, zIndex);
     }
     else if (drawType.id === "writeText") {
-        style = createTextStyle(fill, font, fontSize, text, 9999);
+        style = createTextStyle(color, font, fontSize, text, 9999);
     }
     else {
-        style = createDrawStyle(fill, colorContour, drawType.geometry, pointSize, stroke, zIndex);
+        style = createDrawStyle(color, colorContour, drawType.geometry, pointSize, strokeWidth, zIndex);
     }
 
     return style.clone();

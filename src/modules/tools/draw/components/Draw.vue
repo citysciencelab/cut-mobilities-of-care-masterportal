@@ -510,8 +510,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../../../variables.less";
-    // @import "~variables";
+    @import "~variables";
     .no-cursor {
         cursor: none;
     }

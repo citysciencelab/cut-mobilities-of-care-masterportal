@@ -23,7 +23,6 @@ export default {
         <!-- layout at its heart is two elements - navigation bar and map with elements on it -->
         <MainNav />
         <MapRegion class="map-region" />
-        <!-- TODO: Put the cursor here as a new component -> CursorAttachment -->
         <MapModuleDebug v-if="isDevMode" />
         <!-- keep loader last so it's above it all -->
         <!--

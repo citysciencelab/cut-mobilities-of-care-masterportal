@@ -1,22 +1,33 @@
-import {Circle, Style} from "ol/style.js";
+import {Circle, Fill, Stroke, Style} from "ol/style.js";
 
 /**
  * Creates and returns a feature style for circles and double circles.
  *
- * @param {module:ol/style/Fill} fill fill color.
- * @param {module:ol/style/Stroke} stroke stroke with set color and width.
+ * @param {Array} color The color of the drawn feature represented as an array.
+ * @param {Array} colorContour The color of the contours of the drawn feature represented as an array.
+ * @param {Number} strokeWidth Stroke width.
  * @param {Number} zIndex Determines in which order features are rendered on the view.
  * @returns {module:ol/style/Style} style for circle features.
  */
-export function createCircleStyle (fill, stroke, zIndex) {
+export function createCircleStyle (color, colorContour, strokeWidth, zIndex) {
     return new Style({
         image: new Circle({
             radius: 6,
-            stroke: stroke,
-            fill: fill
+            stroke: new Stroke({
+                color: colorContour,
+                width: strokeWidth
+            }),
+            fill: new Fill({
+                color: color
+            })
         }),
-        stroke: stroke,
-        fill: fill,
+        stroke: new Stroke({
+            color: colorContour,
+            width: strokeWidth
+        }),
+        fill: new Fill({
+            color: color
+        }),
         zIndex: zIndex
     });
 }
