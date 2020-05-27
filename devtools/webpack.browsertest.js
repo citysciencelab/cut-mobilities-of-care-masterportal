@@ -1,6 +1,7 @@
 /* eslint-disable no-sync */
 /* eslint-disable global-require */
 /* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
     Mocha = require("mocha"),
@@ -9,7 +10,8 @@ const merge = require("webpack-merge"),
         reporter: "list"
     }),
     fse = require("fs-extra"),
-    execute = require("child-process-promise").exec;
+    execute = require("child-process-promise").exec,
+    {fork: forkProcess} = require("child_process");
 
 let proxies;
 
@@ -84,8 +86,13 @@ module.exports = function (env, args) {
                                     // todo retry if timeout error (ETIMEDOUT)?
                                 })
                                 .on("end", function () {
+                                    const devServerProcess = forkProcess(".\\node_modules\\webpack-dev-server\\bin\\webpack-dev-server.js", []);
+
                                     console.log("All done");
-                                    execute("killall node");
+                                    setTimeout(_ => {
+                                        devServerProcess.kill();
+                                        console.log("Trying to kill webpack-dev-server...");
+                                    }, 5000);
                                 });
                         }
                     });
