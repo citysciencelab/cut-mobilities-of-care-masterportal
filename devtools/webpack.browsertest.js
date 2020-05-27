@@ -8,7 +8,8 @@ const merge = require("webpack-merge"),
         exit: true,
         reporter: "list"
     }),
-    fse = require("fs-extra");
+    fse = require("fs-extra"),
+    execute = require("child-process-promise").exec;
 
 let proxies;
 
@@ -75,16 +76,16 @@ module.exports = function (env, args) {
                                     console.log("Test done: " + test.title);
                                 })
                                 .on("pass", function (test) {
-                                    console.log("Test passed");
-                                    console.log(test);
+                                    console.log("Test passed: " + test.title);
                                 })
                                 .on("fail", function (test, err) {
-                                    console.log("Test fail");
-                                    console.log(test);
+                                    console.log("Test fail:" + test.title);
                                     console.log(err);
+                                    // todo retry if timeout error (ETIMEDOUT)?
                                 })
                                 .on("end", function () {
                                     console.log("All done");
+                                    execute("kill $(lsof -i :9001 | grep node | awk '{print $2}')");
                                 });
                         }
                     });
