@@ -24,6 +24,10 @@ const LinesView = Backbone.View.extend({
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.model.changeLang
         });
+        this.model.set({
+            "workplace": i18next.t("common:modules.tools.pendler.lines.workplace"),
+            "domicile": i18next.t("common:modules.tools.pendler.lines.domicile")
+        });
     },
 
     tagName: "form",

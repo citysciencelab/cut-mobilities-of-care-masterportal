@@ -21,7 +21,10 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             style: null,
             name: "pendlerLabelLayer"
         }),
-        glyphicon: "glyphicon-play-circle"
+        glyphicon: "glyphicon-play-circle",
+        // translations
+        workplace: "",
+        domicile: ""
     }),
     /**
      * @class Lines
@@ -193,6 +196,8 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
     changeLang: function (lng) {
         if (this.model.get("isActive") === true) {
             this.model.set({
+                "workplace": i18next.t("common:modules.tools.pendler.lines.workplace"),
+                "domicile": i18next.t("common:modules.tools.pendler.lines.domicile"),
                 "currentLng": lng
             });
         }
