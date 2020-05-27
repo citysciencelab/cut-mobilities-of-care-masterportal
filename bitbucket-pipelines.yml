@@ -11,3 +11,5 @@ pipelines:
                 - apt-get install unzip
                 - ./devtools/scripts/run_browserstack_local.bash
                 - npm run browsertestWithServer
+            after-script:
+                - ./devtools/scripts/kill_dev_server.sh
