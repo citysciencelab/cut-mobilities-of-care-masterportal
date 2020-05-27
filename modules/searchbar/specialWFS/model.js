@@ -49,7 +49,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         });
 
         // initiale Suche
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
             this.search(Radio.request("ParametricURL", "getInitString"));
         }
     },
@@ -240,30 +240,46 @@ const SpecialWFSModel = Backbone.Model.extend({
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
             elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]);
-
         let identifier,
-            geom,
-            coordinateArray;
+            geom;
 
-        _.each(elements, function (element) {
+        for (const element of elements) {
             const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
-                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]);
+                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
+                polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember"),
+                lengthIndex = polygonMembers.length;
+            let coordinateArray = [],
+                geomType;
 
             if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
                 identifier = elementPropertyNames[0].textContent;
-                geom = elementGeometryNames[0].firstElementChild;
 
-                // searching for first simple geometry avoiding multipolygons
-                while (geom.childElementCount > 0) {
-                    geom = geom.firstElementChild;
+                if (polygonMembers.length > 1) {
+
+                    for (let i = 0; i < lengthIndex; i++) {
+                        const coords = polygonMembers[i].getElementsByTagNameNS("*", "posList").item(0).textContent;
+
+                        coordinateArray.push(Object.values(coords.replace(/\s\s+/g, " ").split(" ")));
+                    }
+                    geomType = "MULTIPOLYGON";
                 }
+                else {
+                    geom = elementGeometryNames[0].firstElementChild;
 
-                coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
+                    // searching for first simple geometry avoiding multipolygons
+                    while (geom.childElementCount > 0) {
+                        geom = geom.firstElementChild;
+                    }
+
+                    coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
+                    geomType = "POLYGON";
+                }
 
                 // "Hitlist-Objekte"
                 Radio.trigger("Searchbar", "pushHits", "hitList", {
                     id: _.uniqueId(type.toString()),
                     name: identifier.trim(),
+                    geometryType: geomType,
                     type: type,
                     coordinate: coordinateArray,
                     glyphicon: glyphicon
@@ -272,7 +288,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             else {
                 console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
             }
-        }, this);
+        }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
     },
 
@@ -284,7 +300,7 @@ const SpecialWFSModel = Backbone.Model.extend({
     removeNameSpaceFromArray: function (propertyNames) {
         const propertynamesWithoutNamespace = [];
 
-        _.each(propertyNames, function (propertyname) {
+        propertyNames.forEach(function (propertyname) {
             propertynamesWithoutNamespace.push(propertyname.split(":")[1]);
         });
 
@@ -309,24 +325,32 @@ const SpecialWFSModel = Backbone.Model.extend({
      */
     polishAjax: function (type) {
         const ajax = this.get("ajaxRequests"),
-            cleanedAjax = _.omit(ajax, type);
+            cleanedAjax = Radio.request("Util", "omit", ajax, type);
 
         this.set("ajaxRequests", cleanedAjax);
     },
 
-    // setter for minChars
+    /**
+     * Setter for minChars
+     * @param {number} value - Amount of minChars.
+     * @returns {void}
+     */
     setMinChars: function (value) {
         this.set("minChars", value);
     },
 
-    // setter for timeout
+    /**
+     * Setter for timeout
+     * @param {number} value - time.
+     * @returns {void}
+     */
     setTimeout: function (value) {
         this.set("timeout", value);
     },
 
-    /*
+    /**
     * setter for maxFeatures
-    * @param {integer} value maxFeatures
+    * @param {integer} value - maxFeatures
     * @returns {void}
     */
     setMaxFeatures: function (value) {

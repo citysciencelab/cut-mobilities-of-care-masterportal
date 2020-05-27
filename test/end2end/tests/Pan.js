@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
-    {expect} = require("chai"),
     {getCenter} = require("../library/scripts"),
-    {onMoveEnd} = require("../library/scriptsAsync"),
+    {losesCenter} = require("../library/utils"),
     {initDriver} = require("../library/driver"),
+    {isChrome} = require("../settings"),
     {By, Button} = webdriver;
 
 /**
@@ -12,9 +12,7 @@ const webdriver = require("selenium-webdriver"),
  */
 async function PanTests ({builder, url, resolution, browsername}) {
     // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-    const skipCanvasPan = browsername.toLowerCase().includes("chrome");
-
-    (skipCanvasPan ? describe.skip : describe)("Map Pan", function () {
+    (isChrome(browsername) ? describe.skip : describe)("Map Pan", function () {
         let driver;
 
         before(async function () {
@@ -26,19 +24,18 @@ async function PanTests ({builder, url, resolution, browsername}) {
         });
 
         it("should move when panned", async function () {
+            this.timeout(10000);
             const center = await driver.executeScript(getCenter),
                 viewport = await driver.findElement(By.css(".ol-viewport"));
 
-            await driver.actions({bridge: true})
-                .move({origin: viewport})
-                .press(Button.LEFT)
-                .move({origin: viewport, x: 10, y: 10})
-                .release(Button.LEFT)
-                .perform();
-
-            await driver.executeAsyncScript(onMoveEnd);
-
-            expect(center).not.to.eql(await driver.executeScript(getCenter));
+            do {
+                await driver.actions({bridge: true})
+                    .move({origin: viewport})
+                    .press(Button.LEFT)
+                    .move({origin: viewport, x: 10, y: 10})
+                    .release(Button.LEFT)
+                    .perform();
+            } while (!await losesCenter(driver, center));
         });
     });
 }

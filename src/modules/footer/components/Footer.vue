@@ -43,12 +43,12 @@ export default {
                 <span
                     :key="`footer-url-${index}`"
                 >
-                    {{ url.bezeichnung }}
+                    {{ $t(url.bezeichnung) }}
                     <a
                         :href="url.url"
                         target="_blank"
                     >
-                        {{ mobile ? url.alias_mobil : url.alias }}
+                        {{ $t(mobile ? url.alias_mobil : url.alias) }}
                     </a>
                     <span class="glyphicon glyphicon-option-vertical hidden-xs" />
                 </span>
@@ -67,7 +67,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../../variables.less";
+    @import "~variables";
 
     #footer {
         width: 100%;

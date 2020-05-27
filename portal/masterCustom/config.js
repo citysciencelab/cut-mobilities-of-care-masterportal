@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
-
 const Config = {
     clickCounter: {},
     footer: {
         visibility: true,
         urls: [
             {
-                "bezeichnung": "translate#common:modules.footer.designation",
+                "bezeichnung": "common:modules.footer.designation",
                 "url": "http://www.geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
@@ -69,8 +67,12 @@ const Config = {
             en: "englisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        loadPath: "/locales/{{lng}}/{{ns}}.json"
     }
 };
 
-/* eslint-enable no-unused-vars */
+// conditional export to make config readable by e2e tests
+if (typeof module !== "undefined") {
+    module.exports = Config;
+}

@@ -26,7 +26,7 @@ For advanced users and experts we recommend to read the short but sharp document
 
 Following i18next plugins are used:
 
-* [i18next-xhr-backend](https://github.com/i18next/i18next-xhr-backend) to use of language files rather then hard coded translations
+* [i18next-http-backend](https://github.com/i18next/i18next-http-backend) to use of language files rather then hard coded translations
 * [i18next-browser-languagedetector](https://github.com/i18next/i18next-browser-languageDetector) for detecting the language of the browser, use of the localStorage and reacting of the query url
 
 i18next broadcasts a change in language with this Radio Event: "i18next#RadioTriggerLanguageChanged".

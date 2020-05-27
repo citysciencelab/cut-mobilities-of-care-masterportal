@@ -1311,6 +1311,15 @@
 /** -------------------- UTIL -------------------- */
 
 /**
+ * @event Core#RadioRequestUtilChangeTimeZone
+ * @description Changes the timezone for the given historical data.
+ * @param {Object[]} historicalData data from feature.
+ * @param {Object[]} utc timezone.
+ * @returns {Object[]} data with changed timezone.
+ * @example Radio.request("Util", "changeTimeZone", historicalData, utc);
+ */
+
+/**
  * @event Core#RadioTriggerUtilIsViewMobileChanged
  * @description is triggered by Util if mobil is changed
  * @param {boolean} isViewMobile flag if current view is in mobile mode
@@ -1477,6 +1486,33 @@
  * @description returns the masterportal version number
  * @returns {String} - masterportal version number
  * @example Radio.request("Util", "getMasterPortalVersionNumber");
+ */
+ 
+/**
+ * @event Core#RadioRequestUtilSortBy
+ * @description This sort function sorts arrays, objects and strings. This is a replacement for underscores sortBy
+ * @param {(Array|Object|String)} [list=undefined] the array, object or string to sort
+ * @param {(String|Number|Function)} [iteratee=undefined] may be a function (value, key, list) returning a number to sort by or the name of the key to sort objects with
+ * @param {Object} [context=undefined] the context to be used for iteratee, if iteratee is a function
+ * @returns {Array}  a new list as array
+ * @example Radio.request("Util", "sortBy", [3, 2, 1], (num) => num, this);
+ */
+
+/**
+ * @event Core#RadioRequestUtilUniqueId
+ * @description Generate a globally-unique id for client-side models or DOM elements that need one.
+ * @param {String} [prefix=""] prefix for the id
+ * @returns {String}  a globally-unique id
+ * @example Radio.request("Util", "uniqueId", prefix);
+ */
+
+/**
+ * @event Core#RadioRequestUtilDifferenceJs
+ * @description Looks through each value in the array a, returning an array of all the values that are not present in the array b
+ * @param {array} a - elements to check
+ * @param {array} b - elements to check
+ * @returns {array} - returns diffrence between array a and b
+ * @example Radio.request("Util", "DifferenceJs", array-a, array-b);
  */
 
 /**

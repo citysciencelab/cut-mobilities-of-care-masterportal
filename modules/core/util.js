@@ -1,3 +1,5 @@
+import * as moment from "moment";
+
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
         config: "",
@@ -23,6 +25,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @property {String} proxyHost="" Hostname of a remote proxy (CORS must be activated there).
      * @property {String} loaderOverlayTimeoutReference=null todo
      * @property {String} loaderOverlayTimeout="20" Timeout for the loadergif.
+     * @listens Core#RadioRequestUtilChangeTimeZone
      * @listens Core#RadioRequestUtilIsViewMobile
      * @listens Core#RadioRequestUtilGetProxyURL
      * @listens Core#RadioRequestUtilIsApple
@@ -42,6 +45,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
+     * @listens Core#RadioRequestUtilDifferenceJs
+     * @listens Core#RadioRequestUtilSortBy
+     * @listens Core#RadioRequestUtilUniqueId
      * @listens Core#RadioTriggerUtilHideLoader
      * @listens Core#RadioTriggerUtilShowLoader
      * @listens Core#RadioTriggerUtilSetUiStyle
@@ -85,14 +91,19 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "renameValues": this.renameValues,
             "pickKeyValuePairs": this.pickKeyValuePairs,
             "groupBy": this.groupBy,
+            "sortBy": this.sortBy,
+            "uniqueId": this.uniqueId,
             "pick": this.pick,
             "omit": this.omit,
             "findWhereJs": this.findWhereJs,
+            "whereJs": this.whereJs,
             "isEqual": this.isEqual,
+            "differenceJs": this.differenceJs,
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
             "setUrlQueryParams": this.setUrlQueryParams,
-            "searchNestedObject": this.searchNestedObject
+            "searchNestedObject": this.searchNestedObject,
+            "changeTimeZone": this.changeTimeZone
         }, this);
 
         channel.on({
@@ -147,6 +158,100 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             return predecimals + "," + decimals;
         }
         return predecimals;
+    },
+
+    /**
+     * This sort function sorts arrays, objects and strings. This is a replacement for underscores sortBy
+     * @param {(Array|Object|String)} [list=undefined] the array, object or string to sort
+     * @param {(String|Number|Function)} [iteratee=undefined] may be a function (value, key, list) returning a number to sort by or the name of the key to sort objects with
+     * @param {Object} [context=undefined] the context to be used for iteratee, if iteratee is a function
+     * @returns {Array}  a new list as array
+     */
+    sortBy: function (list, iteratee, context) {
+        let sortArray = list,
+            mapToSort = [];
+
+        if (sortArray === null || typeof sortArray !== "object" && typeof sortArray !== "string") {
+            return [];
+        }
+
+        if (typeof sortArray === "string") {
+            sortArray = sortArray.split("");
+        }
+
+        if (typeof iteratee !== "function") {
+            if (!Array.isArray(sortArray)) {
+                sortArray = Object.values(sortArray);
+            }
+
+            // it is important to work with concat() on a copy of sortArray
+            return sortArray.concat().sort((a, b) => {
+                if (a === undefined) {
+                    return 1;
+                }
+                else if (b === undefined) {
+                    return -1;
+                }
+                else if (iteratee !== undefined) {
+                    if (typeof a !== "object" || !a.hasOwnProperty(iteratee)) {
+                        return 1;
+                    }
+                    else if (typeof b !== "object" || !b.hasOwnProperty(iteratee)) {
+                        return -1;
+                    }
+                    else if (a[iteratee] > b[iteratee]) {
+                        return 1;
+                    }
+                    else if (a[iteratee] < b[iteratee]) {
+                        return -1;
+                    }
+
+                    return 0;
+                }
+                else if (a > b) {
+                    return 1;
+                }
+                else if (a < b) {
+                    return -1;
+                }
+
+                return 0;
+            });
+        }
+
+        if (!Array.isArray(sortArray)) {
+            let key;
+
+            for (key in sortArray) {
+                mapToSort.push({
+                    idx: iteratee.call(context, sortArray[key], key, list),
+                    obj: sortArray[key]
+                });
+            }
+        }
+        else {
+            mapToSort = sortArray.map((value, key) => {
+                return {
+                    idx: iteratee.call(context, value, key, list),
+                    obj: value
+                };
+            }, context);
+        }
+
+        mapToSort.sort((a, b) => {
+            if (a.idx > b.idx) {
+                return 1;
+            }
+            else if (a.idx < b.idx) {
+                return -1;
+            }
+
+            return 0;
+        });
+
+        return mapToSort.map((value) => {
+            return value.obj;
+        });
     },
 
     /**
@@ -741,6 +846,36 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
+     * Generate a globally-unique id for client-side models or DOM elements that need one. If prefix is passed, the id will be appended to it.
+     * @param {String} [prefix=""] prefix for the id
+     * @returns {String}  a globally-unique id
+     */
+    uniqueId: function (prefix) {
+        const idCounter = String(this.getIdCounter());
+
+        this.incIdCounter();
+
+        return prefix ? prefix + idCounter : idCounter;
+    },
+
+    /**
+     * gets the current idCounter
+     * @returns {Integer}  the current idCounter
+     */
+    getIdCounter: function () {
+        return Util.idCounter;
+    },
+
+    /**
+     * increments the idCounter
+     * @post the static idCounter (Util.idCounter) is incremented by 1
+     * @returns {Void}  -
+     */
+    incIdCounter: function () {
+        Util.idCounter++;
+    },
+
+    /**
      * Setter for config
      * @param {*} value todo
      * @returns {void}
@@ -854,6 +989,36 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 key => item[key] === properties[key]
             )
         );
+    },
+
+    /**
+     *  Looks through each value in the list, returning an array of all the values that matches the key-value pairs listed in properties
+     * @param {Object[]} [list=[]] - the list.
+     * @param {Object} properties property/entry to search for.
+     * @returns {array} - returns an array of all the values that matches.
+     */
+    whereJs: function (list = [], properties = "") {
+        return list.filter(
+            item => Object.keys(properties).every(
+                key => item[key] === properties[key]
+            )
+        );
+    },
+
+    /**
+     * Looks through each value in the array a, returning an array of all the values that are not present in the array b
+     * @param {array} [a=[]] - elements to check
+     * @param {array} [b=[]] - elements to check
+     * @returns {array} - returns diffrence between array a and b
+     */
+    differenceJs: function (a = [], b = []) {
+        if (!Array.isArray(a) || !Array.isArray(b) || a.length === 0) {
+            return [];
+        }
+        if (b.length === 0) {
+            return a;
+        }
+        return a.filter(e => !b.includes(e));
     },
 
     /**
@@ -973,8 +1138,48 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             }
         }
         return result;
-    }
+    },
 
+    /*
+     * change the timzone for the historicalData
+     *
+     * @param  {Object[]} historicalData data from feature
+     * @param  {Object[]} utc timezone
+     * @return {Object[]} data
+     */
+    changeTimeZone: function (historicalData, utc) {
+        const data = historicalData === undefined ? [] : historicalData;
+
+        data.forEach(loadingPointData => {
+            if (loadingPointData.Observations !== undefined) {
+                loadingPointData.Observations.forEach(obs => {
+                    const phenomenonTime = obs.phenomenonTime,
+                        utcAlgebraicSign = utc.substring(0, 1),
+                        utcString = utc === undefined ? "+1" : utc;
+                    let utcSub,
+                        utcNumber;
+
+                    if (utcString.length === 2) {
+                        // check for winter- and summertime
+                        utcSub = parseInt(utcString.substring(1, 2), 10);
+                        utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                        utcNumber = "0" + utcSub + "00";
+                    }
+                    else if (utcString.length > 2) {
+                        utcSub = parseInt(utcString.substring(1, 3), 10);
+                        utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
+                        utcNumber = utc.substring(1, 3) + "00";
+                    }
+
+                    obs.phenomenonTime = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
+                });
+            }
+        });
+        return data;
+    }
+}, {
+    // globally-unique id for Util.uniqueId([prefix]) - this is a static backbone variable (Util.idCounter)
+    idCounter: 1
 });
 
 export default Util;

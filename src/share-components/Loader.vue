@@ -1,5 +1,7 @@
 <script>
-/* TODO
+import {mapGetters} from "vuex";
+
+/* TODO Draft Status, currently not in use
  * Idea: control loader visibility via store module
  * Concept:
  *  - Store Module holds an array of keys (= strings)
@@ -8,17 +10,45 @@
  *  - When done, they must remove their own key
  * => As long as anything has its key registered, the loader is shown
  */
+
+/*
+ * Snippet for config.js.md - loaderText could be defined like this.
+ * |loaderText|nein|String|""|Ein hier hinterlegter String wird auf dem initial angezeigten Ladebildschirm des Masterportals unter dem Logo angezeigt. Per default existiert ein solcher Anzeigetext nicht.|
+ */
+
+/**
+ * Loader Component.
+ * Not completely implemented, but partially migrated to vue.
+ * Previous methods to show/hide loading screen are still in use
+ * and work on the id #loader of this element.
+ * @listens Core#RadioTriggerUtilHideLoader
+ */
 export default {
     name: "Loader",
     data () {
         return {
-            imgUrl: "/img/ajax-loader.gif"
+            imgUrl: "/img/ajax-loader.gif",
+            /** simple mode has no logo - activated after first loading ends */
+            simple: false,
+            utilChannel: Radio.channel("Util")
         };
     },
     computed: {
-        simple () {
-            // TODO not yet controlled - should be in config.JSON or config.JS maybe?
-            return false;
+        ...mapGetters(["loaderText"])
+    },
+    created () {
+        this.utilChannel.on("hideLoader", this.turnSimple);
+    },
+    beforeDestroy () {
+        this.utilChannel.off("hideLoader", this.turnSimple);
+    },
+    methods: {
+        /**
+         * Turns simple mode on.
+         * @returns {void}
+         */
+        turnSimple () {
+            this.simple = true;
         }
     }
 };
@@ -39,12 +69,15 @@ export default {
             class="complex-loader"
         >
             <img
-                class="portal-logo"
+                id="loader-portal-logo"
                 src="https://geoportal-hamburg.de/lgv-config/img/Logo_Masterportal.svg"
                 alt="Masterportal"
             >
-            <div class="loader-text">
-                Masterportal
+            <div
+                v-if="loaderText"
+                class="loader-text"
+            >
+                {{ loaderText }}
             </div>
             <img
                 class="loader-icon"
@@ -55,11 +88,21 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../variables.less";
+    @import "~variables";
+
     #loader {
         position: absolute;
         height: 100%;
         width: 100%;
+
+        /* needed for IE11 */
+        top: 0;
+        left: 0;
+
+        /* NOTE highest possible value - loader is supposed to be on top;
+         * this can be removed after the _complete_ vue migration is done
+         * since only then loader will (probably?) be the last item on the stack */
+        z-index: 2147483647;
 
         background-color: @secondary;
         color: @secondary_contrast;
@@ -87,7 +130,7 @@ export default {
 
             text-align: center;
 
-            .portal-logo {
+            #loader-portal-logo {
                 width: 35vw;
             }
 

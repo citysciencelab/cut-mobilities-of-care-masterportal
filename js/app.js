@@ -60,7 +60,7 @@ import RoutingView from "../modules/tools/viomRouting/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
-import FeatureLister from "../modules/featureLister/view";
+import FeatureLister from "../modules/tools/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 /**
  * PrintView2
@@ -73,13 +73,7 @@ import PrintView2 from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
-import ZoomControlView from "../modules/controls/zoom/view";
 import OrientationView from "../modules/controls/orientation/view";
-import MousePositionView from "../modules/controls/mousePosition/view";
-import FullScreenView from "../modules/controls/fullScreen/view";
-import TotalView from "../modules/controls/totalView/view";
-import AttributionsView from "../modules/controls/attributions/view";
-import OverviewmapView from "../modules/controls/overviewMap/view";
 import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
@@ -87,10 +81,8 @@ import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
-// import BackForwardView from "../modules/controls/backForward/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
-import "url-polyfill";
 
 let sbconfig, controls, controlsView;
 
@@ -106,7 +98,7 @@ async function loadApp () {
         cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
-        /* eslint-disable no-undef */
+    /* eslint-disable no-undef */
     let app = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
@@ -353,95 +345,10 @@ async function loadApp () {
             let element;
 
             switch (control.id) {
-                case "zoom": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowTR(control.id);
-                        new ZoomControlView({el: element});
-                    }
-                    break;
-                }
                 case "orientation": {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
                     new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
-                case "mousePosition": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowBL(control.id);
-                        new MousePositionView({el: element});
-                    }
-                    break;
-                }
-                case "fullScreen": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowTR(control.id);
-                        new FullScreenView({el: element});
-                    }
-                    break;
-                }
-                /**
-                 * totalView
-                 * @deprecated in 3.0.0
-                 */
-                case "totalview": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'totalview' is deprecated. Please use 'totalView' instead");
-                        new TotalView(control.id);
-                    }
-                    break;
-                }
-                case "totalView": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        new TotalView(control.id);
-                    }
-                    break;
-                }
-                case "attributions": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id, true);
-                        new AttributionsView({el: element});
-                    }
-                    break;
-                }
-                /**
-                 * backforward
-                 * @deprecated in 3.0.0
-                 */
-                /* commented out to avoid conflicts with prototype
-                case "backforward": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'backforward' is deprecated. Please use 'backForward' instead");
-                        element = controlsView.addRowTR(control.id, false);
-                        new BackForwardView({el: element});
-                    }
-                    break;
-                }
-                case "backForward": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowTR(control.id, false);
-                        new BackForwardView({el: element});
-                    }
-                    break;
-                }
-                */
-                /**
-                 * overviewmap
-                 * @deprecated in 3.0.0
-                 */
-                case "overviewmap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead");
-                        element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView(element, control.id, control.attr);
-                    }
-                    break;
-                }
-                case "overviewMap": {
-                    if (control.attr === true || typeof control.attr === "object") {
-                        element = controlsView.addRowBR(control.id, false);
-                        new OverviewmapView(element, control.id, control.attr);
-                    }
                     break;
                 }
                 case "freeze": {
@@ -491,27 +398,22 @@ async function loadApp () {
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
-        /*
-          TODO initCounter and related code currently commented out since variable "i18nextLanguages"
-               was not defined. Found this section in its currently broken state - not sure if this
-               is to be fixed or to be removed in favour of a different approach?
-        */
-        // let initCounter = 0;
+        const i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
+        let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
-                // initCounter++;
+                initCounter++;
             }
         });
 
-        /*
         initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
 
                 Object.keys(i18nextLanguages).forEach((lng) => {
-                    import(/* webpackChunkName: "additionalLocales" * / `../addons/${addonKey}/locales/${lng}/additional.json`)
+                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales);
                             initCounter--;
@@ -531,11 +433,11 @@ async function loadApp () {
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
                 import(
-                    /* webpackChunkName: "[request]" * /
-                    /* webpackExclude: /.+unittests.+/ * /
+                    /* webpackChunkName: "[request]" */
+                    /* webpackExclude: /.+unittests.+/ */
                     "../addons/" + entryPoint + ".js"
                 ).then(module => {
-                    /* eslint-disable new-cap * /
+                    /* eslint-disable new-cap */
                     const addon = new module.default();
 
                     // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
@@ -557,7 +459,6 @@ async function loadApp () {
                 });
             }
         });
-        */
     }
 
     Radio.trigger("Util", "hideLoader");

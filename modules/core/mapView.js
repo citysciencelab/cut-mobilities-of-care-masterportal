@@ -7,7 +7,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     defaults: {
         background: "",
         units: "m",
-        DOTS_PER_INCH: store.getters.dpi || 96 // TODO remove default when VueX Map Module is merged in
+        DOTS_PER_INCH: store.getters.dpi
     },
 
     /**

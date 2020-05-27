@@ -209,11 +209,11 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @returns {void}
      */
     checkIfLayermodelExist: function (layerIds) {
-        _.each(layerIds, function (layer) {
+        layerIds.forEach(layer => {
             if (Radio.request("ModelList", "getModelsByAttributes", {id: layer.layerId}).length === 0) {
                 this.addLayerModel(layer.layerId);
             }
-        }, this);
+        });
     },
 
     /**
@@ -234,11 +234,11 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @returns {void}
      */
     toggleLayerVisibility: function (activeLayerId) {
-        _.each(this.get("layerIds"), function (layer) {
+        this.get("layerIds").forEach(layer => {
             const status = layer.layerId === activeLayerId;
 
             this.sendModification(layer.layerId, status);
-        }, this);
+        });
     },
 
     /**
@@ -263,7 +263,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      * @returns {integer} - Index im Array mit activeLayerId.
      */
     getActiveIndex: function () {
-        return _.findIndex(this.get("layerIds"), function (layer) {
+        return this.get("layerIds").findIndex(function (layer) {
             return layer.layerId === this.get("activeLayer").layerId;
         }, this);
     },
@@ -296,7 +296,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         const windowsInterval = this.get("windowsInterval"),
             timeInterval = this.get("timeInterval");
 
-        if (_.isNull(windowsInterval)) {
+        if (windowsInterval === null) {
             this.forwardLayer();
             this.setWindowsInterval(this.forwardLayer, timeInterval);
         }
@@ -309,7 +309,7 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
     stopInterval: function () {
         const windowsInterval = this.get("windowsInterval");
 
-        if (!_.isUndefined(windowsInterval)) {
+        if (typeof windowsInterval !== "undefined") {
             clearInterval(windowsInterval);
             this.set("windowsInterval", null);
         }

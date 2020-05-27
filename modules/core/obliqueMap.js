@@ -20,7 +20,10 @@ const ObliqueMap = Backbone.Model.extend({
             "getOLMap": function () {
                 return this.get("map");
             },
-            "getCurrentImage": this.getCurrentImage
+            "getCurrentImage": this.getCurrentImage,
+            "getCurrentDirection": function () {
+                return this.currentDirection;
+            }
         }, this);
 
         channel.on({

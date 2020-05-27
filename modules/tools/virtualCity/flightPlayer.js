@@ -24,7 +24,7 @@ const FlightPlayer = Backbone.Model.extend(/** @lends FlightPlayer.prototype */ 
      * @listens FlightPlayer#RadioRequestFlightPlayerPlay
      * @listens FlightPlayer#RadioRequestFlightPlayerGetValues
      */
-    defaults: _.extend({}, Backbone.Model.defaults, {
+    defaults: Object.assign({}, Backbone.Model.defaults, {
         /**
          * @type {Cesium.LinearSpline|Cesium.CatmullRomSpline}
          * @private
