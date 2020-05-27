@@ -1,7 +1,7 @@
 # Code-Konventionen
 
 ## Einleitung
-Als EntwicklerIn bist du natürlich stets motiviert, deinen Code nicht nur voll funktionstüchtig zu erstellen, sondern auch so nachhaltig wie möglich zu gestalten. Nachhaltigkeit umfasst eine Kombination aus Eigenschaften, welche auf den Prinzipien des "Clean Code" basieren und auch auf deinen Code zutreffen werden. Um möglichst objektiv entscheiden zu können, ob dein Code im ersten Anlauf die Hürde des Pull-Requests meistert, haben wir einen Linter sowie einige Konventionen definiert. Bei dem Linter handelt es sich um **[ESLint](https://eslint.org/)**. Die Konfigurationsdatei **[.eslintrc](../.eslintrc)** ist im Repository. Bei jedem Push werden automatisch Linter sowie Unittests ausgeführt. Beim Auftreten eines Fehlers wird ein Push verhindert. Die Konventionen sind in zwei Teile unterteilt. Ein Verstoß gegen eine Konvention aus Teil A führt zum Decline des Pull Requests. In Teil B sind Leitlinien formuliert, durch deren Einhaltung das Nachnutzen und Warten des Codes verbessert wird. Es wäre wünschenswert, wenn diese Leitlinien beachtet werden, sind aber nicht zwingend einzuhalten.
+Als EntwicklerIn bist du natürlich stets motiviert, deinen Code nicht nur voll funktionstüchtig zu erstellen, sondern auch so nachhaltig wie möglich zu gestalten. Nachhaltigkeit umfasst eine Kombination aus Eigenschaften, welche auf den Prinzipien des "Clean Code" basieren und auch auf deinen Code zutreffen werden. Um möglichst objektiv entscheiden zu können, ob dein Code im ersten Anlauf die Hürde des Pull-Requests meistert, haben wir einen Linter sowie einige Konventionen definiert. Bei dem Linter handelt es sich um **[ESLint](https://eslint.org/)**. Die Konfigurationsdatei **[.eslintrc](../.eslintrc)** ist im Repository. Bei jedem Push werden automatisch Linter sowie Unittests ausgeführt. Beim Auftreten eines Fehlers wird ein Push verhindert. Die Konventionen sind in zwei Teile unterteilt. Ein Verstoß gegen eine Konvention aus Teil A führt zum Decline des Pull Requests. In Teil B sind Leitlinien formuliert, durch deren Einhaltung das Nachnutzen und Warten des Codes verbessert wird. Es wäre wünschenswert, wenn diese Leitlinien beachtet werden, sie sind aber nicht zwingend einzuhalten.
 
 ## Konventionen
 
@@ -63,7 +63,7 @@ A.5.3 Jede Funktion hat mindestens einen Positiv-Test (Funktionsaufruf mit plaus
 A.6.1 Es gibt keine hartcodierten URL's und Pfade zu externen Quellen.  
 A.6.2 Konfigurierbare Parameter sind in den .md Dateien dokumentiert.  
 A.6.3 Alle bisherigen Konfigurationsparameter sind weiterhin verwendbar.  
-A.6.4 Parameter die umbenannt oder gelöscht werden sollen, sind als ```Depricated``` markiert.  
+A.6.4 Parameter die umbenannt oder gelöscht werden sollen, sind als ```Deprecated``` markiert.  
 
 ---
 
@@ -85,7 +85,7 @@ A.8.4 Einträge sind einer der folgenden Kategorien zugeordnet: Added, Changed, 
 
 ---
 
-### Teil B
+### Teil B (optional)
 Der Code ist so lesbar und verständlich wie möglich geschrieben. Das Ziel ist nicht, Zeilen zu sparen, sondern die Zeit der nachfolgenden EntwicklerInnen.
 #### B.1 Struktur
 B.1.1 Markup (Templates), Styles (CSS) und Logik (Controller) sind sauber voneinander getrennt.  
