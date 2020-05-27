@@ -50,7 +50,6 @@ function setActive ({state, commit, dispatch}, active) {
         dispatch("createSelectInteractionAndAddToMap", false);
         dispatch("createModifyInteractionAndAddToMap", false);
 
-        // TODO: Check if some of these functionalities need to be implemented in the clean up on close as well
         if (state.renderToWindow) {
             // TODO: Add the cursor to the map
             // TODO: Init the listener this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
@@ -61,15 +60,6 @@ function setActive ({state, commit, dispatch}, active) {
             */
             dispatch("toggleInteraction", "draw");
         }
-        else {
-            dispatch("resetModule");
-            // TODO: unregisterFromMap Radio.trigger("Map", "unregisterListener", this.listener);
-            // TODO: Clear the cursor from the map
-            state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
-        }
-    }
-    else {
-        // TODO: Clean up after the tool has been deactivated
     }
 }
 

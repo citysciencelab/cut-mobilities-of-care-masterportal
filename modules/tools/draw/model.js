@@ -1576,7 +1576,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setIdCounter(id);
         return prefix ? prefix + id : id;
     },*/
-    // TODO: Bis hier die Klasse betrachtet und in den State übernommen (von unten aus gesehen)
+
     /**
      * setter for drawType
      * @param {string} value1 - geometry type
@@ -1658,7 +1658,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("freehand", value);
     },
 
-    // TODO: When is this used?
     /**
      * setter for redoArray
      * @param {array} value - new redoArray
@@ -1766,7 +1765,6 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("methodCircle", value);
     },
 
-    // TODO: Methode setEventualFeatureToDelete nirgends genutzt?
     /**
      * setter for a draw feature to eventual delete it in
      * another iteration.

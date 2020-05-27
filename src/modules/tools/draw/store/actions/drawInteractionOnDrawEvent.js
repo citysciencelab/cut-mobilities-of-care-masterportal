@@ -86,7 +86,7 @@ function transformNaNToNull (value) {
 }
 /**
 * Creates a listener for the addfeature event of the source of the layer used for the Draw Tool.
-* TODO: Shoud the zIndex only be counted up if the feature gets actually drawn?
+* TODO: Should the zIndex only be counted up if the feature gets actually drawn?
 *
 * @param {Object} context actions context object.
 * @param {Object} payload payload object.

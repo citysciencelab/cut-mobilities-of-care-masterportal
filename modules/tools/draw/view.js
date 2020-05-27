@@ -413,7 +413,6 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         this.model.redoLastStep();
     },*/
 
-    // TODO: Functions below are implemented
     /**
      * Setter for the Symbol on the model.
      * @param {*} evt - With a new Symbol.

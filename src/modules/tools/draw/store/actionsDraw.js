@@ -2,11 +2,12 @@ import {Select, Modify, Draw} from "ol/interaction.js";
 
 import {createStyle} from "./actions/style/createStyle";
 import {drawInteractionOnDrawEvent} from "./actions/drawInteractionOnDrawEvent";
-
 import * as setter from "./actions/setterDraw";
 import * as withoutGUI from "./actions/withoutGUIDraw";
 
-// NOTE: The Update and the Redo interactions of the Draw Tool are and weren't compatible with the delete and modify interaction.
+import {initialState} from "./constantsDraw";
+
+// TODO: The Update and the Redo Buttons weren't working with the select and modify interaction in Backbone and are not yet working in Vue too.
 
 const actions = {
     /**
@@ -46,8 +47,9 @@ const actions = {
      * Creates a draw interaction to add to the map.
      *
      * @param {Object} context actions context object.
-     * @param {Boolean} actives Decides whether the draw interations are active or not.
-     * @param {Integer} [maxFeatures] Max amount of features to be added to the map.
+     * @param {Object} payload payload object.
+     * @param {Boolean} payload.active Decides whether the draw interations are active or not.
+     * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
      * @returns {void}
      */
     createDrawInteractionAndAddToMap ({state, commit, dispatch}, {active, maxFeatures}) {
@@ -102,7 +104,7 @@ const actions = {
 
                 if (featureCount > maxFeatures - 1) {
                     Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures}));
-                    dispatch("deactivateDrawInteraction");
+                    dispatch("manipulateInteraction", {interaction: "draw", active: false});
                 }
             });
         }
@@ -189,20 +191,6 @@ const actions = {
             state.selectInteraction.getFeatures().clear();
         });
     },
-    /**
-     * Deactivates the draw interaction if defined.
-     *
-     * @param {Object} context actions context object.
-     * @returns {void}
-     */
-    deactivateDrawInteraction ({state}) {
-        if (state.drawInteraction !== null) {
-            state.drawInteraction.setActive(false);
-        }
-        if (state.drawInteractionTwo !== null) {
-            state.drawInteractionTwo.setActive(false);
-        }
-    },
     drawInteractionOnDrawEvent,
     /**
      * Activates or deactivates the given Interactions based on the given parameters.
@@ -266,15 +254,43 @@ const actions = {
     },
     /**
      * Resets the Draw Tool.
-     * TODO: In the Backbone Version the changeable values are also reseted to default --> Needed?
      *
      * @param {Object} context actions context object.
      * @returns {void}
      */
-    resetModule ({dispatch}) {
-        dispatch("deactivateDrawInteraction");
-        dispatch("deactivateModifyInteraction");
-        dispatch("deactivateSelectInteraction");
+    resetModule ({state, commit, dispatch}) {
+        const color = initialState.color,
+            colorContour = initialState.colorContour;
+
+        color[3] = initialState.opacity;
+        colorContour[3] = initialState.opacityContour;
+
+        commit("setActive", false);
+        dispatch("manipulateInteraction", {interaction: "draw", active: false});
+        dispatch("removeInteraction", state.drawInteraction);
+        dispatch("removeInteraction", state.drawInteractionTwo);
+
+        dispatch("manipulateInteraction", {interaction: "modify", active: false});
+        dispatch("removeInteraction", state.modifyInteraction);
+
+        dispatch("manipulateInteraction", {interaction: "delete", active: false});
+        dispatch("removeInteraction", state.selectInteraction);
+
+        commit("setCircleMethod", initialState.circleMethod);
+        commit("setCircleInnerDiameter", initialState.circleInnerDiameter);
+        commit("setCircleOuterDiameter", initialState.circleOuterDiameter);
+        commit("setColor", color);
+        commit("setColorContour", colorContour);
+        commit("setDrawType", initialState.drawType);
+        commit("setFreeHand", initialState.freeHand);
+        commit("setOpacity", initialState.opacity);
+        commit("setOpacityContour", initialState.opacityContour);
+        commit("setPointSize", initialState.pointSize);
+        commit("setSymbol", initialState.iconList[0]);
+
+        // TODO: unregisterFromMap Radio.trigger("Map", "unregisterListener", this.listener);
+        // TODO: Clear the cursor from the map
+        state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
     },
     ...setter,
     /**

@@ -35,11 +35,11 @@ export default {
                 this.drawHTMLElements || this.circleMethod !== "defined"
                 : this.drawHTMLElements;
         }
-        // TODO: Disable undo & redo buttons when not needed --> cases?
+        // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
     },
     created () {
         this.$on("close", this.close);
-        // setActive call on created is needed for the RemoteInterface so that the Radio can be interacted with
+        // NOTE: setActive call on created is needed for the RemoteInterface so that the Radio can be interacted with
         this.setActive(false);
     },
     methods: {
@@ -47,7 +47,7 @@ export default {
         ...mapActions("Tools/Draw", constants.keyStore.actions),
         close () {
             // NOTE: Line 50 can be moved to Line 41 when everything is completly in Vue
-            this.setActive(false);
+            this.resetModule();
             // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
 
@@ -336,7 +336,6 @@ export default {
                         </select>
                     </div>
                 </div>
-                <!-- TODO: Aktuell wird für drawCurve nur strokeWidth, colorContour und color gesetzt, da kein extra case vorhanden ist -> Gehört das so? -->
                 <div
                     v-if="drawType.id === 'drawLine' || drawType.id === 'drawCurve'"
                     class="form-group form-group-sm"

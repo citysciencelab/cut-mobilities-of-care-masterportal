@@ -1,6 +1,7 @@
 import actions from "./actionsDraw";
 import getters from "./gettersDraw";
 import mutations from "./mutationsDraw";
+import state from "./stateDraw";
 
 const colorOptions = [
         {color: "blue", value: [55, 126, 184]},
@@ -40,6 +41,7 @@ const colorOptions = [
         {caption: "24 px", value: 24},
         {caption: "32 px", value: 32}
     ],
+    initialState = Object.assign({}, state),
     keyStore = {
         getters: Object.keys(getters),
         mutations: Object.keys(mutations),
@@ -82,6 +84,7 @@ export {
     earthRadius,
     fontOptions,
     fontSizeOptions,
+    initialState,
     keyStore,
     pointSizeOptions,
     strokeOptions,

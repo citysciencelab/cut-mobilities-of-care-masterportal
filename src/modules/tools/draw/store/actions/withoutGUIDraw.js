@@ -10,15 +10,12 @@ import MultiPolygon from "ol/geom/MultiPolygon.js";
 /**
  * Resets and deactivates the Draw Tool.
  *
+ * @param {Object} contect actions context object.
  * @param {String} cursor If a cursor has been added through the RemoteInterface, it gets removed.
  * @returns {void}
  */
 function cancelDrawWithoutGUI ({dispatch}, cursor) {
-    dispatch("deactivateDrawInteraction");
-    dispatch("deactivateSelectInteraction");
-    dispatch("deactivateModifyInteraction");
     dispatch("resetModule");
-    dispatch("setActive", false);
 
     if (cursor?.cursor) {
         // TODO: The cursor changes from the map need to happen here
@@ -54,7 +51,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
         multiPoint = new MultiPoint([]),
         multiPolygon = new MultiPolygon([]);
 
-    // TODO: How does this value arrive? In JSDoc it is written that its a Boolean which would make the "===" redundant
+    // NOTE: How does this value arrive? In JSDoc it is written that its a Boolean which could make the "===" redundant
     if (payload.prmObject?.transformWGS === true) {
         targetProjection = "EPSG:4326";
     }
@@ -151,17 +148,17 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
 /**
  * Sends the generated GeoJSON to the RemoteInterface to communicate with an iFrame.
  *
- * @param {Object} _context actions context object.
+ * @param {Object} context actions context object.
  * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
  * @returns {void}
  */
-function downloadViaRemoteInterface (_context, geomType) {
-    const result = downloadFeaturesWithoutGUI(geomType);
-
-    Radio.trigger("RemoteInterface", "postMessage", {
-        "downloadViaRemoteInterface": "function identifier",
-        "success": true,
-        "response": result
+function downloadViaRemoteInterface ({dispatch}, geomType) {
+    dispatch("downloadFeaturesWithoutGUI", geomType).then(result => {
+        Radio.trigger("RemoteInterface", "postMessage", {
+            "downloadViaRemoteInterface": "function identifier",
+            "success": true,
+            "response": result
+        });
     });
 }
 
@@ -173,7 +170,7 @@ function downloadViaRemoteInterface (_context, geomType) {
  * @returns {void}
  */
 function editFeaturesWithoutGUI ({dispatch}) {
-    dispatch("deactivateDrawInteraction");
+    dispatch("manipulateInteraction", {interaction: "draw", active: false});
     dispatch("createModifyInteractionAndAddToMap");
 }
 
@@ -223,7 +220,7 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
 
         if (initialJSON) {
             try {
-                // TODO: How does this value arrive? In JSDoc it is written that its a Boolean which would make the "===" redundant
+                // NOTE: How does this value arrive? In JSDoc it is written that its a Boolean which could make the "===" redundant
                 if (transformWGS === true) {
                     format = new GeoJSON({
                         defaultDataProjection: "EPSG:4326"
@@ -242,7 +239,7 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
                     state.layer.setStyle(createStyle(drawType));
                     state.layer.getSource().addFeatures(featJSON);
                 }
-                // TODO: How does this value arrive? In JSDoc it is written that its a Boolean which would make the "===" redundant
+                // NOTE: How does this value arrive? In JSDoc it is written that its a Boolean which could make the "===" redundant
                 if (featJSON.length > 0 && zoomToExtent === true) {
                     Radio.trigger("Map", "zoomToExtent", state.layer.getSource().getExtent());
                 }
