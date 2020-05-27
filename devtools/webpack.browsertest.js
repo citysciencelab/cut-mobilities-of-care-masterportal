@@ -85,7 +85,7 @@ module.exports = function (env, args) {
                                 })
                                 .on("end", function () {
                                     console.log("All done");
-                                    execute("kill $(lsof -i :9001 | grep node | awk '{print $2}')");
+                                    execute("killall node");
                                 });
                         }
                     });
