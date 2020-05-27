@@ -198,6 +198,9 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             this.model.set({
                 "workplace": i18next.t("common:modules.tools.pendler.lines.workplace"),
                 "domicile": i18next.t("common:modules.tools.pendler.lines.domicile"),
+                "chooseDistrict": i18next.t("common:modules.tools.pendler.lines.chooseDistrict"),
+                "chooseBorough": i18next.t("common:modules.tools.pendler.lines.chooseBorough"),
+                "relationshipsToDisplay": i18next.t("common:modules.tools.pendler.lines.relationshipsToDisplay"),
                 "currentLng": lng
             });
         }

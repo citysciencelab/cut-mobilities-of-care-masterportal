@@ -193,7 +193,10 @@
                 "animation": {},
                 "lines": {
                     "domicile": "Wohnort",
-                    "workplace": "Arbeitsort"
+                    "workplace": "Arbeitsort",
+                    "chooseDistrict": "Landkreis auswählen",
+                    "chooseBorough": "Amt/Samtgemeinde auswählen",
+                    "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen"
                 }
             },
             "compareFeatures": {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <div class="form-group">
     <select id="select-kreis" class="form-control">
-        <option disabled selected hidden>Landkreis auswählen</option>
+        <option disabled selected hidden><%=chooseDistrict%></option>
         <% _.each(kreise, function (element) { %>
         <% if (element === kreis) { %>
         <option selected><%= element %></option>
@@ -15,7 +15,7 @@
 <% if (kreis !== "") { %>
 <div class="form-group">
     <select id="select-gemeinde" class="form-control">
-        <option disabled selected hidden>Amt/Samtgemeinde auswählen</option>
+        <option disabled selected hidden><%=chooseBorough%></option>
         <% _.each(gemeinden, function (element) { %>
         <% if (typeof gemeinde !== "undefined" && element === gemeinde) { %>
         <option selected><%= element %></option>
@@ -30,7 +30,7 @@
 <% if (typeof gemeinde !== "undefined") { %>
 <div class="form-group">
     <select id="select-trefferAnzahl" class="form-control">
-        <option disabled selected hidden>Anzahl anzuzeigender Beziehungen</option>
+        <option disabled selected hidden><%=relationshipsToDisplay%></option>
         <option value="top5"
             <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top5") ? "selected" : "" %>>Top 5</option>
         <option value="top10"
