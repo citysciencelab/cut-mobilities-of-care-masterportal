@@ -9,6 +9,31 @@ import stateDraw from "./stateDraw";
 
 // TODO: The Update and the Redo Buttons weren't working with the select and modify interaction in Backbone and are not yet working in Vue too.
 
+
+/**
+ * Creates a modify interaction and returns it.
+ *
+ * @param  {module:ol/layer/Vector} layer The layer in which the features are drawn.
+ * @returns {module:ol/interaction/Modify} The modify interaction.
+ */
+function createModifyInteraction (layer) {
+    return new Modify({
+        source: layer.getSource()
+    });
+}
+
+/**
+ * Creates a select interaction (for deleting features) and returns it.
+ *
+ * @param  {module:ol/layer/Vector} layer The layer in which the features are drawn.
+ * @returns {module:ol/interaction/Select} The select interaction.
+ */
+function createSelectInteraction (layer) {
+    return new Select({
+        layers: [layer]
+    });
+}
+
 const initialState = Object.assign({}, stateDraw),
     actions = {
         /**
@@ -111,30 +136,19 @@ const initialState = Object.assign({}, stateDraw),
             }
         },
         /**
-         * Creates a modify interaction and returns it.
-         *
-         * @param {Object} context actions context object.
-         * @returns {module:ol/interaction/Modify} The modify interaction.
-         */
-        createModifyInteraction ({state}) {
-            return new Modify({
-                source: state.layer.getSource()
-            });
-        },
-        /**
          * Creates a modify interaction and adds it to the map.
          *
          * @param {Object} context actions context object.
          * @param {Boolean} active Decides whether the modify interaction is active or not.
          * @returns {void}
          */
-        createModifyInteractionAndAddToMap ({commit, dispatch}, active) {
-            dispatch("createModifyInteraction").then(modifyInteraction => {
-                commit("setModifyInteraction", modifyInteraction);
-                dispatch("manipulateInteraction", {interaction: "modify", active: active});
-                dispatch("createModifyInteractionListener");
-                dispatch("addInteraction", modifyInteraction);
-            });
+        createModifyInteractionAndAddToMap ({state, commit, dispatch}, active) {
+            const modifyInteraction = createModifyInteraction(state.layer);
+
+            commit("setModifyInteraction", modifyInteraction);
+            dispatch("manipulateInteraction", {interaction: "modify", active: active});
+            dispatch("createModifyInteractionListener");
+            dispatch("addInteraction", modifyInteraction);
         },
         /**
          * Listener to change the features through the modify interaction.
@@ -159,24 +173,13 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Boolean} active Decides whether the select interaction is active or not.
          * @returns {void}
          */
-        createSelectInteractionAndAddToMap ({commit, dispatch}, active) {
-            dispatch("createSelectInteraction").then(selectInteraction => {
-                commit("setSelectInteraction", selectInteraction);
-                dispatch("manipulateInteraction", {interaction: "delete", active: active});
-                dispatch("createSelectInteractionListener");
-                dispatch("addInteraction", selectInteraction);
-            });
-        },
-        /**
-         * Creates a select interaction (for deleting features) and returns it.
-         *
-         * @param {Object} context actions context object.
-         * @returns {module:ol/interaction/Select} The select interaction.
-         */
-        createSelectInteraction ({state}) {
-            return new Select({
-                layers: [state.layer]
-            });
+        createSelectInteractionAndAddToMap ({state, commit, dispatch}, active) {
+            const selectInteraction = createSelectInteraction(state.layer);
+
+            commit("setSelectInteraction", selectInteraction);
+            dispatch("manipulateInteraction", {interaction: "delete", active: active});
+            dispatch("createSelectInteractionListener");
+            dispatch("addInteraction", selectInteraction);
         },
         /**
          * Listener to select (for deletion) the features through the select interaction.
