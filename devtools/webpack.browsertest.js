@@ -10,7 +10,7 @@ const merge = require("webpack-merge"),
         reporter: "list"
     }),
     fse = require("fs-extra"),
-    execute = require("child-process-promise").exe;
+    execute = require("child-process-promise").exec;
     // {fork: forkProcess} = require("child_process");
 
 let proxies;
