@@ -83,10 +83,10 @@ export default {
         }
     },
     mounted () {
-        $(document).on("mozfullscreenchange", this.escapeHandler);
-        $(document).on("MSFullscreenChange", this.escapeHandler);
-        $(document).on("webkitfullscreenchange", this.escapeHandler);
-        $(document).on("fullscreenchange", this.escapeHandler);
+        document.addEventListener("mozfullscreenchange", this.escapeHandler);
+        document.addEventListener("MSFullscreenChange", this.escapeHandler);
+        document.addEventListener("webkitfullscreenchange", this.escapeHandler);
+        document.addEventListener("fullscreenchange", this.escapeHandler);
     },
     methods: {
         /**
