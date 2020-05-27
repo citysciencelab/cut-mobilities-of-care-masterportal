@@ -1,7 +1,7 @@
-import Model from "@modules/tools/featurelister/model.js";
+import Model from "@modules/tools/featureLister/model.js";
 import {expect} from "chai";
 
-describe("featurelister/model", function () {
+describe("featureLister/model", function () {
     let model;
 
     const exampleSchool = [{
