@@ -1,7 +1,8 @@
-import {earthRadius} from "../constantsDraw";
 import {createStyle} from "./style/createStyle";
 import {getMapProjection} from "masterportalAPI/src/crs";
 import {toLonLat, transform} from "ol/proj";
+
+const earthRadius = 6378137;
 
 /**
  * Helper Function to coordinate the calculation of a circle.
@@ -86,7 +87,7 @@ function transformNaNToNull (value) {
 }
 /**
 * Creates a listener for the addfeature event of the source of the layer used for the Draw Tool.
-* TODO: Should the zIndex only be counted up if the feature gets actually drawn?
+* NOTE: Should the zIndex only be counted up if the feature gets actually drawn?
 *
 * @param {Object} context actions context object.
 * @param {Object} payload payload object.
