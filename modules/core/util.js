@@ -947,7 +947,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * Return a copy of the object, filtered to only have values for the whitelisted keys
      * (or array of valid keys).
      * @param {Object} object - the object.
-     * @param {Number[]} keys - the key(s) to search for.
+     * @param {Number[]|String[]} keys - the key(s) to search for.
      * @returns {Object} - returns the entry/entries with the right key/keys.
      */
     pick: function (object, keys) {
