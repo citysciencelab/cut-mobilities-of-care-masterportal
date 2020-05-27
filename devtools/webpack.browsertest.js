@@ -6,7 +6,8 @@ const merge = require("webpack-merge"),
     mocha = new Mocha({
         exit: true
     }),
-    fse = require("fs-extra");
+    fse = require("fs-extra"),
+    execute = require("child-process-promise").exec;
 
 let proxies;
 
@@ -58,15 +59,17 @@ module.exports = function (env, args) {
             {
                 apply: (compiler) => {
                     compiler.hooks.afterEmit.tap("AfterEmitPlugin", () => {
+                        const killwebpack = "taskkill //pid `netstat -aon | grep 9001 | grep -P '(?<=LISTENING).*' -o | grep -P 'd*' -o` //f";
+
                         /* eslint-disable-next-line no-process-env */
                         if (process.env.NODE_ENV === "e2eTest") {
                             /* eslint-disable-next-line no-console */
                             console.log("after emitting AfterEmitPlugin: starting e2e-tests");
                             mocha.addFile("./test/end2end/TestRunner.js");
                             // exit with non-zero status if there were test failures
-                            // mocha.run(failures => process.exitCode = failures ? 1 : 0);
-                            mocha.run();
-                            // killwebpack="taskkill //pid \`netstat -aon | grep 9001 | grep -P '(?<=LISTENING).*' -o | grep -P '\\d*' -o\` //f"
+                            /* eslint-disable-next-line no-return-assign */
+                            mocha.run(failures => process.exitCode = failures ? 1 : 0);
+                            execute(killwebpack).catch(error => console.error(error));
                         }
                     });
                 }
