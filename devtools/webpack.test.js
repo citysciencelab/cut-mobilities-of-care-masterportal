@@ -5,6 +5,10 @@ const webpack = require("webpack"),
 require("jsdom-global")();
 global.DOMParser = window.DOMParser;
 
+URL.createObjectURL = function () {
+    return false;
+};
+
 module.exports = {
     target: "node",
     mode: "development",

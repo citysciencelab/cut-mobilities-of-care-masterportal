@@ -121,7 +121,7 @@ const ObliqueMap = Backbone.Model.extend({
         gfi.setIsActive(true);
         map2D = Radio.request("Map", "getMap");
 
-        if (this.isActive() && this.currentCollection && _.has(this.currentDirection, "currentImage")) {
+        if (this.isActive() && this.currentCollection && this.currentDirection.hasOwnProperty("currentImage")) {
             Radio.trigger("Map", "beforeChange", "2D");
             Radio.trigger("ObliqueMap", "isActivated", false);
             this.getCenter().then(function (center) {
@@ -176,11 +176,8 @@ const ObliqueMap = Backbone.Model.extend({
     setCenter: function (coordinate, resolution) {
         if (this.currentDirection) {
             const oldImageID = this.currentDirection.currentImage.id,
-                resolutionFactor = this.currentLayer.get("resolution");
-
-            let useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
-
-            useResolution = this.get("map").getView().constrainResolution(useResolution);
+                resolutionFactor = this.currentLayer.get("resolution"),
+                useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
 
             return this.currentDirection.setView(coordinate, useResolution).then(function () {
                 if (this.currentDirection.currentImage) {

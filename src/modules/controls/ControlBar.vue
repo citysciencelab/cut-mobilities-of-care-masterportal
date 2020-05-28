@@ -1,37 +1,60 @@
-
 <script>
 import {mapGetters} from "vuex";
+import ControlBarBackwardsCompatibility from "./ControlBarBackwardsCompatibility.vue";
 
-/**
- * TODO the "main" control bar element is supposed to be
- * 1. scrollable if too many elements are included within
+const fallbackTopRight = {
+        component: ControlBarBackwardsCompatibility,
+        props: {id: "top-right-fallback"},
+        key: "top-right-fallback"
+    },
+    fallbackBottomRight = {
+        component: ControlBarBackwardsCompatibility,
+        props: {id: "bottom-right-fallback"},
+        key: "bottom-right-fallback"
+    };
+
+/* TODO
+ * This was the planned concept:
+ * 1. scrollable if too many controls are included within
  * 2. open-/closable on mobile resolution, that is: only x (per default 3) control
- * elements are to be shown, and the rest can be opened/closed via a button
+ * controls are to be shown, and the rest can be opened/closed via a button
  * (think: openable toolbox); when open and place is not sufficient, the bar
  * is to be scrollable again
+ *
+ * However, positioning is currently in discussion, and a separate ticket
+ * was made regarding the creation of a control concept. Stopping above implementation
+ * in favour of stability until concept is ready.
+ */
+
+/**
+ * Control layout component that places controls on the map.
  */
 export default {
     name: "ControlBar",
     data () {
         return {
             categories: [
-                {categoryName: "main", className: "main-elements"},
-                {categoryName: "bottom", className: "low-elements"}
+                {categoryName: "top", className: "top-controls"},
+                {categoryName: "bottom", className: "bottom-controls"}
             ]
         };
     },
     computed: {
         ...mapGetters(["controlsConfig", "mobile"]),
         ...mapGetters("controls", ["componentMap", "mobileHiddenControls", "bottomControls"]),
+        /** @returns {object} contains controls to-be-rendered sorted by placement */
         categorizedControls () {
-            if (this.controlsConfig === null) {
-                return [];
-            }
-
             const categorizedControls = {
-                main: [],
+                top: [],
                 bottom: []
             };
+
+            if (this.controlsConfig === null) {
+                return {
+                    top: [fallbackTopRight],
+                    bottom: [fallbackBottomRight]
+                };
+            }
 
             Object
                 .keys(this.controlsConfig)
@@ -46,15 +69,19 @@ export default {
                     return key;
                 })
                 .filter(x => x !== "mousePosition") // "mousePosition" is currently handled in footer
-                .filter(x => typeof x === "string" ? console.warn(`Control "${x}" not implemented; ignoring key.`) : true)
+                .filter(x => typeof x === "string" ? console.warn(`Control "${x}" not implemented; ignoring key in ControlBar.vue.`) : true)
                 .forEach(c => {
                     if (this.bottomControls.includes(c.key)) {
                         categorizedControls.bottom.push(c);
                     }
                     else {
-                        categorizedControls.main.push(c);
+                        // defaulting to top-right corner
+                        categorizedControls.top.push(c);
                     }
                 });
+
+            categorizedControls.top.push(fallbackTopRight);
+            categorizedControls.bottom.unshift(fallbackBottomRight);
 
             return categorizedControls;
         }
@@ -114,7 +141,7 @@ export default {
         padding: 5px;
         margin: 5px;
 
-        .main-elements, .low-elements {
+        .top-controls, .bottom-controls {
             pointer-events: all;
         }
     }

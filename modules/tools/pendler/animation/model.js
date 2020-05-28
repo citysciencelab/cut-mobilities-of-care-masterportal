@@ -4,9 +4,10 @@ import {Point, LineString} from "ol/geom.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import Feature from "ol/Feature.js";
+import {getVectorContext} from "ol/render.js";
 
 const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
-    defaults: _.extend({}, PendlerCoreModel.prototype.defaults, {
+    defaults: Object.assign({}, PendlerCoreModel.prototype.defaults, {
         animating: false,
         pathLayer: new VectorLayer({
             source: new VectorSource(),
@@ -91,7 +92,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     preparePendlerLegend: function (features) {
         const pendlerLegend = [];
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             // Ein Feature entspricht einer Gemeinde. Extraktion der für die Legende
             // nötigen Attribute (abhängig von der gewünschten Richtung).
             pendlerLegend.push({
@@ -99,7 +100,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
                 color: this.rgbaArrayToString(feature.color),
                 name: feature.get(this.get("attrGemeinde"))
             });
-        }, this);
+        });
 
         this.set("pendlerLegend", pendlerLegend);
     },
@@ -136,7 +137,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         }
         const animationLayer = this.get("animationLayer");
 
-        if (!_.isUndefined(animationLayer)) {
+        if (animationLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", animationLayer);
         }
         Radio.trigger("MapMarker", "hideMarker");
@@ -209,9 +210,9 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         topFeatures = this.selectFeatures(rawFeatures);
         coloredFeatures = this.colorFeatures(topFeatures);
         // Bestimme statistische Kenngrößen
-        min = _.last(coloredFeatures).get(this.get("attrAnzahl"));
+        min = Array.isArray(coloredFeatures) && coloredFeatures.length ? coloredFeatures[coloredFeatures.length - 1].get(this.get("attrAnzahl")) : null;
         this.setMinVal(min);
-        max = _.first(coloredFeatures).get(this.get("attrAnzahl"));
+        max = Array.isArray(coloredFeatures) && coloredFeatures.length ? coloredFeatures[0].get(this.get("attrAnzahl")) : null;
         this.setMaxVal(max);
 
         this.preparePendlerLegend(coloredFeatures);
@@ -238,7 +239,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
 
         this.get("pathLayer").getSource().clear();
 
-        _.each(relevantFeatures, function (feature) {
+        relevantFeatures.forEach(feature => {
             startPoint = feature.getGeometry().getFirstCoordinate();
             endPoint = feature.getGeometry().getLastCoordinate();
             steps = this.get("steps");
@@ -263,7 +264,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
 
             this.get("pathLayer").getSource().addFeature(line);
 
-        }, this);
+        });
     },
 
     /**
@@ -294,7 +295,8 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * @returns {void}
      */
     prepareAnimation: function () {
-        const animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer");
+        const animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer"),
+            features = this.get("pathLayer").getSource().getFeatures();
 
         if (this.get("direction") === "wohnort") {
             this.setAnimationLimit(2);
@@ -306,10 +308,11 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         this.setAnimationCount(0);
         animationLayer.getSource().clear();
         animationLayer.setZIndex(9);
+        this.addFeaturesToLayer(features, animationLayer);
         this.setAnimationLayer(animationLayer);
-        this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.moveFeature.bind(this)));
+        animationLayer.on("postrender", this.moveFeature.bind(this));
         if (this.get("animating")) {
-            this.stopAnimation([]);
+            this.stopAnimation();
         }
         else {
             this.startAnimation();
@@ -327,16 +330,15 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     },
     /**
      * Wiederholt die animation, wenn AnimationLimit noch nicht erreicht ist
-     * @param  {Object[]} features werden für das hinzufügen auf die Layer nach der animation durchgereicht
      * @returns {void}
      */
-    repeatAnimation: function (features) {
+    repeatAnimation: function () {
         if (this.get("animationCount") < this.get("animationLimit")) {
             this.setAnimationCount(this.get("animationCount") + 1);
             this.startAnimation();
         }
         else {
-            this.stopAnimation(features);
+            this.stopAnimation();
         }
     },
     /**
@@ -344,14 +346,9 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * @param {Object[]} features added to animationLayer after stop
      * @returns {void}
      */
-    stopAnimation: function (features) {
-        Radio.trigger("Map", "unregisterListener", this.get("postcomposeListener"));
+    stopAnimation: function () {
+        this.get("animationLayer").un("postrender", this.moveFeature.bind(this));
         this.set("animating", false);
-        // Wenn Animation fertig alle Features als Vectoren auf neue Layer malen.
-        // features ist undefined, wenn die Funktion üder den Resetknopf aufgerufen wird
-        if (!_.isUndefined(features)) {
-            this.addFeaturesToLayer(features, this.get("animationLayer"));
-        }
     },
     /**
      * triggered after all layers are rendered, moves the circles = animation
@@ -359,19 +356,19 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * @returns {void}
      */
     moveFeature: function (event) {
-        const vectorContext = event.vectorContext,
+        const vectorContext = getVectorContext(event),
             frameState = event.frameState,
             features = this.get("pathLayer").getSource().getFeatures(),
             elapsedTime = frameState.time - this.get("now");
-            // here the trick to increase speed is to jump some indexes
-            // on lineString coordinates
+        // here the trick to increase speed is to jump some indexes
+        // on lineString coordinates
         let index = Math.round(elapsedTime / 100);
 
         // Bestimmt die Richtung der animation (alle geraden sind rückwärts)
         if (this.get("animationCount") % 2 === 1) {
             index = this.get("steps") - index;
             if (index <= 0) {
-                this.repeatAnimation(features, true);
+                this.repeatAnimation();
 
             }
             else if (this.get("animating")) {
@@ -381,7 +378,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         }
         else {
             if (index >= this.get("steps")) {
-                this.repeatAnimation(features);
+                this.repeatAnimation();
                 return;
             }
 
@@ -405,17 +402,15 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
             coordinates,
             style;
 
-        _.each(features, function (feature) {
-
+        features.forEach(feature => {
             if (this.get("animating")) {
                 coordinates = feature.getGeometry().getCoordinates();
-
                 style = this.preparePointStyle(feature.get("anzahlPendler"), feature.get("color"));
                 currentPoint = new Point(coordinates[index]);
                 newFeature = new Feature(currentPoint);
                 vectorContext.drawFeature(newFeature, style);
             }
-        }, this);
+        });
     },
 
     /**
@@ -430,7 +425,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
             drawIndex,
             style;
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             coordinates = feature.getGeometry().getCoordinates();
             style = this.preparePointStyle(feature.get("anzahlPendler"), feature.get("color"));
 
@@ -441,10 +436,10 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
             currentPoint = new Point(coordinates[drawIndex]);
             newFeature = new Feature(currentPoint);
             // "styleId" neccessary for print, that style and feature can be linked
-            newFeature.set("styleId", _.uniqueId());
+            newFeature.set("styleId", Radio.request("Util", "uniqueId"));
             newFeature.setStyle(style);
             layer.getSource().addFeature(newFeature);
-        }, this);
+        });
     },
     /**
      * Sets the animation count
@@ -509,14 +504,6 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      */
     setMaxVal: function (value) {
         this.set("maxVal", value);
-    },
-    /**
-     * Sets the postcompose listener - triggered after all layers are rendered.
-     * @param {Number} value the listener
-     * @returns {void}
-     */
-    setPostcomposeListener: function (value) {
-        this.set("postcomposeListener", value);
     },
     /**
      * Sets the layer of the animation

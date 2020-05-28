@@ -1029,49 +1029,49 @@ Liste der Einstellungen zum Überschreiben von Vektorstyles bei GFI Abfragen.
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules.fill
-Todo
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|color|nein|Float[]|[255, 255, 255, 0.5]|Mögliche Einstellung: color (RGBA)|false|
 
 ```
 #!json
-{
-    "color": [215, 102, 41, 0.9]
-}
+"fill": { "color": [215, 102, 41, 0.9] }
 ```
 
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules.image
-Todo
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|scale|nein|Float|1|Mögliche Einstellung: scale|false|
 
 ```
 #!json
-{
-    "scale": 1.5
-}
+"image": { "scale": 1.5 }
 ```
 
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules.stroke
-Todo
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|width|nein|Integer|1|Mögliche Einstellung: width|false|
 
 ```
 #!json
-{
-    "width": 4
-}
+"stroke": { "width": 4 }
 ```
 
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules.text
-Todo
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|scale|nein|Float|1|Mögliche Einstellung: scale|false|
 
 ```
 #!json
-{
-    "scale": 2
-}
+"text": { "scale": 2 }
 ```
 
 ***

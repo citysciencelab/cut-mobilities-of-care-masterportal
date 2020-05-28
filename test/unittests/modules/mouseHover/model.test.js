@@ -57,15 +57,14 @@ describe("mouseHover", function () {
         it("should return simple text", function () {
             const textArray = ["text1", "text2", "text3", "text4"];
 
-            model.set("numFeaturesToShow", 4);
-            expect(model.checkMaxFeaturesToShow(textArray)).to.have.lengthOf(4);
+            expect(model.checkMaxFeaturesToShow(textArray, 4)).to.have.lengthOf(4);
         });
-        it("should return breakes text", function () {
-            const textArray = ["text1", "text2", "text3", "text4"];
+        it("should return infoText if length of textArray outnumbers given max length", function () {
+            const textArray = ["text1", "text2", "text3", "text4"],
+                content = model.checkMaxFeaturesToShow(textArray, 2, "foo");
 
-            model.set("numFeaturesToShow", 2);
-            expect(model.checkMaxFeaturesToShow(textArray)).to.have.lengthOf(3);
-            expect(model.checkMaxFeaturesToShow(textArray)[2]).to.equal("<span class='info'>(weitere Objekte. Bitte zoomen.)</span>");
+            expect(content).to.have.lengthOf(3);
+            expect(content[2]).to.equal("foo");
         });
     });
     describe("adds break", function () {
