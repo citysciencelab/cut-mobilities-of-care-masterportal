@@ -32,11 +32,11 @@
     <select id="select-trefferAnzahl" class="form-control">
         <option disabled selected hidden><%=relationshipsToDisplay%></option>
         <option value="top5"
-            <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top5") ? "selected" : "" %>>Top 5</option>
+            <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top5") ? "selected" : "" %>><%=top5%></option>
         <option value="top10"
-            <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top10") ? "selected" : "" %>>Top 10</option>
+            <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top10") ? "selected" : "" %>><%=top10%></option>
         <option value="top15"
-            <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top15") ? "selected" : "" %>>Top 15</option>
+            <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "top15") ? "selected" : "" %>><%=top15%></option>
         <!-- <option value="alle" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "alle") ? "selected" : "" %> >Alle</option> -->
     </select>
 </div>

@@ -202,7 +202,10 @@
                     "people": "People",
                     "csvDownload": "CSV download",
                     "start": "Start",
-                    "reset": "Reset"
+                    "reset": "Reset",
+                    "top5": "Top 5",
+                    "top10": "Top 10",
+                    "top15": "Top 15"
                 },
                 "lines": {
                     "domicile": "Domicile",
@@ -213,7 +216,10 @@
                     "deleteGeometries": "Delete geometries",
                     "noCommutersKnown": "No commuting people known!",
                     "people": "People",
-                    "csvDownload": "CSV download"
+                    "csvDownload": "CSV download",
+                    "top5": "Top 5",
+                    "top10": "Top 10",
+                    "top15": "Top 15"
                 }
             },
             "compareFeatures": {

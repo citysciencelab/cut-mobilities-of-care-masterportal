@@ -33,7 +33,10 @@ const LinesView = Backbone.View.extend({
             "deleteGeometries": i18next.t("common:modules.tools.pendler.lines.deleteGeometries"),
             "noCommutersKnown": i18next.t("common:modules.tools.pendler.lines.noCommutersKnown"),
             "people": i18next.t("common:modules.tools.pendler.lines.people"),
-            "csvDownload": i18next.t("common:modules.tools.pendler.lines.csvDownload")
+            "csvDownload": i18next.t("common:modules.tools.pendler.lines.csvDownload"),
+            "top5": i18next.t("common:modules.tools.pendler.lines.top5"),
+            "top10": i18next.t("common:modules.tools.pendler.lines.top10"),
+            "top15": i18next.t("common:modules.tools.pendler.lines.top15")
         });
     },
 

@@ -30,7 +30,10 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
         relationshipsToDisplay: "",
         deleteGeometries: "",
         people: "",
-        csvDownload: ""
+        csvDownload: "",
+        top5: "",
+        top10: "",
+        top15: ""
     }),
     /**
      * @class Lines
@@ -211,6 +214,9 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
                 "noCommutersKnown": i18next.t("common:modules.tools.pendler.lines.noCommutersKnown"),
                 "people": i18next.t("common:modules.tools.pendler.lines.people"),
                 "csvDownload": i18next.t("common:modules.tools.pendler.lines.csvDownload"),
+                "top5": i18next.t("common:modules.tools.pendler.lines.top5"),
+                "top10": i18next.t("common:modules.tools.pendler.lines.top10"),
+                "top15": i18next.t("common:modules.tools.pendler.lines.top15"),
                 "currentLng": lng
             });
         }

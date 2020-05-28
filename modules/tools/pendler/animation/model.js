@@ -33,7 +33,10 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         people: "",
         csvDownload: "",
         reset: "",
-        start: ""
+        start: "",
+        top5: "",
+        top10: "",
+        top15: ""
     }),
     /**
      * @class Animation
@@ -154,17 +157,20 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     changeLang: function (lng) {
         if (this.model.get("isActive") === true) {
             this.model.set({
-                "workplace": i18next.t("common:modules.tools.pendler.lines.workplace"),
-                "domicile": i18next.t("common:modules.tools.pendler.lines.domicile"),
-                "chooseDistrict": i18next.t("common:modules.tools.pendler.lines.chooseDistrict"),
-                "chooseBorough": i18next.t("common:modules.tools.pendler.lines.chooseBorough"),
-                "relationshipsToDisplay": i18next.t("common:modules.tools.pendler.lines.relationshipsToDisplay"),
-                "deleteGeometries": i18next.t("common:modules.tools.pendler.lines.deleteGeometries"),
-                "noCommutersKnown": i18next.t("common:modules.tools.pendler.lines.noCommutersKnown"),
-                "people": i18next.t("common:modules.tools.pendler.lines.people"),
-                "csvDownload": i18next.t("common:modules.tools.pendler.lines.csvDownload"),
-                "reset": i18next.t("common:modules.tools.pendler.lines.reset"),
-                "start": i18next.t("common:modules.tools.pendler.lines.start"),
+                "workplace": i18next.t("common:modules.tools.pendler.animation.workplace"),
+                "domicile": i18next.t("common:modules.tools.pendler.animation.domicile"),
+                "chooseDistrict": i18next.t("common:modules.tools.pendler.animation.chooseDistrict"),
+                "chooseBorough": i18next.t("common:modules.tools.pendler.animation.chooseBorough"),
+                "relationshipsToDisplay": i18next.t("common:modules.tools.pendler.animation.relationshipsToDisplay"),
+                "deleteGeometries": i18next.t("common:modules.tools.pendler.animation.deleteGeometries"),
+                "noCommutersKnown": i18next.t("common:modules.tools.pendler.animation.noCommutersKnown"),
+                "people": i18next.t("common:modules.tools.pendler.animation.people"),
+                "csvDownload": i18next.t("common:modules.tools.pendler.animation.csvDownload"),
+                "reset": i18next.t("common:modules.tools.pendler.animation.reset"),
+                "start": i18next.t("common:modules.tools.pendler.animation.start"),
+                "top5": i18next.t("common:modules.tools.pendler.animation.top5"),
+                "top10": i18next.t("common:modules.tools.pendler.animation.top10"),
+                "top15": i18next.t("common:modules.tools.pendler.animation.top15"),
                 "currentLng": lng
             });
         }
