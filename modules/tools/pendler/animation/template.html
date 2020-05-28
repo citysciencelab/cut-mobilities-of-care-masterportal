@@ -44,14 +44,6 @@
 <% if (typeof trefferAnzahl !== "undefined") { %>
 <div class="radio">
     <label class=" radio-inline">
-        <input type="radio" name="direction" value="wohnort"
-            <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
-        <%=domicile%>
-    </label>
-    <label class=" radio-inline">
-        <input type="radio" name="direction" value="arbeitsort"
-            <% if (typeof direction !== "undefined" && direction === "arbeitsort") { print ("checked")} %>>
-        <%=workplace%>
         <input type="radio" name="direction" value="wohnort" <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
         <%=domicile%>
     </label>
