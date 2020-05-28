@@ -20,7 +20,10 @@ const ObliqueMap = Backbone.Model.extend({
             "getOLMap": function () {
                 return this.get("map");
             },
-            "getCurrentImage": this.getCurrentImage
+            "getCurrentImage": this.getCurrentImage,
+            "getCurrentDirection": function () {
+                return this.currentDirection;
+            }
         }, this);
 
         channel.on({
@@ -173,11 +176,8 @@ const ObliqueMap = Backbone.Model.extend({
     setCenter: function (coordinate, resolution) {
         if (this.currentDirection) {
             const oldImageID = this.currentDirection.currentImage.id,
-                resolutionFactor = this.currentLayer.get("resolution");
-
-            let useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
-
-            useResolution = this.get("map").getView().getConstrainResolution(useResolution);
+                resolutionFactor = this.currentLayer.get("resolution"),
+                useResolution = resolution ? resolution * resolutionFactor : this.get("map").getView().getResolution();
 
             return this.currentDirection.setView(coordinate, useResolution).then(function () {
                 if (this.currentDirection.currentImage) {
