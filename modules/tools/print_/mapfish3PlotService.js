@@ -291,21 +291,22 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * sends a request to get the status for a print job until it is finished
-     * @param {JSON} response - todo
+     * Sends a request to get the status for a print job until it is finished.
+     * @param {JSON} response - Response of print job.
      * @returns {void}
      */
     waitForPrintJob: function (response) {
-        const url = this.get("mapfishServiceUrl") + "status/" + response.ref + ".json";
+        const printAppId = this.get("printAppId"),
+            url = this.get("mapfishServiceUrl") + printAppId + "/status/" + response.ref + ".json";
 
         this.sendRequest(url, "GET", function (status) {
-            // Fehlerverarbeitung...
+            // Error processing...
             if (!status.done) {
                 this.waitForPrintJob(response);
             }
             else {
                 Radio.trigger("Util", "hideLoader");
-                window.open(this.get("mapfishServiceUrl") + "report/" + response.ref);
+                window.open(this.get("mapfishServiceUrl") + printAppId + "/report/" + response.ref);
             }
         });
     },
