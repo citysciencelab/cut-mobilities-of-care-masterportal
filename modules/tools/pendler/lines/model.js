@@ -29,7 +29,8 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
         chooseBorough: "",
         relationshipsToDisplay: "",
         deleteGeometries: "",
-        people: ""
+        people: "",
+        csvDownload: ""
     }),
     /**
      * @class Lines
@@ -209,6 +210,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
                 "deleteGeometries": i18next.t("common:modules.tools.pendler.lines.deleteGeometries"),
                 "noCommutersKnown": i18next.t("common:modules.tools.pendler.lines.noCommutersKnown"),
                 "people": i18next.t("common:modules.tools.pendler.lines.people"),
+                "csvDownload": i18next.t("common:modules.tools.pendler.lines.csvDownload"),
                 "currentLng": lng
             });
         }

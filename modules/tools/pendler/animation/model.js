@@ -30,7 +30,10 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         chooseBorough: "",
         relationshipsToDisplay: "",
         deleteGeometries: "",
-        people: ""
+        people: "",
+        csvDownload: "",
+        reset: "",
+        start: ""
     }),
     /**
      * @class Animation
@@ -159,6 +162,9 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
                 "deleteGeometries": i18next.t("common:modules.tools.pendler.lines.deleteGeometries"),
                 "noCommutersKnown": i18next.t("common:modules.tools.pendler.lines.noCommutersKnown"),
                 "people": i18next.t("common:modules.tools.pendler.lines.people"),
+                "csvDownload": i18next.t("common:modules.tools.pendler.lines.csvDownload"),
+                "reset": i18next.t("common:modules.tools.pendler.lines.reset"),
+                "start": i18next.t("common:modules.tools.pendler.lines.start"),
                 "currentLng": lng
             });
         }

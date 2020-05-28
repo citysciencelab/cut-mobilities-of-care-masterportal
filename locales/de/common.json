@@ -35,7 +35,7 @@
             "kmlimport": "KML Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
-            "commuterLines": "Pendler (Lines)",
+            "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
@@ -192,16 +192,29 @@
                 }
             },
             "pendler": {
-                "animation": {},
+                "animation": {
+                    "domicile": "Wohnort",
+                    "workplace": "Arbeitsort",
+                    "chooseDistrict": "Landkreis auswählen",
+                    "chooseBorough": "Amt/Gemeindeverband auswählen",
+                    "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen",
+                    "deleteGeometries": "Geometrien löschen",
+                    "noCommutersKnown": "Keine pendelnden Personen bekannt!",
+                    "people": "Personen",
+                    "csvDownload": "CSV Download",
+                    "start": "Start",
+                    "reset": "Reset"
+                },
                 "lines": {
                     "domicile": "Wohnort",
                     "workplace": "Arbeitsort",
                     "chooseDistrict": "Landkreis auswählen",
-                    "chooseBorough": "Amt/Samtgemeinde auswählen",
+                    "chooseBorough": "Amt/Gemeindeverband auswählen",
                     "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen",
                     "deleteGeometries": "Geometrien löschen",
                     "noCommutersKnown": "Keine pendelnden Personen bekannt!",
-                    "people": "Personen"
+                    "people": "Personen",
+                    "csvDownload": "CSV Download"
                 }
             },
             "compareFeatures": {

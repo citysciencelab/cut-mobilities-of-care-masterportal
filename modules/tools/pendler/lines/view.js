@@ -32,7 +32,8 @@ const LinesView = Backbone.View.extend({
             "relationshipsToDisplay": i18next.t("common:modules.tools.pendler.lines.relationshipsToDisplay"),
             "deleteGeometries": i18next.t("common:modules.tools.pendler.lines.deleteGeometries"),
             "noCommutersKnown": i18next.t("common:modules.tools.pendler.lines.noCommutersKnown"),
-            "people": i18next.t("common:modules.tools.pendler.lines.people")
+            "people": i18next.t("common:modules.tools.pendler.lines.people"),
+            "csvDownload": i18next.t("common:modules.tools.pendler.lines.csvDownload")
         });
     },
 

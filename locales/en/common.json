@@ -191,16 +191,29 @@
                 }
             },
             "pendler": {
-                "animation": {},
+                "animation": {
+                    "domicile": "Domicile",
+                    "workplace": "Workplace",
+                    "chooseDistrict": "Choose district",
+                    "chooseBorough": "Choose borough",
+                    "relationshipsToDisplay": "Number of relationships to display",
+                    "deleteGeometries": "Delete geometries",
+                    "noCommutersKnown": "No commuting people known!",
+                    "people": "People",
+                    "csvDownload": "CSV download",
+                    "start": "Start",
+                    "reset": "Reset"
+                },
                 "lines": {
                     "domicile": "Domicile",
                     "workplace": "Workplace",
-                    "chooseDistrict": "Choose District",
-                    "chooseBorough": "Choose Borough",
+                    "chooseDistrict": "Choose district",
+                    "chooseBorough": "Choose borough",
                     "relationshipsToDisplay": "Number of relationships to display",
-                    "deleteGeometries": "Delete Geometries",
+                    "deleteGeometries": "Delete geometries",
                     "noCommutersKnown": "No commuting people known!",
-                    "people": "People"
+                    "people": "People",
+                    "csvDownload": "CSV download"
                 }
             },
             "compareFeatures": {
