@@ -55,14 +55,14 @@ export default {
     <div class="back-forward-buttons">
         <ControlIcon
             :title="$t(`common:modules.controls.backForward.stepForward`)"
-            :active="forthAvailable"
+            :disabled="!forthAvailable"
             :icon-name="glyphiconFor"
             :on-click="moveForward"
         />
         <ControlIcon
             :title="$t(`common:modules.controls.backForward.stepBackward`)"
+            :disabled="!backAvailable"
             :icon-name="glyphiconBack"
-            :active="backAvailable"
             :on-click="moveBackward"
         />
     </div>

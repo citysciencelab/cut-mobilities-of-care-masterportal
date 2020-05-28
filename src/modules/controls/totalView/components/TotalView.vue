@@ -43,7 +43,7 @@ export default {
             id="start-totalview"
             class="total-view-button"
             :title="$t('common:modules.controls.totalView.titleButton')"
-            :active="hasMoved"
+            :disabled="!hasMoved"
             :icon-name="glyphiconToUse"
             :on-click="resetView"
         />

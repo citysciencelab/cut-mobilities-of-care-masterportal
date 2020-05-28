@@ -19,9 +19,9 @@ export default {
             required: true
         },
         /** Whether the control is currently clickable. */
-        active: {
+        disabled: {
             type: Boolean,
-            default: true
+            default: false
         },
         /** For TableStyle Control, title text is used as display text. */
         title: {
@@ -57,14 +57,14 @@ export default {
         type="button"
         class="control-icon-table-style"
         tabindex="-1"
-        :disabled="!active"
+        :disabled="disabled"
         @click="onClick"
         @keyup.space.stop.prevent="onClick"
     >
         <a
             aria-role="button"
             href="#"
-            :tabindex="active ? '0' : '-1'"
+            :tabindex="disabled ? '-1' : '0'"
         >
             <span :class="['glyphicon', glyphiconClass]" />
             {{ title }}

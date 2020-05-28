@@ -12,9 +12,9 @@ export default {
             required: true
         },
         /** Whether the icon is currently clickable or marked disabled */
-        active: {
+        disabled: {
             type: Boolean,
-            default: true
+            default: false
         },
         /** Tooltip text */
         title: {
@@ -44,10 +44,10 @@ export default {
 <template>
     <button
         type="button"
-        :tabindex="active ? '0' : '-1'"
+        :tabindex="disabled ? '-1' : '0'"
         :class="['control-icon', 'glyphicon', glyphiconClass, inline ? 'inline' : 'standalone']"
         :title="title"
-        :disabled="!active"
+        :disabled="disabled"
         @click="onClick"
         @keyup.space.stop.prevent="onClick"
     >
