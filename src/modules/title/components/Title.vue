@@ -15,13 +15,12 @@ export default {
         $(this.$el).insertAfter(document.getElementById("root"));
     },
     created () {
-        const that = this,
-            myBus = Backbone.Events;
+        const myBus = Backbone.Events;
 
         myBus.listenTo(Radio.channel("Title"), {
-            "setSize": function () {
-                setTimeout(function () {
-                    that.renderDependingOnSpace();
+            "setSize": () => {
+                setTimeout(() => {
+                    this.renderDependingOnSpace();
                 }, 500);
             }
         });
