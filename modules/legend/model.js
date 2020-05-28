@@ -198,7 +198,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      */
     filterLayersForLegend: function () {
         const visibleLayer = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            filteredLegendUrl = visibleLayer.filter(layer => layer.get("legendURL") !== "ignore"),
+            filteredLegendUrl = visibleLayer.filter(layer => ["ignore", ""].indexOf(layer.get("legendURL")) === -1),
             isMode3D = Radio.request("Map", "isMap3d"),
             filterViewType = filteredLegendUrl.filter(layer => {
                 return (isMode3D && layer.get("supported").includes("3D")) || (!isMode3D && layer.get("supported").includes("2D"));
