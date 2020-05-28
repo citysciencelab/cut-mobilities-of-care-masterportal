@@ -35,6 +35,8 @@
             "kmlimport": "KML import",
             "routing": "Route planner",
             "draw": "Drawing / writing",
+            "commuterLines": "Commuter (Lines)",
+            "commuterAnimation": "Commuter (Animation)",
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
             "addWms": "Add WMS"
