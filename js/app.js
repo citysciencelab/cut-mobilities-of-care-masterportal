@@ -57,7 +57,7 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
 import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
-import Contact from "../modules/tools/contact/view";
+// import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/tools/featureLister/view";
@@ -286,10 +286,10 @@ async function loadApp () {
                 new RoutingView({model: tool});
                 break;
             }
-            case "contact": {
+            /* case "contact": {
                 new Contact({model: tool});
                 break;
-            }
+            }*/
             case "addWMS": {
                 new AddWMSView({model: tool});
                 break;

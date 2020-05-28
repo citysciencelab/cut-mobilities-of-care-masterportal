@@ -27,7 +27,7 @@ import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
-import Contact from "../../tools/contact/model";
+// import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
 import KmlImport from "../../tools/kmlImport/model";
@@ -301,9 +301,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(_.extend(attrs, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
             }
-            else if (attrs.id === "contact") {
+            /* else if (attrs.id === "contact") {
                 return new Contact(attrs, options);
-            }
+            }*/
             /**
              * wfsFeatureFilter
              * @deprecated in 3.0.0

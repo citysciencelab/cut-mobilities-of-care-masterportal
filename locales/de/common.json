@@ -163,7 +163,7 @@
                 "textLoadLayer": "Layer Laden"
             },
             "contact": {
-                "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
+                "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf \"$t(common:modules.tools.contact.textSendButton)\"",
                 "userNamePlaceholder": "Ihr Name",
                 "textSendButton": "Abschicken",
                 "emailAddressPlaceholder": "Ihre Emailadresse",
@@ -172,8 +172,11 @@
                 "errorEmail": "Bitte geben Sie eine gültige Emailadresse ein.",
                 "errorNumber": "Unter welcher Telefonnummer können wir Sie erreichen?",
                 "errorMessage": "Emailversand fehlgeschlagen!",
-                "successMessage": "Ihre Anfrage wurde erfolgreich versendet",
-                "successTicket": "Ihre Ticketnummer lautet: "
+                "errorIncompleteDeclarations": "Bitte füllen Sie alle Felder des Kontaktformulars korrekt aus damit Ihre Anfrage verschickt werden kann.",
+                "successMessage": "Ihre Anfrage wurde erfolgreich versendet.",
+                "successTicket": "Ihre Ticketnummer lautet: ",
+                "emailSubject": "Supportanfrage zum Portal ",
+                "termsOfPrivacy": "Sie erklären sich damit einverstanden, dass Ihre Daten zur Bearbeitung Ihres Anliegens verwendet werden. Weitere Informationen und Widerrufshinweise finden Sie in der <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">Datenschutzerklärung</a>."
             },
             "print": {
                 "titleLabel": "Titel",

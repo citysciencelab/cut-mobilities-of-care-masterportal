@@ -162,7 +162,7 @@
                 "textLoadLayer": "Load layer"
             },
             "contact": {
-                "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
+                "textPlaceholder": "Please write down your message in here and press \"$t(common:modules.tools.contact.textSendButton)\"",
                 "userNamePlaceholder": "Your name",
                 "textSendButton": "send message",
                 "emailAddressPlaceholder": "Your E-mail Address",
@@ -171,8 +171,11 @@
                 "errorEmail": "Please input a valid E-mail address",
                 "errorNumber": "Please input your phone number",
                 "errorMessage": "Sending Email failed!",
-                "successMessage": "Your request was sent successfully",
-                "successTicket": "Your ticket number is: "
+                "errorIncompleteDeclarations": "Please fill out all fields of the contact form correctly so that your request can be sent.",
+                "successMessage": "Your request was sent successfully.",
+                "successTicket": "Your ticket number is: ",
+                "emailSubject": "Support request for the portal ",
+                "termsOfPrivacy": "You agree that your data may be used to process your request. You will find further information and revocation notices in the <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">privacy policy</a>."
             },
             "print": {
                 "titleLabel": "Title",

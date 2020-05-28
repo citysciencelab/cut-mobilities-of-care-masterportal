@@ -1650,16 +1650,22 @@ Werkzeug, wodurch der Nutzer/die Nutzerin mit einem definierten Postfach Kontakt
 **ACHTUNG: Backend notwendig!**
 
 **Das Contact kommuniziert mit einem SMTP-Server und ruft dort die sendmail.php auf.**
-
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |serviceID|ja|String||Id des Emaildienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
+|name|nein|String|"Kontakt"|der Titel des Kontakt-Formulars|false|
+|glyphicon|nein|String|"glyphicon-envelope"|das neben dem Titel des Kontakt-Formulars anzuzeigende Icon (sog. glyphicon)|false|
+|maxLines|nein|Number|5|die Höhe des Nachricht-Feldes in Zeilen|false|
+|deactivateGFI|nein|Boolean|true|sollen durch das Öffnen des Kontakt-Formulars bereits geöffnete gfi-Fenster geschlossen werden?|false|
 |from|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email. Bitte den **[Hinweis zur Email-Sicherheit](#markdown-header-hinweis-zur-email-sicherheit)** beachten.|false|
 |to|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Adressat der Email. Bitte den **[Hinweis zur Email-Sicherheit](#markdown-header-hinweis-zur-email-sicherheit)** beachten.|false|
-|textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|false|
+|subject|nein|String|""|Der Betreff der alternativ zum Standard (siehe Übersetzungs-Datei modules.tools.contact.emailSubject) hinter der Ticket-ID verwendet werden soll.|false|
 |includeSystemInfo|nein|Boolean|false|Flag, ob Systeminfos des Absendern mitgeschickt werden sollen.|false|
-|deleteAfterSend|nein|Boolean|false|Flag, ob das Kontaktfenster nach erfolgreichem Versenden der Nachricht geschlossen und der Inhalt gelöscht werden soll.|false|
-|withTicketNo|nein|Boolean|true|Flag, ob bei erfolgreichem Versand der Anfrage eine Ticketnummer zurückgegeben werden soll.|false|
+|deleteAfterSend|nein|Boolean|false|Flag, ob der Inhalt nach erfolgreichem Versenden gelöscht werden soll.|false|
+|closeAfterSend|nein|Boolean|false|Flag, ob das Kontaktfenster nach erfolgreichem Versenden der Nachricht geschlossen werden soll.|false|
+|withTicketNo|nein|Boolean|false|Flag, ob bei erfolgreichem Versand der Anfrage eine Ticketnummer zurückgegeben werden soll.|false|
+|showTermsOfPrivacy|nein|Boolean|false|Flag, ob die Datenschutzrichtlinie angezeigt wird und ihr Anhaken pflicht ist (siehe Übersetzungs-Datei modules.tools.contact.termsOfPrivacy).|false|
+|contactInfo|nein|String|""|Zusätzlicher Text der zwischen Titel des Kontakt-Formulars und Eingabefeldern angezeigt werden soll.|false|
 
 **Beispiel**
 ```
@@ -1668,6 +1674,8 @@ Werkzeug, wodurch der Nutzer/die Nutzerin mit einem definierten Postfach Kontakt
     "name": "Kontakt",
     "glyphicon": "glyphicon-envelope",
     "serviceID": "123",
+    "maxLines": 5,
+    "deactivateGFI": true,
     "from": [
         {
             "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -1680,10 +1688,12 @@ Werkzeug, wodurch der Nutzer/die Nutzerin mit einem definierten Postfach Kontakt
             "name":"LGVGeoportalHilfe"
         }
     ],
-    "textPlaceholder": "Hier Text eingeben.",
     "includeSystemInfo": true,
     "deleteAfterSend": true,
-    "withTicketNo": false
+    "closeAfterSend": true,
+    "withTicketNo": true,
+    "showTermsOfPrivacy": true,
+    "contactInfo": "Hier haben Sie die Möglichkeit mit uns in Kontakt zu treten und uns Ihre Fragen und fruchtbaren Anregungen zu schicken."
 }
 ```
 

@@ -1,5 +1,6 @@
 <script>
 import Alerting from "./modules/alerting/components/Alerting.vue";
+import Contact from "./modules/tools/contact/components/Contact.vue";
 import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
@@ -10,6 +11,7 @@ export default {
     components: {
         ControlBar,
         Alerting,
+        Contact,
         SupplyCoord,
         Footer
     },
@@ -37,6 +39,7 @@ export default {
         <Alerting />
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
         <SupplyCoord v-if="configJson" />
+        <Contact v-if="configJson" />
         <template v-if="configJson">
             <component
                 :is="$options.components[addonKey]"
