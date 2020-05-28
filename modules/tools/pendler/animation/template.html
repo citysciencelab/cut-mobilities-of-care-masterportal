@@ -2,7 +2,7 @@
 <div class="form-group">
     <select id="select-kreis" class="form-control">
         <option disabled selected hidden>Landkreis auswählen</option>
-        <% _.each(kreise, function (element) { %>
+        <% kreise.forEach(function (element) { %>
             <% if (element === kreis) { %>
                 <option selected><%= element %></option>
             <% }
@@ -16,7 +16,7 @@
 <div class="form-group">
     <select id="select-gemeinde" class="form-control">
         <option disabled selected hidden>Amt/Samtgemeinde auswählen</option>
-        <% _.each(gemeinden, function (element) { %>
+        <% gemeinden.forEach(function (element) { %>
             <% if (typeof gemeinde !== "undefined" && element === gemeinde) { %>
                 <option selected><%= element %></option>
             <% }
@@ -40,42 +40,45 @@
 <% } %>
 <% if (typeof trefferAnzahl !== "undefined") { %>
 <div class="radio">
-  <label class=" radio-inline">
-    <input type="radio" name="direction" value="wohnort" <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
-    Wohnort
-  </label>
-  <label class=" radio-inline">
-    <input type="radio" name="direction" value="arbeitsort" <% if (typeof direction !== "undefined" && direction === "arbeitsort") { print ("checked")} %>>
-    Arbeitsort
-  </label>
+    <label class=" radio-inline">
+        <input type="radio" name="direction" value="wohnort" <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
+        Wohnort
+    </label>
+    <label class=" radio-inline">
+        <input type="radio" name="direction" value="arbeitsort" <% if (typeof direction !== "undefined" && direction === "arbeitsort") { print ("checked")} %>>
+        Arbeitsort
+    </label>
 </div>
 <% } %>
 <% if (typeof direction !== "undefined") { %>
     <% if (pendlerLegend.length > 0) { %>
         <table class="table">
-            <% _.each(pendlerLegend, function(gemeinde){ %>
-                <tr>
-                    <td>
-                        <div class="form-group pull-left animation_legend" style="background-color:<%= gemeinde.color %>"></div></td>
-                    <td><%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> Personen</td>
-                </tr>
+            <% pendlerLegend.forEach(function(gemeinde){ %>
+            <tr>
+                <td>
+                    <span class="form-group pull-left animation_legend" style="background-color:<%= gemeinde.color %>"></span>
+                </td>
+                <td>
+                    <%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> Personen
+                </td>
+            </tr>
             <% }); %>
         </table>
         <hr>
         <div class="form-group">
-        <button class="btn btn-default csv-download">
-            <span class="glyphicon glyphicon-download"></span>&nbsp;CSV Download
-        </button>
-        <% if (animating === true) { %>
-            <button class="btn btn-default pull-right reset">
-                <span class="glyphicon glyphicon-stop"></span>&nbsp;Reset
+            <button class="btn btn-default csv-download">
+                <span class="glyphicon glyphicon-download"></span>&nbsp;CSV Download
             </button>
-        <% }
-        else { %>
-            <button class="btn btn-default pull-right start">
-                <span class="glyphicon glyphicon-play"></span>&nbsp;Start
-            </button>
-        <% } %>
+            <% if (animating === true) { %>
+                <button class="btn btn-default pull-right reset">
+                    <span class="glyphicon glyphicon-stop"></span>&nbsp;Reset
+                </button>
+            <% }
+            else { %>
+                <button class="btn btn-default pull-right start">
+                    <span class="glyphicon glyphicon-play"></span>&nbsp;Start
+                </button>
+            <% } %>
         </div>
         <div class="form-group">
             <button class="btn btn-default btn-remove-features">

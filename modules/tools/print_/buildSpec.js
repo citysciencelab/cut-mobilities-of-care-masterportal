@@ -54,7 +54,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {void}
      */
     removeUniqueIdFromList: function (uniqueIdList, uniqueId) {
-        this.setUniqueIdList(_.without(uniqueIdList, uniqueId));
+        this.setUniqueIdList(Radio.request("Util", "differenceJs", uniqueIdList, [uniqueId]));
     },
 
     /**
@@ -65,7 +65,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     updateMetaData: function (layerName, parsedData) {
         const layers = this.get("attributes").hasOwnProperty("legend") && this.get("attributes").legend.hasOwnProperty("layers") ? this.get("attributes").legend.layers : undefined,
-            layer = _.findWhere(layers, {layerName: layerName});
+            layer = Radio.request("Util", "findWhereJs", layers, {layerName: layerName});
 
         if (layer !== undefined) {
             layer.metaDate = parsedData.hasOwnProperty("date") ? parsedData.date : "n.N.";
@@ -158,7 +158,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             if (layer instanceof Group) {
                 layer.getLayers().getArray().forEach(function (childLayer) {
                     printLayers.push(this.buildLayerType(childLayer, currentResolution));
-                }, this);
+                }.bind(this));
             }
             else {
                 printLayers.push(this.buildLayerType(layer, currentResolution));
@@ -168,7 +168,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     layers.push(printLayer);
                 }
             });
-        }, this);
+        }.bind(this));
 
         attributes.map.layers = layers.reverse();
     },
@@ -181,7 +181,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     getDrawLayerInfo: function (layer, extent) {
         const featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
-            features = _.sortBy(featuresInExtent, function (feature) {
+            features = Radio.request("Util", "sortBy", featuresInExtent, function (feature) {
                 return feature.getStyle().getZIndex();
             });
 
@@ -371,8 +371,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     }
                     mapfishStyleObject[stylingRule] = styleObject;
                 }
-            }, this);
-        }, this);
+            }.bind(this));
+        }.bind(this));
         return mapfishStyleObject;
     },
 
@@ -641,7 +641,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 if (convertedFeature) {
                     geojsonList.push(convertedFeature);
                 }
-            }, this);
+            }.bind(this));
         }
         else {
             convertedFeature = this.convertFeatureToGeoJson(feature);
@@ -777,7 +777,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         let layerModel = model;
 
         if (layerModel.get("typ") === "GROUP") {
-            layerModel = _.filter(layerModel.get("layerSource"), function (childLayer) {
+            layerModel = layerModel.get("layerSource").filter(childLayer => {
                 return childLayer.get("id") === layerId;
             })[0];
         }
@@ -848,7 +848,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         values: this.prepareLegendAttributes(layerParam)
                     });
                 }
-            }, this);
+            }.bind(this));
         }
 
         this.setShowLegend(isLegendSelected);
@@ -856,7 +856,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (isMetaDataAvailable) {
             metaDataLayerList.forEach(function (layerName) {
                 this.getMetaData(layerName);
-            }, this);
+            }.bind(this));
         }
     },
 
@@ -869,7 +869,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     getMetaData: function (layerName) {
         const layer = Radio.request("ModelList", "getModelByAttributes", {name: layerName}),
             metaId = layer.get("datasets") && layer.get("datasets")[0] ? layer.get("datasets")[0].md_id : null,
-            uniqueId = _.uniqueId(),
+            uniqueId = Radio.request("Util", "uniqueId"),
             cswObj = {};
 
         if (metaId !== null) {
@@ -902,7 +902,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             valuesArray.push(this.createStyleWmsLegendList(layerParam.legend[0].params));
         }
 
-        return _.flatten(valuesArray);
+        return [].concat(...valuesArray);
     },
 
     /**
@@ -928,7 +928,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             };
 
             wmsLegendList.push(wmsLegendObject);
-        }, this);
+        });
         return wmsLegendList;
     },
 
@@ -947,7 +947,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             urls.forEach(function (url, index) {
                 wfsLegendObject = this.createWfsLegendObject(url, legendNames[index]);
                 wfsLegendList.push(wfsLegendObject);
-            }, this);
+            }.bind(this));
         }
         else {
             wfsLegendObject = this.createWfsLegendObject(urls, layerName);
