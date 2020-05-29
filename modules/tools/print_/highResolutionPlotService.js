@@ -4,7 +4,7 @@ import {Circle, Polygon} from "ol/geom.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 
 const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         layoutList: [],
         currentLayout: undefined,
         scaleList: [],
@@ -180,7 +180,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         let result = "success",
             isError = true;
 
-        if (!_.isUndefined(response) && !_.isNull(response) &&
+        if (response !== undefined && response !== null &&
                 response.layouts && response.scales && response.outputFormats &&
                 response.layouts.length > 0 && response.scales.length > 0 && response.outputFormats.length > 0) {
             this.set("response", response);
@@ -189,10 +189,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             this.setScaleList(response.scales);
             this.setFormatList(response.outputFormats);
             this.setCurrentScale(Radio.request("MapView", "getOptions").scale);
-            this.setIsGfiAvailable(!_.isUndefined(this.getAttributeInLayoutByName("gfi")));
-            this.setIsLegendAvailable(!_.isUndefined(this.getAttributeInLayoutByName("legend")));
-            this.setIsScaleAvailable(!_.isUndefined(this.getAttributeInLayoutByName("scale")));
-            this.setIsMetaDataAvailable(!_.isUndefined(this.getAttributeInLayoutByName("metadata")));
+            this.setIsGfiAvailable(this.getAttributeInLayoutByName("gfi") !== undefined);
+            this.setIsLegendAvailable(this.getAttributeInLayoutByName("legend") !== undefined);
+            this.setIsScaleAvailable(this.getAttributeInLayoutByName("scale") !== undefined);
+            this.setIsMetaDataAvailable(this.getAttributeInLayoutByName("metadata") !== undefined);
             this.togglePostcomposeListener(this, true);
             isError = false;
         }
@@ -235,7 +235,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @return {object} layout
      */
     getLayoutByName: function (layoutList, layoutName) {
-        return _.find(layoutList, function (layout) {
+        return layoutList.find(layout => {
             return layout.name === layoutName;
         });
     },
@@ -379,7 +379,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     setScaleByMapView: function () {
-        const newScale = _.find(this.get("scaleList"), function (scale) {
+        const newScale = this.get("scaleList").find(scale => {
             return parseInt(scale, 10) === Radio.request("MapView", "getOptions").scale;
         });
 
@@ -416,10 +416,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     updatePrintPage: function () {
         if (this.has("scale") && this.has("currentLayout")) {
             if (this.get("isActive")) {
-                if (_.isEmpty(this.get("precomposeListener"))) {
+                if (Object.keys(this.get("precomposeListener")).length === 0) {
                     this.setPrecomposeListener(Radio.request("Map", "registerListener", "precompose", this.handlePreCompose.bind(this)));
                 }
-                if (_.isEmpty(this.get("postcomposeListener"))) {
+                if (Object.keys(this.get("postcomposeListener")).length === 0) {
                     this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this)));
                 }
             }
@@ -438,14 +438,12 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      */
     setGROUPLayerToPrint: function (layers) {
 
-        const sortedLayers = _.sortBy(layers, function (layer) {
-            return layer.get("selectionIDX");
-        });
+        const sortedLayers = Radio.request("Util", "sortBy", layers, (layer) => layer.get("selectionIDX"));
 
-        _.each(sortedLayers, function (groupLayer) {
+        sortedLayers.forEach(groupLayer => {
             const layerList = groupLayer.get("layerSource");
 
-            _.each(layerList, function (layer) {
+            layerList.forEach(layer => {
                 const params = {},
                     style = [];
 
@@ -487,11 +485,9 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      */
     setWMSLayerToPrint: function (layers) {
 
-        const sortedLayers = _.sortBy(layers, function (layer) {
-            return layer.get("selectionIDX");
-        });
+        const sortedLayers = Radio.request("Util", "sortBy", layers, (layer) => layer.get("selectionIDX"));
 
-        _.each(sortedLayers, function (layer) {
+        sortedLayers.forEach(layer => {
             // only important for treeFilter
             const params = {},
                 style = [];
@@ -559,27 +555,27 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             styleModel,
             printStyleObj = {};
 
-        if (!_.isUndefined(layer)) {
+        if (layer !== undefined) {
             // get styleModel if layerId is defined.
             // layer id is not defined for portal-internal layer like animationLayer and import_draw_layer
             // then the style is located directly at the feature, see line 312
-            if (!_.isUndefined(layerId) || !_.isUndefined(layer.id)) {
+            if (layerId !== undefined || layer.id !== undefined) {
                 layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
-                isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
+                isClustered = layerModel.get("clusterDistance") !== undefined;
                 styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
             }
             // All features that have a circle-geometry
-            _.each(layer.getSource().getFeatures(), function (feature) {
+            layer.getSource().getFeatures().forEach(feature => {
                 if (feature.getGeometry() instanceof Circle) {
                     // creates a regular polygon from a circle with 32(default) sides
                     feature.setGeometry(Polygon.fromCircle(feature.getGeometry()));
                 }
             });
 
-            _.each(layer.getSource().getFeatures(), function (feature, index) {
+            layer.getSource().getFeatures().forEach((feature, index) => {
                 const type = feature.getGeometry().getType(),
-                    styles = !_.isUndefined(feature.getStyleFunction()) ? feature.getStyleFunction().call(feature) : styleModel.createStyle(feature, isClustered),
-                    style = _.isArray(styles) ? styles[0] : styles,
+                    styles = feature.getStyleFunction() !== undefined ? feature.getStyleFunction().call(feature) : styleModel.createStyle(feature, isClustered),
+                    style = Array.isArray(styles) ? styles[0] : styles,
                     coordinates = feature.getGeometry().getCoordinates();
 
                 features.push({
@@ -630,19 +626,19 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             imgName = style.getImage() instanceof Icon ? style.getImage().getSrc() : undefined;
 
         // Points without text
-        if (_.isNull(style.getText()) || _.isUndefined(style.getText())) {
+        if (style.getText() !== null || style.getText() !== undefined) {
             // style image is an Icon
-            if (!_.isUndefined(imgName)) {
+            if (imgName !== undefined) {
                 // get imagename from src path
                 imgName = imgName.match(/(?:[^/]+)$/g)[0];
                 imgPath += imgName;
                 imgPath = encodeURI(imgPath);
                 pointStyleObject = {
                     externalGraphic: imgPath,
-                    graphicWidth: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[0] * style.getImage().getScale() : 20,
-                    graphicHeight: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[1] * style.getImage().getScale() : 20,
-                    graphicXOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[0] : 0,
-                    graphicYOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[1] : 0
+                    graphicWidth: Array.isArray(style.getImage().getSize()) ? style.getImage().getSize()[0] * style.getImage().getScale() : 20,
+                    graphicHeight: Array.isArray(style.getImage().getSize()) ? style.getImage().getSize()[1] * style.getImage().getScale() : 20,
+                    graphicXOffset: style.getImage().getAnchor() !== null ? -style.getImage().getAnchor()[0] : 0,
+                    graphicYOffset: style.getImage().getAnchor() !== null ? -style.getImage().getAnchor()[1] : 0
                 };
             }
             // style is an Circle or Point without Icon
@@ -690,10 +686,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      */
     setSpecification: function (gfiPosition) {
         const layers = Radio.request("Map", "getLayers").getArray(),
-            animationLayer = _.filter(layers, function (layer) {
+            animationLayer = layers.filter(layer => {
                 return layer.get("name") === "animationLayer";
             }),
-            wfsLayer = _.filter(layers, function (layer) {
+            wfsLayer = layers.filter(layer => {
                 return layer.get("typ") === "WFS" && layer.get("visible") === true && layer.getSource().getFeatures().length > 0;
             }),
             specification = {
@@ -718,12 +714,12 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         if (animationLayer.length > 0) {
             this.setLayer(animationLayer[0]);
         }
-        _.each(wfsLayer, function (layer) {
+        wfsLayer.forEach(layer => {
             this.setLayer(layer);
-        }, this);
+        });
 
         if (gfiPosition !== null) {
-            _.each(_.flatten(this.get("gfiParams")), function (element, index) {
+            [].concat(...this.get("gfiParams")).forEach((element, index) => {
                 specification.pages[0]["attr_" + index] = element;
             }, this);
             specification.pages[0].layerName = this.get("gfiTitle");
@@ -784,16 +780,16 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     */
     getGfiForPrint: function () {
         const gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
-            gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
-            gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitle
-            gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Coordinates of GFI
+            gfiParams = Array.isArray(gfis) ? Object.entries(gfis[0]) : null, // Parameter
+            gfiTitle = Array.isArray(gfis) ? gfis[1] : "", // Layertitle
+            gfiPosition = Array.isArray(gfis) ? gfis[2] : null, // Coordinates of GFI
             printGFI = this.get("gfi"), // should be printed according to config parameter?
             printurl = this.get("printurl"); // URL of print service
 
         this.set("gfiParams", gfiParams);
         this.set("gfiTitle", gfiTitle);
         // If GFIPos exists and number of gfiParameter is != 0
-        if (!_.isNull(gfiPosition) && printGFI === true && gfiParams && gfiParams.length > 0) {
+        if (gfiPosition !== null && printGFI === true && gfiParams && gfiParams.length > 0) {
             this.set("createURL", printurl + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
         }
         else {
@@ -851,10 +847,10 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     push: function (attribute, value) {
-        const tempArray = _.clone(this.get(attribute));
+        const tempArray = JSON.parse(JSON.stringify(this.get(attribute)));
 
         tempArray.push(value);
-        this.set(attribute, _.flatten(tempArray));
+        this.set(attribute, tempArray.flat(Infinity));
     },
 
     /**
@@ -994,7 +990,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             height = this.get("currentLayout"),
             resolution = Radio.request("MapView", "getOptions");
 
-        if (_.isUndefined(s) || _.isUndefined(width) || _.isUndefined(height) || _.isUndefined(resolution) || _.isUndefined(mapSize) || _.isNull(mapSize)) {
+        if (s === undefined || width === undefined || height === undefined || resolution === undefined || mapSize === undefined || mapSize === null) {
             return "Error";
         }
 
@@ -1006,7 +1002,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         center = [mapSize[0] * DEVICE_PIXEL_RATIO / 2,
             mapSize[1] * DEVICE_PIXEL_RATIO / 2];
 
-        if (_.isNaN(w) || _.isNaN(h) || _.isNaN(center[0]) || _.isNaN(center[1])) {
+        if (isNaN(w) || isNaN(h) || isNaN(center[0]) || isNaN(center[1])) {
             return "Error";
         }
 
@@ -1087,7 +1083,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     setIsMetaDataAvailable: function (value) {
-        if (_.isBoolean(value)) {
+        if (typeof value === "boolean") {
             this.set("isMetaDataAvailable", value);
         }
         else {
@@ -1155,7 +1151,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     setIsGfiAvailable: function (value) {
-        if (_.isBoolean(value)) {
+        if (typeof value === "boolean") {
             this.set("isGfiAvailable", value);
         }
         else {
@@ -1169,7 +1165,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     setIsGfiActive: function (value) {
-        if (_.isBoolean(value)) {
+        if (typeof value === "boolean") {
             this.set("isGfiActive", value);
         }
         else {
@@ -1183,7 +1179,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     setIsGfiSelected: function (value) {
-        if (_.isBoolean(value)) {
+        if (typeof value === "boolean") {
             this.set("isGfiSelected", value);
         }
         else {
@@ -1197,7 +1193,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     setIsLegendAvailable: function (value) {
-        if (_.isBoolean(value)) {
+        if (typeof value === "boolean") {
             this.set("isLegendAvailable", value);
         }
         else {
@@ -1211,7 +1207,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     setIsScaleAvailable: function (value) {
-        if (_.isBoolean(value)) {
+        if (typeof value === "boolean") {
             this.set("isScaleAvailable", value);
         }
         else {
@@ -1245,9 +1241,11 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     setLayoutList: function (layouts) {
         const that = this;
 
-        _.each(layouts, function (layout) {
-            that.get("layoutList").push(layout);
-        });
+        if (Array.isArray(layouts)) {
+            layouts.forEach(layout => {
+                that.get("layoutList").push(layout);
+            });
+        }
     },
 
     /**
@@ -1258,9 +1256,11 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     setFormatList: function (formats) {
         const that = this;
 
-        _.each(formats, function (format) {
-            that.get("formatList").push(format.name);
-        });
+        if (Array.isArray(formats)) {
+            formats.forEach(format => {
+                that.get("formatList").push(format.name);
+            });
+        }
     },
 
     /**
@@ -1271,9 +1271,11 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     setScaleList: function (scales) {
         const that = this;
 
-        _.each(scales, function (scale) {
-            that.get("scaleList").push(scale.value);
-        });
+        if (Array.isArray(scales)) {
+            scales.forEach(scale => {
+                that.get("scaleList").push(scale.value);
+            });
+        }
     },
 
     /**
@@ -1282,7 +1284,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @returns {void}
      */
     setIsScaleSelectedManually: function (value) {
-        if (_.isBoolean(value)) {
+        if (typeof value === "boolean") {
             this.set("isScaleSelectedManually", value);
         }
         else {

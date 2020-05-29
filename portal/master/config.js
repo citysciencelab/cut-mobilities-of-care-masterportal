@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 const Config = {
     addons: ["einwohnerabfrage"],
     modules: {
@@ -94,8 +92,10 @@ const Config = {
      * @property {boolean} Config.useVectorStyleBeta Flag to use the new vectorStyling module for backward compatibility
      * @default false
      */
-    useVectorStyleBeta: true,
-    loaderText: "Master"
+    useVectorStyleBeta: true
 };
 
-/* eslint-enable no-unused-vars */
+// conditional export to make config readable by e2e tests
+if (typeof module !== "undefined") {
+    module.exports = Config;
+}

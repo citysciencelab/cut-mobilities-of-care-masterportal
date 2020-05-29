@@ -18,7 +18,7 @@
 
     <select class="form-control input" id="dropdown">
          <option title="<%=currentContent.name %>"><%=currentContent.name %></option>
-        <% _.each(currentContent.options, function (option,i) {%>
+        <% currentContent.options.forEach(function (option,i) {%>
             <option title="<%=option %>"><%=option %></option>
         <% });%>
     </select>
@@ -28,10 +28,10 @@
     <%};%>
 
     <%if (currentFilters.length > 0){%>
-        <%_.each(currentFilters,function(filter){%>
+        <%currentFilters.forEach(function(filter){%>
             <div>
                 <label><%=filter.layername%></%></label>
-                <%_.each(filter.attributes,function(attr){%>
+                <%filter.attributes.forEach(function(attr){%>
                     <button id="<%=filter.layername+'__'+attr.attribute+'__'+attr.value %>" title="<%=attr.value %>" class="btn btn-lgv-grey btn_remove" type="button"><%=attr.attribute %>
                         <span class ="glyphicon glyphicon-remove"></span>
                     </button>

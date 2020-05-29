@@ -1,7 +1,6 @@
 <script>
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
-import Loader from "./share-components/Loader.vue";
 import MapModuleDebug from "./modules/map/components/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
 
@@ -10,7 +9,6 @@ export default {
     components: {
         MainNav,
         MapRegion,
-        Loader,
         MapModuleDebug
     },
     data: () => ({isDevMode})
@@ -27,7 +25,11 @@ export default {
         <MapRegion class="map-region" />
         <MapModuleDebug v-if="isDevMode" />
         <!-- keep loader last so it's above it all -->
-        <Loader />
+        <!--
+            NOTE currently doesn't work in all browser since vue renders too late;
+            after everything goes through vue, this should be usable again
+            <Loader />
+        -->
     </div>
 </template>
 

@@ -62,7 +62,7 @@ const FolderViewMenu = Backbone.View.extend(/** @lends FolderViewMenu.prototype 
         const obliqueModeBlacklist = this.model.get("obliqueModeBlacklist"),
             modelId = this.model.get("id");
 
-        if (mapMode === "Oblique" && _.contains(obliqueModeBlacklist, modelId)) {
+        if (mapMode === "Oblique" && obliqueModeBlacklist.indexOf(modelId) > -1) {
             this.$el.hide();
         }
         else {

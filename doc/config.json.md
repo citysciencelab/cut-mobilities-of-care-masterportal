@@ -797,25 +797,24 @@ Konfigurations-Optionen der Legende.
 ***
 
 #### Portalconfig.menu.info
-
 [inherits]: # (Portalconfig.menu.folder)
 
-Informations-Ordner in dem Werkzeuge oder Staticlinks eingetragen werden können.
+Dies ist ein Menüreiter, in dem typischerweise Links *("staticlinks")* zu Informationen angelegt werden. Es können aber auch Werkzeuge *("tools")* hinterlegt werden.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|children|nein|**[children](#markdown-header-portalconfigmenuinfochildren)**||Konfiguration der Kindelemente des Informations Ordners.|false|
+|children|nein|**[children](#markdown-header-portalconfigmenuinfochildren)**||Konfiguration der Kindelemente des Menüreiters.|false|
 
 ***
 
 ##### Portalconfig.menu.info.children
-[type:staticlinks]: # (Portalconfig.menu.staticlinks)
+[type:staticlink]: # (Portalconfig.menu.staticlinks.staticlink)
 
-Liste der Werkzeuge oder Staticlinks die im Info-Ordner erscheinen sollen.
+Liste der Werkzeuge *("tools")* oder Links *("staticlinks")*, die im Menüreiter *"info"* erscheinen sollen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|children|nein|**[staticlinks](#markdown-header-portalconfigmenustaticlinks)**||Konfiguration der Kindelemente des Informations Ordners.|false|
+|staticlinks|nein|**[staticlink](#markdown-header-portalconfigmenustaticlinks)**[]||Konfigurationsobjekt zur Erstellung von Links im Menüreiter.|false|
 
 ***
 
@@ -1030,49 +1029,49 @@ Liste der Einstellungen zum Überschreiben von Vektorstyles bei GFI Abfragen.
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules.fill
-Todo
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|color|nein|Float[]|[255, 255, 255, 0.5]|Mögliche Einstellung: color (RGBA)|false|
 
 ```
 #!json
-{
-    "color": [215, 102, 41, 0.9]
-}
+"fill": { "color": [215, 102, 41, 0.9] }
 ```
 
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules.image
-Todo
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|scale|nein|Float|1|Mögliche Einstellung: scale|false|
 
 ```
 #!json
-{
-    "scale": 1.5
-}
+"image": { "scale": 1.5 }
 ```
 
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules.stroke
-Todo
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|width|nein|Integer|1|Mögliche Einstellung: width|false|
 
 ```
 #!json
-{
-    "width": 4
-}
+"stroke": { "width": 4 }
 ```
 
 ***
 
 ##### Portalconfig.menu.tool.gfi.highlightVectorRules.text
-Todo
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|scale|nein|Float|1|Mögliche Einstellung: scale|false|
 
 ```
 #!json
-{
-    "scale": 2
-}
+"text": { "scale": 2 }
 ```
 
 ***
@@ -1656,11 +1655,8 @@ Werkzeug, wodurch der Nutzer/die Nutzerin mit einem definierten Postfach Kontakt
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |serviceID|ja|String||Id des Emaildienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
-|from|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email.|false|
-|to|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Addressat der Email.|false|
-|cc|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[]|CC der Email.|false|
-|bcc|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[]|BCC der Email.|false|
-|ccToUser|nein|Boolean|false|Flag, ob der Absender auch als CC eingetragen werden soll.|false|
+|from|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email. Bitte den **[Hinweis zur Email-Sicherheit](#markdown-header-hinweis-zur-email-sicherheit)** beachten.|false|
+|to|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Adressat der Email. Bitte den **[Hinweis zur Email-Sicherheit](#markdown-header-hinweis-zur-email-sicherheit)** beachten.|false|
 |textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|false|
 |includeSystemInfo|nein|Boolean|false|Flag, ob Systeminfos des Absendern mitgeschickt werden sollen.|false|
 |deleteAfterSend|nein|Boolean|false|Flag, ob das Kontaktfenster nach erfolgreichem Versenden der Nachricht geschlossen und der Inhalt gelöscht werden soll.|false|
@@ -1685,15 +1681,32 @@ Werkzeug, wodurch der Nutzer/die Nutzerin mit einem definierten Postfach Kontakt
             "name":"LGVGeoportalHilfe"
         }
     ],
-    "cc": [],
-    "bcc": [],
-    "ccTouser": true,
     "textPlaceholder": "Hier Text eingeben.",
     "includeSystemInfo": true,
     "deleteAfterSend": true,
     "withTicketNo": false
 }
 ```
+
+##### Hinweis zur Email-Sicherheit
+Von der ungeprüften Übernahme von *Sender (FROM)*, *Empfänger (TO)*, *Kopie (CC)* und *Blindkopie (BCC)* durch den SMTP-Server wird hiermit aus Sicherheitsgründen **ausdrücklich abgeraten**.
+Vor der ungeprüften Übernahme durch den SMTP-Server der Kunden-Email als *Antwort an* (REPLY-TO) wird gewarnt.
+
+Wir empfehlen dringend *FROM* und *TO* am SMTP-Server manuell fest einzustellen, ohne eine Möglichkeit zur externen Konfiguration anzubieten.
+
+>Aus Sicherheitsgründen darf der vom Masterportal an den SMTP-Server geschickte *Sender (FROM)* und der *Empfänger (TO)* nicht ungeprüft vom SMTP-Server als FROM und TO für die Email verwendet werden. Ansonsten entsteht eine Lücke über die Schad-Mails mit manipuliertem FROM und TO über den SMTP-Server versendet werden. Sollte dennoch eine Konfiguration im Masterportal gewünscht sein (siehe Beispiel oben), können die Parameter *from* und *to* unter dem Vorbehalt verwendet werden, dass *from* und *to* am SMTP-Server gegen eine **Whitelist** mit erlaubten Email-Adressen geprüft und das Versenden einer Email im Falle der Angabe inkorrekter Email-Adressen unterbunden wird.
+
+Wir empfehlen auf das automatische Setzen in *CC* (bzw. *BCC*) der Email-Adresse des Kunden zu verzichten.
+
+>Aus Sicherheitsgründen darf der Kunde nicht automatisch als *Kopie (CC)* oder *Blindkopie (BCC)* der Email gesetzt werden. Ein solcher Automatismus wird missbraucht um durch Angabe einer Fremd-Email-Adresse Schad-Mails über den SMTP-Server zu versenden.
+
+Wir empfehlen dringend *CC* und *BCC* am SMTP-Server manuell zu nullen.
+
+>Es darf keine Möglichkeit geben *Kopie (CC)* oder *Blindkopie (BCC)* über das Masterportal einzustellen. Ein solches Feature wird zum Versenden von Schad-Mails über den SMTP-Server missbraucht.
+
+Wir warnen vor der automatischen Einstellung der Kunden-Mail als *REPLY-TO*.
+
+>Die ungeprüfte Übernahme von Daten in den Email-Header ist je nach Sicherheitsstand (bzw. Alter) des SMTP-Servers mit dem Risiko verbunden, dass im einfachsten Fall durch Injektion von *Carriage Return* und *Line Feed* in z.B. *REPLY-TO* aus der Email-Header-Zeile ausgebrochen und der Email-Header selbst manipuliert wird (Beispiel: "test@example.com\r\nBCC:target1@example.com,target2@example.com,(...),target(n)@example.com"). In einem abstrakteren Fall sind auch UTF-Attacken denkbar, bei der eigentlich harmlose UTF-16- oder UTF-32-Zeichen durch Interpretation als ANSI oder UTF-8 zu Verhaltensänderungen des Email-Headers mit einem ähnlichen Ergebnis führen.
 
 ***
 

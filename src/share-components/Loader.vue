@@ -1,7 +1,7 @@
 <script>
 import {mapGetters} from "vuex";
 
-/* TODO
+/* TODO Draft Status, currently not in use
  * Idea: control loader visibility via store module
  * Concept:
  *  - Store Module holds an array of keys (= strings)
@@ -9,6 +9,11 @@ import {mapGetters} from "vuex";
  *  - Anything may add its own key to the array of keys
  *  - When done, they must remove their own key
  * => As long as anything has its key registered, the loader is shown
+ */
+
+/*
+ * Snippet for config.js.md - loaderText could be defined like this.
+ * |loaderText|nein|String|""|Ein hier hinterlegter String wird auf dem initial angezeigten Ladebildschirm des Masterportals unter dem Logo angezeigt. Per default existiert ein solcher Anzeigetext nicht.|
  */
 
 /**
@@ -39,7 +44,7 @@ export default {
     },
     methods: {
         /**
-         * Turns simple mode off.
+         * Turns simple mode on.
          * @returns {void}
          */
         turnSimple () {
@@ -64,7 +69,7 @@ export default {
             class="complex-loader"
         >
             <img
-                class="portal-logo"
+                id="loader-portal-logo"
                 src="https://geoportal-hamburg.de/lgv-config/img/Logo_Masterportal.svg"
                 alt="Masterportal"
             >
@@ -89,9 +94,14 @@ export default {
         position: absolute;
         height: 100%;
         width: 100%;
-        /* TODO highest possible value - loader is supposed to be on top;
-         * this can be removed after the vue migration is done since loader is
-         * then the last item on the stack */
+
+        /* needed for IE11 */
+        top: 0;
+        left: 0;
+
+        /* NOTE highest possible value - loader is supposed to be on top;
+         * this can be removed after the _complete_ vue migration is done
+         * since only then loader will (probably?) be the last item on the stack */
         z-index: 2147483647;
 
         background-color: @secondary;
@@ -120,7 +130,7 @@ export default {
 
             text-align: center;
 
-            .portal-logo {
+            #loader-portal-logo {
                 width: 35vw;
             }
 

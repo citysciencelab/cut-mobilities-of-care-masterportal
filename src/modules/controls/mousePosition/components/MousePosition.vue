@@ -20,10 +20,10 @@ export default {
     },
     computed: {
         ...mapGetters("Map", ["prettyMouseCoord"]),
-        ...mapGetters(["mobile"]),
+        ...mapGetters(["controlsConfig", "mobile"]),
         // MousePosition is the only control that needs to do this itself since it's not a ControlBar child
         show () {
-            return !this.mobile;
+            return !this.mobile && this.controlsConfig?.mousePosition;
         }
     },
     methods: {

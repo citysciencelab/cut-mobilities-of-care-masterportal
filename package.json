@@ -23,7 +23,7 @@
     "test:all": "npm run test && npm run test:vue",
     "test:all:watch": "npm-run-all --parallel test:watch test:vue:watch",
     "browsertestserver": "webpack-dev-server --config devtools/webpack.browsertest.js",
-    "browsertest": "./node_modules/.bin/mocha --timeout 150000 ./test/end2end/TestRunner.js",
+    "browsertest": "./node_modules/.bin/mocha --timeout 3600000 ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js",
     "buildJsDoc": "node devtools/tasks/buildJsDoc.js"
@@ -95,7 +95,7 @@
     "jsdom-global": "^3.0.2",
     "less": "3.9.0",
     "less-loader": "^4.1.0",
-    "masterportalAPI": "git+https://bitbucket.org/geowerkstatt-hamburg/masterportalapi.git#v1.1.0",
+    "masterportalAPI": "git+https://bitbucket.org/geowerkstatt-hamburg/masterportalapi.git#v1.3.0",
     "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^6.2.0",
     "mocha-loader": "^2.0.0",

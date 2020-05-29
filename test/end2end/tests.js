@@ -1,16 +1,8 @@
-const // modulesControlsAttributionsTests = require("./tests/modules/controls/Attributions.js"),
-    modulesControlsBackForwardTests = require("./tests/modules/controls/BackForward.js"),
-    modulesControlsFreezeTests = require("./tests/modules/controls/Freeze.js"),
-    // modulesControlsFullScreenTests = require("./tests/modules/controls/FullScreen.js"),
-    modulesControlsOrientationTests = require("./tests/modules/controls/Orientation.js"),
-    // modulesControlsOverviewMapTests = require("./tests/modules/controls/OverviewMap.js"),
-    modulesControlsTotalViewTests = require("./tests/modules/controls/TotalView.js"),
-    // modulesControlsZoomTests = require("./tests/modules/controls/Zoom.js"),
-    panTests = require("./tests/Pan.js"),
-    zoomTests = require("./tests/Zoom.js");
+const {isBasic, is2D} = require("./settings");
 
 /**
- * The complete Triforce, or one or more components of the Triforce.
+ * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
+ * which parameters are required and must build the driver by itself, either per test or for the whole suite.
  * @typedef {Object} e2eTestParams
  * @property {selenium-webdriver.Builder} builder fully prepared builder that can be used for instantiation
  * @property {String} url to open Masterportal with
@@ -36,36 +28,60 @@ const // modulesControlsAttributionsTests = require("./tests/modules/controls/At
  */
 function tests (builder, url, browsername, resolution, config, mode) {
     describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
-        this.timeout(150000);
+        this.timeout(3600000);
 
-        const e2eTestParams = {builder, url, resolution, config, mode, browsername};
-
-        /*
-         * restriction statement to reduce tests during writing; will change a lot and should be ultimately removed;
-         * overall test call structure may require some changes previously to reduce run-time
-         */
-        if (mode !== "2D") {
-            // usage of 3D/OB mode not ready yet
+        if (isBasic(url) && !is2D(mode)) {
+            // portal/basic does not offer any mode besides 2D; skip all suites for non-2D basic
             return;
         }
 
-        // modules/controls
-        // TODO commented out for dev branch until ready
-        // modulesControlsAttributionsTests(e2eTestParams);
-        modulesControlsBackForwardTests(e2eTestParams);
-        modulesControlsFreezeTests(e2eTestParams);
-        // TODO commented out for dev branch until ready
-        // modulesControlsFullScreenTests(e2eTestParams);
-        modulesControlsOrientationTests(e2eTestParams);
-        // TODO commented out for dev branch until ready
-        // modulesControlsOverviewMapTests(e2eTestParams);
-        modulesControlsTotalViewTests(e2eTestParams);
-        // TODO commented out for dev branch until ready
-        // modulesControlsZoomTests(e2eTestParams);
+        // TODO remove to activate OB/3D testing (not used in first iteration, and OB may be moved to a different test run)
+        if (mode === "OB" || mode === "3D") {
+            return;
+        }
 
-        // non-module tests
-        panTests(e2eTestParams);
-        zoomTests(e2eTestParams);
+        /*
+         * TODO Check/Fix/Implement and re-activate tests one by one. Each running
+         * test shall then be PR'd back to dev to avoid tests and dev diverging again.
+         */
+        const suites = [
+                // modules/controls
+                // require("./tests/modules/controls/Attributions.js"),
+                // require("./tests/modules/controls/BackForward.js"),
+                // require("./tests/modules/controls/Button3D.js"),
+                // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
+                // require("./tests/modules/controls/ButtonOblique.js"),
+                // require("./tests/modules/controls/Freeze.js"),
+                // require("./tests/modules/controls/FullScreen.js"),
+                // require("./tests/modules/controls/Orientation.js"),
+                // require("./tests/modules/controls/OverviewMap.js"),
+                // require("./tests/modules/controls/TotalView.js"),
+                require("../../src/modules/controls/zoom/test/end2end/Zoom.js")
+
+                // modules/core
+                // require("./tests/modules/core/ParametricUrl.js"),
+
+                // modules/searchbar
+                // require("./tests/modules/searchbar/SearchCategories.js"),
+                // require("./tests/modules/searchbar/GdiSearch.js"),
+
+                // modules/tools
+                // require("./tests/modules/tools/Coord.js"),
+                // require("./tests/modules/tools/Gfi.js"),
+                // require("./tests/modules/tools/Measure.js"),
+                // require("./tests/modules/tools/ParcelSearch.js"),
+                // require("./tests/modules/tools/SearchByCoord.js"),
+
+                // non-module tests
+                // require("./tests/Pan.js"),
+                // require("./tests/Zoom.js"),
+                // require("./tests/Legend.js")
+            ],
+            e2eTestParams = {builder, url, resolution, config, mode, browsername};
+
+        for (const suite of suites) {
+            suite(e2eTestParams);
+        }
     });
 }
 

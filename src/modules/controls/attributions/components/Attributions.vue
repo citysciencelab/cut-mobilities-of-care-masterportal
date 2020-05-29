@@ -37,13 +37,12 @@ export default {
     },
     data () {
         return {
-            open: !this.mobile ? this.isInitOpenMobile : this.isInitOpenDesktop,
             attributionsChannel: Radio.channel("Attributions"),
             modelListChannel: Radio.channel("ModelList")
         };
     },
     computed: {
-        ...mapGetters("controls/attributions", ["attributionList"]),
+        ...mapGetters("controls/attributions", ["attributionList", "open", "openable"]),
         ...mapGetters(["mobile"])
     },
     created () {
@@ -51,6 +50,7 @@ export default {
         this.attributionsChannel.on("removeAttribution", this.removeAttribution);
         this.modelListChannel.on("updateVisibleInMapList", this.updateAttributions);
         this.updateAttributions();
+        this.setOpen(this.mobile ? this.isInitOpenMobile : this.isInitOpenDesktop);
     },
     beforeDestroy () {
         this.attributionsChannel.off("createAttribution", this.addAttribution);
@@ -58,14 +58,14 @@ export default {
         this.modelListChannel.off("updateVisibleInMapList", this.updateAttributions);
     },
     methods: {
-        ...mapMutations("controls/attributions", ["addAttribution", "removeAttribution"]),
-        ...mapActions("controls/attributions", ["updateAttributions"]),
+        ...mapMutations("controls/attributions", ["setOpen"]),
+        ...mapActions("controls/attributions", ["addAttribution", "removeAttribution", "updateAttributions"]),
         /**
          * Toggles whether attributions flyout is visible.
          * @returns {void}
          */
         toggleAttributionsFlyout: function () {
-            this.open = !this.open;
+            this.setOpen(!this.open);
         }
     }
 };
@@ -75,6 +75,7 @@ export default {
     <div class="attributions-wrapper">
         <ControlIcon
             class="attributions-button"
+            :active="openable"
             :title="$t(`common:modules.controls.attributions.${open ? 'hideAttributions' : 'showAttributions'}`)"
             :icon-name="open ? 'forward' : 'info-sign'"
             :on-click="toggleAttributionsFlyout"
@@ -106,10 +107,11 @@ export default {
 
         .attributions-view {
             color: @secondary_contrast;
-            font-size: @font_size_default;
-            font-family: @font_family_default;
-            font-weight: 400;
             background-color: @secondary;
+
+            max-width: calc(100vw - 410px);
+            width: max-content;
+            min-width: min-content;
 
             border: 1px solid @secondary_border;
             box-shadow: 0 6px 12px @shadow;
@@ -122,15 +124,21 @@ export default {
             bottom: 0;
             right: 100%;
 
-            dt {
-                font-size: @font_size_huge;
-                color: @primary;
-            }
             dl {
                 margin-bottom: 0;
             }
+            dt {
+                color: @primary;
+                font-size: @font_size_big;
+                font-family: @font_family_narrow;
+                font-weight: 400;
+                /* required for ie11, else text will break asap */
+                display: flex;
+            }
             dd {
                 margin-bottom: 8px;
+                /* required for ie11, else text will break asap */
+                display: flex;
             }
             img {
                 max-height: 2em;

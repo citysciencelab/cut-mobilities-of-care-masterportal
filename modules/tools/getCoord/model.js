@@ -5,7 +5,7 @@ import {getProjections, transformFromMapProjection} from "masterportalAPI/src/cr
 
 
 const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         selectPointerMove: null,
         projections: [],
         mapProjection: null,
@@ -164,7 +164,7 @@ const CoordPopup = Tool.extend(/** @lends CoordPopup.prototype */{
     returnProjectionByName: function (name) {
         const projections = this.get("projections");
 
-        return _.find(projections, function (projection) {
+        return projections.find(projection => {
             return projection.name === name;
         });
     },

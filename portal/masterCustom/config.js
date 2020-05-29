@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 const Config = {
     clickCounter: {},
     footer: {
@@ -71,8 +69,10 @@ const Config = {
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
         loadPath: "/locales/{{lng}}/{{ns}}.json"
-    },
-    loaderText: "Master Custom"
+    }
 };
 
-/* eslint-enable no-unused-vars */
+// conditional export to make config readable by e2e tests
+if (typeof module !== "undefined") {
+    module.exports = Config;
+}

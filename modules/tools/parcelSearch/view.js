@@ -83,7 +83,7 @@ const ParcelSearchView = Backbone.View.extend({
         if (this.model.get("districtNumber") !== "0" &&
             (this.model.get("cadastralDistrictField") === false || this.model.get("cadastralDistrictNumber") !== "0") &&
             this.model.get("parcelNumber") !== "" &&
-            _.isNumber(parseInt(this.model.get("parcelNumber"), 10)) &&
+            typeof parseInt(this.model.get("parcelNumber"), 10) === "number" &&
             (this.model.get("parcelDenominatorField") === false || this.model.get("ParcelDenominatorNumber") !== "")) {
             this.$("#submitbutton").attr("disabled", false);
             this.$("#reportbutton").attr("disabled", false);

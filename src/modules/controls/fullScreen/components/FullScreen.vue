@@ -82,7 +82,22 @@ export default {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
         }
     },
+    mounted () {
+        document.addEventListener("mozfullscreenchange", this.escapeHandler);
+        document.addEventListener("MSFullscreenChange", this.escapeHandler);
+        document.addEventListener("webkitfullscreenchange", this.escapeHandler);
+        document.addEventListener("fullscreenchange", this.escapeHandler);
+    },
     methods: {
+        /**
+         * Defines the variable "active" depending on whether the fullscreenmode is activated or deactivated.
+         * Is necessary to capture the termination of the fullscreenmode via the ESC key and to render the fullscreenbutton correctly (on/off) in the further process.
+         * @returns {void}
+         */
+        escapeHandler () {
+            this.active = isFullScreen();
+        },
+
         /**
          * Toggles between fullscreen and normal screen.
          * @returns {void}
@@ -93,7 +108,6 @@ export default {
                 window.open(window.location.href, "_blank");
                 return;
             }
-
             if (this.active) {
                 this.active = !closeFullScreen();
             }
