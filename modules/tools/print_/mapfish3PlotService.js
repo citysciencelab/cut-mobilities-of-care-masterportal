@@ -327,7 +327,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
         visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
 
-        if (value && model.get("layoutList").length !== 0 && visibleLayerList.length > 1) {
+        if (value && model.get("layoutList").length !== 0 && visibleLayerList.length >= 1) {
             canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
             this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
             this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateCanvasLayer.bind(this)));
