@@ -415,7 +415,7 @@ const ElektroladesaeulenTheme = Theme.extend({
 
         // Check if data is available
         if (this.checkObservationsNotEmpty(historicalData)) {
-            historicalDataThisTimeZone = this.changeTimeZone(historicalData, utc);
+            historicalDataThisTimeZone = Radio.request("Util", "changeTimeZone", historicalData, utc);
             historicalDataWithIndex = this.addIndex(historicalDataThisTimeZone);
             dataByWeekday = this.divideDataByWeekday(historicalDataWithIndex, lastDay, endDay);
         }
@@ -441,45 +441,6 @@ const ElektroladesaeulenTheme = Theme.extend({
         });
 
         return boolean;
-    },
-
-
-    /**
-     * change the timzone for the historicalData
-     * @param  {Object[]} historicalData - data from feature
-     * @param  {Object[]} utc - timezone
-     * @return {Object[]} data
-     */
-    changeTimeZone: function (historicalData, utc) {
-        const data = _.isUndefined(historicalData) ? [] : historicalData;
-
-        _.each(data, function (loadingPointData) {
-            _.each(loadingPointData.Observations, function (obs) {
-                const phenomenonTime = obs.phenomenonTime,
-                    utcAlgebraicSign = utc.substring(0, 1),
-                    utcString = _.isUndefined(utc) ? "+1" : utc;
-
-                let utcSub,
-                    utcNumber;
-
-                if (utcString.length === 2) {
-                    // check for winter- and summertime
-                    utcSub = parseInt(utcString.substring(1, 2), 10);
-                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
-                    utcNumber = "0" + utcSub + "00";
-                }
-                else if (utcString.length > 2) {
-                    utcSub = parseInt(utcString.substring(1, 3), 10);
-                    utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
-                    utcNumber = utc.substring(1, 3) + "00";
-                }
-
-                obs.phenomenonTime = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
-
-            });
-        });
-
-        return data;
     },
 
     /**

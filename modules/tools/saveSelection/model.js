@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 
 const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         zoomLevel: "",
         centerCoords: [],
         layerIDList: [],
@@ -89,9 +89,10 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
             return !model.get("isExternal");
         });
 
-        filteredLayerList = _.sortBy(filteredLayerList, function (model) {
+        filteredLayerList = Radio.request("Util", "sortBy", filteredLayerList, function (model) {
             return model.get("selectionIDX");
         });
+
         this.setLayerList(filteredLayerList);
         this.createParamsValues();
     },
@@ -104,11 +105,15 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
         const layerVisibilities = [],
             layerTrancparence = [];
 
-        _.each(this.get("layerList"), function (model) {
+        this.get("layerList").forEach(model => {
             layerVisibilities.push(model.get("isVisibleInMap"));
             layerTrancparence.push(model.get("transparency"));
         });
-        this.setLayerIdList(_.pluck(this.get("layerList"), "id"));
+
+        this.setLayerIdList(this.get("layerList").map(function (elem) {
+            return elem.id;
+        }));
+
         this.setLayerTransparencyList(layerTrancparence);
         this.setLayerVisibilityList(layerVisibilities);
         this.setUrl();

@@ -116,9 +116,9 @@ const WfsFeatureFilterView = Backbone.View.extend({
                         attributname = elementfilter.fieldName;
                         attributvalue = elementfilter.fieldValue;
                         if (attributvalue !== "*") {
-                            featureattribute = Radio.request("Util", "pick", feature.getProperties(), attributname);
+                            featureattribute = Radio.request("Util", "pick", feature.getProperties(), [attributname]);
                             if (featureattribute && featureattribute !== null) {
-                                featurevalue0 = featureattribute.values[0];
+                                featurevalue0 = Object.values(featureattribute)[0];
                                 if (featurevalue0) {
                                     featurevalue = featurevalue0.trim();
                                     if (featurevalue !== attributvalue) {

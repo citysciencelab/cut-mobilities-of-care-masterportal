@@ -19,9 +19,18 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Map", ["prettyMouseCoord"])
+        ...mapGetters("Map", ["prettyMouseCoord"]),
+        ...mapGetters(["controlsConfig", "mobile"]),
+        // MousePosition is the only control that needs to do this itself since it's not a ControlBar child
+        show () {
+            return !this.mobile && this.controlsConfig?.mousePosition;
+        }
     },
     methods: {
+        /**
+         * Toggle function that shows/hides the mousePosition control.
+         * @returns {void}
+         */
         toggleOpen () {
             this.open = !this.open;
         }
@@ -31,16 +40,17 @@ export default {
 
 <template>
     <div
+        v-if="show"
         :class="['mouse-position', open ? 'open' : 'closed']"
     >
         <span
             :class="['mouse-position-span', open ? 'open' : 'closed']"
         >
-            {{ prettyMouseCoord || `common:modules.controls.mousePosition.hint` }}
+            {{ prettyMouseCoord || $t(`common:modules.controls.mousePosition.hint`) }}
         </span>
         <ControlIcon
             :icon-name="`chevron-${open ? 'left' : 'right'}`"
-            :title="`common:modules.controls.mousePosition.${open ? 'hide' : 'show'}MousePosition`"
+            :title="$t(`common:modules.controls.mousePosition.${open ? 'hide' : 'show'}MousePosition`)"
             :active="true"
             :on-click="toggleOpen"
             inline
@@ -49,7 +59,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../../../variables.less";
+    @import "~variables";
 
     .mouse-position {
         display: flex;

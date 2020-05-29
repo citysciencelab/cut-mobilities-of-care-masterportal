@@ -43,7 +43,7 @@ const TreeFilterView = Backbone.View.extend({
         });
         // http://holdirbootstrap.de/javascript/#dropdowns
         $(document.body).on("hidden.bs.dropdown", "#categoryToggle", this, function (evt) {
-            if (_.contains(evt.data.model.get("categoryArray"), $("#categoryInput").val()) === false && evt.data.model.get("categoryArray").length !== 73) {
+            if (evt.data.model.get("categoryArray").indexOf($("#categoryInput").val()) === -1 && evt.data.model.get("categoryArray").length !== 73) {
                 // $(".dropdown-toggle-category").dropdown("toggle");
                 // evt.data.focusOnEnd($("#categoryInput"));
             }
@@ -52,7 +52,7 @@ const TreeFilterView = Backbone.View.extend({
             }
         });
         $(document.body).on("hidden.bs.dropdown", "#typeToggle", this, function (evt) {
-            if (_.contains(evt.data.model.get("typeArray"), $("#typeInput").val()) === false && $("#typeInput").val() !== "") {
+            if (evt.data.model.get("typeArray").indexOf($("#typeInput").val()) === -1 && $("#typeInput").val() !== "") {
                 // $(".dropdown-toggle-type").dropdown("toggle");
                 // evt.data.focusOnEnd($("#typeInput"));
             }

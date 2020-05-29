@@ -1,7 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 
 const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         deactivateGFI: false,
         renderToWindow: true,
         isCollapsed: undefined,
@@ -168,14 +168,14 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         const districts = {},
             cadastralDistricts = {};
 
-        _.each(obj, function (value, key) {
-            _.extend(districts, _.object([key], [value.id]));
-            if (_.has(value, "flur") && _.isArray(value.flur) && value.flur.length > 0) {
-                _.extend(cadastralDistricts, _.object([value.id], [value.flur]));
+        Object.entries(obj).forEach(([key, value]) => {
+            Object.assign(districts, Radio.request("Util", "toObject", [key], [value.id]));
+            if (value && value.hasOwnProperty("flur") && Array.isArray(value.flur) && value.flur.length > 0) {
+                Object.assign(cadastralDistricts, Radio.request("Util", "toObject", [value.id], [value.flur]));
             }
-        }, this);
+        });
         this.setDistricts(districts);
-        if (_.values(cadastralDistricts).length > 0) {
+        if (Object.values(cadastralDistricts).length > 0) {
             this.setCadastralDistricts(cadastralDistricts);
             this.setCadastralDistrictField(true);
         }
@@ -183,13 +183,13 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
     },
     createReport: function (flurstueck, gemarkung) {
         const jasperService = Radio.request("RestReader", "getServiceById", this.get("reportServiceId")),
-            params = _.isUndefined(jasperService) === false ? jasperService.get("params") : undefined;
+            params = jasperService !== undefined ? jasperService.get("params") : undefined;
 
-        let url = _.isUndefined(jasperService) === false ? jasperService.get("url") + "?" : undefined,
+        let url = jasperService !== undefined ? jasperService.get("url") + "?" : undefined,
             flurst_kennz = "";
 
         // setze flurst_nummer und gemarkung aus gfi Aufruf
-        if (_.isUndefined(flurstueck) === false) {
+        if (flurstueck !== undefined) {
             this.setParcelNumber(flurstueck);
             this.setDistrictNumber(gemarkung);
             this.setParcelFound(true);
@@ -200,7 +200,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         }
         flurst_kennz = this.createFlurstKennz();
         // if (this.get("parcelFound") === true) {
-        if (this.get("parcelFound") && _.isUndefined(url) === false && _.isUndefined(params) === false) {
+        if (this.get("parcelFound") && url !== undefined && params !== undefined) {
             params.flurstueckskennzeichen = flurst_kennz;
             url = this.buildUrl(url, params);
             window.open(url, "_blank");
@@ -212,7 +212,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
     buildUrl: function (url, params) {
         let addedUrl = url;
 
-        _.each(params, function (val, key) {
+        Object.entries(params).forEach(([key, val]) => {
             const andSymbol = "&";
 
             addedUrl += key + "=" + String(val) + andSymbol;
@@ -287,14 +287,14 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         else {
             position = $(member).find("gml\\:pos, pos")[0] ? $(member).find("gml\\:pos, pos")[0].textContent.split(" ") : null;
             coordinate = position ? [parseFloat(position[0]), parseFloat(position[1])] : null;
-            attributes = coordinate ? _.object(["coordinate"], [coordinate]) : {};
+            attributes = coordinate ? Radio.request("Util", "toObject", ["coordinate"], [coordinate]) : {};
             geoExtent = $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] ? $(member).find("iso19112\\:geographicExtent, geographicExtent")[0] : null;
-            attributes = geoExtent ? _.extend(attributes, _.object(["geographicExtent"], [geoExtent])) : attributes;
+            attributes = geoExtent ? Object.assign(attributes, Radio.request("Util", "toObject", ["geographicExtent"], [geoExtent])) : attributes;
 
             $(member).find("*").filter(function () {
                 return this.nodeName.indexOf("dog") !== -1 || this.nodeName.indexOf("gages") !== -1;
             }).each(function () {
-                _.extend(attributes, _.object([this.nodeName.split(":")[1]], [this.textContent]));
+                Object.assign(attributes, Radio.request("Util", "toObject", [this.nodeName.split(":")[1]], [this.textContent]));
             });
             this.setParcelFound(true);
 

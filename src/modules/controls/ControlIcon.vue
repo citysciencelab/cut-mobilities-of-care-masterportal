@@ -1,32 +1,39 @@
-
 <script>
+/**
+ * ControlIcon component to be used by controls to display
+ * clickable control buttons.
+ */
 export default {
     name: "ControlIcon",
     props: {
+        /** Name of the glyphicon, with or without prefix 'glyphicon-' */
         iconName: {
             type: String,
             required: true
         },
+        /** Whether the icon is currently clickable or marked disabled */
         active: {
             type: Boolean,
             default: true
         },
+        /** Tooltip text */
         title: {
             type: String,
             required: true
         },
+        /** onClick function of the button element */
         onClick: {
             type: Function,
-            default: () => {
-                /* noop */
-            }
+            default: () => console.warn("No onClick function was defined on this ControlIcon.")
         },
+        /** if true, icon is rendered as smaller inline-block */
         inline: {
             type: Boolean,
             default: false
         }
     },
     computed: {
+        /** @returns {string} glyphicon name with added prefix 'glyphicon-' if it was missing */
         glyphiconClass () {
             return this.iconName.startsWith("glyphicon-") ? this.iconName : `glyphicon-${this.iconName}`;
         }
@@ -50,7 +57,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "../../variables.less";
+    @import "~variables";
 
     .standalone {
         display: block;
@@ -123,4 +130,8 @@ export default {
         margin-left: 2px;
         margin-top: -1px;
     }
+    .glyphicon-fast-backward::before {
+        margin-top: -1px;
+    }
+    /* TODO: Since every glyphicon is supported via config, rules for every glyphicon should exist here */
 </style>

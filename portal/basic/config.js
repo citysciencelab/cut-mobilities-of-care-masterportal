@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 const Config = {
     wfsImgPath: "./ressources/img/",
     namedProjections: [
@@ -8,7 +6,7 @@ const Config = {
     footer: {
         urls: [
             {
-                "bezeichnung": "Kartographie und Gestaltung: ",
+                "bezeichnung": "common:modules.footer.designation",
                 "url": "https://www.geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
@@ -30,4 +28,7 @@ const Config = {
     useVectorStyleBeta: true
 };
 
-/* eslint-enable no-unused-vars */
+// conditional export to make config readable by e2e tests
+if (typeof module !== "undefined") {
+    module.exports = Config;
+}

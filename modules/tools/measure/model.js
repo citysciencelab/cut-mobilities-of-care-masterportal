@@ -8,7 +8,7 @@ import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
 import SnippetDropdownModel from "../../snippets/dropdown/model";
 const Measure = Tool.extend(/** @lends Measure.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         source: new VectorSource(),
         styles: [
             // general style

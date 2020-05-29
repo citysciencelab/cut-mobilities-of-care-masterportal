@@ -39,17 +39,15 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
         if (name && name.length > 0) {
             this.zoomToGeometry(name, this.get("layerId"), this.get("attribute"));
         }
-
-        Radio.trigger("Map", "registerListener", "postcompose", this.handlePostCompose, this);
     },
 
     /**
-    * Zooms to a geometry loaded from a WFS.
-    * @param {string} name - Name of the feature to zoom to.
-    * @param {string} layerId - Id from WFS-layer.
-    * @param {string} attribute - The attribute from the wfs.
-    * @returns {void}
-    **/
+     * Zooms to a geometry loaded from a WFS.
+     * @param {string} name - Name of the feature to zoom to.
+     * @param {string} layerId - Id from WFS-layer.
+     * @param {string} attribute - The attribute from the wfs.
+     * @returns {void}
+     **/
     zoomToGeometry: function (name, layerId, attribute) {
         const layerInformation = getLayerWhere({id: layerId});
 
@@ -91,13 +89,13 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
     },
 
     /**
-    * Zooms to the feature loaded by the WFS.
-    * @param {object} data - The GML String.
-    * @param {string} name - Name of the features.
-    * @param {string} attribute - GML attribute that is to be searched for the name.
-    * @fires Core#RadioTriggerMapZoomToExtent
-    * @returns {void}
-    **/
+     * Zooms to the feature loaded by the WFS.
+     * @param {object} data - The GML String.
+     * @param {string} name - Name of the features.
+     * @param {string} attribute - GML attribute that is to be searched for the name.
+     * @fires Core#RadioTriggerMapZoomToExtent
+     * @returns {void}
+     **/
     zoomToFeature: function (data, name, attribute) {
         const foundFeature = this.parseFeatures(data, name, attribute);
         let extent;
@@ -112,16 +110,18 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
             extent = this.calcExtent(foundFeature);
             Radio.trigger("Map", "zoomToExtent", extent);
         }
+
         this.setFeatureGeometry(foundFeature.getGeometry());
+        this.createLayerWithFeature(foundFeature);
     },
 
     /**
-    * Searches a GML string for a specific feature.
-    * @param {object} data - The GML String.
-    * @param {string} name - Name of the features.
-    * @param {string} attribute - GML attribute that is to be searched for the name.
-    * @returns {boolean | ol/feature} The WFS feature.
-    **/
+     * Searches a GML string for a specific feature.
+     * @param {object} data - The GML String.
+     * @param {string} name - Name of the features.
+     * @param {string} attribute - GML attribute that is to be searched for the name.
+     * @returns {boolean | ol/feature} The WFS feature.
+     **/
     parseFeatures: function (data, name, attribute) {
         const format = new WFS(),
             features = format.readFeatures(data),
@@ -157,13 +157,26 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
     },
 
     /**
+     * Adding a layer for creating the cancvas.
+     * @param {ol/feature} feature - Feature for the canvas.
+     * @returns {Void} -
+     */
+    createLayerWithFeature: function (feature) {
+        const zoomToGeometryLayer = Radio.request("Map", "createLayerIfNotExists", "zoomToGeometryLayer");
+
+        zoomToGeometryLayer.getSource().clear();
+        zoomToGeometryLayer.getSource().addFeature(feature);
+        zoomToGeometryLayer.on("postrender", this.handlePostRender.bind(this), this);
+    },
+
+    /**
      * todo
      * @param {*} evt - todo
      * @returns {void}
      */
-    handlePostCompose: function (evt) {
+    handlePostRender: function (evt) {
         const canvas = evt.context,
-            map = evt.target;
+            map = Radio.request("Map", "getMap");
 
         if (this.get("isRender") === true && this.get("featureGeometry") !== undefined) {
             canvas.beginPath();

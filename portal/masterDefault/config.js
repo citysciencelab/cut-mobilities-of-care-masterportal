@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 const Config = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     simpleMap: true,
@@ -61,7 +59,7 @@ const Config = {
         visibility: true,
         urls: [
             {
-                "bezeichnung": "translate#common:modules.footer.designation",
+                "bezeichnung": "common:modules.footer.designation",
                 "url": "https://www.geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV Hamburg"
@@ -69,7 +67,7 @@ const Config = {
             {
                 "bezeichnung": "",
                 "url": "https://www.hamburg.de/bsu/timonline",
-                "alias": "translate#common:modules.footer.cardDiscrepancy"
+                "alias": "common:modules.footer.cardDiscrepancy"
             }
         ]
     },
@@ -127,4 +125,7 @@ const Config = {
     }
 };
 
-/* eslint-enable no-unused-vars */
+// conditional export to make config readable by e2e tests
+if (typeof module !== "undefined") {
+    module.exports = Config;
+}

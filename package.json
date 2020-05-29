@@ -18,8 +18,12 @@
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts --timeout 15000",
     "test:watch": "npm run test -- --watch",
+    "test:vue": "mochapack --recursive --webpack-config devtools/webpack.vue.test.js ./test/unittests/**/*.spec.js",
+    "test:vue:watch": "npm run test:vue -- --watch",
+    "test:all": "npm run test && npm run test:vue",
+    "test:all:watch": "npm-run-all --parallel test:watch test:vue:watch",
     "browsertestserver": "webpack-dev-server --config devtools/webpack.browsertest.js",
-    "browsertest": "./node_modules/.bin/mocha --timeout 150000 ./test/end2end/TestRunner.js",
+    "browsertest": "./node_modules/.bin/mocha --timeout 3600000 ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js",
     "buildJsDoc": "node devtools/tasks/buildJsDoc.js"
@@ -66,9 +70,10 @@
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
+    "@intlify/vue-i18n-loader": "^0.6.1",
+    "@vue/test-utils": "^1.0.2",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
-    "@intlify/vue-i18n-loader": "^0.6.1",
     "canvas": "^2.6.1",
     "chai": "4.1.1",
     "child-process-promise": "^2.2.1",
@@ -90,14 +95,17 @@
     "jsdom-global": "^3.0.2",
     "less": "3.9.0",
     "less-loader": "^4.1.0",
-    "masterportalAPI": "git+https://bitbucket.org/geowerkstatt-hamburg/masterportalapi.git#v1.1.0",
+    "masterportalAPI": "git+https://bitbucket.org/geowerkstatt-hamburg/masterportalapi.git#v1.3.0",
     "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^6.2.0",
     "mocha-loader": "^2.0.0",
+    "mochapack": "^2.0.0",
     "mocha-webpack": "^2.0.0-beta.0",
     "moment-timezone-data-webpack-plugin": "^1.1.0",
+    "npm-run-all": "^4.1.5",
     "null-loader": "^4.0.0",
     "raf": "^3.4.1",
+    "regenerator-runtime": "^0.11.0",
     "replace-in-file": "^6.0.0",
     "selenium-webdriver": "^4.0.0-alpha.5",
     "sinon": "^7.3.2",
@@ -108,6 +116,7 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "1.7.2",
     "webpack-visualizer-plugin": "^0.1.11",
     "whatwg-fetch": "^3.0.0",
     "xmlserializer": "^0.6.1",
@@ -119,7 +128,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test"
+      "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
     }
   }
 }

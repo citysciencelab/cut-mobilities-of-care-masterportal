@@ -28,7 +28,7 @@ export default {
 </template>
 
 <style lang="less">
-    @import "../../../variables.less";
+    @import "~variables";
 
     #scales {
         display: inline-block;
