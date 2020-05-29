@@ -11,6 +11,33 @@ describe("tools/print_/model", function () {
         printModel = new PrintModel();
     });
 
+    describe("chooseCurrentLayout", function () {
+        const layouts = [
+            {
+                name: "A4 Hochformat"
+            },
+            {
+                name: "A4 Querformat"
+            },
+            {
+                name: "A3 Hochformat"
+            },
+            {
+                name: "A3 Querformat"
+            }
+        ];
+
+        it("should return the first Layout if currentlayername ist an empty string", function () {
+            expect(printModel.chooseCurrentLayout(layouts, "")).is.equal(layouts[0]);
+        });
+        it("should return the first Layout if currentlayername ist undefined", function () {
+            expect(printModel.chooseCurrentLayout(layouts, undefined)).is.equal(layouts[0]);
+        });
+        it("should return the third Layout if this one is choosen", function () {
+            expect(printModel.chooseCurrentLayout(layouts, "A3 Hochformat")).is.equal(layouts[2]);
+        });
+    });
+
     describe("sortVisibleLayerListByZindex", function () {
         it("should return an sorted array by input with zIndeces", function () {
             const array = [],

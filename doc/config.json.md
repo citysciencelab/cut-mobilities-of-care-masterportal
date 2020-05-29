@@ -1317,6 +1317,7 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |mapfishServiceId|ja|String||Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
+|currentLayoutName|nein|String|""|Legt fest welches Layout als Standardwert beim öffnen des Druckwerkzeuges ausgewählt sein soll. Zum Beispiel "A4 Hochformat". Wenn das angegebene Layout nicht vorhanden ist oder keins angegeben wurde, dann wird das erste Layout der Capabilities verwendet.|false|
 |printAppId|nein|String|"master"|Id der print app des Druckdienstes. Dies gibt dem Druckdienst vor welche/s Template/s er zu verwenden hat.|false|
 |filename|nein|String|"report"|Dateiname des Druckergebnisses.|false|
 |title|nein|String|"PrintResult"|Titel des Dokuments. Erscheint als Kopfzeile.|false|
