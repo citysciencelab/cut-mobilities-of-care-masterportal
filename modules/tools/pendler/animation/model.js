@@ -22,7 +22,21 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         maxPx: 20,
         colors: [],
         glyphicon: "glyphicon-play-circle",
-        animationLayer: {}
+        animationLayer: {},
+        // translations
+        workplace: "",
+        domicile: "",
+        chooseDistrict: "",
+        chooseBorough: "",
+        relationshipsToDisplay: "",
+        deleteGeometries: "",
+        people: "",
+        csvDownload: "",
+        reset: "",
+        start: "",
+        top5: "",
+        top10: "",
+        top15: ""
     }),
     /**
      * @class Animation
@@ -143,6 +157,20 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     changeLang: function (lng) {
         if (this.model.get("isActive") === true) {
             this.model.set({
+                "workplace": i18next.t("common:modules.tools.pendler.animation.workplace"),
+                "domicile": i18next.t("common:modules.tools.pendler.animation.domicile"),
+                "chooseDistrict": i18next.t("common:modules.tools.pendler.animation.chooseDistrict"),
+                "chooseBorough": i18next.t("common:modules.tools.pendler.animation.chooseBorough"),
+                "relationshipsToDisplay": i18next.t("common:modules.tools.pendler.animation.relationshipsToDisplay"),
+                "deleteGeometries": i18next.t("common:modules.tools.pendler.animation.deleteGeometries"),
+                "noCommutersKnown": i18next.t("common:modules.tools.pendler.animation.noCommutersKnown"),
+                "people": i18next.t("common:modules.tools.pendler.animation.people"),
+                "csvDownload": i18next.t("common:modules.tools.pendler.animation.csvDownload"),
+                "reset": i18next.t("common:modules.tools.pendler.animation.reset"),
+                "start": i18next.t("common:modules.tools.pendler.animation.start"),
+                "top5": i18next.t("common:modules.tools.pendler.animation.top5"),
+                "top10": i18next.t("common:modules.tools.pendler.animation.top10"),
+                "top15": i18next.t("common:modules.tools.pendler.animation.top15"),
                 "currentLng": lng
             });
         }

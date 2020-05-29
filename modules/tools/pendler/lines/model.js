@@ -21,7 +21,19 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             style: null,
             name: "pendlerLabelLayer"
         }),
-        glyphicon: "glyphicon-play-circle"
+        glyphicon: "glyphicon-play-circle",
+        // translations
+        workplace: "",
+        domicile: "",
+        chooseDistrict: "",
+        chooseBorough: "",
+        relationshipsToDisplay: "",
+        deleteGeometries: "",
+        people: "",
+        csvDownload: "",
+        top5: "",
+        top10: "",
+        top15: ""
     }),
     /**
      * @class Lines
@@ -193,6 +205,18 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
     changeLang: function (lng) {
         if (this.model.get("isActive") === true) {
             this.model.set({
+                "workplace": i18next.t("common:modules.tools.pendler.lines.workplace"),
+                "domicile": i18next.t("common:modules.tools.pendler.lines.domicile"),
+                "chooseDistrict": i18next.t("common:modules.tools.pendler.lines.chooseDistrict"),
+                "chooseBorough": i18next.t("common:modules.tools.pendler.lines.chooseBorough"),
+                "relationshipsToDisplay": i18next.t("common:modules.tools.pendler.lines.relationshipsToDisplay"),
+                "deleteGeometries": i18next.t("common:modules.tools.pendler.lines.deleteGeometries"),
+                "noCommutersKnown": i18next.t("common:modules.tools.pendler.lines.noCommutersKnown"),
+                "people": i18next.t("common:modules.tools.pendler.lines.people"),
+                "csvDownload": i18next.t("common:modules.tools.pendler.lines.csvDownload"),
+                "top5": i18next.t("common:modules.tools.pendler.lines.top5"),
+                "top10": i18next.t("common:modules.tools.pendler.lines.top10"),
+                "top15": i18next.t("common:modules.tools.pendler.lines.top15"),
                 "currentLng": lng
             });
         }

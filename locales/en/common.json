@@ -35,6 +35,8 @@
             "kmlimport": "KML import",
             "routing": "Route planner",
             "draw": "Drawing / writing",
+            "commuterLines": "Commuter (Lines)",
+            "commuterAnimation": "Commuter (Animation)",
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
             "addWms": "Add WMS"
@@ -59,8 +61,8 @@
         "infosAndLegend": "Information und explanations",
         "removeTopic": "Remove topic",
         "showTopic": "Present topic",
-        "changeClassDivision":"Change class division",
-        "settings":"Settings",
+        "changeClassDivision": "Change class division",
+        "settings": "Settings",
         "transparency": "Transparency",
         "increaseTransparency": "Increase transparency",
         "reduceTransparency": "Reduce transparency",
@@ -85,10 +87,10 @@
         },
         "quickHelp": {
             "titleTag": "Open help",
-            "search":{
+            "search": {
                 "title": "Help - Search function",
                 "generalInfo": "General Information",
-                "addressSearch":"Address search",
+                "addressSearch": "Address search",
                 "houseNumberSearch": "Search for all house numbers of a street",
                 "topicsSearch": "Search for topics / Geo data",
                 "parcelSearch": "Land parcel search",
@@ -138,10 +140,10 @@
                 "topicsHelp6": "By clicking the button \"Save selection\" in the tab Topic selection, a small popup window with a URL appears. This URL contains the selected topics and the current map section. If the FHH Atlas is opened via this URL, the previously selected topics are automatically included in the selection. In addition, the map zooms to the map section stored in the URL. To ensure that the FHH Atlas always opens with this topic selection, this URL can be saved as a bookmark."
             }
         },
-        "footer":{
-            "designation":"Cartography and design:",
-            "version":"Masterportal V.",
-            "cardDiscrepancy":"Card discrepancy"
+        "footer": {
+            "designation": "Cartography and design:",
+            "version": "Masterportal V.",
+            "cardDiscrepancy": "Card discrepancy"
         },
         "tools": {
             "info": {
@@ -186,6 +188,38 @@
                     "A4 Querformat": "A4 landscape format",
                     "A3 Hochformat": "A3 portrait format",
                     "A3 Querformat": "A3 landscape format"
+                }
+            },
+            "pendler": {
+                "animation": {
+                    "domicile": "Domicile",
+                    "workplace": "Workplace",
+                    "chooseDistrict": "Choose district",
+                    "chooseBorough": "Choose borough",
+                    "relationshipsToDisplay": "Number of relationships to display",
+                    "deleteGeometries": "Delete geometries",
+                    "noCommutersKnown": "No commuting people known!",
+                    "people": "People",
+                    "csvDownload": "CSV download",
+                    "start": "Start",
+                    "reset": "Reset",
+                    "top5": "Top 5",
+                    "top10": "Top 10",
+                    "top15": "Top 15"
+                },
+                "lines": {
+                    "domicile": "Domicile",
+                    "workplace": "Workplace",
+                    "chooseDistrict": "Choose district",
+                    "chooseBorough": "Choose borough",
+                    "relationshipsToDisplay": "Number of relationships to display",
+                    "deleteGeometries": "Delete geometries",
+                    "noCommutersKnown": "No commuting people known!",
+                    "people": "People",
+                    "csvDownload": "CSV download",
+                    "top5": "Top 5",
+                    "top10": "Top 10",
+                    "top15": "Top 15"
                 }
             },
             "compareFeatures": {
@@ -427,9 +461,9 @@
         },
         "searchbar": {
             "placeholder": {
-                "addressHospitalBplan" : "Search for Address/Hospital/B-Plan",
-                "addressTopicParcel" : "Search address, district, topics, parcel",
-                "address" : "Search for Address"
+                "addressHospitalBplan": "Search for Address/Hospital/B-Plan",
+                "addressTopicParcel": "Search address, district, topics, parcel",
+                "address": "Search for Address"
             },
             "showAllResults": "Show all results",
             "locationFinder": {
@@ -467,10 +501,10 @@
             "noInitialResults": "Initial search found no hits."
         },
         "vectorStyle": {
-          "styleModel": {
-            "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
-            "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
-          }
+            "styleModel": {
+                "getGeometryTypeFromWFSFetchfailed": "The legend could not be created in the layer information!",
+                "getGeometryTypeFromWFSFetchfailedMessage": "Details: A required service is not responding."
+            }
         },
         "legend": {
             "title": "Legend",
