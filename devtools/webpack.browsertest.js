@@ -10,6 +10,7 @@ const merge = require("webpack-merge"),
         reporter: "list"
     }),
     fse = require("fs-extra"),
+    kill = require('tree-kill'),
     execute = require("child-process-promise").exec;
     // {fork: forkProcess} = require("child_process");
 
@@ -95,7 +96,12 @@ module.exports = function (env, args) {
                                     //     });
                                     // }, 1000);
                                     // execute("bash -c \"trap 'exec bash' SIGINT; node_modules/.bin/webpack-dev-server;\"");
-                                    execute("npm run stopServer");
+
+                                    const pid = process.pid
+                                    process.on('SIGINT', function () {
+                                        console.log("before kill pid=", pid);
+                                        kill(pid, 'SIGKILL')
+                                    });
                                 });
                         }
                     });
