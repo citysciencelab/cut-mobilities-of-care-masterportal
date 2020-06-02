@@ -9,12 +9,17 @@ function changeActiveMemory (state, map, diff) {
         targetIndex = position === null ? null : position + diff;
 
     if (targetIndex !== null) {
-        const view = map.getView(),
-            {center, zoom} = memory[targetIndex];
+        if (memory[targetIndex]) {
+            const view = map.getView(),
+                {center, zoom} = memory[targetIndex];
 
-        view.setZoom(zoom);
-        view.setCenter(center);
-        state.position = targetIndex;
+            view.setZoom(zoom);
+            view.setCenter(center);
+            state.position = targetIndex;
+        }
+        else {
+            console.error(`Tried to change active backForward memory by ${diff} positions, but such a memory does not exist in memory ${JSON.stringify(memory)}`);
+        }
     }
 }
 
