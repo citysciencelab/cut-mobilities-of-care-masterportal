@@ -2,16 +2,16 @@
 /* eslint-disable global-require */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-return-assign */
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
     Mocha = require("mocha"),
     mocha = new Mocha({
-        exit: true,
-        reporter: "list"
+        // exit: true,
+        // reporter: "list"
     }),
     fse = require("fs-extra"),
     execute = require("child-process-promise").exec;
-    // {fork: forkProcess} = require("child_process");
 
 let proxies;
 
@@ -62,23 +62,19 @@ module.exports = function (env, args) {
         plugins: [
             {
                 apply: (compiler) => {
-                    // compiler.hooks.afterEmit.tap("AfterEmitPlugin", () => {
                     compiler.hooks.done.tap("Compilation done", () => {
 
                         /* eslint-disable-next-line no-process-env */
                         if (process.env.NODE_ENV === "e2eTest") {
-                            console.log("after emitting AfterEmitPlugin: starting e2e-tests");
                             mocha.addFile("./test/end2end/TestRunner.js");
                             // exit with non-zero status if there were test failures
-                            /* eslint-disable-next-line no-return-assign */
                             mocha.run(failures => process.exitCode = failures ? 1 : 0)
                                 .on("fail", function (test, err) {
                                     console.log("Test fail:" + test.title);
                                     console.log(err);
-                                    // todo retry if timeout error (ETIMEDOUT)?
+                                    // todo retry if timeout error happens in future(ETIMEDOUT)?
                                 })
                                 .on("end", function () {
-                                    console.log("kill webpack-dev-server");
                                     execute("pkill -f node_modules/.bin/webpack-dev-server");
                                 });
                         }
