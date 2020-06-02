@@ -62,7 +62,8 @@ module.exports = function (env, args) {
         plugins: [
             {
                 apply: (compiler) => {
-                    compiler.hooks.afterEmit.tap("AfterEmitPlugin", () => {
+                    // compiler.hooks.afterEmit.tap("AfterEmitPlugin", () => {
+                    compiler.hooks.done.tap("Compilation done", () => {
 
                         /* eslint-disable-next-line no-process-env */
                         if (process.env.NODE_ENV === "e2eTest") {
@@ -71,33 +72,14 @@ module.exports = function (env, args) {
                             // exit with non-zero status if there were test failures
                             /* eslint-disable-next-line no-return-assign */
                             mocha.run(failures => process.exitCode = failures ? 1 : 0)
-                                .on("test", function (test) {
-                                    console.log("Test started: " + test.title);
-                                })
-                                .on("test end", function (test) {
-                                    console.log("Test done: " + test.title);
-                                })
-                                .on("pass", function (test) {
-                                    console.log("Test passed: " + test.title);
-                                })
                                 .on("fail", function (test, err) {
                                     console.log("Test fail:" + test.title);
                                     console.log(err);
                                     // todo retry if timeout error (ETIMEDOUT)?
                                 })
                                 .on("end", function () {
-                                    // const devServerProcess = forkProcess("node_modules/webpack-dev-server/bin/webpack-dev-server.js", []);
-
-                                    console.log("All done");
-                                    // setTimeout(() => {
-                                    //     devServerProcess.kill('SIGTERM', {
-                                    //         forceKillAfterTimeout: 2000
-                                    //     });
-                                    // }, 1000);
+                                    console.log("kill webpack-dev-server");
                                     execute("pkill -f node_modules/.bin/webpack-dev-server");
-
-                                  
-                                    //pkill -f node_modules/.bin/webpack-dev-server
                                 });
                         }
                     });
