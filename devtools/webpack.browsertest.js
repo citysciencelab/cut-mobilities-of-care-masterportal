@@ -3,6 +3,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-return-assign */
+/* eslint-disable no-process-env */
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
     Mocha = require("mocha"),
@@ -60,8 +61,6 @@ module.exports = function (env, args) {
             {
                 apply: (compiler) => {
                     compiler.hooks.done.tap("Compilation done", () => {
-
-                        /* eslint-disable-next-line no-process-env */
                         if (process.env.NODE_ENV === "e2eTest") {
                             mocha.addFile("./test/end2end/TestRunner.js");
                             // exit with non-zero status if there were test failures
