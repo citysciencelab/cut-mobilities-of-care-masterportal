@@ -94,7 +94,8 @@ module.exports = function (env, args) {
                                     //         forceKillAfterTimeout: 2000
                                     //     });
                                     // }, 1000);
-                                    execute("bash -c \"trap 'exec bash' SIGINT; node_modules/.bin/webpack-dev-server;\"");
+                                    // execute("bash -c \"trap 'exec bash' SIGINT; node_modules/.bin/webpack-dev-server;\"");
+                                    execute("exit 1");
                                 });
                         }
                     });
