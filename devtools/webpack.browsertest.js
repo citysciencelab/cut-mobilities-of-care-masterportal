@@ -95,7 +95,7 @@ module.exports = function (env, args) {
                                     //     });
                                     // }, 1000);
                                     // execute("bash -c \"trap 'exec bash' SIGINT; node_modules/.bin/webpack-dev-server;\"");
-                                    execute("exit 1");
+                                    execute("npm run stopServer");
                                 });
                         }
                     });
