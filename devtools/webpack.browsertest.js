@@ -6,10 +6,7 @@
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
     Mocha = require("mocha"),
-    mocha = new Mocha({
-        // exit: true,
-        // reporter: "list"
-    }),
+    mocha = new Mocha(),
     fse = require("fs-extra"),
     execute = require("child-process-promise").exec;
 
@@ -40,7 +37,7 @@ module.exports = function (env, args) {
         },
         module: {
             rules: [
-                // Glyphicons werden von bootstrap gelesen
+                // Glyphicons loaded by bootstrap
                 {
                     test: /glyphicons-halflings-regular\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
@@ -49,7 +46,7 @@ module.exports = function (env, args) {
                         publicPath: "../../node_modules/bootstrap/fonts"
                     }
                 },
-                // alle anderen Schriftarten
+                // all other fonts
                 {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
