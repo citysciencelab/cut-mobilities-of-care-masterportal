@@ -66,7 +66,6 @@ module.exports = function (env, args) {
                             // exit with non-zero status if there were test failures
                             mocha.run(failures => process.exitCode = failures ? 1 : 0)
                                 .on("fail", function (test, err) {
-                                    console.log("Test fail:" + test.title);
                                     console.log(err);
                                     // todo retry if timeout error happens in future(ETIMEDOUT)?
                                 })

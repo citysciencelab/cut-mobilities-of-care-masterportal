@@ -26,7 +26,7 @@ function ZoomTests ({builder, url, resolution}) {
             });
 
             it("should have a plus button", async function () {
-                plus = await driver.wait(until.elementLocated(By.css("button.control-icon.glyphicon-plu")), 5000);
+                plus = await driver.wait(until.elementLocated(By.css("button.control-icon.glyphicon-plus")), 5000);
                 expect(plus).to.exist;
             });
 
