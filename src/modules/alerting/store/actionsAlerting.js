@@ -114,8 +114,8 @@ export default {
 
         // in case its an object with deprecated text property, display warning and continue
         if (typeof newAlertObj.text === "string" && typeof newAlertObj.content !== "string") {
-        	console.warn("Deprecated: Alerting module - property \"text\" is deprecated. Use \"content\" instead.");
-        	newAlertObj.content = newAlertObj.text;
+            console.warn("Deprecated: Alerting module - property \"text\" is deprecated. Use \"content\" instead.");
+            newAlertObj.content = newAlertObj.text;
         }
 
         // in case its not an object with a non empty string at .content, dont continue
