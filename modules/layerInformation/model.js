@@ -246,7 +246,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
 
     /**
     * Setter function for noMetaDataMessage
-    * @param {Boolean} value true, if this is visible
+    * @param {Boolean} value no message data
     * @returns {void}
     */
     setNoMetaDataMessage: function (value) {
