@@ -340,9 +340,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} legendObject.legend.typ=svg fixed type
      */
     getLegendParamsFromVectorOld: function (layername, styleId, legendURL) {
-        let subLegend,
-            image = [],
-            name = [];
+        let subLegend;
 
         if (!Radio.request("StyleList", "returnModelById", styleId)) {
             console.warn("Missing style for styleId " + styleId);
@@ -371,7 +369,9 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         const style = Radio.request("StyleList", "returnModelById", styleId).clone(),
             styleClass = style.get("class"),
             styleSubClass = style.get("subClass"),
-            styleFieldValues = style.get("styleFieldValues");
+            styleFieldValues = style.get("styleFieldValues"),
+            image = [],
+            name = [];
 
         if (styleClass === "POINT") {
             // Custom Point Styles
@@ -385,18 +385,22 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                     }
 
                     subLegend = this.getLegendParamsForPointOld("", layername, subStyle);
-                    image.push(subLegend.svg);
-                    name.push(subLegend.name);
+                    if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                        image.push(subLegend.svg);
+                        name.push(subLegend.name);
+                    }
                 });
             }
             else {
                 subLegend = this.getLegendParamsForPointOld(styleSubClass, layername, style);
 
                 if (Array.isArray(subLegend.name) && Array.isArray(subLegend.svg)) {
-                    image = subLegend.svg;
-                    name = subLegend.name;
+                    if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                        image.push(subLegend.svg);
+                        name.push(subLegend.name);
+                    }
                 }
-                else {
+                else if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
                     image.push(subLegend.svg);
                     name.push(subLegend.name);
                 }
@@ -405,7 +409,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         else if (styleClass === "LINE") {
             // Custom Point Styles
             if (styleFieldValues) {
-                styleFieldValues.forEach(function (styleFieldValue) {
+                styleFieldValues.forEach(styleFieldValue => {
                     const subStyle = style.clone();
 
                     // overwrite style with all styleFieldValue settings
@@ -413,20 +417,24 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                         subStyle.set(key, styleFieldValue[key]);
                     }
                     subLegend = this.getLegendParamsForLinesOld(layername, subStyle);
-                    image.push(subLegend.svg);
-                    name.push(subLegend.name);
-                }, this);
+                    if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                        image.push(subLegend.svg);
+                        name.push(subLegend.name);
+                    }
+                });
             }
             else {
                 subLegend = this.getLegendParamsForLinesOld(layername, style);
-                image.push(subLegend.svg);
-                name.push(subLegend.name);
+                if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                    image.push(subLegend.svg);
+                    name.push(subLegend.name);
+                }
             }
         }
         else if (styleClass === "POLYGON") {
             // Custom Point Styles
             if (styleSubClass === "CUSTOM") {
-                styleFieldValues.forEach(function (styleFieldValue) {
+                styleFieldValues.forEach(styleFieldValue => {
                     const subStyle = style.clone();
 
                     // overwrite style with all styleFieldValue settings
@@ -434,14 +442,20 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                         subStyle.set(key, styleFieldValue[key]);
                     }
                     subLegend = this.getLegendParamsForPolygonsOld(layername, subStyle);
-                    image.push(subLegend.svg);
-                    name.push(subLegend.name);
-                }, this);
+
+                    if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                        image.push(subLegend.svg);
+                        name.push(subLegend.name);
+                    }
+                });
             }
             else {
                 subLegend = this.getLegendParamsForPolygonsOld(layername, style);
-                image.push(subLegend.svg);
-                name.push(subLegend.name);
+
+                if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                    image.push(subLegend.svg);
+                    name.push(subLegend.name);
+                }
             }
         }
 
