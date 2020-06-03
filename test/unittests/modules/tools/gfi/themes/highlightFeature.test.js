@@ -18,7 +18,7 @@ describe("highlightFill", function () {
 
 describe("highlightImage", function () {
     it("should return overwritten image", function () {
-        const image = new Image(1, false, 1, 1);
+        const image = new Image({opacity: 1, rotateWithView: false, rotation: 1, scale: 1, displacement: [0, 0]});
 
         expect(model.highlightImage(image, {"scale": 20}).getScale()).to.equal(20);
     });

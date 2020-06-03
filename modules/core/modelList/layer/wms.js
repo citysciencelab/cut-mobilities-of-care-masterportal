@@ -7,10 +7,10 @@ import {Image, Tile} from "ol/layer.js";
 const WMSLayer = Layer.extend({
     defaults: function () {
         // extended die Layer defaults by value
-        return _.extend(_.result(Layer.prototype, "defaults"), {
+        return Object.assign(Layer.prototype.defaults, {
             infoFormat: "text/xml",
             // Eine Veränderung der CACHEID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
-            cacheId: _.random(9999999),
+            cacheId: parseInt(Math.random() * 10000000, 10),
             supported: ["2D", "3D"],
             showSettings: true,
             extent: null,
@@ -31,7 +31,7 @@ const WMSLayer = Layer.extend({
         });
 
         // Hack für Dienste die nicht EPSG:4326 untertützen
-        if (_.contains(this.get("notSupportedFor3D"), this.get("id"))) {
+        if (this.get("notSupportedFor3D").includes(this.get("id"))) {
             this.set("supported", ["2D"]);
         }
     },
@@ -53,7 +53,7 @@ const WMSLayer = Layer.extend({
         };
 
         if (this.get("styles") && this.get("styles") !== "" && this.get("styles") !== "nicht vorhanden") {
-            params = _.extend(params, {
+            params = Object.assign(params, {
                 STYLES: this.get("styles")
             });
         }
@@ -146,7 +146,7 @@ const WMSLayer = Layer.extend({
                 legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers"));
             }
             else if (layerNames.length > 1) {
-                _.each(layerNames, function (layerName) {
+                layerNames.forEach(layerName => {
                     legendURL.push(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName);
                 }, this);
             }
@@ -273,7 +273,7 @@ const WMSLayer = Layer.extend({
             projection = Radio.request("MapView", "getProjection"),
             coordinate = Radio.request("GFI", "getCoordinate");
 
-        return this.get("layerSource").getGetFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount"), STYLES: "", SLD_BODY: undefined});
+        return this.get("layerSource").getFeatureInfoUrl(coordinate, resolution, projection, {INFO_FORMAT: this.get("infoFormat"), FEATURE_COUNT: this.get("featureCount"), STYLES: "", SLD_BODY: undefined});
     },
 
     /*
@@ -281,7 +281,7 @@ const WMSLayer = Layer.extend({
     * @returns {void}
     */
     newCacheId: function () {
-        this.set("cacheId", _.random(9999999));
+        this.set("cacheId", parseInt(Math.random() * 10000000, 10));
     }
 });
 

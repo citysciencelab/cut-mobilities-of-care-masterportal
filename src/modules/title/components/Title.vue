@@ -1,91 +1,31 @@
 <script>
+import {mapGetters} from "vuex";
+
 export default {
     name: "Title",
     computed: {
-        /**
-        * LogoLink
-        * @deprecated in 3.0.0
-        * @returns {String} - link
-        */
-        link () {
-            const deprecatedParameter = this.getDeprecatedParameters("LogoLink");
-
-            return deprecatedParameter === undefined ? this.$store.state.Title.link : deprecatedParameter;
-        },
-        /**
-        * LogoToolTip
-        * @deprecated in 3.0.0
-        * tooltip
-        * @deprecated in 3.0.0
-        * @returns {String} - toolTip
-        */
-        toolTip () {
-            const deprecatedParameter = this.getDeprecatedParameters("LogoToolTip") === undefined ? this.getDeprecatedParameters("tooltip") : deprecatedParameter;
-
-            return deprecatedParameter === undefined ? this.$store.state.Title.toolTip : deprecatedParameter;
-        },
-        /**
-        * LogoLink
-        * @deprecated in 3.0.0
-        * @returns {String} - URL, where the logo is stored
-        */
-        logo () {
-            const deprecatedParameter = this.getDeprecatedParameters("PortalLogo");
-
-            return deprecatedParameter === undefined ? this.$store.state.Title.logo : deprecatedParameter;
-        },
-        /**
-        * PortalTitle
-        * @deprecated in 3.0.0
-        * @returns {String} - the name/title of the portal
-        */
-        title () {
-            const deprecatedParameter = this.getDeprecatedParameters("PortalTitle");
-
-            return deprecatedParameter === undefined ? this.$store.state.Title.title : deprecatedParameter;
-        }
+        ...mapGetters("Title", [
+            "link",
+            "toolTip",
+            "logo",
+            "title"
+        ])
     },
     mounted () {
         $(this.$el).insertAfter(document.getElementById("root"));
     },
     created () {
-        const that = this,
-            myBus = Backbone.Events;
+        const myBus = Backbone.Events;
 
         myBus.listenTo(Radio.channel("Title"), {
-            "setSize": function () {
-                setTimeout(function () {
-                    that.renderDependingOnSpace();
+            "setSize": () => {
+                setTimeout(() => {
+                    this.renderDependingOnSpace();
                 }, 500);
             }
         });
     },
     methods: {
-        /**
-         * Checks whether deprecated parameters have been defined in the config.json.
-         * If this is the case, these values are read out and written into the store.
-         * @param {string} [deprecatedParameter] - name of the deprecated parameter.
-         * @returns {String} - returns the parametervalues.
-         */
-        getDeprecatedParameters (deprecatedParameter) {
-            const deprecatedVsNew = {
-                PortalTitle: "title",
-                LogoLink: "link",
-                LogoToolTip: "toolTip",
-                tooltip: "toolTip",
-                PortalLogo: "logo"
-            };
-
-            if (this.$store.state.Title[deprecatedParameter] !== undefined) {
-                console.warn(
-                    "Attribute '" + deprecatedParameter + "' is deprecated. Please use Object 'portalTitle' and the attribute '"
-                    + deprecatedVsNew[deprecatedParameter] + "' instead."
-                );
-                return this.$store.state.Title[deprecatedParameter];
-            }
-            return undefined;
-        },
-
         /**
         * Depending on the available space, the titletext and titlelogo is rendered.
         * @returns {void}

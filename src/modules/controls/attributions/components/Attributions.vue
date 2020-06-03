@@ -75,7 +75,7 @@ export default {
     <div class="attributions-wrapper">
         <ControlIcon
             class="attributions-button"
-            :active="openable"
+            :disabled="!openable"
             :title="$t(`common:modules.controls.attributions.${open ? 'hideAttributions' : 'showAttributions'}`)"
             :icon-name="open ? 'forward' : 'info-sign'"
             :on-click="toggleAttributionsFlyout"
@@ -111,6 +111,7 @@ export default {
 
             max-width: calc(100vw - 410px);
             width: max-content;
+            min-width: min-content;
 
             border: 1px solid @secondary_border;
             box-shadow: 0 6px 12px @shadow;
