@@ -10,8 +10,8 @@
         <span class="glyphicon glyphicon-info-sign info"></span>
     </div>
 <% } %>
-</div>
-<% if (!_.isUndefined(this.model.get("infoText"))) { %>
+<% if (this.model.get("infoText") !== undefined) { %>
     <div class="col-xs-12 info-text"><%= infoText %></div>
 <% } %>
+</div>
 
