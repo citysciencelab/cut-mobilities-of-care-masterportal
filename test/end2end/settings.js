@@ -140,6 +140,13 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
             "browser_version": "80.0",
             "os": "Windows",
             "os_version": "10"
+        },
+        {
+            ...base,
+            "browserName": "IE",
+            "browser_version": "11.0",
+            "os": "Windows",
+            "os_version": "10"
         }/*
         {
             ...base,
