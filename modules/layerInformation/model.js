@@ -185,6 +185,8 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     setAttributes: function (attrs) {
         this.set(attrs);
         this.setMetadataURL();
+        this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetadataMessage"));
+
         if (this.areMetaIdsSet(this.get("metaID"))) {
             this.requestMetaData(attrs);
         }
@@ -241,6 +243,16 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     setIsVisible: function (value) {
         this.set("isVisible", value);
     },
+
+    /**
+    * Setter function for noMetaDataMessage
+    * @param {Boolean} value true, if this is visible
+    * @returns {void}
+    */
+    setNoMetaDataMessage: function (value) {
+        this.set("noMetaDataMessage", value);
+    },
+
     /**
     * Setter function for uniqueIdList
     * @param {Array} value the uniqueIdList
