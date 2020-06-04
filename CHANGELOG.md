@@ -39,6 +39,8 @@
 ### Fixed
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
 - Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
+- Die Portal-Konfiguration "singleBaselayer": "true" führt jetzt dazu, dass immer nur ein Hauptlayer ausgewählt werden kann.
+- Das Label der Version im Footer wird jetzt korrekt übersetzt. 
 
 ---
 
