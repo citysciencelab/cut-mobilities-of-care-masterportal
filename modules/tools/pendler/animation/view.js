@@ -26,6 +26,22 @@ const AnimationView = Backbone.View.extend({
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.model.changeLang
         });
+        this.model.set({
+            "workplace": i18next.t("common:modules.tools.pendler.animation.workplace"),
+            "domicile": i18next.t("common:modules.tools.pendler.animation.domicile"),
+            "chooseDistrict": i18next.t("common:modules.tools.pendler.animation.chooseDistrict"),
+            "chooseBorough": i18next.t("common:modules.tools.pendler.animation.chooseBorough"),
+            "relationshipsToDisplay": i18next.t("common:modules.tools.pendler.animation.relationshipsToDisplay"),
+            "deleteGeometries": i18next.t("common:modules.tools.pendler.animation.deleteGeometries"),
+            "noCommutersKnown": i18next.t("common:modules.tools.pendler.animation.noCommutersKnown"),
+            "people": i18next.t("common:modules.tools.pendler.animation.people"),
+            "csvDownload": i18next.t("common:modules.tools.pendler.animation.csvDownload"),
+            "reset": i18next.t("common:modules.tools.pendler.animation.reset"),
+            "start": i18next.t("common:modules.tools.pendler.animation.start"),
+            "top5": i18next.t("common:modules.tools.pendler.animation.top5"),
+            "top10": i18next.t("common:modules.tools.pendler.animation.top10"),
+            "top15": i18next.t("common:modules.tools.pendler.animation.top15")
+        });
     },
 
     tagName: "form",

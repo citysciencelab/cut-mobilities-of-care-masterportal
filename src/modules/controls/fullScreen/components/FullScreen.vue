@@ -1,5 +1,6 @@
 <script>
 import ControlIcon from "../../ControlIcon.vue";
+import TableStyleControl from "../../TableStyleControl.vue";
 
 /**
  * Enables fullscreen using browser tools.
@@ -71,15 +72,32 @@ function isFullScreen () {
  */
 export default {
     name: "FullScreen",
-    components: {
-        ControlIcon
-    },
     data: function () {
         return {
             active: isFullScreen()
         };
     },
+    computed: {
+        component () {
+            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+        }
+    },
+    mounted () {
+        document.addEventListener("mozfullscreenchange", this.escapeHandler);
+        document.addEventListener("MSFullscreenChange", this.escapeHandler);
+        document.addEventListener("webkitfullscreenchange", this.escapeHandler);
+        document.addEventListener("fullscreenchange", this.escapeHandler);
+    },
     methods: {
+        /**
+         * Defines the variable "active" depending on whether the fullscreenmode is activated or deactivated.
+         * Is necessary to capture the termination of the fullscreenmode via the ESC key and to render the fullscreenbutton correctly (on/off) in the further process.
+         * @returns {void}
+         */
+        escapeHandler () {
+            this.active = isFullScreen();
+        },
+
         /**
          * Toggles between fullscreen and normal screen.
          * @returns {void}
@@ -90,7 +108,6 @@ export default {
                 window.open(window.location.href, "_blank");
                 return;
             }
-
             if (this.active) {
                 this.active = !closeFullScreen();
             }
@@ -104,12 +121,12 @@ export default {
 
 <template>
     <div class="fullscreen-button">
-        <ControlIcon
+        <component
+            :is="component"
             :title="$t(`common:modules.controls.fullScreen.${active ? 'disable' : 'enable'}`)"
             :icon-name="active ? 'resize-small' : 'fullscreen'"
             :on-click="toggleFullScreen"
         />
-        <!-- TODO table version must be implemented, too -->
     </div>
 </template>
 

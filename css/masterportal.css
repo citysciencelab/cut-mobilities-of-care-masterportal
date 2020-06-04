@@ -12,6 +12,9 @@ html, body {
 .font-bold {
     font-family: 'MasterPortalFont Bold','Arial Narrow',Arial,sans-serif;
 }
+.font-arial {
+    font-family: Arial,sans-serif;
+}
 
 label {
     font-weight: normal;

@@ -1,8 +1,15 @@
 /* eslint-disable no-sync */
 /* eslint-disable global-require */
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-process-env */
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
-    fse = require("fs-extra");
+    Mocha = require("mocha"),
+    mocha = new Mocha(),
+    fse = require("fs-extra"),
+    execute = require("child-process-promise").exec;
 
 let proxies;
 
@@ -19,7 +26,7 @@ module.exports = function (env, args) {
 
     return merge.smart({
         mode: "development",
-        devtool: "cheap-module-eval-source-map",
+        devtool: "eval-cheap-module-source-map",
         devServer: {
             port: 9001,
             publicPath: "/build/",
@@ -31,7 +38,7 @@ module.exports = function (env, args) {
         },
         module: {
             rules: [
-                // Glyphicons werden von bootstrap gelesen
+                // Glyphicons loaded by bootstrap
                 {
                     test: /glyphicons-halflings-regular\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
@@ -40,7 +47,7 @@ module.exports = function (env, args) {
                         publicPath: "../../node_modules/bootstrap/fonts"
                     }
                 },
-                // alle anderen Schriftarten
+                // all other fonts
                 {
                     test: /\.(eot|svg|ttf|woff|woff2)$/,
                     loader: "file-loader",
@@ -49,6 +56,26 @@ module.exports = function (env, args) {
                     }
                 }
             ]
-        }
+        },
+        plugins: [
+            {
+                apply: (compiler) => {
+                    compiler.hooks.done.tap("Compilation done", () => {
+                        if (process.env.NODE_ENV === "e2eTest") {
+                            mocha.addFile("./test/end2end/TestRunner.js");
+                            // exit with non-zero status if there were test failures
+                            mocha.run(failures => process.exitCode = failures ? 1 : 0)
+                                .on("fail", function (test, err) {
+                                    console.log(err);
+                                    // todo retry if timeout error happens in future(ETIMEDOUT)?
+                                })
+                                .on("end", function () {
+                                    execute("pkill -f node_modules/.bin/webpack-dev-server");
+                                });
+                        }
+                    });
+                }
+            }
+        ]
     }, new Common(path2Addon));
 };

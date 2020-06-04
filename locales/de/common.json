@@ -35,6 +35,8 @@
             "kmlimport": "KML Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
+            "commuterLines": "Pendler (Linien)",
+            "commuterAnimation": "Pendler (Animation)",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
@@ -60,7 +62,7 @@
         "infosAndLegend": "Informationen und Legende",
         "removeTopic": "Thema entfernen",
         "showTopic": "Thema darstellen",
-        "changeClassDivision":"Klasseneinteilung ändern",
+        "changeClassDivision": "Klasseneinteilung ändern",
         "settings": "Einstellungen",
         "transparency": "Transparenz",
         "increaseTransparency": "Transparenz erhöhen",
@@ -79,14 +81,14 @@
             "en": "Englisch"
         },
         "cswParser": {
-           "noMetadataMessage": "Keine Metadaten vorhanden."
+            "noMetadataMessage": "Keine Metadaten vorhanden."
         },
         "layerInformation": {
             "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
         },
         "quickHelp": {
             "titleTag": "Hilfe öffnen",
-            "search":{
+            "search": {
                 "title": "Hilfe - Suchfunktion",
                 "generalInfo": "Allgemeines",
                 "addressSearch": "Adresssuche",
@@ -139,10 +141,10 @@
                 "topicsHelp6": "Über den Button \"Auswahl speichern\" im Reiter Themenauswahl, erscheint ein kleines Popup-Fenster mit einer URL. In dieser URL sind die ausgewählten Themen und der aktuelle Kartenausschnitt gespeichert. Wird der FHH-Atlas über diese URL geöffnet, werden die zuvor ausgewählten Themen automatisch in die Auswahl eingebunden. Zusätzlich zoomt die Karte auf den in der URL gespeicherten Kartenausschnitt. Damit sich der FHH-Atlas immer mit dieser Themenauswahl öffnet, kann diese URL als Lesezeichen ablegt werden."
             }
         },
-        "footer":{
-            "designation":"Kartographie und Gestaltung:",
-            "version":"Masterportal V.",
-            "cardDiscrepancy":"Kartenunstimmigkeit"
+        "footer": {
+            "designation": "Kartographie und Gestaltung:",
+            "version": "Masterportal V.",
+            "cardDiscrepancy": "Kartenunstimmigkeit"
         },
         "tools": {
             "info": {
@@ -187,6 +189,38 @@
                     "A4 Querformat": "A4 Querformat",
                     "A3 Hochformat": "A3 Hochformat",
                     "A3 Querformat": "A3 Querformat"
+                }
+            },
+            "pendler": {
+                "animation": {
+                    "domicile": "Wohnort",
+                    "workplace": "Arbeitsort",
+                    "chooseDistrict": "Landkreis auswählen",
+                    "chooseBorough": "Amt/Gemeindeverband auswählen",
+                    "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen",
+                    "deleteGeometries": "Geometrien löschen",
+                    "noCommutersKnown": "Keine pendelnden Personen bekannt!",
+                    "people": "Personen",
+                    "csvDownload": "CSV Download",
+                    "start": "Start",
+                    "reset": "Reset",
+                    "top5": "Top 5",
+                    "top10": "Top 10",
+                    "top15": "Top 15"
+                },
+                "lines": {
+                    "domicile": "Wohnort",
+                    "workplace": "Arbeitsort",
+                    "chooseDistrict": "Landkreis auswählen",
+                    "chooseBorough": "Amt/Gemeindeverband auswählen",
+                    "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen",
+                    "deleteGeometries": "Geometrien löschen",
+                    "noCommutersKnown": "Keine pendelnden Personen bekannt!",
+                    "people": "Personen",
+                    "csvDownload": "CSV Download",
+                    "top5": "Top 5",
+                    "top10": "Top 10",
+                    "top15": "Top 15"
                 }
             },
             "compareFeatures": {
@@ -430,9 +464,9 @@
         },
         "searchbar": {
             "placeholder": {
-                "addressHospitalBplan" : "Suche nach Adresse/Krankenhaus/B-Plan",
-                "addressTopicParcel" : "Suche Adresse, Stadtteil, Themen, Flurstück",
-                "address" : "Suche nach Adresse"
+                "addressHospitalBplan": "Suche nach Adresse/Krankenhaus/B-Plan",
+                "addressTopicParcel": "Suche Adresse, Stadtteil, Themen, Flurstück",
+                "address": "Suche nach Adresse"
             },
             "locationFinder": {
                 "unknownProjection": "Ergebnisse in unbekanntem Koordinatensystem",
@@ -470,10 +504,10 @@
             "noInitialResults": "Die initiale Suche ergab keine Treffer."
         },
         "vectorStyle": {
-          "styleModel": {
-            "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
-            "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
-          }
+            "styleModel": {
+                "getGeometryTypeFromWFSFetchfailed": "Die Legende konnte in der Layerinformation nicht erstellt werden!",
+                "getGeometryTypeFromWFSFetchfailedMessage": "Details: Ein benötigter Dienst antwortet nicht."
+            }
         },
         "legend": {
             "title": "Legende",

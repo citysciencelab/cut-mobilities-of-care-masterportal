@@ -197,9 +197,11 @@ function initLanguage (portalLanguageConfig) {
                 checkWhitelist: true
             }
         });
-    if (!portalLanguage.enabled) {
-        i18next.changeLanguage("de");
-    }
+    i18next.on("initialized", () => {
+        if (!portalLanguage.enabled) {
+            i18next.changeLanguage("de");
+        }
+    });
 
     // bind i18next to backbone to enable use of command line with  > Backbone.i18next...
     Backbone.i18next = i18next;

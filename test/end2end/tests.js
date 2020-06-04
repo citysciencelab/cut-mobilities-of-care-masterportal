@@ -47,7 +47,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
         const suites = [
                 // modules/controls
                 // require("./tests/modules/controls/Attributions.js"),
-                // require("./tests/modules/controls/BackForward.js"),
+                require("../../src/modules/controls/backForward/test/end2end/BackForward.e2e.js"),
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
                 // require("./tests/modules/controls/ButtonOblique.js"),

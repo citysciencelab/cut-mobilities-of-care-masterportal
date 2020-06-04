@@ -13,7 +13,9 @@
     <% if (metaURL !== null) { %>
     <% metaURL.forEach(function (url) { %>
         <br>
-        <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+        <% if (abstractText !== noMetaDataMessage) { %>
+            <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+        <% } %>
     <% }); %>
     <% } %>
     <% if (typeof datePublication !== "undefined" && datePublication !== null) { %>
@@ -40,10 +42,10 @@
             <div id="legende" class="tab-pane fade in active">
                 <p>
                     <% if (Array.isArray(legend.legend) && (legend.legend.length === 0 || legend.legend[0].img === "")) {
-                        print ("<p>Legende wird erst beim aktivieren des Layers geladen</p>");                    
+                        print ("<p>Legende wird erst beim aktivieren des Layers geladen</p>");
                     }
                     else if (legend.legend === null) {
-                        print ("<p>Keine Legende vorhanden</p>");   
+                        print ("<p>Keine Legende vorhanden</p>");
                     }
                     else {
                         legend.legend.forEach(function (legend) {

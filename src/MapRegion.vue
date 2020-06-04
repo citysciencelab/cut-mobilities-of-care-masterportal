@@ -29,7 +29,6 @@ export default {
         <!-- OpenLayers node; control map itself via vuex map module -->
         <div
             id="map"
-            tabindex="0"
         />
         <!-- HUD elements; always present -->
         <div class="elements-positioned-over-map">

@@ -131,7 +131,7 @@ async function loadApp () {
     Vue.use(VueI18Next);
 
     app = new Vue({
-        el: "#vue-root",
+        el: "#masterportal-root",
         name: "VueApp",
         render: h => h(App),
         store,
