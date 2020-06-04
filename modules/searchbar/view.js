@@ -749,9 +749,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             // reset search, if last letter is deleted
             this.deleteSearchString();
         }
-        else if (evt.target.value.length < 3) {
-            this.$("#searchInputUL").html("");
-        }
         else {
             if (evt.type === "paste") {
                 this.model.setSearchString(evt.target.value, evt.type);

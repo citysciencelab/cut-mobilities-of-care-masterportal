@@ -65,7 +65,7 @@ function BackForwardTests ({builder, url, resolution, browsername}) {
                 expect(positions[3]).to.eql(await driver.executeScript(getCenter));
 
                 // wait for information to trickle through to back button functionality ...
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
                 // move backwards
                 await backwardButton.click();

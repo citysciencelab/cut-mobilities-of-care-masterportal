@@ -85,7 +85,7 @@ const ContactView = Backbone.View.extend(/** @lends ContactView.prototype */{
     showValidity: function () {
         const validation = this.model.validationError;
 
-        if (typeof validation === "object") {
+        if (validation instanceof Object) {
             this.toggleUserNameValid(validation.userName);
             this.toggleUserEmailValid(validation.userEmail);
             this.toggleUserTelValid(validation.userTel);

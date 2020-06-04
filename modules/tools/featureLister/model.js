@@ -86,7 +86,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         features.forEach(feature => {
             mapFeatures.forEach(mapFeature => {
                 if (mapFeature.typ === "WFS" && mapFeature.name === layername) {
-                    if (_.isEqual(feature.geometry, mapFeature.feature.getGeometry().getExtent())) {
+                    if (Radio.request("Util", "isEqual", feature.geometry, mapFeature.feature.getGeometry().getExtent())) {
                         this.trigger("gfiHit", feature);
                     }
                 }
@@ -102,7 +102,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     getFeatureWithFeatureId: function () {
         const featureid = this.get("featureid"),
             features = this.get("layer").features,
-            feature = _.find(features, function (feat) {
+            feature = features.find(feat => {
                 return feat.id.toString() === featureid;
             });
         let geometry,
@@ -138,7 +138,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
         const layer = this.get("layer"),
             features = layer.features,
-            feature = _.find(features, function (feat) {
+            feature = features.find(feat => {
                 return feat.id.toString() === id;
             }).feature,
             style = feature.getStyle() ? feature.getStyle() : layer.style(feature),
@@ -174,7 +174,8 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      */
     getLayerWithLayerId: function () {
         const layers = this.get("layerlist"),
-            layer = _.find(layers, {id: this.get("layerid")});
+            layer = Radio.request("Util", "findWhereJs", layers, {id: this.get("layerid")});
+
 
         // wenn Layer wechselt, kann auch kein Feature mehr aktiv sein.
         this.set("featureid", "");
@@ -198,7 +199,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             activeLayerId = this.get("layerid");
 
         // entferne nicht mehr sichtbare Layer
-        _.each(layerlist, function (layer) {
+        layerlist.forEach(layer => {
             const tester = modelList.filter(function (lay) {
                 return lay.id === layer.id;
             });
@@ -212,9 +213,9 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
                 // ... und muss aus Liste entfernt werden
                 this.removeLayerFromList(layer);
             }
-        }, this);
+        });
         // füge neue Layer hinzu
-        _.each(modelList, function (layer) {
+        modelList.forEach(layer => {
             const tester = layerlist.filter(function (lay) {
                 return lay.id === layer.id;
             });
@@ -222,7 +223,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             if (tester.length === 0) {
                 this.addLayerToList(layer);
             }
-        }, this);
+        });
     },
     /**
      * Removes no longer visible layers from the list
@@ -247,7 +248,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     getFeatureList: function (layerId) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
             gfiAttributes = layerModel.get("gfiAttributes"),
-            layerFromList = _.findWhere(this.get("layerlist"), {id: layerId}),
+            layerFromList = Radio.request("Util", "findWhereJs", this.get("layerlist"), {id: layerId}),
             features = layerModel.get("layer").getSource().getFeatures(),
             ll = [];
 
