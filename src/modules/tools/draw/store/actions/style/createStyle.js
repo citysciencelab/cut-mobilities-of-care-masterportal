@@ -1,4 +1,4 @@
-import {Fill, Stroke, Style} from "ol/style.js";
+import {Style} from "ol/style.js";
 
 import {createCircleStyle} from "./createCircleStyle";
 import {createDrawStyle} from "./createDrawStyle";

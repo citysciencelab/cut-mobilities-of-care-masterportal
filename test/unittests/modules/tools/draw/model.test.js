@@ -1,4 +1,4 @@
-import VectorLayer from "ol/layer/Vector.js";
+/* import VectorLayer from "ol/layer/Vector.js";
 import {Select, Modify, Draw} from "ol/interaction.js";
 import {Style, Text} from "ol/style.js";
 import VectorSource from "ol/source/Vector";
@@ -9,7 +9,7 @@ import {expect} from "chai";
 import Map from "ol/Map";
 import View from "ol/View";
 
-/* describe("drawModel", function () {
+describe("drawModel", function () {
     let model,
         iconPath;
 

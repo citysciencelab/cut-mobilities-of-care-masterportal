@@ -1,4 +1,4 @@
-import Vuex from "vuex";
+// import Vuex from "vuex";
 // import {shallowMount, createLocalVue} from "@vue/test-utils";
 // import Draw from "../components/Draw.vue";
 // import {expect} from "chai";
