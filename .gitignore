@@ -42,4 +42,4 @@ debug.log
 devtools/proxyconf.json
 lintfixed.html
 npm-debug.log
-src/share-components/cursorAttachment/components/CursorAttachment.vue
+src/share-components/cursorAttachment/*

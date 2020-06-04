@@ -61,10 +61,12 @@ export default {
 </script>
 
 <template lang="html">
+    <!-- TODO: Add 'selected' property to the option that is currently selected! -->
+    <!-- TODO: Which parameter should be used instead of renderToWindow for deciding whether the window is present or not? -->
     <Tool
         :title="$t('modules.tools.draw.title')"
         :icon="glyphicon"
-        :active="active"
+        :active="active && renderToWindow"
         :render-to-window="renderToWindow"
     >
         <template v-slot:toolBody>

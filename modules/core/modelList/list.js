@@ -558,10 +558,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         const legendModel = this.findWhere({id: "legend"}),
             activeTools = this.where({isActive: true}),
             activatedToolModels = Array.isArray(activatedToolModel) ? activatedToolModel : [activatedToolModel],
-            alwaysActiveTools = [...activatedToolModels, ...this.alwaysActiveTools, legendModel];
+            alwaysActiveTools = [...activatedToolModels, ...this.alwaysActiveTools, legendModel],
+            deactivateGFI = typeof activatedToolModel.get === "function"
+                ? activatedToolModel.get("deactivateGFI")
+                : activatedToolModel.deactivateGFI;
         let activeToolsToDeactivate = [];
 
-        if (!activatedToolModel.get("deactivateGFI")) {
+        if (!deactivateGFI) {
             alwaysActiveTools.push(this.findWhere({id: "gfi"}));
         }
 

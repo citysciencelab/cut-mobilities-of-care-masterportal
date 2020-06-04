@@ -51,8 +51,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
         multiPoint = new MultiPoint([]),
         multiPolygon = new MultiPolygon([]);
 
-    // NOTE: How does this value arrive? In JSDoc it is written that its a Boolean which could make the "===" redundant
-    if (payload.prmObject?.transformWGS === true) {
+    if (payload.prmObject?.transformWGS) {
         targetProjection = "EPSG:4326";
     }
     if (payload.prmObject?.targetProjection !== undefined) {
@@ -190,13 +189,13 @@ function editFeaturesWithoutGUI ({dispatch}) {
  * @returns {String} GeoJSON of all Features as a String
  */
 function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
+    const collection = Radio.request("ModelList", "getCollection");
     let featJSON,
         newColor,
         format;
 
-    // TODO: collection is not defined on the model directly but rather implicitly --> How is this needed and how can this be handled?
-    if (this.collection) {
-        this.collection.setActiveToolsToFalse(this);
+    if (collection) {
+        collection.setActiveToolsToFalse(state);
     }
 
     commit("setRenderToWindow", false);
@@ -220,8 +219,7 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
 
         if (initialJSON) {
             try {
-                // NOTE: How does this value arrive? In JSDoc it is written that its a Boolean which could make the "===" redundant
-                if (transformWGS === true) {
+                if (transformWGS) {
                     format = new GeoJSON({
                         defaultDataProjection: "EPSG:4326"
                     });
@@ -236,11 +234,10 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
                 }
 
                 if (featJSON.length > 0) {
-                    state.layer.setStyle(createStyle(drawType));
+                    state.layer.setStyle(createStyle(state));
                     state.layer.getSource().addFeatures(featJSON);
                 }
-                // NOTE: How does this value arrive? In JSDoc it is written that its a Boolean which could make the "===" redundant
-                if (featJSON.length > 0 && zoomToExtent === true) {
+                if (featJSON.length > 0 && zoomToExtent) {
                     Radio.trigger("Map", "zoomToExtent", state.layer.getSource().getExtent());
                 }
             }

@@ -130,6 +130,7 @@ const initialState = Object.assign({}, stateDraw),
 
                     if (featureCount > maxFeatures - 1) {
                         Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures}));
+                        // TODO: For some reason the drawInteraction is not correctly removed from the Map --> After the limit has been reached, the user starts drawing points (doesn't matter which geometry was chosen beforehand)
                         dispatch("manipulateInteraction", {interaction: "draw", active: false});
                     }
                 });
@@ -291,8 +292,6 @@ const initialState = Object.assign({}, stateDraw),
             commit("setOpacityContour", initialState.opacityContour);
             commit("setPointSize", initialState.pointSize);
             commit("setSymbol", initialState.iconList[0]);
-
-            // TODO: unregisterFromMap Radio.trigger("Map", "unregisterListener", this.listener);
             // TODO: Clear the cursor from the map
             state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
         },

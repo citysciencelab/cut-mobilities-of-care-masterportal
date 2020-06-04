@@ -41,8 +41,6 @@ function setActive ({state, commit, dispatch}, active) {
     });
     Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
 
-    // TODO: Mauszeiger im globalen Store machen
-
     if (active) {
         commit("setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
 
@@ -51,13 +49,7 @@ function setActive ({state, commit, dispatch}, active) {
         dispatch("createModifyInteractionAndAddToMap", false);
 
         if (state.renderToWindow) {
-            // TODO: Add the cursor to the map
-            // TODO: Init the listener this.listener = Radio.request("Map", "registerListener", "pointermove", this.renderGlyphicon.bind(this));
-            // renderGlyphicon:
-            /*  const element = document.getElementById("cursorGlyph");
-                $(element).css("left", evt.originalEvent.offsetX + 5);
-                $(element).css("top", evt.originalEvent.offsetY + 50 - 15); // absolute offset plus height of menubar (50)
-            */
+            // TODO: Add glyphicon glyphicon-pencil to the span of the Component CursorAttachment
             dispatch("toggleInteraction", "draw");
         }
     }
