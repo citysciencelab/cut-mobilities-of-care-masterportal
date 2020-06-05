@@ -185,23 +185,23 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             }
             // Features
             default: {
-                if (coord.length === 2) {
+                if (coord.length === 2 && hit.geometryType !== "MULTIPOLYGON" && hit.geometryType !== "POLYGON") {
                     Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     this.showMarker(coord);
                 }
-                else if (coord.length === 3) {
+                else if (coord.length === 3 && hit.geometryType !== "MULTIPOLYGON" && hit.geometryType !== "POLYGON") {
                     Radio.trigger("MapView", "setCenter", [coord[0], coord[1]], this.model.get("zoomLevel"));
                     this.showMarker(coord);
                 }
-                else if (coord.length === 4) {
+                else if (coord.length === 4 && hit.geometryType !== "MULTIPOLYGON" && hit.geometryType !== "POLYGON") {
                     Radio.trigger("Map", "zoomToExtent", coord);
                 }
-                else if (coord.length > 4) {
+                else if (coord.length > 4 || hit.geometryType === "MULTIPOLYGON" || hit.geometryType === "POLYGON") {
                     if (hit.geometryType === "POLYGON") {
-                        this.model.setWkt("POLYGON", coord);
+                        this.model.setWkt("POLYGON", coord, hit.interiorPolygons);
                     }
                     else if (hit.geometryType === "MULTIPOLYGON") {
-                        this.model.setWkt("MULTIPOLYGON", coord);
+                        this.model.setWkt("MULTIPOLYGON", coord, hit.interiorPolygons);
                     }
                     if (hit.geometryType === "POLYGON" || hit.geometryType === "MULTIPOLYGON") {
                         this.model.showFeature(); // bei Flächen soll diese sichtbar sein

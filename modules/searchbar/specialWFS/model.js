@@ -240,38 +240,23 @@ const SpecialWFSModel = Backbone.Model.extend({
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
             elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]);
-        let identifier,
-            geom;
+        let identifier;
 
         for (const element of elements) {
             const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
                 elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
-                polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember"),
-                lengthIndex = polygonMembers.length;
-            let coordinateArray = [],
-                geomType;
+                polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember");
+            let geomType;
 
             if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
+                const polygonCoords = this.getInteriorAndExtoriorPolygonMembers(polygonMembers);
+
                 identifier = elementPropertyNames[0].textContent;
 
-                if (polygonMembers.length > 1) {
-
-                    for (let i = 0; i < lengthIndex; i++) {
-                        const coords = polygonMembers[i].getElementsByTagNameNS("*", "posList").item(0).textContent;
-
-                        coordinateArray.push(Object.values(coords.replace(/\s\s+/g, " ").split(" ")));
-                    }
+                if (polygonMembers[0].getElementsByTagNameNS("*", "posList").length > 1 || polygonMembers.length > 1) {
                     geomType = "MULTIPOLYGON";
                 }
                 else {
-                    geom = elementGeometryNames[0].firstElementChild;
-
-                    // searching for first simple geometry avoiding multipolygons
-                    while (geom.childElementCount > 0) {
-                        geom = geom.firstElementChild;
-                    }
-
-                    coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
                     geomType = "POLYGON";
                 }
 
@@ -281,7 +266,8 @@ const SpecialWFSModel = Backbone.Model.extend({
                     name: identifier.trim(),
                     geometryType: geomType,
                     type: type,
-                    coordinate: coordinateArray,
+                    coordinate: polygonCoords[0],
+                    interiorPolygons: polygonCoords[1],
                     glyphicon: glyphicon
                 });
             }
@@ -290,6 +276,35 @@ const SpecialWFSModel = Backbone.Model.extend({
             }
         }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+    },
+
+    /**
+     * Function to extract the coordinates of every polygon and - if available - the index/position of interior polygons in the array of coordinates
+     * @param   {Object} polygonMembers members of the polygon
+     * @returns {Array[]} returns the coordinates of every polygon and also an array with the postions of interior polygons
+     */
+    getInteriorAndExtoriorPolygonMembers: function (polygonMembers) {
+        const lengthIndex = polygonMembers.length,
+            coordinateArray = [],
+            interiorPositions = [];
+
+        for (let i = 0; i < lengthIndex; i++) {
+            const coords = [];
+
+            for (const key in Object.keys(polygonMembers[i].getElementsByTagNameNS("*", "posList"))) {
+                coords.push(polygonMembers[i].getElementsByTagNameNS("*", "posList")[key].textContent);
+            }
+            coords.forEach(coordArray => coordinateArray.push(Object.values(coordArray.replace(/\s\s+/g, " ").split(" "))));
+
+            if (coords.length > 1) {
+                const interiorPosition = coordinateArray.length - coords.length;
+
+                for (let n = 1; n < coords.length; n++) {
+                    interiorPositions.push(interiorPosition + n);
+                }
+            }
+        }
+        return [coordinateArray, interiorPositions];
     },
 
     /**

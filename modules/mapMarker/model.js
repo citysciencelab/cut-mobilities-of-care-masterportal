@@ -181,15 +181,16 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
      * Help function for determining a feature with textual description
      * @param  {string} type Geometrietype
      * @param  {number[]} geom Array with coordinate values
+     * @param {number[]} interiorPolygons Array with the indices/position of the interior polygons in geom
      * @returns {string} wkt WellKnownText-Geom
      */
-    getWKTGeom: function (type, geom) {
+    getWKTGeom: function (type, geom, interiorPolygons) {
         let wkt,
             regExp;
 
         if (type === "POLYGON") {
             wkt = type + "((";
-            geom.forEach(function (element, index, list) {
+            geom[0].forEach(function (element, index, list) {
                 if (index % 2 === 0) {
                     wkt += element + " ";
                 }
@@ -214,6 +215,9 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
                     if (index2 % 2 === 0) {
                         wkt += coord + " ";
                     }
+                    else if (index2 === list.length - 1 && interiorPolygons.indexOf(index + 1) !== -1) {
+                        wkt += coord + ")";
+                    }
                     else if (index2 === list.length - 1) {
                         wkt += coord + "))";
                     }
@@ -221,7 +225,11 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
                         wkt += coord + ", ";
                     }
                 });
-                if (index === geom.length - 1) {
+
+                if (interiorPolygons.indexOf(index + 1) !== -1) {
+                    wkt += ",(";
+                }
+                else if (index === geom.length - 1 && interiorPolygons.indexOf(index + 1) === -1) {
                     wkt += ")";
                 }
                 else {
@@ -279,12 +287,13 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
 
     /**
      * setter for wkt
-     * @param {*} type todo
-     * @param {*} geom todo
+     * @param {*} type type of the geometry
+     * @param {*} geom the coordinates of the geometry
+     * @param {*} interiorPolygons Array with the position of the interior Polygons in geom
      * @returns {void}
      */
-    setWkt: function (type, geom) {
-        const value = this.getWKTGeom(type, geom);
+    setWkt: function (type, geom, interiorPolygons = "") {
+        const value = this.getWKTGeom(type, geom, interiorPolygons);
 
         this.set("wkt", value);
     },
