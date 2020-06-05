@@ -53,7 +53,7 @@
     - Ort für Templates
     - Schreiben des Changelogs
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder eine Url enthalten.
-- Es wurde ein Konfigurationsparameter für das Druckwerkzeug eingefügt: currentLayoutName. Dadurch lÃ¤sst sich das Standardlayout beim Starten des Werkzeugs konfigurieren.
+- Es wurde ein Konfigurationsparameter für das Druckwerkzeug eingefügt: currentLayoutName. Dadurch lässt sich das Standardlayout beim Starten des Werkzeugs konfigurieren.
 
 ### Changed
 - Die Dokumentation wurde an einigen Stellen verbessert und der fehlende Teil für das Werkzeug AddWMS wurde hinzugefügt.
@@ -76,7 +76,7 @@
 - Das Problem, das bei der Änderung der Sprache bei einem geöffneten Werkzeug auftrat und zu einer falschen Darstellung führte, wurde behoben
 - Im Footer können nun wieder eigene Einträge konfiguriert werden, die durch die Mehrsprachigkeit nicht mehr fehlerhaft angezeigt werden.
 - Ein Fehler wurde behoben, durch den Werkzeuge nach der Umschaltung der Sprache nicht mehr angezeigt wurden, da dort noch keine Mehrsprachigkeit implementiert ist
-- Die fehlerhafte Ãœbersetzung mittels des URL Parameters ?lng= bei nicht konfigurierter Mehrsprachigkeit wurde behoben
+- Die fehlerhafte Übersetzung mittels des URL Parameters ?lng= bei nicht konfigurierter Mehrsprachigkeit wurde behoben
 - Layer-Info-Fenster ist nun maximal 600px breit
 - Sensordaten werden nun wieder live gestylt.
 - Bei der Suche nach multipart Polygonen wurde lediglich auf eines der Teilpolygone gezoomt und dieses gehighlighted, nun geschieht dies für das gesamte multipart Polygon.
