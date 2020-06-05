@@ -42,6 +42,50 @@
 
 ---
 
+## v2.5.1 - 2020-05-29
+### Added
+- Internationalisierung ergänzt für:
+    - den Parameter Flur in der Flurstückssuche
+    - den Menüparameter Information
+    - die Themenbäume (default und custom)
+- Die Konventionen zu folgenden Themen erweitert:
+    - Die Nutzung von Underscore.js
+    - Ort für Templates
+    - Schreiben des Changelogs
+- Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder eine Url enthalten.
+- Es wurde ein Konfigurationsparameter für das Druckwerkzeug eingefügt: currentLayoutName. Dadurch lÃ¤sst sich das Standardlayout beim Starten des Werkzeugs konfigurieren.
+
+### Changed
+- Die Dokumentation wurde an einigen Stellen verbessert und der fehlende Teil für das Werkzeug AddWMS wurde hinzugefügt.
+- Die Überschriften in dem Control Layerattributions werden nun in der Schriftgröße 14px und nicht mehr fett dargestellt.
+- Die Meldung, die beim Fehlschlagen der GFI angezeigt wird, wurde überarbeitet.
+- In den Layerinformationen wird nun der Text "Keine Metadaten vorhanden." angezeigt, wenn keine Daten geladen wurden.
+- Bei abrufen des Druckreports wird die printAppId nun im Pfad mit angegeben.
+
+### Deprecated
+
+### Removed
+- Underscore.js wurde aus der Package.json entfernt
+
+### Fixed
+- Ein Problem wurde behoben, sodass der Maßstab nun auch bei besonders kleinen Maßstäben nicht umbricht.
+- Der URL-Parameter "LNG" funktioniert nun ausschließlich wenn die Mehrsprachigkeit in den Portalconfigs aktiviert wurde und wirft keinen Fehler mehr.
+- Die Scrollbar beim Starten im IE11 wurde entfernt
+- Ein Problem, dass beim parametrisierten Aufruf mit ?config= auftrat, wurde behoben
+- Ein Problem wurde behoben, welches mit fehlernder Konfifuration des Portaltitels auftrat
+- Das Problem, das bei der Änderung der Sprache bei einem geöffneten Werkzeug auftrat und zu einer falschen Darstellung führte, wurde behoben
+- Im Footer können nun wieder eigene Einträge konfiguriert werden, die durch die Mehrsprachigkeit nicht mehr fehlerhaft angezeigt werden.
+- Ein Fehler wurde behoben, durch den Werkzeuge nach der Umschaltung der Sprache nicht mehr angezeigt wurden, da dort noch keine Mehrsprachigkeit implementiert ist
+- Die fehlerhafte Ãœbersetzung mittels des URL Parameters ?lng= bei nicht konfigurierter Mehrsprachigkeit wurde behoben
+- Layer-Info-Fenster ist nun maximal 600px breit
+- Sensordaten werden nun wieder live gestylt.
+- Bei der Suche nach multipart Polygonen wurde lediglich auf eines der Teilpolygone gezoomt und dieses gehighlighted, nun geschieht dies für das gesamte multipart Polygon.
+- Ein Problem beim Anzeigen des Loader-gif wurde behoben.
+- Bei Vektordaten (WFS) wird nun auch die Legende wieder aus dem Parameter legendURL ausgelesen, wenn dieser angegeben wurde.
+- Bei ausgegrauten Layern wird die Legende nun nicht mehr gedruckt.
+
+---
+
 ## v2.5.0 - 2020-04-06
 ### Added
 - CustomTree: Der Parameter singleBaselayer wurde hinzugefügt. Steuert, ob nur ein einzelner Baselayer auf einmal wählbar sein soll oder nicht.
