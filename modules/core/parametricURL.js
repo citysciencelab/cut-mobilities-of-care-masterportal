@@ -123,7 +123,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                     && parameterNameUpperCase !== "VISIBILITY"
                     && parameterNameUpperCase !== "TRANSPARENCY"
                     && parameterNameUpperCase !== "CONFIG") {
-                    console.error("The URL-Parameter: " + parameterNameUpperCase + " does not exist!");
+                    console.warn("The URL-Parameter: " + parameterNameUpperCase + " is not supported in The Masterportal!");
                 }
             });
             this.setResult(result);
@@ -167,7 +167,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "ZOOMLEVEL": this.setZoomLevel.bind(this),
             "ZOOMTOEXTENT": this.parseZOOMTOEXTENT.bind(this),
             "ZOOMTOGEOMETRY": this.parseZoomToGeometry.bind(this),
-            "LNG": this.checkIfLanguageEnabled
+            "LNG": this.checkIfLanguageEnabled.bind(this)
         };
     },
 
@@ -215,7 +215,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     pushToIsInitOpen: function (value) {
-        let isInitOpenArray = this.get("isInitOpen"),
+        const isInitOpenArray = this.get("isInitOpen"),
             msg = "";
 
         isInitOpenArray.push(value);
@@ -567,6 +567,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
         this.parseURL(location.search.substr(1), this.possibleUrlParameters());
     },
+
     /**
      * Checks, if the language is dis- or enabled in the config.js
      * @returns {void}
