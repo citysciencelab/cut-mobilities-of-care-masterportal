@@ -35,16 +35,16 @@ describe("core/modelList/layer/model", function () {
             secondModel.attributes.isSelected = true;
         });
 
-        it("should deselect all other baselayers if the option singleBaseLayer is set to true", function () {
-            model.set("singleBaseLayer", true);
+        it("should deselect all other baselayers if the option singleBaselayer is set to true", function () {
+            model.set("singleBaselayer", true);
             Radio.trigger("Layer", "toggleIsSelected");
 
             expect(model.attributes.isSelected).to.be.true;
             expect(secondModel.attributes.isSelected).to.be.false;
         });
 
-        it("should lead to multiple baselayers being active if the option singleBaseLayer is set to false", function () {
-            model.set("singleBaseLayer", false);
+        it("should lead to multiple baselayers being active if the option singleBaselayer is set to false", function () {
+            model.set("singleBaselayer", false);
             Radio.trigger("Layer", "toggleIsSelected");
 
             expect(model.attributes.isSelected).to.be.true;

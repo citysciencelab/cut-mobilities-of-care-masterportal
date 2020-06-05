@@ -450,14 +450,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     toggleIsSelected: function () {
         const layerGroup = Radio.request("ModelList", "getModelsByAttributes", {parentId: this.get("parentId")}),
-            singleBaseLayer = this.get("singleBaseLayer") && this.get("parentId") === "Baselayer";
+            singleBaselayer = this.get("singleBaselayer") && this.get("parentId") === "Baselayer";
 
         if (this.get("isSelected") === true) {
             this.setIsSelected(false);
         }
         else {
             // This only works for treeType Custom, otherwise the parentId is not set on the layer
-            if (singleBaseLayer) {
+            if (singleBaselayer) {
                 layerGroup.forEach(layer => {
                     layer.setIsSelected(false);
                     // This makes sure that the Oblique Layer, if present in the layerlist, is not selectable if switching between baselayers
