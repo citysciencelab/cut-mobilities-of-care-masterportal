@@ -339,7 +339,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} legendObject.legend.img svg
      * @returns {string} legendObject.legend.typ=svg fixed type
      */
-    getLegendParamsFromVectorOld: function (layername, styleId, legendURL) {
+    getLegendParamsFromVectorOld: function (layername, styleId) {
         let subLegend;
 
         if (!Radio.request("StyleList", "returnModelById", styleId)) {
