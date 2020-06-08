@@ -55,7 +55,12 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
                 this.render(this.model, this.model.get("isActive"));
             }
         });
-
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.model.changeLang
+        });
+        this.model.set({
+            "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers")
+        });
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
