@@ -1,4 +1,5 @@
 import Model from "@modules/searchbar/specialWFS/model.js";
+import Util from "@testUtil";
 import {expect} from "chai";
 
 describe("modules/searchbar/specialWFS", function () {
@@ -95,6 +96,24 @@ describe("modules/searchbar/specialWFS", function () {
     describe("getWFS110Xml", function () {
         it("should return WFS POST string", function () {
             expect(model.getWFS110Xml(model.get("definitions")[0], "Ham")).to.equal("<?xml version='1.0' encoding='UTF-8'?><wfs:GetFeature service='WFS' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml' traverseXlinkDepth='*' version='1.1.0'><wfs:Query typeName='app:mrh_row_bplan'><wfs:PropertyName>app:name</wfs:PropertyName><wfs:PropertyName>app:geom</wfs:PropertyName><wfs:maxFeatures>1</wfs:maxFeatures><ogc:Filter><ogc:PropertyIsLike matchCase='false' wildCard='*' singleChar='#' escapeChar='!'><ogc:PropertyName>app:name</ogc:PropertyName><ogc:Literal>*Ham*</ogc:Literal></ogc:PropertyIsLike></ogc:Filter></wfs:Query></wfs:GetFeature>");
+        });
+    });
+
+    describe("getInteriorAndExteriorPolygonMembers", function () {
+        let multiPolygonFeatures,
+            utilModel;
+
+        before(function () {
+            utilModel = new Util();
+            multiPolygonFeatures = utilModel.getDescribeFeatureTypeResponse2();
+            // multiPolygonFeatures = utilModel.createTestFeatures2("resources/testFeaturesBplanMultiPolygonWithInteriorPolygon.xml");
+            // multiPolygonMembers = {0: utilModel.getPolygonMembers(multiPolygonFeatures)};
+        });
+
+        it("should return an array with two arrays", function () {
+            console.log(multiPolygonFeatures);
+            console.log(model.getInteriorAndExteriorPolygonMembers(multiPolygonFeatures));
+            // expect(model.getInteriorAndExteriorPolygonMembers(polygonMembers).to.be.equal([["1 2 3 4 5"]]));
         });
     });
 });

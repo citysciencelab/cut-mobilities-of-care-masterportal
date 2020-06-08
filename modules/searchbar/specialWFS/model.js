@@ -249,7 +249,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             let geomType;
 
             if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
-                const polygonCoords = this.getInteriorAndExtoriorPolygonMembers(polygonMembers);
+                const polygonCoords = this.getInteriorAndExteriorPolygonMembers(polygonMembers);
 
                 identifier = elementPropertyNames[0].textContent;
 
@@ -283,7 +283,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      * @param   {Object} polygonMembers members of the polygon
      * @returns {Array[]} returns the coordinates of every polygon and also an array with the postions of interior polygons
      */
-    getInteriorAndExtoriorPolygonMembers: function (polygonMembers) {
+    getInteriorAndExteriorPolygonMembers: function (polygonMembers) {
         const lengthIndex = polygonMembers.length,
             coordinateArray = [],
             interiorPositions = [];
