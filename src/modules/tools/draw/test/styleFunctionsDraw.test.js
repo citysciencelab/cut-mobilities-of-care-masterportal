@@ -170,42 +170,45 @@ describe("styleFunctionsDraw", () => {
             expect(result instanceof Style).to.be.true;
         });
         it("the result color should be the same as the input color for a polyline", function () {
-            const drawType = {value: "LineString", id: "drawLine"};
+            const drawType = {value: "LineString", id: "drawLine"},
+                symbol = {type: undefined};
 
-            expect(createStyle({color: color, drawType: drawType}).getFill().getColor()).to.deep.equal(color);
+            expect(createStyle({color, drawType, symbol}).getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as the input color for a polygon", function () {
-            const drawType = {value: "Polygon", id: "drawArea"};
+            const drawType = {value: "Polygon", id: "drawArea"},
+                symbol = {type: undefined};
 
-            expect(createStyle({color: color, drawType: drawType}).getFill().getColor()).to.deep.equal(color);
+            expect(createStyle({color, drawType, symbol}).getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as the input color for a point of type simple_point", function () {
             const symbol = {type: "simple_point", value: "simple_point"},
                 drawType = {value: "Point", id: "drawPoint"};
 
-            expect(createStyle({color: color, drawType: drawType, symbol: symbol}).getStyle().getFill().getColor()).to.deep.equal(color);
+            expect(createStyle({color, drawType, symbol}).getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as the input color for a point of type glyphicon", function () {
             const symbol = {type: "glyphicon", value: "\ue103"},
                 drawType = {value: "Point", id: "drawPoint"};
 
-            expect(createStyle({color: color, drawType: drawType, symbol: symbol}).getStyle().getText().getFill().getColor()).to.deep.equal(color);
+            expect(createStyle({color, drawType, symbol}).getText().getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as input color excluding the opacity which should be set as a separate parameter for a point of type image", function () {
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             const symbol = {type: "image", value: iconPath + "cloud.png"},
                 drawType = {value: "Point", id: "drawPoint"},
-                result = createStyle({color: color, drawType: drawType, symbol: symbol}).getImage();
+                result = createStyle({color, drawType, symbol}).getImage();
 
             expect(result.getColor()).to.deep.equal(color.slice(0, 3));
             expect(result.getOpacity()).to.deep.equal(color[3]);
         });
         it("the result color should be the same as the input color for text", function () {
-            const drawType = {value: "Point", id: "writeText"};
+            const drawType = {value: "Point", id: "writeText"},
+                symbol = {type: undefined};
 
             color = [255, 0, 0, 1];
 
-            expect(createStyle({color: color, drawType: drawType}).getStyle().getText().getFill().getColor()).to.deep.equal(color);
+            expect(createStyle({color, drawType, symbol}).getStyle().getText().getFill().getColor()).to.deep.equal(color);
         });
     });
     describe("createTextStyle", () => {

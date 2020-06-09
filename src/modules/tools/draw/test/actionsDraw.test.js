@@ -16,7 +16,6 @@ expect(commitSpy.firstCall.arguments).to.eql([1, 1])
 describe("actionsDraw", () => {
     // addInteraction
     // clearLayer
-    // createDrawInteraction
     // createDrawInteractionAndAddToMap
     /* describe.only("createDrawInteractionAndAddToMap", () => {
         it("should do stuff", () => {
