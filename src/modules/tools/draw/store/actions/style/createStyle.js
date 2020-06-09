@@ -21,7 +21,7 @@ import {createTextStyle} from "./createTextStyle";
  * @param {Number} state.zIndex Determines in which order features are rendered on the view.
  * @returns {module:ol/style/Style} style of the draw interaction
  */
-export function createStyle ({color, colorContour, font, fontSize, drawType, pointSize, strokeWidth, symbol, text, zIndex}) {
+export function createStyle ({color, colorContour, drawType, font, fontSize, pointSize, strokeWidth, symbol, text, zIndex}) {
     const glyphBool = symbol.type !== "simple_point"; // Normal point or icon
     let style = new Style();
 

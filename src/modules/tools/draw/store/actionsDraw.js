@@ -9,6 +9,20 @@ import stateDraw from "./stateDraw";
 
 // TODO: The Update and the Redo Buttons weren't working with the select and modify interaction in Backbone and are not yet working in Vue too.
 
+/**
+ * Creates a draw interaction to draw features on the map.
+ *
+ * @param {Object} state actions context object.
+ * @returns {ol/interaction/Draw} draw interaction
+ */
+function createDrawInteraction (state) {
+    return new Draw({
+        source: state.layer.getSource(),
+        type: state.drawType.geometry,
+        style: createStyle(state),
+        freehand: state.freeHand
+    });
+}
 
 /**
  * Creates a modify interaction and returns it.
@@ -56,20 +70,6 @@ const initialState = Object.assign({}, stateDraw),
             state.layer.getSource().clear();
         },
         /**
-         * Creates a draw interaction to draw features on the map.
-         *
-         * @param {Object} context actions context object.
-         * @returns {ol/interaction/Draw} draw interaction
-         */
-        createDrawInteraction ({state}) {
-            return new Draw({
-                source: state.layer.getSource(),
-                type: state.drawType.geometry,
-                style: createStyle(state),
-                freehand: state.freeHand
-            });
-        },
-        /**
          * Creates a draw interaction to add to the map.
          *
          * @param {Object} context actions context object.
@@ -79,20 +79,20 @@ const initialState = Object.assign({}, stateDraw),
          * @returns {void}
          */
         createDrawInteractionAndAddToMap ({state, commit, dispatch}, {active, maxFeatures}) {
-            dispatch("createDrawInteraction").then(drawInteraction => {
-                commit("setDrawInteraction", drawInteraction);
-                dispatch("manipulateInteraction", "draw", active);
-                dispatch("createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeatures});
-                dispatch("addInteraction", drawInteraction);
-            });
+            const drawInteraction = createDrawInteraction(state);
+
+            commit("setDrawInteraction", drawInteraction);
+            dispatch("manipulateInteraction", {interaction: "draw", active: active});
+            dispatch("createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeatures});
+            dispatch("addInteraction", drawInteraction);
 
             if (state.drawType.id === "drawDoubleCircle") {
-                dispatch("createDrawInteraction").then(drawInteractionTwo => {
-                    commit("setDrawInteractionTwo", drawInteractionTwo);
-                    dispatch("manipulateInteraction", "draw", true);
-                    dispatch("createDrawInteractionListener", {doubleCircle: true, drawInteraction: "Two", maxFeatures: maxFeatures});
-                    dispatch("addInteraction", drawInteractionTwo);
-                });
+                const drawInteractionTwo = createDrawInteraction(state);
+
+                commit("setDrawInteractionTwo", drawInteractionTwo);
+                dispatch("manipulateInteraction", {interaction: "draw", active: active});
+                dispatch("createDrawInteractionListener", {doubleCircle: true, drawInteraction: "Two", maxFeatures: maxFeatures});
+                dispatch("addInteraction", drawInteractionTwo);
             }
         },
         /**
