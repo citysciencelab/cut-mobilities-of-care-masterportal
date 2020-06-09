@@ -14,8 +14,6 @@
  * @property {String} font The font used for the text interaction.
  * @property {Number} fontSize The size of the font used for the text interaction.
  * @property {Boolean} freeHand Distinction between a freeHand line drawing or a static one.
- * @property {String} glyphicon The symbol for the entry of the tool in the menu.
- * @property {Array} iconList List of symbols to be used for Point features.
  * @property {String} id Internal Identifier for the Tool.
  * @property {Integer} idCounter Amount of features drawn.
  * @property {String} innerBorderColor The color of the border of the dropdown menu for the selection of the inner radius of a circle.
@@ -54,19 +52,6 @@ const state = {
     font: "Arial",
     fontSize: 10,
     freeHand: false,
-    glyphicon: "glyphicon-pencil",
-    iconList: [
-        {
-            id: "iconPoint",
-            type: "simple_point",
-            value: "simple_point"
-        },
-        {
-            id: "iconLeaf",
-            type: "glyphicon",
-            value: "\ue103"
-        }
-    ],
     id: "draw",
     idCounter: 0,
     innerBorderColor: "",
