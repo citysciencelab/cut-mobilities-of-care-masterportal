@@ -127,7 +127,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             }
             else {
                 Radio.trigger("Alert", "alert", {
-                    text: "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
+                    text: i18next.t("common:modules.tools.featureLister.alert"),
                     kategorie: "alert-warning"
                 });
             }

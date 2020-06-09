@@ -197,7 +197,8 @@
                 "list": "List",
                 "details": "Details",
                 "more": "More...",
-                "detailsOfSelected": "Details of the selected feature"
+                "detailsOfSelected": "Details of the selected feature",
+                "alert": "The attempt to show the selected feature failed because it has no geometry."
             },
             "pendler": {
                 "animation": {

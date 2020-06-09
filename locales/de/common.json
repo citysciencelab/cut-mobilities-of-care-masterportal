@@ -198,7 +198,8 @@
                 "list": "Liste",
                 "details": "Details",
                 "more": "Mehr...",
-                "detailsOfSelected": "Details des ausgewählten Features"
+                "detailsOfSelected": "Details des ausgewählten Features",
+                "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat."
             },
             "pendler": {
                 "animation": {
