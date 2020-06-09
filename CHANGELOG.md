@@ -72,7 +72,7 @@
 - Der URL-Parameter "LNG" funktioniert nun ausschließlich wenn die Mehrsprachigkeit in den Portalconfigs aktiviert wurde und wirft keinen Fehler mehr.
 - Die Scrollbar beim Starten im IE11 wurde entfernt
 - Ein Problem, dass beim parametrisierten Aufruf mit ?config= auftrat, wurde behoben
-- Ein Problem wurde behoben, welches mit fehlernder Konfifuration des Portaltitels auftrat
+- Ein Problem wurde behoben, welches mit fehlernder Konfiguration des Portaltitels auftrat
 - Das Problem, das bei der Änderung der Sprache bei einem geöffneten Werkzeug auftrat und zu einer falschen Darstellung führte, wurde behoben
 - Im Footer können nun wieder eigene Einträge konfiguriert werden, die durch die Mehrsprachigkeit nicht mehr fehlerhaft angezeigt werden.
 - Ein Fehler wurde behoben, durch den Werkzeuge nach der Umschaltung der Sprache nicht mehr angezeigt wurden, da dort noch keine Mehrsprachigkeit implementiert ist
@@ -116,7 +116,7 @@
 - 3D:
     - 3D: Features eines Layers können zum Ausblenden in 3D in der config.json konfiguriert werden.
     - Map-Marker kann nun 3D-Koordinaten bekommen. Dies ist möglich durch eine Konfiguration des Markers als Ebene.
-    - VectorLayer können nun ihre 3D-Koordinate oder duch Konfiguration erhöht dargestellt werden.
+    - VectorLayer können nun ihre 3D-Koordinate oder durch Konfiguration erhöht dargestellt werden.
 - GFI:
     - Konfigurierbar, um Vektordaten bei GFI Abfrage anders darzustellen.
     - Neues GFI-Theme *sensor*, *bildungatlas*
@@ -204,7 +204,7 @@
 ### Fixed
   - Shadow-Tool: Das Schattentool ist nun mobil nicht mehr verfügbar
   - QuickHelp: Ein Bug wurde gefixt, der verhindert hat, dass die Bilder über den angegebenen Dateipfad geladen werden
-  - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den enstprechenden Eintrag gescrollt
+  - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den entsprechenden Eintrag gescrollt
   - Searchbar: Ein Fehler wurde behoben der die Hausnummernsuche in der Gazetteer-Suche blockiert hat
   - WFS: Geoserver-WFS werden nun angezeigt
 
