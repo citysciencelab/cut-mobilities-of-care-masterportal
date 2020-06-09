@@ -1,6 +1,6 @@
-import sinon from "sinon";
-import {expect} from "chai";
-import actions from "../store/actionsDraw";
+// import sinon from "sinon";
+// import {expect} from "chai";
+// import actions from "../store/actionsDraw";
 // import testAction from "../../../../../test/unittests/VueTestUtils";
 
 /*
