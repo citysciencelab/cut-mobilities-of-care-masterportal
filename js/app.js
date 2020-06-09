@@ -411,7 +411,6 @@ async function loadApp () {
 
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
-
                 Object.keys(i18nextLanguages).forEach((lng) => {
                     import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
@@ -419,6 +418,7 @@ async function loadApp () {
                             initCounter--;
                             if (initCounter === 0) {
                                 Radio.trigger("Addons", "initialized");
+                                loadAddOnsAfterLanguageLoaded(allAddons);
                             }
                         }).catch(error => {
                             initCounter--;
@@ -426,42 +426,52 @@ async function loadApp () {
                             console.warn("Die Übersetzungsdateien der Anwendung " + addonKey + " konnten nicht vollständig geladen werden. Teile der Anwendung sind nicht übersetzt.");
                         });
                 });
-
-
-                // .js need to be removed so we can specify specifically in the import statement that
-                // webpack only searches for .js files
-                const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
-
-                import(
-                    /* webpackChunkName: "[request]" */
-                    /* webpackExclude: /.+unittests.+/ */
-                    "../addons/" + entryPoint + ".js"
-                ).then(module => {
-                    /* eslint-disable new-cap */
-                    const addon = new module.default();
-
-                    // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
-                    if (addon.model) {
-                        // set this special attribute, because it is the only one set before this replacement
-                        const model = Radio.request("ModelList", "getModelByAttributes", {"id": addon.model.id});
-
-                        if (!model) {
-                            console.warn("wrong configuration: addon " + addonKey + " is not in tools menu or cannot be called from somewhere in the view! Defined this in config.json.");
-                        }
-                        else {
-                            addon.model.set("i18nextTranslate", model.get("i18nextTranslate"));
-                        }
-                        Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
-                    }
-                }).catch(error => {
-                    console.error(error);
-                    Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
-                });
             }
         });
     }
 
     Radio.trigger("Util", "hideLoader");
+}
+
+/**
+ * Loads AddOns after the language is loaded
+ * @param {Object} allAddons all addons from the config.js
+ * @returns {void}
+ */
+function loadAddOnsAfterLanguageLoaded (allAddons) {
+    Config.addons.forEach((addonKey) => {
+        if (allAddons[addonKey] !== undefined) {
+            // .js need to be removed so we can specify specifically in the import statement that
+            // webpack only searches for .js files
+            const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
+
+            import(
+                /* webpackChunkName: "[request]" */
+                /* webpackExclude: /.+unittests.+/ */
+                "../addons/" + entryPoint + ".js"
+            ).then(module => {
+                /* eslint-disable new-cap */
+                const addon = new module.default();
+
+                // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
+                if (addon.model) {
+                    // set this special attribute, because it is the only one set before this replacement
+                    const model = Radio.request("ModelList", "getModelByAttributes", {"id": addon.model.id});
+
+                    if (!model) {
+                        console.warn("wrong configuration: addon " + addonKey + " is not in tools menu or cannot be called from somewhere in the view! Defined this in config.json.");
+                    }
+                    else {
+                        addon.model.set("i18nextTranslate", model.get("i18nextTranslate"));
+                    }
+                    Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
+                }
+            }).catch(error => {
+                console.error(error);
+                Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+            });
+        }
+    });
 }
 
 export {loadApp};
