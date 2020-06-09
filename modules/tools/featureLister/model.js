@@ -12,7 +12,14 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         featureProps: {}, // Properties des Features mit gesuchter featureid
         highlightedFeature: null,
         highlightedFeatureStyle: null,
-        glyphicon: "glyphicon-menu-hamburger"
+        glyphicon: "glyphicon-menu-hamburger",
+        // translations
+        visibleVectorLayers: "",
+        chooseTheme: "",
+        list: "",
+        details: "",
+        more: "",
+        detailsOfSelected: ""
     }),
     /**
      * @class FeatureListerModel
@@ -62,6 +69,11 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         if (this.model.get("isActive") === true) {
             this.model.set({
                 "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers"),
+                "chooseTheme": i18next.t("common:modules.tools.featureLister.chooseTheme"),
+                "list": i18next.t("common:modules.tools.featureLister.list"),
+                "details": i18next.t("common:modules.tools.featureLister.details"),
+                "more": i18next.t("common:modules.tools.featureLister.more"),
+                "detailsOfSelected": i18next.t("common:modules.tools.featureLister.detailsOfSelected"),
                 "currentLng": lng
             });
         }

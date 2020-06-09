@@ -37,6 +37,7 @@
             "draw": "Drawing / writing",
             "commuterLines": "Commuter (Lines)",
             "commuterAnimation": "Commuter (Animation)",
+            "featureLister": "List",
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
             "addWms": "Add WMS"
@@ -189,6 +190,14 @@
                     "A3 Hochformat": "A3 portrait format",
                     "A3 Querformat": "A3 landscape format"
                 }
+            },
+            "featureLister": {
+                "chooseTheme": "Choose theme",
+                "visibleVectorLayers": "Visible vector layers",
+                "list": "List",
+                "details": "Details",
+                "more": "More...",
+                "detailsOfSelected": "Details of the selected feature"
             },
             "pendler": {
                 "animation": {

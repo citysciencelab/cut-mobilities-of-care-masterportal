@@ -59,7 +59,12 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             "languageChanged": this.model.changeLang
         });
         this.model.set({
-            "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers")
+            "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers"),
+            "chooseTheme": i18next.t("common:modules.tools.featureLister.chooseTheme"),
+            "list": i18next.t("common:modules.tools.featureLister.list"),
+            "details": i18next.t("common:modules.tools.featureLister.details"),
+            "more": i18next.t("common:modules.tools.featureLister.more"),
+            "detailsOfSelected": i18next.t("common:modules.tools.featureLister.detailsOfSelected")
         });
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);

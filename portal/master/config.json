@@ -360,7 +360,7 @@
             "glyphicon": "glyphicon-tint"
           },
           "featureLister": {
-            "name": "Liste",
+            "name": "translate#common:menu.tools.featureLister",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
