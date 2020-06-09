@@ -68,35 +68,8 @@ Util = Backbone.Model.extend({
             }),
             data = fs.readFileSync(this.get("basepath") + path, "utf8"),
             features = format.readFeatures(data);
-            console.log(features);
-        return features;
-    },
-
-
-
-    createTestFeatures2: function (path) {
-        const format = new WFS({
-                featureNS: "http://www.deegree.org/app"
-            }),
-            data = fs.readFileSync(this.get("basepath") + path, "utf8"),
-            features = format.readFeatures(data);
 
         return features;
-    },
-    getPolygonMembers: function (features) {
-        // console.log(features);
-        let typeName = "app:hh_hh_festgestellt";
-        elements = features.getElementsByTagNameNS("*", typeName.split(":")[1]);
-
-        console.log("Me gusta patatas");
-        console.log(elements);
-        console.log("Hello");
-
-        const polygonMembers = features.getElementsByTagNameNS("*", "polygonMember");
-
-        // console.log(polygonMembers);
-
-        return polygonMembers;
     },
 
     getGeoJsonTestFeatures: function () {
@@ -109,16 +82,9 @@ Util = Backbone.Model.extend({
 
         return xml;
     },
-    getDescribeFeatureTypeResponse: function () {
-        const xml = fs.readFileSync(this.get("basepath") + "resources/testDescribeFeatureTypeResponse.xml", "utf8"),
+    getDescribeFeatureTypeResponse: function (path) {
+        const xml = fs.readFileSync(this.get("basepath") + path, "utf8"),
             xmlObject = new window.DOMParser().parseFromString(xml, "text/xml");
-
-        return xmlObject;
-    },
-    getDescribeFeatureTypeResponse2: function () {
-        const xml = fs.readFileSync(this.get("basepath") + "resources/testFeaturesBplanMultiPolygonWithInteriorPolygon.xml", "utf8"),
-            // xmlObject = new window.DOMParser().parseFromString(xml, "application/html");
-            xmlObject = new window.DOMParser().parseFromString(xml, "text/html");
 
         return xmlObject;
     }

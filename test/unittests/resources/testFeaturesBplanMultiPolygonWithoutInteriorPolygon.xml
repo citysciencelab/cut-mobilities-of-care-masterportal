@@ -13,16 +13,6 @@
                   <gml:posList>560313.401 5934298.407 560294.587 5934301.811 560285.063 5934303.535 560271.224 5934294.941 560268.175 5934295.831 560258.461 5934229.981</gml:posList>
                 </gml:LinearRing>
               </gml:exterior>
-              <gml:interior>
-                <gml:LinearRing srsName="EPSG:25832">
-                  <gml:posList>561016.997 5933835.861 561017.451 5933843.541 561061.576 5933841.794</gml:posList>
-                </gml:LinearRing>
-              </gml:interior>
-              <gml:interior>
-                <gml:LinearRing srsName="EPSG:25832">
-                  <gml:posList>561099.048 5933643.820 561099.267 5933651.168 561323.539 5933598.007 561323.352 5933600.283</gml:posList>
-                </gml:LinearRing>
-              </gml:interior>
             </gml:Polygon>
           </gml:polygonMember>
         </gml:MultiPolygon>
