@@ -38,6 +38,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @listens FeatureLister#RadioTriggerGfiHit
      * @listens FeatureLister#RadioTriggerGfiClose
      * @listens FeatureLister#RadioTriggerSwitchTabToTheme
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         this.listenTo(this.model, {
