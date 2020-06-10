@@ -2,7 +2,6 @@
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
 import MapModuleDebug from "./modules/map/components/MapModuleDebug.vue";
-import FreezeWindow from "./modules/controls/freeze/components/FreezeWindow.vue";
 import isDevMode from "./utils/isDevMode";
 
 export default {
@@ -10,8 +9,7 @@ export default {
     components: {
         MainNav,
         MapRegion,
-        MapModuleDebug,
-        FreezeWindow
+        MapModuleDebug
     },
     data: () => ({isDevMode})
 };
@@ -25,7 +23,6 @@ export default {
         <!-- layout at its heart is two elements - navigation bar and map with elements on it -->
         <MainNav />
         <MapRegion class="map-region" />
-        <FreezeWindow />
         <MapModuleDebug v-if="isDevMode" />
         <!-- keep loader last so it's above it all -->
         <!--
