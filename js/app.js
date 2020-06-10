@@ -416,14 +416,12 @@ async function loadApp () {
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales);
                             initCounter--;
-                            if (initCounter === 0) {
-                                Radio.trigger("Addons", "initialized");
-                                loadAddOnsAfterLanguageLoaded(allAddons);
-                            }
+                            checkInitCounter(initCounter, allAddons);
                         }).catch(error => {
                             initCounter--;
                             console.warn(error);
                             console.warn("Die Übersetzungsdateien der Anwendung " + addonKey + " konnten nicht vollständig geladen werden. Teile der Anwendung sind nicht übersetzt.");
+                            checkInitCounter(initCounter, allAddons);
                         });
                 });
             }
@@ -431,6 +429,19 @@ async function loadApp () {
     }
 
     Radio.trigger("Util", "hideLoader");
+}
+
+/**
+ * Checks if all addons are initialized.
+ * @param {Number} initCounter init counter
+ * @param {Object} allAddons all addons from the config.js
+ * @returns {void}
+ */
+function checkInitCounter (initCounter, allAddons) {
+    if (initCounter === 0) {
+        Radio.trigger("Addons", "initialized");
+        loadAddOnsAfterLanguageLoaded(allAddons);
+    }
 }
 
 /**
