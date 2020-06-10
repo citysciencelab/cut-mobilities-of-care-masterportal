@@ -31,7 +31,7 @@ async function ZoomTests ({builder, url, resolution}) {
                 const res = await driver.executeScript(getResolution);
 
                 /* only do-while on zoom-in since function may not be ready;
-                 * zoom-out should then work immediately */
+                 * zoom-out should then work immediately right after */
                 do {
                     await driver.executeScript(mouseWheelUp, canvas);
                     await driver.wait(new Promise(r => setTimeout(r, 500)));

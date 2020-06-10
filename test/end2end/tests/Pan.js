@@ -28,6 +28,7 @@ async function PanTests ({builder, url, resolution, browsername}) {
             const center = await driver.executeScript(getCenter),
                 viewport = await driver.findElement(By.css(".ol-viewport"));
 
+            // since there's no clear sign when panning is active, retry for the timeout written above
             do {
                 await driver.actions({bridge: true})
                     .move({origin: viewport})
