@@ -38,6 +38,11 @@ function OverviewMap ({builder, url, resolution, browsername}) {
                 // open - is closed initially in master, is open initially in custom
                 if (isMaster(url)) {
                     await click.perform();
+                    await driver.wait(
+                        async () => (await driver.findElements(By.css(".ol-overviewmap"))).length > 0,
+                        5000,
+                        "OverviewMap did not open in time."
+                    );
                 }
 
                 // NOTE: next line is a crutch until control layout issues are resolved; WD won't scroll by itself
