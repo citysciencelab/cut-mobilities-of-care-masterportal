@@ -14,7 +14,7 @@ function OverviewMap ({builder, url, resolution, browsername}) {
     const testIsApplicable = !isMobile(resolution) && (isCustom(url) || isMaster(url));
 
     if (testIsApplicable) {
-        describe("Modules Controls OverviewMap", function () {
+        describe.only("Modules Controls OverviewMap", function () {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
             before(async function () {
@@ -45,10 +45,19 @@ function OverviewMap ({builder, url, resolution, browsername}) {
 
                 // close and check result
                 await click.perform();
-                expect((await driver.findElements(By.css(".ol-overviewmap"))).length).to.equal(0);
+                await driver.wait(
+                    async () => (await driver.findElements(By.css(".ol-overviewmap"))).length === 0,
+                    5000,
+                    "OverviewMap did not close in time."
+                );
 
                 // open and check result
                 await click.perform();
+                await driver.wait(
+                    async () => (await driver.findElements(By.css(".ol-overviewmap"))).length > 0,
+                    5000,
+                    "OverviewMap did not appear in time."
+                );
                 overviewMap = await driver.findElement(By.css(".ol-overviewmap"));
                 overviewMapViewport = await driver.findElement(By.css(".ol-overviewmap .ol-viewport"));
 
