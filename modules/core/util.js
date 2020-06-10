@@ -985,11 +985,17 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {String[]} Array with elements as string.
      */
     convertArrayElementsToString: function (array = []) {
+        let realArray = [];
         const arrayWithStrings = [];
 
-        for (const element of array) {
-            arrayWithStrings.push(String(element));
+        if (typeof array !== "object") {
+            realArray = [array];
         }
+        else {
+            realArray = array;
+        }
+        realArray.forEach(element => arrayWithStrings.push(String(element)));
+
         return arrayWithStrings;
     },
 
