@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {isFullscreen} = require("../../../library/scripts"),
-    {isMobile, isMaster, isCustom, isDefault} = require("../../../settings"),
-    {writeScreenshot} = require("../../../library/screenshot"),
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {isFullscreen} = require("../../../../../../test/end2end/library/scripts"),
+    {isMobile, isMaster, isCustom, isDefault} = require("../../../../../../test/end2end/settings"),
+    {writeScreenshot} = require("../../../../../../test/end2end/library/screenshot"),
     {until, By} = webdriver;
 
 /**
@@ -15,10 +15,10 @@ function FullScreenTest ({builder, url, resolution}) {
         (isMaster(url) || isCustom(url) || isDefault(url));
 
     if (testIsApplicable) {
-        describe("Modules Controls FullScreen", function () {
-            const fullScreenButtonSelector = By.xpath("//div[@id='fullScreen']/div/span"),
-                removeIconSelector = By.xpath("//div[@id='fullScreen']/div/span[@class='glyphicon glyphicon-remove']"),
-                fullscreenIconSelector = By.xpath("//div[@id='fullScreen']/div/span[@class='glyphicon glyphicon-fullscreen']");
+        describe.only("Modules Controls FullScreen", function () {
+            const fullScreenButtonSelector = By.css(".fullscreen-button .control-icon"),
+                removeIconSelector = By.css(".fullscreen-button .control-icon.glyphicon-resize-small"),
+                fullscreenIconSelector = By.css(".fullscreen-button .control-icon.glyphicon-fullscreen");
             let driver;
 
             before(async function () {
