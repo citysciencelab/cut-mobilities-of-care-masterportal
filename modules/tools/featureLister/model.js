@@ -58,6 +58,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.changeLang
         });
+        this.changeLang();
         Radio.on("ModelList", "updateVisibleInMapList", this.checkVisibleLayer, this);
         Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
         this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
