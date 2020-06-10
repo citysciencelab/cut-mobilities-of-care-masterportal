@@ -33,11 +33,11 @@ function OverviewMap ({builder, url, resolution, browsername}) {
             });
 
             it("closes/opens overview map on clicking overview map button", async function () {
-                const click = driver.actions({bridge: true}).click(overviewMapButton);
-
                 // open - is closed initially in master, is open initially in custom
                 if (isMaster(url)) {
-                    await click.perform();
+                    // NOTE: next line is a crutch until control layout issues are resolved; WD won't scroll by itself
+                    await driver.executeScript("window.scrollBy(0, 250);");
+                    await overviewMapButton.click();
                     await driver.wait(
                         async () => (await driver.findElements(By.css(".ol-overviewmap"))).length > 0,
                         5000,
@@ -49,15 +49,18 @@ function OverviewMap ({builder, url, resolution, browsername}) {
                 await driver.executeScript("window.scrollBy(0, 250);");
 
                 // close and check result
-                await click.perform();
+                await overviewMapButton.click();
                 await driver.wait(
                     async () => (await driver.findElements(By.css(".ol-overviewmap"))).length === 0,
                     5000,
                     "OverviewMap did not close in time."
                 );
 
+                // NOTE: next line is a crutch until control layout issues are resolved; WD won't scroll by itself
+                await driver.executeScript("window.scrollBy(0, 250);");
+
                 // open and check result
-                await click.perform();
+                await overviewMapButton.click();
                 await driver.wait(
                     async () => (await driver.findElements(By.css(".ol-overviewmap"))).length > 0,
                     5000,
