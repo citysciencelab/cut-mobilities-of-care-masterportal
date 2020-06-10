@@ -398,8 +398,11 @@ describe("core/Util", function () {
             expect(model.pick(undefined, [0])).to.deep.equal({});
         });
     });
+
     describe("omit", function () {
-        const obj = {a: "foo", b: "bar", c: "baz"};
+        const obj = {a: "foo", b: "bar", c: "baz"},
+            objectBoolean = {true: {x: "foo", y: "bar"}},
+            objectNumber = {1: "foo", 2: "bar", 3: "baz"};
 
         it("should return the 3. entry", function () {
             expect(model.omit(obj, ["a", "b"])).to.deep.equal({c: "baz"});
@@ -419,7 +422,40 @@ describe("core/Util", function () {
         it("should return {}", function () {
             expect(model.omit(undefined, ["a"])).to.deep.equal({});
         });
+        it("should return an empty array", function () {
+            expect(model.omit(objectBoolean, [true])).to.be.an("object").that.is.empty;
+        });
+        it("should return the 3. entry by number array input", function () {
+            expect(model.omit(objectNumber, [1, 2])).to.deep.equal({3: "baz"});
+        });
     });
+
+    describe("convertArrayElementsToString", function () {
+        const arrayWithStrings = ["a", "b", "c"],
+            arrayWithNumbers = [1, 2, 3],
+            arrayWithBooleans = [true, false],
+            arrayWithVariousElements = ["a", 1, true];
+
+        it("should return an array with strings by array with strings as input", function () {
+            expect(model.convertArrayElementsToString(arrayWithStrings)).to.deep.equal(arrayWithStrings);
+        });
+        it("should return an array with strings by array with numbers as input", function () {
+            expect(model.convertArrayElementsToString(arrayWithNumbers)).to.deep.equal(["1", "2", "3"]);
+        });
+        it("should return an Aaray with strings by array with booleans as input", function () {
+            expect(model.convertArrayElementsToString(arrayWithBooleans)).to.deep.equal(["true", "false"]);
+        });
+        it("should return an array with strings by array with various elements as input", function () {
+            expect(model.convertArrayElementsToString(arrayWithVariousElements)).to.deep.equal(["a", "1", "true"]);
+        });
+        it("should return an empty array by empty array as input", function () {
+            expect(model.convertArrayElementsToString([])).to.be.an("array").that.is.empty;
+        });
+        it("should return an empty array by undefined input", function () {
+            expect(model.convertArrayElementsToString(undefined)).to.be.an("array").that.is.empty;
+        });
+    });
+
     describe("findWhereJs", function () {
         it("should return the first entry in the list", function () {
             expect(model.findWhereJs(list, {"id": "bkgSuggest3"})).to.deep.equal(list[0]);
