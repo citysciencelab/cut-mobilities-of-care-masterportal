@@ -55,7 +55,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
                 // require("./tests/modules/controls/FullScreen.js"),
                 // require("./tests/modules/controls/Orientation.js"),
                 // require("./tests/modules/controls/OverviewMap.js"),
-                // require("./tests/modules/controls/TotalView.js"),
+                require("../../src/modules/controls/totalView/test/end2end/TotalView.e2e.js"),
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.js")
 
                 // modules/core
