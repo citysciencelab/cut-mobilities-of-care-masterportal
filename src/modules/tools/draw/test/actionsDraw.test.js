@@ -147,7 +147,7 @@ describe("actionsDraw", () => {
                 drawInteraction: ""
             });
 
-            sinon.stub(Radio, "trigger");
+            sinon.stub(Radio, "trigger").callsFake(sinon.fake());
 
             Config.inputMap = {targetprojection: "mock"};
             definedFunctions.drawend[0]({feature: {set}});
@@ -184,7 +184,7 @@ describe("actionsDraw", () => {
         it("enables the maxFeatures drawstart to dispatch does so on maxFeatures reached", () => {
             let featureArray = [];
 
-            sinon.stub(Radio, "trigger");
+            sinon.stub(Radio, "trigger").callsFake(sinon.fake());
 
             state.layer = {
                 getSource: () => ({
