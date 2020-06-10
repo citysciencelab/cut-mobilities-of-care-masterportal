@@ -12,7 +12,7 @@ function AttributionsTests ({builder, url, resolution}) {
     const testIsApplicable = isCustom(url) || isMaster(url); // attributions only active in custom/master
 
     if (testIsApplicable) {
-        describe.only("Modules Controls Attributions", function () {
+        describe("Modules Controls Attributions", function () {
             let driver, attributionsButton, attributionsDiv;
 
             before(async function () {
