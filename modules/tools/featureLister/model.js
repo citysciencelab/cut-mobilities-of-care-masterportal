@@ -47,6 +47,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @listens Map#RadioTriggerMapSetGFIParams
      * @listens FeatureLister#changeLayerId
      * @listens FeatureLister#changeFeatureId
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         this.superInitialize();
@@ -54,6 +55,9 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         if (this.has("lister") === true) {
             this.set("maxFeatures", this.get("lister"));
         }
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
         Radio.on("ModelList", "updateVisibleInMapList", this.checkVisibleLayer, this);
         Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
         this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
@@ -66,8 +70,8 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @returns {Void} -
      */
     changeLang: function (lng) {
-        if (this.model.get("isActive") === true) {
-            this.model.set({
+        if (this.get("isActive") === true) {
+            this.set({
                 "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers"),
                 "chooseTheme": i18next.t("common:modules.tools.featureLister.chooseTheme"),
                 "list": i18next.t("common:modules.tools.featureLister.list"),

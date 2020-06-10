@@ -38,7 +38,6 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @listens FeatureLister#RadioTriggerGfiHit
      * @listens FeatureLister#RadioTriggerGfiClose
      * @listens FeatureLister#RadioTriggerSwitchTabToTheme
-     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         this.listenTo(this.model, {
@@ -55,9 +54,6 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             "change:currentLng": () => {
                 this.render(this.model, this.model.get("isActive"));
             }
-        });
-        this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.model.changeLang
         });
         this.model.set({
             "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers"),
