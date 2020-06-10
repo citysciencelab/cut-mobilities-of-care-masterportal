@@ -14,7 +14,7 @@ function OverviewMap ({builder, url, resolution, browsername}) {
     const testIsApplicable = !isMobile(resolution) && (isCustom(url) || isMaster(url));
 
     if (testIsApplicable) {
-        describe.only("Modules Controls OverviewMap", function () {
+        describe("Modules Controls OverviewMap", function () {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
             before(async function () {
