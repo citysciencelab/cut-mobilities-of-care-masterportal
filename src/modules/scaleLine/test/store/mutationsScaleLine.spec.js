@@ -1,4 +1,4 @@
-import mutations from "../../../../../src/modules/scaleLine/store/mutationsScaleLine";
+import mutations from "../../store/mutationsScaleLine";
 import {expect} from "chai";
 
 describe("mutationsScaleLine", () => {

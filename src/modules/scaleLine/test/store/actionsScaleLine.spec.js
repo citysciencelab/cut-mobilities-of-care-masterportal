@@ -1,5 +1,5 @@
-import actions from "../../../../../src/modules/scaleLine/store/actionsScaleLine";
-import testAction from "../../../VueTestUtils";
+import actions from "../../store/actionsScaleLine";
+import testAction from "../../../../../test/unittests/VueTestUtils";
 
 describe("actionsScaleLine", () => {
 
