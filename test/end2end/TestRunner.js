@@ -15,7 +15,7 @@ const webdriver = require("selenium-webdriver"),
         modes
     } = require("./settings"),
     /* eslint-disable no-process-env */
-    browser = process.env.browser || "firefox,chrome",
+    browser = process.env.browser || "chrome",
     browserstackuser = process.env.bs_user,
     browserstackkey = process.env.bs_key,
     url = process.env.url || "https://localhost:9001",

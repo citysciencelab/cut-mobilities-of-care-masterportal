@@ -15,7 +15,7 @@ function FullScreenTest ({builder, url, resolution}) {
         (isMaster(url) || isCustom(url) || isDefault(url));
 
     if (testIsApplicable) {
-        describe.only("Modules Controls FullScreen", function () {
+        describe("Modules Controls FullScreen", function () {
             const fullScreenButtonSelector = By.css(".fullscreen-button .control-icon"),
                 removeIconSelector = By.css(".fullscreen-button .control-icon.glyphicon-resize-small"),
                 fullscreenIconSelector = By.css(".fullscreen-button .control-icon.glyphicon-fullscreen");
