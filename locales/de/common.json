@@ -199,7 +199,8 @@
                 "details": "Details",
                 "more": "Mehr...",
                 "detailsOfSelected": "Details des ausgewählten Features",
-                "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat."
+                "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
+                "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
             },
             "pendler": {
                 "animation": {

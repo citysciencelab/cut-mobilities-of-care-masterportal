@@ -198,7 +198,8 @@
                 "details": "Details",
                 "more": "More...",
                 "detailsOfSelected": "Details of the selected feature",
-                "alert": "The attempt to show the selected feature failed because it has no geometry."
+                "alert": "The attempt to show the selected feature failed because it has no geometry.",
+                "key": "{{shownFeatures.x}} of {{shownFeatures.y}} features listed"
             },
             "pendler": {
                 "animation": {
