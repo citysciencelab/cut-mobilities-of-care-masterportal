@@ -8,42 +8,16 @@ export default {
     name: "FreezeWindow",
     data: function () {
         return {
-            active: false,
             isTable: Radio.request("Util", "getUiStyle") === "TABLE"
         };
     },
     methods: {
         /**
-         * changing to inactive to hide the freezed window
+         * emitting the function in parent Freeze Component to hide the freezed window
          * @returns {void}
          */
         hideFreezeWin () {
-            this.active = false;
-            const freeView = document.getElementById("freeze-view");
-
-            freeView.className = "freeze-view freeze-deactivated";
-        },
-
-        /**
-         * setting the position of the freezebox according to the device type
-         * @returns {Object} style with left and top
-         */
-        positionStyle () {
-            let left = "30px",
-                top = "30px",
-                style = {};
-
-            if (this.isTable) {
-                left = document.getElementsByClassName("table-nav-main")[0].offsetLeft;
-                top = document.getElementsByClassName("table-nav-main")[0].offsetTop;
-            }
-
-            style = {
-                left: left,
-                top: top
-            };
-
-            return style;
+            this.$emit("hideFreezeWin");
         }
     }
 };
@@ -52,11 +26,10 @@ export default {
 <template>
     <div
         id="freeze-view"
-        :class="active ? 'freeze-view freeze-activated' : 'freeze-view freeze-deactivated'"
+        class="freeze-view freeze-activated"
     >
         <p
-            class="freeze-view-close"
-            :style="positionStyle()"
+            :class="isTable ? 'table freeze-view-close' : 'freeze-view-close'"
             :title="$t(`common:modules.controls.freeze.unfreeze`)"
             @click="hideFreezeWin"
         >
@@ -68,43 +41,36 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
 
-    @color: white;
-    @background_color: #646262;
-
-    .freeze-view {
+    .freeze-view.freeze-activated {
         z-index: 10000;
-        position: absolute;
-        top: -100000px;
-        left: -100000px;
+        position: fixed;
+        top: 0px;
+        left: 0px;
         width: 100%;
         height: 100%;
     }
-    .freeze-activated {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-    }
-    .freeze-deactivated {
-        height: 10px;
-        width: 10px;
-        .freeze-view-close {
-            left: 0px;
-            top: 0px;
-        }
-    }
+
     .freeze-view-close {
         z-index: 10001;
         cursor: pointer;
         position: absolute;
         border-radius: 12px;
         font-size: 26px;
+        left: 30px;
+        top: 30px;
         width: 600px;
         height: 60px;
         line-height: 60px;
         text-align: center;
-        background-color: @background_color;
-        color: @color;
+        background-color: #646262;
+        color: #ffffff;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+        &.table {
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 
     #table-navigation {

@@ -1,6 +1,6 @@
 <script>
 import ControlIcon from "../../ControlIcon.vue";
-import TableStyleControl from "../../TableStyleControl.vue";
+import FreezeWindow from "./FreezeWindow.vue";
 
 /**
  * Freeze control that allows the user to freeze the current window
@@ -8,10 +8,14 @@ import TableStyleControl from "../../TableStyleControl.vue";
  */
 export default {
     name: "Freeze",
-    computed: {
-        component () {
-            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
-        }
+    components: {
+        FreezeWindow,
+        ControlIcon
+    },
+    data: function () {
+        return {
+            isActive: false
+        };
     },
     methods: {
         /**
@@ -19,9 +23,15 @@ export default {
          * @returns {void}
          */
         showFreezeWin () {
-            const freeView = document.getElementById("freeze-view");
+            this.isActive = true;
+        },
 
-            freeView.className = "freeze-view freeze-activated";
+        /**
+         * hiding the freezed window
+         * @returns {void}
+         */
+        hideFreezeWin () {
+            this.isActive = false;
         }
     }
 };
@@ -29,18 +39,20 @@ export default {
 
 <template>
     <div class="freeze-view-start">
-        <component
-            :is="component"
+        <ControlIcon
             :title="$t(`common:modules.controls.freeze.freeze`)"
             :icon-name="'ban-circle'"
             :on-click="showFreezeWin"
+        />
+        <FreezeWindow
+            v-if="isActive"
+            @hideFreezeWin="hideFreezeWin"
         />
     </div>
 </template>
 
 <style lang="less" scoped>
     @import "~variables";
-    @color: #f3f3f3;
 
     .controls-row-right {
         .freeze-view-start {
