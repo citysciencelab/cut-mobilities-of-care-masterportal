@@ -184,7 +184,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
 
         layers.forEach(layer => {
             tempArray.push(this.getLegendDefinition(layer.get("name"), layer.get("typ"), layer.get("legendURL"), layer.get("styleId"), layer.get("layerSource")));
-        }, this);
+        });
 
         this.unset("legendParams");
         this.set("legendParams", tempArray);
@@ -197,14 +197,29 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {Layer[]} sorted and filtered layers
      */
     filterLayersForLegend: function () {
-        const visibleLayer = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true}),
-            filteredLegendUrl = visibleLayer.filter(layer => ["ignore", ""].indexOf(layer.get("legendURL")) === -1),
+        const visibleLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
+            filteredLegendUrl = this.filterLegendUrl(visibleLayers),
             isMode3D = Radio.request("Map", "isMap3d"),
             filterViewType = filteredLegendUrl.filter(layer => {
                 return (isMode3D && layer.get("supported").includes("3D")) || (!isMode3D && layer.get("supported").includes("2D"));
             });
 
         return filterViewType.sort((layerA, layerB) => layerB.get("selectionIDX") - layerA.get("selectionIDX"));
+    },
+
+    /**
+     * Filters out layers where the legend should not be shown.
+     * @param {Backbone.Model[]} [visibleLayers=[]] - The visible layers.
+     * @returns {Backbone.Model[]} The filtered layers.
+     */
+    filterLegendUrl: function (visibleLayers = []) {
+        return visibleLayers.filter(layer => {
+            if (layer.get("typ") === "GROUP") {
+                return layer.get("layerSource").filter(childLayer => ["ignore", ""].indexOf(childLayer.get("legendURL")) === -1);
+            }
+
+            return ["ignore", ""].indexOf(layer.get("legendURL")) === -1;
+        });
     },
 
     /**
@@ -241,19 +256,19 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             if (isNewVectorStyle) {
                 return this.getLegendParamsFromVector(layername, styleId, legendURL);
             }
-            return this.getLegendParamsFromVectorOld(layername, styleId);
+            return this.getLegendParamsFromVectorOld(layername, styleId, legendURL);
         }
         else if (typ === "SensorThings") {
             if (isNewVectorStyle) {
-                return this.getLegendParamsFromVector(layername, styleId);
+                return this.getLegendParamsFromVector(layername, styleId, legendURL);
             }
-            return this.getLegendParamsFromVectorOld(layername, styleId);
+            return this.getLegendParamsFromVectorOld(layername, styleId, legendURL);
         }
         else if (typ === "GeoJSON") {
             if (isNewVectorStyle) {
-                return this.getLegendParamsFromVector(layername, styleId);
+                return this.getLegendParamsFromVector(layername, styleId, legendURL);
             }
-            return this.getLegendParamsFromVectorOld(layername, styleId);
+            return this.getLegendParamsFromVectorOld(layername, styleId, legendURL);
         }
         else if (typ === "StaticImage") {
             return this.getLegendParamsFromURL(layername, legendURL, typ);
@@ -263,7 +278,6 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                 const childLegend = this.getLegendDefinition(layerSource.get("name"), layerSource.get("typ"), layerSource.get("legendURL"), layerSource.get("styleId"), null);
 
                 if (childLegend.legend) {
-                    // layerSource-Abfragen haben immer nur legend[0]
                     defs.push(childLegend.legend[0]);
                 }
             }, this);
@@ -330,7 +344,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @deprecated with new vectorStyle module
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @param   {string} layername Name of layer to use in legend view
-     * @param   {integer} styleId styleId
+     * @param   {number} styleId styleId
+     * @param   {string} legendURL can be an image path as string or array of strings
      * @returns {object} legendObject legend item
      * @returns {string} legendObject.legendname layername
      * @returns {object[]} legendObject.legend Array of legend entries in this particular layer e.g. because of multiple categories
@@ -338,10 +353,8 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {string} legendObject.legend.img svg
      * @returns {string} legendObject.legend.typ=svg fixed type
      */
-    getLegendParamsFromVectorOld: function (layername, styleId) {
-        let subLegend,
-            image = [],
-            name = [];
+    getLegendParamsFromVectorOld: function (layername, styleId, legendURL) {
+        let subLegend;
 
         if (!Radio.request("StyleList", "returnModelById", styleId)) {
             console.warn("Missing style for styleId " + styleId);
@@ -356,10 +369,23 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
             };
         }
 
+        if (typeof legendURL === "string") {
+            return {
+                layername: layername,
+                legend: [{
+                    legendname: [],
+                    img: legendURL,
+                    typ: "png"
+                }]
+            };
+        }
+
         const style = Radio.request("StyleList", "returnModelById", styleId).clone(),
             styleClass = style.get("class"),
             styleSubClass = style.get("subClass"),
-            styleFieldValues = style.get("styleFieldValues");
+            styleFieldValues = style.get("styleFieldValues"),
+            image = [],
+            name = [];
 
         if (styleClass === "POINT") {
             // Custom Point Styles
@@ -373,18 +399,22 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                     }
 
                     subLegend = this.getLegendParamsForPointOld("", layername, subStyle);
-                    image.push(subLegend.svg);
-                    name.push(subLegend.name);
+                    if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                        image.push(subLegend.svg);
+                        name.push(subLegend.name);
+                    }
                 });
             }
             else {
                 subLegend = this.getLegendParamsForPointOld(styleSubClass, layername, style);
 
                 if (Array.isArray(subLegend.name) && Array.isArray(subLegend.svg)) {
-                    image = subLegend.svg;
-                    name = subLegend.name;
+                    if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                        image.push(subLegend.svg);
+                        name.push(subLegend.name);
+                    }
                 }
-                else {
+                else if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
                     image.push(subLegend.svg);
                     name.push(subLegend.name);
                 }
@@ -393,7 +423,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
         else if (styleClass === "LINE") {
             // Custom Point Styles
             if (styleFieldValues) {
-                styleFieldValues.forEach(function (styleFieldValue) {
+                styleFieldValues.forEach(styleFieldValue => {
                     const subStyle = style.clone();
 
                     // overwrite style with all styleFieldValue settings
@@ -401,20 +431,24 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                         subStyle.set(key, styleFieldValue[key]);
                     }
                     subLegend = this.getLegendParamsForLinesOld(layername, subStyle);
-                    image.push(subLegend.svg);
-                    name.push(subLegend.name);
-                }, this);
+                    if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                        image.push(subLegend.svg);
+                        name.push(subLegend.name);
+                    }
+                });
             }
             else {
                 subLegend = this.getLegendParamsForLinesOld(layername, style);
-                image.push(subLegend.svg);
-                name.push(subLegend.name);
+                if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                    image.push(subLegend.svg);
+                    name.push(subLegend.name);
+                }
             }
         }
         else if (styleClass === "POLYGON") {
             // Custom Point Styles
             if (styleSubClass === "CUSTOM") {
-                styleFieldValues.forEach(function (styleFieldValue) {
+                styleFieldValues.forEach(styleFieldValue => {
                     const subStyle = style.clone();
 
                     // overwrite style with all styleFieldValue settings
@@ -422,14 +456,20 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                         subStyle.set(key, styleFieldValue[key]);
                     }
                     subLegend = this.getLegendParamsForPolygonsOld(layername, subStyle);
-                    image.push(subLegend.svg);
-                    name.push(subLegend.name);
-                }, this);
+
+                    if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                        image.push(subLegend.svg);
+                        name.push(subLegend.name);
+                    }
+                });
             }
             else {
                 subLegend = this.getLegendParamsForPolygonsOld(layername, style);
-                image.push(subLegend.svg);
-                name.push(subLegend.name);
+
+                if (!image.includes(subLegend.svg) || !name.includes(subLegend.name)) {
+                    image.push(subLegend.svg);
+                    name.push(subLegend.name);
+                }
             }
         }
 
@@ -765,7 +805,7 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @param   {string} layername Name of layer to use in legend view
      * @param   {integer} styleId styleId
-     * @param   {string|sting[]}   legendURL can be a image path as sting or array of strings
+     * @param   {string|string[]}   legendURL can be an image path as string or array of strings
      * @returns {object} legendObject legend item
      * @returns {string} legendObject.legendname layername
      * @returns {object[]} legendObject.legend Array of legend entries in this particular layer e.g. because of multiple categories

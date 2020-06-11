@@ -39,7 +39,7 @@ const {memorize, forward, backward} = mutations,
         zoom: 1
     };
 
-describe.only("mutationsBackForward", function () {
+describe("mutationsBackForward", function () {
     describe("memorize", function () {
         it("notes the current view's state", function () {
             const state = {

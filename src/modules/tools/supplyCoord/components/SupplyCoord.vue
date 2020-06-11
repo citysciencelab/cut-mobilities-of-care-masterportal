@@ -64,6 +64,13 @@ export default {
                 return this.storePath.projections;
             },
             set (val) {
+                // set currect projection to one in the list of projections
+                const found = val.filter(projection => projection.name === this.currentProjectionName);
+
+                if (found.length === 0) {
+                    this.currentProjectionName = val[0].name;
+                    this.currentSelection = val[0].name;
+                }
                 this.$store.commit("Tools/SupplyCoord/projections", val);
             }
         },

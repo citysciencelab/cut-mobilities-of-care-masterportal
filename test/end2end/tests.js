@@ -46,16 +46,16 @@ function tests (builder, url, browsername, resolution, config, mode) {
          */
         const suites = [
                 // modules/controls
-                // require("./tests/modules/controls/Attributions.js"),
+                require("../../src/modules/controls/attributions/test/end2end/Attributions.e2e.js"),
                 require("../../src/modules/controls/backForward/test/end2end/BackForward.e2e.js"),
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
                 // require("./tests/modules/controls/ButtonOblique.js"),
                 // require("./tests/modules/controls/Freeze.js"),
-                // require("./tests/modules/controls/FullScreen.js"),
+                require("../../src/modules/controls/fullScreen/test/end2end/FullScreen.e2e.js"),
                 // require("./tests/modules/controls/Orientation.js"),
                 // require("./tests/modules/controls/OverviewMap.js"),
-                // require("./tests/modules/controls/TotalView.js"),
+                require("../../src/modules/controls/totalView/test/end2end/TotalView.e2e.js"),
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.js")
 
                 // modules/core

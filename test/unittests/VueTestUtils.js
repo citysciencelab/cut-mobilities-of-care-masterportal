@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime";
 import {expect} from "chai";
 /**
  * Helper for testing action with expected mutations.
