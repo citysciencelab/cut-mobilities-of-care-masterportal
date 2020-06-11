@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {getResolution, mouseWheelUp, mouseWheelDown} = require("../library/scripts"),
-    {initDriver} = require("../library/driver"),
-    {isMobile} = require("../settings"),
+    {getResolution, mouseWheelUp, mouseWheelDown} = require("../../../test/end2end/library/scripts"),
+    {initDriver} = require("../../../test/end2end/library/driver"),
+    {isMobile} = require("../../../test/end2end/settings"),
     {By} = webdriver;
 
 /**

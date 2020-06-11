@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
-    {getCenter} = require("../library/scripts"),
-    {losesCenter} = require("../library/utils"),
-    {initDriver} = require("../library/driver"),
-    {isChrome} = require("../settings"),
+    {getCenter} = require("../../../test/end2end/library/scripts"),
+    {losesCenter} = require("../../../test/end2end/library/utils"),
+    {initDriver} = require("../../../test/end2end/library/driver"),
+    {isChrome} = require("../../../test/end2end/settings"),
     {By, Button} = webdriver;
 
 /**
