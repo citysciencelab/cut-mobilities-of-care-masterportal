@@ -55,7 +55,6 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
                 this.render(this.model, this.model.get("isActive"));
             }
         });
-
         if (this.model.get("isActive") === true) {
             this.render(this.model, true);
         }
@@ -350,7 +349,12 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             this.$(".featurelist-list-footer").show(0, function () {
                 this.setMaxHeight();
             }.bind(this));
-            this.$(".featurelist-list-message").text(shownFeaturesCount + " von " + totalFeaturesCount + " Features gelistet.");
+            const shownFeatures = {
+                x: shownFeaturesCount,
+                y: totalFeaturesCount
+            };
+
+            this.$(".featurelist-list-message").text(i18next.t("common:modules.tools.featureLister.key", {shownFeatures}));
         }
         else {
             this.$(".featurelist-list-footer").hide();

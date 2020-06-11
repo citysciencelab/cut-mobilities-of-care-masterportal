@@ -58,6 +58,7 @@ export default {
 
             Object
                 .keys(this.controlsConfig)
+                .filter(key => this.controlsConfig[key])
                 .map(key => {
                     if (this.componentMap[key]) {
                         return {

@@ -8,6 +8,7 @@ import FullScreen from "./fullScreen/components/FullScreen.vue";
 import OverviewMap from "./overviewMap/components/OverviewMap.vue";
 import TotalView from "./totalView/components/TotalView.vue";
 import Zoom from "./zoom/components/Zoom.vue";
+import Freeze from "./freeze/components/Freeze.vue";
 
 /**
  * controls-Module is required to be able to nest controls
@@ -38,7 +39,9 @@ export default {
                 return TotalView;
             },
             totalView: TotalView,
-            zoom: Zoom
+            zoom: Zoom,
+            freeze: Freeze
+
         },
         // config.json.md control keys where the matching element is to be hidden in mobile mode
         mobileHiddenControls: [
@@ -46,7 +49,8 @@ export default {
             "fullScreen",
             // NOTE "mousePosition" is not rendered as a child here
             "overviewMap",
-            "totalView"
+            "totalView",
+            "freeze"
         ],
         bottomControls: ["attributions", "overviewmap", "overviewMap"]
     },
