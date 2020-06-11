@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {isCustom, isMaster} = require("../../../settings"),
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {isCustom, isMaster} = require("../../../../../../test/end2end/settings"),
     {until, By} = webdriver;
 
 /**
@@ -35,7 +35,7 @@ function AttributionsTests ({builder, url, resolution}) {
                 expect((await driver.findElements(By.css(".attributions-div"))).length).to.equal(0);
                 attributionsButton = await driver.findElement(By.css(".attributions-button"));
                 await attributionsButton.click();
-                attributionsDiv = await driver.findElement(By.css(".attributions-div"));
+                attributionsDiv = await driver.findElement(By.css(".attributions-view"));
                 expect(attributionsDiv).to.exist;
             });
 
