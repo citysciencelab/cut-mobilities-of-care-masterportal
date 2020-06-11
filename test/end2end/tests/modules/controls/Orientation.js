@@ -51,8 +51,8 @@ function Orientation ({builder, url, resolution}) {
                 await driver.executeScript(mockGeoLocationAPI);
 
                 const bikeAndRideSelector = By.xpath("//ul[@id='tree']/li[.//span[contains(.,'Bike and Ride')]]"),
-                    themenSelector = By.xpath("//span[contains(.,'Themen')]"),
-                    topicButton = await driver.wait(until.elementLocated(themenSelector));
+                    themenSelector = By.css("#root .dropdown:first-child"),
+                    topicButton = await driver.wait(until.elementLocated(themenSelector, 5000, "Topic Button not found."));
 
                 await topicButton.click();
                 await (await driver.wait(until.elementLocated(bikeAndRideSelector, 5000, "Layerlist entry 'Bike and Ride' not found."))).click();
