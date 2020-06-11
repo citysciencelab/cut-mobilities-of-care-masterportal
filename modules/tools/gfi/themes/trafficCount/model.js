@@ -379,7 +379,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                         tblContent.day.trucksArr = [];
 
                         dataset.trucks.forEach(element => {
-                            tblContent.day.trucksArr.push(element.result);
+                            tblContent.day.trucksArr.push(Math.round(element.result * 100));
                         });
                     }
                 }
@@ -424,7 +424,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                         tblContent.week.trucksArr = [];
 
                         dataset.trucks.forEach(element => {
-                            tblContent.week.trucksArr.push(element.result);
+                            tblContent.week.trucksArr.push(Math.round(element.result * 100));
                         });
                     }
 
@@ -459,7 +459,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                         tblContent.year.trucksArr = [];
 
                         dataset.trucks.forEach(element => {
-                            tblContent.year.trucksArr.push(element.result);
+                            tblContent.year.trucksArr.push(Math.round(element.result * 100));
                         });
                     }
                 }
