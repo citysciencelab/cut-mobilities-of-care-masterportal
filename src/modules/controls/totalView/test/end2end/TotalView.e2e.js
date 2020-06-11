@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {getCenter} = require("../../../library/scripts"),
-    {losesCenter} = require("../../../library/utils"),
-    {isMaster, isCustom, isMobile, isChrome} = require("../../../settings"),
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {getCenter} = require("../../../../../../test/end2end/library/scripts"),
+    {losesCenter} = require("../../../../../../test/end2end/library/utils"),
+    {isMaster, isCustom, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
     {By, Button, until} = webdriver;
 
 /**
@@ -34,8 +34,7 @@ function TotalViewTests ({builder, url, resolution, browsername}) {
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            // TODO total view button does currently not work; bug ticket was opened
-            (isChrome(browsername) ? it.skip : it.skip)("should reset position on click after panning", async function () {
+            (isChrome(browsername) ? it.skip : it)("should reset position on click after panning", async function () {
                 const center = await driver.executeScript(getCenter),
                     viewport = await driver.findElement(By.css(".ol-viewport"));
 
