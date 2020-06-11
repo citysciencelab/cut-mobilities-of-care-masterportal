@@ -340,7 +340,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      */
     polishAjax: function (type) {
         const ajax = this.get("ajaxRequests"),
-            cleanedAjax = Radio.request("Util", "omit", ajax, type);
+            cleanedAjax = Radio.request("Util", "omit", ajax, Array.isArray(type) ? type : [type]);
 
         this.set("ajaxRequests", cleanedAjax);
     },
