@@ -71,17 +71,15 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @returns {Void} -
      */
     changeLang: function (lng) {
-        if (this.get("isActive") === true) {
-            this.set({
-                "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers"),
-                "chooseTheme": i18next.t("common:modules.tools.featureLister.chooseTheme"),
-                "list": i18next.t("common:modules.tools.featureLister.list"),
-                "details": i18next.t("common:modules.tools.featureLister.details"),
-                "more": i18next.t("common:modules.tools.featureLister.more"),
-                "detailsOfSelected": i18next.t("common:modules.tools.featureLister.detailsOfSelected"),
-                "currentLng": lng
-            });
-        }
+        this.set({
+            "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers"),
+            "chooseTheme": i18next.t("common:modules.tools.featureLister.chooseTheme"),
+            "list": i18next.t("common:modules.tools.featureLister.list"),
+            "details": i18next.t("common:modules.tools.featureLister.details"),
+            "more": i18next.t("common:modules.tools.featureLister.more"),
+            "detailsOfSelected": i18next.t("common:modules.tools.featureLister.detailsOfSelected"),
+            "currentLng": lng
+        });
     },
 
     /**
