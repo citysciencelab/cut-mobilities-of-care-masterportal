@@ -45,7 +45,7 @@ export default {
     watch: {
         active (newValue) {
             const modelCollection = Radio.request("ModelList", "getCollection"),
-                gfiModel =modelCollection ? modelCollection.findWhere({id: "gfi"}) : undefined;
+                gfiModel = modelCollection ? modelCollection.findWhere({id: "gfi"}) : undefined;
 
             if (newValue === false) {
                 this.draggable = false;
@@ -54,7 +54,7 @@ export default {
             else if (!this.renderToWindow && Radio.request("Util", "isViewMobile")) {
                 $("#masterportal-container").append("<div class='backdrop'></div>");
             }
-            if(newValue && gfiModel) {
+            if (newValue && gfiModel) {
                 gfiModel.setIsActive(!this.deactivateGFI);
             }
             else {
