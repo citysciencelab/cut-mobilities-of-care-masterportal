@@ -37,6 +37,7 @@
             "draw": "Zeichnen / Schreiben",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
+            "featureLister": "Liste",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
@@ -190,6 +191,16 @@
                     "A3 Hochformat": "A3 Hochformat",
                     "A3 Querformat": "A3 Querformat"
                 }
+            },
+            "featureLister": {
+                "chooseTheme": "Thema wählen",
+                "visibleVectorLayers": "Sichtbare Vektorlayer",
+                "list": "Liste",
+                "details": "Details",
+                "more": "Mehr...",
+                "detailsOfSelected": "Details des ausgewählten Features",
+                "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
+                "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
             },
             "pendler": {
                 "animation": {
