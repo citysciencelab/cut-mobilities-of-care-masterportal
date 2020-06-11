@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 function Orientation ({builder, url, resolution}) {
-    describe.only("Modules Controls GeoLocate", function () {
+    describe("Modules Controls GeoLocate", function () {
         let driver, geolocateButton;
 
         before(async function () {
@@ -43,7 +43,7 @@ function Orientation ({builder, url, resolution}) {
 
     // only configured in portal/master
     if (isMaster(url)) {
-        describe.only("Modules Controls ProximitySearch", function () {
+        describe("Modules Controls ProximitySearch", function () {
             let driver, poiButton;
 
             before(async function () {
