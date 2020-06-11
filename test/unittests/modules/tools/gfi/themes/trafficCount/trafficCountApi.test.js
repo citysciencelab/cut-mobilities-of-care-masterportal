@@ -1506,7 +1506,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             api.subscribeLastUpdate("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
             expect(lastTopic).to.equal("v1234/Datastreams(foo)/Observations");
-            expect(lastMqttOptions).to.deep.equal({retain: 0, rmSimulate: true});
+            expect(lastMqttOptions).to.deep.equal({retain: 0, rmSimulate: true, rmUrl: "https://www.example.com"});
         });
         it("subscribeLastUpdate: should push an event to subscriptionTopics that will hand over phenomenonTime to the given onupdate handler", function () {
             let lastDatetime = false,

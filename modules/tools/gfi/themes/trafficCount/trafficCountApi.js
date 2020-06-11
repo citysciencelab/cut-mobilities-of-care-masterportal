@@ -50,6 +50,8 @@ export class TrafficCountApi {
         /** @private */
         this.mqttClient = this.mqtt && typeof this.mqtt.connect === "function" ? this.mqtt.connect(mqttOptions) : false;
         /** @private */
+        this.httpHost = httpHost;
+        /** @private */
         this.baseUrlHttp = httpHost + "/" + this.sensorThingsVersion;
         /** @private */
         this.subscriptionTopics = {};
@@ -610,7 +612,8 @@ export class TrafficCountApi {
                 // set retain to 0 to get the last message from the server immediately (see doc\sensorThings_EN.md)
                 this.mqttSubscribe(topic, {
                     retain: 0,
-                    rmSimulate: true
+                    rmSimulate: true,
+                    rmUrl: this.httpHost
                 }, (payload) => {
                     if (payload && payload.hasOwnProperty("phenomenonTime")) {
                         if (typeof onupdate === "function") {
