@@ -53,7 +53,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             AnzFahrraeder: "Fahrrad"
         },
         dayInterval: "15-Min",
-        weekInterval: "1-Stunde",
+        weekInterval: "1-Tag",
         yearInterval: "1-Woche",
         dayDatepicker: null,
         weekDatepicker: null,
@@ -395,12 +395,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                         moment(dataset.bicycles[0].date).format("YYYY");
 
                     tblContent.week.headerDateArr = [];
-                    tblContent.week.headerHourArr = [];
                     tblContent.week.bicyclesArr = [];
 
                     dataset.bicycles.forEach(element => {
                         tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
-                        tblContent.week.headerHourArr.push(element.hour);
                         tblContent.week.bicyclesArr.push(element.result);
                     });
                 }
@@ -409,12 +407,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     tblContent.week.firstColumn = moment(dataset.cars[0].date).add(3, "days").format("WW") + "/" +
                         moment(dataset.cars[0].date).format("YYYY");
                     tblContent.week.headerDateArr = [];
-                    tblContent.week.headerHourArr = [];
                     tblContent.week.carsArr = [];
 
                     dataset.cars.forEach(element => {
                         tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
-                        tblContent.week.headerHourArr.push(element.hour);
                         tblContent.week.carsArr.push(element.result);
                     });
 

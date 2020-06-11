@@ -331,16 +331,12 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      * @return {String} HTML
      */
     createWeekTableHeader: function () {
-        const weekTableHeaderDateArr = this.model.get("weekTableContent").week.headerDateArr,
-            weekTableHeaderHourArr = this.model.get("weekTableContent").week.headerHourArr;
+        const weekTableHeaderDateArr = this.model.get("weekTableContent").week.headerDateArr;
 
         let weekTableHeaderHtml = "";
 
         if (weekTableHeaderDateArr !== undefined) {
-            if (Array.isArray(weekTableHeaderDateArr) && weekTableHeaderDateArr.length > 0 &&
-                Array.isArray(weekTableHeaderHourArr) && weekTableHeaderHourArr.length > 0 &&
-                weekTableHeaderDateArr.length === weekTableHeaderHourArr.length) {
-
+            if (Array.isArray(weekTableHeaderDateArr) && weekTableHeaderDateArr.length > 0) {
                 weekTableHeaderHtml += "<th class=\"tableTopLeft\">" + this.model.get("weekTableContent").week.title + "</th>";
                 for (let i = 0; i < weekTableHeaderDateArr.length; i++) {
                     weekTableHeaderHtml += "<th class=\"tableColumn\">" + weekTableHeaderDateArr[i] + "</th>";
