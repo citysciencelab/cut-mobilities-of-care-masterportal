@@ -12,7 +12,14 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         featureProps: {}, // Properties des Features mit gesuchter featureid
         highlightedFeature: null,
         highlightedFeatureStyle: null,
-        glyphicon: "glyphicon-menu-hamburger"
+        glyphicon: "glyphicon-menu-hamburger",
+        // translations
+        visibleVectorLayers: "",
+        chooseTheme: "",
+        list: "",
+        details: "",
+        more: "",
+        detailsOfSelected: ""
     }),
     /**
      * @class FeatureListerModel
@@ -40,6 +47,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @listens Map#RadioTriggerMapSetGFIParams
      * @listens FeatureLister#changeLayerId
      * @listens FeatureLister#changeFeatureId
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         this.superInitialize();
@@ -47,16 +55,14 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         if (this.has("lister") === true) {
             this.set("maxFeatures", this.get("lister"));
         }
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang();
         Radio.on("ModelList", "updateVisibleInMapList", this.checkVisibleLayer, this);
         Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
         this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
         this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
-
-        this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.changeLang
-        });
-
-        this.changeLang();
     },
 
     /**
@@ -66,6 +72,12 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      */
     changeLang: function (lng) {
         this.set({
+            "visibleVectorLayers": i18next.t("common:modules.tools.featureLister.visibleVectorLayers"),
+            "chooseTheme": i18next.t("common:modules.tools.featureLister.chooseTheme"),
+            "list": i18next.t("common:modules.tools.featureLister.list"),
+            "details": i18next.t("common:modules.tools.featureLister.details"),
+            "more": i18next.t("common:modules.tools.featureLister.more"),
+            "detailsOfSelected": i18next.t("common:modules.tools.featureLister.detailsOfSelected"),
             "currentLng": lng
         });
     },
@@ -118,7 +130,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
             }
             else {
                 Radio.trigger("Alert", "alert", {
-                    text: "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
+                    text: i18next.t("common:modules.tools.featureLister.alert"),
                     kategorie: "alert-warning"
                 });
             }

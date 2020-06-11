@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <ul class="nav nav-tabs featurelist-navtabs">
-    <li class="active featurelist-navtabs-li text-center" role="presentation" id="featurelistThemeChooser"><a href="#">Thema wählen</a></li>
-    <li class="featurelist-navtabs-li text-center disabled" role="presentation" id="featurelistFeaturelist"><a href="#">Liste</a></li>
-    <li class="featurelist-navtabs-li text-center disabled" role="presentation" id="featurelistFeaturedetails"><a href="#">Details</a></li>
+    <li class="active featurelist-navtabs-li text-center" role="presentation" id="featurelistThemeChooser"><a href="#"><%=chooseTheme%></a></li>
+    <li class="featurelist-navtabs-li text-center disabled" role="presentation" id="featurelistFeaturelist"><a href="#"><%=list%></a></li>
+    <li class="featurelist-navtabs-li text-center disabled" role="presentation" id="featurelistFeaturedetails"><a href="#"><%=details%></a></li>
 </ul>
 <div id="featurelist-themes" class="featurelist-themes panel panel-default">
-    <div id="featurelist-themes-header" class="panel-heading">Sichtbare Vektorlayer</div>
+    <div id="featurelist-themes-header" class="panel-heading"><%=visibleVectorLayers%></div>
     <ul id="featurelist-themes-ul" class="nav nav-pills nav-stacked"></ul>
 </div>
 <div id="featurelist-list" class="panel featurelist-list panel-default">
@@ -15,13 +15,13 @@
     </div>
     <div class="panel-footer featurelist-list-footer">
         <button type="button" class="btn btn-default navbar-btn featurelist-list-button" aria-label="Left Align">
-            <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Mehr...
+            <span class="glyphicon glyphicon-import" aria-hidden="true"></span> <%=more%>
         </button>
         <p class="navbar-text featurelist-list-message"></p>
     </div>
 </div>
 <div id="featurelist-details" class="featurelist-details panel panel-default">
-    <div id="featurelist-details-header" class="panel-heading">Details des ausgewählten Features</div>
+    <div id="featurelist-details-header" class="panel-heading"><%=detailsOfSelected%></div>
     <ul class="list-group featurelist-details-ul">
     </ul>
 </div>
