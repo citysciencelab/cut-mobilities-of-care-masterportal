@@ -343,7 +343,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
 
                 weekTableHeaderHtml += "<th class=\"tableTopLeft\">" + this.model.get("weekTableContent").week.title + "</th>";
                 for (let i = 0; i < weekTableHeaderDateArr.length; i++) {
-                    weekTableHeaderHtml += "<th class=\"tableColumn\">" + weekTableHeaderDateArr[i] + "<br/>" + weekTableHeaderHourArr[i] + " Uhr</th>";
+                    weekTableHeaderHtml += "<th class=\"tableColumn\">" + weekTableHeaderDateArr[i] + "</th>";
                 }
             }
         }
