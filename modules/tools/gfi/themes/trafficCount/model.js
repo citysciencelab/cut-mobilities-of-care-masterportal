@@ -727,11 +727,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             // callbackRenderTextXAxis
             const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss");
 
-            if (objMoment.format("H") === "0") {
-                return objMoment.format("dd");
-            }
-
-            return objMoment.format("dd-HH");
+            return objMoment.format("dd");
         }, (value, dotData) => {
             // setTooltipValue
             const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss");
@@ -963,22 +959,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     getEmptyDiagramDataWeek: function () {
         const result = {};
         let key,
-            wd,
-            h;
+            wd;
 
         for (wd = 1; wd <= 7; wd++) {
-            for (h = 0; h < 24; h++) {
-                if (h === 0) {
-                    key = moment(wd % 7, "d").format("dd");
-                }
-                else {
-                    key = moment(wd % 7, "d").format("dd") + "-" + String(h).padStart(2, "0");
-                }
-
-                result[key] = {
-                    weekday: key
-                };
-            }
+            key = moment(wd % 7, "d").format("dd");
+            result[key] = {
+                weekday: key
+            };
         }
 
         return result;
