@@ -25,7 +25,8 @@ export default {
             "renderToWindow",
             "resizableWindow",
             "glyphicon",
-            "title"
+            "title",
+            "deactivateGFI"
         ]),
         active: {
             get () {
@@ -267,6 +268,7 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
+        :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
             <form
