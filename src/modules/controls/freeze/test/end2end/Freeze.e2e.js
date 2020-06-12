@@ -14,7 +14,7 @@ function FreezeTests ({builder, url, resolution, browsername}) {
         (isCustom(url) || isMaster(url)); // freeze only active in these
 
     if (testIsApplicable) {
-        describe.only("Modules Controls Freeze", function () {
+        describe("Modules Controls Freeze", function () {
             let driver, freezeButton, unfreezeButton, topicButton, tree;
 
             before(async function () {
