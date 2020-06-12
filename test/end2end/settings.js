@@ -137,7 +137,7 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
         {
             ...base,
             "browserName": "Chrome",
-            "browser_version": "80.0",
+            "browser_version": "83.0",
             "os": "Windows",
             "os_version": "10"
         }/*

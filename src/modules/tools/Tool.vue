@@ -22,6 +22,10 @@ export default {
         initialWidth: {
             type: Number,
             default: 0.3
+        },
+        deactivateGFI: {
+            type: Boolean,
+            required: true
         }
     },
     data () {
@@ -40,6 +44,9 @@ export default {
     },
     watch: {
         active (newValue) {
+            const modelCollection = Radio.request("ModelList", "getCollection"),
+                gfiModel = modelCollection ? modelCollection.findWhere({id: "gfi"}) : undefined;
+
             if (newValue === false) {
                 this.draggable = false;
                 $(".backdrop").remove();
@@ -47,6 +54,13 @@ export default {
             else if (!this.renderToWindow && Radio.request("Util", "isViewMobile")) {
                 $("#masterportal-container").append("<div class='backdrop'></div>");
             }
+            if (newValue && gfiModel) {
+                gfiModel.setIsActive(!this.deactivateGFI);
+            }
+            else {
+                Radio.trigger("ModelList", "toggleDefaultTool");
+            }
+
             this.updateMap();
         }
     },

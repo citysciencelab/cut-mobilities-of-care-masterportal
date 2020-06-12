@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
-    {getCenter} = require("../library/scripts"),
-    {losesCenter} = require("../library/utils"),
-    {initDriver} = require("../library/driver"),
-    {isChrome} = require("../settings"),
+    {getCenter} = require("../../../test/end2end/library/scripts"),
+    {losesCenter} = require("../../../test/end2end/library/utils"),
+    {initDriver} = require("../../../test/end2end/library/driver"),
+    {isChrome} = require("../../../test/end2end/settings"),
     {By, Button} = webdriver;
 
 /**
@@ -28,6 +28,7 @@ async function PanTests ({builder, url, resolution, browsername}) {
             const center = await driver.executeScript(getCenter),
                 viewport = await driver.findElement(By.css(".ol-viewport"));
 
+            // since there's no clear sign when panning is active, retry for the timeout written above
             do {
                 await driver.actions({bridge: true})
                     .move({origin: viewport})

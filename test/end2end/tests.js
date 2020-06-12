@@ -54,9 +54,9 @@ function tests (builder, url, browsername, resolution, config, mode) {
                 // require("./tests/modules/controls/Freeze.js"),
                 require("../../src/modules/controls/fullScreen/test/end2end/FullScreen.e2e.js"),
                 require("./tests/modules/controls/Orientation.js"),
-                // require("./tests/modules/controls/OverviewMap.js"),
+                require("../../src/modules/controls/overviewMap/test/end2end/OverviewMap.e2e.js"),
                 require("../../src/modules/controls/totalView/test/end2end/TotalView.e2e.js"),
-                require("../../src/modules/controls/zoom/test/end2end/Zoom.js")
+                require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
                 // modules/core
                 // require("./tests/modules/core/ParametricUrl.js"),
@@ -73,8 +73,8 @@ function tests (builder, url, browsername, resolution, config, mode) {
                 // require("./tests/modules/tools/SearchByCoord.js"),
 
                 // non-module tests
-                // require("./tests/Pan.js"),
-                // require("./tests/Zoom.js"),
+                require("../../src/test/end2end/Pan.e2e.js"),
+                require("../../src/test/end2end/Zoom.e2e.js")
                 // require("./tests/Legend.js")
             ],
             e2eTestParams = {builder, url, resolution, config, mode, browsername};
