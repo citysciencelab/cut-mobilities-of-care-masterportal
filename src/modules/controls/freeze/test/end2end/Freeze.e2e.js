@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {getCenter} = require("../../../library/scripts"),
-    {isCustom, isMaster, isMobile, isChrome} = require("../../../settings"),
-    {By, Button, until} = webdriver;
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {getCenter} = require("../../../../../../test/end2end/library/scripts"),
+    {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {By, Button} = webdriver;
 
 /**
  * @param {e2eTestParams} params parameter set
@@ -14,27 +14,18 @@ function FreezeTests ({builder, url, resolution, browsername}) {
         (isCustom(url) || isMaster(url)); // freeze only active in these
 
     if (testIsApplicable) {
-        // TODO test is currently skipped; feature should only be tested in TO mode, for which tests will be implemented in a later iteration
-        describe.skip("Modules Controls Freeze", function () {
-            let driver, freezeView, freezeButton, unfreezeButton, topicButton, tree;
+        describe.only("Modules Controls Freeze", function () {
+            let driver, freezeButton, unfreezeButton, topicButton, tree;
 
             before(async function () {
                 driver = await initDriver(builder, url, resolution);
-
-                await driver.wait(until.elementLocated(By.css(".freeze-view")), 50000);
-                topicButton = await driver.findElement(By.linkText("Themen"));
+                topicButton = await driver.findElement(By.css("#root .dropdown:first-child"));
                 tree = await driver.findElement(By.id("tree"));
                 topicButton.click(); // close tree for upcoming tests
             });
 
             after(async function () {
                 await driver.quit();
-            });
-
-            it("should have the freeze-view element", async function () {
-                freezeView = await driver.findElement(By.css(".freeze-view"));
-
-                expect(freezeView).to.exist;
             });
 
             it("should have freeze button", async function () {
@@ -84,17 +75,7 @@ function FreezeTests ({builder, url, resolution, browsername}) {
             it("should deactivate the freeze element on clicking the unfreeze button", async function () {
                 await unfreezeButton.click();
 
-                expect(await driver.findElement(By.css(".freeze-view.freeze-deactivated"))).to.exist;
-            });
-
-            it("should prevent tool closing", async function () {
-                await topicButton.click();
-                expect(await tree.isDisplayed()).to.be.true;
-                await driver.wait(until.elementIsVisible(driver.findElement(By.id("tree"))));
-                await freezeButton.click();
-                expect(await driver.findElement(By.css(".freeze-view.freeze-activated"))).to.exist;
-                await freezeView.click();
-                expect(await tree.isDisplayed()).to.be.true;
+                expect(await driver.findElements(By.css(".freeze-view"))).to.have.lengthOf(0);
             });
         });
     }

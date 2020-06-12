@@ -51,7 +51,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
                 // require("./tests/modules/controls/ButtonOblique.js"),
-                // require("./tests/modules/controls/Freeze.js"),
+                require("../../src/modules/controls/freeze/test/end2end/Freeze.e2e.js"),
                 require("../../src/modules/controls/fullScreen/test/end2end/FullScreen.e2e.js"),
                 require("./tests/modules/controls/Orientation.js"),
                 require("../../src/modules/controls/overviewMap/test/end2end/OverviewMap.e2e.js"),
