@@ -125,6 +125,7 @@ async function MeasureTests ({builder, url, resolution, mode}) {
             }
 
             if (is3D(mode)) {
+                // TODO 3D mode currently not active in pipeline; update tests when they are
                 describe("3D measurement", function () {
                     let driver, dropdownGeometry, dropdownUnit, viewport;
 
