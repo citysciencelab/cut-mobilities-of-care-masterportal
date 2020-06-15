@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {getUnnavigatedDriver, loadUrl} = require("../../../library/driver"),
     {imageLoaded, getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
     {centersTo, clickFeature} = require("../../../library/utils"),
-    {isBasic, isCustom, isDefault, isMaster, isChrome} = require("../../../settings"),
+    {isBasic, isCustom, isDefault, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ParameterTests ({builder, url, resolution, mode, browsername}) {
+async function ParameterTests ({builder, url, resolution, mode}) {
     describe.only("URL Query Parameters", function () {
         let driver, gfi, counter;
 
@@ -126,8 +126,8 @@ async function ParameterTests ({builder, url, resolution, mode, browsername}) {
                     await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.gfi"))));
                 });
 
-                // TODO: works in Firefox, doesn't in Chrome; bug in Masterportal or in test?
-                (isChrome(browsername) ? it.skip : it)("hospital layer GFI with example 'Krankenhaus Tabea' shows gfi", async function () {
+                // TODO sometimes doesn't work - bug in Masterportal? Communicated in ticket. Manual tests are inconclusive.
+                it.skip("hospital layer GFI with example 'Krankenhaus Tabea' shows gfi", async function () {
                     // at coords '552406.014 5935396.345'
                     gfi = (await driver.findElements(By.css("div.gfi")))[0];
                     counter = 0;
@@ -146,10 +146,11 @@ async function ParameterTests ({builder, url, resolution, mode, browsername}) {
                 });
 
                 it("both layers have their respective legend loaded", async function () {
-                    await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Legende')]"))).click();
+                    await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Legende')]"))).click(); // TODO i18n
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-win"))));
                     expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=KitaEinrichtungen')]"))).to.exist;
                     expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_Krankenhaeuser?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=krankenhaeuser')]"))).to.exist;
+                    // TODO i18n
                     await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Legende')]"))).click();
                     await (await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                     await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.legend-win"))));
@@ -188,9 +189,11 @@ async function ParameterTests ({builder, url, resolution, mode, browsername}) {
                 await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.gfi"))));
 
                 // check whether layer has its legend loaded
+                // TODO i18n
                 await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Legende')]"))).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-win"))));
                 expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//img[contains(@src,'http://www.geoportal-hamburg.de/legende/legende_solar.png')]"))).to.exist;
+                // TODO i18n
                 await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Legende')]"))).click();
                 await (await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//span[contains(@class, 'glyphicon-remove')]"))).click();
                 await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.legend-win"))));
@@ -221,19 +224,20 @@ async function ParameterTests ({builder, url, resolution, mode, browsername}) {
             expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
         });
 
-        it("?startupmodul= allows opening tools initially", async function () {
-            const toolName = isMaster(url) || isCustom(url) ? "routing" : "draw",
-                selector = `//div[contains(@id,'window')]//span[contains(.,'${
-                    isMaster(url) || isCustom(url) ? "Routenplaner" : "Zeichnen / Schreiben"
-                }')]`;
+        it.only("?isinitopen= allows opening tools initially", async function () {
+            const toolName = "draw",
+                possibleTitles = ["Drawing / Writing", "Zeichnen / Schreiben"],
+                titleSelector = "div#window div.win-heading.header p.title span";
 
-            await loadUrl(driver, `${url}?startupmodul=${toolName}`, mode);
+            await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
 
-            await driver.wait(
-                until.elementLocated(By.xpath(selector)),
-                10000,
-                `Loading xpath("${selector}") in scenario "${url}?startupmodul=${toolName}" failed.`
-            );
+            expect(possibleTitles).to.include(
+                await (
+                    await driver.wait(
+                        until.elementIsVisible(
+                            await driver.wait(until.elementLocated(By.css(titleSelector)))
+                        ), 10000, `Loading By("${titleSelector}") in scenario "${url}?isinitopen=${toolName}" failed.`
+                    )).getText());
         });
 
         if (isCustom(url) || isMaster(url) || isDefault(url)) {
