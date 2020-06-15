@@ -35,9 +35,9 @@ async function MeasureTests ({builder, url, resolution, mode}) {
                         dropdownGeometry = await driver.findElement(By.css("#window .dropdown_geometry .filter-option"));
                         dropdownUnit = await driver.findElement(By.css("#window .dropdown_unit .filter-option"));
                         questionIcon = await driver.findElement(By.css("#window .glyphicon.glyphicon-question-sign"));
-                        deleteButton = await driver.findElement(By.xpath("//div[@id='window']//button[contains(.,'Messungen löschen')]"));
+                        deleteButton = await driver.findElement(By.css("div#window button.measure-delete"));
 
-                        await driver.wait(async () => await dropdownGeometry.getText() === "Strecke");
+                        await driver.wait(async () => ["Strecke", "Distance"].includes(await dropdownGeometry.getText()));
                         await driver.wait(async () => await dropdownUnit.getText() === "m");
                     });
 
