@@ -179,98 +179,15 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "bilingual"
-            ]
-          },
-          {
-            "layerId": "8712",
-            "isActive": false,
-            "isSelected": false,
-            "name": "Stadtteilschulen",
-            "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": [
-                  "Stadtteilschulen",
-                  "Langformschulen"
-                ]
-              }
-            ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
-          },
-          {
-            "layerId": "8712",
-            "isActive": false,
-            "isSelected": false,
-            "name": "Gymnasien",
-            "info": "Sie finden berufliche Gymnasien ab der Klassenstufe 11 bei den Beruflichen Schulen.",
-            "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": [
-                  "Gymnasien"
-                ]
-              }
-            ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
-          },
-          {
-            "layerId": "8712",
-            "isActive": false,
-            "isSelected": false,
-            "name": "Sonderschulen",
-            "predefinedRules": [
-              {
-                "attrName": "kapitelbezeichnung",
-                "values": [
-                  "Sonderschulen"
-                ]
-              }
-            ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "ganztagsform",
-              "foerderart",
-              "abschluss"
-            ]
-          },
-          {
-            "layerId": "1711",
-            "isActive": true,
-            "isSelected": true,
-            "name": "Krankenhäuser",
-            "predefinedRules": [],
-            "attributeWhiteList": [
-              "teilnahme_geburtsklinik",
-              "teilnahme_notversorgung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Testeintrag",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Anzahl Schüler",
+              "schwerpunktschule": "Schwerpunktschule",
+              "bilingual": "Bilingual"
+            }
           }
         ]
       },

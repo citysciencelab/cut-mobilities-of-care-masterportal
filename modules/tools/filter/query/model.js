@@ -170,16 +170,24 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         }
     },
 
+    // TODO!!!
+    getAttributesFromWhiteList: function (whiteList) {
+        return Array.isArray(whiteList) ? whiteList : Object.keys(whiteList);
+    },
+
     /**
      * Entfernt alle Attribute die nicht in der Whitelist stehen
      * @param  {object} featureAttributesMap - Mapobject
      * @return {object} featureAttributesMap - gefiltertes Mapobject
      */
     trimAttributes: function (featureAttributesMap) {
-        const trimmedFeatureAttributesMap = [];
+        const trimmedFeatureAttributesMap = [],
+            whiteList = this.get("attributeWhiteList"),
+            whiteListAttributes = Array.isArray(whiteList) ? whiteList : Object.keys(whiteList);
         let featureAttribute;
 
-        _.each(this.get("attributeWhiteList"), function (attr) {
+        console.log(whiteListAttributes);
+        _.each(whiteListAttributes, function (attr) {
             const attrObj = this.createAttrObject(attr);
 
             featureAttribute = _.findWhere(featureAttributesMap, {name: attrObj.name});
@@ -210,7 +218,10 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
      * @return {object} featureAttributesMap - gefiltertes Mapobject
      */
     mapDisplayNames: function (featureAttributesMap) {
-        const displayNames = getDisplayNamesOfFeatureAttributes(this.get("layerId"));
+        const attributeNames = getDisplayNamesOfFeatureAttributes(this.get("layerId")),
+            whiteList = this.get("attributeWhiteList"),
+            displayNames = Array.isArray(whiteList) ? attributeNames : whiteList;
+        console.log(displayNames);
 
         _.each(featureAttributesMap, function (featureAttribute) {
             if (_.isObject(displayNames) === true && _.has(displayNames, featureAttribute.name) === true) {
