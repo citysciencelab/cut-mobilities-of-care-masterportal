@@ -88,7 +88,7 @@ async function MeasureTests ({builder, url, resolution, mode}) {
                         expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='km²']"))).to.be.empty;
 
                         await dropdownGeometry.click();
-                        await (await driver.findElement(By.xpath("//li//span[contains(.,'Fläche')]"))).click();
+                        await (await driver.findElement(By.css(".dropdown_geometry ul li:last-child"))).click();
                         expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='m']"))).to.be.empty;
                         expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='km']"))).to.be.empty;
                         expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='m²']"))).to.have.length(1);
