@@ -23,7 +23,7 @@ const LightMenu = listViewMain.extend(/** @lends LightMenu.prototype */{
         });
         this.renderMain();
         this.render();
-        Radio.trigger("Autostart", "initializedModul", "tree");
+        Radio.trigger("Autostart", "initializedModule", "tree");
     },
     /**
      * Renders the data to DOM.

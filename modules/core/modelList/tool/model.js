@@ -95,7 +95,7 @@ const Tool = Item.extend(/** @lends Tool.prototype */{
             getCollection: this.collection
         });
 
-        Radio.trigger("Autostart", "initializedModul", this.get("id"));
+        Radio.trigger("Autostart", "initializedModule", this.get("id"));
         if (this.get("isInitOpen")) {
             this.setIsActive("true");
         }
