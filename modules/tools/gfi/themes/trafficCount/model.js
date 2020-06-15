@@ -1,5 +1,5 @@
 import Theme from "../model";
-import {TrafficCountApi} from "./trafficCountApi";
+import {TrafficCountCache} from "./trafficCountCache";
 import moment from "moment";
 import SnippetDatepickerModel from "../../../../snippets/datepicker/model";
 
@@ -71,8 +71,9 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      */
     initialize: function () {
         this.listenTo(this, {
-            "change:isVisible": this.onIsVisibleEvent,
-            "change:isReady": this.create
+            "change:isVisible": this.onIsVisibleEvent
+            // TODO: prüfen warum dies benötigt wird. Hier würde this.create immer das zweite Mal ausgeführt...
+            // "change:isReady": this.create
         });
         this.listenTo(Radio.channel("GFI"), {
             "isVisible": this.onGFIIsVisibleEvent
@@ -135,7 +136,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 context: this
             };
 
-        this.setPropTrafficCountApi(new TrafficCountApi(url, sensorThingsApiVersion, mqttOptions));
+        this.setPropTrafficCountApi(new TrafficCountCache(url, sensorThingsApiVersion, mqttOptions));
         this.setPropThingId(thingId);
         this.setPropMeansOfTransport(meansOfTransport);
 
@@ -152,8 +153,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport");
-
-        api.unsubscribeEverything();
 
         // title
         api.updateTitle(thingId, title => {
@@ -528,30 +527,33 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * Function is initially triggered and on update
      * @param   {Backbone.Model} model DatePickerValue Model
-     * @param   {Date} date selected date of weekday
+     * @param   {Date} dates an unsorted array of selected dates of weekday
      * @returns {void}
      */
-    dayDatepickerValueChanged: function (model, date) {
+    dayDatepickerValueChanged: function (model, dates) {
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
-            fromDate = moment(date).format("YYYY-MM-DD"),
-            timeSettings = {
+            timeSettings = [];
+
+        dates.forEach(date => {
+            const fromDate = moment(date).format("YYYY-MM-DD");
+
+            timeSettings.push({
                 interval: this.get("dayInterval"),
                 from: fromDate,
                 until: fromDate
-            };
+            });
+        });
 
-        api.unsubscribeEverything();
-        api.updateDataset(thingId, meansOfTransport, timeSettings, (dataset) => {
-
-            if (Object.keys(dataset[meansOfTransport]).length === 0 || !dataset.hasOwnProperty(meansOfTransport)) {
+        api.updateDataset(thingId, meansOfTransport, timeSettings, (datasets) => {
+            if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
                 console.warn("The data received from api are incomplete!");
             }
 
-            this.refreshDiagramDay(dataset[meansOfTransport]);
+            this.refreshDiagramDay(datasets[0][meansOfTransport]);
 
-            this.prepareTableContent(this.prepareDatasetHourly(dataset), "day", "Datum", timeSettings, meansOfTransport);
+            this.prepareTableContent(this.prepareDatasetHourly(datasets[0]), "day", "Datum", timeSettings, meansOfTransport);
         });
     },
 
@@ -596,30 +598,34 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * Function is initially triggered and on update
      * @param   {Backbone.Model} model DatePickerValue Model
-     * @param   {Date} date selected date of weekday not adjusted to start of week
+     * @param   {Date} dates an unsorted array of selected date of weekday not adjusted to start of week
      * @returns {void}
      */
-    weekDatepickerValueChanged: function (model, date) {
-        this.get("weekDatepicker").updateValuesSilently(date);
+    weekDatepickerValueChanged: function (model, dates) {
+        // TODO: ist dies überhaupt nötig? Was macht das? Wie läuft es mit einem Array(date)?
+        // this.get("weekDatepicker").updateValuesSilently(date);
+
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
-            timeSettings = {
+            timeSettings = [];
+
+        dates.forEach(date => {
+            timeSettings.push({
                 interval: this.get("weekInterval"),
                 from: moment(date).startOf("isoWeek").format("YYYY-MM-DD"),
                 until: moment(date).endOf("isoWeek").format("YYYY-MM-DD")
-            };
+            });
+        });
 
-        api.unsubscribeEverything();
-        api.updateDataset(thingId, meansOfTransport, timeSettings, (dataset) => {
-
-            if (Object.keys(dataset[meansOfTransport]).length === 0 || !dataset.hasOwnProperty(meansOfTransport)) {
+        api.updateDataset(thingId, meansOfTransport, timeSettings, (datasets) => {
+            if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
                 console.warn("The data received from api are incomplete!");
             }
 
-            this.refreshDiagramWeek(dataset[meansOfTransport]);
+            this.refreshDiagramWeek(datasets[0][meansOfTransport]);
 
-            this.prepareTableContent(this.prepareDatasetHourly(dataset), "week", "Woche", timeSettings, meansOfTransport);
+            this.prepareTableContent(this.prepareDatasetHourly(datasets[0]), "week", "Woche", timeSettings, meansOfTransport);
         });
     },
 
@@ -656,31 +662,35 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
     /** Function is initially triggered and on update
      * @param   {Backbone.Model} model DatePickerValue Model
-     * @param   {Date} date first day date of selected year
+     * @param   {Date} dates an unsorted array of first day date of selected year
      * @returns {void}
      */
-    yearDatepickerValueChanged: function (model, date) {
+    yearDatepickerValueChanged: function (model, dates) {
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
-            year = moment(date).format("YYYY"),
-            timeSettings = {
+            timeSettings = [],
+            years = [];
+
+        dates.forEach(date => {
+            years.push(moment(date).format("YYYY"));
+            timeSettings.push({
                 interval: this.get("yearInterval"),
                 // subtract 3 days to savely include the first thursday of january into the interval, as the first calendar week always includes the first thursday of january
                 from: moment(date).startOf("year").subtract(3, "days").format("YYYY-MM-DD"),
                 // add 3 days to savely include the last thursday of december into the interval, as the last calendar week always includes the last thursday of december
                 until: moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD")
-            };
+            });
+        });
 
-        api.unsubscribeEverything();
-        api.updateDataset(thingId, meansOfTransport, timeSettings, (dataset) => {
-
-            if (Object.keys(dataset[meansOfTransport]).length === 0 || !dataset.hasOwnProperty(meansOfTransport)) {
+        api.updateDataset(thingId, meansOfTransport, timeSettings, (datasets) => {
+            if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
                 console.warn("The data received from api are incomplete!");
             }
 
-            this.refreshDiagramYear(dataset[meansOfTransport], year);
-            this.prepareTableContent(this.prepareYearDataset(dataset), "year", "Jahr", timeSettings, meansOfTransport);
+            this.refreshDiagramYear(datasets[0][meansOfTransport], years[0]);
+
+            this.prepareTableContent(this.prepareYearDataset(datasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
         });
     },
 
