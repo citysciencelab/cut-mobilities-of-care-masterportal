@@ -156,7 +156,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
                 });
 
                 it("layers are shown in the topic tree and present layer information", async function () {
-                    await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Themen')]"))).click();
+                    await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
                     await (await driver.findElement(By.css(".layer:nth-child(4) .glyphicon-info-sign"))).click();
                     await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
@@ -196,7 +196,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
                 await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.legend-win"))));
 
                 // check layer information in topic tree
-                await (await driver.findElement(By.xpath("//div[@id='navbarRow']//a[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/li[.//span[@title='Eignungsflächen']]//span[contains(@class,'glyphicon-info-sign')]"))).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
@@ -301,7 +301,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
 
         if (isDefault(url)) {
             it("?mdid= opens and displays a layer", async function () {
-                const topicSelector = By.xpath("//div[@id='navbarRow']//a[contains(.,'Themen')]");
+                const topicSelector = By.css("div#navbarRow li:first-child");
 
                 await loadUrl(driver, `${url}?mdid=EBA4BF12-3ED2-4305-9B67-8E689FE8C445`, mode);
 
