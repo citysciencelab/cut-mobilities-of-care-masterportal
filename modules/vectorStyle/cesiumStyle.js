@@ -7,18 +7,14 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
      * @extends StyleModel
      * @memberof VectorStyle.Style
      * @constructs
-     * @property {ol/feature} feature Feature to be styled.
      * @property {Object} styles styling properties to overwrite defaults
-     * @property {Boolean} isClustered Flag to show if feature is clustered.
      * @property {Object[]} rules The rules of the style.
      */
     defaults: {
         rules: []
     },
 
-    initialize: function (feature, styles, isClustered, rules) {
-        this.setFeature(feature);
-        this.setIsClustered(isClustered);
+    initialize: function (styles, rules) {
         this.overwriteStyling(styles);
         this.setRules(rules);
     },
@@ -37,6 +33,11 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
         });
     },
 
+    /**
+     * Creates the cesium tile style conditions.
+     * @param {Object[]} rules Rules.
+     * @returns {[][]} - Conditions for cesium 3d tile style.
+     */
     createConditions: function (rules) {
         const styleConditions = [];
 
@@ -51,7 +52,7 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
 
                     conditions.push([key, value]);
                 });
-                ruleCondition = this.createCesiumCondition(conditions);
+                ruleCondition = this.createCesiumConditionForRule(conditions);
                 styleConditions.push([ruleCondition, ruleColor]);
             }
             else {
@@ -61,7 +62,12 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
         return styleConditions;
     },
 
-    createCesiumCondition: function (conditions) {
+    /**
+     * Creates a cesium condition.
+     * @param {[][]} conditions Conditions.
+     * @returns {String[]} - Cesium condition for rule.
+     */
+    createCesiumConditionForRule: function (conditions) {
         let cesiumCondition = [],
             singleCondition = "";
 

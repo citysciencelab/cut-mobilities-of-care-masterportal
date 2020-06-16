@@ -240,7 +240,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             return styleObject.getStyle();
         }
         else if (geometryType === "Cesium") {
-            styleObject = new CesiumStyle(feature, style, isClustered, rule);
+            styleObject = new CesiumStyle(style, rule);
             return styleObject.getStyle();
         }
         else if (geometryType === "Circle") {
