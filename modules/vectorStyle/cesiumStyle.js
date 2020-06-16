@@ -64,7 +64,7 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
 
     /**
      * Creates a cesium condition.
-     * @param {[][]} conditions Conditions.
+     * @param {*} conditions Conditions.
      * @returns {String[]} - Cesium condition for rule.
      */
     createCesiumConditionForRule: function (conditions) {
