@@ -36,7 +36,7 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
     /**
      * Creates the cesium tile style conditions.
      * @param {Object[]} rules Rules.
-     * @returns {[][]} - Conditions for cesium 3d tile style.
+     * @returns {*} - Conditions for cesium 3d tile style.
      */
     createConditions: function (rules) {
         const styleConditions = [];
