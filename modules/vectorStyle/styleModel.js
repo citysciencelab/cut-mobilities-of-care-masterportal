@@ -8,20 +8,8 @@ import {fetch as fetchPolyfill} from "whatwg-fetch";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {
-        /**
-         * @type {string}
-         * styleId is set in style.json
-         */
         "styleId": null,
-        /**
-         * @type {object[]}
-         * Array with styling rules and its conditions.
-         */
         "rules": null,
-        /**
-         * @type {object[]}
-         * list of used styling rules for legend grafic
-         */
         "legendInfos": []
     },
 
@@ -31,6 +19,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @extends Backbone.Model
      * @memberof VectorStyle
      * @constructs
+     * @param {String} styleId styleId is set in style.json
+     * @param {Object[]} rules Array with styling rules and its conditions.
+     * @param {Object[]} legendInfos list of used styling rules for legend grafic
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
