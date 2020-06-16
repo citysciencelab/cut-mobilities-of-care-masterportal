@@ -15,7 +15,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function CoordTests ({builder, url, resolution, config}) {
-    describe.only("SupplyCoord", function () {
+    describe("SupplyCoord", function () {
         const selectors = {
             tools: By.xpath("//ul[@id='tools']/.."),
             toolCoord: By.css("ul#tools span.glyphicon-screenshot"),
