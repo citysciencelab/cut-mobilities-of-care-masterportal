@@ -86,7 +86,7 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
                 if (typeof value === "string") {
                     value = "'" + value + "'";
                 }
-                singleCondition = cesiumKey + " === " + value;
+                singleCondition = "(" + cesiumKey + " === " + value + ")";
             }
 
             cesiumCondition.push(singleCondition);
