@@ -37,6 +37,11 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
             "valuesChanged": this.renderValueViews,
             "hideAllInfoText": this.hideAllInfoText
         }, this);
+        this.listenTo(this.model, {
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
+        });
     },
     className: "detail-view",
     /**

@@ -180,13 +180,13 @@
               }
             ],
             "attributeWhiteList": {
-              "bezirk": "Testeintrag",
-              "stadtteil": "Stadtteil",
-              "schulform": "Schulform",
-              "ganztagsform": "Ganztagsform",
-              "anzahl_schueler": "Anzahl Schüler",
-              "schwerpunktschule": "Schwerpunktschule",
-              "bilingual": "Bilingual"
+              "bezirk": "translate#common:modules.tools.filter.attributeWhiteList.bezirk",
+              "stadtteil": "translate#common:modules.tools.filter.attributeWhiteList.stadtteil",
+              "schulform": "translate#common:modules.tools.filter.attributeWhiteList.schulform",
+              "ganztagsform": "translate#common:modules.tools.filter.attributeWhiteList.ganztagsform",
+              "anzahl_schueler": "translate#common:modules.tools.filter.attributeWhiteList.anzahl_schueler",
+              "schwerpunktschule": "translate#common:modules.tools.filter.attributeWhiteList.schwerpunktschule",
+              "bilingual": "translate#common:modules.tools.filter.attributeWhiteList.bilingual"
             }
           }
         ]

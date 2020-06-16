@@ -49,6 +49,12 @@ const FilterView = Backbone.View.extend({
             this.$el.remove();
             this.render();
         }
+        this.listenTo(this.model, {
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+                this.renderDetailView();
+            }
+        });
     },
     id: "filter-view",
     template: _.template(Template),

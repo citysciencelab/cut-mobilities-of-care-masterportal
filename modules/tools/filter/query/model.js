@@ -54,7 +54,28 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
                 }
             }
         }, this);
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set("currentLng", lng);
+        this.set("attributeWhiteList", {
+            bezirke: i18next.t("common:modules.tools.filter.attributeWhiteList.bezirk"),
+            stadtteil: i18next.t("common:modules.tools.filter.attributeWhiteList.stadtteil"),
+            schulform: i18next.t("common:modules.tools.filter.attributeWhiteList.schulform"),
+            ganztagsform: i18next.t("common:modules.tools.filter.attributeWhiteList.ganztagsform"),
+            anzahl_schueler: i18next.t("common:modules.tools.filter.attributeWhiteList.anzahl_schueler"),
+            schwerpunktschule: i18next.t("common:modules.tools.filter.attributeWhiteList.schwerpunktschule"),
+            bilingual: i18next.t("common:modules.tools.filter.attributeWhiteList.bilingual")
+        });
 
+        // this.mapDisplayNames(this.get("attributeWhiteList"));
     },
 
     isSearchInMapExtentActive: function () {
@@ -170,11 +191,6 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         }
     },
 
-    // TODO!!!
-    getAttributesFromWhiteList: function (whiteList) {
-        return Array.isArray(whiteList) ? whiteList : Object.keys(whiteList);
-    },
-
     /**
      * Entfernt alle Attribute die nicht in der Whitelist stehen
      * @param  {object} featureAttributesMap - Mapobject
@@ -186,7 +202,6 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
             whiteListAttributes = Array.isArray(whiteList) ? whiteList : Object.keys(whiteList);
         let featureAttribute;
 
-        console.log(whiteListAttributes);
         _.each(whiteListAttributes, function (attr) {
             const attrObj = this.createAttrObject(attr);
 
@@ -221,7 +236,6 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         const attributeNames = getDisplayNamesOfFeatureAttributes(this.get("layerId")),
             whiteList = this.get("attributeWhiteList"),
             displayNames = Array.isArray(whiteList) ? attributeNames : whiteList;
-        console.log(displayNames);
 
         _.each(featureAttributesMap, function (featureAttribute) {
             if (_.isObject(displayNames) === true && _.has(displayNames, featureAttribute.name) === true) {

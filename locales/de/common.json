@@ -296,6 +296,17 @@
                     "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes."
                 }
             },
+            "filter": {
+                "attributeWhiteList": {
+                        "bezirk": "Bezirk",
+                        "stadtteil": "Stadtteil",
+                        "schulform": "Schulform",
+                        "ganztagsform": "Ganztagsform",
+                        "anzahl_schueler": "Anzahl Schüler",
+                        "schwerpunktschule": "Schwerpunktschule",
+                        "bilingual": "Bilingual"
+                }
+            },
             "viomRouting": {
                 "startAddressLabel": "Startadresse",
                 "destinationAddressLabel": "Zieladresse",
