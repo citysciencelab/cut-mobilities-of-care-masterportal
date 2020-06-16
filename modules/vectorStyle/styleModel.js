@@ -3,6 +3,7 @@ import PointStyle from "./pointStyle";
 import TextStyle from "./textStyle";
 import PolygonStyle from "./polygonStyle";
 import LinestringStyle from "./linestringStyle";
+import CesiumStyle from "./cesiumStyle";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
@@ -179,7 +180,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {Boolean} is geometrytype a multiGeometry
      */
     isMultiGeometry: function (geometryType) {
-        return geometryType === "MultiPoint" || geometryType === "MultiLineString" || geometryType === "MultiPolygon" || geometryType === "GeometryCollection";
+        return geometryType === "MultiPoint" || geometryType === "MultiLineString" || geometryType === "MultiPolygon" || geometryType === "GeometryCollection" || geometryType === "Cesium";
     },
 
     /**
@@ -190,7 +191,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {ol/style/Style}    style is always returned
      */
     getGeometryStyle: function (feature, rules, isClustered) {
-        const geometryType = feature.getGeometry().getType(),
+        const geometryType = feature ? feature.getGeometry().getType() : "Cesium",
             isMultiGeometry = this.isMultiGeometry(geometryType);
 
         // For simple geometries the first styling rule is used.
@@ -236,6 +237,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         else if (geometryType === "Polygon") {
             styleObject = new PolygonStyle(feature, style, isClustered);
             this.addLegendInfo("Polygon", styleObject, rule);
+            return styleObject.getStyle();
+        }
+        else if (geometryType === "Cesium") {
+            styleObject = new CesiumStyle(feature, style, isClustered, rule);
             return styleObject.getStyle();
         }
         else if (geometryType === "Circle") {
@@ -292,7 +297,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         else {
             const simpleStyle = this.getSimpleGeometryStyle(geometryType, feature, rules, isClustered);
 
-            simpleStyle.setGeometry(geometryType);
+            if (geometryType !== "Cesium") {
+                simpleStyle.setGeometry(geometryType);
+            }
+
             olStyle.push(simpleStyle);
         }
 
