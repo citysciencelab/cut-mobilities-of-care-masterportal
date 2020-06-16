@@ -1,11 +1,12 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {isMobile, isBasic} = require("../../../settings"),
-    namedProjectionsBasic = require("../../../../../portal/basic/config").namedProjections,
-    namedProjectionsMaster = require("../../../../../portal/master/config").namedProjections,
-    namedProjectionsCustom = require("../../../../../portal/masterCustom/config").namedProjections,
-    namedProjectionsDefault = require("../../../../../portal/masterDefault/config").namedProjections,
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {reclickUntilNotStale} = require("../../../../../../test/end2end/library/utils"),
+    {isMobile, isBasic} = require("../../../../../../test/end2end/settings"),
+    namedProjectionsBasic = require("../../../../../../portal/basic/config").namedProjections,
+    namedProjectionsMaster = require("../../../../../../portal/master/config").namedProjections,
+    namedProjectionsCustom = require("../../../../../../portal/masterCustom/config").namedProjections,
+    namedProjectionsDefault = require("../../../../../../portal/masterDefault/config").namedProjections,
     {By, until, Key} = webdriver;
 
 /**
@@ -14,22 +15,21 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function CoordTests ({builder, url, resolution, config}) {
-    // TODO may currently crash on alert message regarding gemarkungen.json; probably works after rebase
-    describe.skip("Coord", function () {
+    describe.only("SupplyCoord", function () {
         const selectors = {
-            tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
-            toolCoord: By.xpath("//a[contains(.,'Koordinaten abfragen')]"),
-            modal: By.xpath("//div[@id='window']"),
-            header: By.xpath("//div[@id='window']//span[contains(.,'Koordinaten abfragen')]"),
-            coordSystemLabel: By.xpath("//label[contains(.,'Koordinatensystem')]"),
-            coordSystemSelect: By.xpath("//select[@id='coordSystemField']"),
-            eastingLabel: By.xpath("//label[@id='coordinatesEastingLabel']"),
-            eastingField: By.xpath("//input[@id='coordinatesEastingField']"),
-            northingLabel: By.xpath("//label[@id='coordinatesNorthingLabel']"),
-            northingField: By.xpath("//input[@id='coordinatesNorthingField']"),
+            tools: By.xpath("//ul[@id='tools']/.."),
+            toolCoord: By.css("ul#tools span.glyphicon-screenshot"),
+            modal: By.css("div.tool-window-vue"),
+            header: By.css("div.tool-window-vue p.title span"),
+            coordSystemLabel: By.xpath("//label[@for='coordSystemField']"),
+            coordSystemSelect: By.css("select#coordSystemField"),
+            eastingLabel: By.css("label#coordinatesEastingLabel"),
+            eastingField: By.css("input#coordinatesEastingField"),
+            northingLabel: By.css("label#coordinatesNorthingLabel"),
+            northingField: By.css("input#coordinatesNorthingField"),
             wgs84Option: By.xpath("//option[contains(.,'WGS 84 (long/lat)')]"),
             utm32nOption: By.xpath("//option[contains(.,'ETRS89/UTM 32N')]"),
-            searchMarker: By.xpath("//div[@id='searchMarker']"),
+            searchMarker: By.css("div#searchMarker"),
             searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]"),
             viewport: By.css(".ol-viewport")
         };
@@ -52,15 +52,16 @@ async function CoordTests ({builder, url, resolution, config}) {
 
             const eastValue = await eastingField.getAttribute("value"),
                 northValue = await northingField.getAttribute("value"),
-                searchMarkerPosition = await searchMarkerContainer.getAttribute("style");
+                searchMarkerPosition = await searchMarkerContainer.getAttribute("style"),
+                expectPhrase = expectUnchanged ? "to" : "not";
 
             await driver.actions({bridge: true})
                 .move({origin: viewport, x: 50, y: 50})
                 .perform();
 
-            expect(eastValue)[expectUnchanged ? "to" : "not"].equal(await eastingField.getAttribute("value"));
-            expect(northValue)[expectUnchanged ? "to" : "not"].equal(await northingField.getAttribute("value"));
-            expect(searchMarkerPosition)[expectUnchanged ? "to" : "not"].equal(await searchMarkerContainer.getAttribute("style"));
+            expect(eastValue)[expectPhrase].equal(await eastingField.getAttribute("value"));
+            expect(northValue)[expectPhrase].equal(await northingField.getAttribute("value"));
+            expect(searchMarkerPosition)[expectPhrase].equal(await searchMarkerContainer.getAttribute("style"));
         }
 
         before(async function () {
@@ -72,30 +73,32 @@ async function CoordTests ({builder, url, resolution, config}) {
         });
 
         it("displays a modal dialog containing the tool elements", async () => {
-            const tools = await driver.findElement(selectors.tools),
-                toolCoord = await driver.findElement(selectors.toolCoord);
-
-            await driver.wait(until.elementIsVisible(tools));
-            while (!await toolCoord.isDisplayed()) {
-                await tools.click();
+            // can't keep tools/toolCoord as variable - tends to go stale in /portal/basic
+            await driver.wait(until.elementIsVisible(await driver.findElement(selectors.tools)));
+            while (!await (await driver.findElement(selectors.toolCoord)).isDisplayed()) {
+                await reclickUntilNotStale(driver, selectors.tools);
                 await driver.wait(new Promise(r => setTimeout(r, 100)));
             }
-            await toolCoord.click();
+            await (await driver.findElement(selectors.toolCoord)).click();
 
             await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)));
 
             await driver.wait(until.elementLocated(selectors.header));
+
             await driver.wait(until.elementLocated(selectors.coordSystemLabel));
             await driver.wait(until.elementLocated(selectors.coordSystemSelect));
-            await driver.wait(until.elementLocated(selectors.eastingLabel));
-            await driver.wait(until.elementLocated(selectors.eastingField));
-            await driver.wait(until.elementLocated(selectors.northingLabel));
-            await driver.wait(until.elementLocated(selectors.northingField));
 
-            viewport = await driver.findElement(selectors.viewport);
+            await driver.wait(until.elementLocated(selectors.eastingLabel));
+            eastingField = await driver.wait(until.elementLocated(selectors.eastingField));
+
+            await driver.wait(until.elementLocated(selectors.northingLabel));
+            northingField = await driver.wait(until.elementLocated(selectors.northingField));
+
             searchMarkerContainer = await driver.findElement(selectors.searchMarkerContainer);
-            eastingField = await driver.findElement(selectors.eastingField);
-            northingField = await driver.findElement(selectors.northingField);
+            viewport = await driver.findElement(selectors.viewport);
+
+            // /portal/basic sometimes requires setup time until all events are registered
+            await driver.wait(new Promise(r => setTimeout(r, 1000)));
         });
 
         it("the displayed coordinates and map marker position change on mouse movement", async () => {
@@ -110,7 +113,7 @@ async function CoordTests ({builder, url, resolution, config}) {
         });
 
         if (isMobile(url)) {
-            it("after another click, coordinates and marker move to new position without sticking to the mouse", async () => {
+            it("mobile: coordinates and marker move to new position without sticking to the 'mouse'", async () => {
                 await moveAndClickAndCheck({
                     clickAfterFirstMove: true,
                     expectUnchanged: true
@@ -118,7 +121,7 @@ async function CoordTests ({builder, url, resolution, config}) {
             });
         }
         else {
-            it("after another click, coordinates and marker stick to mouse again", async () => {
+            it("desktop: after another click, coordinates and marker stick to mouse again", async () => {
                 await moveAndClickAndCheck({
                     clickAfterFirstMove: true
                 });

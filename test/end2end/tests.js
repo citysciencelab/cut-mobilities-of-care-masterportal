@@ -66,7 +66,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
                 // require("./tests/modules/searchbar/GdiSearch.js"),
 
                 // modules/tools
-                // require("./tests/modules/tools/Coord.js"),
+                require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
                 // require("./tests/modules/tools/Gfi.js"),
                 // require("./tests/modules/tools/Measure.js"),
                 // require("./tests/modules/tools/ParcelSearch.js"),
