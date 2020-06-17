@@ -155,7 +155,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         let data;
 
         if (searchString.length >= this.get("minChars")) {
-            definitions.forEach(function (def) {
+            definitions.forEach(def => {
                 // translate if necessary
                 if (typeof def.i18nextTranslate === "function") {
                     def.i18nextTranslate(function (key, value) {
@@ -166,7 +166,7 @@ const SpecialWFSModel = Backbone.Model.extend({
                 data = this.getWFS110Xml(def, searchString);
                 def.url = this.manipulateUrlForProxy(def.url);
                 this.sendRequest(def, data);
-            }, this);
+            });
         }
     },
 
@@ -239,43 +239,61 @@ const SpecialWFSModel = Backbone.Model.extend({
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
-            elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]);
-        let identifier;
+            elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]),
+            multiGeometries = ["MULTIPOLYGON"];
+        let geometry;
 
         for (const element of elements) {
-            const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
-                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
-                polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember");
-            let geomType;
+            if (element.getElementsByTagName(propertyNames).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
+                const elementGeometryName = element.getElementsByTagNameNS("*", geometryName.split(":")[1])[0],
+                    elementGeometryFirstChild = elementGeometryName.firstElementChild,
+                    firstChildNameUpperCase = elementGeometryFirstChild.localName.toUpperCase(),
+                    identifier = element.getElementsByTagName(propertyNames)[0].textContent;
+                let interiorGeometry = [];
 
-            if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
-                const polygonCoords = this.getInteriorAndExteriorPolygonMembers(polygonMembers);
+                if (multiGeometries.includes(firstChildNameUpperCase)) {
+                    const memberName = elementGeometryFirstChild.firstElementChild.localName,
+                        geometryMembers = elementGeometryName.getElementsByTagNameNS("*", memberName),
+                        coordinates = this.getInteriorAndExteriorPolygonMembers(geometryMembers);
 
-                identifier = elementPropertyNames[0].textContent;
-
-                if (polygonMembers[0].getElementsByTagNameNS("*", "posList").length > 1 || polygonMembers.length > 1) {
-                    geomType = "MULTIPOLYGON";
+                    geometry = coordinates[0];
+                    interiorGeometry = coordinates[1];
                 }
                 else {
-                    geomType = "POLYGON";
+                    const geometryString = element.getElementsByTagName(geometryName)[0].textContent;
+
+                    geometry = geometryString.trim().split(" ");
                 }
 
-                // "Hitlist-Objekte"
-                Radio.trigger("Searchbar", "pushHits", "hitList", {
-                    id: _.uniqueId(type.toString()),
-                    name: identifier.trim(),
-                    geometryType: geomType,
-                    type: type,
-                    coordinate: polygonCoords[0],
-                    interiorPolygons: polygonCoords[1],
-                    glyphicon: glyphicon
-                });
+                this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon);
             }
             else {
                 console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
             }
         }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+    },
+
+    /**
+    * Trigger function pushHits in Searchbar and send result objects for hit list.
+    * @param {string} type - Type name.
+    * @param {string} identifier - Name frmom target result.
+    * @param {string} firstChildNameUpperCase - Geometrie type.
+    * @param {string[]} geometry - The coordinates from exterior geometry.
+    * @param {string[]} interiorGeometry - The coordinates from interior geometry.
+    * @param {string} glyphicon - The glyphicon for hit.
+    * @returns {void}
+    */
+    pushHitListObjects: function (type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon) {
+        Radio.trigger("Searchbar", "pushHits", "hitList", {
+            id: _.uniqueId(type.toString()),
+            name: identifier.trim(),
+            geometryType: firstChildNameUpperCase,
+            type: type,
+            coordinate: geometry,
+            interiorGeometry: interiorGeometry,
+            glyphicon: glyphicon
+        });
     },
 
     /**

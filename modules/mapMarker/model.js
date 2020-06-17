@@ -178,19 +178,19 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
     },
 
     /**
-     * Help function for determining a feature with textual description
-     * @param  {string} type Geometrietype
-     * @param  {number[]} geom Array with coordinate values
-     * @param {number[]} interiorPolygons Array with the indices/position of the interior polygons in geom
+     * Help function for determining a feature with textual description.
+     * @param  {string} type - Type of geometry.
+     * @param  {number[]} geometry - Array with coordinate values
+     * @param {number[]} interiorGeometry - Array with the indices/position of the interior polygons in geometry
      * @returns {string} wkt WellKnownText-Geom
      */
-    getWKTGeom: function (type, geom, interiorPolygons) {
+    getWKTGeom: function (type, geometry, interiorGeometry) {
         let wkt,
             regExp;
 
         if (type === "POLYGON") {
             wkt = type + "((";
-            geom[0].forEach(function (element, index, list) {
+            geometry.forEach(function (element, index, list) {
                 if (index % 2 === 0) {
                     wkt += element + " ";
                 }
@@ -204,18 +204,18 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
         }
         else if (type === "POINT") {
             wkt = type + "(";
-            wkt += geom[0] + " " + geom[1];
+            wkt += geometry[0] + " " + geometry[1];
             wkt += ")";
         }
         else if (type === "MULTIPOLYGON") {
             wkt = type + "(((";
-            geom.forEach(function (element, index) {
+            geometry.forEach(function (element, index) {
 
-                geom[index].forEach(function (coord, index2, list) {
+                geometry[index].forEach(function (coord, index2, list) {
                     if (index2 % 2 === 0) {
                         wkt += coord + " ";
                     }
-                    else if (index2 === list.length - 1 && interiorPolygons.indexOf(index + 1) !== -1) {
+                    else if (index2 === list.length - 1 && interiorGeometry.indexOf(index + 1) !== -1) {
                         wkt += coord + ")";
                     }
                     else if (index2 === list.length - 1) {
@@ -226,10 +226,10 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
                     }
                 });
 
-                if (interiorPolygons.indexOf(index + 1) !== -1) {
+                if (interiorGeometry.indexOf(index + 1) !== -1) {
                     wkt += ",(";
                 }
-                else if (index === geom.length - 1 && interiorPolygons.indexOf(index + 1) === -1) {
+                else if (index === geometry.length - 1 && interiorGeometry.indexOf(index + 1) === -1) {
                     wkt += ")";
                 }
                 else {
@@ -239,6 +239,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
             regExp = new RegExp(", \\)\\?\\(", "g");
             wkt = wkt.replace(regExp, "),(");
         }
+
         return wkt;
     },
 
@@ -286,14 +287,14 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
     },
 
     /**
-     * setter for wkt
-     * @param {*} type type of the geometry
-     * @param {*} geom the coordinates of the geometry
-     * @param {*} interiorPolygons Array with the position of the interior Polygons in geom
+     * Sets geometry as wkt to model.
+     * @param {string} type - Type of the geometry.
+     * @param {string[]} geometry - The coordinates of the geometry.
+     * @param {string[]} interiorGeometry - Array with the position of the interior Geometries in geometry.
      * @returns {void}
      */
-    setWkt: function (type, geom, interiorPolygons = "") {
-        const value = this.getWKTGeom(type, geom, interiorPolygons);
+    setWkt: function (type, geometry, interiorGeometry = []) {
+        const value = this.getWKTGeom(type, geometry, interiorGeometry);
 
         this.set("wkt", value);
     },
