@@ -135,16 +135,18 @@ export default {
     },
     created () {
         this.$on("close", this.close);
+        this.initialize();
     },
     /**
      * Put initialize here if mounting occurs after config parsing
      * @returns {void}
      */
     mounted () {
-        this.initialize();
+        this.activateByUrlParam();
     },
     methods: {
         ...mapActions("Tools/SupplyCoord", [
+            "activateByUrlParam",
             "initialize"
         ]),
         copyToClipboard ({target}) {
