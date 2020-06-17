@@ -58,17 +58,17 @@ async function losesCenter (driver, target) {
 }
 
 /**
- * Clicks a feature by centering and then clicking the viewport's center.
+ * Clicks a feature by centering and then clicking the canvas's center.
  * @param {object} driver initialized driver
  * @param {Number[]} coordinates coordinates to jump to and click on
  * @returns {void}
  */
 async function clickFeature (driver, coordinates) {
-    const viewport = await driver.findElement(By.css(".ol-viewport"));
+    const canvas = await driver.findElement(By.css(".ol-viewport canvas"));
 
     await driver.executeScript(setCenter, coordinates);
     await driver.actions({bridge: true})
-        .move({origin: viewport})
+        .move({origin: canvas})
         .click()
         .perform();
 }

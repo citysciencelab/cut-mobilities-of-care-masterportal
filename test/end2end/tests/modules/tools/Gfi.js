@@ -12,7 +12,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function GfiTests ({builder, url, resolution}) {
-    describe("Gfi", function () {
+    describe.only("Gfi", function () {
         const exampleHospital = {
             coord: [551370.202, 5937222.981],
             name: "Asklepios Westklinikum Hamburg",
@@ -29,8 +29,7 @@ async function GfiTests ({builder, url, resolution}) {
             await driver.quit();
         });
 
-        // TODO custom temporarily commented out since hospital layer doesn't work atm
-        if (isMaster(url)/* || isCustom(url)*/) {
+        if (isMaster(url) || isCustom(url)) {
             it("hospitals open gfi on click", async function () {
                 do {
                     await clickFeature(driver, exampleHospital.coord);
@@ -54,7 +53,7 @@ async function GfiTests ({builder, url, resolution}) {
 
         if (isDefault(url)) {
             it("default tree development plans open gfi on click", async function () {
-                const topic = await driver.wait(until.elementLocated(By.xpath("//span[contains(.,'Themen')]")));
+                const topic = await driver.wait(until.elementLocated(By.xpath("//ul[@id='tree']/..")));
 
                 // open layer
                 await topic.click();
@@ -74,9 +73,9 @@ async function GfiTests ({builder, url, resolution}) {
 
         if (isBasic(url)) {
             it("basic tree hospital+kita layer displays gfi on kita click", async function () {
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/li//span[contains(.,'Kita und Krankenhäuser')]"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
                 await clickFeature(driver, [577664.4797278475, 5940742.819722826]);
 
@@ -89,26 +88,25 @@ async function GfiTests ({builder, url, resolution}) {
 
         if (isDefault(url)) {
             it("default tree traffic camera layer displays gfi including video element", async function () {
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
                 await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
                 await (await driver.findElement(By.xpath("//span[contains(.,'Verkehrskameras Hamburg')]"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
                 await clickFeature(driver, [565827.0277867382, 5933651.108328401]);
 
                 await driver.wait(until.elementLocated(By.css("div.gfi")));
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                expect(await driver.findElement(By.css("div.gfi #video3"))).to.exist;
+                expect(await driver.findElement(By.css("div.gfi div.video-js"))).to.exist;
             });
         }
 
         if (isMaster(url)) {
-            // TODO currently blocked by a warníng message
-            it.skip("basic tree traffic intensity layer displays gfi including overview table", async function () {
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+            it("basic tree traffic intensity layer displays gfi including overview table", async function () {
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
                 await (await driver.findElement(By.xpath("//span[contains(@title,'Verkehrsstärken')]"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
                 await clickFeature(driver, [562228.696396504, 5930738.047401453]);
 
@@ -150,11 +148,11 @@ async function GfiTests ({builder, url, resolution}) {
 
         if (isDefault(url)) {
             it("default tree bicycle count layer shows gfi with info page initially open", async function () {
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
                 await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
-                await (await driver.findElement(By.css(".layer:nth-child(53) > .layer-item > .glyphicon"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']//span[contains(text(),'Dauerzählstellen (Rad) Hamburg')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
                 await clickFeature(driver, [566800.6939276252, 5934968.732616884]);
 
@@ -182,11 +180,11 @@ async function GfiTests ({builder, url, resolution}) {
         }
 
         if (isBasic(url)) {
-            // TODO bugticket was created, gfi doesn't open on initial zoom level
+            // TODO works in FF, but Chrome does not click the right position
             it.skip("basic tree event layer displays gfi in iFrame", async function () {
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
                 await (await driver.findElement(By.xpath("//ul[@id='tree']/li[2]/span/span/span"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
                 await clickFeature(driver, [575203.8560565843, 5934816.1562565565]);
 
@@ -199,8 +197,7 @@ async function GfiTests ({builder, url, resolution}) {
         }
 
         if (isCustom(url)) {
-            // TODO oftentimes blocked by div#loader - remove skip when fixed
-            it.skip("custom tree hvv stop layer displays gfi from application/vnd.ogc.gml", async function () {
+            it("custom tree hvv stop layer displays gfi from application/vnd.ogc.gml", async function () {
                 // hvv stops not available on initial zoom level
                 await driver.executeScript(zoomIn);
 
@@ -211,9 +208,12 @@ async function GfiTests ({builder, url, resolution}) {
                 await (await driver.findElement(By.xpath("//*[contains(@id,'EisenbahnwesenPersonenbefrderung')]/*[contains(@class,'glyphicon')]"))).click();
                 await (await driver.findElement(By.xpath("//*[contains(@id,'HamburgerVerkehrsverbundHVV')]/*[contains(@class,'glyphicon-plus-sign')]"))).click();
                 await (await driver.findElement(By.css(".layer:nth-child(15) > .layer-item > .glyphicon"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
-                await clickFeature(driver, [576229.78, 5931627.22]);
+                do {
+                    await clickFeature(driver, [576229.78, 5931627.22]);
+                    await driver.wait(new Promise(r => setTimeout(r, 2500)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
                 await driver.wait(until.elementLocated(By.css("div.gfi")));
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
@@ -225,12 +225,12 @@ async function GfiTests ({builder, url, resolution}) {
 
         if (isDefault(url)) {
             it("default tree gfi windows can be dragged, but not outside the screen", async function () {
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
                 await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
                 await driver.wait(until.elementLocated(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]")));
                 await (await driver.findElement(By.xpath("//*[contains(@id,'TransportundVerkehr')]/*[contains(@class,'glyphicon')]"))).click();
-                await (await driver.findElement(By.css(".layer:nth-child(53) > .layer-item > .glyphicon"))).click();
-                await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']//span[contains(text(),'Dauerzählstellen (Rad) Hamburg')]"))).click();
+                await (await driver.findElement(By.xpath("//ul[@id='tree']/.."))).click();
 
                 await clickFeature(driver, [566800.6939276252, 5934968.732616884]);
 
