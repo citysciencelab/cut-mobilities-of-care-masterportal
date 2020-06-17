@@ -676,6 +676,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
+     * Setter for placeholder.
+     * @param {string} value - Placeholder for the title.
+     * @returns {void}
+     */
+    setTitlePlaceholder: function (value) {
+        this.set("titlePlaceholder", value);
+    },
+
+    /**
      * todo
      * @param {*} value  - todo
      * @returns {void}
