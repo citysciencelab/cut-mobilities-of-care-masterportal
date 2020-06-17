@@ -19,11 +19,6 @@ const QuerySimpleView = Backbone.View.extend({
             },
             "change:isLayerVisible": this.render
         });
-        this.listenTo(this.model, {
-            "change:currentLng": () => {
-                this.render(this.model, this.model.get("isActive"));
-            }
-        });
     },
     template: _.template(Template),
     className: "simple-view",

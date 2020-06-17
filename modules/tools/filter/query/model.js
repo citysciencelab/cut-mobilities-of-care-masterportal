@@ -54,28 +54,6 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
                 }
             }
         }, this);
-        this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.changeLang
-        });
-    },
-    /**
-     * change language - sets default values for the language
-     * @param {String} lng the language changed to
-     * @returns {Void}  -
-     */
-    changeLang: function (lng) {
-        this.set("currentLng", lng);
-        this.set("attributeWhiteList", {
-            bezirke: i18next.t("common:modules.tools.filter.attributeWhiteList.bezirk"),
-            stadtteil: i18next.t("common:modules.tools.filter.attributeWhiteList.stadtteil"),
-            schulform: i18next.t("common:modules.tools.filter.attributeWhiteList.schulform"),
-            ganztagsform: i18next.t("common:modules.tools.filter.attributeWhiteList.ganztagsform"),
-            anzahl_schueler: i18next.t("common:modules.tools.filter.attributeWhiteList.anzahl_schueler"),
-            schwerpunktschule: i18next.t("common:modules.tools.filter.attributeWhiteList.schwerpunktschule"),
-            bilingual: i18next.t("common:modules.tools.filter.attributeWhiteList.bilingual")
-        });
-
-        // this.mapDisplayNames(this.get("attributeWhiteList"));
     },
 
     isSearchInMapExtentActive: function () {
