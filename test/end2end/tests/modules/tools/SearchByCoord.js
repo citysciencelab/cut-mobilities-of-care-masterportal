@@ -13,8 +13,8 @@ const webdriver = require("selenium-webdriver"),
 async function SearchByCoordTests ({builder, url, resolution}) {
     describe("SearchByCoord", function () {
         const selectors = {
-                tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
-                toolSearchByCoord: By.xpath("//a[contains(.,'Koordinatensuche')]"),
+                tools: By.xpath("//ul[@id='tools']/.."),
+                toolSearchByCoord: By.xpath("//ul[@id='tools']//span[contains(@class,'glyphicon-record')]"),
                 modal: By.xpath("//div[@id='window']"),
                 coordSystemSelect: By.xpath("//select[@id='coordSystemField']"),
                 coordinatesNorthingField: By.xpath("//input[@id='coordinatesNorthingField']"),
@@ -22,7 +22,7 @@ async function SearchByCoordTests ({builder, url, resolution}) {
                 etrs89Option: By.xpath("//option[contains(.,'ETRS89')]"),
                 wgs84Option: By.xpath("//option[contains(.,'WGS84')]"),
                 wgs84DecimalOption: By.xpath("//option[contains(.,'WGS84(Dezimalgrad)')]"),
-                searchButton: By.xpath("//div[@id='window']//button[contains(.,'Suchen')]"),
+                searchButton: By.css("div#window .win-body button"),
                 searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]")
             },
             expectedResolution = isBasic(url) || isCustom(url) || isDefault(url) ? 0.66 : 0.13;
@@ -103,18 +103,18 @@ async function SearchByCoordTests ({builder, url, resolution}) {
         it("zooms to selected coordinates in WGS84", async () => {
             await searchCoordinatesAndCheckResults({
                 optionSelector: selectors.wgs84Option,
-                easting: "53 33 50",
-                northing: "9 59 40",
-                expectedCenter: [5924237.82, 1540480.11]
+                easting: "9 59 40",
+                northing: "53 33 50",
+                expectedCenter: [565863.82, 5935461.37]
             });
         });
 
         it("zooms to selected coordinates in WGS84(Dezimalgrad)", async () => {
             await searchCoordinatesAndCheckResults({
                 optionSelector: selectors.wgs84DecimalOption,
-                easting: "53.5",
-                northing: "10.0",
-                expectedCenter: [5914524.24, 1539675.37]
+                easting: "10.0",
+                northing: "53.5",
+                expectedCenter: [566331.53, 5928359.09]
             });
         });
     });

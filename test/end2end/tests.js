@@ -71,7 +71,7 @@ function tests (builder, url, browsername, resolution, config, mode) {
                 require("./tests/modules/Legend.js"),
                 require("./tests/modules/tools/Measure.js"),
                 // require("./tests/modules/tools/ParcelSearch.js"),
-                // require("./tests/modules/tools/SearchByCoord.js"),
+                require("./tests/modules/tools/SearchByCoord.js"),
 
                 // non-module tests
                 require("../../src/test/end2end/Pan.e2e.js"),
