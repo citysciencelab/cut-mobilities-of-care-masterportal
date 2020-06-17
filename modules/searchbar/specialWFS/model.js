@@ -286,7 +286,7 @@ const SpecialWFSModel = Backbone.Model.extend({
     */
     pushHitListObjects: function (type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon) {
         Radio.trigger("Searchbar", "pushHits", "hitList", {
-            id: _.uniqueId(type.toString()),
+            id: Radio.request("Util", "uniqueId", type.toString()),
             name: identifier.trim(),
             geometryType: firstChildNameUpperCase,
             type: type,
@@ -307,10 +307,11 @@ const SpecialWFSModel = Backbone.Model.extend({
             interiorPositions = [];
 
         for (let i = 0; i < lengthIndex; i++) {
-            const coords = [];
+            const coords = [],
+                posListPolygonMembers = polygonMembers[i].getElementsByTagNameNS("*", "posList");
 
-            for (const key in Object.keys(polygonMembers[i].getElementsByTagNameNS("*", "posList"))) {
-                coords.push(polygonMembers[i].getElementsByTagNameNS("*", "posList")[key].textContent);
+            for (const key in Object.keys(posListPolygonMembers)) {
+                coords.push(posListPolygonMembers[key].textContent);
             }
             coords.forEach(coordArray => coordinateArray.push(Object.values(coordArray.replace(/\s\s+/g, " ").split(" "))));
 
