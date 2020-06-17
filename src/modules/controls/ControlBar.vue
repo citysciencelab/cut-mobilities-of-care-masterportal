@@ -40,7 +40,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["controlsConfig", "mobile"]),
+        ...mapGetters(["controlsConfig", "mobile", "simpleStyle"]),
         ...mapGetters("controls", ["componentMap", "mobileHiddenControls", "bottomControls"]),
         /** @returns {object} contains controls to-be-rendered sorted by placement */
         categorizedControls () {
@@ -101,23 +101,25 @@ export default {
 
 <template>
     <div class="right-bar">
-        <div
-            v-for="{categoryName, className} in categories"
-            :key="className"
-            :class="className"
-        >
-            <template v-for="(control, index) in categorizedControls[categoryName]">
-                <component
-                    :is="control.component"
-                    :key="'control-' + control.key"
-                    :class="[
-                        index !== categorizedControls[categoryName].length - 1 ? 'spaced' : '',
-                        mobile && hiddenMobile(control.key) ? 'hidden' : ''
-                    ]"
-                    v-bind="control.props"
-                />
-            </template>
-        </div>
+        <template v-if="!simpleStyle">
+            <div
+                v-for="{categoryName, className} in categories"
+                :key="className"
+                :class="className"
+            >
+                <template v-for="(control, index) in categorizedControls[categoryName]">
+                    <component
+                        :is="control.component"
+                        :key="'control-' + control.key"
+                        :class="[
+                            index !== categorizedControls[categoryName].length - 1 ? 'spaced' : '',
+                            mobile && hiddenMobile(control.key) ? 'hidden' : ''
+                        ]"
+                        v-bind="control.props"
+                    />
+                </template>
+            </div>
+        </template>
     </div>
 </template>
 

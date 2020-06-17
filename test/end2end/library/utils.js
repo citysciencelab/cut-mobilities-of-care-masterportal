@@ -67,10 +67,7 @@ async function clickFeature (driver, coordinates) {
     const viewport = await driver.findElement(By.css(".ol-viewport"));
 
     await driver.executeScript(setCenter, coordinates);
-    await driver.actions({bridge: true})
-        .move({origin: viewport})
-        .click()
-        .perform();
+    await viewport.click();
 }
 
 /**

@@ -147,6 +147,12 @@ export default {
         ...mapActions("Tools/SupplyCoord", [
             "initialize"
         ]),
+        copyToClipboard ({target}) {
+            target.select();
+            // seems to be required for mobile devices
+            target.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+        },
         selectionChanged (event) {
             this.currentSelection = event.target.value;
             this.changedPosition(event.target.value);
@@ -313,6 +319,7 @@ export default {
                             class="form-control"
                             readonly
                             contenteditable="false"
+                            @click="copyToClipboard"
                         >
                     </div>
                 </div>
@@ -330,6 +337,7 @@ export default {
                             class="form-control"
                             readonly
                             contenteditable="false"
+                            @click="copyToClipboard"
                         >
                     </div>
                 </div>
