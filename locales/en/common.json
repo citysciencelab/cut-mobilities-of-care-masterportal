@@ -295,17 +295,6 @@
                     "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service."
                 }
             },
-            "filter": {
-                "attributeWhiteList": {
-                        "bezirk": "Districts",
-                        "stadtteil": "Quarters",
-                        "schulform": "Type of school",
-                        "ganztagsform": "Full day form",
-                        "anzahl_schueler": "Number of pupils",
-                        "schwerpunktschule": "Specialised School",
-                        "bilingual": "Bilingual"
-                }
-            },
             "viomRouting": {
                 "startAddressLabel": "Start address",
                 "destinationAddressLabel": "Destination address",
