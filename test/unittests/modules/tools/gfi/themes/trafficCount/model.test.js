@@ -29,11 +29,11 @@ describe("tools/gfi/themes/trafficCount", function () {
             expect(model.addThousandPoints("foo1234bar56789")).to.equal("foo1.234bar56.789");
         });
         it("should return a zero as string if anything but a number or string is given", function () {
-            expect(model.addThousandPoints(undefined)).to.equal("0");
-            expect(model.addThousandPoints(false)).to.equal("0");
-            expect(model.addThousandPoints(null)).to.equal("0");
-            expect(model.addThousandPoints([])).to.equal("0");
-            expect(model.addThousandPoints({})).to.equal("0");
+            expect(model.addThousandPoints(undefined)).to.equal("");
+            expect(model.addThousandPoints(false)).to.equal("");
+            expect(model.addThousandPoints(null)).to.equal("");
+            expect(model.addThousandPoints([])).to.equal("");
+            expect(model.addThousandPoints({})).to.equal("");
         });
     });
     describe("getMeansOfTransportFromDatastream", function () {
