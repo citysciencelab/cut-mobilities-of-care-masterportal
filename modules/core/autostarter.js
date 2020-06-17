@@ -1,5 +1,3 @@
-import store from "../../src/app-store";
-
 const Autostarter = Backbone.Model.extend({
     defaults: {
         autostartModules: [], // array of all modules to open on startup
