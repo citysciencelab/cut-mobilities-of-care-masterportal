@@ -288,10 +288,9 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      */
     createDayTableHeader: function () {
         const dayTableHeaderArr = this.model.get("dayTableContent").day.headerArr;
-        let dayTableHeaderHtml = "";
+        let dayTableHeaderHtml = "<th class=\"tableTopLeft\">" + this.model.get("dayTableContent").day.title + "</th>";
 
         if (dayTableHeaderArr !== undefined) {
-            dayTableHeaderHtml += "<th class=\"tableTopLeft\">" + this.model.get("dayTableContent").day.title + "</th>";
             if (Array.isArray(dayTableHeaderArr) && dayTableHeaderArr.length > 0) {
                 for (const key in dayTableHeaderArr) {
                     dayTableHeaderHtml += "<th class=\"tableColumn\">" + dayTableHeaderArr[key] + " <br/>Uhr</th>";
@@ -311,16 +310,19 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      * @returns {string} html snippet
      */
     createTableContent: function (tableColumnsArr, firstColumn, headerPrefix, headerSuffix) {
-        let tableColumnsHtml = "";
+        let tableColumnsHtml = "<td class=\"tableFirstColumn\" width=\"165\">" + headerPrefix + firstColumn + headerSuffix + "</td>";
 
         if (tableColumnsArr === undefined) {
-            return "";
+            tableColumnsHtml += "<td class=\"text-align-center\" width=\"165\">&nbsp;</td>";
+            return tableColumnsHtml;
         }
-        tableColumnsHtml += "<td class=\"tableFirstColumn\">" + headerPrefix + firstColumn + headerSuffix + "</td>";
         if (Array.isArray(tableColumnsArr) && tableColumnsArr.length > 0) {
             for (const key in tableColumnsArr) {
                 tableColumnsHtml += "<td class=\"text-align-center\">" + tableColumnsArr[key] + "</td>";
             }
+        }
+        else {
+            tableColumnsHtml += "<td class=\"text-align-center\">&nbsp;</td>";
         }
 
         return tableColumnsHtml;
@@ -333,15 +335,17 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
     createWeekTableHeader: function () {
         const weekTableHeaderDateArr = this.model.get("weekTableContent").week.headerDateArr;
 
-        let weekTableHeaderHtml = "";
+        let weekTableHeaderHtml = "<th class=\"tableTopLeft\">" + this.model.get("weekTableContent").week.title + "</th>";
 
         if (weekTableHeaderDateArr !== undefined) {
             if (Array.isArray(weekTableHeaderDateArr) && weekTableHeaderDateArr.length > 0) {
-                weekTableHeaderHtml += "<th class=\"tableTopLeft\">" + this.model.get("weekTableContent").week.title + "</th>";
                 for (let i = 0; i < weekTableHeaderDateArr.length; i++) {
                     weekTableHeaderHtml += "<th class=\"tableColumn\">" + weekTableHeaderDateArr[i] + "</th>";
                 }
             }
+        }
+        else {
+            weekTableHeaderHtml += "<th class=\"tableColumn\"></th>";
         }
 
         return weekTableHeaderHtml;
@@ -353,10 +357,9 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      */
     createYearTableHeader: function () {
         const yearTableHeaderArr = this.model.get("yearTableContent").year.headerArr;
-        let yearTableHeaderHtml = "";
+        let yearTableHeaderHtml = "<th class=\"tableTopLeft\">" + this.model.get("yearTableContent").year.title + "</th>";
 
         if (yearTableHeaderArr) {
-            yearTableHeaderHtml += "<th class=\"tableTopLeft\">" + this.model.get("yearTableContent").year.title + "</th>";
             if (Array.isArray(yearTableHeaderArr) && yearTableHeaderArr.length > 0) {
                 for (const key in yearTableHeaderArr) {
                     yearTableHeaderHtml += "<th class=\"tableColumn\">KW " + yearTableHeaderArr[key] + "</th>";
@@ -375,7 +378,8 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         const carsArr = this.model.get("dayTableContent").day.carsArr,
             bicyclesArr = this.model.get("dayTableContent").day.bicyclesArr,
             trucksArr = this.model.get("dayTableContent").day.trucksArr,
-            firstColumn = this.model.get("dayTableContent").day.firstColumn;
+            firstColumn = this.model.get("dayTableContent").day.firstColumn,
+            meansOfTransport = this.model.get("dayTableContent").day.meansOfTransport;
 
         this.$el.find("#dayTableContentHeader").empty();
         this.$el.find("#dayTableContentCars").empty();
@@ -383,9 +387,17 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         this.$el.find("#dayTableContentBicycles").empty();
 
         this.$el.find("#dayTableContentHeader").append(this.createDayTableHeader());
-        this.$el.find("#dayTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
-        this.$el.find("#dayTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
-        this.$el.find("#dayTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+
+        switch (meansOfTransport) {
+            case this.model.get("meansOfTransportFahrraeder"):
+                this.$el.find("#dayTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                break;
+            case this.model.get("meansOfTransportFahrzeuge"):
+                this.$el.find("#dayTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
+                this.$el.find("#dayTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                break;
+            default:
+        }
     },
 
     /**
@@ -396,7 +408,8 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         const bicyclesArr = this.model.get("weekTableContent").week.bicyclesArr,
             trucksArr = this.model.get("weekTableContent").week.trucksArr,
             carsArr = this.model.get("weekTableContent").week.carsArr,
-            firstColumn = this.model.get("weekTableContent").week.firstColumn;
+            firstColumn = this.model.get("weekTableContent").week.firstColumn,
+            meansOfTransport = this.model.get("weekTableContent").week.meansOfTransport;
 
         this.$el.find("#weekTableContentHeader").empty();
         this.$el.find("#weekTableContentCars").empty();
@@ -404,9 +417,17 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         this.$el.find("#weekTableContentBicycles").empty();
 
         this.$el.find("#weekTableContentHeader").append(this.createWeekTableHeader());
-        this.$el.find("#weekTableContentCars").append(this.createTableContent(carsArr, firstColumn, "KW ", " KFZ abs."));
-        this.$el.find("#weekTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "KW ", " SV-Anteil in %"));
-        this.$el.find("#weekTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "KW ", ""));
+
+        switch (meansOfTransport) {
+            case this.model.get("meansOfTransportFahrraeder"):
+                this.$el.find("#weekTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                break;
+            case this.model.get("meansOfTransportFahrzeuge"):
+                this.$el.find("#weekTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
+                this.$el.find("#weekTableContentBicycles").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                break;
+            default:
+        }
     },
 
     /**
@@ -417,7 +438,9 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         const carsArr = this.model.get("yearTableContent").year.carsArr,
             firstColumn = this.model.get("yearTableContent").year.firstColumn,
             trucksArr = this.model.get("yearTableContent").year.trucksArr,
-            bicyclesArr = this.model.get("yearTableContent").year.bicyclesArr;
+            bicyclesArr = this.model.get("yearTableContent").year.bicyclesArr,
+            meansOfTransport = this.model.get("yearTableContent").year.meansOfTransport;
+
 
         this.$el.find("#yearTableContentHeader").empty();
         this.$el.find("#yearTableContentCars").empty();
@@ -425,9 +448,17 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         this.$el.find("#yearTableContentBicycles").empty();
 
         this.$el.find("#yearTableContentHeader").append(this.createYearTableHeader());
-        this.$el.find("#yearTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
-        this.$el.find("#yearTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
-        this.$el.find("#yearTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+
+        switch (meansOfTransport) {
+            case this.model.get("meansOfTransportFahrraeder"):
+                this.$el.find("#yearTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                break;
+            case this.model.get("meansOfTransportFahrzeuge"):
+                this.$el.find("#yearTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
+                this.$el.find("#yearTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                break;
+            default:
+        }
     },
 
     /**
