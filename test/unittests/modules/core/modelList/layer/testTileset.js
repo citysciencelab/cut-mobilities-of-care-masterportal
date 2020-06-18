@@ -105,5 +105,8 @@ describe("core/modelList/layer/tileset", function () {
         it("should combine config options with default options", function () {
             expect(tilesetLayer.combineOptions({a: 1, b: 2}, "url")).to.deep.equal({a: 1, b: 2, maximumScreenSpaceError: "6", url: "url/tileset.json"});
         });
+        it("should filter url parameters", function () {
+            expect(tilesetLayer.combineOptions({a: 1, b: 2}, "url?castToPoint=true")).to.deep.equal({a: 1, b: 2, maximumScreenSpaceError: "6", url: "url/tileset.json"});
+        });
     });
 });

@@ -142,20 +142,16 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     },
 
     /**
-     * Combines default and config settings
+     * Combines default and config settings ignoring optional url parameter.
      * @param   {object} cesium3DTilesetOptions config settings
-     * @param   {string} url                    url
+     * @param   {string} fullurl fullurl
      * @returns {object} combinedOptions
      */
-    combineOptions: function (cesium3DTilesetOptions, url) {
-        const options = Object.assign(this.get("cesium3DTilesetDefaults"), cesium3DTilesetOptions);
+    combineOptions: function (cesium3DTilesetOptions, fullurl) {
+        const options = Object.assign(this.get("cesium3DTilesetDefaults"), cesium3DTilesetOptions),
+            url = fullurl.split("?")[0] + "/tileset.json";
 
-        if (url && url.endsWith("tileset.json")) {
-            options.url = url;
-        }
-        else {
-            options.url = url + "/tileset.json";
-        }
+        options.url = url;
 
         return options;
     },
