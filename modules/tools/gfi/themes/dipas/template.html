@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <div class = "dipas-gfi-content">
-    <% if (Object.keys(gfiAttributesDipas).indexOf("Thema") > -1) { %>
+    <% if (Object.keys(gfiContent['allProperties']).indexOf("Thema") > -1) { %>
         <div class="dipas-gfi-icon"><img src="<%= iconPath %>"></div>
-        <div class = "dipas-gfi-thema"><%= gfiAttributesDipas.Thema %></div>
+        <div class = "dipas-gfi-thema"><%= gfiContent['allProperties'].Thema %></div>
     <% } %>
 
-    <% if (Object.keys(gfiAttributesDipas).indexOf("name") > -1) { %>
-        <% if (uiStyle !== "TABLE" && Object.keys(gfiAttributesDipas).indexOf("link") > -1) { %>
-            <div class = "dipas-gfi-name"><a href="<%= gfiAttributesDipas.link %>" target="_top"><%= gfiAttributesDipas.name %></a></div>
+    <% if (Object.keys(gfiContent[0]).indexOf("name") > -1) { %>
+        <% if (uiStyle !== "TABLE" && Object.keys(gfiContent[0]).indexOf("link") > -1) { %>
+            <div class = "dipas-gfi-name"><a href="<%= gfiContent[0].link %>" target="_top"><%= gfiContent[0].name %></a></div>
         <% } else { %>
-            <div class = "dipas-gfi-name"><%= gfiAttributesDipas.name %></div>
+            <div class = "dipas-gfi-name"><%= gfiContent[0].name %></div>
         <% } %>
     <% } %>
 
-    <% if (Object.keys(gfiAttributesDipas).indexOf("description") > -1) { %>
-        <div class = "dipas-gfi-description"><%= gfiAttributesDipas.description %></div>
+    <% if (Object.keys(gfiContent[0]).indexOf("description") > -1) { %>
+        <div class = "dipas-gfi-description"><%= gfiContent[0].description %></div>
     <% } %>
 
-    <% if (uiStyle !== "TABLE" && Object.keys(gfiAttributesDipas).indexOf("link") > -1) { %>
-        <a class="dipas-gfi-more" href="<%= gfiAttributesDipas.link %>" target="_top">mehr</a>
+    <% if (uiStyle !== "TABLE" && Object.keys(gfiContent[0]).indexOf("link") > -1) { %>
+        <a class="dipas-gfi-more" href="<%= gfiContent[0].link %>" target="_top">mehr</a>
     <% } %>
 </div>
+
+
