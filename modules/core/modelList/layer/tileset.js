@@ -122,12 +122,23 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         const options = this.combineOptions(this.get("cesium3DTilesetOptions"), this.get("url")),
             tileset = new Cesium.Cesium3DTileset(options);
 
+        tileset.style = this.styling();
         this.setTileSet(tileset);
 
         tileset.tileVisible.addEventListener(this.applyStyle.bind(this));
         tileset.tileUnload.addEventListener((tile) => {
             delete tile[lastUpdatedSymbol];
         });
+    },
+
+    styling: function () {
+        const styleModel = this.get("styleId") ? Radio.request("StyleList", "returnModelById", this.get("styleId")) : undefined;
+        let style;
+
+        if (styleModel) {
+            style = styleModel.createStyle()[0];
+        }
+        return style;
     },
 
     /**

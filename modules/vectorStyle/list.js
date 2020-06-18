@@ -151,7 +151,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         if (layers) {
             layers.forEach(layer => {
-                if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings") {
+                if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings" || layer.typ === "TileSet3D") {
                     if (layer.hasOwnProperty("styleId")) {
                         styleIds.push(layer.styleId);
                     }
