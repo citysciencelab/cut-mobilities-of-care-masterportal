@@ -108,7 +108,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
                     // at coords '550115.420 5935760.220'
                     counter = 0;
                     do {
-                        expect(counter++).to.be.below(10);
+                        expect(counter++).to.be.below(25);
                         await clickFeature(driver, [550115.420, 5935760.220]);
                         await driver.wait(new Promise(r => setTimeout(r, 100)));
                     } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
