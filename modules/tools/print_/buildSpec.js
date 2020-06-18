@@ -922,7 +922,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             const wmsLegendObject = {
                 legendType: "wmsGetLegendGraphic",
                 geometryType: "",
-                imageUrl: encodeURI(url),
+                imageUrl: url,
                 color: "",
                 label: ""
             };
