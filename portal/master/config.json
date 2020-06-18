@@ -179,15 +179,15 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "bilingual"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Anzahl Schüler",
+              "schwerpunktschule": "Schwerpunktschule",
+              "bilingual": "Bilingual"
+            }
           },
           {
             "layerId": "8712",
@@ -203,17 +203,17 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Schülerzahl",
+              "schwerpunktschule": "Schwerpunktschule Inklusion",
+              "fremdsprache": "Fremdsprachen",
+              "fremdsprache_mit_klasse": "Fremdsprachen ab Klassenstufe",
+              "schulische_ausrichtung": "Schwerpunkte in den Angeboten"
+            }
           },
           {
             "layerId": "8712",
@@ -229,16 +229,16 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Schülerzahl",
+              "fremdsprache": "Fremdsprachen",
+              "fremdsprache_mit_klasse": "Fremdsprachen ab Klassenstufe",
+              "schulische_ausrichtung": "Schwerpunkte in den Angeboten"
+            }
           },
           {
             "layerId": "8712",
@@ -253,13 +253,13 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "ganztagsform",
-              "foerderart",
-              "abschluss"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "ganztagsform": "Ganztagsform",
+              "foerderart": "Förderart",
+              "abschluss": "Abschluss"
+            }
           },
           {
             "layerId": "1711",
@@ -267,10 +267,10 @@
             "isSelected": true,
             "name": "Krankenhäuser",
             "predefinedRules": [],
-            "attributeWhiteList": [
-              "teilnahme_geburtsklinik",
-              "teilnahme_notversorgung"
-            ]
+            "attributeWhiteList": {
+              "teilnahme_geburtsklinik": "Geburtshilfe",
+              "teilnahme_notversorgung": "Not- und Unfallversorgung"
+            }
           }
         ]
       },

@@ -97,11 +97,11 @@
                 "topicsSearch": "Suche nach Themen / Geo-Daten",
                 "parcelSearch": "Flurstückssuche",
                 "generalInfoHelp1": "Es müssen mindestens drei Buchstaben in die Suchmaske eingegeben werden <strong>(1)</strong>, um Vorschläge zu erhalten. Es werden maximal fünf Vorschläge, nach dem Zufallsprinzip, angezeigt <strong>(2)</strong>. Ein Icon vor und eine Bezeichnung nach dem Vorschlagstreffer <strong>(3)</strong> zeigen an, um welche \"Trefferkategorie\" es sich handelt.",
-                "generalInfoHelp2": "Durch einen Mausklick auf die Lupe <strong>(1)</strong> oder durch Drücken der Enter-/Returntaste, werden alle Ergebnisse kategorisiert aufgelistet, inklusive der Anzahl der Treffer pro Kategorie <strong>(2)</strong>. Durch einen weiteren Klick auf eine der Kategorien werden die jeweiligen Treffer angzeigt <strong>(3)</strong>.",
-                "addressHelp": "Geben Sie die gesuchte Adresse in die Suchmaske ein. Durch drücken die Enter-/Returntaste bzw. der Lupe oder durch einen Mausklick auf die Adresse in der Vorschlagsliste, zoomt die Karte zur gesuchten Adresse. Zusätzlich wird die geanue Position die Adresse durch ein Icon auf der Karte angezeigt.",
+                "generalInfoHelp2": "Durch einen Mausklick auf die Lupe <strong>(1)</strong> oder durch Drücken der Enter-/Returntaste, werden alle Ergebnisse kategorisiert aufgelistet, inklusive der Anzahl der Treffer pro Kategorie <strong>(2)</strong>. Durch einen weiteren Klick auf eine der Kategorien werden die jeweiligen Treffer angezeigt <strong>(3)</strong>.",
+                "addressHelp": "Geben Sie die gesuchte Adresse in die Suchmaske ein. Durch drücken die Enter-/Returntaste bzw. der Lupe oder durch einen Mausklick auf die Adresse in der Vorschlagsliste, zoomt die Karte zur gesuchten Adresse. Zusätzlich wird die genaue Position die Adresse durch ein Icon auf der Karte angezeigt.",
                 "houseNumberHelp": "Geben Sie die entsprechende Straße in die Suchmaske ein. Sobald die Adresssuche als Ergebnis nur noch eine Straße findet, wird automatisch die Hausnummernsuche ausgeführt und die Vorschlagsliste füllt sich mit Adressen. Durch drücken die Enter-/Returntaste bzw. der Lupe, werden alle Hausnummern der Straße aufgelistet.",
-                "topicsHelp": "Mit der Themensuche können Sie Suchbegriffe eingeben (z.B. Schutzgebiete, Wahlen, Wohnungsbau usw.) und nach verfügbaren Geodaten zu diesem Thema suchen. Wenn Sie ein Resultat auswählen, wird es dirket in der Karte dargestellt.",
-                "parcelHelp": "Über die Flurstrücksnummer und die Gemarkungsnummer können Sie nach Flurstücken suchen. Geben Sie einfach die Gemarkungsnummer gefolgt von der Flurstücksnummer <strong>(1)</strong> (mit oder ohne Leerzeichen) in die Suchmaske ein und drücken die Enter-/Retruntaste bzw. die Lupe. Daraufhin wird die Karte auf das gesuchte Flurstück zentriert <strong>(2)</strong>."
+                "topicsHelp": "Mit der Themensuche können Sie Suchbegriffe eingeben (z.B. Schutzgebiete, Wahlen, Wohnungsbau usw.) und nach verfügbaren Geodaten zu diesem Thema suchen. Wenn Sie ein Resultat auswählen, wird es direkt in der Karte dargestellt.",
+                "parcelHelp": "Über die Flurstrücksnummer und die Gemarkungsnummer können Sie nach Flurstücken suchen. Geben Sie einfach die Gemarkungsnummer gefolgt von der Flurstücksnummer <strong>(1)</strong> (mit oder ohne Leerzeichen) in die Suchmaske ein und drücken die Enter-/Returntaste bzw. die Lupe. Daraufhin wird die Karte auf das gesuchte Flurstück zentriert <strong>(2)</strong>."
             },
             "measureTool": {
                 "title": "Hilfe - Strecke/Fläche messen",
@@ -158,7 +158,7 @@
             "addWMS": {
                 "completeMessage": "Die Layer des angeforderten WMS wurden dem Themenbaum unter dem Menüpunkt <strong>Externe Fachdaten</strong> hinzugefügt!",
                 "error": "Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!",
-                "errorMessage": "Der angegebene Dienst konnte nicht geladen werden. Bitte stellen Sie sicher, dass die URL richtig angegben wurde.<br><br> Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes mit folgendem Hinweis:<br><strong>Es soll sichergestellt werden, dass ein CORS-Header für den Dienst gesetzt ist. Dies wird von der <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> im Kapitel 4.7.1 empfohlen.</strong>",
+                "errorMessage": "Der angegebene Dienst konnte nicht geladen werden. Bitte stellen Sie sicher, dass die URL richtig angegeben wurde.<br><br> Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes mit folgendem Hinweis:<br><strong>Es soll sichergestellt werden, dass ein CORS-Header für den Dienst gesetzt ist. Dies wird von der <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> im Kapitel 4.7.1 empfohlen.</strong>",
                 "placeholder": "Hier bitte die WMS-URL eingeben.",
                 "textExample": "Beispiel: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
                 "textLoadLayer": "Layer Laden"
@@ -302,7 +302,7 @@
                 "fromPlaceholder": "Von",
                 "toPlaceholder": "Bis",
                 "setStartTimeText": "Startzeitpunkt vorgeben",
-                "routingError": "Fehlermeldung bei Routenberechung",
+                "routingError": "Fehlermeldung bei Routenberechnung",
                 "enterStartDestHoverText": "Start- und Ziel eingeben",
                 "enterOptionsText": "Optionen eingeben",
                 "calculateRoute": "Route berechnen",

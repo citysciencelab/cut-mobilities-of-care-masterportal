@@ -36,8 +36,8 @@ const fs = require("fs"),
 
             return xml;
         },
-        getDescribeFeatureTypeResponse: function () {
-            const xml = fs.readFileSync(this.get("basepath") + "resources/testDescribeFeatureTypeResponse.xml", "utf8"),
+        getDescribeFeatureTypeResponse: function (path) {
+            const xml = fs.readFileSync(this.get("basepath") + path, "utf8"),
                 xmlObject = new window.DOMParser().parseFromString(xml, "text/xml");
 
             return xmlObject;

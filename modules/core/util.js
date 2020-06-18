@@ -988,6 +988,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         const arrayWithStrings = [];
 
         array.forEach(element => arrayWithStrings.push(String(element)));
+
         return arrayWithStrings;
     },
 

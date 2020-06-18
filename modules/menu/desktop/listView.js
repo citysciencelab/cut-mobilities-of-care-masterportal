@@ -53,7 +53,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
         this.renderMain();
         this.render(firstTime);
         this.renderSelectedList();
-        Radio.trigger("Autostart", "initializedModul", "tree");
+        Radio.trigger("Autostart", "initializedModule", "tree");
     },
 
     /**

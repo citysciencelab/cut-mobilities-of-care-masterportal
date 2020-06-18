@@ -1221,7 +1221,7 @@ Filterregel die die Daten immer vorfiltert.
 
 #### Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject
 Ein AttributeWhiteList Objekt kann entweder ein String sein, welcher den Attributnamen repräsentiert.
-Er kann aber auch ein Objekt sein.
+Er kann aber auch ein Objekt sein. Erfolgt der Eintrag als Objekt, so kann eine Umbennung der zu filternden Attribute vorgenommen werden. Der Schlüssel muss dabei der originale Attributname sein. Der zugehörige Wert ist der alternative Name.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|

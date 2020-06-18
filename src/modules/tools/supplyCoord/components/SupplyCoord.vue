@@ -25,7 +25,8 @@ export default {
             "renderToWindow",
             "resizableWindow",
             "glyphicon",
-            "title"
+            "title",
+            "deactivateGFI"
         ]),
         active: {
             get () {
@@ -134,18 +135,26 @@ export default {
     },
     created () {
         this.$on("close", this.close);
+        this.initialize();
     },
     /**
      * Put initialize here if mounting occurs after config parsing
      * @returns {void}
      */
     mounted () {
-        this.initialize();
+        this.activateByUrlParam();
     },
     methods: {
         ...mapActions("Tools/SupplyCoord", [
+            "activateByUrlParam",
             "initialize"
         ]),
+        copyToClipboard ({target}) {
+            target.select();
+            // seems to be required for mobile devices
+            target.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+        },
         selectionChanged (event) {
             this.currentSelection = event.target.value;
             this.changedPosition(event.target.value);
@@ -267,6 +276,7 @@ export default {
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
+        :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
             <form
@@ -311,6 +321,7 @@ export default {
                             class="form-control"
                             readonly
                             contenteditable="false"
+                            @click="copyToClipboard"
                         >
                     </div>
                 </div>
@@ -328,6 +339,7 @@ export default {
                             class="form-control"
                             readonly
                             contenteditable="false"
+                            @click="copyToClipboard"
                         >
                     </div>
                 </div>

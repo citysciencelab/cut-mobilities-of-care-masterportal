@@ -269,7 +269,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         }
         spec = spec.toJSON();
 
-        spec = Radio.request("Util", "omit", spec, "uniqueIdList");
+        spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
         this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
     },
 
@@ -673,6 +673,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      */
     setMapfishServiceUrl: function (value) {
         this.set("mapfishServiceUrl", value);
+    },
+
+    /**
+     * Setter for placeholder.
+     * @param {string} value - Placeholder for the title.
+     * @returns {void}
+     */
+    setTitlePlaceholder: function (value) {
+        this.set("titlePlaceholder", value);
     },
 
     /**

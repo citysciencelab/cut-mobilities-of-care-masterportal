@@ -117,6 +117,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
      */
     setTitle: function (evt) {
         this.model.setTitle(evt.target.value);
+        this.model.setTitlePlaceholder(evt.target.value);
     },
 
     /**
