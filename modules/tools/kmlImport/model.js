@@ -75,7 +75,7 @@ const ImportTool = Tool.extend(/** @lends ImportTool.prototype */{
     importKML: function () {
         this.getFeaturesFromKML();
         this.transformFeatures();
-        this.styleFeatures(this.get("features"));
+        //this.styleFeatures(this.get("features"));
         this.featuresToMap();
         this.emptyInput();
 
