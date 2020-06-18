@@ -12,7 +12,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function GfiTests ({builder, url, resolution}) {
-    describe("Gfi", function () {
+    describe.only("Gfi", function () {
         const exampleHospital = {
             coord: [551370.202, 5937222.981],
             name: "Asklepios Westklinikum Hamburg",
