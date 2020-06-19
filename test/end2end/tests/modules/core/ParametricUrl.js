@@ -206,8 +206,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
         }
 
         if (isMaster(url) || isCustom(url)) {
-            // TODO resolve timeout issue
-            it.skip("?featureid= displays markers for features", async function () {
+            it.only("?featureid= displays markers for features", async function () {
                 await loadUrl(driver, `${url}?featureid=18,26`, mode);
                 await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
                     {coordinate: [568814.3835, 5931819.377], image: "https://geoportal-hamburg.de/lgv-config/img/location_eventlotse.svg"},
