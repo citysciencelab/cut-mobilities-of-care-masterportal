@@ -15,7 +15,8 @@ const BKGSearchModel = Backbone.Model.extend({
         ajaxRequests: {},
         typeOfRequest: "",
         zoomToResult: false,
-        idCounter: 0
+        idCounter: 0,
+        zoomLevel: 7
     },
     /**
      * @description Initialisierung der BKG Suggest Suche
@@ -195,7 +196,7 @@ const BKGSearchModel = Backbone.Model.extend({
             Radio.trigger("MapMarker", "hideMarker");
         }
         if (this.get("zoomToResult")) {
-            Radio.trigger("MapMarker", "zoomToBKGSearchResult", data);
+            Radio.trigger("MapMarker", "zoomToBKGSearchResult", data, this.get("zoomLevel"));
         }
     },
     /**
