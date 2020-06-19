@@ -46,7 +46,7 @@ describe("snippets/datepicker/model", function () {
 
     describe("update values silently works also", function () {
         it("input values are set like they should", function () {
-            const today = moment("2019, 06, 17").format("YYYY-MM-DD")
+            const today = moment("2019, 06, 17").format("YYYY-MM-DD");
 
             model.updateValuesSilently(today);
 
