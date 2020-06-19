@@ -510,11 +510,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         if (!datepicker) {
             this.set("dayDatepicker", new SnippetDatepickerModel({
                 displayName: "Tag",
+                multidate: 5,
                 preselectedValue: moment().toDate(),
                 startDate: startDate.toDate(),
                 endDate: moment().toDate(),
                 type: "datepicker",
-                autoclose: true,
                 inputs: $("#dayDateInput"),
                 todayHighlight: false
             }));
@@ -569,13 +569,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         if (!datepicker) {
             this.set("weekDatepicker", new SnippetDatepickerModel({
                 preselectedValue: moment().toDate(),
+                multidate: 5,
                 startDate: startDate.toDate(),
                 endDate: moment().toDate(),
                 type: "datepicker",
                 selectWeek: true,
                 inputs: $("#weekDateInput"),
                 calendarWeeks: true,
-                autoclose: true,
                 format: {
                     toDisplay: function (date) {
                         return moment(date).startOf("isoWeek").format("DD.MM.YYYY") + "-" + moment(date).endOf("isoWeek").format("DD.MM.YYYY");
@@ -600,6 +600,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {void}
      */
     weekDatepickerValueChanged: function (evt, date) {
+        this.get("weekDatepicker").updateValuesSilently(date);
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
@@ -637,13 +638,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             this.set("yearDatepicker", new SnippetDatepickerModel({
                 displayName: "Tag",
                 preselectedValue: moment().toDate(),
+                multidate: 5,
                 startDate: startDate.toDate(),
                 endDate: moment().toDate(),
                 type: "datepicker",
                 minViewMode: "years",
                 maxViewMode: "years",
                 inputs: $("#yearDateInput"),
-                autoclose: true,
                 format: "yyyy"
             }));
             this.listenTo(this.get("yearDatepicker"), {

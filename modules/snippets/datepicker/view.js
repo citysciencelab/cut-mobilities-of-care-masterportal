@@ -1,7 +1,6 @@
 import Template from "text-loader!./template.html";
 import "bootstrap-datepicker";
 import "bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min";
-import moment from "moment";
 
 const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype */{
     /**
@@ -47,6 +46,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
 
         datepickerContainer.datepicker({
             todayHighlight: date.get("todayHighlight"),
+            multidate: date.get("multidate"),
             language: date.get("language"),
             defaultViewDate: date.get("date"),
             startDate: date.get("startDate"),
@@ -68,7 +68,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             date.get("inputs").on("changeDate", this.changeDate.bind(this), null);
 
             // listener to set classes for selectWeek
-            if (date.get("selectWeek")) {
+            if (this.model.get("selectWeek")) {
                 date.get("inputs").on("show", this.showWeekpicker.bind(this), null);
             }
         }
@@ -79,13 +79,21 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
 
     /**
      * Is triggered when the selected date of the datepicker changes. Sets value to the model.
-     * @param   {evt} evt Event fired by the datepicker
+     * @param {Event} evt changeData Event
      * @returns {void}
      */
     changeDate: function (evt) {
-        const newDate = evt.date;
+        if (this.model.get("silentChangeEvent") === false) {
+            return;
+        }
 
-        this.model.updateValues(newDate);
+        if (this.model.get("selectWeek")) {
+            this.model.set("silentChangeEvent", false);
+            this.model.get("inputs").datepicker("clearDates");
+            this.model.get("inputs").datepicker("setDates", this.model.getDatesForWeekPicker(evt.dates));
+            this.model.set("silentChangeEvent", true);
+        }
+        this.model.updateValues(evt.dates);
     },
 
     /**
@@ -95,15 +103,6 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
      * @returns {void}
      */
     updateDOM: function (value) {
-        const inputs = this.model.get("valuesCollection").at(0).get("inputs");
-
-        if (inputs) {
-            // input must be setted like 25.03.2020
-            inputs.datepicker("update", moment(value).format("DD.MM.YYYY"));
-
-            return;
-        }
-
         this.$el.find(".datepicker-container").datepicker("update", value);
     },
 

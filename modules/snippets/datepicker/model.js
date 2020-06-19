@@ -3,18 +3,23 @@ import ValueModel from "../value/model";
 import moment from "moment";
 
 const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype */{
+
     /**
      * @class DatepickerModel
      * @extends SnippetModel
      * @memberof Snippets.Datepicker
      * @constructs
      * @property {Date} preselectedValue Initial value.
+     * @property {Boolean|Number} multidate Enable multidate picking
+     * @property {Boolean} selectWeek Enable week picking
      * @property {Date} startDate earliest selectable date
      * @property {Date} endDate latest selectable date
-     * @param {object} model Model to be used in this view
+     * @param {object} attributes Model attributes to be used in this view
      */
     defaults: Object.assign({}, SnippetModel.prototype.defaults, {
-        preselectedValue: null
+        preselectedValue: null,
+        multidate: false,
+        selectWeek: false
     }),
 
     /**
@@ -22,13 +27,17 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
      * @param   {Backbone.Model} model Model attributes to be used in this view
      * @returns {void}
      */
-    initialize: function (model) {
+    initialize: function (attributes) {
         this.superInitialize();
-        this.addValueModel(model);
+        this.addValueModel(attributes);
         this.listenTo(this.get("valuesCollection"), {
-            "change:date": function (valueModel, value) {
-                this.triggerValuesChanged(model, value);
-                this.trigger("updateDOM", value);
+            "change:date": function (model, value) {
+                if (Array.isArray(value)) {
+                    this.triggerValuesChanged(model, value);
+                }
+                else {
+                    this.triggerValuesChanged(model, [value]);
+                }
             }
         });
     },
@@ -42,6 +51,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
     addValueModel: function (model) {
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
+            multidate: this.get("multidate"),
             date: model.preselectedValue ? model.preselectedValue : moment().toDate(),
             startDate: model.startDate,
             endDate: model.endDate,
@@ -53,7 +63,6 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
             autoclose: model.autoclose ? model.autoclose : false,
             type: this.get("type"),
             todayHighlight: model.todayHighlight ? model.todayHighlight : false,
-            selectWeek: model.selectWeek ? model.selectWeek : false,
             language: model.language ? model.language : "de"
         }));
     },
@@ -86,8 +95,38 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
         return {
             attrName: this.get("name"),
             type: this.get("type"),
-            values: this.get("valuesCollection").pluck("date")
+            values: this.get("valuesCollection").at(0).get("date")
         };
+    },
+
+    /**
+     * remove dates if they are in the same week
+     * @param {Date[]} dates - selected days
+     * @returns {Date[]} dates - dates displayed in the week datepicker
+     */
+    getDatesForWeekPicker: function (dates) {
+        const startingDaysOfWeek = [],
+            indexOfDuplicates = [];
+
+        // get all week starting days per date
+        dates.forEach(date => {
+            startingDaysOfWeek.push(moment(date).startOf("isoWeek").format("YYYY-MM-DD"));
+        });
+
+        // find the index of the starting dates that exist twice
+        startingDaysOfWeek.forEach((startingDay, index) => {
+            if (startingDaysOfWeek.lastIndexOf(startingDay) !== index) {
+                indexOfDuplicates.push(startingDaysOfWeek.lastIndexOf(startingDay));
+                indexOfDuplicates.push(startingDaysOfWeek.indexOf(startingDay));
+            }
+        });
+
+        // remove all dates of the same week from back to front
+        indexOfDuplicates.sort().reverse().forEach(duplicate => {
+            dates.splice(duplicate, 1);
+        });
+
+        return dates;
     }
 });
 
