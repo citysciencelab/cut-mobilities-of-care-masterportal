@@ -252,6 +252,10 @@ export class TrafficCountApi {
 
             // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
             this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                if (payload && payload.hasOwnProperty("retained") && payload.retained === true) {
+                    // this message is a retained message, so its content is already in sum
+                    return;
+                }
                 if (payload && payload.hasOwnProperty("result")) {
                     sum += payload.result;
 
@@ -323,6 +327,10 @@ export class TrafficCountApi {
 
                 // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
                 this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                    if (payload && payload.hasOwnProperty("retained") && payload.retained === true) {
+                        // this message is a retained message, so its content is already in sum
+                        return;
+                    }
                     if (!payload || !payload.hasOwnProperty("result")) {
                         (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateYear: the payload does not include a result", payload);
                     }
@@ -378,6 +386,10 @@ export class TrafficCountApi {
 
                 // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
                 this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                    if (payload && payload.hasOwnProperty("retained") && payload.retained === true) {
+                        // this message is a retained message, so its content is already in sum
+                        return;
+                    }
                     if (!payload || !payload.hasOwnProperty("result")) {
                         (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateTotal: the payload does not include a result", payload);
                     }
@@ -565,6 +577,10 @@ export class TrafficCountApi {
 
                     // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
                     this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                        if (payload && payload.hasOwnProperty("retained") && payload.retained === true) {
+                            // this message is a retained message, so its content is already in sum
+                            return;
+                        }
                         if (payload && payload.hasOwnProperty("result") && payload.hasOwnProperty("phenomenonTime")) {
                             const datetime = moment(this.parsePhenomenonTime(payload.phenomenonTime)).format("YYYY-MM-DD HH:mm:ss");
 
