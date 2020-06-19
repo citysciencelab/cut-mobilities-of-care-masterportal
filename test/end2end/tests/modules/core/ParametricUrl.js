@@ -221,7 +221,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
             expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
         });
 
-        it.only("?isinitopen= allows opening tools initially", async function () {
+        it("?isinitopen= allows opening tools initially", async function () {
             const toolName = "draw",
                 checkSelector = By.css("div#window #drawPoint");
 
