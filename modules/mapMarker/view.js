@@ -217,11 +217,12 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     * @fires Core#RadioTriggerMapZoomToExtent
     * @fires Core#RadioTriggerMapViewSetCenter
     * @param {string} data - Die Data-Object des request.
+    * @param {number} zoomLevel - The level to zoom.
     * @returns {void}
     */
-    zoomToBKGSearchResult: function (data) {
-        if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
-            Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, this.model.get("zoomLevel"));
+    zoomToBKGSearchResult: function (data, zoomLevel) {
+        if (data.features.length !== 0 && !_.isNull(data.features[0].geometry) && data.features[0].geometry.type === "Point") {
+            Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, zoomLevel !== undefined ? zoomLevel : this.model.get("zoomLevel"));
             this.showMarker(data.features[0].geometry.coordinates);
         }
         else if (data.features.length !== 0 && data.features[0].properties !== null && data.features[0].properties.bbox !== null &&
