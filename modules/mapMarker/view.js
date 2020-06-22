@@ -221,7 +221,7 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     * @returns {void}
     */
     zoomToBKGSearchResult: function (data, zoomLevel) {
-        if (data.features.length !== 0 && !_.isNull(data.features[0].geometry) && data.features[0].geometry.type === "Point") {
+        if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
             Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, zoomLevel !== undefined ? zoomLevel : this.model.get("zoomLevel"));
             this.showMarker(data.features[0].geometry.coordinates);
         }
