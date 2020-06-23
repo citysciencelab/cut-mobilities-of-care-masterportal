@@ -10,7 +10,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
      * @memberof Snippets.Datepicker
      * @constructs
      * @property {Date} preselectedValue Initial value.
-     * @property {Boolean|Number} multidate Enable multidate picking
+     * @property {(Boolean|Number)} multidate Enable multidate picking
      * @property {Boolean} selectWeek Enable week picking
      * @property {Date} startDate earliest selectable date
      * @property {Date} endDate latest selectable date
