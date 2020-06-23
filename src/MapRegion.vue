@@ -39,6 +39,7 @@ export default {
         <Alerting />
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
         <SupplyCoord v-if="configJson" />
+        <KmlImport v-if="configJson" />
         <template v-if="configJson">
             <component
                 :is="$options.components[addonKey]"
