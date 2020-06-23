@@ -131,18 +131,19 @@ export default {
          */
         createInteraction () {
             const pr = getProjections();
+            let pointerMove = null;
 
             // EPSG:25832 must be the first one
-            pr.sort(function(a, b){
-                if(a.name.indexOf("25832") > -1) {
-                     return -1; 
+            pr.sort((a) => {
+                if (a.name.indexOf("25832") > -1) {
+                    return -1;
                 }
                 return 0;
-            })
+            });
             this.setProjections(pr);
 
             this.setMapProjection(this.projection);
-            const pointerMove = new Pointer(
+            pointerMove = new Pointer(
                 {
                     handleMoveEvent: function (evt) {
                         this.checkPosition(evt.coordinate);
