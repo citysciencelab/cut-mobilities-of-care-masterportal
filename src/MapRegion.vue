@@ -1,6 +1,7 @@
 <script>
 import Alerting from "./modules/alerting/components/Alerting.vue";
 import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
+import KmlImport from "./modules/tools/kmlImport/components/KmlImport.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
 import {mapState} from "vuex";
@@ -11,6 +12,7 @@ export default {
         ControlBar,
         Alerting,
         SupplyCoord,
+        KmlImport,
         Footer
     },
     computed: {

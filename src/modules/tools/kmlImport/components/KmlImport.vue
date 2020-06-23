@@ -134,6 +134,8 @@ export default {
         }
     },
     created () {
+        console.log("OKOKOKOKOOK");
+        
         this.$on("close", this.close);
         this.initialize();
     },

@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
 import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
+import KmlImport from "../modules/tools/kmlImport/store/indexKmlImport";
 import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
@@ -25,7 +26,8 @@ const store = new Vuex.Store({
         Tools: {
             namespaced: true,
             modules: {
-                SupplyCoord // hier die stores von weiteren Tools eintragen
+                SupplyCoord, // hier die stores von weiteren Tools eintragen
+                KmlImport
             }
         },
         controls: {

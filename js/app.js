@@ -257,10 +257,6 @@ async function loadApp () {
                 new SaveSelectionView({model: tool});
                 break;
             }
-            case "kmlimport": {
-                new ImportView({model: tool});
-                break;
-            }
             /**
              * wfsFeatureFilter
              * @deprecated in 3.0.0
