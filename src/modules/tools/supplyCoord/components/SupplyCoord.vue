@@ -3,7 +3,10 @@ import Tool from "../../Tool.vue";
 import {Pointer} from "ol/interaction.js";
 import {toStringHDMS, toStringXY} from "ol/coordinate.js";
 import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
-import {mapActions, mapState} from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
+import getters from "../store/gettersSupplyCoord";
+import mutations from "../store/mutationsSupplyCoord";
+import isMobile from "../../../../utils/isMobile";
 
 export default {
     name: "SupplyCoord",
@@ -13,136 +16,46 @@ export default {
     data () {
         return {
             coordinatesEastingField: "",
-            coordinatesNorthingField: "",
-            storePath: this.$store.state.Tools.SupplyCoord
+            coordinatesNorthingField: ""
         };
     },
     computed: {
-        ...mapState([
-            "configJson"
-        ]),
-        ...mapState("Tools/SupplyCoord", [
-            "renderToWindow",
-            "resizableWindow",
-            "glyphicon",
-            "title",
-            "deactivateGFI"
-        ]),
-        active: {
-            get () {
-                return this.storePath.active;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/active", val);
-            }
-        },
-        currentProjectionName: {
-            get () {
-                return this.storePath.currentProjectionName;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/currentProjectionName", val);
-            }
-        },
+        ...mapGetters("Tools/SupplyCoord", Object.keys(getters)),
+        ...mapGetters("Map", ["map", "projection"]),
+        /**
+         * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
+         */
         currentSelection: {
             get () {
-                return this.storePath.currentSelection;
+                return this.$store.state.Tools.SupplyCoord.currentSelection;
             },
             set (newValue) {
-                this.$store.commit("Tools/SupplyCoord/currentSelection", newValue);
-            }
-        },
-        mapProjection: {
-            get () {
-                return this.storePath.mapProjection;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/mapProjection", val);
-            }
-        },
-        projections: {
-            get () {
-                return this.storePath.projections;
-            },
-            set (val) {
-                // set currect projection to one in the list of projections
-                const found = val.filter(projection => projection.name === this.currentProjectionName);
-
-                if (found.length === 0) {
-                    this.currentProjectionName = val[0].name;
-                    this.currentSelection = val[0].name;
-                }
-                this.$store.commit("Tools/SupplyCoord/projections", val);
-            }
-        },
-        positionMapProjection: {
-            get () {
-                return this.storePath.positionMapProjection;
-            }, set (val) {
-                this.$store.commit("Tools/SupplyCoord/positionMapProjection", val);
-            }
-        },
-        selectPointerMove: {
-            get () {
-                return this.storePath.selectPointerMove;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/selectPointerMove", val);
-            }
-        },
-        updatePosition: {
-            get () {
-                return this.storePath.updatePosition;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/updatePosition", val);
+                this.setCurrentSelection(newValue);
             }
         }
     },
     watch: {
-        /**
-         * since the parsing of the configJson happens after mount,
-         * we need to wait with initialize until configJson is parsed to store
-         * either here or centrally in App / MapRegionlistening
-         * if mounting occurs after config parsing, put the init function to mounted lifecycle hook
-         * @listens mapState#configJson
-         * @returns {void}
-         */
-        configJson () {
-            // this.initialize();
-        },
         active (newValue) {
-            const myBus = Backbone.Events,
-                that = this;
-
-            Radio.trigger("MapMarker", "hideMarker");
-            Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
             if (newValue) {
                 // active is true
-                myBus.listenTo(Radio.channel("Map"), {
-                    clickedWindowPosition: function (evt) {
-                        that.positionClicked(evt.coordinate);
-                    }
-                });
+                this.addPointerMoveHandlerToMap(this.setCoordinates);
                 this.createInteraction();
                 this.changedPosition();
-            }
-            else {
-                this.updatePosition = true;
-                this.removeInteraction();
-                myBus.stopListening(Radio.channel("Map", "clickedWindowPosition"));
             }
         }
     },
     created () {
         this.$on("close", this.close);
-        this.initialize();
     },
     /**
      * Put initialize here if mounting occurs after config parsing
      * @returns {void}
      */
     mounted () {
+        this.initialize();
+        if (this.isActive) {
+            this.setActive(true);
+        }
         this.activateByUrlParam();
     },
     methods: {
@@ -150,100 +63,163 @@ export default {
             "activateByUrlParam",
             "initialize"
         ]),
+        ...mapMutations("Tools/SupplyCoord", Object.keys(mutations)),
+        ...mapActions("Map", {
+            addPointerMoveHandlerToMap: "addPointerMoveHandler",
+            addInteractionToMap: "addInteraction",
+            removeInteractionFromMap: "removeInteraction"}),
+        /*
+        * Function to initiate the copying of the coordinates from the inputfields.
+        * @fires Util#RadioTriggerUtilCopyToClipboard
+        * @param {event} evt Click Event
+        * @returns {void}
+        */
         copyToClipboard ({target}) {
             target.select();
             // seems to be required for mobile devices
             target.setSelectionRange(0, 99999);
             document.execCommand("copy");
         },
+        /**
+         * Called if selection of scale changed. Sets the current scale to state and changes the position.
+         * @param {object} event changed selection event
+         * @returns {void}
+         */
         selectionChanged (event) {
-            this.currentSelection = event.target.value;
+            this.setCurrentSelection(event.target.value);
             this.changedPosition(event.target.value);
         },
-        positionClicked: function (position) {
-            const isViewMobile = Radio.request("Util", "isViewMobile"),
-                updatePosition = isViewMobile ? true : this.updatePosition;
+        /**
+         * Remembers the projection and shows mapmarker at the given position.
+         * @param {object} event - pointerdown-event, to get the position from
+         * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+         * @returns {void}
+         */
+        positionClicked: function (event) {
+            const updatePosition = isMobile() ? true : this.updatePosition,
+                position = event.coordinate;
 
-            this.positionMapProjection = position;
+            this.setPositionMapProjection(position);
             this.changedPosition(position);
-            this.updatePosition = !updatePosition;
+            this.setUpdatePosition(!updatePosition);
+
+            // TODO replace trigger when MapMarker is migrated
             Radio.trigger("MapMarker", "showMarker", position);
         },
-        setCoordinates: function (evt) {
-            const position = evt.coordinate;
+        /**
+         * Sets the coordinates from the maps pointermove-event.
+         * @param {object} event pointermove-event, to get the position from
+         * @returns {void}
+         */
+        setCoordinates: function (event) {
+            const position = event.coordinate;
 
             if (this.updatePosition) {
-                this.positionMapProjection = position;
+                this.setPositionMapProjection(position);
                 this.changedPosition(position);
             }
         },
+        /**
+         * Stores the projections and adds interaction pointermove to map.
+         * @returns {void}
+         */
         createInteraction () {
-            this.projections = getProjections();
-            this.mapProjection = Radio.request("MapView", "getProjection");
+            this.setProjections(getProjections());
+            this.setMapProjection(this.projection);
             const pointerMove = new Pointer(
                 {
                     handleMoveEvent: function (evt) {
                         this.checkPosition(evt.coordinate);
                     }.bind(this),
                     handleDownEvent: function (evt) {
-                        this.positionClicked(evt.coordinate);
+                        this.positionClicked(evt);
                     }.bind(this)
                 },
                 this
             );
 
-            this.selectPointerMove = pointerMove;
-            Radio.trigger("Map", "addInteraction", pointerMove);
+            this.setSelectPointerMove(pointerMove);
+            this.addInteractionToMap(pointerMove);
         },
+        /**
+         * Removes the interaction from map.
+         * @returns {void}
+         */
         removeInteraction () {
-            Radio.trigger("Map", "removeInteraction", this.selectPointerMove);
-            this.selectPointerMove = null;
+            this.removeInteractionFromMap(this.selectPointerMove);
+            this.setSelectPointerMove(null);
         },
+        /**
+         * Checks the position for update and shows the marker at updated position
+         * @param {Array} position contains coordinates of mouse position
+         * @returns {void}
+         */
         checkPosition (position) {
             if (this.updatePosition) {
+                // TODO replace trigger when MapMarker is migrated
                 Radio.trigger("MapMarker", "showMarker", position);
-                this.positionMapProjection = position;
+                this.setPositionMapProjection(position);
             }
         },
+        /*
+        * Delegates the calculation and transformation of the position according to the projection
+        * @returns {void}
+        */
         changedPosition () {
             const targetProjectionName = this.currentSelection,
-                position = this.returnTransformedPosition(targetProjectionName),
-                targetProjection = this.returnProjectionByName(targetProjectionName);
+                position = this.getTransformedPosition(targetProjectionName),
+                targetProjection = this.getProjectionByName(targetProjectionName);
 
-            this.currentProjectionName = targetProjectionName;
+            this.setCurrentProjectionName(targetProjectionName);
             if (position) {
                 this.adjustPosition(position, targetProjection);
             }
         },
-        returnTransformedPosition (targetProjection) {
+        /**
+         * Transforms the projection.
+         * @param {object} targetProjection the target projection
+         * @returns {object} the transformed projection
+         */
+        getTransformedPosition (targetProjection) {
             let positionTargetProjection = [0, 0];
 
             if (this.positionMapProjection.length > 0) {
                 positionTargetProjection = transformFromMapProjection(
-                    Radio.request("Map", "getMap"),
+                    this.map,
                     targetProjection,
                     this.positionMapProjection
                 );
             }
             return positionTargetProjection;
         },
-        returnProjectionByName (name) {
+        /**
+         * Returns the projection to the given name.
+         * @param {string} name of the projection
+         * @returns {object} projection
+         */
+        getProjectionByName (name) {
             const projections = this.projections;
 
-            return _.find(projections, function (projection) {
+            return projections.find(projection => {
                 return projection.name === name;
             });
         },
+        /*
+        * Calculates the clicked position and writes the coordinate-values into the textfields.
+        * @param {object} position transformed coordinates
+        * @param {object} targetProjection selected projection
+        * @returns {void}
+        */
         adjustPosition (position, targetProjection) {
             let coord, easting, northing;
 
-            // geographische Koordinaten
+            // geographical coordinates
             if (targetProjection.projName === "longlat") {
                 coord = toStringHDMS(position);
                 easting = coord.substr(0, 13);
                 northing = coord.substr(14);
             }
-            // kartesische Koordinaten
+            // cartesian coordinates
             else {
                 coord = toStringXY(position, 2);
                 easting = coord.split(",")[0].trim();
@@ -252,19 +228,27 @@ export default {
             this.coordinatesEastingField = easting;
             this.coordinatesNorthingField = northing;
         },
+        /**
+         * Closes this tool window by setting active to false
+         * @returns {void}
+         */
         close () {
-            this.active = false;
-            // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
+            this.setActive(false);
+            this.setUpdatePosition(true);
+            this.removeInteraction();
 
-            if (model) {
-                model.set("isActive", false);
-            }
+            // TODO replace trigger when MapMarker is migrated
+            Radio.trigger("MapMarker", "hideMarker");
         },
+        /**
+         * Returns the label mame depending on the selected projection.
+         * @param {string} key in the language files
+         * @returns {string} the name of the label
+         */
         label (key) {
             const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
 
-            return "modules.tools.getCoord." + type + "." + key;
+            return "modules.tools.supplyCoord." + type + "." + key;
         }
     }
 };
@@ -272,7 +256,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('modules.tools.getCoord.title')"
+        :title="name"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
@@ -289,7 +273,7 @@ export default {
                     <label
                         for="coordSystemField"
                         class="col-md-5 col-sm-5 control-label"
-                    >{{ $t("modules.tools.getCoord.coordSystemField") }}</label>
+                    >{{ $t("modules.tools.supplyCoord.coordSystemField") }}</label>
                     <div class="col-md-7 col-sm-7">
                         <select
                             id="coordSystemField"

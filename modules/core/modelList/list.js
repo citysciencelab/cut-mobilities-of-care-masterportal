@@ -568,7 +568,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         activeToolsToDeactivate = activeTools.filter(tool => !alwaysActiveTools.includes(tool));
         activeToolsToDeactivate.forEach((tool) => {
             tool.setIsActive(false);
-            store.commit("setToolActive", {id: tool.id, active: false});
+            store.dispatch("Tools/setToolActive", {id: tool.id, active: false});
         });
     },
 
@@ -585,7 +585,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         activeTools = _.without(activeTools, legendModel);
         if (activeTools.length === 0 && defaultTool !== undefined) {
             defaultTool.setIsActive(true);
-            store.commit("setToolActive", {id: defaultTool.id, active: true});
+            store.dispatch("Tools/setToolActive", {id: defaultTool.id, active: true});
         }
     },
 

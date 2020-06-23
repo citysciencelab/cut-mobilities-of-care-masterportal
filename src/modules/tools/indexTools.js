@@ -1,20 +1,10 @@
-import mutations from "./mutationsTools";
+import actions from "./actionsTools";
 
 /**
  * This is here to test app-store/utils/composeModules.
- * However, these parameters will probably end up
- * as props and not as state.
+ * Also provides actions.
  */
 export default {
     namespaced: true,
-    state: {
-        name: null,
-        glyphicon: null, // should be overridden
-        onlyDesktop: false,
-        isVisibleInMenu: true,
-        renderToWindow: true, // should be added
-        resizableWindow: false,
-        keepOpen: false
-    },
-    mutations
+    actions
 };

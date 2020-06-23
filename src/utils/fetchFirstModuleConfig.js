@@ -108,7 +108,9 @@ function createKeyPathArray (path, separator = ".") {
  */
 function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFallback = true) {
     const missingSources = [],
-        missingDefaultValues = [];
+        missingDefaultValues = [],
+        // no real config-params, e.g. added during parsing: must not be in state as default
+        defaultsNotInState = ["i18nextTranslate"];
 
     let source,
         success = false;
@@ -130,7 +132,7 @@ function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFall
 
         // Check for missing default values in module state
         for (const sourceProp in source) {
-            if (context.state[sourceProp] === undefined) {
+            if (!defaultsNotInState.includes(sourceProp) && context.state[sourceProp] === undefined) {
                 missingDefaultValues.push(sourceProp);
             }
         }

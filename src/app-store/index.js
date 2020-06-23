@@ -7,6 +7,7 @@ import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 
+import toolsActions from "../modules/tools/actionsTools";
 import getters from "./getters";
 import mutations from "./mutations";
 import state from "./state";
@@ -25,8 +26,10 @@ const store = new Vuex.Store({
         Tools: {
             namespaced: true,
             modules: {
-                SupplyCoord // hier die stores von weiteren Tools eintragen
-            }
+                // add here other Tools
+                SupplyCoord
+            },
+            actions: toolsActions
         },
         controls: {
             ...controlsModule

@@ -3,14 +3,15 @@ import {expect} from "chai";
 /**
  * Helper for testing action with expected mutations.
  * Mocks the commit and calls the action and checks the expexted mutations.
- * @param {*} action will be called the action with mocked store and arguments
- * @param {*} payload the action is called with
- * @param {*} state the action is called with
- * @param {*} expectedMutations mutations expected to call
- * @param {*} done will be called if finished or fails
+ * @param {function} action will be called the action with mocked store and arguments
+ * @param {object} payload the action is called with
+ * @param {object} state the action is called with
+ * @param {object} rootState app's root state
+ * @param {array.<object>} expectedMutations mutations expected to call
+ * @param {function} done will be called if finished or fails
  * @returns {void}
  */
-export default function testAction (action, payload, state, expectedMutations, done) {
+export default function testAction (action, payload, state, rootState, expectedMutations, done) {
     let commit = null,
         count = 0;
 
@@ -34,7 +35,7 @@ export default function testAction (action, payload, state, expectedMutations, d
     };
 
     // call the action with mocked store and arguments
-    action({commit, state}, payload);
+    action({commit, state, rootState}, payload);
 
     // check if no mutations should have been dispatched
     if (expectedMutations.length === 0) {

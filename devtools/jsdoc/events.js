@@ -2436,13 +2436,6 @@
  * @description Event fired when layer slider model changes its attribute "activeLayer".
  */
 
-/** -------------------- TOOLS.GETCOORD -------------------- */
-
-/**
- * @event Tools.GetCoord#RadioTriggerChangeIsActive
- * @description todo
- */
-
 /** -------------------- TOOLS.DRAW -------------------- */
 
 /**
