@@ -527,11 +527,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
     /**
      * Function is initially triggered and on update
-     * @param   {Event} evt  Change event
+     * @param   {Backbone.Model} model DatePickerValue Model
      * @param   {Date} date selected date of weekday
      * @returns {void}
      */
-    dayDatepickerValueChanged: function (evt, date) {
+    dayDatepickerValueChanged: function (model, date) {
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
@@ -595,11 +595,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
     /**
      * Function is initially triggered and on update
-     * @param   {Event} evt  Change event
+     * @param   {Backbone.Model} model DatePickerValue Model
      * @param   {Date} date selected date of weekday not adjusted to start of week
      * @returns {void}
      */
-    weekDatepickerValueChanged: function (evt, date) {
+    weekDatepickerValueChanged: function (model, date) {
         this.get("weekDatepicker").updateValuesSilently(date);
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
@@ -655,11 +655,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     },
 
     /** Function is initially triggered and on update
-     * @param   {Event} evt  Change event
+     * @param   {Backbone.Model} model DatePickerValue Model
      * @param   {Date} date first day date of selected year
      * @returns {void}
      */
-    yearDatepickerValueChanged: function (evt, date) {
+    yearDatepickerValueChanged: function (model, date) {
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
