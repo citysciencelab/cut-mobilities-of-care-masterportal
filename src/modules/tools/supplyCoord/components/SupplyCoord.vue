@@ -42,6 +42,11 @@ export default {
                 this.createInteraction();
                 this.changedPosition();
             }
+            else {
+                this.removePointerMoveHandlerFromMap(this.setCoordinates);
+                this.setUpdatePosition(true);
+                this.removeInteraction();
+            }
         }
     },
     created () {
@@ -66,6 +71,7 @@ export default {
         ...mapMutations("Tools/SupplyCoord", Object.keys(mutations)),
         ...mapActions("Map", {
             addPointerMoveHandlerToMap: "addPointerMoveHandler",
+            removePointerMoveHandlerFromMap: "removePointerMoveHandler",
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"}),
         /*
@@ -124,7 +130,17 @@ export default {
          * @returns {void}
          */
         createInteraction () {
-            this.setProjections(getProjections());
+            const pr = getProjections();
+
+            // EPSG:25832 must be the first one
+            pr.sort(function(a, b){
+                if(a.name.indexOf("25832") > -1) {
+                     return -1; 
+                }
+                return 0;
+            })
+            this.setProjections(pr);
+
             this.setMapProjection(this.projection);
             const pointerMove = new Pointer(
                 {
@@ -234,11 +250,6 @@ export default {
          */
         close () {
             this.setActive(false);
-            this.setUpdatePosition(true);
-            this.removeInteraction();
-
-            // TODO replace trigger when MapMarker is migrated
-            Radio.trigger("MapMarker", "hideMarker");
         },
         /**
          * Returns the label mame depending on the selected projection.

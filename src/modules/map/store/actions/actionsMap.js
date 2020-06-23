@@ -191,11 +191,20 @@ const actions = {
         const {map} = state;
 
         if (callback) {
-            unsubscribes = [
-                map.on("pointermove", e => callback(e))
-            ];
+            map.on("pointermove", e => callback(e));
         }
 
+    },
+    /**
+     * Removes a listener from maps pointermove
+     * @param {object} state state object
+     * @param {function} callback  to be called on pointermove
+     * @returns {void}
+     */
+    removePointerMoveHandler ({state}, callback) {
+        const {map} = state;
+
+        map.un("pointermove", e => callback(e));
     },
     /**
      * Adds an interaction to the map.

@@ -32,9 +32,7 @@ export default {
     */
     setActive ({commit}, active) {
         commit("setActive", active);
-        if (active) {
-            // TODO replace trigger when MapMarker is migrated
-            Radio.trigger("MapMarker", "hideMarker");
-        }
+        // TODO replace trigger when MapMarker is migrated
+        Radio.trigger("MapMarker", "hideMarker");
     }
 };
