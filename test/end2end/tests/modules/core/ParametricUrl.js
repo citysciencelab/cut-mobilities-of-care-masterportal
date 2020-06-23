@@ -221,21 +221,14 @@ async function ParameterTests ({builder, url, resolution, mode}) {
             expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
         });
 
-        // TODO find a way to initially detect which tool it is (translation sometimes too slow)
-        it.skip("?isinitopen= allows opening tools initially", async function () {
+        it("?isinitopen= allows opening tools initially", async function () {
             const toolName = "draw",
-                possibleTitles = ["Drawing / Writing", "Zeichnen / Schreiben"],
-                titleSelector = "div#window div.win-heading.header p.title span";
+                checkSelector = By.css("div#window #drawPoint");
 
             await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
 
-            expect(possibleTitles).to.include(
-                await (
-                    await driver.wait(
-                        until.elementIsVisible(
-                            await driver.wait(until.elementLocated(By.css(titleSelector)))
-                        ), 10000, `Loading By("${titleSelector}") in scenario "${url}?isinitopen=${toolName}" failed.`
-                    )).getText());
+            // assume draw tool loaded when #drawPoint option is detected - should be unique
+            await driver.wait(until.elementLocated(checkSelector));
         });
 
         if (isCustom(url) || isMaster(url) || isDefault(url)) {
