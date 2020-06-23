@@ -89,13 +89,18 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             return;
         }
 
+        let dates = evt.dates;
+
         if (this.model.get("selectWeek")) {
             this.model.set("mutexChangeEvent", false);
+
+            dates = this.model.getDatesForWeekPicker([...dates]);
             this.model.get("inputs").datepicker("clearDates");
-            this.model.get("inputs").datepicker("setDates", this.model.getDatesForWeekPicker([...evt.dates]));
+            this.model.get("inputs").datepicker("setDates", dates);
             this.model.set("mutexChangeEvent", true);
         }
-        this.model.updateValues(evt.dates);
+
+        this.model.updateValues(dates);
     },
 
     /**
