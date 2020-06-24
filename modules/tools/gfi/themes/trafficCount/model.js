@@ -550,10 +550,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
                 console.warn("The data received from api are incomplete!");
             }
+            const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-            this.refreshDiagramDay(datasets[0][meansOfTransport]);
+            this.refreshDiagramDay(sortedDatasets[0][meansOfTransport]);
 
-            this.prepareTableContent(this.prepareDatasetHourly(datasets[0]), "day", "Datum", timeSettings, meansOfTransport);
+            this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "day", "Datum", timeSettings, meansOfTransport);
         });
     },
 
@@ -622,10 +623,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
                 console.warn("The data received from api are incomplete!");
             }
+            const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-            this.refreshDiagramWeek(datasets[0][meansOfTransport]);
+            this.refreshDiagramWeek(sortedDatasets[0][meansOfTransport]);
 
-            this.prepareTableContent(this.prepareDatasetHourly(datasets[0]), "week", "Woche", timeSettings, meansOfTransport);
+            this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "week", "Woche", timeSettings, meansOfTransport);
         });
     },
 
@@ -687,11 +689,39 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
                 console.warn("The data received from api are incomplete!");
             }
+            const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-            this.refreshDiagramYear(datasets[0][meansOfTransport], years[0]);
+            this.refreshDiagramYear(sortedDatasets[0][meansOfTransport], years[0]);
 
-            this.prepareTableContent(this.prepareYearDataset(datasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
+            this.prepareTableContent(this.prepareYearDataset(sortedDatasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
         });
+    },
+
+    /**
+     * Sorts the datasets by date
+     * @param {Object[]} datasets -
+     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @returns {Object[]} sorted datasets
+     */
+    getSortedDatasets: function (datasets, meansOfTransport) {
+        datasets.sort((firstElement, secondElement) => {
+            const firstDate = new Date(Object.keys(firstElement[meansOfTransport])[0]),
+                secondDate = new Date(Object.keys(secondElement[meansOfTransport])[0]);
+
+            // compare the 2 dates
+            // sort firstElement to a lower index than secondElement
+            if (firstDate < secondDate) {
+                return -1;
+            }
+            // sort secondElement to a lower index than firstElement
+            if (firstDate > secondDate) {
+                return 1;
+            }
+            // leave firstElement and secondElement unchanged in relation to each other,
+            // but sorted in relation to all other elements
+            return 0;
+        });
+        return datasets;
     },
 
     /**
