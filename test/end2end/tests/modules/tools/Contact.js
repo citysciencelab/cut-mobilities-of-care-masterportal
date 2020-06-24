@@ -19,7 +19,7 @@ async function ContactTests ({builder, url, resolution}) {
     );
 
     if (testIsApplicable) {
-        describe.only("Contact", function () {
+        describe("Contact", function () {
             const windowWidth = 500,
                 windowHeight = 420;
             let driver, navBarIcon, toolWindow,
