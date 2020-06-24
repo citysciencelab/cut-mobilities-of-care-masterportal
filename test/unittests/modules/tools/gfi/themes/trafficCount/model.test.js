@@ -1266,5 +1266,56 @@ describe("tools/gfi/themes/trafficCount", function () {
             expect(model.prepareDatasetHourly(dataset)).to.deep.equal(tblContentExpected);
         });
     });
+
+    describe("getSortedDatasets", function () {
+        it("should return an array sorted by object key", function () {
+            const datasets = [
+                    {
+                        AnzFahrzeuge:
+                        {
+                            "2020-06-23 00:00:01": 232
+                        }
+                    },
+                    {
+                        AnzFahrzeuge:
+                        {
+                            "2020-07-25 00:00:01": 232
+                        }
+                    },
+                    {
+                        AnzFahrzeuge:
+                        {
+                            "2020-05-23 00:00:01": 232
+                        }
+                    },
+                    {
+                        AnzFahrzeuge:
+                        {
+                            "2020-07-24 00:00:01": 232
+                        }
+                    },
+                    {
+                        AnzFahrzeuge:
+                        {
+                            "2020-07-24 00:00:01": 232
+                        }
+                    },
+                    {
+                        AnzFahrzeuge:
+                        {
+                            "2020-06-24 00:00:01": 232
+                        }
+                    }
+                ],
+                sortedDatasets = model.getSortedDatasets(datasets, "AnzFahrzeuge");
+
+            expect(sortedDatasets[0].AnzFahrzeuge).to.have.all.keys("2020-05-23 00:00:01");
+            expect(sortedDatasets[1].AnzFahrzeuge).to.have.all.keys("2020-06-23 00:00:01");
+            expect(sortedDatasets[2].AnzFahrzeuge).to.have.all.keys("2020-06-24 00:00:01");
+            expect(sortedDatasets[3].AnzFahrzeuge).to.have.all.keys("2020-07-24 00:00:01");
+            expect(sortedDatasets[4].AnzFahrzeuge).to.have.all.keys("2020-07-24 00:00:01");
+            expect(sortedDatasets[5].AnzFahrzeuge).to.have.all.keys("2020-07-25 00:00:01");
+        });
+    });
 });
 
