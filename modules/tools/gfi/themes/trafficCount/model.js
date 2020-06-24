@@ -66,6 +66,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @description This theme is used to show trafficCount data for Radzählstationen, Radzählsäulen and aVME data
      * @memberof Tools.GFI.Themes.TrafficCount
      * @listens GFI#RadioTriggerGFISetIsVisible
+     * @fires   Alerting#RadioTriggerAlertAlert
      * @constructs
      * @property {Object} feature feature to show gfi.
      */
@@ -147,6 +148,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * to be called on toggle of a tab
      * @param {String} tabValue the value of the target element (info, day, week, year)
+     * @fires   Alerting#RadioTriggerAlertAlert
      * @returns {Void}  -
      */
     toggleTab: function (tabValue) {
@@ -157,6 +159,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         // title
         api.updateTitle(thingId, title => {
             this.setTitle(title);
+        }, errormsg => {
+            this.setTitle("(kein Titel empfangen)");
+            console.warn("The title received is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Der vom Sensor-Server erhaltene Titel des geöffneten GFI konnte wegen eines API-Fehlers nicht empfangen werden.",
+                category: "Info"
+            });
         });
 
         // type
@@ -192,6 +201,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         // tab footer
         api.subscribeLastUpdate(thingId, meansOfTransport, datetime => {
             this.setLastUpdate(moment(datetime, "YYYY-MM-DD HH:mm:ss").format("DD.MM.YYYY, HH:mm:ss"));
+        }, errormsg => {
+            this.setLastUpdate("(aktuell keine Zeitangabe)");
+            console.warn("The last update received is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Das vom Sensor-Server erhaltene Datum der letzten Aktualisierung kann wegen eines API-Fehlers nicht ausgegeben werden.",
+                category: "Info"
+            });
         });
     },
 
@@ -200,42 +216,99 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @param {Object} api instance of TrafficCountApi
      * @param {String} thingId the thingId to be send to any api call
      * @param {String} meansOfTransport the meansOfTransport to be send with any api call
+     * @fires   Alerting#RadioTriggerAlertAlert
      * @returns {Void}  -
      */
     setupTabInfo: function (api, thingId, meansOfTransport) {
         api.updateTotal(thingId, meansOfTransport, (date, value) => {
             this.setTotalDesc(typeof date === "string" ? moment(date, "YYYY-MM-DD").format("DD.MM.YYYY") : "");
             this.setTotalValue(this.addThousandPoints(value));
+        }, errormsg => {
+            this.setTotalDesc("(nicht");
+            this.setTotalValue("empfangen)");
+            console.warn("The last update total is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Der Wert für \"insgesamt seit\" wurde wegen eines API-Fehlers nicht empfangen.",
+                category: "Info"
+            });
         });
 
         api.updateYear(thingId, meansOfTransport, moment().format("YYYY"), (year, value) => {
             this.setThisYearDesc(typeof year === "string" ? "01.01." + year : "");
             this.setThisYearValue(this.addThousandPoints(value));
+        }, errormsg => {
+            this.setThisYearDesc("(nicht");
+            this.setThisYearValue("empfangen)");
+            console.warn("The last update year is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Der Wert für \"seit Jahresbeginn\" wurde wegen eines API-Fehlers nicht empfangen.",
+                category: "Info"
+            });
         });
 
         api.updateYear(thingId, meansOfTransport, moment().subtract(1, "year").format("YYYY"), (year, value) => {
             this.setLastYearDesc(typeof year === "string" ? year : "");
             this.setLastYearValue(this.addThousandPoints(value));
+        }, errormsg => {
+            this.setLastYearDesc("(nicht");
+            this.setLastYearValue("empfangen)");
+            console.warn("The last update last year is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Der Wert für \"im Vorjahr\" wurde wegen eines API-Fehlers nicht empfangen.",
+                category: "Info"
+            });
         });
 
         api.updateDay(thingId, meansOfTransport, moment().subtract(1, "day").format("YYYY-MM-DD"), (date, value) => {
             this.setLastDayDesc(typeof date === "string" ? moment(date, "YYYY-MM-DD").format("DD.MM.YYYY") : "");
             this.setLastDayValue(this.addThousandPoints(value));
+        }, errormsg => {
+            this.setLastDayDesc("(nicht");
+            this.setLastDayValue("empfangen)");
+            console.warn("The last update last day is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Der Wert für \"am Vortag\" wurde wegen eines API-Fehlers nicht empfangen.",
+                category: "Info"
+            });
         });
 
         api.updateHighestWorkloadDay(thingId, meansOfTransport, moment().format("YYYY"), (date, value) => {
             this.setHighestWorkloadDayDesc(typeof date === "string" ? moment(date, "YYYY-MM-DD").format("DD.MM.YYYY") : "");
             this.setHighestWorkloadDayValue(this.addThousandPoints(value));
+        }, errormsg => {
+            this.setHighestWorkloadDayDesc("(nicht");
+            this.setHighestWorkloadDayValue("empfangen)");
+            console.warn("The last update HighestWorkloadDay is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Der Wert für \"Stärkster Tag im Jahr\" wurde wegen eines API-Fehlers nicht empfangen.",
+                category: "Info"
+            });
         });
 
         api.updateHighestWorkloadWeek(thingId, meansOfTransport, moment().format("YYYY"), (calendarWeek, value) => {
             this.setHighestWorkloadWeekDesc(!isNaN(calendarWeek) || typeof calendarWeek === "string" ? "KW " + calendarWeek : "");
             this.setHighestWorkloadWeekValue(this.addThousandPoints(value));
+        }, errormsg => {
+            this.setHighestWorkloadWeekDesc("(nicht");
+            this.setHighestWorkloadWeekValue("empfangen)");
+            console.warn("The last update HighestWorkloadWeek is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Der Wert für \"Stärkste Woche im Jahr\" wurde wegen eines API-Fehlers nicht empfangen.",
+                category: "Info"
+            });
         });
 
         api.updateHighestWorkloadMonth(thingId, meansOfTransport, moment().format("YYYY"), (month, value) => {
             this.setHighestWorkloadMonthDesc(typeof month === "string" ? month : "");
             this.setHighestWorkloadMonthValue(this.addThousandPoints(value));
+        }, errormsg => {
+            this.setHighestWorkloadMonthDesc("(nicht");
+            this.setHighestWorkloadMonthValue("empfangen)");
+            console.warn("The last update HighestWorkloadMonth is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Der Wert für \"Stärkster Monat im Jahr\" wurde wegen eines API-Fehlers nicht empfangen.",
+                category: "Info"
+            });
         });
     },
 
@@ -528,6 +601,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * Function is initially triggered and on update
      * @param   {Backbone.Model} model DatePickerValue Model
      * @param   {Date} dates an unsorted array of selected dates of weekday
+     * @fires   Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     dayDatepickerValueChanged: function (model, dates) {
@@ -546,15 +620,21 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
         });
 
-        api.updateDataset(thingId, meansOfTransport, timeSettings, (datasets) => {
-            if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
-                console.warn("The data received from api are incomplete!");
-            }
+        api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
             const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
             this.refreshDiagramDay(sortedDatasets[0][meansOfTransport]);
-
             this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "day", "Datum", timeSettings, meansOfTransport);
+
+        }, errormsg => {
+            this.refreshDiagramDay([]);
+            this.prepareTableContent([], "day", "Datum", timeSettings, meansOfTransport);
+
+            console.warn("The data received from api are incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
+                category: "Info"
+            });
         });
     },
 
@@ -600,6 +680,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * Function is initially triggered and on update
      * @param   {Backbone.Model} model DatePickerValue Model
      * @param   {Date} dates an unsorted array of selected date of weekday not adjusted to start of week
+     * @fires   Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     weekDatepickerValueChanged: function (model, dates) {
@@ -619,15 +700,21 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
         });
 
-        api.updateDataset(thingId, meansOfTransport, timeSettings, (datasets) => {
-            if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
-                console.warn("The data received from api are incomplete!");
-            }
+        api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
             const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
             this.refreshDiagramWeek(sortedDatasets[0][meansOfTransport]);
-
             this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "week", "Woche", timeSettings, meansOfTransport);
+
+        }, errormsg => {
+            this.refreshDiagramWeek([]);
+            this.prepareTableContent([], "week", "Woche", timeSettings, meansOfTransport);
+
+            console.warn("The data received from api are incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
+                category: "Info"
+            });
         });
     },
 
@@ -665,6 +752,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /** Function is initially triggered and on update
      * @param   {Backbone.Model} model DatePickerValue Model
      * @param   {Date} dates an unsorted array of first day date of selected year
+     * @fires   Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     yearDatepickerValueChanged: function (model, dates) {
@@ -685,15 +773,21 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
         });
 
-        api.updateDataset(thingId, meansOfTransport, timeSettings, (datasets) => {
-            if (!datasets[0].hasOwnProperty(meansOfTransport) || Object.keys(datasets[0][meansOfTransport]).length === 0) {
-                console.warn("The data received from api are incomplete!");
-            }
+        api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
             const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
             this.refreshDiagramYear(sortedDatasets[0][meansOfTransport], years[0]);
-
             this.prepareTableContent(this.prepareYearDataset(sortedDatasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
+
+        }, errormsg => {
+            this.refreshDiagramYear([]);
+            this.prepareTableContent([], "year", "Jahr", timeSettings, meansOfTransport);
+
+            console.warn("The data received from api are incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
+                category: "Info"
+            });
         });
     },
 
