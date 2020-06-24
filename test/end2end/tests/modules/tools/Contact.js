@@ -61,15 +61,19 @@ async function ContactTests ({builder, url, resolution}) {
                 // wait a second for animation to finish - needed in Chrome
                 await driver.wait(new Promise(r => setTimeout(r, 1000)));
 
+                await nameInput.clear();
                 await nameInput.sendKeys("Bob Ross");
                 expect(await nameInput.getAttribute("value")).to.equal("Bob Ross");
 
+                await mailInput.clear();
                 await mailInput.sendKeys("bob_ross@example.com");
                 expect(await mailInput.getAttribute("value")).to.equal("bob_ross@example.com");
 
+                await telInput.clear();
                 await telInput.sendKeys("55555555");
                 expect(await telInput.getAttribute("value")).to.equal("55555555");
 
+                await textInput.clear();
                 await textInput.sendKeys("Test crashed? A happy little mistake.");
                 expect(await textInput.getAttribute("value")).to.equal("Test crashed? A happy little mistake.");
             });
