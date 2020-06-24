@@ -294,58 +294,35 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
 
     /**
      * creates HTML-Code for dayTableHeader
+     * @param {String} title - title of the table
      * @return {String} HTML
      */
-    createDayTableHeader: function () {
-        const dayTableHeaderArr = this.model.get("dayTableContent").day.headerArr;
-        let dayTableHeaderHtml = "<th class=\"tableTopLeft\">" + this.model.get("dayTableContent").day.title + "</th>";
+    createDayTableHeader: function (title) {
+        const headerArray = this.model.getXAxisTickValuesDay().slice(0, -1);
 
-        if (dayTableHeaderArr !== undefined) {
-            if (Array.isArray(dayTableHeaderArr) && dayTableHeaderArr.length > 0) {
-                for (const key in dayTableHeaderArr) {
-                    dayTableHeaderHtml += "<th class=\"tableColumn\">" + dayTableHeaderArr[key] + " <br/>Uhr</th>";
-                }
-            }
+        let dayTableHeaderHtml = "<thead>";
+
+        dayTableHeaderHtml += "<th class=\"tableTopLeft\">" + title + "</th>";
+
+        for (let i = 0; i < headerArray.length; i++) {
+            dayTableHeaderHtml += "<th class=\"tableColumn\">" + headerArray[i] + " <br/>Uhr</th>";
         }
+
+        dayTableHeaderHtml += "</thead>";
 
         return dayTableHeaderHtml;
     },
 
     /**
-     * Create HTML-Code for table
-     * @param   {string[]} tableColumnsArr Array of table headers
-     * @param   {string} firstColumn     text of first column
-     * @param   {string} headerPrefix    text to prefix column
-     * @param   {string} headerSuffix    test to suffix column
-     * @returns {string} html snippet
-     */
-    createTableContent: function (tableColumnsArr, firstColumn, headerPrefix, headerSuffix) {
-        let tableColumnsHtml = "<td class=\"tableFirstColumn\" width=\"165\">" + headerPrefix + firstColumn + headerSuffix + "</td>";
-
-        if (tableColumnsArr === undefined) {
-            tableColumnsHtml += "<td class=\"text-align-center\" width=\"165\">&nbsp;</td>";
-            return tableColumnsHtml;
-        }
-        if (Array.isArray(tableColumnsArr) && tableColumnsArr.length > 0) {
-            for (const key in tableColumnsArr) {
-                tableColumnsHtml += "<td class=\"text-align-center\">" + tableColumnsArr[key] + "</td>";
-            }
-        }
-        else {
-            tableColumnsHtml += "<td class=\"text-align-center\">&nbsp;</td>";
-        }
-
-        return tableColumnsHtml;
-    },
-
-    /**
      * creates HTML-Code for weekTableHeader
+     * @param {Array} weekTableHeaderDateArr - array of dataset header
+     * @param {String} title - title of the table
      * @return {String} HTML
      */
-    createWeekTableHeader: function () {
-        const weekTableHeaderDateArr = this.model.get("weekTableContent").week.headerDateArr;
+    createWeekTableHeader: function (weekTableHeaderDateArr, title) {
+        let weekTableHeaderHtml = "<thead>";
 
-        let weekTableHeaderHtml = "<th class=\"tableTopLeft\">" + this.model.get("weekTableContent").week.title + "</th>";
+        weekTableHeaderHtml += "<th class=\"tableTopLeft\">" + title + "</th>";
 
         if (weekTableHeaderDateArr !== undefined) {
             if (Array.isArray(weekTableHeaderDateArr) && weekTableHeaderDateArr.length > 0) {
@@ -358,94 +335,167 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
             weekTableHeaderHtml += "<th class=\"tableColumn\"></th>";
         }
 
+        weekTableHeaderHtml += "</thead>";
+
         return weekTableHeaderHtml;
     },
 
     /**
      * creates HTML-Code for yearTableHeader
+     * @param {String} title - title of the table
      * @return {String} HTML
      */
-    createYearTableHeader: function () {
-        const yearTableHeaderArr = this.model.get("yearTableContent").year.headerArr;
-        let yearTableHeaderHtml = "<th class=\"tableTopLeft\">" + this.model.get("yearTableContent").year.title + "</th>";
+    createYearTableHeader: function (title) {
+        let yearTableHeaderHtml = "<thead>";
 
-        if (yearTableHeaderArr) {
-            if (Array.isArray(yearTableHeaderArr) && yearTableHeaderArr.length > 0) {
-                for (const key in yearTableHeaderArr) {
-                    yearTableHeaderHtml += "<th class=\"tableColumn\">KW " + yearTableHeaderArr[key] + "</th>";
-                }
-            }
-        }
+        yearTableHeaderHtml += "<th class=\"tableTopLeft\">" + title + "</th>";
 
+        this.model.getXAxisTickValuesYear().forEach(kw => {
+            yearTableHeaderHtml += "<th class=\"tableColumn\">" + kw + "</th>";
+        });
+
+        yearTableHeaderHtml += "</thead>";
         return yearTableHeaderHtml;
     },
 
     /**
-     * clears the day table content and/or appends header and columns to day table
-     * @param {Backbone.Model} model - trafficCount model
-     * @param {Object} value - dataset
-     * @returns {void}
+     * creates and appends tableday
+     * @returns {Void} -
      */
-    renderDayTableContent: function (model, value) {
-        this.$el.find("#dayTableContentHeader").empty();
-        this.$el.find("#dayTableContentCars").empty();
-        this.$el.find("#dayTableContentTrucks").empty();
-        this.$el.find("#dayTableContentBicycles").empty();
-        if (value.hasOwnProperty("day")) {
+    renderDayTableContent: function () {
+        let htmlOut = "<table class=\"table table-striped text-align-center table-condensed table-bordered text-nowrap\">";
 
-            const carsArr = model.get("dayTableContent").day.carsArr,
-                bicyclesArr = model.get("dayTableContent").day.bicyclesArr,
-                trucksArr = model.get("dayTableContent").day.trucksArr,
-                firstColumn = model.get("dayTableContent").day.firstColumn,
-                meansOfTransport = model.get("dayTableContent").day.meansOfTransport;
+        if (this.model.get("dayTableContent").length !== 0) {
+            htmlOut += this.createDayTableHeader(this.model.get("dayTableContent")[0].title);
+        }
 
-            this.$el.find("#dayTableContentHeader").append(this.createDayTableHeader());
+        htmlOut += "<tbody>";
+
+        this.$el.find("#tableday").empty();
+
+        this.model.get("dayTableContent").forEach(day => {
+
+            const carsArr = day.carsArr,
+                bicyclesArr = day.bicyclesArr,
+                trucksArr = day.trucksArr,
+                firstColumn = day.firstColumn,
+                meansOfTransport = day.meansOfTransport;
 
             switch (meansOfTransport) {
-                case model.get("meansOfTransportFahrraeder"):
-                    this.$el.find("#dayTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                case this.model.get("meansOfTransportFahrraeder"):
+                    htmlOut += this.createDayTableContent(bicyclesArr, firstColumn, "", "");
                     break;
-                case model.get("meansOfTransportFahrzeuge"):
-                    this.$el.find("#dayTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
-                    this.$el.find("#dayTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                case this.model.get("meansOfTransportFahrzeuge"):
+                    htmlOut += this.createDayTableContent(carsArr, firstColumn, "", this.model.get("carsHeaderSuffix"));
+                    htmlOut += this.createDayTableContent(trucksArr, firstColumn, "", this.model.get("trucksHeaderSuffix"));
                     break;
                 default:
             }
-        }
+        });
+        htmlOut += "</table></tbody>";
+
+        this.$el.find("#tableday").append(htmlOut);
     },
 
     /**
-     * appends header and columns to week table
-     * @param {Backbone.Model} model - trafficCount model
-     * @param {Object} value - dataset
-     * @returns {void}
+     * generate html for table day
+     * @param {Array} carsArr - array of the car results
+     * @param {String} firstColumn -
+     * @param {String} headerPrefix -
+     * @param {String} headerSuffix -
+     * @return {String} - returns the generated html
      */
-    renderWeekTableContent: function (model, value) {
-        this.$el.find("#weekTableContentHeader").empty();
-        this.$el.find("#weekTableContentCars").empty();
-        this.$el.find("#weekTableContentTrucks").empty();
-        this.$el.find("#weekTableContentBicycles").empty();
+    createDayTableContent: function (carsArr, firstColumn, headerPrefix, headerSuffix) {
+        const hourArr = this.model.getXAxisTickValuesDay().slice(0, -1);
 
-        if (value.hasOwnProperty("week")) {
-            const bicyclesArr = model.get("weekTableContent").week.bicyclesArr,
-                trucksArr = model.get("weekTableContent").week.trucksArr,
-                carsArr = model.get("weekTableContent").week.carsArr,
-                firstColumn = model.get("weekTableContent").week.firstColumn,
-                meansOfTransport = model.get("weekTableContent").week.meansOfTransport;
+        let tableColumnsHtml = "<tr>";
 
-            this.$el.find("#weekTableContentHeader").append(this.createWeekTableHeader());
+        tableColumnsHtml += "<td class=\"tableFirstColumn\" width=\"165\">" + headerPrefix + firstColumn + " " + headerSuffix + "</td>";
+
+        if (carsArr === undefined) {
+            for (let i = 0; i < hourArr.length; i++) {
+                tableColumnsHtml += "<td class=\"text-align-center\">&nbsp;</td>";
+            }
+            return tableColumnsHtml;
+        }
+
+        hourArr.forEach(hour => {
+            if (carsArr.hasOwnProperty(hour)) {
+                tableColumnsHtml += "<td class=\"text-align-center\">" + carsArr[hour] + "</td>";
+            }
+            else {
+                tableColumnsHtml += "<td class=\"text-align-center\"></td>";
+            }
+        });
+
+        tableColumnsHtml += "</tr>";
+
+        return tableColumnsHtml;
+    },
+
+    /**
+     * creates and appends tableweek
+     * @returns {Void}  -
+     */
+    renderWeekTableContent: function () {
+        let htmlOut = "<table class=\"table table-striped text-align-center table-condensed table-bordered text-nowrap\">";
+
+        this.$el.find("#tableweek").empty();
+
+        this.model.get("weekTableContent").forEach(week => {
+
+            const carsArr = week.carsArr,
+                bicyclesArr = week.bicyclesArr,
+                trucksArr = week.trucksArr,
+                firstColumn = week.firstColumn,
+                meansOfTransport = week.meansOfTransport,
+                headerDateArr = week.headerDateArr,
+                title = week.title;
+
+            htmlOut += this.createWeekTableHeader(headerDateArr, title);
 
             switch (meansOfTransport) {
-                case model.get("meansOfTransportFahrraeder"):
-                    this.$el.find("#weekTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                case this.model.get("meansOfTransportFahrraeder"):
+                    htmlOut += this.createWeekTableContent(headerDateArr, bicyclesArr, firstColumn, "", "");
                     break;
-                case model.get("meansOfTransportFahrzeuge"):
-                    this.$el.find("#weekTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
-                    this.$el.find("#weekTableContentBicycles").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                case this.model.get("meansOfTransportFahrzeuge"):
+                    htmlOut += this.createWeekTableContent(headerDateArr, carsArr, firstColumn, "", this.model.get("carsHeaderSuffix"));
+                    htmlOut += this.createWeekTableContent(headerDateArr, trucksArr, firstColumn, "", this.model.get("trucksHeaderSuffix"));
                     break;
                 default:
             }
-        }
+        });
+        htmlOut += "</table></tbody>";
+
+        this.$el.find("#tableweek").append(htmlOut);
+    },
+
+    /**
+     * generate html for week-table
+     * @param {Array} headerDateArr -
+     * @param {Array} carsArr -
+     * @param {String} firstColumn -
+     * @param {String} headerPrefix -
+     * @param {String} headerSuffix -
+     * @return {String} - returns the generated html
+     */
+    createWeekTableContent: function (headerDateArr, carsArr, firstColumn, headerPrefix, headerSuffix) {
+        let tableColumnsHtml = "<tr>";
+
+        tableColumnsHtml += "<td class=\"tableFirstColumn\" width=\"165\">" + headerPrefix + firstColumn + " " + headerSuffix + "</td>";
+
+        headerDateArr.forEach(date => {
+            if (carsArr.hasOwnProperty(date)) {
+                tableColumnsHtml += "<td class=\"text-align-center\">" + carsArr[date] + "</td>";
+            }
+            else {
+                tableColumnsHtml += "<td class=\"text-align-center\">&nbsp;</td>";
+            }
+        });
+
+        tableColumnsHtml += "</tr>";
+
+        return tableColumnsHtml;
     },
 
     /**
@@ -454,33 +504,79 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      * @param {Object} value - dataset
      * @returns {void}
      */
-    renderYearTableContent: function (model, value) {
-        this.$el.find("#yearTableContentHeader").empty();
-        this.$el.find("#yearTableContentCars").empty();
-        this.$el.find("#yearTableContentTrucks").empty();
-        this.$el.find("#yearTableContentBicycles").empty();
+    renderYearTableContent: function () {
 
-        if (value.hasOwnProperty("year")) {
-            const carsArr = model.get("yearTableContent").year.carsArr,
-                firstColumn = model.get("yearTableContent").year.firstColumn,
-                trucksArr = model.get("yearTableContent").year.trucksArr,
-                bicyclesArr = model.get("yearTableContent").year.bicyclesArr,
-                meansOfTransport = model.get("yearTableContent").year.meansOfTransport;
+        let htmlOut = "<table class=\"table table-striped text-align-center table-condensed table-bordered text-nowrap\">";
 
+        if (this.model.get("yearTableContent").length !== 0) {
+            htmlOut += this.createYearTableHeader(this.model.get("yearTableContent")[0].title);
+        }
 
-            this.$el.find("#yearTableContentHeader").append(this.createYearTableHeader());
+        this.$el.find("#tableyear").empty();
+
+        this.model.get("yearTableContent").forEach(year => {
+
+            const carsArr = year.carsArr,
+                bicyclesArr = year.bicyclesArr,
+                trucksArr = year.trucksArr,
+                firstColumn = year.firstColumn,
+                meansOfTransport = year.meansOfTransport;
 
             switch (meansOfTransport) {
-                case model.get("meansOfTransportFahrraeder"):
-                    this.$el.find("#yearTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                case this.model.get("meansOfTransportFahrraeder"):
+                    htmlOut += this.createYearTableContent(bicyclesArr, firstColumn, "", "");
                     break;
-                case model.get("meansOfTransportFahrzeuge"):
-                    this.$el.find("#yearTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
-                    this.$el.find("#yearTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                case this.model.get("meansOfTransportFahrzeuge"):
+                    htmlOut += this.createYearTableContent(carsArr, firstColumn, "", this.model.get("carsHeaderSuffix"));
+                    htmlOut += this.createYearTableContent(trucksArr, firstColumn, "", this.model.get("trucksHeaderSuffix"));
                     break;
                 default:
             }
+        });
+        htmlOut += "</table></tbody>";
+
+        this.$el.find("#tableyear").append(htmlOut);
+    },
+
+    /**
+     * generate html for year-table
+     * @param {Array} carsArr -
+     * @param {String} firstColumn -
+     * @param {String} headerPrefix -
+     * @param {String} headerSuffix -
+     * @return {String} - returns the generated html
+     */
+    createYearTableContent: function (carsArr, firstColumn, headerPrefix, headerSuffix) {
+        const calenderWeekArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
+            "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+            "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
+            "31", "32", "33", "34", "35", "36", "37", "38", "39", "40",
+            "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
+            "51", "52", "53"];
+
+        let tableColumnsHtml = "<tr>";
+
+        tableColumnsHtml += "<td class=\"tableFirstColumn\" width=\"165\">" + headerPrefix + firstColumn + " " + headerSuffix + "</td>";
+
+        if (carsArr === undefined) {
+            for (let i = 0; i < calenderWeekArr.length; i++) {
+                tableColumnsHtml += "<td class=\"text-align-center\">&nbsp;</td>";
+            }
+            return tableColumnsHtml;
         }
+
+        calenderWeekArr.forEach(kw => {
+            if (carsArr.hasOwnProperty(kw)) {
+                tableColumnsHtml += "<td class=\"text-align-center\">" + carsArr[kw] + "</td>";
+            }
+            else {
+                tableColumnsHtml += "<td class=\"text-align-center\">&nbsp;</td>";
+            }
+        });
+
+        tableColumnsHtml += "</tr>";
+
+        return tableColumnsHtml;
     },
 
     /**

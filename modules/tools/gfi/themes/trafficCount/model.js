@@ -7,9 +7,12 @@ import ExportButtonModel from "../../../../snippets/exportButton/model";
 
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
-        dayTableContent: {},
-        weekTableContent: {},
-        yearTableContent: {},
+        dayTableContent: [],
+        weekTableContent: [],
+        yearTableContent: [],
+
+        carsHeaderSuffix: "KFZ abs.",
+        trucksHeaderSuffix: "SV-Anteil in %",
 
         meansOfTransportFahrzeuge: "AnzFahrzeuge",
         meansOfTransportFahrraeder: "AnzFahrraeder",
@@ -390,259 +393,294 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
     /**
      * creates a json for the dayLine data
-     * @param {Object} dataset contains the dayLine data
+     * @param {Array} datasets contain the dayLine data
      * @return {Object} Object with prepared data
      */
-    prepareDatasetHourly: function (dataset) {
-        const retObj = {};
+    prepareDatasetHourly: function (datasets) {
+        const retObjArr = [];
         let bicyclesResultVal = "",
             carsResultVal = "",
             trucksResultVal = "";
 
-        retObj.trucks = [];
-        retObj.cars = [];
-        retObj.bicycles = [];
+        datasets.forEach(dataset => {
+            const retObj = {};
 
-        for (const meansOfTransport in dataset) {
-            for (const datetime in dataset[meansOfTransport]) {
+            retObj.trucks = [];
+            retObj.cars = [];
+            retObj.bicycles = [];
 
-                const splittedDate = datetime.split(" "),
-                    date = moment(splittedDate[0], "YYYY-MM-DD").format("YYYY-MM-DD"),
-                    hour = moment(splittedDate[1], "HH:mm:ss").format("HH:mm");
+            Object.keys(dataset).forEach(meansOfTransport => {
+                Object.keys(dataset[meansOfTransport]).forEach(datetime => {
 
-                if (meansOfTransport === this.get("meansOfTransportFahrraeder")) {
-                    if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
-                        bicyclesResultVal = this.addThousandPoints(dataset[meansOfTransport][datetime]);
+                    const splittedDate = datetime.split(" "),
+                        date = moment(splittedDate[0], "YYYY-MM-DD").format("YYYY-MM-DD"),
+                        hour = moment(splittedDate[1], "HH:mm:ss").format("HH:mm");
+
+                    if (meansOfTransport === this.get("meansOfTransportFahrraeder")) {
+                        if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
+                            bicyclesResultVal = this.addThousandPoints(dataset[meansOfTransport][datetime]);
+                        }
+
+                        retObj.bicycles.push({
+                            date: date,
+                            hour: hour,
+                            result: bicyclesResultVal
+                        });
                     }
 
-                    retObj.bicycles.push({
-                        date: date,
-                        hour: hour,
-                        result: bicyclesResultVal
-                    });
-                }
+                    if (meansOfTransport === this.get("meansOfTransportFahrzeuge")) {
+                        if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
+                            carsResultVal = this.addThousandPoints(dataset[meansOfTransport][datetime]);
+                        }
 
-                if (meansOfTransport === this.get("meansOfTransportFahrzeuge")) {
-                    if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
-                        carsResultVal = this.addThousandPoints(dataset[meansOfTransport][datetime]);
+                        retObj.cars.push({
+                            date: date,
+                            hour: hour,
+                            result: carsResultVal
+                        });
                     }
 
-                    retObj.cars.push({
-                        date: date,
-                        hour: hour,
-                        result: carsResultVal
-                    });
-                }
+                    if (meansOfTransport === this.get("meansOfTransportSV")) {
+                        if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
+                            trucksResultVal = dataset[meansOfTransport][datetime];
+                        }
 
-                if (meansOfTransport === this.get("meansOfTransportSV")) {
-                    if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
-                        trucksResultVal = dataset[meansOfTransport][datetime];
+                        retObj.trucks.push({
+                            date: date,
+                            hour: hour,
+                            result: trucksResultVal
+                        });
                     }
+                });
+            });
 
-                    retObj.trucks.push({
-                        date: date,
-                        hour: hour,
-                        result: trucksResultVal
-                    });
-                }
-            }
-        }
+            retObjArr.push(retObj);
+        });
 
-        return retObj;
+        return retObjArr;
     },
 
     /**
      * creates a json for the yearLine data
-     * @param {Object} dataset contains the yearLine data
+     * @param {Array} datasets contain the yearLine data
      * @return {Object} Object with prepared data
      */
-    prepareYearDataset: function (dataset) {
-        const retObj = {};
+    prepareYearDataset: function (datasets) {
+        const retObjArr = [];
         let bicyclesResultVal = "",
             carsResultVal = "",
             trucksResultVal = "";
 
-        retObj.trucks = [];
-        retObj.cars = [];
-        retObj.bicycles = [];
+        datasets.forEach(dataset => {
+            const retObj = {};
 
-        for (const meansOfTransport in dataset) {
-            for (const datetime in dataset[meansOfTransport]) {
+            retObj.trucks = [];
+            retObj.cars = [];
+            retObj.bicycles = [];
 
-                const date = moment(datetime, "YYYY-MM-DD").format("YYYY-MM-DD"),
-                    calenderWeek = moment(datetime).add(3, "days").format("WW");
+            Object.keys(dataset).forEach(meansOfTransport => {
+                Object.keys(dataset[meansOfTransport]).forEach(datetime => {
 
-                if (meansOfTransport === this.get("meansOfTransportFahrraeder")) {
-                    if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
-                        bicyclesResultVal = this.addThousandPoints(dataset[meansOfTransport][datetime]);
+                    const date = moment(datetime, "YYYY-MM-DD").format("YYYY-MM-DD"),
+                        calenderWeek = moment(datetime).add(3, "days").format("WW");
+
+                    if (meansOfTransport === this.get("meansOfTransportFahrraeder")) {
+                        if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
+                            bicyclesResultVal = this.addThousandPoints(dataset[meansOfTransport][datetime]);
+                        }
+
+                        retObj.bicycles.push({
+                            date: date,
+                            calenderWeek: calenderWeek,
+                            result: bicyclesResultVal
+                        });
                     }
 
-                    retObj.bicycles.push({
-                        date: date,
-                        calenderWeek: calenderWeek,
-                        result: bicyclesResultVal
-                    });
-                }
+                    if (meansOfTransport === this.get("meansOfTransportFahrzeuge")) {
+                        if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
+                            carsResultVal = this.addThousandPoints(dataset[meansOfTransport][datetime]);
+                        }
 
-                if (meansOfTransport === this.get("meansOfTransportFahrzeuge")) {
-                    if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
-                        carsResultVal = this.addThousandPoints(dataset[meansOfTransport][datetime]);
+                        retObj.cars.push({
+                            date: date,
+                            calenderWeek: calenderWeek,
+                            result: carsResultVal
+                        });
                     }
 
-                    retObj.cars.push({
-                        date: date,
-                        calenderWeek: calenderWeek,
-                        result: carsResultVal
-                    });
-                }
+                    if (meansOfTransport === this.get("meansOfTransportSV")) {
+                        if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
+                            trucksResultVal = dataset[meansOfTransport][datetime];
+                        }
 
-                if (meansOfTransport === this.get("meansOfTransportSV")) {
-                    if (dataset[meansOfTransport][datetime] !== undefined && dataset[meansOfTransport][datetime] !== "" && dataset[meansOfTransport][datetime] !== null) {
-                        trucksResultVal = dataset[meansOfTransport][datetime];
+                        retObj.trucks.push({
+                            date: date,
+                            calenderWeek: calenderWeek,
+                            result: trucksResultVal
+                        });
                     }
+                });
+            });
 
-                    retObj.trucks.push({
-                        date: date,
-                        calenderWeek: calenderWeek,
-                        result: trucksResultVal
-                    });
-                }
-            }
-        }
+            retObjArr.push(retObj);
+        });
 
-        return retObj;
+        return retObjArr;
     },
 
     /**
-     * prepare table data
-     * @param {Object} dataset data
+     * prepare and set table data for day
+     * @param {Array} datasets data
      * @param {String} type of the table
      * @param {String} title of the table
-     * @param {Object} timeSettings - the selected dates
+     * @param {Array} timeSettings - the selected dates
      * @param {Object} meansOfTransport -
      * @return {Void} -
      */
-    prepareTableContent (dataset, type, title, timeSettings, meansOfTransport) {
-        const tblContent = {};
+    prepareTableContent (datasets, type, title, timeSettings, meansOfTransport) {
+        const dayTableContentArr = [],
+            weekTableContentArr = [],
+            yearTableContentArr = [];
+
+        let i = 0;
 
         if (["day", "week", "year"].indexOf(type) === -1) {
             return;
         }
 
-        switch (type) {
-            case "day":
-                tblContent.day = {};
-                tblContent.day.title = title;
-                tblContent.day.meansOfTransport = meansOfTransport;
+        datasets.forEach(dataset => {
+            switch (type) {
+                case "day":
+                    dayTableContentArr[i] = {};
+                    dayTableContentArr[i].title = title;
+                    dayTableContentArr[i].meansOfTransport = meansOfTransport;
+                    dayTableContentArr[i].firstColumn = "";
+                    dayTableContentArr[i].carsArr = {};
+                    dayTableContentArr[i].trucksArr = {};
+                    dayTableContentArr[i].bicyclesArr = {};
 
-                if (meansOfTransport === this.get("meansOfTransportFahrraeder") && Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
-                    tblContent.day.firstColumn = moment(timeSettings.from).format("DD.MM.YYYY");
-                    tblContent.day.headerArr = [];
-                    tblContent.day.bicyclesArr = [];
-
-                    dataset.bicycles.forEach(element => {
-                        tblContent.day.headerArr.push(element.hour);
-                        tblContent.day.bicyclesArr.push(element.result);
-                    });
-                }
-
-                if (meansOfTransport === this.get("meansOfTransportFahrzeuge") && Array.isArray(dataset.cars) && dataset.cars.length > 0) {
-                    tblContent.day.firstColumn = moment(timeSettings.from).format("DD.MM.YYYY");
-                    tblContent.day.headerArr = [];
-                    tblContent.day.carsArr = [];
-
-                    dataset.cars.forEach(element => {
-                        tblContent.day.headerArr.push(element.hour);
-                        tblContent.day.carsArr.push(element.result);
-                    });
-
-                    if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
-                        tblContent.day.trucksArr = [];
-
-                        dataset.trucks.forEach(element => {
-                            tblContent.day.trucksArr.push(Math.round(element.result * 100));
-                        });
-                    }
-                }
-
-                this.setDayTableContent(tblContent);
-                break;
-            case "week":
-                tblContent.week = {};
-                tblContent.week.title = title;
-                tblContent.week.meansOfTransport = meansOfTransport;
-
-                tblContent.week.firstColumn = moment(timeSettings.from).add(3, "days").format("WW") + "/" +
-                    moment(timeSettings.from).format("YYYY");
-
-                if (meansOfTransport === this.get("meansOfTransportFahrraeder") && Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
-                    tblContent.week.headerDateArr = [];
-                    tblContent.week.bicyclesArr = [];
-
-                    dataset.bicycles.forEach(element => {
-                        tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
-                        tblContent.week.bicyclesArr.push(element.result);
-                    });
-                }
-
-                if (meansOfTransport === this.get("meansOfTransportFahrzeuge") && Array.isArray(dataset.cars) && dataset.cars.length > 0) {
-                    tblContent.week.headerDateArr = [];
-                    tblContent.week.carsArr = [];
-
-                    dataset.cars.forEach(element => {
-                        tblContent.week.headerDateArr.push(moment(element.date).format("DD.MM.YYYY"));
-                        tblContent.week.carsArr.push(element.result);
-                    });
-
-                    if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
-                        tblContent.week.trucksArr = [];
-
-                        dataset.trucks.forEach(element => {
-                            tblContent.week.trucksArr.push(Math.round(element.result * 100));
+                    if (meansOfTransport === this.get("meansOfTransportFahrraeder") && Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                        dayTableContentArr[i].firstColumn = moment(timeSettings[i].from).format("DD.MM.YYYY");
+                        dataset.bicycles.forEach(element => {
+                            dayTableContentArr[i].bicyclesArr[element.hour] = element.result;
                         });
                     }
 
-                }
-                this.setWeekTableContent(tblContent);
-                break;
-            case "year":
-                tblContent.year = {};
-                tblContent.year.title = title;
-                tblContent.year.meansOfTransport = meansOfTransport;
+                    if (meansOfTransport === this.get("meansOfTransportFahrzeuge") && Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                        dayTableContentArr[i].firstColumn = moment(timeSettings[i].from).format("DD.MM.YYYY");
+                        dataset.cars.forEach(element => {
+                            dayTableContentArr[i].carsArr[element.hour] = element.result;
+                        });
 
-                if (meansOfTransport === this.get("meansOfTransportFahrraeder") && Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
-                    tblContent.year.firstColumn = moment(timeSettings.from, "YYYY-MM-DD").format("YYYY");
-                    tblContent.year.headerArr = [];
-                    tblContent.year.bicyclesArr = [];
+                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                            dataset.trucks.forEach(element => {
+                                dayTableContentArr[i].trucksArr[element.hour] = Math.round(element.result * 100);
+                            });
+                        }
+                    }
 
-                    dataset.bicycles.forEach(element => {
-                        tblContent.year.headerArr.push(element.calenderWeek);
-                        tblContent.year.bicyclesArr.push(element.result);
-                    });
-                }
+                    i++;
+                    // dayTableContentArr.push(day);
+                    break;
+                case "week":
 
-                if (meansOfTransport === this.get("meansOfTransportFahrzeuge") && Array.isArray(dataset.cars) && dataset.cars.length > 0) {
-                    tblContent.year.firstColumn = moment(dataset.cars[0].date, "YYYY-MM-DD").format("YYYY");
-                    tblContent.year.headerArr = [];
-                    tblContent.year.carsArr = [];
+                    weekTableContentArr[i] = {};
+                    weekTableContentArr[i].title = title;
+                    weekTableContentArr[i].meansOfTransport = meansOfTransport;
+                    weekTableContentArr[i].firstColumn = "";
+                    weekTableContentArr[i].headerDateArr = [];
+                    weekTableContentArr[i].carsArr = {};
+                    weekTableContentArr[i].trucksArr = {};
+                    weekTableContentArr[i].bicyclesArr = {};
 
-                    dataset.cars.forEach(element => {
-                        tblContent.year.headerArr.push(element.calenderWeek);
-                        tblContent.year.carsArr.push(element.result);
-                    });
+                    weekTableContentArr[i].firstColumn = moment(timeSettings[i].from).add(3, "days").format("WW") + "/" +
+                        moment(timeSettings[i].from).format("YYYY");
 
-                    if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
-                        tblContent.year.trucksArr = [];
+                    weekTableContentArr[i].headerDateArr = this.getDaysRangeInWeek(moment(timeSettings[i].from).startOf("day"), moment(timeSettings[i].until).startOf("day"));
 
-                        dataset.trucks.forEach(element => {
-                            tblContent.year.trucksArr.push(Math.round(element.result * 100));
+                    if (meansOfTransport === this.get("meansOfTransportFahrraeder") && Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                        dataset.bicycles.forEach(element => {
+                            weekTableContentArr[i].bicyclesArr[moment(element.date).format("DD.MM.YYYY")] = element.result;
                         });
                     }
-                }
-                this.setYearTableContent(tblContent);
-                break;
-            default:
+
+                    if (meansOfTransport === this.get("meansOfTransportFahrzeuge") && Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                        dataset.cars.forEach(element => {
+                            weekTableContentArr[i].carsArr[moment(element.date).format("DD.MM.YYYY")] = element.result;
+                        });
+
+                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                            dataset.trucks.forEach(element => {
+                                weekTableContentArr[i].trucksArr[moment(element.date).format("DD.MM.YYYY")] = Math.round(element.result * 100);
+                            });
+                        }
+                    }
+                    i++;
+                    break;
+                case "year":
+
+                    yearTableContentArr[i] = {};
+                    yearTableContentArr[i].title = title;
+                    yearTableContentArr[i].meansOfTransport = meansOfTransport;
+                    yearTableContentArr[i].firstColumn = "";
+                    yearTableContentArr[i].carsArr = {};
+                    yearTableContentArr[i].trucksArr = {};
+                    yearTableContentArr[i].bicyclesArr = {};
+
+                    if (meansOfTransport === this.get("meansOfTransportFahrraeder") && Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
+                        yearTableContentArr[i].firstColumn = moment(timeSettings[i].from, "YYYY-MM-DD").format("YYYY");
+
+                        dataset.bicycles.forEach(element => {
+                            yearTableContentArr[i].bicyclesArr[element.calenderWeek] = element.result;
+                        });
+                    }
+
+                    if (meansOfTransport === this.get("meansOfTransportFahrzeuge") && Array.isArray(dataset.cars) && dataset.cars.length > 0) {
+                        yearTableContentArr[i].firstColumn = moment(dataset.cars[0].date, "YYYY-MM-DD").format("YYYY");
+
+                        dataset.cars.forEach(element => {
+                            yearTableContentArr[i].carsArr[element.calenderWeek] = element.result;
+                        });
+
+                        if (Array.isArray(dataset.trucks) && dataset.trucks.length > 0) {
+                            dataset.trucks.forEach(element => {
+                                yearTableContentArr[i].trucksArr[element.calenderWeek] = Math.round(element.result * 100);
+                            });
+                        }
+                    }
+
+                    i++;
+                    break;
+                default:
+            }
+        });
+
+        if (type === "day") {
+            this.setDayTableContent(dayTableContentArr);
         }
+        else if (type === "week") {
+            this.setWeekTableContent(weekTableContentArr);
+        }
+        else {
+            this.setYearTableContent(yearTableContentArr);
+        }
+    },
+
+    /**
+     * returns the days between
+     * @param {Object} from - from date
+     * @param {Object} until - to date
+     * @return {Array} - returns the days range in a week
+     */
+    getDaysRangeInWeek: function (from, until) {
+        const dates = [];
+
+        dates.push(from.clone().format("DD.MM.YYYY"));
+        while (from.add(1, "days").diff(until) <= 0) {
+            dates.push(from.clone().format("DD.MM.YYYY"));
+        }
+
+        return dates;
     },
 
     /**
@@ -711,8 +749,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
 
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
+
                 this.refreshDiagramDay(datasets, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareDatasetHourly(datasets[0]), "day", "Datum", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareDatasetHourly(datasets), "day", "Datum", timeSettings, meansOfTransport);
+
             }, errormsg => {
                 this.refreshDiagramDay([]);
                 this.setDayTableContent([]);
@@ -803,8 +843,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
 
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
+
                 this.refreshDiagramWeek(datasets, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareDatasetHourly(datasets[0]), "week", "Woche", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareDatasetHourly(datasets), "week", "Woche", timeSettings, meansOfTransport);
+
             }, errormsg => {
                 this.refreshDiagramWeek([]);
                 this.setWeekTableContent([]);
@@ -889,8 +931,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
 
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
+
                 this.refreshDiagramYear(datasets, years, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareYearDataset(datasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareYearDataset(datasets), "year", "Jahr", timeSettings, meansOfTransport);
+
             }, errormsg => {
                 this.refreshDiagramYear([]);
                 this.setYearTableContent([]);

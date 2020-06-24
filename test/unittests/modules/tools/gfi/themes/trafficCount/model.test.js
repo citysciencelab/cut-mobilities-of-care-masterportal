@@ -256,6 +256,61 @@ describe("tools/gfi/themes/trafficCount", function () {
     });
 
     describe("prepareTableContent", function () {
+        it("should return a specific object for the given dataset of day for cars", function () {
+
+            const dataset =
+                    {
+                        trucks: [],
+                        bicycles: [],
+                        cars: [
+                            {date: "2020-03-31", hour: "00:15", result: 84},
+                            {date: "2020-03-31", hour: "00:30", result: 82},
+                            {date: "2020-03-31", hour: "00:45", result: 76},
+                            {date: "2020-03-31", hour: "01:00", result: 96},
+                            {date: "2020-03-31", hour: "01:15", result: 74},
+                            {date: "2020-03-31", hour: "01:30", result: 72},
+                            {date: "2020-03-31", hour: "01:45", result: 70},
+                            {date: "2020-03-31", hour: "02:00", result: 69},
+                            {date: "2020-03-31", hour: "02:15", result: 58},
+                            {date: "2020-03-31", hour: "02:30", result: 89},
+                            {date: "2020-03-31", hour: "02:45", result: 70},
+                            {date: "2020-03-31", hour: "03:00", result: 75},
+                            {date: "2020-03-31", hour: "03:15", result: 93},
+                            {date: "2020-03-31", hour: "03:30", result: 71}
+                        ]
+                    },
+
+                tblContentExpected = [{
+                    title: "Datum",
+                    firstColumn: "31.03.2020",
+                    bicyclesArr: {},
+                    carsArr: {
+                        "00:15": 84,
+                        "00:30": 82,
+                        "00:45": 76,
+                        "01:00": 96,
+                        "01:15": 74,
+                        "01:30": 72,
+                        "01:45": 70,
+                        "02:00": 69,
+                        "02:15": 58,
+                        "02:30": 89,
+                        "02:45": 70,
+                        "03:00": 75,
+                        "03:15": 93,
+                        "03:30": 71
+                    },
+                    trucksArr: {},
+                    meansOfTransport: "AnzFahrzeuge"
+                }];
+
+            model.prepareTableContent([dataset], "day", "Datum", [{from: "2020-03-31", until: "2020-03-31"}], "AnzFahrzeuge");
+
+            expect(model.get("dayTableContent")).to.deep.equal(tblContentExpected);
+        });
+    });
+
+    describe("prepareTableContent", function () {
         it("should return a specific object for the given dataset of day for bicycles", function () {
 
             const dataset =
@@ -276,147 +331,35 @@ describe("tools/gfi/themes/trafficCount", function () {
                             {date: "2020-03-31", hour: "02:45", result: 70},
                             {date: "2020-03-31", hour: "03:00", result: 75},
                             {date: "2020-03-31", hour: "03:15", result: 93},
-                            {date: "2020-03-31", hour: "03:30", result: 71},
-                            {date: "2020-03-31", hour: "03:45", result: 85},
-                            {date: "2020-03-31", hour: "04:00", result: 89},
-                            {date: "2020-03-31", hour: "04:15", result: 62},
-                            {date: "2020-03-31", hour: "04:30", result: 69},
-                            {date: "2020-03-31", hour: "04:45", result: 62},
-                            {date: "2020-03-31", hour: "05:00", result: 82},
-                            {date: "2020-03-31", hour: "05:15", result: 91},
-                            {date: "2020-03-31", hour: "05:30", result: 72},
-                            {date: "2020-03-31", hour: "05:45", result: 88},
-                            {date: "2020-03-31", hour: "06:00", result: 54},
-                            {date: "2020-03-31", hour: "06:15", result: 50},
-                            {date: "2020-03-31", hour: "06:30", result: 72},
-                            {date: "2020-03-31", hour: "06:45", result: 62},
-                            {date: "2020-03-31", hour: "07:00", result: 91},
-                            {date: "2020-03-31", hour: "07:15", result: 81},
-                            {date: "2020-03-31", hour: "07:30", result: 88},
-                            {date: "2020-03-31", hour: "07:45", result: 82},
-                            {date: "2020-03-31", hour: "08:00", result: 77},
-                            {date: "2020-03-31", hour: "08:15", result: 75},
-                            {date: "2020-03-31", hour: "08:30", result: 97},
-                            {date: "2020-03-31", hour: "08:45", result: 69},
-                            {date: "2020-03-31", hour: "09:00", result: 92},
-                            {date: "2020-03-31", hour: "09:15", result: 75},
-                            {date: "2020-03-31", hour: "09:30", result: 91},
-                            {date: "2020-03-31", hour: "09:45", result: 88},
-                            {date: "2020-03-31", hour: "10:00", result: 81},
-                            {date: "2020-03-31", hour: "10:15", result: 65},
-                            {date: "2020-03-31", hour: "10:30", result: 65},
-                            {date: "2020-03-31", hour: "10:45", result: 71},
-                            {date: "2020-03-31", hour: "11:00", result: 105},
-                            {date: "2020-03-31", hour: "11:15", result: 65},
-                            {date: "2020-03-31", hour: "11:30", result: 78}
+                            {date: "2020-03-31", hour: "03:30", result: 71}
                         ]
                     },
 
-                tblContentExpected = {
-                    day: {
-                        title: "Datum",
-                        firstColumn: "31.03.2020",
-                        headerArr: [
-                            "00:15",
-                            "00:30",
-                            "00:45",
-                            "01:00",
-                            "01:15",
-                            "01:30",
-                            "01:45",
-                            "02:00",
-                            "02:15",
-                            "02:30",
-                            "02:45",
-                            "03:00",
-                            "03:15",
-                            "03:30",
-                            "03:45",
-                            "04:00",
-                            "04:15",
-                            "04:30",
-                            "04:45",
-                            "05:00",
-                            "05:15",
-                            "05:30",
-                            "05:45",
-                            "06:00",
-                            "06:15",
-                            "06:30",
-                            "06:45",
-                            "07:00",
-                            "07:15",
-                            "07:30",
-                            "07:45",
-                            "08:00",
-                            "08:15",
-                            "08:30",
-                            "08:45",
-                            "09:00",
-                            "09:15",
-                            "09:30",
-                            "09:45",
-                            "10:00",
-                            "10:15",
-                            "10:30",
-                            "10:45",
-                            "11:00",
-                            "11:15",
-                            "11:30"
-                        ],
-                        bicyclesArr: [
-                            84,
-                            82,
-                            76,
-                            96,
-                            74,
-                            72,
-                            70,
-                            69,
-                            58,
-                            89,
-                            70,
-                            75,
-                            93,
-                            71,
-                            85,
-                            89,
-                            62,
-                            69,
-                            62,
-                            82,
-                            91,
-                            72,
-                            88,
-                            54,
-                            50,
-                            72,
-                            62,
-                            91,
-                            81,
-                            88,
-                            82,
-                            77,
-                            75,
-                            97,
-                            69,
-                            92,
-                            75,
-                            91,
-                            88,
-                            81,
-                            65,
-                            65,
-                            71,
-                            105,
-                            65,
-                            78
-                        ],
-                        meansOfTransport: "AnzFahrraeder"
-                    }
-                };
+                tblContentExpected = [{
+                    title: "Datum",
+                    firstColumn: "31.03.2020",
+                    carsArr: {},
+                    bicyclesArr: {
+                        "00:15": 84,
+                        "00:30": 82,
+                        "00:45": 76,
+                        "01:00": 96,
+                        "01:15": 74,
+                        "01:30": 72,
+                        "01:45": 70,
+                        "02:00": 69,
+                        "02:15": 58,
+                        "02:30": 89,
+                        "02:45": 70,
+                        "03:00": 75,
+                        "03:15": 93,
+                        "03:30": 71
+                    },
+                    trucksArr: {},
+                    meansOfTransport: "AnzFahrraeder"
+                }];
 
-            model.prepareTableContent(dataset, "day", "Datum", {from: "2020-03-31", until: "2020-03-31"}, "AnzFahrraeder");
+            model.prepareTableContent([dataset], "day", "Datum", [{from: "2020-03-31", until: "2020-03-31"}], "AnzFahrraeder");
 
             expect(model.get("dayTableContent")).to.deep.equal(tblContentExpected);
         });
@@ -440,198 +383,32 @@ describe("tools/gfi/themes/trafficCount", function () {
                     },
 
                 tblContentExpected = {
-                    week: {
-                        title: "Woche",
-                        firstColumn: "12/2020",
-                        headerDateArr: [
-                            "16.03.2020",
-                            "17.03.2020",
-                            "18.03.2020",
-                            "19.03.2020",
-                            "20.03.2020",
-                            "21.03.2020"
-                        ],
-                        carsArr: [
-                            1324,
-                            1381,
-                            1619,
-                            1409,
-                            1567,
-                            1464
-                        ],
-                        meansOfTransport: "AnzFahrzeuge"
-                    }
-                };
-
-            model.prepareTableContent(dataset, "week", "Woche", {from: "2020-03-16", until: "2020-03-21"}, "AnzFahrzeuge");
-
-            expect(model.get("weekTableContent")).to.deep.equal(tblContentExpected);
-        });
-    });
-    describe("prepareTableContent", function () {
-        it("should return a specific object for the given dataset of day for cars", function () {
-
-            const dataset =
-                    {
-                        trucks: [],
-                        bicycles: [],
-                        cars: [
-                            {date: "2020-03-31", hour: "00:15", result: 84},
-                            {date: "2020-03-31", hour: "00:30", result: 82},
-                            {date: "2020-03-31", hour: "00:45", result: 76},
-                            {date: "2020-03-31", hour: "01:00", result: 96},
-                            {date: "2020-03-31", hour: "01:15", result: 74},
-                            {date: "2020-03-31", hour: "01:30", result: 72},
-                            {date: "2020-03-31", hour: "01:45", result: 70},
-                            {date: "2020-03-31", hour: "02:00", result: 69},
-                            {date: "2020-03-31", hour: "02:15", result: 58},
-                            {date: "2020-03-31", hour: "02:30", result: 89},
-                            {date: "2020-03-31", hour: "02:45", result: 70},
-                            {date: "2020-03-31", hour: "03:00", result: 75},
-                            {date: "2020-03-31", hour: "03:15", result: 93},
-                            {date: "2020-03-31", hour: "03:30", result: 71},
-                            {date: "2020-03-31", hour: "03:45", result: 85},
-                            {date: "2020-03-31", hour: "04:00", result: 89},
-                            {date: "2020-03-31", hour: "04:15", result: 62},
-                            {date: "2020-03-31", hour: "04:30", result: 69},
-                            {date: "2020-03-31", hour: "04:45", result: 62},
-                            {date: "2020-03-31", hour: "05:00", result: 82},
-                            {date: "2020-03-31", hour: "05:15", result: 91},
-                            {date: "2020-03-31", hour: "05:30", result: 72},
-                            {date: "2020-03-31", hour: "05:45", result: 88},
-                            {date: "2020-03-31", hour: "06:00", result: 54},
-                            {date: "2020-03-31", hour: "06:15", result: 50},
-                            {date: "2020-03-31", hour: "06:30", result: 72},
-                            {date: "2020-03-31", hour: "06:45", result: 62},
-                            {date: "2020-03-31", hour: "07:00", result: 91},
-                            {date: "2020-03-31", hour: "07:15", result: 81},
-                            {date: "2020-03-31", hour: "07:30", result: 88},
-                            {date: "2020-03-31", hour: "07:45", result: 82},
-                            {date: "2020-03-31", hour: "08:00", result: 77},
-                            {date: "2020-03-31", hour: "08:15", result: 75},
-                            {date: "2020-03-31", hour: "08:30", result: 97},
-                            {date: "2020-03-31", hour: "08:45", result: 69},
-                            {date: "2020-03-31", hour: "09:00", result: 92},
-                            {date: "2020-03-31", hour: "09:15", result: 75},
-                            {date: "2020-03-31", hour: "09:30", result: 91},
-                            {date: "2020-03-31", hour: "09:45", result: 88},
-                            {date: "2020-03-31", hour: "10:00", result: 81},
-                            {date: "2020-03-31", hour: "10:15", result: 65},
-                            {date: "2020-03-31", hour: "10:30", result: 65},
-                            {date: "2020-03-31", hour: "10:45", result: 71},
-                            {date: "2020-03-31", hour: "11:00", result: 105},
-                            {date: "2020-03-31", hour: "11:15", result: 65},
-                            {date: "2020-03-31", hour: "11:30", result: 78}
-                        ]
+                    title: "Woche",
+                    firstColumn: "12/2020",
+                    headerDateArr: [
+                        "16.03.2020",
+                        "17.03.2020",
+                        "18.03.2020",
+                        "19.03.2020",
+                        "20.03.2020",
+                        "21.03.2020"
+                    ],
+                    carsArr: {
+                        "16.03.2020": 1324,
+                        "17.03.2020": 1381,
+                        "18.03.2020": 1619,
+                        "19.03.2020": 1409,
+                        "20.03.2020": 1567,
+                        "21.03.2020": 1464
                     },
-
-                tblContentExpected = {
-                    day: {
-                        title: "Datum",
-                        firstColumn: "31.03.2020",
-                        headerArr: [
-                            "00:15",
-                            "00:30",
-                            "00:45",
-                            "01:00",
-                            "01:15",
-                            "01:30",
-                            "01:45",
-                            "02:00",
-                            "02:15",
-                            "02:30",
-                            "02:45",
-                            "03:00",
-                            "03:15",
-                            "03:30",
-                            "03:45",
-                            "04:00",
-                            "04:15",
-                            "04:30",
-                            "04:45",
-                            "05:00",
-                            "05:15",
-                            "05:30",
-                            "05:45",
-                            "06:00",
-                            "06:15",
-                            "06:30",
-                            "06:45",
-                            "07:00",
-                            "07:15",
-                            "07:30",
-                            "07:45",
-                            "08:00",
-                            "08:15",
-                            "08:30",
-                            "08:45",
-                            "09:00",
-                            "09:15",
-                            "09:30",
-                            "09:45",
-                            "10:00",
-                            "10:15",
-                            "10:30",
-                            "10:45",
-                            "11:00",
-                            "11:15",
-                            "11:30"
-                        ],
-                        carsArr: [
-                            84,
-                            82,
-                            76,
-                            96,
-                            74,
-                            72,
-                            70,
-                            69,
-                            58,
-                            89,
-                            70,
-                            75,
-                            93,
-                            71,
-                            85,
-                            89,
-                            62,
-                            69,
-                            62,
-                            82,
-                            91,
-                            72,
-                            88,
-                            54,
-                            50,
-                            72,
-                            62,
-                            91,
-                            81,
-                            88,
-                            82,
-                            77,
-                            75,
-                            97,
-                            69,
-                            92,
-                            75,
-                            91,
-                            88,
-                            81,
-                            65,
-                            65,
-                            71,
-                            105,
-                            65,
-                            78
-                        ],
-                        meansOfTransport: "AnzFahrzeuge"
-                    }
+                    trucksArr: {},
+                    bicyclesArr: {},
+                    meansOfTransport: "AnzFahrzeuge"
                 };
 
-            model.prepareTableContent(dataset, "day", "Datum", {from: "2020-03-31", until: "2020-03-31"}, "AnzFahrzeuge");
+            model.prepareTableContent([dataset], "week", "Woche", [{from: "2020-03-16", until: "2020-03-21"}], "AnzFahrzeuge");
 
-            expect(model.get("dayTableContent")).to.deep.equal(tblContentExpected);
+            expect(model.get("weekTableContent")[0]).to.deep.equal(tblContentExpected);
         });
     });
 
@@ -653,36 +430,36 @@ describe("tools/gfi/themes/trafficCount", function () {
                     },
 
                 tblContentExpected = {
-                    week: {
-                        title: "Woche",
-                        firstColumn: "12/2020",
-                        headerDateArr: [
-                            "16.03.2020",
-                            "17.03.2020",
-                            "18.03.2020",
-                            "19.03.2020",
-                            "20.03.2020",
-                            "21.03.2020"
-                        ],
-                        carsArr: [
-                            1324,
-                            1378,
-                            "",
-                            1409,
-                            1567,
-                            1464
-                        ],
-                        meansOfTransport: "AnzFahrzeuge"
-                    }
+                    title: "Woche",
+                    firstColumn: "12/2020",
+                    headerDateArr: [
+                        "16.03.2020",
+                        "17.03.2020",
+                        "18.03.2020",
+                        "19.03.2020",
+                        "20.03.2020",
+                        "21.03.2020"
+                    ],
+                    carsArr: {
+                        "16.03.2020": 1324,
+                        "17.03.2020": 1378,
+                        "18.03.2020": "",
+                        "19.03.2020": 1409,
+                        "20.03.2020": 1567,
+                        "21.03.2020": 1464
+                    },
+                    trucksArr: {},
+                    bicyclesArr: {},
+                    meansOfTransport: "AnzFahrzeuge"
                 };
 
-            model.prepareTableContent(dataset, "week", "Woche", {from: "2020-03-16", until: "2020-03-21"}, "AnzFahrzeuge");
-            expect(model.get("weekTableContent")).to.deep.equal(tblContentExpected);
+            model.prepareTableContent([dataset], "week", "Woche", [{from: "2020-03-16", until: "2020-03-21"}], "AnzFahrzeuge");
+            expect(model.get("weekTableContent")[0]).to.deep.equal(tblContentExpected);
         });
     });
 
     describe("prepareDatasetHourly", function () {
-        it("should return a specific object for the given dataset of week for cars", function () {
+        it("should return a specific object for the given dataset of day for cars and trucks", function () {
 
             const dataset =
                     {
@@ -782,7 +559,7 @@ describe("tools/gfi/themes/trafficCount", function () {
                         }
                     },
 
-                tblContentExpected = {
+                tblContentExpected = [{
                     "trucks": [
                         {
                             "date": "2020-06-17",
@@ -1238,9 +1015,9 @@ describe("tools/gfi/themes/trafficCount", function () {
                         }
                     ],
                     "bicycles": []
-                };
+                }];
 
-            expect(model.prepareDatasetHourly(dataset)).to.deep.equal(tblContentExpected);
+            expect(model.prepareDatasetHourly([dataset])).to.deep.equal(tblContentExpected);
         });
     });
 
