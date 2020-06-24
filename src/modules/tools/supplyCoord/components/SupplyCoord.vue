@@ -112,7 +112,8 @@ export default {
             // this.initialize();
         },
         active (newValue) {
-            const myBus = Backbone.Events;
+            const myBus = Backbone.Events,
+                that = this;
 
             Radio.trigger("MapMarker", "hideMarker");
             Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
@@ -120,7 +121,7 @@ export default {
                 // active is true
                 myBus.listenTo(Radio.channel("Map"), {
                     clickedWindowPosition: function (evt) {
-                        this.positionClicked(evt.coordinate);
+                        that.positionClicked(evt.coordinate);
                     }
                 });
                 this.createInteraction();
