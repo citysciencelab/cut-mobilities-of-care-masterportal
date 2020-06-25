@@ -24,7 +24,7 @@
             <tr colspan = "2">
                 <td class="bold"><%= attribute.attrName %></td>
                 <td>
-                    <% if (_.isArray(attribute.attrValue)) {
+                    <% if (Array.isArray(attribute.attrValue)) {
                         _.each(attribute.attrValue, function (value) {
                             if (value.search("http") !== -1) { %>
                                 <a href="<%= value %>" target="_blank"><%= value.trim().substring(7) %></a>

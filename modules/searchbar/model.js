@@ -169,7 +169,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         // Prüfe für jeden bekannten Suchalgorithmus ob er aktiviert ist. Wenn ja markiere ihn als
         // "Ergebnis ausstehend" und füge ihn der Liste aktiver Suchalgorithmen hinzu.
         _.forEach(searchTasks, function (taskName) {
-            if (_.has(config, taskName) === true) {
+            if (config.hasOwnProperty(taskName)) {
                 if (taskName === "gazetteer") {
                     // Der Suchalgorithmus "gazetteer" ist ein Sonderfall, da er mehrere Suchen durchführen kann
                     this.set("initialSearch_gazetteer_streetsOrHouseNumbers", false);
@@ -241,19 +241,19 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         tempArray.push(value);
 
         // removes addresses without house number, if more than one exists
-        if (evtType === "paste" && !_.isUndefined(tempArray) && tempArray.length > 1) {
+        if (evtType === "paste" && tempArray !== undefined && tempArray.length > 1) {
             valueWithNumbers = tempArray.filter(function (val) {
                 const valueArray = val.name.split(",")[0].split(" ");
 
-                return !_.isNaN(parseInt(valueArray[valueArray.length - 1], 10));
+                return isNaN(parseInt(valueArray[valueArray.length - 1], 10));
             });
 
-            tempArray = _.isUndefined(valueWithNumbers) ? tempArray : valueWithNumbers;
+            tempArray = valueWithNumbers === undefined ? tempArray : valueWithNumbers;
         }
 
         this.set(attribute, _.flatten(tempArray));
 
-        if (!_.isUndefined(valueWithNumbers) && this.get("eventType") === "paste") {
+        if (valueWithNumbers !== undefined && this.get("eventType") === "paste") {
             Radio.trigger("ViewZoom", "hitSelected");
         }
     },
@@ -268,9 +268,9 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         const tempArray = _.clone(this.get(attribute));
         let toRemove;
 
-        if (_.isObject(filter)) {
+        if (typeof filter === "object") {
             toRemove = _.where(tempArray, filter);
-            _.each(toRemove, function (item) {
+            toRemove.forEach(item => {
                 tempArray.splice(tempArray.indexOf(item), 1);
             });
         }
@@ -291,7 +291,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @return {String} file extension
      */
     changeFileExtension: function (src, ext) {
-        if (_.isUndefined(src)) {
+        if (src === undefined) {
             return src;
         }
         if (src.substring(src.lastIndexOf("."), src.length) !== ext) {
@@ -307,7 +307,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @returns {string} s todo
      */
     shortenString: function (s, length) {
-        if (_.isUndefined(s)) {
+        if (s === undefined) {
             return s;
         }
         if (s.length > length && length > 0) {

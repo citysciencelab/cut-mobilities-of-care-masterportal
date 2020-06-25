@@ -110,7 +110,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return this.where(attributes);
             },
             "getModelByAttributes": function (attributes) {
-                return !_.isUndefined(this.findWhere(attributes)) ? this.findWhere(attributes) : this.retrieveGroupModel(attributes);
+                return this.findWhere(attributes) !== undefined ? this.findWhere(attributes) : this.retrieveGroupModel(attributes);
             }
         }, this);
 
@@ -243,15 +243,15 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                  * @deprecated in 3.0.0
                  */
                 if (attrs.version === undefined) {
-                    return new PrintV2(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                    return new PrintV2(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 else if (attrs.version === "HighResolutionPlotService") {
-                    return new HighResolutionPrint(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                    return new HighResolutionPrint(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new Print(attrs, options);
             }
             else if (attrs.id === "gfi") {
-                return new GFI(_.extend(attrs, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
+                return new GFI(Object.assign(attrs, Config.hasOwnProperty("gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
             }
             else if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
@@ -284,7 +284,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new SearchByCoord(attrs, options);
             }
             else if (attrs.id === "saveSelection") {
-                return new SaveSelection(_.extend(attrs, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
+                return new SaveSelection(Object.assign(attrs, Config.hasOwnProperty("simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
             }
             else if (attrs.id === "lines") {
                 return new Lines(attrs, options);
@@ -299,7 +299,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new AddWms(attrs, options);
             }
             else if (attrs.id === "treeFilter") {
-                return new TreeFilter(_.extend(attrs, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
+                return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);
             }
             else if (attrs.id === "contact") {
                 return new Contact(attrs, options);
@@ -318,7 +318,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
              */
             else if (attrs.id === "extendedFilter") {
                 console.warn("Tool: 'extendedFilter' is deprecated. Please use 'filter' instead.");
-                return new ExtendedFilter(_.extend(attrs, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
+                return new ExtendedFilter(Object.assign(attrs, Config.hasOwnProperty("ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
             }
             else if (attrs.id === "featureLister") {
                 return new FeatureLister(attrs, options);
@@ -794,23 +794,23 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (paramLayers.length > 0) {
             itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
-            _.each(itemIsVisibleInMap, function (layer) {
+            itemIsVisibleInMap.forEach(layer => {
                 layer.isVisibleInMap = false;
                 layer.isSelected = false;
-            }, this);
+            });
 
-            _.each(paramLayers, function (paramLayer) {
+            paramLayers.forEach(paramLayer => {
                 lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
-                if (_.isUndefined(lightModel) === false) {
+                if (lightModel !== undefined) {
                     this.add(lightModel);
                     this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
                     // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
-                    if (paramLayer.visibility === false && _.isUndefined(this.get(paramLayer.id)) === false) {
+                    if (paramLayer.visibility === false && this.get(paramLayer.id) !== undefined) {
                         this.get(paramLayer.id).setIsVisibleInMap(false);
                     }
                 }
-            }, this);
+            });
             this.addModelsByAttributes({typ: "Oblique"});
         }
         else {
@@ -831,11 +831,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     mergeParamsToLightModels: function (lightModels, paramLayers) {
         lightModels.reverse();
         // Merge die parametrisierten Einstellungen an die geparsten Models
-        if (_.isUndefined(paramLayers) === false && paramLayers.length !== 0) {
-            _.each(lightModels, function (lightModel) {
-                const hit = _.find(paramLayers, function (paramLayer) {
-                    return paramLayer.id === lightModel.id;
-                });
+        if (paramLayers !== undefined && paramLayers.length !== 0) {
+            lightModels.forEach(lightModel => {
+                const hit = paramLayers.find(paramLayer => paramLayer.id === lightModel.id);
 
                 if (hit) {
                     lightModel.isSelected = hit.visibility;
@@ -858,7 +856,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setModelAttributesById: function (id, attrs) {
         const model = this.get(id);
 
-        if (_.isUndefined(model) === false) {
+        if (model !== undefined) {
             model.set(attrs);
         }
     },
@@ -960,7 +958,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         this.add(lightSiblingsModels);
         // Abbruchbedingung
-        if (_.isUndefined(parentModel) === false && parentModel.id !== "tree") {
+        if (parentModel !== undefined && parentModel.id !== "tree") {
             this.addAndExpandModelsRecursive(parentModel.parentId);
             this.get(parentModel.id).setIsExpanded(true);
         }
@@ -1031,13 +1029,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {Object} model
      */
     retrieveGroupModel: function (attributes) {
-        const layerId = _.isObject(attributes) ? attributes.id : attributes,
+        const layerId = typeof attributes === "object" ? attributes.id : attributes,
             groupModels = this.filter(function (model) {
                 return model.get("typ") === "GROUP";
             });
 
-        return _.find(groupModels, function (groupModel) {
-            return _.find(groupModel.get("children"), function (child) {
+        return groupModels.find(groupModel => {
+            return groupModel.get("children").find(child => {
                 return child.id === layerId;
             });
         });
@@ -1094,10 +1092,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     getModelById: function (id) {
         let model = this.get(id);
 
-        if (_.isUndefined(model)) {
-            model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {
-                return child.get("id") === id;
-            });
+        if (model === undefined) {
+            model = this.retrieveGroupModel(id).get("layerSource").find(child => child.get("id") === id);
         }
         return model;
     },

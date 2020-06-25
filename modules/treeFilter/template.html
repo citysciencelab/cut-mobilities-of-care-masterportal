@@ -10,7 +10,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right treeList" role="menu">
-                                <% _.each(categoryArray, function (category, index) { %>
+                                <% categoryArray.forEach(function (category, index) { %>
                                     <li><a class="categoryPick" href="#" title="<%= category %>"><%= category %></a></li>
                                 <% }); %>
                         </ul>
@@ -33,7 +33,7 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right treeTypeList" role="menu">
                             <% if (typeArray.length >= 1) { %>
-                                <% _.each(typeArray, function (type, index) { %>
+                                <% typeArray.forEach(function (type, index) { %>
                                     <li><a class="typePick" href="#" title="<%= type %>"><%= type %></a></li>
                                 <% }); %>
                             <% } else { %>

@@ -5,7 +5,7 @@ import StaticImageSource from "ol/source/ImageStatic.js";
 
 const StaticImageLayer = Layer.extend({
 
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"]
     }),
 

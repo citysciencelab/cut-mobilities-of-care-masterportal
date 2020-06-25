@@ -18,7 +18,7 @@ const ItGbmTheme = Theme.extend({
 
         });
         this.setTitle(this.get("gfiContent")[0].Belegenheit);
-        this.setGfiContent(_.omit(this.get("gfiContent")[0], "Belegenheit"));
+        this.setGfiContent(Radio.request("Util", "omit", this.get("gfiContent")[0], ["Belegenheit"]));
         this.setGfiContent(this.addUnits(this.get("gfiContent"), ["Größe"]));
     },
     /**
@@ -30,11 +30,11 @@ const ItGbmTheme = Theme.extend({
     addUnits: function (gfiContent, attrArray) {
         _.each(gfiContent, function (value, key) {
             // Gewerbliche Standorte
-            if (this.get("id") === "10319" && _.contains(attrArray, key)) {
+            if (this.get("id") === "10319" && attrArray.includes(key)) {
                 gfiContent[key] = this.punctuate(value) + " ha";
             }
             // Flurstücke
-            if (this.get("id") === "10320" && _.contains(attrArray, key)) {
+            if (this.get("id") === "10320" && attrArray.includes(key)) {
                 gfiContent[key] = this.punctuate(value) + " m²";
             }
         }, this);
@@ -61,7 +61,7 @@ const ItGbmTheme = Theme.extend({
      * @returns {void}
      */
     postMessageToItGbm: function () {
-        const featureProperties = _.omit(this.get("feature").getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]);
+        const featureProperties = Radio.request("Util", "omit", this.get("feature").getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]);
 
         featureProperties.extent = this.get("feature").getGeometry().getExtent();
         featureProperties.id = this.get("feature").getId();

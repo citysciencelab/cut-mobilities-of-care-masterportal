@@ -163,10 +163,10 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     updateValues: function (value) {
         const collection = this.get("valuesCollection").models;
 
-        _.each(collection, function (model, index) {
+        collection.forEach((model, index) => {
             model.set("value", value[index]);
             model.set("displayName", value[index]);
-        }, this);
+        });
         if (this.get("preselectedValues").length > 0) {
             this.updateSelectedValues(this.get("preselectedValues"));
         }
@@ -181,14 +181,14 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
     updateSelectedValues: function (values) {
         let vals = values;
 
-        if (!_.isArray(values)) {
+        if (!Array.isArray(values)) {
             if (!this.get("isMultiple")) {
                 this.setDisplayName(values);
             }
             vals = [vals];
         }
-        _.each(this.get("valuesCollection").models, function (valueModel) {
-            if (_.contains(vals, valueModel.get("value"))) {
+        this.get("valuesCollection").models.forEach(valueModel => {
+            if (vals.includes(valueModel.get("value"))) {
                 valueModel.set("isSelected", true);
             }
             else {
@@ -205,7 +205,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
      */
     updateSelectableValues: function (values) {
         this.get("valuesCollection").each(function (valueModel) {
-            if (!_.contains(values, valueModel.get("value")) && !valueModel.get("isSelected")) {
+            if (!values.includes(valueModel.get("value")) && !valueModel.get("isSelected")) {
                 valueModel.set("isSelectable", false);
             }
             else {
@@ -258,7 +258,7 @@ const DropdownModel = SnippetModel.extend(/** @lends DropdownModel.prototype */{
             };
 
         if (selectedModels.length > 0) {
-            _.each(selectedModels, function (model) {
+            selectedModels.forEach(model => {
                 obj.values.push(model.get("value"));
             });
         }

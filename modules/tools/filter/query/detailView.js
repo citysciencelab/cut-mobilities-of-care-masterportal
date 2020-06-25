@@ -76,7 +76,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      */
     rerenderSnippets: function (changedValue) {
         _.each(this.model.get("snippetCollection").models, function (snippet) {
-            if (_.isUndefined(changedValue) || snippet.get("name") !== changedValue.get("attr")) {
+            if (changedValue === undefined || snippet.get("name") !== changedValue.get("attr")) {
                 snippet.trigger("render");
             }
         });
@@ -151,8 +151,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         let countSelectedValues = 0,
             view;
 
-        _.each(this.model.get("snippetCollection").models, function (snippet) {
-            _.each(snippet.get("valuesCollection").models, function (valueModel) {
+        this.model.get("snippetCollection").models.forEach(snippet => {
+            snippet.get("valuesCollection").models.forEach(valueModel => {
                 valueModel.trigger("removeView");
 
                 if (valueModel.get("isSelected")) {
@@ -161,8 +161,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
                     this.$el.find(".value-views-container .text:nth-child(1)").after(view.render().$el);
                 }
-            }, this);
-        }, this);
+            });
+        });
 
         if (countSelectedValues === 0) {
             this.$el.find(".text:last-child").show();

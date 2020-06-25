@@ -65,9 +65,9 @@ const MobileMenu = Backbone.View.extend({
             return layer.get("selectionIDX");
         }).reverse();
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             model.setIsVisibleInTree(false);
-        }, this);
+        });
 
         this.addViews(models);
     },
@@ -80,9 +80,9 @@ const MobileMenu = Backbone.View.extend({
         }
         else {
             // Views löschen um doppeltes Zeichnen zu vermeiden
-            _.each(models, function (model) {
+            models.forEach(model => {
                 model.setIsVisibleInTree(false);
-            }, this);
+            });
             models = _.sortBy(models, function (layer) {
                 return layer.get("selectionIDX");
             }).reverse();

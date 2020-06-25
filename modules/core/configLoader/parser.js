@@ -114,7 +114,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         return model.get("type") === "layer" && model.get("parentId") !== "Baselayer";
                     });
 
-                _.each(modelListToRemove, function (model) {
+                modelListToRemove.forEach(model => {
                     model.setIsSelected(false);
                 });
                 modelList.remove(modelListToRemove);
@@ -156,19 +156,21 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * Parsed the menu entries (everything except the contents of the tree)
-     * @param {Object} items Single levels of the menu bar, e.g. contact, legend, tools and tree
+     * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @param {String} parentId indicates to whom the items will be added
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @return {void}
      */
-    parseMenu: function (items, parentId) {
-        _.each(items, function (value, key) {
+    parseMenu: function (items = {}, parentId) {
+        Object.entries(items).forEach(itemX => {
+            const value = itemX[1],
+                key = itemX[0];
             let item,
                 toolitem,
                 ansicht,
                 downloadItem;
 
-            if (_.has(value, "children") || key === "tree") {
+            if (value.hasOwnProperty("children") || key === "tree") {
                 item = {
                     type: "folder",
                     parentId: parentId,
@@ -178,29 +180,29 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 };
 
                 // Attribute aus der config.json werden von item geerbt
-                _.extend(item, value);
+                Object.assign(item, value);
                 this.addItem(item);
                 this.parseMenu(value.children, key);
             }
             else if (key.search("staticlinks") !== -1) {
-                _.each(value, function (staticlink) {
-                    toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
+                value.forEach(staticlink => {
+                    toolitem = Object.assign(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
 
                     this.addItem(toolitem);
-                }, this);
+                });
             }
-            else if (_.has(value, "type") && value.type === "viewpoint") {
-                ansicht = _.extend(value, {parentId: parentId, id: _.uniqueId(key + "_")});
+            else if (value.hasOwnProperty("type") && value.type === "viewpoint") {
+                ansicht = Object.assign(value, {parentId: parentId, id: _.uniqueId(key + "_")});
                 this.addItem(ansicht);
             }
             else {
-                toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+                toolitem = Object.assign(value, {type: "tool", parentId: parentId, id: key});
 
                 // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
-                if (!_.has(toolitem, "onlyDesktop")) {
+                if (!toolitem.hasOwnProperty("onlyDesktop")) {
                     // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
                     if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
-                        toolitem = _.extend(toolitem, {onlyDesktop: true});
+                        toolitem = Object.assign(toolitem, {onlyDesktop: true});
                     }
                 }
 
@@ -234,17 +236,20 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * todo
-     * @param  {Array} items - todo
+     * @param  {object} [items={}] - todo
      * @return {void}
      */
-    parseControls: function (items) {
-        _.each(items, function (value, key) {
+    parseControls: function (items = {}) {
+        Object.entries(items).forEach(item => {
+            const value = item[1],
+                key = item[0];
+
             this.addItem({
                 type: "control",
                 id: key,
                 attr: value
             });
-        }, this);
+        });
     },
 
     /**
@@ -253,7 +258,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {void}
      */
     addItem: function (obj) {
-        if (!_.isUndefined(obj.visibility)) {
+        if (obj.visibility !== undefined) {
             obj.isSelected = obj.visibility;
             obj.isVisibleInMap = obj.visibility;
             delete obj.visibility;
@@ -268,7 +273,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {void}
      */
     addItemByPosition: function (obj, position) {
-        if (!_.isUndefined(obj.visibility)) {
+        if (obj.visibility !== undefined) {
             obj.isSelected = obj.visibility;
             obj.isVisibleInMap = obj.visibility;
             delete obj.visibility;
@@ -283,9 +288,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      *  @return {void}
      */
     addItems: function (objs, attr) {
-        _.each(objs, function (obj) {
-            this.addItem(_.extend(obj, attr));
-        }, this);
+        objs.forEach(obj => {
+            this.addItem(Object.assign(obj, attr));
+        });
     },
 
     /**
@@ -479,7 +484,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {void}
      */
     addItemAtTop: function (obj) {
-        if (!_.isUndefined(obj.visibility)) {
+        if (obj.visibility !== undefined) {
             obj.isSelected = obj.visibility;
             obj.isVisibleInMap = obj.visibility;
             delete obj.visibility;
@@ -584,7 +589,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             parentId: "tree",
             isInThemen: true,
             isInitiallyExpanded: false,
-            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Baselayer"),
+            isAlwaysExpanded: isAlwaysExpandedList.includes("Baselayer"),
             level: 0,
             quickHelp: isQuickHelpSet
         });
@@ -600,7 +605,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             parentId: "tree",
             isInThemen: true,
             isInitiallyExpanded: false,
-            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Overlayer"),
+            isAlwaysExpanded: isAlwaysExpandedList.includes("Overlayer"),
             level: 0,
             quickHelp: isQuickHelpSet
         });
@@ -618,7 +623,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isLeafFolder: true,
             isInThemen: true,
             isInitiallyExpanded: true,
-            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "SelectedLayer"),
+            isAlwaysExpanded: isAlwaysExpandedList.includes("SelectedLayer"),
             level: 0,
             quickHelp: isQuickHelpSet
         });
@@ -675,7 +680,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     postionFor3DFolder: function (itemList) {
         let position = itemList.length + 1;
 
-        _.each(itemList, function (item, index) {
+        itemList.forEach((item, index) => {
             if (item.name === "Hintergrundkarten") {
                 position = index + 1;
             }
@@ -686,16 +691,18 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * Groups objects from the layerlist that match the IDs in the passed list.
-     * @param  {string[]} ids - Array of ids whose objects are grouped together
-     * @param  {Object[]} layerlist - Objects from the services.json
+     * @param  {string[]} [ids=[]] - Array of ids whose objects are grouped together
+     * @param  {Object[]} [layerlist=[]] - Objects from the services.json
      * @return {Object[]} layerlist - Objects from the services.json
      */
-    mergeObjectsByIds: function (ids, layerlist) {
-        const objectsByIds = [];
+    mergeObjectsByIds: function (ids = [], layerlist = []) {
+        const objectsByIds = [],
+            maxScales = [],
+            minScales = [];
         let newObject = {};
 
         // Objekte die gruppiert werden
-        _.each(ids, function (id) {
+        ids.forEach(id => {
             const lay = _.findWhere(layerlist, {id: id});
 
             if (lay) {
@@ -713,14 +720,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         newObject.layers = _.pluck(objectsByIds, "layers").toString();
         // Das Attribut maxScale wird gruppiert
         // Am kopierten Objekt wird der höchste Wert gesetzt
-        newObject.maxScale = _.max(_.pluck(objectsByIds, "maxScale"), function (scale) {
-            return parseInt(scale, 10);
-        });
+        objectsByIds.forEach(object => maxScales.push(parseInt(object.maxScale, 10)));
+        newObject.maxScale = Math.max(...maxScales);
+
         // Das Attribut minScale wird gruppiert
         // Am kopierten Objekt wird der niedrigste Wert gesetzt
-        newObject.minScale = _.min(_.pluck(objectsByIds, "minScale"), function (scale) {
-            return parseInt(scale, 10);
-        });
+        objectsByIds.forEach(object => minScales.push(parseInt(object.minScale, 10)));
+        newObject.minScale = Math.min(...minScales);
 
         return newObject;
     },
@@ -763,11 +769,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     getInitVisibBaselayer: function () {
         const layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
 
-        if (_.isUndefined(layer)) {
+        if (layer === undefined) {
             return undefined;
         }
 
-        if (_.isArray(layer.id)) {
+        if (Array.isArray(layer.id)) {
             layer.id = layer.id[0];
         }
         return layer;

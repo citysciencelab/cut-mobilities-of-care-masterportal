@@ -90,7 +90,7 @@ const MietenspiegelThemeView = ThemeView.extend({
 
         this.$(".msmerkmal").each(function () {
             if (this.value !== "-1") { // = bitte wählen
-                merkmale = _.extend(merkmale, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
+                merkmale = Object.assign(merkmale, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
             }
         });
         return merkmale;

@@ -26,7 +26,6 @@ class FixedOverlaySynchronizer extends OverlaySynchronizer {
      */
     addOverlays () {
         /* eslint no-underscore-dangle: ["error", { "allow": ["overlays_"] }]*/
-
         this.overlays_.forEach((overlay) => {
             this.addOverlay(overlay);
         });

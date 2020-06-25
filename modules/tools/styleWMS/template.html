@@ -5,7 +5,7 @@
             <label class="range-label">Thema</label>
             <select class="form-control input-sm" id="layerField">
                 <option class="pull-left" value="" selected="true">Bitte Thema auswählen</option>
-                <% _.each(styleableLayerList, function (styleableLayer) { %>
+                <% styleableLayerList.forEach(function (styleableLayer) { %>
                     <option class ="pull-left" value="<%= styleableLayer.id %>"><%= styleableLayer.name %></option>
                 <% })%>
             </select>
@@ -17,7 +17,7 @@
                 <label class="range-label">Attribut</label>
                 <select class="form-control input-sm" id="attributField">
                     <option class="pull-left" value="default" <% if (attributeName === "default") { print ("SELECTED")} %>>Bitte Attribut ausw&auml;hlen</option>
-                    <% _.each(model.get("attributesToStyle"), function (attribute) { %>
+                    <% model.get("attributesToStyle").forEach(function (attribute) { %>
                         <option class="pull-left" value=<%= attribute %> <% if (attribute === attributeName) { print ("SELECTED")} %>><%= attribute %></option>
                     <% }); %>
                 </select>
@@ -29,7 +29,7 @@
                     <label class="range-label">Anzahl der Klassen</label>
                     <select class="form-control input-sm" id="numberField">
                         <option class="pull-left" value="default" <% if (numberOfClasses === "default") { print ("SELECTED")} %>>Bitte Anzahl der Klassen ausw&auml;hlen</option>
-                        <% _.each(numberOfClassesList, function (number) { %>
+                        <% numberOfClassesList.forEach(function (number) { %>
                             <option class="pull-left" value=<%= number %> <% if (number === numberOfClasses) { print ("SELECTED")} %>><%= number %></option>
                         <% }); %>
                     </select>

@@ -4,7 +4,7 @@ import {Heatmap} from "ol/layer.js";
 
 const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
 
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         attribute: "",
         value: "",
         radius: 10,
@@ -250,9 +250,11 @@ const HeatmapLayer = Layer.extend(/** @lends HeatmapLayer.prototype */{
      * @returns {void}
      */
     normalizeWeight: function (featuresWithValue) {
-        const max = _.max(featuresWithValue, function (feature) {
-            return feature.get("weightForHeatmap");
-        }).get("weightForHeatmap");
+        const maxScales = [];
+        let max = 0;
+
+        featuresWithValue.forEach(feature => maxScales.push(parseInt(feature.get("weightForHeatmap"), 10)));
+        max = Math.max(...maxScales);
 
         featuresWithValue.forEach(function (feature) {
             feature.set("weightForHeatmap", feature.get("weightForHeatmap") / max);

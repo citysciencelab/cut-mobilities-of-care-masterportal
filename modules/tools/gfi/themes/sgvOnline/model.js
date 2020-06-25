@@ -22,7 +22,7 @@ const SgvOnlineTheme = Theme.extend({
      * @returns {void}
      */
     checkRoutable: function () {
-        if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
+        if (Radio.request("Parser", "getItemByAttributes", {id: "routing"}) !== undefined) {
             if (this.get("routable") === true) {
                 this.set("routable", new RoutableView());
             }
@@ -39,11 +39,11 @@ const SgvOnlineTheme = Theme.extend({
         const children = [];
         let element = this.get("gfiContent");
 
-        if (_.isString(element) && element.match(/content="text\/html/g)) {
+        if (typeof element === "string" && element.match(/content="text\/html/g)) {
             children.push(element);
         }
         else {
-            _.each(element, function (ele) {
+            element.forEach(ele => {
                 _.each(ele, function (val, key) {
                     let imgView,
                         videoView;
@@ -65,7 +65,7 @@ const SgvOnlineTheme = Theme.extend({
                             key: videoView.model.get("id"),
                             val: videoView
                         });
-                        if (_.has(element, "mobil_video")) {
+                        if (element.hasOwnProperty("mobil_video")) {
                             element.mobil_video = "#";
                         }
                     }
@@ -77,7 +77,7 @@ const SgvOnlineTheme = Theme.extend({
                             key: videoView.model.get("id"),
                             val: videoView
                         });
-                        if (_.has(element, "video")) {
+                        if (element.hasOwnProperty("video")) {
                             element.video = "#";
                         }
                     }
@@ -85,7 +85,7 @@ const SgvOnlineTheme = Theme.extend({
                     element = _.omit(element, function (value) {
                         return value === "#";
                     });
-                }, this);
+                });
             });
         }
         if (children.length > 0) {

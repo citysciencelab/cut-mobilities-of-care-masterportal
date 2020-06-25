@@ -60,7 +60,7 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
             elements = "";
 
         // Serialize xml-object. Skipped if a xml-string was provided.
-        if (!_.isString(response)) {
+        if (typeof response !== "string") {
             responseString = new XMLSerializer().serializeToString(response);
         }
         else {
@@ -75,7 +75,7 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
 
         elements = $(selector, response);
 
-        _.each(elements, function (element) {
+        elements.forEach(element => {
 
             let type = $(element).attr("type"),
                 typeWithoutNamespace,

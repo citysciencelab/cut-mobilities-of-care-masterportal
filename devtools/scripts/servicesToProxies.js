@@ -157,7 +157,7 @@ function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
     // In entry array werden alle aus der Json extrahierten url eintraege gespeichert
     let entryArray = [];
 
-    _.each(allDomains, function (layer) {
+    allDomains.forEach(layer => {
         const hostname = url.parse(layer.url).hostname;
 
         if (hostname) {

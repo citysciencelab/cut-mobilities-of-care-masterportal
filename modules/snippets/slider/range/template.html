@@ -24,6 +24,6 @@
 </form>
 </div>
 <input class="slider" type="text" data-slider-tooltip="hide" />
-<% if (!_.isUndefined(this.model.get("infoText"))) { %>
+<% if (this.model.get("infoText") !== undefined) { %>
     <div class="info-text"><%= infoText %></div>
 <% } %>

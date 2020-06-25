@@ -1,7 +1,7 @@
 import Theme from "../model";
 
 const SchulInfoTheme = Theme.extend({
-    defaults: _.extend({}, Theme.prototype.defaults, {
+    defaults: Object.assign({}, Theme.prototype.defaults, {
         themeConfig: [{
             name: "Grundsätzliche Informationen",
             isSelected: true,
@@ -127,7 +127,7 @@ const SchulInfoTheme = Theme.extend({
         let gfiContent,
             featureInfos = [];
 
-        if (!_.isUndefined(this.get("gfiContent")[0])) {
+        if (this.get("gfiContent")[0] !== undefined) {
             gfiContent = this.get("gfiContent")[0];
             featureInfos = [];
             featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
@@ -144,26 +144,25 @@ const SchulInfoTheme = Theme.extend({
     createFeatureInfos: function (gfiContent, themeConfig) {
         const featureInfos = [];
 
-        if (!_.isUndefined(themeConfig)) {
-
-            _.each(themeConfig, function (kategory) {
+        if (themeConfig !== undefined) {
+            themeConfig.forEach(kategory => {
                 const kategoryObj = {
                     name: kategory.name,
                     isSelected: kategory.isSelected ? kategory.isSelected : false,
                     attributes: []};
 
-                _.each(kategory.attributes, function (attribute) {
+                kategory.attributes.forEach(attribute => {
                     const isAttributeFound = this.checkForAttribute(gfiContent, attribute);
 
                     if (isAttributeFound) {
                         kategoryObj.attributes.push({
-                            attrName: _.isUndefined(this.get("gfiAttributes")[attribute]) ? attribute : this.get("gfiAttributes")[attribute],
+                            attrName: this.get("gfiAttributes")[attribute] === undefined ? attribute : this.get("gfiAttributes")[attribute],
                             attrValue: this.beautifyAttribute(gfiContent[attribute], attribute)
                         });
                     }
-                }, this);
+                });
                 featureInfos.push(kategoryObj);
-            }, this);
+            });
         }
         return featureInfos;
     },
@@ -171,7 +170,7 @@ const SchulInfoTheme = Theme.extend({
         let newVal,
             beautifiedAttribute = attribute;
 
-        if (key === "oberstufenprofil" && _.isString(attribute)) {
+        if (key === "oberstufenprofil" && typeof attribute === "string") {
             if (beautifiedAttribute.indexOf("|") !== -1) {
                 beautifiedAttribute = [];
                 _.each(attribute.split("|"), function (value) {
@@ -224,7 +223,7 @@ const SchulInfoTheme = Theme.extend({
     checkForAttribute: function (gfiContent, attribute) {
         let isAttributeFound = false;
 
-        if (!_.isUndefined(gfiContent[attribute])) {
+        if (gfiContent[attribute] !== undefined) {
             isAttributeFound = true;
         }
 
