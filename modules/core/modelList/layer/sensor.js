@@ -1017,7 +1017,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     createLegendURL: function () {
         let style;
 
-        if (this.get("LegendURL") !== undefined && !this.get("LegendURL").length) {
+        if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
             if (style !== undefined) {
