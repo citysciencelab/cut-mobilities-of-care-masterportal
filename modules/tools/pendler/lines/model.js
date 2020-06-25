@@ -7,7 +7,7 @@ import Feature from "ol/Feature.js";
 
 
 const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
-    defaults: _.extend({}, PendlerCoreModel.prototype.defaults, {
+    defaults: Object.assign({}, PendlerCoreModel.prototype.defaults, {
         zoomLevel: 0,
         // Layer zur Darstellung der Linien / Strahlen
         lineLayer: new VectorLayer({
@@ -64,14 +64,14 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
     preparePendlerLegend: function (features) {
         const pendlerLegend = [];
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             // Ein Feature entspricht einer Gemeinde. Extraktion der für die Legende
             // nötigen Attribute (abhängig von der gewünschten Richtung).
             pendlerLegend.push({
                 anzahlPendler: feature.get(this.get("attrAnzahl")),
                 name: feature.get(this.get("attrGemeinde"))
             });
-        }, this);
+        });
 
         this.set("pendlerLegend", pendlerLegend);
     },
@@ -130,7 +130,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             labelCoordinates,
             labelLayerFeature;
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             // Erzeuge die Strahlen
             lineLayerFeature = new Feature({
                 geometry: feature.getGeometry()
@@ -174,7 +174,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             labelLayerFeature.set("styleId", _.uniqueId());
             this.get("pendlerLabelLayer").getSource().addFeature(labelLayerFeature);
 
-        }, this);
+        });
     },
 
     /**
@@ -186,12 +186,12 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             labelLayer = null;
 
         lineLayer = this.get("pendlerLineLayer");
-        if (!_.isUndefined(lineLayer)) {
+        if (lineLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", lineLayer);
         }
 
         labelLayer = this.get("pendlerLabelLayer");
-        if (!_.isUndefined(lineLayer)) {
+        if (lineLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
         Radio.trigger("MapMarker", "hideMarker");

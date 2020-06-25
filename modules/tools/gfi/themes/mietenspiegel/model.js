@@ -7,7 +7,7 @@ const MietenspiegelTheme = Theme.extend({
         });
     },
     setDefaults: function () {
-        if (_.isUndefined(this.get("gfiContent")) === false) {
+        if (this.get("gfiContent") !== undefined) {
             this.set("readyState", false);
             this.set("msDaten", []);
             this.set("msErhebungsstand", "");
@@ -44,44 +44,28 @@ const MietenspiegelTheme = Theme.extend({
 
         $(".msmerkmal").each(function () {
             if (this.value !== "-1") { // = bitte wählen
-                ms = _.extend(ms, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
+                ms = Object.assign(ms, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
             }
         });
         if (this.get("msMittelwert") !== "") {
-            ms = _.extend(ms, _.object(["Mittelwert"], [this.get("msMittelwert").toString()]));
+            ms = Object.assign(ms, _.object(["Mittelwert"], [this.get("msMittelwert").toString()]));
         }
         if (this.get("msSpanneMin") !== "") {
-            ms = _.extend(ms, _.object(["Spanne Min."], [this.get("msSpanneMin").toString()]));
+            ms = Object.assign(ms, _.object(["Spanne Min."], [this.get("msSpanneMin").toString()]));
         }
         if (this.get("msSpanneMax") !== "") {
-            ms = _.extend(ms, _.object(["Spanne Max"], [this.get("msSpanneMax").toString()]));
+            ms = Object.assign(ms, _.object(["Spanne Max"], [this.get("msSpanneMax").toString()]));
         }
         if (this.get("msDatensaetze") !== "") {
-            ms = _.extend(ms, _.object(["Datensätze"], [this.get("msDatensaetze").toString()]));
+            ms = Object.assign(ms, _.object(["Datensätze"], [this.get("msDatensaetze").toString()]));
         }
-        ms = _.extend(ms, _.object(["Herausgeber"], [this.get("msHerausgeber")]));
-        ms = _.extend(ms, _.object(["Erhebungsstand"], [this.get("msErhebungsstand")]));
-        ms = _.extend(ms, _.object(["Hinweis"], [this.get("msHinweis")]));
+        ms = Object.assign(ms, _.object(["Herausgeber"], [this.get("msHerausgeber")]));
+        ms = Object.assign(ms, _.object(["Erhebungsstand"], [this.get("msErhebungsstand")]));
+        ms = Object.assign(ms, _.object(["Hinweis"], [this.get("msHinweis")]));
         return [ms, "Mietenspiegel-Auswertung"];
     },
     layerListReady: function () {
-        // var layerList = Radio.request("LayerList", "getLayerList");
-
-        // if (layerList.length > 0) {
-        // lade Layerinformationen aus Config
-        // this.set("msLayerDaten", _.find(layerList, function (layer) {
-        // return layer.id === "2730" || layer.id === "2830";
-        // }));
-        // this.set("msLayerMetaDaten", _.find(layerList, function (layer) {
-        // return layer.id === "2731" || layer.id === "2831";
-        // }));
-        // if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
         this.ladeMetaDaten();
-        // }
-        // else {
-        // Radio.trigger("Alert", "alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
-        // }
-        // }
     },
     /*
      * Wird aus View gerufen und gibt Liste möglicher Merkmale zurück
@@ -99,7 +83,7 @@ const MietenspiegelTheme = Theme.extend({
             return value.merkmale;
         });
         merkmaleReduced = merkmale.filter(function (value) {
-            return _.isMatch(value, setted);
+            return Object.entries(setted).forEach(entry => value[entry[0]] === entry[1]);
         });
         possibleValues = _.map(merkmaleReduced, function (merkmal) {
             return _.values(_.pick(merkmal, merkmalId))[0];
@@ -211,7 +195,7 @@ const MietenspiegelTheme = Theme.extend({
      */
     calculateMerkmale: function () {
         const daten = this.get("msDaten"),
-            merkmalnamen = _.object(_.keys(daten[0].merkmale), []),
+            merkmalnamen = _.object(Object.keys(daten[0].merkmale), []),
             merkmale = _.map(daten, function (value) {
                 return value.merkmale;
             }),
@@ -228,7 +212,7 @@ const MietenspiegelTheme = Theme.extend({
     calculateVergleichsmiete: function (merkmale) {
         const daten = this.get("msDaten"),
             vergleichsmiete = daten.filter(function (value) {
-                return _.isMatch(value.merkmale, merkmale);
+                return Object.entries(merkmale).forEach(entry => value.merkmale[entry[0]] === entry[1]);
             });
 
         if (vergleichsmiete.length !== 1) {

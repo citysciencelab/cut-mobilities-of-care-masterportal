@@ -11,11 +11,11 @@
         <label for="layoutField" class="col-md-3 col-sm-3 control-label">Layout</label>
         <div class="col-md-9 col-sm-9">
             <select class="form-control input-sm" id="layoutField">
-                <% _.each(layouts, function(element, index) { %>
+                <% layouts.forEach(function(element, index) { %>
                     <% if (element.name == layout.name) { %>
-                        <option value=<%= _.toArray(element.map) %> SELECTED><%= element.name %></option>
+                        <option value=<%= Object.values(element.map) %> SELECTED><%= element.name %></option>
                     <% } else { %>
-                        <option value=<%= _.toArray(element.map) %>><%= element.name %></option>
+                        <option value=<%= Object.values(element.map) %>><%= element.name %></option>
                     <% } %>
                 <% }); %></%>
             </select>
@@ -26,7 +26,7 @@
         <label for="scaleField" class="col-md-3 col-sm-3 control-label">Maßstab</label>
         <div class="col-md-9 col-sm-9">
             <select class="form-control input-sm" id="scaleField">
-                <% _.each(scales, function(element, index) { %>
+                <% scales.forEach(function(element, index) { %>
                     <% if (element.value == scale.valueInt) { %>
                         <option value=<%= element.value %> SELECTED><%= element.name %></option>
                     <% } else { %>

@@ -21,7 +21,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @fires Core#RadioRequestIsMap3d
      * @fires Core#RadioRequestGetMap3d
      */
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
         selectionIDX: -1,
@@ -190,7 +190,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     isLayerSourceValid: function () {
-        return !_.isUndefined(this.get("tileset"));
+        return this.get("tileset") !== undefined;
     },
 
     /**

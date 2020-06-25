@@ -103,28 +103,28 @@ const WPS = Backbone.Model.extend({
 
         // if  element does not have any children --> leaf
         if (children.length === 0) {
-            obj = _.isUndefined($(xml)[0]) ? undefined : $(xml)[0].textContent;
+            obj = $(xml)[0] === undefined ? undefined : $(xml)[0].textContent;
         }
         else {
-            _.each(children, function (child) {
+            children.forEach(child => {
                 const localName = $(child)[0].localName;
                 let old;
 
                 // if object does not have key create it
-                if (!_.has(obj, localName)) {
+                if (!obj.hasOwnProperty(localName)) {
                     obj[localName] = this.parseXmlToObject(child);
                 }
                 // key already exists.
                 else {
                     // if value is not an array, create array, push old value and then push new value
-                    if (!_.isArray(obj[localName])) {
+                    if (!Array.isArray(obj[localName])) {
                         old = obj[localName];
                         obj[localName] = [];
                         obj[localName].push(old);
                     }
                     obj[localName].push(this.parseXmlToObject(child));
                 }
-            }, this);
+            });
         }
         return obj;
     },
@@ -140,8 +140,8 @@ const WPS = Backbone.Model.extend({
         let dataString = this.setXMLElement(xmlTemplate, "</ows:Identifier>", identifier);
 
         _.each(data, function (obj, key) {
-            const dataType = _.has(obj, "dataType") ? obj.dataType : undefined,
-                value = _.has(obj, "value") ? obj.value : obj;
+            const dataType = obj.hasOwnProperty("dataType") ? obj.dataType : undefined,
+                value = obj.hasOwnProperty("value") ? obj.value : obj;
             let attributeString = "";
 
             attributeString = this.setXMLElement(dataInputXmlTemplate, "</ows:Identifier>", key);
@@ -159,13 +159,13 @@ const WPS = Backbone.Model.extend({
      * @returns {string} newdataString with added dada
      */
     setXMLElement: function (dataString, closingTagName, value, dataType) {
-        let newDataString = _.isUndefined(dataString) ? "" : dataString;
+        let newDataString = dataString === undefined ? "" : dataString;
 
-        if (!_.isUndefined(dataType)) {
+        if (dataType !== undefined) {
             newDataString = newDataString.toString().replace("<wps:LiteralData>", "<wps:LiteralData dataType='" + dataType + "'>");
         }
 
-        if (_.isUndefined(dataString) === false && _.isUndefined(closingTagName) === false && _.isUndefined(value) === false) {
+        if (dataString !== undefined && closingTagName !== undefined && value !== undefined) {
             newDataString = newDataString.toString().replace(closingTagName.toString(), value.toString() + closingTagName.toString());
         }
         return newDataString;

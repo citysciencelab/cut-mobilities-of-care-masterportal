@@ -27,11 +27,11 @@ const GeoJsonQueryModel = SourceModel.extend({
      */
     createFeatureAttributesMap: function (features, snippetType) {
         const featureAttributesMap = [],
-            firstFeature = !_.isUndefined(features) ? features[0] : undefined,
-            keys = !_.isUndefined(firstFeature) ? _.without(firstFeature.getKeys(), "geometry") : [];
+            firstFeature = features !== undefined ? features[0] : undefined,
+            keys = firstFeature !== undefined ? _.without(firstFeature.getKeys(), "geometry") : [];
 
-        _.each(keys, function (key) {
-            const type = !_.isUndefined(snippetType) ? String(snippetType) : typeof firstFeature.get(key);
+        keys.forEach(key => {
+            const type = snippetType !== undefined ? String(snippetType) : typeof firstFeature.get(key);
 
             featureAttributesMap.push({name: key, type: type});
         });

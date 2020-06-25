@@ -67,7 +67,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             gfiParams = this.get("gfiParams");
             historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams);
             historicalDataClean = this.dataCleaning(historicalData);
-            lastDay = _.isUndefined(this.get("lastDate")) ? "" : moment(this.get("lastDate")).format("YYYY-MM-DD");
+            lastDay = this.get("lastDate") === undefined ? "" : moment(this.get("lastDate")).format("YYYY-MM-DD");
             endDay = moment().format("YYYY-MM-DD");
             dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay, endDay);
 
@@ -106,10 +106,10 @@ const ElektroladesaeulenTheme = Theme.extend({
         const propertiesObj = {};
 
         _.each(properties, function (value, key) {
-            if (value === "|" || _.contains(value, "|")) {
+            if (value === "|" || value.includes("|")) {
                 propertiesObj[key] = String(value).split("|");
             }
-            else if (_.isObject(value) && !_.isArray(value)) {
+            else if (typeof value === "object" && !Array.isArray(value)) {
                 propertiesObj[key] = [""];
             }
             else {
@@ -133,10 +133,10 @@ const ElektroladesaeulenTheme = Theme.extend({
     createGfiHeadingChargingStation: function (allProperties) {
         const headTitleObject = {};
 
-        headTitleObject.StandortId = _.has(allProperties, "chargings_station_nr") ? String(allProperties.chargings_station_nr[0]) : "";
-        headTitleObject.Adresse = _.has(allProperties, "chargings_station_nr") && _.has(allProperties, "postal_code") && _.has(allProperties, "city")
+        headTitleObject.StandortId = allProperties.hasOwnProperty("chargings_station_nr") ? String(allProperties.chargings_station_nr[0]) : "";
+        headTitleObject.Adresse = allProperties.hasOwnProperty("chargings_station_nr") && allProperties.hasOwnProperty("postal_code") && allProperties.hasOwnProperty("city")
             ? allProperties.location_name[0] + ", " + allProperties.postal_code[0] + " " + allProperties.city[0] : "";
-        headTitleObject.Eigentümer = _.has(allProperties, "owner") ? allProperties.owner[0] : "";
+        headTitleObject.Eigentümer = allProperties.hasOwnProperty("owner") ? allProperties.owner[0] : "";
 
         return headTitleObject;
     },
@@ -147,7 +147,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} tableheadArray
      */
     createGfiTableHeadingChargingStation: function (allProperties) {
-        const stationNumbers = _.has(allProperties, "sms_no_charging_station") ? allProperties.sms_no_charging_station : [],
+        const stationNumbers = allProperties.hasOwnProperty("sms_no_charging_station") ? allProperties.sms_no_charging_station : [],
             tableheadArray = [];
 
         _.each(stationNumbers, function (num) {
@@ -168,10 +168,10 @@ const ElektroladesaeulenTheme = Theme.extend({
                 charging: "Belegt",
                 outoforder: "Außer Betrieb"
             },
-            gfiPropertiesGerman = !_.isUndefined(gfiProperties) ? gfiProperties : {};
+            gfiPropertiesGerman = gfiProperties !== undefined ? gfiProperties : {};
 
         _.each(gfiPropertiesGerman.Zustand, function (state, index) {
-            if (_.contains(_.keys(translateObj), state.toLowerCase())) {
+            if (Object.keys(translateObj).includes(state.toLowerCase())) {
                 gfiPropertiesGerman.Zustand[index] = translateObj[state];
             }
             else {
@@ -255,31 +255,31 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {String} extended query
      */
     addGfiParams: function (query, gfiParams) {
-        const startDate = _.has(gfiParams, "startDate") ? gfiParams.startDate : undefined,
-            periodTime = _.has(gfiParams, "periodTime") ? gfiParams.periodTime : undefined,
-            periodUnit = _.has(gfiParams, "periodUnit") ? gfiParams.periodUnit : undefined;
+        const startDate = gfiParams.hasOwnProperty("startDate") ? gfiParams.startDate : undefined,
+            periodTime = gfiParams.hasOwnProperty("periodTime") ? gfiParams.periodTime : undefined,
+            periodUnit = gfiParams.hasOwnProperty("periodUnit") ? gfiParams.periodUnit : undefined;
 
-        let workingQuery = _.isUndefined(query) ? "" : query,
-            endDate = _.has(gfiParams, "endDate") ? gfiParams.endDate : undefined,
+        let workingQuery = query === undefined ? "" : query,
+            endDate = gfiParams.hasOwnProperty("endDate") ? gfiParams.endDate : undefined,
             lastDate,
             time,
             translateUnit,
             unit;
 
         // handle Dates
-        if (!_.isUndefined(startDate)) {
+        if (startDate !== undefined) {
             lastDate = moment(startDate, "DD.MM.YYYY");
             // request 3 more weeks to find the latest status
             time = moment(startDate, "DD.MM.YYYY").subtract(3, "weeks").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
             workingQuery = workingQuery + ";$filter=phenomenonTime gt " + time;
 
-            if (!_.isUndefined(endDate)) {
+            if (endDate !== undefined) {
                 endDate = moment(endDate, "DD.MM.YYYY").format("YYYY-MM-DDTHH:mm:ss.sss") + "Z";
                 workingQuery = workingQuery + " and phenomenonTime lt " + endDate;
             }
         }
         // handle period
-        else if (!_.isUndefined(periodTime) && !_.isUndefined(periodUnit)) {
+        else if (periodTime !== undefined && periodUnit !== undefined) {
             translateUnit = {
                 Jahr: "years",
                 Monat: "months",
@@ -315,7 +315,7 @@ const ElektroladesaeulenTheme = Theme.extend({
     buildRequestFromQuery: function (query, requestUrl, versionUrl) {
         let completeUrl;
 
-        if (_.isUndefined(query || requestUrl) || _.isNaN(parseFloat(versionUrl, 10))) {
+        if ((query || requestUrl) === undefined || isNaN(parseFloat(versionUrl, 10))) {
             completeUrl = "";
         }
         else {
@@ -365,7 +365,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} workingArray - without doublicates
      */
     dataCleaning: function (dataArray) {
-        const workingArray = _.isUndefined(dataArray) ? [] : dataArray;
+        const workingArray = dataArray === undefined ? [] : dataArray;
 
         _.each(workingArray, function (loadingPoint) {
             const observations = loadingPoint.Observations,
@@ -408,7 +408,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Array} dataByWeekday
      */
     processDataForAllWeekdays: function (historicalData, lastDay, endDay) {
-        const utc = _.isUndefined(this.get("utc")) ? "+1" : this.get("utc");
+        const utc = this.get("utc") === undefined ? "+1" : this.get("utc");
         let historicalDataThisTimeZone,
             historicalDataWithIndex,
             dataByWeekday;
@@ -434,8 +434,8 @@ const ElektroladesaeulenTheme = Theme.extend({
     checkObservationsNotEmpty: function (historicalData) {
         let boolean = false;
 
-        _.each(historicalData, function (data) {
-            if (!_.isEmpty(data.Observations)) {
+        historicalData.forEach(data => {
+            if (Object.keys(data.Observations).length !== 0) {
                 boolean = true;
             }
         });
@@ -449,7 +449,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object[]} data
      */
     addIndex: function (historicalData) {
-        const data = _.isUndefined(historicalData) ? [] : historicalData;
+        const data = historicalData === undefined ? [] : historicalData;
 
         _.each(data, function (loadingPointData) {
             _.each(loadingPointData.Observations, function (obs, index) {
@@ -473,20 +473,20 @@ const ElektroladesaeulenTheme = Theme.extend({
             [], [], [], [], [], [], []
         ];
 
-        _.each(historicalDataWithIndex, function (historicalData) {
-            const observations = _.has(historicalData, "Observations") ? historicalData.Observations : [];
+        historicalDataWithIndex.forEach(historicalData => {
+            const observations = historicalData.hasOwnProperty("Observations") ? historicalData.Observations : [];
 
             let thisLastDay,
                 booleanLoop = true,
-                actualDay = _.isUndefined(endDay) ? moment().format("YYYY-MM-DD") : endDay,
+                actualDay = endDay === undefined ? moment().format("YYYY-MM-DD") : endDay,
                 arrayIndex = 0;
 
-            if (!_.isEmpty(observations)) {
-                thisLastDay = _.isUndefined(lastDay) || lastDay === "" ? moment(observations[observations.length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay;
+            if (observations.length !== 0) {
+                thisLastDay = lastDay === undefined || lastDay === "" ? moment(observations[observations.length - 1].phenomenonTime).format("YYYY-MM-DD") : lastDay;
                 weekArray[arrayIndex].push([]);
             }
 
-            _.each(observations, function (data) {
+            observations.forEach(data => {
                 const phenomenonDay = moment(data.phenomenonTime).format("YYYY-MM-DD");
                 let zeroTime,
                     zeroResult,
@@ -551,7 +551,7 @@ const ElektroladesaeulenTheme = Theme.extend({
         // need to toggle weekdays
         this.setDayIndex(index);
         // set an error message if the values of processedData are all 0
-        if (_.isEmpty(dataByWeekday)) {
+        if (dataByWeekday.length === 0) {
             this.drawErrorMessage(graphTag, width, height, index);
             return;
         }
@@ -560,7 +560,7 @@ const ElektroladesaeulenTheme = Theme.extend({
         processedData = this.calculateSumAndArithmeticMean(dataPerHour);
 
         // set an error message if the values of processedData are all 0
-        if (_.isUndefined(this.checkValue(processedData, "mean"))) {
+        if (this.checkValue(processedData, "mean") === undefined) {
             this.drawErrorMessage(graphTag, width, height, index);
             return;
         }
@@ -636,7 +636,7 @@ const ElektroladesaeulenTheme = Theme.extend({
                 emptyDayObj = this.createInitialDayPerHour();
             let dayObj = {};
 
-            if (firstTimeDayData !== zeroTime && _.isArray(dayData)) {
+            if (firstTimeDayData !== zeroTime && Array.isArray(dayData)) {
                 dayData.reverse();
             }
 
@@ -670,11 +670,11 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object} dayObj
      */
     calculateWorkloadforOneDay: function (emptyDayObj, dayData, targetResult) {
-        const dataFromDay = _.isUndefined(dayData) ? [] : dayData,
-            startDate = _.has(dataFromDay[0], "phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
-            dayObj = _.isUndefined(emptyDayObj) ? {} : emptyDayObj;
+        const dataFromDay = dayData === undefined ? [] : dayData,
+            startDate = dataFromDay[0].hasOwnProperty("phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
+            dayObj = emptyDayObj === undefined ? {} : emptyDayObj;
 
-        let actualState = _.has(dataFromDay[0], "result") ? dataFromDay[0].result : "",
+        let actualState = dataFromDay[0].hasOwnProperty("result") ? dataFromDay[0].result : "",
             actualStateAsNumber = targetResult === actualState ? 1 : 0;
 
         _.each(dayObj, function (value, key) {
@@ -687,7 +687,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             if (moment(nextTimeStep).toDate().getTime() > moment().toDate().getTime()) {
                 dayObj[i] = undefined;
             }
-            else if (_.isEmpty(dataByActualTimeStep)) {
+            else if (dataByActualTimeStep.length === 0) {
                 dayObj[i] = actualStateAsNumber;
             }
             else {
@@ -712,7 +712,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             return [];
         }
         return dayData.filter(function (data) {
-            const dataToCheck = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
+            const dataToCheck = data.hasOwnProperty("phenomenonTime") ? moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss") : "";
 
             return dataToCheck >= actualTimeStep && dataToCheck < nextTimeStep;
         });
@@ -738,13 +738,13 @@ const ElektroladesaeulenTheme = Theme.extend({
             currentStateAsNumber = actualStateAsNumber,
             actualPhenomenonTime = moment(actualTimeStep).toDate().getTime();
 
-        _.each(dataByActualTimeStep, function (data) {
-            const state = _.has(data, "result") ? data.result : currentState;
+        dataByActualTimeStep.forEach(data => {
+            const state = data.hasOwnProperty("result") ? data.result : currentState;
             let phenomenonTime,
                 res;
 
             if (state !== currentState) {
-                phenomenonTime = _.has(data, "phenomenonTime") ? moment(data.phenomenonTime).toDate().getTime() : "";
+                phenomenonTime = data.hasOwnProperty("phenomenonTime") ? moment(data.phenomenonTime).toDate().getTime() : "";
 
                 res = (phenomenonTime - actualPhenomenonTime) * currentStateAsNumber;
                 timeDiff = timeDiff + res;
@@ -758,7 +758,7 @@ const ElektroladesaeulenTheme = Theme.extend({
 
         // add last difference to next full hour
         betweenRes = (endTime - actualPhenomenonTime) * currentStateAsNumber;
-        timeDiff = _.isNaN(betweenRes) ? timeDiff : timeDiff + betweenRes;
+        timeDiff = isNaN(betweenRes) ? timeDiff : timeDiff + betweenRes;
 
         // result in the unit hour, rounded to 3 decimal places
         return Math.round(timeDiff / 3600) / 1000;
@@ -783,12 +783,12 @@ const ElektroladesaeulenTheme = Theme.extend({
             mean = 0;
             arrayPerHour = this.arrayPerHour(dataPerHour, i);
 
-            if (_.isEmpty(arrayPerHour)) {
+            if (arrayPerHour.length === 0) {
                 break;
             }
             // remove all undefined data
             arrayPerHour = arrayPerHour.filter(function (value) {
-                return !_.isUndefined(value);
+                return value !== undefined;
             });
 
             // calculate sum of the array with values for one hour
@@ -799,7 +799,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             // calculate mean of the array with values for one hour
             mean = sum / arrayPerHour.length;
 
-            if (_.isNaN(mean)) {
+            if (isNaN(mean)) {
                 mean = 0;
                 sum = 0;
             }
@@ -827,7 +827,7 @@ const ElektroladesaeulenTheme = Theme.extend({
         _.each(dataPerHour, function (day) {
             const positionData = parseFloat(_.pick(day, String(position))[position], 10);
 
-            if (!_.isUndefined(positionData) && !_.isNaN(positionData)) {
+            if (positionData !== undefined && !isNaN(positionData)) {
                 arrayPerHour.push(positionData);
             }
         });
@@ -843,9 +843,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @return {Object} first data that was found
      */
     checkValue: function (processedData, value) {
-        return _.find(processedData, function (data) {
-            return data[value] > 0;
-        });
+        return processedData.find(data => data[value] > 0);
     },
 
 
@@ -871,7 +869,7 @@ const ElektroladesaeulenTheme = Theme.extend({
 
         $(".ladesaeulen .day").text(day);
 
-        label = _.isUndefined(day) || _.isUndefined(targetResult) || _.isUndefined(stateLabel)
+        label = day === undefined || targetResult === undefined || stateLabel === undefined
             ? "" : stateLabel + day + "s";
 
         return label;

@@ -13,7 +13,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
      * @property {Date} endDate latest selectable date
      * @param {object} model Model to be used in this view
      */
-    defaults: _.extend({}, SnippetModel.prototype.defaults, {
+    defaults: Object.assign({}, SnippetModel.prototype.defaults, {
         preselectedValue: null
     }),
 

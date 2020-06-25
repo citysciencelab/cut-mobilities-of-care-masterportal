@@ -131,8 +131,8 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             baselayer: response.Themenconfig.Hintergrundkarten,
             overlayer: response.Themenconfig.Fachdaten,
             overlayer_3d: response.Themenconfig.Fachdaten_3D,
-            treeType: _.has(response.Portalconfig, "treeType") ? response.Portalconfig.treeType : "light",
-            isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
+            treeType: response.Portalconfig.hasOwnProperty("treeType") ? response.Portalconfig.treeType : "light",
+            isFolderSelectable: this.parseIsFolderSelectable(Config?.tree?.isFolderSelectable),
             snippetInfos: this.requestSnippetInfos()
         };
 
@@ -250,10 +250,10 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @deprecated in 3.0.0. Remove whole function and call!
      */
     updateTreeType: function (attributes, response) {
-        if (_.has(response.Portalconfig, "treeType")) {
+        if (response.Portalconfig.hasOwnProperty("treeType")) {
             attributes.treeType = response.Portalconfig.treeType;
         }
-        else if (_.has(response.Portalconfig, "Baumtyp")) {
+        else if (response.Portalconfig.hasOwnProperty("Baumtyp")) {
             attributes.treeType = response.Portalconfig.Baumtyp;
             console.warn("Attribute 'Baumtyp' is deprecated. Please use 'treeType' instead.");
         }
@@ -297,11 +297,11 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         let infos,
             url;
 
-        if (_.has(Config, "infoJson")) {
+        if (Config.hasOwnProperty("infoJson")) {
             url = Config.infoJson;
         }
 
-        if (!_.isUndefined(url)) {
+        if (url !== undefined) {
             $.ajax({
                 url: url,
                 async: false,

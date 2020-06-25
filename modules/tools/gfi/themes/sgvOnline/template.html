@@ -10,7 +10,7 @@
             </tr>
         <% }
         else { %>
-<%     if (_.isString(key) === false || _.isString(value)=== false) return; %>
+<%     if (typeof key !== "string" || typeof value !== "string") return; %>
 <% if (key === "Amtlich vergebene Adresse" || key === "Bezirk" || key === "Baublock"|| key === "Amtsgericht"|| key === "Wahlbezirk (Bürgerschaftswahl)") {%>
     <tr colspan="2">
         <td class="no-lines placeholder"></td>

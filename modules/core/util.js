@@ -725,7 +725,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
         });
 
-        if (_.has(result, "CONFIG")) {
+        if (result.hasOwnProperty("CONFIG")) {
             config = _.values(_.pick(result, "CONFIG"))[0];
 
             if (config.slice(-5) === ".json") {

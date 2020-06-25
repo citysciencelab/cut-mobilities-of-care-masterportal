@@ -9,7 +9,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @constructs
      */
-    defaults: _.extend({}, Parser.prototype.defaults, {
+    defaults: Object.assign({}, Parser.prototype.defaults, {
     }),
 
     /**
@@ -39,11 +39,11 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      */
     filterList: function (layerList) {
         return layerList.filter(function (element) {
-            if (!_.has(element, "datasets")) {
+            if (!element.hasOwnProperty("datasets")) {
                 return false;
             }
 
-            return element.datasets.length > 0 && _.contains(["WMS", "Terrain3D", "TileSet3D", "Oblique"], element.typ);
+            return element.datasets.length > 0 && ["WMS", "Terrain3D", "TileSet3D", "Oblique"].includes(element.typ);
         });
     },
 
@@ -56,12 +56,12 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
         const cacheLayerMetaIDs = [],
             cacheLayer = _.where(layerList, {cache: true});
 
-        _.each(cacheLayer, function (layer) {
+        cacheLayer.forEach(layer => {
             cacheLayerMetaIDs.push(layer.datasets[0].md_id);
         });
 
         return _.reject(layerList, function (element) {
-            return _.contains(cacheLayerMetaIDs, element.datasets[0].md_id) && element.cache === false;
+            return cacheLayerMetaIDs.includes(element.datasets[0].md_id) && element.cache === false;
         });
     },
 
@@ -76,11 +76,11 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             return element.datasets.length > 1;
         });
 
-        _.each(layerListPerDataset, function (layer) {
-            _.each(layer.datasets, function (ds, key) {
+        layerListPerDataset.forEach(layer => {
+            layer.datasets.forEach((ds, index) => {
                 const newLayer = _.clone(layer);
 
-                newLayer.id = layer.id + "_" + key;
+                newLayer.id = layer.id + "_" + index;
                 newLayer.datasets = [ds];
                 layerList.push(newLayer);
             });
@@ -106,7 +106,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 else if (layer.typ === "Oblique") {
                     return "oblique";
                 }
-                return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
+                return baseLayerIds.includes(layer.id) ? "baselayers" : "overlays";
             });
 
         // Models für die Hintergrundkarten erzeugen
@@ -125,9 +125,9 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     createObliqueLayer: function (layerList) {
-        _.each(layerList, function (layer) {
-            this.addItem(_.extend({type: "layer"}, layer));
-        }, this);
+        layerList.forEach(layer => {
+            this.addItem(Object.assign({type: "layer"}, layer));
+        });
     },
 
     /**
@@ -145,7 +145,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             layer3DVisible;
 
         if (layerList && Array.isArray(layerList)) {
-            layerList.forEach(function (layer) {
+            layerList.forEach(layer => {
                 if (Layer3dList && typeof Layer3dList === "object" && Layer3dList.Layer && Layer3dList.Layer.length > 0) {
 
                     layer3DVisibility = Layer3dList.Layer.filter(function (layer3D) {
@@ -156,14 +156,14 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     }
                 }
 
-                this.addItem(_.extend({
+                this.addItem(Object.assign({
                     type: "layer",
                     parentId: "3d_daten",
                     level: 0,
                     isVisibleInTree: isVisibleInTree,
                     isSelected: layer3DVisible ? layer3DVisible : false
                 }, layer));
-            }, this);
+            });
         }
     },
 
@@ -174,21 +174,21 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     createBaselayer: function (layerList) {
-        _.each(this.get("baselayer").Layer, function (layer) {
+        this.get("baselayer").Layer.forEach(layer => {
             let newLayer;
 
-            if (_.isArray(layer.id)) {
-                newLayer = _.extend(this.mergeObjectsByIds(layer.id, layerList), _.omit(layer, "id"));
+            if (Array.isArray(layer.id)) {
+                newLayer = Object.assign(this.mergeObjectsByIds(layer.id, layerList), Radio.request("Util", "omit", layer, ["id"]));
             }
             else {
-                newLayer = _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
+                newLayer = Object.assign(_.findWhere(layerList, {id: layer.id}), Radio.request("Util", "omit", layer, ["id"]));
             }
 
-            if (_.isUndefined(newLayer)) {
+            if (newLayer !== undefined) {
                 console.error("Layer with id: " + layer.id + " cannot be found in layerlist. Possible error: layer got removed in function 'deleteLayersIncludeCache'.");
             }
             else {
-                this.addItem(_.extend({
+                this.addItem(Object.assign({
                     isBaseLayer: true,
                     isVisibleInTree: true,
                     level: 0,
@@ -196,7 +196,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     type: "layer"
                 }, newLayer));
             }
-        }, this);
+        });
     },
 
     /**

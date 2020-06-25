@@ -286,7 +286,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
      */
     polishAjax: function (type) {
         const ajax = this.get("ajaxRequests"),
-            cleanedAjax = _.omit(ajax, type);
+            cleanedAjax = Radio.request("Util", "omit", ajax, type);
 
         this.set("ajaxRequests", cleanedAjax);
     },

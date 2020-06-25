@@ -2,7 +2,7 @@ import Tool from "../../../core/modelList/tool/model";
 import {WFS} from "ol/format.js";
 
 const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         kreis: "",
         kreise: [],
         pendlerLegend: [],
@@ -178,7 +178,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             hits = $("gml\\:featureMember,featureMember", data);
         let kreis;
 
-        _.each(hits, function (hit) {
+        hits.toArray().forEach(hit => {
             kreis = $(hit).find("app\\:kreisname,kreisname")[0].textContent;
             kreise.push(kreis);
         });
@@ -198,7 +198,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             hits = $("wfs\\:member,member", data);
         let gemeinde;
 
-        _.each(hits, function (hit) {
+        hits.toArray().forEach(hit => {
             gemeinde = $(hit).find("app\\:gemeinde,gemeinde")[0].textContent;
             gemeinden.push(gemeinde);
         });
@@ -319,8 +319,8 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         let csv = "",
             blob = "";
 
-        features.forEach(function (feature) {
-            featurePropertyList.push(_.omit(feature.getProperties(), "geom_line"));
+        features.forEach(feature => {
+            featurePropertyList.push(Radio.request("Util", "omit", feature.getProperties(), ["geom_line"]));
         });
         csv = Radio.request("Util", "convertArrayOfObjectsToCsv", featurePropertyList);
         blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});

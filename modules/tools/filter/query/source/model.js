@@ -46,7 +46,7 @@ const SourceModel = QueryModel.extend({
     collectAllFeatureIds: function (features) {
         const featureIds = [];
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             featureIds.push(feature.getId());
         });
         return featureIds;
@@ -95,7 +95,7 @@ const SourceModel = QueryModel.extend({
         let layerSource,
             features = [];
 
-        if (!_.isUndefined(model)) {
+        if (model !== undefined) {
             layerSource = model.get("layerSource");
             layerSource = this.retrieveLayerSource(layerSource, layerId);
             features = layerSource.getFeatures();
@@ -114,10 +114,8 @@ const SourceModel = QueryModel.extend({
         let layer,
             groupLayerSource = layerSource;
 
-        if (_.isArray(layerSource)) {
-            layer = _.find(layerSource, function (child) {
-                return child.get("id") === layerId;
-            });
+        if (Array.isArray(layerSource)) {
+            layer = layerSource.find(child => child.get("id") === layerId);
             groupLayerSource = layer.get("layerSource");
         }
 
@@ -130,7 +128,7 @@ const SourceModel = QueryModel.extend({
         if (this.get("searchInMapExtent") === true) {
             this.addSearchInMapExtentSnippet();
         }
-        if (!_.isUndefined(layerObject)) {
+        if (layerObject !== undefined) {
             this.buildQueryDatastructureByType(layerObject);
         }
     },
@@ -144,7 +142,7 @@ const SourceModel = QueryModel.extend({
         const elements = $("element", response),
             featureAttributesMap = [];
 
-        _.each(elements, function (element) {
+        elements.forEach(element => {
             featureAttributesMap.push({name: $(element).attr("name"), type: $(element).attr("type")});
         });
         this.createSnippets(featureAttributesMap);
@@ -173,22 +171,22 @@ const SourceModel = QueryModel.extend({
             attributeValue = feature.get(attributeName);
         let attributeValues = [];
 
-        if (!_.isUndefined(attributeValue)) {
-            if (_.isString(attributeValue) && attributeValue.indexOf("|") !== -1) {
+        if (attributeValue !== undefined) {
+            if (typeof attributeValue === "string" && attributeValue.indexOf("|") !== -1) {
                 attributeValues = attributeValue.split("|");
 
-                _.each(attributeValues, function (value) {
+                attributeValues.forEach(value => {
                     if (this.isValid(value)) {
                         values.push(this.trimValue(value));
                     }
-                }, this);
+                });
             }
-            else if (_.isArray(attributeValue)) {
-                _.each(attributeValue, function (value) {
+            else if (Array.isArray(attributeValue)) {
+                attributeValue.forEach(value => {
                     if (this.isValid(value)) {
                         values.push(this.trimValue(value));
                     }
-                }, this);
+                });
             }
             else if (this.isValid(attributeValue)) {
                 values.push(this.trimValue(attributeValue));
@@ -197,12 +195,12 @@ const SourceModel = QueryModel.extend({
         return _.unique(values);
     },
     isValid: function (value) {
-        return value !== null && !_.isUndefined(value);
+        return value !== null && value !== undefined;
     },
     trimValue: function (value) {
         let trimmedValue = value;
 
-        if (_.isString(value)) {
+        if (typeof value === "string") {
             trimmedValue = value.trim();
         }
         return trimmedValue;
@@ -216,14 +214,14 @@ const SourceModel = QueryModel.extend({
         const features = this.get("features"),
             newFeatures = [];
 
-        if (!_.isUndefined(this.get("predefinedRules")) && this.get("predefinedRules").length > 0) {
-            _.each(features, function (feature) {
-                _.each(this.get("predefinedRules"), function (rule) {
-                    if (_.contains(rule.values, feature.get(rule.attrName))) {
+        if (this.get("predefinedRules") !== undefined && this.get("predefinedRules").length > 0) {
+            features.forEach(feature => {
+                this.get("predefinedRules").forEach(rule => {
+                    if (rule.values.includes(feature.get(rule.attrName))) {
                         newFeatures.push(feature);
                     }
                 });
-            }, this);
+            });
         }
         else {
             return features;
@@ -249,18 +247,18 @@ const SourceModel = QueryModel.extend({
         });
 
         if (selectedAttributes.length > 0) {
-            _.each(features, function (feature) {
+            features.forEach(feature => {
                 const isMatch = this.isFilterMatch(feature, selectedAttributes);
 
                 if (isMatch) {
                     featureIds.push(feature.getId());
                 }
-            }, this);
+            });
         }
         else {
-            _.each(features, function (feature) {
+            features.forEach(feature => {
                 featureIds.push(feature.getId());
-            }, this);
+            });
         }
 
         this.updateSnippets(features, selectedAttributes);
@@ -273,10 +271,10 @@ const SourceModel = QueryModel.extend({
             features = [];
         let feature;
 
-        _.each(this.get("featureIds"), function (id) {
+        this.get("featureIds").forEach(id => {
             feature = model.get("layerSource").getFeatureById(id);
             feature.set("extent", feature.getGeometry().getExtent());
-            features.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+            features.push(Radio.request("Util", "omit", feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
         });
 
         Radio.trigger("RemoteInterface", "postMessage", {"features": JSON.stringify(features), "layerId": model.get("id"), "layerName": model.get("name")});
@@ -292,10 +290,10 @@ const SourceModel = QueryModel.extend({
         const selectableOptions = [];
         let selectableValues = [];
 
-        _.each(allAttributes, function (attribute) {
+        allAttributes.forEach(attribute => {
             selectableValues = {name: attribute.name, displayName: attribute.displayName, type: attribute.type, values: [], matchingMode: attribute.matchingMode};
 
-            _.each(features, function (feature) {
+            features.forEach(feature => {
                 const isMatch = this.isFilterMatch(feature, selectedAttributes.filter(function (attr) {
                     return attr.attrName !== attribute.name;
                 }));
@@ -303,11 +301,11 @@ const SourceModel = QueryModel.extend({
                 if (isMatch) {
                     selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
                 }
-            }, this);
+            });
             selectableValues.values = _.unique(_.flatten(selectableValues.values));
 
             selectableOptions.push(selectableValues);
-        }, this);
+        });
 
         return selectableOptions;
     },
@@ -321,11 +319,12 @@ const SourceModel = QueryModel.extend({
         const snippets = this.get("snippetCollection"),
             selectableOptions = this.collectSelectableOptions(features, selectedAttributes, this.get("featureAttributesMap"));
 
-        _.each(snippets.where({"snippetType": "dropdown"}), function (snippet) {
+        snippets.where({"snippetType": "dropdown"}).forEach(snippet => {
             let attribute = {};
 
             snippet.resetValues();
-            attribute = _.find(selectableOptions, {name: snippet.get("name")});
+            attribute = selectableOptions.find(option => option.name === snippet.get("name"));
+
             snippet.updateSelectableValues(attribute.values);
         });
     },
@@ -344,10 +343,10 @@ const SourceModel = QueryModel.extend({
     isORMatch: function (feature, attribute) {
         let isMatch = false;
 
-        isMatch = _.find(attribute.values, function (value) {
+        isMatch = attribute.values.find(value => {
             return this.containsValue(feature, attribute, value);
-        }, this);
-        return !_.isUndefined(isMatch);
+        });
+        return isMatch !== undefined;
     },
     isANDMatch: function (feature, attribute) {
         return _.every(attribute.values, function (value) {
@@ -355,7 +354,7 @@ const SourceModel = QueryModel.extend({
         }, this);
     },
     containsValue: function (feature, attribute, value) {
-        if (_.isUndefined(feature.get(attribute.attrName)) === false) {
+        if (feature.get(attribute.attrName) !== undefined) {
             return feature.get(attribute.attrName).indexOf(value) !== -1;
         }
         return false;
@@ -370,7 +369,7 @@ const SourceModel = QueryModel.extend({
     isNumberInRange: function (feature, attributeName, values) {
         const featureValue = feature.get(attributeName);
         let isNumberInRange = false,
-            valueList = _.extend([], values);
+            valueList = Object.assign([], values);
 
         valueList.push(featureValue);
         valueList = _.sortBy(valueList);

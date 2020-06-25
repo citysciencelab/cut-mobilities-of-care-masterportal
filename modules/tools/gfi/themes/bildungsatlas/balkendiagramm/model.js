@@ -1,7 +1,7 @@
 import Theme from "../../model";
 
 const BalkendiagrammTheme = Theme.extend(/** @lends BalkendiagrammTheme.prototype */{
-    defaults: _.extend({}, Theme.prototype.defaults, {
+    defaults: Object.assign({}, Theme.prototype.defaults, {
         // default values to be set for the template
         themeTitle: "",
         description: "",

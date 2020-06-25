@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <tbody>
 <%
-_.each(featureInfos, function(attr) {
+featureInfos.forEach(function(attr) {
     const key= attr.attrName,
         value = attr.attrValue;
 
-    if (_.isString(key) === false) return;
+    if (typeof key !== "string") return;
 %>
 <tr colspan="2">
     <td style="font-family: 'MasterPortalFont Bold','Arial Narrow',Arial,sans-serif;">
@@ -13,8 +13,8 @@ _.each(featureInfos, function(attr) {
     </td>
     <td>
 <%
-    if (_.isArray(value))  {
-        _.each(value, function (valuePart) {
+    if (Array.isArray(value))  {
+        value.forEach(function (valuePart) {
             if (valuePart.search("http") !== -1) {
 %>
                 <a href="<%= valuePart %>" target="_blank"><%= valuePart.trim().substring(7) %></a>

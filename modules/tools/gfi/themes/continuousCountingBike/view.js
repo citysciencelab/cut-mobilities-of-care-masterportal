@@ -43,7 +43,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
             activeContent = this.$("#" + activeTab),
             tabContentList = [];
 
-        if (!_.has(Config, "uiStyle") || Config.uiStyle !== "table") {
+        if (!Config.hasOwnProperty("uiStyle") || Config.uiStyle !== "table") {
             $(".gfi > .gfi-content").css("max-height", "80vh");
         }
 
@@ -54,10 +54,10 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
 
         // get all tabContent to remove "in active" classes
         _.each(this.$(".active.continuousCountingBike"), function (ele) {
-            if (!_.isNull(ele.getAttribute("id"))) {
+            if (ele.getAttribute("id") !== null) {
                 tabContentList.push("#" + ele.getAttribute("id"));
             }
-            else if (!_.isNull(ele.getAttribute("class"))) {
+            else if (ele.getAttribute("class") !== null) {
                 tabContentList.push("." + ele.getAttribute("class").replace(/ /g, "."));
             }
         });

@@ -230,9 +230,7 @@ export default {
         returnProjectionByName (name) {
             const projections = this.projections;
 
-            return _.find(projections, function (projection) {
-                return projection.name === name;
-            });
+            return projections.find(projection => projection.name === name);
         },
         adjustPosition (position, targetProjection) {
             let coord, easting, northing;

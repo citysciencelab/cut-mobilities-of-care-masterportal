@@ -1,7 +1,7 @@
 import Theme from "../../model";
 
 const SchulenWohnortThemeModel = Theme.extend(/** @lends SchulenWohnortThemeModel.prototype */{
-    defaults: _.extend({}, Theme.prototype.defaults, {
+    defaults: Object.assign({}, Theme.prototype.defaults, {
         /**
          * the theme type according to config.json -> gfiFormat.gfiBildungsatlasFormat.themeType (should equal school levels: primary, secondary)
          * @type {String}

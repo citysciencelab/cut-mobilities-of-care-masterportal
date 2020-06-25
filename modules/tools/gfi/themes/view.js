@@ -11,7 +11,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * @fires GFI#RadioRequestGFIGetCurrentView
      */
     initialize: function () {
-        const gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached",
+        const gfiWindow = Config.hasOwnProperty("gfiWindow") ? Config.gfiWindow : "detached",
             channel = Radio.channel("gfiView");
 
         this.listenTo(this.model, {
@@ -37,7 +37,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     render: function () {
         let attr;
 
-        if (_.isUndefined(this.model.get("gfiContent")) === false) {
+        if (this.model.get("gfiContent") !== undefined) {
             attr = this.model.toJSON();
             this.$el.html(this.template(attr));
         }
@@ -58,7 +58,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
         let oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
 
         if (value === true) {
-            if (_.isNaN(oldLeft)) {
+            if (isNaN(oldLeft)) {
                 oldLeft = 0;
             }
             currentView.$el.css("left", "0px");
@@ -124,7 +124,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
         const children = this.model.get("children");
 
         this.$(".gfi-content").removeClass("has-image");
-        _.each(children, function (element) {
+        children.forEach(element => {
             if (element.type && element.type === "image") {
                 this.$el.before(element.val.$el);
                 this.$(".gfi-content").addClass("has-image");
@@ -132,7 +132,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
             else {
                 this.$el.after(element.val.$el);
             }
-        }, this);
+        });
     },
     /**
      * Fügt den Button dem gfiContent hinzu
