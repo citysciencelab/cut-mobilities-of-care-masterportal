@@ -632,7 +632,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
             }, errormsg => {
                 this.refreshDiagramDay([]);
-                this.prepareTableContent([], "day", "Datum", timeSettings, meansOfTransport);
+                this.setDayTableContent([]);
 
                 console.warn("The data received from api are incomplete:", errormsg);
                 Radio.trigger("Alert", "alert", {
@@ -717,7 +717,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
             }, errormsg => {
                 this.refreshDiagramWeek([]);
-                this.prepareTableContent([], "week", "Woche", timeSettings, meansOfTransport);
+                this.setWeekTableContent([]);
 
                 console.warn("The data received from api are incomplete:", errormsg);
                 Radio.trigger("Alert", "alert", {
@@ -796,7 +796,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
             }, errormsg => {
                 this.refreshDiagramYear([]);
-                this.prepareTableContent([], "year", "Jahr", timeSettings, meansOfTransport);
+                this.setYearTableContent([]);
 
                 console.warn("The data received from api are incomplete:", errormsg);
                 Radio.trigger("Alert", "alert", {
