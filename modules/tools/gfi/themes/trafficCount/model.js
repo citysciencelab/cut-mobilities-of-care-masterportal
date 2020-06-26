@@ -1291,6 +1291,72 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     },
 
     /**
+     * gets the download data for the last 7 days for the given thingId and meansOfTransport
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    downloadDataDay: function (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete) {
+        const api = this.get("propTrafficCountApi"),
+            timeSet = {
+                interval: this.get("dayInterval"),
+                from: moment().subtract(7, "days").format("YYYY-MM-DD"),
+                until: moment().format("YYYY-MM-DD")
+            };
+
+        api.downloadData(thingId, meansOfTransport, timeSet, onsuccess, onerror, onstart, oncomplete);
+    },
+
+    /**
+     * gets the download data for the 54 weeks for the given thingId and meansOfTransport
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    downloadDataWeek: function (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete) {
+        const api = this.get("propTrafficCountApi"),
+            timeSet = {
+                interval: this.get("weekInterval"),
+                from: moment().subtract(54, "weeks").format("YYYY-MM-DD"),
+                until: moment().format("YYYY-MM-DD")
+            };
+
+        api.downloadData(thingId, meansOfTransport, timeSet, onsuccess, onerror, onstart, oncomplete);
+    },
+
+    /**
+     * gets the download data since the beginning
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    downloadDataYear: function (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete) {
+        const api = this.get("propTrafficCountApi");
+
+        api.getFirstDateEver(thingId, meansOfTransport, firstDate => {
+            const timeSet = {
+                interval: this.get("yearInterval"),
+                from: firstDate,
+                until: moment().format("YYYY-MM-DD")
+            };
+
+            api.downloadData(thingId, meansOfTransport, timeSet, onsuccess, onerror, false, oncomplete);
+        }, onerror, onstart, false);
+    },
+
+    /**
      * Setter for dayTableContent
      * @param {Object} value Contains the taleContent
      * @returns {void}

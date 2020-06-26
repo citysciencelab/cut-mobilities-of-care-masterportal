@@ -1174,4 +1174,51 @@ describe("tools/gfi/themes/trafficCount/trafficCountCache", function () {
             expect(cache.getCache()).to.deep.equals({});
         });
     });
+
+    describe("getFirstDateEver", () => {
+        it("should create a cache key and a callback as a function without an observer", () => {
+            const expectedKey = "getFirstDateEverthingIdmeansOfTransport";
+            let lastKey = "",
+                lastApiCall = null,
+                lastOnsuccess = null,
+                lastObserver = null,
+                lastOnstart = null,
+                lastOncomplete = null;
+
+            cache.getFirstDateEver("thingId", "meansOfTransport", "onsuccess", "onerror", "onstart", "oncomplete", (key, apiCall, onsuccess, observer, onstart, oncomplete) => {
+                lastKey = key;
+                lastApiCall = apiCall;
+                lastOnsuccess = onsuccess;
+                lastObserver = observer;
+                lastOnstart = onstart;
+                lastOncomplete = oncomplete;
+            });
+
+            expect(lastKey).to.equal(expectedKey);
+            expect(typeof lastApiCall).to.equal("function");
+            expect(lastOnsuccess).to.equal("onsuccess");
+            expect(lastObserver).to.be.false;
+            expect(lastOnstart).to.equal("onstart");
+            expect(lastOncomplete).to.equal("oncomplete");
+        });
+        it("should call getFirstDateEver on the given api and fetch the received data", () => {
+            const expectedData = "data";
+            let lastData = null,
+                lastOnerror = null;
+
+            cache.getFirstDateEver("thingId", "meansOfTransport", "onsuccess", "onerror", "onstart", "oncomplete", (key, apiCall) => {
+                apiCall((data) => {
+                    lastData = data;
+                });
+            }, {
+                getFirstDateEver: (thingId, meansOfTransport, callback, onerror) => {
+                    lastOnerror = onerror;
+                    callback("data");
+                }
+            });
+
+            expect(lastData).to.equal(expectedData);
+            expect(lastOnerror).to.equal("onerror");
+        });
+    });
 });

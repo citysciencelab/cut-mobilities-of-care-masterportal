@@ -1620,4 +1620,53 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             expect(onsuccessCalled).to.be.true;
         });
     });
+
+    describe("downloadData", () => {
+        it("should receive a resultset with title and data", () => {
+            let lastResult = false;
+            const phenomenonTimeA = "2020-03-22T00:00:00.000Z",
+                phenomenonTimeB = "2020-03-23T12:14:30.123Z",
+                phenomenonTimeC = "2020-03-24T23:59:59.999Z",
+                dummySensorThingsHttp = {
+                    get: (url, onupdate) => {
+                        if (url === "https://www.example.com/v1234/Things(thingId)") {
+                            // updateTitle
+                            onupdate([{
+                                name: "title"
+                            }]);
+                            return;
+                        }
+
+                        onupdate([{
+                            Datastreams: [{
+                                "@iot.id": "foo",
+                                Observations: [
+                                    {result: 1, phenomenonTime: phenomenonTimeA},
+                                    {result: 2, phenomenonTime: phenomenonTimeB},
+                                    {result: 3, phenomenonTime: phenomenonTimeC}
+                                ]
+                            }]
+                        }]);
+                    }
+                },
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
+                timeSettings = {
+                    interval: "interval",
+                    from: "2020-03-20",
+                    until: "2020-03-30"
+                };
+
+            api.downloadData("thingId", "meansOfTransport", timeSettings, result => {
+                lastResult = result;
+            }, "onerror", "onstart", "oncomplete");
+
+            expect(lastResult).to.be.an("object");
+            expect(lastResult.title).to.equal("title");
+            expect(lastResult.data).to.be.an("object");
+            expect(lastResult.data.meansOfTransport).to.be.an("object");
+            expect(lastResult.data.meansOfTransport["2020-03-22 01:00:00"]).to.equal(1);
+            expect(lastResult.data.meansOfTransport["2020-03-23 13:14:30"]).to.equal(2);
+            expect(lastResult.data.meansOfTransport["2020-03-25 00:59:59"]).to.equal(3);
+        });
+    });
 });

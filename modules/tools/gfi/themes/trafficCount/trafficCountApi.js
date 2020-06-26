@@ -671,6 +671,67 @@ export class TrafficCountApi {
     }
 
     /**
+     * gets the title and the data without subscription for the given thingId, meansOfTransport and timeSettings
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} timeSettings time configuration
+     * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
+     * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
+     * @param {String} timeSettings.until the day to end with (inclusive) as String in format YYYY-MM-DD
+     * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    downloadData (thingId, meansOfTransport, timeSettings, onsuccess, onerror, onstart, oncomplete) {
+        if (typeof onstart === "function") {
+            onstart();
+        }
+
+        this.updateTitle(thingId, title => {
+            this.updateDataset(thingId, meansOfTransport, timeSettings, dataset => {
+                if (typeof onsuccess === "function") {
+                    onsuccess({
+                        title: title,
+                        data: dataset
+                    });
+                }
+                if (typeof oncomplete === "function") {
+                    oncomplete();
+                }
+
+                // prohibit subscription by using the last param with a future date for today
+            }, onerror, false, false, moment().add(1, "month").format("YYYY-MM-DD"));
+        }, onerror);
+    }
+
+    /**
+     * gets the first date on a weekly basis ever recorded without subscription
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {Callback} onsuccess as event function(firstDate) fires once
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    getFirstDateEver (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete) {
+        const urlWeekly = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_1-Woche';$expand=Observations)";
+
+        return this.http.get(urlWeekly, (datasetWeekly) => {
+            if (!this.checkForObservations(datasetWeekly)) {
+                (onerror || this.defaultErrorHandler)("TrafficCountAPI.getFirstDate: datasetWeekly does not include a datastream with an observation", datasetWeekly);
+                return;
+            }
+
+            if (typeof onsuccess === "function") {
+                onsuccess(this.getFirstDate(datasetWeekly));
+            }
+        }, onstart, oncomplete, onerror || this.defaultErrorHandler);
+    }
+
+    /**
      * gets the subscribed topics
      * @returns {Object}  an object {topic => [callback(payload)]} with all subscriptions
      */

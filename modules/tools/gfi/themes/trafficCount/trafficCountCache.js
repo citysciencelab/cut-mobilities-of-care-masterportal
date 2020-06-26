@@ -335,6 +335,49 @@ export class TrafficCountCache {
         });
     }
 
+    /**
+     * gets the title and the data without subscription for the given thingId, meansOfTransport and timeSettings
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} timeSettings time configuration
+     * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
+     * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
+     * @param {String} timeSettings.until the day to end with (inclusive) as String in format YYYY-MM-DD
+     * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    downloadData (thingId, meansOfTransport, timeSettings, onsuccess, onerror, onstart, oncomplete) {
+        // this is just a gateway - no cache needed
+        this.api.downloadData(thingId, meansOfTransport, timeSettings, onsuccess, onerror, onstart, oncomplete);
+    }
+
+    /**
+     * gets the first date on a weekly basis ever recorded without subscription
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {Callback} onsuccess as event function(firstDate) fires once
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} [simpleCacheCallOpt=null] using this function instead of inner simpleCacheCall (for testing)
+     * @param {TrafficCountApi} [trafficCountApiOpt=null] the api to use (for testing)
+     * @returns {Void}  -
+     */
+    getFirstDateEver (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete, simpleCacheCallOpt = null, trafficCountApiOpt = null) {
+        const key = "getFirstDateEver" + thingId + meansOfTransport;
+
+        (simpleCacheCallOpt || this.simpleCacheCall).bind(this)(key, callback => {
+            (trafficCountApiOpt || this.api).getFirstDateEver(thingId, meansOfTransport, (...args) => {
+                if (typeof callback === "function") {
+                    return callback(...args);
+                }
+                return null;
+            }, onerror);
+        }, onsuccess, false, onstart, oncomplete);
+    }
 
     /**
      * uses the cache to make the given api call
