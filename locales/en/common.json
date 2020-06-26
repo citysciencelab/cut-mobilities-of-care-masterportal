@@ -40,7 +40,8 @@
             "featureLister": "List",
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
-            "addWms": "Add WMS"
+            "addWms": "Add WMS",
+            "scaleSwitcher": "Scale switcher"
         },
         "legend": "Explanations",
         "contact": "Mail",
@@ -393,6 +394,9 @@
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
                 "area": "Area"
+            },
+            "scaleSwitcher": {
+                "label": "Scale"
             }
         },
         "controls": {

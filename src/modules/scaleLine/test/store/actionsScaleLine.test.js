@@ -9,7 +9,7 @@ describe("actionsScaleLine", () => {
 
         testAction(actions.modifyScale, payload, {}, {}, [
             {type: "updateScaleNumber", payload: mutationPayload}
-        ], done);
+        ], {}, done);
     });
 
     it("modifyScale() updateScaleNumber more than 10.000", done => {
@@ -18,7 +18,7 @@ describe("actionsScaleLine", () => {
 
         testAction(actions.modifyScale, payload, {}, {}, [
             {type: "updateScaleNumber", payload: mutationPayload}
-        ], done);
+        ], {}, done);
     });
 
     it("updateScaleLineValue() to end with km", done => {
@@ -27,7 +27,7 @@ describe("actionsScaleLine", () => {
 
         testAction(actions.updateScaleLineValue, null, state, {}, [
             {type: "updateScaleLineValue", payload: mutationPayload}
-        ], done);
+        ], {}, done);
     });
 
     it("updateScaleLineValue() to end with m", done => {
@@ -36,7 +36,7 @@ describe("actionsScaleLine", () => {
 
         testAction(actions.updateScaleLineValue, null, state, {}, [
             {type: "updateScaleLineValue", payload: mutationPayload}
-        ], done);
+        ], {}, done);
     });
 
 

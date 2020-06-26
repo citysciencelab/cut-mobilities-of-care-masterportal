@@ -15,12 +15,22 @@ const mutations = {
      * @param {Array} projections list of available projections
      * @returns {void}
      */
-    setProjections: (state, projections) => {
+    setProjections: (state, projections = []) => {
         const found = projections.filter(projection => projection.name === state.currentProjectionName);
 
         if (found.length === 0) {
-            state.currentProjectionName = projections[0].name;
-            state.currentSelection = projections[0].name;
+            // EPSG:25832 must be the first one
+            const firstProj = projections.find(proj => proj.name.indexOf("25832") > -1);
+
+            if (firstProj) {
+                const index = projections.indexOf(firstProj);
+
+                projections.splice(index, 1);
+                projections.unshift(firstProj);
+            }
+            state.currentProjectionName = projections[0]?.name;
+            state.currentSelection = projections[0]?.name;
+            state.currentProjection = projections[0];
         }
         state.projections = projections;
     }
