@@ -54,7 +54,7 @@
                     </div>
                     <div id="LayerInfoDataDownload" class="tab-pane fade">
                         <ul class="list-unstyled">
-                            <% _.each(downloadLinks, function (downloadLink) { %>
+                            <% downloadLinks.forEach(function (downloadLink) { %>
                                 <li><a href="<%= downloadLink[1] %>" target="_blank"><%= downloadLink[0] %> </a><li>
                             <% }); %>
                         </ul>

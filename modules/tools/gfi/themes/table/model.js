@@ -42,9 +42,9 @@ const TableTheme = Theme.extend({
             if (element.hasOwnProperty("children")) {
                 children = element.children;
 
-                _.each(children, function (child) {
+                children.forEach(child => {
                     child.val.remove();
-                }, this);
+                });
             }
         });
         this.get("gfiRoutables").forEach(element => {

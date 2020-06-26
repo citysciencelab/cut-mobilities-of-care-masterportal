@@ -53,7 +53,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
         });
 
         // get all tabContent to remove "in active" classes
-        _.each(this.$(".active.continuousCountingBike"), function (ele) {
+        this.$(".active.continuousCountingBike").forEach(ele => {
             if (ele.getAttribute("id") !== null) {
                 tabContentList.push("#" + ele.getAttribute("id"));
             }
@@ -89,9 +89,9 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
      * @return {void}
      */
     removeClasses: function (tabContentList) {
-        _.each(tabContentList, function (tabContent) {
+        tabContentList.forEach(tabContent => {
             this.$(tabContent).removeClass("in active");
-        }, this);
+        });
     },
 
     /**
@@ -163,13 +163,13 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
             imageContinuousCountingBikeDiv = this.$(".imageContinuousCountingBikeDiv");
 
         imageContinuousCountingBikeDiv.removeClass("has-image");
-        _.each(children, function (element) {
+        children.forEach(element => {
             element.val.$el.prepend("<p class=imageContinuousCountingBikeP>" + element.key + ": </p>");
             if (element.type && element.type === "image") {
                 imageContinuousCountingBikeDiv.append("<div class='col-xs-6 col-md-6'>" + element.val.$el[0].innerHTML + "</div>");
                 imageContinuousCountingBikeDiv.addClass("has-image");
             }
-        }, this);
+        });
     },
 
     /**

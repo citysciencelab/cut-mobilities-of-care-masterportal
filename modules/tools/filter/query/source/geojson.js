@@ -28,7 +28,7 @@ const GeoJsonQueryModel = SourceModel.extend({
     createFeatureAttributesMap: function (features, snippetType) {
         const featureAttributesMap = [],
             firstFeature = features !== undefined ? features[0] : undefined,
-            keys = firstFeature !== undefined ? _.without(firstFeature.getKeys(), "geometry") : [];
+            keys = firstFeature !== undefined ? firstFeature.getKeys().filter(feature => feature !== "geometry") : [];
 
         keys.forEach(key => {
             const type = snippetType !== undefined ? String(snippetType) : typeof firstFeature.get(key);

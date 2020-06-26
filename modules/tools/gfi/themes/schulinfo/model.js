@@ -174,13 +174,13 @@ const SchulInfoTheme = Theme.extend({
         if (key === "oberstufenprofil" && typeof attribute === "string") {
             if (beautifiedAttribute.indexOf("|") !== -1) {
                 beautifiedAttribute = [];
-                _.each(attribute.split("|"), function (value) {
+                attribute.split("|").forEach(value => {
                     newVal = value;
                     // make part before first ";" bold
                     newVal = newVal.replace(/^/, "<b>");
                     newVal = newVal.replace(/;/, "</b>;");
                     beautifiedAttribute.push(newVal);
-                }, this);
+                });
             }
             else {
                 newVal = attribute;
@@ -253,7 +253,7 @@ const SchulInfoTheme = Theme.extend({
 
         newNameFound = this.isNewNameInFeatureInfos(newName, featureInfos);
         if (newNameFound) {
-            _.each(featureInfos, function (featureInfo) {
+            featureInfos.forEach(featureInfo => {
                 if (featureInfo.name === newName) {
                     featureInfo.isSelected = true;
                 }

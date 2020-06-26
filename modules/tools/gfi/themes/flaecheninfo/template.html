@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <table class="table table-hover">
     <tbody>
-    <%  _.each(gfiContent[0], function(value, key) { %>
+    <%  Object.entries(gfiContent[0]).forEach(function(content) {
+        const value = content[1],
+            key = content[0];
+    %>
     <tr>
         <td>
             <%= key %>

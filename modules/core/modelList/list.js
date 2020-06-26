@@ -395,7 +395,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         else {
             children = this.where({parentId: parentId});
         }
-        _.each(children, function (item) {
+        children.forEach(item => {
             item.setIsVisibleInTree(false);
         });
     },
@@ -436,7 +436,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         children = children.concat(additionalChildren);
 
-        _.each(children, function (child) {
+        children.forEach(child => {
             child.setIsVisibleInTree(false);
             if (child.get("type") === "folder") {
                 if (isMobile) {
@@ -444,7 +444,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 }
                 this.setAllDescendantsInvisible(child.get("id"), isMobile);
             }
-        }, this);
+        });
     },
 
     /**
@@ -455,12 +455,12 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setAllDescendantsVisible: function (parentId) {
         const children = this.where({parentId: parentId});
 
-        _.each(children, function (child) {
+        children.forEach(child => {
             child.setIsVisibleInTree(true);
             if (child.get("type") === "folder" && child.get("isExpanded")) {
                 this.setAllDescendantsVisible(child.get("id"));
             }
-        }, this);
+        });
     },
 
     /**
@@ -495,7 +495,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         descendantModels = descendantModels.reverse();
 
         // Setting each layer as selected will trigger rerender of OL canvas and displayed selected layers.
-        _.each(descendantModels, function (childModel) {
+        descendantModels.forEach(childModel => {
             childModel.setIsSelected(model.get("isSelected"));
         });
     },
@@ -648,9 +648,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     resetLayerIndeces: function (layers) {
         // we start indexing at 1 because 0 is defined as newly selected layer
-        _.each(layers, function (oLayerModel, newSelectionIndex) {
+        layers.forEach((oLayerModel, newSelectionIndex) => {
             oLayerModel.setSelectionIDX(newSelectionIndex + 1);
-        }, this);
+        });
         return layers;
     },
 
@@ -736,9 +736,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     updateLayerView: function () {
         const sortedLayers = this.getSortedTreeLayers();
 
-        _.each(sortedLayers, function (layer) {
+        sortedLayers.forEach(layer => {
             Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
-        }, this);
+        });
 
         return sortedLayers;
     },
@@ -751,7 +751,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setIsSettingVisible: function (value) {
         const models = this.where({type: "layer"});
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             model.setIsSettingVisible(value);
         });
     },
@@ -970,11 +970,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     toggleCatalogs: function (id) {
-        _.each(this.where({parentId: "tree"}), function (model) {
+        this.where({parentId: "tree"}).forEach(model => {
             if (model.get("id") !== id && !model.get("isAlwaysExpanded")) {
                 model.setIsExpanded(false);
             }
-        }, this);
+        });
     },
 
     /**
@@ -983,14 +983,14 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     * @return {void}
     */
     removeModelsByParentId: function (parentId) {
-        _.each(this.where({parentId: parentId}), function (model) {
+        this.where({parentId: parentId}).forEach(model => {
             if (model.get("type") === "layer" && model.get("isVisibleInMap") === true) {
                 model.setIsVisibleInMap(false);
             }
             model.setIsVisibleInTree(false);
 
             this.remove(model);
-        }, this);
+        });
     },
 
     /**

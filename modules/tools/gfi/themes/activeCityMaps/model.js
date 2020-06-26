@@ -137,7 +137,9 @@ const ActiveCityMapsTheme = Theme.extend({
     createFeatureInfos: function (gfiContent) {
         const featureInfos = [];
 
-        _.each(gfiContent, function (attribute, key) {
+        Object.entries(gfiContent).forEach(content => {
+            const attribute = content[1],
+                key = content[0];
             let gfiAttributes;
 
             if (attribute.indexOf("|") !== -1) {

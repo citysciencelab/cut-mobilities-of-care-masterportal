@@ -182,7 +182,8 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             kreis = $(hit).find("app\\:kreisname,kreisname")[0].textContent;
             kreise.push(kreis);
         });
-        this.setKreise(_.without(kreise.sort(), "Bremen", "Berlin", "Kiel", "Hannover"));
+
+        this.setKreise(kreise.sort().filter(feature => !["Bremen", "Berlin", "Kiel", "Hannover"].includes(feature)));
         if (this.get("isActive")) {
             this.trigger("render", this, true);
         }

@@ -113,7 +113,7 @@ const MietenspiegelThemeView = ThemeView.extend({
             }
         });
         // dann füllen
-        _.each(validMerkmale, function (val, index) {
+        validMerkmale.forEach((val, index) => {
             document.getElementById(comboboxId).add(new Option(val, index));
         });
     },

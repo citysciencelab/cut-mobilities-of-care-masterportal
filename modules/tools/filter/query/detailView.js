@@ -75,7 +75,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @returns {void}
      */
     rerenderSnippets: function (changedValue) {
-        _.each(this.model.get("snippetCollection").models, function (snippet) {
+        this.model.get("snippetCollection").models.forEach(snippet => {
             if (changedValue === undefined || snippet.get("name") !== changedValue.get("attr")) {
                 snippet.trigger("render");
             }
@@ -115,7 +115,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         let view;
 
         if (this.model.get("isLayerVisible")) {
-            _.each(this.model.get("snippetCollection").models, function (snippet) {
+            this.model.get("snippetCollection").models.forEach(snippet => {
                 if (snippet.get("snippetType") === "checkbox-classic") {
                     view = new SnippetMultiCheckboxView({model: snippet});
                 }
@@ -135,7 +135,7 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
 
                 this.$el.append(view.render().$el);
-            }, this);
+            });
         }
         else {
             this.removeView();

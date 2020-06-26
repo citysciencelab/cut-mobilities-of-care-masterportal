@@ -5,7 +5,10 @@
 </button>
 <table class="table table-hover">
     <tbody>
-    <%  _.each(gfiContent, function(value, key) { %>
+    <%  Object.entries(gfiContent).forEach(function(content) {
+        const value = content[1],
+            key = content[0];
+    %>
     <tr>
         <td>
             <%= key %>
