@@ -75,7 +75,7 @@ export default {
     adjustPosition ({commit}, {position, targetProjection}) {
         let coord, easting, northing;
 
-        if(targetProjection){
+        if (targetProjection) {
             // geographical coordinates
             if (targetProjection.projName === "longlat") {
                 coord = toStringHDMS(position);
