@@ -610,32 +610,37 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             meansOfTransport = this.get("propMeansOfTransport"),
             timeSettings = [];
 
-        dates.forEach(date => {
-            const fromDate = moment(date).format("YYYY-MM-DD");
+        if (dates.length === 0) {
+            this.setDayTableContent([]);
+        }
+        else {
+            dates.forEach(date => {
+                const fromDate = moment(date).format("YYYY-MM-DD");
 
-            timeSettings.push({
-                interval: this.get("dayInterval"),
-                from: fromDate,
-                until: fromDate
+                timeSettings.push({
+                    interval: this.get("dayInterval"),
+                    from: fromDate,
+                    until: fromDate
+                });
             });
-        });
 
-        api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
-            const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
+            api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
+                const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-            this.refreshDiagramDay(sortedDatasets[0][meansOfTransport]);
-            this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "day", "Datum", timeSettings, meansOfTransport);
+                this.refreshDiagramDay(sortedDatasets[0][meansOfTransport]);
+                this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "day", "Datum", timeSettings, meansOfTransport);
 
-        }, errormsg => {
-            this.refreshDiagramDay([]);
-            this.prepareTableContent([], "day", "Datum", timeSettings, meansOfTransport);
+            }, errormsg => {
+                this.refreshDiagramDay([]);
+                this.prepareTableContent([], "day", "Datum", timeSettings, meansOfTransport);
 
-            console.warn("The data received from api are incomplete:", errormsg);
-            Radio.trigger("Alert", "alert", {
-                content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
-                category: "Info"
+                console.warn("The data received from api are incomplete:", errormsg);
+                Radio.trigger("Alert", "alert", {
+                    content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
+                    category: "Info"
+                });
             });
-        });
+        }
     },
 
     /**
@@ -692,30 +697,35 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             meansOfTransport = this.get("propMeansOfTransport"),
             timeSettings = [];
 
-        dates.forEach(date => {
-            timeSettings.push({
-                interval: this.get("weekInterval"),
-                from: moment(date).startOf("isoWeek").format("YYYY-MM-DD"),
-                until: moment(date).endOf("isoWeek").format("YYYY-MM-DD")
+        if (dates.length === 0) {
+            this.setWeekTableContent([]);
+        }
+        else {
+            dates.forEach(date => {
+                timeSettings.push({
+                    interval: this.get("weekInterval"),
+                    from: moment(date).startOf("isoWeek").format("YYYY-MM-DD"),
+                    until: moment(date).endOf("isoWeek").format("YYYY-MM-DD")
+                });
             });
-        });
 
-        api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
-            const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
+            api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
+                const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-            this.refreshDiagramWeek(sortedDatasets[0][meansOfTransport]);
-            this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "week", "Woche", timeSettings, meansOfTransport);
+                this.refreshDiagramWeek(sortedDatasets[0][meansOfTransport]);
+                this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "week", "Woche", timeSettings, meansOfTransport);
 
-        }, errormsg => {
-            this.refreshDiagramWeek([]);
-            this.prepareTableContent([], "week", "Woche", timeSettings, meansOfTransport);
+            }, errormsg => {
+                this.refreshDiagramWeek([]);
+                this.prepareTableContent([], "week", "Woche", timeSettings, meansOfTransport);
 
-            console.warn("The data received from api are incomplete:", errormsg);
-            Radio.trigger("Alert", "alert", {
-                content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
-                category: "Info"
+                console.warn("The data received from api are incomplete:", errormsg);
+                Radio.trigger("Alert", "alert", {
+                    content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
+                    category: "Info"
+                });
             });
-        });
+        }
     },
 
     /**
@@ -763,33 +773,38 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             timeSettings = [],
             years = [];
 
-        dates.forEach(date => {
-            years.push(moment(date).format("YYYY"));
-            timeSettings.push({
-                interval: this.get("yearInterval"),
-                // subtract 3 days to savely include the first thursday of january into the interval, as the first calendar week always includes the first thursday of january
-                from: moment(date).startOf("year").subtract(3, "days").format("YYYY-MM-DD"),
-                // add 3 days to savely include the last thursday of december into the interval, as the last calendar week always includes the last thursday of december
-                until: moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD")
+        if (dates.length === 0) {
+            this.setYearTableContent([]);
+        }
+        else {
+            dates.forEach(date => {
+                years.push(moment(date).format("YYYY"));
+                timeSettings.push({
+                    interval: this.get("yearInterval"),
+                    // subtract 3 days to savely include the first thursday of january into the interval, as the first calendar week always includes the first thursday of january
+                    from: moment(date).startOf("year").subtract(3, "days").format("YYYY-MM-DD"),
+                    // add 3 days to savely include the last thursday of december into the interval, as the last calendar week always includes the last thursday of december
+                    until: moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD")
+                });
             });
-        });
 
-        api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
-            const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
+            api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
+                const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-            this.refreshDiagramYear(sortedDatasets[0][meansOfTransport], years[0]);
-            this.prepareTableContent(this.prepareYearDataset(sortedDatasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
+                this.refreshDiagramYear(sortedDatasets[0][meansOfTransport], years[0]);
+                this.prepareTableContent(this.prepareYearDataset(sortedDatasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
 
-        }, errormsg => {
-            this.refreshDiagramYear([]);
-            this.prepareTableContent([], "year", "Jahr", timeSettings, meansOfTransport);
+            }, errormsg => {
+                this.refreshDiagramYear([]);
+                this.prepareTableContent([], "year", "Jahr", timeSettings, meansOfTransport);
 
-            console.warn("The data received from api are incomplete:", errormsg);
-            Radio.trigger("Alert", "alert", {
-                content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
-                category: "Info"
+                console.warn("The data received from api are incomplete:", errormsg);
+                Radio.trigger("Alert", "alert", {
+                    content: "Die gewünschten Daten wurden wegen eines API-Fehlers nicht korrekt empfangen.",
+                    category: "Info"
+                });
             });
-        });
+        }
     },
 
     /**

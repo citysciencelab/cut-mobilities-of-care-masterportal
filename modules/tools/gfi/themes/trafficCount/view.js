@@ -371,93 +371,105 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
     },
 
     /**
-     * appends header and columns to day table
-     * @returns {Void}  -
+     * clears the day table content and/or appends header and columns to day table
+     * @param {Backbone.Model} model - trafficCount model
+     * @param {Object} value - dataset
+     * @returns {void}
      */
-    renderDayTableContent: function () {
-        const carsArr = this.model.get("dayTableContent").day.carsArr,
-            bicyclesArr = this.model.get("dayTableContent").day.bicyclesArr,
-            trucksArr = this.model.get("dayTableContent").day.trucksArr,
-            firstColumn = this.model.get("dayTableContent").day.firstColumn,
-            meansOfTransport = this.model.get("dayTableContent").day.meansOfTransport;
-
+    renderDayTableContent: function (model, value) {
         this.$el.find("#dayTableContentHeader").empty();
         this.$el.find("#dayTableContentCars").empty();
         this.$el.find("#dayTableContentTrucks").empty();
         this.$el.find("#dayTableContentBicycles").empty();
+        if (value.hasOwnProperty("day")) {
 
-        this.$el.find("#dayTableContentHeader").append(this.createDayTableHeader());
+            const carsArr = model.get("dayTableContent").day.carsArr,
+                bicyclesArr = model.get("dayTableContent").day.bicyclesArr,
+                trucksArr = model.get("dayTableContent").day.trucksArr,
+                firstColumn = model.get("dayTableContent").day.firstColumn,
+                meansOfTransport = model.get("dayTableContent").day.meansOfTransport;
 
-        switch (meansOfTransport) {
-            case this.model.get("meansOfTransportFahrraeder"):
-                this.$el.find("#dayTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
-                break;
-            case this.model.get("meansOfTransportFahrzeuge"):
-                this.$el.find("#dayTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
-                this.$el.find("#dayTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
-                break;
-            default:
+            this.$el.find("#dayTableContentHeader").append(this.createDayTableHeader());
+
+            switch (meansOfTransport) {
+                case model.get("meansOfTransportFahrraeder"):
+                    this.$el.find("#dayTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                    break;
+                case model.get("meansOfTransportFahrzeuge"):
+                    this.$el.find("#dayTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
+                    this.$el.find("#dayTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                    break;
+                default:
+            }
         }
     },
 
     /**
      * appends header and columns to week table
-     * @returns {Void}  -
+     * @param {Backbone.Model} model - trafficCount model
+     * @param {Object} value - dataset
+     * @returns {void}
      */
-    renderWeekTableContent: function () {
-        const bicyclesArr = this.model.get("weekTableContent").week.bicyclesArr,
-            trucksArr = this.model.get("weekTableContent").week.trucksArr,
-            carsArr = this.model.get("weekTableContent").week.carsArr,
-            firstColumn = this.model.get("weekTableContent").week.firstColumn,
-            meansOfTransport = this.model.get("weekTableContent").week.meansOfTransport;
-
+    renderWeekTableContent: function (model, value) {
         this.$el.find("#weekTableContentHeader").empty();
         this.$el.find("#weekTableContentCars").empty();
         this.$el.find("#weekTableContentTrucks").empty();
         this.$el.find("#weekTableContentBicycles").empty();
 
-        this.$el.find("#weekTableContentHeader").append(this.createWeekTableHeader());
+        if (value.hasOwnProperty("week")) {
+            const bicyclesArr = model.get("weekTableContent").week.bicyclesArr,
+                trucksArr = model.get("weekTableContent").week.trucksArr,
+                carsArr = model.get("weekTableContent").week.carsArr,
+                firstColumn = model.get("weekTableContent").week.firstColumn,
+                meansOfTransport = model.get("weekTableContent").week.meansOfTransport;
 
-        switch (meansOfTransport) {
-            case this.model.get("meansOfTransportFahrraeder"):
-                this.$el.find("#weekTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
-                break;
-            case this.model.get("meansOfTransportFahrzeuge"):
-                this.$el.find("#weekTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
-                this.$el.find("#weekTableContentBicycles").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
-                break;
-            default:
+            this.$el.find("#weekTableContentHeader").append(this.createWeekTableHeader());
+
+            switch (meansOfTransport) {
+                case model.get("meansOfTransportFahrraeder"):
+                    this.$el.find("#weekTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                    break;
+                case model.get("meansOfTransportFahrzeuge"):
+                    this.$el.find("#weekTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
+                    this.$el.find("#weekTableContentBicycles").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                    break;
+                default:
+            }
         }
     },
 
     /**
      * appends header and columns to year table
-     * @returns {Void}  -
+     * @param {Backbone.Model} model - trafficCount model
+     * @param {Object} value - dataset
+     * @returns {void}
      */
-    renderYearTableContent: function () {
-        const carsArr = this.model.get("yearTableContent").year.carsArr,
-            firstColumn = this.model.get("yearTableContent").year.firstColumn,
-            trucksArr = this.model.get("yearTableContent").year.trucksArr,
-            bicyclesArr = this.model.get("yearTableContent").year.bicyclesArr,
-            meansOfTransport = this.model.get("yearTableContent").year.meansOfTransport;
-
-
+    renderYearTableContent: function (model, value) {
         this.$el.find("#yearTableContentHeader").empty();
         this.$el.find("#yearTableContentCars").empty();
         this.$el.find("#yearTableContentTrucks").empty();
         this.$el.find("#yearTableContentBicycles").empty();
 
-        this.$el.find("#yearTableContentHeader").append(this.createYearTableHeader());
+        if (value.hasOwnProperty("year")) {
+            const carsArr = model.get("yearTableContent").year.carsArr,
+                firstColumn = model.get("yearTableContent").year.firstColumn,
+                trucksArr = model.get("yearTableContent").year.trucksArr,
+                bicyclesArr = model.get("yearTableContent").year.bicyclesArr,
+                meansOfTransport = model.get("yearTableContent").year.meansOfTransport;
 
-        switch (meansOfTransport) {
-            case this.model.get("meansOfTransportFahrraeder"):
-                this.$el.find("#yearTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
-                break;
-            case this.model.get("meansOfTransportFahrzeuge"):
-                this.$el.find("#yearTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
-                this.$el.find("#yearTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
-                break;
-            default:
+
+            this.$el.find("#yearTableContentHeader").append(this.createYearTableHeader());
+
+            switch (meansOfTransport) {
+                case model.get("meansOfTransportFahrraeder"):
+                    this.$el.find("#yearTableContentBicycles").append(this.createTableContent(bicyclesArr, firstColumn, "", ""));
+                    break;
+                case model.get("meansOfTransportFahrzeuge"):
+                    this.$el.find("#yearTableContentCars").append(this.createTableContent(carsArr, firstColumn, "", " KFZ abs."));
+                    this.$el.find("#yearTableContentTrucks").append(this.createTableContent(trucksArr, firstColumn, "", " SV-Anteil in %"));
+                    break;
+                default:
+            }
         }
     },
 
