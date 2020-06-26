@@ -84,7 +84,7 @@ const MietenspiegelTheme = Theme.extend({
             return Object.entries(setted).forEach(entry => value[entry[0]] === entry[1]);
         });
         possibleValues = merkmaleReduced.map(merkmal => _.values(_.pick(merkmal, merkmalId))[0]);
-        uniqueValues = _.unique(possibleValues);
+        uniqueValues = [...new Set(possibleValues)];
 
         if (merkmalId === "Baualtersklasse/Bezugsfertigkeit") {
             // sortiert nach letzten 4 Zeichen (Jahresangabe / Größe)
@@ -194,7 +194,7 @@ const MietenspiegelTheme = Theme.extend({
             merkmalnamen = _.object(Object.keys(daten[0].merkmale), []),
             merkmale = daten.map(value => value.merkmale),
             merkmaleReduced = _.mapObject(merkmalnamen, function (value, key) {
-                return _.unique(merkmale.Layer.map(val => val[key]));
+                return [...new Set(merkmale.Layer.map(val => val[key]))];
             });
 
         this.set("msMerkmale", merkmaleReduced);
@@ -233,7 +233,7 @@ const MietenspiegelTheme = Theme.extend({
         this.set("msDatensaetze", "");
     },
     newWindow: function (layer, response, coordinate) {
-        this.set("id", _.uniqueId("mietenspiegelTheme"));
+        this.set("id", Radio.request("Util", "uniqueId", "mietenspiegelTheme"));
         this.set("layer", layer);
         this.set("coordinate", coordinate);
         this.defaultErgebnisse();

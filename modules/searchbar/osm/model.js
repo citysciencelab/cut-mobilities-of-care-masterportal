@@ -189,7 +189,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
                         type: "OpenStreetMap",
                         osm: true,
                         glyphicon: "glyphicon-road",
-                        id: _.uniqueId("osmSuggest"),
+                        id: Radio.request("Util", "uniqueId", "osmSuggest"),
                         marker: hit.class === "building",
                         coordinate: center
                     });

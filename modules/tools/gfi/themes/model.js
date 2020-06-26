@@ -158,7 +158,8 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             tagNameList = node.firstElementChild.children.map(element => element.tagName);
             tagNameListSorted = _.sortBy(tagNameList, name => name);
             multiTags = tagNameListSorted.filter((tagName, index, list) => tagName === list[index + 1]);
-            multiTagsUnique = _.uniq(multiTags);
+
+            multiTagsUnique = [...new Set(multiTags)];
         }
 
         return multiTagsUnique;
@@ -280,7 +281,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             if (index > 0 && this.collection) {
                 clone = this.clone();
                 clone.set("gfiContent", [singlePgfi]);
-                clone.set("id", _.uniqueId());
+                clone.set("id", Radio.request("Util", "uniqueId"));
                 clone.set("isReady", true);
                 if (this.get("gfiTheme") === "trinkwasser") {
                     clone.splitContent();

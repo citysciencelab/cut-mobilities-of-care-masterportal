@@ -105,7 +105,10 @@ const ElektroladesaeulenTheme = Theme.extend({
     splitProperties: function (properties) {
         const propertiesObj = {};
 
-        _.each(properties, function (value, key) {
+        Object.entries(properties).forEach(prop => {
+            const value = prop[1],
+                key = prop[0];
+
             if (value === "|" || value.includes("|")) {
                 propertiesObj[key] = String(value).split("|");
             }
@@ -117,7 +120,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             }
 
             // remove blanks
-            _.each(propertiesObj[key], function (str, index) {
+            propertiesObj[key].forEach((str, index) => {
                 propertiesObj[key][index] = str.trim();
             });
         });
@@ -150,7 +153,7 @@ const ElektroladesaeulenTheme = Theme.extend({
         const stationNumbers = allProperties.hasOwnProperty("sms_no_charging_station") ? allProperties.sms_no_charging_station : [],
             tableheadArray = [];
 
-        _.each(stationNumbers, function (num) {
+        stationNumbers.forEach(num => {
             tableheadArray.push("Ladepunkt: " + num);
         });
 
@@ -170,7 +173,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             },
             gfiPropertiesGerman = gfiProperties !== undefined ? gfiProperties : {};
 
-        _.each(gfiPropertiesGerman.Zustand, function (state, index) {
+        gfiPropertiesGerman.Zustand.forEach((state, index) => {
             if (Object.keys(translateObj).includes(state.toLowerCase())) {
                 gfiPropertiesGerman.Zustand[index] = translateObj[state];
             }
@@ -207,7 +210,7 @@ const ElektroladesaeulenTheme = Theme.extend({
         historicalData = this.sendRequest(completeUrl, async);
 
         // if with one request not all data can be fetched
-        _.each(historicalData, function (data) {
+        historicalData.forEach(data => {
             const observationsId = data["@iot.id"],
                 observationsCount = data["Observations@iot.count"],
                 observationsLength = data.Observations.length;
@@ -221,7 +224,7 @@ const ElektroladesaeulenTheme = Theme.extend({
 
                 data.Observations.push.apply(data.Observations, skipHistoricalData[0].Observations);
             }
-        }, this);
+        });
 
         return historicalData;
     },
@@ -230,13 +233,13 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * adds filter to a given query
      * @param {String} query - filter load observations
-     * @param {String} dataStreamIds - from feature
+     * @param {String[]} dataStreamIds - from feature
      * @return {Object[]} workingQuery
      */
     addFilter: function (query, dataStreamIds) {
         let workingQuery = query + ")&$filter=";
 
-        _.each(dataStreamIds, function (id, index) {
+        dataStreamIds.forEach((id, index) => {
             const dataStreamIdLen = dataStreamIds.length - 1;
 
             workingQuery = workingQuery + "@iot.id eq'" + id + "'";
@@ -367,14 +370,14 @@ const ElektroladesaeulenTheme = Theme.extend({
     dataCleaning: function (dataArray) {
         const workingArray = dataArray === undefined ? [] : dataArray;
 
-        _.each(workingArray, function (loadingPoint) {
+        workingArray.forEach(loadingPoint => {
             const observations = loadingPoint.Observations,
                 indexArray = [];
 
             let lastTime = 0,
                 lastState = "";
 
-            _.each(observations, function (data, index) {
+            observations.forEach((data, index) => {
                 const time = moment(data.phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
                     state = data.result;
 
@@ -392,7 +395,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             });
 
             // remove data by indexArray
-            _.each(indexArray.reverse(), function (element) {
+            indexArray.reverse().forEach(element => {
                 observations.splice(element, 1);
             });
         });
@@ -451,8 +454,8 @@ const ElektroladesaeulenTheme = Theme.extend({
     addIndex: function (historicalData) {
         const data = historicalData === undefined ? [] : historicalData;
 
-        _.each(data, function (loadingPointData) {
-            _.each(loadingPointData.Observations, function (obs, index) {
+        data.forEach(loadingPointData => {
+            loadingPointData.Observations.forEach((obs, index) => {
                 obs.index = index;
             });
         });
@@ -630,7 +633,7 @@ const ElektroladesaeulenTheme = Theme.extend({
     calculateWorkloadPerDayPerHour: function (dataByWeekday, targetResult) {
         const allDataArray = [];
 
-        _.each(dataByWeekday, function (dayData) {
+        dataByWeekday.forEach(dayData => {
             const zeroTime = moment(moment(dayData[0].phenomenonTime).format("YYYY-MM-DD")).format("YYYY-MM-DDTHH:mm:ss"),
                 firstTimeDayData = moment(dayData[0].phenomenonTime).format("YYYY-MM-DDTHH:mm:ss"),
                 emptyDayObj = this.createInitialDayPerHour();
@@ -642,7 +645,7 @@ const ElektroladesaeulenTheme = Theme.extend({
 
             dayObj = this.calculateWorkloadforOneDay(emptyDayObj, dayData, targetResult);
             allDataArray.push(dayObj);
-        }, this);
+        });
 
         return allDataArray;
     },
@@ -677,7 +680,7 @@ const ElektroladesaeulenTheme = Theme.extend({
         let actualState = dataFromDay[0].hasOwnProperty("result") ? dataFromDay[0].result : "",
             actualStateAsNumber = targetResult === actualState ? 1 : 0;
 
-        _.each(dayObj, function (value, key) {
+        Object.keys(dayObj).forEach(key => {
             const i = parseFloat(key, 10),
                 actualTimeStep = moment(startDate).add(i, "hour").format("YYYY-MM-DDTHH:mm:ss"),
                 nextTimeStep = moment(startDate).add(i + 1, "hour").format("YYYY-MM-DDTHH:mm:ss"),
@@ -692,7 +695,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             }
             else {
                 dayObj[i] = this.calculateOneHour(dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult);
-                actualState = _.last(dataByActualTimeStep).result;
+                actualState = dataByActualTimeStep.slice(-1).result;
                 actualStateAsNumber = targetResult === actualState ? 1 : 0;
             }
         }, this);
@@ -822,7 +825,7 @@ const ElektroladesaeulenTheme = Theme.extend({
     arrayPerHour: function (dataPerHour, position) {
         const arrayPerHour = [];
 
-        _.each(dataPerHour, function (day) {
+        dataPerHour.forEach(day => {
             const positionData = parseFloat(_.pick(day, String(position))[position], 10);
 
             if (positionData !== undefined && !isNaN(positionData)) {

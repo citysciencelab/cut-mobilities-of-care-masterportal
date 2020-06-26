@@ -80,8 +80,8 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
                     years.push(year);
                 }
             });
-            newRowNames = _.unique(newRowNames);
-            years = _.unique(years);
+            newRowNames = [...new Set(newRowNames)];
+            years = [...new Set(years)];
             this.setYears(years);
             this.setRowNames(newRowNames);
             this.combineYearsData(dataPerYear, years);
@@ -164,7 +164,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
             let children;
 
             if (element.hasOwnProperty("children")) {
-                children = _.values(_.pick(element, "children"))[0];
+                children = element.children;
 
                 children.forEach(child => {
                     child.val.remove();

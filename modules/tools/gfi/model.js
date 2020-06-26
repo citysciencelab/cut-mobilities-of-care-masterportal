@@ -467,7 +467,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
         clonedModelAttributes.gfiFeatureList = [feature];
         clonedModelAttributes.feature = feature;
         clonedModelAttributes.themeId = clonedModelAttributes.id;
-        clonedModelAttributes.id += _.uniqueId("_");
+        clonedModelAttributes.id += Radio.request("Util", "uniqueId", "_");
         return clonedModelAttributes;
     },
 

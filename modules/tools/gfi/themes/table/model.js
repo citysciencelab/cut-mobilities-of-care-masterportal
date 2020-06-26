@@ -40,7 +40,7 @@ const TableTheme = Theme.extend({
             let children;
 
             if (element.hasOwnProperty("children")) {
-                children = _.values(_.pick(element, "children"))[0];
+                children = element.children;
 
                 _.each(children, function (child) {
                     child.val.remove();

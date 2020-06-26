@@ -726,7 +726,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         });
 
         if (result.hasOwnProperty("CONFIG")) {
-            config = _.values(_.pick(result, "CONFIG"))[0];
+            config = result.CONFIG;
 
             if (config.slice(-5) === ".json") {
                 this.setConfig(config);

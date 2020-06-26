@@ -10,7 +10,7 @@
             <p><%= abstractText %></p>
 
             <% if (metaURL !== null) { %>
-              <% _.each(metaURL, function (url) { %>
+              <% metaURL.forEach(function (url) { %>
                   <br>
                   <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
               <% }); %>

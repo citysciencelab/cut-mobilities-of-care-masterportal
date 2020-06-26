@@ -157,7 +157,7 @@ const SourceModel = QueryModel.extend({
     getValuesFromFeature: function (feature, attrName) {
         const values = this.parseValuesFromString(feature, attrName);
 
-        return _.unique(values);
+        return [...new Set(values)];
     },
 
     /**
@@ -192,7 +192,7 @@ const SourceModel = QueryModel.extend({
                 values.push(this.trimValue(attributeValue));
             }
         }
-        return _.unique(values);
+        return [...new Set(values)];
     },
     isValid: function (value) {
         return value !== null && value !== undefined;
@@ -302,7 +302,7 @@ const SourceModel = QueryModel.extend({
                     selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
                 }
             });
-            selectableValues.values = _.unique(Array.isArray(selectableValues.values) ? selectableValues.values.reduce((acc, val) => acc.concat(val), []) : selectableValues.values);
+            selectableValues.values = [...new Set(Array.isArray(selectableValues.values) ? selectableValues.values.reduce((acc, val) => acc.concat(val), []) : selectableValues.values)];
             selectableOptions.push(selectableValues);
         });
 
