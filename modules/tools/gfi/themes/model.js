@@ -155,7 +155,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             multiTags;
 
         if (node.hasOwnProperty("firstElementChild") && node.firstElementChild.hasOwnProperty("children")) {
-            tagNameList = _.map(node.firstElementChild.children, element => element.tagName);
+            tagNameList = node.firstElementChild.children.map(element => element.tagName);
             tagNameListSorted = _.sortBy(tagNameList, name => name);
             multiTags = tagNameListSorted.filter((tagName, index, list) => tagName === list[index + 1]);
             multiTagsUnique = _.uniq(multiTags);
@@ -173,9 +173,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     replaceMultiNodes: function (multiTags, childNode) {
         multiTags.forEach(tagName => {
             const nodeList = childNode.getElementsByTagName(tagName),
-                nodeListValue = _.map(nodeList, function (node) {
-                    return node.innerHTML;
-                }),
+                nodeListValue = nodeList.map(node => node.innerHTML),
                 firstNode = nodeList[0];
 
             firstNode.innerHTML = JSON.stringify({

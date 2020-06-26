@@ -283,10 +283,10 @@ const SourceModel = QueryModel.extend({
      * determines the attributes and their values that are still selectable
      * @param  {ol.Feature[]} features olfeatures
      * @param  {object[]} selectedAttributes attribute object
-     * @param  {object[]} allAttributes      array of all attributes and their values
+     * @param  {object[]} [allAttributes=[]]      array of all attributes and their values
      * @return {object[]}                    array of attributes and their values that are still selectable
      */
-    collectSelectableOptions: function (features, selectedAttributes, allAttributes) {
+    collectSelectableOptions: function (features, selectedAttributes, allAttributes = []) {
         const selectableOptions = [];
         let selectableValues = [];
 
@@ -302,8 +302,7 @@ const SourceModel = QueryModel.extend({
                     selectableValues.values.push(this.parseValuesFromString(feature, attribute.name));
                 }
             });
-            selectableValues.values = _.unique(_.flatten(selectableValues.values));
-
+            selectableValues.values = _.unique(Array.isArray(selectableValues.values) ? selectableValues.values.reduce((acc, val) => acc.concat(val), []) : selectableValues.values);
             selectableOptions.push(selectableValues);
         });
 
@@ -335,7 +334,7 @@ const SourceModel = QueryModel.extend({
      * @return {Boolean}               true if feature has attribute that contains value
      */
     isValueMatch: function (feature, attribute) {
-        const featureMap = _.findWhere(this.get("featureAttributesMap"), {name: attribute.attrName});
+        const featureMap = this.get("featureAttributesMap").find(featureAttribute => featureAttribute.name === attribute.attrName);
 
         attribute.matchingMode = featureMap.matchingMode;
         return attribute.matchingMode === "OR" ? this.isORMatch(feature, attribute) : this.isANDMatch(feature, attribute);
@@ -349,9 +348,7 @@ const SourceModel = QueryModel.extend({
         return isMatch !== undefined;
     },
     isANDMatch: function (feature, attribute) {
-        return _.every(attribute.values, function (value) {
-            return this.containsValue(feature, attribute, value);
-        }, this);
+        return attribute.values.every(value => this.containsValue(feature, attribute, value));
     },
     containsValue: function (feature, attribute, value) {
         if (feature.get(attribute.attrName) !== undefined) {
@@ -393,7 +390,7 @@ const SourceModel = QueryModel.extend({
     isFilterMatch: function (feature, filterAttr) {
         let isMatch = false;
 
-        isMatch = _.every(filterAttr, function (attribute) {
+        isMatch = filterAttr.every(attribute => {
             if (feature.get(attribute.attrName) === null) {
                 return false;
             }
@@ -405,8 +402,8 @@ const SourceModel = QueryModel.extend({
             }
 
             return this.isValueMatch(feature, attribute);
+        });
 
-        }, this);
         return isMatch;
     },
 

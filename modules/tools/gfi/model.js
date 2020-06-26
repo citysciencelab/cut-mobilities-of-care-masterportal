@@ -462,7 +462,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @returns {Object} Prepared vector gfi param
      */
     prepareVectorGfiParam: function (modelAttributes, feature) {
-        const clonedModelAttributes = _.clone(modelAttributes);
+        const clonedModelAttributes = {...modelAttributes};
 
         clonedModelAttributes.gfiFeatureList = [feature];
         clonedModelAttributes.feature = feature;

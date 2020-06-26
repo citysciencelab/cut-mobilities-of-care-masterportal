@@ -112,7 +112,8 @@ const SchulInfoTheme = Theme.extend({
         this.get("feature").set("layerName", this.get("name"));
     },
     getVectorGfi: function () {
-        let gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
+        const gfiContentPick = this.get("themeConfig").map(value => value.attributes);
+        let gfiContent = _.pick(this.get("feature").getProperties(), Array.isArray(gfiContentPick) ? gfiContentPick.reduce((acc, val) => acc.concat(val), []) : gfiContentPick);
 
         gfiContent = this.getManipulateDate([gfiContent]);
         this.setGfiContent(gfiContent);

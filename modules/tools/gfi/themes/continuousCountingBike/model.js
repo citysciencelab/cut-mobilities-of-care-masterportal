@@ -265,7 +265,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     prepareDayDataset: function (data) {
         const date = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
-            newData = data ? _.map(data, function (val) {
+            newData = data ? data.map(val => {
                 val.timestamp = moment(val.timestamp).format("HH:mm");
                 return val;
             }) : "",
@@ -296,7 +296,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         const startDate = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
             endDate = data ? moment(_.last(data).timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
-            newData = data ? _.map(data, function (val) {
+            newData = data ? data.map(val => {
                 val.timestamp = moment(val.timestamp).format("DD.MM.YYYY");
                 return val;
             }) : "",

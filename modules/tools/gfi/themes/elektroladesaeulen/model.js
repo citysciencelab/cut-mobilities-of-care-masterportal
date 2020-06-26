@@ -792,9 +792,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             });
 
             // calculate sum of the array with values for one hour
-            sum = _.reduce(arrayPerHour, function (memo, value) {
-                return memo + value;
-            });
+            sum = arrayPerHour.reduce((memo, value) => memo + value);
 
             // calculate mean of the array with values for one hour
             mean = sum / arrayPerHour.length;

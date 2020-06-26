@@ -73,7 +73,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 // Für Gruppen-Layer (ol.layer.Group)
                 // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
                 else if (layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
-                    layerExtended.children = _.map(layerExtended.children, function (childLayer) {
+                    layerExtended.children = layerExtended.children.map(childLayer => {
                         objFromRawList = getLayerWhere({id: childLayer.id});
 
                         if (objFromRawList !== null) {
@@ -81,7 +81,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                         }
 
                         return undefined;
-                    }, this);
+                    });
 
                     layerExtended.children = layerExtended.children.filter(function (childLayer) {
                         return childLayer !== undefined;

@@ -536,9 +536,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setIsSelectedOnParent: function (model) {
         const layers = this.where({parentId: model.get("parentId")}),
             folderModel = this.findWhere({id: model.get("parentId")}),
-            allLayersSelected = _.every(layers, function (layer) {
-                return layer.get("isSelected") === true;
-            });
+            allLayersSelected = layers.every(layer => layer.get("isSelected") === true);
 
         if (allLayersSelected === true) {
             folderModel.setIsSelected(true);
@@ -923,7 +921,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     */
     scrollToLayer: function (overlayerName) {
         const $Overlayer = $("#Overlayer"),
-            element = _.findWhere($Overlayer.find("span"), {title: overlayerName});
+            element = $Overlayer.find("span").toArray().find(layer => layer.title === overlayerName);
+
         let overlayOffsetToTop,
             overlayerHeight,
             elementOffsetFromTop,

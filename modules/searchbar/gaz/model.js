@@ -148,7 +148,7 @@ const GazetteerModel = Backbone.Model.extend({
             houseNumbers = [];
         let sortedHouseNumbers = null;
 
-        hits.each(function (i, hit) {
+        hits.toArray().forEach(hit => {
             houseNumbers.push({
                 position: $(hit).find("gml\\:pos,pos")[0].textContent,
                 number: $(hit).find("dog\\:hausnummer,hausnummer")[0].textContent,
