@@ -229,7 +229,7 @@ function nichtTestbareFunktion (param) {
 ---
 
 #### A.5.2
-Weitere Informationen zu Unit-Tests [hier](./unittesting.md).
+Weitere Informationen zu Unit-Tests [hier](./unittestingVue.md).
 
 Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mocha](https://mochajs.org/)** verwendet.  
 

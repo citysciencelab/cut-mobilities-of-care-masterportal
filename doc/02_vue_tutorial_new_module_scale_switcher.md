@@ -1,5 +1,5 @@
 
-## Tutorial: Ein neues Tool erstellen (Scale-Switcher)
+## Tutorial: Ein neues Tool in Vue erstellen (Scale-Switcher)
 Eine Schritt für Schritt Anleitung zur Erstellung eines neuen Tools mit [vue](https://vuejs.org/) und [vuex](https://vuex.vuejs.org/).
 
 ### Beispiel Anforderung
@@ -31,9 +31,9 @@ src
 |   |   |   |	|   |-- components
 |   |   |   |   |	|   |-- SScaleSwitcher.spec.js
 |   |   |   |	|   |-- store
-|   |   |   |   |	|   |-- actionsScaleSwitcher.spec.js
-|   |   |   |   |	|   |-- gettersScaleSwitcher.spec.js
-|   |   |   |   |	|   |-- mutationsScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- actionsScaleSwitcher.test.js
+|   |   |   |   |	|   |-- gettersScaleSwitcher.test.js
+|   |   |   |   |	|   |-- mutationsScaleSwitcher.test.js
 ```
 
 ### ScaleSwitcher.vue erstellen
@@ -433,5 +433,5 @@ Die Übersetzung des Namens wird in den Übersetzungsdateien (*locales/[de/en]/c
              "scaleSwitcher": "Maßstab umschalten"
         }
         ... // further translations
-```   
-### [Dateien herunterladen](scale.zip), Stand Juni 2020
+```
+
