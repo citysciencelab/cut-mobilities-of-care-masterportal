@@ -1,6 +1,7 @@
 const webpack = require("webpack"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
+require("regenerator-runtime/runtime");
 require("jsdom-global")();
 
 module.exports = {
