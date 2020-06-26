@@ -732,16 +732,17 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         if (!datepicker) {
             this.set("yearDatepicker", new SnippetDatepickerModel({
                 displayName: "Tag",
-                preselectedValue: moment().toDate(),
+                preselectedValue: moment().startOf("year").toDate(),
                 multidate: 5,
                 startDate: startDate.toDate(),
-                endDate: moment().toDate(),
+                endDate: moment().startOf("year").toDate(),
                 type: "datepicker",
                 minViewMode: "years",
                 maxViewMode: "years",
                 inputs: $("#yearDateInput"),
                 format: "yyyy"
             }));
+
             this.listenTo(this.get("yearDatepicker"), {
                 "valuesChanged": this.yearDatepickerValueChanged
             });

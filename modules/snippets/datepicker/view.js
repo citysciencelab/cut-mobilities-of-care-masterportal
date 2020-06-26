@@ -72,7 +72,13 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             if (this.model.get("selectWeek")) {
                 date.get("inputs").on("show", this.showWeekpicker.bind(this), null);
             }
-            date.get("inputs").datepicker("update", moment(date.get("date")).format("DD.MM.YYYY"));
+            // set date in year datepicker
+            if (date.get("minViewMode") === "years" && date.get("maxViewMode") === "years") {
+                date.get("inputs").datepicker("setDate", date.get("date"));
+            }
+            else {
+                date.get("inputs").datepicker("update", moment(date.get("date")).format("DD.MM.YYYY"));
+            }
         }
 
         // setter for target 'inline'
