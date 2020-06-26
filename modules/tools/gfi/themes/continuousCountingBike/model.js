@@ -294,7 +294,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      */
     prepareLastSevenDaysDataset: function (data) {
         const startDate = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
-            endDate = data ? moment(_.last(data).timestamp).format("DD.MM.YYYY") : "",
+            endDate = data ? moment(data.slice(-1).timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
             newData = data ? data.map(val => {
                 val.timestamp = moment(val.timestamp).format("DD.MM.YYYY");
@@ -457,7 +457,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             let children;
 
             if (element.hasOwnProperty("children")) {
-                children = _.values(_.pick(element, "children"))[0];
+                children = element.children;
                 children.forEach(child => {
                     child.val.remove();
                 });

@@ -143,16 +143,16 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
                 })
             }));
             // "styleId" neccessary for print, that style and feature can be linked
-            lineLayerFeature.set("styleId", _.uniqueId());
+            lineLayerFeature.set("styleId", Radio.request("Util", "uniqueId"));
             this.get("pendlerLineLayer").getSource().addFeature(lineLayerFeature);
 
             // Erzeuge die Beschriftung. Dafür wird ein (unsichtbarere) Punkt am Ende jeder Linie gesetzt.
             // Wo das Ende ist (erste oder zweite Koordinate) entschreidet sich dabei aus der (Pendel-)Richtung
             if (this.get("direction") === "wohnort") {
-                labelCoordinates = _.last(feature.getGeometry().getCoordinates());
+                labelCoordinates = feature.getGeometry().getCoordinates().slice(-1);
             }
             else {
-                labelCoordinates = _.first(feature.getGeometry().getCoordinates());
+                labelCoordinates = feature.getGeometry().getCoordinates()[0];
             }
 
             labelLayerFeature = new Feature({
@@ -171,7 +171,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
                 })
             }));
             // "styleId" neccessary for print, that style and feature can be linked
-            labelLayerFeature.set("styleId", _.uniqueId());
+            labelLayerFeature.set("styleId", Radio.request("Util", "uniqueId"));
             this.get("pendlerLabelLayer").getSource().addFeature(labelLayerFeature);
 
         });

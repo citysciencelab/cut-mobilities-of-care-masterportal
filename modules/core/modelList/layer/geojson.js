@@ -362,7 +362,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      */
     addId: function (features) {
         features.forEach(function (feature) {
-            const id = feature.get("id") || _.uniqueId();
+            const id = feature.get("id") || Radio.request("Util", "uniqueId");
 
             feature.setId(id);
         });

@@ -186,13 +186,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             }
             else if (key.search("staticlinks") !== -1) {
                 value.forEach(staticlink => {
-                    toolitem = Object.assign(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
+                    toolitem = Object.assign(staticlink, {type: "staticlink", parentId: parentId, id: Radio.request("Util", "uniqueId", "_")});
 
                     this.addItem(toolitem);
                 });
             }
             else if (value.hasOwnProperty("type") && value.type === "viewpoint") {
-                ansicht = Object.assign(value, {parentId: parentId, id: _.uniqueId(key + "_")});
+                ansicht = Object.assign(value, {parentId: parentId, id: Radio.request("Util", "uniqueId", key + "_")});
                 this.addItem(ansicht);
             }
             else {
@@ -201,7 +201,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
                 if (!toolitem.hasOwnProperty("onlyDesktop")) {
                     // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
-                    if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
+                    if (this.get("onlyDesktopTools").indexOf(toolitem.id) !== -1) {
                         toolitem = Object.assign(toolitem, {onlyDesktop: true});
                     }
                 }
@@ -740,7 +740,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     createUniqId: function (value) {
         const trimmedValue = value.replace(/[^a-zA-Z0-9]/g, "");
 
-        return _.uniqueId(trimmedValue);
+        return Radio.request("Util", "uniqueId", trimmedValue);
     },
 
     /**

@@ -247,7 +247,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         }
 
         // Gebe eine nach <limit> Einträgen abgeschnittene Liste zurück
-        return _.first(features, limit);
+        return features.slice(0, limit);
     },
 
     /**
