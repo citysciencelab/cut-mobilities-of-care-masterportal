@@ -14,7 +14,10 @@ const TrinkwasserTheme = Theme.extend({
 
         if (this.get("gfiContent") !== undefined) {
             this.get("gfiContent").forEach(element => {
-                _.each(element, function (value, key) {
+                Object.entries(element).forEach(ele => {
+                    const value = ele[1],
+                        key = ele[0];
+
                     if (["Entnahmedatum", "Bezirk", "Stadtteil", "Versorgungsgebiet"].includes(key)) {
                         allgemContent[key] = value;
                     }

@@ -28,7 +28,10 @@ const ItGbmTheme = Theme.extend({
     * @returns {Object} gfiContent
     */
     addUnits: function (gfiContent, attrArray) {
-        _.each(gfiContent, function (value, key) {
+        Object.entries(gfiContent).forEach(content =>{
+            const value = content[1],
+                key = content[0];
+
             // Gewerbliche Standorte
             if (this.get("id") === "10319" && attrArray.includes(key)) {
                 gfiContent[key] = this.punctuate(value) + " ha";
@@ -37,7 +40,7 @@ const ItGbmTheme = Theme.extend({
             if (this.get("id") === "10320" && attrArray.includes(key)) {
                 gfiContent[key] = this.punctuate(value) + " m²";
             }
-        }, this);
+        });
 
         return gfiContent;
     },

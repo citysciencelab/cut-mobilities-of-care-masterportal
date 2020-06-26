@@ -37,9 +37,8 @@
                     <% }
                     years.forEach(function(year) { %>
                         <td class="data">
-                        <% if(dataset.find(data => data.year === year)[name] !== undefined) {
-                            dataset.find(data => data.year === year);
-                        print(dataset.find(data => data.year === year).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                        <% if(dataset.find(function(data) {return data.year === year})[name] !== undefined) {
+                        print(dataset.find(function(data) {return data.year === year})[name].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
                         } %>
                         </td>
                     <% });%>

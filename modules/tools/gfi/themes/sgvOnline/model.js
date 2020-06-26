@@ -44,7 +44,9 @@ const SgvOnlineTheme = Theme.extend({
         }
         else {
             element.forEach(ele => {
-                _.each(ele, function (val, key) {
+                Object.entries(ele).forEach(singelelement => {
+                    const val = singelelement[1],
+                        key = singelelement[0];
                     let imgView,
                         videoView;
 

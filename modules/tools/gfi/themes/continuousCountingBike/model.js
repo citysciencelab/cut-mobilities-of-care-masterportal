@@ -109,7 +109,9 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             lastSevenDaysLine = gfiContent.hasOwnProperty("Wochenlinie") ? gfiContent.Wochenlinie : null;
             yearLine = gfiContent.hasOwnProperty("Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
             this.setDownloadLink(gfiContent.hasOwnProperty("Download") ? gfiContent.Download : null);
-            _.each(infoGFIContent, function (attribute, key) {
+            Object.entries(infoGFIContent).forEach(content => {
+                const attribute = content[1],
+                    key = content[0];
                 let gfiAttributes,
                     isnum,
                     editedAttribute,
@@ -163,7 +165,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         const dataSplit = dayLine ? dayLine.split("|") : "",
             tempArr = [];
 
-        _.each(dataSplit, function (data) {
+        dataSplit.forEach(data => {
             const splitted = data.split(","),
                 day = splitted[0].split(".")[0],
                 month = splitted[0].split(".")[1] - 1,
@@ -199,7 +201,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         const dataSplit = lastSevenDaysLine ? lastSevenDaysLine.split("|") : "",
             tempArr = [];
 
-        _.each(dataSplit, function (data) {
+        dataSplit.forEach(data => {
             const splitted = data.split(","),
                 // weeknumber = splitted[0],
                 day = splitted[1].split(".")[0],
@@ -234,7 +236,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         const dataSplit = yearLine ? yearLine.split("|") : "",
             tempArr = [];
 
-        _.each(dataSplit, function (data) {
+        dataSplit.forEach(data => {
             const splitted = data.split(","),
                 weeknumber = splitted[1],
                 year = splitted[0],
@@ -324,7 +326,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      */
     prepareYearDataset: function (data) {
         const graphArray = data ? this.getDataAttributes(data[0]) : "",
-            newData = data ? _.each(data, function (val) {
+            newData = data ? data.forEach(val => {
                 val.timestamp = moment(val.timestamp).format("w");
                 return val;
             }) : "",
@@ -489,7 +491,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             startsWith = 0,
             xThinningVal = xThinning;
 
-        _.each(data, function (ele) {
+        data.forEach(ele => {
             tickValuesArray.push(ele.timestamp);
         });
 

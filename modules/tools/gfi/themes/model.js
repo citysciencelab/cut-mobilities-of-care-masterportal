@@ -225,10 +225,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         // ESRI is not parsed by the Ol-format
         if (gfiFeatures.length === 0) {
             if (dat.getElementsByTagName("FIELDS")[0] !== undefined) {
-                _.each(dat.getElementsByTagName("FIELDS"), function (element) {
+                dat.getElementsByTagName("FIELDS").forEach(element => {
                     const gfi = {};
 
-                    _.each(element.attributes, function (attribute) {
+                    element.attributes.forEach(attribute => {
                         const key = attribute.localName;
 
                         if (this.isValidValue(attribute.value)) {
@@ -240,10 +240,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                         else {
                             gfi[key] = "";
                         }
-                    }, this);
+                    });
 
                     gfiList.push(gfi);
-                }, this);
+                });
             }
         }
         else { // OS (deegree, UMN, Geoserver) is parsed by Ol-format

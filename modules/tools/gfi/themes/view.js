@@ -121,7 +121,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * @returns {*} todo
      */
     appendChildren: function () {
-        const children = this.model.get("children");
+        const children = this.model.get("children") !== undefined ? this.model.get("children") : [];
 
         this.$(".gfi-content").removeClass("has-image");
         children.forEach(element => {

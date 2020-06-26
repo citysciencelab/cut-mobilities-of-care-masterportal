@@ -60,9 +60,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             cacheLayerMetaIDs.push(layer.datasets[0].md_id);
         });
 
-        return _.reject(layerList, function (element) {
-            return cacheLayerMetaIDs.includes(element.datasets[0].md_id) && element.cache === false;
-        });
+        return layerList.filter(element => !(cacheLayerMetaIDs.includes(element.datasets[0].md_id) && element.cache === false));
     },
 
     /**
@@ -213,7 +211,10 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             layer = [],
             categories = {};
 
-        _.each(metaNameGroups, function (group, groupname) {
+        Object.entries(metaNameGroups).forEach(metaName => {
+            const group = metaName[1],
+                groupname = metaName[0];
+
             // Wenn eine Gruppe mehr als einen Eintrag hat -> Ordner erstellen
             if (Object.keys(group).length > 1) {
                 folder.push({
@@ -229,7 +230,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             categories.layer = layer;
             categories.id = this.createUniqId(name);
             categories.name = name;
-        }, this);
+        });
         return categories;
     },
 
@@ -280,7 +281,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             sortedCategories = [],
             isQuickHelpSet = Radio.request("QuickHelp", "isSet");
 
-        _.each(sortedKeys, function (key) {
+        sortedKeys.forEach(key => {
             sortedCategories.push(tree[key]);
         });
         // Kategorien erzeugen
@@ -293,7 +294,9 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             glyphicon: "glyphicon-plus-sign",
             quickHelp: isQuickHelpSet
         });
-        _.each(tree, function (category) {
+        Object.keys(tree).forEach(element => {
+            const category = tree[element];
+
             // Unterordner erzeugen
             this.addItems(category.folder, {
                 glyphicon: "glyphicon-plus-sign",
@@ -305,7 +308,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 type: "folder",
                 quickHelp: isQuickHelpSet
             });
-            _.each(category.layer, function (layer) {
+            category.layer.forEach(layer => {
                 layer.name = layer.datasets[0].md_name;
             });
             // Layer dirket in Kategorien
@@ -315,7 +318,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 parentId: category.id,
                 type: "layer"
             });
-            _.each(category.folder, function (folder) {
+            category.folder.forEach(folder => {
                 // Layer in der untertesten Ebene erzeugen
                 this.addItems(folder.layer, {
                     isBaseLayer: false,
@@ -323,8 +326,8 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     parentId: folder.id,
                     type: "layer"
                 });
-            }, this);
-        }, this);
+            });
+        });
     }
 });
 

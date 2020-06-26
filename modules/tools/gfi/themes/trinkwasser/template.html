@@ -73,7 +73,10 @@ Object.entries(gfiContent.mikrobioContent).forEach(function(element) {
     </td>
 </tr>
 <%}
-_.each(gfiContent.chemContent, function(value, key) {
+Object.entries(gfiContent.chemContent).forEach(function(content) {
+        const value = content[1],
+            key = content[0];
+
         if (typeof key !== "string" || typeof value !== "string") return;
     %>
 <tr colspan="2">

@@ -203,7 +203,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     getFeatureObject: function (searchField, filteredFeatures, model) {
         const featureArray = [];
 
-        _.each(filteredFeatures, function (feature) {
+        filteredFeatures.forEach(feature => {
             const featureObject = {
                 // "bezeichnung" hard coded? Or use searchField?
                 name: this.getWithClusterFallback(feature, searchField),
@@ -225,7 +225,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
             }
 
             featureArray.push(featureObject);
-        }, this);
+        });
         return featureArray;
     },
 

@@ -211,7 +211,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
 
         if (this.canShowHit(searched)) {
 
-            _.each(params, function (param) {
+            params.forEach(param => {
                 if ((address.hasOwnProperty("house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
                     (address.hasOwnProperty("road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
                     (address.hasOwnProperty("pedestrian") && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||

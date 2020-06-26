@@ -178,13 +178,12 @@ const MobileMenu = Backbone.View.extend({
      */
     addViews: function (models) {
         const treeType = this.doRequestTreeType(),
-            newModels = _.reject(models, function (model) {
-                return model.get("onlyDesktop") === true;
-            });
+            newModels = models.filter(model => !(model.get("onlyDesktop") === true));
+
         let nodeView,
             attr;
 
-        _.each(newModels, function (model) {
+        newModels.forEach(model => {
             model.setIsVisibleInTree(true);
             switch (model.get("type")) {
                 case "folder": {
@@ -227,7 +226,7 @@ const MobileMenu = Backbone.View.extend({
                 }
             }
             this.doAppendNodeView(nodeView);
-        }, this);
+        });
     },
 
     /**

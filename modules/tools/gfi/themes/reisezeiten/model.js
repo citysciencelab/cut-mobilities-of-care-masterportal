@@ -65,7 +65,7 @@ const ReisezeitenTheme = Theme.extend({
                     routen = $(hits).find("app\\:reisezeit_routen,reisezeit_routen"),
                     ziele = [];
 
-                _.each(routen, function (route) {
+                routen.toArray().forEach(route => {
                     const zielort = $(route).find("app\\:ziel_ort,ziel_ort")[0].textContent,
                         anzeige = $(route).find("app\\:anzeige,anzeige")[0].textContent,
                         routenid = $(route).find("app\\:id,id")[0].textContent;
@@ -161,7 +161,7 @@ const ReisezeitenTheme = Theme.extend({
 
         this.removeRouteLayer();
         this.createRouteLayer();
-        _.each(source.getFeatures(), function (feature) {
+        source.getFeatures().forEach(feature => {
             switch (feature.get("farbe")) {
                 case "rot": {
                     strokestyle = new Stroke({
