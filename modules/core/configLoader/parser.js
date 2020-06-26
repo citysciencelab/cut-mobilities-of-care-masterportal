@@ -498,7 +498,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {Object} item
      */
     getItemByAttributes: function (value) {
-        return _.findWhere(this.get("itemList"), value);
+        return this.get("itemList").find(item => Object.keys(value).every(key => item[key] === value[key]));
     },
 
     /**
@@ -507,7 +507,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {Array} Items
      */
     getItemsByAttributes: function (value) {
-        return _.where(this.get("itemList"), value);
+        return this.get("itemList").filter(item => Object.keys(value).every(key => item[key] === value[key]));
     },
 
     /**
@@ -703,7 +703,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
         // Objekte die gruppiert werden
         ids.forEach(id => {
-            const lay = _.findWhere(layerlist, {id: id});
+            const lay = layerlist.find(layer => layer.id === id);
 
             if (lay) {
                 objectsByIds.push(lay);
@@ -715,9 +715,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             return null;
         }
         // Das erste Objekt wird kopiert
-        newObject = _.clone(objectsByIds[0]);
+        newObject = {...objectsByIds[0]};
         // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
-        newObject.layers = _.pluck(objectsByIds, "layers").toString();
+        newObject.layers = objectsByIds.map(value => value.layers).toString();
         // Das Attribut maxScale wird gruppiert
         // Am kopierten Objekt wird der höchste Wert gesetzt
         objectsByIds.forEach(object => maxScales.push(parseInt(object.maxScale, 10)));
@@ -767,7 +767,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {String} layer initial visible baselayer
      */
     getInitVisibBaselayer: function () {
-        const layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
+        const layer = this.get("baselayer").Layer.find(singleLayer => singleLayer.visibility === true);
 
         if (layer === undefined) {
             return undefined;

@@ -79,15 +79,11 @@ const MietenspiegelTheme = Theme.extend({
             uniqueValues = "",
             sortedValues = "";
 
-        merkmale = _.map(daten, function (value) {
-            return value.merkmale;
-        });
+        merkmale = daten.map(value => value.merkmale);
         merkmaleReduced = merkmale.filter(function (value) {
             return Object.entries(setted).forEach(entry => value[entry[0]] === entry[1]);
         });
-        possibleValues = _.map(merkmaleReduced, function (merkmal) {
-            return _.values(_.pick(merkmal, merkmalId))[0];
-        });
+        possibleValues = merkmaleReduced.map(merkmal => _.values(_.pick(merkmal, merkmalId))[0]);
         uniqueValues = _.unique(possibleValues);
 
         if (merkmalId === "Baualtersklasse/Bezugsfertigkeit") {
@@ -196,11 +192,9 @@ const MietenspiegelTheme = Theme.extend({
     calculateMerkmale: function () {
         const daten = this.get("msDaten"),
             merkmalnamen = _.object(Object.keys(daten[0].merkmale), []),
-            merkmale = _.map(daten, function (value) {
-                return value.merkmale;
-            }),
+            merkmale = daten.map(value => value.merkmale),
             merkmaleReduced = _.mapObject(merkmalnamen, function (value, key) {
-                return _.unique(_.pluck(merkmale, key));
+                return _.unique(merkmale.Layer.map(val => val[key]));
             });
 
         this.set("msMerkmale", merkmaleReduced);

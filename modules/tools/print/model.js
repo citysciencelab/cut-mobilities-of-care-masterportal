@@ -122,7 +122,7 @@ const PrintModel = Tool.extend({
                             scaletext = scaletext < 10000 ? scaletext : scaletext.substring(0, scaletext.length - 3) + " " + scaletext.substring(scaletext.length - 3);
                             scale.name = "1: " + scaletext;
                         });
-                        model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
+                        model.set("layout", model.get("layouts").find(layout => layout.name === "A4 Hochformat"));
                         model.setScaleByMapView();
                         model.set("isCollapsed", false);
                         model.set("fetched", true);
@@ -431,9 +431,10 @@ const PrintModel = Tool.extend({
         };
 
         if (gfiPosition !== null) {
-            _.flatten(this.get("gfiParams")).forEach((element, index) => {
+            (Array.isArray(this.get("gfiParams")) ? this.get("gfiParams").reduce((acc, val) => acc.concat(val), []) : this.get("gfiParams")).forEach((element, index) => {
                 specification.pages[0]["attr_" + index] = element;
             });
+
             specification.pages[0].layerName = this.get("gfiTitle");
         }
         this.set("specification", specification);
@@ -555,10 +556,10 @@ const PrintModel = Tool.extend({
      * @returns {void}
      */
     push: function (attribute, value) {
-        const tempArray = _.clone(this.get(attribute));
+        const tempArray = {...this.get(attribute)};
 
         tempArray.push(value);
-        this.set(attribute, _.flatten(tempArray));
+        this.set(attribute, Array.isArray(tempArray) ? tempArray.reduce((acc, val) => acc.concat(val), []) : tempArray);
     },
 
     // Prüft ob es sich um einen rgb(a) oder hexadezimal String handelt.

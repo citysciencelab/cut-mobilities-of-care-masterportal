@@ -108,8 +108,8 @@ const DefaultTheme = Theme.extend({
                         }
                     }
                     // lösche leere Dummy-Einträge wieder raus.
-                    element[index] = _.omit(element[index], function (value) {
-                        return value === "#";
+                    element[index] = _.omit(element[index], function (val) {
+                        return val === "#";
                     });
                 }, this);
             });

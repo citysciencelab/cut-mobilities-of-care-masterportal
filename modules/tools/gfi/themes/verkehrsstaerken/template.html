@@ -37,8 +37,9 @@
                     <% }
                     years.forEach(function(year) { %>
                         <td class="data">
-                        <% if(_.findWhere(dataset, {year: year})[name] !== undefined) {
-                        print(_.findWhere(dataset, {year: year})[name].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                        <% if(dataset.find(data => data.year === year)[name] !== undefined) {
+                            dataset.find(data => data.year === year);
+                        print(dataset.find(data => data.year === year).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
                         } %>
                         </td>
                     <% });%>

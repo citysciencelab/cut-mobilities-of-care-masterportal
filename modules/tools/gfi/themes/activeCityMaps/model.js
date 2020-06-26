@@ -87,8 +87,8 @@ const ActiveCityMapsTheme = Theme.extend({
                         }
                     }
                     // lösche leere Dummy-Einträge wieder raus.
-                    element[index] = _.omit(element[index], function (value) {
-                        return value === "#";
+                    element[index] = _.omit(element[index], function (val) {
+                        return val === "#";
                     });
                 });
             });
@@ -136,7 +136,6 @@ const ActiveCityMapsTheme = Theme.extend({
      */
     createFeatureInfos: function (gfiContent) {
         const featureInfos = [];
-console.log(gfiContent);
 
         _.each(gfiContent, function (attribute, key) {
             let gfiAttributes;

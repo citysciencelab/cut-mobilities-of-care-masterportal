@@ -235,7 +235,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @return {void}
      */
     pushHits: function (attribute, value, evtType) {
-        let tempArray = _.clone(this.get(attribute)),
+        let tempArray = [...this.get(attribute)],
             valueWithNumbers;
 
         tempArray.push(value);
@@ -251,7 +251,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             tempArray = valueWithNumbers === undefined ? tempArray : valueWithNumbers;
         }
 
-        this.set(attribute, _.flatten(tempArray));
+        this.set(attribute, [].concat(...[].concat(...tempArray)));
 
         if (valueWithNumbers !== undefined && this.get("eventType") === "paste") {
             Radio.trigger("ViewZoom", "hitSelected");
@@ -265,11 +265,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @return {Void} Nothing
      */
     removeHits: function (attribute, filter) {
-        const tempArray = _.clone(this.get(attribute));
+        const tempArray = [...this.get(attribute)];
         let toRemove;
 
         if (typeof filter === "object") {
-            toRemove = _.where(tempArray, filter);
+            toRemove = tempArray.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
             toRemove.forEach(item => {
                 tempArray.splice(tempArray.indexOf(item), 1);
             });
@@ -281,7 +281,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
                 }
             }
         }
-        this.set(attribute, _.flatten(tempArray));
+        this.set(attribute, Array.isArray(tempArray) ? tempArray.reduce((acc, val) => acc.concat(val), []) : tempArray);
     },
 
     /**

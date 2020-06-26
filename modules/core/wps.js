@@ -106,7 +106,7 @@ const WPS = Backbone.Model.extend({
             obj = $(xml)[0] === undefined ? undefined : $(xml)[0].textContent;
         }
         else {
-            children.forEach(child => {
+            children.toArray().forEach(child => {
                 const localName = $(child)[0].localName;
                 let old;
 
@@ -139,8 +139,10 @@ const WPS = Backbone.Model.extend({
     buildXML: function (identifier, data, xmlTemplate, dataInputXmlTemplate) {
         let dataString = this.setXMLElement(xmlTemplate, "</ows:Identifier>", identifier);
 
-        _.each(data, function (obj, key) {
-            const dataType = obj.hasOwnProperty("dataType") ? obj.dataType : undefined,
+        Object.entries(data).forEach(dat => {
+            const obj = dat[1],
+                key = dat[0],
+                dataType = obj.hasOwnProperty("dataType") ? obj.dataType : undefined,
                 value = obj.hasOwnProperty("value") ? obj.value : obj;
             let attributeString = "";
 

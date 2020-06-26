@@ -43,7 +43,6 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
             url: url,
             context: this,
             data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
-            // parent (QueryModel) function
             success: callback
         });
     },
@@ -75,7 +74,7 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
 
         elements = $(selector, response);
 
-        elements.forEach(element => {
+        elements.toArray().forEach(element => {
 
             let type = $(element).attr("type"),
                 typeWithoutNamespace,

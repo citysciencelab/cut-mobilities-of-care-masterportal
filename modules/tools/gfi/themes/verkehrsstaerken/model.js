@@ -121,7 +121,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
         let dataset = [];
 
         years.forEach(year => {
-            const attrDataArray = _.where(dataPerYear, {year: year}),
+            const attrDataArray = dataPerYear.filter(item => item.year === year),
                 yearObject = {year: year};
 
             attrDataArray.forEach(attrData => {
