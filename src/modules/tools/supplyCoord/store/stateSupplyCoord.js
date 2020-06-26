@@ -7,7 +7,10 @@ const state = {
     positionMapProjection: [],
     updatePosition: true,
     currentProjectionName: "EPSG:25832",
+    currentProjection: null,
     currentSelection: "EPSG:25832",
+    coordinatesEastingField: "",
+    coordinatesNorthingField: "",
 
     // defaults for config.json parameters
     name: "Koordinaten abfragen",

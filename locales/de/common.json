@@ -41,7 +41,8 @@
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
-            "wfsTransaction": "WFS-T Tool"
+            "wfsTransaction": "WFS-T Tool",
+            "scaleSwitcher": "Maßstab umschalten"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -394,6 +395,9 @@
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche"
+            },
+            "scaleSwitcher": {
+                "label": "Maßstab"
             }
         },
         "controls": {

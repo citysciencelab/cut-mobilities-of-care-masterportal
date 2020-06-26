@@ -1,3 +1,4 @@
+import "regenerator-runtime/runtime";
 import Vuex from "vuex";
 import {config, mount, createLocalVue} from "@vue/test-utils";
 import BackForward from "../../../components/BackForward.vue";
