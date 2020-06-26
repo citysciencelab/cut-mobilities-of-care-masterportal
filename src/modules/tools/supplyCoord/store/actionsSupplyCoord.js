@@ -75,20 +75,22 @@ export default {
     adjustPosition ({commit}, {position, targetProjection}) {
         let coord, easting, northing;
 
-        // geographical coordinates
-        if (targetProjection.projName === "longlat") {
-            coord = toStringHDMS(position);
-            easting = coord.substr(0, 13);
-            northing = coord.substr(14);
+        if(targetProjection){
+            // geographical coordinates
+            if (targetProjection.projName === "longlat") {
+                coord = toStringHDMS(position);
+                easting = coord.substr(0, 13);
+                northing = coord.substr(14);
+            }
+            // cartesian coordinates
+            else {
+                coord = toStringXY(position, 2);
+                easting = coord.split(",")[0].trim();
+                northing = coord.split(",")[1].trim();
+            }
+            commit("setCoordinatesEastingField", easting);
+            commit("setCoordinatesNorthingField", northing);
         }
-        // cartesian coordinates
-        else {
-            coord = toStringXY(position, 2);
-            easting = coord.split(",")[0].trim();
-            northing = coord.split(",")[1].trim();
-        }
-        commit("setCoordinatesEastingField", easting);
-        commit("setCoordinatesNorthingField", northing);
     },
     /**
      * Sets the coordinates from the maps pointermove-event.
