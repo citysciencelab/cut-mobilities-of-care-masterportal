@@ -1,9 +1,7 @@
 <script>
 import Tool from "../../Tool.vue";
-import {Pointer} from "ol/interaction.js";
-import {toStringHDMS, toStringXY} from "ol/coordinate.js";
-import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
-import {mapActions, mapState} from "vuex";
+import {mapGetters} from "vuex";
+import {mapActions} from "vuex";
 
 export default {
     name: "KmlImport",
@@ -12,50 +10,36 @@ export default {
     },
     data () {
         return {
+            dzIsDropHovering: false,
             storePath: this.$store.state.Tools.KmlImport
         };
     },
     computed: {
-        ...mapState([
-            "configJson"
-        ]),
-        ...mapState("Tools/KmlImport", [
+        ...mapGetters("Tools/KmlImport", [
+            "deactivateGFI",
+            "glyphicon",
+            "isActive",
+            "rawSource",
             "renderToWindow",
             "resizableWindow",
-            "glyphicon",
-            "title",
-            "deactivateGFI"
+            "supportedFiletypes"
         ]),
-        active: {
+        selectedFiletype: {
             get () {
-                return this.storePath.active;
+                return this.storePath.selectedFiletype;
             },
-            set (val) {
-                this.$store.commit("Tools/KmlImport/active", val);
+            set (value) {
+                this.setSelectedFiletype(value);
             }
         },
-        projections: {
-            get () {
-                return this.storePath.projections;
-            }
-        }
-    },
-    watch: {
-        /**
-         * since the parsing of the configJson happens after mount,
-         * we need to wait with initialize until configJson is parsed to store
-         * either here or centrally in App / MapRegionlistening
-         * if mounting occurs after config parsing, put the init function to mounted lifecycle hook
-         * @listens mapState#configJson
-         * @returns {void}
-         */
-        configJson () {
-            // this.initialize();
+
+        dropZoneAdditionalClass: function () {
+            return this.dzIsDropHovering ? "dzReady" : "";
         },
-        active (newValue) {}
+
+        console: () => console
     },
     created () {
-        console.log("KmlImport Created Hook");
         this.$on("close", this.close);
         this.initialize();
     },
@@ -69,10 +53,48 @@ export default {
     methods: {
         ...mapActions("Tools/KmlImport", [
             "activateByUrlParam",
-            "initialize"
+            "initialize",
+            "importKML",
+            "setSelectedFiletype",
+            "setActive"
         ]),
+        onDZDragenter () {
+            this.dzIsDropHovering = true;
+        },
+        onDZDragend () {
+            this.dzIsDropHovering = false;
+        },
+        onDZMouseenter () {
+            this.dzIsHovering = true;
+        },
+        onDZMouseleave () {
+            this.dzIsHovering = false;
+        },
+        onInputChange (e) {
+            if (e.target.files !== undefined) {
+                this.addFile(e.target.files);
+            }
+        },
+        onDrop (e) {
+            this.dzIsDropHovering = false;
+            if (e.dataTransfer.files !== undefined) {
+                this.addFile(e.dataTransfer.files);
+            }
+        },
+        addFile (files) {
+            files.forEach(file => {
+                const reader = new FileReader();
+
+                reader.onload = f => {
+                    this.importKML({raw: f.target.result, filename: file.name});
+                };
+
+                // this is the method to read a text file content
+                reader.readAsText(file);
+            });
+        },
         close () {
-            this.active = false;
+            this.setActive(false);
             // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
 
@@ -86,27 +108,189 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('modules.tools.KmlImport.title')"
+        :title="$t('modules.tools.kmlImport.title')"
         :icon="glyphicon"
-        :active="active"
+        :active="isActive"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
-            <form
-                v-if="active"
-                class="form-horizontal"
-                role="form"
+            <p
+                id="cta"
             >
-                <div class="form-group form-group-sm">
-                    <label
-                        for="coordSystemField"
-                        class="col-md-5 col-sm-5 control-label"
-                    >{{ $t("modules.tools.kmlImport.kmlFile") }}</label>
-                    <div class="col-md-7 col-sm-7"></div>
+                {{ $t("modules.tools.kmlImport.captions.intro") }}
+            </p>
+            <div
+                id="drop-area-fake"
+                class="vh-center-outer-wrapper"
+                :class="dropZoneAdditionalClass"
+            >
+                <div
+                    class="vh-center-inner-wrapper"
+                >
+                    <p
+                        class="caption"
+                    >
+                        {{ $t("modules.tools.kmlImport.captions.dropzone") }}
+                    </p>
                 </div>
-            </form>
+
+                <div
+                    id="drop-area"
+                    @drop.prevent="onDrop"
+                    @dragover.prevent
+                    @dragenter.prevent="onDZDragenter"
+                    @dragleave="onDZDragend"
+                    @mouseenter="onDZMouseenter"
+                    @mouseleave="onDZMouseleave"
+                />
+            </div>
+
+            <div>
+                <label
+                    id="upload-button-wrapper"
+                >
+                    <input
+                        type="file"
+                        @change="onInputChange"
+                    />
+                    {{ $t("modules.tools.kmlImport.captions.browse") }}
+                </label>
+            </div>
+
+            <div
+                id="h-seperator"
+            />
+
+            <div
+                id="selectedFiletype-form-container"
+            >
+                <form>
+                    <label
+                        v-for="(alertCategory, categoryKey) of supportedFiletypes"
+                        :key="categoryKey"
+                    >
+                        <input
+                            v-model="selectedFiletype"
+                            type="radio"
+                            :value="categoryKey"
+                            name="selectedFiletype"
+                            @input="setSelectedFiletype"
+                        />
+                        {{ $t(alertCategory.caption) }}
+                    </label>
+                </form>
+            </div>
         </template>
     </Tool>
 </template>
+
+<style lang="less" scoped>
+    @import "~variables";
+
+    #selectedFiletype-form-container {
+        label {
+            display: block;
+            margin:0;
+            font-size:@font_size_big;
+            
+            &:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
+        input {
+            margin:0;
+            
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
+    #h-seperator {
+        margin:12px 0 12px 0;
+        border: 1px solid #DDDDDD;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    #upload-button-wrapper {
+        border: 2px solid #DDDDDD;
+        background-color:#FFFFFF;
+        display: block;
+        text-align:center;
+        padding: 8px 12px;
+        cursor: pointer;
+        margin:12px 0 0 0;
+        font-size: @font_size_big;
+        transition: background 0.25s;
+
+        &:hover {
+            background-color:#EEEEEE;
+        }
+    }
+
+    #cta {
+        margin-bottom:12px;
+        max-width:300px;
+    }
+    #drop-area-fake {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        border: 2px dashed @accent_disabled;
+        padding:24px;
+        transition: background 0.25s, border-color 0.25s;
+
+        &.dzReady {
+            background-color:@accent_hover;
+            border-color:transparent;
+
+            p.caption {
+                color:#FFFFFF;
+            }
+        }
+
+        p.caption {
+            margin:0;
+            text-align:center;
+            transition: color 0.35s;
+            font-family: @font_family_accent;
+            font-size: @font_size_huge;
+            color: @accent_disabled;
+        }
+    }
+    #drop-area {
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        z-index:10;
+    }
+    .vh-center-outer-wrapper {
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        text-align:center;
+        position:relative;
+
+        &:before {
+            content:'';
+            display:inline-block;
+            height:100%;
+            vertical-align:middle;
+            margin-right:-0.25em;
+        }
+    }
+    .vh-center-inner-wrapper {
+        text-align:left;
+        display:inline-block;
+        vertical-align:middle;
+        position:relative;
+    }
+</style>
