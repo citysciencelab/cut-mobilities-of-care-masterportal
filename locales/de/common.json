@@ -37,6 +37,7 @@
             "draw": "Zeichnen / Schreiben",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
+            "layerSlider": "Zeitreihe",
             "featureLister": "Liste",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
@@ -201,6 +202,15 @@
                 "detailsOfSelected": "Details des ausgewählten Features",
                 "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
                 "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
+            },
+            "layerSlider": {
+                "displayLayers": "Anzeige diverser Layer.",
+                "title": "Simulation von Beispiel-WMS",
+                "titleNotConfigured": "Titel nicht konfiguriert",
+                "serviceOne": "Dienst 1",
+                "serviceTwo": "Dienst 2",
+                "serviceThree": "Dienst 3",
+                "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
             },
             "pendler": {
                 "animation": {

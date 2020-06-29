@@ -393,21 +393,21 @@
             "glyphicon": "glyphicon-share"
           },
           "layerSlider": {
-            "name": "Zeitreihe",
+            "name": "translate#common:menu.tools.layerSlider",
             "glyphicon": "glyphicon-film",
-            "title": "Simulation von Beispiel-WMS",
+            "title": "translate#common:modules.tools.layerSlider.title",
             "timeInterval": 2000,
             "layerIds": [
               {
-                "title": "Dienst 1",
+                "title": "translate#common:modules.tools.layerSlider.serviceOne",
                 "layerId": "8730"
               },
               {
-                "title": "Dienst 2",
+                "title": "translate#common:modules.tools.layerSlider.serviceTwo",
                 "layerId": "2426"
               },
               {
-                "title": "Dienst 3",
+                "title": "translate#common:modules.tools.layerSlider.serviceThree",
                 "layerId": "4561"
               }
             ]

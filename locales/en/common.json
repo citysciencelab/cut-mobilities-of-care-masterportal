@@ -37,6 +37,7 @@
             "draw": "Drawing / writing",
             "commuterLines": "Commuter (Lines)",
             "commuterAnimation": "Commuter (Animation)",
+            "layerSlider": "Time series",
             "featureLister": "List",
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
@@ -200,6 +201,15 @@
                 "detailsOfSelected": "Details of the selected feature",
                 "alert": "The attempt to show the selected feature failed because it has no geometry.",
                 "key": "{{shownFeatures.x}} of {{shownFeatures.y}} features listed"
+            },
+            "layerSlider": {
+                "displayLayers": "Display of various layers.",
+                "title": "Simulation of example WMS",
+                "titleNotConfigured": "Title not configured",
+                "serviceOne": "Service 1",
+                "serviceTwo": "Service 2",
+                "serviceThree": "Service 3",
+                "key": "Configuration of tool <b>{{alertMessage.x}}</b> incorrect: sliderType \"{{alertMessage.y}}\" is not yet implemented!"
             },
             "pendler": {
                 "animation": {
