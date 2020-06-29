@@ -53,7 +53,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
         });
 
         // get all tabContent to remove "in active" classes
-        this.$(".active.continuousCountingBike").forEach(ele => {
+        this.$(".active.continuousCountingBike").toArray().forEach(ele => {
             if (ele.getAttribute("id") !== null) {
                 tabContentList.push("#" + ele.getAttribute("id"));
             }
@@ -159,7 +159,7 @@ const ContinuousCountingBikeView = ThemeView.extend(/** @lends ContiniuousCounti
      * @return {void}
      */
     appendChildren: function () {
-        const children = this.model.get("children"),
+        const children = this.model.get("children") !== undefined ? this.model.get("children") : [],
             imageContinuousCountingBikeDiv = this.$(".imageContinuousCountingBikeDiv");
 
         imageContinuousCountingBikeDiv.removeClass("has-image");

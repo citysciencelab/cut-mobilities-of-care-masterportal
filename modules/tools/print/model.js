@@ -175,12 +175,9 @@ const PrintModel = Tool.extend({
     },
 
     setGROUPLayerToPrint: function (layers) {
-        let sortedLayers = "";
+        layers.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX"));
 
-        sortedLayers = _.sortBy(layers, function (layer) {
-            return layer.get("selectionIDX");
-        });
-        sortedLayers.forEach(groupLayer => {
+        layers.forEach(groupLayer => {
             const layerList = groupLayer.get("layerSource");
 
             layerList.forEach(layer => {
@@ -219,12 +216,9 @@ const PrintModel = Tool.extend({
     },
 
     setWMSLayerToPrint: function (layers) {
+        layers.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX"));
 
-        const sortedLayers = _.sortBy(layers, function (layer) {
-            return layer.get("selectionIDX");
-        });
-
-        sortedLayers.forEach(layer => {
+        layers.forEach(layer => {
             // nur wichtig für treeFilter
             const params = {},
                 style = [];
@@ -490,7 +484,7 @@ const PrintModel = Tool.extend({
     */
     getGfiForPrint: function () {
         const gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
-            gfiParams = Array.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
+            gfiParams = Array.isArray(gfis) === true ? Object.entries(gfis[0]) : null, // Parameter
             gfiTitle = Array.isArray(gfis) === true ? gfis[1] : "", // Layertitel
             gfiPosition = Array.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
             // printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?

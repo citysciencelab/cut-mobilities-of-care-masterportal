@@ -826,7 +826,7 @@ const ElektroladesaeulenTheme = Theme.extend({
         const arrayPerHour = [];
 
         dataPerHour.forEach(day => {
-            const positionData = parseFloat(_.pick(day, String(position))[position], 10);
+            const positionData = parseFloat(Object.fromEntries(Object.entries(day).filter(([key]) => [String(position)].includes(key)))[position], 10);
 
             if (positionData !== undefined && !isNaN(positionData)) {
                 arrayPerHour.push(positionData);

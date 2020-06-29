@@ -87,9 +87,7 @@ const ActiveCityMapsTheme = Theme.extend({
                         }
                     }
                     // lösche leere Dummy-Einträge wieder raus.
-                    element[index] = _.omit(element[index], function (val) {
-                        return val === "#";
-                    });
+                    Radio.request("Util", "omit", element[index], ["#"]);
                 });
             });
         }

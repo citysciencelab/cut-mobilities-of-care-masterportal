@@ -169,11 +169,9 @@ function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
         }
     });
     // doppelte domain rauswerfen
-    entryArray = _.unique(entryArray, function (item) {
-        return item[1].replace(/www\d?\./, "");
-    });
+    entryArray = [...new Set(entryArray)];
     // für jeden eintrag im array einen Proxy schreiben
-    _.each(entryArray, function (entry, index) {
+    entryArray.forEach((entry, index) => {
         let isLast = false;
 
         if ((entryArray.length - 1) === index) {

@@ -156,7 +156,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
 
         if (node.hasOwnProperty("firstElementChild") && node.firstElementChild.hasOwnProperty("children")) {
             tagNameList = node.firstElementChild.children.map(element => element.tagName);
-            tagNameListSorted = _.sortBy(tagNameList, name => name);
+            tagNameListSorted = tagNameList.sort((nameA, nameB) => nameA - nameB);
             multiTags = tagNameListSorted.filter((tagName, index, list) => tagName === list[index + 1]);
 
             multiTagsUnique = [...new Set(multiTags)];

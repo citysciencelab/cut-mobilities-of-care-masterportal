@@ -124,7 +124,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             }
         });
 
-        $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
+        $(window).on("resize", this.toggleIsViewMobile.bind(this));
         this.parseConfigFromURL();
     },
 
@@ -432,7 +432,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     sortObjects: function (type, input, first, second) {
         let sortedObj = input;
 
-        if (type === "address") {
+        if (type === "addressx") {
             sortedObj = this.sortObjectsAsAddress(sortedObj, first);
         }
         else {
@@ -452,14 +452,11 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     sortObjectsNonAddress: function (input, first, second) {
         let sortedObj = input;
 
-        sortedObj = _.chain(input)
-            .sortBy(function (element) {
-                return element[second];
-            })
-            .sortBy(function (element) {
-                return parseInt(element[first], 10);
-            })
-            .value();
+        sortedObj = input.sort((elementA, elementB) => {
+            return elementA[second] - elementB[second];
+        }).sort((elementC, elementD) => {
+            return parseInt(elementC[first], 10) - parseInt(elementD[first], 10);
+        });
 
         return sortedObj;
     },
@@ -835,11 +832,11 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * Groups the elements of an array based on the given function.
      * Use Array.prototype.map() to map the values of an array to a function or property name.
      * Use Array.prototype.reduce() to create an object, where the keys are produced from the mapped results.
-     * @param {array} arr - elements to group
+     * @param {array} [arr=[]] - elements to group
      * @param {function} fn - reducer function
      * @returns {object} - the grouped object
      */
-    groupBy: function (arr, fn) {
+    groupBy: function (arr = [], fn) {
         return arr.map(typeof fn === "function" ? fn : val => val[fn]).reduce((acc, val, i) => {
             acc[val] = (acc[val] || []).concat(arr[i]);
             return acc;

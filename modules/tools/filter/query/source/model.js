@@ -364,12 +364,13 @@ const SourceModel = QueryModel.extend({
      * @return {boolean} flag if value is in range
      */
     isNumberInRange: function (feature, attributeName, values) {
-        const featureValue = feature.get(attributeName);
-        let isNumberInRange = false,
+        const featureValue = feature.get(attributeName),
             valueList = Object.assign([], values);
+        let isNumberInRange = false;
 
         valueList.push(featureValue);
-        valueList = _.sortBy(valueList);
+        valueList.sort((valueA, valueB) => valueA - valueB);
+
         isNumberInRange = valueList[1] === featureValue;
 
         return isNumberInRange;

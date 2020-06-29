@@ -69,7 +69,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
 
             vectorLayerModels = vectorLayerModels.concat(this.filterVisibleGroupLayer(visibleGroupLayers, layerTypes));
 
-            filteredModels = _.union(vectorLayerModels).filter(function (model) {
+            filteredModels = vectorLayerModels.filter(model => {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 

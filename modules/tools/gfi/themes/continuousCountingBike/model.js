@@ -78,9 +78,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                     }
 
                     // lösche leere Dummy-Einträge wieder raus.
-                    element[index] = _.omit(element[index], function (val) {
-                        return val === "#";
-                    });
+                    Radio.request("Util", "omit", element[index], ["#"]);
                 });
             });
         }
@@ -188,7 +186,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 r_out: r_out
             });
         });
-        return _.sortBy(tempArr, "timestamp");
+        return tempArr.sort((valueA, valueB) => valueA.timestamp - valueB.timestamp);
     },
 
     /**
@@ -222,7 +220,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             });
         });
 
-        return _.sortBy(tempArr, "timestamp");
+        return tempArr.sort((valueA, valueB) => valueA.timestamp - valueB.timestamp);
     },
 
 
@@ -256,7 +254,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             });
         });
 
-        return _.sortBy(tempArr, "timestamp");
+        return tempArr.sort((valueA, valueB) => valueA.timestamp - valueB.timestamp);
     },
 
     /**
@@ -326,12 +324,14 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      */
     prepareYearDataset: function (data) {
         const graphArray = data ? this.getDataAttributes(data[0]) : "",
-            newData = data ? data.forEach(val => {
-                val.timestamp = moment(val.timestamp).format("w");
-                return val;
-            }) : "",
+            newData = [],
             legendArray = data ? this.getLegendAttributes(data[0]) : "",
             year = data ? data[0].year : "";
+
+        data.forEach(val => {
+            val.timestamp = moment(val.timestamp).format("w");
+            newData.push(val);
+        });
 
         return {
             data: newData,
@@ -495,7 +495,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             tickValuesArray.push(ele.timestamp);
         });
 
-        tickValuesArray = _.filter(tickValuesArray, function (d, i) {
+        tickValuesArray = tickValuesArray.filter((d, i) => {
             let val;
 
             if (d === "1") {

@@ -57,7 +57,7 @@ const BalkendiagrammTheme = Theme.extend(/** @lends BalkendiagrammTheme.prototyp
             "change:isVisible": function () {
                 const timeOut = this.checkIsMobile() ? 300 : 100;
 
-                setTimeout(_.bind(this.createD3Document, this), timeOut);
+                setTimeout(this.createD3Document.bind(this), timeOut);
             }
         });
     },

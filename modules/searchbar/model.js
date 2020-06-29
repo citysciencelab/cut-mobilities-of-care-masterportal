@@ -123,14 +123,15 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         let allDone = true;
         // Ist mindestens ein Suchalgorithmus noch als ausstehend markiert?
 
-        _.forEach(this.get("activeInitialSearchTasks"), function (taskName) {
+        this.get("activeInitialSearchTasks").forEach(taskName => {
+
             const status = this.get("initialSearch_" + taskName);
 
             if (!status) {
                 allDone = false;
             }
 
-        }, this);
+        });
 
         if (allDone) {
             // Sobald alle Ergebnisse vorliegen, wird der Modus "Initiale Suche"
@@ -168,7 +169,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
 
         // Prüfe für jeden bekannten Suchalgorithmus ob er aktiviert ist. Wenn ja markiere ihn als
         // "Ergebnis ausstehend" und füge ihn der Liste aktiver Suchalgorithmen hinzu.
-        _.forEach(searchTasks, function (taskName) {
+        searchTasks.forEach(taskName => {
             if (config.hasOwnProperty(taskName)) {
                 if (taskName === "gazetteer") {
                     // Der Suchalgorithmus "gazetteer" ist ein Sonderfall, da er mehrere Suchen durchführen kann
@@ -182,7 +183,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
                     activeSearchTasks.push(taskName);
                 }
             }
-        }, this);
+        });
 
         this.set("activeInitialSearchTasks", activeSearchTasks);
     },
