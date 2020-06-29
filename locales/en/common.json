@@ -32,7 +32,7 @@
             "measure": "Measure distance / area",
             "coord": "Query coordinates",
             "searchByCoord": "Coordinate search",
-            "kmlimport": "KML import",
+            "kmlimport": "Import file",
             "routing": "Route planner",
             "draw": "Drawing / writing",
             "commuterLines": "Commuter (Lines)",
@@ -258,11 +258,24 @@
                 "contenNotSaved": "Content could not be copied to the clipboard."
             },
             "kmlImport": {
-                "unknownGeometry": "Unknown Geometry",
-                "chooseFileFirst": "Please choose the kml data file for importing first.",
-                "fakeButton": "Choose file (no file chosen yet)",
-                "importButton": "IMPORT",
-                "file": "File"
+                "captions": {
+                    "intro": "Import your file via drag and drop or alternatively use the browse dialogue.",
+                    "dropzone": "Drop file here",
+                    "browse": "Browse files",
+                    "supportedFiletypes": {
+                        "auto": "Automatic filetype detection",
+                        "kml": "KML-file (*.kml)",
+                        "gpx": "GPX-file (*.gpx)",
+                        "geojson": "GeoJson-file (*.geojson, *.json)"
+                    }
+                },
+                "alertingMessages": {
+                    "success": "The file \"{{filename}}\" has been successfully imported.",
+                    "formatError": "File could not be read. Please check if actual filetype is matching your chosen filetype.",
+                    "missingFileContent": "There was an error loading your file. Please check its filetype and content. If still not working, please contact the support.",
+                    "missingFormat": "The chosen filetype is not supported. Please contact the support."
+                },
+                "title": "Import file"
             },
             "parcelSearch": {
                 "wrongConfig": "Invalid or incomplete configuration",

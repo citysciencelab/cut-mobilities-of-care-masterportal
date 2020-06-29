@@ -4,7 +4,5 @@ export default {
     },
     selectedFiletype (state, value) {
         state.selectedFiletype = value;
-        console.log(state);
-        
     }
 };
