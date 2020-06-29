@@ -95,10 +95,10 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     parseLayerList: function (layerList, Layer3dList) {
-        const baseLayerIdsPluck = this.get("baselayer").Layer.map(value => value.id),
+        const baseLayerIdsPluck = this.get("baselayer").Layer !== undefined ? this.get("baselayer").Layer.map(value => value.id) : [],
             baseLayerIds = Array.isArray(baseLayerIdsPluck) ? baseLayerIdsPluck.reduce((acc, val) => acc.concat(val), []) : baseLayerIdsPluck,
             // Unterscheidung nach Overlay und Baselayer
-            typeGroup = _.groupBy(layerList, function (layer) {
+            typeGroup = Radio.request("Util", "groupBy", layerList, function (layer) {
                 if (layer.typ === "Terrain3D" || layer.typ === "TileSet3D" || layer.typ === "Entities3D") {
                     return "layer3d";
                 }
@@ -173,7 +173,9 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     createBaselayer: function (layerList) {
-        this.get("baselayer").Layer.forEach(layer => {
+        const baseLayer = this.get("baselayer").Layer !== undefined ? this.get("baselayer").Layer : [];
+
+        baseLayer.forEach(layer => {
             let newLayer;
 
             if (Array.isArray(layer.id)) {
@@ -241,7 +243,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      */
     groupDefaultTreeOverlays: function (overlays) {
         const tree = {},
-            categoryGroups = _.groupBy(overlays, function (layer) {
+            categoryGroups = Radio.request("Util", "groupBy", overlays, function (layer) {
                 // Gruppierung nach Opendatakategorie
                 if (this.get("category") === "Opendata") {
                     return layer.datasets[0].kategorie_opendata[0];
@@ -254,13 +256,13 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     return layer.datasets[0].kategorie_organisation;
                 }
                 return "Nicht zugeordnet";
-            }, this);
+            }.bind(this));
 
         // Gruppierung nach MetaName
         Object.entries(categoryGroups).forEach(value => {
             const group = value[1],
                 name = value[0],
-                metaNameGroups = _.groupBy(group, function (layer) {
+                metaNameGroups = Radio.request("Util", "groupBy", group, function (layer) {
                     return layer.datasets[0].md_name;
                 });
 

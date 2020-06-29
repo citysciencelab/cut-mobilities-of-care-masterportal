@@ -117,19 +117,19 @@
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
-                <% if (Object.keys(yearDataset).length !== 0) {
-                yearDataset.data.forEach(function (year) {%>
+                <% if (Object.keys(yearDataset).length !== 0 && yearDataset.data !== undefined) {
+                yearDataset.data.forEach(function (year) { %>
                 <th class="text-align-center"><%=year.timestamp + " KW"%></th>
                 <% });%>
             </thead>
             <tbody>
 
-                <tr>
+                    <tr>
                     <td class="kategory"><%=gfiContent[0].Name%></td>
-                <% yearDataset.data.forEach(function (year) {%>
-                    <td class="data"><%=year.tableData%></td>
-                <% });
-                }%>
+                    <% yearDataset.data.forEach(function (year) { %>
+                        <td class="data"><%=year.tableData%></td>
+                    <% });
+                } %>
                 </tr>
             </tbody>
         </table>

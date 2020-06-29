@@ -86,11 +86,11 @@ const MietenspiegelThemeView = ThemeView.extend({
      * Erzeugt eine Liste mit gewählten Merkmalen
      */
     returnMerkmaleListe: function () {
-        let merkmale = _.object(["Wohnlage"], [this.$(".mswohnlage").text()]);
+        let merkmale = this.model.convertTwoArraysToOneObject(["Wohnlage"], [this.$(".mswohnlage").text()]);
 
-        this.$(".msmerkmal").each(function () {
+        this.$(".msmerkmal").each(() => {
             if (this.value !== "-1") { // = bitte wählen
-                merkmale = Object.assign(merkmale, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
+                merkmale = Object.assign(merkmale, this.model.convertTwoArraysToOneObject([$(this).attr("id")], [$(this).find("option:selected").text()]));
             }
         });
         return merkmale;

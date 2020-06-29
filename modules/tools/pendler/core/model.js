@@ -258,13 +258,10 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      */
     selectFeatures: function (rawFeatures) {
         // Sortiere nach Anzahl der Pendler
-        const sortedFeatures = _.sortBy(rawFeatures, function (feature) {
-            // Verwende die Gegenzahl als Wert zur Sortierung, um absteigende Reihenfolge zu erhalten.
-            return feature.get(this.get("attrAnzahl")) * -1;
-        }, this);
+        rawFeatures.sort((featureA, featureB) => featureA.get(this.get("attrAnzahl")) * -1 - featureB.get(this.get("attrAnzahl")) * -1);
 
         // Schneide Liste gemäß gewähltem Top ab
-        return this.truncateFeatureList(sortedFeatures, this.get("trefferAnzahl"));
+        return this.truncateFeatureList(rawFeatures, this.get("trefferAnzahl"));
     },
 
     /**

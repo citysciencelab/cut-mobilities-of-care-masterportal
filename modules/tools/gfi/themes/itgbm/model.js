@@ -8,15 +8,17 @@ const ItGbmTheme = Theme.extend({
     },
 
     parseGfiContent: function () {
+        this.get("gfiContent")[0] = Object.fromEntries(Object.entries(this.get("gfiContent")[0]).map(content => {
+            const value = content[1];
 
-        this.get("gfiContent")[0] = _.mapObject(this.get("gfiContent")[0], function (val) {
-            if (typeof val === "string" && val.indexOf("|") !== -1) {
-                return val.replace(/\|/g, ", ");
+            if (typeof value === "string" && value.indexOf("|") !== -1) {
+                return value.replace(/\|/g, ", ");
             }
 
-            return val;
+            return value;
+        }));
 
-        });
+
         this.setTitle(this.get("gfiContent")[0].Belegenheit);
         this.setGfiContent(Radio.request("Util", "omit", this.get("gfiContent")[0], ["Belegenheit"]));
         this.setGfiContent(this.addUnits(this.get("gfiContent"), ["Größe"]));

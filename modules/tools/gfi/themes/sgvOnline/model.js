@@ -84,9 +84,7 @@ const SgvOnlineTheme = Theme.extend({
                         }
                     }
                     // lösche leere Dummy-Einträge wieder raus.
-                    element = _.omit(element, function (value) {
-                        return value === "#";
-                    });
+                    Radio.request("Util", "omit", element[index], ["#"]);
                 });
             });
         }

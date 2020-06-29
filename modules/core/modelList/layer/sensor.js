@@ -956,7 +956,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         if (dataStreamIds.indexOf("|") >= 0) {
             dataStreamIds = dataStreamIds.split("|");
 
-            dataStreamIds.forEach(function (id) {
+            dataStreamIds.forEach(id => {
                 dataStreamIdsArray.push(id.trim());
             });
         }

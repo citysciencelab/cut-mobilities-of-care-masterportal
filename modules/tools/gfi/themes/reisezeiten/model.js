@@ -31,7 +31,7 @@ const ReisezeitenTheme = Theme.extend({
      * @returns {void}
      */
     sortRouten: function () {
-        this.set("ziele", _.sortBy(this.get("ziele"), "zielort"));
+        this.set("ziele", this.get("ziele").sort((valueA, valueB) => valueA.zielort - valueB.zielort));
     },
     /**
      * Fragt Layer mit Routeninformationen ab, um Template rendern zu können

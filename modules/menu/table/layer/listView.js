@@ -39,11 +39,9 @@ const LayerView = Backbone.View.extend({
         return this;
     },
     renderList: function () {
-        let models = this.collection.where({type: "layer"});
+        const models = this.collection.where({type: "layer"});
 
-        models = _.sortBy(models, function (model) {
-            return model.get("selectionIDX");
-        });
+        models.sort((modelA, modelB) => modelA.get("selectionIDX") - modelB.get("selectionIDX"));
         this.addViews(models);
     },
     addViews: function (models) {
