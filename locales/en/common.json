@@ -209,7 +209,7 @@
                 "serviceOne": "Service 1",
                 "serviceTwo": "Service 2",
                 "serviceThree": "Service 3",
-                "key": "Configuration of tool <b>{{alertMessage.x}}</b> incorrect: sliderType \"{{alertMessage.y}}\" is not yet implemented!"
+                "key": "Configuration of tool <b>{{alertMessage.x}}</b> incorrect: <b>sliderType</b> \"{{alertMessage.y}}\" is not yet implemented!"
             },
             "pendler": {
                 "animation": {
