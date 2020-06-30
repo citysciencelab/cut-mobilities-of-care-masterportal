@@ -13,7 +13,9 @@ const TrinkwasserTheme = Theme.extend({
             chemContent = {};
 
         if (this.get("gfiContent") !== undefined) {
-            this.get("gfiContent").forEach(element => {
+            const gfiContent = Array.isArray(this.get("gfiContent")) ? this.get("gfiContent") : [this.get("gfiContent")];
+
+            gfiContent.forEach(element => {
                 Object.entries(element).forEach(ele => {
                     const value = ele[1],
                         key = ele[0];

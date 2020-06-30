@@ -4,7 +4,6 @@
 * erstellt
 */
 const fse = require("fs-extra"),
-    _ = require("underscore"),
     url = require("url");
     // arguments kommt von Note.js und enthält die in der Konsole übergebenen Argumente
 

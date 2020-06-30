@@ -131,12 +131,12 @@ const WPS = Backbone.Model.extend({
     /**
      * @desc build xml for WPS request
      * @param {string} identifier String The functionality to be invoked by the wps
-     * @param {obj} data Object Contains the Attributes to be sent
+     * @param {obj} [data={}] Object Contains the Attributes to be sent
      * @param {string} xmlTemplate String  XML frame template that is filled
      * @param {string} dataInputXmlTemplate String Inner XML used to generate attributes
      * @return {string} dataString
      */
-    buildXML: function (identifier, data, xmlTemplate, dataInputXmlTemplate) {
+    buildXML: function (identifier, data = {}, xmlTemplate, dataInputXmlTemplate) {
         let dataString = this.setXMLElement(xmlTemplate, "</ows:Identifier>", identifier);
 
         Object.entries(data).forEach(dat => {
@@ -149,7 +149,7 @@ const WPS = Backbone.Model.extend({
             attributeString = this.setXMLElement(dataInputXmlTemplate, "</ows:Identifier>", key);
             attributeString = this.setXMLElement(attributeString, "</wps:LiteralData>", value, dataType);
             dataString = this.setXMLElement(dataString, "</wps:DataInputs>", attributeString);
-        }, this);
+        });
         return dataString;
     },
     /**

@@ -34,10 +34,10 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
     /**
      * Filters all objects from the layerList that are not WMS and are assigned to at least one data record.
-     * @param  {Object[]} layerList - Objekte from services.json
+     * @param  {Object[]} [layerList=[]] - Objekte from services.json
      * @return {Object[]} layerList - Objekte from services.json
      */
-    filterList: function (layerList) {
+    filterList: function (layerList = []) {
         return layerList.filter(function (element) {
             if (!element.hasOwnProperty("datasets")) {
                 return false;
@@ -120,10 +120,10 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
     /**
      * todo
-     * @param {*} layerList - todo
+     * @param {*} [layerList=[]] - todo
      * @returns {void}
      */
-    createObliqueLayer: function (layerList) {
+    createObliqueLayer: function (layerList = []) {
         layerList.forEach(layer => {
             this.addItem(Object.assign({type: "layer"}, layer));
         });
@@ -147,7 +147,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             layerList.forEach(layer => {
                 if (Layer3dList && typeof Layer3dList === "object" && Layer3dList.Layer && Layer3dList.Layer.length > 0) {
 
-                    layer3DVisibility = Layer3dList.Layer.filter(function (layer3D) {
+                    layer3DVisibility = Layer3dList.Layer.filter(layer3D => {
                         return layer3D.id === layer.id;
                     });
                     if (layer3DVisibility[0] !== undefined) {
@@ -185,7 +185,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 newLayer = Object.assign(layerList.find(singleLayer => singleLayer.id === layer.id), Radio.request("Util", "omit", layer, ["id"]));
             }
 
-            if (newLayer !== undefined) {
+            if (newLayer === undefined) {
                 console.error("Layer with id: " + layer.id + " cannot be found in layerlist. Possible error: layer got removed in function 'deleteLayersIncludeCache'.");
             }
             else {
@@ -204,7 +204,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * subdivide the layers grouped by metaName into folders
      * and layers if a MetaNameGroup has only one entry
      * it should be added as layer and not as folder
-     * @param {object[]} metaNameGroups - todo
+     * @param {object} metaNameGroups - todo
      * @param {string} name - todo
      * @returns {object} categories
     */
