@@ -2,6 +2,7 @@ import Theme from "../model";
 import {TrafficCountCache} from "./trafficCountCache";
 import moment from "moment";
 import SnippetDatepickerModel from "../../../../snippets/datepicker/model";
+import ExportButtonModel from "../../../../snippets/exportButton/model";
 
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
@@ -71,6 +72,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @property {Object} feature feature to show gfi.
      */
     initialize: function () {
+        this.set("exportButtonModel", new ExportButtonModel({
+            tag: "Als CSV herunterladen",
+            rawData: [],
+            fileExtension: "csv"
+        }));
+
         this.listenTo(this, {
             "change:isVisible": this.onIsVisibleEvent
             // TODO: prüfen warum dies benötigt wird. Hier würde this.create immer das zweite Mal ausgeführt...
@@ -187,12 +194,57 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         // tab body
         if (tabValue === "day") {
             this.setupTabDay();
+            this.downloadDataDay(thingId, meansOfTransport, result => {
+                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
+                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + `_${tabValue}`);
+            }, error => {
+                console.warn("error", "downloadDataDay", error);
+                Radio.trigger("Alert", "alert", {
+                    content: "Die Daten können im Moment nicht heruntergeladen werden",
+                    category: "Info"
+                });
+                this.get("exportButtonModel").set("disabled", true);
+            }, () => {
+                this.get("exportButtonModel").set("disabled", true);
+            }, () => {
+                this.get("exportButtonModel").set("disabled", false);
+            });
         }
         else if (tabValue === "week") {
             this.setupTabWeek();
+            this.downloadDataWeek(thingId, meansOfTransport, result => {
+                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
+                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + `_${tabValue}`);
+            }, error => {
+                console.warn("error", "downloadDataWeek", error);
+                Radio.trigger("Alert", "alert", {
+                    content: "Die Daten können im Moment nicht heruntergeladen werden",
+                    category: "Info"
+                });
+                this.get("exportButtonModel").set("disabled", true);
+            }, () => {
+                this.get("exportButtonModel").set("disabled", true);
+            }, () => {
+                this.get("exportButtonModel").set("disabled", false);
+            });
         }
         else if (tabValue === "year") {
             this.setupTabYear();
+            this.downloadDataYear(thingId, meansOfTransport, result => {
+                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
+                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + `_${tabValue}`);
+            }, error => {
+                console.warn("error", "downloadDataYear", error);
+                Radio.trigger("Alert", "alert", {
+                    content: "Die Daten können im Moment nicht heruntergeladen werden",
+                    category: "Info"
+                });
+                this.get("exportButtonModel").set("disabled", true);
+            }, () => {
+                this.get("exportButtonModel").set("disabled", true);
+            }, () => {
+                this.get("exportButtonModel").set("disabled", false);
+            });
         }
         else {
             this.setupTabInfo(api, thingId, meansOfTransport);
@@ -211,6 +263,26 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         });
     },
 
+    /**
+     * converts the data object into an array of objects for the csv download
+     * @param {Object} data - the data for download
+     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @returns {Object[]} objArr - converted data
+     */
+    prepareDataForDownload: function (data, meansOfTransport) {
+        const objArr = [];
+
+        for (const key in data) {
+            const obj = {},
+                date = key.split(" ");
+
+            obj.Datum = date[0];
+            obj.Zeitraum = date[1];
+            obj[meansOfTransport] = data[key];
+            objArr.push(obj);
+        }
+        return objArr;
+    },
     /**
      * setup of the info tab
      * @param {Object} api instance of TrafficCountApi
@@ -1301,6 +1373,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     downloadDataDay: function (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete) {
+        // tabvalue mit übergeben
         const api = this.get("propTrafficCountApi"),
             timeSet = {
                 interval: this.get("dayInterval"),

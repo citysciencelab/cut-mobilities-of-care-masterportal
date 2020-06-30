@@ -1,6 +1,7 @@
 import ThemeView from "../view";
 import TrafficCountTemplate from "text-loader!./template.html";
 import SnippetDatepickerView from "../../../../snippets/datepicker/view";
+import ExportButtonView from "../../../../snippets/exportButton/view";
 import moment from "moment";
 
 const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype */{
@@ -17,6 +18,8 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      * @constructs
      */
     initialize: function () {
+        this.exportButtonView = new ExportButtonView({model: this.model.get("exportButtonModel")});
+
         // call ThemeView's initialize method explicitly
         ThemeView.prototype.initialize.apply(this);
 
@@ -68,6 +71,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         this.resize();
         this.setCurrentTabClassFooter(value);
         this.setContentScrollbar(value);
+        this.renderExportButton(value);
         this.model.toggleTab(value);
     },
 
@@ -117,6 +121,12 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      */
     setCurrentTabClassFooter: function (value) {
         this.$el.find(".tab-bottom").removeClass().addClass("tab-bottom " + value);
+    },
+
+    renderExportButton: function (value) {
+        if (value !== "infos") {
+            this.$el.find(".tab-bottom").append(this.exportButtonView.render().el);
+        }
     },
 
     /**
