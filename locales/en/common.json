@@ -35,6 +35,7 @@
             "kmlimport": "KML import",
             "routing": "Route planner",
             "draw": "Drawing / writing",
+            "styleWMS": "Style WMS",
             "commuterLines": "Commuter (Lines)",
             "commuterAnimation": "Commuter (Animation)",
             "featureLister": "List",
@@ -190,6 +191,24 @@
                     "A3 Hochformat": "A3 portrait format",
                     "A3 Querformat": "A3 landscape format"
                 }
+            },
+            "styleWMS": {
+                "noStyleableLayers": "There are currently no classifiable topics to which this tool could be applied.",
+                "theme": "Theme",
+                "chooseTheme": "Please choose theme",
+                "attribute": "Attribute",
+                "chooseAttribute": "Please choose Attribute",
+                "countOfClasses": "Number of classes",
+                "chooseNumberOfClasses": "Please select number of classes",
+                "rangeOfValues": "Range of values class",
+                "from": "from",
+                "to": "to",
+                "reset": "Reset",
+                "apply": "Apply",
+                "pleaseEnterInteger": "Please enter an integer.",
+                "pleaseChooseColor": "Please choose a color.",
+                "checkTheValues": "Check the values.",
+                "overlappingValueRanges": "Check the values. Values ranges are not allowed to overlap." 
             },
             "featureLister": {
                 "chooseTheme": "Choose theme",
