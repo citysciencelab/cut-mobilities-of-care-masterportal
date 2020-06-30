@@ -12,6 +12,7 @@ const ExportButtonView = Backbone.View.extend(/** @lends ExportButtonView.protot
      */
     initialize: function () {
         this.listenTo(this.model, {
+            "change:disabled": this.render,
             "render": this.render,
             "download": this.download
         });
