@@ -619,6 +619,12 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             attrElement = $(response).find("*").filter(function () {
                 return $(this).attr("name") === featureTypename;
             });
+            // if there is no element with the featureTypename and the featureTypename has a prefix
+            if (attrElement.length === 0 && featureTypename.indexOf(":") > 0) {
+                attrElement = $(response).find("*").filter(function () {
+                    return $(this).attr("name") === featureTypename.slice(featureTypename.indexOf(":") + 1);
+                });
+            }
             if (attrElement.length > 0) {
                 complexType = $(attrElement).find("*").filter(function () {
                     return this.localName === "complexType";
