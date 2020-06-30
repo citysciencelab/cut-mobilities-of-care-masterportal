@@ -42,6 +42,39 @@
 
 ---
 
+## v2.5.3 - 2020-06-29
+### Added
+- Multipolygone werden nun von der SpecialWFS Suche verarbeitet. Interne Polygone bspw. von B-Plänen werden fortan berücksichtigt und bei der Darstellung ausgespart.
+- Ein Konfigurationsparameter für das ZoomLevel bei der BKG-Suche wurde eingeführt.
+- In der BKG-Suche wurden die Parameter zoomToResultOnHover und zoomToResultOnClick zum Steuern der Anzeige der Suchergebnisse eingeführt.
+
+### Changed
+- Der erste Buchstabe wird für Einträge in der Legend aus WFS-Diensten nun immer groß geschrieben.
+- Das Werkzeug zur Koordinatenabfrage zeigt die Koordinatensysteme nun enstprechend der Reihenfolge der konfigurierten namedProjections aus der config.js an.
+
+### Deprecated
+- Der URL-Parameter zoomToResult ist deprecated. Bitte zoomToResultOnHover und zoomToResultOnClick benutzen.
+
+### Fixed
+- Die Legende für GruppenLayer wird nun wieder dargestellt.
+- Themenbaum/ Externe Fachdaten: Ein visuelles Problem beim Schliessen der Ordners wurde beseitigt.
+- Der Titel wird im Druckmodul nun beibehalten wenn der Maßstab geändert oder in der Karte gezoomt wird.
+- Die Legende wir für GruppenLayer wird nun nur noch einmal angezeigt.
+- Im Ausdrucken aus dem Druckmodul wird nun die Legende für GruppenLayer wieder angezeigt.
+
+---
+
+## v2.5.2 - 2020-06-09
+### Fixed
+- Die Portal-Konfiguration "singleBaselayer": "true" führt jetzt dazu, dass immer nur ein Hauptlayer ausgewählt werden kann.
+- Das Label der Version im Footer wird jetzt korrekt übersetzt. 
+- Legenden, die den gleichen Namen und das gleiche Image haben, werden nur noch einmal für jeden Layer dargestellt.
+- In der Layerinformation wird, wenn keine Metadaten geladen wurden, der Link für "weitere Metadaten" nicht mehr dargestellt.
+- Der Infotext für Checkboxen wird nun beim Start nicht mehr ausgeklappt und hat nun den richtigen Style.
+- Die Quickhelp wird nun wieder richtig positioniert.
+
+---
+
 ## v2.5.1 - 2020-05-29
 ### Added
 - Internationalisierung ergänzt für:
