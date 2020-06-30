@@ -25,7 +25,6 @@ src
 |   |   |   |   |-- ...
 |   |   |	|-- store
 |   |   |   |   |-- actionsScaleSwitcher.js
-|   |   |   |   |-- constantsScaleSwitcher.js (wird hier nicht benötigt)
 |   |   |   |   |-- gettersScaleSwitcher.js
 |   |   |   |   |-- indexScaleSwitcher.js
 |   |   |   |   |-- mutationsScaleSwitcher.js
@@ -36,7 +35,7 @@ src
 |   |   |   |	|   |-- ScaleSwitcher.e2e.js
 |   |   |	|   |-- unit
 |   |   |   |	|   |-- components
-|   |   |   |   |	|   |-- SScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- ScaleSwitcher.spec.js
 |   |   |   |	|   |-- store
 |   |   |   |   |	|   |-- actionsScaleSwitcher.test.js
 |   |   |   |   |	|   |-- gettersScaleSwitcher.test.js
@@ -170,6 +169,8 @@ describe("gettersScaleSwitcher", function () {
 **BeispielStruktur: actions testen**
 
 Datei *modules/tools/scale/store/actionsScaleSwitcher.js*
+
+Es wird die Funktion *testAction* aus *test/unittests/VueTestUtils* genutzt.
 ```
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsScaleSwitcher";
@@ -296,4 +297,4 @@ D.h. nicht nur testen, ob das erwünschte Ergebnis produziert wird, sondern auch
 
 [vue.js testing guide](https://vuejs.org/v2/guide/unit-testing.html#ad)
 
-[vuev testing](https://vuex.vuejs.org/guide/testing.html)
+[vue testing](https://vuex.vuejs.org/guide/testing.html)
