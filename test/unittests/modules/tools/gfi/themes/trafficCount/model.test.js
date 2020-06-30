@@ -1317,5 +1317,22 @@ describe("tools/gfi/themes/trafficCount", function () {
             expect(sortedDatasets[5].AnzFahrzeuge).to.have.all.keys("2020-07-25 00:00:01");
         });
     });
+
+    describe("prepareDataForDownload", function () {
+        it("should return the prepared data for the csv download", function () {
+            const obj = {
+                    "2020-06-23 00:00:01": 0.16,
+                    "2020-06-23 00:15:01": 0.07,
+                    "2020-06-23 00:30:01": 0.13,
+                    "2020-06-23 00:45:01": 0.15
+                },
+                data = model.prepareDataForDownload(obj, "AnzFahrzeuge");
+
+            expect(data[0]).to.have.all.keys("Datum", "Zeitraum", "AnzFahrzeuge");
+            expect(data[0].Datum).to.equal("2020-06-23");
+            expect(data[1].Zeitraum).to.equal("00:15:01");
+            expect(data[2].AnzFahrzeuge).to.equal(0.13);
+        });
+    });
 });
 
