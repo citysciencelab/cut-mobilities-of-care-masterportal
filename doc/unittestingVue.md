@@ -1,4 +1,4 @@
-##Unit Tests##
+## Unit Tests ##
 
 **Beispiel:**
 *masterportal/src/modules/tools/scale/tests*
@@ -6,12 +6,13 @@
 **Aufrufe**:
 
 npm run test:vue
+
 npm run test:vue:watch
 *******************************************************************************
 
-##Wie man Tests schreibt:###
+## Wie man Tests schreibt: ###
 
-###Ort###
+### Ort ###
 
 Die Tests liegen neben der Komponente und dem Store. Hier am Beispiel des ScaleSwitchers:
 ```
@@ -44,7 +45,7 @@ src
 
 
 
-###Struktur###
+### Struktur ###
 
 **BeispielStruktur: Komponente testen**
 
@@ -176,27 +177,6 @@ import actions from "../../../store/actionsScaleSwitcher";
 const {setActive, activateByUrlParam} = actions;
 
 describe("actionsScaleSwitcher", function () {
-    describe("activateByUrlParam", function () {
-        it("activateByUrlParam  isinitopen=scaleSwitcher", done => {
-            const rootState = {
-                queryParams: {
-                    "isinitopen": "scaleSwitcher"
-                }
-            };
-
-            testAction(activateByUrlParam, null, {active: false}, rootState, [
-                {type: "setActive", payload: true}
-            ], {}, done);
-        });
-        it("activateByUrlParam no isinitopen", done => {
-            const rootState = {
-                queryParams: {
-                }
-            };
-
-            testAction(activateByUrlParam, null, {active: false}, rootState, [], {}, done);
-        });
-    });
     describe("setActive", function () {
         const rootState = {
             Map: {
@@ -253,6 +233,8 @@ describe("mutationsScaleSwitcher", function () {
 });
 ```
 
+### mocha ###
+
 **Describe** wird benutzt um einen Abschnitt Kenntlich zu machen.
 Im Beispiel wird das Äußere **describe** benutzt, um zu beschreiben Welches Modul getestet wird.
 Im Inneren **describe** wird die Funktion, die gerade getestet werden soll beschrieben.
@@ -277,7 +259,7 @@ Als zweiten Parameter wird eine Callback übergeben, in der mit Hilfe eines *exp
 
 [mehr Infos zu mocha](https://mochajs.org/)
 
-###Die Testcases###
+### chai ###
 
 Innerhalb eines **it** sollte ein **expect** stehen.
 
@@ -293,7 +275,7 @@ Innerhalb eines **it** sollte ein **expect** stehen.
 [mehr Infos zu chai](https://chaijs.com/api/bdd/)
 
 
-###Best practices###
+### Best practices ###
 
 Ein Test sollte immer möglichst nur aus genau **einem Grund** fehlschlagen.
 D.h. pro **It** sollte möglichst nur ein **expect** verwendet werden.
@@ -306,7 +288,7 @@ D.h. Ungewöhnliche Fälle testen, z.b. sehr hohe oder sehr geringe Eingaben ode
 Positiv und **negativ** testen.
 D.h. nicht nur testen, ob das erwünschte Ergebnis produziert wird, sondern auch, dass keine Unerwünschten Nebeneffekte auftreten.
 
-###Links###
+### Links ###
 
 [vue test utils](https://vue-test-utils.vuejs.org/)
 
