@@ -85,7 +85,7 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
         if (this.model.get("isActive") === true) {
 
             if (attr.styleableLayerList.length === 0) {
-                this.$el.html(this.templateNoStyleableLayers());
+                this.$el.html(this.templateNoStyleableLayers(attr));
             }
             else {
                 this.$el.html(this.template(attr));
