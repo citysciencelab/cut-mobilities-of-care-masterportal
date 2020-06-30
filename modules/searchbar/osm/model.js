@@ -207,7 +207,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      */
     isSearched: function (searched, params) {
         const hits = [],
-            address = searched.address;
+            address = searched.address !== undefined ? searched.address : {};
 
         if (this.canShowHit(searched)) {
 

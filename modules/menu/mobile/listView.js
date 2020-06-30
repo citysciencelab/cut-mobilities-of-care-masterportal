@@ -71,7 +71,7 @@ const MobileMenu = Backbone.View.extend({
     },
 
     renderSelection: function (withAnimation) {
-        let models = this.collection.where({isSelected: true, type: "layer"});
+        const models = this.collection.where({isSelected: true, type: "layer"});
 
         if (withAnimation) {
             this.slideModels("descent", models, "tree", "Selection");
@@ -111,8 +111,7 @@ const MobileMenu = Backbone.View.extend({
         const that = this;
         let slideIn,
             slideOut,
-            groupedModels,
-            modelsToShowSelection;
+            groupedModels;
 
         if (direction === "descent") {
             slideIn = "right";

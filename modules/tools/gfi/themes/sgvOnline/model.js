@@ -36,8 +36,8 @@ const SgvOnlineTheme = Theme.extend({
      * @returns {void}
      */
     replaceValuesWithChildObjects: function () {
-        const children = [];
-        let element = this.get("gfiContent");
+        const children = [],
+            element = this.get("gfiContent");
 
         if (typeof element === "string" && element.match(/content="text\/html/g)) {
             children.push(element);
@@ -84,7 +84,7 @@ const SgvOnlineTheme = Theme.extend({
                         }
                     }
                     // lösche leere Dummy-Einträge wieder raus.
-                    Radio.request("Util", "omit", element[index], ["#"]);
+                    Radio.request("Util", "omit", element, ["#"]);
                 });
             });
         }

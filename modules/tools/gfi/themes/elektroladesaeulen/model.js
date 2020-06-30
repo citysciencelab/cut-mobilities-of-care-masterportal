@@ -99,21 +99,21 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * split properties by pipe (|)
-     * @param  {Object} properties - from chargingstation
+     * @param  {Object} [properties={}] - from chargingstation
      * @return {Object} propertiesObj
      */
-    splitProperties: function (properties) {
+    splitProperties: function (properties = {}) {
         const propertiesObj = {};
 
         Object.entries(properties).forEach(prop => {
-            const value = prop[1],
+            const value = typeof prop[1] === "number" ? prop[1].toString() : prop[1],
                 key = prop[0];
 
-            if (value === "|" || value.includes("|")) {
-                propertiesObj[key] = String(value).split("|");
-            }
-            else if (typeof value === "object" && !Array.isArray(value)) {
+            if (typeof value === "object" && !Array.isArray(value)) {
                 propertiesObj[key] = [""];
+            }
+            else if (value === "|" || value.includes("|")) {
+                propertiesObj[key] = String(value).split("|");
             }
             else {
                 propertiesObj[key] = [String(value)];
@@ -130,10 +130,10 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * creates the heading for the gfi of charging stations
-     * @param  {Object} allProperties - from chargingstation
+     * @param  {Object} [allProperties={}] - from chargingstation
      * @return {Object} headTitleObject
      */
-    createGfiHeadingChargingStation: function (allProperties) {
+    createGfiHeadingChargingStation: function (allProperties = {}) {
         const headTitleObject = {};
 
         headTitleObject.StandortId = allProperties.hasOwnProperty("chargings_station_nr") ? String(allProperties.chargings_station_nr[0]) : "";
@@ -146,10 +146,10 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * creates the heading for the table in the gfi of charging stations
-     * @param  {Object} allProperties - from chargingstation
+     * @param  {Object} [allProperties={}] - from chargingstation
      * @return {Array} tableheadArray
      */
-    createGfiTableHeadingChargingStation: function (allProperties) {
+    createGfiTableHeadingChargingStation: function (allProperties = {}) {
         const stationNumbers = allProperties.hasOwnProperty("sms_no_charging_station") ? allProperties.sms_no_charging_station : [],
             tableheadArray = [];
 
@@ -162,28 +162,28 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * changes the states from englisch to german
-     * @param  {Object} gfiProperties - with english state
+     * @param  {Object} [gfiProperties={}] - with english state
      * @return {Object} gfiProperties - with german state
      */
-    changeStateToGerman: function (gfiProperties) {
+    changeStateToGerman: function (gfiProperties = {}) {
         const translateObj = {
                 available: "Frei",
                 charging: "Belegt",
                 outoforder: "Außer Betrieb"
             },
-            gfiPropertiesGerman = gfiProperties !== undefined ? gfiProperties : {};
+            gfiPropertiesGermanStatus = gfiProperties.hasOwnProperty("Zustand") ? gfiProperties.Zustand : [];
 
-        gfiPropertiesGerman.Zustand.forEach((state, index) => {
+        gfiPropertiesGermanStatus.forEach((state, index) => {
             if (Object.keys(translateObj).includes(state.toLowerCase())) {
-                gfiPropertiesGerman.Zustand[index] = translateObj[state];
+                gfiProperties.Zustand[index] = translateObj[state];
             }
             else {
-                gfiPropertiesGerman.Zustand[index] = "";
+                gfiProperties.Zustand[index] = "";
             }
 
         });
 
-        return gfiPropertiesGerman;
+        return gfiProperties;
     },
 
     /**
@@ -254,10 +254,10 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * adds time params to query by given gfiParams
      * @param {String} query - filter load observations
-     * @param {Object[]} gfiParams - attributes that specify the historical data period
+     * @param {Object} [gfiParams={}] - attributes that specify the historical data period
      * @return {String} extended query
      */
-    addGfiParams: function (query, gfiParams) {
+    addGfiParams: function (query, gfiParams = {}) {
         const startDate = gfiParams.hasOwnProperty("startDate") ? gfiParams.startDate : undefined,
             periodTime = gfiParams.hasOwnProperty("periodTime") ? gfiParams.periodTime : undefined,
             periodUnit = gfiParams.hasOwnProperty("periodUnit") ? gfiParams.periodUnit : undefined;
@@ -364,14 +364,14 @@ const ElektroladesaeulenTheme = Theme.extend({
      * removes doublicates
      * duplicates are records whose phenomenontime is less than 1000 milliseconds
      * and have the same result
-     * @param  {Array} dataArray - that contains data from the features
+     * @param  {Array} [dataArray=[]] - that contains data from the features
      * @return {Array} workingArray - without doublicates
      */
-    dataCleaning: function (dataArray) {
+    dataCleaning: function (dataArray = []) {
         const workingArray = dataArray === undefined ? [] : dataArray;
 
         workingArray.forEach(loadingPoint => {
-            const observations = loadingPoint.Observations,
+            const observations = loadingPoint.hasOwnProperty("Observations") ? loadingPoint.Observations : [],
                 indexArray = [];
 
             let lastTime = 0,
@@ -431,14 +431,16 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * checks if there are any observations
-     * @param  {Object[]} historicalData - data from feature
+     * @param  {Object[]} [historicalData=[]] - data from feature
      * @return {Boolean} boolean
      */
-    checkObservationsNotEmpty: function (historicalData) {
+    checkObservationsNotEmpty: function (historicalData = []) {
         let boolean = false;
 
         historicalData.forEach(data => {
-            if (Object.keys(data.Observations).length !== 0) {
+            const history = data.hasOwnProperty("Observations") ? data.Observations : [];
+
+            if (Object.keys(history).length !== 0) {
                 boolean = true;
             }
         });
@@ -455,7 +457,9 @@ const ElektroladesaeulenTheme = Theme.extend({
         const data = historicalData === undefined ? [] : historicalData;
 
         data.forEach(loadingPointData => {
-            loadingPointData.Observations.forEach((obs, index) => {
+            const loading = loadingPointData.hasOwnProperty("Observations") ? loadingPointData.Observations : [];
+
+            loading.forEach((obs, index) => {
                 obs.index = index;
             });
         });
@@ -466,12 +470,12 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * divides the day into 7 days of the week
      * and generate an observation for every day at 0 o'clock
-     * @param  {Array} historicalDataWithIndex - from features
+     * @param  {Array} [historicalDataWithIndex=[]] - from features
      * @param  {Date} lastDay - the day on which the evaluation of the data should end
      * @param  {Date} endDay - the date at which the evaluation should end
      * @return {Array} weekArray
      */
-    divideDataByWeekday: function (historicalDataWithIndex, lastDay, endDay) {
+    divideDataByWeekday: function (historicalDataWithIndex = [], lastDay, endDay) {
         const weekArray = [
             [], [], [], [], [], [], []
         ];
@@ -626,11 +630,11 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * calculate workload for every day
      * the workload is divided into 24 hours
-     * @param  {Array} dataByWeekday - historical data sorted by weekday
+     * @param  {Array} [dataByWeekday=[]] - historical data sorted by weekday
      * @param  {String} targetResult - result to draw
      * @return {Array} allDataArray
      */
-    calculateWorkloadPerDayPerHour: function (dataByWeekday, targetResult) {
+    calculateWorkloadPerDayPerHour: function (dataByWeekday = [], targetResult) {
         const allDataArray = [];
 
         dataByWeekday.forEach(dayData => {
@@ -674,10 +678,10 @@ const ElektroladesaeulenTheme = Theme.extend({
      */
     calculateWorkloadforOneDay: function (emptyDayObj, dayData, targetResult) {
         const dataFromDay = dayData === undefined ? [] : dayData,
-            startDate = dataFromDay[0].hasOwnProperty("phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
+            startDate = dataFromDay.length > 0 && dataFromDay[0].hasOwnProperty("phenomenonTime") ? moment(dataFromDay[0].phenomenonTime).format("YYYY-MM-DD") : "",
             dayObj = emptyDayObj === undefined ? {} : emptyDayObj;
 
-        let actualState = dataFromDay[0].hasOwnProperty("result") ? dataFromDay[0].result : "",
+        let actualState = dataFromDay.length > 0 && dataFromDay[0].hasOwnProperty("result") ? dataFromDay[0].result : "",
             actualStateAsNumber = targetResult === actualState ? 1 : 0;
 
         Object.keys(dayObj).forEach(key => {
@@ -695,10 +699,10 @@ const ElektroladesaeulenTheme = Theme.extend({
             }
             else {
                 dayObj[i] = this.calculateOneHour(dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult);
-                actualState = dataByActualTimeStep.slice(-1).result;
+                actualState = dataByActualTimeStep[dataByActualTimeStep.length - 1].result;
                 actualStateAsNumber = targetResult === actualState ? 1 : 0;
             }
-        }, this);
+        });
 
         return dayObj;
     },
@@ -724,7 +728,7 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * calculates the workload for the current hour
      * time calculations in milliseconds
-     * @param  {Array} dataByActualTimeStep - within an hour
+     * @param  {Array} [dataByActualTimeStep=[]] - within an hour
      * @param  {String} actualState - status of the last observation
      * @param  {Number} actualStateAsNumber - state as number 0 or 1
      * @param  {String} actualTimeStep - startTime
@@ -732,7 +736,7 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @param  {String} targetResult - result to draw
      * @return {Number} workload
      */
-    calculateOneHour: function (dataByActualTimeStep, actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult) {
+    calculateOneHour: function (dataByActualTimeStep = [], actualState, actualStateAsNumber, actualTimeStep, nextTimeStep, targetResult) {
         const endTime = moment(nextTimeStep).toDate().getTime();
 
         let betweenRes = "",
@@ -790,7 +794,7 @@ const ElektroladesaeulenTheme = Theme.extend({
                 break;
             }
             // remove all undefined data
-            arrayPerHour = arrayPerHour.filter(function (value) {
+            arrayPerHour = arrayPerHour.filter(value => {
                 return value !== undefined;
             });
 
@@ -818,11 +822,11 @@ const ElektroladesaeulenTheme = Theme.extend({
 
     /**
      * returns an array which contains values at hour position
-     * @param  {Array} dataPerHour - data for every day, according to targetresult
+     * @param  {Array} [dataPerHour=[]] - data for every day, according to targetresult
      * @param  {Number} position - one hour
      * @return {Array} arrayPerHour
      */
-    arrayPerHour: function (dataPerHour, position) {
+    arrayPerHour: function (dataPerHour = [], position) {
         const arrayPerHour = [];
 
         dataPerHour.forEach(day => {
@@ -839,11 +843,11 @@ const ElektroladesaeulenTheme = Theme.extend({
     /**
      * checks if processdData is existing
      * if no data is found, undefined will be delivered
-     * @param  {Array} processedData - data with mean
+     * @param  {Array} [processedData=[]] - data with mean
      * @param  {Array} value - the key is searched
      * @return {Object} first data that was found
      */
-    checkValue: function (processedData, value) {
+    checkValue: function (processedData = [], value) {
         return processedData.find(data => data[value] > 0);
     },
 

@@ -582,7 +582,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         activeTools = activeTools.filter(tool => tool !== legendModel);
 
-        activeTools.filter(tool => tool !== legendModel)
+        activeTools.filter(tool => tool !== legendModel);
         if (activeTools.length === 0 && defaultTool !== undefined) {
             defaultTool.setIsActive(true);
             store.commit("setToolActive", {id: defaultTool.id, active: true});

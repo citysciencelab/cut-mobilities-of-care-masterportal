@@ -432,7 +432,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     sortObjects: function (type, input, first, second) {
         let sortedObj = input;
 
-        if (type === "addressx") {
+        if (type === "address") {
             sortedObj = this.sortObjectsAsAddress(sortedObj, first);
         }
         else {
@@ -444,21 +444,37 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * Sorts Objects not as address.
-     * @param {Object[]} input Array with object to be sorted.
+     * @param {Object[]} [input=[]] Array with object to be sorted.
      * @param {String} first First attribute to sort by.
      * @param {String} second Second attribute to sort by.
      * @returns {Object[]} - Sorted array of objects.
      */
-    sortObjectsNonAddress: function (input, first, second) {
-        let sortedObj = input;
+    sortObjectsNonAddress: function (input = [], first, second) {
+        const sortedOjectSecond = input.sort((elementA, elementB) => this.compareInputs(elementA, elementB, second)),
+            sortedObjectFirst = sortedOjectSecond.sort((elementA, elementB) => this.compareInputs(elementA, elementB, first));
 
-        sortedObj = input.sort((elementA, elementB) => {
-            return elementA[second] - elementB[second];
-        }).sort((elementC, elementD) => {
-            return parseInt(elementC[first], 10) - parseInt(elementD[first], 10);
-        });
+        return sortedObjectFirst;
+    },
 
-        return sortedObj;
+    /**
+     * Compare two elements.
+     * @param {object} elementA - The first object.
+     * @param {object} elementB - The second object.
+     * @param {string|number} value - value by sort.
+     * @returns {number} Sort sequence in numbers
+     */
+    compareInputs: function (elementA, elementB, value) {
+        const firstElement = isNaN(parseInt(elementA[value], 10)) ? elementA[value] : parseInt(elementA[value], 10),
+            secondElement = isNaN(parseInt(elementB[value], 10)) ? elementB[value] : parseInt(elementB[value], 10);
+
+        if (firstElement < secondElement) {
+            return -1;
+        }
+        else if (firstElement > secondElement) {
+            return 1;
+        }
+
+        return 0;
     },
 
     /**
