@@ -5,24 +5,17 @@ const actions = {
      *
      * @param {Object} context context object
      * @param {Object} state state object; in this case rootState = state
-     * @param {Function} commit store commit function
      * @param {Object} payload The given parameters
      * @param {String} payload.id The id of the Tool to be (de-)activated
      * @param {String} active Value for (de-)activation
      * @returns {void}
      */
-    setToolActive ({state, commit, dispatch}, {id, active}) {
+    setToolActive ({state, dispatch}, {id, active}) {
         Object.keys(state).forEach(toolId => {
             const tool = state[toolId];
 
             if (tool && tool.id === id) {
-                // NOTE: Extra case for the SupplyCoord Tool as it is not refactored in this PR.
-                if (id === "coord") {
-                    commit(toolId + "/setActive", active);
-                }
-                else {
-                    dispatch(toolId + "/setActive", active);
-                }
+                dispatch(toolId + "/setActive", active);
             }
         });
     },
