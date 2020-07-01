@@ -73,7 +73,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      */
     initialize: function () {
         this.set("exportButtonModel", new ExportButtonModel({
-            tag: "Als CSV herunterladen",
+            tag: "Download",
             rawData: [],
             fileExtension: "csv"
         }));
