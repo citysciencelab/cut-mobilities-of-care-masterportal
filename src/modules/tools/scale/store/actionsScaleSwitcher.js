@@ -19,9 +19,9 @@ const configPaths = [
          * @returns {void}
          */
         activateByUrlParam: ({rootState, commit}) => {
-            const mappings = ["scaleSwitcher"];
+            const mappings = ["scaleswitcher"];
 
-            if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen) !== -1) {
+            if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen.toLowerCase()) !== -1) {
                 commit("setActive", true);
             }
         },
