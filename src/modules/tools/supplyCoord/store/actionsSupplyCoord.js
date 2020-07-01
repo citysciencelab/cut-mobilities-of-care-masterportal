@@ -75,12 +75,12 @@ export default {
     adjustPosition ({commit}, {position, targetProjection}) {
         let coord, easting, northing;
 
-        if (targetProjection) {
+        if (targetProjection && Array.isArray(position) && position.length === 2) {
             // geographical coordinates
             if (targetProjection.projName === "longlat") {
                 coord = toStringHDMS(position);
-                easting = coord.substr(0, 13);
-                northing = coord.substr(14);
+                easting = coord.substr(0, 13).trim();
+                northing = coord.substr(14).trim();
             }
             // cartesian coordinates
             else {

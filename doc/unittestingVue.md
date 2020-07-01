@@ -14,7 +14,7 @@ npm run test:vue:watch
 
 ### Ort ###
 
-Die Tests liegen neben der Komponente und dem Store. Hier am Beispiel des ScaleSwitchers:
+Die Tests *.spec.js liegen neben der Komponente und dem Store. Hier am Beispiel des ScaleSwitchers:
 ```
 src
 |-- modules
@@ -37,9 +37,9 @@ src
 |   |   |   |	|   |-- components
 |   |   |   |   |	|   |-- ScaleSwitcher.spec.js
 |   |   |   |	|   |-- store
-|   |   |   |   |	|   |-- actionsScaleSwitcher.test.js
-|   |   |   |   |	|   |-- gettersScaleSwitcher.test.js
-|   |   |   |   |	|   |-- mutationsScaleSwitcher.test.js
+|   |   |   |   |	|   |-- actionsScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- gettersScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- mutationsScaleSwitcher.spec.js
 ```
 
 
@@ -96,7 +96,7 @@ describe("ScaleSwitcher.vue", () => {
 
     beforeEach(() => {
         store = new Vuex.Store({
-            namespaces: true,
+            namespaced: true,
             modules: {
                 Tools: {
                     namespaced: true,
@@ -140,6 +140,40 @@ describe("ScaleSwitcher.vue", () => {
             expect(scale).to.equal(options.at(index).attributes().value);
         });
     });
+
+    it("select another scale changes scale in map", async () => {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
+            options = wrapper.findAll("option");
+
+        options.at(1).trigger("change");
+        await wrapper.vm.$nextTick();
+        expect(options.at(1).attributes().selected).to.equals("true");
+        expect(options.at(0).attributes().selected).to.be.undefined;
+        expect(options.at(2).attributes().selected).to.be.undefined;
+        // maps scale change should be called
+        expect(mockMapActions.setResolutionByIndex.calledOnce).to.equal(true);
+
+        options.at(2).trigger("change");
+        await wrapper.vm.$nextTick();
+        expect(options.at(2).attributes().selected).to.equals("true");
+        // maps scale change should be called
+        expect(mockMapActions.setResolutionByIndex.calledTwice).to.equal(true);
+    });
+
+    it("method selectionChanged shall change currentScale", async () => {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
+            event = {
+                target: {
+                    value: scales[1],
+                    selectedIndex: 1
+                }
+            };
+
+        wrapper.vm.selectionChanged(event);
+        await wrapper.vm.$nextTick();
+
+        expect(store.state.Tools.ScaleSwitcher.currentScale).to.equals(scales[1]);
+    });
 });
 ```
 **BeispielStruktur: getters testen**
@@ -162,6 +196,12 @@ describe("gettersScaleSwitcher", function () {
 
             expect(currentScale(state)).to.equals("1000");
         });
+    });
+     describe("testing default values", function () {
+        it("returns the name default value from state", function () {
+            expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");
+        });
+    ... //weitere default-Werte testen
     });
 });
 
@@ -297,4 +337,4 @@ D.h. nicht nur testen, ob das erwünschte Ergebnis produziert wird, sondern auch
 
 [vue.js testing guide](https://vuejs.org/v2/guide/unit-testing.html#ad)
 
-[vue testing](https://vuex.vuejs.org/guide/testing.html)
+[vuex testing](https://vuex.vuejs.org/guide/testing.html)

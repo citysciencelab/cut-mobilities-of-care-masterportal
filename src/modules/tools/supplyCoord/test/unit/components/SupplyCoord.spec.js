@@ -102,6 +102,29 @@ describe("SupplyCoord.vue", () => {
         selected = options.filter(o => o.attributes().selected === "true");
         expect(selected.length).to.equal(1);
         expect(selected.at(0).attributes().value).to.equal("EPSG:25832");
-
     });
+    it("method close sets active to false", async () => {
+        wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
+
+        wrapper.vm.close();
+        await wrapper.vm.$nextTick();
+
+        expect(store.state.Tools.SupplyCoord.active).to.be.false;
+        expect(wrapper.find("#ssupply-coord").exists()).to.be.false;
+    });
+    it("method selectionChanged sets currentSelection", async () => {
+        const value = "EPSG:25832",
+            event = {
+                target: {
+                    value: value
+                }
+            };
+
+        wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
+
+        wrapper.vm.selectionChanged(event);
+
+        expect(store.state.Tools.SupplyCoord.currentSelection).to.be.equals(value);
+    });
+
 });

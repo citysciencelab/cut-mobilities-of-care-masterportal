@@ -75,8 +75,7 @@ describe("ScaleSwitcher.vue", () => {
         store.dispatch("Tools/ScaleSwitcher/setActive", false);
         const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
 
-
-        expect(wrapper.find("select").exists()).to.be.false;
+        expect(wrapper.find("#scale-switcher").exists()).to.be.false;
     });
 
     it("has initially set all scales to select", () => {
@@ -118,4 +117,42 @@ describe("ScaleSwitcher.vue", () => {
         // maps scale change should be called
         expect(mockMapActions.setResolutionByIndex.calledTwice).to.equal(true);
     });
+
+    it("has initially selected current scale", async () => {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
+            options = wrapper.findAll("option");
+
+        // now the map sets it scale and the ScaleSwitcher watches for it and sets it currentScale
+        store.commit("Tools/ScaleSwitcher/setCurrentScale", scales[1]);
+        await wrapper.vm.$nextTick();
+        // the option should be selected
+        expect(options.at(1).attributes().selected).to.equals("true");
+    });
+
+    it("method selectionChanged shall change currentScale", async () => {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
+            event = {
+                target: {
+                    value: scales[1],
+                    selectedIndex: 1
+                }
+            };
+
+        wrapper.vm.selectionChanged(event);
+        await wrapper.vm.$nextTick();
+
+        expect(store.state.Tools.ScaleSwitcher.currentScale).to.equals(scales[1]);
+    });
+
+    it("method close sets active to false", async () => {
+        const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
+
+        wrapper.vm.close();
+        await wrapper.vm.$nextTick();
+
+        expect(store.state.Tools.ScaleSwitcher.active).to.be.false;
+        expect(wrapper.find("#scale-switcher").exists()).to.be.false;
+    });
+
+
 });
