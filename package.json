@@ -41,6 +41,7 @@
     "bootstrap-slider": "^10.6.2",
     "bootstrap-toggle": "2.x.x",
     "core-js": "^3.6.5",
+    "chart.js": "^2.9.3",
     "d3": "4.9.x",
     "d3-scale-chromatic": "^1.5.0",
     "dom-parser": "^0.1.5",

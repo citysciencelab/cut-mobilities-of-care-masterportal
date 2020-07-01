@@ -112,31 +112,10 @@ describe("tools/gfi/themes/trafficCount", function () {
         });
     });
 
-    describe("addD3LineData", function () {
-        it("should create an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram", function () {
-            const lineData = model.addD3LineData("classname", "stylename", "xAttr", "yAttr", function () {
-                    return "foobar";
-                }, {
-                    "foo": "bar"
-                }, {
-                    "foobar": {"xAttr": "foobar"}
-                }),
-                lineDataExpected = [{
-                    class: "classname",
-                    style: "stylename",
-                    date: "foo",
-                    xAttr: "foobar",
-                    yAttr: "bar"
-                }];
-
-            expect(lineData).to.deep.equal(lineDataExpected);
-        });
-    });
-
     describe("getXAxisTickValuesDay", function () {
         it("should generate an array of xAxis Attributes to be shown in the diagram", function () {
             const xAxisTickValues = model.getXAxisTickValuesDay(),
-                xAxisTickValuesExpected = ["00:00", "06:00", "12:00", "18:00", "23:00"];
+                xAxisTickValuesExpected = ["00:00", "00:15", "00:30", "00:45", "01:00", "01:15", "01:30", "01:45", "02:00", "02:15", "02:30", "02:45", "03:00", "03:15", "03:30", "03:45", "04:00", "04:15", "04:30", "04:45", "05:00", "05:15", "05:30", "05:45", "06:00", "06:15", "06:30", "06:45", "07:00", "07:15", "07:30", "07:45", "08:00", "08:15", "08:30", "08:45", "09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "12:00", "12:15", "12:30", "12:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45", "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15", "21:30", "21:45", "22:00", "22:15", "22:30", "22:45", "23:00", "23:15", "23:30", "23:45", "24:00"];
 
             expect(xAxisTickValues).to.deep.equal(xAxisTickValuesExpected);
         });
@@ -154,22 +133,9 @@ describe("tools/gfi/themes/trafficCount", function () {
     describe("getXAxisTickValuesYear", function () {
         it("should generate an array of xAxis Attributes to be shown in the diagram", function () {
             const xAxisTickValues = model.getXAxisTickValuesYear(),
-                xAxisTickValuesExpected = [
-                    "Jan.",
-                    "Feb.",
-                    "März",
-                    "Apr.",
-                    "Mai",
-                    "Juni",
-                    "Juli",
-                    "Aug.",
-                    "Sep.",
-                    "Okt.",
-                    "Nov.",
-                    "Dez."
-                ];
+                xAxisTickValuesExpected = ["KW01", "KW02", "KW03", "KW04", "KW05", "KW06", "KW07", "KW08", "KW09", "KW10", "KW11", "KW12", "KW13", "KW14", "KW15", "KW16", "KW17", "KW18", "KW19", "KW20", "KW21", "KW22", "KW23", "KW24", "KW25", "KW26", "KW27", "KW28", "KW29", "KW30", "KW31", "KW32", "KW33", "KW34", "KW35", "KW36", "KW37", "KW38", "KW39", "KW40", "KW41", "KW42", "KW43", "KW44", "KW45", "KW46", "KW47", "KW48", "KW49", "KW50", "KW51", "KW52"];
 
-            expect(xAxisTickValues).to.deep.equal(xAxisTickValuesExpected);
+            expect(xAxisTickValues).to.include.members(xAxisTickValuesExpected);
         });
     });
 
@@ -235,46 +201,57 @@ describe("tools/gfi/themes/trafficCount", function () {
         });
     });
 
-    describe("createD3Config", function () {
-        it("should return a specific object for the given data", function () {
-            const axis = {
-                    xAttr: "xAttr",
-                    xAxisTicks: "xAxisTicks",
-                    xAxisLabel: "xAxisLabel",
-                    yAxisLabel: "yAxisLabel"
-                },
-                graphConfig = model.createD3Config("legendData", "selector", "selectorTooltip", "width", "height", axis, "attrToShowArray", "setTooltipValue", "dataset"),
-                graphConfigExpected = {
-                    legendData: "legendData",
-                    graphType: "Linegraph",
-                    selector: "selector",
-                    width: "width",
-                    height: "height",
-                    margin: {
-                        top: 20,
-                        right: 20,
-                        bottom: 40,
-                        left: 60
-                    },
-                    svgClass: "graph-svg",
-                    selectorTooltip: "selectorTooltip",
-                    scaleTypeX: "ordinal",
-                    scaleTypeY: "linear",
-                    xAxisTicks: "xAxisTicks",
-                    dotSize: 2,
-                    yAxisTicks: {
-                        ticks: 5,
-                        factor: ",f"
-                    },
-                    data: "dataset",
-                    xAttr: "xAttr",
-                    xAxisLabel: "xAxisLabel",
-                    yAxisLabel: "yAxisLabel",
-                    attrToShowArray: "attrToShowArray",
-                    setTooltipValue: "setTooltipValue"
-                };
+    describe("getLineData", function () {
+        it("should create an array of objects{(xAttr), (yAttr)} that can be used as dataset for the chart diagram", function () {
+            const lineData = model.getLineData("weekday", "count", () => {
+                    return "Mo";
+                }, {date: 1455}, {Mo: {weekday: "Mo"}}),
+                lineDataExpected = [{
+                    count: 1455,
+                    date: "date",
+                    weekday: "Mo"
+                }];
 
-            expect(graphConfig).to.deep.equal(graphConfigExpected);
+            expect(lineData).to.deep.equal(lineDataExpected);
+        });
+    });
+
+    describe("getPointData", function () {
+        it("should create an array of each line that can be used as dataset for the chart diagram", function () {
+            const pointData = model.getPointData([{
+                    count: 1455,
+                    date: "date",
+                    weekday: "Mo"
+                }]),
+                pointDataExpected = [1455];
+
+            expect(pointData).to.deep.equal(pointDataExpected);
+        });
+    });
+
+    describe("getDataSetsForChart", function () {
+        it("should create an array of datasets for the chart diagram", function () {
+            const pointData = model.getDataSetsForChart(
+                    [{AnzFahrzeuge: {"date": 1455}}],
+                    "AnzFahrzeuge",
+                    ["#337ab7"],
+                    "weekday",
+                    "count",
+                    () => {
+                        return "KW 26 / 2020";
+                    },
+                    () => {
+                        return "Mo";
+                    },
+                    {Mo: {weekday: "Mo"}}),
+                pointDataExpected = [{
+                    backgroundColor: "#337ab7",
+                    borderColor: "#337ab7",
+                    data: [1455],
+                    label: "KW 26 / 2020"
+                }];
+
+            expect(pointData).to.deep.equal(pointDataExpected);
         });
     });
 
@@ -1272,39 +1249,39 @@ describe("tools/gfi/themes/trafficCount", function () {
             const datasets = [
                     {
                         AnzFahrzeuge:
-                        {
-                            "2020-06-23 00:00:01": 232
-                        }
+                            {
+                                "2020-06-23 00:00:01": 232
+                            }
                     },
                     {
                         AnzFahrzeuge:
-                        {
-                            "2020-07-25 00:00:01": 232
-                        }
+                            {
+                                "2020-07-25 00:00:01": 232
+                            }
                     },
                     {
                         AnzFahrzeuge:
-                        {
-                            "2020-05-23 00:00:01": 232
-                        }
+                            {
+                                "2020-05-23 00:00:01": 232
+                            }
                     },
                     {
                         AnzFahrzeuge:
-                        {
-                            "2020-07-24 00:00:01": 232
-                        }
+                            {
+                                "2020-07-24 00:00:01": 232
+                            }
                     },
                     {
                         AnzFahrzeuge:
-                        {
-                            "2020-07-24 00:00:01": 232
-                        }
+                            {
+                                "2020-07-24 00:00:01": 232
+                            }
                     },
                     {
                         AnzFahrzeuge:
-                        {
-                            "2020-06-24 00:00:01": 232
-                        }
+                            {
+                                "2020-06-24 00:00:01": 232
+                            }
                     }
                 ],
                 sortedDatasets = model.getSortedDatasets(datasets, "AnzFahrzeuge");
@@ -1335,4 +1312,3 @@ describe("tools/gfi/themes/trafficCount", function () {
         });
     });
 });
-

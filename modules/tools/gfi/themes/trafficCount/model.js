@@ -2,6 +2,7 @@ import Theme from "../model";
 import {TrafficCountCache} from "./trafficCountCache";
 import moment from "moment";
 import SnippetDatepickerModel from "../../../../snippets/datepicker/model";
+import ChartJs from "chart.js";
 import ExportButtonModel from "../../../../snippets/exportButton/model";
 
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
@@ -680,9 +681,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
-            timeSettings = [];
+            timeSettings = [],
+            themeId = this.get("themeId"),
+            selector = "trafficCountDiagramDay_" + themeId;
 
         if (dates.length === 0) {
+            this.removeCanvas(selector);
             this.setDayTableContent([]);
         }
         else {
@@ -699,9 +703,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
                 const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-                this.refreshDiagramDay(sortedDatasets[0][meansOfTransport]);
+                this.refreshDiagramDay(sortedDatasets, meansOfTransport, selector);
                 this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "day", "Datum", timeSettings, meansOfTransport);
-
             }, errormsg => {
                 this.refreshDiagramDay([]);
                 this.setDayTableContent([]);
@@ -767,9 +770,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
-            timeSettings = [];
+            timeSettings = [],
+            themeId = this.get("themeId"),
+            selector = "trafficCountDiagramWeek_" + themeId;
 
         if (dates.length === 0) {
+            this.removeCanvas(selector);
             this.setWeekTableContent([]);
         }
         else {
@@ -784,9 +790,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
                 const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-                this.refreshDiagramWeek(sortedDatasets[0][meansOfTransport]);
+                this.refreshDiagramWeek(sortedDatasets, meansOfTransport, selector);
                 this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "week", "Woche", timeSettings, meansOfTransport);
-
             }, errormsg => {
                 this.refreshDiagramWeek([]);
                 this.setWeekTableContent([]);
@@ -843,9 +848,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),
             timeSettings = [],
-            years = [];
+            years = [],
+            themeId = this.get("themeId"),
+            selector = "trafficCountDiagramYear_" + themeId;
 
         if (dates.length === 0) {
+            this.removeCanvas(selector);
             this.setYearTableContent([]);
         }
         else {
@@ -863,9 +871,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
                 const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
 
-                this.refreshDiagramYear(sortedDatasets[0][meansOfTransport], years[0]);
+                this.refreshDiagramYear(sortedDatasets, years, meansOfTransport, selector);
                 this.prepareTableContent(this.prepareYearDataset(sortedDatasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
-
             }, errormsg => {
                 this.refreshDiagramYear([]);
                 this.setYearTableContent([]);
@@ -909,21 +916,19 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * refreshes the diagram for a dataset based on day
      * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
+     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
      * @returns {Void}  -
      */
-    refreshDiagramDay: function (dataset) {
-        const themeId = this.get("themeId"),
-            selector = ".trafficCountDiagramDay_" + themeId,
-            selectorTooltip = ".graph-tooltip-div-day_" + themeId,
-            xAxisTickValues = this.getXAxisTickValuesDay(),
+    refreshDiagramDay: function (dataset, meansOfTransport, selector) {
+        const xAxisTickValues = this.getXAxisTickValuesDay(),
             emptyDiagramData = this.getEmptyDiagramDataDay(),
             generalConfigParams = {
                 dataset: dataset,
+                meansOfTransport: meansOfTransport,
                 selector: selector,
-                selectorTooltip: selectorTooltip,
                 xAxis: {
                     xAttr: "hour",
-                    xAxisText: "",
                     xAxisTicks: {
                         unit: " Uhr",
                         values: xAxisTickValues
@@ -950,21 +955,19 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * refreshes the diagram for a dataset based on week
      * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
+     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
      * @returns {Void}  -
      */
-    refreshDiagramWeek: function (dataset) {
-        const themeId = this.get("themeId"),
-            selector = ".trafficCountDiagramWeek_" + themeId,
-            selectorTooltip = ".graph-tooltip-div-week_" + themeId,
-            xAxisTickValues = this.getXAxisTickValuesWeek(),
+    refreshDiagramWeek: function (dataset, meansOfTransport, selector) {
+        const xAxisTickValues = this.getXAxisTickValuesWeek(),
             emptyDiagramData = this.getEmptyDiagramDataWeek(),
             generalConfigParams = {
                 dataset: dataset,
+                meansOfTransport: meansOfTransport,
                 selector: selector,
-                selectorTooltip: selectorTooltip,
                 xAxis: {
                     xAttr: "weekday",
-                    xAxisText: "",
                     xAxisTicks: {
                         unit: "",
                         values: xAxisTickValues
@@ -972,7 +975,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: "Anzahl / 15 Min."
+                    yAxisText: "Anzahl / Tag"
                 }
             };
 
@@ -999,21 +1002,19 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * refreshes the diagram for a dataset based on year
      * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
      * @param {String} year the year from the calendar as String
+     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
      * @returns {Void}  -
      */
-    refreshDiagramYear: function (dataset, year) {
-        const themeId = this.get("themeId"),
-            selector = ".trafficCountDiagramYear_" + themeId,
-            selectorTooltip = ".graph-tooltip-div-year_" + themeId,
-            xAxisTickValues = this.getXAxisTickValuesYear(),
+    refreshDiagramYear: function (dataset, year, meansOfTransport, selector) {
+        const xAxisTickValues = this.getXAxisTickValuesYear(),
             emptyDiagramData = this.getEmptyDiagramDataYear(year),
             generalConfigParams = {
                 dataset: dataset,
+                meansOfTransport: meansOfTransport,
                 selector: selector,
-                selectorTooltip: selectorTooltip,
                 xAxis: {
-                    xAttr: "month",
-                    xAxisText: "",
+                    xAttr: "week",
                     xAxisTicks: {
                         unit: "",
                         values: xAxisTickValues
@@ -1055,13 +1056,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @param {Object} generalConfigParams main configuration
      * @param {Object} generalConfigParams.dataset the dataset to refresh the diagram with as object{date: value}
      * @param {String} generalConfigParams.selector the dom selector of the diagram (e.g. an id as "#...")
-     * @param {String} generalConfigParams.selectorTooltip the dom selector for the tooltip of the diagram (e.g. a class as ".(...)")
-     * @param {String} generalConfigParams.xAxis configuration of xAxis-settings
-     * @param {String} generalConfigParams.xAxis.xAttr the attribute to use for x axis values (e.g. week, weekday, hour)
      * @param {Object} generalConfigParams.xAxis.xAxisTicks an object to define the behavior of the xAxis as object{unit, values}
-     * @param {String} generalConfigParams.xAxis.xAxisText the text of the x axis
-     * @param {String} generalConfigParams.yAxis configuration of yAxis-settings
-     * @param {String} generalConfigParams.yAxis.yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
      * @param {String} generalConfigParams.yAxis.yAxisText the text of the y axis
      * @param {Callback} callbackRenderLegendText a function (phenomenonTime) to write the legend text with
      * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to write the entry at the x axis with
@@ -1070,82 +1065,254 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     refreshDiagramGeneral: function (generalConfigParams, callbackRenderLegendText, callbackRenderTextXAxis, setTooltipValue, emptyDiagramData) {
-        if (typeof generalConfigParams.dataset !== "object") {
+        if (typeof generalConfigParams.dataset !== "object" || generalConfigParams.dataset.length === 0) {
+            this.removeCanvas(generalConfigParams.selector);
             return;
         }
 
         const dataset = generalConfigParams.dataset,
+            meansOfTransport = generalConfigParams.meansOfTransport,
             selector = generalConfigParams.selector,
-            selectorTooltip = generalConfigParams.selectorTooltip,
             xAttr = generalConfigParams.xAxis.xAttr,
             xAxisTicks = generalConfigParams.xAxis.xAxisTicks,
             yAttr = generalConfigParams.yAxis.yAttr,
-            xAxisText = generalConfigParams.xAxis.xAxisText,
             yAxisText = generalConfigParams.yAxis.yAxisText,
-            diagramWidth = 570,
-            diagramHeight = 280,
-            axis = {
-                xAttr: xAttr,
-                xAxisTicks: xAxisTicks,
-                xAxisLabel: {
-                    label: xAxisText,
-                    translate: 6
+            colors = ["#337ab7", "#d73027", "#fc8d59", "#91bfdb", "#542788"],
+            dataSets = this.getDataSetsForChart(dataset, meansOfTransport, colors, xAttr, yAttr, callbackRenderLegendText, callbackRenderTextXAxis, emptyDiagramData),
+            config = {
+                type: "line",
+                pointHoverRadius: 2,
+                data: {
+                    labels: xAxisTicks.values,
+                    datasets: dataSets
                 },
-                yAxisLabel: {
-                    label: yAxisText,
-                    offset: 54
+                options: {
+                    title: {
+                        display: false
+                    },
+                    elements: {
+                        line: {
+                            tension: 0
+                        }
+                    },
+                    tooltips: {
+                        bodyFontColor: "#555555",
+                        backgroundColor: "#f0f0f0",
+                        yAlign: "bottom",
+                        custom: function (tooltip) {
+                            if (!tooltip) {
+                                return;
+                            }
+                            // disable displaying the color box;
+                            tooltip.displayColors = false;
+                        },
+                        callbacks: {
+                            // use label callback to return the desired label
+                            label: function (tooltipItem) {
+                                return setTooltipValue(tooltipItem.yLabel, this.getLineData(xAttr, yAttr, callbackRenderTextXAxis, dataset[tooltipItem.datasetIndex][meansOfTransport], emptyDiagramData)[tooltipItem.index]);
+                            }.bind(this),
+                            // remove title
+                            title: function () {
+                                return false;
+                            }
+                        }
+                    },
+                    hover: {
+                        mode: "nearest",
+                        intersect: true,
+                        onHover: function (e) {
+                            const point = this.getElementAtEvent(e);
+
+                            if (point.length) {
+                                e.target.style.cursor = "pointer";
+                            }
+                            else {
+                                e.target.style.cursor = "default";
+                            }
+                        }
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            ticks: {
+                                fontSize: 10,
+                                fontColor: "#000000",
+                                beginAtZero: true,
+                                autoSkip: true,
+                                maxTicksLimit: xAttr === "hour" ? 4 : "",
+                                callback: function (value) {
+                                    return value + " " + xAxisTicks.unit;
+                                }
+                            },
+                            gridLines: {
+                                color: "black",
+                                display: true,
+                                drawBorder: true,
+                                drawOnChartArea: false
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: true,
+                                fontSize: 10,
+                                fontColor: "#000000",
+                                maxTicksLimit: 8,
+                                callback: function (value) {
+                                    return this.addThousandPoints(value);
+                                }.bind(this)
+                            },
+                            gridLines: {
+                                color: "black",
+                                display: true,
+                                drawBorder: true,
+                                drawOnChartArea: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: yAxisText
+                            }
+                        }]
+                    },
+                    legend: {
+                        display: true,
+                        onClick: (e) => e.stopPropagation(),
+                        labels: {
+                            usePointStyle: true,
+                            fontSize: 12,
+                            fontColor: "#555555"
+                        },
+                        align: "start"
+                    }
                 }
-            },
-            legendData = [{
-                class: "dot",
-                style: "circle",
-                text: callbackRenderLegendText(Object.keys(dataset)[0])
-            }],
-            attrToShowArray = [{
-                attrName: yAttr,
-                attrClass: "line"
-            }],
-            diagramData = this.addD3LineData("dot", "circle", xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData),
-            graphConfig = this.createD3Config(legendData, selector, selectorTooltip, diagramWidth, diagramHeight, axis, attrToShowArray, setTooltipValue, diagramData);
+            };
 
-        // In case multi GFI themes come together, we need to clear the bar graph so that only one bar graph shows up
-        $(selector + " svg").remove();
+        let canvasArea = "";
 
-        Radio.trigger("Graph", "createGraph", graphConfig);
+        this.removeCanvas(selector);
+        document.getElementsByClassName(selector)[0].appendChild(document.createElement("canvas"));
+
+        canvasArea = document.getElementsByClassName(selector)[0].querySelector("canvas").getContext("2d");
+
+        ChartJs.defaults.global.elements.line.spanGaps = false;
+        ChartJs.defaults.global.elements.line.fill = false;
+        ChartJs.defaults.global.elements.line.borderWidth = 1;
+        ChartJs.defaults.global.elements.point.borderWidth = 1;
+        ChartJs.defaults.global.elements.point.radius = 2;
+
+        ChartJs.Legend.prototype.afterFit = function () {
+            this.height = this.height + 10;
+        };
+
+        if (Array.isArray(dataSets) && dataSets.length > 0) {
+            window.chartLine = new ChartJs(canvasArea, config);
+        }
+    },
+
+    /**
+     * remove Chart canvas from dom
+     * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
+     * @returns {void}
+     */
+    removeCanvas: function (selector) {
+        const canvasElement = document.getElementsByClassName(selector)[0].querySelector("canvas");
+
+        if (canvasElement) {
+            canvasElement.parentNode.removeChild(canvasElement);
+        }
+    },
+
+    /**
+     *get Data set in right format for drawing the chart
+     * @param {Array} dataset the dataset getting from api
+     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {Array} colors the color to be signed to every data list
+     * @param {String} xAttr the attribute to use for x axis values (e.g. week, weekday, hour)
+     * @param {String} yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
+     * @param {Callback} callbackRenderLegendText a function (phenomenonTime) to write the legend text with
+     * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to convert the key of dataset into the wanted format with
+     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {class, style, xAxisAttr}}
+     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram
+     */
+    getDataSetsForChart: function (dataset, meansOfTransport, colors, xAttr, yAttr, callbackRenderLegendText, callbackRenderTextXAxis, emptyDiagramData) {
+        if (!Array.isArray(dataset) || dataset.length === 0) {
+            return false;
+        }
+
+        const dataSets = [];
+
+        dataset.forEach(function (data, index) {
+            if (!data.hasOwnProperty(meansOfTransport) || Object.keys(data[meansOfTransport]).length === 0) {
+                console.warn("The data received from api are incomplete!");
+                return;
+            }
+
+            const lineData = this.getLineData(xAttr, yAttr, callbackRenderTextXAxis, data[meansOfTransport], emptyDiagramData),
+                pointData = Array.isArray(lineData) && dataset.length > 0 ? this.getPointData(lineData) : [],
+                legendData = callbackRenderLegendText(Object.keys(data[meansOfTransport])[0]),
+                dataObject = {
+                    label: legendData,
+                    backgroundColor: colors[index],
+                    borderColor: colors[index],
+                    data: pointData
+                };
+
+            dataSets.push(dataObject);
+        }.bind(this));
+
+        return dataSets;
     },
 
     /**
      * adds objects to use as diagram data to the given result set
-     * @param {String} classname the name of the class to use for the dots of this line
-     * @param {String} stylename the name of the style to use for the dots of this line (e.g. circle)
      * @param {String} xAttr the attribute to use for x axis values (e.g. week, weekday, hour)
      * @param {String} yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
      * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to convert the key of dataset into the wanted format with
      * @param {Object[]} dataset the dataset from the API as array of objects{phenomenonTime: value}
-     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {class, style, xAxisAttr}}
-     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram
+     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {xAxisAttr}}
+     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{(xAttr), (yAttr)} that can be used as dataset for the D3 diagram
      */
-    addD3LineData: function (classname, stylename, xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData) {
+    getLineData: function (xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData) {
         if (typeof dataset !== "object" || typeof emptyDiagramData !== "object" || typeof callbackRenderTextXAxis !== "function") {
             return [];
         }
+
+        const diagramData = Object.assign({}, emptyDiagramData);
 
         let key;
 
         for (key in dataset) {
             const obj = {
-                class: classname,
-                style: stylename,
                 date: key
             };
 
             obj[xAttr] = callbackRenderTextXAxis(key);
             obj[yAttr] = dataset[key];
 
-            emptyDiagramData[obj[xAttr]] = obj;
+            diagramData[obj[xAttr]] = obj;
         }
 
-        return Object.values(emptyDiagramData);
+        return Object.values(diagramData);
+    },
+
+    /**
+     * adds objects to use as diagram data to the given result set
+     * @param {Object[]} lineData the data from a data list
+     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram
+     */
+    getPointData: function (lineData) {
+        const pointData = [];
+
+        lineData.forEach(data => {
+            if (data.hasOwnProperty("count") && data.hasOwnProperty("date")) {
+                pointData.push(data.count);
+            }
+            else {
+                pointData.push(null);
+            }
+        });
+
+        return pointData;
     },
 
     /**
@@ -1153,7 +1320,26 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @return {String[]}  an array with relevant xAxis Attributes for the day diagram
      */
     getXAxisTickValuesDay: function () {
-        return ["00:00", "06:00", "12:00", "18:00", "23:00"];
+        // x - minutes interval
+        // times - time array
+        const x = 15,
+            times = [];
+
+        // tt - start time
+        let tt = 0,
+            i = 0;
+
+        for (i = 0; tt <= 24 * 60; i++) {
+            // getting hours of day in 0-24 format
+            // getting minutes of the hour in 0-55 format
+            const hh = Math.floor(tt / 60),
+                mm = tt % 60;
+
+            times[i] = ("0" + hh).slice(-2) + ":" + ("0" + mm).slice(-2); // pushing data in array in [ 00:00 - 24:00 format]
+            tt = tt + x;
+        }
+
+        return times;
     },
 
     /**
@@ -1177,10 +1363,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      */
     getXAxisTickValuesYear: function () {
         const xAxisTickValues = [];
-        let m = 0;
+        let kw = 0;
 
-        for (m = 1; m <= 12; m++) {
-            xAxisTickValues.push(moment(m, "M").format("MMM"));
+        for (kw = 1; kw <= moment().isoWeeksInYear(); kw++) {
+            kw = kw < 10 ? "0" + kw : kw;
+            xAxisTickValues.push("KW" + kw);
         }
 
         return xAxisTickValues;
@@ -1260,61 +1447,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         }
 
         return result;
-    },
-
-    /**
-     * generates a new config, usable for the Radio trigger "Graph"=>"createGraph"
-     * @param {Object[]} legendData an array of objects{class, style, text} to use as legend for the diagram
-     * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
-     * @param {String} selectorTooltip the dom selector for the tooltip of the diagram (e.g. a class as ".(...)")
-     * @param {Integer} width the width of the diagram
-     * @param {Integer} height the height of the diagram
-     * @param {Object} axis axis configuration
-     * @param {String} axis.xAttr the attribute to use from the dataset to bind the data to the math. x axis
-     * @param {Object} axis.xAxisTicks an object to define the behavior of the xAxis as object{unit, values}
-     * @param {Object} axis.xAxisLabel an object {label, translate} with the label to use for the math. x axis
-     * @param {Object} axis.yAxisLabel an object {label, offset} with the label to use for the math. y axis
-     * @param {Object[]} attrToShowArray the classes of lines as array of object{attrName, attrClass}
-     * @param {callback} setTooltipValue a function(value) to be called at the event of a tooltip
-     * @param {Object[]} dataset an array of objects as Array({(xAttr), (yAttr), class, style})
-     * @return {Object}  a config object to be used for d3
-     */
-    createD3Config: function (legendData, selector, selectorTooltip, width, height, axis, attrToShowArray, setTooltipValue, dataset) {
-        const xAttr = axis.xAttr,
-            xAxisTicks = axis.xAxisTicks,
-            xAxisLabel = axis.xAxisLabel,
-            yAxisLabel = axis.yAxisLabel,
-            graphConfig = {
-                legendData: legendData,
-                graphType: "Linegraph",
-                selector: selector,
-                width: width,
-                height: height,
-                margin: {
-                    top: 20,
-                    right: 20,
-                    bottom: 40,
-                    left: 60
-                },
-                svgClass: "graph-svg",
-                selectorTooltip: selectorTooltip,
-                scaleTypeX: "ordinal",
-                scaleTypeY: "linear",
-                xAxisTicks: xAxisTicks,
-                dotSize: 2,
-                yAxisTicks: {
-                    ticks: 5,
-                    factor: ",f"
-                },
-                data: dataset,
-                xAttr: xAttr,
-                xAxisLabel: xAxisLabel,
-                yAxisLabel: yAxisLabel,
-                attrToShowArray: attrToShowArray,
-                setTooltipValue: setTooltipValue
-            };
-
-        return graphConfig;
     },
 
     /**
