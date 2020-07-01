@@ -119,8 +119,13 @@
                 font-size: 12px;
             }
         }
-        padding: 8px;
+        &.infos {
+            button {
+                display: none;
+            }
+        }
         &:not(.infos) {
+            padding: 8px 8px 0;
             display: inline-block;
             width: 100%;
             .table-striped {
