@@ -196,7 +196,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             this.setupTabDay();
             this.downloadDataDay(thingId, meansOfTransport, result => {
                 this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
-                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + `_${tabValue}`);
+                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + "-15min_Werte");
             }, error => {
                 console.warn("error", "downloadDataDay", error);
                 Radio.trigger("Alert", "alert", {
@@ -214,7 +214,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             this.setupTabWeek();
             this.downloadDataWeek(thingId, meansOfTransport, result => {
                 this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
-                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + `_${tabValue}`);
+                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + "-Tageswerte");
             }, error => {
                 console.warn("error", "downloadDataWeek", error);
                 Radio.trigger("Alert", "alert", {
@@ -232,7 +232,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             this.setupTabYear();
             this.downloadDataYear(thingId, meansOfTransport, result => {
                 this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
-                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + `_${tabValue}`);
+                this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + "-Wochenwerte");
             }, error => {
                 console.warn("error", "downloadDataYear", error);
                 Radio.trigger("Alert", "alert", {
@@ -1373,7 +1373,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     downloadDataDay: function (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete) {
-        // tabvalue mit übergeben
         const api = this.get("propTrafficCountApi"),
             timeSet = {
                 interval: this.get("dayInterval"),
