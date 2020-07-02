@@ -18,6 +18,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
         styleableLayerList: [],
         wmsSoftware: "OGC",
         // translations
+        currentLng: "",
         noStyleableLayers: "",
         theme: "",
         chooseTheme: "",
@@ -66,6 +67,23 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @property {String} styleableLayer.name Name of styleable Layer
      * @property {String} styleableLayer.id Id of styleable Layer
      * @property {String} wmsSoftware="OGC" Flag of sld has to be created according to ogc standards or in esri style
+     * @property {String} currentLng: "" contains the translated text
+     * @property {String} noStyleableLayers: "" contains the translated text
+     * @property {String} theme: "" contains the translated text
+     * @property {String} chooseTheme: "" contains the translated text
+     * @property {String} attribute: "" contains the translated text
+     * @property {String} chooseAttribute: "" contains the translated text
+     * @property {String} countOfClasses: "" contains the translated text
+     * @property {String} chooseNumberOfClasses: "" contains the translated text
+     * @property {String} rangeOfValues: "" contains the translated text
+     * @property {String} reset: "" contains the translated text
+     * @property {String} apply: "" contains the translated text
+     * @property {String} from: "" contains the translated text
+     * @property {String} to: "" contains the translated text
+     * @property {String} pleaseEnterInteger: "" contains the translated text
+     * @property {String} pleaseChooseColor: "" contains the translated text
+     * @property {String} checkTheValues: "" contains the translated text
+     * @property {String} overlappingValueRanges: "" contains the translated text
      * @listens StyleWMS#RadioTriggerStyleWMSopenStyleWMS
      * @listens StyleWMS#changeModel
      * @listens StyleWMS#changeAttributeName
@@ -80,6 +98,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @fires StyleWMS#RadioTriggerStyleWMSUpdateParamsStyleWMS
      * @fires StyleWMSModel#sync
      * @fires StyleWMSModel#changeIsactive
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         const channel = Radio.channel("StyleWMS");
