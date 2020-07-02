@@ -2,11 +2,13 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
+import ScaleSwitcher from "../modules/tools/scale/store/indexScaleSwitcher";
 import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
 import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 
+import toolsActions from "../modules/tools/actionsTools";
 import getters from "./getters";
 import mutations from "./mutations";
 import state from "./state";
@@ -25,8 +27,11 @@ const store = new Vuex.Store({
         Tools: {
             namespaced: true,
             modules: {
-                SupplyCoord // hier die stores von weiteren Tools eintragen
-            }
+                // add here other Tools
+                SupplyCoord,
+                ScaleSwitcher
+            },
+            actions: toolsActions
         },
         controls: {
             ...controlsModule

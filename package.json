@@ -115,7 +115,6 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2",
-    "webpack-node-externals": "1.7.2",
     "webpack-visualizer-plugin": "^0.1.11",
     "whatwg-fetch": "^3.0.0",
     "xmlserializer": "^0.6.1",
