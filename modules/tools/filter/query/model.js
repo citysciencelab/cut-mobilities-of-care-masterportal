@@ -233,7 +233,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
      * @param  {object} rules - contains values to be added
      * @return {object} featureAttributesMap
      */
-    mapRules: function (featureAttributesMap, rules) {
+    mapRules: function (featureAttributesMap, rules = []) {
         let attrMap;
 
         rules.forEach(rule => {

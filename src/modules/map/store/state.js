@@ -37,6 +37,7 @@ const state = {
     resolution: null,
     maxResolution: null,
     minResolution: null,
+    scales: null,
     initialCenter: null,
     center: null,
     mouseCoord: null,

@@ -1,5 +1,6 @@
 <script>
 import Alerting from "./modules/alerting/components/Alerting.vue";
+import ScaleSwitcher from "./modules/tools/scale/components/ScaleSwitcher.vue";
 import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
 import KmlImport from "./modules/tools/kmlImport/components/KmlImport.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
@@ -11,6 +12,7 @@ export default {
     components: {
         ControlBar,
         Alerting,
+        ScaleSwitcher,
         SupplyCoord,
         KmlImport,
         Footer
@@ -38,6 +40,7 @@ export default {
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
         <Alerting />
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
+        <ScaleSwitcher v-if="configJson" />
         <SupplyCoord v-if="configJson" />
         <KmlImport v-if="configJson" />
         <template v-if="configJson">

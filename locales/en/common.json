@@ -37,10 +37,12 @@
             "draw": "Drawing / writing",
             "commuterLines": "Commuter (Lines)",
             "commuterAnimation": "Commuter (Animation)",
+            "layerSlider": "Time series",
             "featureLister": "List",
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
-            "addWms": "Add WMS"
+            "addWms": "Add WMS",
+            "scaleSwitcher": "Scale switcher"
         },
         "legend": "Explanations",
         "contact": "Mail",
@@ -201,6 +203,15 @@
                 "alert": "The attempt to show the selected feature failed because it has no geometry.",
                 "key": "{{shownFeatures.x}} of {{shownFeatures.y}} features listed"
             },
+            "layerSlider": {
+                "displayLayers": "Display of various layers.",
+                "title": "Simulation of example WMS",
+                "titleNotConfigured": "Title not configured",
+                "serviceOne": "Service 1",
+                "serviceTwo": "Service 2",
+                "serviceThree": "Service 3",
+                "key": "Configuration of tool <b>{{alertMessage.x}}</b> incorrect: <b>sliderType</b> \"{{alertMessage.y}}\" is not yet implemented!"
+            },
             "pendler": {
                 "animation": {
                     "domicile": "Domicile",
@@ -291,7 +302,7 @@
                 "parcelNumberPlaceholder": "Enter number",
                 "generateReport": "Generate report"
             },
-            "getCoord": {
+            "supplyCoord": {
                 "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
                 "hdms": {
@@ -329,8 +340,8 @@
                     "noCoord": "Please enter your {{valueKey}}.",
                     "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})"
                 },
-                "hdmsEastingText": "value for the $t(common:modules.tools.getCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "value for the $t(common:modules.tools.getCoord.hdms.northingLabel)"
+                "hdmsEastingText": "value for the $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "value for the $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",
@@ -406,6 +417,9 @@
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
                 "area": "Area"
+            },
+            "scaleSwitcher": {
+                "label": "Scale"
             }
         },
         "controls": {

@@ -37,11 +37,13 @@
             "draw": "Zeichnen / Schreiben",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
+            "layerSlider": "Zeitreihe",
             "featureLister": "Liste",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
-            "wfsTransaction": "WFS-T Tool"
+            "wfsTransaction": "WFS-T Tool",
+            "scaleSwitcher": "Maßstab umschalten"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -210,6 +212,15 @@
                 "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
                 "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
             },
+            "layerSlider": {
+                "displayLayers": "Anzeige diverser Layer.",
+                "title": "Simulation von Beispiel-WMS",
+                "titleNotConfigured": "Titel nicht konfiguriert",
+                "serviceOne": "Dienst 1",
+                "serviceTwo": "Dienst 2",
+                "serviceThree": "Dienst 3",
+                "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
+            },
             "pendler": {
                 "animation": {
                     "domicile": "Wohnort",
@@ -300,7 +311,7 @@
                 "parcelNumberPlaceholder": "Nummer eingeben",
                 "generateReport": "Bericht erzeugen"
             },
-            "getCoord": {
+            "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
@@ -338,8 +349,8 @@
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
                     "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
                 },
-                "hdmsEastingText": "Wert der $t(common:modules.tools.getCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "Wert der $t(common:modules.tools.getCoord.hdms.northingLabel)"
+                "hdmsEastingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
@@ -415,6 +426,9 @@
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche"
+            },
+            "scaleSwitcher": {
+                "label": "Maßstab"
             }
         },
         "controls": {
