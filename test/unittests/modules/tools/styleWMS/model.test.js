@@ -66,27 +66,27 @@ describe("tools/styleWMS/model", function () {
         describe("Error list should include", function () {
 
             it("NAN value for minimum", function () {
-                expect(errors[0].minText).to.be.equal("common:modules.tools.styleWMS.pleaseEnterInteger");
+                expect(errors[0].minText).to.be.equal(i18next.t("common:modules.tools.styleWMS.pleaseEnterInteger"));
                 expect(errors[0].minIndex).to.be.equal(1);
             });
 
             it("NAN value for maximum", function () {
-                expect(errors[1].maxText).to.be.equal("common:modules.tools.styleWMS.pleaseEnterInteger");
+                expect(errors[1].maxText).to.be.equal(i18next.t("common:modules.tools.styleWMS.pleaseEnterInteger"));
                 expect(errors[1].maxIndex).to.be.equal(2);
             });
 
             it("missing color", function () {
-                expect(errors[2].colorText).to.be.equal("common:modules.tools.styleWMS.pleaseChooseColor");
+                expect(errors[2].colorText).to.be.equal(i18next.t("common:modules.tools.styleWMS.pleaseChooseColor"));
                 expect(errors[2].colorIndex).to.be.equal(3);
             });
 
             it("minimum greater than maximum", function () {
-                expect(errors[3].rangeText).to.be.equal("common:modules.tools.styleWMS.checkTheValues");
+                expect(errors[3].rangeText).to.be.equal(i18next.t("common:modules.tools.styleWMS.checkTheValues"));
                 expect(errors[3].rangeIndex).to.be.equal(4);
             });
 
             it("intersecting intervalls", function () {
-                expect(errors[4].intersectText).to.be.equal("common:modules.tools.styleWMS.overlappingValueRanges");
+                expect(errors[4].intersectText).to.be.equal(i18next.t("common:modules.tools.styleWMS.overlappingValueRanges"));
                 expect(errors[4].intersectIndex).to.be.equal(6);
                 expect(errors[4].prevIndex).to.be.equal(5);
             });
