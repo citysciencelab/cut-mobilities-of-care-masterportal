@@ -577,12 +577,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     toggleDefaultTool: function () {
         const legendModel = this.findWhere({id: "legend"}),
             defaultTool = this.getDefaultTool();
-
         let activeTools = this.where({isActive: true});
 
         activeTools = activeTools.filter(tool => tool !== legendModel);
-
-        activeTools.filter(tool => tool !== legendModel);
         if (activeTools.length === 0 && defaultTool !== undefined) {
             defaultTool.setIsActive(true);
             store.dispatch("Tools/setToolActive", {id: defaultTool.id, active: true});

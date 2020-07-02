@@ -284,7 +284,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
                 if (feature.tileset && feature.tileset.layerReferenceId) {
                     layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.tileset.layerReferenceId});
                     if (layerModel) {
-                        modelAttributes = Object.fromEntries(Object.entries(layerModel.attributes).filter(([key]) => ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"].includes(key)));
+                        modelAttributes = Radio.request("Util", "pick", layerModel.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
                     }
 
                 }
@@ -312,7 +312,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
                 else if (feature.primitive.id instanceof Cesium.Entity) {
                     layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.primitive.id.layerReferenceId});
                     if (layerModel) {
-                        modelAttributes = Object.fromEntries(Object.entries(layerModel.attributes).filter(([key]) => ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"].includes(key)));
+                        modelAttributes = Radio.request("Util", "pick", layerModel.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
                     }
                     if (modelAttributes) {
                         if (feature.primitive.id.attributes) {
@@ -432,7 +432,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
                     },
                     hitTolerance: vectorLayer.get("hitTolerance")
                 }),
-                modelAttributes = Object.fromEntries(Object.entries(vectorLayer.attributes).filter(([key]) => ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable", "layer"].includes(key)));
+                modelAttributes = Radio.request("Util", "pick", vectorLayer.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
 
             features.forEach(featureAtPixel => {
                 // Feature
@@ -482,7 +482,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
         let modelAttributes;
 
         if (model !== undefined) {
-            modelAttributes = Object.fromEntries(Object.entries(model.attribute).filter(([key]) => ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"].includes(key)));
+            modelAttributes = Radio.request("Util", "pick", model.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
             modelAttributes.gfiFeatureList = [];
             // Feature
             if (!featureAtPixel.getProperties().hasOwnProperty("features")) {
@@ -492,7 +492,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
             // Cluster Feature
             else {
                 featureAtPixel.get("features").forEach(feature => {
-                    modelAttributes = Object.fromEntries(Object.entries(model.attributes).filter(([key]) => ["name", "gfiAttributes", "typ", "gfiTheme", "routable"].includes(key)));
+                    modelAttributes = Radio.request("Util", "pick", model.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
                     modelAttributes.gfiFeatureList.push(feature);
                     modelAttributes.feature = feature;
                 });

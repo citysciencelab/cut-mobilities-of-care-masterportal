@@ -94,7 +94,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
             pitch = 0,
             roll = 0;
 
-        const allowPicking = model.allowPicking === "boolean" ? model.allowPicking : true,
+        const allowPicking = typeof model.allowPicking === "boolean" ? model.allowPicking : true,
             attributes = model.attributes ? model.attributes : {};
 
         if (typeof model.url !== "string") {

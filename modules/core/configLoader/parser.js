@@ -186,7 +186,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             }
             else if (key.search("staticlinks") !== -1) {
                 value.forEach(staticlink => {
-                    toolitem = Object.assign(staticlink, {type: "staticlink", parentId: parentId, id: Radio.request("Util", "uniqueId", "_")});
+                    toolitem = Object.assign(staticlink, {type: "staticlink", parentId: parentId, id: Radio.request("Util", "uniqueId", key + "_")});
 
                     this.addItem(toolitem);
                 });
