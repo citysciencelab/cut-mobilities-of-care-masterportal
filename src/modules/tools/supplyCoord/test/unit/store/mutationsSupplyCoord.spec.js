@@ -13,8 +13,9 @@ const {setProjections} = mutations,
 
 describe("mutationsSupplyCoord", function () {
 
-    // not in beforeAll, must be only done once
-    crs.registerProjections(namedProjections);
+    before(() => {
+        crs.registerProjections(namedProjections);
+    }),
 
     describe("setProjections", function () {
         it("initially sets the currentProjectionName to \"EPSG:25832\"", function () {
