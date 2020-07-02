@@ -246,7 +246,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             valueWithNumbers = tempArray.filter(function (val) {
                 const valueArray = val.name.split(",")[0].split(" ");
 
-                return isNaN(parseInt(valueArray[valueArray.length - 1], 10));
+                return !isNaN(parseInt(valueArray[valueArray.length - 1], 10));
             });
 
             tempArray = valueWithNumbers === undefined ? tempArray : valueWithNumbers;
@@ -269,7 +269,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         const tempArray = [...this.get(attribute)];
         let toRemove;
 
-        if (typeof filter === "object") {
+        if (typeof filter === "function" || typeof filter === "object") {
             toRemove = tempArray.filter(item => Object.keys(filter).every(key => item[key] === filter[key]));
             toRemove.forEach(item => {
                 tempArray.splice(tempArray.indexOf(item), 1);
