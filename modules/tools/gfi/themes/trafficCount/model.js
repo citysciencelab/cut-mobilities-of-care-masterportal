@@ -100,7 +100,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     onGFIIsVisibleEvent: function (visible) {
         const api = this.get("propTrafficCountApi");
 
-        if (visible === false) {
+        if (visible === false && api !== null) {
             api.unsubscribeEverything();
             this.stopListening(Radio.channel("GFI"), "isVisible");
             this.clear({silent: true});
