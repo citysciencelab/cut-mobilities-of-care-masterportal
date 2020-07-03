@@ -44,7 +44,7 @@ const DefaultTheme = Theme.extend({
         const element = this.get("gfiContent") !== undefined ? this.get("gfiContent") : [],
             children = [];
 
-        if (element === "string" && element.match(/content="text\/html/g)) {
+        if (typeof element === "string" && element.match(/content="text\/html/g)) {
             children.push(element);
         }
         else {

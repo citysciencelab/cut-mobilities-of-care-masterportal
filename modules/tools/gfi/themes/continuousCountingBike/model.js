@@ -328,10 +328,12 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             legendArray = data ? this.getLegendAttributes(data[0]) : "",
             year = data ? data[0].year : "";
 
-        data.forEach(val => {
-            val.timestamp = moment(val.timestamp).format("w");
-            newData.push(val);
-        });
+        if(data){
+            data.forEach(val => {
+                val.timestamp = moment(val.timestamp).format("w");
+                newData.push(val);
+            });
+        }
 
         return {
             data: newData,
