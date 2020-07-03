@@ -15,7 +15,7 @@ describe("mutationsSupplyCoord", function () {
 
     before(() => {
         crs.registerProjections(namedProjections);
-    }),
+    });
 
     describe("setProjections", function () {
         it("initially sets the currentProjectionName to \"EPSG:25832\"", function () {
