@@ -86,7 +86,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
                 mapWidth = $("#map").width() - 40,
                 gfiLeft = parseInt(this.$el.offsetParent().css("left"), 10),
                 gfiRight = gfiLeft + gfiWidth,
-                newLeft = gfiLeft - (gfiRight - mapWidth);
+                newLeft = gfiLeft - (gfiRight - mapWidth) - 40;
 
             if (gfiRight > mapWidth) {
                 this.$el.offsetParent().css("left", newLeft + "px");
