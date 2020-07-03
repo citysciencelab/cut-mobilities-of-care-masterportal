@@ -163,7 +163,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     toggleTab: function (tabValue) {
-        console.info(tabValue);
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport");
