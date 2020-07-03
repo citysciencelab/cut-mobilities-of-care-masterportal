@@ -111,7 +111,7 @@ describe("SupplyCoord.vue", () => {
             await wrapper.vm.$nextTick();
 
             expect(store.state.Tools.SupplyCoord.active).to.be.false;
-            expect(wrapper.find("#ssupply-coord").exists()).to.be.false;
+            expect(wrapper.find("#supply-coord").exists()).to.be.false;
         });
         it("method selectionChanged sets currentSelection", () => {
             const value = "EPSG:25832",
