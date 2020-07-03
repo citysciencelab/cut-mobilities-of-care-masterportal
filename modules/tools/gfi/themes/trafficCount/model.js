@@ -59,7 +59,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         yearInterval: "1-Woche",
         dayDatepicker: null,
         weekDatepicker: null,
-        yearDatepicker: null
+        yearDatepicker: null,
+        tabValue: "infos"
     }),
 
 
@@ -152,7 +153,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         this.setPropMeansOfTransport(meansOfTransport);
 
         // init the tab for infos
-        this.toggleTab("infos");
+        this.toggleTab(this.get("tabValue"));
     },
 
     /**
@@ -162,6 +163,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {Void}  -
      */
     toggleTab: function (tabValue) {
+        console.info(tabValue);
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport");
@@ -669,6 +671,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 "valuesChanged": this.dayDatepickerValueChanged
             });
             this.trigger("renderDayDatepicker");
+            this.get("dayDatepicker").updateValues(moment().toDate());
+        }
+        else {
+            this.trigger("renderDayDatepicker");
         }
     },
 
@@ -755,6 +761,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 "valuesChanged": this.weekDatepickerValueChanged
             });
             this.trigger("renderWeekDatepicker");
+            this.get("weekDatepicker").updateValues(moment().toDate());
+        }
+        else {
+            this.trigger("renderWeekDatepicker");
         }
     },
 
@@ -835,6 +845,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             this.listenTo(this.get("yearDatepicker"), {
                 "valuesChanged": this.yearDatepickerValueChanged
             });
+            this.trigger("renderYearDatepicker");
+            this.get("yearDatepicker").updateValues(moment().startOf("year").toDate());
+        }
+        else {
             this.trigger("renderYearDatepicker");
         }
     },

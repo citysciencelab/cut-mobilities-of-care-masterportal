@@ -76,7 +76,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             if (date.get("minViewMode") === "years" && date.get("maxViewMode") === "years") {
                 date.get("inputs").datepicker("setDate", date.get("date"));
             }
-            else {
+            else if (!Array.isArray(date.get("date"))) {
                 date.get("inputs").datepicker("update", moment(date.get("date")).format("DD.MM.YYYY"));
             }
         }

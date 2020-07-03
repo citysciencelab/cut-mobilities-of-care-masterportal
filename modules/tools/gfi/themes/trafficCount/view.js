@@ -2,7 +2,6 @@ import ThemeView from "../view";
 import TrafficCountTemplate from "text-loader!./template.html";
 import SnippetDatepickerView from "../../../../snippets/datepicker/view";
 import ExportButtonView from "../../../../snippets/exportButton/view";
-import moment from "moment";
 
 const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype */{
     events: {
@@ -71,6 +70,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         this.resize();
         this.setCurrentTabClassFooter(value);
         this.setContentScrollbar(value);
+        this.model.set("tabValue", value);
         this.renderExportButton(value);
         this.model.toggleTab(value);
     },
@@ -495,17 +495,14 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
 
     renderDayDatepicker: function () {
         this.$el.find("#dayDateSelector").append(new SnippetDatepickerView({model: this.model.get("dayDatepicker")}).render().el);
-        this.model.get("dayDatepicker").updateValues(moment().toDate());
     },
 
     renderWeekDatepicker: function () {
         this.$el.find("#weekDateSelector").append(new SnippetDatepickerView({model: this.model.get("weekDatepicker")}).render().el);
-        this.model.get("weekDatepicker").updateValues(moment().toDate());
     },
 
     renderYearDatepicker: function () {
         this.$el.find("#yearDateSelector").append(new SnippetDatepickerView({model: this.model.get("yearDatepicker")}).render().el);
-        this.model.get("yearDatepicker").updateValues(moment().startOf("year").toDate());
     },
 
     /**
