@@ -116,71 +116,76 @@ export default {
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
-            <p
-                id="cta"
-            >
-                {{ $t("modules.tools.kmlImport.captions.intro") }}
-            </p>
             <div
-                id="drop-area-fake"
-                class="vh-center-outer-wrapper"
-                :class="dropZoneAdditionalClass"
+                v-if="isActive"
+                id="kml-import"
             >
-                <div
-                    class="vh-center-inner-wrapper"
+                <p
+                    id="cta"
                 >
-                    <p
-                        class="caption"
+                    {{ $t("modules.tools.kmlImport.captions.intro") }}
+                </p>
+                <div
+                    id="drop-area-fake"
+                    class="vh-center-outer-wrapper"
+                    :class="dropZoneAdditionalClass"
+                >
+                    <div
+                        class="vh-center-inner-wrapper"
                     >
-                        {{ $t("modules.tools.kmlImport.captions.dropzone") }}
-                    </p>
+                        <p
+                            class="caption"
+                        >
+                            {{ $t("modules.tools.kmlImport.captions.dropzone") }}
+                        </p>
+                    </div>
+
+                    <div
+                        id="drop-area"
+                        @drop.prevent="onDrop"
+                        @dragover.prevent
+                        @dragenter.prevent="onDZDragenter"
+                        @dragleave="onDZDragend"
+                        @mouseenter="onDZMouseenter"
+                        @mouseleave="onDZMouseleave"
+                    />
+                </div>
+
+                <div>
+                    <label
+                        id="upload-button-wrapper"
+                    >
+                        <input
+                            type="file"
+                            @change="onInputChange"
+                        />
+                        {{ $t("modules.tools.kmlImport.captions.browse") }}
+                    </label>
                 </div>
 
                 <div
-                    id="drop-area"
-                    @drop.prevent="onDrop"
-                    @dragover.prevent
-                    @dragenter.prevent="onDZDragenter"
-                    @dragleave="onDZDragend"
-                    @mouseenter="onDZMouseenter"
-                    @mouseleave="onDZMouseleave"
+                    id="h-seperator"
                 />
-            </div>
 
-            <div>
-                <label
-                    id="upload-button-wrapper"
+                <div
+                    id="selectedFiletype-form-container"
                 >
-                    <input
-                        type="file"
-                        @change="onInputChange"
-                    />
-                    {{ $t("modules.tools.kmlImport.captions.browse") }}
-                </label>
-            </div>
-
-            <div
-                id="h-seperator"
-            />
-
-            <div
-                id="selectedFiletype-form-container"
-            >
-                <form>
-                    <label
-                        v-for="(alertCategory, categoryKey) of supportedFiletypes"
-                        :key="categoryKey"
-                    >
-                        <input
-                            v-model="selectedFiletype"
-                            type="radio"
-                            :value="categoryKey"
-                            name="selectedFiletype"
-                            @input="setSelectedFiletype"
-                        />
-                        {{ $t(alertCategory.caption) }}
-                    </label>
-                </form>
+                    <form>
+                        <label
+                            v-for="(alertCategory, categoryKey) of supportedFiletypes"
+                            :key="categoryKey"
+                        >
+                            <input
+                                v-model="selectedFiletype"
+                                type="radio"
+                                :value="categoryKey"
+                                name="selectedFiletype"
+                                @input="setSelectedFiletype"
+                            />
+                            {{ $t(alertCategory.caption) }}
+                        </label>
+                    </form>
+                </div>
             </div>
         </template>
     </Tool>
