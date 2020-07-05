@@ -15,8 +15,8 @@ const TableTheme = Theme.extend({
     identifyColNames: function () {
         let colNames;
 
-        if (_.isUndefined(this.get("gfiContent")) === false) {
-            colNames = _.keys(this.get("gfiContent")[0]);
+        if (this.get("gfiContent") !== undefined) {
+            colNames = Object.keys(this.get("gfiContent")[0]);
 
             this.setColNames(colNames);
         }
@@ -36,22 +36,22 @@ const TableTheme = Theme.extend({
      * @returns {void}
      */
     destroy: function () {
-        _.each(this.get("gfiContent"), function (element) {
+        this.get("gfiContent").forEach(element => {
             let children;
 
-            if (_.has(element, "children")) {
-                children = _.values(_.pick(element, "children"))[0];
+            if (element.hasOwnProperty("children")) {
+                children = element.children;
 
-                _.each(children, function (child) {
+                children.forEach(child => {
                     child.val.remove();
-                }, this);
+                });
             }
-        }, this);
-        _.each(this.get("gfiRoutables"), function (element) {
-            if (_.isObject(element) === true) {
+        });
+        this.get("gfiRoutables").forEach(element => {
+            if (typeof element === "object") {
                 element.remove();
             }
-        }, this);
+        });
     }
 });
 

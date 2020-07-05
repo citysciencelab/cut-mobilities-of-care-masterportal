@@ -122,7 +122,10 @@
             </thead>
 
             <tbody>
-            <%  _.each(tableContent, function(value, key) { %>
+            <%  Object.entries(tableContent).forEach(function(content) {
+                const value = content[1],
+                    key = content[0];
+            %>
                 <tr>
                     <td>
                         <%= key %>

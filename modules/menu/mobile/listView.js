@@ -61,31 +61,28 @@ const MobileMenu = Backbone.View.extend({
 
         models = this.collection.add(lightModels);
 
-        models = _.sortBy(models, function (layer) {
-            return layer.get("selectionIDX");
-        }).reverse();
+        models.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             model.setIsVisibleInTree(false);
-        }, this);
+        });
 
         this.addViews(models);
     },
 
     renderSelection: function (withAnimation) {
-        let models = this.collection.where({isSelected: true, type: "layer"});
+        const models = this.collection.where({isSelected: true, type: "layer"});
 
         if (withAnimation) {
             this.slideModels("descent", models, "tree", "Selection");
         }
         else {
             // Views löschen um doppeltes Zeichnen zu vermeiden
-            _.each(models, function (model) {
+            models.forEach(model => {
                 model.setIsVisibleInTree(false);
-            }, this);
-            models = _.sortBy(models, function (layer) {
-                return layer.get("selectionIDX");
-            }).reverse();
+            });
+
+            models.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
 
             this.addViews(models);
         }
@@ -114,8 +111,7 @@ const MobileMenu = Backbone.View.extend({
         const that = this;
         let slideIn,
             slideOut,
-            groupedModels,
-            modelsToShowSelection;
+            groupedModels;
 
         if (direction === "descent") {
             slideIn = "right";
@@ -130,32 +126,24 @@ const MobileMenu = Backbone.View.extend({
 
             that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
             if (currentList === "Selection") {
-                modelsToShowSelection = _.sortBy(modelsToShow, function (layer) {
-                    return layer.get("selectionIDX");
-                }).reverse();
-                that.addViews(modelsToShowSelection);
+                modelsToShow.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
+                that.addViews(modelsToShow);
             }
             else {
                 // Gruppieren nach Folder und Rest
-                groupedModels = _.groupBy(modelsToShow, function (model) {
+                groupedModels = Radio.request("Util", "groupBy", modelsToShow, function (model) {
                     return model.get("type") === "folder" ? "folder" : "other";
                 });
 
                 // Im default-Tree werden folder und layer alphabetisch sortiert
                 if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
-                    groupedModels.folder = _.sortBy(groupedModels.folder, function (item) {
-                        return item.get("name");
-                    });
-                    groupedModels.other = _.sortBy(groupedModels.other, function (item) {
-                        return item.get("name");
-                    });
+                    groupedModels.folder.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
+                    groupedModels.other.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
                 }
                 // Folder zuerst zeichnen
                 that.addViews(groupedModels.folder);
 
-                groupedModels.other = _.sortBy(groupedModels.other, function (layer) {
-                    return layer.get("selectionIDX");
-                }).reverse();
+                groupedModels.other.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).rerverse();
                 that.addViews(groupedModels.other);
             }
         });
@@ -178,13 +166,12 @@ const MobileMenu = Backbone.View.extend({
      */
     addViews: function (models) {
         const treeType = this.doRequestTreeType(),
-            newModels = _.reject(models, function (model) {
-                return model.get("onlyDesktop") === true;
-            });
+            newModels = models.filter(model => !(model.get("onlyDesktop") === true));
+
         let nodeView,
             attr;
 
-        _.each(newModels, function (model) {
+        newModels.forEach(model => {
             model.setIsVisibleInTree(true);
             switch (model.get("type")) {
                 case "folder": {
@@ -227,7 +214,7 @@ const MobileMenu = Backbone.View.extend({
                 }
             }
             this.doAppendNodeView(nodeView);
-        }, this);
+        });
     },
 
     /**

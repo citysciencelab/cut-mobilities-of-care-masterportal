@@ -9,7 +9,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @constructs
      */
-    defaults: _.extend({}, Parser.prototype.defaults, {
+    defaults: Object.assign({}, Parser.prototype.defaults, {
     }),
 
     /**
@@ -34,16 +34,16 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
     /**
      * Filters all objects from the layerList that are not WMS and are assigned to at least one data record.
-     * @param  {Object[]} layerList - Objekte from services.json
+     * @param  {Object[]} [layerList=[]] - Objekte from services.json
      * @return {Object[]} layerList - Objekte from services.json
      */
-    filterList: function (layerList) {
+    filterList: function (layerList = []) {
         return layerList.filter(function (element) {
-            if (!_.has(element, "datasets")) {
+            if (!element.hasOwnProperty("datasets")) {
                 return false;
             }
 
-            return element.datasets.length > 0 && _.contains(["WMS", "Terrain3D", "TileSet3D", "Oblique"], element.typ);
+            return element.datasets.length > 0 && ["WMS", "Terrain3D", "TileSet3D", "Oblique"].includes(element.typ);
         });
     },
 
@@ -54,15 +54,13 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      */
     deleteLayersIncludeCache: function (layerList) {
         const cacheLayerMetaIDs = [],
-            cacheLayer = _.where(layerList, {cache: true});
+            cacheLayer = layerList.filter(item => item.cache === true);
 
-        _.each(cacheLayer, function (layer) {
+        cacheLayer.forEach(layer => {
             cacheLayerMetaIDs.push(layer.datasets[0].md_id);
         });
 
-        return _.reject(layerList, function (element) {
-            return _.contains(cacheLayerMetaIDs, element.datasets[0].md_id) && element.cache === false;
-        });
+        return layerList.filter(element => !(cacheLayerMetaIDs.includes(element.datasets[0].md_id) && element.cache === false));
     },
 
     /**
@@ -76,11 +74,11 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             return element.datasets.length > 1;
         });
 
-        _.each(layerListPerDataset, function (layer) {
-            _.each(layer.datasets, function (ds, key) {
-                const newLayer = _.clone(layer);
+        layerListPerDataset.forEach(layer => {
+            layer.datasets.forEach((ds, index) => {
+                const newLayer = {...layer};
 
-                newLayer.id = layer.id + "_" + key;
+                newLayer.id = layer.id + "_" + index;
                 newLayer.datasets = [ds];
                 layerList.push(newLayer);
             });
@@ -97,16 +95,17 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     parseLayerList: function (layerList, Layer3dList) {
-        const baseLayerIds = _.flatten(_.pluck(this.get("baselayer").Layer, "id")),
+        const baseLayerIdsPluck = this.get("baselayer").Layer !== undefined ? this.get("baselayer").Layer.map(value => value.id) : [],
+            baseLayerIds = Array.isArray(baseLayerIdsPluck) ? baseLayerIdsPluck.reduce((acc, val) => acc.concat(val), []) : baseLayerIdsPluck,
             // Unterscheidung nach Overlay und Baselayer
-            typeGroup = _.groupBy(layerList, function (layer) {
+            typeGroup = Radio.request("Util", "groupBy", layerList, function (layer) {
                 if (layer.typ === "Terrain3D" || layer.typ === "TileSet3D" || layer.typ === "Entities3D") {
                     return "layer3d";
                 }
                 else if (layer.typ === "Oblique") {
                     return "oblique";
                 }
-                return _.contains(baseLayerIds, layer.id) ? "baselayers" : "overlays";
+                return baseLayerIds.includes(layer.id) ? "baselayers" : "overlays";
             });
 
         // Models für die Hintergrundkarten erzeugen
@@ -121,13 +120,13 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
     /**
      * todo
-     * @param {*} layerList - todo
+     * @param {*} [layerList=[]] - todo
      * @returns {void}
      */
-    createObliqueLayer: function (layerList) {
-        _.each(layerList, function (layer) {
-            this.addItem(_.extend({type: "layer"}, layer));
-        }, this);
+    createObliqueLayer: function (layerList = []) {
+        layerList.forEach(layer => {
+            this.addItem(Object.assign({type: "layer"}, layer));
+        });
     },
 
     /**
@@ -145,10 +144,10 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             layer3DVisible;
 
         if (layerList && Array.isArray(layerList)) {
-            layerList.forEach(function (layer) {
+            layerList.forEach(layer => {
                 if (Layer3dList && typeof Layer3dList === "object" && Layer3dList.Layer && Layer3dList.Layer.length > 0) {
 
-                    layer3DVisibility = Layer3dList.Layer.filter(function (layer3D) {
+                    layer3DVisibility = Layer3dList.Layer.filter(layer3D => {
                         return layer3D.id === layer.id;
                     });
                     if (layer3DVisibility[0] !== undefined) {
@@ -156,14 +155,14 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     }
                 }
 
-                this.addItem(_.extend({
+                this.addItem(Object.assign({
                     type: "layer",
                     parentId: "3d_daten",
                     level: 0,
                     isVisibleInTree: isVisibleInTree,
                     isSelected: layer3DVisible ? layer3DVisible : false
                 }, layer));
-            }, this);
+            });
         }
     },
 
@@ -174,21 +173,23 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {void}
      */
     createBaselayer: function (layerList) {
-        _.each(this.get("baselayer").Layer, function (layer) {
+        const baseLayer = this.get("baselayer").Layer !== undefined ? this.get("baselayer").Layer : [];
+
+        baseLayer.forEach(layer => {
             let newLayer;
 
-            if (_.isArray(layer.id)) {
-                newLayer = _.extend(this.mergeObjectsByIds(layer.id, layerList), _.omit(layer, "id"));
+            if (Array.isArray(layer.id)) {
+                newLayer = Object.assign(this.mergeObjectsByIds(layer.id, layerList), Radio.request("Util", "omit", layer, ["id"]));
             }
             else {
-                newLayer = _.extend(_.findWhere(layerList, {id: layer.id}), _.omit(layer, "id"));
+                newLayer = Object.assign(layerList.find(singleLayer => singleLayer.id === layer.id), Radio.request("Util", "omit", layer, ["id"]));
             }
 
-            if (_.isUndefined(newLayer)) {
+            if (newLayer === undefined) {
                 console.error("Layer with id: " + layer.id + " cannot be found in layerlist. Possible error: layer got removed in function 'deleteLayersIncludeCache'.");
             }
             else {
-                this.addItem(_.extend({
+                this.addItem(Object.assign({
                     isBaseLayer: true,
                     isVisibleInTree: true,
                     level: 0,
@@ -196,14 +197,14 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     type: "layer"
                 }, newLayer));
             }
-        }, this);
+        });
     },
 
     /**
      * subdivide the layers grouped by metaName into folders
      * and layers if a MetaNameGroup has only one entry
      * it should be added as layer and not as folder
-     * @param {object[]} metaNameGroups - todo
+     * @param {object} metaNameGroups - todo
      * @param {string} name - todo
      * @returns {object} categories
     */
@@ -212,7 +213,10 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             layer = [],
             categories = {};
 
-        _.each(metaNameGroups, function (group, groupname) {
+        Object.entries(metaNameGroups).forEach(metaName => {
+            const group = metaName[1],
+                groupname = metaName[0];
+
             // Wenn eine Gruppe mehr als einen Eintrag hat -> Ordner erstellen
             if (Object.keys(group).length > 1) {
                 folder.push({
@@ -228,7 +232,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             categories.layer = layer;
             categories.id = this.createUniqId(name);
             categories.name = name;
-        }, this);
+        });
         return categories;
     },
 
@@ -239,7 +243,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      */
     groupDefaultTreeOverlays: function (overlays) {
         const tree = {},
-            categoryGroups = _.groupBy(overlays, function (layer) {
+            categoryGroups = Radio.request("Util", "groupBy", overlays, function (layer) {
                 // Gruppierung nach Opendatakategorie
                 if (this.get("category") === "Opendata") {
                     return layer.datasets[0].kategorie_opendata[0];
@@ -252,17 +256,19 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     return layer.datasets[0].kategorie_organisation;
                 }
                 return "Nicht zugeordnet";
-            }, this);
+            }.bind(this));
 
         // Gruppierung nach MetaName
-        _.each(categoryGroups, function (group, name) {
-            const metaNameGroups = _.groupBy(group, function (layer) {
-                return layer.datasets[0].md_name;
-            });
+        Object.entries(categoryGroups).forEach(value => {
+            const group = value[1],
+                name = value[0],
+                metaNameGroups = Radio.request("Util", "groupBy", group, function (layer) {
+                    return layer.datasets[0].md_name;
+                });
 
             // in Layer und Ordner unterteilen
             tree[name] = this.splitIntoFolderAndLayer(metaNameGroups, name);
-        }, this);
+        });
         this.createModelsForDefaultTree(tree);
     },
 
@@ -277,7 +283,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             sortedCategories = [],
             isQuickHelpSet = Radio.request("QuickHelp", "isSet");
 
-        _.each(sortedKeys, function (key) {
+        sortedKeys.forEach(key => {
             sortedCategories.push(tree[key]);
         });
         // Kategorien erzeugen
@@ -290,7 +296,9 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
             glyphicon: "glyphicon-plus-sign",
             quickHelp: isQuickHelpSet
         });
-        _.each(tree, function (category) {
+        Object.keys(tree).forEach(element => {
+            const category = tree[element];
+
             // Unterordner erzeugen
             this.addItems(category.folder, {
                 glyphicon: "glyphicon-plus-sign",
@@ -302,7 +310,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 type: "folder",
                 quickHelp: isQuickHelpSet
             });
-            _.each(category.layer, function (layer) {
+            category.layer.forEach(layer => {
                 layer.name = layer.datasets[0].md_name;
             });
             // Layer dirket in Kategorien
@@ -312,7 +320,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 parentId: category.id,
                 type: "layer"
             });
-            _.each(category.folder, function (folder) {
+            category.folder.forEach(folder => {
                 // Layer in der untertesten Ebene erzeugen
                 this.addItems(folder.layer, {
                     isBaseLayer: false,
@@ -320,8 +328,8 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                     parentId: folder.id,
                     type: "layer"
                 });
-            }, this);
-        }, this);
+            });
+        });
     }
 });
 

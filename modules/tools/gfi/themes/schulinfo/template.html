@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <div class="schulinfo-head row">
     <div class="btn-group btn-group-sm col-xs-9">
-        <% _.each(featureInfos, function (kategory) { %>
+        <% featureInfos.forEach(function (kategory) { %>
             <% if (kategory.attributes.length > 0){ %>
                 <button value = "<%=kategory.name%>" class="btn btn-default <%if(kategory.isSelected) {print('btn-select');}%>"><%=kategory.name%></button>
             <% } %>
@@ -20,12 +20,12 @@
 <div class="schulinfo-content row">
     <table class="table table-condensed table-hover">
         <tbody>
-        <%_.each(selectedContent.attributes, function (attribute) { %>
+        <%selectedContent.attributes.forEach(function (attribute) { %>
             <tr colspan = "2">
                 <td class="bold"><%= attribute.attrName %></td>
                 <td>
-                    <% if (_.isArray(attribute.attrValue)) {
-                        _.each(attribute.attrValue, function (value) {
+                    <% if (Array.isArray(attribute.attrValue)) {
+                        attribute.attrValue.forEach(function (value) {
                             if (value.search("http") !== -1) { %>
                                 <a href="<%= value %>" target="_blank"><%= value.trim().substring(7) %></a>
                             <%

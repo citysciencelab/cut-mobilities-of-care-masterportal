@@ -229,11 +229,11 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
 
     /**
      * adds values that should be initially selected (rules) to the map object
-     * @param  {object} featureAttributesMap - Mapobject
-     * @param  {object} rules - contains values to be added
+     * @param  {object[]} [featureAttributesMap={}] - Mapobject
+     * @param  {object[]} [rules=[]] - contains values to be added
      * @return {object} featureAttributesMap
      */
-    mapRules: function (featureAttributesMap, rules = []) {
+    mapRules: function (featureAttributesMap = [], rules = []) {
         let attrMap;
 
         rules.forEach(rule => {

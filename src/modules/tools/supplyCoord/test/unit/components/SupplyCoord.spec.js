@@ -1,10 +1,10 @@
 import Vuex from "vuex";
-import * as crs from "masterportalAPI/src/crs";
-import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import SupplyCoordComponent from "../../../components/SupplyCoord.vue";
-import SupplyCoord from "../../../store/indexSupplyCoord";
 import {expect} from "chai";
 import sinon from "sinon";
+import {config, shallowMount, createLocalVue} from "@vue/test-utils";
+import * as crs from "masterportalAPI/src/crs";
+import SupplyCoordComponent from "../../../components/SupplyCoord.vue";
+import SupplyCoord from "../../../store/indexSupplyCoord";
 
 const localVue = createLocalVue(),
     namedProjections = [
@@ -103,28 +103,79 @@ describe("SupplyCoord.vue", () => {
         expect(selected.length).to.equal(1);
         expect(selected.at(0).attributes().value).to.equal("EPSG:25832");
     });
-    it("method close sets active to false", async () => {
-        wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
+    describe("SupplyCoord.vue methods", () => {
+        it("close sets active to false", async () => {
+            wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
 
-        wrapper.vm.close();
-        await wrapper.vm.$nextTick();
+            wrapper.vm.close();
+            await wrapper.vm.$nextTick();
 
-        expect(store.state.Tools.SupplyCoord.active).to.be.false;
-        expect(wrapper.find("#ssupply-coord").exists()).to.be.false;
+            expect(store.state.Tools.SupplyCoord.active).to.be.false;
+            expect(wrapper.find("#supply-coord").exists()).to.be.false;
+        });
+        it("method selectionChanged sets currentSelection", () => {
+            const value = "EPSG:25832",
+                event = {
+                    target: {
+                        value: value
+                    }
+                };
+
+            wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
+            wrapper.vm.selectionChanged(event);
+            expect(store.state.Tools.SupplyCoord.currentSelection).to.be.equals(value);
+            expect(store.state.Tools.SupplyCoord.currentProjectionName).to.be.equals(value);
+            expect(store.state.Tools.SupplyCoord.currentProjection.name).to.be.equals(value);
+            expect(store.state.Tools.SupplyCoord.coordinatesEastingField).to.be.equals("0.00");
+            expect(store.state.Tools.SupplyCoord.coordinatesNorthingField).to.be.equals("0.00");
+
+        });
+        it("createInteraction sets projections and adds interaction", () => {
+            wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
+            expect(store.state.Tools.SupplyCoord.selectPointerMove).to.be.null;
+            wrapper.vm.createInteraction();
+            expect(typeof store.state.Tools.SupplyCoord.selectPointerMove).to.be.equals("object");
+            expect(typeof store.state.Tools.SupplyCoord.selectPointerMove.handleMoveEvent).to.be.equals("function");
+        });
+        it("removeInteraction removes interaction", () => {
+            wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
+            expect(typeof store.state.Tools.SupplyCoord.selectPointerMove).to.be.equals("object");
+            wrapper.vm.removeInteraction();
+            expect(store.state.Tools.SupplyCoord.selectPointerMove).to.be.null;
+        });
+        it("label returns correct path", () => {
+            const key = "key";
+            let ret = "";
+
+            wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
+            store.commit("Tools/SupplyCoord/setActive", true);
+            store.commit("Tools/SupplyCoord/setCurrentProjectionName", "EPSG:4326");
+            ret = wrapper.vm.label(key);
+            expect(ret).to.be.equals("modules.tools.supplyCoord.hdms.key");
+
+            store.commit("Tools/SupplyCoord/setCurrentProjectionName", "EPSG:31467");
+            ret = wrapper.vm.label(key);
+            expect(ret).to.be.equals("modules.tools.supplyCoord.cartesian.key");
+
+            store.commit("Tools/SupplyCoord/setCurrentProjectionName", null);
+            ret = wrapper.vm.label(key);
+            expect(ret).to.be.equals("modules.tools.supplyCoord.cartesian.key");
+        });
     });
-    it("method selectionChanged sets currentSelection", async () => {
-        const value = "EPSG:25832",
-            event = {
-                target: {
-                    value: value
-                }
-            };
+    describe("SupplyCoord.vue watcher", () => {
+        it("watch to active shall create/remove PointerMove interaction", async () => {
+            wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
 
-        wrapper = shallowMount(SupplyCoordComponent, {store, localVue});
+            store.commit("Tools/SupplyCoord/setActive", true);
+            await wrapper.vm.$nextTick();
+            expect(typeof store.state.Tools.SupplyCoord.selectPointerMove).to.be.equals("object");
+            expect(typeof store.state.Tools.SupplyCoord.selectPointerMove.handleMoveEvent).to.be.equals("function");
 
-        wrapper.vm.selectionChanged(event);
+            store.commit("Tools/SupplyCoord/setActive", false);
+            await wrapper.vm.$nextTick();
 
-        expect(store.state.Tools.SupplyCoord.currentSelection).to.be.equals(value);
+            expect(store.state.Tools.SupplyCoord.updatePosition).to.be.true;
+            expect(store.state.Tools.SupplyCoord.selectPointerMove).to.be.null;
+        });
     });
-
 });

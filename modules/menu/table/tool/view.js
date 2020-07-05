@@ -20,7 +20,7 @@ const ToolView = Backbone.View.extend({
                 return model.get("type") === "tool" || model.get("type") === "folder";
             });
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             switch (model.get("type")) {
                 case "tool": {
                     this.addToolView(model);
@@ -34,7 +34,7 @@ const ToolView = Backbone.View.extend({
                 }
                 default:
             }
-        }, this);
+        });
         return this;
     },
     addToolsMenuView: function () {
