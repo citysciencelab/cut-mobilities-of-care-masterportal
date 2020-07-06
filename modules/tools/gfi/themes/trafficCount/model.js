@@ -697,7 +697,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             this.setDayTableContent([]);
         }
         else {
-            dates.forEach(date => {
+            dates.sort((earlyDate, lateDate) => {
+                // Showing earlier date first
+                return earlyDate - lateDate;
+            }).forEach(date => {
                 const fromDate = moment(date).format("YYYY-MM-DD");
 
                 timeSettings.push({
@@ -708,10 +711,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
 
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
-                const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
-
-                this.refreshDiagramDay(sortedDatasets, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "day", "Datum", timeSettings, meansOfTransport);
+                this.refreshDiagramDay(datasets, meansOfTransport, selector);
+                this.prepareTableContent(this.prepareDatasetHourly(datasets[0]), "day", "Datum", timeSettings, meansOfTransport);
             }, errormsg => {
                 this.refreshDiagramDay([]);
                 this.setDayTableContent([]);
@@ -790,7 +791,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             this.setWeekTableContent([]);
         }
         else {
-            dates.forEach(date => {
+            dates.sort((earlyDate, lateDate) => {
+                // Showing earlier date first
+                return earlyDate - lateDate;
+            }).forEach(date => {
                 timeSettings.push({
                     interval: this.get("weekInterval"),
                     from: moment(date).startOf("isoWeek").format("YYYY-MM-DD"),
@@ -799,10 +803,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
 
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
-                const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
-
-                this.refreshDiagramWeek(sortedDatasets, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareDatasetHourly(sortedDatasets[0]), "week", "Woche", timeSettings, meansOfTransport);
+                this.refreshDiagramWeek(datasets, meansOfTransport, selector);
+                this.prepareTableContent(this.prepareDatasetHourly(datasets[0]), "week", "Woche", timeSettings, meansOfTransport);
             }, errormsg => {
                 this.refreshDiagramWeek([]);
                 this.setWeekTableContent([]);
@@ -872,7 +874,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             this.setYearTableContent([]);
         }
         else {
-            dates.forEach(date => {
+            dates.sort((earlyDate, lateDate) => {
+                // Showing earlier date first
+                return earlyDate - lateDate;
+            }).forEach(date => {
                 years.push(moment(date).format("YYYY"));
                 timeSettings.push({
                     interval: this.get("yearInterval"),
@@ -884,10 +889,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             });
 
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
-                const sortedDatasets = this.getSortedDatasets(datasets, meansOfTransport);
-
-                this.refreshDiagramYear(sortedDatasets, years, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareYearDataset(sortedDatasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
+                this.refreshDiagramYear(datasets, years, meansOfTransport, selector);
+                this.prepareTableContent(this.prepareYearDataset(datasets[0]), "year", "Jahr", timeSettings, meansOfTransport);
             }, errormsg => {
                 this.refreshDiagramYear([]);
                 this.setYearTableContent([]);
@@ -899,33 +902,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 });
             });
         }
-    },
-
-    /**
-     * Sorts the datasets by date
-     * @param {Object[]} datasets -
-     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
-     * @returns {Object[]} sorted datasets
-     */
-    getSortedDatasets: function (datasets, meansOfTransport) {
-        datasets.sort((firstElement, secondElement) => {
-            const firstDate = new Date(Object.keys(firstElement[meansOfTransport])[0]),
-                secondDate = new Date(Object.keys(secondElement[meansOfTransport])[0]);
-
-            // compare the 2 dates
-            // sort firstElement to a lower index than secondElement
-            if (firstDate < secondDate) {
-                return -1;
-            }
-            // sort secondElement to a lower index than firstElement
-            if (firstDate > secondDate) {
-                return 1;
-            }
-            // leave firstElement and secondElement unchanged in relation to each other,
-            // but sorted in relation to all other elements
-            return 0;
-        });
-        return datasets;
     },
 
     /**
