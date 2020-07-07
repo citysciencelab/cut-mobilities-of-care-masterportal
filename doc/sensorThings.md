@@ -149,9 +149,9 @@ Um das Problem fehlender *Retained Messages* zu lösen, haben wir für das Maste
 ## SensorThingsHttp ##
 Die SensorThingsAPI sieht ein automatisches Splitten von zu großen Server-Antworten vor.
 Bietet der Broker (Server) diese Funktion an, kann sie u.a. dafür genutzt werden den aktuellen Fortschritt (Progress) des Aufrufes in der UI darzustellen (siehe [Automatisches Splitten](#markdown-header-automatisches-splitten)).
-Die Antwort des Servers kann zusätzlich auf einen bestimmten Karten-Ausschnitt (z.B. der Extent des Browsers) eingegrenzt werden. Hierdurch wird die Server-Antwort kleiner (siehe [Automatischer Aufruf im Karten-Ausschnitt](#markdown-header-automatischer-aufruf-im-karten-ausschnitt)).
+Die Antwort des Servers kann zusätzlich auf einen bestimmten Karten-Ausschnitt (z.B. der Extent des Browsers) eingegrenzt werden. Hierdurch wird die Last auf der Datenbank und die Server-Antwort kleiner (siehe [Automatischer Aufruf im Karten-Ausschnitt](#markdown-header-automatischer-aufruf-im-karten-ausschnitt)).
 
-Für das Masterportal haben wir eine Software-Schicht *SensorThingsHttp* implementiert, die den Aufruf und das Splitting für Sie übernimmt.
+Für das Masterportal haben wir eine Software-Schicht *SensorThingsHttp* implementiert, die den Aufruf im Extent des Browsers und das Splitting für Sie übernimmt.
 
 *Hinweis: Bitte beachten Sie, dass das Splitten der Antwort und der Abruf des aktuellen Karten-Ausschnittes nur verfügbar ist, wenn Ihr Server (z.B. FROST Server) entsprechend aufgesetzt ist.*
 
@@ -178,33 +178,34 @@ const http = new SensorThingsHttp(),
     url = "https://iot.hamburg.de/v1.0/Things";
 
 http.get(url, function (response) {
-    // on success
+    // onsuccess
     // do something with the total response
-
 }, function () {
-    // on start
+    // onstart
     Radio.trigger("Util", "showLoader");
-
 }, function () {
-    // on complete (always called)
+    // oncomplete (always called)
     Radio.trigger("Util", "hideLoader");
-
 }, function (error) {
-    // on error
+    // onerror
     console.warn(error);
-
 }, function (progress) {
-    // on wait
+    // onprogress
     // the progress (percentage = Math.round(progress * 100)) to update your progress bar with
-
 });
 
 ```
 
 Bitte beachten Sie, dass *SensorThingsHttp.get()* asynchron arbeitet. Alle Parameter (die vielen Funktionen) sind optional - außer "url". Natürlich macht es Sinn zumindest den onsuccess-Callback mit zu übergeben um an die Response zu kommen.
 
-Hinweis: Es gibt einen optionalen siebten Parameter (httpClient), der benutzt werden kann um den intern verwendeten default Http-Client zu ersetzen.
-Für den Fall, dass Sie einen eigenen Http-Client vorziehen (intern wird axios verwendet) oder eigene Tests schreiben wollen ist eine Funktion mit drei Parametern als Http-Client nötig: function (url, onsuccess, onerror).
+
+### Konfiguration SensorThingsHttp ###
+Die SensorThingsHttp-Klasse kann beim Erstellen einer neuen Instanz mit folgenden Parametern konfiguriert werden:
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|removeIotLinks|Nein|Boolean|false|entfernt alle Vorkommen von "@iot.navigationLink" und "@iot.selfLink" aus dem Response um das Ergebnis schlank zu halten|const http = new SensorThingsHttp({removeIotLinks: true});|
+|httpClient|Nein|Function|null|Für den Fall, dass Sie einen eigenen Http-Client vorziehen (intern wird axios verwendet) oder eigene Tests schreiben wollen ohne eine externe Schnittstelle aufrufen zu müssen.|const http = new SensorThingsHttp({httpClient: (url, onsuccess, onerror) => {}});|
 
 
 
@@ -231,6 +232,101 @@ Im Datensatz finden Sie den angesprochenen Wert "@iot.nextLink", der auf den nä
 
 Rufen Sie den nächsten Link auf ([https://iot.hamburg.de/v1.0/Things?$skip=100](https://iot.hamburg.de/v1.0/Things?$skip=100)) wird Ihnen ein weiterer Datensatz mit einem "@iot.nextLink" geschickt, usw.
 Das Ende erkennen Sie daran, dass der "@iot.nextLink" fehlt.
+
+
+### Komplexe Strukturen mit @iot.nextLink ###
+Wenn Sie nicht auf die Software-Schicht *SensorThingsHttp* angewiesen sein möchten um mit komplexen Strukturen umzugehen, folgt nun eine Erläuterung auf welchen Mechanismus Sie achten müssen.
+
+Komplexere Aufrufe der SensorThingsApi können zu Ergebnissen mit vielen @iot.nextLink führen.
+Der FROST-Server ist in der Lage jedes gelieferte Array (auch in Unterstrukturen) zu splitten und mit einem @iot.nextLink verfolgbar zu machen.
+Diese @iot.nextLink haben initial den Key des gesplitteten Arrays als Prefix. z.B. Observations@iot.nextLink oder Datastreams@iot.nextLink.
+
+**Beispiel**
+
+Die URL [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))) gibt Ihnen Things mit Datastreams und Observations zurück.
+(Für dieses Beispiel wird durch die Verwendung von $top=X in der Anfrage die Antwort künstlich beschnitten und die Verwendung von @iot.nextLink auf allen Ebenen erzwungen.)
+```
+#!json
+{
+    "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$skip=100&$expand=Datastreams%28%24top%3D2%3B%24expand%3DObservations%28%24top%3D2%29%29",
+    "value" : [ {
+        "Datastreams" : [ {
+            "Observations" : [...],
+            "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13976)/Observations?$top=2&$skip=2",
+        }, {
+            "Observations" : [...],
+            "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13978)/Observations?$top=2&$skip=2",
+        } ],
+        "Datastreams@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29",
+    }]
+}
+```
+
+Folgen wir z.B. Datastreams@iot.nextLink [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29),
+so erhalten wir wiederum eine komplexe Struktur, diesmal auf Basis des Datastreams:
+```
+#!json
+{
+    "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=4&$expand=Observations%28%24top%3D2%29",
+    "value" : [ {
+        "Observations" : [...],
+        "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=2&$skip=2",
+    }]
+}
+```
+
+Zu beachten ist, dass Einzel-Objekte (z.B. ein Thing) ohne @iot.nextLink und ohne dem Key "value" geliefert werden. Die Regeln für Unterstrukturen mit @iot.nextLink bleiben bestehen. z.B.: [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)?$expand=Datastreams($top=2)]
+
+
+
+### Tiefenschranken für @iot.nextLink ###
+Die offensichtlichste Tiefenschranke ist die Abwesenheit eines @iot.nextLink.
+
+Es gibt aber eine zweite nicht sofort erkennbare Tiefenschranke:
+Wird eine SensorThingsAPI-Url oder ein @iot.nextLink durch die Verwendung von $top=X in der Anzahl zu übermittelnder Entitäten beschränkt, erhalten wir dennoch einen @iot.nextLink.
+Folgen wir blind allen @iot.nextLink, dann kann dies zu Kaskaden von Server-Anfragen führen. Bei $top=1 und 1000 Entitäten wären dies z.B. 1000 Netzwerk-Anfragen.
+
+Simples Beispiel: [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1]
+```
+#!json
+{
+  "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1&$skip=1",
+  "value" : [ {...} ]
+}
+```
+
+Leider können wir nicht davon ausgehen, dass @iot.nextLink immer ignoriert werden kann, wenn eine Limitierung mit $top=X vorgenommen wird.
+Wenn das X in $top=X größer ist als die vom Server voreingestellte maximale Anzahl auszuliefernder Entitäten pro Anfrage, dann müssen wir @iot.nextLink folgen um unser Ergebnis zu komplettieren.
+
+_"In addition, if the $top value exceeds the service-driven pagination limitation (...), the $top query option SHALL be discarded and the server-side pagination limitation SHALL be imposed."_
+[https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#51](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#51)
+
+Wir müssen also jeden @iot.nextLink durchsuchen nach Vorkommen von "$top=X" bzw. "%24top=X" und "$skip=Y" bzw. "%24skip=Y" um X und Y für diese zweite sehr versteckte Tiefenschranke auswerten zu können.
+
+Zum Glück sind alle $top=X die sich nicht auf die aktuelle Sammlung von Entitäten beziehen im @iot.nextLink url codiert: z.B. "%24top%3DX"
+
+Wir können also zwischen $top=X auf Root-Ebene und $top=X auf Sub-Ebenen problemlos unterscheiden.
+Beispiel: [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?%24top=2&%24skip=2&%24expand=Observations%28%24top%3D2%29](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?%24top=2&%24skip=2&%24expand=Observations%28%24top%3D2%29)
+
+Hier die regulären Ausdrücke um das relevante X und Y von $top=X bzw. $skip=Y aus einem @iot.nextLink zu holen:
+
+ - Regex für $top=X: /[\$|%24]top=([0-9]+)/
+ - Regex für $skip=X: /[\$|%24]skip=([0-9]+)/
+
+Und hier der Pseudo-Code um eine Tiefenschranke mit $top=X und $skip=Y zu bauen:
+
+```
+// pseudo code, nextLink wird angenommen
+int topX = fetchTopFromNextLink(nextLink);
+int skipX = fetchSkipFromNextLink(nextLink);
+
+if (topX > 0 && topX <= skipX) {
+    // diesem @iot.nextLink nicht mehr folgen (Tiefenschranke erreicht)
+}
+```
+
+
+
 
 
 ### Aufruf mit "@iot.count" ###
