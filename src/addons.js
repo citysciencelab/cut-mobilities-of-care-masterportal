@@ -15,9 +15,19 @@ export default async function (config) {
         const addons = config.map(async addonKey => {
             try {
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, ""),
-                    entryPointParts = entryPoint.split("/"),
-                    storeModule = await import(/* webpackChunkName: "[request]" */ "../addons/" + entryPointParts[0] + "/store/" + entryPointParts[1] + ".js"),
-                    component = await import(/* webpackChunkName: "[request]" */ "../addons/" + entryPointParts[0] + "/components/" + entryPointParts[1] + ".vue");
+                    storeModule = await import(
+                        /* webpackChunkName: "[request]" */
+                        /* webpackInclude: /addons\/**\/*.js/ */
+                        /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+                        "../addons/" + entryPoint + ".js"),
+                    component = await import(
+                        /* webpackChunkName: "[request]" */
+                        /* webpackInclude: /addons\/**\/*.vue/ */
+                        /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+                        "../addons/" + entryPoint + ".vue");
+
+                // Add the component to vue instance globally
+                Vue.component(component.default.name, component.default);
 
                 // Add the addonKey to a global array on vue instance
                 Vue.prototype.$addons.push(component.default.name);

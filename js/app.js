@@ -404,7 +404,10 @@ async function loadApp () {
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
                 Object.keys(i18nextLanguages).forEach((lng) => {
-                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
+                    import(
+                        /* webpackChunkName: "additionalLocales" */
+                        /* webpackInclude: /\additional.json$/ */
+                        `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
@@ -450,10 +453,10 @@ function loadAddOnsAfterLanguageLoaded (allAddons) {
             const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
             import(
-                /* webpackChunkName: "[request]" */ /* webpackExclude: /.+(unittests|tests).+/ */ "../addons/" + entryPoint + ".js"
-            ).catch(err => {
-                console.warn("Loading backbone-addons: cannot load addon, is maybe a Vue addon:", entryPoint, "Error:", err);
-            }).then(module => {
+                /* webpackChunkName: "[request]" */
+                /* webpackInclude: /addons\/**\/*.js/ */
+                /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+                "../addons/" + entryPoint + ".js").then(module => {
                 /* eslint-disable new-cap */
                 let addon;
 
