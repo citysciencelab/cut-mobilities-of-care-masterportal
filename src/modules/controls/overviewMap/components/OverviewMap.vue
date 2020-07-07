@@ -117,6 +117,11 @@ export default {
             :on-click="toggleOverviewMapFlyout"
         />
     </div>
+    <div
+        v-else
+        :class="{hideButton: 'overviewmap-button'}"
+    >
+    </div>
 </template>
 
 <style lang="less" scoped>
@@ -154,5 +159,8 @@ export default {
                 width: 200px;
             }
         }
+    }
+    .hideButton {
+        display: none;
     }
 </style>
