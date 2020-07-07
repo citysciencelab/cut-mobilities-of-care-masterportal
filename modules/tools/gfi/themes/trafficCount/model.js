@@ -530,7 +530,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
     /**
      * prepare and set table data for day
-     * @param {Array} datasets data
+     * @param {Array} datasets data list of day, week and year for view
      * @param {String} type of the table
      * @param {String} title of the table
      * @param {Array} timeSettings - the selected dates
@@ -1096,7 +1096,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @param {Callback} callbackRenderLegendText a function (phenomenonTime) to write the legend text with
      * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to write the entry at the x axis with
      * @param {Callback} setTooltipValue a function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
-     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {class, style, xAxisAttr}}
+     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {xAxisAttr}}
      * @returns {Void}  -
      */
     refreshDiagramGeneral: function (generalConfigParams, callbackRenderLegendText, callbackRenderTextXAxis, setTooltipValue, emptyDiagramData) {
@@ -1266,8 +1266,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @param {String} yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
      * @param {Callback} callbackRenderLegendText a function (phenomenonTime) to write the legend text with
      * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to convert the key of dataset into the wanted format with
-     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {class, style, xAxisAttr}}
-     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram
+     * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {xAxisAttr}}
+     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{(xAttr), (yAttr)} that can be used as dataset for the chart diagram
      */
     getDataSetsForChart: function (dataset, meansOfTransport, colors, xAttr, yAttr, callbackRenderLegendText, callbackRenderTextXAxis, emptyDiagramData) {
         if (!Array.isArray(dataset) || dataset.length === 0) {
@@ -1305,7 +1305,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @param {Callback} callbackRenderTextXAxis a function (phenomenonTime) to convert the key of dataset into the wanted format with
      * @param {Object[]} dataset the dataset from the API as array of objects{phenomenonTime: value}
      * @param {Object} emptyDiagramData empty diagram dataset to be filled by dataset as object{xAxisValue: {xAxisAttr}}
-     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{(xAttr), (yAttr)} that can be used as dataset for the D3 diagram
+     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{(xAttr), (yAttr)} that can be used as dataset for the chart diagram
      */
     getLineData: function (xAttr, yAttr, callbackRenderTextXAxis, dataset, emptyDiagramData) {
         if (typeof dataset !== "object" || typeof emptyDiagramData !== "object" || typeof callbackRenderTextXAxis !== "function") {
@@ -1333,7 +1333,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * adds objects to use as diagram data to the given result set
      * @param {Object[]} lineData the data from a data list
-     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram
+     * @returns {Object[]}  the result by reference to add the new data to: the result is an array of objects{(xAttr), (yAttr)} that can be used as dataset for the chart diagram
      */
     getPointData: function (lineData) {
         const pointData = [];
@@ -1411,7 +1411,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * generates an empty dataset of diagram data to be used as pattern for the diagramData
      * @info this is necessary to expand the year, week or day diagram to full span
-     * @return {Object}  an empty dataset for the day as object{xAttr: {class, style, hour}}
+     * @return {Object}  an empty dataset for the day as object{xAttr: {hour}}
      */
     getEmptyDiagramDataDay: function () {
         const result = {};
@@ -1435,7 +1435,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * generates an empty dataset of diagram data to be used as pattern for the diagramData
      * @info this is necessary to expand the year, week or day diagram to full span
-     * @return {Object}  an empty dataset for the week as object{xAttr: {class, style, hour}}
+     * @return {Object}  an empty dataset for the week as object{xAttr: {hour}}
      */
     getEmptyDiagramDataWeek: function () {
         const result = {};
@@ -1456,7 +1456,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * generates an empty dataset of diagram data to be used as pattern for the diagramData
      * @param {String} year the year to use in format YYYY
      * @info this is necessary to expand the year, week or day diagram to full span
-     * @return {Object}  an empty dataset for the year as object{xAttr: {class, style, hour}}
+     * @return {Object}  an empty dataset for the year as object{xAttr: {hour}}
      */
     getEmptyDiagramDataYear: function (year) {
         const result = {},
