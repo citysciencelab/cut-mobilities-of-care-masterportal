@@ -374,7 +374,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateDay("thingId", "meansOfTransport", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "dayTodayOpt");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_15-Min';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -590,7 +590,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateYear("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete", "2021");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Woche';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Woche';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -831,7 +831,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateTotal("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Woche';$expand=Observations)");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Woche';$expand=Observations)");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1039,7 +1039,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-01-01 00:00:00").toISOString(),
                 expectedUntil = new Date("2021-01-01 00:00:00").toISOString(),
-                expectedUrl = "https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))";
+                expectedUrl = "https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))";
 
             api.updateHighestWorkloadDay("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete");
 
@@ -1101,7 +1101,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateHighestWorkloadWeek("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Woche';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Woche';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1158,7 +1158,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateHighestWorkloadMonth("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1224,7 +1224,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateDataset("thingId", "meansOfTransport", timeSettings, "onupdate", "onerror", "onstart", "oncomplete", "todayUntilOpt");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_interval';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime le " + expectedUntil + ";$orderby=phenomenonTime asc))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_interval';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime le " + expectedUntil + ";$orderby=phenomenonTime asc))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1455,7 +1455,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.subscribeLastUpdate("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_15-Min')");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_15-Min')");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
