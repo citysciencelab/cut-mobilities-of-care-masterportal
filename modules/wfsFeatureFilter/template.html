@@ -1,17 +1,17 @@
 <% if (wfsList.length > 0) { %>
 <div class="panel panel-default" style="margin: 0px;">
-<% _.each(wfsList, function (wfslayer) { %>
+<% wfsList.forEach(function (wfslayer) { %>
     <div id="<%= wfslayer.id %>" class="panel-heading">
         <p class="buttons pull-right">
             <span id="wfsfeaturefilter_resizemarker" class="glyphicon glyphicon-resize-full" title="Ein- und ausklappen"></span>
         </p>
         <span style="font-size: 14px; "><%=wfslayer.name %></span>
     </div>
-<% _.each(wfslayer.filterOptions, function (filter) { if (filter.filterType === 'combo') { %>
+<% wfslayer.filterOptions.forEach(function (filter) { if (filter.filterType === 'combo') { %>
     <div class="panel-body <%= wfslayer.id %>_wfs_panel">
         <label for="" class="control-label"><%=filter.filterName%></label>
         <select class="form-control input-sm" id="<%=wfslayer.id %>_<%=filter.fieldName %>">
-<% _.each(filter.filterString, function (value) { if (value === '*') { %>
+<% filter.filterString.forEach(function (value) { if (value === '*') { %>
             <option title="keine Filterung der Elemente auf dieses Attribut">*</option>
 <% } else { %>
             <option title='nur Elemente mit "<%=value%>" darstellen'><%=value%></option>

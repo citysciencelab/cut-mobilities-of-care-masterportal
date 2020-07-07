@@ -36,17 +36,16 @@ const POIModel = Backbone.Model.extend({
         const isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false,
             poiDistances = Radio.request("geolocation", "getPoiDistances"),
             poiFeatures = [];
-        let featInCircle = [],
-            sortedFeatures = [];
+        let featInCircle = [];
 
         poiDistances.forEach(distance => {
             featInCircle = Radio.request("geolocation", "getFeaturesInCircle", distance);
-            sortedFeatures = _.sortBy(featInCircle, function (feature) {
-                return feature.dist2Pos;
-            });
+
+            featInCircle.sort((featureA, featureB) => featureA.dist2Pos - featureB.dist2Pos);
+
             poiFeatures.push({
                 "category": distance,
-                "features": sortedFeatures
+                "features": featInCircle
             });
         });
 

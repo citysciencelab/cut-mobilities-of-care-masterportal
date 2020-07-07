@@ -258,7 +258,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
 
         if (modul.get("type") === "tool") {
             modul.setIsActive(true);
-            store.commit("setToolActive", {id: modul.id, active: true});
+            store.dispatch("Tools/setToolActive", {id: modul.id, active: true});
         }
         else {
             $("#" + modulId).parent().addClass("open");

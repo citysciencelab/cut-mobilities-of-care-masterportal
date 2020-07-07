@@ -11,7 +11,7 @@ window.HELP_IMPROVE_VIDEOJS = false;
 
 const VideoModel = Backbone.Model.extend({
     defaults: {
-        id: _.uniqueId("video"),
+        id: Radio.request("Util", "uniqueId", "video"),
         url: "",
         type: "",
         width: "400px",

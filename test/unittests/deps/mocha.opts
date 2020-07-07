@@ -1,4 +1,4 @@
-./test/unittests/**/*.test.js ./addons/**/unittests/*.test.js ./src/**/*.test.js
+./test/unittests/**/*.test.js ./addons/**/unittests/*.test.js
 --bail
 --require jsdom-global/register
 --require chai/register-expect

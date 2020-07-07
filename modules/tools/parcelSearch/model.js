@@ -80,7 +80,6 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @property {String} parcelSearchImpossible="", filled with "Flurstücksabfrage derzeit nicht möglich!"- translated
      * @property {String} tryAgainLater="", filled with "Bitte versuchen Sie es später erneut."- translated
      * @constructs
-     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
      * @listens i18next#RadioTriggerLanguageChanged
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapRegisterListener

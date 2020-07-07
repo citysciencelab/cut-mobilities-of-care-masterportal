@@ -436,12 +436,6 @@
  */
 
 /**
- * @namespace GetCoord
- * @memberof Tools
- * @description Tool to request the coordinates of a click point in the map.
- */
-
-/**
  * @namespace GFI
  * @memberof Tools
  * @description Tool to show result of GetFeatureInfo-request.

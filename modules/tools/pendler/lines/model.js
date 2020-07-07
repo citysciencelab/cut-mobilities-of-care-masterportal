@@ -7,7 +7,7 @@ import Feature from "ol/Feature.js";
 
 
 const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
-    defaults: _.extend({}, PendlerCoreModel.prototype.defaults, {
+    defaults: Object.assign({}, PendlerCoreModel.prototype.defaults, {
         zoomLevel: 0,
         // Layer zur Darstellung der Linien / Strahlen
         lineLayer: new VectorLayer({
@@ -64,14 +64,14 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
     preparePendlerLegend: function (features) {
         const pendlerLegend = [];
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             // Ein Feature entspricht einer Gemeinde. Extraktion der für die Legende
             // nötigen Attribute (abhängig von der gewünschten Richtung).
             pendlerLegend.push({
                 anzahlPendler: feature.get(this.get("attrAnzahl")),
                 name: feature.get(this.get("attrGemeinde"))
             });
-        }, this);
+        });
 
         this.set("pendlerLegend", pendlerLegend);
     },
@@ -130,7 +130,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             labelCoordinates,
             labelLayerFeature;
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             // Erzeuge die Strahlen
             lineLayerFeature = new Feature({
                 geometry: feature.getGeometry()
@@ -143,16 +143,16 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
                 })
             }));
             // "styleId" neccessary for print, that style and feature can be linked
-            lineLayerFeature.set("styleId", _.uniqueId());
+            lineLayerFeature.set("styleId", Radio.request("Util", "uniqueId"));
             this.get("pendlerLineLayer").getSource().addFeature(lineLayerFeature);
 
             // Erzeuge die Beschriftung. Dafür wird ein (unsichtbarere) Punkt am Ende jeder Linie gesetzt.
             // Wo das Ende ist (erste oder zweite Koordinate) entschreidet sich dabei aus der (Pendel-)Richtung
             if (this.get("direction") === "wohnort") {
-                labelCoordinates = _.last(feature.getGeometry().getCoordinates());
+                labelCoordinates = feature.getGeometry().getCoordinates().slice(-1);
             }
             else {
-                labelCoordinates = _.first(feature.getGeometry().getCoordinates());
+                labelCoordinates = feature.getGeometry().getCoordinates()[0];
             }
 
             labelLayerFeature = new Feature({
@@ -171,10 +171,10 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
                 })
             }));
             // "styleId" neccessary for print, that style and feature can be linked
-            labelLayerFeature.set("styleId", _.uniqueId());
+            labelLayerFeature.set("styleId", Radio.request("Util", "uniqueId"));
             this.get("pendlerLabelLayer").getSource().addFeature(labelLayerFeature);
 
-        }, this);
+        });
     },
 
     /**
@@ -186,12 +186,12 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             labelLayer = null;
 
         lineLayer = this.get("pendlerLineLayer");
-        if (!_.isUndefined(lineLayer)) {
+        if (lineLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", lineLayer);
         }
 
         labelLayer = this.get("pendlerLabelLayer");
-        if (!_.isUndefined(lineLayer)) {
+        if (lineLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
         Radio.trigger("MapMarker", "hideMarker");

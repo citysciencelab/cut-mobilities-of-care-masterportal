@@ -1,7 +1,7 @@
 import Theme from "../../model";
 
 const SchulenEinzugsgebieteThemeModel = Theme.extend(/** @lends SchulenEinzugsgebieteThemeModel.prototype */{
-    defaults: _.extend({}, Theme.prototype.defaults, {
+    defaults: Object.assign({}, Theme.prototype.defaults, {
         name: "",
         id: "",
         address: "",

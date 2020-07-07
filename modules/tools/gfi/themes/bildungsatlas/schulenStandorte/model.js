@@ -1,7 +1,7 @@
 import Theme from "../../model";
 
 const SchulenStandorteViewTheme = Theme.extend(/** @lends SchulenStandorteViewTheme.prototype */{
-    defaults: _.extend({}, Theme.prototype.defaults, {
+    defaults: Object.assign({}, Theme.prototype.defaults, {
         // default values to be set for the template
         C_S_Name: "",
         C_S_Str: "",

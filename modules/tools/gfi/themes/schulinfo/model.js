@@ -1,7 +1,7 @@
 import Theme from "../model";
 
 const SchulInfoTheme = Theme.extend({
-    defaults: _.extend({}, Theme.prototype.defaults, {
+    defaults: Object.assign({}, Theme.prototype.defaults, {
         themeConfig: [{
             name: "Grundsätzliche Informationen",
             isSelected: true,
@@ -112,7 +112,9 @@ const SchulInfoTheme = Theme.extend({
         this.get("feature").set("layerName", this.get("name"));
     },
     getVectorGfi: function () {
-        let gfiContent = _.pick(this.get("feature").getProperties(), _.flatten(_.pluck(this.get("themeConfig"), "attributes")));
+        const gfiContentPick = this.get("themeConfig").map(value => value.attributes);
+        let gfiContent = Object.fromEntries(Object.entries(this.get("feature").getProperties()).filter(([key]) => (Array.isArray(gfiContentPick) ? gfiContentPick.reduce((acc, val) => acc.concat(val), []) : gfiContentPick).includes(key)));
+
 
         gfiContent = this.getManipulateDate([gfiContent]);
         this.setGfiContent(gfiContent);
@@ -127,7 +129,7 @@ const SchulInfoTheme = Theme.extend({
         let gfiContent,
             featureInfos = [];
 
-        if (!_.isUndefined(this.get("gfiContent")[0])) {
+        if (this.get("gfiContent")[0] !== undefined) {
             gfiContent = this.get("gfiContent")[0];
             featureInfos = [];
             featureInfos = this.createFeatureInfos(gfiContent, this.get("themeConfig"));
@@ -144,26 +146,25 @@ const SchulInfoTheme = Theme.extend({
     createFeatureInfos: function (gfiContent, themeConfig) {
         const featureInfos = [];
 
-        if (!_.isUndefined(themeConfig)) {
-
-            _.each(themeConfig, function (kategory) {
+        if (themeConfig !== undefined) {
+            themeConfig.forEach(kategory => {
                 const kategoryObj = {
                     name: kategory.name,
                     isSelected: kategory.isSelected ? kategory.isSelected : false,
                     attributes: []};
 
-                _.each(kategory.attributes, function (attribute) {
+                kategory.attributes.forEach(attribute => {
                     const isAttributeFound = this.checkForAttribute(gfiContent, attribute);
 
                     if (isAttributeFound) {
                         kategoryObj.attributes.push({
-                            attrName: _.isUndefined(this.get("gfiAttributes")[attribute]) ? attribute : this.get("gfiAttributes")[attribute],
+                            attrName: this.get("gfiAttributes")[attribute] === undefined ? attribute : this.get("gfiAttributes")[attribute],
                             attrValue: this.beautifyAttribute(gfiContent[attribute], attribute)
                         });
                     }
-                }, this);
+                });
                 featureInfos.push(kategoryObj);
-            }, this);
+            });
         }
         return featureInfos;
     },
@@ -171,16 +172,16 @@ const SchulInfoTheme = Theme.extend({
         let newVal,
             beautifiedAttribute = attribute;
 
-        if (key === "oberstufenprofil" && _.isString(attribute)) {
+        if (key === "oberstufenprofil" && typeof attribute === "string") {
             if (beautifiedAttribute.indexOf("|") !== -1) {
                 beautifiedAttribute = [];
-                _.each(attribute.split("|"), function (value) {
+                attribute.split("|").forEach(value => {
                     newVal = value;
                     // make part before first ";" bold
                     newVal = newVal.replace(/^/, "<b>");
                     newVal = newVal.replace(/;/, "</b>;");
                     beautifiedAttribute.push(newVal);
-                }, this);
+                });
             }
             else {
                 newVal = attribute;
@@ -224,7 +225,7 @@ const SchulInfoTheme = Theme.extend({
     checkForAttribute: function (gfiContent, attribute) {
         let isAttributeFound = false;
 
-        if (!_.isUndefined(gfiContent[attribute])) {
+        if (gfiContent[attribute] !== undefined) {
             isAttributeFound = true;
         }
 
@@ -253,7 +254,7 @@ const SchulInfoTheme = Theme.extend({
 
         newNameFound = this.isNewNameInFeatureInfos(newName, featureInfos);
         if (newNameFound) {
-            _.each(featureInfos, function (featureInfo) {
+            featureInfos.forEach(featureInfo => {
                 if (featureInfo.name === newName) {
                     featureInfo.isSelected = true;
                 }

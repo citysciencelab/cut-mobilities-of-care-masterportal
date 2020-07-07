@@ -4,7 +4,6 @@
 * erstellt
 */
 const fse = require("fs-extra"),
-    _ = require("underscore"),
     url = require("url");
     // arguments kommt von Note.js und enthält die in der Konsole übergebenen Argumente
 
@@ -157,7 +156,7 @@ function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
     // In entry array werden alle aus der Json extrahierten url eintraege gespeichert
     let entryArray = [];
 
-    _.each(allDomains, function (layer) {
+    allDomains.forEach(layer => {
         const hostname = url.parse(layer.url).hostname;
 
         if (hostname) {
@@ -169,11 +168,9 @@ function readfileAndGenerateProxies (allDomains, proxyForFHHNet) {
         }
     });
     // doppelte domain rauswerfen
-    entryArray = _.unique(entryArray, function (item) {
-        return item[1].replace(/www\d?\./, "");
-    });
+    entryArray = [...new Set(entryArray)];
     // für jeden eintrag im array einen Proxy schreiben
-    _.each(entryArray, function (entry, index) {
+    entryArray.forEach((entry, index) => {
         let isLast = false;
 
         if ((entryArray.length - 1) === index) {

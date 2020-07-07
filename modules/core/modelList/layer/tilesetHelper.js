@@ -221,7 +221,7 @@ export function setCesiumStyleImage (vcsStyle, style) {
         }
         pointSize *= 2;
         if (vcsStyle.image && vcsStyle.image.stroke) {
-            if (_.isNumber(vcsStyle.image.stroke.width)) {
+            if (typeof vcsStyle.image.stroke.width === "number") {
                 outlineStrokeWidth = vcsStyle.image.stroke.width;
             }
             if (vcsStyle.image.stroke.color) {

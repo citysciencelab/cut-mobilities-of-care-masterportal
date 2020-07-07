@@ -3,20 +3,20 @@
     <table class="table table-striped table-condensed table-gfi table-gfi-headversion">
         <thead>
             <tr>
-                <% _.each(colNames, function (name) { %>
+                <% colNames.forEach(function (name) { %>
                     <th><%= name %></th>
                 <% }); %>
             </tr>
         </thead>
         <tbody>
-            <% _.each(gfiContent, function (obj) { %>
+            <% gfiContent.forEach(function (obj) { %>
                 <tr>
-                    <% _.each(obj, function (value) { %>
+                    <% Object.values(obj).forEach(function (value) { %>
                         <% if (value !== "") { %>
                             <td>
                                 <% if (new RegExp(/(\.pdf)$/i).test(value) === true && value.substr(0, 4) === "http") { %>
                                     <!-- Hack für Flüchtlingsportal -->
-                                    <% _.each(value.split("$"), function (val, index) { %>
+                                    <% value.split("$").forEach(function (val, index) { %>
                                         <a href="<%= val %>" target="_blank">Anhang <%= index + 1 %></a><br>
                                     <% }); %>
                                 <% } else if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http") { %>
@@ -42,20 +42,20 @@
     <table class="table table-striped table-condensed table-gfi table-gfi-bodyversion">
         <thead>
             <tr>
-                <% _.each(colNames, function (name) { %>
+                <% colNames.forEach(function (name) { %>
                     <th><%= name %></th>
                 <% }); %>
             </tr>
         </thead>
         <tbody>
-            <% _.each(gfiContent, function (obj) { %>
+            <% gfiContent.forEach(function (obj) { %>
                 <tr>
-                    <% _.each(obj, function (value) { %>
+                    <% Object.values(obj).forEach(function (value) { %>
                         <% if (value !== "") { %>
                             <td>
                                 <% if (new RegExp(/(\.pdf)$/i).test(value) === true && value.substr(0, 4) === "http") { %>
                                     <!-- Hack für Flüchtlingsportal -->
-                                    <% _.each(value.split("$"), function (val, index) { %>
+                                    <% value.split("$").forEach(function (val, index) { %>
                                         <a href="<%= val %>" target="_blank">Anhang <%= index + 1 %></a><br>
                                     <% }); %>
                                 <% } else if (new RegExp(/(\.html)$/i).test(value) === true || value.substr(0, 4) === "http") { %>
