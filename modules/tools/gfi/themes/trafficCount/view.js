@@ -631,10 +631,24 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
 
         if (this.$(evt.target).prop("checked")) {
             this.$el.find($(toggledElementId)).removeClass("inactive");
+            this.fixIndicationPosition();
         }
         else {
             this.$el.find($(toggledElementId)).addClass("inactive");
         }
+    },
+
+    /**
+     * Making the indication position always fixed when the window is scrolled
+     * @returns {void}
+     */
+    fixIndicationPosition: function () {
+        const gfiContent = document.querySelector(".gfi-content"),
+            indicationContent = document.querySelector(".indication");
+
+        gfiContent.addEventListener("scroll", () => {
+            indicationContent.style.cssText = "left: " + gfiContent.scrollLeft + "px";
+        });
     },
 
     destroy: function () {
