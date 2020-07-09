@@ -2,7 +2,7 @@
 
 Um eigene Entwicklungen in das MasterPortal zu integrieren existiert ein Mechanismus der es erlaubt, Code von außerhalb des MasterPortal-Repositories in die MasterPortal Sourcen zu integrieren. Siehe auch **[lokale Entwicklungsumgebung einrichten](setup-dev.md)**.
 
-Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch **[Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](02_vue_tutorial_new_module_scale_switcher.md)**). Es liegt lediglich außerhalb des Repository und erlaubt so eine getrennte Verwaltung.
+Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch **[Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](02_vue_tutorial_new_module_scale_switcher.md)**). Es liegt lediglich außerhalb des Repositories und erlaubt so eine getrennte Verwaltung.
 
 Alle Addons liegen in einem Ordner namens "addons" auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der **[config.js](config.js.md)** konfigurieren.
 
@@ -178,7 +178,7 @@ export default {
 </template>
 ```
 
-Alle weiteren Dateien zum VueAddon können [hier](VueAddon.zip) geruntergeladen werden.
+Alle weiteren Dateien zum VueAddon können [hier](./VueAddon.zip) geruntergeladen werden.
 
 2.3. Die Addons-Config-Datei erstellen:
 
