@@ -178,7 +178,7 @@ export default {
 </template>
 ```
 
-Alle weiteren Dateien zum VueAddon können [hier](../addons/VueAddon/) eingesehen werden.
+Alle weiteren Dateien zum VueAddon können [hier](VueAddon.zip) geruntergeladen werden.
 
 2.3. Die Addons-Config-Datei erstellen:
 
