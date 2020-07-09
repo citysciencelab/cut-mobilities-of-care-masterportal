@@ -1174,7 +1174,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                                 fontColor: "#000000",
                                 beginAtZero: true,
                                 autoSkip: true,
-                                maxTicksLimit: xAttr === "hour" ? 4 : "",
+                                maxTicksLimit: xAttr === "hour" ? 12 : "",
                                 callback: function (value) {
                                     return value + " " + xAxisTicks.unit;
                                 }
