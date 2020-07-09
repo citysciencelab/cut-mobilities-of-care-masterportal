@@ -24,7 +24,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
 
     /**
      * Sets default values and listener
-     * @param   {Backbone.Model} model Model attributes to be used in this view
+     * @param   {Object} attributes to be used in this view
      * @returns {void}
      */
     initialize: function (attributes) {

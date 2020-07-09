@@ -85,8 +85,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         this.listenTo(this, {
             "change:isVisible": this.onIsVisibleEvent
-            // TODO: prüfen warum dies benötigt wird. Hier würde this.create immer das zweite Mal ausgeführt...
-            // "change:isReady": this.create
         });
         this.listenTo(Radio.channel("GFI"), {
             "isVisible": this.onGFIIsVisibleEvent
@@ -202,8 +200,9 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         if (tabValue === "day") {
             this.setupTabDay();
             this.downloadDataDay(thingId, meansOfTransport, result => {
-                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
+                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], tabValue));
                 this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + "-15min_Werte");
+                // onerror
             }, error => {
                 console.warn("error", "downloadDataDay", error);
                 Radio.trigger("Alert", "alert", {
@@ -212,16 +211,19 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 });
                 this.get("exportButtonModel").set("disabled", true);
             }, () => {
+                // onstart
                 this.get("exportButtonModel").set("disabled", true);
             }, () => {
+                // oncomplete
                 this.get("exportButtonModel").set("disabled", false);
             });
         }
         else if (tabValue === "week") {
             this.setupTabWeek();
             this.downloadDataWeek(thingId, meansOfTransport, result => {
-                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
+                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], tabValue));
                 this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + "-Tageswerte");
+                // onerror
             }, error => {
                 console.warn("error", "downloadDataWeek", error);
                 Radio.trigger("Alert", "alert", {
@@ -230,16 +232,19 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 });
                 this.get("exportButtonModel").set("disabled", true);
             }, () => {
+                // onstart
                 this.get("exportButtonModel").set("disabled", true);
             }, () => {
+                // oncomplete
                 this.get("exportButtonModel").set("disabled", false);
             });
         }
         else if (tabValue === "year") {
             this.setupTabYear();
             this.downloadDataYear(thingId, meansOfTransport, result => {
-                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], meansOfTransport));
+                this.get("exportButtonModel").set("rawData", this.prepareDataForDownload(result.data[meansOfTransport], tabValue));
                 this.get("exportButtonModel").set("filename", result.title.replace(" ", "_") + "-Wochenwerte");
+                // onerror
             }, error => {
                 console.warn("error", "downloadDataYear", error);
                 Radio.trigger("Alert", "alert", {
@@ -248,8 +253,10 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 });
                 this.get("exportButtonModel").set("disabled", true);
             }, () => {
+                // onstart
                 this.get("exportButtonModel").set("disabled", true);
             }, () => {
+                // oncomplete
                 this.get("exportButtonModel").set("disabled", false);
             });
         }
@@ -273,21 +280,30 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * converts the data object into an array of objects for the csv download
      * @param {Object} data - the data for download
-     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {String} tabValue - day | week | year
      * @returns {Object[]} objArr - converted data
      */
-    prepareDataForDownload: function (data, meansOfTransport) {
+    prepareDataForDownload: function (data, tabValue) {
         const objArr = [];
 
         for (const key in data) {
             const obj = {},
                 date = key.split(" ");
 
-            obj.Datum = date[0];
-            obj.Zeitraum = date[1];
-            obj[meansOfTransport] = data[key];
+            if (tabValue === "day") {
+                obj.Datum = date[0];
+                obj["Uhrzeit von"] = date[1].slice(0, -3);
+            }
+            else if (tabValue === "week") {
+                obj.Datum = date[0];
+            }
+            else if (tabValue === "year") {
+                obj["Kalenderwoche ab"] = date[0];
+            }
+            obj.Anzahl = data[key];
             objArr.push(obj);
         }
+
         return objArr;
     },
     /**
@@ -815,9 +831,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @returns {void}
      */
     weekDatepickerValueChanged: function (model, dates) {
-        // TODO: ist dies überhaupt nötig? Was macht das? Wie läuft es mit einem Array(date)?
-        // this.get("weekDatepicker").updateValuesSilently(date);
-
         const api = this.get("propTrafficCountApi"),
             thingId = this.get("propThingId"),
             meansOfTransport = this.get("propMeansOfTransport"),

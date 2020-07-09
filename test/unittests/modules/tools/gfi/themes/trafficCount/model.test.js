@@ -1029,12 +1029,22 @@ describe("tools/gfi/themes/trafficCount", function () {
                     "2020-06-23 00:30:01": 0.13,
                     "2020-06-23 00:45:01": 0.15
                 },
-                data = model.prepareDataForDownload(obj, "AnzFahrzeuge");
+                dataDay = model.prepareDataForDownload(obj, "day"),
+                dataWeek = model.prepareDataForDownload(obj, "week"),
+                dataYear = model.prepareDataForDownload(obj, "year");
 
-            expect(data[0]).to.have.all.keys("Datum", "Zeitraum", "AnzFahrzeuge");
-            expect(data[0].Datum).to.equal("2020-06-23");
-            expect(data[1].Zeitraum).to.equal("00:15:01");
-            expect(data[2].AnzFahrzeuge).to.equal(0.13);
+            expect(dataDay[0]).to.have.all.keys("Datum", "Uhrzeit von", "Anzahl");
+            expect(dataDay[0].Datum).to.equal("2020-06-23");
+            expect(dataDay[1]["Uhrzeit von"]).to.equal("00:15");
+            expect(dataDay[2].Anzahl).to.equal(0.13);
+
+            expect(dataWeek[0]).to.have.all.keys("Datum", "Anzahl");
+            expect(dataWeek[0].Datum).to.equal("2020-06-23");
+            expect(dataWeek[2].Anzahl).to.equal(0.13);
+
+            expect(dataYear[0]).to.have.all.keys("Kalenderwoche ab", "Anzahl");
+            expect(dataYear[0]["Kalenderwoche ab"]).to.equal("2020-06-23");
+            expect(dataYear[2].Anzahl).to.equal(0.13);
         });
     });
 });
