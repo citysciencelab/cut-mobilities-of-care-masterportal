@@ -580,7 +580,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     }
 
                     i++;
-                    // dayTableContentArr.push(day);
                     break;
                 case "week":
 
@@ -628,7 +627,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     yearTableContentArr[i].bicyclesArr = {};
 
                     if (meansOfTransport === this.get("meansOfTransportFahrraeder") && Array.isArray(dataset.bicycles) && dataset.bicycles.length > 0) {
-                        yearTableContentArr[i].firstColumn = moment(timeSettings[i].from, "YYYY-MM-DD").format("YYYY");
+                        yearTableContentArr[i].firstColumn = timeSettings[i].selectedYear;
 
                         dataset.bicycles.forEach(element => {
                             yearTableContentArr[i].bicyclesArr[element.calenderWeek] = element.result;
@@ -636,7 +635,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     }
 
                     if (meansOfTransport === this.get("meansOfTransportFahrzeuge") && Array.isArray(dataset.cars) && dataset.cars.length > 0) {
-                        yearTableContentArr[i].firstColumn = moment(dataset.cars[0].date, "YYYY-MM-DD").format("YYYY");
+                        yearTableContentArr[i].firstColumn = timeSettings[i].selectedYear;
 
                         dataset.cars.forEach(element => {
                             yearTableContentArr[i].carsArr[element.calenderWeek] = element.result;
@@ -926,7 +925,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                     // subtract 3 days to savely include the first thursday of january into the interval, as the first calendar week always includes the first thursday of january
                     from: moment(date).startOf("year").subtract(3, "days").format("YYYY-MM-DD"),
                     // add 3 days to savely include the last thursday of december into the interval, as the last calendar week always includes the last thursday of december
-                    until: moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD")
+                    until: moment(date).endOf("year").add(3, "days").format("YYYY-MM-DD"),
+                    selectedYear: moment(date).format("YYYY")
                 });
             });
 
