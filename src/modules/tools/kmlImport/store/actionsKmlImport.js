@@ -1,4 +1,4 @@
-import proj4 from "proj4";
+import {proj4} from "proj4";
 import {fetchFirstModuleConfig} from "../../../../utils/fetchFirstModuleConfig";
 import {KML, GeoJSON, GPX} from "ol/format.js";
 
@@ -70,7 +70,7 @@ export default {
     },
 
     importKML: ({state, dispatch}, datasrc) => {
-        const vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+        const vectorLayer = datasrc.layer;
        
         let format,
             alertingMessage,

@@ -86,7 +86,9 @@ export default {
                 const reader = new FileReader();
 
                 reader.onload = f => {
-                    this.importKML({raw: f.target.result, filename: file.name});
+                    const vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
+                    
+                    this.importKML({raw: f.target.result, layer:vectorLayer, filename: file.name});
                 };
 
                 // this is the method to read a text file content

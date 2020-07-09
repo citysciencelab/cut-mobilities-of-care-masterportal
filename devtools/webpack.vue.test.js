@@ -3,6 +3,10 @@ const webpack = require("webpack"),
 
 require("regenerator-runtime/runtime");
 require("jsdom-global")();
+require("proj4");
+
+global.DOMParser = window.DOMParser;
+
 
 module.exports = {
     mode: "development",
@@ -35,10 +39,11 @@ module.exports = {
         new webpack.ProvidePlugin({
             // jQuery: "jquery",
             // $: "jquery",
+            //DOMParser
             Backbone: "backbone",
-            Radio: "backbone.radio"
+            Radio: "backbone.radio",
             // _: "underscore",
-            // i18next: ["i18next/dist/cjs/i18next.js"],
+            i18next: ["i18next/dist/cjs/i18next.js"]
             // Config: path.resolve(__dirname, "../test/unittests/deps/testConfig"),
             // XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
             // fs: "fs",

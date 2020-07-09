@@ -5,14 +5,15 @@ import KmlImport from "../../../store/indexKmlImport";
 import {expect} from "chai";
 import sinon from "sinon";
 import rawSources from "../../ressources/rawSources.js";
-
-
-console.log(rawSources);
-
+import VectorLayer from "ol/layer/Vector.js";
+import VectorSource from "ol/source/Vector.js";
+import DOMParser from "xmldom";
+import VueI18Next from "@panter/vue-i18next";
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+
 config.mocks.$t = key => key;
 
 describe("KmlImport.vue", () => {
@@ -30,9 +31,9 @@ describe("KmlImport.vue", () => {
                 menu: {
                     tools: {
                         children: {
-                            kmlImport:
+                            kmlimport:
                             {
-                                "name": "translate#common:menu.tools.kmlImport",
+                                //"name": "translate#common:menu.tools.kmlImport",
                                 "glyphicon": "glyphicon-resize-full",
                                 "renderToWindow": true
                             }
@@ -42,6 +43,7 @@ describe("KmlImport.vue", () => {
             }
         };
     let store;
+
 
     beforeEach(() => {
         store = new Vuex.Store({
@@ -72,24 +74,39 @@ describe("KmlImport.vue", () => {
 
         expect(wrapper.find("#kml-import").exists()).to.be.true;
     });
-    /*
-    it("do not render the kmlImport select if not active", () => {
+
+    it("do not render the kmlImport tool if not active", () => {
         store.dispatch("Tools/KmlImport/setActive", false);
         const wrapper = shallowMount(KmlImportComponent, {store, localVue});
 
-        expect(wrapper.find("#scale-switcher").exists()).to.be.false;
+        expect(wrapper.find("#kml-import").exists()).to.be.false;
     });
 
-    it("has initially set all scales to select", () => {
-        const wrapper = shallowMount(KmlImportComponent, {store, localVue}),
-            options = wrapper.findAll("option");
+    it("import method is initially set to \"auto\"", () => {
+        const wrapper = shallowMount(KmlImportComponent, {store, localVue});
 
-        expect(options.length).to.equal(scales.length);
-        scales.forEach((scale, index) => {
-            expect(scale).to.equal(options.at(index).attributes().value);
-        });
+        expect(wrapper.vm.selectedFiletype).to.equal("auto");
     });
 
+    /*
+    it("Kml file should add some features to the current draw layer", async () => {
+        const
+            wrapper = shallowMount(KmlImportComponent, {store, localVue}),
+            source = new VectorSource(),
+            layer = new VectorLayer({
+                name: name,
+                source: source,
+                alwaysOnTop: true
+            });
+            
+        let resultObj;
+        
+        resultObj = store.dispatch("Tools/KmlImport/importKML", {raw: rawSources[0], layer, filename: "test.kml"});
+        await wrapper.vm.$nextTick();
+    });
+    */
+
+    /*
     it("has initially selected current scale", async () => {
         const wrapper = shallowMount(KmlImportComponent, {store, localVue}),
             options = wrapper.findAll("option");
