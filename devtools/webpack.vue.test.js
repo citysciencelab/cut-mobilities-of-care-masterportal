@@ -7,7 +7,6 @@ require("proj4");
 
 global.DOMParser = window.DOMParser;
 
-
 module.exports = {
     mode: "development",
     devtool: "inline-cheap-module-source-map",
@@ -39,7 +38,6 @@ module.exports = {
         new webpack.ProvidePlugin({
             // jQuery: "jquery",
             // $: "jquery",
-            //DOMParser
             Backbone: "backbone",
             Radio: "backbone.radio",
             // _: "underscore",
