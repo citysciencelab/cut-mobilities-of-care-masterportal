@@ -135,17 +135,19 @@ const MobileMenu = Backbone.View.extend({
                 groupedModels = Radio.request("Util", "groupBy", modelsToShow, function (model) {
                     return model.get("type") === "folder" ? "folder" : "other";
                 });
-
                 // Im default-Tree werden folder und layer alphabetisch sortiert
                 if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
                     groupedModels.folder.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
                     groupedModels.other.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
                 }
                 // Folder zuerst zeichnen
-                that.addViews(groupedModels.folder);
-
-                groupedModels.other.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).rerverse();
-                that.addViews(groupedModels.other);
+                if (groupedModels.folder !== undefined) {
+                    that.addViews(groupedModels.folder);
+                }
+                if (groupedModels.other !== undefined) {
+                    groupedModels.other.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
+                    that.addViews(groupedModels.other);
+                }
             }
         });
         $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
