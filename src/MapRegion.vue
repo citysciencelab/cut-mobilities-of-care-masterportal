@@ -18,7 +18,8 @@ export default {
     computed: {
         ...mapState([
             // listen to configJson changes for mounting the tools
-            "configJson"
+            "configJson",
+            "i18NextInitialized"
         ])
     }
 };
@@ -40,7 +41,7 @@ export default {
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
         <ScaleSwitcher v-if="configJson" />
         <SupplyCoord v-if="configJson" />
-        <template v-if="configJson">
+        <template v-if="i18NextInitialized">
             <component
                 :is="$options.components[addonKey]"
                 v-for="addonKey in $addons"

@@ -134,7 +134,7 @@ async function loadApp () {
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n: new VueI18Next(i18next)
+        i18n: new VueI18Next(i18next, {namespaces: ["additional", "common"]})
     });
 
 
@@ -401,18 +401,19 @@ async function loadApp () {
 
         initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
+        // loads all language files from addons for backbone- and vue-addons
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
                 Object.keys(i18nextLanguages).forEach((lng) => {
                     import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
-                            i18next.addResourceBundle(lng, "additional", additionalLocales);
+                            i18next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
                             checkInitCounter(initCounter, allAddons);
                         }).catch(error => {
                             initCounter--;
                             console.warn(error);
-                            console.warn("Die Übersetzungsdateien der Anwendung " + addonKey + " konnten nicht vollständig geladen werden. Teile der Anwendung sind nicht übersetzt.");
+                            console.warn("Translation files of addon " + addonKey + " could not be loaded or does not exist. Addon is not translated.");
                             checkInitCounter(initCounter, allAddons);
                         });
                 });
@@ -433,6 +434,7 @@ function checkInitCounter (initCounter, allAddons) {
     if (initCounter === 0) {
         Radio.trigger("Addons", "initialized");
         loadAddOnsAfterLanguageLoaded(allAddons);
+        store.commit("setI18Nextinitialized", true);
     }
 }
 
@@ -449,12 +451,20 @@ function loadAddOnsAfterLanguageLoaded (allAddons) {
             const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
             import(
-                /* webpackChunkName: "[request]" */
-                /* webpackExclude: /.+unittests.+/ */
-                "../addons/" + entryPoint + ".js"
-            ).then(module => {
+                /* webpackChunkName: "[request]" */ /* webpackExclude: /.+(unittests|tests).+/ */ "../addons/" + entryPoint + ".js"
+            ).catch(err => {
+                console.warn("Loading backbone-addons: cannot load addon, is maybe a Vue addon:", entryPoint, "Error:", err);
+            }).then(module => {
                 /* eslint-disable new-cap */
-                const addon = new module.default();
+                let addon;
+
+                try {
+                    addon = new module.default();
+                }
+                catch (err) {
+                    // cannot load addon, is maybe a Vue addon
+                    return;
+                }
 
                 // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
                 if (addon.model) {
