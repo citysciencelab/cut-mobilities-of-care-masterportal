@@ -17,7 +17,7 @@ const getters = {
     getTransformedPosition: state => (map, targetProjection) => {
         let positionTargetProjection = [0, 0];
 
-        if (state.positionMapProjection.length > 0) {
+        if (state.positionMapProjection !== null && state.positionMapProjection.length > 0) {
             positionTargetProjection = transformFromMapProjection(
                 map,
                 targetProjection,

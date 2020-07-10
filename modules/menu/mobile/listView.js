@@ -35,8 +35,9 @@ const MobileMenu = Backbone.View.extend({
     render: function () {
         const rootModels = this.collection.where({parentId: "root"});
 
-        this.$("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
-        this.$("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
+        $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
+        $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
+        document.getElementsByClassName("portal-title")[0].style.display = "none";
         this.addViews(rootModels);
         return this;
     },
@@ -122,7 +123,7 @@ const MobileMenu = Backbone.View.extend({
             slideOut = "right";
         }
 
-        this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
+        $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
 
             that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
             if (currentList === "Selection") {
@@ -134,20 +135,22 @@ const MobileMenu = Backbone.View.extend({
                 groupedModels = Radio.request("Util", "groupBy", modelsToShow, function (model) {
                     return model.get("type") === "folder" ? "folder" : "other";
                 });
-
                 // Im default-Tree werden folder und layer alphabetisch sortiert
                 if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
                     groupedModels.folder.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
                     groupedModels.other.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
                 }
                 // Folder zuerst zeichnen
-                that.addViews(groupedModels.folder);
-
-                groupedModels.other.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).rerverse();
-                that.addViews(groupedModels.other);
+                if (groupedModels.folder !== undefined) {
+                    that.addViews(groupedModels.folder);
+                }
+                if (groupedModels.other !== undefined) {
+                    groupedModels.other.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
+                    that.addViews(groupedModels.other);
+                }
             }
         });
-        this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
+        $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
     },
 
     doRequestTreeType: function () {
@@ -155,7 +158,7 @@ const MobileMenu = Backbone.View.extend({
     },
 
     doAppendNodeView: function (nodeView) {
-        this.$("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
+        $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
     },
 
     /**
