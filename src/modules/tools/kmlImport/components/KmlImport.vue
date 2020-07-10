@@ -19,7 +19,6 @@ export default {
             "deactivateGFI",
             "glyphicon",
             "isActive",
-            "rawSource",
             "renderToWindow",
             "resizableWindow",
             "supportedFiletypes"
@@ -87,17 +86,15 @@ export default {
 
                 reader.onload = f => {
                     const vectorLayer = Radio.request("Map", "createLayerIfNotExists", "import_draw_layer");
-                    
-                    this.importKML({raw: f.target.result, layer:vectorLayer, filename: file.name});
+
+                    this.importKML({raw: f.target.result, layer: vectorLayer, filename: file.name});
                 };
 
-                // this is the method to read a text file content
                 reader.readAsText(file);
             });
         },
         close () {
             this.setActive(false);
-            // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
 
             if (model) {
@@ -201,7 +198,7 @@ export default {
             display: block;
             margin:0;
             font-size:@font_size_big;
-            
+
             &:hover {
                 text-decoration: underline;
                 cursor: pointer;
@@ -209,7 +206,7 @@ export default {
         }
         input {
             margin:0;
-            
+
             &:hover {
                 cursor: pointer;
             }

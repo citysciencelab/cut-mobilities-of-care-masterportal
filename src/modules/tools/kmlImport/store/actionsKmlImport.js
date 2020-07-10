@@ -1,4 +1,3 @@
-import {proj4} from "proj4";
 import {fetchFirstModuleConfig} from "../../../../utils/fetchFirstModuleConfig";
 import {KML, GeoJSON, GPX} from "ol/format.js";
 
@@ -12,14 +11,14 @@ const configPaths = [
     };
 
 /**
- * Checks given file suffix for any defined Format. Default mappings are defined in state and may be 
+ * Checks given file suffix for any defined Format. Default mappings are defined in state and may be
  * overridden in config.
  * @param {String} filename - Name of the given file.
  * @param {String} selectedFiletype - The name of type of file. This represents a key of supportedFiletypes
- * and defines, how the format will be chosen. Either directly if it matches an available format and 
+ * and defines, how the format will be chosen. Either directly if it matches an available format and
  * supported file type. Or automatically, when set to "auto".
- * @param {Object} supportedFiletypes - Object of supported file types. This has to include a regex for each 
- * file type, that will be used to determine the filetype when selectedFiletype is "auto". The defaults are 
+ * @param {Object} supportedFiletypes - Object of supported file types. This has to include a regex for each
+ * file type, that will be used to determine the filetype when selectedFiletype is "auto". The defaults are
  * defined in state and may be overridden in config.
  * @param {Object} availableFormats - Object of available formats provided by Openlayers. These are hardcoded
  * in this file and this is only a param for the sake of avoiding global variables.
@@ -70,83 +69,69 @@ export default {
     },
 
     importKML: ({state, dispatch}, datasrc) => {
-        const vectorLayer = datasrc.layer;
-       
-        let format,
+        const
+            vectorLayer = datasrc.layer,
+            format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
+
+        let
             alertingMessage,
             features;
 
-        if (datasrc.raw === "") {
-            console.warn("File import tool: datasrc.raw is empty", datasrc);
-            alertingMessage = {
-                category: i18next.t("common:modules.alerting.categories.error"),
-                content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFileContent")
-            };
-            
-            dispatch("Alerting/addSingleAlert", alertingMessage, {root:true});
-            return;
-        }
-
-        format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
-        
         if (format === false) {
-            console.warn("File import tool: getFormat() returned false", datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
                 content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFormat")
             };
-            
-            dispatch("Alerting/addSingleAlert", alertingMessage, {root:true});
+
+            dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
             return;
         }
-        
+
         try {
             features = format.readFeatures(datasrc.raw);
         }
         catch (ex) {
-            console.warn("File import tool: format.readFeatures() error", ex);
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
                 content: i18next.t("common:modules.tools.kmlImport.alertingMessages.formatError")
             };
-            
-            dispatch("Alerting/addSingleAlert", alertingMessage, {root:true});
+
+            dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
             return;
         }
 
         if (!Array.isArray(features) || features.length === 0) {
-            console.warn("File import tool: no features found", datasrc);
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
                 content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFileContent")
             };
-            
-            dispatch("Alerting/addSingleAlert", alertingMessage, {root:true});
+
+            dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
             return;
         }
-        
+
         features.forEach(feature => {
             let geometries;
-            
+
             if (feature.getGeometry().getType() === "GeometryCollection") {
-                geometries = feature.getGeometry().getGeometries();        
+                geometries = feature.getGeometry().getGeometries();
             }
             else {
                 geometries = [feature.getGeometry()];
             }
-            
+
             geometries.forEach(geometry => {
                 geometry.transform("EPSG:4326", "EPSG:25832");
             });
         });
-        
+
         vectorLayer.getSource().addFeatures(features);
-        
+
         alertingMessage = {
             category: i18next.t("common:modules.alerting.categories.info"),
             content: i18next.t("common:modules.tools.kmlImport.alertingMessages.success", {filename: datasrc.filename})
         };
-        
-        dispatch("Alerting/addSingleAlert", alertingMessage, {root:true});
-    },
+
+        dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
+    }
 };
