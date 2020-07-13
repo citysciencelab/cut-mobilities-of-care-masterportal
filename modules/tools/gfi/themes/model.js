@@ -103,7 +103,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         const gfiFeatures = {"html": this.get("gfiUrl")};
 
         try {
-            if ($(data).find("tbody").children().length > 1) {
+            if ($(data).find("tbody").children().length >= 1) {
                 this.set("gfiContent", [gfiFeatures]);
             }
             this.setIsReady(true);
