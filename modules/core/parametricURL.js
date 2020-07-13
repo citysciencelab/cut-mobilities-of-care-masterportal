@@ -151,7 +151,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "CENTER": this.setCenter.bind(this),
             "CLICKCOUNTER": this.setClickCounter.bind(this),
             "FEATUREID": this.setZoomToFeatureIds.bind(this),
-            "FEATURE": this.setStartFeature.bind(this),
+            "FEATURE": this.setInitialFeature.bind(this),
             "FILTER": this.setFilter.bind(this),
             "HEADING": this.evaluateCameraParameters.bind(this),
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
@@ -320,7 +320,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         this.createLayerParamsUsingMetaId(values);
     },
 
-    setStartFeature: function (input) {
+    setInitialFeature: function (input) {
         const config = Radio.request("Parser", "getPortalConfig")?.featureViaURL;
 
         if (config === undefined) {
