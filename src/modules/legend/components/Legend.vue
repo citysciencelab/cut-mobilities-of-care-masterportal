@@ -14,8 +14,8 @@ export default {
     },
     mounted () {
         this.getLegendConfig();
-        console.log(this.name);
-        console.log(this.showLegendInMenu);
+        console.warn(this.name);
+        console.warn(this.showLegendInMenu);
         $(this.$el).insertAfter(document.getElementById("root"));
     },
     methods: {
@@ -24,7 +24,7 @@ export default {
         ]),
         ...mapMutations("Legend", Object.keys(mutations)),
         clicked () {
-            console.log("clicked");
+            console.warn("clicked");
         }
     }
 };
