@@ -247,15 +247,23 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      */
     getJsonProjection: function (data) {
         // using indexOf method to increase performance
-        const dataString = data.replace(/\s/g, ""),
-            startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
+        if (typeof data === "object") {
+            if (data.crs !== undefined) {
+                const regExp = /\d+/;
 
-        if (startIndex !== -1) {
-            const endIndex = dataString.indexOf("\"", startIndex + 43);
-
-            return dataString.substring(startIndex + 43, endIndex);
+                return "EPSG:" + data.crs.properties.href.match(regExp)[0];
+            }
         }
+        else {
+            const dataString = data.replace(/\s/g, ""),
+                startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
 
+            if (startIndex !== -1) {
+                const endIndex = dataString.indexOf("\"", startIndex + 43);
+
+                return dataString.substring(startIndex + 43, endIndex);
+            }
+        }
         return "EPSG:4326";
     },
 

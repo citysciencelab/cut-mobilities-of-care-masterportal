@@ -382,7 +382,7 @@ async function loadApp () {
 
     sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});
     sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
-    if (sbconfig) {
+    if (sbconfig !== undefined) {
         new SearchbarView(sbconfig);
     }
 

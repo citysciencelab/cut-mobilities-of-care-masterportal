@@ -137,6 +137,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
 
+        this.addItem({
+            type: "featureViaURL",
+            attr: this.get("portalConfig").featureViaURL
+        });
+
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
             this.parseTree(this.get("baselayer"), "tree", 0);
@@ -372,9 +377,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {*} name - todo
      * @param {*} id - todo
      * @param {*} geojson - todo
+     * @param {String} styleId Id for the styling of the features.
      * @returns {void}
      */
-    addGeoJSONLayer: function (name, id, geojson) {
+    addGeoJSONLayer: function (name, id, geojson, styleId) {
         const layer = {
             type: "layer",
             name: name,
@@ -392,7 +398,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isVisibleInTree: true,
             cache: false,
             datasets: [],
-            urlIsVsible: true
+            urlIsVsible: true,
+            styleId: styleId
         };
 
         this.addItem(layer);

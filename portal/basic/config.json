@@ -1,6 +1,12 @@
 {
 	"Portalconfig": {
-		"treeType": "light",
+        "treeType": "light",
+        "featureViaURL": {
+            "layerID": "420",
+            "layerName": "Übergebene Feature",
+            "epsg": 4326,
+            "style": "funky"
+        },
 		"searchBar": {
 			"osm": {
 				"minChars": 3,
