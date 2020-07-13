@@ -7,6 +7,7 @@ import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
 import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
+import Legend from "../modules/legend/store/indexLegend";
 
 import toolsActions from "../modules/tools/actionsTools";
 import getters from "./getters";
@@ -24,6 +25,7 @@ const store = new Vuex.Store({
     modules: {
         Map,
         Alerting,
+        Legend,
         Tools: {
             namespaced: true,
             modules: {

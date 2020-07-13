@@ -31,7 +31,7 @@ import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
-import LegendLoader from "../modules/legend/legendLoader";
+// import LegendLoader from "../modules/legend/legendLoader";
 import MeasureView from "../modules/tools/measure/view";
 import ShadowView from "../modules/tools/shadow/view";
 import DrawView from "../modules/tools/draw/view";
@@ -301,10 +301,10 @@ async function loadApp () {
                 new Formular({model: tool});
                 break;
             }
-            case "legend": {
-                new LegendLoader(tool);
-                break;
-            }
+            // case "legend": {
+            //     new LegendLoader(tool);
+            //     break;
+            // }
             case "styleWMS": {
                 new StyleWMSView({model: tool});
                 break;

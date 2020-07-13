@@ -4,6 +4,7 @@ import ScaleSwitcher from "./modules/tools/scale/components/ScaleSwitcher.vue";
 import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
+import Legend from "./modules/legend/components/Legend.vue";
 import {mapState} from "vuex";
 
 export default {
@@ -13,7 +14,8 @@ export default {
         Alerting,
         ScaleSwitcher,
         SupplyCoord,
-        Footer
+        Footer,
+        Legend
     },
     computed: {
         ...mapState([
@@ -41,6 +43,7 @@ export default {
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
         <ScaleSwitcher v-if="configJson" />
         <SupplyCoord v-if="configJson" />
+        <Legend v-if="configJson" />
         <template v-if="i18NextInitialized">
             <component
                 :is="$options.components[addonKey]"
