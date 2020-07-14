@@ -32,7 +32,6 @@ const configPaths = [
                 }
                 return sortVal;
             });
-            //todo sort legends by position
             state.legends = legends;
         },
         removeLegend: function ({state}, layerName) {
