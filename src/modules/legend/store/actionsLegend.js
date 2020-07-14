@@ -18,7 +18,7 @@ const configPaths = [
             commit("showLegend", showLegend);
         },
         addLegend: function ({state}, legendObj) {
-            let legends = state.legends;
+            const legends = state.legends;
 
             legends.push(legendObj);
             // legends = legends.sort(function (a, b) {
