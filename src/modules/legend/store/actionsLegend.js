@@ -13,6 +13,35 @@ const configPaths = [
          */
         getLegendConfig: context => {
             return fetchFirstModuleConfig(context, configPaths, "Legend");
+        },
+        setShowLegend: function ({commit}, showLegend) {
+            commit("showLegend", showLegend);
+        },
+        addLegend: function ({state}, legendObj) {
+            let legends = state.legends;
+
+            legends.push(legendObj);
+            legends = legends.sort(function (a, b) {
+                let sortVal = 0;
+
+                if (a.position < b.position) {
+                    sortVal = -1;
+                }
+                if (a.position > b.position) {
+                    sortVal = 1;
+                }
+                return sortVal;
+            });
+            //todo sort legends by position
+            state.legends = legends;
+        },
+        removeLegend: function ({state}, layerName) {
+            state.legends = state.legends.filter((legendObj) => {
+                return legendObj.name !== layerName;
+            });
+        },
+        clearLegends: function ({state}) {
+            state.legends = [];
         }
     };
 

@@ -2,9 +2,10 @@
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
+import actions from "../store/actionsLegend";
 
 export default {
-    name: "Legend",
+    name: "LegendMenu",
     components: {},
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
@@ -14,31 +15,30 @@ export default {
     },
     mounted () {
         this.getLegendConfig();
-        console.warn(this.name);
-        console.warn(this.showLegendInMenu);
         $(this.$el).insertAfter(document.getElementById("root"));
     },
     methods: {
-        ...mapActions("Legend", [
-            "getLegendConfig"
-        ]),
+        ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
-        clicked () {
-            console.warn("clicked");
+        toggleLegend () {
+            this.setShowLegend(!this.showLegend);
         }
     }
 };
 </script>
 
 <template>
-    <ul
+    <div
         v-if="showLegendInMenu"
-        id="Legend"
-        @click="clicked"
+        id="LegendMenu"
+        @click="toggleLegend"
     >
-        <!-- <span class="glyphicon glyphicon-book hidden-sm" /><span>{{ $t("menu.legend") }}</span> -->
-        <span class="glyphicon glyphicon-book hidden-sm" /><span>{{ $t(name) }}</span>
-    </ul>
+        <span
+            :class="glyphicon"
+            class="glyphicon hidden-sm"
+        ></span>
+        <span>{{ $t("menu.legend") }}</span>
+    </div>
 </template>
 
 <style lang="less" scoped>

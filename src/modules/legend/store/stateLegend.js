@@ -1,3 +1,6 @@
 export default {
-    name: undefined
+    name: undefined,
+    glyphicon: "glyphicon-book",
+    showLegend: false,
+    legends: []
 };
