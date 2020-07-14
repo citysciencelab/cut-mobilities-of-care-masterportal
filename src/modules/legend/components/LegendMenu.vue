@@ -30,7 +30,7 @@ export default {
 <template>
     <div
         v-if="showLegendInMenu"
-        id="LegendMenu"
+        id="legend-menu"
         @click="toggleLegend"
     >
         <span
@@ -43,4 +43,7 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    #legend-menu {
+        cursor: pointer;
+    }
 </style>

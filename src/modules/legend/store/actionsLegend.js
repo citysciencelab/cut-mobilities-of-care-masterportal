@@ -21,26 +21,23 @@ const configPaths = [
             let legends = state.legends;
 
             legends.push(legendObj);
-            legends = legends.sort(function (a, b) {
-                let sortVal = 0;
+            // legends = legends.sort(function (a, b) {
+            //     let sortVal = 0;
 
-                if (a.position < b.position) {
-                    sortVal = -1;
-                }
-                if (a.position > b.position) {
-                    sortVal = 1;
-                }
-                return sortVal;
-            });
+            //     if (a.position < b.position) {
+            //         sortVal = -1;
+            //     }
+            //     if (a.position > b.position) {
+            //         sortVal = 1;
+            //     }
+            //     return sortVal;
+            // });
             state.legends = legends;
         },
-        removeLegend: function ({state}, layerName) {
+        removeLegend: function ({state}, id) {
             state.legends = state.legends.filter((legendObj) => {
-                return legendObj.name !== layerName;
+                return legendObj.id !== id;
             });
-        },
-        clearLegends: function ({state}) {
-            state.legends = [];
         }
     };
 

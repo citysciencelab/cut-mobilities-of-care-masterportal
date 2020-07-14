@@ -17,9 +17,6 @@ export default {
 
                 visibleLayers.forEach(layer => this.toggleLayerInLegend(layer));
             }
-            else {
-                this.clearLegends();
-            }
         }
     },
     mounted () {
@@ -28,72 +25,70 @@ export default {
     created () {
         Backbone.Events.listenTo(Radio.channel("Layer"), {
             "layerVisibleChanged": (id, isVisibleInMap, layer) => {
-                if (this.showLegend) {
-                    this.toggleLayerInLegend(layer);
-                }
+                this.toggleLayerInLegend(layer);
             }
         });
     },
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
-        // This is for closing the legend from the legend window
-        // toggleLegend () {
-        //     this.setShowLegend(!this.showLegend);
-        // },
+        closeLegend () {
+            this.setShowLegend(!this.showLegend);
+        },
         getVisibleLayers () {
             return Radio.request("ModelList", "getModelsByAttributes", {type: "layer", isVisibleInMap: true});
         },
         toggleLayerInLegend (layer) {
-            if (layer.get("isVisibleInMap")) {
+            const isVisibleInMap = layer.get("isVisibleInMap"),
+                layerId = layer.get("id");
+
+            if (isVisibleInMap) {
                 this.generateLegend(layer);
             }
             else {
-                this.removeLegend(layer.get("name"));
-                // console.log(this.legends);
+                this.removeLegend(layerId);
             }
         },
         generateLegend (layer) {
-            const legendObj = this.generateLegendObj(layer);
+            const id = layer.get("id"),
+                legendObj = {
+                    id: id,
+                    name: layer.get("name"),
+                    legend: layer.get("legend") ? layer.get("legend") : layer.get("legendURL"),
+                    position: layer.get("selectionIDX")
+                },
+                isNotYetInLegend = this.isLayerNotYetInLegend(id);
 
-            if (this.isValidLegendObj(legendObj)) {
+            if (this.isValidLegendObj(legendObj) && isNotYetInLegend) {
                 this.addLegend(legendObj);
-                // console.log(this.legends);
             }
         },
-        generateLegendObj (layer) {
-            const name = layer.get("name"),
-                legend = layer.get("legendURL"),
-                position = layer.get("selectionIDX"),
-                legendObj = {
-                    name,
-                    legend,
-                    position
-                };
+        /* example WMS
+            {
+                name: "Layername",
+                legend: [
+                    "https://geoportal.muenchen.de/geoserver/gsm/wms?VERSION=1.0.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=gsm:citywise"
+                ],
+                position:1
+            }
+        */
 
-            /* example WMS
-                {
-                    name: "Layername",
-                    legend: [
-                        "https://geoportal.muenchen.de/geoserver/gsm/wms?VERSION=1.0.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=gsm:citywise"
-                    ],
-                    position:1
-                }
-            */
-
-            /* example vector
-                {
-                    name: "Layername",
-                    legend: [
-                        {
-                            name: "foobar",
-                            graphic: "<svg>...</svg>"
-                        }
-                    ],
-                    position:2
-                }
-            */
-            return legendObj;
+        /* example vector
+            {
+                name: "Layername",
+                legend: [
+                    {
+                        name: "foobar",
+                        graphic: "<svg>...</svg>"
+                    }
+                ],
+                position:2
+            }
+        */
+        isLayerNotYetInLegend (layerId) {
+            return this.legends.filter((legendObj) => {
+                return legendObj.id === layerId;
+            }).length === 0;
         },
         isValidLegendObj (legendObj) {
             let isValid = true;
@@ -116,17 +111,39 @@ export default {
 <template>
     <div
         v-if="showLegend"
-        id="LegendWindow"
+        id="legend-window"
     >
-        <div class="legendTitle">
+        <div class="legend-title">
             <span
                 :class="glyphicon"
                 class="glyphicon hidden-sm"
             />
             <span>{{ $t("menu.legend") }}</span>
+            <span
+                class="glyphicon glyphicon-remove close-legend float-right"
+                @click="closeLegend"
+            ></span>
         </div>
-        <div class="legendContent">
-            <span>FOOBAR</span>
+        <div class="legend-content">
+            <div
+                v-for="legendObj in legends"
+                :key="legendObj.name"
+            >
+                <div class="layer-title">
+                    {{ legendObj.name }}
+                </div>
+                <div class="layer-legend">
+                    <div
+                        v-for="legendPart in legendObj.legend"
+                        :key="legendPart"
+                    >
+                        <img
+                            v-if="typeof legendPart === 'string'"
+                            :src="legendPart"
+                        >
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -134,9 +151,28 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
 
-    #LegendWindow {
+    #legend-window {
         position: absolute;
-        left: 0px;
+        right: 100px;
         background-color: #ffffff;
+        width:300px;
+        padding: 10px;
+        .legend-title {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #000000;
+            .close-legend {
+                cursor: pointer;
+            }
+        }
+        .legend-content {
+            padding-top: 10px;
+            .layer-title {
+
+            }
+            .layer-legend {
+
+            }
+        }
     }
+
 </style>
