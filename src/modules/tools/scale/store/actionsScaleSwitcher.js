@@ -31,7 +31,7 @@ const configPaths = [
         * @param {boolean} active Value deciding whether the tool gets activated or deactivated.
         * @returns {void}
         */
-        setActive ({commit, rootState}, active) {
+        setActive ({commit}, active) {
             commit("setActive", active);
         }
     };
