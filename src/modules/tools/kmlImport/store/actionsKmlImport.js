@@ -1,5 +1,6 @@
 import {fetchFirstModuleConfig} from "../../../../utils/fetchFirstModuleConfig";
 import {KML, GeoJSON, GPX} from "ol/format.js";
+import {Circle as CircleStyle, Fill, Stroke, Style} from "ol/style";
 
 const configPaths = [
         "configJson.Portalconfig.menu.tools.children.kmlimport"
@@ -49,6 +50,65 @@ function getFormat (filename, selectedFiletype, supportedFiletypes, availableFor
     return false;
 }
 
+/**
+ * Creates a simple default style for specific features.
+ * May be augmented with more styles or made configurable later on.
+ *
+ * @returns {Object} Returns the style object applicable with Layer.setStyle().
+ */
+function createDefaultStyles () {
+    const style = {
+        "Point": new Style({
+            image: new CircleStyle({
+                fill: new Fill({
+                    color: "rgba(255,255,0,0.6)"
+                }),
+                radius: 8,
+                stroke: new Stroke({
+                    color: "#FFFF00",
+                    width: 2
+                })
+            })
+        }),
+        "LineString": new Style({
+            stroke: new Stroke({
+                color: "#FF0000",
+                width: 4
+            })
+        }),
+        "MultiLineString": new Style({
+            stroke: new Stroke({
+                color: "#00FF00",
+                width: 4
+            })
+        })
+    };
+
+    return style;
+}
+
+/**
+ * Checks for OL-unsupported tags and removes them.
+ * Currently unszpported tags are:
+ *      - cascadingStyle
+
+ * @param {String} rawSource - KML source as string.
+ * @returns {String} Returns raw string KML source without unsupported tags.
+ */
+function removeBadTags (rawSource) {
+    let result = rawSource;
+
+    // remove "cascadingStyle" Tags
+    result = rawSource.replace(/<.*?cascadingstyle.*?kml:id="(.+)">\s*<style>/gmi, (a, b) => {
+        return "<Style id=\"" + b + "\">";
+    });
+    result = result.replace(/<\/Style>\s*<\/.*?cascadingstyle>/gmi, "</Style>");
+
+    // ... remove more tags eventually
+
+    return result;
+}
+
 export default {
     initialize: context => fetchFirstModuleConfig(context, configPaths, "kmlimport"),
 
@@ -76,6 +136,10 @@ export default {
         let
             alertingMessage,
             features;
+
+        if (format instanceof KML) {
+            datasrc.raw = removeBadTags(datasrc.raw);
+        }
 
         if (format === false) {
             alertingMessage = {
@@ -126,6 +190,9 @@ export default {
         });
 
         vectorLayer.getSource().addFeatures(features);
+        if (format instanceof GPX || format instanceof GeoJSON) {
+            vectorLayer.setStyle((feature) => createDefaultStyles()[feature.getGeometry().getType()]);
+        }
 
         alertingMessage = {
             category: i18next.t("common:modules.alerting.categories.info"),
