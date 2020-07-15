@@ -33,45 +33,18 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     fetchData: function (defaultConfigPath) {
         this.fetch({async: false,
             error: function (model, xhr, error) {
-                const statusText = xhr.statusText;
-                let message,
-                    position,
-                    snippet,
-                    textStatus;
+                Radio.trigger("Alert", "alert", {text: "Die gewünschte Konfigurationsdatei konnte nicht geladen werden."});
+                console.warn(error);
 
-                // SyntaxError for consoletesting, propably because of older version.
-                if (statusText === "Not Found" || statusText.indexOf("SyntaxError") !== -1) {
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Die Datei \"" + model.url + "\" ist nicht vorhanden!</strong>"
-                        + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
-                        kategorie: "alert-warning"
-                    });
-                    if (this.url !== defaultConfigPath) {
-                        this.url = defaultConfigPath;
-                        this.fetchData(defaultConfigPath);
-                    }
-                }
-                else {
-                    message = error.errorThrown.message;
-                    position = parseInt(message.substring(message.lastIndexOf(" ")), 10);
-                    snippet = xhr.responseText.substring(position - 30, position + 30);
-                    textStatus = error.textStatus;
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Die Datei '" + model.url + "' konnte leider nicht geladen werden!</strong> <br> " +
-                        "<small>Details: " + textStatus + " - " + error.errorThrown.message + ".</small><br>" +
-                        "<small>Auszug:" + snippet + "</small>",
-                        kategorie: "alert-warning"
-                    });
-                    if (textStatus === "parsererror") {
-                        // reload page once
-                        if (window.localStorage) {
-                            if (!localStorage.getItem("firstLoad")) {
-                                localStorage.firstLoad = true;
-                                window.location.reload();
-                            }
-                            else {
-                                localStorage.removeItem("firstLoad");
-                            }
+                if (error.textStatus === "parsererror") {
+                    // reload page once
+                    if (window.localStorage) {
+                        if (!localStorage.getItem("firstLoad")) {
+                            localStorage.firstLoad = true;
+                            window.location.reload();
+                        }
+                        else {
+                            localStorage.removeItem("firstLoad");
                         }
                     }
                 }
