@@ -36,11 +36,14 @@ module.exports = function () {
             throw new Error("ERROR: WRONG ENTRY IN \"" + addonConfigPath + "\" at key \"" + addonName + "\"\nABORTED...");
         }
 
-        const addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
+        let addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
 
         if (!fse.existsSync(addonFilePath)) {
-            console.error("############\n------------");
-            throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
+            addonFilePath = path.resolve(addonPath, addonName, "store", addonEntryPoints[addonName]);
+            if (!fse.existsSync(addonFilePath)) {
+                console.error("############\n------------");
+                throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
+            }
         }
 
         addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");

@@ -454,12 +454,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         // Laden des Layers überwachen
         if (layer instanceof LayerGroup) {
             layer.getLayers().forEach(function (singleLayer) {
+                /* NOTE
+                 * Broken. channel.trigger is called immediately and returns undefined.
+                 * However, depending on the config, the loader will not disappear without this toggle.
+                 * (e.g. if only one WMTS without optionsFromCapabilities is set)
+                 */
                 singleLayer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
                 singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
             });
         }
         else if (layerModel instanceof WMTSLayer) {
-            if (layerModel.attributes.optionsFromCapabilities) {
+            if (layerModel.attributes.optionsFromCapabilities && !layerModel.hasBeenActivatedOnce) {
+                /* Additional guard: "addLayerToIndex" is called about 3 times on startup,
+                 * but addLoadingLayer should only be called once */
+                layerModel.hasBeenActivatedOnce = true;
                 // wmts source will load asynchonously
                 // -> source=null at this step
                 // listener to remove loading layer is set in WMTS class (on change:layerSource)
@@ -467,6 +475,11 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             }
         }
         else {
+            /* NOTE
+             * Broken. channel.trigger is called immediately and returns undefined.
+             * However, depending on the config, the loader will not disappear without this toggle.
+             * (e.g. if only one WMTS without optionsFromCapabilities is set)
+             */
             layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
             layer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
         }

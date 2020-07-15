@@ -20,7 +20,8 @@ export default {
     computed: {
         ...mapState([
             // listen to configJson changes for mounting the tools
-            "configJson"
+            "configJson",
+            "i18NextInitialized"
         ])
     }
 };
@@ -43,7 +44,7 @@ export default {
         <ScaleSwitcher v-if="configJson" />
         <SupplyCoord v-if="configJson" />
         <KmlImport v-if="configJson" />
-        <template v-if="configJson">
+        <template v-if="i18NextInitialized">
             <component
                 :is="$options.components[addonKey]"
                 v-for="addonKey in $addons"
