@@ -27,9 +27,12 @@ const Config = {
     },
     useVectorStyleBeta: true,
     featureViaURL: {
-        layerId: "420",
-        layerName: "Übergebene Feature",
-        styleId: "funky"
+        epsg: 4326,
+        layers: [{
+            id: "420",
+            name: "Übergebene Punkt Feature",
+            styleId: "funky"
+        }]
     }
 };
 

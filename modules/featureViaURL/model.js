@@ -1,10 +1,8 @@
 const featureViaURL = Backbone.Model.extend({
     defaults: {
-        layerName: "Features via URL",
-        // Labeling for the properties of the Features
         featureLabel: "Beschriftung",
-        xCoordLabel: "X-Koordinate",
-        yCoordLabel: "Y-Koordinate"
+        coordLabel: "Koordinaten",
+        typeLabel: "Geometrietyp"
     },
     /**
      * @class FeatureViaURL
@@ -12,22 +10,32 @@ const featureViaURL = Backbone.Model.extend({
      * @extends Backbone.Model
      * @param {Object} config The configuration of the module from the config.js.
      * @constructs
-     * @property {String} layerName="Features via URL" The name of the GeoJSON layer.
      * @property {String} featureLabel="Beschriftung" The label for the features.
-     * @property {String} xCoordLabel="X-Koordinate" The label for the x-coordinate of the features.
-     * @property {String} yCoordLabel="Y-Koordinate" The label for the y-coordinate of the features.
+     * @property {String} coordLabel="Koordinaten" The label for the coordinates of the features.
+     * @property {String} typeLabel="Geometrietyp" The label for the type of the features.
      * @fires Core#RadioRequestParametricURLGetFeatureViaURL
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @fires Tools.AddGeoJSON#RadioTriggerAddGeoJSONAddGeoJsonToMap
      */
     initialize: function (config) {
-        this.setValues(config.layerName, config.label?.feature, config.label?.xCoord, config.label?.yCoord);
+        // TODO: ERROR HANDLING IF PARAMS ARE MISSING
+        // TODO: CONFIG DOC
+        // TODO: TESTS?
+        // TODO: Ticket aktualisieren, sobald PR gestellt!
+
+        /*
+            URL Param for Points:       ?featureViaURL=[{"type":"Point","coordinates":[10,53.5],"label":"TestPunkt"}]
+            URL Param for LineStrings:  ?featureViaURL=[{"type":"LineString","coordinates":[[10.05,53.5],[10,53.5], [10,53.55]],"label":"TestLinie"}]
+        */
+
+        this.setValues(config.label?.feature, config.label?.coord, config.label?.type);
 
         const geoJSON = this.createGeoJSON(config.epsg, Radio.request("ParametricURL", "getFeatureViaURL")),
             treeType = Radio.request("Parser", "getTreeType"),
             parentId = treeType === "light" ? "tree" : "Overlayer";
 
-        Radio.trigger("AddGeoJSON", "addGeoJsonToMap", this.get("layerName"), config.layerId, geoJSON, parentId, config.styleId);
+        // TODO: Irgendwie einen Ordner anlegen für die Feature, wenn der treeType nicht light ist
+        Radio.trigger("AddGeoJSON", "addGeoJsonToMap", config.layers[0].name, config.layers[0].id, geoJSON, parentId, config.layers[0].styleId);
     },
     /**
      * Creates a basic GeoJSON structure and add the features from the user to it.
@@ -49,23 +57,23 @@ const featureViaURL = Backbone.Model.extend({
                 "features": []
             },
             featureLabel = this.get("featureLabel"),
-            xCoordLabel = this.get("xCoordLabel"),
-            yCoordLabel = this.get("yCoordLabel");
+            coordLabel = this.get("coordLabel"),
+            typeLabel = this.get("typeLabel");
         let featureJSON;
 
         features.forEach(feature => {
             featureJSON = {
                 "type": "Feature",
                 "geometry": {
-                    "type": "Point",
-                    "coordinates": [feature.x, feature.y]
+                    "type": feature.type,
+                    "coordinates": feature.coordinates
                 },
                 "properties": {
                 }
             };
             featureJSON.properties[featureLabel] = feature.label;
-            featureJSON.properties[xCoordLabel] = feature.x;
-            featureJSON.properties[yCoordLabel] = feature.y;
+            featureJSON.properties[coordLabel] = feature.coordinates;
+            featureJSON.properties[typeLabel] = feature.type;
             geoJSON.features.push(featureJSON);
         });
 
@@ -74,24 +82,20 @@ const featureViaURL = Backbone.Model.extend({
     /**
      * Sets values on the model if given in the config.
      *
-     * @param {String} [layerName] Name of the layer for the given features from the URL.
      * @param {String} [featureLabel] Label for the feature descriptions.
-     * @param {String} [xCoordLabel] Label for the x-coordinate of the features.
-     * @param {String} [yCoordLabel] Label for the y-coordinate of the features.
+     * @param {String} [coordLabel] Label for the x-coordinate of the features.
+     * @param {String} [typeLabel] Label for the type of the features.
      * @returns {void}
      */
-    setValues: function (layerName, featureLabel, xCoordLabel, yCoordLabel) {
-        if (layerName !== undefined) {
-            this.set("layerName", layerName);
-        }
+    setValues: function (featureLabel, coordLabel, typeLabel) {
         if (featureLabel !== undefined) {
             this.set("featureLabel", featureLabel);
         }
-        if (xCoordLabel !== undefined) {
-            this.set("xCoordLabel", xCoordLabel);
+        if (coordLabel !== undefined) {
+            this.set("xCoordLabel", coordLabel);
         }
-        if (yCoordLabel !== undefined) {
-            this.set("yCoordLabel", yCoordLabel);
+        if (typeLabel !== undefined) {
+            this.set("typeLabel", typeLabel);
         }
     }
 });
