@@ -22,19 +22,17 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         const defaultConfigPath = this.get("defaultConfigPath");
 
         this.url = this.getUrlPath(options.url, this.requestConfigFromUtil(), defaultConfigPath);
-        this.fetchData(defaultConfigPath);
+        this.fetchData();
     },
 
     /**
      * Fetches the Data from the config.json.
-     * @param {string} defaultConfigPath The default path to config.json
      * @returns {void}
      */
-    fetchData: function (defaultConfigPath) {
+    fetchData: function () {
         this.fetch({async: false,
-            error: function (model, xhr, error) {
-                Radio.trigger("Alert", "alert", {text: "Die gewünschte Konfigurationsdatei konnte nicht geladen werden."});
-                console.warn(error);
+            error: (model, xhr, error) => {
+                Radio.trigger("Alert", "alert", {text: "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden:<br>" + this.url});
 
                 if (error.textStatus === "parsererror") {
                     // reload page once
@@ -48,7 +46,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                         }
                     }
                 }
-            }.bind(this)
+            }
         });
     },
 
