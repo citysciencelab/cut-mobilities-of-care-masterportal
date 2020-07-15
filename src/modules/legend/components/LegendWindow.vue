@@ -137,10 +137,19 @@ export default {
                         v-for="legendPart in legendObj.legend"
                         :key="legendPart"
                     >
+                        <!--Legend as Image-->
                         <img
-                            v-if="typeof legendPart === 'string'"
+                            v-if="(typeof legendPart === 'string' && !legendPart.endsWith('.pdf'))"
                             :src="legendPart"
                         >
+                        <!--Legend PDF as Link-->
+                        <a
+                            v-if="(typeof legendPart === 'string' && legendPart.endsWith('.pdf'))"
+                            :href="legendPart"
+                            target="_blank"
+                        >
+                            {{ legendPart }}
+                        </a>
                     </div>
                 </div>
             </div>

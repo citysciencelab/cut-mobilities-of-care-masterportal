@@ -151,6 +151,10 @@ const WMSLayer = Layer.extend({
 
             this.set("legendURL", legendURL);
         }
+        else if (this.get("legendURL") !== "ignore" && !Array.isArray(this.get("legendURL"))) {
+            legendURL.push(this.get("legendURL"));
+            this.set("legendURL", legendURL);
+        }
     },
 
     /**
