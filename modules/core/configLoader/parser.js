@@ -373,14 +373,17 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} name - todo
-     * @param {*} id - todo
-     * @param {*} geojson - todo
-     * @param {String} styleId Id for the styling of the features.
+     * Creates the Masterportal Configuration for a GeoJSON Layer.
+     * Adds the configuration to be parsed into the Portal.
+     *
+     * @param {String} name Name of the layer.
+     * @param {String} id Unique identifier for the layer.
+     * @param {(String | JSON)} geojson GeoJSON for the layer containing the features.
+     * @param {String} [parentId] Id for the correct position of the layer in the layertree.
+     * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
      * @returns {void}
      */
-    addGeoJSONLayer: function (name, id, geojson, styleId) {
+    addGeoJSONLayer: function (name, id, geojson, parentId, styleId) {
         const layer = {
             type: "layer",
             name: name,
@@ -398,9 +401,15 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isVisibleInTree: true,
             cache: false,
             datasets: [],
-            urlIsVsible: true,
-            styleId: styleId
+            urlIsVsible: true
         };
+
+        if (styleId !== undefined) {
+            layer.styleId = styleId;
+        }
+        if (parentId !== undefined) {
+            layer.parentId = parentId;
+        }
 
         this.addItem(layer);
     },

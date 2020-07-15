@@ -25,7 +25,12 @@ const Config = {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
     },
-    useVectorStyleBeta: true
+    useVectorStyleBeta: true,
+    featureViaURL: {
+        layerId: "420",
+        layerName: "Übergebene Feature",
+        styleId: "funky"
+    }
 };
 
 // conditional export to make config readable by e2e tests

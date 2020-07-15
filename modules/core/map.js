@@ -440,6 +440,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         let layerModel;
 
         if (layer) {
+            // TODO: Is there a reason the name is used instead of the ID?
             layerModel = Radio.request("ModelList", "getModelByAttributes", {"name": layer.get("name")});
         }
 

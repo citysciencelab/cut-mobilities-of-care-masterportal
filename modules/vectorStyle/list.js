@@ -123,6 +123,9 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
         styleIds.push(this.getStyleIdsFromTools(tools));
+        if (Config?.featureViaURL?.styleId !== undefined) {
+            styleIds.push(Config.featureViaURL.styleId);
+        }
 
         styleIds = Array.isArray(styleIds) ? styleIds.reduce((acc, val) => acc.concat(val), []) : styleIds;
         filteredData = data.filter(function (styleModel) {

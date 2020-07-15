@@ -21,6 +21,7 @@ import ColorScale from "../modules/tools/colorScale/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
+import FeatureViaURL from "../modules/featureViaURL/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
@@ -172,6 +173,9 @@ async function loadApp () {
     }
     if (Config.hasOwnProperty("zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
+    }
+    if (Config.hasOwnProperty("featureViaURL")) {
+        new FeatureViaURL(Config.featureViaURL);
     }
 
     new SliderView();

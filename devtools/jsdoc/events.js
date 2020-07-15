@@ -2005,6 +2005,11 @@
  * @description todo
  */
 
+ /**
+  * @event Core#RadioRequestParametricURLGetFeatureViaURL
+  * @returns {Object[]} Returns the features given by the user via the URL.
+  */
+
 /**
  * @event Core#RadioRequestParametricURLGetProjectionFromUrl
  * @description todo

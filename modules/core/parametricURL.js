@@ -5,7 +5,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         layerParams: [],
         isInitOpen: [],
         zoomToGeometry: "",
-        zoomToFeatureIds: []
+        zoomToFeatureIds: [],
+        featureViaURL: []
     },
 
     /**
@@ -18,6 +19,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @property {String[]} isInitOpen="" Tool to be opened initially.
      * @property {string} zoomToGeometry=[] Geoemtry to be zoomed on.
      * @property {String[]} zoomToFeatureIds=[] Features to be zoomed in on.
+     * @property {Object[]} featureViaURL=[] The features given by the user via the URL.
      * @listens Core#RadioRequestParametricURLGetResult
      * @listens Core#RadioRequestParametricURLGetLayerParams
      * @listens Core#RadioRequestParametricURLGetIsInitOpen
@@ -29,6 +31,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @listens Core#RadioRequestParametricURLGetZoomToExtent
      * @listens Core#RadioRequestParametricURLGetStyle
      * @listens Core#RadioRequestParametricURLGetFilter
+     * @listens Core#RadioRequestParametricURLGetFeatureViaURL
      * @listens Core#RadioRequestParametricURLGetHighlightFeature
      * @listens Core#RadioRequestParametricURLGetZoomToFeatureIds
      * @listens Core#RadioRequestParametricURLGetBrwId
@@ -76,6 +79,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "getStyle": this.getStyle,
             "getFilter": function () {
                 return this.get("filter");
+            },
+            "getFeatureViaURL": function () {
+                return this.get("featureViaURL");
             },
             "getHighlightFeature": function () {
                 return this.get("highlightfeature");
@@ -151,7 +157,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "CENTER": this.setCenter.bind(this),
             "CLICKCOUNTER": this.setClickCounter.bind(this),
             "FEATUREID": this.setZoomToFeatureIds.bind(this),
-            "FEATURE": this.setInitialFeature.bind(this),
+            "FEATUREVIAURL": this.setFeatureViaURL.bind(this),
             "FILTER": this.setFilter.bind(this),
             "HEADING": this.evaluateCameraParameters.bind(this),
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
@@ -318,53 +324,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         Config.tree.metaIdsToSelected = values;
         Config.view.zoomLevel = 0;
         this.createLayerParamsUsingMetaId(values);
-    },
-
-    setInitialFeature: function (input) {
-        const config = Radio.request("Parser", "getPortalConfig")?.featureViaURL;
-
-        if (config === undefined) {
-            console.warn("FeatureViaURL: This Portal does not support features via URL!");
-        }
-        else {
-            const epsg = config.epsg === undefined ? 4326 : config.epsg,
-                layerName = config.layerName === undefined ? "FeaturesViaURL" : config.layerName,
-                styleID = config.style,
-                geoJSON = this.createGeoJSON(JSON.parse(input).features, epsg, styleID);
-
-            // TODO: This way the layer does not show in the Layertree!
-            // TODO: The styleId is not found if it is not used for a different layer as well
-            Radio.trigger("Parser", "addGeoJSONLayer", layerName, config.layerID, geoJSON, styleID);
-        }
-    },
-
-    createGeoJSON: function (features, epsg) {
-        const geoJSON = {
-            "type": "FeatureCollection",
-            "crs": {
-                "type": "link",
-                "properties": {
-                    "href": "http://spatialreference.org/ref/epsg/" + epsg + "/proj4/",
-                    "type": "proj4"
-                }
-            },
-            "features": []
-        };
-
-        features.forEach(feature => {
-            geoJSON.features.push({
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [feature.x, feature.y]
-                },
-                "properties": {
-                    "label": feature.label
-                }
-            });
-        });
-
-        return geoJSON;
     },
 
     /**
@@ -760,6 +719,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      */
     setZoomToExtent: function (value) {
         this.set("zoomToExtent", value);
+    },
+
+    /**
+     * Sets the array for the features via the URL.
+     * @param {String} value The given features from the URL which is parsed to JSON.
+     * @returns {void}
+     */
+    setFeatureViaURL: function (value) {
+        this.set("featureViaURL", JSON.parse(value));
     }
 });
 
