@@ -33,9 +33,6 @@ const configPaths = [
         */
         setActive ({commit, rootState}, active) {
             commit("setActive", active);
-            if (active) {
-                commit("setCurrentScale", Math.round(rootState.Map.scale / 1000) * 1000);
-            }
         }
     };
 
