@@ -28,11 +28,24 @@ const Config = {
     useVectorStyleBeta: true,
     featureViaURL: {
         epsg: 4326,
-        layers: [{
-            id: "420",
-            name: "Übergebene Punkt Feature",
-            styleId: "funky"
-        }]
+        layers: [
+            {
+                id: "420",
+                geometryType: "Point",
+                name: "Übergebene Punkt Feature",
+                styleId: "funky"
+            },
+            {
+                id: "4200",
+                geometryType: "LineString",
+                name: "Übergebene Linien Feature"
+            },
+            {
+                id: "4020",
+                geometryType: "Polygon",
+                name: "Übergebene Polygon Feature"
+            }
+        ]
     }
 };
 
