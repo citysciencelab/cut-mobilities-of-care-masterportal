@@ -1,4 +1,4 @@
-const featureViaURL = Backbone.Model.extend({
+const FeatureViaURL = Backbone.Model.extend({
     defaults: {
         featureLabel: "Beschriftung",
         coordLabel: "Koordinaten",
@@ -147,4 +147,4 @@ const featureViaURL = Backbone.Model.extend({
     }
 });
 
-export default featureViaURL;
+export default FeatureViaURL;
