@@ -828,6 +828,11 @@
  * @description foobar
  */
 
+ /**
+  * @namespace FeatureViaURL
+  * @description Creates a new GeoJSON layer on the basis of the given features by the user via the URL.
+  */
+
 /**
  * @namespace Footer
  * @description Defines the footer shown on the bottom of the map.
