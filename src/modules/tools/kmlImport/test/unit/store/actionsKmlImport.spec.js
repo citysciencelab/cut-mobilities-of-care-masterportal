@@ -35,7 +35,7 @@ describe("actionsKmlImport", function () {
             };
 
             testAction(activateByUrlParam, null, {active: false}, rootState, [
-                {type: "active", payload: true}
+                {type: "setActive", payload: true}
             ], {}, done);
         });
         it("activateByUrlParam no isinitopen", done => {
