@@ -19,7 +19,6 @@ const FeatureViaURL = Backbone.Model.extend({
      * @fires Tools.AddGeoJSON#RadioTriggerAddGeoJSONAddGeoJsonToMap
      */
     initialize: function (config) {
-        // TODO: ERROR HANDLING IF PARAMS ARE MISSING
         // TODO: CONFIG DOC
         // TODO: TESTS?
         // TODO: Ticket aktualisieren, sobald PR gestellt!
@@ -30,32 +29,42 @@ const FeatureViaURL = Backbone.Model.extend({
             URL Param for Polygons:         ?featureViaURL=[{"layerId":"4020","features":[{"coordinates":[[[10.05,53.5],[10,53.5],[9.80,53.55],[10,53.55]]],"label":"TestPolygon"}]}]
             URL Param for Multi-Polygons:   ?featureViaURL=[{"layerId":"4020","features":[{"coordinates":[[[10.05,53.5],[10,53.5],[9.80,53.55],[10,53.55]],[[10.072,53.492],[9.92,53.492],[9.736,53.558],[10.008,53.558]]],"label":"TestMultiPolygon"}]}]
         */
+        if (Array.isArray(config.layers) && config.layers.length > 0) {
+            this.setValues(config.label?.feature, config.label?.coord, config.label?.type);
+            const gfiAttributes = this.createGFIAttributes(),
+                layers = Radio.request("ParametricURL", "getFeatureViaURL"),
+                parentId = treeType === "light" ? "tree" : "Overlayer",
+                treeType = Radio.request("Parser", "getTreeType");
+            let features,
+                geoJSON,
+                layerId,
+                layerPosition;
 
-        this.setValues(config.label?.feature, config.label?.coord, config.label?.type);
-
-        const gfiAttributes = this.createGFIAttributes(),
-            layers = Radio.request("ParametricURL", "getFeatureViaURL"),
-            parentId = treeType === "light" ? "tree" : "Overlayer",
-            treeType = Radio.request("Parser", "getTreeType");
-        let features,
-            geoJSON,
-            layerId,
-            layerPosition;
-
-        // TODO: Irgendwie einen Ordner anlegen für die Feature, wenn der treeType nicht light ist
-        layers.forEach(layer => {
-            layerId = layer.layerId;
-            features = layer.features;
-            layerPosition = this.findPosition(config.layers, layerId);
-            if (layerPosition !== undefined) {
-                geoJSON = this.createGeoJSON(config.epsg, features, config.layers[layerPosition].geometryType);
-                Radio.trigger("AddGeoJSON", "addGeoJsonToMap", config.layers[layerPosition].name, config.layers[layerPosition].id, geoJSON, config.layers[layerPosition].styleId, parentId, gfiAttributes);
-            }
-            else {
-                // TODO: Make this as an alert!
-                console.error("FeatureViaURL: The layerID given by the URL was not defined in the config.js!");
-            }
-        });
+            // TODO: Irgendwie einen Ordner anlegen für die Feature, wenn der treeType nicht light ist
+            layers.forEach(layer => {
+                layerId = layer.layerId;
+                features = layer.features;
+                layerPosition = this.findPosition(config.layers, layerId);
+                if (layerPosition !== undefined) {
+                    if (config.layers[layerPosition].name !== undefined) {
+                        geoJSON = this.createGeoJSON(config.epsg, features, config.layers[layerPosition].geometryType);
+                        Radio.trigger("AddGeoJSON", "addGeoJsonToMap", config.layers[layerPosition].name, config.layers[layerPosition].id, geoJSON, config.layers[layerPosition].styleId, parentId, gfiAttributes);
+                    }
+                    else {
+                        // TODO: Make this as an alert!
+                        console.error(`FeatureViaURL: No name was defined in the configuration for the layer with the id ${layerId}.`);
+                    }
+                }
+                else {
+                    // TODO: Make this as an alert!
+                    console.error(`FeatureViaURL: The layerID ${layerId} given by the URL was not defined in the config.js.`);
+                }
+            });
+        }
+        else {
+            // TODO: Make this as an alert!
+            console.error("FeatureViaURL: The Input can't be parsed with the current configuration.");
+        }
     },
     /**
      * Creates a basic GeoJSON structure and add the features from the user to it.
@@ -80,19 +89,25 @@ const FeatureViaURL = Backbone.Model.extend({
         let featureJSON;
 
         features.forEach(feature => {
-            featureJSON = {
-                "type": "Feature",
-                "geometry": {
-                    "type": geometryType,
-                    "coordinates": feature.coordinates
-                },
-                "properties": {
-                    "featureLabel": feature.label,
-                    "coordLabel": feature.coordinates,
-                    "typeLabel": geometryType
-                }
-            };
-            geoJSON.features.push(featureJSON);
+            try {
+                featureJSON = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": geometryType,
+                        "coordinates": feature.coordinates
+                    },
+                    "properties": {
+                        "featureLabel": feature.label,
+                        "coordLabel": feature.coordinates,
+                        "typeLabel": geometryType
+                    }
+                };
+                geoJSON.features.push(featureJSON);
+            }
+            catch (err) {
+                // TODO: Make this an Alert!
+                console.error(`FeatureViaURL: Error while processing the feature data: ${err}`);
+            }
         });
 
         return geoJSON;
