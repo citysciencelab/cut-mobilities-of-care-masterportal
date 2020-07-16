@@ -6,13 +6,13 @@
 </div>
 <ul class="nav nav-pills">
     <li value= "info" class="tab-toggle active"><a data-toggle="tab" href="#gfiList">Info</a></li>
-  <% if (!_.isEmpty(dayDataset)) { %>
+    <% if (Object.keys(dayDataset).length !== 0) { %>
     <li value= "day" class="tab-toggle"><a data-toggle="tab" href="#chart">letzter Tag</a></li>
   <% } %>
-  <% if (!_.isEmpty(lastSevenDaysDataset)) { %>
+  <% if (Object.keys(lastSevenDaysDataset).length !== 0) { %>
     <li value= "lastSevenDays" class="tab-toggle"><a data-toggle="tab" href="#chart">letzte 7 Tage</a></li>
   <% } %>
-  <% if (!_.isEmpty(yearDataset)) { %>
+  <% if (Object.keys(yearDataset).length !== 0) { %>
     <li value= "year" class="tab-toggle"><a data-toggle="tab" href="#chart">Jahr</a></li>
   <% } %>
 </ul>
@@ -32,12 +32,12 @@
                         Fahrräder
                     </td>
                 </tr>
-            <%  _.each(infoGFIContent, function(value, index) {%>
+            <%  infoGFIContent.forEach(function(value, index) {%>
                 <tr colspan="3">
                     <td style="font-family: 'MasterPortalFont Bold','Arial Narrow',Arial,sans-serif;">
                         <%= value.attrName + ""%>
                     </td>
-                <% if(_.isArray(value.attrValue)) { %>
+                <% if(Array.isArray(value.attrValue)) { %>
                     <td class = "infoGFIContent">
                         <%= value.attrValue[0] %>
                     </td>
@@ -75,8 +75,8 @@
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
-                <% if (!_.isEmpty(dayDataset)) {
-                    _.each(dayDataset.data, function (day){%>
+                <% if (Object.keys(dayDataset).length !== 0) {
+                    dayDataset.data.forEach(function (day){%>
                 <th class="text-align-center"><%=day.timestamp%></th>
                 <% });%>
             </thead>
@@ -84,7 +84,7 @@
 
                 <tr>
                     <td class="kategory"><%=gfiContent[0].Name%></td>
-                <% _.each(dayDataset.data, function (day){%>
+                <% dayDataset.data.forEach(function (day){%>
                     <td class="data"><%=day.tableData%></td>
                 <% });
                 }%>
@@ -96,8 +96,8 @@
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
-                <% if (!_.isEmpty(lastSevenDaysDataset)) {
-                _.each(lastSevenDaysDataset.data, function (lastSevenDays){ %>
+                <% if (Object.keys(lastSevenDaysDataset).length !== 0) {
+                lastSevenDaysDataset.data.forEach(function (lastSevenDays){ %>
                 <th class="text-align-center"><%=lastSevenDays.timestamp%></th>
                 <% });%>
             </thead>
@@ -105,7 +105,7 @@
 
                 <tr>
                     <td class="kategory"><%=gfiContent[0].Name%></td>
-                <% _.each(lastSevenDaysDataset.data, function (lastSevenDays) {%>
+                <% lastSevenDaysDataset.data.forEach(function (lastSevenDays) {%>
                     <td class="data"><%=lastSevenDays.tableData%></td>
                 <% });
                 }%>
@@ -117,26 +117,26 @@
         <table class="table table-striped text-align-center">
             <thead>
                 <th class="text-align-center">Name</th>
-                <% if (!_.isEmpty(yearDataset)) {
-                _.each(yearDataset.data, function (year) {%>
+                <% if (Object.keys(yearDataset).length !== 0 && yearDataset.data !== undefined) {
+                yearDataset.data.forEach(function (year) { %>
                 <th class="text-align-center"><%=year.timestamp + " KW"%></th>
                 <% });%>
             </thead>
             <tbody>
 
-                <tr>
+                    <tr>
                     <td class="kategory"><%=gfiContent[0].Name%></td>
-                <% _.each(yearDataset.data, function (year) {%>
-                    <td class="data"><%=year.tableData%></td>
-                <% });
-                }%>
+                    <% yearDataset.data.forEach(function (year) { %>
+                        <td class="data"><%=year.tableData%></td>
+                    <% });
+                } %>
                 </tr>
             </tbody>
         </table>
     </div>
     <div class="continuousCountingBike tab-pane downloadButton fade">
-        <button class="btn csv-download">Download
-            <span class="glyphicon glyphicon-save"></span>
+        <button class="btn btn-primary csv-download">
+            <span class="glyphicon glyphicon-export"></span>Download
         </button>
     </div>
 </div>

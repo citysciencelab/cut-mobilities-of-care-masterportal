@@ -9,8 +9,8 @@
             <h4 class="subtitle"><%= title %></h4>
             <p><%= abstractText %></p>
 
-            <% if (!_.isNull(metaURL)) { %>
-              <% _.each(metaURL, function (url) { %>
+            <% if (metaURL !== null) { %>
+              <% metaURL.forEach(function (url) { %>
                   <br>
                   <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
               <% }); %>
@@ -28,10 +28,10 @@
                 <hr>
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
-                    <% if (!_.isNull(downloadLinks)) { %>
+                    <% if (downloadLinks !== null) { %>
                     <li><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
                     <% } %>
-                    <% if (!_.isNull(url)) { %>
+                    <% if (url !== null) { %>
                     <li><a data-toggle="tab" href="#url"><%= typ %>-Adresse</a></li>
                     <% } %>
                 </ul>
@@ -39,14 +39,14 @@
                 <div class="tab-content">
                     <div id="legende" class="tab-pane fade in active">
                       <p>
-                        <% if (_.isEmpty(legend.legend) || legend.legend[0].img === "") {
+                        <% if (legend.legend.length === 0 || legend.legend[0].img === "") {
                             print ("<p>Legende wird erst beim aktivieren des Layers geladen</p>");                    
                         }
-                        else if (_.isNull(legend.legend)) {
+                        else if (legend.legend === null) {
                             print ("<p>Keine Legende vorhanden</p>");   
                         }
                         else {
-                            _.each(legend.legend, function (legend) {
+                            legend.legend.forEach(function (legend) {
                                 print (legend.html);
                             });
                         } %>
@@ -54,7 +54,7 @@
                     </div>
                     <div id="LayerInfoDataDownload" class="tab-pane fade">
                         <ul class="list-unstyled">
-                            <% _.each(downloadLinks, function (downloadLink) { %>
+                            <% downloadLinks.forEach(function (downloadLink) { %>
                                 <li><a href="<%= downloadLink[1] %>" target="_blank"><%= downloadLink[0] %> </a><li>
                             <% }); %>
                         </ul>

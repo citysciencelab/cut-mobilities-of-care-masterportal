@@ -103,7 +103,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         const gfiFeatures = {"html": this.get("gfiUrl")};
 
         try {
-            if ($(data).find("tbody").children().length > 1) {
+            if ($(data).find("tbody").children().length >= 1) {
                 this.set("gfiContent", [gfiFeatures]);
             }
             this.setIsReady(true);
@@ -155,10 +155,11 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             multiTags;
 
         if (node.hasOwnProperty("firstElementChild") && node.firstElementChild.hasOwnProperty("children")) {
-            tagNameList = _.map(node.firstElementChild.children, element => element.tagName);
-            tagNameListSorted = _.sortBy(tagNameList, name => name);
+            tagNameList = node.firstElementChild.children.map(element => element.tagName);
+            tagNameListSorted = tagNameList.sort((nameA, nameB) => nameA - nameB);
             multiTags = tagNameListSorted.filter((tagName, index, list) => tagName === list[index + 1]);
-            multiTagsUnique = _.uniq(multiTags);
+
+            multiTagsUnique = [...new Set(multiTags)];
         }
 
         return multiTagsUnique;
@@ -173,9 +174,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
     replaceMultiNodes: function (multiTags, childNode) {
         multiTags.forEach(tagName => {
             const nodeList = childNode.getElementsByTagName(tagName),
-                nodeListValue = _.map(nodeList, function (node) {
-                    return node.innerHTML;
-                }),
+                nodeListValue = nodeList.map(node => node.innerHTML),
                 firstNode = nodeList[0];
 
             firstNode.innerHTML = JSON.stringify({
@@ -226,10 +225,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
         // ESRI is not parsed by the Ol-format
         if (gfiFeatures.length === 0) {
             if (dat.getElementsByTagName("FIELDS")[0] !== undefined) {
-                _.each(dat.getElementsByTagName("FIELDS"), function (element) {
+                dat.getElementsByTagName("FIELDS").forEach(element => {
                     const gfi = {};
 
-                    _.each(element.attributes, function (attribute) {
+                    element.attributes.forEach(attribute => {
                         const key = attribute.localName;
 
                         if (this.isValidValue(attribute.value)) {
@@ -241,10 +240,10 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                         else {
                             gfi[key] = "";
                         }
-                    }, this);
+                    });
 
                     gfiList.push(gfi);
-                }, this);
+                });
             }
         }
         else { // OS (deegree, UMN, Geoserver) is parsed by Ol-format
@@ -282,7 +281,7 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
             if (index > 0 && this.collection) {
                 clone = this.clone();
                 clone.set("gfiContent", [singlePgfi]);
-                clone.set("id", _.uniqueId());
+                clone.set("id", Radio.request("Util", "uniqueId"));
                 clone.set("isReady", true);
                 if (this.get("gfiTheme") === "trinkwasser") {
                     clone.splitContent();

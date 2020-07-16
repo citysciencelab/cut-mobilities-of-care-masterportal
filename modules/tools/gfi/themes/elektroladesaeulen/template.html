@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <div class= "text-align-center ladesaeulenHeader">
-    <% _.each(headTitleObject, function (value, key) { %>
+    <% Object.entries(headTitleObject).forEach(function (obj) {
+        const value = obj[1],
+            key = obj[0];
+    %>
         <strong><%=key%>: <%=value%></strong>
         <br>
     <% }); %>
@@ -22,16 +25,19 @@
          <thead>
             <tr class="row">
                 <th>Eigenschaften</th>
-                <% _.each(tableheadArray, function (element) { %>
+                <% tableheadArray.forEach(function(element) { %>
                     <th><%=element%></th>
                 <% }); %>
             </tr>
         </thead>
         <tbody>
-            <% _.each(gfiProperties, function (value, key) { %>
+            <% Object.entries(gfiProperties).forEach(function (property) { 
+                const value = property[1],
+                    key = property[0];
+            %>
                 <tr class="row">
                     <th><%=key%></th>
-                    <% _.each(value, function (val) { %>
+                    <% value.forEach(function(val) { %>
                         <td><%=val%></td>
                     <% }); %>
                 </tr>

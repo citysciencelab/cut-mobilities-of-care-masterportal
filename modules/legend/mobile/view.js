@@ -76,9 +76,11 @@ const MobileLegendView = Backbone.View.extend(/** @lends MobileLegendView.protot
      */
     addContentHTML: function (legendParams) {
         legendParams.forEach(legendDefinition => {
-            legendDefinition.legend.forEach(legend => {
-                legend.html = this.contentTemplate(legend);
-            });
+            if (legendDefinition.legend) {
+                legendDefinition.legend.forEach(legend => {
+                    legend.html = this.contentTemplate(legend);
+                });
+            }
         });
     },
     /**

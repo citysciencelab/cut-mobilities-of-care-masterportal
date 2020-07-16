@@ -3,7 +3,7 @@ import ImgView from "../../objects/image/view";
 import * as moment from "moment";
 
 const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBikeTheme.prototype */{
-    defaults: _.extend({}, Theme.prototype.defaults,
+    defaults: Object.assign({}, Theme.prototype.defaults,
         {
             dayDataset: {},
             lastSevenDaysDataset: {},
@@ -42,10 +42,12 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         const element = this.get("gfiContent"),
             children = [];
 
-        if (!_.isString(element)) {
-            _.each(element, function (ele, index) {
-                _.each(ele, function (val, key) {
-                    const valString = String(val);
+        if (typeof element !== "string") {
+            element.forEach((ele, index) => {
+                Object.entries(ele).forEach(oneElement => {
+                    const value = oneElement[1],
+                        key = oneElement[0],
+                        valString = String(value);
                     let copyright,
                         imgView;
 
@@ -54,11 +56,11 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                         // Prüfen, ob es auch ein Copyright für das Bild gibt, dann dieses ebenfalls an ImgView übergeben, damit es im Bild dargestellt wird
                         copyright = "";
 
-                        if (!_.isUndefined(element[index].Copyright) && element[index].Copyright !== null) {
+                        if (element[index].Copyright !== undefined && element[index].Copyright !== null) {
                             copyright = element[index].Copyright;
                             element[index].Copyright = "#";
                         }
-                        else if (!_.isUndefined(element[index].copyright) && element[index].copyright !== null) {
+                        else if (element[index].copyright !== undefined && element[index].copyright !== null) {
                             copyright = element[index].copyright;
                             element[index].copyright = "#";
                         }
@@ -74,11 +76,10 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
 
                         });
                     }
+
                     // lösche leere Dummy-Einträge wieder raus.
-                    element[index] = _.omit(element[index], function (value) {
-                        return value === "#";
-                    });
-                }, this);
+                    Radio.request("Util", "omit", element[index], ["#"]);
+                });
             });
         }
         if (children.length > 0) {
@@ -99,14 +100,16 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             yearLine,
             infoGFIContent;
 
-        if (!_.isUndefined(this.get("gfiContent"))) {
+        if (this.get("gfiContent") !== undefined) {
             gfiContent = this.get("gfiContent")[0];
-            infoGFIContent = _.omit(gfiContent, ["Tageslinie", "Wochenlinie", "Jahrgangslinie", "Name", "Typ", "Download"]);
-            dayLine = _.has(gfiContent, "Tageslinie") ? gfiContent.Tageslinie : null;
-            lastSevenDaysLine = _.has(gfiContent, "Wochenlinie") ? gfiContent.Wochenlinie : null;
-            yearLine = _.has(gfiContent, "Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
-            this.setDownloadLink(_.has(gfiContent, "Download") ? gfiContent.Download : null);
-            _.each(infoGFIContent, function (attribute, key) {
+            infoGFIContent = Radio.request("Util", "omit", gfiContent, ["Tageslinie", "Wochenlinie", "Jahrgangslinie", "Name", "Typ", "Download"]);
+            dayLine = gfiContent.hasOwnProperty("Tageslinie") ? gfiContent.Tageslinie : null;
+            lastSevenDaysLine = gfiContent.hasOwnProperty("Wochenlinie") ? gfiContent.Wochenlinie : null;
+            yearLine = gfiContent.hasOwnProperty("Jahrgangslinie") ? gfiContent.Jahrgangslinie : null;
+            this.setDownloadLink(gfiContent.hasOwnProperty("Download") ? gfiContent.Download : null);
+            Object.entries(infoGFIContent).forEach(content => {
+                const attribute = content[1],
+                    key = content[0];
                 let gfiAttributes,
                     isnum,
                     editedAttribute,
@@ -160,7 +163,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         const dataSplit = dayLine ? dayLine.split("|") : "",
             tempArr = [];
 
-        _.each(dataSplit, function (data) {
+        dataSplit.forEach(data => {
             const splitted = data.split(","),
                 day = splitted[0].split(".")[0],
                 month = splitted[0].split(".")[1] - 1,
@@ -183,7 +186,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 r_out: r_out
             });
         });
-        return _.sortBy(tempArr, "timestamp");
+        return tempArr.sort((valueA, valueB) => valueA.timestamp - valueB.timestamp);
     },
 
     /**
@@ -196,7 +199,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         const dataSplit = lastSevenDaysLine ? lastSevenDaysLine.split("|") : "",
             tempArr = [];
 
-        _.each(dataSplit, function (data) {
+        dataSplit.forEach(data => {
             const splitted = data.split(","),
                 // weeknumber = splitted[0],
                 day = splitted[1].split(".")[0],
@@ -217,7 +220,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             });
         });
 
-        return _.sortBy(tempArr, "timestamp");
+        return tempArr.sort((valueA, valueB) => valueA.timestamp - valueB.timestamp);
     },
 
 
@@ -231,7 +234,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
         const dataSplit = yearLine ? yearLine.split("|") : "",
             tempArr = [];
 
-        _.each(dataSplit, function (data) {
+        dataSplit.forEach(data => {
             const splitted = data.split(","),
                 weeknumber = splitted[1],
                 year = splitted[0],
@@ -251,7 +254,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             });
         });
 
-        return _.sortBy(tempArr, "timestamp");
+        return tempArr.sort((valueA, valueB) => valueA.timestamp - valueB.timestamp);
     },
 
     /**
@@ -262,7 +265,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     prepareDayDataset: function (data) {
         const date = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
-            newData = data ? _.map(data, function (val) {
+            newData = data ? data.map(val => {
                 val.timestamp = moment(val.timestamp).format("HH:mm");
                 return val;
             }) : "",
@@ -291,9 +294,9 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      */
     prepareLastSevenDaysDataset: function (data) {
         const startDate = data ? moment(data[0].timestamp).format("DD.MM.YYYY") : "",
-            endDate = data ? moment(_.last(data).timestamp).format("DD.MM.YYYY") : "",
+            endDate = data ? moment(data.slice(-1).timestamp).format("DD.MM.YYYY") : "",
             graphArray = data ? this.getDataAttributes(data[0]) : "",
-            newData = data ? _.map(data, function (val) {
+            newData = data ? data.map(val => {
                 val.timestamp = moment(val.timestamp).format("DD.MM.YYYY");
                 return val;
             }) : "",
@@ -321,12 +324,16 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      */
     prepareYearDataset: function (data) {
         const graphArray = data ? this.getDataAttributes(data[0]) : "",
-            newData = data ? _.each(data, function (val) {
-                val.timestamp = moment(val.timestamp).format("w");
-                return val;
-            }) : "",
+            newData = [],
             legendArray = data ? this.getLegendAttributes(data[0]) : "",
             year = data ? data[0].year : "";
+
+        if (data) {
+            data.forEach(val => {
+                val.timestamp = moment(val.timestamp).format("w");
+                newData.push(val);
+            });
+        }
 
         return {
             data: newData,
@@ -352,10 +359,10 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     getDataAttributes: function (inspectData) {
         const showData = ["total"];
 
-        if (inspectData && !_.isNull(inspectData.r_in)) {
+        if (inspectData && inspectData.r_in !== null) {
             showData.push("r_in");
         }
-        if (inspectData && !_.isNull(inspectData.r_out)) {
+        if (inspectData && inspectData.r_out !== null) {
             showData.push("r_out");
         }
 
@@ -374,14 +381,14 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             style: "circle"
         }];
 
-        if (inspectData && !_.isNull(inspectData.r_in)) {
+        if (inspectData && inspectData.r_in !== null) {
             legendData.push({
                 key: "r_in",
                 value: "Fahrräder stadteinwärts"
             });
         }
 
-        if (inspectData && !_.isNull(inspectData.r_out)) {
+        if (inspectData && inspectData.r_out !== null) {
             legendData.push({
                 key: "r_out",
                 value: "Fahrräder stadtauswärts"
@@ -450,21 +457,21 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @return {void}
      */
     destroy: function () {
-        _.each(this.get("gfiContent"), function (element) {
+        this.get("gfiContent").forEach(element => {
             let children;
 
-            if (_.has(element, "children")) {
-                children = _.values(_.pick(element, "children"))[0];
-                _.each(children, function (child) {
+            if (element.hasOwnProperty("children")) {
+                children = element.children;
+                children.forEach(child => {
                     child.val.remove();
-                }, this);
+                });
             }
-        }, this);
-        _.each(this.get("gfiRoutables"), function (element) {
-            if (_.isObject(element) === true) {
+        });
+        this.get("gfiRoutables").forEach(element => {
+            if (typeof element === "object") {
                 element.remove();
             }
-        }, this);
+        });
     },
 
     /**
@@ -486,11 +493,11 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
             startsWith = 0,
             xThinningVal = xThinning;
 
-        _.each(data, function (ele) {
+        data.forEach(ele => {
             tickValuesArray.push(ele.timestamp);
         });
 
-        tickValuesArray = _.filter(tickValuesArray, function (d, i) {
+        tickValuesArray = tickValuesArray.filter((d, i) => {
             let val;
 
             if (d === "1") {

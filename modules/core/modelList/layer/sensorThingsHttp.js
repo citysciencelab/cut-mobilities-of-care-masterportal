@@ -249,7 +249,24 @@ export function SensorThingsHttp () {
                 completeResult = completeResult.concat(response);
             }
 
-            if (response && response.hasOwnProperty("@iot.nextLink")) {
+            if (requestUrl.indexOf("%24top=1") === -1 && response && response.hasOwnProperty("Datastreams") && response.Datastreams.length > 0 && response.Datastreams[0]["Observations@iot.nextLink"]) {
+                getHelper(response.Datastreams[0]["Observations@iot.nextLink"], observations => {
+                    response.Datastreams[0].Observations = observations;
+
+                    // no further skips
+                    if (typeof onsuccess === "function") {
+                        if (typeof onwait === "function") {
+                            onwait(1.0);
+                        }
+                        onsuccess(completeResult);
+                    }
+                    if (typeof oncomplete === "function") {
+                        oncomplete();
+                    }
+                }, oncomplete, onerror, onwait, httpClient, response.Datastreams[0].Observations);
+
+            }
+            else if (requestUrl.indexOf("%24top=1") === -1 && response && response.hasOwnProperty("@iot.nextLink")) {
                 if (typeof onwait === "function") {
                     onwait(getSkipProgress(response["@iot.nextLink"], response["@iot.count"]));
                 }

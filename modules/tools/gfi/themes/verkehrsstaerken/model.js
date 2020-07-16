@@ -2,7 +2,7 @@ import Theme from "../model";
 import "../../../graph/model";
 
 const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenThemeModel.prototype */{
-    defaults: _.extend({}, Theme.prototype.defaults,
+    defaults: Object.assign({}, Theme.prototype.defaults,
         {
             ansicht: "Diagrammansicht",
             link: "http://daten-hamburg.de/transport_verkehr/verkehrsstaerken/DTV_DTVw_Download.xlsx",
@@ -49,11 +49,11 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
             year,
             years = [];
 
-        if (_.isUndefined(this.get("gfiContent")) === false) {
+        if (this.get("gfiContent") !== undefined) {
             gfiContent = this.get("gfiContent")[0];
-            rowNames = _.keys(this.get("gfiContent")[0]);
+            rowNames = Object.keys(this.get("gfiContent")[0]);
 
-            _.each(rowNames, function (rowName) {
+            rowNames.forEach(rowName => {
                 let newRowName;
 
                 year = parseInt(rowName.slice(-4), 10);
@@ -68,7 +68,7 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
                     this.setArt(gfiContent[rowName]);
                 }
                 // jahresDatensätze parsen
-                else if (!_.isNaN(year)) {
+                else if (!isNaN(year)) {
                     newRowName = this.createNewRowName(rowName, year);
                     yearData = {
                         year: year,
@@ -79,9 +79,9 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
                     newRowNames.push(newRowName);
                     years.push(year);
                 }
-            }, this);
-            newRowNames = _.unique(newRowNames);
-            years = _.unique(years);
+            });
+            newRowNames = [...new Set(newRowNames)];
+            years = [...new Set(years)];
             this.setYears(years);
             this.setRowNames(newRowNames);
             this.combineYearsData(dataPerYear, years);
@@ -120,15 +120,15 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
     combineYearsData: function (dataPerYear, years) {
         let dataset = [];
 
-        _.each(years, function (year) {
-            const attrDataArray = _.where(dataPerYear, {year: year}),
+        years.forEach(year => {
+            const attrDataArray = dataPerYear.filter(item => item.year === year),
                 yearObject = {year: year};
 
-            _.each(attrDataArray, function (attrData) {
+            attrDataArray.forEach(attrData => {
                 yearObject[attrData.attrName] = attrData.value;
-            }, this);
+            });
             dataset.push(yearObject);
-        }, this);
+        });
         dataset = this.parseData(dataset);
         this.setDataset(dataset);
     },
@@ -160,22 +160,22 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
      * @returns {void}
      */
     destroy: function () {
-        _.each(this.get("gfiContent"), function (element) {
+        this.get("gfiContent").forEach(element => {
             let children;
 
-            if (_.has(element, "children")) {
-                children = _.values(_.pick(element, "children"))[0];
+            if (element.hasOwnProperty("children")) {
+                children = element.children;
 
-                _.each(children, function (child) {
+                children.forEach(child => {
                     child.val.remove();
-                }, this);
+                });
             }
-        }, this);
-        _.each(this.get("gfiRoutables"), function (element) {
-            if (_.isObject(element) === true) {
+        });
+        this.get("gfiRoutables").forEach(element => {
+            if (typeof element === "object") {
                 element.remove();
             }
-        }, this);
+        });
     },
     /*
     * Parses the data and prepares them for creating the table or the graph.
@@ -186,14 +186,16 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
     parseData: function (dataArray) {
         const parsedDataArray = [];
 
-        _.each(dataArray, function (dataObj) {
+        dataArray.forEach(dataObj => {
             const parsedDataObj = {
                 class: "dot",
                 style: "circle"
             };
 
-            _.each(dataObj, function (dataVal, dataAttr) {
-                const parseDataVal = this.parseDataValue(dataVal),
+            Object.entries(dataObj).forEach(obj => {
+                const dataVal = obj[1],
+                    dataAttr = obj[0],
+                    parseDataVal = this.parseDataValue(dataVal),
                     parseFloatVal = parseFloat(parseDataVal);
 
                 if (dataAttr === "Baustelleneinfluss") {
@@ -207,9 +209,9 @@ const VerkehrsStaerkenThemeModel = Theme.extend(/** @lends VerkehrsStaerkenTheme
                     parsedDataObj[dataAttr] = parseFloatVal;
                 }
 
-            }, this);
+            });
             parsedDataArray.push(parsedDataObj);
-        }, this);
+        });
 
         return parsedDataArray;
     },

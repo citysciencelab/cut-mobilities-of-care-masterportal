@@ -20,7 +20,10 @@
                 <p class="text-right"><%= msStadtteil %></p>
             </div>
         </div>
-        <% _.each (msMerkmale, function (value, key) { %>
+        <% Object.entries(msMerkmale).forEach(function (merkmal) {
+            const value = merkmal[1],
+                key = merkmal[0];
+        %>
             <% if (key === 'Wohnlage') { %>
                 <div class="row" style="padding-bottom: 4px;">
                     <div class="col-xs-6">

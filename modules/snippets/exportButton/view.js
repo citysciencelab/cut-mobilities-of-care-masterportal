@@ -12,6 +12,7 @@ const ExportButtonView = Backbone.View.extend(/** @lends ExportButtonView.protot
      */
     initialize: function () {
         this.listenTo(this.model, {
+            "change:disabled": this.render,
             "render": this.render,
             "download": this.download
         });
@@ -39,6 +40,9 @@ const ExportButtonView = Backbone.View.extend(/** @lends ExportButtonView.protot
      * @returns {void}
      */
     export: function () {
+        if (this.model.get("disabled")) {
+            return;
+        }
         if (typeof this.model.get("rawData") === "string") {
             this.model.htmlToCanvas();
         }

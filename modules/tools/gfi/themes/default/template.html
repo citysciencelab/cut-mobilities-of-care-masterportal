@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <tbody>
 <% let anlagenCounter = 1; %>
-<%  _.each(gfiContent[0], function(value, key) {
+<%  Object.entries(gfiContent[0]).forEach(function(content) {
+    const value = content[1],
+        key = content[0];
+
         if (infoFormat === "text/html") { %>
             <tr colspan="1" >
                 <td >

@@ -1,4 +1,6 @@
-# Addons #
+# backbone Addons #
+
+ACHTUNG: das masterportal wird vom Backbone nach Vue.js migriert. Daher ist es ratsam neue addons in vue.js zu schreiben, um die später notwendige Migrierung zu vermeiden! [Vue Addons]()
 
 Um eigene Entwicklungen in das MasterPortal zu integrieren existiert ein Mechanismus der es erlaubt, Code von außerhalb des MasterPortal-Repositories in die MasterPortal Sourcen zu integrieren. Siehe auch **[lokale Entwicklungsumgebung einrichten](setup-dev.md)**.
 
@@ -21,8 +23,8 @@ Folgende Struktur ist dabei zu beachten:
 myMasterPortalFolder/
     addons/
         myAddon1/
-            loader.js
-            anotherFile.js
+            view.js
+            model.js
             doc/
                 config.json.md
             jsdoc/
@@ -55,7 +57,7 @@ myMasterPortalFolder/
 ```
 {
   "exampleAddon": "entrypoint.js",
-  "myAddon1": "loader.js",
+  "myAddon1": "view.js",
   "myAddon2": "subFolder/init.js"
 }
 ```
@@ -72,7 +74,9 @@ Hier legen wir kurz ein Beispiel-Addon an!
 myMasterPortalFolder/
     addons/
         exampleAddon/
-            entrypoint.js
+            view.js
+            model.js
+            template.html
     devtools/
     doc/
     [...]
@@ -81,33 +85,64 @@ myMasterPortalFolder/
 2.2. Addon-Code schreiben:
 
 ```
-// myMasterPortalFolder/addons/exampleAddon/entrypoint.js
+// myMasterPortalFolder/addons/exampleAddon/model.js
+import Tool from "../../modules/core/modelList/tool/model";
 
-const exampleAddon = Backbone.Model.extend({
-    defaults: {},
-
+const exampleAddon = Tool.extend({
+    defaults: Object.assign({}, Tool.prototype.defaults, {
+        glyphicon: "glyphicon-example",
+        renderToWindow: true,
+        id: "exampleAddon",
+        name: "Example Tool"
+    }),
     initialize: function () {
-        console.warn("Hello. I am an addon.");
+        this.superInitialize();
     }
 });
 
 export default exampleAddon;
-```
-Das Model muss folgende properties haben:
-```
-type: "tool",
-id: "exampleId", // muss gleich dem Schlüssel unter tools in der config.json sein
-name: "Example Tool", 
-glyphicon: "glyphicon-example"
-```
 
+```
+```
+// myMasterPortalFolder/addons/exampleAddon/view.js
+import ExampleTemplate from "text-loader!./template.html";
+import ExampleModel from "./model";
+
+const ExampleView = Backbone.View.extend({
+    
+    initialize: function () 
+     {
+        this.model = new ExampleModel();
+        this.listenTo(this.model, {
+            "change:isActive": this.render
+        });
+        if (this.model.get("isActive") === true) {
+            this.render(this.model, true);
+        }
+    },
+    template: _.template(ExampleTemplate),
+
+    // Konvention: Die Methode fürs zeichnen der View, heißt render.
+    render: function (model, value) {
+        const attr = model.toJSON();
+    
+        if (value) {
+            //do something like this
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template(attr));
+        }
+        return this;
+    }
+});
+
+```
 2.3. Die Addons-Config-Datei erstellen:
 
 ```
 // myMasterPortalFolder/addons/addonsConf.json
 
 {
-  "exampleAddon": "entrypoint.js"
+  "exampleAddon": "view.js"
 }
 ```
 
@@ -117,9 +152,21 @@ glyphicon: "glyphicon-example"
 
 const Config = {
     // [...]
-    addons: ["boris"],
+    addons: ["exampleAddon"],
     // [...]
 };
+```
+2.5. Das Beispiel-Addon als Werkzeug in der config.json definieren, damit es als Menüpunkt erscheint.
+```
+// myMasterPortalFolder/config.json
+...
+    "tools": {
+        "name": "Werkzeuge",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "exampleAddon": {
+            "name": "Beispiel Addon"
+          },
 ```
 
 2.5. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
@@ -141,6 +188,3 @@ const Config = {
 * @constructs
 */
 ```
-
-
-

@@ -7,7 +7,7 @@ const ValueModel = BaseModel.extend(/** @lends ValueModel.prototype */{
      * @memberof Snippets.Slider
      * @constructs
      */
-    defaults: _.extend({}, BaseModel.prototype.defaults, {
+    defaults: Object.assign({}, BaseModel.prototype.defaults, {
         isMin: false,
         initValue: 0
     }),

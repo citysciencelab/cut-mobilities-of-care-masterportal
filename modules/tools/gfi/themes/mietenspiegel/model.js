@@ -7,7 +7,7 @@ const MietenspiegelTheme = Theme.extend({
         });
     },
     setDefaults: function () {
-        if (_.isUndefined(this.get("gfiContent")) === false) {
+        if (this.get("gfiContent") !== undefined) {
             this.set("readyState", false);
             this.set("msDaten", []);
             this.set("msErhebungsstand", "");
@@ -44,44 +44,28 @@ const MietenspiegelTheme = Theme.extend({
 
         $(".msmerkmal").each(function () {
             if (this.value !== "-1") { // = bitte wählen
-                ms = _.extend(ms, _.object([$(this).attr("id")], [$(this).find("option:selected").text()]));
+                ms = Object.assign(ms, this.convertTwoArraysToOneObject([$(this).attr("id")], [$(this).find("option:selected").text()]));
             }
         });
         if (this.get("msMittelwert") !== "") {
-            ms = _.extend(ms, _.object(["Mittelwert"], [this.get("msMittelwert").toString()]));
+            ms = Object.assign(ms, this.convertTwoArraysToOneObject(["Mittelwert"], [this.get("msMittelwert").toString()]));
         }
         if (this.get("msSpanneMin") !== "") {
-            ms = _.extend(ms, _.object(["Spanne Min."], [this.get("msSpanneMin").toString()]));
+            ms = Object.assign(ms, this.convertTwoArraysToOneObject(["Spanne Min."], [this.get("msSpanneMin").toString()]));
         }
         if (this.get("msSpanneMax") !== "") {
-            ms = _.extend(ms, _.object(["Spanne Max"], [this.get("msSpanneMax").toString()]));
+            ms = Object.assign(ms, this.convertTwoArraysToOneObject(["Spanne Max"], [this.get("msSpanneMax").toString()]));
         }
         if (this.get("msDatensaetze") !== "") {
-            ms = _.extend(ms, _.object(["Datensätze"], [this.get("msDatensaetze").toString()]));
+            ms = Object.assign(ms, this.convertTwoArraysToOneObject(["Datensätze"], [this.get("msDatensaetze").toString()]));
         }
-        ms = _.extend(ms, _.object(["Herausgeber"], [this.get("msHerausgeber")]));
-        ms = _.extend(ms, _.object(["Erhebungsstand"], [this.get("msErhebungsstand")]));
-        ms = _.extend(ms, _.object(["Hinweis"], [this.get("msHinweis")]));
+        ms = Object.assign(ms, this.convertTwoArraysToOneObject(["Herausgeber"], [this.get("msHerausgeber")]));
+        ms = Object.assign(ms, this.convertTwoArraysToOneObject(["Erhebungsstand"], [this.get("msErhebungsstand")]));
+        ms = Object.assign(ms, this.convertTwoArraysToOneObject(["Hinweis"], [this.get("msHinweis")]));
         return [ms, "Mietenspiegel-Auswertung"];
     },
     layerListReady: function () {
-        // var layerList = Radio.request("LayerList", "getLayerList");
-
-        // if (layerList.length > 0) {
-        // lade Layerinformationen aus Config
-        // this.set("msLayerDaten", _.find(layerList, function (layer) {
-        // return layer.id === "2730" || layer.id === "2830";
-        // }));
-        // this.set("msLayerMetaDaten", _.find(layerList, function (layer) {
-        // return layer.id === "2731" || layer.id === "2831";
-        // }));
-        // if (!_.isUndefined(this.get("msLayerDaten")) && !_.isUndefined(this.get("msLayerMetaDaten"))) {
         this.ladeMetaDaten();
-        // }
-        // else {
-        // Radio.trigger("Alert", "alert", {text: "<strong>Fehler beim Initialisieren des Moduls</strong> (mietenspiegel)", kategorie: "alert-warning"});
-        // }
-        // }
     },
     /*
      * Wird aus View gerufen und gibt Liste möglicher Merkmale zurück
@@ -95,28 +79,21 @@ const MietenspiegelTheme = Theme.extend({
             uniqueValues = "",
             sortedValues = "";
 
-        merkmale = _.map(daten, function (value) {
-            return value.merkmale;
-        });
+        merkmale = daten.map(value => value.merkmale);
         merkmaleReduced = merkmale.filter(function (value) {
-            return _.isMatch(value, setted);
+            return Object.entries(setted).forEach(entry => value[entry[0]] === entry[1]);
         });
-        possibleValues = _.map(merkmaleReduced, function (merkmal) {
-            return _.values(_.pick(merkmal, merkmalId))[0];
-        });
-        uniqueValues = _.unique(possibleValues);
+        possibleValues = merkmaleReduced.map(merkmal => merkmal.merkmalId);
+        uniqueValues = [...new Set(possibleValues)];
 
         if (merkmalId === "Baualtersklasse/Bezugsfertigkeit") {
             // sortiert nach letzten 4 Zeichen (Jahresangabe / Größe)
-            sortedValues = _.sortBy(uniqueValues, function (val) {
-                return val.substring(val.length - 4);
-            });
+            sortedValues = uniqueValues.sort((valueA, valueB) => valueA.substring(valueA.length - 4) - valueB.substring(valueB.length - 4));
         }
         else {
             // sortiert nach letzten 4 Zeichen (Jahresangabe / Größe)
-            sortedValues = _.sortBy(uniqueValues, function (val) {
-                return val.substring(0, 1);
-            });
+            sortedValues = uniqueValues.sort((valueA, valueB) => valueA.substring(0, 1) - valueB.substring(0, 1));
+
         }
         return sortedValues;
     },
@@ -185,13 +162,13 @@ const MietenspiegelTheme = Theme.extend({
                     daten = [],
                     keys = this.get("msMerkmaleText");
 
-                mietenspiegel_daten.each(function (index, value) {
+                mietenspiegel_daten.each((index, value) => {
                     daten.push({
                         mittelwert: parseFloat($(value).find("app\\:mittelwert,mittelwert").text()),
                         spanne_min: parseFloat($(value).find("app\\:spanne_min,spanne_min").text()),
                         spanne_max: parseFloat($(value).find("app\\:spanne_max,spanne_max").text()),
                         datensaetze: parseInt($(value).find("app\\:datensaetze,datensaetze").text(), 10),
-                        merkmale: _.object(keys, $(value).find("app\\:merkmale,merkmale").text().split("|"))
+                        merkmale: this.convertTwoArraysToOneObject(keys, $(value).find("app\\:merkmale,merkmale").text().split("|"))
                     });
                 });
                 this.set("msDaten", daten);
@@ -205,19 +182,41 @@ const MietenspiegelTheme = Theme.extend({
             }
         });
     },
+
+    /**
+     * Converts two arrays to one object.
+     * @param {string[]|number[]} keys - Array that contains the keys.
+     * @param {string[]|number[]} values - Array that contains the values.
+     * @returns {object} The object with the key value pairs.
+     */
+    convertTwoArraysToOneObject: function (keys, values) {
+        const object = {};
+
+        keys.forEach((key, index) => {
+            object[key] = values[index];
+        });
+
+        return object;
+    },
+
     /*
      * Bestimmt alle Inhalte der Comboboxen für die Merkmale anhand der ausgelesenen Daten.
      * Wird nicht mehr genutzt, da returnValidMerkmale
      */
     calculateMerkmale: function () {
         const daten = this.get("msDaten"),
-            merkmalnamen = _.object(_.keys(daten[0].merkmale), []),
-            merkmale = _.map(daten, function (value) {
-                return value.merkmale;
-            }),
-            merkmaleReduced = _.mapObject(merkmalnamen, function (value, key) {
-                return _.unique(_.pluck(merkmale, key));
+            merkmalNamen = Object.keys(daten[0].merkmale),
+            merkmale = daten.map(value => value.merkmale),
+            merkmaleReduced = {};
+
+        merkmalNamen.forEach(merkmalName => {
+            merkmaleReduced[merkmalName] = [];
+            merkmale.forEach(merkmal => {
+                if (!merkmaleReduced[merkmalName].includes(merkmal[merkmalName])) {
+                    merkmaleReduced[merkmalName].push(merkmal[merkmalName]);
+                }
             });
+        });
 
         this.set("msMerkmale", merkmaleReduced);
         this.set("readyState", true);
@@ -228,7 +227,7 @@ const MietenspiegelTheme = Theme.extend({
     calculateVergleichsmiete: function (merkmale) {
         const daten = this.get("msDaten"),
             vergleichsmiete = daten.filter(function (value) {
-                return _.isMatch(value.merkmale, merkmale);
+                return Object.entries(merkmale).forEach(entry => value.merkmale[entry[0]] === entry[1]);
             });
 
         if (vergleichsmiete.length !== 1) {
@@ -255,7 +254,7 @@ const MietenspiegelTheme = Theme.extend({
         this.set("msDatensaetze", "");
     },
     newWindow: function (layer, response, coordinate) {
-        this.set("id", _.uniqueId("mietenspiegelTheme"));
+        this.set("id", Radio.request("Util", "uniqueId", "mietenspiegelTheme"));
         this.set("layer", layer);
         this.set("coordinate", coordinate);
         this.defaultErgebnisse();

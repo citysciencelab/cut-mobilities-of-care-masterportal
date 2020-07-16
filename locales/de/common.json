@@ -35,6 +35,7 @@
             "kmlimport": "KML Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
+            "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
             "layerSlider": "Zeitreihe",
@@ -193,6 +194,24 @@
                     "A3 Hochformat": "A3 Hochformat",
                     "A3 Querformat": "A3 Querformat"
                 }
+            },
+            "styleWMS": {
+                "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+                "theme": "Thema",
+                "chooseTheme": "Bitte Thema auswählen",
+                "attribute": "Attribut",
+                "chooseAttribute": "Bitte Attribut wählen",
+                "countOfClasses": "Anzahl der Klassen",
+                "chooseNumberOfClasses": "Bitte Anzahl der Klassen auswählen",
+                "rangeOfValues": "Wertebereich Klasse",
+                "from": "von",
+                "to": "bis",
+                "reset": "Zurücksetzen",
+                "apply": "Anwenden",
+                "pleaseEnterInteger": "Bitte tragen Sie eine ganze Zahl ein.",
+                "pleaseChooseColor": "Bitte wählen Sie eine Farbe aus.",
+                "checkTheValues": "Überprüfen Sie die Werte.",
+                "overlappingValueRanges": "Überprüfen Sie die Werte. Wertebereiche dürfen sich nicht überschneiden."
             },
             "featureLister": {
                 "chooseTheme": "Thema wählen",
