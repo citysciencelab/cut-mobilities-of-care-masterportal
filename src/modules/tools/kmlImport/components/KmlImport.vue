@@ -18,7 +18,7 @@ export default {
         ...mapGetters("Tools/KmlImport", [
             "deactivateGFI",
             "glyphicon",
-            "isActive",
+            "active",
             "renderToWindow",
             "resizableWindow",
             "supportedFiletypes"
@@ -109,14 +109,14 @@ export default {
     <Tool
         :title="$t('modules.tools.kmlImport.title')"
         :icon="glyphicon"
-        :active="isActive"
+        :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
             <div
-                v-if="isActive"
+                v-if="active"
                 id="kml-import"
             >
                 <p

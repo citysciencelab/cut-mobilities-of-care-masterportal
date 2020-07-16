@@ -89,7 +89,7 @@ function createDefaultStyles () {
 
 /**
  * Checks for OL-unsupported tags and removes them.
- * Currently unszpported tags are:
+ * Currently unsupported tags are:
  *      - cascadingStyle
 
  * @param {String} rawSource - KML source as string.
@@ -113,14 +113,14 @@ export default {
     initialize: context => fetchFirstModuleConfig(context, configPaths, "kmlimport"),
 
     setActive: ({commit}, value) => {
-        commit("active", value);
+        commit("setActive", value);
     },
 
     activateByUrlParam: ({rootState, commit}) => {
         const mappings = ["kmlimport"];
 
         if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen.toLowerCase()) !== -1) {
-            commit("active", true);
+            commit("setActive", true);
         }
     },
 
