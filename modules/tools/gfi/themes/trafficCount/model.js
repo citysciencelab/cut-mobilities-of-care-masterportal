@@ -7,12 +7,30 @@ import ExportButtonModel from "../../../../snippets/exportButton/model";
 
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
+        currentLng: "",
+        dayLabel: "",
+        weekLabel: "",
+        yearLabel: "",
+        tableLabel: "",
+        notice: "",
+        lastupdateLabel: "",
+        diagramLabel: "",
+        calendarweek: "",
+        infraredsensor: "",
+        countingstation: "",
+        carLabel: "",
+        bicycleLabel: "",
+
         dayTableContent: [],
         weekTableContent: [],
         yearTableContent: [],
 
-        carsHeaderSuffix: "KFZ abs.",
-        trucksHeaderSuffix: "SV-Anteil in %",
+        carsHeaderSuffix: "",
+        trucksHeaderSuffix: "",
+
+        idLabel: "",
+        typeLabel: "",
+        meansOfTransportLabel: "",
 
         meansOfTransportFahrzeuge: "AnzFahrzeuge",
         meansOfTransportFahrraeder: "AnzFahrraeder",
@@ -50,12 +68,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
          */
         isCreated: false,
         typeAssoc: {
-            AnzFahrzeuge: "Infrarotsensor",
-            AnzFahrraeder: "Zählstation"
+            AnzFahrzeuge: "",
+            AnzFahrraeder: ""
         },
         meansOfTransportAssoc: {
-            AnzFahrzeuge: "KFZ",
-            AnzFahrraeder: "Fahrrad"
+            AnzFahrzeuge: "",
+            AnzFahrraeder: ""
         },
         dayInterval: "15-Min",
         weekInterval: "1-Tag",
@@ -77,6 +95,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @property {Object} feature feature to show gfi.
      */
     initialize: function () {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang(i18next.language);
+
         this.set("exportButtonModel", new ExportButtonModel({
             tag: "Download",
             rawData: [],
@@ -91,7 +114,19 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         }, this);
 
         // change language from moment.js to german
-        moment.locale("de");
+        moment.locale(this.get("currentLng"));
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set({
+            currentLng: lng,
+            day: i18next.t("additional:modules.tools.populationRequest.result.hint")
+        });
     },
 
     /**
@@ -381,7 +416,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         });
 
         api.updateHighestWorkloadWeek(thingId, meansOfTransport, moment().format("YYYY"), (calendarWeek, value) => {
-            this.setHighestWorkloadWeekDesc(!isNaN(calendarWeek) || typeof calendarWeek === "string" ? "KW " + calendarWeek : "");
+            this.setHighestWorkloadWeekDesc(!isNaN(calendarWeek) || typeof calendarWeek === "string" ? i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextYear") + " " + calendarWeek : "");
             this.setHighestWorkloadWeekValue(this.addThousandPoints(value));
         }, errormsg => {
             this.setHighestWorkloadWeekDesc("(nicht");
@@ -717,7 +752,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 endDate: moment().toDate(),
                 type: "datepicker",
                 inputs: $("#dayDateInput"),
-                todayHighlight: false
+                todayHighlight: false,
+                language: this.get("currentLng")
             }));
             this.listenTo(this.get("dayDatepicker"), {
                 "valuesChanged": this.dayDatepickerValueChanged
@@ -810,7 +846,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                         return moment.utc(date, "DD.MM.YYYY").toDate();
                     }
                 },
-                todayHighlight: false
+                todayHighlight: false,
+                language: this.get("currentLng")
             }));
             this.listenTo(this.get("weekDatepicker"), {
                 "valuesChanged": this.weekDatepickerValueChanged
@@ -894,7 +931,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 minViewMode: "years",
                 maxViewMode: "years",
                 inputs: $("#yearDateInput"),
-                format: "yyyy"
+                format: "yyyy",
+                language: this.get("currentLng")
             }));
 
             this.listenTo(this.get("yearDatepicker"), {
@@ -978,13 +1016,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 xAxis: {
                     xAttr: "hour",
                     xAxisTicks: {
-                        unit: " Uhr",
+                        unit: i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextDay"),
                         values: xAxisTickValues
                     }
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: "Anzahl / 15 Min."
+                    yAxisText: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextDay")
                 }
             };
 
@@ -996,7 +1034,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm");
         }, (value, dotData) => {
             // setTooltipValue
-            return dotData.hour + " Uhr: " + this.addThousandPoints(value);
+            return dotData.hour + " " + i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextDay") + ": " + this.addThousandPoints(value);
         }, emptyDiagramData);
     },
 
@@ -1023,7 +1061,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: "Anzahl / Tag"
+                    yAxisText: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextWeek")
                 }
             };
 
@@ -1032,7 +1070,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             const weeknumber = moment(datetime, "YYYY-MM-DD HH:mm:ss").week(),
                 year = moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
 
-            return "KW " + weeknumber + " / " + year;
+            return i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextYear") + " " + weeknumber + " / " + year;
         }, datetime => {
             // callbackRenderTextXAxis
             const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss");
@@ -1070,7 +1108,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: "Anzahl / Woche"
+                    yAxisText: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextYear")
                 }
             };
 
@@ -1095,7 +1133,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             // use thursday as fixure of the week, as the calendar week is fixated to thursday
             const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss").add(3, "days");
 
-            return "KW " + objMoment.format("WW") + " / " + objMoment.format("YYYY") + ": " + this.addThousandPoints(value);
+            return i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextYear") + " " + objMoment.format("WW") + " / " + objMoment.format("YYYY") + ": " + this.addThousandPoints(value);
         }, emptyDiagramData);
     },
 
@@ -1415,7 +1453,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         for (kw = 1; kw <= moment().isoWeeksInYear(); kw++) {
             kw = kw < 10 ? "0" + kw : kw;
-            xAxisTickValues.push("KW" + kw);
+            xAxisTickValues.push(i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextYear") + kw);
         }
 
         return xAxisTickValues;

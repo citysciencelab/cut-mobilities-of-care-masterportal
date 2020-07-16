@@ -2,9 +2,9 @@
 <div>
     <div class="header">
         <div>
-            ID: <span id="title"><%= title %></span><br>
-            Art: <span id="type"><%= type %></span><br>
-            Verkehrsmittel: <span id="meansOfTransport"><%= meansOfTransport %></span>
+            <%= idLabel %> <span id="title"><%= title %></span><br>
+            <%= typeLabel %> <span id="type"><%= type %></span><br>
+            <%= meansOfTransportLabel %> <span id="meansOfTransport"><%= meansOfTransport %></span>
         </div>
     </div>
     <ul class="nav nav-pills">
@@ -90,7 +90,7 @@
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="tableCheck-day">
-                <label class="form-check-label" for="tableCheck-day">Tabelle</label>
+                <label class="form-check-label" for="tableCheck-day"><%= tableLabel %></label>
             </div>
             <div id="tableday" class="tab-pane table inactive">
             </div>
@@ -133,26 +133,26 @@
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="diagramCheck-year" checked>
-                <label class="form-check-label" for="diagramCheck-year">Diagramm</label>
+                <label class="form-check-label" for="diagramCheck-year"><%= diagramLabel %></label>
             </div>
             <div id="diagramyear" class="trafficCountDiagramYear_<%= themeId %> padded" style="position:relative;">
                 <canvas></canvas>
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="tableCheck-year">
-                <label class="form-check-label" for="tableCheck-year">Tabelle</label>
+                <label class="form-check-label" for="tableCheck-year"><%= tableLabel %></label>
             </div>
             <div id="tableyear" class="tab-pane table inactive">
             </div>
         </div>
         <div class="tab-bottom infos">
             <div class="indication">
-                <span>Aufgrund nicht verfügbarer Daten können Lücken im Diagramm und leere Tabellenzellen auftreten.</span>
+                <span><%= notice %></span>
             </div>
             <table class="table table-striped">
                 <tbody>
                 <tr>
-                    <td class="text-left bold">letzte Aktualisierung:</td>
+                    <td class="text-left bold"><%= lastupdateLabel %></td>
                     <td class="text-right"><span id="lastUpdate"><%= lastUpdate %></span></td>
                 </tr>
                 </tbody>

@@ -61,6 +61,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
             calendarWeeks: model.calendarWeeks ? model.calendarWeeks : false,
             format: model.format ? model.format : "dd.mm.yyyy",
             autoclose: model.autoclose ? model.autoclose : false,
+            weekStart: model.weekStart ? model.weekStart : 1,
             type: this.get("type"),
             todayHighlight: model.todayHighlight ? model.todayHighlight : false,
             language: model.language ? model.language : "de"

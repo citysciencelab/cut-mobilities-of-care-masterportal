@@ -23,6 +23,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         ThemeView.prototype.initialize.apply(this);
 
         this.listenTo(this.model, {
+            "change:currentLng": this.render,
             "change:title": this.renderTitle,
             "change:type": this.renderType,
             "change:meansOfTransport": this.renderMeansOfTransport,
@@ -48,9 +49,31 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
             "renderWeekDatepicker": this.renderWeekDatepicker,
             "renderYearDatepicker": this.renderYearDatepicker
         });
+        this.render();
     },
     tagName: "div",
     className: "trafficCount",
+
+    /**
+     * renders the view
+     * @param {TrafficCountModel} model the model of the view
+     * @param {Boolean} value the values of the changes made to the model
+     * @returns {Void}  -
+     */
+    render: function () {
+        this.model.set("dayDatepicker", null);
+        this.model.set("weekDatepicker", null);
+        this.model.set("yearDatepicker", null);
+        this.model.set("dayTableContent", []);
+        this.model.set("weekTableContent", []);
+        this.model.set("yearTableContent", []);
+
+        const template = _.template(TrafficCountTemplate),
+            params = this.model.toJSON();
+
+        this.$el.html(template(params));
+        return this;
+    },
 
     /**
      * @member TrafficCountTemplate

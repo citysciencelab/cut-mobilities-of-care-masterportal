@@ -210,7 +210,7 @@
                 "pleaseEnterInteger": "Please enter an integer.",
                 "pleaseChooseColor": "Please choose a color.",
                 "checkTheValues": "Check the values.",
-                "overlappingValueRanges": "Check the values. Values ranges are not allowed to overlap." 
+                "overlappingValueRanges": "Check the values. Values ranges are not allowed to overlap."
             },
             "featureLister": {
                 "chooseTheme": "Choose theme",
@@ -335,7 +335,31 @@
             },
             "gfi": {
                 "themes": {
-                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service."
+                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
+                    "trafficCount": {
+                        "dayLabel": "Day",
+                        "weekLabel": "Week",
+                        "yearLabel": "Year",
+                        "tableLabel": "Table",
+                        "notice": "Due to unavailable data, gaps in the chart and empty table cells may occur.",
+                        "lastupdateLabel": "Last update:",
+                        "diagramLabel": "Diagram",
+                        "calendarweek": "CW",
+                        "infraredsensor": "Infrared sensor",
+                        "countingstation": "Counting station",
+                        "carLabel": "Car",
+                        "bicycleLabel": "Bicycle",
+                        "idLabel": "ID:",
+                        "typeLabel": "Type:",
+                        "meansOfTransportLabel": "Means of transportation:",
+                        "carsHeaderSuffix": "The count of cars",
+                        "trucksHeaderSuffix": "Trucks proportion in %",
+                        "yAxisTextDay": "Count / 15 Min.",
+                        "yAxisTextWeek": "Count / Day",
+                        "yAxisTextYear": "Count / Week",
+                        "xAxisTextDay": " o'clock",
+                        "xAxisTextYear": "CW"
+                    }
                 }
             },
             "viomRouting": {
