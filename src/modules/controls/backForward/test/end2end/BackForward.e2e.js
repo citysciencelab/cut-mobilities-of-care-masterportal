@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function BackForwardTests ({builder, url, resolution, browsername, capability, description}) {
+function BackForwardTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && // buttons not visible mobile
         (isCustom(url) || isMaster(url)); // backForward active in these portals
 
@@ -21,7 +21,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability, d
 
             before(async function () {
                 if (capability) {
-                    capability.name = `BackForwardTests : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

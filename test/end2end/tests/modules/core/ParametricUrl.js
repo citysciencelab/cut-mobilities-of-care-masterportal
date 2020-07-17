@@ -11,13 +11,13 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ParameterTests ({builder, url, resolution, mode, capability, description}) {
+async function ParameterTests ({builder, url, resolution, mode, capability}) {
     describe("URL Query Parameters", function () {
         let driver, gfi, counter;
 
         before(async function () {
             if (capability) {
-                capability.name = `URL Query Parameters : ${this.currentTest.title} - ${description}`;
+                capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await getUnnavigatedDriver(builder, resolution);

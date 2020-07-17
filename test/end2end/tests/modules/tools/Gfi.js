@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function GfiTests ({builder, url, resolution, capability, description}) {
+async function GfiTests ({builder, url, resolution, capability}) {
     describe("Gfi", function () {
         const exampleHospital = {
             coord: [551370.202, 5937222.981],
@@ -23,7 +23,7 @@ async function GfiTests ({builder, url, resolution, capability, description}) {
 
         before(async function () {
             if (capability) {
-                capability.name = `Gfi : ${this.currentTest.title} - ${description}`;
+                capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

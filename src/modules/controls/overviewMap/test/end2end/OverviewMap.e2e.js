@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function OverviewMap ({builder, url, resolution, browsername, capability, description}) {
+function OverviewMap ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && (isCustom(url) || isMaster(url));
 
     if (testIsApplicable) {
@@ -19,7 +19,7 @@ function OverviewMap ({builder, url, resolution, browsername, capability, descri
 
             before(async function () {
                 if (capability) {
-                    capability.name = `OverviewMap : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

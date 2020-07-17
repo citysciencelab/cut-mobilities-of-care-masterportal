@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ParcelSearchTests ({builder, url, resolution, capability, description}) {
+async function ParcelSearchTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isDefault(url) || isCustom(url) || isMaster(url),
         withCadastral = isCustom(url);
 
@@ -39,7 +39,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability, descrip
 
             before(async function () {
                 if (capability) {
-                    capability.name = `ParcelSearch : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

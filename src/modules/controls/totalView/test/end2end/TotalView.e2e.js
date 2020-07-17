@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function TotalViewTests ({builder, url, resolution, browsername, capability, description}) {
+function TotalViewTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = (isMaster(url) || isCustom(url)) && // only active here
         !isMobile(resolution); // not visible on mobile devices
 
@@ -21,7 +21,7 @@ function TotalViewTests ({builder, url, resolution, browsername, capability, des
 
             before(async function () {
                 if (capability) {
-                    capability.name = `TotalViewTests : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

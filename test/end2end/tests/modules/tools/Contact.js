@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ContactTests ({builder, url, resolution, capability, description}) {
+async function ContactTests ({builder, url, resolution, capability}) {
     // for a start, testing from 2D desktop mode
     const testIsApplicable = !isMobile(resolution) && (
         isMaster(url) || isCustom(url) || isDefault(url)
@@ -28,7 +28,7 @@ async function ContactTests ({builder, url, resolution, capability, description}
 
             before(async function () {
                 if (capability) {
-                    capability.name = `Contact : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

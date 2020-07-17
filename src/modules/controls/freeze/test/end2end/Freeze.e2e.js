@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function FreezeTests ({builder, url, resolution, browsername, capability, description}) {
+function FreezeTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && // function not available mobile
         (isCustom(url) || isMaster(url)); // freeze only active in these
 
@@ -20,7 +20,7 @@ function FreezeTests ({builder, url, resolution, browsername, capability, descri
 
             before(async function () {
                 if (capability) {
-                    capability.name = `FreezeTests : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

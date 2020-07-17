@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function LegendTests ({builder, config, url, resolution, capability, description}) {
+async function LegendTests ({builder, config, url, resolution, capability}) {
     const testIsApplicable = isMaster(url) || isCustom(url),
         expectedEntries = {
             master: ["Krankenhäuser", "Schulinfosystem"],
@@ -23,7 +23,7 @@ async function LegendTests ({builder, config, url, resolution, capability, descr
 
             before(async function () {
                 if (capability) {
-                    capability.name = `Legend : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

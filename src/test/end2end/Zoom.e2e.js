@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ZoomTests ({builder, url, resolution, capability, description}) {
+async function ZoomTests ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution); // no mouse wheel on mobile devices
 
     if (testIsApplicable) {
@@ -20,7 +20,7 @@ async function ZoomTests ({builder, url, resolution, capability, description}) {
 
             before(async function () {
                 if (capability) {
-                    capability.name = `Map Zoom with MouseWheel : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

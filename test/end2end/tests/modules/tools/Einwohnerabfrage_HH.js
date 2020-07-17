@@ -8,7 +8,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function CoordTests ({builder, url, resolution, capability, description}) {
+async function CoordTests ({builder, url, resolution, capability}) {
     /*
     * TODO This test has been prepared regarding the required data. However, since the feature
     * has been moved to be an addon, it can currently not be tested, since no preparations for
@@ -26,7 +26,7 @@ async function CoordTests ({builder, url, resolution, capability, description}) 
 
         before(async function () {
             if (capability) {
-                capability.name = `Einwohnerabfrage_HH : ${this.currentTest.title} - ${description}`;
+                capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

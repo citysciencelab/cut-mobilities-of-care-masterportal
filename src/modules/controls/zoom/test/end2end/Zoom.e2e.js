@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function ZoomTests ({builder, url, resolution, capability, description}) {
+function ZoomTests ({builder, url, resolution, capability,}) {
     // no zoom control on mobile devices - skip
     const testIsApplicable = !isMobile(resolution);
 
@@ -20,7 +20,7 @@ function ZoomTests ({builder, url, resolution, capability, description}) {
 
             before(async function () {
                 if (capability) {
-                    capability.name = `Modules Controls Zoom : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

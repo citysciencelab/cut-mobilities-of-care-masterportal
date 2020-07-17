@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function MeasureTests ({builder, url, resolution, mode, capability, description}) {
+async function MeasureTests ({builder, url, resolution, mode, capability}) {
     const testIsApplicable = !isMobile(resolution);
 
     if (testIsApplicable) {
@@ -22,7 +22,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability, descri
 
                     before(async function () {
                         if (capability) {
-                            capability.name = `Measure Tool : ${this.currentTest.title} - ${description}`;
+                            capability.name = this.currentTest.fullTitle();
                             builder.withCapabilities(capability);
                         }
                         driver = await initDriver(builder, url, resolution);

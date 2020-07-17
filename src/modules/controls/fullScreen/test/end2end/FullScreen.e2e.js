@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function FullScreenTest ({builder, url, resolution, capability, description}) {
+function FullScreenTest ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution) &&
         (isMaster(url) || isCustom(url) || isDefault(url));
 
@@ -24,7 +24,7 @@ function FullScreenTest ({builder, url, resolution, capability, description}) {
 
             before(async function () {
                 if (capability) {
-                    capability.name = `FullScreenTest : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

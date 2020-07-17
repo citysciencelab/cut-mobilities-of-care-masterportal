@@ -10,14 +10,14 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function PanTests ({builder, url, resolution, browsername, capability, description}) {
+async function PanTests ({builder, url, resolution, browsername, capability}) {
     // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
     (isChrome(browsername) ? describe.skip : describe)("Map Pan", function () {
         let driver;
 
         before(async function () {
             if (capability) {
-                capability.name = `Map Pan : ${this.currentTest.title} - ${description}`;
+                capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

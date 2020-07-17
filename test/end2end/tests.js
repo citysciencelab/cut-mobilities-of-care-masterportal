@@ -29,8 +29,6 @@ const {isBasic, is2D} = require("./settings");
  */
 function tests (builder, url, browsername, resolution, config, mode, capability) {
     try {
-        const description = `${browsername} (mode=${mode},resolution=${resolution},config=${config})`;
-
         if (capability) {
             /* eslint-disable-next-line no-process-env */
             capability.build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT;
@@ -89,7 +87,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     require("../../src/test/end2end/Pan.e2e.js"),
                     require("../../src/test/end2end/Zoom.e2e.js")
                 ],
-                e2eTestParams = {builder, url, resolution, config, mode, browsername, capability, description};
+                e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
 
             for (const suite of suites) {
                 suite(e2eTestParams);

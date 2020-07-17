@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function SearchCategories ({builder, url, resolution, capability, description}) {
+async function SearchCategories ({builder, url, resolution, capability}) {
     const testIsApplicable = isDefault(url); // only default config has sufficiently configured search bar for test
 
     if (testIsApplicable) {
@@ -91,7 +91,7 @@ async function SearchCategories ({builder, url, resolution, capability, descript
                 const searchInputSelector = By.css("#searchInput");
 
                 if (capability) {
-                    capability.name = `Search Categories : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

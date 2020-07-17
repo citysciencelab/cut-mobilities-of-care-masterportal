@@ -10,13 +10,13 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function Orientation ({builder, url, resolution, capability, description}) {
+function Orientation ({builder, url, resolution, capability}) {
     describe("Modules Controls GeoLocate", function () {
         let driver, geolocateButton;
 
         before(async function () {
             if (capability) {
-                capability.name = `Modules Controls GeoLocate : ${this.currentTest.title} - ${description}`;
+                capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

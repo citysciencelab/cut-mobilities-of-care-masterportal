@@ -14,7 +14,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function CoordTests ({builder, url, resolution, config, capability, description}) {
+async function CoordTests ({builder, url, resolution, config, capability}) {
     describe("SupplyCoord", function () {
         const selectors = {
             tools: By.xpath("//ul[@id='tools']/.."),
@@ -66,7 +66,7 @@ async function CoordTests ({builder, url, resolution, config, capability, descri
 
         before(async function () {
             if (capability) {
-                capability.name = `SupplyCoord : ${this.currentTest.title} - ${description}`;
+                capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function Button3DTests ({builder, url, resolution, mode, capability, description}) {
+function Button3DTests ({builder, url, resolution, mode, capability}) {
     /* only run tests in
      * - non-mobile mode (does not have 3D mode)
      * - 2D mode, because de-/activating 3D is part of this test (3D mode is for rerunning other tools/search/... tests in 3D)
@@ -31,7 +31,7 @@ function Button3DTests ({builder, url, resolution, mode, capability, description
 
             before(async function () {
                 if (capability) {
-                    capability.name = `Modules Controls Button3D : ${this.currentTest.title} - ${description}`;
+                    capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

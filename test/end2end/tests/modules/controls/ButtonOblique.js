@@ -31,7 +31,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function Button3DTests ({builder, url, resolution, mode, capability, description}) {
+function Button3DTests ({builder, url, resolution, mode, capability}) {
     /* only run tests
      * - in non-mobile mode (does not have OB mode)
      * - in custom and default (have OB mode)
@@ -48,7 +48,7 @@ function Button3DTests ({builder, url, resolution, mode, capability, description
 
         before(async function () {
             if (capability) {
-                capability.name = `Modules Controls ButtonOblique : ${this.currentTest.title} - ${description}`;
+                capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);
