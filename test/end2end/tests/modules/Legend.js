@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../library/driver"),
-    {getTextOfElements} = require("../../library/utils"),
+    {getTextOfElements, logBrowserstackUrlToTest} = require("../../library/utils"),
     {isMaster, isCustom} = require("../../settings"),
     {By, until} = webdriver;
 
@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function LegendTests ({builder, config, url, resolution}) {
+async function LegendTests ({builder, config, url, resolution, capability, description}) {
     const testIsApplicable = isMaster(url) || isCustom(url),
         expectedEntries = {
             master: ["Krankenhäuser", "Schulinfosystem"],
@@ -22,10 +22,19 @@ async function LegendTests ({builder, config, url, resolution}) {
             let driver;
 
             before(async function () {
+                if (capability) {
+                    capability.name = `Legend ${description}`;
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

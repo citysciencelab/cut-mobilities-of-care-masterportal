@@ -2,6 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {isMobile, isMaster, isCustom, isDefault} = require("../../../settings"),
+    {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
 /**
@@ -12,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ContactTests ({builder, url, resolution}) {
+async function ContactTests ({builder, url, resolution, capability, description}) {
     // for a start, testing from 2D desktop mode
     const testIsApplicable = !isMobile(resolution) && (
         isMaster(url) || isCustom(url) || isDefault(url)
@@ -26,10 +27,19 @@ async function ContactTests ({builder, url, resolution}) {
                 nameInput, mailInput, telInput, textInput, submitButton;
 
             before(async function () {
+                if (capability) {
+                    capability.name = `Contact ${description}`;
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

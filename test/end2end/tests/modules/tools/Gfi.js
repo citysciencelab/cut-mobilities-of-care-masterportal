@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {zoomIn} = require("../../../library/scripts"),
-    {clickFeature, hoverFeature} = require("../../../library/utils"),
+    {clickFeature, hoverFeature, logBrowserstackUrlToTest} = require("../../../library/utils"),
     {isDefault, isCustom, isMaster, isBasic} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function GfiTests ({builder, url, resolution}) {
+async function GfiTests ({builder, url, resolution, capability, description}) {
     describe("Gfi", function () {
         const exampleHospital = {
             coord: [551370.202, 5937222.981],
@@ -21,11 +21,20 @@ async function GfiTests ({builder, url, resolution}) {
 
         let driver;
 
-        beforeEach(async function () {
+        before(async function () {
+            if (capability) {
+                capability.name = `Gfi ${description}`;
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
         });
 
-        afterEach(async function () {
+        after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

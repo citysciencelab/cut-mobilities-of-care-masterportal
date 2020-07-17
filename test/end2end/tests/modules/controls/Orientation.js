@@ -1,6 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {isMaster} = require("../../../settings"),
+    {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {getCenter, mockGeoLocationAPI} = require("../../../library/scripts"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
@@ -9,16 +10,25 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function Orientation ({builder, url, resolution}) {
+function Orientation ({builder, url, resolution, capability, description}) {
     describe("Modules Controls GeoLocate", function () {
         let driver, geolocateButton;
 
         before(async function () {
+            if (capability) {
+                capability.name = `Modules Controls GeoLocate ${description}`;
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
             await driver.executeScript(mockGeoLocationAPI);
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

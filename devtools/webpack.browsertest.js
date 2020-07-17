@@ -7,7 +7,7 @@
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
     Mocha = require("mocha"),
-    mocha = new Mocha(),
+    mocha = new Mocha({bail: true, fullTrace: true}),
     fse = require("fs-extra"),
     execute = require("child-process-promise").exec;
 
@@ -65,10 +65,6 @@ module.exports = function (env, args) {
                             mocha.addFile("./test/end2end/TestRunner.js");
                             // exit with non-zero status if there were test failures
                             mocha.run(failures => process.exitCode = failures ? 1 : 0)
-                                .on("fail", function (test, err) {
-                                    console.log(err);
-                                    // todo retry if timeout error happens in future(ETIMEDOUT)?
-                                })
                                 .on("end", function () {
                                     execute("pkill -f node_modules/.bin/webpack-dev-server");
                                 });

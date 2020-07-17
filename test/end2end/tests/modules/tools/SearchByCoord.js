@@ -2,6 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getCenter, getResolution, setResolution} = require("../../../library/scripts"),
     {isBasic, isDefault, isCustom} = require("../../../settings"),
+    {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
 
@@ -10,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function SearchByCoordTests ({builder, url, resolution}) {
+async function SearchByCoordTests ({builder, url, resolution, capability, description}) {
     describe("SearchByCoord", function () {
         const selectors = {
                 tools: By.xpath("//ul[@id='tools']/.."),
@@ -29,10 +30,19 @@ async function SearchByCoordTests ({builder, url, resolution}) {
         let driver, searchMarkerContainer, counter;
 
         before(async function () {
+            if (capability) {
+                capability.name = `SearchByCoord ${description}`;
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

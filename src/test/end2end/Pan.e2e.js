@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../test/end2end/library/scripts"),
-    {losesCenter} = require("../../../test/end2end/library/utils"),
+    {losesCenter, logBrowserstackUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver"),
     {isChrome} = require("../../../test/end2end/settings"),
     {By, Button} = webdriver;
@@ -10,16 +10,25 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function PanTests ({builder, url, resolution, browsername}) {
+async function PanTests ({builder, url, resolution, browsername, capability, description}) {
     // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
     (isChrome(browsername) ? describe.skip : describe)("Map Pan", function () {
         let driver;
 
         before(async function () {
+            if (capability) {
+                capability.name = `Map Pan ${description}`;
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {isLayerVisible} = require("../../../library/scripts"),
-    {reclickUntilNotStale} = require("../../../library/utils"),
+    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../library/utils"),
     {isCustom, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function GdiSearch ({builder, url, resolution}) {
+async function GdiSearch ({builder, url, resolution, capability, description}) {
     describe.skip("Gdi Search", function () {
         const searchInputSelector = By.css("#searchInput"),
             searchString = "Alt",
@@ -20,12 +20,21 @@ async function GdiSearch ({builder, url, resolution}) {
         let driver, searchInput;
 
         before(async function () {
+            if (capability) {
+                capability.name = `Gdi Search ${description}`;
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
             await driver.wait(until.elementLocated(searchInputSelector));
             searchInput = await driver.findElement(searchInputSelector);
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

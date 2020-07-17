@@ -1,6 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getResolution} = require("../../../../../../test/end2end/library/scripts"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isMobile} = require("../../../../../../test/end2end/settings"),
     {until, By} = webdriver;
@@ -9,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function ZoomTests ({builder, url, resolution}) {
+function ZoomTests ({builder, url, resolution, capability, description}) {
     // no zoom control on mobile devices - skip
     const testIsApplicable = !isMobile(resolution);
 
@@ -18,10 +19,19 @@ function ZoomTests ({builder, url, resolution}) {
             let driver, minus, plus;
 
             before(async function () {
+                if (capability) {
+                    capability.name = `Modules Controls Zoom ${description}`;
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

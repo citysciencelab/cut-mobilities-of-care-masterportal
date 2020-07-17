@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getUnnavigatedDriver, loadUrl} = require("../../../library/driver"),
     {imageLoaded, getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
-    {centersTo, clickFeature} = require("../../../library/utils"),
+    {centersTo, clickFeature, logBrowserstackUrlToTest} = require("../../../library/utils"),
     {isBasic, isCustom, isDefault, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -11,15 +11,24 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ParameterTests ({builder, url, resolution, mode}) {
+async function ParameterTests ({builder, url, resolution, mode, capability, description}) {
     describe("URL Query Parameters", function () {
         let driver, gfi, counter;
 
         before(async function () {
+            if (capability) {
+                capability.name = `URL Query Parameters ${description}`;
+                builder.withCapabilities(capability);
+            }
             driver = await getUnnavigatedDriver(builder, resolution);
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

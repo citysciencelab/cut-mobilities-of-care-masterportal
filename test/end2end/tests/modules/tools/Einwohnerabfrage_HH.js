@@ -1,5 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../library/driver"),
+    {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
 /**
@@ -7,7 +8,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function CoordTests ({builder, url, resolution}) {
+async function CoordTests ({builder, url, resolution, capability, description}) {
     /*
     * TODO This test has been prepared regarding the required data. However, since the feature
     * has been moved to be an addon, it can currently not be tested, since no preparations for
@@ -24,11 +25,20 @@ async function CoordTests ({builder, url, resolution}) {
         let driver;
 
         before(async function () {
+            if (capability) {
+                capability.name = `Einwohnerabfrage_HH ${description}`;
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
             // TODO set resolution to 26.458319045841044 for testing - coordinates below chosen for this resolution
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

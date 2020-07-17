@@ -4,13 +4,14 @@ const webdriver = require("selenium-webdriver"),
     {onMoveEnd} = require("../../../../../../test/end2end/library/scriptsAsync"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
 /**
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function BackForwardTests ({builder, url, resolution, browsername}) {
+function BackForwardTests ({builder, url, resolution, browsername, capability, description}) {
     const testIsApplicable = !isMobile(resolution) && // buttons not visible mobile
         (isCustom(url) || isMaster(url)); // backForward active in these portals
 
@@ -19,10 +20,19 @@ function BackForwardTests ({builder, url, resolution, browsername}) {
             let driver, forwardButton, backwardButton;
 
             before(async function () {
+                if (capability) {
+                    capability.name = `BackForwardTests ${description}`;
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 
