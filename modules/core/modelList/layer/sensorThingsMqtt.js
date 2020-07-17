@@ -97,10 +97,10 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
      * @param {String} host the protocol, hostname and port (optional) to call e.g. https://example.com
      * @param {String} topic the topic to call e.g. v1.0/Things(614)
      * @param {SensorThingsHttpClient} httpClient the function to call an url with
-     * @param {SensorThingsMqttClient~callbackMessage} callbackMessage the handler as function(payload) to give the simulated retained message to
+     * @param {SensorThingsMqttClient~callbackMessage} callbackMessage the handler as function(payload) to give the simulated retained message to - the payload is flaged with retained=true
      * @returns {Void}  -
      */
-    function simulateRetainedMessage (host, topic, httpClient, callbackMessage) {
+    this.simulateRetainedMessage = function (host, topic, httpClient, callbackMessage) {
         const term = topic.split("/").pop().toLowerCase(),
             single = term.indexOf("(") >= 0,
             subTerm = single ? term.substr(0, term.indexOf("(")) : term,
@@ -113,31 +113,40 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
                     parsedUrl.set("query", "$orderby=phenomenonTime desc&$top=1");
                 }
                 httpClient(parsedUrl.href, function (resp) {
+                    let response = resp;
+
                     if (!single && Array.isArray(resp.value) && resp.value.length) {
-                        callbackMessage.call(context, topic, resp.value[0]);
+                        response = resp.value[0];
                     }
-                    else {
-                        callbackMessage.call(context, topic, resp);
+                    if (typeof response === "object") {
+                        response.retained = true;
                     }
+                    callbackMessage.call(context, topic, response);
                 });
                 break;
             case "locations":
                 // there should be only one location
                 httpClient(parsedUrl.href, function (resp) {
+                    let response = resp;
+
                     if (!single && Array.isArray(resp.value) && resp.value.length) {
-                        callbackMessage.call(context, topic, resp.value[0]);
+                        response = resp.value[0];
                     }
-                    else {
-                        callbackMessage.call(context, topic, resp);
+                    if (typeof response === "object") {
+                        response.retained = true;
                     }
+                    callbackMessage.call(context, topic, response);
                 });
                 break;
             default:
                 httpClient(parsedUrl.href, function (resp) {
+                    if (typeof resp === "object") {
+                        resp.retained = true;
+                    }
                     callbackMessage.call(context, topic, resp);
                 });
         }
-    }
+    };
 
     /**
      * sets a handler as event of "eventName" for the mqttClient
@@ -192,7 +201,7 @@ export function SensorThingsMqttClient (mqttClient, mqttHost, context) {
 
         if (options.rmSimulate && (options.retain !== 2)) {
             // simulate retained message
-            simulateRetainedMessage(options.rmUrl, topic, options.rmHttpClient, onmessageOpt || messageHandler);
+            this.simulateRetainedMessage(options.rmUrl, topic, options.rmHttpClient, onmessageOpt || messageHandler);
         }
     };
 

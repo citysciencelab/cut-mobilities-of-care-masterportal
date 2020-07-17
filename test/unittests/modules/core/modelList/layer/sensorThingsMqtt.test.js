@@ -189,5 +189,50 @@ describe("core/modelList/layer/SensorThingsMqtt", function () {
                 expect(mqttTestClient.getLastUnsubscribeTopic()).to.equal("foobar");
             });
         });
+
+        describe("simulateRetainedMessage", () => {
+            it("should flag a simulated retained message as retained for observations", () => {
+                const expectedResponse = {
+                    retained: true
+                };
+                let lastResponse = false;
+
+                client.simulateRetainedMessage("https://example.com:8080", "baz/Observations", (url, callback) => {
+                    callback({});
+                }, (topic, response) => {
+                    lastResponse = response;
+                });
+
+                expect(lastResponse).to.deep.equal(expectedResponse);
+            });
+            it("should flag a simulated retained message as retained for locations", () => {
+                const expectedResponse = {
+                    retained: true
+                };
+                let lastResponse = false;
+
+                client.simulateRetainedMessage("https://example.com:8080", "baz/Locations", (url, callback) => {
+                    callback({});
+                }, (topic, response) => {
+                    lastResponse = response;
+                });
+
+                expect(lastResponse).to.deep.equal(expectedResponse);
+            });
+            it("should flag a simulated retained message as retained for other", () => {
+                const expectedResponse = {
+                    retained: true
+                };
+                let lastResponse = false;
+
+                client.simulateRetainedMessage("https://example.com:8080", "baz/Thing", (url, callback) => {
+                    callback({});
+                }, (topic, response) => {
+                    lastResponse = response;
+                });
+
+                expect(lastResponse).to.deep.equal(expectedResponse);
+            });
+        });
     });
 });

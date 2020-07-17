@@ -764,7 +764,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     convertArrayOfObjectsToCsv: function (data, colDeli, lineDeli) {
         const keys = Object.keys(data[0]),
-            columnDelimiter = colDeli || ",",
+            columnDelimiter = colDeli || ";",
             lineDelimiter = lineDeli || "\n";
 
         // header line

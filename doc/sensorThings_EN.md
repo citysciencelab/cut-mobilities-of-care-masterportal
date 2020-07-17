@@ -142,34 +142,37 @@ import {SensorThingsHttp} from "@modules/core/modelList/layer/sensorThingsHttp";
 
 const http = new SensorThingsHttp(),
     url = "https://iot.hamburg.de/v1.0/Things";
-
 http.get(url, function (response) {
-    // on success
+    // onsuccess
     // do something with the total response
-
 }, function () {
-    // on start
+    // onstart
     Radio.trigger("Util", "showLoader");
-
 }, function () {
-    // on complete (always called)
+    // oncomplete (always called)
     Radio.trigger("Util", "hideLoader");
-
 }, function (error) {
-    // on error
+    // onerror
     console.warn(error);
-
 }, function (progress) {
-    // on wait
+    // onprogress
     // the progress (percentage = Math.round(progress * 100)) to update your progress bar with
-
 });
 
 ```
 
 Please note that the http.get call in itself is asynchronous. All parameters of *SensorThingsHttp.get()* except for "url" are optional. It makes sense of cause to use at least onsuccess to receive the response.
 
-There is an optional seventh parameter (httpClient) that can be used to change the default http handler (in our case axios). This optional httpClient can be a simple function with the parameters url, onsuccess and onerror.
+
+### configuration ###
+SensorThingsHttp can be configured with two parameters via constructor.
+
+
+|name|mandatory|type|default|description|example|
+|----|-------------|---|-------|------------|--------|
+|removeIotLinks|No|Boolean|false|removes all "@iot.navigationLink" and "@iot.selfLink" from the response to reduce the size of the result|const http = new SensorThingsHttp({removeIotLinks: true});|
+|httpClient|No|Function|null|can be used to change the default http handler (in our case axios), e.g. for testing|const http = new SensorThingsHttp({httpClient: (url, onsuccess, onerror) => {}});|
+
 
 
 
@@ -192,6 +195,95 @@ The following url will only get 100 datasets and is including a "@iot.nextLink" 
 ```
 
 Calling the next link ([https://iot.hamburg.de/v1.0/Things?$skip=100](https://iot.hamburg.de/v1.0/Things?$skip=100)) will provide you with the next chunk of data and another follow up link ("@iot.nextLink") and so forth, until in the last dataset no follow up link is given.
+
+
+
+### @iot.nextLink on different levels ###
+If you don't want to use *SensorThingsHttp* to automaticaly follow @iot.nextLink on different levels, here is a short discription of what awaits you.
+
+Any structure (an array) in the response of the SensorThingsAPI can be splitted with an @iot.nextLink. This leads to @iot.nextLinks on multi levels.
+Only the main structure uses a pure "@iot.nextLink" to describe its followups. Substructures use the key name as prefix. e.g. Observations@iot.nextLink, Datastreams@iot.nextLink
+
+**example**
+
+ - url: [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2)))
+ - response: Many Things with many Datastreams with many Observations.
+ - hint: In this example we use $top=2 to enforce splitting with [prefix]@iot.nextLink on any expanded sublevel.
+
+```
+#!json
+{
+    "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$skip=100&$expand=Datastreams%28%24top%3D2%3B%24expand%3DObservations%28%24top%3D2%29%29",
+    "value" : [ {
+        "Datastreams" : [ {
+            "Observations" : [...],
+            "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13976)/Observations?$top=2&$skip=2",
+        }, {
+            "Observations" : [...],
+            "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13978)/Observations?$top=2&$skip=2",
+        } ],
+        "Datastreams@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29",
+    }]
+}
+```
+
+Let's follow the Datastreams@iot.nextLink: [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29)
+We receive a structure for Datastreams only:
+```
+#!json
+{
+    "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=4&$expand=Observations%28%24top%3D2%29",
+    "value" : [ {
+        "Observations" : [...],
+        "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=2&$skip=2",
+    }]
+}
+```
+
+Keep in mind that a single Thing has no @iot.nextLink nor "value" key. e.g. [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)?$expand=Datastreams($top=2)](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)?$expand=Datastreams($top=2))
+But even in this case there can be substructures with [prefix]@iot.nextLink to follow.
+
+
+
+
+
+### @iot.nextLink and depth barriers ###
+The end of @iot.nextLink followups is marked by the absence of a next @iot.nextLink to follow.
+But: If you limit the response using some $top=X (with X the number of entities to load) an @iot.nextLink is given anyhow.
+Following @iot.nextLink stoical, will lead to a cascade of server calls anytime you cut the response with $top=X.
+
+e.g. [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1)
+```
+#!json
+{
+  "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1&$skip=1",
+  "value" : [ {...} ]
+}
+```
+
+Unfortunately you can't simply ignore @iot.nextLink if you find a $top=X in the @iot.nextLink, as the X in $top=X can exceed "the service-driven pagination limitation":
+
+_"In addition, if the $top value exceeds the service-driven pagination limitation (...), the $top query option SHALL be discarded and the server-side pagination limitation SHALL be imposed."_
+[https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#51](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#51)
+
+A simple @iot.nextLink search for "$top=X" or "%24top=X" in combination with "$skip=Y" or "%24skip=Y" will do the trick, as any $top=X not related to the root structure is url encoded with "%3D" instead of "=".
+e.g. [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?%24top=2&%24skip=2&%24expand=Observations%28%24top%3D2%29](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?%24top=2&%24skip=2&%24expand=Observations%28%24top%3D2%29)
+
+ - Regex for $top=X: /[\$|%24]top=([0-9]+)/
+ - Regex for $skip=X: /[\$|%24]skip=([0-9]+)/
+
+Apply this code as your additional depth barrier:
+
+```
+// pseudo code, some nextLink is given
+int topX = fetchTopFromNextLink(nextLink);
+int skipX = fetchSkipFromNextLink(nextLink);
+
+if (topX > 0 && topX <= skipX) {
+    // do not follow (depth barrier)
+}
+```
+
 
 
 ### The "@iot.count" Value ###
