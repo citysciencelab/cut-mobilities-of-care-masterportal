@@ -20,7 +20,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      */
     initialize: function (config) {
         // TODO: SOMEHOW THIS DOES WORK WITH BASIC BUT NOT WITH (AT ALL) MASTER, (BUGGY) MASTERCUSTOM, (BUGGY) MASTERDEFAULT --> regarding layertree
-        // TODO: Create a folder for the layers if the treeType is something other than "light"?
+        // TODO: Create a folder for the layers if the treeType is something other than "light"
         // TODO: Tests
         // TODO: Ticket aktualisieren, sobald PR gestellt!
 
@@ -38,6 +38,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 parentId = treeType === "light" ? "tree" : "Overlayer";
             let features,
                 geoJSON,
+                geometryType,
                 layerId,
                 layerPosition;
 
@@ -47,8 +48,14 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 layerPosition = this.findPosition(config.layers, layerId);
                 if (layerPosition !== undefined) {
                     if (config.layers[layerPosition].name !== undefined) {
-                        geoJSON = this.createGeoJSON(config.epsg, features, config.layers[layerPosition].geometryType);
-                        Radio.trigger("AddGeoJSON", "addGeoJsonToMap", config.layers[layerPosition].name, config.layers[layerPosition].id, geoJSON, config.layers[layerPosition].styleId, parentId, gfiAttributes);
+                        geometryType = config.layers[layerPosition].geometryType;
+                        if (geometryType === "LineString" || geometryType === "Point" || geometryType === "Polygon") {
+                            geoJSON = this.createGeoJSON(config.epsg, features, geometryType);
+                            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", config.layers[layerPosition].name, config.layers[layerPosition].id, geoJSON, config.layers[layerPosition].styleId, parentId, gfiAttributes);
+                        }
+                        else {
+                            Radio.trigger("Alert", "alert", `FeatureViaURL: The given geometryType ${geometryType} is not supported.`);
+                        }
                     }
                     else {
                         Radio.trigger("Alert", "alert", `FeatureViaURL: No name was defined in the configuration for the layer with the id ${layerId}.`);
