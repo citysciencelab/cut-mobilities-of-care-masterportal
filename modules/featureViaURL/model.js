@@ -20,7 +20,8 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      */
     initialize: function (config) {
         // TODO: SOMEHOW THIS DOES WORK WITH BASIC BUT NOT WITH (AT ALL) MASTER, (BUGGY) MASTERCUSTOM, (BUGGY) MASTERDEFAULT --> regarding layertree
-        // TODO: TESTS?
+        // TODO: Create a folder for the layers if the treeType is something other than "light"?
+        // TODO: Tests
         // TODO: Ticket aktualisieren, sobald PR gestellt!
 
         /*
@@ -40,7 +41,6 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 layerId,
                 layerPosition;
 
-            // TODO: Maybe create a folder for the layers if the treeType is something other than "light"?
             layers.forEach(layer => {
                 layerId = layer.layerId;
                 features = layer.features;
@@ -60,7 +60,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             });
         }
         else {
-            Radio.trigger("Alert", "alert", "FeatureViaURL: The Input can't be parsed with the current configuration.");
+            Radio.trigger("Alert", "alert", "FeatureViaURL: No layers were defined in the config.js for the given features.");
         }
     },
     /**
@@ -85,8 +85,8 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
         };
         let featureJSON;
 
-        features.forEach(feature => {
-            try {
+        try {
+            features.forEach(feature => {
                 featureJSON = {
                     "type": "Feature",
                     "geometry": {
@@ -100,11 +100,11 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                     }
                 };
                 geoJSON.features.push(featureJSON);
-            }
-            catch (err) {
-                Radio.trigger("Alert", "alert", `FeatureViaURL: Error while processing the feature data: ${err}`);
-            }
-        });
+            });
+        }
+        catch (err) {
+            Radio.trigger("Alert", "alert", `FeatureViaURL: Error while processing the feature data: ${err}`);
+        }
 
         return geoJSON;
     },
@@ -150,7 +150,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             this.set("featureLabel", featureLabel);
         }
         if (coordLabel !== undefined) {
-            this.set("xCoordLabel", coordLabel);
+            this.set("coordLabel", coordLabel);
         }
         if (typeLabel !== undefined) {
             this.set("typeLabel", typeLabel);
