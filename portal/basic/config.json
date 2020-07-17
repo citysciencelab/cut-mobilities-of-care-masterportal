@@ -40,10 +40,10 @@
 					},
 					"measure": {
 						"name": "Strecke / Fläche messen"
-					},
-					"styleVT": {
-						"name": "Style VectorTiles",
-						"glyphicon": "glyphicon-tint"
+          },
+          "draw": {
+						"name": "Zeichnen / Schreiben",
+						"glyphicon": "glyphicon-pencil"
 					},
 					"kmlimport": {
 						"name": "KML Import"
