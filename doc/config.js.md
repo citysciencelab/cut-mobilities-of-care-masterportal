@@ -47,6 +47,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
 |**[alerting](#markdown-header-alerting)**|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
 |mapMarker|nein|**[mapMarker](#markdown-header-mapMarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer fefiniert werden.||
+|featureViaURL|nein|**[featureViaURL](#markdown-header-featureviaurl)**||Optionale Konfigurationseinstellungen für den URL-Parameter *featureViaURL*. Siehe **[URL-Parameter](URL-Parameter.md)**||
 
 *********
 ## quickHelp ##
@@ -313,6 +314,83 @@ portalLanguage: {
     }
 ```
 ********
+
+## featureViaURL ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|epsg|nein|Integer|4326|EPSG-Code für die Projektion der übergebenen Koordinaten der Feature.|
+|**[label](#markdown-header-featureviaurllabel)**|nein|Object|{featureLabel: "Beschriftung", coordLabel: "Koordinaten", typeLabel: "Geometrietyp"}|Label für die einzelnen Parameter der Feature, welche bspw. mit dem GFI-Tool angezeigt werden.|
+|**[layers](#markdown-header-featureviaurllayers)**|ja|Object[]||Array an Layerkonfigurationen für die übergebenen Feature.|
+
+**Beispiel:**
+```
+featureViaURL: {
+    epsg: 25832,
+    layers: [
+        {
+            "id": "urlPointFeatures",
+            "geometryType": "Point",
+            "name": "URL Point Features",
+            "styleId": "url_points"
+        },
+        {
+            "id": "urlLineFeatures",
+            "geometryType": "LineString",
+            "name": "URL Line Features",
+            "styleId": "url_lines"
+        },
+        {
+            "id": "urlPolygonFeatures",
+            "geometryType": "Polygon",
+            "name": "URL Polygon Features",
+            "styleId": "url_polygons"
+        }
+    ]
+}
+```
+
+***
+
+### featureViaURL.label ###
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|featureLabel|nein|String|"Beschriftung"|Label für die Beschriftung eines Features.|
+|coordLabel|nein|String|"Koordinaten"|Label für die Koordinaten eines Features.|
+|typeLabel|nein|String|"Geometrietyp"|Label für den Geometrietypen eines Features.|
+
+**Beispiel:**
+```
+label: {
+    featureLabel: "Name",
+    coordLabel: "Long, Lat",
+    typeLabel: "Geometrie"
+}
+```
+
+***
+
+### featureViaURL.layers ###
+
+Die beschriebenen Parameter sind für die eines einzelnen Layer-Objektes im **[layers](#markdown-header-featureviaurllayers)**-Array.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|id|ja|String||Eindeutige ID für den zu erstellenden Layer.|
+|geometryType|ja|String||Eindeutige ID für den zu erstellenden Layer.|
+|name|ja|String||Name des Layers; wird im Themenbaum, der Legende und im GFI-Popup dargestellt.|
+|styleId|nein|String||Eindeutige ID für den Style, welcher für die Feature verwendet werden soll. Die Styles stammen aus der **[style.json](style.json.md)**.|
+
+**Beispiel:**
+```
+layers: {
+    id: "urlPolygonFeatures",
+    geometryType: "Polygon",
+    name: "URL Polygon Features",
+    styleId: "url_polygons"
+}
+```
+
+***
 
 >Zurück zur **[Dokumentation Übersetzungen im Masterportal](languages_de.md)**.
 

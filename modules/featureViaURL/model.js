@@ -19,7 +19,6 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      * @fires Tools.AddGeoJSON#RadioTriggerAddGeoJSONAddGeoJsonToMap
      */
     initialize: function (config) {
-        // TODO: CONFIG DOC
         // TODO: SOMEHOW THIS DOES WORK WITH BASIC BUT NOT WITH (AT ALL) MASTER, (BUGGY) MASTERCUSTOM, (BUGGY) MASTERDEFAULT --> regarding layertree
         // TODO: TESTS?
         // TODO: Ticket aktualisieren, sobald PR gestellt!
