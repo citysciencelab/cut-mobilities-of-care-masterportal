@@ -68,7 +68,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
                     // modules/core
                     // todo create issue to fix test
-                    // require("./tests/modules/core/ParametricUrl.js"),
+                    require("./tests/modules/core/ParametricUrl.js"),
 
                     // modules/searchbar
                     // require("./tests/modules/searchbar/SearchCategories.js"),

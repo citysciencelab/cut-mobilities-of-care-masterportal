@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function ZoomTests ({builder, url, resolution, capability,}) {
+function ZoomTests ({builder, url, resolution, capability}) {
     // no zoom control on mobile devices - skip
     const testIsApplicable = !isMobile(resolution);
 
