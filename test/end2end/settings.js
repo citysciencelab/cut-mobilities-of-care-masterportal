@@ -15,7 +15,7 @@ const webdriver = require("selenium-webdriver"),
     ],
     configs = new Map([
         ["basic", "/portal/basic"],
-        ["master", "/portal/master"]
+        ["master", "/portal/master"],
         ["custom", "/portal/masterCustom"],
         ["default", "/portal/masterDefault"]
     ]),
