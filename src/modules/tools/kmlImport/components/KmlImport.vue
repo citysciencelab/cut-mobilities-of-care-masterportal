@@ -41,6 +41,9 @@ export default {
     created () {
         this.$on("close", this.close);
         this.initialize();
+        if (this.isActive) {
+            this.setActive(true);
+        }
     },
     /**
      * Put initialize here if mounting occurs after config parsing
