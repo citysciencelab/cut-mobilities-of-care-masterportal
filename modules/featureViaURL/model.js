@@ -20,6 +20,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      */
     initialize: function (config) {
         // TODO: CONFIG DOC
+        // TODO: SOMEHOW THIS DOES WORK WITH BASIC BUT NOT WITH (AT ALL) MASTER, (BUGGY) MASTERCUSTOM, (BUGGY) MASTERDEFAULT --> regarding layertree
         // TODO: TESTS?
         // TODO: Ticket aktualisieren, sobald PR gestellt!
 
@@ -33,14 +34,14 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             this.setValues(config.label?.feature, config.label?.coord, config.label?.type);
             const gfiAttributes = this.createGFIAttributes(),
                 layers = Radio.request("ParametricURL", "getFeatureViaURL"),
-                parentId = treeType === "light" ? "tree" : "Overlayer",
-                treeType = Radio.request("Parser", "getTreeType");
+                treeType = Radio.request("Parser", "getTreeType"),
+                parentId = treeType === "light" ? "tree" : "Overlayer";
             let features,
                 geoJSON,
                 layerId,
                 layerPosition;
 
-            // TODO: Irgendwie einen Ordner anlegen für die Feature, wenn der treeType nicht light ist
+            // TODO: Maybe create a folder for the layers if the treeType is something other than "light"?
             layers.forEach(layer => {
                 layerId = layer.layerId;
                 features = layer.features;
@@ -51,19 +52,16 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                         Radio.trigger("AddGeoJSON", "addGeoJsonToMap", config.layers[layerPosition].name, config.layers[layerPosition].id, geoJSON, config.layers[layerPosition].styleId, parentId, gfiAttributes);
                     }
                     else {
-                        // TODO: Make this as an alert!
-                        console.error(`FeatureViaURL: No name was defined in the configuration for the layer with the id ${layerId}.`);
+                        Radio.trigger("Alert", "alert", `FeatureViaURL: No name was defined in the configuration for the layer with the id ${layerId}.`);
                     }
                 }
                 else {
-                    // TODO: Make this as an alert!
-                    console.error(`FeatureViaURL: The layerID ${layerId} given by the URL was not defined in the config.js.`);
+                    Radio.trigger("Alert", "alert", `FeatureViaURL: The layerID ${layerId} given by the URL was not defined in the config.js.`);
                 }
             });
         }
         else {
-            // TODO: Make this as an alert!
-            console.error("FeatureViaURL: The Input can't be parsed with the current configuration.");
+            Radio.trigger("Alert", "alert", "FeatureViaURL: The Input can't be parsed with the current configuration.");
         }
     },
     /**
@@ -105,8 +103,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 geoJSON.features.push(featureJSON);
             }
             catch (err) {
-                // TODO: Make this an Alert!
-                console.error(`FeatureViaURL: Error while processing the feature data: ${err}`);
+                Radio.trigger("Alert", "alert", `FeatureViaURL: Error while processing the feature data: ${err}`);
             }
         });
 
