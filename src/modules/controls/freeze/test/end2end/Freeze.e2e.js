@@ -20,7 +20,7 @@ function FreezeTests ({builder, url, resolution, browsername, capability, descri
 
             before(async function () {
                 if (capability) {
-                    capability.name = `FreezeTests ${description}`;
+                    capability.name = `FreezeTests : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

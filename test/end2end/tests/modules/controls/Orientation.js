@@ -16,7 +16,7 @@ function Orientation ({builder, url, resolution, capability, description}) {
 
         before(async function () {
             if (capability) {
-                capability.name = `Modules Controls GeoLocate ${description}`;
+                capability.name = `Modules Controls GeoLocate : ${this.currentTest.title} - ${description}`;
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

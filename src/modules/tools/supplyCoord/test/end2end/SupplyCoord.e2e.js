@@ -66,7 +66,7 @@ async function CoordTests ({builder, url, resolution, config, capability, descri
 
         before(async function () {
             if (capability) {
-                capability.name = `SupplyCoord ${description}`;
+                capability.name = `SupplyCoord : ${this.currentTest.title} - ${description}`;
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

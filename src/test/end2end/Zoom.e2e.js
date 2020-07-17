@@ -20,7 +20,7 @@ async function ZoomTests ({builder, url, resolution, capability, description}) {
 
             before(async function () {
                 if (capability) {
-                    capability.name = `Map Zoom with MouseWheel ${description}`;
+                    capability.name = `Map Zoom with MouseWheel : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

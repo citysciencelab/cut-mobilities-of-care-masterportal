@@ -19,7 +19,7 @@ function OverviewMap ({builder, url, resolution, browsername, capability, descri
 
             before(async function () {
                 if (capability) {
-                    capability.name = `OverviewMap ${description}`;
+                    capability.name = `OverviewMap : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

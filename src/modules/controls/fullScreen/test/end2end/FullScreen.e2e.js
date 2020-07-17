@@ -24,7 +24,7 @@ function FullScreenTest ({builder, url, resolution, capability, description}) {
 
             before(async function () {
                 if (capability) {
-                    capability.name = `FullScreenTest ${description}`;
+                    capability.name = `FullScreenTest : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

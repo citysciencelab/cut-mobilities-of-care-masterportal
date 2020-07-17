@@ -48,7 +48,7 @@ function Button3DTests ({builder, url, resolution, mode, capability, description
 
         before(async function () {
             if (capability) {
-                capability.name = `Modules Controls ButtonOblique ${description}`;
+                capability.name = `Modules Controls ButtonOblique : ${this.currentTest.title} - ${description}`;
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

@@ -21,7 +21,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability, d
 
             before(async function () {
                 if (capability) {
-                    capability.name = `BackForwardTests ${description}`;
+                    capability.name = `BackForwardTests : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

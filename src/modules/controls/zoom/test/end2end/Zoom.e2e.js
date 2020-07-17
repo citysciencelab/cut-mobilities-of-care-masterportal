@@ -20,7 +20,7 @@ function ZoomTests ({builder, url, resolution, capability, description}) {
 
             before(async function () {
                 if (capability) {
-                    capability.name = `Modules Controls Zoom ${description}`;
+                    capability.name = `Modules Controls Zoom : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

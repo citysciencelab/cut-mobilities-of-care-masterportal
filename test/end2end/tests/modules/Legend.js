@@ -23,7 +23,7 @@ async function LegendTests ({builder, config, url, resolution, capability, descr
 
             before(async function () {
                 if (capability) {
-                    capability.name = `Legend ${description}`;
+                    capability.name = `Legend : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

@@ -17,7 +17,7 @@ async function PanTests ({builder, url, resolution, browsername, capability, des
 
         before(async function () {
             if (capability) {
-                capability.name = `Map Pan ${description}`;
+                capability.name = `Map Pan : ${this.currentTest.title} - ${description}`;
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

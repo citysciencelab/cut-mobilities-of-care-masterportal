@@ -22,7 +22,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability, descri
 
                     before(async function () {
                         if (capability) {
-                            capability.name = `Measure Tool ${description}`;
+                            capability.name = `Measure Tool : ${this.currentTest.title} - ${description}`;
                             builder.withCapabilities(capability);
                         }
                         driver = await initDriver(builder, url, resolution);

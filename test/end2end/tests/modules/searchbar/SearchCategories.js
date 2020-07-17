@@ -91,7 +91,7 @@ async function SearchCategories ({builder, url, resolution, capability, descript
                 const searchInputSelector = By.css("#searchInput");
 
                 if (capability) {
-                    capability.name = `Search Categories ${description}`;
+                    capability.name = `Search Categories : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

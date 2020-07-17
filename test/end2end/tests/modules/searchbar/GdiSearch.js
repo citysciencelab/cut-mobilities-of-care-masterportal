@@ -21,7 +21,7 @@ async function GdiSearch ({builder, url, resolution, capability, description}) {
 
         before(async function () {
             if (capability) {
-                capability.name = `Gdi Search ${description}`;
+                capability.name = `Gdi Search : ${this.currentTest.title} - ${description}`;
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

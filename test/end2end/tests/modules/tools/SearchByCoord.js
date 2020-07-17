@@ -31,7 +31,7 @@ async function SearchByCoordTests ({builder, url, resolution, capability, descri
 
         before(async function () {
             if (capability) {
-                capability.name = `SearchByCoord ${description}`;
+                capability.name = `SearchByCoord : ${this.currentTest.title} - ${description}`;
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

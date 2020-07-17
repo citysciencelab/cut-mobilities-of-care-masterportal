@@ -18,7 +18,7 @@ function AttributionsTests ({builder, url, resolution, capability, description})
 
             before(async function () {
                 if (capability) {
-                    capability.name = `AttributionsTests ${description}`;
+                    capability.name = `AttributionsTests : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
@@ -35,7 +35,7 @@ function AttributionsTests ({builder, url, resolution, capability, description})
 
             it("should have an attributions button", async function () {
                 await driver.wait(until.elementLocated(By.css(".attributions-button")), 50000);
-                attributionsButton = await driver.findElement(By.css(".attributions-button#####"));
+                attributionsButton = await driver.findElement(By.css(".attributions-button"));
 
                 expect(attributionsButton).to.exist;
             });

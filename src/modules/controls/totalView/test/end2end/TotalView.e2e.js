@@ -21,7 +21,7 @@ function TotalViewTests ({builder, url, resolution, browsername, capability, des
 
             before(async function () {
                 if (capability) {
-                    capability.name = `TotalViewTests ${description}`;
+                    capability.name = `TotalViewTests : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

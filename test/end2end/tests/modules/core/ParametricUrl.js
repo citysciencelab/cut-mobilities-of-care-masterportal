@@ -17,7 +17,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability, desc
 
         before(async function () {
             if (capability) {
-                capability.name = `URL Query Parameters ${description}`;
+                capability.name = `URL Query Parameters : ${this.currentTest.title} - ${description}`;
                 builder.withCapabilities(capability);
             }
             driver = await getUnnavigatedDriver(builder, resolution);

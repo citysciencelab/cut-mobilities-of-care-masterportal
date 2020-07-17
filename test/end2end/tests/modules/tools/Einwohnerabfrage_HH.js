@@ -26,7 +26,7 @@ async function CoordTests ({builder, url, resolution, capability, description}) 
 
         before(async function () {
             if (capability) {
-                capability.name = `Einwohnerabfrage_HH ${description}`;
+                capability.name = `Einwohnerabfrage_HH : ${this.currentTest.title} - ${description}`;
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);

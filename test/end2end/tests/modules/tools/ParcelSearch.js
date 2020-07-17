@@ -39,7 +39,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability, descrip
 
             before(async function () {
                 if (capability) {
-                    capability.name = `ParcelSearch ${description}`;
+                    capability.name = `ParcelSearch : ${this.currentTest.title} - ${description}`;
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
