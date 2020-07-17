@@ -328,7 +328,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
         dayTableHeaderHtml += "<th class=\"tableTopLeft\">" + title + "</th>";
 
         for (let i = 0; i < headerArray.length; i++) {
-            dayTableHeaderHtml += "<th class=\"tableColumn\">" + headerArray[i] + " <br/>Uhr</th>";
+            dayTableHeaderHtml += "<th class=\"tableColumn\">" + headerArray[i] + " <br/>" + this.model.get("clockLabel") + "</th>";
         }
 
         dayTableHeaderHtml += "</thead>";

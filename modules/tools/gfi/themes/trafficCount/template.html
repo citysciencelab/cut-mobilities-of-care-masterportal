@@ -9,16 +9,16 @@
     </div>
     <ul class="nav nav-pills">
         <li value= "infos" class="tab-toggle active">
-            <a data-toggle="tab" href="#infos">Info</a>
+            <a data-toggle="tab" href="#infos"><%= infoLabel %></a>
         </li>
         <li value= "day" class="tab-toggle">
-            <a data-toggle="tab" href="#day">Tag</a>
+            <a data-toggle="tab" href="#day"><%= dayLabel %></a>
         </li>
         <li value= "week" class="tab-toggle">
-            <a data-toggle="tab" href="#week">Woche</a>
+            <a data-toggle="tab" href="#week"><%= weekLabel %></a>
         </li>
         <li value= "year" class="tab-toggle">
-            <a data-toggle="tab" href="#year">Jahr</a>
+            <a data-toggle="tab" href="#year"><%= yearLabel %></a>
         </li>
     </ul>
     <div class="tab-content">
@@ -28,41 +28,41 @@
                     <tbody>
                     <tr colspan = "3">
                         <td class="bold">&nbsp;</td>
-                        <td class="bold">Zeitraum</td>
-                        <td class="bold">Anzahl</td>
+                        <td class="bold"><%= period %></td>
+                        <td class="bold"><%= number %></td>
                     </tr>
                     <tr colspan = "3">
-                        <td class="bold">insgesamt seit</td>
+                        <td class="bold"><%= totalSince %></td>
                         <td id="totalDesc" class="text-right"><%= totalDesc %></td>
                         <td id="totalValue" class="text-right"><%= totalValue %></td>
                     </tr>
                     <tr colspan = "3">
-                        <td class="bold">seit Jahresbeginn</td>
+                        <td class="bold"><%= sinceBeginningOfTheYear %></td>
                         <td id="thisYearDesc" class="text-right"><%= thisYearDesc %></td>
                         <td id="thisYearValue" class="text-right"><%= thisYearValue %></td>
                     </tr>
                     <tr colspan = "3">
-                        <td class="bold">im Vorjahr</td>
+                        <td class="bold"><%= overThePastYear%></td>
                         <td id="lastYearDesc" class="text-right"><%= lastYearDesc %></td>
                         <td id="lastYearValue" class="text-right"><%= lastYearValue %></td>
                     </tr>
                     <tr colspan = "3">
-                        <td class="bold">am Vortag</td>
+                        <td class="bold"><%= onThePreviousDay %></td>
                         <td id="lastDayDesc" class="text-right"><%= lastDayDesc %></td>
                         <td id="lastDayValue" class="text-right"><%= lastDayValue %></td>
                     </tr>
                     <tr colspan = "3">
-                        <td class="bold">Stärkster Tag im Jahr</td>
+                        <td class="bold"><%= highestDay %></td>
                         <td id="highestWorkloadDayDesc" class="text-right"><%= highestWorkloadDayDesc %></td>
                         <td id="highestWorkloadDayValue" class="text-right"><%= highestWorkloadDayValue %></td>
                     </tr>
                     <tr colspan = "3">
-                        <td class="bold">Stärkste Woche im Jahr</td>
+                        <td class="bold"><%= highestWeek %></td>
                         <td id="highestWorkloadWeekDesc" class="text-right"><%= highestWorkloadWeekDesc %></td>
                         <td id="highestWorkloadWeekValue" class="text-right"><%= highestWorkloadWeekValue %></td>
                     </tr>
                     <tr colspan = "3">
-                        <td class="bold">Stärkster Monat im Jahr</td>
+                        <td class="bold"><%= highestMonth %></td>
                         <td id="highestWorkloadMonthDesc" class="text-right"><%= highestWorkloadMonthDesc %></td>
                         <td id="highestWorkloadMonthValue" class="text-right"><%= highestWorkloadMonthValue %></td>
                     </tr>
@@ -83,7 +83,7 @@
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="diagramCheck-day" checked>
-                <label class="form-check-label" for="diagramCheck-day">Diagramm</label>
+                <label class="form-check-label" for="diagramCheck-day"><%= diagramLabel %></label>
             </div>
             <div id="diagramday" class="trafficCountDiagramDay_<%= themeId %> padded" style="position:relative;">
                 <canvas></canvas>
@@ -108,14 +108,14 @@
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="diagramCheck-week" checked>
-                <label class="form-check-label" for="diagramCheck-week">Diagramm</label>
+                <label class="form-check-label" for="diagramCheck-week"><%= diagramLabel %></label>
             </div>
             <div id="diagramweek" class="trafficCountDiagramWeek_<%= themeId %> padded" style="position:relative;">
                 <canvas></canvas>
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="tableCheck-week">
-                <label class="form-check-label" for="tableCheck-week">Tabelle</label>
+                <label class="form-check-label" for="tableCheck-week"><%= tableLabel %></label>
             </div>
             <div id="tableweek" class="tab-pane table inactive">
             </div>

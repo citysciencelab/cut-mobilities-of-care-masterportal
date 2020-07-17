@@ -8,9 +8,21 @@ import ExportButtonModel from "../../../../snippets/exportButton/model";
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
         currentLng: "",
+        infoLabel: "",
         dayLabel: "",
         weekLabel: "",
         yearLabel: "",
+        period: "",
+        number: "",
+        totalSince: "",
+        sinceBeginningOfTheYear: "",
+        overThePastYear: "",
+        onThePreviousDay: "",
+        highestDay: "",
+        highestWeek: "",
+        highestMonth: "",
+        dateLabel: "",
+        clockLabel: "",
         tableLabel: "",
         notice: "",
         lastupdateLabel: "",
@@ -125,7 +137,39 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     changeLang: function (lng) {
         this.set({
             currentLng: lng,
-            day: i18next.t("additional:modules.tools.populationRequest.result.hint")
+            infoLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.infoLabel"),
+            dayLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.dayLabel"),
+            weekLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.weekLabel"),
+            yearLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.yearLabel"),
+            period: i18next.t("common:modules.tools.gfi.themes.trafficCount.period"),
+            number: i18next.t("common:modules.tools.gfi.themes.trafficCount.number"),
+            totalSince: i18next.t("common:modules.tools.gfi.themes.trafficCount.totalSince"),
+            sinceBeginningOfTheYear: i18next.t("common:modules.tools.gfi.themes.trafficCount.sinceBeginningOfTheYear"),
+            overThePastYear: i18next.t("common:modules.tools.gfi.themes.trafficCount.overThePastYear"),
+            onThePreviousDay: i18next.t("common:modules.tools.gfi.themes.trafficCount.onThePreviousDay"),
+            highestDay: i18next.t("common:modules.tools.gfi.themes.trafficCount.highestDay"),
+            highestWeek: i18next.t("common:modules.tools.gfi.themes.trafficCount.highestWeek"),
+            highestMonth: i18next.t("common:modules.tools.gfi.themes.trafficCount.highestMonth"),
+            dateLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.dateLabel"),
+            clockLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.clockLabel"),
+            tableLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.tableLabel"),
+            notice: i18next.t("common:modules.tools.gfi.themes.trafficCount.notice"),
+            lastupdateLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.lastupdateLabel"),
+            diagramLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.diagramLabel"),
+            calendarweek: i18next.t("common:modules.tools.gfi.themes.trafficCount.calendarweek"),
+            meansOfTransportAssoc: {
+                AnzFahrzeuge: i18next.t("common:modules.tools.gfi.themes.trafficCount.carLabel"),
+                AnzFahrraeder: i18next.t("common:modules.tools.gfi.themes.trafficCount.bicycleLabel")
+            },
+            typeAssoc: {
+                AnzFahrzeuge: i18next.t("common:modules.tools.gfi.themes.trafficCount.infraredsensor"),
+                AnzFahrraeder: i18next.t("common:modules.tools.gfi.themes.trafficCount.countingstation")
+            },
+            idLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.idLabel"),
+            typeLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.typeLabel"),
+            meansOfTransportLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.meansOfTransportLabel"),
+            carsHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.carsHeaderSuffix"),
+            trucksHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.trucksHeaderSuffix")
         });
     },
 
@@ -802,7 +846,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
 
                 this.refreshDiagramDay(datasets, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareDatasetHourly(datasets), "day", "Datum", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareDatasetHourly(datasets), "day", this.get("dateLabel"), timeSettings, meansOfTransport);
 
             }, errormsg => {
                 this.refreshDiagramDay([]);
@@ -894,7 +938,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
 
                 this.refreshDiagramWeek(datasets, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareDatasetHourly(datasets), "week", "Woche", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareDatasetHourly(datasets), "week", this.get("weekLabel"), timeSettings, meansOfTransport);
 
             }, errormsg => {
                 this.refreshDiagramWeek([]);
@@ -984,7 +1028,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
 
                 this.refreshDiagramYear(datasets, years, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareYearDataset(datasets), "year", "Jahr", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareYearDataset(datasets), "year", this.get("yearLabel"), timeSettings, meansOfTransport);
 
             }, errormsg => {
                 this.refreshDiagramYear([]);
