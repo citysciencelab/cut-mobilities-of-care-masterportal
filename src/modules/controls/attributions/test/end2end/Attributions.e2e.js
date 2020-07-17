@@ -35,7 +35,7 @@ function AttributionsTests ({builder, url, resolution, capability, description})
 
             it("should have an attributions button", async function () {
                 await driver.wait(until.elementLocated(By.css(".attributions-button")), 50000);
-                attributionsButton = await driver.findElement(By.css(".attributions-button"));
+                attributionsButton = await driver.findElement(By.css(".attributions-button#####"));
 
                 expect(attributionsButton).to.exist;
             });
