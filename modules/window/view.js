@@ -162,11 +162,11 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         else {
             this.$el.hide("slow");
         }
-        
+
         if (this.model.get("isCollapsed")) {
             this.minimize();
         }
-        
+
         return this;
     },
 
