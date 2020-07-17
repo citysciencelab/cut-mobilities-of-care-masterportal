@@ -1,10 +1,11 @@
 /**
  * User type definition
  * @typedef {object} KmlImportState
- * @property {boolean}  active - if true, component will be initially rendered
+ * @property {boolean}  active - if true, component is rendered
  * @property {boolean}  deactivateGFI - if true, component activation deactivates gfi component
  * @property {string}   glyphicon - icon next to title
  * @property {string}   id - internal id of component
+ * @property {boolean}  isActive - if true, component will be initially rendered
  * @property {string}   name - Module name
  * @property {boolean}  renderToWindow - if true, component is rendered in desktop only
  * @property {string}   parentId - Id of parent node
@@ -21,6 +22,7 @@ export default {
     deactivateGFI: false,
     glyphicon: "glyphicon-load",
     id: "kmlImport",
+    isActive: false,
     name: "KML-Datei laden",
     onlyDesktop: true,
     parentId: "tool",

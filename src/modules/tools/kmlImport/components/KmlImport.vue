@@ -19,6 +19,7 @@ export default {
             "deactivateGFI",
             "glyphicon",
             "active",
+            "isActive",
             "renderToWindow",
             "resizableWindow",
             "supportedFiletypes"
