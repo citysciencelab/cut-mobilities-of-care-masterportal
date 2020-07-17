@@ -376,7 +376,7 @@ Die beschriebenen Parameter sind für die eines einzelnen Layer-Objektes im **[l
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |id|ja|String||Eindeutige ID für den zu erstellenden Layer.|
-|geometryType|ja|String||Eindeutige ID für den zu erstellenden Layer.|
+|geometryType|ja|enum["LineString", "Point", "Polygon"]||Eindeutige ID für den zu erstellenden Layer.|
 |name|ja|String||Name des Layers; wird im Themenbaum, der Legende und im GFI-Popup dargestellt.|
 |styleId|nein|String||Eindeutige ID für den Style, welcher für die Feature verwendet werden soll. Die Styles stammen aus der **[style.json](style.json.md)**.|
 
