@@ -377,9 +377,7 @@
                         "trucksHeaderSuffix": "SV-Anteil in %",
                         "yAxisTextDay": "Anzahl / 15 Min.",
                         "yAxisTextWeek": "Anzahl / Tag",
-                        "yAxisTextYear": "Anzahl / Woche",
-                        "xAxisTextDay": " Uhr",
-                        "xAxisTextYear": "KW"
+                        "yAxisTextYear": "Anzahl / Woche"
                     }
                 }
             },

@@ -368,9 +368,7 @@
                         "trucksHeaderSuffix": "Trucks proportion in %",
                         "yAxisTextDay": "Count / 15 Min.",
                         "yAxisTextWeek": "Count / Day",
-                        "yAxisTextYear": "Count / Week",
-                        "xAxisTextDay": " o'clock",
-                        "xAxisTextYear": "CW"
+                        "yAxisTextYear": "Count / Week"
                     }
                 }
             },

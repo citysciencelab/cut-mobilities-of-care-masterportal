@@ -124,9 +124,6 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         this.listenTo(Radio.channel("GFI"), {
             "isVisible": this.onGFIIsVisibleEvent
         }, this);
-
-        // change language from moment.js to german
-        moment.locale(this.get("currentLng"));
     },
 
     /**
@@ -169,8 +166,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             typeLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.typeLabel"),
             meansOfTransportLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.meansOfTransportLabel"),
             carsHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.carsHeaderSuffix"),
-            trucksHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.trucksHeaderSuffix")
+            trucksHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.trucksHeaderSuffix"),
+            yAxisTextDay: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextDay"),
+            yAxisTextWeek: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextWeek"),
+            yAxisTextYear: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextYear")
         });
+        moment.locale(lng);
     },
 
     /**
@@ -460,7 +461,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         });
 
         api.updateHighestWorkloadWeek(thingId, meansOfTransport, moment().format("YYYY"), (calendarWeek, value) => {
-            this.setHighestWorkloadWeekDesc(!isNaN(calendarWeek) || typeof calendarWeek === "string" ? i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextYear") + " " + calendarWeek : "");
+            this.setHighestWorkloadWeekDesc(!isNaN(calendarWeek) || typeof calendarWeek === "string" ? this.get("calendarweek") + " " + calendarWeek : "");
             this.setHighestWorkloadWeekValue(this.addThousandPoints(value));
         }, errormsg => {
             this.setHighestWorkloadWeekDesc("(nicht");
@@ -1060,13 +1061,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 xAxis: {
                     xAttr: "hour",
                     xAxisTicks: {
-                        unit: i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextDay"),
+                        unit: " " + this.get("clockLabel"),
                         values: xAxisTickValues
                     }
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextDay")
+                    yAxisText: this.get("yAxisTextDay")
                 }
             };
 
@@ -1078,7 +1079,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm");
         }, (value, dotData) => {
             // setTooltipValue
-            return dotData.hour + " " + i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextDay") + ": " + this.addThousandPoints(value);
+            return dotData.hour + " " + this.get("clockLabel") + ": " + this.addThousandPoints(value);
         }, emptyDiagramData);
     },
 
@@ -1105,7 +1106,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextWeek")
+                    yAxisText: this.get("yAxisTextWeek")
                 }
             };
 
@@ -1114,7 +1115,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             const weeknumber = moment(datetime, "YYYY-MM-DD HH:mm:ss").week(),
                 year = moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
 
-            return i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextYear") + " " + weeknumber + " / " + year;
+            return this.get("calendarweek") + " " + weeknumber + " / " + year;
         }, datetime => {
             // callbackRenderTextXAxis
             const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss");
@@ -1152,7 +1153,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextYear")
+                    yAxisText: this.get("yAxisTextYear")
                 }
             };
 
@@ -1177,7 +1178,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             // use thursday as fixure of the week, as the calendar week is fixated to thursday
             const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss").add(3, "days");
 
-            return i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextYear") + " " + objMoment.format("WW") + " / " + objMoment.format("YYYY") + ": " + this.addThousandPoints(value);
+            return this.get("calendarweek") + " " + objMoment.format("WW") + " / " + objMoment.format("YYYY") + ": " + this.addThousandPoints(value);
         }, emptyDiagramData);
     },
 
@@ -1497,7 +1498,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         for (kw = 1; kw <= moment().isoWeeksInYear(); kw++) {
             kw = kw < 10 ? "0" + kw : kw;
-            xAxisTickValues.push(i18next.t("common:modules.tools.gfi.themes.trafficCount.xAxisTextYear") + kw);
+            xAxisTickValues.push(this.get("calendarweek") + kw);
         }
 
         return xAxisTickValues;
