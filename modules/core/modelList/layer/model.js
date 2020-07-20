@@ -11,7 +11,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         isVisibleInMap: false,
         layerInfoClicked: false,
         singleBaselayer: false,
-        legend: undefined,
+        legend: true,
         maxScale: "1000000",
         minScale: "0",
         selectionIDX: 0,

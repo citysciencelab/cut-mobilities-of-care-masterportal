@@ -1,7 +1,6 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import {expect} from "chai";
-import sinon from "sinon";
 import WMTSLayer from "@modules/core/modelList/layer/wmts.js";
 import {get as getProjection} from "ol/proj";
 import {getWidth} from "ol/extent";
@@ -35,23 +34,6 @@ describe("core/modelList/layer/wmts", function () {
 
             expect(wmts.attributes).to.have.property("layerSource");
             expect(typeof wmts.attributes.layerSource).to.equal("object");
-        });
-    });
-
-    describe("createLegend", function () {
-        before(function () {
-            sinon.stub(console, "error");
-        });
-
-        after(function () {
-            sinon.restore();
-        });
-
-        it("should log an error on the console if the legend is not set", function () {
-            wmts.createLegend();
-
-            expect(console.error.calledOnce).to.be.true;
-            expect(console.error.calledWith("WMTS: No legend is specified for the layer!")).to.be.true;
         });
     });
 
@@ -99,7 +81,6 @@ describe("core/modelList/layer/wmts", function () {
 
 describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
     let model,
-        legend,
         result;
 
     const tests = [
@@ -176,57 +157,6 @@ describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
             model.createLayer();
 
             expect(model.get("layer")).to.be.an.instanceOf(TileLayer);
-        });
-    });
-
-    describe("test createlegend success", () => {
-
-        before(async function () {
-            model.set("capabilitiesUrl", tests[0].result);
-            model.set("optionsFromCapabilities", true);
-            model.createLegend();
-        });
-
-        after(() => {
-            model.unset("legend");
-            legend = undefined;
-        });
-
-        it("legend should be valid url", () => {
-            /**
-            * checkURL for img format
-            * @param {string} url the url to be checked
-            * @returns {void}
-            */
-            function checkUrlImg (url) {
-                let valid = false;
-
-                if (url.toLowerCase().match("png|gif|jpg|jpeg")) {
-                    valid = true;
-                }
-                return valid;
-            }
-
-            legend = model.get("legend");
-
-            expect(legend).to.contain("http");
-
-            expect(checkUrlImg(legend)).to.be.true;
-        });
-    });
-
-    describe("test createlegend failure", () => {
-
-        before(async function () {
-            model.set("capabilitiesUrl", tests[1].result);
-            model.set("layers", tests[1].layerName);
-            model.set("optionsFromCapabilities", true);
-            model.createLegend();
-        });
-
-        it("should be null", () => {
-            legend = model.get("legend");
-            expect(legend).to.be.null;
         });
     });
 });
