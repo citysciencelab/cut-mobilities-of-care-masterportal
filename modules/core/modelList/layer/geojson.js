@@ -373,14 +373,13 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @fires StyleList#RadioRequestReturnModelById
      * @returns {void}
      */
-    createLegendURL: function () {
+    createLegend: function () {
         let style;
 
-        if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
+        if (this.get("legend")) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-
             if (style !== undefined) {
-                this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
+                this.setLegend(style.createLegend());
             }
         }
     },

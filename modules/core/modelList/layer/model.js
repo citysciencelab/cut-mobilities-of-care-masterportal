@@ -11,7 +11,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         isVisibleInMap: false,
         layerInfoClicked: false,
         singleBaselayer: false,
-        legendURL: "",
+        legend: undefined,
         maxScale: "1000000",
         minScale: "0",
         selectionIDX: 0,
@@ -51,7 +51,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Boolean} singleBaselayer=false - Flag if only a single baselayer should be selectable at once
      * @property {String} minScale="0" Minimum scale for layer to be displayed
      * @property {String} maxScale="1000000" Maximum scale for layer to be displayed
-     * @property {String} legendURL="" LegendURL to request legend from
+     * @property {String} legend=undefined Legend for layer
      * @property {String[]} supported=["2D"] Array of Strings to show supported modes "2D" and "3D"
      * @property {Boolean} showSettings=true Flag if layer settings have to be shown
      * @property {Number} hitTolerance=0 Hit tolerance used by layer for map interaction
@@ -300,7 +300,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         this.createLayer();
         this.updateLayerTransparency();
         this.getResolutions();
-        this.createLegendURL();
+        this.createLegend();
         this.checkForScale(Radio.request("MapView", "getOptions"));
     },
 
@@ -581,7 +581,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
         if (this.get("legendURL") === "") {
-            this.createLegendURL();
+            this.createLegend();
         }
         legend = Radio.request("Legend", "getLegend", this);
         metaID.push(layerMetaId);
@@ -750,12 +750,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Setter for legendURL
-     * @param {String} value legendURL
+     * Setter for legend
+     * @param {String} value legend
      * @returns {void}
      */
-    setLegendURL: function (value) {
-        this.set("legendURL", value);
+    setLegend: function (value) {
+        this.set("legend", value);
     },
 
     /**

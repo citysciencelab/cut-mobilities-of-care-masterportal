@@ -54,7 +54,7 @@ export default {
                 legendObj = {
                     id: id,
                     name: layer.get("name"),
-                    legend: layer.get("legend") ? layer.get("legend") : layer.get("legendURL"),
+                    legend: layer.get("legend"),
                     position: layer.get("selectionIDX")
                 },
                 isNotYetInLegend = this.isLayerNotYetInLegend(id);
@@ -96,7 +96,7 @@ export default {
             if (legendObj.position < 0) {
                 isValid = false;
             }
-            if (legendObj.legend === "" || legendObj.legend === "ignore") {
+            if (!legendObj.legend) {
                 isValid = false;
             }
             if (Array.isArray(legendObj.legend) && legendObj.legend.length === 0) {
@@ -135,13 +135,14 @@ export default {
                 <div class="layer-legend">
                     <div
                         v-for="legendPart in legendObj.legend"
-                        :key="legendPart"
+                        :key="JSON.stringify(legendPart)"
                     >
                         <!--Legend as Image-->
                         <img
                             v-if="(typeof legendPart === 'string' && !legendPart.endsWith('.pdf'))"
                             :src="legendPart"
                         >
+
                         <!--Legend PDF as Link-->
                         <a
                             v-if="(typeof legendPart === 'string' && legendPart.endsWith('.pdf'))"
@@ -150,6 +151,15 @@ export default {
                         >
                             {{ legendPart }}
                         </a>
+
+                        <!--Legend as Image from Object-->
+                        <img
+                            v-if="(typeof legendPart === 'object')"
+                            :src="legendPart.graphic"
+                        >
+                        <span
+                            v-if="(typeof legendPart === 'object')"
+                        >{{ legendPart.name }}</span>
                     </div>
                 </div>
             </div>

@@ -90,12 +90,12 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     },
 
     /**
-     * Creates the legendUrls of each child layer
+     * Creates the legend of each child layer
      * @return {void}
      */
-    createLegendURL: function () {
+    createLegend: function () {
         this.get("layerSource").forEach(layerSource => {
-            layerSource.createLegendURL();
+            layerSource.createLegend();
         }, this);
     },
 

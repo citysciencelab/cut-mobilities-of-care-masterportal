@@ -107,7 +107,6 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (this.get("isSelected")) {
             this.updateSource(true);
         }
-        this.createLegendURL();
     },
 
     /**
@@ -236,19 +235,19 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     },
 
     /**
-     * Generates a legend url.
+     * Generates a legend.
      * @returns {void}
      */
-    createLegendURL: function () {
+    createLegend: function () {
         let style;
 
-        if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
+        if (this.get("legend")) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
             if (style !== undefined) {
                 if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
                     style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
                 }
-                this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
+                this.setLegend(style.createLegend());
             }
         }
     },

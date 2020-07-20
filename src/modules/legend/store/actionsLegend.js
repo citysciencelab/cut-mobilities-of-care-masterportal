@@ -21,17 +21,6 @@ const configPaths = [
             const legends = state.legends;
 
             legends.push(legendObj);
-            // legends = legends.sort(function (a, b) {
-            //     let sortVal = 0;
-
-            //     if (a.position < b.position) {
-            //         sortVal = -1;
-            //     }
-            //     if (a.position > b.position) {
-            //         sortVal = 1;
-            //     }
-            //     return sortVal;
-            // });
             state.legends = legends;
         },
         removeLegend: function ({state}, id) {

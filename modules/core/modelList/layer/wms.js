@@ -133,27 +133,28 @@ const WMSLayer = Layer.extend({
      * Wenn der Parameter "legendURL" leer ist, wird er auf GetLegendGraphic gesetzt.
      * @return {void}
      */
-    createLegendURL: function () {
-        const legendURL = [],
+    createLegend: function () {
+        const legend = this.get("legend"),
+            legends = [],
             version = this.get("version");
 
-        if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
+        if (legend === true) {
             const layerNames = this.get("layers").split(",");
 
             if (layerNames.length === 1) {
-                legendURL.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers")));
+                legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers")));
             }
             else if (layerNames.length > 1) {
                 layerNames.forEach(layerName => {
-                    legendURL.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName));
+                    legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName));
                 });
             }
 
-            this.set("legendURL", legendURL);
+            this.setLegend(legends);
         }
-        else if (this.get("legendURL") !== "ignore" && !Array.isArray(this.get("legendURL"))) {
-            legendURL.push(this.get("legendURL"));
-            this.set("legendURL", legendURL);
+        else if (typeof legend === "string") {
+            legends.push(legend);
+            this.setLegend(legends);
         }
     },
 
