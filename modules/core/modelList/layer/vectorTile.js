@@ -5,11 +5,11 @@ import OpenLayersVectorTileSource from "ol/source/VectorTile";
 import {applyStyle} from "ol-mapbox-style";
 
 const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
-
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: {
+        ...Layer.prototype.defaults,
         selectedStyleID: undefined,
         isOutOfRange: false
-    }),
+    },
 
     /**
      * @class VectorTileLayer
@@ -24,8 +24,6 @@ const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
-
-
         /*
         this.checkForScale(Radio.request("MapView", "getOptions"));
 
@@ -38,11 +36,11 @@ const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         }
         */
 
-/*
+        /*
         Radio.trigger("Map", "addLayer", new TileLayer({
             source: new OSM()
         }));
-*/
+        */
 
         this.createLayer();
     },
@@ -52,12 +50,11 @@ const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @return {void}
      */
     createLayer: function () {
-
         // TODO: Check projection, echo error if mismatch
-        var mapEPSG = Radio.request("MapView", "getProjection").getCode(),
-            vtEPSG = this.get("epsg"),
-            vectorTileLayer,
-            defaultStyle;
+        const mapEPSG = Radio.request("MapView", "getProjection").getCode(),
+            vtEPSG = this.get("epsg");
+        let vectorTileLayer = null,
+            defaultStyle = null;
 
         if (mapEPSG !== vtEPSG) {
             console.warn("map and layer projection mismatch", mapEPSG, vtEPSG);
@@ -88,10 +85,10 @@ const VectorTileLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         */
 
         defaultStyle = this.get("vtStyles").find(function (item) {
-            return item.defaultStyle
+            return item.defaultStyle;
         });
 
-        if (_.isUndefined(defaultStyle)) {
+        if (typeof defaultStyle === "undefined") {
             console.warn("Missing style. Draw without style.");
         }
         else {

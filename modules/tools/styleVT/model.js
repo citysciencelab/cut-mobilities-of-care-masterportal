@@ -1,7 +1,8 @@
 import Tool from "../../core/modelList/tool/model";
 
 const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: {
+        ...Tool.prototype.defaults,
         isCurrentWin: false,
         isCollapsed: false,
         glyphicon: "glyphicon-tint",
@@ -10,7 +11,7 @@ const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
         model: null,
         selectedLayerID: undefined,
         vectorTileLayerList: []
-    }),
+    },
 
     /**
      * @class StyleWmsModel
@@ -58,13 +59,11 @@ const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @fires StyleWMSModel#changeIsactive
      */
     initialize: function () {
-
-        var channel = Radio.channel("StyleVT");
+        const channel = Radio.channel("StyleVT");
 
         this.superInitialize();
         channel.on({
             "open": function (model) {
-
                 console.log("on open", model);
 
                 // Check if tool window is already open,if not, open it
@@ -98,23 +97,25 @@ const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @returns {void}
      */
     refreshVectorTileLayerList: function () {
-        var vectorTileLayerList = [],
-            layerModelList,
-            result;
+        const vectorTileLayerList = [],
+            layerModelList = Radio.request("ModelList", "getModelsByAttributes", {typ: "VectorTile", isSelected: true});
 
-        layerModelList = Radio.request("ModelList", "getModelsByAttributes", {typ: "VectorTile", isSelected: true});
-
-        _.each(layerModelList, function (layerModel) {
-            vectorTileLayerList.push({name: layerModel.get("name"), id: layerModel.get("id")});
-        });
+        if (layerModelList) {
+            layerModelList.forEach(
+                layerModel => vectorTileLayerList.push(
+                    {name: layerModel.get("name"), id: layerModel.get("id")}
+                )
+            );
+        }
 
         this.set("vectorTileLayerList", vectorTileLayerList);
 
         // If current layer model is not selected any more, remove it
         if (this.get("model") !== null && this.get("model") !== undefined) {
-            result = _.find(vectorTileLayerList, function (vectorTileLayer) {
-                return vectorTileLayer.id === this.get("model").get("id");
-            }, this);
+            const modelId = this.get("model").get("id"),
+                result = vectorTileLayerList.find(
+                    vectorTileLayer => vectorTileLayer.id === modelId
+                );
 
             if (result === undefined) {
                 this.setModel(null);
@@ -123,7 +124,7 @@ const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     },
 
     setModelByID: function (id) {
-        var model = null;
+        let model = null;
 
         if (id !== "") {
             model = Radio.request("ModelList", "getModelByAttributes", {id: id});

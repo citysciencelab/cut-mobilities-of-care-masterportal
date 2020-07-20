@@ -66,7 +66,7 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      * @return {Backbone.View} returns itself when rendered
      */
     render: function () {
-        var attr = this.model.toJSON();
+        const attr = this.model.toJSON();
 
         this.setElement(document.getElementsByClassName("win-body")[0]);
         if (this.model.get("isActive") === true) {
@@ -121,11 +121,10 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
      * @returns {void}
      */
     setStyleClassAttributes: function () {
-        var styleClassAttributes = [],
-            i;
+        const styleClassAttributes = [];
 
         this.removeErrorMessages();
-        for (i = 0; i < this.model.get("numberOfClasses"); i++) {
+        for (let i = 0; i < this.model.get("numberOfClasses"); i++) {
             styleClassAttributes.push({
                 startRange: this.$(".start-range" + i).val(),
                 stopRange: this.$(".stop-range" + i).val(),
