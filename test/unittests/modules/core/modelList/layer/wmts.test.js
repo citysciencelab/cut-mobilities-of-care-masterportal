@@ -38,7 +38,7 @@ describe("core/modelList/layer/wmts", function () {
         });
     });
 
-    describe("createLegendURL", function () {
+    describe("createLegend", function () {
         before(function () {
             sinon.stub(console, "error");
         });
@@ -48,7 +48,7 @@ describe("core/modelList/layer/wmts", function () {
         });
 
         it("should log an error on the console if the legendURL is not set", function () {
-            wmts.createLegendURL();
+            wmts.createLegend();
 
             expect(console.error.calledOnce).to.be.true;
             expect(console.error.calledWith("WMTS: No legendURL is specified for the layer!")).to.be.true;
@@ -184,7 +184,7 @@ describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
         before(async function () {
             model.set("capabilitiesUrl", tests[0].result);
             model.set("optionsFromCapabilities", true);
-            model.createLegendURL();
+            model.createLegend();
         });
 
         after(() => {
@@ -221,7 +221,7 @@ describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
             model.set("capabilitiesUrl", tests[1].result);
             model.set("layers", tests[1].layerName);
             model.set("optionsFromCapabilities", true);
-            model.createLegendURL();
+            model.createLegend();
         });
 
         it("should be null", () => {
