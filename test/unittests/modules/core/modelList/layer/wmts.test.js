@@ -47,11 +47,11 @@ describe("core/modelList/layer/wmts", function () {
             sinon.restore();
         });
 
-        it("should log an error on the console if the legendURL is not set", function () {
+        it("should log an error on the console if the legend is not set", function () {
             wmts.createLegend();
 
             expect(console.error.calledOnce).to.be.true;
-            expect(console.error.calledWith("WMTS: No legendURL is specified for the layer!")).to.be.true;
+            expect(console.error.calledWith("WMTS: No legend is specified for the layer!")).to.be.true;
         });
     });
 
@@ -99,7 +99,7 @@ describe("core/modelList/layer/wmts", function () {
 
 describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
     let model,
-        legendURL,
+        legend,
         result;
 
     const tests = [
@@ -188,11 +188,11 @@ describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
         });
 
         after(() => {
-            model.unset("legendURL");
-            legendURL = undefined;
+            model.unset("legend");
+            legend = undefined;
         });
 
-        it("legendURL should be valid url", () => {
+        it("legend should be valid url", () => {
             /**
             * checkURL for img format
             * @param {string} url the url to be checked
@@ -207,11 +207,11 @@ describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
                 return valid;
             }
 
-            legendURL = model.get("legendURL");
+            legend = model.get("legend");
 
-            expect(legendURL).to.contain("http");
+            expect(legend).to.contain("http");
 
-            expect(checkUrlImg(legendURL)).to.be.true;
+            expect(checkUrlImg(legend)).to.be.true;
         });
     });
 
@@ -225,8 +225,8 @@ describe("core/modelList/layer/wmts optionsFromCapabilities", function () {
         });
 
         it("should be null", () => {
-            legendURL = model.get("legendURL");
-            expect(legendURL).to.be.null;
+            legend = model.get("legend");
+            expect(legend).to.be.null;
         });
     });
 });
