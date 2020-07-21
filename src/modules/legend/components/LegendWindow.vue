@@ -82,6 +82,12 @@ export default {
                     if (geometryType === "Point") {
                         legendObj = this.prepareLegendForPoint(legendObj, styleObj);
                     }
+                    else if (geometryType === "LineString") {
+                        legendObj = this.prepareLegendForLineString(legendObj, styleObj);
+                    }
+                    else if (geometryType === "Polygon") {
+                        legendObj = this.prepareLegendForPolygon(legendObj, styleObj);
+                    }
                     preparedLegend.push(legendObj);
                 });
 
@@ -169,6 +175,57 @@ export default {
             svg += "</svg>";
 
             return svg;
+        },
+        prepareLegendForLineString (legendObj, style) {
+            const clonedStyle = style.clone(),
+                strokeColor = clonedStyle.get("lineStrokeColor") ? this.colorToRgb(clonedStyle.get("lineStrokeColor")) : "black",
+                strokeWidth = clonedStyle.get("lineStrokeWidth"),
+                strokeOpacity = clonedStyle.get("lineStrokeColor")[3] || 0,
+                strokeDash = clonedStyle.get("lineStrokeDash") ? clonedStyle.get("lineStrokeDash").join(" ") : undefined;
+            let svg = "data:image/svg+xml;charset=utf-8,";
+
+            svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+            svg += "<path d='M 05 30 L 30 05' stroke='";
+            svg += strokeColor;
+            svg += "' stroke-opacity='";
+            svg += strokeOpacity;
+            svg += "' stroke-width='";
+            svg += strokeWidth;
+            if (strokeDash) {
+                svg += "' stroke-dasharray='";
+                svg += strokeDash;
+            }
+            svg += "' fill='none'/>";
+            svg += "</svg>";
+
+            legendObj.graphic = svg;
+            return legendObj;
+        },
+
+        prepareLegendForPolygon (legendObj, style) {
+            const fillColor = style.get("polygonFillColor") ? this.colorToRgb(style.get("polygonFillColor")) : "black",
+                strokeColor = style.get("polygonStrokeColor") ? this.colorToRgb(style.get("polygonStrokeColor")) : "black",
+                strokeWidth = style.get("polygonStrokeWidth"),
+                fillOpacity = style.get("polygonFillColor")[3] || 0,
+                strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
+            let svg = "data:image/svg+xml;charset=utf-8,";
+
+            svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+            svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
+            svg += fillColor;
+            svg += ";fill-opacity:";
+            svg += fillOpacity;
+            svg += ";stroke:";
+            svg += strokeColor;
+            svg += ";stroke-opacity:";
+            svg += strokeOpacity;
+            svg += ";stroke-width:";
+            svg += strokeWidth;
+            svg += ";'/>";
+            svg += "</svg>";
+
+            legendObj.graphic = svg;
+            return legendObj;
         },
 
         /**
