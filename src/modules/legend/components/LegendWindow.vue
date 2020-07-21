@@ -96,6 +96,9 @@ export default {
             if (type === "icon") {
                 legendObj.graphic = imgPath + imageName;
             }
+            else if (type === "circle") {
+                legendObj.graphic = this.drawCircleStyle(styleObj);
+            }
             else if (type === "interval") {
                 legendObj.graphic = this.drawIntervalStyle(styleObj);
             }
@@ -107,13 +110,6 @@ export default {
                 clonedStyle = style.clone();
             let intervalStyle = [];
 
-            // set the background of the SVG transparent
-            // necessary because the image is in the background and the SVG on top of this
-            // if (clonedStyle.get("imageName") !== "blank.png") {
-            //     clonedStyle.setCircleSegmentsBackgroundColor([
-            //         255, 255, 255, 0
-            //     ]);
-            // }
             if (scalingShape === "CIRCLE_BAR") {
                 intervalStyle = this.drawIntervalCircleBars(scalingAttribute, clonedStyle);
             }
@@ -139,8 +135,51 @@ export default {
             olFeature.set(scalingAttribute, barHeight);
             style = clonedStyle.getStyle(olFeature, false);
             intervalCircleBar = style.getImage().getSrc();
+
             return intervalCircleBar;
         },
+
+        /**
+         * Creates an SVG for a circle
+         * @param   {vectorStyle} style feature styles
+         * @returns {string} svg
+         */
+        drawCircleStyle: function (style) {
+            const circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
+                circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
+                circleStrokeWidth = style.get("circleStrokeWidth"),
+                circleFillColor = style.get("circleFillColor") ? this.colorToRgb(style.get("circleFillColor")) : "black",
+                circleFillOpacity = style.get("circleFillColor")[3] || 0,
+                circleRadius = style.get("circleRadius"),
+                widthAndHeight = (circleRadius + 1.5) * 2;
+            let svg = "data:image/svg+xml;charset=utf-8,";
+
+            svg += "<svg height='" + widthAndHeight + "' width='" + widthAndHeight + "' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+            svg += "<circle cx='" + widthAndHeight / 2 + "' cy='" + widthAndHeight / 2 + "' r='" + circleRadius + "' stroke='";
+            svg += circleStrokeColor;
+            svg += "' stroke-opacity='";
+            svg += circleStrokeOpacity;
+            svg += "' stroke-width='";
+            svg += circleStrokeWidth;
+            svg += "' fill='";
+            svg += circleFillColor;
+            svg += "' fill-opacity='";
+            svg += circleFillOpacity;
+            svg += "'/>";
+            svg += "</svg>";
+
+            return svg;
+        },
+
+        /**
+         * Returns a rgb color string that can be interpreted in SVG.
+         * @param   {integer[]} color color set in style
+         * @returns {string} svg color
+         */
+        colorToRgb: function (color) {
+            return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+        },
+
         isArrayOfStrings (legendInfos) {
             let isArrayOfStrings = false;
 
@@ -227,7 +266,7 @@ export default {
                         v-for="legendPart in legendObj.legend"
                         :key="JSON.stringify(legendPart)"
                     >
-                        <!--Legend as Image-->
+                        <!--Legend as Image or SVG-->
                         <img
                             v-if="(typeof legendPart === 'string' && !legendPart.endsWith('.pdf'))"
                             :src="legendPart"
