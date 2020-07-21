@@ -34,12 +34,10 @@ describe("actionsScaleSwitcher", function () {
 
         it("setActive(true) should set rounded currentScale", done => {
             const payload = true,
-                mutationActivePayload = true,
-                mutationScalePayload = 60000;
+                mutationActivePayload = true;
 
             testAction(setActive, payload, {}, rootState, [
-                {type: "setActive", payload: mutationActivePayload},
-                {type: "setCurrentScale", payload: mutationScalePayload}
+                {type: "setActive", payload: mutationActivePayload}
             ], {}, done);
 
         });
