@@ -87,6 +87,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
                 this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
             }
         }
+        this.createLegend();
     },
 
     /**
@@ -369,18 +370,15 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     /**
-     * creates the legendUrl used by layerinformation
-     * @fires StyleList#RadioRequestReturnModelById
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
     createLegend: function () {
-        let style;
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (this.get("legend")) {
-            style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-            if (style !== undefined) {
-                this.setLegend(style.createLegend());
-            }
+            this.setLegend(styleModel.getLegendInfos());
         }
     },
 

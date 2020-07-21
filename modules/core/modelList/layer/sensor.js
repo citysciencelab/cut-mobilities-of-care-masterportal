@@ -170,6 +170,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             "change:isVisibleInMap": this.changedConditions,
             "change:isOutOfRange": this.changedConditions
         });
+        this.createLegend();
     },
 
     /**
@@ -1010,18 +1011,15 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * create legend
+     * Creates the legend
      * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
     createLegend: function () {
-        let style;
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (this.get("legend")) {
-            style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-            if (style !== undefined) {
-                this.setLegend(style.createLegend());
-            }
+            this.setLegend(styleModel.getLegendInfos());
         }
     },
 

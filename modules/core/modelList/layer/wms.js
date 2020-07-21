@@ -127,6 +127,7 @@ const WMSLayer = Layer.extend({
         else {
             this.setLayer(new Image(layerobjects));
         }
+        this.createLegend();
     },
 
     /**

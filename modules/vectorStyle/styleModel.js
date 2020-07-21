@@ -58,46 +58,20 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         return styleObject;
     },
 
-    createLegend: function () {
-        const rules = this.get("rules"),
-            imgPath = Config.wfsImgPath,
-            legends = [];
-
-        rules.forEach(rule => {
-            const type = rule.style.type,
-                conditions = rule.conditions,
-                name = [];
-
-            if (conditions) {
-                Object.keys(conditions.properties).forEach(property =>{
-                    name.push(conditions.properties[property]);
-                });
-            }
-
-            if (type === "icon") {
-                legends.push({
-                    name: name.join(", "),
-                    graphic: imgPath + rule.style.imageName
-                });
-            }
-        });
-        return legends;
-    },
-
     /**
      * Requests the DescribeFeatureType of the wfs layer and starts the function to parse the xml and creates the legend info
-     * @param   {string} wfsURL url from layer
+     * @param   {string} wfsUrl url from layer
      * @param   {string} version wfs version from layer
      * @param   {string} featureType wfs feature type from layer
      * @returns {void}
      */
-    getGeometryTypeFromWFS: function (wfsURL, version, featureType) {
+    getGeometryTypeFromWFS: function (wfsUrl, version, featureType) {
         const params = {
             "SERVICE": "WFS",
             "VERSION": version,
             "REQUEST": "DescribeFeatureType"
         };
-        let url = wfsURL + "?";
+        let url = wfsUrl + "?";
 
         Object.keys(params).forEach(key => {
             url += key + "=" + params[key] + "&";

@@ -107,6 +107,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (this.get("isSelected")) {
             this.updateSource(true);
         }
+        this.createLegend();
     },
 
     /**
@@ -216,18 +217,18 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     styling: function () {
-        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-        let isClusterfeature;
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let isClusterFeature;
 
-        if (stylelistmodel !== undefined) {
+        if (styleModel !== undefined) {
             this.setStyle(function (feature) {
                 // in manchen Fällen war feature undefined und in "this" geschrieben.
                 // konnte nicht nachvollziehen, wann das so ist.
                 const feat = feature !== undefined ? feature : this;
 
-                isClusterfeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
+                isClusterFeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
 
-                return stylelistmodel.createStyle(feat, isClusterfeature);
+                return styleModel.createStyle(feat, isClusterFeature);
             });
         }
 
@@ -235,20 +236,18 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     },
 
     /**
-     * Generates a legend.
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
     createLegend: function () {
-        let style;
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (this.get("legend")) {
-            style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-            if (style !== undefined) {
-                if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
-                    style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
-                }
-                this.setLegend(style.createLegend());
+            if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
             }
+            this.setLegend(styleModel.getLegendInfos());
         }
     },
 

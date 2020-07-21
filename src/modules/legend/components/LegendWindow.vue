@@ -1,4 +1,5 @@
 <script>
+import Feature from "ol/Feature.js";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
@@ -54,7 +55,7 @@ export default {
                 legendObj = {
                     id: id,
                     name: layer.get("name"),
-                    legend: layer.get("legend"),
+                    legend: this.prepareLegend(layer.get("legend")),
                     position: layer.get("selectionIDX")
                 },
                 isNotYetInLegend = this.isLayerNotYetInLegend(id);
@@ -62,6 +63,93 @@ export default {
             if (this.isValidLegendObj(legendObj) && isNotYetInLegend) {
                 this.addLegend(legendObj);
             }
+        },
+        prepareLegend (legendInfos) {
+            let preparedLegend = [];
+
+            if (this.isArrayOfStrings(legendInfos) || typeof legendInfos === "boolean" || !legendInfos) {
+                preparedLegend = legendInfos;
+            }
+            else {
+                legendInfos.forEach(legendInfo => {
+                    const geometryType = legendInfo.geometryType,
+                        name = legendInfo.label,
+                        styleObj = legendInfo.styleObject;
+                    let legendObj = {
+                        name
+                    };
+
+                    if (geometryType === "Point") {
+                        legendObj = this.prepareLegendForPoint(legendObj, styleObj);
+                    }
+                    preparedLegend.push(legendObj);
+                });
+
+            }
+            return preparedLegend;
+        },
+        prepareLegendForPoint (legendObj, styleObj) {
+            const imgPath = styleObj.get("imagePath"),
+                type = styleObj.get("type"),
+                imageName = styleObj.get("imageName");
+
+            if (type === "icon") {
+                legendObj.graphic = imgPath + imageName;
+            }
+            else if (type === "interval") {
+                legendObj.graphic = this.drawIntervalStyle(styleObj);
+            }
+            return legendObj;
+        },
+        drawIntervalStyle (style) {
+            const scalingShape = style.get("scalingShape"),
+                scalingAttribute = style.get("scalingAttribute"),
+                clonedStyle = style.clone();
+            let intervalStyle = [];
+
+            // set the background of the SVG transparent
+            // necessary because the image is in the background and the SVG on top of this
+            // if (clonedStyle.get("imageName") !== "blank.png") {
+            //     clonedStyle.setCircleSegmentsBackgroundColor([
+            //         255, 255, 255, 0
+            //     ]);
+            // }
+            if (scalingShape === "CIRCLE_BAR") {
+                intervalStyle = this.drawIntervalCircleBars(scalingAttribute, clonedStyle);
+            }
+
+            return intervalStyle;
+        },
+        /**
+         * Draw advanced styles for interval circle bars in legend
+         * @param {String} scalingAttribute attribute that contains the values of a feature
+         * @param {ol.style} clonedStyle copy of style
+         * @param {String} layername Name des Layers
+         * @param {Array} image should contain the image source for legend elements
+         * @param {Array} name should contain the names for legend elements
+         * @returns {Array} allItems
+         */
+        drawIntervalCircleBars: function (scalingAttribute, clonedStyle) {
+            const olFeature = new Feature(),
+                circleBarScalingFactor = clonedStyle.get("circleBarScalingFactor"),
+                barHeight = String(20 / circleBarScalingFactor);
+            let style = null,
+                intervalCircleBar = null;
+
+            olFeature.set(scalingAttribute, barHeight);
+            style = clonedStyle.getStyle(olFeature, false);
+            intervalCircleBar = style.getImage().getSrc();
+            return intervalCircleBar;
+        },
+        isArrayOfStrings (legendInfos) {
+            let isArrayOfStrings = false;
+
+            if (Array.isArray(legendInfos)) {
+                isArrayOfStrings = legendInfos.every(legendInfo => {
+                    return typeof legendInfo === "string";
+                });
+            }
+            return isArrayOfStrings;
         },
         /* example WMS
             {
@@ -91,15 +179,17 @@ export default {
             }).length === 0;
         },
         isValidLegendObj (legendObj) {
+            const legend = legendObj.legend,
+                position = legendObj.position;
             let isValid = true;
 
-            if (legendObj.position < 0) {
+            if (position < 0) {
                 isValid = false;
             }
-            if (!legendObj.legend) {
+            if (typeof legend === "boolean" || !legend) {
                 isValid = false;
             }
-            if (Array.isArray(legendObj.legend) && legendObj.legend.length === 0) {
+            if (Array.isArray(legend) && legend.length === 0) {
                 isValid = false;
             }
             return isValid;

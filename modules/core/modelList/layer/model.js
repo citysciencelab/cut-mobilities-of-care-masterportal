@@ -300,7 +300,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         this.createLayer();
         this.updateLayerTransparency();
         this.getResolutions();
-        this.createLegend();
         this.checkForScale(Radio.request("MapView", "getOptions"));
     },
 
