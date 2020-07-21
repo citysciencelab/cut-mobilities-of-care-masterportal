@@ -362,6 +362,8 @@ export default {
         background-color: #ffffff;
         width:300px;
         padding: 10px;
+        max-height: 70vh;
+        overflow: auto;
         .legend-title {
             padding-bottom: 10px;
             border-bottom: 1px solid #000000;
