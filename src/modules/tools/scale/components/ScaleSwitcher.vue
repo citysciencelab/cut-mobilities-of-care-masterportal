@@ -13,7 +13,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/ScaleSwitcher", Object.keys(getters)),
-        ...mapGetters("Map", ["scales", "scale"]),
+        ...mapGetters("Map", ["scales"]),
         scale: {
             get () {
                 return this.$store.state.Map.scale;
