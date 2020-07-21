@@ -125,13 +125,12 @@ async function reclickUntilNotStale (driver, selector) {
 }
 /**
  * Logs the url to the test currently running in browserstack.
- * Gets all current builds from browserstack to achieve th id of this build.
+ * Gets all current builds from browserstack to achieve the id of this build.
  * Constructs an Url to the test in browserstack with the given session id and the build id.
- * @param {string} sessionId id of the browserstack session
+ * @param {string} sessionId id of the browserstack test session
  * @returns {void}
  */
 async function logBrowserstackUrlToTest (sessionId) {
-    // get all builds from browserstack and find the id of this one
     const bsUrl = "https://api.browserstack.com/automate/builds.json";
 
     axios({

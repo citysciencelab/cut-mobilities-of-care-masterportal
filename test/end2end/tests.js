@@ -67,7 +67,6 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
                     // modules/core
-                    // todo create issue to fix test
                     require("./tests/modules/core/ParametricUrl.js"),
 
                     // modules/searchbar
