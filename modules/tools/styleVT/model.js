@@ -1,6 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
 
-const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
+const StyleVTModel = Tool.extend(/** @lends StyleVtModel.prototype */{
     defaults: {
         ...Tool.prototype.defaults,
         isCurrentWin: false,
@@ -10,71 +10,53 @@ const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
         id: "styleVT",
         model: null,
         selectedLayerID: undefined,
-        vectorTileLayerList: []
+        vectorTileLayerList: [],
+        // display strings
+        introText: "",
+        noStyleableLayers: "",
+        theme: "",
+        chooseTheme: "",
+        style: ""
     },
 
     /**
-     * @class StyleWmsModel
-     * @description Tool that can modify the style of a WMS.
-     * Therefore a sld-body is created and sent via the get-map-request.
-     * Caution: Only works for numerical values
+     * @class StyleVtModel
+     * @description Tool that can change the style of a VTL. Multiple styles
+     * can be configured and will be applied on-demand client-side to style the layer.
      * @extends Tool
-     * @memberof Tools.StyleWMS
+     * @memberof Tools.StyleVT
      * @constructs
-     * @property {Boolean} isCurrentWin=false Flag if this tool is shown in the toolwindow and thus is active
-     * @property {Boolean} isCollapsed=false Flag if this tool window is collapsed
-     * @property {String} glyphicon="glyphicon-tint" Icon that is shown before the tool name
-     * @property {String} name="Style WMS" Name of the Tool
-     * @property {String} id="StyleWMS" id of Tool
-     * @property {String} modelId="" Id of layer model to be styled
-     * @property {WmsLayer} model=null Layer model to be styled
-     * @property {String} geomType="" Geometry type of data shown in wms layer. important for creating the correct sld
-     * @property {String} attributeName="default" Name of attribute to be styled
-     * @property {String[]} numberOfClassesList=["1", "2", "3", "4", "5"] Array that defines the maximum amount of styling classes
-     * @property {String} numberOfClasses="default" Flag that shows how many styling classes are used
-     * @property {styleClassAttribute[]} styleClassAttributes=[] Array of defined styleclassattributes
-     * @property {Object} styleClassAttribute One user defined style class
-     * @property {Integer} styleClassAttribute.startRange Start of value range to style
-     * @property {Integer} styleClassAttribute.stopRange Stop of value range to style
-     * @property {String} styleClassAttribute.color Color as hex code
-     * @property {String} styleWMSName="" Name of Layer to be styled
-     * @property {styleableLayer[]} styleableLayerList=[] List of Layers that can be used for restyling
+     * @property {Boolean} [isCurrentWin=false] Flag if this tool is shown in the toolwindow and thus is active
+     * @property {Boolean} [isCollapsed=false] false Flag if this tool window is collapsed
+     * @property {String} [glyphicon="glyphicon-tint"] Icon that is shown before the tool name
+     * @property {String} [name="Style VT"] Name of the Tool
+     * @property {String} [id="StyleVT"] id of Tool
+     * @property {String} [modelId=""] Id of layer model to be styled
+     * @property {VtLayer} [model=null] Layer model to be styled
+     * @property {String} [geomType=""] Geometry type of data shown in wms layer. important for creating the correct sld
+     * @property {String} [attributeName="default"] Name of attribute to be styled
+     * @property {styleableLayer[]} [styleableLayerList=[]] List of Layers that can be used for restyling
      * @property {Object} styleableLayer Object containing the name and the id of the styleable layer
      * @property {String} styleableLayer.name Name of styleable Layer
      * @property {String} styleableLayer.id Id of styleable Layer
-     * @property {String} wmsSoftware="OGC" Flag of sld has to be created according to ogc standards or in esri style
-     * @listens StyleWMS#RadioTriggerStyleWMSopenStyleWMS
-     * @listens StyleWMS#changeModel
-     * @listens StyleWMS#changeAttributeName
-     * @listens StyleWMS#changeNumberOfClasses
-     * @listens StyleWMS#changeSetSld
-     * @listens List#RadioTriggerModelListUpdatedSelectedLayerList
      * @fires List#RadioRequestModelListGetModelsByAttributes
-     * @fires List#RadioTriggerModelListSetModelAttributesById
-     * @fires List#RadioRequestModelListGetModelByAttributes
-     * @fires Util#RadioRequestUtilGetProxyUrl
-     * @fires StyleWMS#RadioTriggerStyleWMSResetParamsStyleWMS
-     * @fires StyleWMS#RadioTriggerStyleWMSUpdateParamsStyleWMS
-     * @fires StyleWMSModel#sync
-     * @fires StyleWMSModel#changeIsactive
+     * @fires StyleVTModel#sync
      */
     initialize: function () {
         const channel = Radio.channel("StyleVT");
 
         this.superInitialize();
+
         channel.on({
             "open": function (model) {
-                console.log("on open", model);
-
-                // Check if tool window is already open,if not, open it
+                // Check if tool window is already open; if not, open it
                 if (this.get("isActive") !== true) {
                     this.setIsActive(true);
                     Radio.trigger("Window", "toggleWin", this);
                 }
 
-                // Take layer that is selected in Layer tree
+                // Take layer that is selected in layer tree
                 this.setModel(model);
-                console.log("model:", model, "=>", this.get("model"));
                 this.trigger("sync");
             }
         }, this);
@@ -83,16 +65,36 @@ const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
             "updatedSelectedLayerList": function () {
                 this.refreshVectorTileLayerList();
                 if (this.get("isActive") === true) {
-                    // if tool is active , refresh the content
+                    // if tool is active, refresh the content
                     this.trigger("sync");
                 }
             }
         });
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
     },
 
     /**
-     * Refreshes the styleableLayerList
-     * Takes the layermodels that are selected in the layer tree. Takes the layer name and the layer id
+     * Updates model state fields to new translation.
+     * @returns {void}
+     */
+    changeLang: function () {
+        this.set({
+            "introText": i18next.t("common:modules.tools.styleVT.introText"),
+            "noStyleableLayers": i18next.t("common:modules.tools.styleVT.noStyleableLayers"),
+            "theme": i18next.t("common:modules.tools.styleVT.theme"),
+            "chooseTheme": i18next.t("common:modules.tools.styleVT.chooseTheme"),
+            "style": i18next.t("common:modules.tools.styleVT.style")
+        });
+    },
+
+    /**
+     * Refreshes the styleableLayerList.
+     * Takes the layermodels that are selected in the layer tree with name/id.
      * @fires List#RadioRequestModelListGetModelsByAttributes
      * @returns {void}
      */
@@ -123,29 +125,38 @@ const StyleVTModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
         }
     },
 
+    /**
+     * Sets the currently active layer by id.
+     * @param {String} id id of a layer
+     * @returns {void}
+     */
     setModelByID: function (id) {
         let model = null;
 
         if (id !== "") {
-            model = Radio.request("ModelList", "getModelByAttributes", {id: id});
+            model = Radio.request("ModelList", "getModelByAttributes", {id});
         }
         this.setModel(model);
         this.trigger("sync");
     },
 
+    /**
+     * Sets the style to use to the layer.
+     * @param {String} styleID id of style to use
+     * @returns {void}
+     */
     triggerStyleUpdate: function (styleID) {
-        this.get("model").setStyle(styleID);
+        this.get("model").setStyleById(styleID);
     },
 
     /**
-     * Setter of model
+     * Model setter.
      * @param {Layer} value layer model
      * @returns {void}
      */
     setModel: function (value) {
         this.set("model", value);
     }
-
 });
 
 export default StyleVTModel;

@@ -3,36 +3,37 @@ import StyleVTTemplateNoStyleableLayers from "text-loader!./templateNoStyleableL
 import "bootstrap-colorpicker";
 
 /**
- * @member StyleWmsTemplate
+ * @member StyleVtTemplate
  * @description Template used to create the user input form
- * @memberof Tools.StyleWMS
+ * @memberof Tools.StyleVT
  */
 
 /**
- * @member StyleWmsTemplateNoStyleableLayers
+ * @member StyleVtTemplateNoStyleableLayers
  * @description Template used if no styleable Layers are available
- * @memberof Tools.StyleWMS
+ * @memberof Tools.StyleVT
  */
 
-const StyleVTView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
+const StyleVTView = Backbone.View.extend(/** @lends StyleVTView.prototype */{
     events: {
-        // Auswahl des Layers
+        // Choosing a layer
         "change #styleVT-selectedLayerField": "setModelByID",
-        // Auswahl der Attribute
+        // Choosing a chosen layer's style
         "change #styleVT-selectedStyleField": "triggerStyleUpdate"
     },
 
     /**
-     * @class StyleWmsView
-     * @description View for style wms. Reacts to user input
+     * @class StyleVtView
+     * @description View for style vt. Reacts to user input
      * @extends Backbone.View
-     * @memberof Tools.StyleWMS
+     * @memberof Tools.StyleVT
      * @constructs
-     * @listens StyleWmsModel#sync
-     * @listens StyleWmsModel#changeIsActive
-     * @listens StyleWmsModel#changeModel
-     * @listens StyleWmsModel#changeAttributeName
-     * @listens StyleWmsModel#changeNumberOfClasses
+     * @listens StyleVtModel#sync
+     * @listens StyleVtModel#changeIsActive
+     * @listens StyleVtModel#changeModel
+     * @listens StyleVtModel#changeAttributeName
+     * @listens StyleVtModel#changeNumberOfClasses
+     * @listens StyleVtModel#changeCurrentLng
      */
     initialize: function () {
         this.listenTo(this.model, {
@@ -47,7 +48,10 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
                 }
             },
             "change:model change:attributeName change:numberOfClasses": this.render,
-            "invalid": this.showErrorMessages
+            "invalid": this.showErrorMessages,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
         });
         if (Radio.request("Parser", "getTreeType") === "light") {
             this.model.refreshVectorTileLayerList();
@@ -56,13 +60,12 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
             this.render();
         }
     },
-    className: "wmsStyle-window",
+    className: "vtStyle-window",
     template: _.template(StyleVTTemplate),
     templateNoStyleableLayers: _.template(StyleVTTemplateNoStyleableLayers),
 
-
     /**
-     * render styleWms view
+     * Render StyleVt view.
      * @return {Backbone.View} returns itself when rendered
      */
     render: function () {
@@ -70,15 +73,10 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
 
         this.setElement(document.getElementsByClassName("win-body")[0]);
         if (this.model.get("isActive") === true) {
-
             if (attr.vectorTileLayerList.length === 0) {
-                this.$el.html(this.templateNoStyleableLayers());
+                this.$el.html(this.templateNoStyleableLayers(attr));
             }
             else {
-                console.log("render with attrs", attr);
-                if (attr.model) {
-                    console.log("model:", attr.model.attributes.name);
-                }
                 this.$el.html(this.template(attr));
             }
 
@@ -90,7 +88,7 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
     },
 
     /**
-     * resets Tool
+     * Resets tool to initial state.
      * @returns {void}
      */
     reset: function () {
@@ -98,53 +96,38 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
         this.render();
     },
 
+    /**
+     * Calls triggerStyleUpdate in model with event's value.
+     * @param {ChangeEvent} evt change event
+     * @returns {void}
+     */
     triggerStyleUpdate: function (evt) {
         this.model.triggerStyleUpdate(evt.target.value);
     },
 
+    /**
+     * Calls setModelByID in model with event's value.
+     * @param {ChangeEvent} evt change event
+     * @returns {void}
+     */
     setModelByID: function (evt) {
         this.model.setModelByID(evt.target.value);
     },
 
     /**
-     * Calls setNumberOfClasses in model
-     * @param {ChangeEvent} evt -
-     * @returns {void}
-     */
-    setNumberOfClasses: function (evt) {
-        this.model.setNumberOfClasses(evt.target.value);
-        this.setStyleClassAttributes();
-    },
-
-    /**
-     * Creates and sets style-classes in model
-     * @returns {void}
-     */
-    setStyleClassAttributes: function () {
-        const styleClassAttributes = [];
-
-        this.removeErrorMessages();
-        for (let i = 0; i < this.model.get("numberOfClasses"); i++) {
-            styleClassAttributes.push({
-                startRange: this.$(".start-range" + i).val(),
-                stopRange: this.$(".stop-range" + i).val(),
-                color: this.$(".selected-color" + i).val()
-            });
-        }
-        this.model.setStyleClassAttributes(styleClassAttributes);
-    },
-
-    /**
-     * Removes error messages
+     * Removes error messages.
      * @returns {void}
      */
     removeErrorMessages: function () {
         this.$el.find(".error").remove();
-        this.$el.find("[class*=selected-color], [class*=start-range], [class*=stop-range]").parent().removeClass("has-error");
+        this.$el
+            .find("[class*=selected-color], [class*=start-range], [class*=stop-range]")
+            .parent()
+            .removeClass("has-error");
     },
 
     /**
-     * Hides Tool
+     * Hides tool.
      * @returns {void}
      */
     hide: function () {

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <div>
-    <p>Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.</p>
+    <p><%=introText%></p>
 </div>
 <div class="form-horizontal" role="form">
     <div class="form-group form-group-sm">
         <div class="col-md-12 col-sm-12">
-            <label class="range-label">Layer</label>
+            <label class="range-label"><%=theme%></label>
             <select class="form-control input-sm" id="styleVT-selectedLayerField">
-                <option class="pull-left" value="" selected="true">Bitte Thema auswählen</option>
-                <% _.each(vectorTileLayerList, function (vectorTileLayer) { %>
+                <option class="pull-left" value="" selected="true"><%=chooseTheme%></option>
+                <% vectorTileLayerList.forEach(function (vectorTileLayer) { %>
                     <option class ="pull-left" value="<%= vectorTileLayer.id %>" <% if (model && model.attributes.id === vectorTileLayer.id) { print ("SELECTED")} %>><%= vectorTileLayer.name %></option>
                 <% })%>
             </select>
@@ -17,9 +17,9 @@
     <% if ( model !== null && model!== undefined) { %>
         <div class="form-group form-group-sm">
             <div class="col-md-12 col-sm-12">
-                <label class="style-label">Style</label>
+                <label class="style-label"><%=style%></label>
                 <select class="form-control input-sm" id="styleVT-selectedStyleField">
-                    <% _.each(model.get("vtStyles"), function (vtStyle) { %>
+                    <% model.get("vtStyles").forEach(function (vtStyle) { %>
                         <option class="pull-left" value=<%= vtStyle.id %> <% if (vtStyle.id === model.attributes.selectedStyleID) { print ("SELECTED")} %>><%= vtStyle.name %></option>
                     <% }); %>
                 </select>
