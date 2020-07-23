@@ -40,8 +40,8 @@
 					},
 					"measure": {
 						"name": "Strecke / Fläche messen"
-          },
-          "draw": {
+					},
+					"draw": {
 						"name": "Zeichnen / Schreiben",
 						"glyphicon": "glyphicon-pencil"
 					},
