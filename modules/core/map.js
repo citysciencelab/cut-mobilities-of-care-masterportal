@@ -1,5 +1,6 @@
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector.js";
+import Cluster from "ol/source/Cluster.js";
 import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import MapView from "./mapView";
@@ -560,12 +561,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             });
         }
         else if (layer !== undefined && olLayer.getSource() !== undefined) {
-            layerFeatures = olLayer.getSource().getFeatures();
+            let source = olLayer.getSource();
+
+            // if source is cluster, the ids to filter by in the following code are one source deeper
+            if (source instanceof Cluster) {
+                source = source.getSource();
+            }
+
+            layerFeatures = source.getFeatures();
         }
 
         features = layerFeatures.filter(function (feature) {
             return ids.indexOf(feature.getId()) > -1;
         });
+
         if (features.length > 0) {
             extent = this.calculateExtent(features);
             this.zoomToExtent(extent);

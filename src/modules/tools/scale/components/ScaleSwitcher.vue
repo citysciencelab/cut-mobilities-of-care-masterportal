@@ -13,20 +13,17 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/ScaleSwitcher", Object.keys(getters)),
-        ...mapGetters("Map", ["scale", "scales"])
-    },
-    watch: {
-        /**
-         * Watch to changes of scale triggered by map, e.g. by zoom. Set the selectbox to current scale.
-         * @param {number} newValue the changed scale value
-         * @returns {void}
-         */
-        scale (newValue) {
-            if (newValue !== this.currentScale) {
-                this.setCurrentScale(Math.round(this.scale / 1000) * 1000);
+        ...mapGetters("Map", ["scales"]),
+        scale: {
+            get () {
+                return this.$store.state.Map.scale;
+            },
+            set (value) {
+                this.$store.commit("Map/setScale", value);
             }
         }
     },
+
     /**
      * Lifecycle hook: adds a "close"-Listener to close the tool.
      * @returns {void}
@@ -52,15 +49,7 @@ export default {
         ]),
         ...mapActions("Map", ["setResolutionByIndex"]),
         ...mapMutations("Tools/ScaleSwitcher", Object.keys(mutations)),
-        /**
-         * Sets this current scale and map's scale.
-         * @param {object} event of the select
-         * @returns {void}
-         */
-        selectionChanged (event) {
-            this.setCurrentScale(event.target.value);
-            this.setResolutionByIndex(event.target.selectedIndex);
-        },
+
         /**
          * Sets active to false.
          * @returns {void}
@@ -101,16 +90,16 @@ export default {
                 <div class="col-md-7 col-sm-7">
                     <select
                         id="scale-switcher-select"
+                        v-model="scale"
                         class="font-arial form-control input-sm pull-left"
-                        @change="selectionChanged($event)"
+                        @change="setResolutionByIndex($event.target.selectedIndex)"
                     >
                         <option
-                            v-for="(scale, i) in scales"
+                            v-for="(scaleValue, i) in scales"
                             :key="i"
-                            :value="scale"
-                            :SELECTED="scale === currentScale"
+                            :value="scaleValue"
                         >
-                            1:{{ scale }}
+                            1:{{ scaleValue }}
                         </option>
                     </select>
                 </div>

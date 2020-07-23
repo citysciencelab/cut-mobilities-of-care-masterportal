@@ -29,11 +29,10 @@ src
 |   |   |   |	|   |-- ScaleSwitcher.e2e.js
 |   |   |	|   |-- unit
 |   |   |   |	|   |-- components
-|   |   |   |   |	|   |-- SScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- ScaleSwitcher.spec.js
 |   |   |   |	|   |-- store
-|   |   |   |   |	|   |-- actionsScaleSwitcher.test.js
-|   |   |   |   |	|   |-- gettersScaleSwitcher.test.js
-|   |   |   |   |	|   |-- mutationsScaleSwitcher.test.js
+|   |   |   |   |	|   |-- actionsScaleSwitcher.spec.js
+|   |   |   |   |	|   |-- gettersScaleSwitcher.spec.js
 ```
 
 ### ScaleSwitcher.vue erstellen
@@ -72,7 +71,7 @@ export default {
 
 <template>
         ...
-        <ScaleSwitcher v-if="configJson" />   
+        <ScaleSwitcher v-if="configJson" />
 </template>
 ```
 ### state definieren
@@ -82,10 +81,6 @@ const state = {
     // mandatory
     active: false,
     id: "scaleSwitcher",
-
-    // scaleSwitcher specific
-    currentScale: "",
-    
     // mandatory defaults for config.json parameters
     name: "Maßstab umschalten",
     glyphicon: "glyphicon-resize-full",
@@ -152,7 +147,7 @@ export default mutations;
 
 - "initialize" lädt die Konfiguartion des ScaleSwitchers aus der Konfigurationsdatei config.json und stellt diese im state zur Verfügung. Die Konfiguration wird in den unter "configPaths" angegebenen Pfaden in der config.json gesucht.  Siehe auch [Dokumentation config.json](config.json.md).
 - "activateByUrlParam" prüft ob die Url den Parameter "isinitopen" für den ScaleSwitcher enthält und aktiviert ihn gegebenenfalls. Siehe auch [Dokumentation Url-Parameter](URL-Parameter.md).
-- die action "setActive" ist speziell für den ScaleSwitcher. Sie setzt den state "active" des Tools auf true, dann wird das Tool gerendert (siehe property active am Tool.vue). Der state-Parameter "currentScale" vom ScaleSwitcher wird hier auf den Wert der scale der Karte (Map) gesetzt.
+- die action "setActive" ist speziell für den ScaleSwitcher. Sie setzt den state "active" des Tools auf true, dann wird das Tool gerendert (siehe property active am Tool.vue).
 ```js
 import {fetchFirstModuleConfig} from "../../../../utils/fetchFirstModuleConfig";;
 
@@ -189,9 +184,6 @@ const configPaths = [
         */
         setActive ({commit, rootState}, active) {
             commit("setActive", active);
-            if (active) {
-                commit("setCurrentScale", Math.round(rootState.Map.scale / 1000) * 1000);
-            }
         }
     };
 
@@ -234,18 +226,26 @@ const store = new Vuex.Store({
             ...
 ```
 ### getters in der ScaleSwitcher.vue als computed properties bereitstellen
-In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* "mapGetters" aus vuex und die getters des ScaleSwitchers importieren. Alle getter-keys des ScaleSwitchers und die getter *scale* und *scales* aus der Map bereitstellen. Mit *scale* kann der aktuelle Maßstab der Karte (Map) und über *scales* alle verfügbaren Maßstäbe der Karte abgefragt werden.
+In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* "mapGetters" aus vuex und die getters des ScaleSwitchers importieren. Alle getter-keys des ScaleSwitchers und die getter *scale* und *scales* aus der Map bereitstellen. Für *scale* wird zusätzlich ein setter bereitgestellt. Mit *scale* kann der aktuelle Maßstab der Karte (Map) und über *scales* alle verfügbaren Maßstäbe der Karte abgefragt werden.
 ```js
 import {mapGetters} from "vuex";
 import getters from "../store/gettersScaleSwitcher";
 ...
 computed: {
         ...mapGetters("Tools/ScaleSwitcher", Object.keys(getters)),
-        ...mapGetters("Map", ["scale", "scales"])
+        ...mapGetters("Map", ["scales"]),
+         scale: {
+            get () {
+                return this.$store.state.Map.scale;
+            },
+            set (value) {
+                this.$store.commit("Map/setScale", value);
+            }
+        }
     },
 ```
 ### actions in der ScaleSwitcher.vue als methods bereitstellen
-In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* "mapActions" aus vuex und die mutations des ScaleSwitchers importieren. Alle mutations-keys des ScaleSwitchers und die actions *activateByUrlParam* und *initialize* aus den actions des ScaleSwitchers bereitstellen. 
+In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* "mapActions" aus vuex und die mutations des ScaleSwitchers importieren. Alle mutations-keys des ScaleSwitchers und die actions *activateByUrlParam* und *initialize* aus den actions des ScaleSwitchers bereitstellen.
 ```js
 import {mapGetters, mapActions} from "vuex";
 import mutations from "../store/mutationsScaleSwitcher";
@@ -320,15 +320,15 @@ Datei *modules/tools/scale/components/ScaleSwitcher.vue* öffnen und den templat
                 <div class="col-md-7 col-sm-7">
                     <select
                         id="scale-switcher-select"
+                        v-model="scale"
                         class="font-arial form-control input-sm pull-left"
                     >
                         <option
-                            v-for="(scale, i) in scales"
+                            v-for="(scaleValue, i) in scales"
                             :key="i"
-                            :value="scale"
-                            :SELECTED="scale === currentScale"
+                            :value="scaleValue"
                         >
-                            1:{{ scale }}
+                            1:{{ scaleValue }}
                         </option>
                     </select>
                 </div>
@@ -353,41 +353,23 @@ In der Datei *css/variables.less* stehen vordefinierte Variablen zur Verfügung.
 </style>
 ```
 ### Auf die Auswahl eines Maßstabs reagieren
-Im template-Bereich der Datei *modules/tools/scale/components/ScaleSwitcher.vue* einen change-Listener zum *select*-Element hinzufügen, der die Methode *selectionChanged* aufruft.
+Im template-Bereich der Datei *modules/tools/scale/components/ScaleSwitcher.vue* einen change-Listener zum *select*-Element hinzufügen, der die Methode *setResolutionByIndex* aufruft.
 ```vue
 <select
     id="scale-switcher-select"
     class="font-arial form-control input-sm pull-left"
-    @change="selectionChanged($event)"
+    @change="setResolutionByIndex($event.target.selectedIndex)"
 >
 ```
 Die action *setResolutionByIndex* der Map wird bereitgestellt.
-Mit der mutation *setCurrentScale* wird im state *currentScale* auf den gewählten Maßstab gesetzt und mit *setResolutionByIndex* wird der Maßstab in der Karte gesetzt.
+Mit *setResolutionByIndex* wird der Maßstab in der Karte gesetzt.
 ```js
 methods: {
         ...mapActions("Map", ["setResolutionByIndex"]),
-
-        selectionChanged (event) {
-            this.setCurrentScale(event.target.value);
-            this.setResolutionByIndex(event.target.selectedIndex);
-        },
         ...
     }
 ```
 
-### Auf Änderungen des Maßstabs der Karte im watch lifecycle hook reagieren
-Wir wollen nicht nur den Maßstab der Karte setzen können , sondern auch auf Veränderungen des Maßstabs reagieren. Ändert sich der Kartenmaßstab, soll sich in unserem Tool der aktuelle Maßstab anpassen.
-
-Dazu wird in der Datei *modules/tools/scale/components/ScaleSwitcher.vue* der *watch* lifecycle hook implementiert. Dort wird der *scale* aus dem state der Map beobachtet. Wenn dieser sich ändert, dann wird mit der mutation *setCurrentScale* der neue gerundete Wert in den state des ScaleSwitchers geschrieben.
-```js
-watch: {
-    scale (newValue) {
-        if (newValue !== this.currentScale) {
-            this.setCurrentScale(Math.round(this.scale / 1000) * 1000);
-        }
-    }
-}
-```
 ### Internationalisierung
 Das Label soll in verschiedenen Sprachen angezeigt werden. Dazu werden in den Übersetzungsdateien (*locales/[de/en]/common.json*) Schlüssel und Übersetzungen eingetragen, siehe [Dokumentation Internationalisierung](languages_de.md).
 ```js
@@ -397,7 +379,7 @@ Das Label soll in verschiedenen Sprachen angezeigt werden. Dazu werden in den Ü
             "label": "Maßstab"
         },
         ... // further translations
-```        
+```
 Auf diese Werte kann mit $t im template-Bereich zugegriffen werden.
 ```html
 <label
@@ -408,7 +390,7 @@ Auf diese Werte kann mit $t im template-Bereich zugegriffen werden.
 
 
 ### Tool in der config.json konfigurieren
-Um das Tool in einem Portal zu verwenden, muss dies in der config.json konfiguriert werden. 
+Um das Tool in einem Portal zu verwenden, muss dies in der config.json konfiguriert werden.
 ```js
       "tools":
       {
@@ -425,7 +407,7 @@ Um das Tool in einem Portal zu verwenden, muss dies in der config.json konfiguri
         }
       }
 ```
-Die Übersetzung des Namens wird in den Übersetzungsdateien (*locales/[de/en]/common.json*) eingetragen. 
+Die Übersetzung des Namens wird in den Übersetzungsdateien (*locales/[de/en]/common.json*) eingetragen.
 ```js
 "common": {
     "menu": {

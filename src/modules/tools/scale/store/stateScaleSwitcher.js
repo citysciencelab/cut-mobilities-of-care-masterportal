@@ -18,7 +18,6 @@
 const state = {
     active: false,
     id: "scaleSwitcher",
-    currentScale: "",
     // defaults for config.json parameters
     name: "Maßstab umschalten",
     glyphicon: "glyphicon-resize-full",

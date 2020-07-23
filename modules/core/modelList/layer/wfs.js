@@ -82,7 +82,14 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     createClusterLayerSource: function () {
         this.setClusterLayerSource(new Cluster({
             source: this.get("layerSource"),
-            distance: this.get("clusterDistance")
+            distance: this.get("clusterDistance"),
+            geometryFunction: function (feature) {
+                // do not cluster invisible features; can't rely on style since it will be null initially
+                if (feature.get("hideInClustering") === true) {
+                    return null;
+                }
+                return feature.getGeometry();
+            }
         }));
     },
 
@@ -258,13 +265,20 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     hideAllFeatures: function () {
-        const collection = this.get("layerSource").getFeatures();
+        const layerSource = this.get("layerSource"),
+            features = this.get("layerSource").getFeatures();
 
-        collection.forEach(function (feature) {
+        // optimization - clear and re-add to prevent cluster updates on each change
+        layerSource.clear();
+
+        features.forEach(function (feature) {
+            feature.set("hideInClustering", true);
             feature.setStyle(function () {
                 return null;
             });
         }, this);
+
+        layerSource.addFeatures(features);
     },
 
     /**
@@ -289,19 +303,25 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     showFeaturesByIds: function (featureIdList) {
-        const features = [];
+        const layerSource = this.get("layerSource"),
+            // featuresToShow is a subset of allLayerFeatures
+            allLayerFeatures = layerSource.getFeatures(),
+            featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
 
         this.hideAllFeatures();
-        featureIdList.forEach(id => {
-            const feature = this.get("layerSource").getFeatureById(id);
-            let style = [];
 
-            style = this.getStyleAsFunction(this.get("style"));
+        // optimization - clear and re-add to prevent cluster updates on each change
+        layerSource.clear();
 
+        featuresToShow.forEach(feature => {
+            const style = this.getStyleAsFunction(this.get("style"));
+
+            feature.set("hideInClustering", false);
             feature.setStyle(style(feature));
-            features.push(feature);
         }, this);
-        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
+
+        layerSource.addFeatures(allLayerFeatures);
+        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), allLayerFeatures);
     },
 
     /**
@@ -310,7 +330,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {function} - style as function.
      */
     getStyleAsFunction: function (style) {
-        if (style && {}.toString.call(style) === "[object Function]") {
+        if (typeof style === "function") {
             return style;
         }
 
