@@ -91,9 +91,11 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
             }
         }
 
-        stylingPromise
-            .then(() => this.setVisible(this.get("isSelected")))
-            .catch(err => console.error(err));
+        if (stylingPromise) {
+            stylingPromise
+                .then(() => this.setVisible(this.get("isSelected")))
+                .catch(err => console.error(err));
+        }
     },
 
     /**

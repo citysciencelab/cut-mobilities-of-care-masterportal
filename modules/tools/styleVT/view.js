@@ -115,18 +115,6 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleVTView.prototype */{
     },
 
     /**
-     * Removes error messages.
-     * @returns {void}
-     */
-    removeErrorMessages: function () {
-        this.$el.find(".error").remove();
-        this.$el
-            .find("[class*=selected-color], [class*=start-range], [class*=stop-range]")
-            .parent()
-            .removeClass("has-error");
-    },
-
-    /**
      * Hides tool.
      * @returns {void}
      */
