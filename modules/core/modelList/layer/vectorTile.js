@@ -76,7 +76,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
 
         if (this.get("styleId")) {
             this.set("selectedStyleID", this.get("styleId"));
-            stylingPromise = this.setStyleByID(this.get("styleId"));
+            stylingPromise = this.setStyleById(this.get("styleId"));
         }
         else {
             const style = this.get("vtStyles").find(({defaultStyle}) => defaultStyle) ||
@@ -101,7 +101,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @param {String} styleID id of style as defined in services.json
      * @returns {Promise} resolves void after style was set; may reject if no style found or received style invalid
      */
-    setStyleByID: function (styleID) {
+    setStyleById: function (styleID) {
         const styleDefinition = this
             .get("vtStyles")
             .find(({id}) => id === styleID);
