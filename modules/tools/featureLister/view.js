@@ -147,8 +147,14 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             this.$(".featurelist-details-li").remove();
             Object.entries(props).forEach(([key, value]) => {
                 this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
-                this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
-            });
+                let content = value;
+
+                // The featurelister uses similar criteria to detect a link as the gfi.table TODO: develop util function for both?
+                if ((/(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[A-Z0-9+&@#/%=~_|$])/i).test(value) || new RegExp(/[^/]+(?:\.html)$/i).test(value)) {
+                    content = "<a href=" + value + " target=\"_blank\">" + value + "</a>";
+                }
+                this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + content + "</li>");
+            }, this);
             this.switchTabToDetails();
         }
         else {
