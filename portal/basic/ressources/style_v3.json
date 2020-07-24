@@ -1,21 +1,5 @@
 [
   {
-    "styleId": "funky",
-    "rules": [
-        {
-            "style": {
-                "type": "icon",
-                "imageScale": "0.5",
-                "imageName": "sans.png",
-                "imageWidth": 48,
-                "imageHeight": 48,
-                "imageOffsetY": 48,
-                "imageOffsetYUnit": "pixels"
-            }
-        }
-    ]
-  },
-  {
     "styleId": "location_eventlotse",
     "rules": [
       {

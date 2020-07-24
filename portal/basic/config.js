@@ -25,18 +25,7 @@ const Config = {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
     },
-    useVectorStyleBeta: true,
-    featureViaURL: {
-        epsg: 4326,
-        layers: [
-            {
-                id: "42",
-                geometryType: "Point",
-                name: "Übergebene Punkt Feature",
-                styleId: "funky"
-            }
-        ]
-    }
+    useVectorStyleBeta: true
 };
 
 // conditional export to make config readable by e2e tests

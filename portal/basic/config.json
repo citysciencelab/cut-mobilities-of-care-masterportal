@@ -1,6 +1,6 @@
 {
 	"Portalconfig": {
-        "treeType": "custom",
+        "treeType": "light",
 		"searchBar": {
 			"osm": {
 				"minChars": 3,
