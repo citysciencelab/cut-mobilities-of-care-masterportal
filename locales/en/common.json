@@ -88,6 +88,12 @@
         "layerInformation": {
             "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
         },
+        "featureViaURL": {
+            "coordLabel": "Coordinates",
+            "featureLabel": "Label",
+            "folderName": "Features given by URL",
+            "typeLabel": "Geometrytype"
+        },
         "quickHelp": {
             "titleTag": "Open help",
             "search": {

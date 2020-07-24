@@ -319,7 +319,6 @@ portalLanguage: {
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |epsg|nein|Integer|4326|EPSG-Code für die Projektion der übergebenen Koordinaten der Feature.|
-|**[label](#markdown-header-featureviaurllabel)**|nein|Object|{featureLabel: "Beschriftung", coordLabel: "Koordinaten", typeLabel: "Geometrietyp"}|Label für die einzelnen Parameter der Feature, welche bspw. mit dem GFI-Tool angezeigt werden.|
 |**[layers](#markdown-header-featureviaurllayers)**|ja|Object[]||Array an Layerkonfigurationen für die übergebenen Feature.|
 
 **Beispiel:**
@@ -346,24 +345,6 @@ featureViaURL: {
             "styleId": "url_polygons"
         }
     ]
-}
-```
-
-***
-
-### featureViaURL.label ###
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|featureLabel|nein|String|"Beschriftung"|Label für die Beschriftung eines Features.|
-|coordLabel|nein|String|"Koordinaten"|Label für die Koordinaten eines Features.|
-|typeLabel|nein|String|"Geometrietyp"|Label für den Geometrietypen eines Features.|
-
-**Beispiel:**
-```
-label: {
-    featureLabel: "Name",
-    coordLabel: "Long, Lat",
-    typeLabel: "Geometrie"
 }
 ```
 
