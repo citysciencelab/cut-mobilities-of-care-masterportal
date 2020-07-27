@@ -334,8 +334,9 @@ export default {
                             v-if="(typeof legendPart === 'string' && legendPart.endsWith('.pdf'))"
                             :href="legendPart"
                             target="_blank"
+                            :title="legendPart"
                         >
-                            {{ legendPart }}
+                            Zur externen Legende (PDF)
                         </a>
 
                         <!--Legend as Image from Object-->
