@@ -32,22 +32,32 @@ export default {
 </script>
 
 <template>
-    <div
-        v-if="showLegendInMenu"
-        id="legend-menu"
-        @click="toggleLegend"
-    >
-        <span
-            :class="glyphicon"
-            class="glyphicon hidden-sm"
-        ></span>
-        <span>{{ $t("menu.legend") }}</span>
-    </div>
+    <ul class="nav navbar-nav">
+        <li
+            v-if="showLegendInMenu"
+            id="legend-menu"
+            class="dropdown dropdown-folder"
+            @click="toggleLegend"
+        >
+            <a
+                href="#"
+                class="dropdown-toggle"
+            >
+                <span
+                    :class="glyphicon"
+                    class="glyphicon hidden-sm"
+                ></span>
+                <span class="menuitem">{{ $t("menu.legend") }}</span>
+            </a>
+        </li>
+    </ul>
 </template>
 
 <style lang="less" scoped>
     @import "~variables";
     #legend-menu {
+        font-size: 14px;
+        float: left;
         cursor: pointer;
     }
 </style>
