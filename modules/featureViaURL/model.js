@@ -22,9 +22,6 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function (config) {
-        // TODO: Tests
-        // TODO: Ticket aktualisieren, sobald PR gestellt!
-
         if (!config || !Array.isArray(config.layers) || config.layers.length === 0) {
             Radio.trigger("Alert", "alert", "FeatureViaURL: No layers were defined in the config.js for the given features.");
             return;
