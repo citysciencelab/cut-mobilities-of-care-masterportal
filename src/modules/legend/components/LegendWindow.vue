@@ -33,12 +33,27 @@ export default {
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
+        /**
+         * Closes the legend.
+         * @returns {void}
+         */
         closeLegend () {
             this.setShowLegend(!this.showLegend);
         },
+
+        /**
+         * Retrieves the visible Layers from the ModelList
+         * @returns {Object[]} - all Layer that are visible
+         */
         getVisibleLayers () {
             return Radio.request("ModelList", "getModelsByAttributes", {type: "layer", isVisibleInMap: true});
         },
+
+        /**
+         * Generates or removed the layers legend object.
+         * @param {Object} layer layer.
+         * @returns {void}
+         */
         toggleLayerInLegend (layer) {
             const isVisibleInMap = layer.get("isVisibleInMap"),
                 layerId = layer.get("id");
@@ -50,6 +65,12 @@ export default {
                 this.removeLegend(layerId);
             }
         },
+
+        /**
+         * Generates the legend object and adds it to the legend array in the store.
+         * @param {Object} layer layer.
+         * @returns {void}
+         */
         generateLegend (layer) {
             const id = layer.get("id"),
                 legendObj = {
@@ -64,6 +85,12 @@ export default {
                 this.addLegend(legendObj);
             }
         },
+
+        /**
+         * Prepares the legend with the given legendInfos
+         * @param {*[]} legendInfos legend Infos of layer
+         * @returns {Object[]} - the prepared legend.
+         */
         prepareLegend (legendInfos) {
             let preparedLegend = [];
 
@@ -74,19 +101,19 @@ export default {
                 legendInfos.forEach(legendInfo => {
                     const geometryType = legendInfo.geometryType,
                         name = legendInfo.label,
-                        styleObj = legendInfo.styleObject;
+                        style = legendInfo.styleObject;
                     let legendObj = {
                         name
                     };
 
                     if (geometryType === "Point") {
-                        legendObj = this.prepareLegendForPoint(legendObj, styleObj);
+                        legendObj = this.prepareLegendForPoint(legendObj, style);
                     }
                     else if (geometryType === "LineString") {
-                        legendObj = this.prepareLegendForLineString(legendObj, styleObj);
+                        legendObj = this.prepareLegendForLineString(legendObj, style);
                     }
                     else if (geometryType === "Polygon") {
-                        legendObj = this.prepareLegendForPolygon(legendObj, styleObj);
+                        legendObj = this.prepareLegendForPolygon(legendObj, style);
                     }
                     preparedLegend.push(legendObj);
                 });
@@ -94,22 +121,35 @@ export default {
             }
             return preparedLegend;
         },
-        prepareLegendForPoint (legendObj, styleObj) {
-            const imgPath = styleObj.get("imagePath"),
-                type = styleObj.get("type"),
-                imageName = styleObj.get("imageName");
+
+        /**
+         * Prepares the legend for point style.
+         * @param {Object} legendObj The legend object.
+         * @param {Object} style The styleModel.
+         * @returns {Object} - prepared legendObj.
+         */
+        prepareLegendForPoint (legendObj, style) {
+            const imgPath = style.get("imagePath"),
+                type = style.get("type"),
+                imageName = style.get("imageName");
 
             if (type === "icon") {
                 legendObj.graphic = imgPath + imageName;
             }
             else if (type === "circle") {
-                legendObj.graphic = this.drawCircleStyle(styleObj);
+                legendObj.graphic = this.drawCircleStyle(style);
             }
             else if (type === "interval") {
-                legendObj.graphic = this.drawIntervalStyle(styleObj);
+                legendObj.graphic = this.drawIntervalStyle(style);
             }
             return legendObj;
         },
+
+        /**
+         * Creates interval scaled advanced style for pointFeatures
+         * @param {Object} style The styleModel.
+         * @return {ol.Style} style
+         */
         drawIntervalStyle (style) {
             const scalingShape = style.get("scalingShape"),
                 scalingAttribute = style.get("scalingAttribute"),
@@ -123,13 +163,10 @@ export default {
             return intervalStyle;
         },
         /**
-         * Draw advanced styles for interval circle bars in legend
+         * Creats an SVG for interval circle bar style.
          * @param {String} scalingAttribute attribute that contains the values of a feature
          * @param {ol.style} clonedStyle copy of style
-         * @param {String} layername Name des Layers
-         * @param {Array} image should contain the image source for legend elements
-         * @param {Array} name should contain the names for legend elements
-         * @returns {Array} allItems
+         * @returns {String} - style as svg
          */
         drawIntervalCircleBars: function (scalingAttribute, clonedStyle) {
             const olFeature = new Feature(),
@@ -146,7 +183,7 @@ export default {
         },
 
         /**
-         * Creates an SVG for a circle
+         * Creates an SVG for a circle style.
          * @param   {vectorStyle} style feature styles
          * @returns {string} svg
          */
@@ -176,6 +213,13 @@ export default {
 
             return svg;
         },
+
+        /**
+         * Prepares the legend for linestring style.
+         * @param {Object} legendObj The legend object.
+         * @param {Object} style The styleModel.
+         * @returns {Object} - prepared legendObj.
+         */
         prepareLegendForLineString (legendObj, style) {
             const clonedStyle = style.clone(),
                 strokeColor = clonedStyle.get("lineStrokeColor") ? this.colorToRgb(clonedStyle.get("lineStrokeColor")) : "black",
@@ -202,6 +246,12 @@ export default {
             return legendObj;
         },
 
+        /**
+         * Prepares the legend for polygon style.
+         * @param {Object} legendObj The legend object.
+         * @param {Object} style The styleModel.
+         * @returns {Object} - prepare legendObj
+         */
         prepareLegendForPolygon (legendObj, style) {
             const fillColor = style.get("polygonFillColor") ? this.colorToRgb(style.get("polygonFillColor")) : "black",
                 strokeColor = style.get("polygonStrokeColor") ? this.colorToRgb(style.get("polygonStrokeColor")) : "black",
@@ -237,11 +287,16 @@ export default {
             return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
         },
 
-        isArrayOfStrings (legendInfos) {
+        /**
+         * Checks if the input is an array of strings.
+         * @param {*} input The input to be checked.
+         * @returns {boolean} - Flag of input is an array of strings
+         */
+        isArrayOfStrings (input) {
             let isArrayOfStrings = false;
 
-            if (Array.isArray(legendInfos)) {
-                isArrayOfStrings = legendInfos.every(legendInfo => {
+            if (Array.isArray(input)) {
+                isArrayOfStrings = input.every(legendInfo => {
                     return typeof legendInfo === "string";
                 });
             }
@@ -269,11 +324,23 @@ export default {
                 position:2
             }
         */
+
+        /**
+        * Checks if given layerid is not yet in the legend.
+        * @param {String} layerId Id of layer.
+        * @returns {Boolean} - Flag if layer is not yet in the legend
+        */
         isLayerNotYetInLegend (layerId) {
             return this.legends.filter((legendObj) => {
                 return legendObj.id === layerId;
             }).length === 0;
         },
+
+        /**
+         * Checks if the given legend object is valid.
+         * @param {Object} legendObj The legend object to be checked.
+         * @returns {Boolean} - Flag if legendObject is valid.
+         */
         isValidLegendObj (legendObj) {
             const legend = legendObj.legend,
                 position = legendObj.position;

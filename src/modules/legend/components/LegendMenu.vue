@@ -20,6 +20,10 @@ export default {
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
+        /**
+         * Toggles the visibility of the legend
+         * @returns {void}
+         */
         toggleLegend () {
             this.setShowLegend(!this.showLegend);
         }
