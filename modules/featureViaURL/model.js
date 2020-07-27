@@ -31,45 +31,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             "languageChanged": this.translate
         });
 
-        const gfiAttributes = {
-                featureLabel: this.get("featureLabel"),
-                coordLabel: this.get("coordLabel"),
-                typeLabel: this.get("typeLabel")
-            },
-            layers = Radio.request("ParametricURL", "getFeatureViaURL"),
-            treeType = Radio.request("Parser", "getTreeType");
-        let features,
-            geoJSON,
-            geometryType,
-            layerId,
-            layerPosition,
-            parentId = "tree";
-
-        if (treeType === "custom") {
-            Radio.trigger("Parser", "addFolder", this.get("folderName"), "featureViaURLFolder", "Overlayer", 0, true, "modules.featureViaURL.folderName");
-            parentId = "featureViaURLFolder";
-        }
-
-        layers.forEach(layer => {
-            layerId = layer.layerId;
-            features = layer.features;
-            layerPosition = config.layers.findIndex(element => element.id === layerId);
-            if (layerPosition === -1) {
-                Radio.trigger("Alert", "alert", `FeatureViaURL: The layer with the id ${layerId} was not found.`);
-                return;
-            }
-            if (!config.layers[layerPosition].name) {
-                Radio.trigger("Alert", "alert", `FeatureViaURL: No name was defined for the layer with the id ${layerId}.`);
-                return;
-            }
-            geometryType = config.layers[layerPosition].geometryType;
-            if (geometryType !== "LineString" && geometryType !== "Point" && geometryType !== "Polygon") {
-                Radio.trigger("Alert", "alert", `FeatureViaURL: The given geometryType ${geometryType} is not supported.`);
-                return;
-            }
-            geoJSON = this.createGeoJSON(config.epsg, features, geometryType);
-            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", config.layers[layerPosition].name, config.layers[layerPosition].id, geoJSON, config.layers[layerPosition].styleId, parentId, gfiAttributes);
-        });
+        this.createLayers(config.layers, config.epsg);
     },
     /**
      * Creates a basic GeoJSON structure and add the features from the user to it.
@@ -110,6 +72,55 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
         });
 
         return geoJSON;
+    },
+    /**
+     * Creates the GeoJSON layers depending on the configuration and the URL-Parameters.
+     * TODO: Testing of this function!
+     *
+     * @param {Object[]} configLayers The layer configurations for the feature layers.
+     * @param {Integer} epsg The EPSG-Code in which the features are coded.
+     * @returns {void}
+     */
+    createLayers: function (configLayers, epsg) {
+        const gfiAttributes = {
+                featureLabel: this.get("featureLabel"),
+                coordLabel: this.get("coordLabel"),
+                typeLabel: this.get("typeLabel")
+            },
+            layers = Radio.request("ParametricURL", "getFeatureViaURL"),
+            treeType = Radio.request("Parser", "getTreeType");
+        let features,
+            geoJSON,
+            geometryType,
+            layerId,
+            layerPosition,
+            parentId = "tree";
+
+        if (treeType === "custom") {
+            Radio.trigger("Parser", "addFolder", this.get("folderName"), "featureViaURLFolder", "Overlayer", 0, true, "modules.featureViaURL.folderName");
+            parentId = "featureViaURLFolder";
+        }
+
+        layers.forEach(layer => {
+            layerId = layer.layerId;
+            features = layer.features;
+            layerPosition = configLayers.findIndex(element => element.id === layerId);
+            if (layerPosition === -1) {
+                Radio.trigger("Alert", "alert", `FeatureViaURL: The layer with the id ${layerId} was not found.`);
+                return;
+            }
+            if (!configLayers[layerPosition].name) {
+                Radio.trigger("Alert", "alert", `FeatureViaURL: No name was defined for the layer with the id ${layerId}.`);
+                return;
+            }
+            geometryType = configLayers[layerPosition].geometryType;
+            if (geometryType !== "LineString" && geometryType !== "Point" && geometryType !== "Polygon") {
+                Radio.trigger("Alert", "alert", `FeatureViaURL: The given geometryType ${geometryType} is not supported.`);
+                return;
+            }
+            geoJSON = this.createGeoJSON(epsg, features, geometryType);
+            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", configLayers[layerPosition].name, configLayers[layerPosition].id, geoJSON, configLayers[layerPosition].styleId, parentId, gfiAttributes);
+        });
     },
     /**
      * Translates the values of this module, namely "coordLabel", "featureLabel", "folderName" and "typeLabel".
