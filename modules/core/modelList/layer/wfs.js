@@ -241,13 +241,17 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     createLegend: function () {
-        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const legend = this.get("legend"),
+            styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
-        if (this.get("legend")) {
+        if (styleModel && legend === true) {
             if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
                 styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
             }
             this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
         }
     },
 

@@ -375,10 +375,14 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @returns {void}
      */
     createLegend: function () {
-        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const legend = this.get("legend"),
+            styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
-        if (this.get("legend")) {
+        if (styleModel && legend === true) {
             this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
         }
     },
 

@@ -154,8 +154,7 @@ const WMSLayer = Layer.extend({
             this.setLegend(legends);
         }
         else if (typeof legend === "string") {
-            legends.push(legend);
-            this.setLegend(legends);
+            this.setLegend([legends]);
         }
     },
 
