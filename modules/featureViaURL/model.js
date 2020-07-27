@@ -1,9 +1,10 @@
 const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/{
     defaults: {
-        coordLabel: "",
-        featureLabel: "",
+        // NOTE: Initial values are set here because the translation is too late. Can be removed when the translations are possible for the labels.
+        coordLabel: "Koordinaten",
+        featureLabel: "Beschriftung",
         folderName: "",
-        typeLabel: ""
+        typeLabel: "Geometrietyp"
     },
     /**
      * @class FeatureViaURL
@@ -26,7 +27,6 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             Radio.trigger("Alert", "alert", "FeatureViaURL: No layers were defined in the config.js for the given features.");
             return;
         }
-        this.translate();
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": this.translate
         });
