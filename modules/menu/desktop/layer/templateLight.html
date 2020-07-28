@@ -13,7 +13,9 @@
     <% if (typeof styleable !== "undefined" && styleable === true) { %>
             <span class="glyphicon glyphicon-tint" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
     <% } %>
-    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="<%=infosAndLegendText%>"></span>
+    <% if (typeof showInfobutton !== "undefined" && showInfobutton === true) { %>
+        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="<%=infosAndLegendText%>"></span>
+    <% } %>
     <% if (showSettings === true) { %>
         <span class="glyphicon glyphicon-cog rotate settings" title="<%=settingsText%>"></span>
     <% } %>
