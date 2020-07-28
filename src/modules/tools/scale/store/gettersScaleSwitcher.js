@@ -2,12 +2,9 @@ import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 import scaleSwitcherState from "./stateScaleSwitcher";
 
 const getters = {
-    ...generateSimpleGetters(scaleSwitcherState),
+    ...generateSimpleGetters(scaleSwitcherState)
 
     // NOTE overwrite getters here if you need a special behaviour in a getter
-    currentScale: state => {
-        return state.currentScale;
-    }
 };
 
 export default getters;

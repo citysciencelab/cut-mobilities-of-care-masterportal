@@ -173,7 +173,7 @@ describe("core/Util", function () {
             expect(model.convertArrayOfObjectsToCsv(array)).to.be.a("string").to.have.lengthOf(39);
         });
         it("should find four commtatas", function () {
-            expect(model.convertArrayOfObjectsToCsv(array).match(/,/g)).to.have.lengthOf(4);
+            expect(model.convertArrayOfObjectsToCsv(array, ",").match(/,/g)).to.have.lengthOf(4);
         });
         it("should find four linebreaks (\n)", function () {
             expect(model.convertArrayOfObjectsToCsv(array).match(/\n/g)).to.have.lengthOf(4);

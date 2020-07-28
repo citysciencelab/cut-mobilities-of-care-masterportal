@@ -44,7 +44,6 @@ import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
-import ImportView from "../modules/tools/kmlImport/view";
 /**
  * WFSFeatureFilterView
  * @deprecated in 3.0.0
@@ -255,10 +254,6 @@ async function loadApp () {
             }
             case "saveSelection": {
                 new SaveSelectionView({model: tool});
-                break;
-            }
-            case "kmlimport": {
-                new ImportView({model: tool});
                 break;
             }
             /**

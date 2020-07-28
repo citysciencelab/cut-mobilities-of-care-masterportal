@@ -31,11 +31,8 @@ const configPaths = [
         * @param {boolean} active Value deciding whether the tool gets activated or deactivated.
         * @returns {void}
         */
-        setActive ({commit, rootState}, active) {
+        setActive ({commit}, active) {
             commit("setActive", active);
-            if (active) {
-                commit("setCurrentScale", Math.round(rootState.Map.scale / 1000) * 1000);
-            }
         }
     };
 

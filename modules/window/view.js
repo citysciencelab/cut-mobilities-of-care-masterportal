@@ -162,6 +162,11 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         else {
             this.$el.hide("slow");
         }
+
+        if (this.model.get("isCollapsed")) {
+            this.minimize();
+        }
+
         return this;
     },
 
@@ -170,6 +175,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * @returns {void}
      */
     minimize: function () {
+        this.model.setCollapse(true);
         this.model.set("maxPosTop", this.$el.css("top"));
         this.model.set("maxPosLeft", this.$el.css("left"));
         this.$(".win-body").hide();
@@ -186,6 +192,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      */
     maximize: function () {
         if (this.$(".win-body").css("display") === "none") {
+            this.model.setCollapse(false);
             this.$(".win-body").show();
             this.$(".glyphicon-minus").show();
             this.$el.css({"top": this.model.get("maxPosTop"), "bottom": "", "left": this.model.get("maxPosLeft"), "margin-bottom": "30px"});

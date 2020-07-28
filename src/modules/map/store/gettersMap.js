@@ -51,7 +51,7 @@ const getters = {
      * @returns {string} pretty-printed scale to 2cms
      */
     scaleToOne: (_, {scale}) => {
-        if (scale > 1000) {
+        if (scale > 10000) {
             return `1 : ${(Math.round(scale / 1000) * 1000).toLocaleString()}`;
         }
         else if (scale > 100) {

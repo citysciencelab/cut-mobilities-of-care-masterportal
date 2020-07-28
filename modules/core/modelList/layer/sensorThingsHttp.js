@@ -4,13 +4,13 @@ import UrlParser from "url-parse";
 import {transform as transformProjectionToProjection} from "masterportalAPI/src/crs";
 
 /**
- * SensorThingsHttp is the software layer to handle the special needs of the SensorThingsAPI regarding the http protocol.
+ * SensorThingsHttp is the software layer to handle the special needs of the SensorThingsAPI regarding http requests.
  * <pre>
  * SensorThingsAPI: https://docs.opengeospatial.org/is/15-078r6/15-078r6.html
  *
- * This software layer handles the skip response of the SensorThingsAPI as well as the call in the browsers extent.
+ * This software layer handles the skip response of the SensorThings-API as well as the call in the browsers extent.
  *
- * To import SensorThingsHttp: import {SensorThingsHttp} from "./SensorThingsHttp";
+ * To import SensorThingsHttp: import {SensorThingsHttp} from "./sensorThingsHttp";
  * create a new object:        const obj = new SensorThingsHttp()
  * call:                       obj.get(url, onsuccess, onstart, oncomplete, onerror, onwait)
  * call:                       obj.getInExtent(url, extentObj, onsuccess, onstart, oncomplete, onerror, onwait)
@@ -20,30 +20,123 @@ import {transform as transformProjectionToProjection} from "masterportalAPI/src/
  * @memberof Core.ModelList.Layer.SensorThingsHttp
  * @export
  */
-export function SensorThingsHttp () {
+export class SensorThingsHttp {
 
     /**
-     * an async function to call an url and to receive data from
+     * constructor of SensorThingsHttp
+     * @param {Object} [optionsOpt] the options for the SensorThingsHttp
+     * @param {Boolean} [optionsOpt.removeIotLinks=false] set to true if the overhead from IotLinks should be removed
+     * @param {Boolean} [optionsOpt.httpClient=null] the httpClient to use as function(url, onsuccess, onerror) with onsuccess as function(response) and onerror as function(error)
+     * @constructor
+     * @returns {SensorThingsHttp}  the instance of SensorThingsHttp
+     */
+    constructor (optionsOpt) {
+        const options = Object.assign({
+            removeIotLinks: false,
+            httpClient: null
+        }, optionsOpt);
+
+        /** private **/
+        this.removeIotLinks = options.removeIotLinks;
+        /** private **/
+        this.httpClient = options.httpClient;
+    }
+
+    /**
+     * calls the given url, targets only data in expand, walks through all @iot.nextLink
      * @param {String} url the url to call
-     * @param {SensorThingsCallbackHttpSuccess} onsuccess a function (resp) with the response of the call
-     * @param {SensorThingsErrorCallback} onerror a function (resp) with the response of the call
+     * @param {Function} [onsuccess] as function(result) with result as Object[] (result is always an array)
+     * @param {Function} [onstart] as function called on start
+     * @param {Function} [oncomplete] as function called at the end anyways
+     * @param {Function} [onerror] as function(error)
+     * @param {Function} [onprogress] as function(rel) with rel as current progress [0..1] called after each @iot.nextLink
+     * @param {Function} [callNextLinkOpt] see this.callNextLink - a fake callNextLink function for testing
      * @returns {Void}  -
      */
-    function defaultHttpClient (url, onsuccess, onerror) {
-        axios({
-            method: "get",
-            url: url,
-            responseType: "text"
-        }).then(function (response) {
-            if (response !== undefined && typeof onsuccess === "function") {
-                onsuccess(response.data);
+    get (url, onsuccess, onstart, oncomplete, onerror, onprogress, callNextLinkOpt) {
+        const nextLinkFiFo = [],
+            progressList = [{
+                count: 1,
+                progress: 0
+            }],
+            result = [];
+
+        if (typeof onstart === "function") {
+            onstart();
+        }
+        if (typeof onprogress === "function") {
+            onprogress(0);
+        }
+
+        (typeof callNextLinkOpt === "function" ? callNextLinkOpt : this.callNextLink).bind(this)(url, nextLinkFiFo, () => {
+            // onfinish
+            if (typeof onsuccess === "function") {
+                onsuccess(result);
             }
-        }).catch(function (error) {
+            if (typeof oncomplete === "function") {
+                oncomplete();
+            }
+        }, error => {
+            // onerror
             if (typeof onerror === "function") {
                 onerror(error);
             }
-        });
+            if (typeof oncomplete === "function") {
+                oncomplete();
+            }
+        }, onprogress, result, progressList, progressList[0]);
     }
+
+    /**
+     * calls the given url to a SensorThings server, uses a call in extent, follows skip urls, response is given as callback onsuccess
+     * @param {String} url the url to call
+     * @param {Object} extentObj data for the extent
+     * @param {Number[]} extentObj.extent the extent based on OpenLayers (e.g. [556925.7670922858, 5925584.829527992, 573934.2329077142, 5942355.170472008])
+     * @param {String} extentObj.sourceProjection the projection of the extent
+     * @param {String} extentObj.targetProjection the projection the broker expects
+     * @param {Function} [onsuccess] a function (resp) with the response of the call
+     * @param {Function} [onstart] a function to call on start
+     * @param {Function} [oncomplete] a function to allways call when the request is finished (successfully or in failure)
+     * @param {Function} [onerror] a function (error) to call on error
+     * @param {Function} [onprogress] a function to call on each step of a skipping SensorThingsAPI response
+     * @param {Function} [getOpt] see this.get - a function for testing only
+     * @returns {Void}  -
+     */
+    getInExtent (url, extentObj, onsuccess, onstart, oncomplete, onerror, onprogress, getOpt) {
+        const extent = extentObj && extentObj.extent ? extentObj.extent : false,
+            sourceProjection = extentObj && extentObj.sourceProjection ? extentObj.sourceProjection : false,
+            targetProjection = extentObj && extentObj.targetProjection ? extentObj.targetProjection : false,
+            points = this.convertExtentIntoPoints(extent, sourceProjection, targetProjection, error => {
+                if (typeof onstart === "function") {
+                    onstart();
+                }
+                if (typeof onerror === "function") {
+                    onerror(error);
+                }
+                if (typeof oncomplete === "function") {
+                    oncomplete();
+                }
+            }),
+            requestUrl = this.addPointsToUrl(url, points, error => {
+                if (typeof onstart === "function") {
+                    onstart();
+                }
+                if (typeof onerror === "function") {
+                    onerror(error);
+                }
+                if (typeof oncomplete === "function") {
+                    oncomplete();
+                }
+            });
+
+        if (points === false || requestUrl === false) {
+            // if an error occured above
+            return;
+        }
+
+        (typeof getOpt === "function" ? getOpt : this.get).bind(this)(requestUrl, onsuccess, onstart, oncomplete, onerror, onprogress);
+    }
+
 
     /**
      * creates a query to put into $filter of the SensorThingsAPI to select only Things within the given points
@@ -51,7 +144,7 @@ export function SensorThingsHttp () {
      * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
      * @returns {String|Boolean}  the query to add to $filter= (excluding $filter=) or false on error
      */
-    function getPolygonQueryWithPoints (points, onerror) {
+    getPolygonQueryWithPoints (points, onerror) {
         let query = "";
 
         if (!Array.isArray(points)) {
@@ -83,7 +176,7 @@ export function SensorThingsHttp () {
      * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
      * @returns {Object[]}  the points as array with objects(x, y) to use as Polygon in SensorThingsAPI call
      */
-    function convertExtentIntoPoints (extent, sourceProjection, targetProjection, onerror) {
+    convertExtentIntoPoints (extent, sourceProjection, targetProjection, onerror) {
         let i;
 
         if (!Array.isArray(extent) || extent.length !== 4) {
@@ -137,9 +230,9 @@ export function SensorThingsHttp () {
      * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
      * @returns {String|Boolean}  the url with an extent to call the SensorThingsAPI with or false on error
      */
-    function addPointsToUrl (url, points, onerror) {
+    addPointsToUrl (url, points, onerror) {
         const parsedUrl = new UrlParser(url),
-            polygonQuery = getPolygonQueryWithPoints(points, onerror);
+            polygonQuery = this.getPolygonQueryWithPoints(points, onerror);
 
         if (!polygonQuery) {
             return false;
@@ -172,11 +265,195 @@ export function SensorThingsHttp () {
     }
 
     /**
+     * calls a nextLink for the recursion
+     * @param {String} nextLink the url to call
+     * @param {Object[]} nextLinkFiFo the fifo-List to walk through @iot.nextLink
+     * @param {Function} onfinish as function to be called when finished
+     * @param {Function} onerror as function(error)
+     * @param {Function} onprogress as function(rel) with rel as current progress [0..1] called after each @iot.nextLink
+     * @param {Object[]} resultRef the reference for the result anything should be added to at this depth
+     * @param {Object[]} progressList the progressList - a collection of progressRef to calc the progress with
+     * @param {Object} progressRef the progress object to use for this specific call
+     * @param {Function} [collectNextLinksOpt] a collectNextLink function for testing only
+     * @returns {Void}  -
+     */
+    callNextLink (nextLink, nextLinkFiFo, onfinish, onerror, onprogress, resultRef, progressList, progressRef, collectNextLinksOpt) {
+        if (!Array.isArray(resultRef)) {
+            if (typeof onerror === "function") {
+                onerror("SensorThingsHttp - callNextLink: given resultRef is not an array - nextLink: " + nextLink + " - resultRef: " + resultRef);
+            }
+            return;
+        }
+
+        // to calc the progress we need the number of entities for each call - so add $count=true to any given nextLink
+        const url = this.addCountToUrl(nextLink);
+
+        this.callHttpClient(url, response => {
+            if (response === null || typeof response !== "object" || Array.isArray(response)) {
+                // the response is represented as a JSON object (no array)
+                // https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#36
+                if (typeof onerror === "function") {
+                    onerror("SensorThingsHttp - callNextLink: the response from the SensorThingsApi is not an object - check url: " + url);
+                }
+                return;
+            }
+
+            if (progressRef !== null && typeof progressRef === "object" && !Array.isArray(progressRef) && response.hasOwnProperty("@iot.count")) {
+                // the number of entities to receive is @iot.count - except if $top=X is given via url
+                const topX = this.fetchTopX(url),
+                    skipX = this.fetchSkipX(url),
+                    count = topX > 0 && topX < response["@iot.count"] ? topX : response["@iot.count"];
+
+                // $skip=X is only found in url if $top=X or @iot.count is bigger than the at once received number of entities
+                progressRef.count = count;
+                progressRef.progress = skipX;
+            }
+
+            if (response.hasOwnProperty("value") && Array.isArray(response.value)) {
+                response.value.forEach(value => {
+                    resultRef.push(value);
+                });
+
+                // all responses in a row of @iot.nextLink followups have following @iot.nextLink except the last one
+                if (response.hasOwnProperty("@iot.nextLink")) {
+                    if (Array.isArray(nextLinkFiFo)) {
+                        nextLinkFiFo.push({
+                            nextLink: response["@iot.nextLink"],
+                            resultRef: resultRef,
+                            progressRef: progressRef
+                        });
+                    }
+                }
+                else if (progressRef !== null && typeof progressRef === "object" && !Array.isArray(progressRef)) {
+                    // if no @iot.nextLink to follow: the end of this @iot.nextLink path to follow is reached
+                    progressRef.progress = progressRef.count;
+                }
+            }
+            else {
+                // e.g. a single Thing
+                resultRef.push(response);
+            }
+
+            (typeof collectNextLinksOpt === "function" ? collectNextLinksOpt : this.collectNextLinks).bind(this)(resultRef, nextLinkFiFo, progressList, () => {
+                const obj = this.getNextFiFoObj(nextLinkFiFo);
+
+                if (typeof onprogress === "function") {
+                    onprogress(this.getProgress(progressList));
+                }
+                if (obj === false) {
+                    // depth barrier reached
+                    if (typeof onfinish === "function") {
+                        onfinish();
+                    }
+                    return;
+                }
+
+                this.callNextLink(obj.nextLink, nextLinkFiFo, onfinish, onerror, onprogress, obj.resultRef, progressList, obj.progressRef);
+            });
+        }, onerror);
+    }
+
+    /**
+     * searches for @iot.nextLink in the given resultRef, removes the @iot.nextLink and expands the nextLinkFiFo-List as well as the progressList
+     * @param {*} resultRef something to walk through
+     * @param {Object[]} nextLinkFiFo the fifo list to add found @iot.nextLink and their resultRef to
+     * @param {Object[]} progressList the list of progress objects to adapt
+     * @param {Function} onfinish a function to call when finished
+     * @returns {Void}  -
+     */
+    collectNextLinks (resultRef, nextLinkFiFo, progressList, onfinish) {
+        if (resultRef === null || typeof resultRef !== "object") {
+            if (typeof onfinish === "function") {
+                onfinish();
+            }
+            return;
+        }
+        let key;
+
+        for (key in resultRef) {
+            if (this.removeIotLinks && (key.indexOf("@iot.navigationLink") !== -1 || key.indexOf("@iot.selfLink") !== -1)) {
+                // to reduce output navigationLink and selfLink should be removed
+                delete resultRef[key];
+                continue;
+            }
+
+            const pos = key.indexOf("@iot.nextLink");
+
+            if (pos === -1) {
+                // onfinish mustn't be used in recursion
+                this.collectNextLinks(resultRef[key], nextLinkFiFo, progressList);
+            }
+            else if (pos === 0) {
+                // this should never happen as the rood node is moved into nextLinkFiFo in callNextLink
+                // we collect it anyways just in case some sub node uses @iot.nextLink, which shouldn't happen ...
+                // in this case no progressList should be used because at this place we can't use a reference (new lists should only be created for sub nodes)
+                // @iot.nextLink - aka root node
+                if (Array.isArray(nextLinkFiFo)) {
+                    nextLinkFiFo.push({
+                        nextLink: resultRef[key],
+                        resultRef: resultRef.value
+                    });
+                }
+
+                // always collect the nextLink to prevent additional recursions (avoiding double entities on resultRef)
+                delete resultRef[key];
+            }
+            else {
+                // [collectionKey]@iot.nextLink
+                if (Array.isArray(progressList)) {
+                    progressList.push({
+                        count: 1,
+                        progress: 0
+                    });
+                }
+                if (Array.isArray(nextLinkFiFo)) {
+                    nextLinkFiFo.push({
+                        nextLink: resultRef[key],
+                        resultRef: resultRef[key.substring(0, pos)],
+                        progressRef: progressList[progressList.length - 1]
+                    });
+                }
+
+                // always collect the nextLink to prevent additional recursions (avoiding double entities on resultRef)
+                delete resultRef[key];
+            }
+        }
+
+        if (typeof onfinish === "function") {
+            onfinish();
+        }
+    }
+
+    /**
+     * returns the next object from nextLinkFiFo, returns false if no valid object was found (depth barrier)
+     * @param {Object[]} nextLinkFiFo the fifo list to add found @iot.nextLink and their resultRef to
+     * @returns {(Object|Boolean)}  the next fifo object to be followed or false if depth barrier has been triggert
+     */
+    getNextFiFoObj (nextLinkFiFo) {
+        if (!Array.isArray(nextLinkFiFo) || nextLinkFiFo.length === 0 || !nextLinkFiFo[0].hasOwnProperty("nextLink")) {
+            return false;
+        }
+        const obj = nextLinkFiFo.shift(),
+            topX = this.fetchTopX(obj.nextLink),
+            skipX = this.fetchSkipX(obj.nextLink);
+
+        if (topX > 0 && topX <= skipX) {
+            // "In addition, if the $top value exceeds the service-driven pagination limitation (...), the $top query option SHALL be discarded and the server-side pagination limitation SHALL be imposed."
+            // https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#51
+            // that means: skipX can be less than top, but stop for all topX greater or equal skipX
+            // all of this only if topX is given
+            return this.getNextFiFoObj(nextLinkFiFo);
+        }
+
+        return obj;
+    }
+
+    /**
      * adds the $count=true param to the url if not already set
      * @param {String} url the url with or without $count=true
      * @returns {String}  the url with set $count=true param
      */
-    function addCountToUrl (url) {
+    addCountToUrl (url) {
         const parsedUrl = new UrlParser(url);
         let parsedUrlHref = "";
 
@@ -199,156 +476,108 @@ export function SensorThingsHttp () {
     }
 
     /**
-     * gets the percentage of data the given url will load with a set max data
-     * @param {String} url the url with a $skip=x value to analyse, if no $skip=x value is found the returned value is 0.0
-     * @param {Number} total the number of datasets to be expected, if no count is given the returned value is 1.0
-     * @returns {Number}  a relative number [0..1] calculated from $skip and count
+     * extracts the X from $top=X of the given String
+     * @param {String} url the url to extract $top from
+     * @returns {Number}  the X in $top=X or 0 if no $top was found
      */
-    function getSkipProgress (url, total) {
-        const parsedUrl = new UrlParser(url);
+    fetchTopX (url) {
+        if (typeof url !== "string") {
+            return 0;
+        }
+        const regex = /[$|%24]top=([0-9]+)/,
+            result = regex.exec(url);
 
-        if (!parsedUrl.query) {
-            parsedUrl.query = {};
+        if (!Array.isArray(result) || !result.hasOwnProperty(1)) {
+            return 0;
         }
 
-        // use UrlParser.set to parse query into object
-        parsedUrl.set("query", parsedUrl.query);
-
-        if (isNaN(parseInt(parsedUrl.query.$skip, 10))) {
-            return 0.0;
-        }
-
-        if (total <= 0 || parseInt(parsedUrl.query.$skip, 10) >= total) {
-            return 1.0;
-        }
-
-        return 1 / total * parseInt(parsedUrl.query.$skip, 10);
+        return parseInt(result[1], 10);
     }
 
     /**
-     * helper function to call the SensorThingsAPI with skip function - for more informations about this issue please read the doc/sensorThings.md
+     * extracts the X from $skip=X of the given String
+     * @param {String} url the url to extract $skip from
+     * @returns {Number}  the X in $skip=X or 0 if no $skip was found
+     */
+    fetchSkipX (url) {
+        if (typeof url !== "string") {
+            return 0;
+        }
+        const regex = /[$|%24]skip=([0-9]+)/,
+            result = regex.exec(url);
+
+        if (!Array.isArray(result) || !result.hasOwnProperty(1)) {
+            return 0;
+        }
+
+        return parseInt(result[1], 10);
+    }
+
+    /**
+     * sums up the content of progressList and calcs the progress
+     * @param {Object[]} progressList the list of progress objects to be calculated
+     * @returns {Number}  a number in the range [0..1] round to 2 decimal numbers
+     */
+    getProgress (progressList) {
+        let count = 0,
+            progress = 0;
+
+        progressList.forEach(ref => {
+            count += ref.count;
+            progress += ref.progress;
+        });
+        if (count === 0) {
+            return 0;
+        }
+
+        return Math.round(100 / count * progress) / 100;
+    }
+
+    /**
+     * calls the httpClient as async function to call an url and to receive data from
      * @param {String} url the url to call
-     * @param {Function} onsuccess a function (resp) with the response of the call
-     * @param {Function} oncomplete a function to allways call when the request is finished (successfully or in failure)
-     * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
-     * @param {Function} onwait a function to call on each step of a skipping SensorThingsAPI response with the current progress
-     * @param {SensorThingsHttpClient} httpClient the httpClient to use instead of the default
-     * @param {Object[]} [result] an array to add up the responses
+     * @param {Function} onsuccess a function (response) with the response of the call
+     * @param {Function} onerror a function (error) with the error of the call if any
      * @returns {Void}  -
      */
-    function getHelper (url, onsuccess, oncomplete, onerror, onwait, httpClient, result) {
-        const requestUrl = addCountToUrl(url);
-        let completeResult = Array.isArray(result) ? result : [];
+    callHttpClient (url, onsuccess, onerror) {
+        if (typeof this.httpClient === "function") {
+            this.httpClient(url, onsuccess, onerror);
+            return;
+        }
 
-        (httpClient || defaultHttpClient)(requestUrl, function (response) {
-            if (response && response.hasOwnProperty("value") && Array.isArray(response.value)) {
-                completeResult = completeResult.concat(response.value);
+        axios({
+            method: "get",
+            url: url,
+            responseType: "text"
+        }).then(function (response) {
+            if (response !== undefined && typeof onsuccess === "function") {
+                onsuccess(response.data);
             }
-            else {
-                // if no value key is found: concat anything in response
-                completeResult = completeResult.concat(response);
-            }
-
-            if (response && response.hasOwnProperty("@iot.nextLink")) {
-                if (typeof onwait === "function") {
-                    onwait(getSkipProgress(response["@iot.nextLink"], response["@iot.count"]));
-                }
-
-                getHelper(response["@iot.nextLink"], onsuccess, oncomplete, onerror, onwait, httpClient, completeResult);
-
-            }
-            else {
-                // no further skips
-                if (typeof onsuccess === "function") {
-                    if (typeof onwait === "function") {
-                        onwait(1.0);
-                    }
-                    onsuccess(completeResult);
-                }
-                if (typeof oncomplete === "function") {
-                    oncomplete();
-                }
-            }
-
-        }, function (error) {
+        }).catch(function (error) {
             if (typeof onerror === "function") {
                 onerror(error);
-            }
-            if (typeof oncomplete === "function") {
-                oncomplete();
             }
         });
     }
 
     /**
-     * calls the given url from the SensorThingsAPI, follows skip urls, response is given as callback onsuccess
-     * @param {String} url the url to call
-     * @param {Function} onsuccess a function (resp) with the response of the call
-     * @param {Function} onstart a function to call on start
-     * @param {Function} oncomplete a function to allways call when the request is finished (successfully or in failure)
-     * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
-     * @param {Function} onwait a function to call on each step of a skipping SensorThingsAPI response
-     * @param {SensorThingsHttpClient} [httpClient] the httpClient to use instead of the default
-     * @returns {Void}  -
+     * sets the httpClient after construction (used for testing only)
+     * @param {Function} httpClient as function(url, onsuccess, onerror)
+     * @post the internal httpClient is set to the given httpClient
+     * @return {Void}  -
      */
-    this.get = function (url, onsuccess, onstart, oncomplete, onerror, onwait, httpClient) {
-        if (typeof onstart === "function") {
-            onstart();
-        }
-
-        if (typeof onwait === "function") {
-            onwait(0.0);
-        }
-
-        getHelper(url, onsuccess, oncomplete, onerror, onwait, httpClient);
-    };
+    setHttpClient (httpClient) {
+        this.httpClient = httpClient;
+    }
 
     /**
-     * calls the given url from the SensorThingsAPI, uses a call in extent, follows skip urls, response is given as callback onsuccess
-     * @param {String} url the url to call
-     * @param {Object} extentObj data for the extent
-     * @param {Number[]} extentObj.extent the extent based on OpenLayers (e.g. [556925.7670922858, 5925584.829527992, 573934.2329077142, 5942355.170472008])
-     * @param {String} extentObj.sourceProjection the projection of the extent
-     * @param {String} extentObj.targetProjection the projection the broker expects
-     * @param {Function} onsuccess a function (resp) with the response of the call
-     * @param {Function} onstart a function to call on start
-     * @param {Function} oncomplete a function to allways call when the request is finished (successfully or in failure)
-     * @param {SensorThingsErrorCallback} onerror a function (error) to call on error
-     * @param {Function} onwait a function to call on each step of a skipping SensorThingsAPI response
-     * @param {SensorThingsHttpClient} [httpClient] the httpClient to use instead of the default
-     * @returns {Void}  -
+     * sets the removeIotLinks flag after construction (used for testing only)
+     * @param {Boolean} removeIotLinks see options
+     * @post the removeIotLinks flag is set to the given removeIotLinks flag
+     * @return {Void}  -
      */
-    this.getInExtent = function (url, extentObj, onsuccess, onstart, oncomplete, onerror, onwait, httpClient) {
-        const extent = extentObj && extentObj.extent ? extentObj.extent : false,
-            sourceProjection = extentObj && extentObj.sourceProjection ? extentObj.sourceProjection : false,
-            targetProjection = extentObj && extentObj.targetProjection ? extentObj.targetProjection : false,
-            points = convertExtentIntoPoints(extent, sourceProjection, targetProjection, onerror),
-            requestUrl = addPointsToUrl(url, points, onerror);
-
-        if (typeof onstart === "function") {
-            onstart();
-        }
-
-        if (typeof onwait === "function") {
-            onwait(0.0);
-        }
-
-        if (points === false || requestUrl === false) {
-            if (typeof oncomplete === "function") {
-                oncomplete();
-            }
-            return;
-        }
-
-        getHelper(requestUrl, onsuccess, oncomplete, onerror, onwait, httpClient);
-    };
-
-    // shadow functions - public internal functions for better testing
-    this.getPolygonQueryWithPoints = getPolygonQueryWithPoints;
-    this.convertExtentIntoPoints = convertExtentIntoPoints;
-    this.addPointsToUrl = addPointsToUrl;
-    this.addCountToUrl = addCountToUrl;
-    this.getSkipProgress = getSkipProgress;
-    this.getHelper = getHelper;
-
+    setRemoveIotLinks (removeIotLinks) {
+        this.removeIotLinks = removeIotLinks;
+    }
 }
