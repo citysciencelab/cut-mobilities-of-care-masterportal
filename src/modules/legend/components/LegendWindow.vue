@@ -30,6 +30,21 @@ export default {
             }
         });
     },
+    updated () {
+        $(this.$el).draggable({
+            containment: "#map",
+            handle: ".legend-title",
+            start: function (event, ui) {
+                ui.helper.css({
+                    right: "auto",
+                    bottom: "auto"
+                });
+            },
+            stop: function (event, ui) {
+                ui.helper.css({"height": "", "width": ""});
+            }
+        });
+    },
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
@@ -381,6 +396,7 @@ export default {
             <div
                 v-for="legendObj in legends"
                 :key="legendObj.name"
+                class="layer"
             >
                 <div class="layer-title">
                     {{ legendObj.name }}
@@ -429,23 +445,32 @@ export default {
         right: 100px;
         background-color: #ffffff;
         width:300px;
-        padding: 10px;
-        max-height: 70vh;
-        overflow: auto;
+        padding-left: 10px;
+        padding-top: 10px;
         .legend-title {
             padding-bottom: 10px;
-            border-bottom: 1px solid #000000;
+            border-bottom: 2px solid #aaaaaa;
+            cursor: move;
             .close-legend {
                 cursor: pointer;
+                padding-right: 10px;
             }
         }
         .legend-content {
             padding-top: 10px;
+            max-height: 70vh;
+            overflow: auto;
+            .layer {
+                border: 2px solid #aaaaaa;
+                margin: 2px;
+            }
             .layer-title {
-
+                padding: 5px;
+                font-weight: bold;
             }
             .layer-legend {
-
+                padding-top: 5px;
+                padding-bottom: 5px;
             }
         }
     }
