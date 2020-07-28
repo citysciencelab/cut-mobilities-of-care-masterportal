@@ -13,6 +13,10 @@ describe("featurelister", function () {
         view.$el.html("<ul class=\"featurelist-details-ul\"></ul>");
     });
 
+    afterEach(function () {
+        sinon.restore();
+    });
+
     describe("the change to details with \"showFeatureProps\" ", function () {
         it("should change the content of the list item to a clickable anchor if it begins with 'http'", function () {
             const prop = {
