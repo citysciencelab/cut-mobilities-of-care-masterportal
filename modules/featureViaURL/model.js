@@ -11,7 +11,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      * @description Creates a new GeoJSON layer on the basis of the given features by the user via the URL.
      * @extends Backbone.Model
      * @memberof FeatureViaURL
-     * @param {Object} config The configuration of the module from the config.js.
+     * @param {object} config The configuration of the module from the config.js.
      * @constructs
      * @property {String} featureLabel="Beschriftung" The label for the features.
      * @property {String} coordLabel="Koordinaten" The label for the coordinates of the features.
