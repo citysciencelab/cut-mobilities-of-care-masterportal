@@ -92,7 +92,7 @@
             "coordLabel": "Coordinates",
             "featureLabel": "Label",
             "folderName": "Features given by URL",
-            "typeLabel": "Geometrytype"
+            "typeLabel": "Type of geometry"
         },
         "quickHelp": {
             "titleTag": "Open help",
