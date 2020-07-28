@@ -16,6 +16,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      * @property {String} featureLabel="Beschriftung" The label for the features.
      * @property {String} coordLabel="Koordinaten" The label for the coordinates of the features.
      * @property {String} typeLabel="Geometrietyp" The label for the type of the features.
+     * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioRequestParametricURLGetFeatureViaURL
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @fires Core.ConfigLoader#RadioTriggerParserAddFolder
@@ -34,12 +35,12 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
         this.createLayers(config.layers, config.epsg);
     },
     /**
-     * Creates a basic GeoJSON structure and add the features from the user to it.
+     * Creates a basic GeoJSON structure and adds the features given by the user from the URL to it.
      *
-     * @param {Integer} [epsg=4326] The EPSG-Code in which the features are coded.
+     * @param {Number} [epsg=4326] The EPSG-Code in which the features are coded.
      * @param {Object[]} features The features given by the user to be added to the map.
      * @param {String} geometryType Geometry type of the given features.
-     * @returns {JSON} GeoJSON containing the features.
+     * @returns {Object} GeoJSON containing the features.
      */
     createGeoJSON: function (epsg = 4326, features, geometryType) {
         const geoJSON = {
@@ -53,18 +54,25 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             },
             "features": []
         };
-        let featureJSON;
+        let featureJSON,
+            coordinates;
 
         features.forEach(feature => {
+            coordinates = feature.coordinates;
+            if (!coordinates || !Array.isArray(coordinates) || coordinates.length === 0 || !features.label) {
+                Radio.trigger("Alert", "alert", "FeatureViaURL: Not all features could be parsed.");
+                return;
+            }
+
             featureJSON = {
                 "type": "Feature",
                 "geometry": {
                     "type": geometryType,
-                    "coordinates": feature.coordinates
+                    "coordinates": coordinates
                 },
                 "properties": {
                     "featureLabel": feature.label,
-                    "coordLabel": feature.coordinates,
+                    "coordLabel": coordinates,
                     "typeLabel": geometryType
                 }
             };
@@ -78,7 +86,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      * TODO: Testing of this function!
      *
      * @param {Object[]} configLayers The layer configurations for the feature layers.
-     * @param {Integer} epsg The EPSG-Code in which the features are coded.
+     * @param {Number} epsg The EPSG-Code in which the features are coded.
      * @returns {void}
      */
     createLayers: function (configLayers, epsg) {
@@ -118,13 +126,17 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 Radio.trigger("Alert", "alert", `FeatureViaURL: The given geometryType ${geometryType} is not supported.`);
                 return;
             }
+            if (!features || !Array.isArray(features) || features.length === 0) {
+                Radio.trigger("Alert", "alert", "FeatureViaURL: No features in the right format were given.");
+                return;
+            }
             geoJSON = this.createGeoJSON(epsg, features, geometryType);
             Radio.trigger("AddGeoJSON", "addGeoJsonToMap", configLayers[layerPosition].name, configLayers[layerPosition].id, geoJSON, configLayers[layerPosition].styleId, parentId, gfiAttributes);
         });
     },
     /**
      * Translates the values of this module, namely "coordLabel", "featureLabel", "folderName" and "typeLabel".
-     * NOTE: The labels are currently not updated when changing a language. To accomplish this the layer will have to be removed and readded.
+     * NOTE: The three layer labels are currently not updated when changing a language. To accomplish this the layer will have to be removed and readded.
      *
      * @returns {void}
      */
