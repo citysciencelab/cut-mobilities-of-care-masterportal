@@ -60,7 +60,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
         features.forEach(feature => {
             coordinates = feature.coordinates;
             if (!coordinates || !Array.isArray(coordinates) || coordinates.length === 0 || !features.label) {
-                Radio.trigger("Alert", "alert", "FeatureViaURL: Not all features could be parsed.");
+                Radio.trigger("Alert", "alert", "FeatureViaURL: Not all features could be parsed from the URL.");
                 return;
             }
 
@@ -131,6 +131,10 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 return;
             }
             geoJSON = this.createGeoJSON(epsg, features, geometryType);
+            if (geoJSON.features.length === 0) {
+                Radio.trigger("Alert", "alert", "FeatureViaURL: No features could be parsed from the URL.");
+                return;
+            }
             Radio.trigger("AddGeoJSON", "addGeoJsonToMap", configLayers[layerPosition].name, configLayers[layerPosition].id, geoJSON, configLayers[layerPosition].styleId, parentId, gfiAttributes);
         });
     },
