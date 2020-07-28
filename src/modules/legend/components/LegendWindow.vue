@@ -445,24 +445,22 @@ export default {
         right: 100px;
         background-color: #ffffff;
         width:300px;
-        padding-left: 10px;
-        padding-top: 10px;
         .legend-title {
-            padding-bottom: 10px;
+            padding: 10px;
             border-bottom: 2px solid #aaaaaa;
             cursor: move;
             .close-legend {
                 cursor: pointer;
-                padding-right: 10px;
             }
         }
         .legend-content {
-            padding-top: 10px;
+            margin-top: 2px;
             max-height: 70vh;
             overflow: auto;
             .layer {
                 border: 2px solid #aaaaaa;
                 margin: 2px;
+                padding: 5px;
             }
             .layer-title {
                 padding: 5px;
