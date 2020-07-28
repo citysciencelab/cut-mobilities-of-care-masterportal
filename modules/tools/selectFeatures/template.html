@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<div class="form-group form-group-sm">
-    <div class="col-md-7 col-sm-7">
-        <%if (selectedFeatures.getLength() > 0) {%>
-        <ul>
-            <%selectedFeatures.forEach(feature => {%>
-                <li>
-                    <%console.log("NEW FEATURE")%>
-                    <%Object.keys(feature.properties).forEach(key => {%>
-                        <%console.log(key + ":" + feature.properties[key]);%>
-                    <%});%>
-                </li>
-            <%});%>
-        </ul>
-        <%} else {%>
-            Keine Feature ausgewählt.
-        <%}%>
+<%if (selectedFeaturesWithRenderInformation.length) {%>
+    <div class="select-features-tables">
+        <%selectedFeaturesWithRenderInformation.forEach(({feature, properties}, index) => {%>
+            <%if (properties.length) {%>
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <%properties.forEach(([key, value]) => {%>
+                            <tr>
+                                <td><%=key%></td>
+                                <td><%=value%></td>
+                            </tr>
+                        <%});%>
+                    </tbody>
+                </table>
+            <%} else {%>
+                <p><%=propertylessFeature%></p>
+            <%}%>
+            <a href="#" class="select-features-zoom-link" id="<%=index%>-selectFeatures-feature"><%=zoomToFeature%></a>
+            <hr />
+        <%});%>
     </div>
-</div>
+<%} else {%>
+    <span><%=noFeatureChosen%></span>
+<%}%>

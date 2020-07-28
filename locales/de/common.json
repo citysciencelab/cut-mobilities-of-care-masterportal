@@ -44,7 +44,8 @@
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
             "wfsTransaction": "WFS-T Tool",
-            "scaleSwitcher": "Maßstab umschalten"
+            "scaleSwitcher": "Maßstab umschalten",
+            "selectFeatures": "Features auswählen"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -329,6 +330,11 @@
                 "plot": "Flur",
                 "parcelNumberPlaceholder": "Nummer eingeben",
                 "generateReport": "Bericht erzeugen"
+            },
+            "selectFeatures": {
+              "zoomToFeature": "Auf dieses Feature zoomen",
+              "noFeatureChosen": "Keine Features ausgewählt. Wählen Sie Features durch Halten von Strg und Ziehen einer Box um die auszuwählenden Features.",
+              "propertylessFeature": "Element ohne Attribute"
             },
             "supplyCoord": {
                 "title": "Koordinaten abfragen",

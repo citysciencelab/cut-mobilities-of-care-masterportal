@@ -1,208 +1,87 @@
-import Tool from "../../core/modelList/tool/model";
 import {Select, DragBox} from "ol/interaction";
 import {platformModifierKeyOnly} from "ol/events/condition";
-import Requestor from "../../core/requestor";
+import VectorSource from "ol/source/Vector.js";
+import {never} from "ol/events/condition";
+
+import Tool from "../../core/modelList/tool/model";
+
+/**
+ * @typedef {object} featureWithRenderInformation
+ * @property {ol:module/Feature} feature that is supposed to get an entry
+ * @property {Array.<string[]>} properties [key, value] pairs prepared for tabular display
+ * @memberof Tools.SelectFeatures
+ */
 
 const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype */ {
-    defaults: Object.assign({}, Tool.prototype.defaults, {
+    defaults: {
+        ...Tool.prototype.defaults,
         selectedFeatures: undefined,
+        selectedFeaturesWithRenderInformation: [],
         select: undefined,
         dragBox: undefined,
-        renderToWindow: true
-    }),
+        renderToWindow: true,
+        // display strings
+        propertylessFeature: "",
+        noFeatureChosen: "",
+        zoomToFeature: "",
+        currentLng: ""
+    },
+
     /**
      * @class SelectFeaturesModel
      * @extends Tool
      * @memberof Tools.SelectFeatures
+     * @fires Tools.SelectFeaturesModel#updatedSelection
      * @listens Tools.SelectFeatures#RadioRequestGetSelectedFeatures
      * @listens i18next#RadioTriggerLanguageChanged
      * @constructs
      */
     initialize: function () {
         this.superInitialize();
+        this.createInteractions();
+        this.listenTo(this, {"change:isActive": this.changeIsActive});
+        this.listenTo(Radio.channel("i18next"), {"languageChanged": this.changeLanguage});
         this.changeLanguage();
-
-        this.listenTo(this, {
-            "change:isActive": function (model, status) {
-                if (status) {
-                    this.createInteractions();
-                }
-                else {
-                    this.removeInteractions();
-                }
-            }
-        });
-
-        this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.changeLanguage
-        });
-    },
-
-    /**
-     * Adds the interactions to the Map.
-     *
-     * @param {Select} select interaction.
-     * @param {DragBox} dragBox interaction.
-     * @returns {void}
-     */
-    addInteractionsToMap: function (select, dragBox) {
-        Radio.trigger("Map", "addInteraction", select);
-        Radio.trigger("Map", "addInteraction", dragBox);
     },
 
     /**
      * Translates the parameters of this class to the given language.
-     *
+     * @param {string} lng current language key
      * @returns {void}
      */
-    changeLanguage: function () {
-        // TODO: Implement me if needed
+    changeLanguage: function (lng) {
+        this.set({
+            "propertylessFeature": i18next.t("common:modules.tools.selectFeatures.propertylessFeature"),
+            "noFeatureChosen": i18next.t("common:modules.tools.selectFeatures.noFeatureChosen"),
+            "zoomToFeature": i18next.t("common:modules.tools.selectFeatures.zoomToFeature"),
+            "currentLng": lng
+        });
     },
 
     /**
-     * Clears the selected features of all current instances.
-     *
-     * @returns {void}
-     */
-    clearFeatures: function () {
-        this.get("selectedFeatures").clear();
-    },
-
-    /**
-     * Concats the given features to the Collection of currently selected features.
-     *
-     * @param {Array} features to be concatenated.
-     * @returns {void}
-     */
-    concatFeatures: function (features) {
-        this.get("selectedFeatures").concat(features);
-    },
-
-    /**
-     * Creates the Interactions for selecting features.
-     *
+     * Creates the interactions for selecting features.
      * @returns {void}
      */
     createInteractions: function () {
-        // TODO: Kann man die DragBox noch verschönern?
-        // TODO: Muss man select als interaction überhaupt hinzufügen?
-        // TODO: Wäre ein normales Array statt der Collection eventuell einfacher?
-        const select = new Select(),
+        const select = new Select({
+                toggleCondition: never
+            }),
             dragBox = new DragBox({
                 condition: platformModifierKeyOnly
-            }),
-            that = this;
+            });
 
         this.setSelectedFeatures(select.getFeatures());
 
-        dragBox.on("boxstart", function () {
-            that.clearFeatures();
-        });
-
-        dragBox.on("boxend", function () {
-            const layers = Radio.request("Map", "getLayers"),
-                extent = dragBox.getGeometry().getExtent();/* ,
-                rotation = Radio.request("Map", "getMap").getView().getRotation,
-                oblique = rotation % (Math.PI / 2) !== 0,
-                canditateFeatures = [],
-                anchor = [0, 0];
-            let geometry = dragBox.getGeometry().clone(),
-                extent = geometry.getExtent();*/
-            let gfiAttributes,
-                properties,
-                geometry;
-
-            layers.forEach(layer => {
-                // TODO: Do this for all VectorSources!
-                if (layer.get("visible") && layer.get("typ") === "WFS") {
-                    gfiAttributes = layer.get("gfiAttributes");
-                    layer.get("source").forEachFeatureIntersectingExtent(extent, (feature, index) => {
-                        // TODO: Vllt vorher an dieser Stelle eine Methode aufrufen, welche die Feature zu lesbaren Objekten aufbereitet --> so wie jetzt?
-                        properties = Requestor.translateGFI([feature.getProperties()], gfiAttributes)[0];
-                        geometry = feature.getGeometry().getExtent();
-
-                        that.pushFeature({
-                            id: index,
-                            properties: properties,
-                            geometry: geometry,
-                            feature: feature
-                        });
-
-                        // that.pushFeature(feature);
-                        // canditateFeatures.push(feature);
-                    });
-                }
-            });
-
-            Radio.trigger("SelectFeaturesView", "updatedSelection");
-
-            // console.log(that.get("selectedFeatures"))
-
-            // TODO: Muss diese Rotation überhaupt beachtet werden oder könnte man nicht eigentlich einfach alle Werte des Arrays direkt pushen?
-
-            // If the View is not obliquely rotated the dragBox and its extent are equivalent
-            // so intersecting features can be added directly to the collection
-            /* if (!oblique) {
-                that.concatFeatures(canditateFeatures);
-            }
-            // Otherwise the extent of the box will exceed its geometry.
-            // That's why both the dragBox and the features are rotated around the same anchor
-            // to confirm that they intersect with one another.
-            else {
-                geometry.rotate(-rotation, anchor);
-                extent = geometry.getExtent();
-
-                canditateFeatures.forEach(function (feature) {
-                    geometry = feature.getGeometry().clone();
-                    geometry.rotate(-rotation, anchor);
-
-                    if (geometry.intersectsExtent(extent)) {
-                        that.pushFeature(feature);
-                    }
-                });
-            }*/
-        });
+        dragBox.on("boxstart", this.clearFeatures.bind(this));
+        dragBox.on("boxend", this.setFeaturesFromDrag.bind(this));
 
         this.setSelectInteraction(select);
         this.setDragBoxInteraction(dragBox);
-
-        this.addInteractionsToMap(select, dragBox);
     },
 
     /**
-     * Pushes the given feature to the Collection of currently selected features.
-     *
-     * @param {*} feature to be pushed
-     * @returns {void}
-     */
-    pushFeature: function (feature) {
-        this.get("selectedFeatures").push(feature);
-    },
-
-    /**
-     * Removes the Interactions from the Map.
-     *
-     * @returns {void}
-     */
-    removeInteractions: function () {
-        Radio.trigger("Map", "removeInteraction", this.get("dragBox"));
-        Radio.trigger("Map", "removeInteraction", this.get("select"));
-    },
-
-    /**
-     * Sets the dragBox Interaction to the given parameter.
-     *
-     * @param {DragBox} dragBox Interaction to be set.
-     * @returns {void}
-     */
-    setDragBoxInteraction: function (dragBox) {
-        this.set("dragBox", dragBox);
-    },
-
-    /**
-     * Sets the Collection of selected features to the given Parameter.
-     *
-     * @param {Collection} selectedFeatures The Collection of selected Features to be set.
+     * Sets collection of selected features to model.
+     * @param {Collection} selectedFeatures selected features collection
      * @returns {void}
      */
     setSelectedFeatures: function (selectedFeatures) {
@@ -210,13 +89,202 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
     },
 
     /**
-     * Sets the select Interaction to the given parameter.
-     *
-     * @param {Select} select Interaction to be set.
+     * Sets an array of feature/properties-objects to the model.
+     * @param {featureWithRenderInformation[]} array features for render
+     * @returns {void}
+     */
+    setSelectedFeaturesWithRenderInformation: function (array) {
+        this.set("selectedFeaturesWithRenderInformation", array);
+    },
+
+    /**
+     * Pushes the given feature to the collection of currently selected features.
+     * @param {module:ol/Layer} layer layer the feature belongs to (for gfi attributes)
+     * @param {module:ol/Feature} feature feature to be pushed
+     * @returns {void}
+     */
+    pushFeature: function (layer, feature) {
+        this.get("selectedFeatures").push(feature);
+        this.get("selectedFeaturesWithRenderInformation").push({
+            feature,
+            properties: this.translateGFI(
+                feature.getProperties(),
+                layer.get("gfiAttributes")
+            )
+        });
+    },
+
+    /**
+     * Infers features from interaction state and sets them to the selectedFeatures.
+     * @returns {void}
+     */
+    setFeaturesFromDrag: function () {
+        const extent = this.get("dragBox").getGeometry().getExtent();
+
+        Radio
+            .request("Map", "getLayers")
+            .getArray()
+            .filter(l => l.get("visible") && l.get("source") instanceof VectorSource)
+            .forEach(
+                l => l.get("source").forEachFeatureIntersectingExtent(
+                    extent,
+                    feature => this.pushFeature(l, feature)
+                )
+            );
+
+        Radio.trigger(this, "updatedSelection");
+    },
+
+    /**
+     * Clears the selected features of all current instances.
+     * @returns {void}
+     */
+    clearFeatures: function () {
+        this.get("selectedFeatures").clear();
+        this.setSelectedFeaturesWithRenderInformation([]);
+    },
+
+    /**
+     * If select changes, check if empty - if so, clear.
+     * @returns {void}
+     */
+    selectChange: function () {
+        if (this.get("selectedFeatures").getLength() === 0) {
+            this.clearFeatures();
+        }
+    },
+
+    /**
+     * Adds/Removes interactions depending on whether tool is active.
+     * @param {object} _ model, not used
+     * @param {boolean} isActive whether tool is active
+     * @returns {void}
+     */
+    changeIsActive: function (_, isActive) {
+        if (isActive) {
+            this.addInteractions();
+        }
+        else {
+            this.removeInteractions();
+        }
+    },
+
+    /**
+     * Adds the interactions to the Map.
+     * @returns {void}
+     */
+    addInteractions: function () {
+        Radio.trigger("Map", "addInteraction", this.get("select"));
+        Radio.trigger("Map", "addInteraction", this.get("dragBox"));
+    },
+
+    /**
+     * Removes the Interactions from the Map.
+     * @returns {void}
+     */
+    removeInteractions: function () {
+        Radio.trigger("Map", "removeInteraction", this.get("select"));
+        Radio.trigger("Map", "removeInteraction", this.get("dragBox"));
+    },
+
+    /**
+     * @param {DragBox} dragBox dragBox to be set to model
+     * @returns {void}
+     */
+    setDragBoxInteraction: function (dragBox) {
+        this.set("dragBox", dragBox);
+    },
+
+    /**
+     * @param {Select} select select to be set to model
      * @returns {void}
      */
     setSelectInteraction: function (select) {
         this.set("select", select);
+    },
+
+    /**
+     * Prepares the properties of a feature for tabular display.
+     * @param {object} properties Technical key to display value
+     * @param {object} gfiAttributes Technical key to display key
+     * @returns {Array.<string[]>} Array of [key,value]-pairs - may be empty
+     */
+    translateGFI: function (properties, gfiAttributes) {
+        // showAll => just use properties and make key look nice
+        if (gfiAttributes === "showAll") {
+            return Object
+                .entries(properties)
+                .map(([key, value]) => {
+                    if (this.isValidKey(key) && this.isValidValue(value)) {
+                        return [this.beautifyKey(key), this.beautifyValue(value)];
+                    }
+                    return false;
+                })
+                // filter "false" entries that did not pass checks
+                .filter(entry => entry);
+        }
+
+        // type object => contains pretty-print instruction for key as value
+        if (typeof gfiAttributes === "object") {
+            return Object
+                .keys(gfiAttributes)
+                .map(key => [
+                    gfiAttributes[key],
+                    this.beautifyValue(properties[key] || "")
+                ]);
+        }
+
+        // gfiAttributes === "ignore" (or invalid)
+        if (gfiAttributes !== "ignore") {
+            console.warn(`Layer has invalid gfiAttributes "${gfiAttributes}". Acting as if "ignore" was given.`);
+        }
+
+        return [];
+    },
+
+    /**
+     * Prepares a
+     * e.g. "very_important_field" becomes "Very Important Field"
+     * @param {string} str key to beautify
+     * @returns {string} beautified key
+     */
+    beautifyKey: function (str) {
+        return str
+            .split("_")
+            .map(s => s.substring(0, 1).toUpperCase() + s.substring(1))
+            .join(" ");
+    },
+
+    /**
+     * Translates | separators to newlines.
+     * @param {String} str string, potentially with separators '|'
+     * @returns {string} beautified string
+     */
+    beautifyValue: function (str) {
+        return str
+            .split("|")
+            .map(s => s.trim())
+            .join("<br/>");
+    },
+
+    /**
+     * helper function: check, if key has a valid value
+     * @param {string} key parameter
+     * @returns {boolean} desc
+     */
+    isValidKey: function (key) {
+        const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
+
+        return ignoredKeys.indexOf(key.toUpperCase()) === -1;
+    },
+
+    /**
+     * helper function: check, if str has a valid value
+     * @param {string} str parameter
+     * @returns {boolean} desc
+     */
+    isValidValue: function (str) {
+        return Boolean(str && typeof str === "string" && str.toUpperCase() !== "NULL");
     }
 });
 
