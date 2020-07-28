@@ -213,6 +213,22 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
         let legend = this.get("legend");
         const capabilitiesUrl = this.get("capabilitiesUrl");
 
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
         if ((this.get("optionsFromCapabilities") === undefined) && (legend === true)) {
             console.error("WMTS: No legendURL is specified for the layer!");
         }

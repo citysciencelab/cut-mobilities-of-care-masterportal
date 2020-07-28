@@ -135,9 +135,25 @@ const WMSLayer = Layer.extend({
      * @return {void}
      */
     createLegend: function () {
-        const legend = this.get("legend"),
-            legends = [],
+        const legends = [],
             version = this.get("version");
+        let legend = this.get("legend");
+
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
 
         if (legend === true) {
             const layerNames = this.get("layers").split(",");
