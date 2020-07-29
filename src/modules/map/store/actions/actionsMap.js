@@ -67,8 +67,7 @@ const actions = {
     },
     /**
      * @param {function} commit commit function
-     * @param {module:ol/Map} map openlayer map object
-     * @param {number} dpi needed to calculate scale
+     * @param {MapBrowserEvent} evt - Moveend event
      * @returns {function} update function for state parts to update onmoveend
      */
     updateViewState ({commit, rootGetters}, evt) {
@@ -128,8 +127,8 @@ const actions = {
             // wms api aufruf mit getFeatureInfoUrls
             // anschließen concat featuresAtPixel und wms features
             // wenn alle durch sind, gibt es ein commit an "featuresAtCoordinate"
-            console.info(featureInfoUrls);
-            console.info(featuresAtPixel);
+            console.warn(featureInfoUrls);
+            console.warn(featuresAtPixel);
             commit("setFeaturesAtCoordinate", featuresAtPixel);
         }
     },
