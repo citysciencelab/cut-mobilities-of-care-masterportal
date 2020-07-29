@@ -18,7 +18,7 @@ describe("featureViaURL", function () {
         consoleWarnSpy.resetHistory();
         radioSpy.resetHistory();
     });
-    describe.only("createGeoJSON", function () {
+    describe("createGeoJSON", function () {
         const {createGeoJSON} = FeatureViaURL.prototype,
             geometryType = "Point",
             regExp = /\d+/;
