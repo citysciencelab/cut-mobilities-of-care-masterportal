@@ -325,6 +325,11 @@ export default {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     z-index: 999;
     max-width: 500px;
+    
+    .drag-bar {
+        display:none;
+    }
+    
     .header();
     > .header-min {
         background-color: @background_color_2;
