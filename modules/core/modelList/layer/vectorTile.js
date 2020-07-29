@@ -8,8 +8,7 @@ import Layer from "./model";
 const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     defaults: {
         ...Layer.prototype.defaults,
-        selectedStyleID: undefined,
-        isOutOfRange: false
+        selectedStyleID: undefined
     },
 
     /**
@@ -17,8 +16,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @extends Layer
      * @memberof Core.ModelList.Layer
      * @constructs
-     * @property {String[]} [supported=["2D", "3D"]] Supported map modes.
-     * @property {Boolean} [showSettings=true] Flag if settings selectable.
+     * @property {string} selectedStyleID Currently active style by ID
      * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
@@ -49,17 +47,13 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @return {void}
      */
     createLayer: function () {
-        let vectorTileLayer = null;
-
-        vectorTileLayer = new OpenLayersVectorTileLayer({
+        this.setLayer(new OpenLayersVectorTileLayer({
             source: this.get("layerSource"),
             id: this.get("id"),
             typ: this.get("typ"),
             name: this.get("name"),
             visible: this.get("visibility")
-        });
-
-        this.setLayer(vectorTileLayer);
+        }));
         this.setConfiguredLayerStyle();
     },
 
@@ -116,6 +110,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     },
 
     /**
+     * Loads a style from a style definition's URL and sets it to be active.
      * @param {object} styleDefinition style definition as found in service.json file
      * @param {string} styleDefinition.url url where style is kept
      * @param {string} styleDefinition.id id of style
@@ -138,6 +133,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     },
 
     /**
+     * Checks required fields of a style for presence.
      * @param {object} style style object as fetched from a remote url
      * @returns {boolean} true if all expected fields at least exist
      */

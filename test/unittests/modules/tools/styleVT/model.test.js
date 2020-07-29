@@ -1,7 +1,6 @@
 import StyleVTModel from "@modules/tools/styleVT/model.js";
-import Sinon from "sinon";
-const {expect} = require("chai"),
-    sinon = require("sinon");
+import {expect} from "chai";
+import sinon from "sinon";
 
 /**
  * Context mock function.
@@ -22,7 +21,7 @@ function createContext (activeLayer) {
 
 describe("tools/styleVT/model", function () {
     beforeEach(function () {
-        Sinon.stub(Radio, "request").callsFake(() => [
+        sinon.stub(Radio, "request").callsFake(() => [
             {get: key => ({name: "Layer One", id: "l1"})[key]},
             {get: key => ({name: "Layer Two", id: "l2"})[key]}
         ]);

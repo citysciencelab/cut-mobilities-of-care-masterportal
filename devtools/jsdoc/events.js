@@ -51,6 +51,34 @@
  * @description Triggered when setSLD changes
  */
 
+/** -------------------- StyleVT -------------------- */
+
+/**
+ * @event StyleVT#RadioTriggerStyleVTOpenStyleVT
+ * @param {Object} model Layer model to be styled
+ * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the glyphicon in the layer tree.
+ * @example Radio.trigger("StyleVT", "open", model)
+ */
+
+/**
+ * @event StyleVT#changeIsActive
+ * @description Triggered when stylevt model gets (de-)activated
+ */
+
+/**
+ * @event StyleVT#changeModel
+ * @description Triggered when selected layer model is changed
+ */
+
+/**
+ * @event StyleVT#changeCurrentLng
+ * @description Triggered when current language is changed
+ */
+
+/**
+ * @event StyleVT#changeVectorTileLayerList
+ * @description Triggered when available layer set is changed
+ */
 
 /** -------------------- SIDEBAR -------------------- */
 
@@ -217,7 +245,7 @@
  */
 /**
  * @event Core.ConfigLoader#RadioRequestParserGetTreeType
- * @returns {*} todo
+ * @returns {string} tree type from config.js file
  * @example Radio.request("Parser", "getTreeType")
  */
 /**
@@ -1487,7 +1515,7 @@
  * @returns {String} - masterportal version number
  * @example Radio.request("Util", "getMasterPortalVersionNumber");
  */
- 
+
 /**
  * @event Core#RadioRequestUtilSortBy
  * @description This sort function sorts arrays, objects and strings. This is a replacement for underscores sortBy

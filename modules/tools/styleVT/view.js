@@ -3,13 +3,13 @@ import StyleVTTemplateNoStyleableLayers from "text-loader!./templateNoStyleableL
 import "bootstrap-colorpicker";
 
 /**
- * @member StyleVtTemplate
+ * @member StyleVTTemplate
  * @description Template used to create the user input form
  * @memberof Tools.StyleVT
  */
 
 /**
- * @member StyleVtTemplateNoStyleableLayers
+ * @member StyleVTTemplateNoStyleableLayers
  * @description Template used if no styleable Layers are available
  * @memberof Tools.StyleVT
  */
@@ -23,21 +23,19 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleVTView.prototype */{
     },
 
     /**
-     * @class StyleVtView
-     * @description View for style vt. Reacts to user input
+     * @class StyleVTView
+     * @description View for style vt. Reacts to user input.
      * @extends Backbone.View
      * @memberof Tools.StyleVT
      * @constructs
-     * @listens StyleVtModel#sync
-     * @listens StyleVtModel#changeIsActive
-     * @listens StyleVtModel#changeModel
-     * @listens StyleVtModel#changeAttributeName
-     * @listens StyleVtModel#changeNumberOfClasses
-     * @listens StyleVtModel#changeCurrentLng
+     * @listens Core.ConfigLoader#RadioRequestParserGetTreeType
+     * @listens StyleVTModel#changeIsActive
+     * @listens StyleVTModel#changeModel
+     * @listens StyleVTModel#changeCurrentLng
+     * @listens StyleVTModel#changeVectorTileLayerList
      */
     initialize: function () {
         this.listenTo(this.model, {
-            "sync": this.render,
             "change:isActive": function (model, value) {
                 if (!value) {
                     this.model.setModel(null);
@@ -47,16 +45,12 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleVTView.prototype */{
                     this.render();
                 }
             },
-            "change:model change:attributeName change:numberOfClasses": this.render,
-            "invalid": this.showErrorMessages,
-            "change:currentLng": () => {
-                this.render(this.model, this.model.get("isActive"));
-            }
+            "change:model change:currentLng change:vectorTileLayerList": this.render
         });
         if (Radio.request("Parser", "getTreeType") === "light") {
             this.model.refreshVectorTileLayerList();
         }
-        if (this.model.get("isActive") === true) {
+        if (this.model.get("isActive")) {
             this.render();
         }
     },
@@ -65,14 +59,14 @@ const StyleVTView = Backbone.View.extend(/** @lends StyleVTView.prototype */{
     templateNoStyleableLayers: _.template(StyleVTTemplateNoStyleableLayers),
 
     /**
-     * Render StyleVt view.
+     * Render StyleVT view.
      * @return {Backbone.View} returns itself when rendered
      */
     render: function () {
         const attr = this.model.toJSON();
 
         this.setElement(document.getElementsByClassName("win-body")[0]);
-        if (this.model.get("isActive") === true) {
+        if (this.model.get("isActive")) {
             if (attr.vectorTileLayerList.length === 0) {
                 this.$el.html(this.templateNoStyleableLayers(attr));
             }

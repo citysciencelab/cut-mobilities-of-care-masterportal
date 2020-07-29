@@ -197,9 +197,9 @@
             },
             "styleVT": {
               "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",
-              "noStyleableLayers": "There are currently no classifiable topics to which this tool could be applied.",
+              "noStyleableLayers": "There are currently no topics to which this tool could be applied.",
               "theme": "Theme",
-              "chooseTheme": "Please choose theme",
+              "chooseTheme": "Please choose active theme",
               "style": "Style"
             },
             "styleWMS": {

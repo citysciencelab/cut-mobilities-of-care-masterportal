@@ -1,6 +1,13 @@
 import Tool from "../../core/modelList/tool/model";
 
-const StyleVTModel = Tool.extend(/** @lends StyleVtModel.prototype */{
+/**
+ * Object containing name and id of a stylable layer.
+ * @typedef {object} styleableLayer
+ * @property {String} styleableLayer.name Name of styleable Layer
+ * @property {String} styleableLayer.id Id of styleable Layer
+ */
+
+const StyleVTModel = Tool.extend(/** @lends StyleVTModel.prototype */{
     defaults: {
         ...Tool.prototype.defaults,
         isCurrentWin: false,
@@ -20,34 +27,40 @@ const StyleVTModel = Tool.extend(/** @lends StyleVtModel.prototype */{
     },
 
     /**
-     * @class StyleVtModel
+     * @class StyleVTModel
      * @description Tool that can change the style of a VTL. Multiple styles
      * can be configured and will be applied on-demand client-side to style the layer.
      * @extends Tool
      * @memberof Tools.StyleVT
      * @constructs
-     * @property {Boolean} [isCurrentWin=false] Flag if this tool is shown in the toolwindow and thus is active
-     * @property {Boolean} [isCollapsed=false] false Flag if this tool window is collapsed
+     * @property {Boolean} [isCurrentWin=false] whether this tool is shown in the toolwindow and thus is active
+     * @property {Boolean} [isCollapsed=false] whether this tool window is collapsed
      * @property {String} [glyphicon="glyphicon-tint"] Icon that is shown before the tool name
      * @property {String} [name="Style VT"] Name of the Tool
-     * @property {String} [id="StyleVT"] id of Tool
-     * @property {String} [modelId=""] Id of layer model to be styled
+     * @property {String} [id="styleVT"] id of Tool
      * @property {VtLayer} [model=null] Layer model to be styled
-     * @property {String} [geomType=""] Geometry type of data shown in wms layer. important for creating the correct sld
-     * @property {String} [attributeName="default"] Name of attribute to be styled
-     * @property {styleableLayer[]} [styleableLayerList=[]] List of Layers that can be used for restyling
-     * @property {Object} styleableLayer Object containing the name and the id of the styleable layer
-     * @property {String} styleableLayer.name Name of styleable Layer
-     * @property {String} styleableLayer.id Id of styleable Layer
-     * @fires List#RadioRequestModelListGetModelsByAttributes
-     * @fires StyleVTModel#sync
+     * @property {styleableLayer[]} [vectorTileLayerList=[]] List of Layers that can be used for restyling
+     * @property {string} selectedLayerID currently selected layer ID
+     * @property {styleableLayer} styleableLayer currently chosen styleable layer
+     * @property {string} introText contains current localization for key
+     * @property {string} noStyleableLayers contains current localization for key
+     * @property {string} theme contains current localization for key
+     * @property {string} chooseTheme contains current localization for key
+     * @property {string} style contains current localization for key
+     * @listens Core.ModelList#RadioTriggerModelListUpdatedSelectedLayerList
+     * @listens i18next#RadioTriggerLanguageChanged
+     * @listens StyleVT#RadioTriggerStyleVTOpen
+     * @fires Core.ModelList#RadioRequestModelListGetModelsByAttributes
+     * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+     * @fires StyleVTModel#changeIsActive
+     * @fires StyleVTModel#changeModel
+     * @fires StyleVTModel#changeCurrentLng
+     * @fires StyleVTModel#changeVectorTileLayerList
      */
     initialize: function () {
-        const channel = Radio.channel("StyleVT");
-
         this.superInitialize();
 
-        channel.on({
+        Radio.channel("StyleVT").on({
             "open": function (model) {
                 // Check if tool window is already open; if not, open it
                 if (this.get("isActive") !== true) {
@@ -57,18 +70,11 @@ const StyleVTModel = Tool.extend(/** @lends StyleVtModel.prototype */{
 
                 // Take layer that is selected in layer tree
                 this.setModel(model);
-                this.trigger("sync");
             }
         }, this);
 
         this.listenTo(Radio.channel("ModelList"), {
-            "updatedSelectedLayerList": function () {
-                this.refreshVectorTileLayerList();
-                if (this.get("isActive") === true) {
-                    // if tool is active, refresh the content
-                    this.trigger("sync");
-                }
-            }
+            "updatedSelectedLayerList": this.refreshVectorTileLayerList
         });
 
         this.listenTo(Radio.channel("i18next"), {
@@ -93,8 +99,8 @@ const StyleVTModel = Tool.extend(/** @lends StyleVtModel.prototype */{
     },
 
     /**
-     * Refreshes the styleableLayerList.
-     * Takes the layermodels that are selected in the layer tree with name/id.
+     * Refreshes the vectorTileLayerList.
+     * Retrieves {name, id} from available layer models.
      * @fires List#RadioRequestModelListGetModelsByAttributes
      * @returns {void}
      */
@@ -137,7 +143,6 @@ const StyleVTModel = Tool.extend(/** @lends StyleVtModel.prototype */{
             model = Radio.request("ModelList", "getModelByAttributes", {id});
         }
         this.setModel(model);
-        this.trigger("sync");
     },
 
     /**
