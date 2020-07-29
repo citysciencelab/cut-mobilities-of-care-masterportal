@@ -1,6 +1,6 @@
 const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/{
     defaults: {
-        // NOTE: Initial values are set here because the translation is too late. Can be removed when the translations are possible for the labels.
+        // Translations
         coordLabel: "Koordinaten",
         featureLabel: "Beschriftung",
         folderName: "",
@@ -13,10 +13,12 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      * @memberof FeatureViaURL
      * @param {object} config The configuration of the module from the config.js.
      * @constructs
-     * @property {String} featureLabel="Beschriftung" The label for the features.
-     * @property {String} coordLabel="Koordinaten" The label for the coordinates of the features.
-     * @property {String} typeLabel="Geometrietyp" The label for the type of the features.
+     * @property {String} [coordLabel="Koordinaten"] The label for the coordinates of the features.
+     * @property {String} [featureLabel="Beschriftung"] The label for the features.
+     * @property {String} [folderName=""] The name of the folder in which the GeoJSON-Layers reside in the layertree.
+     * @property {String} [typeLabel="Geometrietyp"] The label for the type of the features.
      * @fires Alerting#RadioTriggerAlertAlert
+     * @fires Core#RadioTriggerMapRemoveLayer
      * @fires Core#RadioRequestParametricURLGetFeatureViaURL
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @fires Core.ConfigLoader#RadioTriggerParserAddFolder
@@ -25,7 +27,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      */
     initialize: function (config) {
         if (!config || !Array.isArray(config.layers) || config.layers.length === 0) {
-            Radio.trigger("Alert", "alert", "FeatureViaURL: No layers were defined in the config.js for the given features.");
+            Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.noLayers"));
             return;
         }
         this.listenTo(Radio.channel("i18next"), {
@@ -54,13 +56,14 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             },
             "features": []
         };
-        let featureJSON,
-            coordinates;
+        let coordinates,
+            featureJSON,
+            flag = false;
 
         features.forEach(feature => {
             coordinates = feature.coordinates;
-            if (!coordinates || !Array.isArray(coordinates) || coordinates.length === 0 || !features.label) {
-                Radio.trigger("Alert", "alert", "FeatureViaURL: Not all features could be parsed from the URL.");
+            if (!coordinates || !Array.isArray(coordinates) || coordinates.length === 0 || !feature.label) {
+                flag = true;
                 return;
             }
 
@@ -78,6 +81,10 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             };
             geoJSON.features.push(featureJSON);
         });
+
+        if (flag) {
+            console.warn(i18next.t("common:modules.featureViaURL.messages.featureParsing"));
+        }
 
         return geoJSON;
     },
@@ -114,26 +121,25 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             features = layer.features;
             layerPosition = configLayers.findIndex(element => element.id === layerId);
             if (layerPosition === -1) {
-                Radio.trigger("Alert", "alert", `FeatureViaURL: The layer with the id ${layerId} was not found.`);
+                console.error(i18next.t("common:modules.featureViaURL.messages.layerNotFound", {layerId}));
                 return;
             }
             if (!configLayers[layerPosition].name) {
-                Radio.trigger("Alert", "alert", `FeatureViaURL: No name was defined for the layer with the id ${layerId}.`);
+                console.error(i18next.t("common:modules.featureViaURL.messages.noNameDefined", {layerId}));
                 return;
             }
             geometryType = configLayers[layerPosition].geometryType;
             if (geometryType !== "LineString" && geometryType !== "Point" && geometryType !== "Polygon") {
-                Radio.trigger("Alert", "alert", `FeatureViaURL: The given geometryType ${geometryType} is not supported.`);
+                console.error(i18next.t("common:modules.featureViaURL.messages.geometryNotSupported"), {layerId, geometryType});
                 return;
             }
             if (!features || !Array.isArray(features) || features.length === 0) {
-                Radio.trigger("Alert", "alert", "FeatureViaURL: No features in the right format were given.");
+                Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.featureParsingAll"));
                 return;
             }
             geoJSON = this.createGeoJSON(epsg, features, geometryType);
             if (geoJSON.features.length === 0) {
-                Radio.trigger("Alert", "alert", "FeatureViaURL: No features could be parsed from the URL.");
-                return;
+                Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded"));
             }
             Radio.trigger("AddGeoJSON", "addGeoJsonToMap", configLayers[layerPosition].name, configLayers[layerPosition].id, geoJSON, configLayers[layerPosition].styleId, parentId, gfiAttributes);
         });

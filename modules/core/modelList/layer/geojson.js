@@ -163,7 +163,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     /**
      * Takes the response, parses the geojson and creates ol.features.
      * @fires RemoteInterface#RadioTriggerPostMessage
-     * @param   {string} data   response as GeoJson
+     * @param   {(string | object)} data   response as GeoJson
      * @returns {void}
      */
     handleData: function (data) {
@@ -242,11 +242,10 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * For downward compatibility a crs tag can be used.
      * @see https://tools.ietf.org/html/rfc7946
      * @see https://geojson.org/geojson-spec#named-crs
-     * @param   {string} data   response as GeoJson
+     * @param   {(string | object)} data   response as GeoJson
      * @returns {string} epsg definition
      */
     getJsonProjection: function (data) {
-        // using indexOf method to increase performance
         if (typeof data === "object") {
             if (data.crs !== undefined) {
                 const regExp = /\d+/;
@@ -255,6 +254,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             }
         }
         else {
+            // using indexOf method to increase performance
             const dataString = data.replace(/\s/g, ""),
                 startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
 

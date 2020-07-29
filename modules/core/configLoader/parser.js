@@ -378,7 +378,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      *
      * @param {String} name Name of the layer.
      * @param {String} id Unique identifier for the layer.
-     * @param {(String | JSON)} geojson GeoJSON for the layer containing the features.
+     * @param {(String | Object)} geojson GeoJSON for the layer containing the features.
      * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
      * @param {String} [parentId] Id for the correct position of the layer in the layertree.
      * @param {(String | Object)} [gfiAttributes="showAll"] Attributes to be shown when clicking on the feature using the GFI tool.
