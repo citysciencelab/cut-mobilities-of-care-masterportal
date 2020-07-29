@@ -7,12 +7,42 @@ import ExportButtonModel from "../../../../snippets/exportButton/model";
 
 const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     defaults: Object.assign({}, Theme.prototype.defaults, {
+        currentLng: "",
+        infoLabel: "",
+        dayLabel: "",
+        weekLabel: "",
+        yearLabel: "",
+        period: "",
+        number: "",
+        totalSince: "",
+        sinceBeginningOfTheYear: "",
+        overThePastYear: "",
+        onThePreviousDay: "",
+        highestDay: "",
+        highestWeek: "",
+        highestMonth: "",
+        dateLabel: "",
+        clockLabel: "",
+        tableLabel: "",
+        notice: "",
+        lastupdateLabel: "",
+        diagramLabel: "",
+        calendarweek: "",
+        infraredsensor: "",
+        countingstation: "",
+        carLabel: "",
+        bicycleLabel: "",
+
         dayTableContent: [],
         weekTableContent: [],
         yearTableContent: [],
 
-        carsHeaderSuffix: "KFZ abs.",
-        trucksHeaderSuffix: "SV-Anteil in %",
+        carsHeaderSuffix: "",
+        trucksHeaderSuffix: "",
+
+        idLabel: "",
+        typeLabel: "",
+        meansOfTransportLabel: "",
 
         meansOfTransportFahrzeuge: "AnzFahrzeuge",
         meansOfTransportFahrraeder: "AnzFahrraeder",
@@ -50,12 +80,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
          */
         isCreated: false,
         typeAssoc: {
-            AnzFahrzeuge: "Infrarotsensor",
-            AnzFahrraeder: "Zählstation"
+            AnzFahrzeuge: "",
+            AnzFahrraeder: ""
         },
         meansOfTransportAssoc: {
-            AnzFahrzeuge: "KFZ",
-            AnzFahrraeder: "Fahrrad"
+            AnzFahrzeuge: "",
+            AnzFahrraeder: ""
         },
         dayInterval: "15-Min",
         weekInterval: "1-Tag",
@@ -77,6 +107,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * @property {Object} feature feature to show gfi.
      */
     initialize: function () {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang(i18next.language);
+
         this.set("exportButtonModel", new ExportButtonModel({
             tag: "Download",
             rawData: [],
@@ -89,9 +124,54 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         this.listenTo(Radio.channel("GFI"), {
             "isVisible": this.onGFIIsVisibleEvent
         }, this);
+    },
 
-        // change language from moment.js to german
-        moment.locale("de");
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set({
+            currentLng: lng,
+            infoLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.infoLabel"),
+            dayLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.dayLabel"),
+            weekLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.weekLabel"),
+            yearLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.yearLabel"),
+            period: i18next.t("common:modules.tools.gfi.themes.trafficCount.period"),
+            number: i18next.t("common:modules.tools.gfi.themes.trafficCount.number"),
+            totalSince: i18next.t("common:modules.tools.gfi.themes.trafficCount.totalSince"),
+            sinceBeginningOfTheYear: i18next.t("common:modules.tools.gfi.themes.trafficCount.sinceBeginningOfTheYear"),
+            overThePastYear: i18next.t("common:modules.tools.gfi.themes.trafficCount.overThePastYear"),
+            onThePreviousDay: i18next.t("common:modules.tools.gfi.themes.trafficCount.onThePreviousDay"),
+            highestDay: i18next.t("common:modules.tools.gfi.themes.trafficCount.highestDay"),
+            highestWeek: i18next.t("common:modules.tools.gfi.themes.trafficCount.highestWeek"),
+            highestMonth: i18next.t("common:modules.tools.gfi.themes.trafficCount.highestMonth"),
+            dateLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.dateLabel"),
+            clockLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.clockLabel"),
+            tableLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.tableLabel"),
+            notice: i18next.t("common:modules.tools.gfi.themes.trafficCount.notice"),
+            lastupdateLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.lastupdateLabel"),
+            diagramLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.diagramLabel"),
+            calendarweek: i18next.t("common:modules.tools.gfi.themes.trafficCount.calendarweek"),
+            meansOfTransportAssoc: {
+                AnzFahrzeuge: i18next.t("common:modules.tools.gfi.themes.trafficCount.carLabel"),
+                AnzFahrraeder: i18next.t("common:modules.tools.gfi.themes.trafficCount.bicycleLabel")
+            },
+            typeAssoc: {
+                AnzFahrzeuge: i18next.t("common:modules.tools.gfi.themes.trafficCount.infraredsensor"),
+                AnzFahrraeder: i18next.t("common:modules.tools.gfi.themes.trafficCount.countingstation")
+            },
+            idLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.idLabel"),
+            typeLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.typeLabel"),
+            meansOfTransportLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.meansOfTransportLabel"),
+            carsHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.carsHeaderSuffix"),
+            trucksHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.trucksHeaderSuffix"),
+            yAxisTextDay: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextDay"),
+            yAxisTextWeek: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextWeek"),
+            yAxisTextYear: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextYear")
+        });
+        moment.locale(lng);
     },
 
     /**
@@ -143,9 +223,9 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             url = feature.get("requestUrl"),
             sensorThingsApiVersion = "v" + feature.get("versionUrl"),
             mqttOptions = {
-                host: feature.get("requestUrl").split("/")[2],
-                protocol: "wss",
-                path: "/mqtt",
+                mqttUrl: "wss://" + feature.get("requestUrl").split("/")[2] + "/mqtt",
+                mqttVersion: "3.1.1",
+                rhPath: url,
                 context: this
             };
 
@@ -381,7 +461,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         });
 
         api.updateHighestWorkloadWeek(thingId, meansOfTransport, moment().format("YYYY"), (calendarWeek, value) => {
-            this.setHighestWorkloadWeekDesc(!isNaN(calendarWeek) || typeof calendarWeek === "string" ? "KW " + calendarWeek : "");
+            this.setHighestWorkloadWeekDesc(!isNaN(calendarWeek) || typeof calendarWeek === "string" ? this.get("calendarweek") + " " + calendarWeek : "");
             this.setHighestWorkloadWeekValue(this.addThousandPoints(value));
         }, errormsg => {
             this.setHighestWorkloadWeekDesc("(nicht");
@@ -717,7 +797,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 endDate: moment().toDate(),
                 type: "datepicker",
                 inputs: $("#dayDateInput"),
-                todayHighlight: false
+                todayHighlight: false,
+                language: this.get("currentLng")
             }));
             this.listenTo(this.get("dayDatepicker"), {
                 "valuesChanged": this.dayDatepickerValueChanged
@@ -766,7 +847,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
 
                 this.refreshDiagramDay(datasets, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareDatasetHourly(datasets), "day", "Datum", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareDatasetHourly(datasets), "day", this.get("dateLabel"), timeSettings, meansOfTransport);
 
             }, errormsg => {
                 this.refreshDiagramDay([]);
@@ -810,7 +891,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                         return moment.utc(date, "DD.MM.YYYY").toDate();
                     }
                 },
-                todayHighlight: false
+                todayHighlight: false,
+                language: this.get("currentLng")
             }));
             this.listenTo(this.get("weekDatepicker"), {
                 "valuesChanged": this.weekDatepickerValueChanged
@@ -857,7 +939,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
 
                 this.refreshDiagramWeek(datasets, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareDatasetHourly(datasets), "week", "Woche", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareDatasetHourly(datasets), "week", this.get("weekLabel"), timeSettings, meansOfTransport);
 
             }, errormsg => {
                 this.refreshDiagramWeek([]);
@@ -894,7 +976,8 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 minViewMode: "years",
                 maxViewMode: "years",
                 inputs: $("#yearDateInput"),
-                format: "yyyy"
+                format: "yyyy",
+                language: this.get("currentLng")
             }));
 
             this.listenTo(this.get("yearDatepicker"), {
@@ -946,7 +1029,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
 
                 this.refreshDiagramYear(datasets, years, meansOfTransport, selector);
-                this.prepareTableContent(this.prepareYearDataset(datasets), "year", "Jahr", timeSettings, meansOfTransport);
+                this.prepareTableContent(this.prepareYearDataset(datasets), "year", this.get("yearLabel"), timeSettings, meansOfTransport);
 
             }, errormsg => {
                 this.refreshDiagramYear([]);
@@ -978,13 +1061,13 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 xAxis: {
                     xAttr: "hour",
                     xAxisTicks: {
-                        unit: " Uhr",
+                        unit: " " + this.get("clockLabel"),
                         values: xAxisTickValues
                     }
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: "Anzahl / 15 Min."
+                    yAxisText: this.get("yAxisTextDay")
                 }
             };
 
@@ -996,7 +1079,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm");
         }, (value, dotData) => {
             // setTooltipValue
-            return dotData.hour + " Uhr: " + this.addThousandPoints(value);
+            return dotData.hour + " " + this.get("clockLabel") + ": " + this.addThousandPoints(value);
         }, emptyDiagramData);
     },
 
@@ -1023,7 +1106,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: "Anzahl / Tag"
+                    yAxisText: this.get("yAxisTextWeek")
                 }
             };
 
@@ -1032,7 +1115,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             const weeknumber = moment(datetime, "YYYY-MM-DD HH:mm:ss").week(),
                 year = moment(datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY");
 
-            return "KW " + weeknumber + " / " + year;
+            return this.get("calendarweek") + " " + weeknumber + " / " + year;
         }, datetime => {
             // callbackRenderTextXAxis
             const objMoment = moment(datetime, "YYYY-MM-DD HH:mm:ss");
@@ -1070,7 +1153,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
                 },
                 yAxis: {
                     yAttr: "count",
-                    yAxisText: "Anzahl / Woche"
+                    yAxisText: this.get("yAxisTextYear")
                 }
             };
 
@@ -1095,7 +1178,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             // use thursday as fixure of the week, as the calendar week is fixated to thursday
             const objMoment = moment(dotData.date, "YYYY-MM-DD HH:mm:ss").add(3, "days");
 
-            return "KW " + objMoment.format("WW") + " / " + objMoment.format("YYYY") + ": " + this.addThousandPoints(value);
+            return this.get("calendarweek") + " " + objMoment.format("WW") + " / " + objMoment.format("YYYY") + ": " + this.addThousandPoints(value);
         }, emptyDiagramData);
     },
 
@@ -1415,7 +1498,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
 
         for (kw = 1; kw <= moment().isoWeeksInYear(); kw++) {
             kw = kw < 10 ? "0" + kw : kw;
-            xAxisTickValues.push("KW" + kw);
+            xAxisTickValues.push(this.get("calendarweek") + kw);
         }
 
         return xAxisTickValues;

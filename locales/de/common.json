@@ -352,7 +352,41 @@
             },
             "gfi": {
                 "themes": {
-                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes."
+                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
+                    "trafficCount": {
+                        "infoLabel": "Info",
+                        "dayLabel": "Tag",
+                        "weekLabel": "Woche",
+                        "yearLabel": "Jahr",
+                        "period": "Zeitraum",
+                        "number": "Anzahl",
+                        "totalSince": "Insgesamt seit",
+                        "sinceBeginningOfTheYear": "Seit Jahresbeginn",
+                        "overThePastYear": "Im Vorjahr",
+                        "onThePreviousDay": "Am Vortag",
+                        "highestDay": "Stärkster Tag im Jahr",
+                        "highestWeek": "Stärkste Woche im Jahr",
+                        "highestMonth": "Stärkster Monat im Jahr",
+                        "dateLabel": "Datum",
+                        "clockLabel": "Uhr",
+                        "tableLabel": "Tabelle",
+                        "notice": "Aufgrund nicht verfügbarer Daten können Lücken im Diagramm und leere Tabellenzellen auftreten.",
+                        "lastupdateLabel": "Letzte Aktualisierung:",
+                        "diagramLabel": "Diagramm",
+                        "calendarweek": "KW",
+                        "infraredsensor": "Infrarotsensor",
+                        "countingstation": "Zählstation",
+                        "carLabel": "KFZ",
+                        "bicycleLabel": "Fahrrad",
+                        "idLabel": "ID:",
+                        "typeLabel": "Art: ",
+                        "meansOfTransportLabel": "Verkehrsmittel: ",
+                        "carsHeaderSuffix": "KFZ abs.",
+                        "trucksHeaderSuffix": "SV-Anteil in %",
+                        "yAxisTextDay": "Anzahl / 15 Min.",
+                        "yAxisTextWeek": "Anzahl / Tag",
+                        "yAxisTextYear": "Anzahl / Woche"
+                    }
                 }
             },
             "viomRouting": {

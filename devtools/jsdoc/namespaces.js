@@ -913,7 +913,7 @@
 /**
  * @namespace SensorThingsMqtt
  * @memberof Core.ModelList.Layer
- * @description SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol.
+ * @description SensorThingsMqtt is a software layer to standardize the handling of mqtt v3.1, v3.1.1 and v5.0 for SensorThingsApi.
  */
 
 /**

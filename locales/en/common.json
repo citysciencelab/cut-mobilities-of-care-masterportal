@@ -343,7 +343,41 @@
             },
             "gfi": {
                 "themes": {
-                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service."
+                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
+                    "trafficCount": {
+                        "infoLabel": "Info",
+                        "dayLabel": "Day",
+                        "weekLabel": "Week",
+                        "yearLabel": "Year",
+                        "period": "Period of time",
+                        "number": "Number",
+                        "totalSince": "Total since",
+                        "sinceBeginningOfTheYear": "Since beginning of the year",
+                        "overThePastYear": "In the previous year",
+                        "onThePreviousDay": "On the previous day",
+                        "highestDay": "Day with highest number in the year",
+                        "highestWeek": "Week with highest number in the year",
+                        "highestMonth": "Month with highest number in the year",
+                        "dateLabel": "Date",
+                        "clockLabel": "",
+                        "tableLabel": "Table",
+                        "notice": "Due to unavailable data, gaps in the chart and empty table cells may occur.",
+                        "lastupdateLabel": "Last update:",
+                        "diagramLabel": "Diagram",
+                        "calendarweek": "CW",
+                        "infraredsensor": "Infrared sensor",
+                        "countingstation": "Counting station",
+                        "carLabel": "Car",
+                        "bicycleLabel": "Bicycle",
+                        "idLabel": "ID:",
+                        "typeLabel": "Type:",
+                        "meansOfTransportLabel": "Means of transportation:",
+                        "carsHeaderSuffix": "The count of cars",
+                        "trucksHeaderSuffix": "Trucks proportion in %",
+                        "yAxisTextDay": "Count / 15 Min.",
+                        "yAxisTextWeek": "Count / Day",
+                        "yAxisTextYear": "Count / Week"
+                    }
                 }
             },
             "viomRouting": {

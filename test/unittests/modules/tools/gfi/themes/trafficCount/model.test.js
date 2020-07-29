@@ -6,6 +6,7 @@ describe("tools/gfi/themes/trafficCount", function () {
 
     before(function () {
         model = new Model();
+        model.set("calendarweek", "KW");
     });
     describe("onIsVisibleEvent should set internal variable", function () {
         it("should set isCreated to false", function () {
