@@ -41,12 +41,11 @@ const StyleVTModel = Tool.extend(/** @lends StyleVTModel.prototype */{
      * @property {VtLayer} [model=null] Layer model to be styled
      * @property {styleableLayer[]} [vectorTileLayerList=[]] List of Layers that can be used for restyling
      * @property {string} selectedLayerID currently selected layer ID
-     * @property {styleableLayer} styleableLayer currently chosen styleable layer
-     * @property {string} introText contains current localization for key
-     * @property {string} noStyleableLayers contains current localization for key
-     * @property {string} theme contains current localization for key
-     * @property {string} chooseTheme contains current localization for key
-     * @property {string} style contains current localization for key
+     * @property {string} [introText=""] contains current localization for key
+     * @property {string} [noStyleableLayers=""] contains current localization for key
+     * @property {string} [theme=""] contains current localization for key
+     * @property {string} [chooseTheme=""] contains current localization for key
+     * @property {string} [style=""] contains current localization for key
      * @listens Core.ModelList#RadioTriggerModelListUpdatedSelectedLayerList
      * @listens i18next#RadioTriggerLanguageChanged
      * @listens StyleVT#RadioTriggerStyleVTOpen
