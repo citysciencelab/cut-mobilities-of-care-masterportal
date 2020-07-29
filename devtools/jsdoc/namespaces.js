@@ -830,6 +830,11 @@
  */
 
 /**
+ * @namespace SelectFeatures
+ * @description Module that allows selecting features cross-wfs
+ */
+
+/**
  * @namespace FeatureLister
  * @description foobar
  */

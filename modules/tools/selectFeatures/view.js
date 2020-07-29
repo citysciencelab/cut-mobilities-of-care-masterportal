@@ -9,27 +9,28 @@ const SelectFeaturesView = Backbone.View.extend(/** @lends SelectFeaturesView.pr
      * @class SelectFeaturesView
      * @extends Backbone.View
      * @memberof Tools.SelectFeatures
-     * @listens Tools.SelectFeaturesModel#updatedSelection
+     * @listens Tools.SelectFeatures#changeIsActive
+     * @listens Tools.SelectFeatures#changeCurrentLng
+     * @listens Tools.SelectFeatures#updatedSelection
+     * @listens Core#RadioRequestMapGetMap
      * @constructs
      */
     initialize: function () {
-        const channel = Radio.channel(this.model);
-
-        channel.on({
-            "updatedSelection": () => this.render(this.model)
+        Radio.channel(this.model).on({
+            "updatedSelection": this.render
         }, this);
 
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "change:currentLng": function () {
-                if (this.model.get("isActive") === true) {
-                    this.render(this.model, true);
+            "change:currentLng": () => {
+                if (this.model.get("isActive")) {
+                    this.render();
                 }
             }
         });
 
-        if (this.model.get("isActive") === true) {
-            this.render(this.model, true);
+        if (this.model.get("isActive")) {
+            this.render();
         }
     },
 
@@ -38,13 +39,12 @@ const SelectFeaturesView = Backbone.View.extend(/** @lends SelectFeaturesView.pr
     /**
      * Renders the SelectFeatures tool contents.
      * @param {Backbone.Model} model SelectFeaturesModel instance
-     * @param {Boolean} [isActive=model.get("isActive")] whether tool is open/closed
      * @returns {Backbone.View} SelectFeaturesView
      */
-    render: function (model, isActive = model.get("isActive")) {
-        if (isActive && this.model.get("renderToWindow")) {
+    render: function () {
+        if (this.model.get("isActive") && this.model.get("renderToWindow")) {
             this.setElement(document.getElementsByClassName("win-body")[0]);
-            this.$el.html(this.template(model.toJSON()));
+            this.$el.html(this.template(this.model.toJSON()));
             this.delegateEvents();
         }
         else {

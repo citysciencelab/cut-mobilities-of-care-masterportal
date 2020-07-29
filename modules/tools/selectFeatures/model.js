@@ -6,6 +6,7 @@ import {never} from "ol/events/condition";
 import Tool from "../../core/modelList/tool/model";
 
 /**
+ * Feature zipped with its properties prepared for display (aka beautified).
  * @typedef {object} featureWithRenderInformation
  * @property {ol:module/Feature} feature that is supposed to get an entry
  * @property {Array.<string[]>} properties [key, value] pairs prepared for tabular display
@@ -19,7 +20,6 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
         selectedFeaturesWithRenderInformation: [],
         select: undefined,
         dragBox: undefined,
-        renderToWindow: true,
         // display strings
         propertylessFeature: "",
         noFeatureChosen: "",
@@ -32,9 +32,22 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
      * @extends Tool
      * @memberof Tools.SelectFeatures
      * @fires Tools.SelectFeaturesModel#updatedSelection
+     * @fires Tools.SelectFeatures#changeIsActive
+     * @fires Core#RadioTriggerMapAddInteraction
+     * @fires Core#RadioTriggerMapRemoveInteraction
      * @listens Tools.SelectFeatures#RadioRequestGetSelectedFeatures
+     * @listens Tools.SelectFeatures#changeIsActive
+     * @listens Core#RadioRequestUtilGetIgnoredKeys
      * @listens i18next#RadioTriggerLanguageChanged
      * @constructs
+     * @property {module:ol/Collection} selectedFeatures collection of selected features
+     * @property {featureWithRenderInformation[]} selectedFeaturesWithRenderInformation render-ready feature zip
+     * @property {module:ol/interaction/Select} select select interaction for deselection behaviour
+     * @property {module:ol/interaction/DragBox} dragBox drag box interaction to select features
+     * @property {string} [propertylessFeature=""] current display translation
+     * @property {string} [noFeatureChosen=""] current display translation
+     * @property {string} [zoomToFeature=""] current display translation
+     * @property {string} [currentLng=""] current display language
      */
     initialize: function () {
         this.superInitialize();
@@ -64,11 +77,13 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
      */
     createInteractions: function () {
         const select = new Select({
-                toggleCondition: never
+                // select works indirectly via DragBox results - never updates itself
+                addCondition: never,
+                removeCondition: never,
+                toggleCondition: never,
+                condition: never
             }),
-            dragBox = new DragBox({
-                condition: platformModifierKeyOnly
-            });
+            dragBox = new DragBox({condition: platformModifierKeyOnly});
 
         this.setSelectedFeatures(select.getFeatures());
 
@@ -142,16 +157,6 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
     clearFeatures: function () {
         this.get("selectedFeatures").clear();
         this.setSelectedFeaturesWithRenderInformation([]);
-    },
-
-    /**
-     * If select changes, check if empty - if so, clear.
-     * @returns {void}
-     */
-    selectChange: function () {
-        if (this.get("selectedFeatures").getLength() === 0) {
-            this.clearFeatures();
-        }
     },
 
     /**
