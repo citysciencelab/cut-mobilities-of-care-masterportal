@@ -36,7 +36,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             "languageChanged": this.translate
         });
 
-        this.createLayers(config.layers, config.epsg);
+        this.createLayers(config);
     },
     /**
      * Creates a basic GeoJSON structure and adds the features given by the user from the URL to it.
@@ -92,45 +92,46 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
     },
     /**
      * Creates the GeoJSON layers depending on the configuration and the URL-Parameters.
-     * TODO: Testing of this function!
      *
-     * @param {Object[]} configLayers The layer configurations for the feature layers.
-     * @param {Number} epsg The EPSG-Code in which the features are coded.
+     * @param {Object} config The configuration of this module from the config.js.
+     * @param {Object[]} config.layers The layer configurations for the feature layers.
+     * @param {Number} config.epsg The EPSG-Code in which the features are coded.
+     * @param {String} config.zoomTo The Id of the layer on which features the extent is set on if not undefined.
      * @returns {void}
      */
-    createLayers: function (configLayers, epsg) {
+    createLayers: function ({layers, epsg, zoomTo}) {
         const gfiAttributes = {
                 featureLabel: this.get("featureLabel"),
                 coordLabel: this.get("coordLabel"),
                 typeLabel: this.get("typeLabel")
             },
-            layers = Radio.request("ParametricURL", "getFeatureViaURL"),
+            urlLayers = Radio.request("ParametricURL", "getFeatureViaURL"),
             treeType = Radio.request("Parser", "getTreeType");
         let features,
             geoJSON,
             geometryType,
             layerId,
-            layerPosition,
-            parentId = "tree";
+            parentId = "tree",
+            pos;
 
         if (treeType === "custom") {
             Radio.trigger("Parser", "addFolder", this.get("folderName"), "featureViaURLFolder", "Overlayer", 0, true, "modules.featureViaURL.folderName");
             parentId = "featureViaURLFolder";
         }
 
-        layers.forEach(layer => {
+        urlLayers.forEach(layer => {
             layerId = layer.layerId;
             features = layer.features;
-            layerPosition = configLayers.findIndex(element => element.id === layerId);
-            if (layerPosition === -1) {
+            pos = layers.findIndex(element => element.id === layerId);
+            if (pos === -1) {
                 console.error(i18next.t("common:modules.featureViaURL.messages.layerNotFound", {layerId}));
                 return;
             }
-            if (!configLayers[layerPosition].name) {
+            if (!layers[pos].name) {
                 console.error(i18next.t("common:modules.featureViaURL.messages.noNameDefined", {layerId}));
                 return;
             }
-            geometryType = configLayers[layerPosition].geometryType;
+            geometryType = layers[pos].geometryType;
             if (geometryType !== "LineString" && geometryType !== "Point" && geometryType !== "Polygon") {
                 console.error(i18next.t("common:modules.featureViaURL.messages.geometryNotSupported"), {layerId, geometryType});
                 return;
@@ -144,8 +145,30 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded"));
             }
             this.get("layerIds").push(layerId);
-            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", configLayers[layerPosition].name, configLayers[layerPosition].id, geoJSON, configLayers[layerPosition].styleId, parentId, gfiAttributes);
+            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
+            if (typeof zoomTo !== "undefined" && zoomTo === layerId) {
+                Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(layerId), layerId);
+            }
         });
+    },
+    /**
+     * Gets the layer for the given layerId and extracts the Ids of the features.
+     *
+     * @param {String} layerId Unique Id of the layer in which the features reside.
+     * @returns {String[]} Array of FeatureIds.
+     */
+    getFeatureIds: function (layerId) {
+        const featureArray = [],
+            layer = Radio.request("Map", "getLayers").getArray().find(l => l.get("id") === layerId);
+
+        if (typeof layer === "undefined") {
+            console.warn(i18next.t("common:modules.featureViaURL.messages.layerNotFound"));
+            return featureArray;
+        }
+        layer.getSource().getFeatures().forEach(feature => {
+            featureArray.push(feature.getId());
+        });
+        return featureArray;
     },
     /**
      * Translates the values of this module, namely "coordLabel", "featureLabel", "folderName" and "typeLabel"
