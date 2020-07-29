@@ -2,11 +2,16 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
+import ScaleSwitcher from "../modules/tools/scale/store/indexScaleSwitcher";
+import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
+import KmlImport from "../modules/tools/kmlImport/store/indexKmlImport";
 import Footer from "../modules/footer/store/indexFooter";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 import Legend from "../modules/legend/store/indexLegend";
 
+import Gfi from "../modules/tools/gfi/store/indexGfi";
+import toolsActions from "../modules/tools/actionsTools";
 import getters from "./getters";
 import mutations from "./mutations";
 import state from "./state";
@@ -26,7 +31,15 @@ const store = new Vuex.Store({
         Legend,
         Footer,
         Tools: {
-            ...toolsModule
+            ...toolsModule,
+            namespaced: true,
+            modules: {
+                Gfi,
+                KmlImport,
+                ScaleSwitcher,
+                SupplyCoord
+            },
+            actions: toolsActions
         },
         controls: {
             ...controlsModule
