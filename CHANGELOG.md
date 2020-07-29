@@ -1,6 +1,6 @@
 # Changelog Masterportal
  Alle wichtigen Änderungen in diesem Projekt werden in dieser Datei abgelegt.
- 
+
  Es wird die [Semantische Versionierung](https://semver.org/spec/v2.0.0.html) verwendet.
 
 
@@ -15,6 +15,7 @@
 - Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
 - Die “gfiAttribute”-keys können jetzt auch Objektpfade sein, analog zum neuen Styling.
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
+- Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 
 ### Changed
 - Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von VUE. Weiterhin heißt es fortan "Datei-Import".
@@ -70,7 +71,7 @@
 ## v2.5.2 - 2020-06-09
 ### Fixed
 - Die Portal-Konfiguration "singleBaselayer": "true" führt jetzt dazu, dass immer nur ein Hauptlayer ausgewählt werden kann.
-- Das Label der Version im Footer wird jetzt korrekt übersetzt. 
+- Das Label der Version im Footer wird jetzt korrekt übersetzt.
 - Legenden, die den gleichen Namen und das gleiche Image haben, werden nur noch einmal für jeden Layer dargestellt.
 - In der Layerinformation wird, wenn keine Metadaten geladen wurden, der Link für "weitere Metadaten" nicht mehr dargestellt.
 - Der Infotext für Checkboxen wird nun beim Start nicht mehr ausgeklappt und hat nun den richtigen Style.
