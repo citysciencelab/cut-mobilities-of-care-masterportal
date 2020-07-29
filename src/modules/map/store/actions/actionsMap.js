@@ -1,6 +1,7 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
 import requestGfi from "../../../../api/wmsGetFeatureInfo";
+import getFeatureInfoUrls from "./getFeatureInfoUrls";
 
 let unsubscribes = [],
     loopId = null;
@@ -46,7 +47,7 @@ const actions = {
         commit("setLayerList", map.getLayers().getArray());
 
         // update state once initially to get initial settings
-        dispatch("updateViewState");
+        // dispatch("updateViewState");
 
         // hack: see comment on function
         loopLayerLoader(commit, map);
@@ -66,6 +67,7 @@ const actions = {
             map.on("click", evt => dispatch("updateClick", evt))
         ];
     },
+
     /**
      * @param {function} commit commit function
      * @param {MapBrowserEvent} evt - Moveend event
@@ -175,10 +177,11 @@ const actions = {
             });
         }));
 
-        commit("setGfiFeatures", {
-            coordinate: clickCoord,
-            features: gfiFeaturesAtPixel.concat(...gfiFeatures)
-        });
+
+        // only commit if features found
+        if (gfiFeaturesAtPixel.concat(...gfiFeatures).length > 0) {
+            commit("setGfiFeatures", gfiFeaturesAtPixel.concat(...gfiFeatures));
+        }
     },
 
     /**
