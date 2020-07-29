@@ -5,18 +5,21 @@ import sinon from "sinon";
 describe("featureViaURL", function () {
     const consoleErrorSpy = sinon.spy(),
         consoleWarnSpy = sinon.spy(),
-        radioSpy = sinon.spy();
+        radioRequestSpy = sinon.spy(),
+        radioTriggerSpy = sinon.spy();
 
     beforeEach(function () {
         sinon.stub(console, "error").callsFake(consoleErrorSpy);
         sinon.stub(console, "warn").callsFake(consoleWarnSpy);
-        sinon.stub(Radio, "trigger").callsFake(radioSpy);
+        sinon.stub(Radio, "request").callsFake(radioRequestSpy);
+        sinon.stub(Radio, "trigger").callsFake(radioTriggerSpy);
     });
     afterEach(function () {
         sinon.restore();
         consoleErrorSpy.resetHistory();
         consoleWarnSpy.resetHistory();
-        radioSpy.resetHistory();
+        radioRequestSpy.resetHistory();
+        radioTriggerSpy.resetHistory();
     });
     describe("createGeoJSON", function () {
         const {createGeoJSON} = FeatureViaURL.prototype,

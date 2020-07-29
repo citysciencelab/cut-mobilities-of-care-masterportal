@@ -1,10 +1,11 @@
 const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/{
     defaults: {
+        layerIds: [],
         // Translations
-        coordLabel: "Koordinaten",
-        featureLabel: "Beschriftung",
+        coordLabel: "",
+        featureLabel: "",
         folderName: "",
-        typeLabel: "Geometrietyp"
+        typeLabel: ""
     },
     /**
      * @class FeatureViaURL
@@ -13,12 +14,13 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      * @memberof FeatureViaURL
      * @param {object} config The configuration of the module from the config.js.
      * @constructs
+     * @property {String[]} [layerIds=[]] The unique IDs of the GeoJSON layers which are added to the map.
      * @property {String} [coordLabel="Koordinaten"] The label for the coordinates of the features.
      * @property {String} [featureLabel="Beschriftung"] The label for the features.
      * @property {String} [folderName=""] The name of the folder in which the GeoJSON-Layers reside in the layertree.
      * @property {String} [typeLabel="Geometrietyp"] The label for the type of the features.
      * @fires Alerting#RadioTriggerAlertAlert
-     * @fires Core#RadioTriggerMapRemoveLayer
+     * @fires Core#RadioRequestMapGetLayers
      * @fires Core#RadioRequestParametricURLGetFeatureViaURL
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @fires Core.ConfigLoader#RadioTriggerParserAddFolder
@@ -141,6 +143,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             if (geoJSON.features.length === 0) {
                 Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded"));
             }
+            this.get("layerIds").push(layerId);
             Radio.trigger("AddGeoJSON", "addGeoJsonToMap", configLayers[layerPosition].name, configLayers[layerPosition].id, geoJSON, configLayers[layerPosition].styleId, parentId, gfiAttributes);
         });
     },
@@ -155,6 +158,24 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
         this.set("featureLabel", i18next.t("common:modules.featureViaURL.featureLabel"));
         this.set("folderName", i18next.t("common:modules.featureViaURL.coordLabel"));
         this.set("typeLabel", i18next.t("common:modules.featureViaURL.typeLabel"));
+        this.updateLayers();
+    },
+    /**
+     * Updates the labels for the features for all layers.
+     *
+     * @returns {void}
+     */
+    updateLayers: function () {
+        let layer;
+
+        this.get("layerIds").forEach(id => {
+            layer = Radio.request("Map", "getLayers").getArray().find(l => l.get("id") === id);
+            if (typeof layer !== "undefined") {
+                layer.get("gfiAttributes").featureLabel = this.get("featureLabel");
+                layer.get("gfiAttributes").coordLabel = this.get("coordLabel");
+                layer.get("gfiAttributes").typeLabel = this.get("typeLabel");
+            }
+        });
     }
 });
 
