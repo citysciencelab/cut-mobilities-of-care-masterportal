@@ -1,6 +1,30 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import actions from "../../../store/actions/actionsMap.js";
+import getFeatureInfoUrls from "../../../store/actions/getFeatureInfoUrls";
+import Map from "ol/Map";
+import TileLayer from "ol/layer/tile";
+import TileWMS from "ol/source/TileWMS";
+import View from "ol/View";
+
+// get data from https://openlayers.org/en/latest/examples/getfeatureinfo-tile.html
+const wmsSource = new TileWMS({
+        url: "https://ahocevar.com/geoserver/wms",
+        params: {"LAYERS": "ne:ne", "TILED": true},
+        serverType: "geoserver",
+        crossOrigin: "anonymous"
+    }),
+    wmsLayer = new TileLayer({
+        source: wmsSource,
+        INFO_FORMAT: "text/html"
+    }),
+    map = new Map({
+        layers: [wmsLayer],
+        view: new View({
+            center: [0, 0],
+            zoom: 1
+        })
+    });
 
 describe("actionsMap", function () {
     describe("updateClick: Listener for click on the map", () => {
@@ -85,11 +109,54 @@ describe("actionsMap", function () {
                     projection: sinon.spy(),
                     gfiFeaturesAtPixel: []
                 },
-                commit = sinon.spy();
+                view = {
+                    getResolution: sinon.stub(),
+                    getProjection: sinon.stub()
+                },
+                layers = {
+                    getArray: function () {
+                        return [];
+                    }
+                },
+                rootGetters = {
+                    "Tools/Gfi/isActive": true
+                },
+                commit = sinon.spy(),
+                obj = {
+                    coordinate: [4, 56],
+                    pixel: [12, 99],
+                    map: {
+                        getView: function () {
+                            return view;
+                        },
+                        getLayers: function () {
+                            return layers;
+                        },
+                        getFeaturesAtPixel: sinon.stub()
+                    }
+                };
 
-            await actions.collectGfiFeatures({commit, getters});
-            expect(commit.calledOnce).to.be.true;
-            expect(commit.args[0]).to.include.members(["setGfiFeatures"]);
+            actions.updateClick({commit, getters, rootGetters}, obj);
+            expect(commit.calledThrice).to.be.true;
+            expect(commit.args[2]).to.include.members(["setFeaturesAtCoordinate"]);
+        });
+    });
+
+    describe("getFeatureInfoUrls", () => {
+        it("returns an array with urls for the GFI request for all visible wms layer", () => {
+            const urls = getFeatureInfoUrls(map, [4, 56]);
+
+            expect(urls).to.be.an("array");
+            expect(urls).to.have.lengthOf(1);
+            expect(urls[0]).to.equal("https://ahocevar.com/geoserver/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&FORMAT=image%2Fpng&TRANSPARENT=true&QUERY_LAYERS=ne%3Ane&LAYERS=ne%3Ane&TILED=true&I=0&J=255&WIDTH=256&HEIGHT=256&CRS=EPSG%3A3857&STYLES=&BBOX=0%2C0%2C20037508.342789244%2C20037508.342789244");
+        });
+
+        it("returns an empty array if no wms layer is visible", () => {
+            wmsLayer.setVisible(false);
+            const urls = getFeatureInfoUrls(map, [4, 56]);
+
+            expect(urls).to.be.an("array");
+            expect(urls).to.be.empty;
         });
     });
 });
