@@ -148,8 +148,8 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
         });
     },
     /**
-     * Translates the values of this module, namely "coordLabel", "featureLabel", "folderName" and "typeLabel".
-     * NOTE: The three layer labels are currently not updated when changing a language. To accomplish this the layer will have to be removed and readded.
+     * Translates the values of this module, namely "coordLabel", "featureLabel", "folderName" and "typeLabel"
+     * and updates the gfiAttributes on the added layers.
      *
      * @returns {void}
      */
@@ -162,6 +162,8 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
     },
     /**
      * Updates the labels for the features for all layers.
+     * NOTE: When the gfi-window is still open, the values are not yet translated.
+     * It needs to be reopened so that the changes take effect.
      *
      * @returns {void}
      */
