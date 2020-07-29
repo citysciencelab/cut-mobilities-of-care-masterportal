@@ -4,6 +4,7 @@ import VectorSynchronizer from "olcs/VectorSynchronizer.js";
 import FixedOverlaySynchronizer from "./3dUtils/fixedOverlaySynchronizer.js";
 import WMSRasterSynchronizer from "./3dUtils/wmsRasterSynchronizer.js";
 import {transform, get} from "ol/proj.js";
+import Store from "../../src/app-store";
 
 const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
     defaults: {
@@ -86,6 +87,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
         }
         map3d.setEnabled(true);
         Radio.trigger("Map", "change", "3D");
+        Store.commit("Map/setMapMode", 1);
     },
 
     /**
@@ -173,6 +175,8 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
                     transformedPickedPosition.push(cartographicPickedPosition.height);
                 }
             }
+
+            Store.dispatch("Map/updateClick", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: Radio.request("Map", "getMap")});
             Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: Radio.request("Map", "getMap")});
         }
     },
@@ -207,6 +211,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
                 }
                 Radio.trigger("Alert", "alert:remove");
                 Radio.trigger("Map", "change", "2D");
+                Store.commit("Map/setMapMode", 0);
             });
         }
     },
