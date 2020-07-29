@@ -31,14 +31,6 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
      * @class SelectFeaturesModel
      * @extends Tool
      * @memberof Tools.SelectFeatures
-     * @fires Tools.SelectFeaturesModel#updatedSelection
-     * @fires Tools.SelectFeatures#changeIsActive
-     * @fires Core#RadioTriggerMapAddInteraction
-     * @fires Core#RadioTriggerMapRemoveInteraction
-     * @listens Tools.SelectFeatures#RadioRequestGetSelectedFeatures
-     * @listens Tools.SelectFeatures#changeIsActive
-     * @listens Core#RadioRequestUtilGetIgnoredKeys
-     * @listens i18next#RadioTriggerLanguageChanged
      * @constructs
      * @property {module:ol/Collection} selectedFeatures collection of selected features
      * @property {featureWithRenderInformation[]} selectedFeaturesWithRenderInformation render-ready feature zip
@@ -48,6 +40,14 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
      * @property {string} [noFeatureChosen=""] current display translation
      * @property {string} [zoomToFeature=""] current display translation
      * @property {string} [currentLng=""] current display language
+     * @fires Tools.SelectFeaturesModel#updatedSelection
+     * @fires Tools.SelectFeatures#changeIsActive
+     * @fires Core#RadioTriggerMapAddInteraction
+     * @fires Core#RadioTriggerMapRemoveInteraction
+     * @listens Tools.SelectFeatures#RadioRequestGetSelectedFeatures
+     * @listens Tools.SelectFeatures#changeIsActive
+     * @listens Core#RadioRequestUtilGetIgnoredKeys
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         this.superInitialize();
@@ -248,7 +248,7 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
     },
 
     /**
-     * Prepares a
+     * Prepares a key for display.
      * e.g. "very_important_field" becomes "Very Important Field"
      * @param {string} str key to beautify
      * @returns {string} beautified key

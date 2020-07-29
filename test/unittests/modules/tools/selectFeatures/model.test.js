@@ -9,7 +9,7 @@ const {
     isValidValue
 } = SelectFeaturesModel.prototype;
 
-describe.only("tools/selectFeatures/model", function () {
+describe("tools/selectFeatures/model", function () {
     describe("translateGFI", function () {
         const properties = {
                 "warp_speed": "10",
