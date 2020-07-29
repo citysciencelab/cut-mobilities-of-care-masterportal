@@ -3,16 +3,22 @@ import {expect} from "chai";
 import sinon from "sinon";
 
 describe("featureViaURL", function () {
-    const spy = sinon.spy();
+    const consoleErrorSpy = sinon.spy(),
+        consoleWarnSpy = sinon.spy(),
+        radioSpy = sinon.spy();
 
     beforeEach(function () {
-        sinon.stub(Radio, "trigger").callsFake(spy);
+        sinon.stub(console, "error").callsFake(consoleErrorSpy);
+        sinon.stub(console, "warn").callsFake(consoleWarnSpy);
+        sinon.stub(Radio, "trigger").callsFake(radioSpy);
     });
     afterEach(function () {
         sinon.restore();
-        spy.resetHistory();
+        consoleErrorSpy.resetHistory();
+        consoleWarnSpy.resetHistory();
+        radioSpy.resetHistory();
     });
-    describe("createGeoJSON", function () {
+    describe.only("createGeoJSON", function () {
         const {createGeoJSON} = FeatureViaURL.prototype,
             geometryType = "Point",
             regExp = /\d+/;
@@ -48,31 +54,33 @@ describe("featureViaURL", function () {
         it("should trigger an alert if no coordinates were defined for a feature and the feature shouldn't be added to the Object", function () {
             features = [{label: "TestPunktEins"}, {coordinates: [10.5, 53.5], label: "TestPunktZwei"}];
             geoJSON = createGeoJSON(undefined, features, geometryType);
-            expect(spy.calledOnce).to.be.true;
-            expect(spy.firstCall.args).to.eql(["Alert", "alert", "FeatureViaURL: Not all features from the URL could be parsed."]);
+
+            expect(consoleWarnSpy.calledOnce).to.be.true;
+            expect(consoleWarnSpy.firstCall.args).to.eql([i18next.t("common:modules.featureViaURL.messages.featureParsing")]);
             expect(geoJSON.features.length).to.equal(1);
         });
         it("should trigger an alert if the coordinates of a feature are not an Array and the feature shouldn't be added to the Object", function () {
             features = [{coordinates: {x: 10, y: 53.5}, label: "TestPunktEins"}, {coordinates: [10.5, 53.5], label: "TestPunktZwei"}];
             geoJSON = createGeoJSON(undefined, features, geometryType);
 
-            expect(spy.calledOnce).to.be.true;
-            expect(spy.firstCall.calledWith("Alert", "alert", "FeatureViaURL: Not all features from the URL could be parsed.")).to.be.true;
+            expect(consoleWarnSpy.calledOnce).to.be.true;
+            expect(consoleWarnSpy.firstCall.args).to.eql([i18next.t("common:modules.featureViaURL.messages.featureParsing")]);
             expect(geoJSON.features.length).to.equal(1);
         });
         it("should trigger an alert if the coordinates of a feature is just an empty Array and the feature shouldn't be added to the Object", function () {
             features = [{coordinates: [], label: "TestPunktEins"}, {coordinates: [10.5, 53.5], label: "TestPunktZwei"}];
             geoJSON = createGeoJSON(undefined, features, geometryType);
-            expect(spy.calledOnce).to.be.true;
-            expect(spy.firstCall.calledWith("Alert", "alert", "FeatureViaURL: Not all features from the URL could be parsed.")).to.be.true;
+
+            expect(consoleWarnSpy.calledOnce).to.be.true;
+            expect(consoleWarnSpy.firstCall.args).to.eql([i18next.t("common:modules.featureViaURL.messages.featureParsing")]);
             expect(geoJSON.features.length).to.equal(1);
         });
         it("should trigger an alert if no label was defined for a feature and the feature shouldn't be added to the Object", function () {
             features = [{coordinates: [10, 53.5]}, {coordinates: [10.5, 53.5], label: "TestPunktZwei"}];
             geoJSON = createGeoJSON(undefined, features, geometryType);
 
-            expect(spy.calledOnce).to.be.true;
-            expect(spy.firstCall.calledWith("Alert", "alert", "FeatureViaURL: Not all features from the URL could be parsed.")).to.be.true;
+            expect(consoleWarnSpy.calledOnce).to.be.true;
+            expect(consoleWarnSpy.firstCall.args).to.eql([i18next.t("common:modules.featureViaURL.messages.featureParsing")]);
             expect(geoJSON.features.length).to.equal(1);
         });
     });
