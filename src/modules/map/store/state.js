@@ -6,7 +6,7 @@ import {MapMode} from "./enums";
  * @typedef {object} MapState
  * @property {?module:ol/Map} map currently active map instance
  * @property {?module:ol/layer[]} layerList - all layers of the map
- * @property {object[]} gfiFeatures - features for the gfi
+ * @property {?object[]} gfiFeatures - features for the gfi
  * @property {?number} initialZoomLevel initial zoom level
  * @property {?number} zoomLevel active zoom level
  * @property {?number} maxZoomLevel maximum zoom level
