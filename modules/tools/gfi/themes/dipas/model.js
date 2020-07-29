@@ -2,7 +2,7 @@ import Theme from "../model";
 
 const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
     defaults: {
-        iconPath: "http://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png",
+        iconPath: "",
         gfiAttributesDipas: {
             "Thema": "",
             "name": "",
@@ -39,9 +39,9 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
         const gfiContent = this.get("gfiContent"),
             gfiAttributes = this.get("gfiAttributes");
 
-        Object.keys(gfiAttributes).forEach(function (value) {
+        Object.keys(gfiAttributes).forEach(value => {
             this.get("gfiAttributesDipas")[value] = gfiContent[0][gfiAttributes[value]] || value;
-        }, this);
+        });
     },
 
     /**
@@ -53,7 +53,7 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
     getIconPath: function (value) {
         const styleModel = Radio.request("StyleList", "returnModelById", this.get("themeId")),
             isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false,
-            iconPath = this.get("iconPath");
+            iconPath = this.get("gfiParams")?.iconPath ? this.get("gfiParams").iconPath : this.get("iconPath");
 
         let valueStyle;
 
