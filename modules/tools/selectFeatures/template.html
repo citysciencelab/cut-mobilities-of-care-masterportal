@@ -17,7 +17,9 @@
                 <p><%=propertylessFeature%></p>
             <%}%>
             <a href="#" class="select-features-zoom-link" id="<%=index%>-selectFeatures-feature"><%=zoomToFeature%></a>
-            <hr />
+            <%if (index !== selectedFeaturesWithRenderInformation.length - 1) {%>
+                <hr />
+            <%}%>
         <%});%>
     </div>
 <%} else {%>
