@@ -14,7 +14,10 @@ import {MapMode} from "./enums";
  * @property {?number} resolution active resolution (changes with zoom level)
  * @property {?number} maxResolution maximum resolution
  * @property {?number} minResolution minimum resolution
- * @property {?[number, number]} mouseCoord last mouse position
+ * @property {?[number, number]} clickCoord - the coordinate where the mouse click event triggered
+ * @property {?[number, number]} clickPixel - the pixel where the mouse click event triggered relative to the viewport
+ * @property {?[number, number]} clickPixel - the pixel where the mouse click event triggered relative to the viewport
+ * @property {?Object[]} featuresAtCoordinate - features at the click coordinate
  * @property {?[number, number]} initialCenter initial center coordinate
  * @property {?[number, number]} center coordinate
  * @property {?[number, number, number, number]} bbox current bounding box
@@ -40,6 +43,9 @@ const state = {
     scales: null,
     initialCenter: null,
     center: null,
+    clickCoord: null,
+    clickPixel: null,
+    featuresAtCoordinate: null,
     mouseCoord: null,
     bbox: null,
     projection: null,

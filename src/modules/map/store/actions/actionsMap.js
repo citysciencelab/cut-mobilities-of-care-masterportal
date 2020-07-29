@@ -1,5 +1,6 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
+import getFeatureInfoUrls from "./getFeatureInfoUrls";
 
 let unsubscribes = [],
     loopId = null;
@@ -44,7 +45,7 @@ const actions = {
         commit("setMap", map);
 
         // update state once initially to get initial settings
-        dispatch("updateViewState");
+        // dispatch("updateViewState");
 
         // hack: see comment on function
         loopLayerLoader(commit, map);
@@ -59,8 +60,9 @@ const actions = {
 
         // register listeners with state update functions
         unsubscribes = [
-            map.on("moveend", () => dispatch("updateViewState")),
-            map.on("pointermove", e => dispatch("updatePointer", e))
+            map.on("moveend", evt => dispatch("updateViewState", evt)),
+            map.on("pointermove", evt => dispatch("updatePointer", evt)),
+            map.on("click", evt => dispatch("updateClick", evt))
         ];
     },
     /**
@@ -69,8 +71,8 @@ const actions = {
      * @param {number} dpi needed to calculate scale
      * @returns {function} update function for state parts to update onmoveend
      */
-    updateViewState ({commit, getters, rootGetters}) {
-        const {map} = getters,
+    updateViewState ({commit, rootGetters}, evt) {
+        const map = evt.map,
             mapView = map.getView(),
             {dpi} = rootGetters;
 
@@ -95,6 +97,41 @@ const actions = {
             return;
         }
         commit("setMouseCoord", evt.coordinate);
+    },
+
+    /**
+     * Updates the click coordinate and the related pixel depending on the map mode.
+     * If Gfi Tool is active, the features of this coordinate/pixel are set.
+     * @param {MapBrowserEvent} evt - Click event in 2D, fake click event in 3D
+     * @returns {void}
+     */
+    updateClick ({getters, commit, rootGetters}, evt) {
+        const {mapMode} = getters;
+
+        // MODE_2D
+        if (mapMode === 0) {
+            commit("setClickCoord", evt.coordinate);
+            commit("setClickPixel", evt.pixel);
+        }
+        // MODE_3D
+        else {
+            commit("setClickCoord", evt.pickedPosition);
+            commit("setClickPixel", [evt.position.x, evt.position.y]);
+        }
+
+        if (rootGetters["Tools/Gfi/isActive"]) {
+            const {clickCoord, clickPixel} = getters,
+                map = evt.map,
+                featureInfoUrls = getFeatureInfoUrls(map, clickCoord),
+                featuresAtPixel = map.getFeaturesAtPixel(clickPixel);
+
+            // wms api aufruf mit getFeatureInfoUrls
+            // anschließen concat featuresAtPixel und wms features
+            // wenn alle durch sind, gibt es ein commit an "featuresAtCoordinate"
+            console.info(featureInfoUrls);
+            console.info(featuresAtPixel);
+            commit("setFeaturesAtCoordinate", featuresAtPixel);
+        }
     },
     /**
      * Sets a new zoom level to map and store. All other fields will be updated onmoveend.
