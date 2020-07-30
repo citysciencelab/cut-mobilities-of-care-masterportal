@@ -67,6 +67,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {Backbone.View} todo
      */
     render: function () {
+        this.checkForMetadata();
         const attr = this.model.toJSON(),
             selector = $("#" + this.model.get("parentId"));
 
@@ -272,7 +273,27 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     unhighlightLayerInformationIcon: function () {
         this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
         this.model.setLayerInfoChecked(false);
+    },
+
+    checkForMetadata: function () {
+        const metadata = this.model;
+
+        if (metadata.attributes.datasets !== "undefinded" || metadata.attributes.datasets.length >= 1) {
+            console.log("has meta");
+        }
+        if (metadata.has("children")) {
+            const layerContainer = metadata.attributes.children;
+
+            for (const i of layerContainer) {
+                this.model.set({datasets: true});
+                // eslint-disable-next-line no-console
+                console.log(this.model);
+            }
+            // eslint-disable-next-line no-console
+            console.log(metadata.attributes.showInfobutton);
+        }
     }
+
 });
 
 export default LayerView;
