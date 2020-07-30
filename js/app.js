@@ -82,6 +82,7 @@ import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
+import SelectFeaturesView from "../modules/tools/selectFeatures/view";
 
 let sbconfig, controls, controlsView;
 
@@ -327,6 +328,10 @@ async function loadApp () {
             }
             case "virtualCity": {
                 new VirtualcityModel(tool.attributes);
+                break;
+            }
+            case "selectFeatures": {
+                new SelectFeaturesView({model: tool});
                 break;
             }
             default: {

@@ -1838,6 +1838,17 @@
  * @example Radio.trigger("CswParser", "fetchedMetaData", cswObj);
  */
 
+/** -------------------- SelectFeatures -------------------- */
+
+/**
+ * @event Tools.SelectFeatures#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event Tools.SelectFeatures#updatedSelection
+ * @description Triggered when selection changes
+ */
 
 /** -------------------- FeatureLister -------------------- */
 
