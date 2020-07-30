@@ -30,7 +30,6 @@ import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
-import KmlImport from "../../tools/kmlImport/model";
 import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
@@ -322,9 +321,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "featureLister") {
                 return new FeatureLister(attrs, options);
-            }
-            else if (attrs.id === "kmlimport") {
-                return new KmlImport(attrs, options);
             }
             else if (attrs.id === "formular") {
                 return new Formular(attrs, options);

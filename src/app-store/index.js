@@ -4,7 +4,7 @@ import Vuex from "vuex";
 import Alerting from "../modules/alerting/store/indexAlerting";
 import ScaleSwitcher from "../modules/tools/scale/store/indexScaleSwitcher";
 import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
-import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
+import KmlImport from "../modules/tools/kmlImport/store/indexKmlImport";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 
@@ -27,16 +27,15 @@ const store = new Vuex.Store({
         Tools: {
             namespaced: true,
             modules: {
-                // add here other Tools
-                SupplyCoord,
-                ScaleSwitcher
+                KmlImport,
+                ScaleSwitcher,
+                SupplyCoord
             },
             actions: toolsActions
         },
         controls: {
             ...controlsModule
         },
-        ScaleLine,
         Title: Title
     },
     state,

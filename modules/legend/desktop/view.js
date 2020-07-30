@@ -99,9 +99,11 @@ const LegendView = Backbone.View.extend(/** @lends LegendView.prototype */{
      */
     addContentHTML: function (legendParams) {
         legendParams.forEach(legendDefinition => {
-            legendDefinition.legend.forEach(legend => {
-                legend.html = this.contentTemplate(legend);
-            });
+            if (legendDefinition.legend) {
+                legendDefinition.legend.forEach(legend => {
+                    legend.html = this.contentTemplate(legend);
+                });
+            }
         });
     },
     /**

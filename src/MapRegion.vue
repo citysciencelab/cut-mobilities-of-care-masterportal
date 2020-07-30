@@ -2,6 +2,7 @@
 import Alerting from "./modules/alerting/components/Alerting.vue";
 import ScaleSwitcher from "./modules/tools/scale/components/ScaleSwitcher.vue";
 import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
+import KmlImport from "./modules/tools/kmlImport/components/KmlImport.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
 import {mapState} from "vuex";
@@ -13,12 +14,14 @@ export default {
         Alerting,
         ScaleSwitcher,
         SupplyCoord,
+        KmlImport,
         Footer
     },
     computed: {
         ...mapState([
             // listen to configJson changes for mounting the tools
-            "configJson"
+            "configJson",
+            "i18NextInitialized"
         ])
     }
 };
@@ -40,7 +43,8 @@ export default {
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
         <ScaleSwitcher v-if="configJson" />
         <SupplyCoord v-if="configJson" />
-        <template v-if="configJson">
+        <KmlImport v-if="configJson" />
+        <template v-if="i18NextInitialized">
             <component
                 :is="$options.components[addonKey]"
                 v-for="addonKey in $addons"

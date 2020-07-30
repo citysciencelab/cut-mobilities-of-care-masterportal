@@ -1,5 +1,6 @@
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector.js";
+import Cluster from "ol/source/Cluster.js";
 import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import MapView from "./mapView";
@@ -455,12 +456,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         // Laden des Layers überwachen
         if (layer instanceof LayerGroup) {
             layer.getLayers().forEach(function (singleLayer) {
+                /* NOTE
+                 * Broken. channel.trigger is called immediately and returns undefined.
+                 * However, depending on the config, the loader will not disappear without this toggle.
+                 * (e.g. if only one WMTS without optionsFromCapabilities is set)
+                 */
                 singleLayer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
                 singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
             });
         }
         else if (layerModel instanceof WMTSLayer) {
-            if (layerModel.attributes.optionsFromCapabilities) {
+            if (layerModel.attributes.optionsFromCapabilities && !layerModel.hasBeenActivatedOnce) {
+                /* Additional guard: "addLayerToIndex" is called about 3 times on startup,
+                 * but addLoadingLayer should only be called once */
+                layerModel.hasBeenActivatedOnce = true;
                 // wmts source will load asynchonously
                 // -> source=null at this step
                 // listener to remove loading layer is set in WMTS class (on change:layerSource)
@@ -468,6 +477,11 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             }
         }
         else {
+            /* NOTE
+             * Broken. channel.trigger is called immediately and returns undefined.
+             * However, depending on the config, the loader will not disappear without this toggle.
+             * (e.g. if only one WMTS without optionsFromCapabilities is set)
+             */
             layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
             layer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
         }
@@ -548,12 +562,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             });
         }
         else if (layer !== undefined && olLayer.getSource() !== undefined) {
-            layerFeatures = olLayer.getSource().getFeatures();
+            let source = olLayer.getSource();
+
+            // if source is cluster, the ids to filter by in the following code are one source deeper
+            if (source instanceof Cluster) {
+                source = source.getSource();
+            }
+
+            layerFeatures = source.getFeatures();
         }
 
         features = layerFeatures.filter(function (feature) {
             return ids.indexOf(feature.getId()) > -1;
         });
+
         if (features.length > 0) {
             extent = this.calculateExtent(features);
             this.zoomToExtent(extent);

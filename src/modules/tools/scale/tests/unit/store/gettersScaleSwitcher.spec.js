@@ -6,7 +6,6 @@ import stateScaleSwitcher from "../../../store/stateScaleSwitcher";
 const {
     active,
     id,
-    currentScale,
     name,
     glyphicon,
     renderToWindow,
@@ -19,13 +18,6 @@ const {
     deactivateGFI} = getters;
 
 describe("gettersScaleSwitcher", function () {
-    it("returns the currentScale from state", function () {
-        const state = {
-            currentScale: "1000"
-        };
-
-        expect(currentScale(state)).to.equals("1000");
-    });
     it("returns the active from state", function () {
         expect(active(stateScaleSwitcher)).to.be.false;
     });

@@ -27,9 +27,9 @@
             padding-left: 5px;
             padding-right: 5px;
             .tableTopLeft {
-                text-align: center;
+                text-align: left;
                 vertical-align: middle;
-                font-size:20px;
+                font-size:18px;
             }
             .tableColumn {
                 text-align: center;
@@ -48,6 +48,7 @@
         }
         .graph {
             width: 580px;
+            padding-bottom: 5px;
             div[class^="trafficCountDiagram"] {
                 min-height: 285px;
                 &.inactive {
@@ -107,12 +108,38 @@
         }
     }
     .tab-bottom {
-        padding: 0 5px;
+        .download-container {
+            float: left;
+            margin-top: 28px;
+            button {
+                font-size: 12px;
+            }
+        }
+        .indication {
+            min-width: 456px;
+            font-size: 10px;
+            position: absolute;
+            left: 0px;
+            margin-left: 5px;
+        }
+        &.infos {
+            .download-container {
+                margin-top: 0;
+                button {
+                    display: none;
+                }
+            }
+            .indication {
+                display: none;
+            }
+        }
         &:not(.infos) {
+            padding: 0 8px;
             display: inline-block;
             width: 100%;
+            position: relative;
             .table-striped {
-                margin-top: 10px;
+                margin-top: 28px;
                 min-width: 280px;
                 width: 50%;
                 float: right;

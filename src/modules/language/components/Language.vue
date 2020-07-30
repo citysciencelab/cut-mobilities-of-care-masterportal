@@ -69,6 +69,7 @@ export default {
     @import "~variables";
 
     #language-bar {
+        margin-left: 10px;
         .current-language {
             display: block;
             position: relative;

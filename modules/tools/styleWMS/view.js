@@ -57,7 +57,10 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
                 }
             },
             "change:model change:attributeName change:numberOfClasses": this.render,
-            "invalid": this.showErrorMessages
+            "invalid": this.showErrorMessages,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
         });
         if (Radio.request("Parser", "getTreeType") === "light") {
             this.model.refreshStyleableLayerList();
@@ -82,7 +85,7 @@ const StyleWmsView = Backbone.View.extend(/** @lends StyleWmsView.prototype */{
         if (this.model.get("isActive") === true) {
 
             if (attr.styleableLayerList.length === 0) {
-                this.$el.html(this.templateNoStyleableLayers());
+                this.$el.html(this.templateNoStyleableLayers(attr));
             }
             else {
                 this.$el.html(this.template(attr));
