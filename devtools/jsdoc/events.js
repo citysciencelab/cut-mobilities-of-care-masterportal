@@ -1487,7 +1487,7 @@
  * @returns {String} - masterportal version number
  * @example Radio.request("Util", "getMasterPortalVersionNumber");
  */
- 
+
 /**
  * @event Core#RadioRequestUtilSortBy
  * @description This sort function sorts arrays, objects and strings. This is a replacement for underscores sortBy
@@ -1810,6 +1810,17 @@
  * @example Radio.trigger("CswParser", "fetchedMetaData", cswObj);
  */
 
+/** -------------------- SelectFeatures -------------------- */
+
+/**
+ * @event Tools.SelectFeatures#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event Tools.SelectFeatures#updatedSelection
+ * @description Triggered when selection changes
+ */
 
 /** -------------------- FeatureLister -------------------- */
 
