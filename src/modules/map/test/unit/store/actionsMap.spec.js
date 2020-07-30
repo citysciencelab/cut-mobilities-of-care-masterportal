@@ -3,7 +3,7 @@ import sinon from "sinon";
 import actions from "../../../store/actions/actionsMap.js";
 import getFeatureInfoUrls from "../../../store/actions/getFeatureInfoUrls";
 import Map from "ol/Map";
-import TileLayer from "ol/layer/tile";
+import TileLayer from "ol/layer/Tile";
 import TileWMS from "ol/source/TileWMS";
 import View from "ol/View";
 
