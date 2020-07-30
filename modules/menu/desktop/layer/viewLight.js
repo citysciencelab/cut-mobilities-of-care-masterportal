@@ -275,22 +275,22 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.model.setLayerInfoChecked(false);
     },
 
+    /**
+     * Checks group layers for children with datasets (metadata) and sets the parent datasets atrribute to true
+     * to show the info button in menu tree.
+     * @returns {void}
+     */
     checkForMetadata: function () {
         const metadata = this.model;
 
-        if (metadata.attributes.datasets !== "undefinded" || metadata.attributes.datasets.length >= 1) {
-            console.log("has meta");
-        }
         if (metadata.has("children")) {
             const layerContainer = metadata.attributes.children;
 
             for (const i of layerContainer) {
-                this.model.set({datasets: true});
-                // eslint-disable-next-line no-console
-                console.log(this.model);
+                if (i.datasets.length >= 1) {
+                    this.model.set({datasets: true});
+                }
             }
-            // eslint-disable-next-line no-console
-            console.log(metadata.attributes.showInfobutton);
         }
     }
 
