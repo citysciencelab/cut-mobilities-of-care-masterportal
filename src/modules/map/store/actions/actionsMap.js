@@ -47,7 +47,7 @@ const actions = {
         commit("setLayerList", map.getLayers().getArray());
 
         // update state once initially to get initial settings
-        // dispatch("updateViewState");
+        dispatch("updateViewState");
 
         // hack: see comment on function
         loopLayerLoader(commit, map);

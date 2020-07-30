@@ -1,6 +1,6 @@
-import ImageLayer from "ol/layer/image";
-import TileLayer from "ol/layer/tile";
-import GroupLayer from "ol/layer/group";
+import ImageLayer from "ol/layer/Image";
+import TileLayer from "ol/layer/Tile";
+import GroupLayer from "ol/layer/Group";
 
 /**
  * Creates and returns urls for the GetFeatureInfo Request of all visible wms layer at the given coordinate
