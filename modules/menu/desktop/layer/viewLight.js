@@ -32,6 +32,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires Parser#RadioTriggerParserRemoveItem
      */
     initialize: function () {
+        this.checkChildrenDatasets();
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
@@ -67,7 +68,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {Backbone.View} todo
      */
     render: function () {
-        this.checkForMetadata();
         const attr = this.model.toJSON(),
             selector = $("#" + this.model.get("parentId"));
 
@@ -276,24 +276,23 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * Checks group layers for children with datasets (metadata) and sets the parent datasets atrribute to true
-     * to show the info button in menu tree.
+     * Checks group layers for children with datasets (metadata) to decide
+     * whether an info button should be shown for the group layer. It will
+     * be shown if a single child has datasets not undefined and not false.
      * @returns {void}
      */
-    checkForMetadata: function () {
-        const metadata = this.model;
+    checkChildrenDatasets: function () {
+        if (this.model.has("children")) {
+            const children = this.model.get("children");
 
-        if (metadata.has("children")) {
-            const layerContainer = metadata.attributes.children;
-
-            for (const i of layerContainer) {
-                if (i.datasets.length >= 1) {
+            for (const {datasets} of children) {
+                if (typeof datasets !== "undefined" && datasets !== false) {
                     this.model.set({datasets: true});
+                    break;
                 }
             }
         }
     }
-
 });
 
 export default LayerView;
