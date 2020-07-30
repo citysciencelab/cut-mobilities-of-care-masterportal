@@ -160,6 +160,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
             // test if property value contains searched string as substring
             return testFieldValue.indexOf(searchString.toUpperCase()) !== -1;
         });
+
         return filteredFeatures;
     },
 
