@@ -117,7 +117,7 @@ export default {
             this.maxPosTop = el.css("top");
             this.maxPosLeft = el.css("left");
             $(".win-body-vue").hide();
-            $(".glyphicon-minus").hide();
+            el.find(".glyphicon-minus").hide();
             el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
             $(".header").addClass("header-min");
             el.draggable("disable");
