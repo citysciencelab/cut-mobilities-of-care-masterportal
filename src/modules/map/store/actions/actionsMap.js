@@ -45,7 +45,7 @@ const actions = {
         commit("setMap", map);
 
         // update state once initially to get initial settings
-        // dispatch("updateViewState");
+        dispatch("updateViewState");
 
         // hack: see comment on function
         loopLayerLoader(commit, map);
@@ -70,9 +70,17 @@ const actions = {
      * @param {MapBrowserEvent} evt - Moveend event
      * @returns {function} update function for state parts to update onmoveend
      */
-    updateViewState ({commit, rootGetters}, evt) {
-        const map = evt.map,
-            mapView = map.getView(),
+    updateViewState ({commit, getters, rootGetters}, evt) {
+        let map;
+
+        if (evt) {
+            map = evt.map;
+        }
+        else {
+            ({map} = getters);
+        }
+
+        const mapView = map.getView(),
             {dpi} = rootGetters;
 
         commit("setZoomLevel", mapView.getZoom());
@@ -124,9 +132,9 @@ const actions = {
                 featureInfoUrls = getFeatureInfoUrls(map, clickCoord),
                 featuresAtPixel = map.getFeaturesAtPixel(clickPixel);
 
-            // wms api aufruf mit getFeatureInfoUrls
-            // anschließen concat featuresAtPixel und wms features
-            // wenn alle durch sind, gibt es ein commit an "featuresAtCoordinate"
+            // wms api called with getFeatureInfoUrls
+            // connect concat featuresAtPixel and wms features
+            // when all are done, there will be a commit on "featuresAtCoordinate"
             console.warn(featureInfoUrls);
             console.warn(featuresAtPixel);
             commit("setFeaturesAtCoordinate", featuresAtPixel);
