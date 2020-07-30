@@ -43,7 +43,8 @@
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
             "addWms": "Add WMS",
-            "scaleSwitcher": "Scale switcher"
+            "scaleSwitcher": "Scale switcher",
+            "selectFeatures": "Select features"
         },
         "legend": "Explanations",
         "contact": "Mail",
@@ -335,6 +336,11 @@
                 "plot": "Plot",
                 "parcelNumberPlaceholder": "Enter number",
                 "generateReport": "Generate report"
+            },
+            "selectFeatures": {
+              "zoomToFeature": "Zoom to this feature",
+              "noFeatureChosen": "No feature chosen. Select features by holding down Ctrl and dragging a box around the features to choose.",
+              "propertylessFeature": "Element without attributes"
             },
             "supplyCoord": {
                 "title": "Query Coordinates",

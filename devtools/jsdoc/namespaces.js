@@ -720,6 +720,12 @@
  */
 
 /**
+ * @namespace SelectFeatures
+ * @memberof Tools
+ * @description Tool to select multiple Features from the map by using a box for selection.
+ */
+
+/**
  * @namespace TreeFilter
  * @description foobar
  */
@@ -821,6 +827,11 @@
 /**
  * @namespace CswParser
  * @description Model to parse the CSW output of metadata catalogue
+ */
+
+/**
+ * @namespace SelectFeatures
+ * @description Module that allows selecting features cross-wfs
  */
 
 /**
