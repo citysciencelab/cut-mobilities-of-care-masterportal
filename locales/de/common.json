@@ -32,9 +32,10 @@
             "measure": "Strecke / Fläche messen",
             "coord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
-            "kmlimport": "KML Import",
+            "kmlimport": "Datei-Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
+            "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
             "layerSlider": "Zeitreihe",
@@ -43,7 +44,8 @@
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
             "wfsTransaction": "WFS-T Tool",
-            "scaleSwitcher": "Maßstab umschalten"
+            "scaleSwitcher": "Maßstab umschalten",
+            "selectFeatures": "Features auswählen"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -78,6 +80,14 @@
     "date": "Datum",
     "time": "Zeit",
     "modules": {
+        "alerting": {
+            "categories": {
+                "error": "Fehler",
+                "info": "Info",
+                "success": "Erfolg",
+                "warning": "Achtung"
+            }
+        },
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
@@ -98,7 +108,7 @@
                 "featureParsing": "FeatureViaURL: Es konnten nicht alle übergebenen Feature verarbeitet werden.",
                 "featureParsingAll": "FeatureViaURL: Alle übergebenen Feature wurden nicht mit dem richtigen Datentyp übergeben. Bitte beachten Sie die Dokumentation.",
                 "featureParsingNoneAdded": "FeatureViaURL: Allen übergebenen Feature fehlen mindestens ein Parameter. Es wurden keine Feature der Karte hinzugefügt. Bitte beachten Sie die Dokumentation.",
-                "geometryNotSupported": "FeatureViaURL: Der in der Konfiguration für den Layer {{layerId}} deklarierte Geometrietyp {{geometryType}} is not supported.",
+                "geometryNotSupported": "FeatureViaURL: Der in der Konfiguration für den Layer {{layerId}} deklarierte Geometrietyp {{geometryType}} wird nicht unterstützt.",
                 "layerNotFound": "FeatureViaURL: Es konnte kein Layer mit der ID {{layerId}} gefunden werden.",
                 "noLayers": "FeatureViaURL: Für die übergebenen Feature wurden keine Layer in der Konfiguration definiert.",
                 "noNameDefined": "FeatureViaURL: Es wurde kein Name für den Layer mit der ID {{layerId}} in der Konfiguration definiert."
@@ -202,12 +212,38 @@
                 "withLegendLabel": "Mit Legende",
                 "printLabel": "Drucken",
                 "withInfoLabel": "Mit Informationen",
+                "vtlWarning": "Da MapFish 3 keine Vector Tile Layer unterstützt, werden die folgenden aktiven Layer nicht in der Printansicht erscheinen:",
                 "layoutNameList": {
                     "A4 Hochformat": "A4 Hochformat",
                     "A4 Querformat": "A4 Querformat",
                     "A3 Hochformat": "A3 Hochformat",
                     "A3 Querformat": "A3 Querformat"
                 }
+            },
+            "styleVT": {
+              "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
+              "noStyleableLayers": "Derzeit sind keine Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+              "theme": "Thema",
+              "chooseTheme": "Bitte aktives Thema auswählen",
+              "style": "Style"
+            },
+            "styleWMS": {
+                "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+                "theme": "Thema",
+                "chooseTheme": "Bitte Thema auswählen",
+                "attribute": "Attribut",
+                "chooseAttribute": "Bitte Attribut wählen",
+                "countOfClasses": "Anzahl der Klassen",
+                "chooseNumberOfClasses": "Bitte Anzahl der Klassen auswählen",
+                "rangeOfValues": "Wertebereich Klasse",
+                "from": "von",
+                "to": "bis",
+                "reset": "Zurücksetzen",
+                "apply": "Anwenden",
+                "pleaseEnterInteger": "Bitte tragen Sie eine ganze Zahl ein.",
+                "pleaseChooseColor": "Bitte wählen Sie eine Farbe aus.",
+                "checkTheValues": "Überprüfen Sie die Werte.",
+                "overlappingValueRanges": "Überprüfen Sie die Werte. Wertebereiche dürfen sich nicht überschneiden."
             },
             "featureLister": {
                 "chooseTheme": "Thema wählen",
@@ -285,11 +321,24 @@
                 "contenNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
             },
             "kmlImport": {
-                "unknownGeometry": "Unbekannte Geometry",
-                "chooseFileFirst": "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus",
-                "fakeButton": "Datei auswählen (keine ausgewählt)",
-                "importButton": "IMPORT",
-                "file": "Datei"
+                "captions": {
+                    "intro": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.",
+                    "dropzone": "Datei hier ablegen",
+                    "browse": "Datei auswählen",
+                    "supportedFiletypes": {
+                        "auto": "Automatische Erkennung",
+                        "kml": "KML-Datei (*.kml)",
+                        "gpx": "GPX-Datei (*.gpx)",
+                        "geojson": "GeoJson-Datei (*.geojson, *.json)"
+                    }
+                },
+                "alertingMessages": {
+                    "success": "Die Datei \"{{filename}}\" wurde erfolgreich importiert.",
+                    "formatError": "Die Datei konnte nicht gelesen werden. Bitte prüfen Sie, ob das Format der Datei mit dem gewählten Format übereinstimmt.",
+                    "missingFileContent": "Fehler beim Lesen der Datei. Bitte überprüfen Sie den Dateityp sowie den Inhalt der Datei. Falls die Datei fehlerfrei ist, wenden Sie sich bitte an den Support.",
+                    "missingFormat": "Das gewählte Dateiformat ist nicht konfiguriert. Bitte wenden Sie sich an den Support."
+                },
+                "title": "Datei importieren"
             },
             "parcelSearch": {
                 "wrongConfig": "Ungültige oder unvollständige Konfiguration",
@@ -305,6 +354,11 @@
                 "parcelNumberPlaceholder": "Nummer eingeben",
                 "generateReport": "Bericht erzeugen"
             },
+            "selectFeatures": {
+              "zoomToFeature": "Auf dieses Feature zoomen",
+              "noFeatureChosen": "Keine Features ausgewählt. Wählen Sie Features durch Halten von Strg und Ziehen einer Box um die auszuwählenden Features.",
+              "propertylessFeature": "Element ohne Attribute"
+            },
             "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
@@ -319,7 +373,41 @@
             },
             "gfi": {
                 "themes": {
-                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes."
+                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
+                    "trafficCount": {
+                        "infoLabel": "Info",
+                        "dayLabel": "Tag",
+                        "weekLabel": "Woche",
+                        "yearLabel": "Jahr",
+                        "period": "Zeitraum",
+                        "number": "Anzahl",
+                        "totalSince": "Insgesamt seit",
+                        "sinceBeginningOfTheYear": "Seit Jahresbeginn",
+                        "overThePastYear": "Im Vorjahr",
+                        "onThePreviousDay": "Am Vortag",
+                        "highestDay": "Stärkster Tag im Jahr",
+                        "highestWeek": "Stärkste Woche im Jahr",
+                        "highestMonth": "Stärkster Monat im Jahr",
+                        "dateLabel": "Datum",
+                        "clockLabel": "Uhr",
+                        "tableLabel": "Tabelle",
+                        "notice": "Aufgrund nicht verfügbarer Daten können Lücken im Diagramm und leere Tabellenzellen auftreten.",
+                        "lastupdateLabel": "Letzte Aktualisierung:",
+                        "diagramLabel": "Diagramm",
+                        "calendarweek": "KW",
+                        "infraredsensor": "Infrarotsensor",
+                        "countingstation": "Zählstation",
+                        "carLabel": "KFZ",
+                        "bicycleLabel": "Fahrrad",
+                        "idLabel": "ID:",
+                        "typeLabel": "Art: ",
+                        "meansOfTransportLabel": "Verkehrsmittel: ",
+                        "carsHeaderSuffix": "KFZ abs.",
+                        "trucksHeaderSuffix": "SV-Anteil in %",
+                        "yAxisTextDay": "Anzahl / 15 Min.",
+                        "yAxisTextWeek": "Anzahl / Tag",
+                        "yAxisTextYear": "Anzahl / Woche"
+                    }
                 }
             },
             "viomRouting": {

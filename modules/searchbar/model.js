@@ -219,7 +219,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
             this.set("searchString", streetName);
             Radio.trigger("Searchbar", "setPastedHouseNumber", houseNumber);
         }
-        else {
+        else if (value.length >= 3) {
             this.set("searchString", value);
         }
         this.set("hitList", []);
@@ -332,7 +332,6 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         if (this.get("sortByName")) {
             hitList = Radio.request("Util", "sort", "address", hitList, "name");
         }
-
         this.setHitList(hitList);
 
         // Die Funktion "createRecommendedList" wird vielfach (von jedem Suchalgorithmus) aufgerufen.

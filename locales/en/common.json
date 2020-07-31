@@ -32,9 +32,10 @@
             "measure": "Measure distance / area",
             "coord": "Query coordinates",
             "searchByCoord": "Coordinate search",
-            "kmlimport": "KML import",
+            "kmlimport": "Import file",
             "routing": "Route planner",
             "draw": "Drawing / writing",
+            "styleWMS": "Style WMS",
             "commuterLines": "Commuter (Lines)",
             "commuterAnimation": "Commuter (Animation)",
             "layerSlider": "Time series",
@@ -42,7 +43,8 @@
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
             "addWms": "Add WMS",
-            "scaleSwitcher": "Scale switcher"
+            "scaleSwitcher": "Scale switcher",
+            "selectFeatures": "Select features"
         },
         "legend": "Explanations",
         "contact": "Mail",
@@ -201,12 +203,38 @@
                 "withLegendLabel": "With legend",
                 "printLabel": "Print",
                 "withInfoLabel": "With information",
+                "vtlWarning": "Since MapFish 3 does not support Vector Tile Layers, the following active layers will not appear in the print view:",
                 "layoutNameList": {
                     "A4 Hochformat": "A4 portrait format",
                     "A4 Querformat": "A4 landscape format",
                     "A3 Hochformat": "A3 portrait format",
                     "A3 Querformat": "A3 landscape format"
                 }
+            },
+            "styleVT": {
+              "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",
+              "noStyleableLayers": "There are currently no topics to which this tool could be applied.",
+              "theme": "Theme",
+              "chooseTheme": "Please choose active theme",
+              "style": "Style"
+            },
+            "styleWMS": {
+                "noStyleableLayers": "There are currently no classifiable topics to which this tool could be applied.",
+                "theme": "Theme",
+                "chooseTheme": "Please choose theme",
+                "attribute": "Attribute",
+                "chooseAttribute": "Please choose Attribute",
+                "countOfClasses": "Number of classes",
+                "chooseNumberOfClasses": "Please select number of classes",
+                "rangeOfValues": "Range of values class",
+                "from": "from",
+                "to": "to",
+                "reset": "Reset",
+                "apply": "Apply",
+                "pleaseEnterInteger": "Please enter an integer.",
+                "pleaseChooseColor": "Please choose a color.",
+                "checkTheValues": "Check the values.",
+                "overlappingValueRanges": "Check the values. Values ranges are not allowed to overlap."
             },
             "featureLister": {
                 "chooseTheme": "Choose theme",
@@ -284,11 +312,24 @@
                 "contenNotSaved": "Content could not be copied to the clipboard."
             },
             "kmlImport": {
-                "unknownGeometry": "Unknown Geometry",
-                "chooseFileFirst": "Please choose the kml data file for importing first.",
-                "fakeButton": "Choose file (no file chosen yet)",
-                "importButton": "IMPORT",
-                "file": "File"
+                "captions": {
+                    "intro": "Import your file via drag and drop or alternatively use the browse dialogue.",
+                    "dropzone": "Drop file here",
+                    "browse": "Browse files",
+                    "supportedFiletypes": {
+                        "auto": "Automatic filetype detection",
+                        "kml": "KML-file (*.kml)",
+                        "gpx": "GPX-file (*.gpx)",
+                        "geojson": "GeoJson-file (*.geojson, *.json)"
+                    }
+                },
+                "alertingMessages": {
+                    "success": "The file \"{{filename}}\" has been successfully imported.",
+                    "formatError": "File could not be read. Please check if actual filetype is matching your chosen filetype.",
+                    "missingFileContent": "There was an error loading your file. Please check its filetype and content. If still not working, please contact the support.",
+                    "missingFormat": "The chosen filetype is not supported. Please contact the support."
+                },
+                "title": "Import file"
             },
             "parcelSearch": {
                 "wrongConfig": "Invalid or incomplete configuration",
@@ -304,6 +345,11 @@
                 "parcelNumberPlaceholder": "Enter number",
                 "generateReport": "Generate report"
             },
+            "selectFeatures": {
+              "zoomToFeature": "Zoom to this feature",
+              "noFeatureChosen": "No feature chosen. Select features by holding down Ctrl and dragging a box around the features to choose.",
+              "propertylessFeature": "Element without attributes"
+            },
             "supplyCoord": {
                 "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
@@ -318,7 +364,41 @@
             },
             "gfi": {
                 "themes": {
-                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service."
+                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
+                    "trafficCount": {
+                        "infoLabel": "Info",
+                        "dayLabel": "Day",
+                        "weekLabel": "Week",
+                        "yearLabel": "Year",
+                        "period": "Period of time",
+                        "number": "Number",
+                        "totalSince": "Total since",
+                        "sinceBeginningOfTheYear": "Since beginning of the year",
+                        "overThePastYear": "In the previous year",
+                        "onThePreviousDay": "On the previous day",
+                        "highestDay": "Day with highest number in the year",
+                        "highestWeek": "Week with highest number in the year",
+                        "highestMonth": "Month with highest number in the year",
+                        "dateLabel": "Date",
+                        "clockLabel": "",
+                        "tableLabel": "Table",
+                        "notice": "Due to unavailable data, gaps in the chart and empty table cells may occur.",
+                        "lastupdateLabel": "Last update:",
+                        "diagramLabel": "Diagram",
+                        "calendarweek": "CW",
+                        "infraredsensor": "Infrared sensor",
+                        "countingstation": "Counting station",
+                        "carLabel": "Car",
+                        "bicycleLabel": "Bicycle",
+                        "idLabel": "ID:",
+                        "typeLabel": "Type:",
+                        "meansOfTransportLabel": "Means of transportation:",
+                        "carsHeaderSuffix": "The count of cars",
+                        "trucksHeaderSuffix": "Trucks proportion in %",
+                        "yAxisTextDay": "Count / 15 Min.",
+                        "yAxisTextWeek": "Count / Day",
+                        "yAxisTextYear": "Count / Week"
+                    }
                 }
             },
             "viomRouting": {

@@ -41,7 +41,7 @@ Jetzt müssen die Node-Module installiert werden:
 
 Es werden alle Abhängigkeiten installiert.
 
-Falls Addons genutzt werden sollen, siehe hier für weitere Informationen bezüglich **[Addons](/doc/addons.md)**.
+Falls Addons genutzt werden sollen, siehe hier für weitere Informationen bezüglich **[Addons](/doc/addons_vue.md)**.
 
 ### npm start
 Einen lokalen Entwicklungsserver starten.
@@ -55,7 +55,7 @@ Unter https://localhost:9001/portal/master gibt es eine umfassende Demo-Konfigur
 Um Dienste von Servern in der lokalen Entwicklungsumgebung verwenden zu können müssen diese über einen **[Proxy](/doc/proxyconf.md)** weitergeleitet werden. Auf diese Datei wird in webpack.dev.js verwiesen. Als Default ist dort die Datei "devtools/proxyconf_examples.json" angegeben. Ist eine Datei "devtools/proxyconf.json" vorhanden, wird diese genutzt. Sie wird im git-Prozess ignoriert und eignet sich daher seine eigenen Proxyserver dort zu verwalten.
 
 ### npm run test
-Unittests durchführen. Dabei werden auch die Unittests der Addons ausgeführt (siehe **[addons](../addons.md)**).
+Unittests durchführen. Dabei werden auch die Unittests der Addons ausgeführt (siehe **[addons](../addons_vue.md)**).
 
 ```
 // npm run test

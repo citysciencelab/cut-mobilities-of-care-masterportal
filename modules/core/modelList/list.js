@@ -9,6 +9,7 @@ import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "./layer/terrain";
 import EntitiesLayer from "./layer/entities";
 import TileSetLayer from "./layer/tileset";
+import VectorTileLayer from "./layer/vectorTile";
 import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
@@ -30,7 +31,6 @@ import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
-import KmlImport from "../../tools/kmlImport/model";
 import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
@@ -50,6 +50,7 @@ import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
+import StyleVT from "../../tools/styleVT/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewPoint/model";
@@ -57,6 +58,7 @@ import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 import store from "../../../src/app-store/index";
 import WfstModel from "../../tools/wfst/model";
+import SelectFeaturesTool from "../../tools/selectFeatures/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -231,6 +233,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.typ === "Oblique") {
                 return new ObliqueLayer(attrs, options);
             }
+            else if (attrs.typ === "VectorTile") {
+                return new VectorTileLayer(attrs, options);
+            }
         }
         else if (attrs.type === "folder") {
             return new Folder(attrs, options);
@@ -258,6 +263,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
+            }
+            else if (attrs.id === "styleVT") {
+                return new StyleVT(attrs, options);
             }
             else if (attrs.id === "compareFeatures") {
                 return new CompareFeatures(attrs, options);
@@ -323,9 +331,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "featureLister") {
                 return new FeatureLister(attrs, options);
             }
-            else if (attrs.id === "kmlimport") {
-                return new KmlImport(attrs, options);
-            }
             else if (attrs.id === "formular") {
                 return new Formular(attrs, options);
             }
@@ -349,6 +354,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "virtualcity") {
                 return new VirtualCityModel(attrs, options);
+            }
+            else if (attrs.id === "selectFeatures") {
+                return new SelectFeaturesTool(attrs, options);
             }
             return new Tool(attrs, options);
         }

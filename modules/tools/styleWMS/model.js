@@ -16,7 +16,25 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
         styleClassAttributes: [],
         styleWMSName: "",
         styleableLayerList: [],
-        wmsSoftware: "OGC"
+        wmsSoftware: "OGC",
+        // translations
+        currentLng: "",
+        noStyleableLayers: "",
+        theme: "",
+        chooseTheme: "",
+        attribute: "",
+        chooseAttribute: "",
+        countOfClasses: "",
+        chooseNumberOfClasses: "",
+        rangeOfValues: "",
+        reset: "",
+        apply: "",
+        from: "",
+        to: "",
+        pleaseEnterInteger: "",
+        pleaseChooseColor: "",
+        checkTheValues: "",
+        overlappingValueRanges: ""
     }),
 
     /**
@@ -49,6 +67,23 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @property {String} styleableLayer.name Name of styleable Layer
      * @property {String} styleableLayer.id Id of styleable Layer
      * @property {String} wmsSoftware="OGC" Flag of sld has to be created according to ogc standards or in esri style
+     * @property {String} currentLng: "" contains the translated text
+     * @property {String} noStyleableLayers: "" contains the translated text
+     * @property {String} theme: "" contains the translated text
+     * @property {String} chooseTheme: "" contains the translated text
+     * @property {String} attribute: "" contains the translated text
+     * @property {String} chooseAttribute: "" contains the translated text
+     * @property {String} countOfClasses: "" contains the translated text
+     * @property {String} chooseNumberOfClasses: "" contains the translated text
+     * @property {String} rangeOfValues: "" contains the translated text
+     * @property {String} reset: "" contains the translated text
+     * @property {String} apply: "" contains the translated text
+     * @property {String} from: "" contains the translated text
+     * @property {String} to: "" contains the translated text
+     * @property {String} pleaseEnterInteger: "" contains the translated text
+     * @property {String} pleaseChooseColor: "" contains the translated text
+     * @property {String} checkTheValues: "" contains the translated text
+     * @property {String} overlappingValueRanges: "" contains the translated text
      * @listens StyleWMS#RadioTriggerStyleWMSopenStyleWMS
      * @listens StyleWMS#changeModel
      * @listens StyleWMS#changeAttributeName
@@ -63,6 +98,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @fires StyleWMS#RadioTriggerStyleWMSUpdateParamsStyleWMS
      * @fires StyleWMSModel#sync
      * @fires StyleWMSModel#changeIsactive
+     * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
         const channel = Radio.channel("StyleWMS");
@@ -115,6 +151,37 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
                 }
             }
         });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "noStyleableLayers": i18next.t("common:modules.tools.styleWMS.noStyleableLayers"),
+            "theme": i18next.t("common:modules.tools.styleWMS.theme"),
+            "chooseTheme": i18next.t("common:modules.tools.styleWMS.chooseTheme"),
+            "attribute": i18next.t("common:modules.tools.styleWMS.attribute"),
+            "chooseAttribute": i18next.t("common:modules.tools.styleWMS.chooseAttribute"),
+            "countOfClasses": i18next.t("common:modules.tools.styleWMS.countOfClasses"),
+            "chooseNumberOfClasses": i18next.t("common:modules.tools.styleWMS.chooseNumberOfClasses"),
+            "rangeOfValues": i18next.t("common:modules.tools.styleWMS.rangeOfValues"),
+            "reset": i18next.t("common:modules.tools.styleWMS.reset"),
+            "apply": i18next.t("common:modules.tools.styleWMS.apply"),
+            "from": i18next.t("common:modules.tools.styleWMS.from"),
+            "to": i18next.t("common:modules.tools.styleWMS.to"),
+            "pleaseEnterInteger": i18next.t("common:modules.tools.styleWMS.pleaseEnterInteger"),
+            "pleaseChooseColor": i18next.t("common:modules.tools.styleWMS.pleaseChooseColor"),
+            "checkTheValues": i18next.t("common:modules.tools.styleWMS.checkTheValues"),
+            "overlappingValueRanges": i18next.t("common:modules.tools.styleWMS.overlappingValueRanges"),
+            "currentLng": lng
+        });
     },
 
     /**
@@ -158,7 +225,11 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     validate: function (attributes) {
 
         const errors = [],
-            regExp = new RegExp("^[0-9]+$");
+            regExp = new RegExp("^[0-9]+$"),
+            pleaseEnterInteger = this.get("pleaseEnterInteger"),
+            pleaseChooseColor = this.get("pleaseChooseColor"),
+            checkTheValues = this.get("checkTheValues"),
+            overlappingValueRanges = this.get("overlappingValueRanges");
 
         let prevMax = -1;
 
@@ -168,31 +239,31 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
 
             if (regExp.test(element.startRange) === false) {
                 errors.push({
-                    minText: "Bitte tragen Sie eine ganze Zahl ein.",
+                    minText: pleaseEnterInteger,
                     minIndex: index
                 });
             }
             if (regExp.test(element.stopRange) === false) {
                 errors.push({
-                    maxText: "Bitte tragen Sie eine ganze Zahl ein.",
+                    maxText: pleaseEnterInteger,
                     maxIndex: index
                 });
             }
             if (element.color === "") {
                 errors.push({
-                    colorText: "Bitte wählen Sie eine Farbe aus.",
+                    colorText: pleaseChooseColor,
                     colorIndex: index
                 });
             }
             if (min >= max) {
                 errors.push({
-                    rangeText: "Überprüfen Sie die Werte.",
+                    rangeText: checkTheValues,
                     rangeIndex: index
                 });
             }
             if (prevMax >= min) {
                 errors.push({
-                    intersectText: "Überprüfen Sie die Werte. Wertebereiche dürfen sich nicht überschneiden.",
+                    intersectText: overlappingValueRanges,
                     intersectIndex: index,
                     prevIndex: index - 1
                 });

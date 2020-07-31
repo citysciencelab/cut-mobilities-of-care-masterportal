@@ -43,9 +43,9 @@ import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
+import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
-import ImportView from "../modules/tools/kmlImport/view";
 /**
  * WFSFeatureFilterView
  * @deprecated in 3.0.0
@@ -83,6 +83,7 @@ import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
+import SelectFeaturesView from "../modules/tools/selectFeatures/view";
 
 let sbconfig, controls, controlsView;
 
@@ -135,7 +136,7 @@ async function loadApp () {
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n: new VueI18Next(i18next)
+        i18n: new VueI18Next(i18next, {namespaces: ["additional", "common"]})
     });
 
 
@@ -261,10 +262,6 @@ async function loadApp () {
                 new SaveSelectionView({model: tool});
                 break;
             }
-            case "kmlimport": {
-                new ImportView({model: tool});
-                break;
-            }
             /**
              * wfsFeatureFilter
              * @deprecated in 3.0.0
@@ -317,6 +314,10 @@ async function loadApp () {
                 new WfstView({model: tool});
                 break;
             }
+            case "styleVT": {
+                new StyleVTView({model: tool});
+                break;
+            }
             /**
              * layerslider
              * @deprecated in 3.0.0
@@ -331,6 +332,10 @@ async function loadApp () {
             }
             case "virtualCity": {
                 new VirtualcityModel(tool.attributes);
+                break;
+            }
+            case "selectFeatures": {
+                new SelectFeaturesView({model: tool});
                 break;
             }
             default: {
@@ -405,18 +410,19 @@ async function loadApp () {
 
         initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
+        // loads all language files from addons for backbone- and vue-addons
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
                 Object.keys(i18nextLanguages).forEach((lng) => {
                     import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
-                            i18next.addResourceBundle(lng, "additional", additionalLocales);
+                            i18next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
                             checkInitCounter(initCounter, allAddons);
                         }).catch(error => {
                             initCounter--;
                             console.warn(error);
-                            console.warn("Die Übersetzungsdateien der Anwendung " + addonKey + " konnten nicht vollständig geladen werden. Teile der Anwendung sind nicht übersetzt.");
+                            console.warn("Translation files of addon " + addonKey + " could not be loaded or does not exist. Addon is not translated.");
                             checkInitCounter(initCounter, allAddons);
                         });
                 });
@@ -437,6 +443,7 @@ function checkInitCounter (initCounter, allAddons) {
     if (initCounter === 0) {
         Radio.trigger("Addons", "initialized");
         loadAddOnsAfterLanguageLoaded(allAddons);
+        store.commit("setI18Nextinitialized", true);
     }
 }
 
@@ -453,12 +460,20 @@ function loadAddOnsAfterLanguageLoaded (allAddons) {
             const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
 
             import(
-                /* webpackChunkName: "[request]" */
-                /* webpackExclude: /.+unittests.+/ */
-                "../addons/" + entryPoint + ".js"
-            ).then(module => {
+                /* webpackChunkName: "[request]" */ /* webpackExclude: /.+(unittests|tests).+/ */ "../addons/" + entryPoint + ".js"
+            ).catch(err => {
+                console.warn("Loading backbone-addons: cannot load addon, is maybe a Vue addon:", entryPoint, "Error:", err);
+            }).then(module => {
                 /* eslint-disable new-cap */
-                const addon = new module.default();
+                let addon;
+
+                try {
+                    addon = new module.default();
+                }
+                catch (err) {
+                    // cannot load addon, is maybe a Vue addon
+                    return;
+                }
 
                 // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
                 if (addon.model) {
