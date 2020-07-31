@@ -1,5 +1,5 @@
 /**
- * Returns true if the RegExp is matched.
+ * Tests if the given Parameter is an URL.
  * @param {string} str Incoming string to test against RegExp.
  * @returns {boolean} True if incoming string matches RegExp for website links or html files.
  */
