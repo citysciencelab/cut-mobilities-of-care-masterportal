@@ -440,8 +440,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         let layerModel;
 
         if (layer) {
-            // TODO: Is there a reason the name is used instead of the ID?
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {"name": layer.get("name")});
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
         }
 
         // if the layer is already at the correct position, do nothing
