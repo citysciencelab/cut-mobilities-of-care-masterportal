@@ -161,6 +161,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             withLegendLabel: i18next.t("common:modules.tools.print.withLegendLabel"),
             printLabel: i18next.t("common:modules.tools.print.printLabel"),
             withInfoLabel: i18next.t("common:modules.tools.print.withInfoLabel"),
+            vtlWarning: i18next.t("common:modules.tools.print.vtlWarning"),
             layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true}),
             currentLng: lng
         });
@@ -333,11 +334,26 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     togglePostrenderListener: function (model, value) {
-        const canvasModel = new BuildCanvasModel();
+        const canvasModel = new BuildCanvasModel(),
+            foundVectorTileLayers = [];
+
+        /*
+         * Since MapFish 3 does not yet support VTL (see https://github.com/mapfish/mapfish-print/issues/659),
+         * they are filtered in the following code and an alert is shown to the user informing him about which
+         * layers will not be printed.
+         */
         let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
+                if (layer.get("typ") === "VectorTile") {
+                    foundVectorTileLayers.push(layer.get("name"));
+                    return false;
+                }
                 return layer.getVisible() === true;
             }),
             canvasLayer;
+
+        if (foundVectorTileLayers.length && this.get("isActive")) {
+            Radio.trigger("Alert", "alert", `${this.get("vtlWarning")} ${foundVectorTileLayers.join(", ")}`);
+        }
 
         visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
 

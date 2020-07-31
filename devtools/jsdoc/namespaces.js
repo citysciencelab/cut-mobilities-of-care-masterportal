@@ -702,6 +702,12 @@
  */
 
 /**
+ * @namespace StyleVT
+ * @memberof Tools
+ * @description Tool that can modify vtl styles with external style documents
+ */
+
+/**
  * @namespace ViomRouting
  * @memberof Tools
  * @description Tool to route on viom data.
@@ -717,6 +723,12 @@
  * @namespace Wfst
  * @memberof Tools
  * @description Tool to visualize, insert, edit, delete and update WFS features.
+ */
+
+/**
+ * @namespace SelectFeatures
+ * @memberof Tools
+ * @description Tool to select multiple Features from the map by using a box for selection.
  */
 
 /**
@@ -821,6 +833,11 @@
 /**
  * @namespace CswParser
  * @description Model to parse the CSW output of metadata catalogue
+ */
+
+/**
+ * @namespace SelectFeatures
+ * @description Module that allows selecting features cross-wfs
  */
 
 /**
