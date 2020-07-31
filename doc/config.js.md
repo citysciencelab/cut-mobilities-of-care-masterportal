@@ -377,12 +377,12 @@ Die beschriebenen Parameter sind für die eines einzelnen Layer-Objektes im **[l
 
 **Beispiel:**
 ```
-layers: {
+layers: [{
     id: "urlPolygonFeatures",
     geometryType: "Polygon",
     name: "URL Polygon Features",
     styleId: "url_polygons"
-}
+}]
 ```
 
 ***
