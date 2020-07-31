@@ -21,6 +21,7 @@ import ColorScale from "../modules/tools/colorScale/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
+import FeatureViaURL from "../modules/featureViaURL/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
@@ -42,6 +43,7 @@ import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
+import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 /**
@@ -81,6 +83,7 @@ import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
+import SelectFeaturesView from "../modules/tools/selectFeatures/view";
 
 let sbconfig, controls, controlsView;
 
@@ -171,6 +174,9 @@ async function loadApp () {
     }
     if (Config.hasOwnProperty("zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
+    }
+    if (Config.hasOwnProperty("featureViaURL")) {
+        new FeatureViaURL(Config.featureViaURL);
     }
 
     new SliderView();
@@ -308,6 +314,10 @@ async function loadApp () {
                 new WfstView({model: tool});
                 break;
             }
+            case "styleVT": {
+                new StyleVTView({model: tool});
+                break;
+            }
             /**
              * layerslider
              * @deprecated in 3.0.0
@@ -322,6 +332,10 @@ async function loadApp () {
             }
             case "virtualCity": {
                 new VirtualcityModel(tool.attributes);
+                break;
+            }
+            case "selectFeatures": {
+                new SelectFeaturesView({model: tool});
                 break;
             }
             default: {

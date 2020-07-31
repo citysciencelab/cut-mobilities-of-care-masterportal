@@ -123,6 +123,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
         styleIds.push(this.getStyleIdsFromTools(tools));
+        styleIds.push(this.getFeatureViaURLStyles());
 
         styleIds = Array.isArray(styleIds) ? styleIds.reduce((acc, val) => acc.concat(val), []) : styleIds;
         filteredData = data.filter(function (styleModel) {
@@ -140,7 +141,22 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         this.add(filteredData);
         return filteredData;
     },
+    /**
+     * Checks whether the module featureViaURL is activated and retrieves the styleIds.
+     *
+     * @returns {String[]} Array of styleIds for the layers for the features given via the URL.
+     */
+    getFeatureViaURLStyles: function () {
+        const styleIds = [],
+            layers = Config?.featureViaURL?.layers;
 
+        if (layers !== undefined) {
+            layers.forEach(layer => {
+                styleIds.push(layer.styleId);
+            });
+        }
+        return styleIds;
+    },
     /**
      * Gathers the styleIds of the layers.
      * @param {Object[]} layers The configured layers.

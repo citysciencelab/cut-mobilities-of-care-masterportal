@@ -24,14 +24,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             it("should take the given dummy instead of creating a new instance of SensorThingsMqtt", function () {
                 const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "foo", "noSingletonOpt");
 
-                expect(api.getSensorThingsMqtt()).to.equal("foo");
-                expect(api.getMqttClient()).to.be.false;
-            });
-            it("should create a new instance of SensorThingsMqtt on construction if no dummy was given", function () {
-                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", {host: "foo"}, "sensorThingsHttpOpt", false, "noSingletonOpt");
-
-                expect(api.getSensorThingsMqtt().constructor.name).to.equal("SensorThingsMqtt");
-                expect(api.getMqttClient().constructor.name).to.equal("SensorThingsMqttClient");
+                expect(api.getMqttClient()).to.equal("foo");
             });
         });
 
@@ -52,31 +45,13 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         });
 
         describe("TrafficCountApi.constructor: SensorThingsMqttClient", function () {
-            it("should use the given mqtt options to get the client from SensorThingsMqtt", function () {
-                let lastMqttOptions = false;
-                const dummySensorThingsMqtt = {
-                        connect: (mqttOptions) => {
-                            lastMqttOptions = mqttOptions;
-
-                            return "baz";
-                        }
-                    },
-                    api = new TrafficCountApi("httpHost", "sensorThingsVersion", {"foo": "bar"}, "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt");
-
-                expect(lastMqttOptions).to.deep.equal({"foo": "bar"});
-                expect(api.getMqttClient()).to.equal("baz");
-            });
             it("should set the on message event with an event", function () {
                 let lastEventName = false,
                     lastCallback = false;
                 const dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            on: (eventName, callback) => {
-                                lastEventName = eventName;
-                                lastCallback = callback;
-                            }
-                        };
+                    on: (eventName, callback) => {
+                        lastEventName = eventName;
+                        lastCallback = callback;
                     }
                 };
 
@@ -88,12 +63,8 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             it("should set the on message event with an event(topic, payload) that will give payload to all callbacks stored in subscriptionTopics[topic]", function () {
                 let lastCallback = false;
                 const dummySensorThingsMqtt = {
-                        connect: () => {
-                            return {
-                                on: (eventName, callback) => {
-                                    lastCallback = callback;
-                                }
-                            };
+                        on: (eventName, callback) => {
+                            lastCallback = callback;
                         }
                     },
                     api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt"),
@@ -241,13 +212,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             let lastTopic = false,
                 lastMqttOptions = false;
             const dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt");
@@ -424,18 +391,14 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations",
-                expectedMqttOptions = {retain: 2};
+                expectedMqttOptions = {rh: 2};
 
             // hint: day === dayTodayOpt with "day" === "day"
             api.updateDay("thingId", "meansOfTransport", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "2020-03-20");
@@ -457,13 +420,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
@@ -685,13 +644,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
@@ -1286,13 +1241,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt"),
@@ -1306,7 +1257,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             api.updateDataset("thingId", "meansOfTransport", timeSettings, "onupdate", "onerror", "onstart", "oncomplete", "2020-03-20");
 
             expect(lastTopic).to.equal("v1234/Datastreams(foo)/Observations");
-            expect(lastMqttOptions).to.deep.equal({retain: 2});
+            expect(lastMqttOptions).to.deep.equal({rh: 2});
         });
         it("updateDataset: should resend the result with new data to onupdate anytime a subscribed message was received", function () {
             let lastDataset = false;
@@ -1479,7 +1430,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             expect(api.getSubscriptionTopics().hasOwnProperty(expectedTopic)).to.be.true;
         });
-        it("subscribeLastUpdate: should subscribe to a subscription topic with mqtt options retain 0 and rmSimulate true", function () {
+        it("subscribeLastUpdate: should subscribe to a subscription topic with mqtt options rh 0", function () {
             let lastTopic = false,
                 lastMqttOptions = false;
             const dummySensorThingsHttp = {
@@ -1492,13 +1443,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
@@ -1506,7 +1453,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             api.subscribeLastUpdate("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
             expect(lastTopic).to.equal("v1234/Datastreams(foo)/Observations");
-            expect(lastMqttOptions).to.deep.equal({retain: 0, rmSimulate: true, rmUrl: "https://www.example.com"});
+            expect(lastMqttOptions).to.deep.equal({rh: 0});
         });
         it("subscribeLastUpdate: should push an event to subscriptionTopics that will hand over phenomenonTime to the given onupdate handler", function () {
             let lastDatetime = false,
@@ -1590,12 +1537,8 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         it("unsubscribeEverything: should call unsubscribe on the given mqtt client for each topic found in subscription topics", function () {
             const unsubscribedTopics = [],
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            unsubscribe: (topic) => {
-                                unsubscribedTopics.push(topic);
-                            }
-                        };
+                    unsubscribe: (topic) => {
+                        unsubscribedTopics.push(topic);
                     }
                 },
                 api = new TrafficCountApi(false, false, {}, true, dummySensorThingsMqtt, "noSingletonOpt");
