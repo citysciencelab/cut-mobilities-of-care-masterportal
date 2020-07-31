@@ -16,6 +16,8 @@
 - Die “gfiAttribute”-keys können jetzt auch Objektpfade sein, analog zum neuen Styling.
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
 - Es wurde die Möglichkeit hinzugefügt über die URL Feature zu übergeben, welche dann in einem GeoJSON-Layer dargestellt werden.
+- Es können nun Vector Tile Layer (VTL) als Layer eingebunden werden.
+- Für VTL wurde ein Tool hergestellt, mit dem zwischen externen Styles gewechselt werden kann.
 - Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
 - Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 

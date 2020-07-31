@@ -203,12 +203,20 @@
                 "withLegendLabel": "With legend",
                 "printLabel": "Print",
                 "withInfoLabel": "With information",
+                "vtlWarning": "Since MapFish 3 does not support Vector Tile Layers, the following active layers will not appear in the print view:",
                 "layoutNameList": {
                     "A4 Hochformat": "A4 portrait format",
                     "A4 Querformat": "A4 landscape format",
                     "A3 Hochformat": "A3 portrait format",
                     "A3 Querformat": "A3 landscape format"
                 }
+            },
+            "styleVT": {
+              "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",
+              "noStyleableLayers": "There are currently no topics to which this tool could be applied.",
+              "theme": "Theme",
+              "chooseTheme": "Please choose active theme",
+              "style": "Style"
             },
             "styleWMS": {
                 "noStyleableLayers": "There are currently no classifiable topics to which this tool could be applied.",

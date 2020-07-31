@@ -702,6 +702,12 @@
  */
 
 /**
+ * @namespace StyleVT
+ * @memberof Tools
+ * @description Tool that can modify vtl styles with external style documents
+ */
+
+/**
  * @namespace ViomRouting
  * @memberof Tools
  * @description Tool to route on viom data.

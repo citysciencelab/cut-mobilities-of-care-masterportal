@@ -212,12 +212,20 @@
                 "withLegendLabel": "Mit Legende",
                 "printLabel": "Drucken",
                 "withInfoLabel": "Mit Informationen",
+                "vtlWarning": "Da MapFish 3 keine Vector Tile Layer unterstützt, werden die folgenden aktiven Layer nicht in der Printansicht erscheinen:",
                 "layoutNameList": {
                     "A4 Hochformat": "A4 Hochformat",
                     "A4 Querformat": "A4 Querformat",
                     "A3 Hochformat": "A3 Hochformat",
                     "A3 Querformat": "A3 Querformat"
                 }
+            },
+            "styleVT": {
+              "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
+              "noStyleableLayers": "Derzeit sind keine Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+              "theme": "Thema",
+              "chooseTheme": "Bitte aktives Thema auswählen",
+              "style": "Style"
             },
             "styleWMS": {
                 "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
