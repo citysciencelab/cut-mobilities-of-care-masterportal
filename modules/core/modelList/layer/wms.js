@@ -118,7 +118,9 @@ const WMSLayer = Layer.extend({
                 legendURL: this.get("legendURL"),
                 routable: this.get("routable"),
                 gfiTheme: this.get("gfiTheme"),
-                infoFormat: this.get("infoFormat")
+                gfiAttributes: this.get("gfiAttributes"),
+                infoFormat: this.get("infoFormat"),
+                featureCount: this.get("featureCount")
             };
 
         if (this.get("singleTile") !== true) {
