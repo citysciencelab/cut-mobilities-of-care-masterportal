@@ -143,13 +143,15 @@ const actions = {
      * @param {function} store.commit - function to commit a mutation
      * @returns {void}
      */
-    collectGfiFeatures ({getters, commit}) {
+    async collectGfiFeatures ({getters, commit}) {
         const {clickCoord, visibleWmsLayerList, resolution, projection, gfiFeaturesAtPixel} = getters,
             gfiWmsLayerList = visibleWmsLayerList.filter(layer => {
                 return layer.get("gfiAttributes") !== "ignore";
             });
 
-        Promise.all(gfiWmsLayerList.map(layer => {
+        let gfiFeatures = [];
+
+        gfiFeatures = await Promise.all(gfiWmsLayerList.map(layer => {
             const mimeType = layer.get("infoFormat"),
                 gfiParams = {
                     INFO_FORMAT: mimeType,
@@ -166,11 +168,11 @@ const actions = {
                     "html": mimeType === "text/html" ? featureInfos : null
                 };
             });
-        })).then(gfiFeatures => {
-            commit("setGfiFeatures", {
-                coordinate: clickCoord,
-                features: gfiFeaturesAtPixel.concat(gfiFeatures)
-            });
+        }));
+
+        commit("setGfiFeatures", {
+            coordinate: clickCoord,
+            features: gfiFeaturesAtPixel.concat(gfiFeatures)
         });
     },
 
