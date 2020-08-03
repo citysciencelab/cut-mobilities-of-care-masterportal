@@ -71,4 +71,25 @@ describe("actionsMap", function () {
             expect(dispatch.args[0]).to.include.members(["collectGfiFeatures"]);
         });
     });
+
+    describe("collectGfiFeatures", () => {
+        it("commits setGfiFeature", async () => {
+            const getters = {
+                    clickCoord: sinon.spy(),
+                    visibleWmsLayerList: {
+                        filter: function () {
+                            return [];
+                        }
+                    },
+                    resolution: sinon.spy(),
+                    projection: sinon.spy(),
+                    gfiFeaturesAtPixel: []
+                },
+                commit = sinon.spy();
+
+            await actions.collectGfiFeatures({commit, getters});
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.args[0]).to.include.members(["setGfiFeatures"]);
+        });
+    });
 });
