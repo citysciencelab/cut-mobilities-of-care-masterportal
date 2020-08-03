@@ -299,7 +299,7 @@
             "name": "translate#common:menu.tools.measure",
             "glyphicon": "glyphicon-resize-full"
           },
-          "coord": {
+          "supplyCoord": {
             "name": "translate#common:menu.tools.coord",
             "glyphicon": "glyphicon-screenshot"
           },
