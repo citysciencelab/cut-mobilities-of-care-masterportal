@@ -1,6 +1,6 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
-import getFeatureInfoUrls from "./getFeatureInfoUrls";
+import requestGfi from "../../../../api/wmsGetFeatureInfo";
 
 let unsubscribes = [],
     loopId = null;
@@ -43,6 +43,7 @@ const actions = {
 
         // set map to store
         commit("setMap", map);
+        commit("setLayerList", map.getLayers().getArray());
 
         // update state once initially to get initial settings
         dispatch("updateViewState");
@@ -109,10 +110,14 @@ const actions = {
     /**
      * Updates the click coordinate and the related pixel depending on the map mode.
      * If Gfi Tool is active, the features of this coordinate/pixel are set.
+     * @param {object} store.getters - the map getters
+     * @param {function} store.commit - function to commit a mutation
+     * @param {function} store.dispatch - function to dipatch a action
+     * @param {object} store.rootGetters - the store getters
      * @param {MapBrowserEvent} evt - Click event in 2D, fake click event in 3D
      * @returns {void}
      */
-    updateClick ({getters, commit, rootGetters}, evt) {
+    updateClick ({getters, commit, dispatch, rootGetters}, evt) {
         const {mapMode} = getters;
 
         // MODE_2D
@@ -127,19 +132,48 @@ const actions = {
         }
 
         if (rootGetters["Tools/Gfi/isActive"]) {
-            const {clickCoord, clickPixel} = getters,
-                map = evt.map,
-                featureInfoUrls = getFeatureInfoUrls(map, clickCoord),
-                featuresAtPixel = map.getFeaturesAtPixel(clickPixel);
-
-            // wms api called with getFeatureInfoUrls
-            // connect concat featuresAtPixel and wms features
-            // when all are done, there will be a commit on "featuresAtCoordinate"
-            console.warn(featureInfoUrls);
-            console.warn(featuresAtPixel);
-            commit("setFeaturesAtCoordinate", featuresAtPixel);
+            dispatch("collectGfiFeatures");
         }
     },
+
+    /**
+     * collects features for the gfi.
+     * @param {object} store context
+     * @param {object} store.getters - the map getters
+     * @param {function} store.commit - function to commit a mutation
+     * @returns {void}
+     */
+    collectGfiFeatures ({getters, commit}) {
+        const {clickCoord, visibleWmsLayerList, resolution, projection, gfiFeaturesAtPixel} = getters,
+            gfiWmsLayerList = visibleWmsLayerList.filter(layer => {
+                return layer.get("gfiAttributes") !== "ignore";
+            });
+
+        Promise.all(gfiWmsLayerList.map(layer => {
+            const mimeType = layer.get("infoFormat"),
+                gfiParams = {
+                    INFO_FORMAT: mimeType,
+                    FEATURE_COUNT: layer.get("featureCount")
+                },
+                url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
+
+            return requestGfi(mimeType, url).then(featureInfos => {
+                return {
+                    "title": layer.get("name"),
+                    "theme": layer.get("gfiTheme"),
+                    "attributesToShow": layer.get("gfiAttributes"),
+                    "olFeatures": mimeType === "text/xml" ? featureInfos : null,
+                    "html": mimeType === "text/html" ? featureInfos : null
+                };
+            });
+        })).then(gfiFeatures => {
+            commit("setGfiFeatures", {
+                coordinate: clickCoord,
+                features: gfiFeaturesAtPixel.concat(gfiFeatures)
+            });
+        });
+    },
+
     /**
      * Sets a new zoom level to map and store. All other fields will be updated onmoveend.
      * @param {object} state state object

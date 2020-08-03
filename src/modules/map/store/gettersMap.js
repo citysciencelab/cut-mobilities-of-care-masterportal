@@ -1,8 +1,91 @@
-import state from "./state";
+import stateMap from "./state";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
 
-const getters = {
-    ...generateSimpleGetters(state),
+const gettersMap = {
+    ...generateSimpleGetters(stateMap),
+
+    /**
+     * gets all visible layers
+     * @param {object} state - the map state
+     * @param {object[]} state.layerList - all avaible layers in the map
+     * @returns {object[]} all visible layers
+     */
+    visibleLayerList: ({layerList}) => {
+        return layerList.filter(layer => layer.getVisible());
+    },
+
+    /**
+     * gets all visible wms layers
+     * @param {object} state - the map state
+     * @param {object} getters - the map getters
+     * @param {object[]} getters.visibleLayerList - all visible layers in the map
+     * @returns {object[]} all visible wms layers
+     */
+    visibleWmsLayerList: (state, {visibleLayerList}) => {
+        const list = [];
+
+        visibleLayerList.forEach(layer => {
+            // Group Layer
+            if (layer.get("layers")) {
+                layer.get("layers").getArray().forEach(childLayer => {
+                    if (childLayer.get("typ") === "WMS") {
+                        list.push(childLayer);
+                    }
+                });
+            }
+            else if (layer.get("typ") === "WMS") {
+                list.push(layer);
+            }
+        });
+        return list;
+    },
+
+    /**
+     * gets the features at the given pixel for the gfi
+     * @param {object} state - the map state
+     * @param {object} state.map - the openlayers map
+     * @param {number[]} state.clickPixel - the pixel coordinate of the click event
+     * @returns {object[]} gfi features
+     */
+    gfiFeaturesAtPixel: ({map, clickPixel}) => {
+        const featuresAtPixel = [];
+
+        map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
+            const existingFeature = featuresAtPixel.find(featureAtPixel => {
+                    return featureAtPixel.title === layer.get("name");
+                }),
+                gfiFeature = {
+                    html: null,
+                    theme: layer.get("gfiTheme"),
+                    title: layer.get("name"),
+                    attributesToShow: layer.get("gfiAttributes")
+                };
+
+            // cluster feature
+            if (feature.getProperties().features) {
+                // feature does not yet exist in featuresAtPixel
+                if (typeof existingFeature === "undefined") {
+                    gfiFeature.olFeatures = feature.getProperties().features;
+                    featuresAtPixel.push(gfiFeature);
+                }
+                // feature already exists in featuresAtPixel
+                else {
+                    existingFeature.olFeatures.concat(feature.getProperties().features);
+                }
+            }
+            // no cluster feature && feature does not yet exist in featuresAtPixel
+            else if (typeof existingFeature === "undefined") {
+                gfiFeature.olFeatures = [feature];
+                featuresAtPixel.push(gfiFeature);
+            }
+            // no cluster feature && feature already exists in featuresAtPixel
+            else {
+                existingFeature.olFeatures.push(feature);
+            }
+        });
+        return featuresAtPixel;
+    },
+
     /**
      * @param {object} s state
      * @returns {boolean} true if map is not in initial zoom/center
@@ -71,4 +154,4 @@ const getters = {
     projectionUnits: (_, g) => g.projection?.getUnits()
 };
 
-export default getters;
+export default gettersMap;
