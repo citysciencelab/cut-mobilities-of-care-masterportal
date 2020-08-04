@@ -80,9 +80,8 @@ export default {
          */
         listenToCreateLegendForLayerInfo () {
             Backbone.Events.listenTo(Radio.channel("Legend"), {
-                "createLegendForLayer": (layerId, elementId) => {
+                "createLegendForLayer": (layerId) => {
                     this.createLayerInfoLegend(layerId);
-                    document.getElementById(elementId).innerHTML = "<p>" + this.layerInfoLegend.name + "</p>";
                 }
             });
         },
@@ -442,34 +441,45 @@ export default {
 </script>
 
 <template>
-    <div
-        v-if="showLegend"
-        id="legend-window"
-    >
-        <div class="legend-title">
-            <span
-                :class="glyphicon"
-                class="glyphicon hidden-sm"
-            />
-            <span>{{ $t("menu.legend") }}</span>
-            <span
-                class="glyphicon glyphicon-remove close-legend float-right"
-                @click="closeLegend"
-            ></span>
-        </div>
-        <div class="legend-content">
-            <div
-                v-for="legendObj in legends"
-                :key="legendObj.name"
-                class="layer"
-            >
-                <div class="layer-title">
-                    {{ legendObj.name }}
-                </div>
-                <LegendSingleLayer
-                    :legend="legendObj.legend"
+    <div>
+        <div
+            v-if="showLegend"
+            id="legend-window"
+        >
+            <div class="legend-title">
+                <span
+                    :class="glyphicon"
+                    class="glyphicon hidden-sm"
                 />
+                <span>{{ $t("menu.legend") }}</span>
+                <span
+                    class="glyphicon glyphicon-remove close-legend float-right"
+                    @click="closeLegend"
+                ></span>
             </div>
+            <div class="legend-content">
+                <div
+                    v-for="legendObj in legends"
+                    :key="legendObj.name"
+                    class="layer"
+                >
+                    <div class="layer-title">
+                        {{ legendObj.name }}
+                    </div>
+                    <LegendSingleLayer
+                        :legend="legendObj.legend"
+                        :renderToId="''"
+                    />
+                </div>
+            </div>
+        </div>
+        <div
+            v-if="layerInfoLegend.hasOwnProperty('legend') && layerInfoLegend.legend.length > 0"
+        >
+            <LegendSingleLayer
+                :legend="layerInfoLegend.legend"
+                :renderToId="'layerinfo-legend'"
+            />
         </div>
     </div>
 </template>

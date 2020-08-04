@@ -3,5 +3,5 @@ export default {
     glyphicon: "glyphicon-book",
     showLegend: false,
     legends: [],
-    layerInfoLegend: []
+    layerInfoLegend: {}
 };

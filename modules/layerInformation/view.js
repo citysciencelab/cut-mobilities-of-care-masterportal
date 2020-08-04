@@ -57,7 +57,8 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     },
 
     drawLayerLegend: function () {
-        Radio.trigger("Legend", "createLegendForLayer", this.model.get("id"), "layerinfo-legend");
+        console.log(this.model.get("id"));
+        Radio.trigger("Legend", "createLegendForLayer", this.model.get("id"));
     },
     /**
      * Toggles the tab after click.

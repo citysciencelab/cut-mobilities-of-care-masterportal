@@ -6,6 +6,16 @@ export default {
         legend: {
             type: Array,
             required: true
+        },
+        renderToId: {
+            type: String,
+            required: true
+        }
+    },
+    mounted () {
+        if (this.renderToId !== "") {
+            // $(this.$el).insertAfter(document.getElementById(this.renderToId));
+            document.getElementById(this.renderToId).append(this.$el);
         }
     }
 };
