@@ -1,6 +1,7 @@
 import {createStyle} from "./style/createStyle";
 import {getMapProjection} from "masterportalAPI/src/crs";
 import {toLonLat, transform} from "ol/proj";
+import {transformNaNToNull} from "../../../../../utils/transformNaNToNull";
 
 const earthRadius = 6378137;
 
@@ -76,15 +77,6 @@ function getCircleExtentByDistanceLon (circleCenter, circleDiameter, map) {
     return transform([newPositionLon, circleCenterWGS[1]], "EPSG:4326", getMapProjection(map));
 }
 
-/**
- * Transforms the given value to null, if it is not a number.
- *
- * @param {*} value value to check whether its a number.
- * @returns {Number|null} Returns null, if the input value is not a number.
- */
-function transformNaNToNull (value) {
-    return isNaN(value) ? null : value;
-}
 /**
 * Creates a listener for the addfeature event of the source of the layer used for the Draw Tool.
 * NOTE: Should the zIndex only be counted up if the feature gets actually drawn?

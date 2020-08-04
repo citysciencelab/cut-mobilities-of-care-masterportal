@@ -1,8 +1,18 @@
 import sinon from "sinon";
 import {expect} from "chai";
 import actions from "../store/actionsDraw";
+import stateDraw from "../store/stateDraw";
 
-describe("actionsDraw", () => {
+describe.only("actionsDraw", () => {
+    let commit, dispatch, state;
+
+    beforeEach(() => {
+        commit = sinon.spy();
+        dispatch = sinon.spy();
+    });
+
+    afterEach(sinon.restore);
+
     describe("addInteraction", () => {
         it("calls map's addInteraction function with a given interaction", () => {
             const addInteraction = sinon.spy(),
@@ -18,10 +28,11 @@ describe("actionsDraw", () => {
     });
     describe("clearLayer", () => {
         it("calls the clear function of the state's layer", () => {
-            const clear = sinon.spy(),
-                state = {layer: {
-                    getSource: () => ({clear})
-                }};
+            const clear = sinon.spy();
+
+            state = {layer: {
+                getSource: () => ({clear})
+            }};
 
             actions.clearLayer({state});
 
@@ -50,9 +61,6 @@ describe("actionsDraw", () => {
             maxFeaturesSymbol = Symbol();
 
         it("commits and dispatches as expected", () => {
-            const commit = sinon.spy(),
-                dispatch = sinon.spy();
-
             actions.createDrawInteractionAndAddToMap({state: getState("drawCircle"), commit, dispatch}, {active: activeSymbol, maxFeatures: maxFeaturesSymbol});
 
             // commits setDrawInteraction
@@ -69,9 +77,6 @@ describe("actionsDraw", () => {
         });
 
         it("commits and dispatches a second set of information for drawDoubleCircle", () => {
-            const commit = sinon.spy(),
-                dispatch = sinon.spy();
-
             actions.createDrawInteractionAndAddToMap({state: getState("drawDoubleCircle"), commit, dispatch}, {active: activeSymbol, maxFeatures: maxFeaturesSymbol});
 
             // commits setDrawInteraction
@@ -94,14 +99,13 @@ describe("actionsDraw", () => {
         });
     });
     describe("createDrawInteractionListener", () => {
-        let definedFunctions, dispatch, state;
+        let definedFunctions;
 
         beforeEach(() => {
             definedFunctions = {
                 drawstart: [],
                 drawend: []
             };
-            dispatch = sinon.spy();
             state = {
                 drawInteraction: {
                     on: (key, f) => {
@@ -110,8 +114,6 @@ describe("actionsDraw", () => {
                 }
             };
         });
-
-        afterEach(sinon.restore);
 
         it("defines a drawstart and drawend function on the interaction", () => {
             actions.createDrawInteractionListener({state, dispatch}, {
@@ -217,15 +219,14 @@ describe("actionsDraw", () => {
     });
     describe("createModifyInteractionAndAddToMap", () => {
         it("commits and dispatches as expected", () => {
-            const commit = sinon.spy(),
-                dispatch = sinon.spy(),
-                state = {
-                    layer: {getSource: () => ({
-                        getFeatures: () => [],
-                        addEventListener: () => ({})
-                    })}
-                },
-                activeSymbol = Symbol();
+            const activeSymbol = Symbol();
+
+            state = {
+                layer: {getSource: () => ({
+                    getFeatures: () => [],
+                    addEventListener: () => ({})
+                })}
+            };
 
             actions.createModifyInteractionAndAddToMap(
                 {state, commit, dispatch},
@@ -242,36 +243,689 @@ describe("actionsDraw", () => {
             expect(typeof dispatch.thirdCall.args[1]).to.eql("object");
         });
     });
-    // createModifyInteractionListener
-    // createSelectInteractionAndAddToMap
-    // createSelectionInteractionListener
-    // drawInteractionOnDrawEvent
-    // manipulateInteraction
-    // redoLastStep
-    // removeInteraction
-    // resetModule
-    // setActive
-    // setCircleInnerDiameter
-    // setCircleMethod
-    // setCircleOuterDiameter
-    // setColor
-    // setColorContour
-    // setDrawType
-    // setFont
-    // setFontSize
-    // setOpacity
-    // setOpacityContour
-    // setPointSize
-    // setStrokeWidth
-    // setSymbol
-    // setText
-    // setUnit
-    // startDownloadTool
-    // toggleInteraction
-    // undoLastStep
-    // uniqueID
-    // updateDrawInteraction
-    // updateRedoArray
+    describe("createModifyInteractionListener", () => {
+        let definedFunctions, trigger;
+
+        beforeEach(() => {
+            trigger = sinon.spy();
+            definedFunctions = {
+                modifyend: []
+            };
+            state = {
+                modifyInteraction: {
+                    on: (key, f) => {
+                        definedFunctions[key].push(f);
+                    }
+                }
+            };
+            sinon.stub(Radio, "trigger").callsFake(trigger);
+        });
+
+        it("should define a modifyend function on the interaction", () => {
+            actions.createModifyInteractionListener({state, dispatch});
+
+            expect(definedFunctions.modifyend).to.have.length(1);
+        });
+        it("should enable the modifyend to trigger to the RemoteInterface if Config.inputMap is defined", () => {
+            const featureSymbol = Symbol(),
+                geoJSONSymbol = Symbol();
+
+            dispatch = sinon.spy(() => geoJSONSymbol);
+            actions.createModifyInteractionListener({state, dispatch});
+
+            Config.inputMap = {targetProjection: "mock"};
+            definedFunctions.modifyend[0]({feature: {featureSymbol}});
+            delete Config.inputMap;
+
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": "mock"}, currentFeature: {featureSymbol}}]);
+            expect(trigger.calledOnce).to.be.true;
+            expect(trigger.firstCall.args).to.eql(["RemoteInterface", "postMessage", {"drawEnd": geoJSONSymbol}]);
+        });
+    });
+    describe("createSelectInteractionAndAddToMap", () => {
+        it("commits and dispatches as expected", () => {
+            const activeSymbol = Symbol();
+
+            state = {
+                layer: {getSource: () => ({
+                    getFeatures: () => [],
+                    addEventListener: () => ({})
+                })}
+            };
+
+            actions.createSelectInteractionAndAddToMap(
+                {state, commit, dispatch},
+                activeSymbol
+            );
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args[0]).to.equal("setSelectInteraction");
+            expect(typeof commit.firstCall.args[1]).to.equal("object");
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: activeSymbol}]);
+            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionListener"]);
+            expect(dispatch.thirdCall.args[0]).to.eql("addInteraction");
+            expect(typeof dispatch.thirdCall.args[1]).to.eql("object");
+        });
+    });
+    describe("createSelectionInteractionListener", () => {
+        let clear, definedFunctions, removeFeature;
+
+        beforeEach(() => {
+            clear = sinon.spy();
+            removeFeature = sinon.spy();
+            definedFunctions = {
+                select: []
+            };
+            state = {
+                selectInteraction: {
+                    on: (key, f) => {
+                        definedFunctions[key].push(f);
+                    },
+                    getFeatures: () => ({clear})
+                },
+                layer: {
+                    getSource: () => ({removeFeature})
+                }
+            };
+        });
+
+        it("should define a select function on the interaction", () => {
+            actions.createSelectInteractionListener({state});
+
+            expect(definedFunctions.select).to.have.length(1);
+        });
+        it("should enable the select to call the functions removeFeature from the layerSource and clear from the features", () => {
+            const selectedSymbol = Symbol();
+
+            actions.createSelectInteractionListener({state});
+            definedFunctions.select[0]({selected: [selectedSymbol]});
+
+            expect(removeFeature.calledOnce).to.be.true;
+            expect(removeFeature.firstCall.args).to.eql([selectedSymbol]);
+            expect(clear.calledOnce).to.be.true;
+            expect(clear.firstCall.args).to.eql([]);
+        });
+    });
+    // TODO: drawInteractionOnDrawEvent
+    describe("manipulateInteraction", () => {
+        const active = true;
+        let interaction, setActive;
+
+        beforeEach(() => {
+            setActive = sinon.spy();
+            state = {
+                drawInteraction: {
+                    setActive
+                },
+                drawInteractionTwo: {
+                    setActive
+                },
+                modifyInteraction: {
+                    setActive
+                },
+                selectInteraction: {
+                    setActive
+                }
+            };
+        });
+
+        it("should call the 'setActive' method of the first draw interaction with the given 'active' value if it is not null and the given interaction equals 'draw'", () => {
+            delete state.drawInteractionTwo;
+
+            interaction = "draw";
+            actions.manipulateInteraction({state}, {interaction, active});
+
+            expect(setActive.calledOnce).to.be.true;
+            expect(setActive.firstCall.args).to.eql([active]);
+        });
+        it("should call the 'setActive' method of both draw interactions with the given 'active' value if it is not null and the given interaction equals 'draw'", () => {
+            actions.manipulateInteraction({state}, {interaction, active});
+
+            expect(setActive.calledTwice).to.be.true;
+            expect(setActive.firstCall.args).to.eql([active]);
+            expect(setActive.secondCall.args).to.eql([active]);
+        });
+        it("should call the 'setActive' method of the modify interaction with the given 'active' value if it is not null and the given interaction equals 'modify'", () => {
+            interaction = "modify";
+            actions.manipulateInteraction({state}, {interaction, active});
+
+            expect(setActive.calledOnce).to.be.true;
+            expect(setActive.firstCall.args).to.eql([active]);
+        });
+        it("should call the 'setActive' method of the select interaction with the given 'active' value if it is not null and the given interaction equals 'delete'", () => {
+            interaction = "delete";
+            actions.manipulateInteraction({state}, {interaction, active});
+
+            expect(setActive.calledOnce).to.be.true;
+            expect(setActive.firstCall.args).to.eql([active]);
+        });
+    });
+    describe("redoLastStep", () => {
+        const styleSymbol = Symbol();
+        let addFeature, getStyle, setId, setStyle;
+
+        beforeEach(() => {
+            addFeature = sinon.spy();
+            getStyle = sinon.spy(() => styleSymbol);
+            setId = sinon.spy();
+            setStyle = sinon.spy();
+            state = {
+                fId: 0,
+                layer: {
+                    getSource: () => ({
+                        addFeature,
+                        getFeatureById: () => ({setStyle})
+                    })
+                },
+                redoArray: []
+            };
+        });
+
+        it("should commit and dispatch if the redoArray contains a value", () => {
+            const featureToRestore = {getStyle, setId};
+
+            state.redoArray.push(featureToRestore);
+
+            actions.redoLastStep({state, commit, dispatch});
+
+            expect(setId.calledOnce).to.be.true;
+            expect(setId.firstCall.args).to.eql([0]);
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setFId", 1]);
+            expect(addFeature.calledOnce).to.be.true;
+            expect(addFeature.firstCall.args).to.eql([featureToRestore]);
+            expect(setStyle.calledOnce).to.be.true;
+            expect(setStyle.firstCall.args).to.eql([styleSymbol]);
+            expect(getStyle.calledOnce).to.be.true;
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["updateRedoArray", {remove: true}]);
+        });
+        it("should not commit and dispatch if the redoArray doesn't contain a value", () => {
+            expect(setId.notCalled).to.be.true;
+            expect(commit.notCalled).to.be.true;
+            expect(addFeature.notCalled).to.be.true;
+            expect(setStyle.notCalled).to.be.true;
+            expect(getStyle.notCalled).to.be.true;
+            expect(dispatch.notCalled).to.be.true;
+        });
+    });
+    describe("removeInteraction", () => {
+        const interactionSymbol = Symbol(),
+            removeInteraction = sinon.spy(),
+            rootState = {
+                Map: {
+                    map: {
+                        removeInteraction
+                    }
+                }
+            };
+
+        it("should call the 'removeInteration' method of the map of the rootState", () => {
+            actions.removeInteraction({rootState}, interactionSymbol);
+
+            expect(removeInteraction.calledOnce).to.be.true;
+            expect(removeInteraction.firstCall.args).to.eql([interactionSymbol]);
+        });
+    });
+    describe("resetModule", () => {
+        const drawInteraction = Symbol(),
+            drawInteractionTwo = Symbol(),
+            iconSymbol = Symbol(),
+            getters = {
+                iconList: [iconSymbol]
+            },
+            listener = Symbol(),
+            initialState = Object.assign({}, stateDraw),
+            color = initialState.color,
+            colorContour = initialState.colorContour,
+            modifyInteraction = Symbol(),
+            selectInteraction = Symbol(),
+            un = sinon.spy();
+
+        color[3] = initialState.opacity;
+        colorContour[3] = initialState.opacityContour;
+
+        it("should commit and dispatch as intended", () => {
+            state = {
+                addFeatureListener: {listener},
+                drawInteraction,
+                drawInteractionTwo,
+                layer: {getSource: () => ({un})},
+                modifyInteraction,
+                selectInteraction
+            };
+            actions.resetModule({state, commit, dispatch, getters});
+
+            expect(un.calledOnce).to.be.true;
+            expect(un.firstCall.args).to.eql(["addFeature", listener]);
+
+            expect(commit.callCount).to.equal(12);
+            expect(commit.getCall(0).args).to.eql(["setActive", false]);
+            expect(commit.getCall(1).args).to.eql(["setCircleMethod", initialState.circleMethod]);
+            expect(commit.getCall(2).args).to.eql(["setCircleInnerDiameter", initialState.circleInnerDiameter]);
+            expect(commit.getCall(3).args).to.eql(["setCircleOuterDiameter", initialState.circleOuterDiameter]);
+            expect(commit.getCall(4).args).to.eql(["setColor", color]);
+            expect(commit.getCall(5).args).to.eql(["setColorContour", colorContour]);
+            expect(commit.getCall(6).args).to.eql(["setDrawType", initialState.drawType]);
+            expect(commit.getCall(7).args).to.eql(["setFreeHand", initialState.freeHand]);
+            expect(commit.getCall(8).args).to.eql(["setOpacity", initialState.opacity]);
+            expect(commit.getCall(9).args).to.eql(["setOpacityContour", initialState.opacityContour]);
+            expect(commit.getCall(10).args).to.eql(["setPointSize", initialState.pointSize]);
+            expect(commit.getCall(11).args).to.eql(["setSymbol", iconSymbol]);
+
+            expect(dispatch.callCount).to.equal(7);
+            expect(dispatch.getCall(0).args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
+            expect(dispatch.getCall(1).args).to.eql(["removeInteraction", drawInteraction]);
+            expect(dispatch.getCall(2).args).to.eql(["removeInteraction", drawInteractionTwo]);
+            expect(dispatch.getCall(3).args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
+            expect(dispatch.getCall(4).args).to.eql(["removeInteraction", modifyInteraction]);
+            expect(dispatch.getCall(5).args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+            expect(dispatch.getCall(6).args).to.eql(["removeInteraction", selectInteraction]);
+        });
+    });
+    describe("setter", () => {
+        let target;
+
+        // TODO: setActive
+        describe("setCircleInnerDiameter", () => {
+            it("should commit as intended", () => {
+                state = {unit: "m"};
+                target = {value: "42.5"};
+
+                actions.setCircleInnerDiameter({state, commit}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setCircleInnerDiameter", 42.5]);
+            });
+        });
+        describe("setCircleMethod", () => {
+            it("should commit as intended", () => {
+                const method = Symbol();
+
+                target = {options: [{value: method}], selectedIndex: 0};
+
+                actions.setCircleMethod({commit}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setCircleMethod", method]);
+            });
+        });
+        describe("setCircleOuterDiameter", () => {
+            it("should commit as intended", () => {
+                state = {unit: "m"};
+                target = {value: "42.5"};
+
+                actions.setCircleOuterDiameter({state, commit}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setCircleOuterDiameter", 42.5]);
+            });
+        });
+        describe("setColor", () => {
+            it("should commit as intended", () => {
+                state = {opacity: 3};
+                target = {options: [{value: "0,1,2"}], selectedIndex: 0};
+
+                actions.setColor({state, commit, dispatch}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setColor", [0, 1, 2, 3]]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setColorContour", () => {
+            it("should commit as intended", () => {
+                state = {opacityContour: 3};
+                target = {options: [{value: "0,1,2"}], selectedIndex: 0};
+
+                actions.setColorContour({state, commit, dispatch}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setColorContour", [0, 1, 2, 3]]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setDrawType", () => {
+            const geometry = Symbol();
+
+            it("should commit as intended", () => {
+                const id = Symbol();
+
+                target = {options: [{id: id, value: geometry}], selectedIndex: 0};
+                actions.setDrawType({commit, dispatch}, {target});
+
+                expect(commit.calledThrice).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
+                expect(commit.secondCall.args).to.eql(["setCircleMethod", "interactive"]);
+                expect(commit.thirdCall.args).to.eql(["setDrawType", {id, geometry}]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+            it("should commit 'true' to 'setFreeHand' if the id of the selectedElement equals 'drawCurve'", () => {
+                target = {options: [{id: "drawCurve", value: geometry}], selectedIndex: 0};
+                actions.setDrawType({commit, dispatch}, {target});
+
+                expect(commit.calledWithExactly("setFreeHand", true)).to.be.true;
+            });
+            it("should commit 'defined' to 'setCircleMethod' if the id of the selectedElement equals 'drawDoubleCircle'", () => {
+                target = {options: [{id: "drawDoubleCircle", value: geometry}], selectedIndex: 0};
+                actions.setDrawType({commit, dispatch}, {target});
+
+                expect(commit.calledWithExactly("setCircleMethod", "defined")).to.be.true;
+            });
+            it("should commit 'interactive' to 'setCircleMethod' if the id of the selectedElement equals anything other than 'drawDoubleCircle'", () => {
+                const id = Symbol();
+
+                target = {options: [{id, value: geometry}], selectedIndex: 0};
+                actions.setDrawType({commit, dispatch}, {target});
+
+                expect(commit.calledWithExactly("setCircleMethod", "interactive")).to.be.true;
+            });
+        });
+        describe("setFont", () => {
+            it("should commit as intended", () => {
+                target = {options: [{value: "Arial"}], selectedIndex: 0};
+
+                actions.setFont({commit, dispatch}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setFont", "Arial"]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setFontSize", () => {
+            it("should commit as intended", () => {
+                target = {options: [{value: 16}], selectedIndex: 0};
+
+                actions.setFontSize({commit, dispatch}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setFontSize", 16]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setOpacity", () => {
+            it("should commit as intended", () => {
+                state = {color: [0, 1, 2]};
+                target = {options: [{value: "3.5"}], selectedIndex: 0};
+
+                actions.setOpacity({state, commit, dispatch}, {target});
+
+                expect(commit.calledTwice).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setOpacity", 3.5]);
+                expect(commit.secondCall.args).to.eql(["setColor", [0, 1, 2, 3.5]]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setOpacityContour", () => {
+            it("should commit as intended", () => {
+                state = {colorContour: [0, 1, 2]};
+                target = {options: [{value: "3.5"}], selectedIndex: 0};
+
+                actions.setOpacityContour({state, commit, dispatch}, {target});
+
+                expect(commit.calledTwice).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setOpacityContour", 3.5]);
+                expect(commit.secondCall.args).to.eql(["setColorContour", [0, 1, 2, 3.5]]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setPointSize", () => {
+            it("should commit as intended", () => {
+                target = {options: [{value: "6"}], selectedIndex: 0};
+
+                actions.setPointSize({commit, dispatch}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setPointSize", 6]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setStrokeWidth", () => {
+            it("should commit as intended", () => {
+                target = {options: [{value: "6"}], selectedIndex: 0};
+
+                actions.setStrokeWidth({commit, dispatch}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setStrokeWidth", 6]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setSymbol", () => {
+            it("should commit as intended", () => {
+                const myIcon = Symbol(),
+                    otherIcon = Symbol(),
+                    getters = {iconList: [{id: otherIcon}, {id: myIcon}]};
+
+                target = {options: [{value: myIcon}], selectedIndex: 0};
+
+                actions.setSymbol({commit, dispatch, getters}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setSymbol", {id: myIcon}]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setText", () => {
+            it("should commit as intended", () => {
+                target = {value: "My Text"};
+
+                actions.setText({commit, dispatch}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setText", "My Text"]);
+                expect(dispatch.calledOnce).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+            });
+        });
+        describe("setUnit", () => {
+            it("should commit as intended", () => {
+                const circleInnerDiameter = Symbol(),
+                    circleOuterDiameter = Symbol();
+
+                state = {circleInnerDiameter, circleOuterDiameter};
+                target = {options: [{value: "km"}], selectedIndex: 0};
+
+                actions.setUnit({state, commit, dispatch}, {target});
+
+                expect(commit.calledOnce).to.be.true;
+                expect(commit.firstCall.args).to.eql(["setUnit", "km"]);
+                expect(dispatch.calledTwice).to.be.true;
+                expect(dispatch.firstCall.args).to.eql(["setCircleInnerDiameter", {target: {value: circleInnerDiameter}}]);
+                expect(dispatch.secondCall.args).to.eql(["setCircleOuterDiameter", {target: {value: circleOuterDiameter}}]);
+            });
+        });
+    });
+    describe("startDownloadTool", () => {
+        const features = Symbol(),
+            getFeatures = sinon.fake.returns(features),
+            trigger = sinon.spy();
+
+        beforeEach(() => {
+            state = {
+                layer: {
+                    getSource: () => ({getFeatures})
+                }
+            };
+            sinon.stub(Radio, "trigger").callsFake(trigger);
+        });
+
+        it("should trigger the download tool to start", () => {
+            actions.startDownloadTool({state});
+
+            expect(trigger.calledOnce).to.be.true;
+            expect(trigger.firstCall.args).to.eql(["Download", "start", {features, formats: ["KML", "GEOJSON", "GPX"]}]);
+        });
+    });
+    describe("toggleInteraction", () => {
+        let interaction;
+
+        it("should enable the draw interactions and disable the other interactions if the given interaction equals 'draw'", () => {
+            interaction = "draw";
+
+            actions.toggleInteraction({commit, dispatch}, interaction);
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "draw"]);
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: true}]);
+            expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
+            expect(dispatch.thirdCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+        });
+        it("should enable the modify interaction and disable the other interactions if the given interaction equals 'modify'", () => {
+            interaction = "modify";
+
+            actions.toggleInteraction({commit, dispatch}, interaction);
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "modify"]);
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
+            expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: true}]);
+            expect(dispatch.thirdCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+        });
+        it("should enable the select interaction and disable the other interactions if the given interaction equals 'delete'", () => {
+            interaction = "delete";
+
+            actions.toggleInteraction({commit, dispatch}, interaction);
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "delete"]);
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
+            expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
+            expect(dispatch.thirdCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: true}]);
+        });
+    });
+    describe("undoLastStep", () => {
+        const arr = [],
+            feature = Symbol(),
+            getFeatures = sinon.fake.returns(arr),
+            removeFeature = sinon.spy();
+
+        beforeEach(() => {
+            state = {
+                layer: {
+                    getSource: () => ({getFeatures, removeFeature})
+                }
+            };
+        });
+
+        it("should do nothing if the type of featureToRemove is 'undefined'", () => {
+            actions.undoLastStep({state, dispatch});
+
+            expect(dispatch.notCalled).to.be.true;
+            expect(removeFeature.notCalled).to.be.true;
+        });
+        it("should dispatch the correct methods and remove the feature if the type of featureToRemove is not 'undefined'", () => {
+            arr.push(feature);
+            actions.undoLastStep({state, dispatch});
+
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["updateRedoArray", {remove: false, feature}]);
+            expect(removeFeature.calledOnce).to.be.true;
+            expect(removeFeature.firstCall.args).to.eql([feature]);
+        });
+    });
+    describe("uniqueID", () => {
+        let unique;
+
+        beforeEach(() => {
+            state = {
+                idCounter: 0
+            };
+        });
+
+        it("should create a uniqueID without a prefix is none is given and commit as intended", () => {
+            unique = actions.uniqueID({state, commit});
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.be.eql(["setIdCounter", 1]);
+            expect(unique).to.equal("1");
+        });
+        it("should crate a uniqueID with a prefix if it is given and commit as intended", () => {
+            const prefix = "id_";
+
+            unique = actions.uniqueID({state, commit}, prefix);
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.be.eql(["setIdCounter", 1]);
+            expect(unique).to.equal("id_1");
+        });
+    });
+    describe("updateDrawInteraction", () => {
+        const drawInteraction = Symbol(),
+            drawInteractionTwo = Symbol();
+
+        beforeEach(() => {
+            state = {drawInteraction};
+        });
+
+        it("should commit and dispatch as intended", () => {
+            actions.updateDrawInteraction({state, commit, dispatch});
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setDrawInteraction", null]);
+            expect(dispatch.calledTwice).to.be.true;
+            expect(dispatch.firstCall.args).to.be.eql(["removeInteraction", drawInteraction]);
+            expect(dispatch.secondCall.args).to.be.eql(["createDrawInteractionAndAddToMap", {active: true}]);
+        });
+        it("should also dispatch and commit for the second drawInteraction if its type is not 'undefined'", () => {
+            state.drawInteractionTwo = drawInteractionTwo;
+
+            actions.updateDrawInteraction({state, commit, dispatch});
+
+            expect(commit.calledTwice).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setDrawInteraction", null]);
+            expect(commit.secondCall.args).to.eql(["setDrawInteractionTwo", null]);
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.be.eql(["removeInteraction", drawInteraction]);
+            expect(dispatch.secondCall.args).to.be.eql(["removeInteraction", drawInteractionTwo]);
+            expect(dispatch.thirdCall.args).to.be.eql(["createDrawInteractionAndAddToMap", {active: true}]);
+        });
+    });
+    describe("updateRedoArray", () => {
+        const feature = Symbol();
+        let remove;
+
+        beforeEach(() => {
+            state = {
+                redoArray: []
+            };
+        });
+
+        it("should remove the last element of the redoArray if remove is set to 'true' and commit as intended", () => {
+            remove = true;
+            state.redoArray.push(feature);
+
+            actions.updateRedoArray({state, commit}, {remove});
+
+            expect(state.redoArray.length).to.equal(0);
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.be.eql(["setRedoArray", []]);
+        });
+        it("should push the given feature onto the redoArray if remove is set to 'false' and commit as intended", () => {
+            remove = false;
+
+            actions.updateRedoArray({state, commit}, {remove, feature});
+
+            expect(state.redoArray.length).to.equal(1);
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.be.eql(["setRedoArray", [feature]]);
+        });
+    });
     // cancelDrawWithoutGUI
     // downloadFeaturesWithoutGUI
     // downloadViaRemoteInterface

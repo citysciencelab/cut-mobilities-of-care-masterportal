@@ -130,8 +130,9 @@ const initialState = Object.assign({}, stateDraw),
 
                     if (featureCount > maxFeatures - 1) {
                         Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures}));
-                        // TODO: For some reason the drawInteraction is not correctly removed from the Map --> After the limit has been reached, the user starts drawing points (doesn't matter which geometry was chosen beforehand)
+                        // TODO: When testing this on the console with the Radio this neither deactivates nor removes the interaction with the map
                         dispatch("manipulateInteraction", {interaction: "draw", active: false});
+                        dispatch("removeInteraction", state.drawInteraction);
                     }
                 });
             }
@@ -207,21 +208,21 @@ const initialState = Object.assign({}, stateDraw),
          */
         manipulateInteraction ({state}, {interaction, active}) {
             if (interaction === "draw") {
-                if (state.drawInteraction !== null) {
+                if (typeof state.drawInteraction !== "undefined") {
                     state.drawInteraction.setActive(active);
                 }
-                if (state.drawInteractionTwo !== null) {
+                if (typeof state.drawInteractionTwo !== "undefined") {
                     state.drawInteractionTwo.setActive(active);
                 }
             }
             else if (interaction === "modify") {
-                if (state.modifyInteraction) {
+                if (typeof state.modifyInteraction !== "undefined") {
                     state.modifyInteraction.setActive(active);
                     // TODO: putGlyphToCursor glyphicon glyphicon-pencil (bei deactivate) glyphicon glyphicon-wrench (bei activate)
                 }
             }
             else if (interaction === "delete") {
-                if (state.selectInteraction) {
+                if (typeof state.selectInteraction !== "undefined") {
                     state.selectInteraction.setActive(active);
                     // TODO: putGlyphToCursor glyphicon glyphicon-pencil (bei deactivate) glyphicon glyphicon-trash (bei activate)
                 }
@@ -237,7 +238,7 @@ const initialState = Object.assign({}, stateDraw),
             const redoArray = state.redoArray,
                 featureToRestore = redoArray[redoArray.length - 1];
 
-            if (featureToRestore) {
+            if (typeof featureToRestore !== "undefined") {
                 const featureId = state.fId;
 
                 featureToRestore.setId(featureId);
@@ -263,7 +264,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        resetModule ({state, commit, dispatch}) {
+        resetModule ({state, commit, dispatch, getters}) {
             const color = initialState.color,
                 colorContour = initialState.colorContour;
 
@@ -291,7 +292,7 @@ const initialState = Object.assign({}, stateDraw),
             commit("setOpacity", initialState.opacity);
             commit("setOpacityContour", initialState.opacityContour);
             commit("setPointSize", initialState.pointSize);
-            commit("setSymbol", initialState.iconList[0]);
+            commit("setSymbol", getters.iconList[0]);
             // TODO: Clear the cursor from the map
             state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
         },
@@ -348,7 +349,7 @@ const initialState = Object.assign({}, stateDraw),
             const features = state.layer.getSource().getFeatures(),
                 featureToRemove = features[features.length - 1];
 
-            if (featureToRemove) {
+            if (typeof featureToRemove !== "undefined") {
                 dispatch("updateRedoArray", {remove: false, feature: featureToRemove});
                 state.layer.getSource().removeFeature(featureToRemove);
             }
@@ -365,7 +366,7 @@ const initialState = Object.assign({}, stateDraw),
             const id = state.idCounter + 1;
 
             commit("setIdCounter", id);
-            return prefix ? prefix + id : id;
+            return prefix ? prefix + id : id.toString(10);
         },
         /**
          * Updates the drawInteractions on the map and creates a new one.
@@ -376,7 +377,7 @@ const initialState = Object.assign({}, stateDraw),
         updateDrawInteraction ({state, commit, dispatch}) {
             dispatch("removeInteraction", state.drawInteraction);
             commit("setDrawInteraction", null);
-            if (state.drawInteractionTwo) {
+            if (typeof state.drawInteractionTwo !== "undefined") {
                 dispatch("removeInteraction", state.drawInteractionTwo);
                 commit("setDrawInteractionTwo", null);
             }

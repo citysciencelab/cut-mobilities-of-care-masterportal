@@ -5,7 +5,7 @@ import DownloadView from "../../../../../../modules/tools/download/view";
  *
  * @param {String} diameter diameter of the circle.
  * @param {String} unit unit of the diameter.
- * @return {String} returns value / string without comma.
+ * @return {(String | Number)} returns value / string without comma.
  */
 function adjustValueToUnits (diameter, unit) {
     return unit === "km" ? diameter * 1000 : diameter;
