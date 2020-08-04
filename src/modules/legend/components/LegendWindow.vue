@@ -24,11 +24,8 @@ export default {
         this.getLegendConfig();
     },
     created () {
-        Backbone.Events.listenTo(Radio.channel("Layer"), {
-            "layerVisibleChanged": (id, isVisibleInMap, layer) => {
-                this.toggleLayerInLegend(layer);
-            }
-        });
+        this.listenToLayerVisibilityChanged();
+        this.listenToUpdatedSelectedLayerList();
     },
     updated () {
         $(this.$el).draggable({
@@ -48,6 +45,21 @@ export default {
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
+
+        listenToLayerVisibilityChanged () {
+            Backbone.Events.listenTo(Radio.channel("Layer"), {
+                "layerVisibleChanged": (id, isVisibleInMap, layer) => {
+                    this.toggleLayerInLegend(layer);
+                }
+            });
+        },
+        listenToUpdatedSelectedLayerList () {
+            Backbone.Events.listenTo(Radio.channel("ModelList"), {
+                "updatedSelectedLayerList": (layers) => {
+                    layers.forEach(layer => this.toggleLayerInLegend(layer));
+                }
+            });
+        },
         /**
          * Closes the legend.
          * @returns {void}
@@ -94,11 +106,18 @@ export default {
                     legend: this.prepareLegend(layer.get("legend")),
                     position: layer.get("selectionIDX")
                 },
-                isNotYetInLegend = this.isLayerNotYetInLegend(id);
+                isValidLegend = this.isValidLegendObj(legendObj),
+                isNotYetInLegend = isValidLegend && this.isLayerNotYetInLegend(id),
+                isPositionChanged = isValidLegend && !isNotYetInLegend && this.isPositionChanged(id, legendObj.position);
 
-            if (this.isValidLegendObj(legendObj) && isNotYetInLegend) {
+            if (isNotYetInLegend) {
                 this.addLegend(legendObj);
             }
+            else if (isPositionChanged) {
+                this.removeLegend(id);
+                this.addLegend(legendObj);
+            }
+            this.sortLegend();
         },
 
         /**
@@ -349,6 +368,25 @@ export default {
             return this.legends.filter((legendObj) => {
                 return legendObj.id === layerId;
             }).length === 0;
+        },
+
+        /**
+         * Checks if the position of the layer has changed
+         * @param {String} layerId Id of layer
+         * @param {Number} position position of layer in map
+         * @returns {Boolean} - Flag if the position has changed
+         */
+        isPositionChanged (layerId, position) {
+            let isPositionChanged = false;
+            const layerLegend = this.legends.filter((legendObj) => {
+                return legendObj.id === layerId;
+            })[0];
+
+            if (layerLegend && layerLegend.position !== position) {
+                isPositionChanged = true;
+            }
+
+            return isPositionChanged;
         },
 
         /**

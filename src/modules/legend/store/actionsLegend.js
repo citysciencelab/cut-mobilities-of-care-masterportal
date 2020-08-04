@@ -14,15 +14,50 @@ const configPaths = [
         getLegendConfig: context => {
             return fetchFirstModuleConfig(context, configPaths, "Legend");
         },
+
+        /**
+         * Shows or hides the legend.
+         * @param {Object} param0 State
+         * @param {Boolean} showLegend Flag if legend should be shown or not
+         * @returns {void}
+         */
         setShowLegend: function ({commit}, showLegend) {
             commit("showLegend", showLegend);
         },
+
+        /**
+         * Adds the legend of one layer to the legends in the store
+         * @param {Object} param0 State
+         * @param {Object} legendObj Legend object of one layer
+         * @returns {void}
+         */
         addLegend: function ({state}, legendObj) {
             const legends = state.legends;
 
             legends.push(legendObj);
             state.legends = legends;
         },
+
+        /**
+         * Sorts the Legend Entries by position descending
+         * @param {Object} param0 State
+         * @returns {void}
+         */
+        sortLegend: function ({state}) {
+            let legends = state.legends;
+
+            legends = legends.sort(function (a, b) {
+                return b.position - a.position;
+            });
+            state.legends = legends;
+        },
+
+        /**
+         * Removes a layer legend from the legends in the store by given id.
+         * @param {Object} param0 State
+         * @param {String} id Id of layer.
+         * @returns {void}
+         */
         removeLegend: function ({state}, id) {
             state.legends = state.legends.filter((legendObj) => {
                 return legendObj.id !== id;
