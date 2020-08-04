@@ -1,7 +1,7 @@
 import sinon from "sinon";
 import {expect} from "chai";
-import actions from "../store/actionsDraw";
-import stateDraw from "../store/stateDraw";
+import actions from "../../store/actionsDraw";
+import stateDraw from "../../store/stateDraw";
 
 describe.only("actionsDraw", () => {
     let commit, dispatch, state;
@@ -926,9 +926,9 @@ describe.only("actionsDraw", () => {
             expect(commit.firstCall.args).to.be.eql(["setRedoArray", [feature]]);
         });
     });
-    // cancelDrawWithoutGUI
-    // downloadFeaturesWithoutGUI
-    // downloadViaRemoteInterface
-    // editFeaturesWithoutGUI
-    // initializeWithoutGUI
+    // TODO: cancelDrawWithoutGUI
+    // TODO: downloadFeaturesWithoutGUI
+    // TODO: downloadViaRemoteInterface
+    // TODO: editFeaturesWithoutGUI
+    // TODO: initializeWithoutGUI
 });

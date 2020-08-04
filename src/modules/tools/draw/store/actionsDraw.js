@@ -7,7 +7,7 @@ import * as withoutGUI from "./actions/withoutGUIDraw";
 
 import stateDraw from "./stateDraw";
 
-// TODO: The Update and the Redo Buttons weren't working with the select and modify interaction in Backbone and are not yet working in Vue too.
+// NOTE: The Update and the Redo Buttons weren't working with the select and modify interaction in Backbone and are not yet working in Vue too.
 
 /**
  * Creates a draw interaction to draw features on the map.

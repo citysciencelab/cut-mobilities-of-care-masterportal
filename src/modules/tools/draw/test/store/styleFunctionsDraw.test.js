@@ -1,7 +1,7 @@
-import {createDrawStyle} from "../store/actions/style/createDrawStyle";
-import {createIconStyle} from "../store/actions/style/createIconStyle";
-import {createStyle} from "../store/actions/style/createStyle";
-import {createTextStyle} from "../store/actions/style/createTextStyle";
+import {createDrawStyle} from "../../store/actions/style/createDrawStyle";
+import {createIconStyle} from "../../store/actions/style/createIconStyle";
+import {createStyle} from "../../store/actions/style/createStyle";
+import {createTextStyle} from "../../store/actions/style/createTextStyle";
 
 import {Style} from "ol/style.js";
 import {expect} from "chai";
