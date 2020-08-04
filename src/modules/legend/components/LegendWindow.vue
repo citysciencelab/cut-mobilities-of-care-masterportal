@@ -46,6 +46,10 @@ export default {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
 
+        /**
+         * Listens to changed layer visibility
+         * @returns {void}
+         */
         listenToLayerVisibilityChanged () {
             Backbone.Events.listenTo(Radio.channel("Layer"), {
                 "layerVisibleChanged": (id, isVisibleInMap, layer) => {
@@ -53,6 +57,11 @@ export default {
                 }
             });
         },
+
+        /**
+         * Listens to updated selectedLayerList
+         * @returns {void}
+         */
         listenToUpdatedSelectedLayerList () {
             Backbone.Events.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": (layers) => {
