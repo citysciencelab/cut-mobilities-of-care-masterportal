@@ -4,10 +4,13 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
+import LegendSingleLayer from "./LegendSingleLayer.vue";
 
 export default {
     name: "LegendWindow",
-    components: {},
+    components: {
+        LegendSingleLayer
+    },
     computed: {
         ...mapGetters("Legend", Object.keys(getters))
     },
@@ -26,6 +29,7 @@ export default {
     created () {
         this.listenToLayerVisibilityChanged();
         this.listenToUpdatedSelectedLayerList();
+        this.listenToCreateLegendForLayerInfo();
     },
     updated () {
         $(this.$el).draggable({
@@ -69,6 +73,20 @@ export default {
                 }
             });
         },
+
+        /**
+         * Listens on request to create the legend for the layer info
+         * @returns {void}
+         */
+        listenToCreateLegendForLayerInfo () {
+            Backbone.Events.listenTo(Radio.channel("Legend"), {
+                "createLegendForLayer": (layerId, elementId) => {
+                    this.createLayerInfoLegend(layerId);
+                    document.getElementById(elementId).innerHTML = "<p>" + this.layerInfoLegend.name + "</p>";
+                }
+            });
+        },
+
         /**
          * Closes the legend.
          * @returns {void}
@@ -448,37 +466,9 @@ export default {
                 <div class="layer-title">
                     {{ legendObj.name }}
                 </div>
-                <div class="layer-legend">
-                    <div
-                        v-for="legendPart in legendObj.legend"
-                        :key="JSON.stringify(legendPart)"
-                    >
-                        <!--Legend as Image or SVG-->
-                        <img
-                            v-if="(typeof legendPart === 'string' && !legendPart.endsWith('.pdf'))"
-                            :src="legendPart"
-                        >
-
-                        <!--Legend PDF as Link-->
-                        <a
-                            v-if="(typeof legendPart === 'string' && legendPart.endsWith('.pdf'))"
-                            :href="legendPart"
-                            target="_blank"
-                            :title="legendPart"
-                        >
-                            Zur externen Legende (PDF)
-                        </a>
-
-                        <!--Legend as Image from Object-->
-                        <img
-                            v-if="(typeof legendPart === 'object')"
-                            :src="legendPart.graphic"
-                        >
-                        <span
-                            v-if="(typeof legendPart === 'object')"
-                        >{{ legendPart.name }}</span>
-                    </div>
-                </div>
+                <LegendSingleLayer
+                    :legend="legendObj.legend"
+                />
             </div>
         </div>
     </div>
@@ -512,10 +502,6 @@ export default {
             .layer-title {
                 padding: 5px;
                 font-weight: bold;
-            }
-            .layer-legend {
-                padding-top: 5px;
-                padding-bottom: 5px;
             }
         }
     }

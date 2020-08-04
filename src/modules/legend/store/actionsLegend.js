@@ -44,12 +44,9 @@ const configPaths = [
          * @returns {void}
          */
         sortLegend: function ({state}) {
-            let legends = state.legends;
-
-            legends = legends.sort(function (a, b) {
+            state.legends.sort(function (a, b) {
                 return b.position - a.position;
             });
-            state.legends = legends;
         },
 
         /**
@@ -62,6 +59,14 @@ const configPaths = [
             state.legends = state.legends.filter((legendObj) => {
                 return legendObj.id !== id;
             });
+        },
+
+        createLayerInfoLegend: function ({state}, id) {
+            const legendById = state.legends.filter((legendObj) => {
+                return legendObj.id === id;
+            })[0];
+
+            state.layerInfoLegend = legendById;
         }
     };
 

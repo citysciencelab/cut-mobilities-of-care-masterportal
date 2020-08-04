@@ -574,20 +574,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
-        let legend = "";
         const metaID = [],
             name = this.get("name"),
             layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
-        if (this.get("legendURL") === "") {
-            this.createLegend();
-        }
-        legend = Radio.request("Legend", "getLegend", this);
         metaID.push(layerMetaId);
 
         Radio.trigger("LayerInformation", "add", {
             "id": this.get("id"),
-            "legend": legend,
             "metaID": metaID,
             "layername": name,
             "url": this.get("url"),
