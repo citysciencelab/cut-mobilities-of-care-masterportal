@@ -52,12 +52,15 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
             handle: ".header"
         });
         this.delegateEvents();
-        this.drawLayerLegend();
+        this.createLayerInfoLegend();
         return this;
     },
 
-    drawLayerLegend: function () {
-        console.log(this.model.get("id"));
+    /**
+     * Triggers the event to create layerinfo legend
+     * @returns {void}
+     */
+    createLayerInfoLegend: function () {
         Radio.trigger("Legend", "createLegendForLayer", this.model.get("id"));
     },
     /**
