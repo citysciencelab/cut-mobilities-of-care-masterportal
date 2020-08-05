@@ -10,6 +10,8 @@ describe("actionsSetterDraw", () => {
         dispatch = sinon.spy();
     });
 
+    afterEach(sinon.restore);
+
     describe("setActive", () => {
         let active,
             request,

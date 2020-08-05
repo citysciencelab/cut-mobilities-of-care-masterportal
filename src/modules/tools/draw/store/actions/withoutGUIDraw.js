@@ -51,10 +51,10 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
         multiPoint = new MultiPoint([]),
         multiPolygon = new MultiPolygon([]);
 
-    if (payload.prmObject?.transformWGS) {
+    if (payload?.prmObject?.transformWGS) {
         targetProjection = "EPSG:4326";
     }
-    if (payload.prmObject?.targetProjection !== undefined) {
+    if (payload?.prmObject?.targetProjection !== undefined) {
         targetProjection = payload.prmObject.targetProjection;
     }
 
@@ -216,7 +216,7 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
             commit("setOpacity", opacity);
         }
 
-        dispatch("createDrawInteractionAndAddToMap", {active: true, maxFeatures: maxFeatures});
+        dispatch("createDrawInteractionAndAddToMap", {active: true, maxFeatures});
 
         if (initialJSON) {
             try {
