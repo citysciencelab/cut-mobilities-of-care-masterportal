@@ -51,36 +51,26 @@ const gettersMap = {
         const featuresAtPixel = [];
 
         map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
-            const existingFeature = featuresAtPixel.find(featureAtPixel => {
-                    return featureAtPixel.title === layer.get("name");
-                }),
-                gfiFeature = {
+            // cluster feature
+            if (feature.getProperties().features) {
+                feature.get("features").forEach(function (clusteredFeature) {
+                    featuresAtPixel.push({
+                        html: null,
+                        theme: layer.get("gfiTheme"),
+                        title: layer.get("name"),
+                        attributesToShow: layer.get("gfiAttributes"),
+                        olFeatures: clusteredFeature
+                    });
+                });
+            }
+            else {
+                featuresAtPixel.push({
                     html: null,
                     theme: layer.get("gfiTheme"),
                     title: layer.get("name"),
-                    attributesToShow: layer.get("gfiAttributes")
-                };
-
-            // cluster feature
-            if (feature.getProperties().features) {
-                // feature does not yet exist in featuresAtPixel
-                if (typeof existingFeature === "undefined") {
-                    gfiFeature.olFeatures = feature.getProperties().features;
-                    featuresAtPixel.push(gfiFeature);
-                }
-                // feature already exists in featuresAtPixel
-                else {
-                    existingFeature.olFeatures.concat(feature.getProperties().features);
-                }
-            }
-            // no cluster feature && feature does not yet exist in featuresAtPixel
-            else if (typeof existingFeature === "undefined") {
-                gfiFeature.olFeatures = [feature];
-                featuresAtPixel.push(gfiFeature);
-            }
-            // no cluster feature && feature already exists in featuresAtPixel
-            else {
-                existingFeature.olFeatures.push(feature);
+                    attributesToShow: layer.get("gfiAttributes"),
+                    olFeatures: feature
+                });
             }
         });
         return featuresAtPixel;
