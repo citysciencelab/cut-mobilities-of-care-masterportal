@@ -183,7 +183,7 @@ describe("actionsDraw", () => {
             expect(dispatch.calledWithMatch("drawInteractionOnDrawEvent", {drawInteraction: "", doubleCircle: doubleCircleSymbol})).to.be.true;
         });
 
-        it("enables the maxFeatures drawstart to dispatch does so on maxFeatures reached", () => {
+        it("enables the maxFeatures drawstart to dispatch, does so on maxFeatures reached", () => {
             let featureArray = [];
 
             sinon.stub(Radio, "trigger").callsFake(sinon.fake());
@@ -214,7 +214,7 @@ describe("actionsDraw", () => {
             /* NOTE: i18next isn't actually working in tests yet, so here undefined
              * is compared with undefined - works, but has limited meaning */
             expect(Radio.trigger.calledWith("Alert", "alert", i18next.t("common:modules.tools.draw.limitReached", {count: 5}))).to.be.true;
-            expect(dispatch.calledWith("manipulateInteraction", {interaction: "draw", active: false})).to.be.true;
+            expect(dispatch.calledWith("deactivateDrawInteractions")).to.be.true;
         });
     });
     describe("createModifyInteractionAndAddToMap", () => {
