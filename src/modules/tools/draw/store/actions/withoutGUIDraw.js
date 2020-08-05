@@ -176,6 +176,7 @@ function editFeaturesWithoutGUI ({dispatch}) {
 /**
  * Initializes the drawing functionality without GUI.
  * Used in the RemoteInterface.
+ * NOTE: This method is not implemented for simultaneous usage of the GUI of the Draw Tool.
  *
  * @param {Object} context actions context object.
  * @param {String} prmObject An Object which includes the parameters.

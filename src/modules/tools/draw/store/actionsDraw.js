@@ -112,7 +112,7 @@ const initialState = Object.assign({}, stateDraw),
             interaction.on("drawend", function (event) {
                 event.feature.set("styleId", dispatch("uniqueID"));
 
-                if (typeof Config.inputMap !== "undefined") {
+                if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
                     dispatch("cancelDrawWithoutGUI");
                     dispatch("editFeaturesWithoutGUI");
 
@@ -130,9 +130,8 @@ const initialState = Object.assign({}, stateDraw),
 
                     if (featureCount > maxFeatures - 1) {
                         Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures}));
-                        // TODO: When testing this on the console with the Radio this neither deactivates nor removes the interaction with the map
-                        dispatch("manipulateInteraction", {interaction: "draw", active: false});
-                        dispatch("removeInteraction", state.drawInteraction);
+                        dispatch("deactivateDrawInteractions");
+                        dispatch("removeInteraction", interaction);
                     }
                 });
             }
@@ -162,7 +161,7 @@ const initialState = Object.assign({}, stateDraw),
             state.modifyInteraction.on("modifyend", event => {
                 let geoJSON;
 
-                if (typeof Config.inputMap !== "undefined") {
+                if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
                     geoJSON = dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetProjection}, currentFeature: event.feature});
                     Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geoJSON});
                 }
@@ -197,6 +196,23 @@ const initialState = Object.assign({}, stateDraw),
                 state.selectInteraction.getFeatures().clear();
             });
         },
+        /**
+         * Deactivates all draw interactions of the map and add them to the state.
+         * NOTE: This is mainly used with the RemoteInterface because otherwise not all interactions are removed.
+         *
+         * @param {Object} context actions context object.
+         * @returns {void}
+         */
+        deactivateDrawInteractions ({state, rootState}) {
+            rootState.Map.map.getInteractions().forEach(int => {
+                if (int instanceof Draw) {
+                    int.setActive(false);
+                    if (state.deactivateDrawInteractions === -1) {
+                        state.deactivateDrawInteractions.push(int);
+                    }
+                }
+            });
+        },
         drawInteractionOnDrawEvent,
         /**
          * Activates or deactivates the given Interactions based on the given parameters.
@@ -208,21 +224,21 @@ const initialState = Object.assign({}, stateDraw),
          */
         manipulateInteraction ({state}, {interaction, active}) {
             if (interaction === "draw") {
-                if (typeof state.drawInteraction !== "undefined") {
+                if (typeof state.drawInteraction !== "undefined" && state.drawInteraction !== null) {
                     state.drawInteraction.setActive(active);
                 }
-                if (typeof state.drawInteractionTwo !== "undefined") {
+                if (typeof state.drawInteractionTwo !== "undefined" && state.drawInteractionTwo !== null) {
                     state.drawInteractionTwo.setActive(active);
                 }
             }
             else if (interaction === "modify") {
-                if (typeof state.modifyInteraction !== "undefined") {
+                if (typeof state.modifyInteraction !== "undefined" && state.modifyInteraction !== null) {
                     state.modifyInteraction.setActive(active);
                     // TODO: putGlyphToCursor glyphicon glyphicon-pencil (bei deactivate) glyphicon glyphicon-wrench (bei activate)
                 }
             }
             else if (interaction === "delete") {
-                if (typeof state.selectInteraction !== "undefined") {
+                if (typeof state.selectInteraction !== "undefined" && state.selectInteraction !== null) {
                     state.selectInteraction.setActive(active);
                     // TODO: putGlyphToCursor glyphicon glyphicon-pencil (bei deactivate) glyphicon glyphicon-trash (bei activate)
                 }
@@ -238,7 +254,7 @@ const initialState = Object.assign({}, stateDraw),
             const redoArray = state.redoArray,
                 featureToRestore = redoArray[redoArray.length - 1];
 
-            if (typeof featureToRestore !== "undefined") {
+            if (typeof featureToRestore !== "undefined" && featureToRestore !== null) {
                 const featureId = state.fId;
 
                 featureToRestore.setId(featureId);
@@ -349,7 +365,7 @@ const initialState = Object.assign({}, stateDraw),
             const features = state.layer.getSource().getFeatures(),
                 featureToRemove = features[features.length - 1];
 
-            if (typeof featureToRemove !== "undefined") {
+            if (typeof featureToRemove !== "undefined" && featureToRemove !== null) {
                 dispatch("updateRedoArray", {remove: false, feature: featureToRemove});
                 state.layer.getSource().removeFeature(featureToRemove);
             }
@@ -377,7 +393,7 @@ const initialState = Object.assign({}, stateDraw),
         updateDrawInteraction ({state, commit, dispatch}) {
             dispatch("removeInteraction", state.drawInteraction);
             commit("setDrawInteraction", null);
-            if (typeof state.drawInteractionTwo !== "undefined") {
+            if (typeof state.drawInteractionTwo !== "undefined" && state.drawInteractionTwo !== null) {
                 dispatch("removeInteraction", state.drawInteractionTwo);
                 commit("setDrawInteractionTwo", null);
             }

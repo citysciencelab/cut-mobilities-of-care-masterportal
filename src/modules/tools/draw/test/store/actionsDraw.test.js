@@ -3,7 +3,7 @@ import {expect} from "chai";
 import actions from "../../store/actionsDraw";
 import stateDraw from "../../store/stateDraw";
 
-describe.only("actionsDraw", () => {
+describe("actionsDraw", () => {
     let commit, dispatch, state;
 
     beforeEach(() => {
@@ -348,6 +348,7 @@ describe.only("actionsDraw", () => {
             expect(clear.firstCall.args).to.eql([]);
         });
     });
+    // TODO: deactivateDrawInteractions
     // TODO: drawInteractionOnDrawEvent
     describe("manipulateInteraction", () => {
         const active = true;
