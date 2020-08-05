@@ -1,9 +1,7 @@
 const Config = {
     addons: ["einwohnerabfrage"],
-    modules: {
-        Alerting: {
-            // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json",
-        }
+    alerting: {
+        // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json"
     },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "detached",
