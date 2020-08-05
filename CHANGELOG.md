@@ -34,6 +34,7 @@
 ### Deprecated
 - WfsFeatureFilter ist deprecated. Bitte das Modul Filter benutzen.
 - ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
+- Das Attribut coord für das Modul zur Koordinatenabfrage ist deprecated. Bitte das Attribut supplyCoord benutzen.
 
 ### Removed
 - @babel/polyfill wurde aus der package.json entfernt.

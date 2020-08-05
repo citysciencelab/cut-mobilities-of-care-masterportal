@@ -6,6 +6,11 @@ const state = {
     componentMap: {
         scaleSwitcher: ScaleSwitcher,
         supplyCoord: SupplyCoord,
+        /**
+         * coord
+         * @deprecated in 3.0.0
+         */
+        coord: SupplyCoord,
         kmlimport: KmlImport
     }
 };
