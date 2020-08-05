@@ -207,8 +207,8 @@ const initialState = Object.assign({}, stateDraw),
             rootState.Map.map.getInteractions().forEach(int => {
                 if (int instanceof Draw) {
                     int.setActive(false);
-                    if (state.deactivateDrawInteractions === -1) {
-                        state.deactivateDrawInteractions.push(int);
+                    if (state.deactivatedDrawInteractions.indexOf(int) === -1) {
+                        state.deactivatedDrawInteractions.push(int);
                     }
                 }
             });

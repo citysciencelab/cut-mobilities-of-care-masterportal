@@ -17,7 +17,7 @@ import MultiPolygon from "ol/geom/MultiPolygon.js";
 function cancelDrawWithoutGUI ({dispatch}, cursor) {
     dispatch("resetModule");
 
-    if (cursor?.cursor) {
+    if (typeof cursor?.cursor !== "undefined") {
         // TODO: The cursor changes from the map need to happen here
         $("#map").removeClass("no-cursor");
     }
