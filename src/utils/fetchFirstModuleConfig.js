@@ -110,7 +110,8 @@ function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFall
     const missingSources = [],
         missingDefaultValues = [],
         // no real config-params, e.g. added during parsing: must not be in state as default
-        defaultsNotInState = ["i18nextTranslate", "useConfigName"];
+        defaultsNotInState = ["i18nextTranslate", "useConfigName"],
+        state = context.state[moduleName] || context.state;
 
     let source,
         success = false;
@@ -132,10 +133,11 @@ function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFall
 
         // Check for missing default values in module state
         for (const sourceProp in source) {
-            if (!defaultsNotInState.includes(sourceProp) && context.state[sourceProp] === undefined) {
+            if (!defaultsNotInState.includes(sourceProp) && state[sourceProp] === undefined) {
                 missingDefaultValues.push(sourceProp);
             }
         }
+
         if (missingDefaultValues.length > 0) {
             console.warn("Im Modul \"" + moduleName + "\" wurden folgende Standardwerte nicht gefunden. Diese werden aus der Config übernommen, haben möglicherweise aber keinen Effekt.", missingDefaultValues);
             console.warn("Pfad des Moduls:", createKeyPathArray(path));
@@ -150,7 +152,7 @@ function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFall
     }
 
     if (source) {
-        context.state = deepMerge(source, context.state);
+        context.state = deepMerge(source, state);
         success = true;
     }
 

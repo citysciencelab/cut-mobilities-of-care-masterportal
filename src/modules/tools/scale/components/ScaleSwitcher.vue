@@ -36,7 +36,6 @@ export default {
      * @returns {void}
      */
     mounted () {
-        this.initialize();
         if (this.isActive) {
             this.setActive(true);
         }
@@ -44,8 +43,7 @@ export default {
     },
     methods: {
         ...mapActions("Tools/ScaleSwitcher", [
-            "activateByUrlParam",
-            "initialize"
+            "activateByUrlParam"
         ]),
         ...mapActions("Map", ["setResolutionByIndex"]),
         ...mapMutations("Tools/ScaleSwitcher", Object.keys(mutations)),

@@ -1,8 +1,18 @@
 <script>
 import {mapGetters} from "vuex";
+import {mapActions} from "vuex";
 
 export default {
     name: "ToolManager",
+    data () {
+        return {
+            /** Path array of possible config locations for tools */
+            configPossibilitiesPaths: [
+                "configJson.Portalconfig.menu",
+                "configJson.Portalconfig.menu.tools.children"
+            ]
+        };
+    },
     computed: {
         ...mapGetters(["menuConfig"]),
         ...mapGetters("Tools", ["componentMap"]),
@@ -15,14 +25,14 @@ export default {
             const configPossibilities = [this.menuConfig, this.menuConfig.tools.children],
                 configuredTools = [];
 
-            configPossibilities.forEach(toolsFromConfig => {
+            configPossibilities.forEach((toolsFromConfig, index) => {
                 Object
                     .keys(toolsFromConfig)
                     .map(key => {
                         if (this.componentMap[key]) {
                             return {
                                 component: this.componentMap[key],
-                                props: typeof toolsFromConfig[key] === "object" ? toolsFromConfig[key] : {},
+                                configPath: this.configPossibilitiesPaths[index] + "." + key,
                                 key
                             };
                         }
@@ -34,17 +44,25 @@ export default {
 
             return configuredTools;
         }
+    },
+    created () {
+        /** Push the configured attributes to store from all configured tools. */
+        this.configuredTools.forEach(configuredTool => this.pushAttributesToStoreElements(configuredTool));
+    },
+    methods: {
+        ...mapActions("Tools", [
+            "pushAttributesToStoreElements"
+        ])
     }
 };
 </script>
 
 <template lang="html">
     <div id="tool-manager">
-        <template v-for="(tool) in configuredTools">
+        <template v-for="tool in configuredTools">
             <component
                 :is="tool.component"
                 :key="'tool-' + tool.key"
-                v-bind="tool.props"
             />
         </template>
     </div>

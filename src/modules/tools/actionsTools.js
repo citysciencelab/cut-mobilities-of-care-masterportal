@@ -1,3 +1,5 @@
+import {fetchFirstModuleConfig} from "../../utils/fetchFirstModuleConfig";
+
 const actions = {
     /**
      * Sets the parameter "active" to the given parameter for the tool with the given id.
@@ -37,6 +39,16 @@ const actions = {
                 commit(toolId + "/setName", name);
             }
         });
+    },
+
+    /**
+     * Sets the config-params for every configured tool into state from that tool.
+     * @param {object} context the context Vue instance
+     * @param {object} configuredTool the tool component
+     * @returns {boolean} false, if config does not contain the tool
+     */
+    pushAttributesToStoreElements: (context, configuredTool) => {
+        return fetchFirstModuleConfig(context, [configuredTool.configPath], configuredTool.component.name);
     }
 };
 
