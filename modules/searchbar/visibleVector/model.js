@@ -54,14 +54,12 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
         const visibleGroupLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}),
             layerTypes = this.get("layerTypes");
 
-        let prepSearchString = "",
-            vectorLayerModels = [],
+        let vectorLayerModels = [],
             foundMatchingFeatures = [],
             filteredModels = [];
 
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.setInUse(true);
-            prepSearchString = searchString.replace(" ", "");
 
             layerTypes.forEach(layerType => {
                 vectorLayerModels = vectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
@@ -73,7 +71,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 
-            foundMatchingFeatures = this.findMatchingFeatures(filteredModels, prepSearchString);
+            foundMatchingFeatures = this.findMatchingFeatures(filteredModels, searchString);
             Radio.trigger("Searchbar", "pushHits", "hitList", foundMatchingFeatures);
 
             Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
@@ -126,26 +124,26 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
 
     /**
      * Filters (clustered) features according to given search string.
-     * @param {array} aFeatures Array of features to filter
-     * @param {string} sSearchField Feature field key to look for value
-     * @param {string} sSearchString Given string to search inside features
+     * @param {array} features Array of features to filter
+     * @param {string} searchField Feature field key to look for value
+     * @param {string} searchString Given string to search inside features
      * @returns {array} Array of features containing searched string
      */
-    filterFeaturesArrayRec: function (aFeatures, sSearchField, sSearchString) {
-        let aFilteredFeatures = [];
+    filterFeaturesArrayRec: function (features, searchField, searchString) {
+        let filteredFeatures = [];
 
-        aFilteredFeatures = aFeatures.filter(function (oFeature) {
-            let aFilteredSubFeatures = [],
-                sTestFieldValue = "";
+        filteredFeatures = features.filter(feature => {
+            let filteredSubFeatures = [],
+                testFieldValue = "";
 
             // if feature is clustered
-            if (this.isClusteredFeature(oFeature)) {
+            if (this.isClusteredFeature(feature)) {
                 // enter recursion
-                aFilteredSubFeatures = this.filterFeaturesArrayRec(oFeature.get("features"), sSearchField, sSearchString);
+                filteredSubFeatures = this.filterFeaturesArrayRec(feature.get("features"), searchField, searchString);
 
                 // set sub features for this cluster
-                if (aFilteredSubFeatures.length > 0) {
-                    oFeature.set("features", aFilteredSubFeatures);
+                if (filteredSubFeatures.length > 0) {
+                    feature.set("features", filteredSubFeatures);
                     return true;
                 }
                 // filter this feature when no sub feature is left
@@ -153,15 +151,17 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
             }
 
             // if this key is not set, filter
-            if (oFeature.get(sSearchField) === undefined) {
+            if (feature.get(searchField) === undefined) {
                 return false;
             }
 
-            sTestFieldValue = oFeature.get(sSearchField).toString().toUpperCase();
+            testFieldValue = feature.get(searchField).toString().toUpperCase();
+
             // test if property value contains searched string as substring
-            return sTestFieldValue.indexOf(sSearchString.toUpperCase()) !== -1;
-        }, this);
-        return aFilteredFeatures;
+            return testFieldValue.indexOf(searchString.toUpperCase()) !== -1;
+        });
+
+        return filteredFeatures;
     },
 
     /**

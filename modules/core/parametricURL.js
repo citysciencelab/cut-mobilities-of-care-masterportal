@@ -5,7 +5,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         layerParams: [],
         isInitOpen: [],
         zoomToGeometry: "",
-        zoomToFeatureIds: []
+        zoomToFeatureIds: [],
+        featureViaURL: []
     },
 
     /**
@@ -18,6 +19,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @property {String[]} isInitOpen="" Tool to be opened initially.
      * @property {string} zoomToGeometry=[] Geoemtry to be zoomed on.
      * @property {String[]} zoomToFeatureIds=[] Features to be zoomed in on.
+     * @property {Object[]} featureViaURL=[] The features given by the user via the URL.
      * @listens Core#RadioRequestParametricURLGetResult
      * @listens Core#RadioRequestParametricURLGetLayerParams
      * @listens Core#RadioRequestParametricURLGetIsInitOpen
@@ -29,6 +31,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @listens Core#RadioRequestParametricURLGetZoomToExtent
      * @listens Core#RadioRequestParametricURLGetStyle
      * @listens Core#RadioRequestParametricURLGetFilter
+     * @listens Core#RadioRequestParametricURLGetFeatureViaURL
      * @listens Core#RadioRequestParametricURLGetHighlightFeature
      * @listens Core#RadioRequestParametricURLGetZoomToFeatureIds
      * @listens Core#RadioRequestParametricURLGetBrwId
@@ -76,6 +79,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "getStyle": this.getStyle,
             "getFilter": function () {
                 return this.get("filter");
+            },
+            "getFeatureViaURL": function () {
+                return this.get("featureViaURL");
             },
             "getHighlightFeature": function () {
                 return this.get("highlightfeature");
@@ -151,6 +157,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "CENTER": this.setCenter.bind(this),
             "CLICKCOUNTER": this.setClickCounter.bind(this),
             "FEATUREID": this.setZoomToFeatureIds.bind(this),
+            "FEATUREVIAURL": this.setFeatureViaURL.bind(this),
             "FILTER": this.setFilter.bind(this),
             "HEADING": this.evaluateCameraParameters.bind(this),
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
@@ -712,6 +719,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      */
     setZoomToExtent: function (value) {
         this.set("zoomToExtent", value);
+    },
+
+    /**
+     * Sets the array for the features via the URL.
+     * @param {String} value The given features from the URL which is parsed to JSON.
+     * @returns {void}
+     */
+    setFeatureViaURL: function (value) {
+        this.set("featureViaURL", JSON.parse(value));
     }
 });
 

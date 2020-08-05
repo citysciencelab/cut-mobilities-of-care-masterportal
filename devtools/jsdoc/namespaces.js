@@ -702,6 +702,12 @@
  */
 
 /**
+ * @namespace StyleVT
+ * @memberof Tools
+ * @description Tool that can modify vtl styles with external style documents
+ */
+
+/**
  * @namespace ViomRouting
  * @memberof Tools
  * @description Tool to route on viom data.
@@ -717,6 +723,12 @@
  * @namespace Wfst
  * @memberof Tools
  * @description Tool to visualize, insert, edit, delete and update WFS features.
+ */
+
+/**
+ * @namespace SelectFeatures
+ * @memberof Tools
+ * @description Tool to select multiple Features from the map by using a box for selection.
  */
 
 /**
@@ -824,9 +836,19 @@
  */
 
 /**
+ * @namespace SelectFeatures
+ * @description Module that allows selecting features cross-wfs
+ */
+
+/**
  * @namespace FeatureLister
  * @description foobar
  */
+
+/**
+  * @namespace FeatureViaURL
+  * @description Creates a new GeoJSON layer on the basis of the given features by the user via the URL.
+  */
 
 /**
  * @namespace Footer

@@ -20,6 +20,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |**[clickCounter](#markdown-header-clickcounter)**|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
 |cswId|nein|String|"3"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"meine CSW-ID"`|
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
+|featureViaURL|nein|**[featureViaURL](#markdown-header-featureviaurl)**||Optionale Konfigurationseinstellungen für den URL-Parameter *featureViaURL*. Siehe **[URL-Parameter](URL-Parameter.md)**. Implementiert für den treeType *light* und *custom*.||
 |**[footer](#markdown-header-footer)**|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
 |gfiWindow|nein|String|"detached"|Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|
@@ -322,6 +323,66 @@ zoomToGeometry: {
     attribute: "bezirk_name",
     geometries: ["BEZIRK1", "BEZIRK2"]
 }
+```
+
+***
+
+## featureViaURL ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|epsg|nein|Integer|4326|EPSG-Code für die Projektion der übergebenen Koordinaten der Feature.|
+|**[layers](#markdown-header-featureviaurllayers)**|ja|Object[]||Array an Layerkonfigurationen für die übergebenen Feature.|
+|zoomTo||String||Id des **[layers](#markdown-header-featureviaurllayers)**, zu welchem beim Start des Masterportals gezoomed werden soll. Beim Nichtangabe wird der normale Startpunkt der Karte verwendet.|
+
+**Beispiel:**
+```
+featureViaURL: {
+    epsg: 25832,
+    zoomTo: "urlPointFeatures",
+    layers: [
+        {
+            "id": "urlPointFeatures",
+            "geometryType": "Point",
+            "name": "URL Point Features",
+            "styleId": "url_points"
+        },
+        {
+            "id": "urlLineFeatures",
+            "geometryType": "LineString",
+            "name": "URL Line Features",
+            "styleId": "url_lines"
+        },
+        {
+            "id": "urlPolygonFeatures",
+            "geometryType": "Polygon",
+            "name": "URL Polygon Features",
+            "styleId": "url_polygons"
+        }
+    ]
+}
+```
+
+***
+
+### featureViaURL.layers ###
+
+Die beschriebenen Parameter sind für die eines einzelnen Layer-Objektes im **[layers](#markdown-header-featureviaurllayers)**-Array.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|id|ja|String||Eindeutige ID für den zu erstellenden Layer.|
+|geometryType|ja|enum["LineString", "Point", "Polygon"]||Geometrietyp der darzustellenden Feature.|
+|name|ja|String||Name des Layers; wird im Themenbaum, der Legende und im GFI-Popup dargestellt.|
+|styleId|nein|String||Eindeutige ID für den Style, welcher für die Feature verwendet werden soll. Die Styles stammen aus der **[style.json](style.json.md)**.|
+
+**Beispiel:**
+```
+layers: [{
+    id: "urlPolygonFeatures",
+    geometryType: "Polygon",
+    name: "URL Polygon Features",
+    styleId: "url_polygons"
+}]
 ```
 
 ***
