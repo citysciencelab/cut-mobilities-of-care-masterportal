@@ -160,19 +160,24 @@ const actions = {
                 url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
 
             return requestGfi(mimeType, url).then(featureInfos => {
-                return {
-                    "title": layer.get("name"),
-                    "theme": layer.get("gfiTheme"),
-                    "attributesToShow": layer.get("gfiAttributes"),
-                    "olFeatures": mimeType === "text/xml" ? featureInfos : null,
-                    "html": mimeType === "text/html" ? featureInfos : null
-                };
+                const features = [];
+
+                featureInfos.forEach(function (feature) {
+                    features.push({
+                        "title": layer.get("name"),
+                        "theme": layer.get("gfiTheme"),
+                        "attributesToShow": layer.get("gfiAttributes"),
+                        "olFeatures": mimeType === "text/xml" ? feature : null,
+                        "html": mimeType === "text/html" ? feature : null
+                    });
+                });
+                return features;
             });
         }));
 
         commit("setGfiFeatures", {
             coordinate: clickCoord,
-            features: gfiFeaturesAtPixel.concat(gfiFeatures)
+            features: gfiFeaturesAtPixel.concat(...gfiFeatures)
         });
     },
 
