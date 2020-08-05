@@ -208,7 +208,7 @@ describe("styleFunctionsDraw", () => {
 
             color = [255, 0, 0, 1];
 
-            expect(createStyle({color, drawType, symbol}).getStyle().getText().getFill().getColor()).to.deep.equal(color);
+            expect(createStyle({color, drawType, symbol}).getText().getFill().getColor()).to.deep.equal(color);
         });
     });
     describe("createTextStyle", () => {
@@ -217,18 +217,10 @@ describe("styleFunctionsDraw", () => {
                 font = "",
                 fontSize = 0,
                 text = "",
-                zIndex = 0;
+                zIndex = 0,
+                result = createTextStyle(color, font, fontSize, text, zIndex);
 
-            expect(createTextStyle(color, font, fontSize, text, zIndex) instanceof Style).to.be.true;
-        });
-        it("the result should be an instance of Style and Text for empty input", function () {
-            const color = [],
-                font = "",
-                fontSize = 0,
-                text = "",
-                zIndex = 0;
-
-            expect(createTextStyle(color, font, fontSize, text, zIndex).getText() instanceof Text).to.be.true;
+            expect(result instanceof Style).to.be.true;
         });
         it("the result fontSize should be the same as the input fontSize", function () {
             const color = [255, 255, 0, 1],
