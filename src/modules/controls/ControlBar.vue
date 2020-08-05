@@ -40,7 +40,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["controlsConfig", "mobile", "simpleStyle"]),
+        ...mapGetters(["controlsConfig", "mobile", "isSimpleStyle"]),
         ...mapGetters("controls", ["componentMap", "mobileHiddenControls", "bottomControls"]),
         /** @returns {object} contains controls to-be-rendered sorted by placement */
         categorizedControls () {
@@ -100,7 +100,7 @@ export default {
 
 <template>
     <div class="right-bar">
-        <template v-if="!simpleStyle">
+        <template v-if="!isSimpleStyle">
             <div
                 v-for="{categoryName, className} in categories"
                 :key="className"

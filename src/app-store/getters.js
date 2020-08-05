@@ -15,9 +15,6 @@ export default {
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
     portalConfig: state => state?.configJson?.Portalconfig || null,
-    // styles
-    simpleStyle: state => (state?.queryParams?.style || "").toLowerCase() === "simple",
-    tableStyle: state => (state?.queryParams?.style || "").toLowerCase() === "table",
 
     /**
      * recursively read out the menu config for tools
@@ -68,6 +65,54 @@ export default {
             }
         }
         return tool;
+    },
+
+    /**
+     * checks if the simple style is set in the query params or in the config.js
+     * @param {object} state - the store state
+     * @returns {boolean} true if simple style is set otherwise false
+     */
+    isSimpleStyle: (state) => {
+        if (state?.queryParams?.style) {
+            if (state.queryParams.style === "simple") {
+                return true;
+            }
+            return false;
+        }
+        else if (state?.configJs?.uiStyle && state.configJs.uiStyle === "simple") {
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * checks if the table style is set in the query params or in the config.js
+     * @param {object} state - the store state
+     * @returns {boolean} true if table style is set ohterwise false
+     */
+    isTableStyle: (state) => {
+        if (state?.queryParams?.style) {
+            if (state.queryParams.style === "table") {
+                return true;
+            }
+            return false;
+        }
+        else if (state?.configJs?.uiStyle && state.configJs.uiStyle === "table") {
+            return true;
+        }
+        return false;
+    },
+
+    /**
+     * checks if the default style is set
+     * @param {object} state - the store state
+     * @param {object} getters - the store getters
+     * @param {boolean} getters.isSimpleStyle -
+     * @param {boolean} getters.isTableStyle -
+     * @returns {boolean} false if simple style or table style is set otherwise true
+     */
+    isDefaultStyle: (state, {isSimpleStyle, isTableStyle}) => {
+        return !isSimpleStyle && !isTableStyle;
     }
 };
 
