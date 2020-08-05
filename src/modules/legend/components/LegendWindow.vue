@@ -29,7 +29,6 @@ export default {
     created () {
         this.listenToLayerVisibilityChanged();
         this.listenToUpdatedSelectedLayerList();
-        this.listenToCreateLegendForLayerInfo();
     },
     updated () {
         $(this.$el).draggable({
@@ -70,18 +69,6 @@ export default {
             Backbone.Events.listenTo(Radio.channel("ModelList"), {
                 "updatedSelectedLayerList": (layers) => {
                     layers.forEach(layer => this.toggleLayerInLegend(layer));
-                }
-            });
-        },
-
-        /**
-         * Listens on request to create the legend for the layer info
-         * @returns {void}
-         */
-        listenToCreateLegendForLayerInfo () {
-            Backbone.Events.listenTo(Radio.channel("Legend"), {
-                "createLegendForLayer": (layerId) => {
-                    this.createLayerInfoLegend(layerId);
                 }
             });
         },
@@ -473,14 +460,11 @@ export default {
                 </div>
             </div>
         </div>
-        <div
+        <LegendSingleLayer
             v-if="layerInfoLegend.hasOwnProperty('legend') && layerInfoLegend.legend.length > 0"
-        >
-            <LegendSingleLayer
-                :legend="layerInfoLegend.legend"
-                :renderToId="'layerinfo-legend'"
-            />
-        </div>
+            :legend="layerInfoLegend.legend"
+            :renderToId="'layerinfo-legend'"
+        />
     </div>
 </template>
 

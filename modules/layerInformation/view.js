@@ -1,6 +1,7 @@
 import Template from "text-loader!./template.html";
 import "jquery-ui/ui/widgets/draggable";
 import "bootstrap/js/tab";
+import legendStore from "../../src/modules/legend/store/indexLegend.js";
 /**
  * @member LayerInformationTemplate
  * @description Template used to create the layer information
@@ -51,8 +52,8 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
             containment: "#map",
             handle: ".header"
         });
-        this.delegateEvents();
         this.createLayerInfoLegend();
+        this.delegateEvents();
         return this;
     },
 
@@ -61,7 +62,18 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
      * @returns {void}
      */
     createLayerInfoLegend: function () {
-        Radio.trigger("Legend", "createLegendForLayer", this.model.get("id"));
+        const state = legendStore.state;
+
+        this.removeLayerInfoLegend();
+        // legendStore.commit("createLayerInfoLegend", this.model.get("id"));
+        legendStore.actions.createLayerInfoLegend({state}, this.model.get("id"));
+    },
+
+    removeLayerInfoLegend: function () {
+        const state = legendStore.state;
+
+        // legendStore.commit("removeLayerInfoLegend");
+        legendStore.actions.removeLayerInfoLegend({state});
     },
     /**
      * Toggles the tab after click.
@@ -102,6 +114,7 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
         $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").remove(this.$el);
         this.model.setIsVisible(false);
         Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
+        this.removeLayerInfoLegend();
     }
 });
 

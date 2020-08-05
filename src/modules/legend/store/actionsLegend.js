@@ -67,6 +67,9 @@ const configPaths = [
             })[0];
 
             state.layerInfoLegend = legendById;
+        },
+        removeLayerInfoLegend: function ({state}) {
+            state.layerInfoLegend = {};
         }
     };
 
