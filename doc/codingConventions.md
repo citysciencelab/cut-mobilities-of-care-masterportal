@@ -193,7 +193,7 @@ B.3.2 Style
 B.3.2.1 Nutze wann immer möglich scoped im Style-Tag
 B.3.2.2 Vermeide die Nutzung von !important
 B.3.2.3 Verwende möglichst keine absoluten width und height Angaben (sehr schlecht für Responsive Design)
-B.3.2.3 Es gibt eine globale less-Datei (variables.less), die alle benötigten BootstrapV3 und im Masterportal vorhandene Variablen beinhaltet.
+B.3.2.4 Es gibt eine globale less-Datei (variables.less), die alle benötigten BootstrapV3 und im Masterportal vorhandene Variablen beinhaltet.
 Alle für das Theming benötigten Variablen(Schriftarten, Farben, ...) werden hier gepflegt.
 Die Datei variables.less darf nur Variablen, Mixins, und Funktionen beinhalten. CSS-Regeln führen dazu, dass diese pro Import wiederholt werden.
 Über den import-Befehl im style-Tag wird die variables.less in die Komponente eingebunden.
