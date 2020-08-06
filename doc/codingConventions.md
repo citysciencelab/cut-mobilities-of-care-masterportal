@@ -86,7 +86,7 @@ A.8.4 Einträge sind einer der folgenden Kategorien zugeordnet: Added, Changed, 
 #### A.9 Dateistruktur
 A.9.1 Die Dateistruktur für neue Module soll nach folgenden Schema angelegt werden:
 
-``` bash
+```bash
 src
 |--app-store
 |   |--utils
