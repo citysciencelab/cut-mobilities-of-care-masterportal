@@ -571,7 +571,8 @@
                 "showOverviewControl": "Show overview map",
                 "hideOverviewControl": "Hide overview map",
                 "showOverviewTable": "show mini map",
-                "hideOverviewTable": "hide mini map"
+                "hideOverviewTable": "hide mini map",
+                "missingLayerId": "The overview map could not be created."
             },
             "mousePosition": {
                 "hint": "Move the computer mouse over your screen.",
