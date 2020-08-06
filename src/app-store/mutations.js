@@ -7,7 +7,7 @@
 // In the case "portalTitle.title" for example, the new parameter is written to a new (sub-)path.
 // The old parameter is defined under "Portalconfig.PortalTitle". But the new parameter has to be written to "Portalconfig.portalTitle.title".
 // This means, that not only the parameter "title" is new, also the subpath "portalTitle" is new and has to be inserted.
-// So logically "portalTitle" and "title" are put together to on key called "portalTitle.title".
+// So logically "portalTitle" and "title" are put together to one key called "portalTitle.title".
 // There are some cases, where a tool e.g. "supplyCoord" can be defined at multiple places.
 // Therefore define an array where all the possible paths are stored.
 // Later the algorithm will detect which path is the correct and defined one. This path is used for the new parameter.
@@ -18,6 +18,12 @@ const deprecatedCode = {
     "portalTitle.link": ["Portalconfig.LogoLink"],
     "portalTitle.toolTip": ["Portalconfig.LogoToolTip"],
     "toolTip": ["Portalconfig.portalTitle.tooltip"],
+    "filter": ["Portalconfig.menu.wfsFeatureFilter", "Themenconfig.Fachdaten.Layer.extendedFilter"],
+    "zoomToResultOnHover": ["Portalconfig.searchBar.bkg.zoomToResult"],
+    "treeType": ["Portalconfig.Baumtyp"],
+    "layerId": ["Portalconfig.controls.overviewMap.baselayer"],
+    "startResolution": ["Portalconfig.mapView.resolution"],
+    "startZoomLevel": ["Portalconfig.searchbar.zoomLevel"],
     "supplyCoord": ["Portalconfig.menu.tools.children.coord", "Portalconfig.menu.coord"]
 };
 
@@ -64,18 +70,23 @@ function checkWhereDeprecated (deprecatedPath, config) {
  * @returns {Object} - returns an object with the three mentioned above parameters.
 */
 function getDeprecatedParameters (entry, config) {
-    const splittedPath = entry.split("."),
-        output = splittedPath.reduce((object, index) => object[index], config),
-        deprecatedKey = splittedPath[splittedPath.length - 1];
     let parameters = {};
 
-    parameters = {
-        "splittedPath": splittedPath,
-        "output": output,
-        "deprecatedKey": deprecatedKey
-    };
+    try {
+        const splittedPath = entry.split("."),
+            output = splittedPath.reduce((object, index) => object[index], config),
+            deprecatedKey = splittedPath[splittedPath.length - 1];
 
-    return parameters;
+        parameters = {
+            "splittedPath": splittedPath,
+            "output": output,
+            "deprecatedKey": deprecatedKey
+        };
+        return parameters;
+    }
+    catch {
+        return parameters;
+    }
 }
 
 /**
