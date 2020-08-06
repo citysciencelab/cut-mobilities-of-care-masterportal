@@ -3,8 +3,21 @@ import sinon from "sinon";
 import getters from "../../../store/gettersSupplyCoord";
 import stateSupplyCoord from "../../../store/stateSupplyCoord";
 
-describe("SupplyCoord", function () {
+const {
+    selectPointerMove,
+    projections,
+    mapProjection,
+    positionMapProjection,
+    updatePosition,
+    currentProjectionName,
+    currentProjection,
+    currentSelection,
+    coordinatesEastingField,
+    coordinatesNorthingField
+} = getters;
 
+
+describe("SupplyCoord", function () {
     describe("SupplyCoord getters", function () {
         it("returns the selectPointerMove from state", function () {
             const emptyFunc = sinon.stub(),
@@ -12,8 +25,8 @@ describe("SupplyCoord", function () {
                     selectPointerMove: emptyFunc
                 };
 
-            expect(getters.selectPointerMove(stateSupplyCoord)).to.equals(null);
-            expect(getters.selectPointerMove(state)).to.equals(emptyFunc);
+            expect(selectPointerMove(stateSupplyCoord)).to.equals(null);
+            expect(selectPointerMove(state)).to.equals(emptyFunc);
         });
         it("returns the projections from state", function () {
             const proj = [{name: "projection 1", projName: "utm"},
@@ -22,8 +35,8 @@ describe("SupplyCoord", function () {
                     projections: proj
                 };
 
-            expect(getters.projections(stateSupplyCoord)).to.be.an("array").that.is.empty;
-            expect(getters.projections(state)).to.equals(proj);
+            expect(projections(stateSupplyCoord)).to.be.an("array").that.is.empty;
+            expect(projections(state)).to.equals(proj);
         });
         it("returns the mapProjection from state", function () {
             const proj = {name: "projection 1", projName: "utm"},
@@ -31,8 +44,8 @@ describe("SupplyCoord", function () {
                     mapProjection: proj
                 };
 
-            expect(getters.mapProjection(stateSupplyCoord)).to.be.null;
-            expect(getters.mapProjection(state)).to.equals(proj);
+            expect(mapProjection(stateSupplyCoord)).to.be.null;
+            expect(mapProjection(state)).to.equals(proj);
         });
         it("returns the positionMapProjection from state", function () {
             const pos = [100, 200],
@@ -40,16 +53,16 @@ describe("SupplyCoord", function () {
                     positionMapProjection: pos
                 };
 
-            expect(getters.positionMapProjection(stateSupplyCoord)).to.be.an("array").that.is.empty;
-            expect(getters.positionMapProjection(state)).to.equals(pos);
+            expect(positionMapProjection(stateSupplyCoord)).to.be.an("array").that.is.empty;
+            expect(positionMapProjection(state)).to.equals(pos);
         });
         it("returns the updatePosition from state", function () {
             const state = {
                 updatePosition: false
             };
 
-            expect(getters.updatePosition(stateSupplyCoord)).to.be.true;
-            expect(getters.updatePosition(state)).to.be.false;
+            expect(updatePosition(stateSupplyCoord)).to.be.true;
+            expect(updatePosition(state)).to.be.false;
         });
         it("returns the currentProjectionName from state", function () {
             const name = "EPSG:25832",
@@ -58,8 +71,8 @@ describe("SupplyCoord", function () {
                     currentProjectionName: name2
                 };
 
-            expect(getters.currentProjectionName(stateSupplyCoord)).to.be.equals(name);
-            expect(getters.currentProjectionName(state)).to.be.equals(name2);
+            expect(currentProjectionName(stateSupplyCoord)).to.be.equals(name);
+            expect(currentProjectionName(state)).to.be.equals(name2);
         });
         it("returns the currentProjection from state", function () {
             const proj = {name: "projection 1", projName: "utm"},
@@ -67,8 +80,8 @@ describe("SupplyCoord", function () {
                     currentProjection: proj
                 };
 
-            expect(getters.currentProjection(stateSupplyCoord)).to.be.null;
-            expect(getters.currentProjection(state)).to.equals(proj);
+            expect(currentProjection(stateSupplyCoord)).to.be.null;
+            expect(currentProjection(state)).to.equals(proj);
         });
         it("returns the currentSelection from state", function () {
             const name = "EPSG:25832",
@@ -77,8 +90,8 @@ describe("SupplyCoord", function () {
                     currentSelection: name2
                 };
 
-            expect(getters.currentSelection(stateSupplyCoord)).to.be.equals(name);
-            expect(getters.currentSelection(state)).to.be.equals(name2);
+            expect(currentSelection(stateSupplyCoord)).to.be.equals(name);
+            expect(currentSelection(state)).to.be.equals(name2);
         });
         it("returns the coordinatesEastingField from state", function () {
             const value = "160° 00′ 00″",
@@ -86,8 +99,8 @@ describe("SupplyCoord", function () {
                     coordinatesEastingField: value
                 };
 
-            expect(getters.coordinatesEastingField(stateSupplyCoord)).to.be.equals("");
-            expect(getters.coordinatesEastingField(state)).to.be.equals(value);
+            expect(coordinatesEastingField(stateSupplyCoord)).to.be.equals("");
+            expect(coordinatesEastingField(state)).to.be.equals(value);
         });
         it("returns the coordinatesNorthingField from state", function () {
             const value = "100° 00′ 00″ E",
@@ -95,8 +108,8 @@ describe("SupplyCoord", function () {
                     coordinatesNorthingField: value
                 };
 
-            expect(getters.coordinatesNorthingField(stateSupplyCoord)).to.be.equals("");
-            expect(getters.coordinatesNorthingField(state)).to.be.equals(value);
+            expect(coordinatesNorthingField(stateSupplyCoord)).to.be.equals("");
+            expect(coordinatesNorthingField(state)).to.be.equals(value);
         });
     });
     describe("testing default values", function () {

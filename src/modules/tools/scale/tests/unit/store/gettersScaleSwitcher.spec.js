@@ -15,16 +15,18 @@ const {
     isRoot,
     parentId,
     type,
-    deactivateGFI} = getters;
+    deactivateGFI
+} = getters;
 
-describe("gettersScaleSwitcher", function () {
-    it("returns the active from state", function () {
-        expect(active(stateScaleSwitcher)).to.be.false;
+describe("ScaleSwitcher", function () {
+    describe("ScaleSwitcher getters", function () {
+        it("returns the active from state", function () {
+            expect(active(stateScaleSwitcher)).to.be.false;
+        });
+        it("returns the id from state", function () {
+            expect(id(stateScaleSwitcher)).to.equals("scaleSwitcher");
+        });
     });
-    it("returns the id from state", function () {
-        expect(id(stateScaleSwitcher)).to.equals("scaleSwitcher");
-    });
-
     describe("testing default values", function () {
         it("returns the name default value from state", function () {
             expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");

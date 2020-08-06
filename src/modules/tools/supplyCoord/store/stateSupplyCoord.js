@@ -26,7 +26,7 @@
  */
 const state = {
     active: false,
-    id: "coord",
+    id: "supplyCoord",
     selectPointerMove: null,
     projections: [],
     mapProjection: null,
