@@ -208,6 +208,5 @@ B.4.2 Gib eine sprechende Fehlermeldung, die der NutzerIn erklärt was schiefgel
 B.4.3 Fehler nur dann auswerfen, wenn sie relevant für die NutzerIn sind und sich auf den aktuellen Arbeitsschritt beziehen.
 B.4.4 Wenn der NutzerIn ein Fehler mitgeteilt wird, sagen dass etwas schiefgelaufen ist, warum etwas schiefgelaufen ist und was die NutzerIn tun kann, um den Fehler zu beheben! Wenn nichts getan werden kann überlegen, ob der Fehler der NutzerIn mitgeteilt werden muss.
 B.4.5 Gib technische Fehlermeldung (für die EntwicklerIn) als console.error() oder console.warn() in englischer Sprache aus.
-**[Alert Beispiel](./codingConventionsInfo.md)**
 
 ---
