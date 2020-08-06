@@ -1,4 +1,5 @@
 {
+    "masterPortalVersion": "Masterportal V. {{masterPortalVersionNumber}}",
     "button": {
         "back": "Back",
         "download": "Download",
@@ -163,7 +164,6 @@
         },
         "footer": {
             "designation": "Cartography and design:",
-            "version": "Masterportal V.",
             "cardDiscrepancy": "Card discrepancy"
         },
         "tools": {

@@ -1,5 +1,6 @@
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapActions} from "vuex";
+import getters from "../store/gettersFooter";
 import ScaleLine from "../../scaleLine/components/ScaleLine.vue";
 import Language from "../../language/components/Language.vue";
 import MousePosition from "../../controls/mousePosition/components/MousePosition.vue";
@@ -15,18 +16,21 @@ export default {
     },
     computed: {
         ...mapGetters(["footerConfig", "mobile", "masterPortalVersionNumber"]),
+        ...mapGetters("Footer", Object.keys(getters)),
         showFooter () {
             return Boolean(this.footerConfig);
-        },
-        urls () {
-            return this.footerConfig?.urls;
-        },
-        showVersion () {
-            return this.footerConfig?.showVersion;
         },
         showLanguageSwitcher () {
             return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
         }
+    },
+    mounted () {
+        this.initialize();
+    },
+    methods: {
+        ...mapActions("Footer", [
+            "initialize"
+        ])
     }
 };
 </script>
@@ -55,7 +59,7 @@ export default {
             </template>
             <template v-if="showVersion">
                 <span class="hidden-xs">
-                    Version: {{ masterPortalVersionNumber }}
+                    {{ $t("masterPortalVersion", {masterPortalVersionNumber}) }}
                     <span class="glyphicon glyphicon-option-vertical hidden-xs" />
                 </span>
             </template>
