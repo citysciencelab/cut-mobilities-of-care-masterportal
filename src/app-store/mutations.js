@@ -1,7 +1,10 @@
-
-// beachten, dass es mehrer Pfade für die Tools geben kann. Alle müssen angegeben werden.
+// import {getByArraySyntax} from "../../src/utils/fetchFirstModuleConfig.js";
+// beachten, dass es mehrere Pfade für die Tools geben kann. Alle müssen angegeben werden.
 const deprecatedCode = {
-    "toolTip": ["Portalconfig.portalTitle.tooltip"],
+    "title": ["Portalconfig.PortalTitle"],
+    "logo": ["Portalconfig.PortalLogo"],
+    "link": ["Portalconfig.LogoLink"],
+    "toolTip": ["Portalconfig.portalTitle.tooltip", "Portalconfig.LogoToolTip"],
     "supplyCoord": ["Portalconfig.menu.coord", "Portalconfig.menu.tools.children.coord"]
 };
 
@@ -13,24 +16,23 @@ const deprecatedCode = {
  * @returns {Object} - returns a new config.json without the deprecated parameters. They were replaced by the actual ones.
 */
 function checkWhereDeprecated (deprecatedPath, config) {
-    let updatedConfig = {...config};
+    let parameters = {},
+        updatedConfig = {...config};
 
     Object.entries(deprecatedPath).forEach((entry) => {
-        const currentCode = entry[0];
 
         if (entry[1].length === 1) {
-            const deprecatedParameters = getDeprecatedParameters(entry[1][0], config);
-
-            updatedConfig = findDeprecatedCode(currentCode, deprecatedParameters, config);
+            parameters = getDeprecatedParameters(entry[1][0], config);
         }
         else {
             for (const path of entry[1]) {
-                const deprecatedParameters = getDeprecatedParameters(path, config);
-
-                if (deprecatedParameters.output !== undefined) {
-                    updatedConfig = findDeprecatedCode(currentCode, deprecatedParameters, config);
-                }
+                parameters = getDeprecatedParameters(path, config);
             }
+        }
+        parameters.currentCode = entry[0];
+
+        if (parameters.output !== undefined) {
+            updatedConfig = replaceDeprecatedCode(parameters, updatedConfig);
         }
     });
     return updatedConfig;
@@ -46,38 +48,46 @@ function checkWhereDeprecated (deprecatedPath, config) {
  * @returns {Object} - returns an object with the three mentioned above parameters.
 */
 function getDeprecatedParameters (entry, config) {
-    const splittedPath = entry.split("."),
-        output = splittedPath.reduce((object, index) => object[index], config),
-        deprecatedKey = splittedPath[splittedPath.length - 1];
+    const splittedPath = entry.split(".");
+    let parameters = {};
 
-    return {
-        "splittedPath": splittedPath,
-        "output": output,
-        "deprecatedKey": deprecatedKey
-    };
+    try {
+        const output = splittedPath.reduce((object, index) => object[index], config),
+            // output2 = getByArraySyntax(config, splittedPath),
+            deprecatedKey = splittedPath[splittedPath.length - 1];
+
+        parameters = {
+            "splittedPath": splittedPath,
+            "output": output,
+            "deprecatedKey": deprecatedKey
+        };
+    }
+    catch (e) {
+        console.warn(e, "not defined");
+    }
+    return parameters;
 }
 
 /**
  * Function to find and replace the old deprecated path.
  * Inserts the new and current key into the config instead of the deprecated parameter.
  * The deprecated parameter is deleted. The content is allocated to the new key.
- * @param {String} currentParameter - the new current parameter to repalce the deprecated parameter.
- * @param {Object} deprecatedParameters - this object contains the path with the deprecated parameter, the output/content of the deprecated parameter and the deprecated parameter itself.
+ * @param {Array} parameters - contains the new current parameter to repalce the deprecated parameter. Contains also an object wich lists the path of the deprecated parameter, the output/content of the deprecated parameter and the deprecated parameter itself.
  * @param {Object} config - the config.json.
  * @returns {Object} - returns a updated config where the deprecated parameters are replaced by the new and current ones.
 */
-function findDeprecatedCode (currentParameter, deprecatedParameters, config) {
+function replaceDeprecatedCode (parameters, config) {
     const updatedConfig = {...config},
-        path = deprecatedParameters.splittedPath,
-        output = deprecatedParameters.output,
-        deprecatedKey = deprecatedParameters.deprecatedKey;
+        path = parameters.splittedPath,
+        output = parameters.output,
+        deprecatedKey = parameters.deprecatedKey;
     let current = updatedConfig;
 
     path.pop();
-    path.push(currentParameter);
+    path.push(parameters.currentCode);
     path.forEach((element, index) => {
         if (index === path.length - 1 && output !== undefined) {
-            current[currentParameter] = output;
+            current[parameters.currentCode] = output;
             delete current[deprecatedKey];
         }
         else {
@@ -87,7 +97,6 @@ function findDeprecatedCode (currentParameter, deprecatedParameters, config) {
             current = current[element];
         }
     });
-    // });
 
     return updatedConfig;
 }
