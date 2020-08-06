@@ -185,7 +185,7 @@ B.2.5 Die Typprüfung erfolgt mit typeof, instanceof und Array.isArray() sowie "
 
 ---
 
-### B.3 Vue Best Practice
+#### B.3 Vue Best Practice
 B.3.1 Vue-Komponenten im share-components Verzeichnis werden nach den Regeln von [Vue-Styleguidist](https://vue-styleguidist.github.io/) kommentiert.
 B.3.2 Backbone Radio - Neue Vue-Module sollen soweit möglich ohne Radio auskommen. Radio-Events können in alten Modulen durch den Store ersetzt werden.
 
