@@ -192,16 +192,16 @@ B.3.2 Backbone Radio - Neue Vue-Module sollen soweit möglich ohne Radio auskomm
 ---
 
 #### B.4 Vue Best Practice - State-Management
-B.4.1 Um aus dem State einfache getters und mutations zu schreiben, nutze die Funktionen aus der generator.js (./src/app-store/utils)
+B.4.1 Um aus dem State einfache getters und mutations zu schreiben, nutze die Funktionen aus der generator.js (./src/app-store/utils).
 B.4.2 Nutze die Helper-Funktionen von vuex um die Daten aus dem Store einfacher in die Komponente einzubinden.
 
 ---
 
 #### B.5 Vue Best Practice - Style
 
-B.5.1 Nutze wann immer möglich scoped im Style-Tag
-B.5.2 Vermeide die Nutzung von !important
-B.5.3 Verwende möglichst keine absoluten width und height Angaben (sehr schlecht für Responsive Design)
+B.5.1 Nutze wann immer möglich scoped im Style-Tag.
+B.5.2 Vermeide die Nutzung von !important.
+B.5.3 Verwende möglichst keine absoluten width und height Angaben (sehr schlecht für Responsive Design).
 B.5.4 Es gibt eine globale less-Datei (variables.less), die alle benötigten BootstrapV3 und im Masterportal vorhandene Variablen beinhaltet. Alle für das Theming benötigten Variablen(Schriftarten, Farben, ...) werden hier gepflegt. Die Datei variables.less darf nur Variablen, Mixins, und Funktionen beinhalten. CSS-Regeln führen dazu, dass diese pro Import wiederholt werden. Über den import-Befehl im style-Tag wird die variables.less in die Komponente eingebunden.
 
 ---
