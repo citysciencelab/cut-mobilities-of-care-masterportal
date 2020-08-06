@@ -185,28 +185,35 @@ B.2.5 Die Typprüfung erfolgt mit typeof, instanceof und Array.isArray() sowie "
 
 ---
 
-#### B.3 Vue Best Practice
-B.3.1 State-Management
-B.3.1.1 Um aus dem State einfache getters und mutations zu schreiben, nutze die Funktionen aus der generator.js (./src/app-store/utils)
-B.3.1.2 Nutze die Helper-Funktionen von vuex um die Daten aus dem Store einfacher in die Komponente einzubinden.
-B.3.2 Style
-B.3.2.1 Nutze wann immer möglich scoped im Style-Tag
-B.3.2.2 Vermeide die Nutzung von !important
-B.3.2.3 Verwende möglichst keine absoluten width und height Angaben (sehr schlecht für Responsive Design)
-B.3.2.4 Es gibt eine globale less-Datei (variables.less), die alle benötigten BootstrapV3 und im Masterportal vorhandene Variablen beinhaltet.
-Alle für das Theming benötigten Variablen(Schriftarten, Farben, ...) werden hier gepflegt.
-Die Datei variables.less darf nur Variablen, Mixins, und Funktionen beinhalten. CSS-Regeln führen dazu, dass diese pro Import wiederholt werden.
-Über den import-Befehl im style-Tag wird die variables.less in die Komponente eingebunden.
-B.3.3 Vue-Komponenten im share-components Verzeichnis werden nach den Regeln von [Vue-Styleguidist](https://vue-styleguidist.github.io/) kommentiert.
-B.3.4 Backbone Radio - Neue Vue-Module sollen soweit möglich ohne Radio auskommen. Radio-Events können in alten Modulen durch den Store ersetzt werden.
+### B.3 Vue Best Practice
+B.3.1 Vue-Komponenten im share-components Verzeichnis werden nach den Regeln von [Vue-Styleguidist](https://vue-styleguidist.github.io/) kommentiert.
+B.3.2 Backbone Radio - Neue Vue-Module sollen soweit möglich ohne Radio auskommen. Radio-Events können in alten Modulen durch den Store ersetzt werden.
 
 ---
 
-#### B.4 Ausgabe von Fehlermeldungen
-B.4.1 Verwende das Alerting-Modul.
-B.4.2 Gib eine sprechende Fehlermeldung, die der NutzerIn erklärt was schiefgelaufen ist. Nutze dabei die Mehrsprachigkeit.
-B.4.3 Fehler nur dann auswerfen, wenn sie relevant für die NutzerIn sind und sich auf den aktuellen Arbeitsschritt beziehen.
-B.4.4 Wenn der NutzerIn ein Fehler mitgeteilt wird, sagen dass etwas schiefgelaufen ist, warum etwas schiefgelaufen ist und was die NutzerIn tun kann, um den Fehler zu beheben! Wenn nichts getan werden kann überlegen, ob der Fehler der NutzerIn mitgeteilt werden muss.
-B.4.5 Gib technische Fehlermeldung (für die EntwicklerIn) als console.error() oder console.warn() in englischer Sprache aus.
+#### B.4 Vue Best Practice - State-Management
+B.4.1 Um aus dem State einfache getters und mutations zu schreiben, nutze die Funktionen aus der generator.js (./src/app-store/utils)
+B.4.2 Nutze die Helper-Funktionen von vuex um die Daten aus dem Store einfacher in die Komponente einzubinden.
+
+---
+
+#### B.5 Vue Best Practice - Style
+
+B.5.1 Nutze wann immer möglich scoped im Style-Tag
+B.5.2 Vermeide die Nutzung von !important
+B.5.3 Verwende möglichst keine absoluten width und height Angaben (sehr schlecht für Responsive Design)
+B.5.4 Es gibt eine globale less-Datei (variables.less), die alle benötigten BootstrapV3 und im Masterportal vorhandene Variablen beinhaltet.
+Alle für das Theming benötigten Variablen(Schriftarten, Farben, ...) werden hier gepflegt.
+Die Datei variables.less darf nur Variablen, Mixins, und Funktionen beinhalten. CSS-Regeln führen dazu, dass diese pro Import wiederholt werden.
+Über den import-Befehl im style-Tag wird die variables.less in die Komponente eingebunden.
+
+---
+
+#### B.6 Ausgabe von Fehlermeldungen
+B.6.1 Verwende das Alerting-Modul.
+B.6.2 Gib eine sprechende Fehlermeldung, die der NutzerIn erklärt was schiefgelaufen ist. Nutze dabei die Mehrsprachigkeit.
+B.6.3 Fehler nur dann auswerfen, wenn sie relevant für die NutzerIn sind und sich auf den aktuellen Arbeitsschritt beziehen.
+B.6.4 Wenn der NutzerIn ein Fehler mitgeteilt wird, sagen dass etwas schiefgelaufen ist, warum etwas schiefgelaufen ist und was die NutzerIn tun kann, um den Fehler zu beheben! Wenn nichts getan werden kann überlegen, ob der Fehler der NutzerIn mitgeteilt werden muss.
+B.6.5 Gib technische Fehlermeldung (für die EntwicklerIn) als console.error() oder console.warn() in englischer Sprache aus.
 
 ---
