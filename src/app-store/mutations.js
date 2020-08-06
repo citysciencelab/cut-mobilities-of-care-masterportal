@@ -1,11 +1,24 @@
-// import {getByArraySyntax} from "../../src/utils/fetchFirstModuleConfig.js";
-// beachten, dass es mehrere Pfade für die Tools geben kann. Alle müssen angegeben werden.
+
+// The object deprecatedCode stores the current respectively new parameters and the related deprecated parameters.
+// The key describes the current parameter or more precisely the path to the new/current path.
+// Please note, that the path is not the complete path. It is the path from the point where the new and old paths differ.
+// The easiest case is for example "toolTip". Here the new parameter is written to the same place as the old parameter.
+// Therefore the key is only "toolTip", the previous path is taken over from the old path.
+// In the case "portalTitle.title" for example, the new parameter is written to a new (sub-)path.
+// The old parameter is defined under "Portalconfig.PortalTitle". But the new parameter has to be written to "Portalconfig.portalTitle.title".
+// This means, that not only the parameter "title" is new, also the subpath "portalTitle" is new and has to be inserted.
+// So logically "portalTitle" and "title" are put together to on key called "portalTitle.title".
+// There are some cases, where a tool e.g. "supplyCoord" can be defined at multiple places.
+// Therefore define an array where all the possible paths are stored.
+// Later the algorithm will detect which path is the correct and defined one. This path is used for the new parameter.
+
 const deprecatedCode = {
-    "title": ["Portalconfig.PortalTitle"],
-    "logo": ["Portalconfig.PortalLogo"],
-    "link": ["Portalconfig.LogoLink"],
-    "toolTip": ["Portalconfig.portalTitle.tooltip", "Portalconfig.LogoToolTip"],
-    "supplyCoord": ["Portalconfig.menu.coord", "Portalconfig.menu.tools.children.coord"]
+    "portalTitle.title": ["Portalconfig.PortalTitle"],
+    "portalTitle.logo": ["Portalconfig.PortalLogo"],
+    "portalTitle.link": ["Portalconfig.LogoLink"],
+    "portalTitle.toolTip": ["Portalconfig.LogoToolTip"],
+    "toolTip": ["Portalconfig.portalTitle.tooltip"],
+    "supplyCoord": ["Portalconfig.menu.tools.children.coord", "Portalconfig.menu.coord"]
 };
 
 /**
@@ -20,19 +33,22 @@ function checkWhereDeprecated (deprecatedPath, config) {
         updatedConfig = {...config};
 
     Object.entries(deprecatedPath).forEach((entry) => {
-
         if (entry[1].length === 1) {
             parameters = getDeprecatedParameters(entry[1][0], config);
+            if (parameters.output !== undefined) {
+                parameters.currentCode = entry[0];
+                updatedConfig = replaceDeprecatedCode(parameters, updatedConfig);
+            }
         }
         else {
             for (const path of entry[1]) {
                 parameters = getDeprecatedParameters(path, config);
-            }
-        }
-        parameters.currentCode = entry[0];
 
-        if (parameters.output !== undefined) {
-            updatedConfig = replaceDeprecatedCode(parameters, updatedConfig);
+                if (parameters.output !== undefined) {
+                    parameters.currentCode = entry[0];
+                    updatedConfig = replaceDeprecatedCode(parameters, updatedConfig);
+                }
+            }
         }
     });
     return updatedConfig;
@@ -48,23 +64,17 @@ function checkWhereDeprecated (deprecatedPath, config) {
  * @returns {Object} - returns an object with the three mentioned above parameters.
 */
 function getDeprecatedParameters (entry, config) {
-    const splittedPath = entry.split(".");
+    const splittedPath = entry.split("."),
+        output = splittedPath.reduce((object, index) => object[index], config),
+        deprecatedKey = splittedPath[splittedPath.length - 1];
     let parameters = {};
 
-    try {
-        const output = splittedPath.reduce((object, index) => object[index], config),
-            // output2 = getByArraySyntax(config, splittedPath),
-            deprecatedKey = splittedPath[splittedPath.length - 1];
+    parameters = {
+        "splittedPath": splittedPath,
+        "output": output,
+        "deprecatedKey": deprecatedKey
+    };
 
-        parameters = {
-            "splittedPath": splittedPath,
-            "output": output,
-            "deprecatedKey": deprecatedKey
-        };
-    }
-    catch (e) {
-        console.warn(e, "not defined");
-    }
     return parameters;
 }
 
@@ -80,15 +90,22 @@ function replaceDeprecatedCode (parameters, config) {
     const updatedConfig = {...config},
         path = parameters.splittedPath,
         output = parameters.output,
-        deprecatedKey = parameters.deprecatedKey;
+        deprecatedKey = parameters.deprecatedKey,
+        splittedCurrentPath = parameters.currentCode.split(".");
     let current = updatedConfig;
 
     path.pop();
-    path.push(parameters.currentCode);
+    if (splittedCurrentPath.length === 1) {
+        path.push(parameters.currentCode);
+    }
+    else {
+        splittedCurrentPath.forEach((pathElement) => {
+            path.push(pathElement);
+        });
+    }
     path.forEach((element, index) => {
         if (index === path.length - 1 && output !== undefined) {
-            current[parameters.currentCode] = output;
-            delete current[deprecatedKey];
+            current[element] = output;
         }
         else {
             if (!current[element]) {
@@ -96,6 +113,7 @@ function replaceDeprecatedCode (parameters, config) {
             }
             current = current[element];
         }
+        delete current[deprecatedKey];
     });
 
     return updatedConfig;
