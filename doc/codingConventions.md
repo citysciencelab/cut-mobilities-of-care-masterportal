@@ -99,9 +99,9 @@ src
 |-- modules
 |   |-- exampleModule
 |   |   |-- components
-|   |	|   |-- ExampleModule.vue
+|   |   |   |-- ExampleModule.vue
 |   |   |   |-- ...
-|   |	|-- store
+|   |   |-- store
 |   |   |   |-- actionsExampleModule.js
 |   |   |   |-- constantsExampleModule.js
 |   |   |   |-- gettersExampleModule.js
@@ -109,15 +109,15 @@ src
 |   |   |   |-- mutationsExampleModule.js
 |   |   |   |-- stateExampleModule.js
 |   |   |
-|   |	|-- test
-|   |	|   |-- unit
+|   |   |-- test
+|   |   |   |-- unit
 |   |   |   |   |-- components
 |   |   |   |   |   |-- exampleModule.spec.js
 |   |   |   |   |-- store
 |   |   |   |   |   |-- actionsExampleModule.spec.js
 |   |   |   |   |   |-- gettersExampleModule.spec.js
 |   |   |   |   |   |-- mutationsExampleModule.spec.js
-|   |	|   |-- end2end	(Modul spezifisch)
+|   |   |   |-- end2end	(Modul spezifisch)
 |   |   |   |   |-- ExampleModule.e2e.js
 |   |
 |   |-- controls
@@ -128,18 +128,18 @@ src
 |   |   |-- mutationsControls.js
 |   |   |-- ...
 |   |   |-- exampleControl
-|   |	|   |-- components
-|   |	|   |-- store
-|   |	|   |-- test
+|   |   |   |-- components
+|   |   |   |-- store
+|   |   |   |-- test
 |   |
 |   |-- tools
 |   |   |-- actionsTool.js
 |   |   |-- indexTools.js
 |   |   |-- Tool.vue
 |   |   |-- exampleTool
-|   |	|   |-- components
-|   |	|   |-- store
-|   |	|   |-- test
+|   |   |   |-- components
+|   |   |   |-- store
+|   |   |   |-- test
 |   |
 |-- share-components
 |   |-- exampleShareComponent.vue
@@ -149,7 +149,7 @@ src
 |   |   |--exampleGlobalTest.e2e.js
 |
 |-- utils
-|	|-- exampleGlobalFunction.js
+|   |-- exampleGlobalFunction.js
 |
 |-- addons.js
 |-- App.vue
