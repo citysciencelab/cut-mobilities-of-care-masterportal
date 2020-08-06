@@ -85,6 +85,7 @@ A.8.4 Einträge sind einer der folgenden Kategorien zugeordnet: Added, Changed, 
 
 #### A.9 Dateistruktur
 A.9.1 Die Dateistruktur für neue Module soll nach folgenden Schema angelegt werden:
+
 ``` bash
 src
 |--app-store
@@ -155,12 +156,14 @@ src
 |-- MainNav.vue
 |-- MapRegion.vue
 ```
+
 ---
 
 ---
 
 ### Teil B (optional)
 Der Code ist so lesbar und verständlich wie möglich geschrieben. Das Ziel ist nicht, Zeilen zu sparen, sondern die Zeit der nachfolgenden EntwicklerInnen.
+
 #### B.1 Struktur
 B.1.1 Markup (Templates), Styles (CSS) und Logik (Controller) sind sauber voneinander getrennt.
 B.1.2 Im Controller wird kein HTML erzeugt.
