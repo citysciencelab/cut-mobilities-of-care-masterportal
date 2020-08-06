@@ -17,6 +17,7 @@
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
 
 ### Changed
+- Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
 - Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von VUE. Weiterhin heißt es fortan "Datei-Import".
 - Babel wurde, um einen Support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.
 - Die Version des Packages fs-extra wurde in der package.json aktualisiert.
