@@ -344,7 +344,7 @@ Schreibe für jeden Pull request einen Eintrag im [CHANGELOG](../CHANGELOG.md) u
 
 ### Teil B (optional)
 
-#### B.3.1.1
+#### B.3.1
 ```
 import state from "./state";
 import {generateSimpleMutations} from "~generators";
@@ -355,7 +355,7 @@ const mutations = {
 
 ----
 
-#### B.3.1.2
+#### B.4.2
 * [mapState](https://vuex.vuejs.org/guide/state.html#the-mapstate-helper)
 * [mapGetters](https://vuex.vuejs.org/guide/getters.html#the-mapgetters-helper)
 * [mapMutations](https://vuex.vuejs.org/guide/mutations.html#committing-mutations-in-components)
@@ -363,7 +363,7 @@ const mutations = {
 
 ---
 
-#### B.3.2.3
+#### B.5.4
 ```
 <style lang="less" scoped>
     @import "~variables";
@@ -372,7 +372,7 @@ const mutations = {
 
 ---
 
-#### B.4
+#### B.6
 *Beispiel mit einfachem Text:*
 ```javascript
     import store from "masterportal/src/app-store/index";
