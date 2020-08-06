@@ -86,6 +86,7 @@ const initialState = Object.assign({}, stateDraw),
             dispatch("createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeatures});
             dispatch("addInteraction", drawInteraction);
 
+            // NOTE: This leads to the creation of a second circle instead of a MultiPolygon right now.
             if (state.drawType.id === "drawDoubleCircle") {
                 const drawInteractionTwo = createDrawInteraction(state);
 
@@ -153,6 +154,7 @@ const initialState = Object.assign({}, stateDraw),
         },
         /**
          * Listener to change the features through the modify interaction.
+         * NOTE: For text only the position can be changed. This can be done by clicking at highlighted (on-hover) bottom-left corner of the text.
          *
          * @param {Object} context actions context object.
          * @returns {void}
@@ -169,6 +171,7 @@ const initialState = Object.assign({}, stateDraw),
         },
         /**
          * Creates a select interaction (for deleting features) and adds it to the map.
+         * NOTE: Deleting of text can be done by clicking at highlighted (on-hover) bottom-left corner of the text.
          *
          * @param {Object} context actions context object.
          * @param {Boolean} active Decides whether the select interaction is active or not.
