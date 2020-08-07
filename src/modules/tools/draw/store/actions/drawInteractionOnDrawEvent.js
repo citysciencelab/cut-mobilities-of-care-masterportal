@@ -105,6 +105,7 @@ export function drawInteractionOnDrawEvent ({state, commit, rootState}, {drawInt
 
                 if (drawType.id === "drawDoubleCircle") {
                     if (outerDiameter === null || outerDiameter === 0) {
+                        // TODO: Change all alert triggers to dispatches for the alerting module
                         Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.undefinedTwoCircles"));
                         layerSource.removeFeature(event.feature);
                         state.outerBorderColor = "#E10019";

@@ -35,7 +35,6 @@ import SidebarView from "../modules/sidebar/view";
 import LegendLoader from "../modules/legend/legendLoader";
 import MeasureView from "../modules/tools/measure/view";
 import ShadowView from "../modules/tools/shadow/view";
-import DrawView from "../modules/tools/draw/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import SearchByCoordView from "../modules/tools/searchByCoord/view";
 import LineView from "../modules/tools/pendler/lines/view";
@@ -227,10 +226,6 @@ async function loadApp () {
             }
             case "measure": {
                 new MeasureView({model: tool});
-                break;
-            }
-            case "draw": {
-                new DrawView({model: tool});
                 break;
             }
             case "print": {

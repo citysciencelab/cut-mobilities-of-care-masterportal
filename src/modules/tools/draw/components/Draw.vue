@@ -66,6 +66,7 @@ export default {
         :icon="glyphicon"
         :active="active && renderToWindow"
         :render-to-window="renderToWindow"
+        :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
             <select

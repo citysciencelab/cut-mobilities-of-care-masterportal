@@ -8,7 +8,7 @@
  * @property {Array} color The color of the drawn feature represented as an array.
  * @property {Array} colorContour The color of the contours of the drawn feature represented as an array.
  * @property {Array} deactivatedDrawInteractions Array of draw interactions which are deactivated in the process of the tool. Can be used to reactivate them from another point.
- * @property {Boolean} deactivateGFI Needed as in modelList/list.js it decides whether to deactivate the GFI (for now).
+ * @property {Boolean} deactivateGFI If set to true, the activation of the tool deactivates the GFI tool.
  * @property {module:ol/interaction/Draw} drawInteraction The draw interaction of the draw tool.
  * @property {module:ol/interaction/Draw} drawInteractionTwo The second draw interaction of the draw tool needed if a double circle is to be drawn.
  * @property {Object} drawType The type of the draw interaction. The first parameter represents the type unique identifier of the draw interaction as a String and the second parameter represents the geometry of the drawType as a String.
