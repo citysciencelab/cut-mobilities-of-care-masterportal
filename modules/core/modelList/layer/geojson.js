@@ -5,7 +5,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
 
 const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         isClustered: false,
         altitudeMode: "clampToGround"
@@ -80,7 +80,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             hitTolerance: this.get("hitTolerance")
         }));
         if (this.get("isSelected")) {
-            if (_.isUndefined(this.get("geojson"))) {
+            if (this.get("geojson") === undefined) {
                 this.updateSource();
             }
             else {
@@ -163,7 +163,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     /**
      * Takes the response, parses the geojson and creates ol.features.
      * @fires RemoteInterface#RadioTriggerPostMessage
-     * @param   {string} data   response as GeoJson
+     * @param   {(string | object)} data   response as GeoJson
      * @returns {void}
      */
     handleData: function (data) {
@@ -191,7 +191,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
 
                 if (geometry) {
                     feature.set("extent", geometry.getExtent());
-                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                    newFeatures.push(Radio.request("Util", "omit", feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
                 }
             });
             Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.get("id")});
@@ -242,20 +242,28 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * For downward compatibility a crs tag can be used.
      * @see https://tools.ietf.org/html/rfc7946
      * @see https://geojson.org/geojson-spec#named-crs
-     * @param   {string} data   response as GeoJson
+     * @param   {(string | object)} data   response as GeoJson
      * @returns {string} epsg definition
      */
     getJsonProjection: function (data) {
-        // using indexOf method to increase performance
-        const dataString = data.replace(/\s/g, ""),
-            startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
+        if (typeof data === "object") {
+            if (data.crs !== undefined) {
+                const regExp = /\d+/;
 
-        if (startIndex !== -1) {
-            const endIndex = dataString.indexOf("\"", startIndex + 43);
-
-            return dataString.substring(startIndex + 43, endIndex);
+                return "EPSG:" + data.crs.properties.href.match(regExp)[0];
+            }
         }
+        else {
+            // using indexOf method to increase performance
+            const dataString = data.replace(/\s/g, ""),
+                startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
 
+            if (startIndex !== -1) {
+                const endIndex = dataString.indexOf("\"", startIndex + 43);
+
+                return dataString.substring(startIndex + 43, endIndex);
+            }
+        }
         return "EPSG:4326";
     },
 
@@ -362,7 +370,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      */
     addId: function (features) {
         features.forEach(function (feature) {
-            const id = feature.get("id") || _.uniqueId();
+            const id = feature.get("id") || Radio.request("Util", "uniqueId");
 
             feature.setId(id);
         });
@@ -376,10 +384,10 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     createLegendURL: function () {
         let style;
 
-        if (!_.isUndefined(this.get("legendURL")) && !this.get("legendURL").length) {
+        if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
-            if (!_.isUndefined(style)) {
+            if (style !== undefined) {
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }
         }
@@ -395,14 +403,14 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         const features = [];
 
         this.hideAllFeatures();
-        _.each(featureIdList, function (id) {
+        featureIdList.forEach(id => {
             const feature = this.get("layerSource").getFeatureById(id);
 
             if (feature !== null) {
                 feature.setStyle(undefined);
                 features.push(feature);
             }
-        }, this);
+        });
         Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
     },
 

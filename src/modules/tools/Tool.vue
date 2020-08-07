@@ -22,6 +22,10 @@ export default {
         initialWidth: {
             type: Number,
             default: 0.3
+        },
+        deactivateGFI: {
+            type: Boolean,
+            required: true
         }
     },
     data () {
@@ -40,6 +44,9 @@ export default {
     },
     watch: {
         active (newValue) {
+            const modelCollection = Radio.request("ModelList", "getCollection"),
+                gfiModel = modelCollection ? modelCollection.findWhere({id: "gfi"}) : undefined;
+
             if (newValue === false) {
                 this.draggable = false;
                 $(".backdrop").remove();
@@ -47,6 +54,13 @@ export default {
             else if (!this.renderToWindow && Radio.request("Util", "isViewMobile")) {
                 $("#masterportal-container").append("<div class='backdrop'></div>");
             }
+            if (newValue && gfiModel) {
+                gfiModel.setIsActive(!this.deactivateGFI);
+            }
+            else {
+                Radio.trigger("ModelList", "toggleDefaultTool");
+            }
+
             this.updateMap();
         }
     },
@@ -103,7 +117,7 @@ export default {
             this.maxPosTop = el.css("top");
             this.maxPosLeft = el.css("left");
             $(".win-body-vue").hide();
-            $(".glyphicon-minus").hide();
+            el.find(".glyphicon-minus").hide();
             el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
             $(".header").addClass("header-min");
             el.draggable("disable");
@@ -311,6 +325,11 @@ export default {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     z-index: 999;
     max-width: 500px;
+
+    .drag-bar {
+        display:none;
+    }
+
     .header();
     > .header-min {
         background-color: @background_color_2;

@@ -46,6 +46,8 @@ async function loadUrl (driver, url, mode) {
         await driver.wait(until.elementLocated(By.id("loader")), 90000);
         if (isBasic(url)) {
             await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
+            await driver.wait(until.elementLocated(By.css(".loading")), 90000);
+            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css(".loading"))));
         }
         if (isMaster(url)) {
             // wait for logo to disappear (only appears in master)

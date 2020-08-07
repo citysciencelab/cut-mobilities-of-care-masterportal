@@ -179,15 +179,15 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "bilingual"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Anzahl Schüler",
+              "schwerpunktschule": "Schwerpunktschule",
+              "bilingual": "Bilingual"
+            }
           },
           {
             "layerId": "8712",
@@ -203,17 +203,17 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Schülerzahl",
+              "schwerpunktschule": "Schwerpunktschule Inklusion",
+              "fremdsprache": "Fremdsprachen",
+              "fremdsprache_mit_klasse": "Fremdsprachen ab Klassenstufe",
+              "schulische_ausrichtung": "Schwerpunkte in den Angeboten"
+            }
           },
           {
             "layerId": "8712",
@@ -229,16 +229,16 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Schülerzahl",
+              "fremdsprache": "Fremdsprachen",
+              "fremdsprache_mit_klasse": "Fremdsprachen ab Klassenstufe",
+              "schulische_ausrichtung": "Schwerpunkte in den Angeboten"
+            }
           },
           {
             "layerId": "8712",
@@ -253,13 +253,13 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "ganztagsform",
-              "foerderart",
-              "abschluss"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "ganztagsform": "Ganztagsform",
+              "foerderart": "Förderart",
+              "abschluss": "Abschluss"
+            }
           },
           {
             "layerId": "1711",
@@ -267,10 +267,10 @@
             "isSelected": true,
             "name": "Krankenhäuser",
             "predefinedRules": [],
-            "attributeWhiteList": [
-              "teilnahme_geburtsklinik",
-              "teilnahme_notversorgung"
-            ]
+            "attributeWhiteList": {
+              "teilnahme_geburtsklinik": "Geburtshilfe",
+              "teilnahme_notversorgung": "Not- und Unfallversorgung"
+            }
           }
         ]
       },
@@ -333,11 +333,6 @@
             "name": "translate#common:menu.tools.kmlimport",
             "glyphicon": "glyphicon-import"
           },
-          "wfsFeatureFilter": {
-            "name": "Feature Filter",
-            "glyphicon": "glyphicon-filter",
-            "deactivateGFI": false
-          },
           "extendedFilter": {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
@@ -356,11 +351,11 @@
             "glyphicon": "glyphicon-pencil"
           },
           "styleWMS": {
-            "name": "Style WMS",
+            "name": "translate#common:menu.tools.styleWMS",
             "glyphicon": "glyphicon-tint"
           },
           "featureLister": {
-            "name": "Liste",
+            "name": "translate#common:menu.tools.featureLister",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
@@ -398,24 +393,30 @@
             "glyphicon": "glyphicon-share"
           },
           "layerSlider": {
-            "name": "Zeitreihe",
+            "name": "translate#common:menu.tools.layerSlider",
             "glyphicon": "glyphicon-film",
-            "title": "Simulation von Beispiel-WMS",
+            "title": "translate#common:modules.tools.layerSlider.title",
             "timeInterval": 2000,
             "layerIds": [
               {
-                "title": "Dienst 1",
+                "title": "translate#common:modules.tools.layerSlider.serviceOne",
                 "layerId": "8730"
               },
               {
-                "title": "Dienst 2",
+                "title": "translate#common:modules.tools.layerSlider.serviceTwo",
                 "layerId": "2426"
               },
               {
-                "title": "Dienst 3",
+                "title": "translate#common:modules.tools.layerSlider.serviceThree",
                 "layerId": "4561"
               }
             ]
+          },
+          "scaleSwitcher":
+          {
+            "name": "translate#common:menu.tools.scaleSwitcher",
+            "glyphicon": "glyphicon-resize-full",
+            "renderToWindow": true
           }
         }
       },
@@ -675,29 +676,6 @@
             "strasse"
           ],
           "searchField": "name",
-          "filterOptions": [
-            {
-              "fieldName": "teilnahme_geburtsklinik",
-              "filterType": "combo",
-              "filterName": "Geburtshilfe",
-              "filterString": [
-                "*",
-                "Ja",
-                "Nein"
-              ]
-            },
-            {
-              "fieldName": "teilnahme_notversorgung",
-              "filterType": "combo",
-              "filterName": "Not- und Unfallversorgung",
-              "filterString": [
-                "*",
-                "Ja",
-                "Eingeschränkt",
-                "Nein"
-              ]
-            }
-          ],
           "extendedFilter": true
         },
         {
@@ -718,18 +696,7 @@
           "styleId": "753",
           "visibility": false,
           "mouseHoverField": "Name",
-          "extendedFilter": true,
-          "filterOptions": [
-            {
-              "fieldName": "Bezirk",
-              "filterType": "combo",
-              "filterName": "Bezirk",
-              "filterString": [
-                "*",
-                "Altona"
-              ]
-            }
-          ]
+          "extendedFilter": true
         },
         {
           "id": "8145",

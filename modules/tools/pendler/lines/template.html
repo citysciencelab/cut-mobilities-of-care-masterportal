@@ -2,7 +2,7 @@
 <div class="form-group">
     <select id="select-kreis" class="form-control">
         <option disabled selected hidden><%=chooseDistrict%></option>
-        <% _.each(kreise, function (element) { %>
+        <% kreise.forEach(function (element) { %>
         <% if (element === kreis) { %>
         <option selected><%= element %></option>
         <% }
@@ -16,7 +16,7 @@
 <div class="form-group">
     <select id="select-gemeinde" class="form-control">
         <option disabled selected hidden><%=chooseBorough%></option>
-        <% _.each(gemeinden, function (element) { %>
+        <% gemeinden.forEach(function (element) { %>
         <% if (typeof gemeinde !== "undefined" && element === gemeinde) { %>
         <option selected><%= element %></option>
         <% }
@@ -58,7 +58,7 @@
 <% if (typeof direction !== "undefined") { %>
 <% if (pendlerLegend.length > 0) { %>
 <table class="table">
-    <% _.each(pendlerLegend, function(gemeinde){ %>
+    <% pendlerLegend.forEach(function(gemeinde){ %>
     <tr>
         <td><%= gemeinde.name %>: <%= gemeinde.anzahlPendler %> <%=people%></td>
     </tr>

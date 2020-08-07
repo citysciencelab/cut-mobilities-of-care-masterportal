@@ -134,7 +134,7 @@ const SpecialWFSModel = Backbone.Model.extend({
             data += "<ogc:Or>";
         }
         for (propertyName of propertyNames) {
-            data += "<ogc:PropertyIsLike matchCase='false' wildCard='*' singleChar='#' escapeChar='!'><ogc:PropertyName>" + propertyName + "</ogc:PropertyName><ogc:Literal>*" + _.escape(searchString) + "*</ogc:Literal></ogc:PropertyIsLike>";
+            data += "<ogc:PropertyIsLike matchCase='false' wildCard='*' singleChar='#' escapeChar='!'><ogc:PropertyName>" + propertyName + "</ogc:PropertyName><ogc:Literal>*" + encodeURIComponent(searchString) + "*</ogc:Literal></ogc:PropertyIsLike>";
         }
         if (propertyNames.length > 1) {
             data += "</ogc:Or>";
@@ -155,7 +155,7 @@ const SpecialWFSModel = Backbone.Model.extend({
         let data;
 
         if (searchString.length >= this.get("minChars")) {
-            definitions.forEach(function (def) {
+            definitions.forEach(def => {
                 // translate if necessary
                 if (typeof def.i18nextTranslate === "function") {
                     def.i18nextTranslate(function (key, value) {
@@ -166,7 +166,7 @@ const SpecialWFSModel = Backbone.Model.extend({
                 data = this.getWFS110Xml(def, searchString);
                 def.url = this.manipulateUrlForProxy(def.url);
                 this.sendRequest(def, data);
-            }, this);
+            });
         }
     },
 
@@ -239,57 +239,91 @@ const SpecialWFSModel = Backbone.Model.extend({
             propertyNames = definition.propertyNames,
             geometryName = definition.geometryName ? definition.geometryName : this.get("geometryName"),
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
-            elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]);
-        let identifier,
-            geom;
+            elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]),
+            multiGeometries = ["MULTIPOLYGON"];
+        let geometry;
 
         for (const element of elements) {
-            const elementPropertyNames = element.getElementsByTagNameNS("*", this.removeNameSpaceFromArray(propertyNames)),
-                elementGeometryNames = element.getElementsByTagNameNS("*", geometryName.split(":")[1]),
-                polygonMembers = elementGeometryNames[0].getElementsByTagNameNS("*", "polygonMember"),
-                lengthIndex = polygonMembers.length;
-            let coordinateArray = [],
-                geomType;
+            if (element.getElementsByTagName(propertyNames).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
+                const elementGeometryName = element.getElementsByTagNameNS("*", geometryName.split(":")[1])[0],
+                    elementGeometryFirstChild = elementGeometryName.firstElementChild,
+                    firstChildNameUpperCase = elementGeometryFirstChild.localName.toUpperCase(),
+                    identifier = element.getElementsByTagName(propertyNames)[0].textContent;
+                let interiorGeometry = [];
 
-            if (elementPropertyNames.length > 0 && elementGeometryNames.length > 0) {
-                identifier = elementPropertyNames[0].textContent;
+                if (multiGeometries.includes(firstChildNameUpperCase)) {
+                    const memberName = elementGeometryFirstChild.firstElementChild.localName,
+                        geometryMembers = elementGeometryName.getElementsByTagNameNS("*", memberName),
+                        coordinates = this.getInteriorAndExteriorPolygonMembers(geometryMembers);
 
-                if (polygonMembers.length > 1) {
-
-                    for (let i = 0; i < lengthIndex; i++) {
-                        const coords = polygonMembers[i].getElementsByTagNameNS("*", "posList").item(0).textContent;
-
-                        coordinateArray.push(Object.values(coords.replace(/\s\s+/g, " ").split(" ")));
-                    }
-                    geomType = "MULTIPOLYGON";
+                    geometry = coordinates[0];
+                    interiorGeometry = coordinates[1];
                 }
                 else {
-                    geom = elementGeometryNames[0].firstElementChild;
+                    const geometryString = element.getElementsByTagName(geometryName)[0].textContent;
 
-                    // searching for first simple geometry avoiding multipolygons
-                    while (geom.childElementCount > 0) {
-                        geom = geom.firstElementChild;
-                    }
-
-                    coordinateArray = geom.textContent.replace(/\s\s+/g, " ").split(" ");
-                    geomType = "POLYGON";
+                    geometry = geometryString.trim().split(" ");
                 }
 
-                // "Hitlist-Objekte"
-                Radio.trigger("Searchbar", "pushHits", "hitList", {
-                    id: _.uniqueId(type.toString()),
-                    name: identifier.trim(),
-                    geometryType: geomType,
-                    type: type,
-                    coordinate: coordinateArray,
-                    glyphicon: glyphicon
-                });
+                this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon);
             }
             else {
                 console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
             }
         }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
+    },
+
+    /**
+    * Trigger function pushHits in Searchbar and send result objects for hit list.
+    * @param {string} type - Type name.
+    * @param {string} identifier - Name frmom target result.
+    * @param {string} firstChildNameUpperCase - Geometrie type.
+    * @param {string[]} geometry - The coordinates from exterior geometry.
+    * @param {string[]} interiorGeometry - The coordinates from interior geometry.
+    * @param {string} glyphicon - The glyphicon for hit.
+    * @returns {void}
+    */
+    pushHitListObjects: function (type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon) {
+        Radio.trigger("Searchbar", "pushHits", "hitList", {
+            id: Radio.request("Util", "uniqueId", type.toString()),
+            name: identifier.trim(),
+            geometryType: firstChildNameUpperCase,
+            type: type,
+            coordinate: geometry,
+            interiorGeometry: interiorGeometry,
+            glyphicon: glyphicon
+        });
+    },
+
+    /**
+     * Function to extract the coordinates of every polygon and - if available - the index/position of interior polygons in the array of coordinates
+     * @param   {Object} polygonMembers members of the polygon
+     * @returns {Array[]} returns the coordinates of every polygon and also an array with the postions of interior polygons
+     */
+    getInteriorAndExteriorPolygonMembers: function (polygonMembers) {
+        const lengthIndex = polygonMembers.length,
+            coordinateArray = [],
+            interiorPositions = [];
+
+        for (let i = 0; i < lengthIndex; i++) {
+            const coords = [],
+                posListPolygonMembers = polygonMembers[i].getElementsByTagNameNS("*", "posList");
+
+            for (const key in Object.keys(posListPolygonMembers)) {
+                coords.push(posListPolygonMembers[key].textContent);
+            }
+            coords.forEach(coordArray => coordinateArray.push(Object.values(coordArray.replace(/\s\s+/g, " ").split(" "))));
+
+            if (coords.length > 1) {
+                const interiorPosition = coordinateArray.length - coords.length;
+
+                for (let n = 1; n < coords.length; n++) {
+                    interiorPositions.push(interiorPosition + n);
+                }
+            }
+        }
+        return [coordinateArray, interiorPositions];
     },
 
     /**
@@ -325,7 +359,7 @@ const SpecialWFSModel = Backbone.Model.extend({
      */
     polishAjax: function (type) {
         const ajax = this.get("ajaxRequests"),
-            cleanedAjax = Radio.request("Util", "omit", ajax, type);
+            cleanedAjax = Radio.request("Util", "omit", ajax, Array.isArray(type) ? type : [type]);
 
         this.set("ajaxRequests", cleanedAjax);
     },

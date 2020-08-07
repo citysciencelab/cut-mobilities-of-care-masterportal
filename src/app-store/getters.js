@@ -8,6 +8,9 @@ export default {
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     portalConfig: state => state?.configJson?.Portalconfig || null,
+    // styles
+    simpleStyle: state => (state?.queryParams?.style || "").toLowerCase() === "simple",
+    tableStyle: state => (state?.queryParams?.style || "").toLowerCase() === "table",
 
     /**
      * recursively read out the menu config for tools

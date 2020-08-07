@@ -9,7 +9,7 @@ import Tool from "../../core/modelList/tool/model";
 import HightlightFeature from "./highlightFeature";
 
 const GFI = Tool.extend(/** @lends GFI.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         // detached | attached
         desktopViewType: "detached",
         // ist das Modal/Popover sichtbar
@@ -199,7 +199,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
         let CurrentView;
 
         // Beim ersten Initialisieren ist CurrentView noch undefined
-        if (_.isUndefined(this.get("currentView")) === false) {
+        if (this.get("currentView") !== undefined) {
             this.get("currentView").removeView();
         }
 
@@ -264,7 +264,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
         const gfiParams3d = [],
             features = Radio.request("Map", "getFeatures3dAtPosition", evt.position);
 
-        _.each(features, function (feature) {
+        features.forEach(feature => {
             const properties = {};
 
             let propertyNames,
@@ -275,7 +275,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
 
             if (feature instanceof Cesium.Cesium3DTileFeature || feature instanceof Cesium.Cesium3DTilePointFeature) {
                 propertyNames = feature.getPropertyNames();
-                _.each(propertyNames, function (propertyName) {
+                propertyNames.forEach(propertyName => {
                     properties[propertyName] = feature.getProperty(propertyName);
                 });
                 if (properties.attributes && properties.id) {
@@ -284,7 +284,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
                 if (feature.tileset && feature.tileset.layerReferenceId) {
                     layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.tileset.layerReferenceId});
                     if (layerModel) {
-                        modelAttributes = _.pick(layerModel.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                        modelAttributes = Radio.request("Util", "pick", layerModel.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
                     }
 
                 }
@@ -312,7 +312,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
                 else if (feature.primitive.id instanceof Cesium.Entity) {
                     layerModel = Radio.request("ModelList", "getModelByAttributes", {id: feature.primitive.id.layerReferenceId});
                     if (layerModel) {
-                        modelAttributes = _.pick(layerModel.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+                        modelAttributes = Radio.request("Util", "pick", layerModel.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
                     }
                     if (modelAttributes) {
                         if (feature.primitive.id.attributes) {
@@ -324,7 +324,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
                     }
                 }
             }
-        }, this);
+        });
         return gfiParams3d;
     },
 
@@ -348,7 +348,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
                 },
                 {
                     layerFilter: function (layer) {
-                        return layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true;
+                        return layer.get("gfiAttributes") !== "ignore" || layer.get("gfiAttributes") === undefined;
                     }
                 });
             }
@@ -425,28 +425,28 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
     getVectorGFIParams: function (layerlist, eventPixel) {
         const vectorGfiParams = [];
 
-        _.each(layerlist, function (vectorLayer) {
+        layerlist.forEach(vectorLayer => {
             const features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
                     layerFilter: function (layer) {
                         return layer.get("id") === vectorLayer.get("id");
                     },
                     hitTolerance: vectorLayer.get("hitTolerance")
                 }),
-                modelAttributes = _.pick(vectorLayer.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable", "layer");
+                modelAttributes = Radio.request("Util", "pick", vectorLayer.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
 
-            _.each(features, function (featureAtPixel) {
+            features.forEach(featureAtPixel => {
                 // Feature
-                if (_.has(featureAtPixel.getProperties(), "features") === false) {
+                if (!featureAtPixel.getProperties().hasOwnProperty("features")) {
                     vectorGfiParams.push(this.prepareVectorGfiParam(modelAttributes, featureAtPixel));
                 }
                 // Cluster Feature
                 else {
-                    _.each(featureAtPixel.get("features"), function (feature) {
+                    featureAtPixel.get("features").forEach(feature => {
                         vectorGfiParams.push(this.prepareVectorGfiParam(modelAttributes, feature));
-                    }, this);
+                    });
                 }
-            }, this);
-        }, this);
+            });
+        });
 
         return vectorGfiParams;
     },
@@ -462,12 +462,12 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
      * @returns {Object} Prepared vector gfi param
      */
     prepareVectorGfiParam: function (modelAttributes, feature) {
-        const clonedModelAttributes = _.clone(modelAttributes);
+        const clonedModelAttributes = {...modelAttributes};
 
         clonedModelAttributes.gfiFeatureList = [feature];
         clonedModelAttributes.feature = feature;
         clonedModelAttributes.themeId = clonedModelAttributes.id;
-        clonedModelAttributes.id += _.uniqueId("_");
+        clonedModelAttributes.id += Radio.request("Util", "uniqueId", "_");
         return clonedModelAttributes;
     },
 
@@ -481,18 +481,18 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
 
         let modelAttributes;
 
-        if (_.isUndefined(model) === false) {
-            modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable");
+        if (model !== undefined) {
+            modelAttributes = Radio.request("Util", "pick", model.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
             modelAttributes.gfiFeatureList = [];
             // Feature
-            if (_.has(featureAtPixel.getProperties(), "features") === false) {
+            if (!featureAtPixel.getProperties().hasOwnProperty("features")) {
                 modelAttributes.feature = featureAtPixel;
                 modelAttributes.gfiFeatureList.push(featureAtPixel);
             }
             // Cluster Feature
             else {
-                _.each(featureAtPixel.get("features"), function (feature) {
-                    modelAttributes = _.pick(model.attributes, "name", "gfiAttributes", "typ", "gfiTheme", "routable");
+                featureAtPixel.get("features").forEach(feature => {
+                    modelAttributes = Radio.request("Util", "pick", model.attributes, ["name", "gfiAttributes", "typ", "gfiTheme", "routable", "id", "isComparable"]);
                     modelAttributes.gfiFeatureList.push(feature);
                     modelAttributes.feature = feature;
                 });
@@ -509,12 +509,12 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
 
         const wmsGfiParams = [];
 
-        _.each(layerlist, function (layer) {
-            if (layer.get("gfiAttributes") !== "ignore" || _.isUndefined(layer.get("gfiAttributes")) === true) {
+        layerlist.forEach(layer => {
+            if (layer.get("gfiAttributes") !== "ignore" || layer.get("gfiAttributes") === undefined) {
                 layer.attributes.gfiUrl = layer.getGfiUrl();
                 wmsGfiParams.push(layer.attributes);
             }
-        }, this);
+        });
 
         return wmsGfiParams;
     },
@@ -546,7 +546,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
 
             this.setThemeIndex(0);
 
-            this.get("themeList").reset(_.union(vectorGFIParams, wmsGFIParams));
+            this.get("themeList").reset(vectorGFIParams.concat(wmsGFIParams));
         }
     },
 
@@ -622,7 +622,7 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
 
         let responseArray = [];
 
-        if (!_.isUndefined(theme)) {
+        if (theme !== undefined) {
             responseArray = [theme.get("gfiContent")[0], theme.get("name"), this.get("coordinate")];
         }
         return responseArray;

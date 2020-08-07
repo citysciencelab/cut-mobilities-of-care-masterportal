@@ -108,7 +108,7 @@ export default {
         right:0;
         bottom:0;
         text-align:center;
-        z-index:2;
+        z-index:10000;
 
         &:before {
             content:'';

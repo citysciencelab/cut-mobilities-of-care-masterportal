@@ -2,7 +2,7 @@ import Tool from "../../../core/modelList/tool/model";
 import {WFS} from "ol/format.js";
 
 const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         kreis: "",
         kreise: [],
         pendlerLegend: [],
@@ -178,11 +178,12 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             hits = $("gml\\:featureMember,featureMember", data);
         let kreis;
 
-        _.each(hits, function (hit) {
+        hits.toArray().forEach(hit => {
             kreis = $(hit).find("app\\:kreisname,kreisname")[0].textContent;
             kreise.push(kreis);
         });
-        this.setKreise(_.without(kreise.sort(), "Bremen", "Berlin", "Kiel", "Hannover"));
+
+        this.setKreise(kreise.sort().filter(feature => !["Bremen", "Berlin", "Kiel", "Hannover"].includes(feature)));
         if (this.get("isActive")) {
             this.trigger("render", this, true);
         }
@@ -198,7 +199,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             hits = $("wfs\\:member,member", data);
         let gemeinde;
 
-        _.each(hits, function (hit) {
+        hits.toArray().forEach(hit => {
             gemeinde = $(hit).find("app\\:gemeinde,gemeinde")[0].textContent;
             gemeinden.push(gemeinde);
         });
@@ -247,7 +248,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         }
 
         // Gebe eine nach <limit> Einträgen abgeschnittene Liste zurück
-        return _.first(features, limit);
+        return features.slice(0, limit);
     },
 
     /**
@@ -257,13 +258,10 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      */
     selectFeatures: function (rawFeatures) {
         // Sortiere nach Anzahl der Pendler
-        const sortedFeatures = _.sortBy(rawFeatures, function (feature) {
-            // Verwende die Gegenzahl als Wert zur Sortierung, um absteigende Reihenfolge zu erhalten.
-            return feature.get(this.get("attrAnzahl")) * -1;
-        }, this);
+        rawFeatures.sort((featureA, featureB) => (featureA.get(this.get("attrAnzahl")) * -1) - (featureB.get(this.get("attrAnzahl")) * -1));
 
         // Schneide Liste gemäß gewähltem Top ab
-        return this.truncateFeatureList(sortedFeatures, this.get("trefferAnzahl"));
+        return this.truncateFeatureList(rawFeatures, this.get("trefferAnzahl"));
     },
 
     /**
@@ -319,8 +317,8 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         let csv = "",
             blob = "";
 
-        features.forEach(function (feature) {
-            featurePropertyList.push(_.omit(feature.getProperties(), "geom_line"));
+        features.forEach(feature => {
+            featurePropertyList.push(Radio.request("Util", "omit", feature.getProperties(), ["geom_line"]));
         });
         csv = Radio.request("Util", "convertArrayOfObjectsToCsv", featurePropertyList);
         blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});

@@ -1,11 +1,14 @@
-const VueLoaderPlugin = require("vue-loader/lib/plugin"),
-    nodeExternals = require("webpack-node-externals");
+const webpack = require("webpack"),
+    VueLoaderPlugin = require("vue-loader/lib/plugin");
 
+require("regenerator-runtime/runtime");
 require("jsdom-global")();
+require("proj4");
+
+global.DOMParser = window.DOMParser;
 
 module.exports = {
     mode: "development",
-    externals: [nodeExternals()],
     devtool: "inline-cheap-module-source-map",
     output: {
         // use absolute paths in sourcemaps (important for debugging via IDE)
@@ -32,6 +35,18 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            // jQuery: "jquery",
+            // $: "jquery",
+            Backbone: "backbone",
+            Radio: "backbone.radio",
+            // _: "underscore",
+            i18next: ["i18next/dist/cjs/i18next.js"]
+            // Config: path.resolve(__dirname, "../test/unittests/deps/testConfig"),
+            // XMLSerializer: path.resolve(__dirname, "../test/unittests/deps/testXmlSerializer"),
+            // fs: "fs",
+            // requestAnimationFrame: "raf"
+        }),
         new VueLoaderPlugin()
     ]
 };

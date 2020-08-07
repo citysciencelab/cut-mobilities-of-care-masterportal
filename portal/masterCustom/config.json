@@ -249,11 +249,6 @@
                "name": "translate#common:menu.tools.kmlimport",
                  "glyphicon":"glyphicon-import"
               },
-              "wfsFeatureFilter":{
-                 "name":"Filter",
-                 "glyphicon":"glyphicon-filter",
-                 "deactivateGFI":false
-              },
               "extendedFilter":{
                  "name":"Erweiterter Filter",
                  "glyphicon":"glyphicon-filter",
@@ -902,29 +897,6 @@
                              "strasse"
                           ],
                           "searchField":"name",
-                          "filterOptions":[
-                             {
-                                "fieldName":"teilnahme_geburtsklinik",
-                                "filterType":"combo",
-                                "filterName":"Geburtshilfe",
-                                "filterString":[
-                                   "*",
-                                   "Ja",
-                                   "Nein"
-                                ]
-                             },
-                             {
-                                "fieldName":"teilnahme_notversorgung",
-                                "filterType":"combo",
-                                "filterName":"Not- und Unfallversorgung",
-                                "filterString":[
-                                   "*",
-                                   "Ja",
-                                   "Eingeschränkt",
-                                   "Nein"
-                                ]
-                             }
-                          ],
                           "extendedFilter":true
                        },
                        {

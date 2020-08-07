@@ -19,7 +19,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         isMetaDataAvailable: false,
         isScaleAvailable: false,
         eventListener: {},
-        printID: "99999",
+        printID: "",
         title: "PrintResult",
         outputFilename: "Ausdruck",
         outputFormat: "pdf",
@@ -50,7 +50,16 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         MM_PER_INCHES: 25.4,
         POINTS_PER_INCH: 72,
         DOTS_PER_INCH: 72,
-        INCHES_PER_METER: 39.37
+        INCHES_PER_METER: 39.37,
+        titleLabel: "",
+        titlePlaceholder: "",
+        layoutLabel: "",
+        formatLabel: "",
+        scaleLabel: "",
+        withLegendLabel: "",
+        withInfoLabel: "",
+        printLabel: "",
+        layoutNameList: []
     }),
 
     /**
@@ -72,7 +81,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @property {Boolean} isMetaDataAvailable=false - Flag if the current layout supports meta data
      * @property {Boolean} isScaleAvailable=false - Flag if the current layout supports scale
      * @property {Object} eventListener={} - Holder for an eventListener
-     * @property {String} printID="99999" - Service id for the plot service
+     * @property {String} printID="" - Service id for the plot service
      * @property {String} title="PrintResult" - Initial tilte for the print page
      * @property {String} outputFilename="Ausdruck" - Filename for print page
      * @property {String} outputFormat="pdf" - Format for file of print page
@@ -90,6 +99,14 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @property {Number} POINTS_PER_INCH=72 - Points per Inch
      * @property {Number} DOTS_PER_INCH=72 - Dots per inch
      * @property {Number} INCHES_PER_METER=39.37 - Inches per meter
+     * @property {String} titleLabel="" - Label text for print-window
+     * @property {String} titlePlaceholder="" placeholder text for print-window
+     * @property {String} layoutLabel="" Label text for print-window
+     * @property {String} formatLabel="" Label text for print-window
+     * @property {String} scaleLabel="" Label text for print-window
+     * @property {String} withLegendLabel="" Label text for print-window
+     * @property {String} printLabel="" Label text for print-window
+     * @property {String} layoutNameList=[] Label text for the Layouts
      * @listens Print#ChangeIsAvtive
      * @listens Print#ChangeSpecification
      * @listens MapView#RadioTriggerMapViewChangedOptions
@@ -133,6 +150,43 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         channel.on({
             "createPrintJob": this.createPrintJob
         }, this);
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.setParams();
+        this.changeLang();
+    },
+
+    /**
+     * sets the configured values for print parameter
+     * @returns {void}
+     */
+    setParams: function () {
+        this.setPrintID(this.get("mapfishServiceId"));
+        this.setOutputFilename(this.get("filename"));
+        this.setTitle(this.get("title"));
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set({
+            titleLabel: i18next.t("common:modules.tools.print.titleLabel"),
+            titlePlaceholder: i18next.t("common:modules.tools.print.titlePlaceholder"),
+            layoutLabel: i18next.t("common:modules.tools.print.layoutLabel"),
+            formatLabel: i18next.t("common:modules.tools.print.formatLabel"),
+            scaleLabel: i18next.t("common:modules.tools.print.scaleLabel"),
+            withLegendLabel: i18next.t("common:modules.tools.print.withLegendLabel"),
+            printLabel: i18next.t("common:modules.tools.print.printLabel"),
+            withInfoLabel: i18next.t("common:modules.tools.print.withInfoLabel"),
+            layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true}),
+            currentLng: lng
+        });
     },
 
     /**
@@ -238,6 +292,24 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
         return layoutList.find(layout => {
             return layout.name === layoutName;
         });
+    },
+
+    /**
+     * returns the scales that are available for printing
+     * @returns {number[]} All available Scales of Print service
+     */
+    getPrintMapScales: function () {
+        return this.get("scaleList").sort(this.sortNumbers);
+    },
+
+    /**
+     * sorts an array numerically and ascanding
+     * @param {number} a - first value
+     * @param {number} b - next value
+     * @return {void} a negative, zero or positive value
+     */
+    sortNumbers: function (a, b) {
+        return a - b;
     },
 
     /**
@@ -1092,6 +1164,25 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
     },
 
     /**
+     * Setter for printID
+     * @param {String} value - printID
+     * @returns {void}
+     */
+    setPrintID: function (value) {
+        this.set("printID", value);
+    },
+
+    /**
+     * Setter for outputFilename
+     * @param {String} value - outputFilename
+     * @returns {void}
+     */
+    setOutputFilename: function (value) {
+        this.set("outputFilename", value);
+    },
+
+
+    /**
      * Sets the title for the print page
      * @param {String} value - Title
      * @fires Alert#RadioTriggerAlertalert
@@ -1299,6 +1390,15 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      */
     setEventListener: function (value) {
         this.set("eventListener", value);
+    },
+
+    /**
+     * Setter for placeholder.
+     * @param {string} value - Placeholder for the title.
+     * @returns {void}
+     */
+    setTitlePlaceholder: function (value) {
+        this.set("titlePlaceholder", value);
     }
 });
 

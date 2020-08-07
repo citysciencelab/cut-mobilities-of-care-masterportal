@@ -1,7 +1,7 @@
 import Theme from "../model";
 
 const Buildings3dTheme = Theme.extend({
-    defaults: _.extend({}, Theme.prototype.defaults, {
+    defaults: Object.assign({}, Theme.prototype.defaults, {
         roofTypes: {
             "1000": "Flachdach",
             "2100": "Pultdach",

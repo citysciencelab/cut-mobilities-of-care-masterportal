@@ -40,7 +40,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["controlsConfig", "mobile"]),
+        ...mapGetters(["controlsConfig", "mobile", "simpleStyle"]),
         ...mapGetters("controls", ["componentMap", "mobileHiddenControls", "bottomControls"]),
         /** @returns {object} contains controls to-be-rendered sorted by placement */
         categorizedControls () {
@@ -58,6 +58,7 @@ export default {
 
             Object
                 .keys(this.controlsConfig)
+                .filter(key => this.controlsConfig[key])
                 .map(key => {
                     if (this.componentMap[key]) {
                         return {
@@ -69,7 +70,6 @@ export default {
                     return key;
                 })
                 .filter(x => x !== "mousePosition") // "mousePosition" is currently handled in footer
-                .filter(x => typeof x === "string" ? console.warn(`Control "${x}" not implemented; ignoring key in ControlBar.vue.`) : true)
                 .forEach(c => {
                     if (this.bottomControls.includes(c.key)) {
                         categorizedControls.bottom.push(c);
@@ -100,23 +100,25 @@ export default {
 
 <template>
     <div class="right-bar">
-        <div
-            v-for="{categoryName, className} in categories"
-            :key="className"
-            :class="className"
-        >
-            <template v-for="(control, index) in categorizedControls[categoryName]">
-                <component
-                    :is="control.component"
-                    :key="'control-' + control.key"
-                    :class="[
-                        index !== categorizedControls[categoryName].length - 1 ? 'spaced' : '',
-                        mobile && hiddenMobile(control.key) ? 'hidden' : ''
-                    ]"
-                    v-bind="control.props"
-                />
-            </template>
-        </div>
+        <template v-if="!simpleStyle">
+            <div
+                v-for="{categoryName, className} in categories"
+                :key="className"
+                :class="className"
+            >
+                <template v-for="(control, index) in categorizedControls[categoryName]">
+                    <component
+                        :is="control.component"
+                        :key="'control-' + control.key"
+                        :class="[
+                            index !== categorizedControls[categoryName].length - 1 ? 'spaced' : '',
+                            mobile && hiddenMobile(control.key) ? 'hidden' : ''
+                        ]"
+                        v-bind="control.props"
+                    />
+                </template>
+            </div>
+        </template>
     </div>
 </template>
 

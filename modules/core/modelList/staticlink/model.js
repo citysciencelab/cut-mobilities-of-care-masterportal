@@ -21,9 +21,9 @@ const StaticLink = Item.extend({
         inSubMenue: false
     },
     triggerRadioEvent: function () {
-        _.each(this.get("onClickTrigger"), function (trigger) {
+        this.get("onClickTrigger").forEach(trigger => {
             this.triggerEvent(trigger);
-        }, this);
+        });
     },
     triggerEvent: function (triggerParams) {
         const data = triggerParams.data;

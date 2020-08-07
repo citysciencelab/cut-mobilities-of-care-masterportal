@@ -11,7 +11,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * @fires GFI#RadioRequestGFIGetCurrentView
      */
     initialize: function () {
-        const gfiWindow = _.has(Config, "gfiWindow") ? Config.gfiWindow : "detached",
+        const gfiWindow = Config.hasOwnProperty("gfiWindow") ? Config.gfiWindow : "detached",
             channel = Radio.channel("gfiView");
 
         this.listenTo(this.model, {
@@ -37,7 +37,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     render: function () {
         let attr;
 
-        if (_.isUndefined(this.model.get("gfiContent")) === false) {
+        if (this.model.get("gfiContent") !== undefined) {
             attr = this.model.toJSON();
             this.$el.html(this.template(attr));
         }
@@ -58,7 +58,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
         let oldLeft = parseInt(currentView.$el.css("left").slice(0, -2), 10);
 
         if (value === true) {
-            if (_.isNaN(oldLeft)) {
+            if (isNaN(oldLeft)) {
                 oldLeft = 0;
             }
             currentView.$el.css("left", "0px");
@@ -95,7 +95,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
     */
     adjustGfiWindow: function (currentView, oldGfiWidth, oldLeft) {
         const newGfiWidth = currentView.$el.width(),
-            newLeft = $("#map").width() - newGfiWidth - 40;
+            newLeft = $("#map").width() - newGfiWidth - 80;
 
         // initial left of gfi. can never be 0 after drag, due to render-function in desktop/detached/view
         if (oldLeft === 0) {
@@ -121,10 +121,10 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
      * @returns {*} todo
      */
     appendChildren: function () {
-        const children = this.model.get("children");
+        const children = this.model.get("children") !== undefined ? this.model.get("children") : [];
 
         this.$(".gfi-content").removeClass("has-image");
-        _.each(children, function (element) {
+        children.forEach(element => {
             if (element.type && element.type === "image") {
                 this.$el.before(element.val.$el);
                 this.$(".gfi-content").addClass("has-image");
@@ -132,7 +132,7 @@ const ThemeView = Backbone.View.extend(/** @lends ThemeView.prototype */{
             else {
                 this.$el.after(element.val.$el);
             }
-        }, this);
+        });
     },
     /**
      * Fügt den Button dem gfiContent hinzu

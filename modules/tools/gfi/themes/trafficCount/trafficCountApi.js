@@ -44,19 +44,23 @@ export class TrafficCountApi {
         /** @private */
         this.sensorThingsVersion = sensorThingsVersion;
         /** @private */
-        this.http = sensorThingsHttpOpt || new SensorThingsHttp();
+        this.http = sensorThingsHttpOpt || new SensorThingsHttp({removeIotLinks: true});
         /** @private */
-        this.mqtt = sensorThingsMqttOpt || new SensorThingsMqtt();
+        this.mqttClient = sensorThingsMqttOpt || new SensorThingsMqtt(mqttOptions);
         /** @private */
-        this.mqttClient = this.mqtt && typeof this.mqtt.connect === "function" ? this.mqtt.connect(mqttOptions) : false;
+        this.httpHost = httpHost;
         /** @private */
         this.baseUrlHttp = httpHost + "/" + this.sensorThingsVersion;
         /** @private */
         this.subscriptionTopics = {};
+        /** @private */
+        this.layerNameInfix = "";
+        // this.layerNameInfix = "_Zaehlfeld";
+        // this.layerNameInfix = "_Zaehlstelle";
 
         // set the mqtt listener
         if (this.mqttClient && typeof this.mqttClient.on === "function") {
-            this.mqttClient.on("message", (topic, payload) => {
+            this.mqttClient.on("message", (topic, payload, packet) => {
                 if (this.subscriptionTopics.hasOwnProperty(topic)) {
                     if (!Array.isArray(this.subscriptionTopics[topic])) {
                         return;
@@ -67,7 +71,7 @@ export class TrafficCountApi {
                             // continue
                             return;
                         }
-                        callback(payload);
+                        callback(payload, packet);
                     });
                 }
             });
@@ -225,7 +229,7 @@ export class TrafficCountApi {
         let sum = 0;
         const startDate = moment(day, "YYYY-MM-DD").toISOString(),
             endDate = moment(day, "YYYY-MM-DD").add(1, "day").toISOString(),
-            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + "))";
+            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + "))";
 
         return this.http.get(url, (dataset) => {
             if (!this.checkForObservations(dataset)) {
@@ -248,8 +252,12 @@ export class TrafficCountApi {
             const datastreamId = dataset[0].Datastreams[0]["@iot.id"],
                 topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
-            // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-            this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+            // set retain handling rh to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
+            this.mqttSubscribe(topic, {rh: 2}, (payload, packet) => {
+                if (packet && packet.hasOwnProperty("retain") && packet.retain === true) {
+                    // this message is a retained message, so its content is already in sum
+                    return;
+                }
                 if (payload && payload.hasOwnProperty("result")) {
                     sum += payload.result;
 
@@ -281,10 +289,10 @@ export class TrafficCountApi {
             sumThisWeek = 0;
         const startDate = moment(year, "YYYY").toISOString(),
             endDate = moment(year, "YYYY").add(1, "year").toISOString(),
-            urlWeekly = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_1-Woche';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + "))",
+            urlWeekly = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_1-Woche';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + "))",
             lastMonday = moment().startOf("isoWeek").toISOString(),
             yearToday = yearTodayOpt || moment().format("YYYY"),
-            urlThisWeeks15min = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + lastMonday + "))";
+            urlThisWeeks15min = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + lastMonday + "))";
 
         return this.http.get(urlWeekly, (datasetWeekly) => {
             if (!this.checkForObservations(datasetWeekly)) {
@@ -320,7 +328,11 @@ export class TrafficCountApi {
                     topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
                 // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                this.mqttSubscribe(topic, {rh: 2}, (payload, packet) => {
+                    if (packet && packet.hasOwnProperty("retain") && packet.retain === true) {
+                        // this message is a retained message, so its content is already in sum
+                        return;
+                    }
                     if (!payload || !payload.hasOwnProperty("result")) {
                         (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateYear: the payload does not include a result", payload);
                     }
@@ -348,9 +360,9 @@ export class TrafficCountApi {
         let sumWeekly = 0,
             sumThisWeek = 0,
             firstDate = false;
-        const urlWeekly = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_1-Woche';$expand=Observations)",
+        const urlWeekly = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_1-Woche';$expand=Observations)",
             lastMonday = moment().startOf("isoWeek").toISOString(),
-            urlThisWeeks15min = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + lastMonday + "))";
+            urlThisWeeks15min = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + lastMonday + "))";
 
         return this.http.get(urlWeekly, (datasetWeekly) => {
             if (!this.checkForObservations(datasetWeekly)) {
@@ -375,7 +387,11 @@ export class TrafficCountApi {
                     topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
                 // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                this.mqttSubscribe(topic, {rh: 2}, (payload, packet) => {
+                    if (packet && packet.hasOwnProperty("retain") && packet.retain === true) {
+                        // this message is a retained message, so its content is already in sum
+                        return;
+                    }
                     if (!payload || !payload.hasOwnProperty("result")) {
                         (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateTotal: the payload does not include a result", payload);
                     }
@@ -403,7 +419,7 @@ export class TrafficCountApi {
     updateHighestWorkloadDay (thingId, meansOfTransport, year, onupdate, onerror, onstart, oncomplete) {
         const startDate = moment(year, "YYYY").toISOString(),
             endDate = moment(year, "YYYY").add(1, "year").toISOString(),
-            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_1-Tag';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + ";$orderby=result DESC;$top=1))";
+            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_1-Tag';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + ";$orderby=result DESC;$top=1))";
 
         return this.http.get(url, (dataset) => {
             if (this.checkForObservations(dataset)) {
@@ -434,7 +450,7 @@ export class TrafficCountApi {
     updateHighestWorkloadWeek (thingId, meansOfTransport, year, onupdate, onerror, onstart, oncomplete) {
         const startDate = moment(year, "YYYY").toISOString(),
             endDate = moment(year, "YYYY").add(1, "year").toISOString(),
-            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_1-Woche';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + ";$orderby=result DESC;$top=1))";
+            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_1-Woche';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + ";$orderby=result DESC;$top=1))";
 
         return this.http.get(url, (dataset) => {
             if (this.checkForObservations(dataset)) {
@@ -465,7 +481,7 @@ export class TrafficCountApi {
     updateHighestWorkloadMonth (thingId, meansOfTransport, year, onupdate, onerror, onstart, oncomplete) {
         const startDate = moment(year, "YYYY").toISOString(),
             endDate = moment(year, "YYYY").add(1, "year").toISOString(),
-            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_1-Tag';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + "))",
+            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_1-Tag';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime lt " + endDate + "))",
             sumMonths = {"01": 0};
         let bestMonth = 0,
             bestSum = 0,
@@ -522,7 +538,7 @@ export class TrafficCountApi {
             interval = timeSettings.interval,
             startDate = moment(from, "YYYY-MM-DD").toISOString(),
             endDate = moment(until, "YYYY-MM-DD").add(1, "day").toISOString(),
-            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_" + interval + "';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime le " + endDate + ";$orderby=phenomenonTime asc))",
+            url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_" + interval + "';$expand=Observations($filter=phenomenonTime ge " + startDate + " and phenomenonTime le " + endDate + ";$orderby=phenomenonTime asc))",
             meansOfTransportFahrzeuge = "AnzFahrzeuge",
             meansOfTransportSV = "AntSV",
             result = {},
@@ -562,7 +578,11 @@ export class TrafficCountApi {
                         topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
                     // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                    this.mqttSubscribe(topic, {retain: 2}, (payload) => {
+                    this.mqttSubscribe(topic, {rh: 2}, (payload, packet) => {
+                        if (packet && packet.hasOwnProperty("retain") && packet.retain === true) {
+                            // this message is a retained message, so its content is already in sum
+                            return;
+                        }
                         if (payload && payload.hasOwnProperty("result") && payload.hasOwnProperty("phenomenonTime")) {
                             const datetime = moment(this.parsePhenomenonTime(payload.phenomenonTime)).format("YYYY-MM-DD HH:mm:ss");
 
@@ -595,7 +615,7 @@ export class TrafficCountApi {
      * @returns {Void}  -
      */
     subscribeLastUpdate (thingId, meansOfTransport, onupdate, onerror, onstart, oncomplete) {
-        const url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + "_15-Min')";
+        const url = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_15-Min')";
 
         // get the datastreamId via http to subscribe to with mqtt
         return this.http.get(url, (dataset) => {
@@ -608,10 +628,7 @@ export class TrafficCountApi {
                     topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
                 // set retain to 0 to get the last message from the server immediately (see doc\sensorThings_EN.md)
-                this.mqttSubscribe(topic, {
-                    retain: 0,
-                    rmSimulate: true
-                }, (payload) => {
+                this.mqttSubscribe(topic, {rh: 0}, (payload) => {
                     if (payload && payload.hasOwnProperty("phenomenonTime")) {
                         if (typeof onupdate === "function") {
                             const datetime = moment(this.parsePhenomenonTime(payload.phenomenonTime)).format("YYYY-MM-DD HH:mm:ss");
@@ -649,6 +666,67 @@ export class TrafficCountApi {
         if (typeof onsuccess === "function") {
             onsuccess();
         }
+    }
+
+    /**
+     * gets the title and the data without subscription for the given thingId, meansOfTransport and timeSettings
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} timeSettings time configuration
+     * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
+     * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
+     * @param {String} timeSettings.until the day to end with (inclusive) as String in format YYYY-MM-DD
+     * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    downloadData (thingId, meansOfTransport, timeSettings, onsuccess, onerror, onstart, oncomplete) {
+        if (typeof onstart === "function") {
+            onstart();
+        }
+
+        this.updateTitle(thingId, title => {
+            this.updateDataset(thingId, meansOfTransport, timeSettings, dataset => {
+                if (typeof onsuccess === "function") {
+                    onsuccess({
+                        title: title,
+                        data: dataset
+                    });
+                }
+                if (typeof oncomplete === "function") {
+                    oncomplete();
+                }
+
+                // prohibit subscription by using the last param with a future date for today
+            }, onerror, false, false, moment().add(1, "month").format("YYYY-MM-DD"));
+        }, onerror);
+    }
+
+    /**
+     * gets the first date on a weekly basis ever recorded without subscription
+     * @param {Integer} thingId the ID of the thing
+     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {Callback} onsuccess as event function(firstDate) fires once
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    getFirstDateEver (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete) {
+        const urlWeekly = this.baseUrlHttp + "/Things(" + thingId + ")?$expand=Datastreams($filter=properties/layerName eq '" + meansOfTransport + this.layerNameInfix + "_1-Woche';$expand=Observations)";
+
+        return this.http.get(urlWeekly, (datasetWeekly) => {
+            if (!this.checkForObservations(datasetWeekly)) {
+                (onerror || this.defaultErrorHandler)("TrafficCountAPI.getFirstDate: datasetWeekly does not include a datastream with an observation", datasetWeekly);
+                return;
+            }
+
+            if (typeof onsuccess === "function") {
+                onsuccess(this.getFirstDate(datasetWeekly));
+            }
+        }, onstart, oncomplete, onerror || this.defaultErrorHandler);
     }
 
     /**
@@ -694,10 +772,10 @@ export class TrafficCountApi {
     }
 
     /**
-     * gets the on construction initialized mqtt connector
-     * @returns {Object}  the SensorThingsMqtt
+     * gets the layerName infix (this is used for testing)
+     * @returns {String}  the currently used layerName infix
      */
-    getSensorThingsMqtt () {
-        return this.mqtt;
+    getLayerNameInfix () {
+        return this.layerNameInfix;
     }
 }

@@ -1,7 +1,7 @@
 import Item from "../item";
 
 const Folder = Item.extend(/** @lends Folder.prototype */{
-    defaults: _.extend({}, Item.prototype.defaults, {
+    defaults: Object.assign({}, Item.prototype.defaults, {
         isVisibleInMenu: true,
         isRoot: false,
         isExpanded: false,

@@ -212,7 +212,7 @@ describe("vectorStyleModel", function () {
     before(function () {
         styleModel = new Model();
         utilModel = new Util();
-        xmlDescribeFeatureType = utilModel.getDescribeFeatureTypeResponse();
+        xmlDescribeFeatureType = utilModel.getDescribeFeatureTypeResponse("resources/testDescribeFeatureTypeResponse.xml");
         jsonObjects = geojsonReader.readFeatures(jsonFeatures);
     });
 

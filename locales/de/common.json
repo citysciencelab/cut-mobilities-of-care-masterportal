@@ -32,15 +32,20 @@
             "measure": "Strecke / Fläche messen",
             "coord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
-            "kmlimport": "KML Import",
+            "kmlimport": "Datei-Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
+            "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
+            "layerSlider": "Zeitreihe",
+            "featureLister": "Liste",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
-            "wfsTransaction": "WFS-T Tool"
+            "wfsTransaction": "WFS-T Tool",
+            "scaleSwitcher": "Maßstab umschalten",
+            "selectFeatures": "Features auswählen"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -75,6 +80,14 @@
     "date": "Datum",
     "time": "Zeit",
     "modules": {
+        "alerting": {
+            "categories": {
+                "error": "Fehler",
+                "info": "Info",
+                "success": "Erfolg",
+                "warning": "Achtung"
+            }
+        },
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
@@ -86,6 +99,21 @@
         "layerInformation": {
             "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
         },
+        "featureViaURL": {
+            "coordLabel": "Koordinaten",
+            "featureLabel": "Beschriftung",
+            "folderName": "Über URL übergebene Feature",
+            "typeLabel": "Geometrietyp",
+            "messages": {
+                "featureParsing": "FeatureViaURL: Es konnten nicht alle übergebenen Feature verarbeitet werden.",
+                "featureParsingAll": "FeatureViaURL: Alle übergebenen Feature wurden nicht mit dem richtigen Datentyp übergeben. Bitte beachten Sie die Dokumentation.",
+                "featureParsingNoneAdded": "FeatureViaURL: Allen übergebenen Feature fehlen mindestens ein Parameter. Es wurden keine Feature der Karte hinzugefügt. Bitte beachten Sie die Dokumentation.",
+                "geometryNotSupported": "FeatureViaURL: Der in der Konfiguration für den Layer {{layerId}} deklarierte Geometrietyp {{geometryType}} wird nicht unterstützt.",
+                "layerNotFound": "FeatureViaURL: Es konnte kein Layer mit der ID {{layerId}} gefunden werden.",
+                "noLayers": "FeatureViaURL: Für die übergebenen Feature wurden keine Layer in der Konfiguration definiert.",
+                "noNameDefined": "FeatureViaURL: Es wurde kein Name für den Layer mit der ID {{layerId}} in der Konfiguration definiert."
+            }
+        },
         "quickHelp": {
             "titleTag": "Hilfe öffnen",
             "search": {
@@ -96,11 +124,11 @@
                 "topicsSearch": "Suche nach Themen / Geo-Daten",
                 "parcelSearch": "Flurstückssuche",
                 "generalInfoHelp1": "Es müssen mindestens drei Buchstaben in die Suchmaske eingegeben werden <strong>(1)</strong>, um Vorschläge zu erhalten. Es werden maximal fünf Vorschläge, nach dem Zufallsprinzip, angezeigt <strong>(2)</strong>. Ein Icon vor und eine Bezeichnung nach dem Vorschlagstreffer <strong>(3)</strong> zeigen an, um welche \"Trefferkategorie\" es sich handelt.",
-                "generalInfoHelp2": "Durch einen Mausklick auf die Lupe <strong>(1)</strong> oder durch Drücken der Enter-/Returntaste, werden alle Ergebnisse kategorisiert aufgelistet, inklusive der Anzahl der Treffer pro Kategorie <strong>(2)</strong>. Durch einen weiteren Klick auf eine der Kategorien werden die jeweiligen Treffer angzeigt <strong>(3)</strong>.",
-                "addressHelp": "Geben Sie die gesuchte Adresse in die Suchmaske ein. Durch drücken die Enter-/Returntaste bzw. der Lupe oder durch einen Mausklick auf die Adresse in der Vorschlagsliste, zoomt die Karte zur gesuchten Adresse. Zusätzlich wird die geanue Position die Adresse durch ein Icon auf der Karte angezeigt.",
+                "generalInfoHelp2": "Durch einen Mausklick auf die Lupe <strong>(1)</strong> oder durch Drücken der Enter-/Returntaste, werden alle Ergebnisse kategorisiert aufgelistet, inklusive der Anzahl der Treffer pro Kategorie <strong>(2)</strong>. Durch einen weiteren Klick auf eine der Kategorien werden die jeweiligen Treffer angezeigt <strong>(3)</strong>.",
+                "addressHelp": "Geben Sie die gesuchte Adresse in die Suchmaske ein. Durch drücken die Enter-/Returntaste bzw. der Lupe oder durch einen Mausklick auf die Adresse in der Vorschlagsliste, zoomt die Karte zur gesuchten Adresse. Zusätzlich wird die genaue Position die Adresse durch ein Icon auf der Karte angezeigt.",
                 "houseNumberHelp": "Geben Sie die entsprechende Straße in die Suchmaske ein. Sobald die Adresssuche als Ergebnis nur noch eine Straße findet, wird automatisch die Hausnummernsuche ausgeführt und die Vorschlagsliste füllt sich mit Adressen. Durch drücken die Enter-/Returntaste bzw. der Lupe, werden alle Hausnummern der Straße aufgelistet.",
-                "topicsHelp": "Mit der Themensuche können Sie Suchbegriffe eingeben (z.B. Schutzgebiete, Wahlen, Wohnungsbau usw.) und nach verfügbaren Geodaten zu diesem Thema suchen. Wenn Sie ein Resultat auswählen, wird es dirket in der Karte dargestellt.",
-                "parcelHelp": "Über die Flurstrücksnummer und die Gemarkungsnummer können Sie nach Flurstücken suchen. Geben Sie einfach die Gemarkungsnummer gefolgt von der Flurstücksnummer <strong>(1)</strong> (mit oder ohne Leerzeichen) in die Suchmaske ein und drücken die Enter-/Retruntaste bzw. die Lupe. Daraufhin wird die Karte auf das gesuchte Flurstück zentriert <strong>(2)</strong>."
+                "topicsHelp": "Mit der Themensuche können Sie Suchbegriffe eingeben (z.B. Schutzgebiete, Wahlen, Wohnungsbau usw.) und nach verfügbaren Geodaten zu diesem Thema suchen. Wenn Sie ein Resultat auswählen, wird es direkt in der Karte dargestellt.",
+                "parcelHelp": "Über die Flurstrücksnummer und die Gemarkungsnummer können Sie nach Flurstücken suchen. Geben Sie einfach die Gemarkungsnummer gefolgt von der Flurstücksnummer <strong>(1)</strong> (mit oder ohne Leerzeichen) in die Suchmaske ein und drücken die Enter-/Returntaste bzw. die Lupe. Daraufhin wird die Karte auf das gesuchte Flurstück zentriert <strong>(2)</strong>."
             },
             "measureTool": {
                 "title": "Hilfe - Strecke/Fläche messen",
@@ -157,7 +185,7 @@
             "addWMS": {
                 "completeMessage": "Die Layer des angeforderten WMS wurden dem Themenbaum unter dem Menüpunkt <strong>Externe Fachdaten</strong> hinzugefügt!",
                 "error": "Leider konnte unter der angegebenen URL kein (gültiger) WMS gefunden werden!",
-                "errorMessage": "Der angegebene Dienst konnte nicht geladen werden. Bitte stellen Sie sicher, dass die URL richtig angegben wurde.<br><br> Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes mit folgendem Hinweis:<br><strong>Es soll sichergestellt werden, dass ein CORS-Header für den Dienst gesetzt ist. Dies wird von der <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> im Kapitel 4.7.1 empfohlen.</strong>",
+                "errorMessage": "Der angegebene Dienst konnte nicht geladen werden. Bitte stellen Sie sicher, dass die URL richtig angegeben wurde.<br><br> Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes mit folgendem Hinweis:<br><strong>Es soll sichergestellt werden, dass ein CORS-Header für den Dienst gesetzt ist. Dies wird von der <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> im Kapitel 4.7.1 empfohlen.</strong>",
                 "placeholder": "Hier bitte die WMS-URL eingeben.",
                 "textExample": "Beispiel: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
                 "textLoadLayer": "Layer Laden"
@@ -184,12 +212,57 @@
                 "withLegendLabel": "Mit Legende",
                 "printLabel": "Drucken",
                 "withInfoLabel": "Mit Informationen",
+                "vtlWarning": "Da MapFish 3 keine Vector Tile Layer unterstützt, werden die folgenden aktiven Layer nicht in der Printansicht erscheinen:",
                 "layoutNameList": {
                     "A4 Hochformat": "A4 Hochformat",
                     "A4 Querformat": "A4 Querformat",
                     "A3 Hochformat": "A3 Hochformat",
                     "A3 Querformat": "A3 Querformat"
                 }
+            },
+            "styleVT": {
+              "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
+              "noStyleableLayers": "Derzeit sind keine Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+              "theme": "Thema",
+              "chooseTheme": "Bitte aktives Thema auswählen",
+              "style": "Style"
+            },
+            "styleWMS": {
+                "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+                "theme": "Thema",
+                "chooseTheme": "Bitte Thema auswählen",
+                "attribute": "Attribut",
+                "chooseAttribute": "Bitte Attribut wählen",
+                "countOfClasses": "Anzahl der Klassen",
+                "chooseNumberOfClasses": "Bitte Anzahl der Klassen auswählen",
+                "rangeOfValues": "Wertebereich Klasse",
+                "from": "von",
+                "to": "bis",
+                "reset": "Zurücksetzen",
+                "apply": "Anwenden",
+                "pleaseEnterInteger": "Bitte tragen Sie eine ganze Zahl ein.",
+                "pleaseChooseColor": "Bitte wählen Sie eine Farbe aus.",
+                "checkTheValues": "Überprüfen Sie die Werte.",
+                "overlappingValueRanges": "Überprüfen Sie die Werte. Wertebereiche dürfen sich nicht überschneiden."
+            },
+            "featureLister": {
+                "chooseTheme": "Thema wählen",
+                "visibleVectorLayers": "Sichtbare Vektorlayer",
+                "list": "Liste",
+                "details": "Details",
+                "more": "Mehr...",
+                "detailsOfSelected": "Details des ausgewählten Features",
+                "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
+                "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
+            },
+            "layerSlider": {
+                "displayLayers": "Anzeige diverser Layer.",
+                "title": "Simulation von Beispiel-WMS",
+                "titleNotConfigured": "Titel nicht konfiguriert",
+                "serviceOne": "Dienst 1",
+                "serviceTwo": "Dienst 2",
+                "serviceThree": "Dienst 3",
+                "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
             },
             "pendler": {
                 "animation": {
@@ -248,11 +321,24 @@
                 "contenNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
             },
             "kmlImport": {
-                "unknownGeometry": "Unbekannte Geometry",
-                "chooseFileFirst": "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus",
-                "fakeButton": "Datei auswählen (keine ausgewählt)",
-                "importButton": "IMPORT",
-                "file": "Datei"
+                "captions": {
+                    "intro": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.",
+                    "dropzone": "Datei hier ablegen",
+                    "browse": "Datei auswählen",
+                    "supportedFiletypes": {
+                        "auto": "Automatische Erkennung",
+                        "kml": "KML-Datei (*.kml)",
+                        "gpx": "GPX-Datei (*.gpx)",
+                        "geojson": "GeoJson-Datei (*.geojson, *.json)"
+                    }
+                },
+                "alertingMessages": {
+                    "success": "Die Datei \"{{filename}}\" wurde erfolgreich importiert.",
+                    "formatError": "Die Datei konnte nicht gelesen werden. Bitte prüfen Sie, ob das Format der Datei mit dem gewählten Format übereinstimmt.",
+                    "missingFileContent": "Fehler beim Lesen der Datei. Bitte überprüfen Sie den Dateityp sowie den Inhalt der Datei. Falls die Datei fehlerfrei ist, wenden Sie sich bitte an den Support.",
+                    "missingFormat": "Das gewählte Dateiformat ist nicht konfiguriert. Bitte wenden Sie sich an den Support."
+                },
+                "title": "Datei importieren"
             },
             "parcelSearch": {
                 "wrongConfig": "Ungültige oder unvollständige Konfiguration",
@@ -268,7 +354,12 @@
                 "parcelNumberPlaceholder": "Nummer eingeben",
                 "generateReport": "Bericht erzeugen"
             },
-            "getCoord": {
+            "selectFeatures": {
+              "zoomToFeature": "Auf dieses Feature zoomen",
+              "noFeatureChosen": "Keine Features ausgewählt. Wählen Sie Features durch Halten von Strg und Ziehen einer Box um die auszuwählenden Features.",
+              "propertylessFeature": "Element ohne Attribute"
+            },
+            "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
@@ -282,7 +373,41 @@
             },
             "gfi": {
                 "themes": {
-                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes."
+                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
+                    "trafficCount": {
+                        "infoLabel": "Info",
+                        "dayLabel": "Tag",
+                        "weekLabel": "Woche",
+                        "yearLabel": "Jahr",
+                        "period": "Zeitraum",
+                        "number": "Anzahl",
+                        "totalSince": "Insgesamt seit",
+                        "sinceBeginningOfTheYear": "Seit Jahresbeginn",
+                        "overThePastYear": "Im Vorjahr",
+                        "onThePreviousDay": "Am Vortag",
+                        "highestDay": "Stärkster Tag im Jahr",
+                        "highestWeek": "Stärkste Woche im Jahr",
+                        "highestMonth": "Stärkster Monat im Jahr",
+                        "dateLabel": "Datum",
+                        "clockLabel": "Uhr",
+                        "tableLabel": "Tabelle",
+                        "notice": "Aufgrund nicht verfügbarer Daten können Lücken im Diagramm und leere Tabellenzellen auftreten.",
+                        "lastupdateLabel": "Letzte Aktualisierung:",
+                        "diagramLabel": "Diagramm",
+                        "calendarweek": "KW",
+                        "infraredsensor": "Infrarotsensor",
+                        "countingstation": "Zählstation",
+                        "carLabel": "KFZ",
+                        "bicycleLabel": "Fahrrad",
+                        "idLabel": "ID:",
+                        "typeLabel": "Art: ",
+                        "meansOfTransportLabel": "Verkehrsmittel: ",
+                        "carsHeaderSuffix": "KFZ abs.",
+                        "trucksHeaderSuffix": "SV-Anteil in %",
+                        "yAxisTextDay": "Anzahl / 15 Min.",
+                        "yAxisTextWeek": "Anzahl / Tag",
+                        "yAxisTextYear": "Anzahl / Woche"
+                    }
                 }
             },
             "viomRouting": {
@@ -291,7 +416,7 @@
                 "fromPlaceholder": "Von",
                 "toPlaceholder": "Bis",
                 "setStartTimeText": "Startzeitpunkt vorgeben",
-                "routingError": "Fehlermeldung bei Routenberechung",
+                "routingError": "Fehlermeldung bei Routenberechnung",
                 "enterStartDestHoverText": "Start- und Ziel eingeben",
                 "enterOptionsText": "Optionen eingeben",
                 "calculateRoute": "Route berechnen",
@@ -306,8 +431,8 @@
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
                     "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
                 },
-                "hdmsEastingText": "Wert der $t(common:modules.tools.getCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "Wert der $t(common:modules.tools.getCoord.hdms.northingLabel)"
+                "hdmsEastingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
             },
             "draw": {
                 "title": "Zeichnungen erstellen",
@@ -385,6 +510,9 @@
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche"
+            },
+            "scaleSwitcher": {
+                "label": "Maßstab"
             }
         },
         "controls": {

@@ -1,5 +1,6 @@
 import isMobile from "../utils/isMobile";
 import getDpi from "../utils/getDpi";
+import getQueryParams from "../utils/getQueryParams";
 import isDevMode from "../utils/isDevMode";
 import masterPortalVersionNumber from "../utils/masterPortalVersionNumber";
 
@@ -8,8 +9,10 @@ const state = {
     configJs: null,
     mobile: isMobile(), // resize update in ./index.js
     dpi: getDpi(),
+    queryParams: getQueryParams(),
     masterPortalVersionNumber,
-    isDevMode
+    isDevMode,
+    i18NextInitialized: false
 };
 
 export default state;

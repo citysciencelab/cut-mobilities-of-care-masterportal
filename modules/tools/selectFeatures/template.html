@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<%if (selectedFeaturesWithRenderInformation.length) {%>
+    <div class="select-features-tables">
+        <%selectedFeaturesWithRenderInformation.forEach(({feature, properties}, index) => {%>
+            <%if (properties.length) {%>
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <%properties.forEach(([key, value]) => {%>
+                            <tr>
+                                <td><%=key%></td>
+                                <td><%=value%></td>
+                            </tr>
+                        <%});%>
+                    </tbody>
+                </table>
+            <%} else {%>
+                <p><%=propertylessFeature%></p>
+            <%}%>
+            <a href="#" class="select-features-zoom-link" id="<%=index%>-selectFeatures-feature"><%=zoomToFeature%></a>
+            <%if (index !== selectedFeaturesWithRenderInformation.length - 1) {%>
+                <hr />
+            <%}%>
+        <%});%>
+    </div>
+<%} else {%>
+    <span><%=noFeatureChosen%></span>
+<%}%>

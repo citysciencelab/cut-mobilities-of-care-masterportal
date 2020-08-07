@@ -7,7 +7,8 @@ const ExportButtonModel = SnippetModel.extend(/** @lends ExportButtonModel.proto
         rawData: null,
         filename: "",
         fileExtension: "",
-        data: null
+        data: null,
+        disabled: false
     },
 
     /**

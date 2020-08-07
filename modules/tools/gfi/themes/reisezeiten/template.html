@@ -4,7 +4,7 @@
 </div>
 <table id="reisezeitentable" class="table table-condensed table-hover">
     <tbody>
-        <% _.each(ziele, function (ziel) { %>
+        <% ziele.forEach(function (ziel) { %>
             <tr class="showroute" colspan="2" title="Detaillierte Route anzeigen." id="<%= ziel.routenid %>">
                 <td>
                     <%= ziel.zielort %>

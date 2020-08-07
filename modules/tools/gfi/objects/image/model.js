@@ -15,7 +15,7 @@ const ImgModel = Backbone.Model.extend({
     },
 
     initialize: function () {
-        this.set("id", _.uniqueId("img"));
+        this.set("id", Radio.request("Util", "uniqueId", "img"));
         if (Config.gfiImgReloadTime && Config.gfiImgReloadTime > 0) {
             this.set("gfiImgReloadTime", Config.gfiImgReloadTime);
             this.set("reloadInterval", setInterval(function () {

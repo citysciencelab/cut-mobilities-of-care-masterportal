@@ -46,36 +46,37 @@ function tests (builder, url, browsername, resolution, config, mode) {
          */
         const suites = [
                 // modules/controls
-                // require("./tests/modules/controls/Attributions.js"),
+                require("../../src/modules/controls/attributions/test/end2end/Attributions.e2e.js"),
                 require("../../src/modules/controls/backForward/test/end2end/BackForward.e2e.js"),
                 // require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
                 // require("./tests/modules/controls/ButtonOblique.js"),
-                // require("./tests/modules/controls/Freeze.js"),
-                // require("./tests/modules/controls/FullScreen.js"),
-                // require("./tests/modules/controls/Orientation.js"),
-                // require("./tests/modules/controls/OverviewMap.js"),
-                // require("./tests/modules/controls/TotalView.js"),
-                require("../../src/modules/controls/zoom/test/end2end/Zoom.js")
+                require("../../src/modules/controls/freeze/test/end2end/Freeze.e2e.js"),
+                require("../../src/modules/controls/fullScreen/test/end2end/FullScreen.e2e.js"),
+                require("./tests/modules/controls/Orientation.js"),
+                require("../../src/modules/controls/overviewMap/test/end2end/OverviewMap.e2e.js"),
+                require("../../src/modules/controls/totalView/test/end2end/TotalView.e2e.js"),
+                require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
                 // modules/core
-                // require("./tests/modules/core/ParametricUrl.js"),
+                require("./tests/modules/core/ParametricUrl.js"),
 
                 // modules/searchbar
                 // require("./tests/modules/searchbar/SearchCategories.js"),
                 // require("./tests/modules/searchbar/GdiSearch.js"),
 
                 // modules/tools
-                // require("./tests/modules/tools/Coord.js"),
+                require("./tests/modules/tools/Contact.js"),
+                require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
                 // require("./tests/modules/tools/Gfi.js"),
-                // require("./tests/modules/tools/Measure.js"),
+                require("./tests/modules/Legend.js"),
+                require("./tests/modules/tools/Measure.js"),
                 // require("./tests/modules/tools/ParcelSearch.js"),
-                // require("./tests/modules/tools/SearchByCoord.js"),
+                require("./tests/modules/tools/SearchByCoord.js"),
 
                 // non-module tests
-                // require("./tests/Pan.js"),
-                // require("./tests/Zoom.js"),
-                // require("./tests/Legend.js")
+                require("../../src/test/end2end/Pan.e2e.js"),
+                require("../../src/test/end2end/Zoom.e2e.js")
             ],
             e2eTestParams = {builder, url, resolution, config, mode, browsername};
 

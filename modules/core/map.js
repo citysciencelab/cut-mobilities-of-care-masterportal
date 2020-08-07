@@ -1,5 +1,6 @@
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector.js";
+import Cluster from "ol/source/Cluster.js";
 import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import MapView from "./mapView";
@@ -11,7 +12,7 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
-import Store from "../../src/app-store";
+import store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
@@ -173,8 +174,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         if (Radio.request("ParametricURL", "getZoomToExtent") !== undefined) {
             this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
         }
-
-        this.showMouseMoveText();
 
         Radio.trigger("Map", "isReady", "gfi", false);
 
@@ -442,7 +441,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         let layerModel;
 
         if (layer) {
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {"name": layer.get("name")});
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
         }
 
         // if the layer is already at the correct position, do nothing
@@ -456,12 +455,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         // Laden des Layers überwachen
         if (layer instanceof LayerGroup) {
             layer.getLayers().forEach(function (singleLayer) {
+                /* NOTE
+                 * Broken. channel.trigger is called immediately and returns undefined.
+                 * However, depending on the config, the loader will not disappear without this toggle.
+                 * (e.g. if only one WMTS without optionsFromCapabilities is set)
+                 */
                 singleLayer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
                 singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
             });
         }
         else if (layerModel instanceof WMTSLayer) {
-            if (layerModel.attributes.optionsFromCapabilities) {
+            if (layerModel.attributes.optionsFromCapabilities && !layerModel.hasBeenActivatedOnce) {
+                /* Additional guard: "addLayerToIndex" is called about 3 times on startup,
+                 * but addLoadingLayer should only be called once */
+                layerModel.hasBeenActivatedOnce = true;
                 // wmts source will load asynchonously
                 // -> source=null at this step
                 // listener to remove loading layer is set in WMTS class (on change:layerSource)
@@ -469,6 +476,11 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             }
         }
         else {
+            /* NOTE
+             * Broken. channel.trigger is called immediately and returns undefined.
+             * However, depending on the config, the loader will not disappear without this toggle.
+             * (e.g. if only one WMTS without optionsFromCapabilities is set)
+             */
             layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
             layer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
         }
@@ -549,12 +561,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             });
         }
         else if (layer !== undefined && olLayer.getSource() !== undefined) {
-            layerFeatures = olLayer.getSource().getFeatures();
+            let source = olLayer.getSource();
+
+            // if source is cluster, the ids to filter by in the following code are one source deeper
+            if (source instanceof Cluster) {
+                source = source.getSource();
+            }
+
+            layerFeatures = source.getFeatures();
         }
 
         features = layerFeatures.filter(function (feature) {
             return ids.indexOf(feature.getId()) > -1;
         });
+
         if (features.length > 0) {
             extent = this.calculateExtent(features);
             this.zoomToExtent(extent);
@@ -668,28 +688,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         return this.get("map").getOverlayById(id);
     },
 
-    /** This function allows the hover text to be hovered so that the text could be copied
-     * a new class "hoverText" will be inserted by mouseover and removed by mouseout
-     * @returns {void}
-     */
-    showMouseMoveText: function () {
-    // Firefox & Safari.
-        $(".ol-overlaycontainer-stopevent").on("mousemove, touchmove, pointermove", function () {
-            const overlayContainer = $(this).find(".ol-overlay-container.ol-selectable"),
-                tooltip = overlayContainer.find(".tooltip");
-
-            overlayContainer.mouseover(function () {
-                overlayContainer.addClass("hoverText");
-            });
-
-            tooltip.mouseout(function () {
-                if (overlayContainer.hasClass("hoverText")) {
-                    overlayContainer.removeClass("hoverText");
-                }
-            });
-        });
-    },
-
     /**
      * Setter for the map.
      * @param {ol/map} value - The map.
@@ -697,7 +695,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     setMap: function (value) {
         this.set("map", value);
-        Store.dispatch("Map/setMap", {map: value});
+        store.dispatch("Map/setMap", {map: value});
     }
 
 });

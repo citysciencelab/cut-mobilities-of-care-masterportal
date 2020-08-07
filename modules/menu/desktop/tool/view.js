@@ -143,8 +143,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         Radio.trigger("ClickCounter", "toolChanged");
         if (this.model.get("id") === "legend") {
             this.model.setIsActive(true);
-            // store.commit("setToolActive", {id: this.model.id, active: true});
-            store.dispatch("setToolActive", {id: this.model.id, active: true});
+            store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
         }
         else {
             if (!this.model.collection) {
@@ -161,14 +160,12 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
                 // deactivate all other modules as long as the tool is not set to "keepOpen"
                 this.model.collection.setActiveToolsToFalse(this.model);
                 this.model.setIsActive(true);
-                // store.commit("setToolActive", {id: this.model.id, active: true});
-                store.dispatch("setToolActive", {id: this.model.id, active: true});
+                store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
             }
             else {
                 // deactivate tool if it is already active
                 this.model.setIsActive(false);
-                // store.commit("setToolActive", {id: this.model.id, active: false});
-                store.dispatch("setToolActive", {id: this.model.id, active: false});
+                store.dispatch("Tools/setToolActive", {id: this.model.id, active: false});
             }
         }
 

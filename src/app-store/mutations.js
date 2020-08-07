@@ -26,18 +26,14 @@ const mutations = {
     setMobile (state, mobile) {
         state.mobile = mobile;
     },
-    setToolConfig (state, payload) {
-        Object.keys(state.Tools).forEach(toolId => {
-            const tool = state.Tools[toolId];
-
-            if (tool && tool.id === payload.id) {
-                if (payload.name) {
-                    // special handling of attribute name, is a reserved keyword in vue -> use title
-                    tool.title = payload.name;
-                }
-                Object.assign(tool, payload);
-            }
-        });
+    /**
+     * Sets i18NextInitialized flag. Is done after languages for addons are loaded.
+     * @param {object} state store state
+     * @param {boolean} isInitialized whether i18Next is initialized
+     * @returns {void}
+     */
+    setI18Nextinitialized (state, isInitialized) {
+        state.i18NextInitialized = isInitialized;
     }
 };
 

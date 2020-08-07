@@ -8,7 +8,7 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
      * @constructs
      * @memberof Core.ModelList.Layer
      */
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
         selectionIDX: -1
@@ -54,7 +54,7 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
         if (this.has("terrainProvider") === false) {
             options = {};
             if (this.has("cesiumTerrainProviderOptions")) {
-                _.extend(options, this.get("cesiumTerrainProviderOptions"));
+                Object.assign(options, this.get("cesiumTerrainProviderOptions"));
             }
             options.url = this.get("url");
             this.setTerrainProvider(new Cesium.CesiumTerrainProvider(options));
@@ -96,7 +96,7 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
      * @override
      */
     isLayerSourceValid: function () {
-        return !_.isUndefined(this.get("terrainProvider"));
+        return this.get("terrainProvider") !== undefined;
     },
 
     /**

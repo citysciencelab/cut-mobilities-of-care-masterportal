@@ -168,6 +168,63 @@ const actions = {
 
         // TODO replace trigger when MapMarker is migrated
         Radio.trigger("MapMarker", "hideMarker");
+    },
+    /**
+     * Sets the resolution by the given index of available resolutions.
+     * NOTE: is used by scaleSwitcher tutorial.
+     * @param {number} index of the resolution
+     * @returns {void}
+     */
+    setResolutionByIndex ({state}, index) {
+        const {map} = state,
+            view = map.getView();
+
+        view.setResolution(view.getResolutions()[index]);
+    },
+    /**
+     * Adds a listener to maps pointermove and calls callback-funktion
+     * @param {object} state state object
+     * @param {function} callback  to be called on pointermove
+     * @returns {void}
+     */
+    addPointerMoveHandler ({state}, callback) {
+        const {map} = state;
+
+        if (callback) {
+            map.on("pointermove", e => callback(e));
+        }
+
+    },
+    /**
+     * Removes a listener from maps pointermove
+     * @param {object} state state object
+     * @param {function} callback  to be called on pointermove
+     * @returns {void}
+     */
+    removePointerMoveHandler ({state}, callback) {
+        const {map} = state;
+
+        map.un("pointermove", e => callback(e));
+    },
+    /**
+     * Adds an interaction to the map.
+     * @param {interaction} interaction - Interaction to be added to map.
+     * @returns {void}
+     */
+    addInteraction ({state}, interaction) {
+        const {map} = state;
+
+        map.addInteraction(interaction);
+    },
+    /**
+     * Removes an interaction from the map.
+     * @param {interaction} interaction - Interaction to be removed from map.
+     * @returns {void}
+     */
+    removeInteraction ({state}, interaction) {
+        const {map} = state;
+
+        map.removeInteraction(interaction);
     }
 };
 

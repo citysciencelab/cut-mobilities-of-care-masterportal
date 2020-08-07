@@ -1,6 +1,6 @@
 {
 	"Portalconfig": {
-		"treeType": "light",
+        "treeType": "light",
 		"searchBar": {
 			"osm": {
 				"minChars": 3,
@@ -35,8 +35,8 @@
 						"name": "Koordinatensuche"
 					},
 					"coord": {
-            "name": "Koordinaten abfragen",
-            "glyphicon": "glyphicon-screenshot"
+						"name": "Koordinaten abfragen",
+						"glyphicon": "glyphicon-screenshot"
 					},
 					"measure": {
 						"name": "Strecke / Fläche messen"
@@ -98,20 +98,20 @@
 		"Fachdaten": {
 			"Layer": [
 				{
-          "id": "2426",
-          "name": "Bezirke",
-          "layerAttribution": "<span>Hier Text angeben, der angezeigt wird sobald der Layer sichtbar ist.</span>"
+					"id": "2426",
+					"name": "Bezirke",
+					"layerAttribution": "<span>Hier Text angeben, der angezeigt wird sobald der Layer sichtbar ist.</span>"
 				},
 				{
-          "id": "4561",
-          "name": "Eventflächen",
-          "infoFormat": "text/html",
-          "maxScale": "100000",
+					"id": "4561",
+					"name": "Eventflächen",
+					"infoFormat": "text/html",
+					"maxScale": "100000",
 					"minScale": "40000"
 				},
 				{
-          "id": "3302",
-          "name": "Trinkwasser",
+					"id": "3302",
+					"name": "Trinkwasser",
 					"gfiTheme": "trinkwasser"
 				},
 				{
@@ -127,20 +127,20 @@
 					"name": "Kita und Krankenhäuser"
 				},
 				{
-          "id": "2003",
-          "name": "WFS Schutzgebiete",
+					"id": "2003",
+					"name": "WFS Schutzgebiete",
 					"styleId": "2003",
 					"mouseHoverField": "gebietsname"
 				},
 				{
-          "id": "2404",
-          "name": "WFS Bike and Ride Parkplätze",
+					"id": "2404",
+					"name": "WFS Bike and Ride Parkplätze",
 					"styleId": "45",
 					"clusterDistance": 40
 				},
 				{
-          "id": "1711",
-          "name": "WFS Krankenhäuser",
+					"id": "1711",
+					"name": "WFS Krankenhäuser",
 					"styleId": "1711",
 					"mouseHoverField": "name",
 					"searchField":  "name"

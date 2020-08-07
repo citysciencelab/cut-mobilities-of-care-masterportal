@@ -1,12 +1,13 @@
 # Changelog Masterportal
  Alle wichtigen Änderungen in diesem Projekt werden in dieser Datei abgelegt.
- 
+
  Es wird die [Semantische Versionierung](https://semver.org/spec/v2.0.0.html) verwendet.
 
 
 ## Unreleased - in development
 
 ### Added
+- Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
 - Ein GFI-Theme trafficCount, zum Anzeigen von Verkehrsmengen wurde hinzugefügt.
 - Das Zeichenmodul wurde erweitert, um beim Zeichnen von Punkten verschiedene Glyphicons zu verwenden.
@@ -14,8 +15,14 @@
 - Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
 - Die “gfiAttribute”-keys können jetzt auch Objektpfade sein, analog zum neuen Styling.
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
+- Es wurde die Möglichkeit hinzugefügt über die URL Feature zu übergeben, welche dann in einem GeoJSON-Layer dargestellt werden.
+- Es können nun Vector Tile Layer (VTL) als Layer eingebunden werden.
+- Für VTL wurde ein Tool hergestellt, mit dem zwischen externen Styles gewechselt werden kann.
+- Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
+- Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 
 ### Changed
+- Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von VUE. Weiterhin heißt es fortan "Datei-Import".
 - Babel wurde, um einen Support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.
 - Die Version des Packages fs-extra wurde in der package.json aktualisiert.
 - Die Version des Packages replace-in-file wurde in der package.json aktualisiert.
@@ -37,8 +44,42 @@
 - Der Requestor wurde direkt in dem Tool featurelister integriert und daher entfernt.
 
 ### Fixed
+- Mit Google Earth erstellte KML Dateien werden mit dem Tool "Datei-Import" nun besser dargestellt.
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
 - Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
+
+---
+
+## v2.5.3 - 2020-06-29
+### Added
+- Multipolygone werden nun von der SpecialWFS Suche verarbeitet. Interne Polygone bspw. von B-Plänen werden fortan berücksichtigt und bei der Darstellung ausgespart.
+- Ein Konfigurationsparameter für das ZoomLevel bei der BKG-Suche wurde eingeführt.
+- In der BKG-Suche wurden die Parameter zoomToResultOnHover und zoomToResultOnClick zum Steuern der Anzeige der Suchergebnisse eingeführt.
+
+### Changed
+- Der erste Buchstabe wird für Einträge in der Legend aus WFS-Diensten nun immer groß geschrieben.
+- Das Werkzeug zur Koordinatenabfrage zeigt die Koordinatensysteme nun enstprechend der Reihenfolge der konfigurierten namedProjections aus der config.js an.
+
+### Deprecated
+- Der URL-Parameter zoomToResult ist deprecated. Bitte zoomToResultOnHover und zoomToResultOnClick benutzen.
+
+### Fixed
+- Die Legende für GruppenLayer wird nun wieder dargestellt.
+- Themenbaum/ Externe Fachdaten: Ein visuelles Problem beim Schliessen der Ordners wurde beseitigt.
+- Der Titel wird im Druckmodul nun beibehalten wenn der Maßstab geändert oder in der Karte gezoomt wird.
+- Die Legende wir für GruppenLayer wird nun nur noch einmal angezeigt.
+- Im Ausdrucken aus dem Druckmodul wird nun die Legende für GruppenLayer wieder angezeigt.
+
+---
+
+## v2.5.2 - 2020-06-09
+### Fixed
+- Die Portal-Konfiguration "singleBaselayer": "true" führt jetzt dazu, dass immer nur ein Hauptlayer ausgewählt werden kann.
+- Das Label der Version im Footer wird jetzt korrekt übersetzt.
+- Legenden, die den gleichen Namen und das gleiche Image haben, werden nur noch einmal für jeden Layer dargestellt.
+- In der Layerinformation wird, wenn keine Metadaten geladen wurden, der Link für "weitere Metadaten" nicht mehr dargestellt.
+- Der Infotext für Checkboxen wird nun beim Start nicht mehr ausgeklappt und hat nun den richtigen Style.
+- Die Quickhelp wird nun wieder richtig positioniert.
 
 ---
 
@@ -72,7 +113,7 @@
 - Der URL-Parameter "LNG" funktioniert nun ausschließlich wenn die Mehrsprachigkeit in den Portalconfigs aktiviert wurde und wirft keinen Fehler mehr.
 - Die Scrollbar beim Starten im IE11 wurde entfernt
 - Ein Problem, dass beim parametrisierten Aufruf mit ?config= auftrat, wurde behoben
-- Ein Problem wurde behoben, welches mit fehlernder Konfifuration des Portaltitels auftrat
+- Ein Problem wurde behoben, welches mit fehlernder Konfiguration des Portaltitels auftrat
 - Das Problem, das bei der Änderung der Sprache bei einem geöffneten Werkzeug auftrat und zu einer falschen Darstellung führte, wurde behoben
 - Im Footer können nun wieder eigene Einträge konfiguriert werden, die durch die Mehrsprachigkeit nicht mehr fehlerhaft angezeigt werden.
 - Ein Fehler wurde behoben, durch den Werkzeuge nach der Umschaltung der Sprache nicht mehr angezeigt wurden, da dort noch keine Mehrsprachigkeit implementiert ist
@@ -116,7 +157,7 @@
 - 3D:
     - 3D: Features eines Layers können zum Ausblenden in 3D in der config.json konfiguriert werden.
     - Map-Marker kann nun 3D-Koordinaten bekommen. Dies ist möglich durch eine Konfiguration des Markers als Ebene.
-    - VectorLayer können nun ihre 3D-Koordinate oder duch Konfiguration erhöht dargestellt werden.
+    - VectorLayer können nun ihre 3D-Koordinate oder durch Konfiguration erhöht dargestellt werden.
 - GFI:
     - Konfigurierbar, um Vektordaten bei GFI Abfrage anders darzustellen.
     - Neues GFI-Theme *sensor*, *bildungatlas*
@@ -204,7 +245,7 @@
 ### Fixed
   - Shadow-Tool: Das Schattentool ist nun mobil nicht mehr verfügbar
   - QuickHelp: Ein Bug wurde gefixt, der verhindert hat, dass die Bilder über den angegebenen Dateipfad geladen werden
-  - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den enstprechenden Eintrag gescrollt
+  - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den entsprechenden Eintrag gescrollt
   - Searchbar: Ein Fehler wurde behoben der die Hausnummernsuche in der Gazetteer-Suche blockiert hat
   - WFS: Geoserver-WFS werden nun angezeigt
 

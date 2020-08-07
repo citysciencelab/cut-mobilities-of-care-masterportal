@@ -13,7 +13,7 @@ const ReisezeitenTheme = Theme.extend({
         });
     },
     setDefaults: function () {
-        if (_.isUndefined(this.get("gfiContent")) === false) {
+        if (this.get("gfiContent") !== undefined) {
             this.set("routenLayer", getLayerWhere({id: "2713"}));
             this.set("verkehrslagelayer", getLayerWhere({id: "2715"}));
             this.set("standort", this.get("gfiContent")[0].Standort);
@@ -31,7 +31,7 @@ const ReisezeitenTheme = Theme.extend({
      * @returns {void}
      */
     sortRouten: function () {
-        this.set("ziele", _.sortBy(this.get("ziele"), "zielort"));
+        this.set("ziele", this.get("ziele").sort((valueA, valueB) => valueA.zielort - valueB.zielort));
     },
     /**
      * Fragt Layer mit Routeninformationen ab, um Template rendern zu können
@@ -65,7 +65,7 @@ const ReisezeitenTheme = Theme.extend({
                     routen = $(hits).find("app\\:reisezeit_routen,reisezeit_routen"),
                     ziele = [];
 
-                _.each(routen, function (route) {
+                routen.toArray().forEach(route => {
                     const zielort = $(route).find("app\\:ziel_ort,ziel_ort")[0].textContent,
                         anzeige = $(route).find("app\\:anzeige,anzeige")[0].textContent,
                         routenid = $(route).find("app\\:id,id")[0].textContent;
@@ -161,7 +161,7 @@ const ReisezeitenTheme = Theme.extend({
 
         this.removeRouteLayer();
         this.createRouteLayer();
-        _.each(source.getFeatures(), function (feature) {
+        source.getFeatures().forEach(feature => {
             switch (feature.get("farbe")) {
                 case "rot": {
                     strokestyle = new Stroke({

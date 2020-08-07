@@ -21,6 +21,7 @@ import ColorScale from "../modules/tools/colorScale/model";
 import MenuLoader from "../modules/menu/menuLoader";
 import ZoomToGeometry from "../modules/zoomToGeometry/model";
 import ZoomToFeature from "../modules/zoomToFeature/model";
+import FeatureViaURL from "../modules/featureViaURL/model";
 import SliderView from "../modules/snippets/slider/view";
 import SliderRangeView from "../modules/snippets/slider/range/view";
 import DropdownView from "../modules/snippets/dropdown/view";
@@ -42,9 +43,9 @@ import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
+import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
-import ImportView from "../modules/tools/kmlImport/view";
 /**
  * WFSFeatureFilterView
  * @deprecated in 3.0.0
@@ -74,7 +75,6 @@ import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import OrientationView from "../modules/controls/orientation/view";
-import FreezeModel from "../modules/controls/freeze/model";
 import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
 import HighlightFeature from "../modules/highlightFeature/model";
@@ -83,6 +83,7 @@ import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
+import SelectFeaturesView from "../modules/tools/selectFeatures/view";
 
 let sbconfig, controls, controlsView;
 
@@ -135,7 +136,7 @@ async function loadApp () {
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n: new VueI18Next(i18next)
+        i18n: new VueI18Next(i18next, {namespaces: ["additional", "common"]})
     });
 
 
@@ -173,6 +174,9 @@ async function loadApp () {
     }
     if (Config.hasOwnProperty("zoomToFeature")) {
         new ZoomToFeature(Config.zoomToFeature);
+    }
+    if (Config.hasOwnProperty("featureViaURL")) {
+        new FeatureViaURL(Config.featureViaURL);
     }
 
     new SliderView();
@@ -258,10 +262,6 @@ async function loadApp () {
                 new SaveSelectionView({model: tool});
                 break;
             }
-            case "kmlimport": {
-                new ImportView({model: tool});
-                break;
-            }
             /**
              * wfsFeatureFilter
              * @deprecated in 3.0.0
@@ -314,6 +314,10 @@ async function loadApp () {
                 new WfstView({model: tool});
                 break;
             }
+            case "styleVT": {
+                new StyleVTView({model: tool});
+                break;
+            }
             /**
              * layerslider
              * @deprecated in 3.0.0
@@ -328,6 +332,10 @@ async function loadApp () {
             }
             case "virtualCity": {
                 new VirtualcityModel(tool.attributes);
+                break;
+            }
+            case "selectFeatures": {
+                new SelectFeaturesView({model: tool});
                 break;
             }
             default: {
@@ -349,13 +357,6 @@ async function loadApp () {
                     element = controlsView.addRowTR(control.id, true);
                     orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
                     new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
-                case "freeze": {
-                    if (control.attr === true) {
-                        element = controlsView.addRowTR(control.id);
-                        new FreezeModel({uiStyle: style, el: element});
-                    }
                     break;
                 }
                 case "button3d": {
@@ -409,59 +410,90 @@ async function loadApp () {
 
         initCounter = initCounter * Object.keys(i18nextLanguages).length;
 
+        // loads all language files from addons for backbone- and vue-addons
         Config.addons.forEach((addonKey) => {
             if (allAddons[addonKey] !== undefined) {
-
                 Object.keys(i18nextLanguages).forEach((lng) => {
                     import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
-                            i18next.addResourceBundle(lng, "additional", additionalLocales);
+                            i18next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
-                            if (initCounter === 0) {
-                                Radio.trigger("Addons", "initialized");
-                            }
+                            checkInitCounter(initCounter, allAddons);
                         }).catch(error => {
                             initCounter--;
                             console.warn(error);
-                            console.warn("Die Übersetzungsdateien der Anwendung " + addonKey + " konnten nicht vollständig geladen werden. Teile der Anwendung sind nicht übersetzt.");
+                            console.warn("Translation files of addon " + addonKey + " could not be loaded or does not exist. Addon is not translated.");
+                            checkInitCounter(initCounter, allAddons);
                         });
-                });
-
-
-                // .js need to be removed so we can specify specifically in the import statement that
-                // webpack only searches for .js files
-                const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
-
-                import(
-                    /* webpackChunkName: "[request]" */
-                    /* webpackExclude: /.+unittests.+/ */
-                    "../addons/" + entryPoint + ".js"
-                ).then(module => {
-                    /* eslint-disable new-cap */
-                    const addon = new module.default();
-
-                    // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
-                    if (addon.model) {
-                        // set this special attribute, because it is the only one set before this replacement
-                        const model = Radio.request("ModelList", "getModelByAttributes", {"id": addon.model.id});
-
-                        if (!model) {
-                            console.warn("wrong configuration: addon " + addonKey + " is not in tools menu or cannot be called from somewhere in the view! Defined this in config.json.");
-                        }
-                        else {
-                            addon.model.set("i18nextTranslate", model.get("i18nextTranslate"));
-                        }
-                        Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
-                    }
-                }).catch(error => {
-                    console.error(error);
-                    Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
                 });
             }
         });
     }
 
     Radio.trigger("Util", "hideLoader");
+}
+
+/**
+ * Checks if all addons are initialized.
+ * @param {Number} initCounter init counter
+ * @param {Object} allAddons all addons from the config.js
+ * @returns {void}
+ */
+function checkInitCounter (initCounter, allAddons) {
+    if (initCounter === 0) {
+        Radio.trigger("Addons", "initialized");
+        loadAddOnsAfterLanguageLoaded(allAddons);
+        store.commit("setI18Nextinitialized", true);
+    }
+}
+
+/**
+ * Loads AddOns after the language is loaded
+ * @param {Object} allAddons all addons from the config.js
+ * @returns {void}
+ */
+function loadAddOnsAfterLanguageLoaded (allAddons) {
+    Config.addons.forEach((addonKey) => {
+        if (allAddons[addonKey] !== undefined) {
+            // .js need to be removed so we can specify specifically in the import statement that
+            // webpack only searches for .js files
+            const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
+
+            import(
+                /* webpackChunkName: "[request]" */ /* webpackExclude: /.+(unittests|tests).+/ */ "../addons/" + entryPoint + ".js"
+            ).catch(err => {
+                console.warn("Loading backbone-addons: cannot load addon, is maybe a Vue addon:", entryPoint, "Error:", err);
+            }).then(module => {
+                /* eslint-disable new-cap */
+                let addon;
+
+                try {
+                    addon = new module.default();
+                }
+                catch (err) {
+                    // cannot load addon, is maybe a Vue addon
+                    return;
+                }
+
+                // addons are initialized with 'new Tool(attrs, options);', that produces a rudimental model. Now the model must be replaced in modellist:
+                if (addon.model) {
+                    // set this special attribute, because it is the only one set before this replacement
+                    const model = Radio.request("ModelList", "getModelByAttributes", {"id": addon.model.id});
+
+                    if (!model) {
+                        console.warn("wrong configuration: addon " + addonKey + " is not in tools menu or cannot be called from somewhere in the view! Defined this in config.json.");
+                    }
+                    else {
+                        addon.model.set("i18nextTranslate", model.get("i18nextTranslate"));
+                    }
+                    Radio.trigger("ModelList", "replaceModelById", addon.model.id, addon.model);
+                }
+            }).catch(error => {
+                console.error(error);
+                Radio.trigger("Alert", "alert", "Entschuldigung, diese Anwendung konnte nicht vollständig geladen werden. Bitte wenden sie sich an den Administrator.");
+            });
+        }
+    });
 }
 
 export {loadApp};

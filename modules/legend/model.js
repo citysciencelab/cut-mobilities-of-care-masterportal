@@ -197,14 +197,29 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
      * @returns {Layer[]} sorted and filtered layers
      */
     filterLayersForLegend: function () {
-        const visibleLayer = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
-            filteredLegendUrl = visibleLayer.filter(layer => ["ignore", ""].indexOf(layer.get("legendURL")) === -1),
+        const visibleLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, isOutOfRange: false}),
+            filteredLegendUrl = this.filterLegendUrl(visibleLayers),
             isMode3D = Radio.request("Map", "isMap3d"),
             filterViewType = filteredLegendUrl.filter(layer => {
                 return (isMode3D && layer.get("supported").includes("3D")) || (!isMode3D && layer.get("supported").includes("2D"));
             });
 
         return filterViewType.sort((layerA, layerB) => layerB.get("selectionIDX") - layerA.get("selectionIDX"));
+    },
+
+    /**
+     * Filters out layers where the legend should not be shown.
+     * @param {Backbone.Model[]} [visibleLayers=[]] - The visible layers.
+     * @returns {Backbone.Model[]} The filtered layers.
+     */
+    filterLegendUrl: function (visibleLayers = []) {
+        return visibleLayers.filter(layer => {
+            if (layer.get("typ") === "GROUP") {
+                return layer.get("layerSource").filter(childLayer => ["ignore", ""].indexOf(childLayer.get("legendURL")) === -1);
+            }
+
+            return ["ignore", ""].indexOf(layer.get("legendURL")) === -1;
+        });
     },
 
     /**
@@ -263,7 +278,6 @@ const LegendModel = Tool.extend(/** @lends LegendModel.prototype */{
                 const childLegend = this.getLegendDefinition(layerSource.get("name"), layerSource.get("typ"), layerSource.get("legendURL"), layerSource.get("styleId"), null);
 
                 if (childLegend.legend) {
-                    // layerSource-Abfragen haben immer nur legend[0]
                     defs.push(childLegend.legend[0]);
                 }
             }, this);

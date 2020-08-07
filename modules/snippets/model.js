@@ -26,7 +26,7 @@ const SnippetModel = Backbone.Model.extend(/** @lends SnippetModel.prototype */{
     superInitialize: function () {
         this.set("valuesCollection", new Backbone.Collection());
 
-        if (typeof Config !== "undefined" && _.has(Config, "infoJson")) {
+        if (typeof Config !== "undefined" && Config.hasOwnProperty("infoJson")) {
             this.checkSnippetInfos(Radio.request("Parser", "getSnippetInfos"), this.get("name"));
         }
     },
@@ -38,7 +38,7 @@ const SnippetModel = Backbone.Model.extend(/** @lends SnippetModel.prototype */{
      * @returns {void}
      */
     checkSnippetInfos: function (snippetInfos, name) {
-        if (_.has(snippetInfos, name)) {
+        if (snippetInfos.hasOwnProperty(name)) {
             this.set("infoText", snippetInfos[name]);
         }
     },
@@ -77,7 +77,7 @@ const SnippetModel = Backbone.Model.extend(/** @lends SnippetModel.prototype */{
      * @returns {object} object extended Object
      */
     extentBaseModel: function (obj) {
-        return _.extend({}, new ValueModel(), obj);
+        return Object.assign({}, new ValueModel(), obj);
     },
 
     /**

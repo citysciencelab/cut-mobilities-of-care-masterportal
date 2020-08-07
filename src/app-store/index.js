@@ -3,11 +3,13 @@ import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
 import Draw from "../modules/tools/draw/store/indexDraw";
+import ScaleSwitcher from "../modules/tools/scale/store/indexScaleSwitcher";
 import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
-import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
+import KmlImport from "../modules/tools/kmlImport/store/indexKmlImport";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 
+import toolsActions from "../modules/tools/actionsTools";
 import getters from "./getters";
 import mutations from "./mutations";
 import state from "./state";
@@ -27,13 +29,15 @@ const store = new Vuex.Store({
             namespaced: true,
             modules: {
                 Draw,
-                SupplyCoord // hier die stores von weiteren Tools eintragen
-            }
+                KmlImport,
+                ScaleSwitcher,
+                SupplyCoord
+            },
+            actions: toolsActions
         },
         controls: {
             ...controlsModule
         },
-        ScaleLine,
         Title: Title
     },
     state,
@@ -44,8 +48,26 @@ const store = new Vuex.Store({
 
 export default store;
 
+/**
+ * Debounce function
+ * @param {function} callback - The callback form debounce function.
+ * @param {number} wait - Wait before the callback function is called.
+ * @returns {void}
+ */
+function debounce (callback, wait) {
+    let timeout;
+
+    return (...args) => {
+        const that = this;
+
+        clearTimeout(timeout);
+        timeout = setTimeout(() => callback.apply(that, args), wait);
+    };
+}
+
+
 // resize update
-window.addEventListener("resize", _.debounce(function () {
+window.addEventListener("resize", debounce(() => {
     const nextIsMobile = isMobile();
 
     if (nextIsMobile !== store.state.mobile) {

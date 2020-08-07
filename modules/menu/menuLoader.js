@@ -2,6 +2,7 @@ import LightMenu from "./desktop/listViewLight";
 import Menu from "./desktop/listView";
 import MobileMenu from "./mobile/listView";
 import TableMenu from "./table/view";
+import store from "../../src/app-store/index";
 
 const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
     defaults: {
@@ -99,6 +100,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
                         return;
                     }
                     model.set(key, value);
+                    store.dispatch("Tools/languageChanged", {id: model.id, name: value});
                 });
             }
         }, this);

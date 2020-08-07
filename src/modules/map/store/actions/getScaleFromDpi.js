@@ -27,10 +27,25 @@ function getScaleFromDpi (map, dpi) {
 
         d *= dpi / 0.0254; // 1 dot/m = 0.0254 dpi
 
-        return d;
+        return getRoundedScale(d);
     }
 
     return null;
+}
+
+/**
+ * returns the rounded scale
+ * @param {number} scale to round
+ * @returns {number} rounded scale
+ */
+function getRoundedScale (scale) {
+    if (scale > 10000) {
+        return Math.round(scale / 1000) * 1000;
+    }
+    else if (scale > 100) {
+        return Math.round(scale / 100) * 100;
+    }
+    return Math.round(scale);
 }
 
 export default getScaleFromDpi;

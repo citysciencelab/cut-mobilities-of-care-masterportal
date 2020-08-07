@@ -12,14 +12,14 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      */
-    defaults: _.extend({}, Parser.prototype.defaults, {}),
+    defaults: Object.assign({}, Parser.prototype.defaults, {}),
 
     /**
      * Recursive function.
      * Parses the config.json. response.Themenconfig.
      * The object from config.json and services.json are merged by id.
      *
-     * @param  {Object} object - Baselayer | Overlayer | Folder
+     * @param  {Object} [object={}] - Baselayer | Overlayer | Folder
      * @param  {string} parentId Id of parent item.
      * @param  {Number} level Level of recursion. Equals to level in layertree.
      * @fires Core#RadioRequestRawLayerListGetLayerAttributesWhere
@@ -28,12 +28,12 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
-    parseTree: function (object, parentId, level) {
+    parseTree: function (object = {}, parentId, level) {
         const isBaseLayer = Boolean(parentId === "Baselayer" || parentId === "tree"),
             treeType = Radio.request("Parser", "getTreeType");
 
-        if (_.has(object, "Layer")) {
-            _.each(object.Layer, function (layer) {
+        if (object.hasOwnProperty("Layer")) {
+            object.Layer.forEach(layer => {
                 let objFromRawList,
                     objsFromRawList,
                     layerExtended = layer,
@@ -43,60 +43,60 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 // Für Single-Layer (ol.layer.Layer)
                 // z.B.: {id: "5181", visible: false}
 
-                if (!_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
+                if (!layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
                     objFromRawList = getLayerWhere({id: layerExtended.id});
                     // DIPAS -> Steht ein Objekt nicht in der ServicesJSON, hat aber eine url dann wird der Layer ohne Services Eintrag trotzdemübergeben
 
                     // DIPAS -> wenn der Layertyp "StaticImage" übergeben wird brechen wur nicht ab sondern arbeiten mit der neuen ImageURL weiter.
                     // Wird für den Einsatz eines individuell eingestelölten Bildes benötigt.
-                    if (_.isNull(objFromRawList)) {
-                        if (_.has(layerExtended, "url")) { // Wenn LayerID nicht definiert, dann Abbruch
+                    if (objFromRawList === null) {
+                        if (layerExtended.hasOwnProperty("url")) { // Wenn LayerID nicht definiert, dann Abbruch
                             objFromRawList = layerExtended;
                         }
                         else {
                             return;
                         }
                     }
-                    layerExtended = _.extend(objFromRawList, layerExtended, {"isChildLayer": false});
+                    layerExtended = Object.assign(objFromRawList, layerExtended, {"isChildLayer": false});
                 }
                 // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)
                 // z.B.: {id: ["550,551,552,...,559"], visible: false}
-                else if (_.isArray(layerExtended.id) && _.isString(layerExtended.id[0])) {
+                else if (Array.isArray(layerExtended.id) && typeof layerExtended.id[0] === "string") {
                     objsFromRawList = getLayerList();
                     mergedObjsFromRawList = this.mergeObjectsByIds(layerExtended.id, objsFromRawList);
 
-                    if (_.isNull(mergedObjsFromRawList)) { // Wenn Layer nicht definiert, dann Abbruch
+                    if (mergedObjsFromRawList === null) { // Wenn Layer nicht definiert, dann Abbruch
                         return;
                     }
-                    layerExtended = _.extend(mergedObjsFromRawList, _.omit(layerExtended, "id"), {"isChildLayer": false});
+                    layerExtended = Object.assign(mergedObjsFromRawList, Radio.request("Util", "omit", layerExtended, ["id"]), {"isChildLayer": false});
                 }
                 // Für Gruppen-Layer (ol.layer.Group)
                 // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
-                else if (_.has(layerExtended, "children") && _.isString(layerExtended.id)) {
-                    layerExtended.children = _.map(layerExtended.children, function (childLayer) {
+                else if (layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
+                    layerExtended.children = layerExtended.children.map(childLayer => {
                         objFromRawList = getLayerWhere({id: childLayer.id});
 
-                        if (!_.isNull(objFromRawList)) {
-                            return _.extend(objFromRawList, childLayer, {"isChildLayer": true});
+                        if (objFromRawList !== null) {
+                            return Object.assign(objFromRawList, childLayer, {"isChildLayer": true});
                         }
 
                         return undefined;
-                    }, this);
+                    });
 
                     layerExtended.children = layerExtended.children.filter(function (childLayer) {
-                        return !_.isUndefined(childLayer);
+                        return childLayer !== undefined;
                     });
 
                     if (layerExtended.children.length > 0) {
-                        layerExtended = _.extend(layerExtended, {typ: "GROUP", isChildLayer: false});
+                        layerExtended = Object.assign(layerExtended, {typ: "GROUP", isChildLayer: false});
                     }
                 }
 
                 // HVV :(
 
-                if (_.has(layerExtended, "styles") && layerExtended.styles.length >= 1) {
-                    _.each(layerExtended.styles, function (style, index) {
-                        let subItem = _.extend({
+                if (layerExtended.hasOwnProperty("styles") && layerExtended.styles.length >= 1) {
+                    layerExtended.styles.forEach((style, index) => {
+                        let subItem = Object.assign({
                             id: layerExtended.id + style,
                             isBaseLayer: isBaseLayer,
                             legendURL: layerExtended.legendURL[index],
@@ -105,15 +105,15 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                             parentId: parentId,
                             styles: layerExtended.styles[index],
                             type: "layer"
-                        }, _.omit(layerExtended, "id", "name", "styles", "legendURL"));
+                        }, Radio.request("Util", "omit", layerExtended, ["id", "name", "styles", "legendURL"]));
 
                         subItem = this.controlsVisibilityInTree(subItem, treeType, level, layerExtended);
 
                         this.addItem(subItem);
-                    }, this);
+                    });
                 }
                 else {
-                    item = _.extend({
+                    item = Object.assign({
                         format: "image/png",
                         isBaseLayer: isBaseLayer,
                         level: level,
@@ -125,11 +125,11 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
 
                     this.addItem(item);
                 }
-            }, this);
+            });
         }
-        if (_.has(object, "Ordner")) {
-            _.each(object.Ordner, function (folder) {
-                const isLeafFolder = !_.has(folder, "Ordner");
+        if (object.hasOwnProperty("Ordner")) {
+            object.Ordner.forEach(folder => {
+                const isLeafFolder = !folder.hasOwnProperty("Ordner");
                 let isFolderSelectable;
 
                 // Visiblity of SelectAll-Box. Use item property first, if not defined use global setting.
@@ -159,7 +159,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 });
                 // rekursiver Aufruf
                 this.parseTree(folder, folder.id, level + 1);
-            }, this);
+            });
         }
     },
 
@@ -175,12 +175,12 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
         let extendedItem = item;
 
         if (treeType === "light") {
-            extendedItem = _.extend({
+            extendedItem = Object.assign({
                 isVisibleInTree: this.getIsVisibleInTree(level, "layer", layerExtended.visibility, treeType)
             }, extendedItem);
         }
         else {
-            extendedItem = _.extend({
+            extendedItem = Object.assign({
                 isSelected: this.getIsVisibleInTree(level, "layer", layerExtended.visibility, treeType)
             }, extendedItem);
         }
@@ -197,7 +197,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
      * @returns {Boolean} - Flag if layer is visible in layertree
      */
     getIsVisibleInTree: function (level, type, isInThemen, treeType) {
-        const isInThemenBool = _.isUndefined(isInThemen) ? false : isInThemen;
+        const isInThemenBool = isInThemen === undefined ? false : isInThemen;
 
         return (type === "layer" && (isInThemenBool || treeType === "light"))
             ||

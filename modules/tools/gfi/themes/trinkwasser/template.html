@@ -37,7 +37,7 @@
         <%=gfiContent.allgemContent.Stadtteil %>
     </td>
 </tr>
-<% if(_.isEmpty(gfiContent.mikrobioContent) === false){ %>
+<% if(Object.keys(gfiContent.mikrobioContent).length !== 0){ %>
 
     <tr>
         <td colspan="2"></td>
@@ -48,8 +48,11 @@
         </td>
     </tr>
 <%}
-_.each(gfiContent.mikrobioContent, function(value, key) {
-        if (_.isString(key) === false || _.isString(value)=== false) return;
+Object.entries(gfiContent.mikrobioContent).forEach(function(element) {
+    const value = element[1],
+        key = element[0];
+
+        if (typeof key !== "string" || typeof value !== "string") return;
     %>
 <tr colspan="2">
     <td>
@@ -60,7 +63,7 @@ _.each(gfiContent.mikrobioContent, function(value, key) {
     </td>
 </tr>
 <% }); %>
-<% if(_.isEmpty(gfiContent.chemContent) === false){ %>
+<% if(Object.keys(gfiContent.chemContent).length !== 0){ %>
 <tr>
     <td colspan="2"></td>
 </tr>
@@ -70,8 +73,11 @@ _.each(gfiContent.mikrobioContent, function(value, key) {
     </td>
 </tr>
 <%}
-_.each(gfiContent.chemContent, function(value, key) {
-        if (_.isString(key) === false || _.isString(value)=== false) return;
+Object.entries(gfiContent.chemContent).forEach(function(content) {
+        const value = content[1],
+            key = content[0];
+
+        if (typeof key !== "string" || typeof value !== "string") return;
     %>
 <tr colspan="2">
     <td>

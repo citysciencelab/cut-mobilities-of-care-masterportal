@@ -50,11 +50,11 @@ const ElektroladesaeulenThemeView = ThemeView.extend({
     toggleTab: function (evt) {
         const contentId = $(evt.currentTarget).attr("value"),
             modelDayIndex = this.model.get("dayIndex"),
-            index = _.isUndefined(modelDayIndex) ? 0 : modelDayIndex;
+            index = modelDayIndex === undefined ? 0 : modelDayIndex;
         let gfiSize = {};
 
         // sets the window size so that it is always the same
-        if (_.isUndefined(this.model.get("gfiHeight")) || _.isUndefined(this.model.get("gfiWidth"))) {
+        if (this.model.get("gfiHeight") === undefined || this.model.get("gfiWidth") === undefined) {
             gfiSize = {
                 width: $(".gfi-content").css("width").slice(0, -2),
                 height: $(".gfi-content").css("height").slice(0, -2)

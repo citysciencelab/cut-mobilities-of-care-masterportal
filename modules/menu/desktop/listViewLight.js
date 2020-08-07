@@ -23,7 +23,7 @@ const LightMenu = listViewMain.extend(/** @lends LightMenu.prototype */{
         });
         this.renderMain();
         this.render();
-        Radio.trigger("Autostart", "initializedModul", "tree");
+        Radio.trigger("Autostart", "initializedModule", "tree");
     },
     /**
      * Renders the data to DOM.
@@ -34,9 +34,6 @@ const LightMenu = listViewMain.extend(/** @lends LightMenu.prototype */{
 
         $("#tree").html("");
 
-        // models = _.sortBy(models, function (model) {
-        //     return model.get("selectionIDX");
-        // });
         models = Radio.request("Util", "sortBy", models, (model) => model.get("selectionIDX"), this);
 
         this.addViews(models);

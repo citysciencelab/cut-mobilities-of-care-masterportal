@@ -21,7 +21,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @fires Core#RadioRequestIsMap3d
      * @fires Core#RadioRequestGetMap3d
      */
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
         selectionIDX: -1,
@@ -122,6 +122,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         const options = this.combineOptions(this.get("cesium3DTilesetOptions"), this.get("url")),
             tileset = new Cesium.Cesium3DTileset(options);
 
+        tileset.style = this.styling();
         this.setTileSet(tileset);
 
         tileset.tileVisible.addEventListener(this.applyStyle.bind(this));
@@ -130,21 +131,27 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         });
     },
 
+    styling: function () {
+        const styleModel = this.get("styleId") ? Radio.request("StyleList", "returnModelById", this.get("styleId")) : undefined;
+        let style;
+
+        if (styleModel) {
+            style = styleModel.createStyle()[0];
+        }
+        return style;
+    },
+
     /**
-     * Combines default and config settings
+     * Combines default and config settings ignoring optional url parameter.
      * @param   {object} cesium3DTilesetOptions config settings
-     * @param   {string} url                    url
+     * @param   {string} fullurl fullurl
      * @returns {object} combinedOptions
      */
-    combineOptions: function (cesium3DTilesetOptions, url) {
-        const options = Object.assign(this.get("cesium3DTilesetDefaults"), cesium3DTilesetOptions);
+    combineOptions: function (cesium3DTilesetOptions, fullurl) {
+        const options = Object.assign(this.get("cesium3DTilesetDefaults"), cesium3DTilesetOptions),
+            url = fullurl.split("?")[0] + "/tileset.json";
 
-        if (url && url.endsWith("tileset.json")) {
-            options.url = url;
-        }
-        else {
-            options.url = url + "/tileset.json";
-        }
+        options.url = url;
 
         return options;
     },
@@ -183,7 +190,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     isLayerSourceValid: function () {
-        return !_.isUndefined(this.get("tileset"));
+        return this.get("tileset") !== undefined;
     },
 
     /**

@@ -185,27 +185,25 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
             }
             // Features
             default: {
-                if (coord.length === 2) {
+                if (coord.length === 2 && hit.geometryType !== "MULTIPOLYGON" && hit.geometryType !== "POLYGON") {
                     Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                     this.showMarker(coord);
                 }
-                else if (coord.length === 3) {
+                else if (coord.length === 3 && hit.geometryType !== "MULTIPOLYGON" && hit.geometryType !== "POLYGON") {
                     Radio.trigger("MapView", "setCenter", [coord[0], coord[1]], this.model.get("zoomLevel"));
                     this.showMarker(coord);
                 }
-                else if (coord.length === 4) {
+                else if (coord.length === 4 && hit.geometryType !== "MULTIPOLYGON" && hit.geometryType !== "POLYGON") {
                     Radio.trigger("Map", "zoomToExtent", coord);
                 }
-                else if (coord.length > 4) {
-                    if (hit.geometryType === "POLYGON") {
-                        this.model.setWkt("POLYGON", coord);
-                    }
-                    else if (hit.geometryType === "MULTIPOLYGON") {
-                        this.model.setWkt("MULTIPOLYGON", coord);
-                    }
-                    if (hit.geometryType === "POLYGON" || hit.geometryType === "MULTIPOLYGON") {
-                        this.model.showFeature(); // bei Flächen soll diese sichtbar sein
+                else if (coord.length > 4 || hit.geometryType === "MULTIPOLYGON" || hit.geometryType === "POLYGON") {
+                    if (["POLYGON", "MULTIPOLYGON"].includes(hit.geometryType)) {
+                        this.model.setWkt(hit.geometryType, coord, hit.interiorGeometry);
+                        this.model.showFeature(); // for surfaces it should be visible
                         Radio.trigger("Map", "zoomToExtent", this.model.getExtent(), {maxZoom: index});
+                    }
+                    else {
+                        console.error("Zoom and Highligt Feature for the geometry type: " + hit.geometryType + " not yet implemented!");
                     }
                 }
                 Radio.trigger("Filter", "resetFilter", hit.feature);
@@ -219,11 +217,12 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
     * @fires Core#RadioTriggerMapZoomToExtent
     * @fires Core#RadioTriggerMapViewSetCenter
     * @param {string} data - Die Data-Object des request.
+    * @param {number} zoomLevel - The level to zoom.
     * @returns {void}
     */
-    zoomToBKGSearchResult: function (data) {
+    zoomToBKGSearchResult: function (data, zoomLevel) {
         if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
-            Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, this.model.get("zoomLevel"));
+            Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, zoomLevel !== undefined ? zoomLevel : this.model.get("zoomLevel"));
             this.showMarker(data.features[0].geometry.coordinates);
         }
         else if (data.features.length !== 0 && data.features[0].properties !== null && data.features[0].properties.bbox !== null &&
