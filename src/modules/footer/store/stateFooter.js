@@ -1,6 +1,7 @@
 /**
  * User type definition
  * @typedef {object} FooterState
+ * @property {boolean} showFooter Indicates whether the footer is displayed.
  * @property {object[]} urls Array of URL configuration objects
  * @property {string} urls[].alias Name of the link for desktop playout.
  * @property {string} urls[].alias_mobil Name of the link for mobile application.
@@ -10,6 +11,7 @@
  * @property {boolean} showVersionFlag if the version number of the Master Portal should be displayed in the footer.
  */
 const state = {
+    showFooter: false,
     urls: [],
     showVersion: false
 };

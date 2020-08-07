@@ -1,12 +1,14 @@
 <script>
-import {mapGetters, mapActions} from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersFooter";
+import mutations from "../store/mutationsFooter";
 import ScaleLine from "../../scaleLine/components/ScaleLine.vue";
 import Language from "../../language/components/Language.vue";
 import MousePosition from "../../controls/mousePosition/components/MousePosition.vue";
 
-/* TODO implement missing feature toolModelId */
-
+/**
+ * Footer that is displayed below the map. The version of the masterportal and links can be displayed here.
+ */
 export default {
     name: "Footer",
     components: {
@@ -17,20 +19,22 @@ export default {
     computed: {
         ...mapGetters(["footerConfig", "mobile", "masterPortalVersionNumber"]),
         ...mapGetters("Footer", Object.keys(getters)),
-        showFooter () {
-            return Boolean(this.footerConfig);
-        },
         showLanguageSwitcher () {
             return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
         }
     },
     mounted () {
         this.initialize();
+
+        if (this.footerConfig) {
+            this.setShowFooter(true);
+        }
     },
     methods: {
         ...mapActions("Footer", [
             "initialize"
-        ])
+        ]),
+        ...mapMutations("Footer", Object.keys(mutations))
     }
 };
 </script>
