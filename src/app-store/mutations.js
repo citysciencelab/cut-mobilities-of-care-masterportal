@@ -1,16 +1,11 @@
 
 // The object deprecatedCode stores the current respectively new parameters and the related deprecated parameters.
 // The key describes the current parameter or more precisely the path to the new/current path.
-// Please note, that the path is not the complete path. It is the path from the point where the new and old paths differ.
-// The easiest case is for example "toolTip". Here the new parameter is written to the same place as the old parameter.
-// Therefore the key is only "toolTip", the previous path is taken over from the old path.
-// In the case "portalTitle.title" for example, the new parameter is written to a new (sub-)path.
-// The old parameter is defined under "Portalconfig.PortalTitle". But the new parameter has to be written to "Portalconfig.portalTitle.title".
-// This means, that not only the parameter "title" is new, also the subpath "portalTitle" is new and has to be inserted.
-// So logically "portalTitle" and "title" are put together to one key called "portalTitle.title".
-// There are some cases, where a tool e.g. "supplyCoord" can be defined at multiple places.
-// Therefore define an array where all the possible paths are stored.
-// Later the algorithm will detect which path is the correct and defined one. This path is used for the new parameter.
+// The corresponding value describes the old path with the deprecated parameter.
+// Later on the algorithm takes the old path, estimates the content and rewrites the content to the new path / new parameter.
+// The old deprecated path will be removed.
+// Please notice that the replacement only effects the state. This means that the changes only have impact on the vue-components.
+// Nevertheless you can or even should specify deprecated backbone parameters here.
 
 const deprecatedParams = {
     "Portalconfig.portalTitle.title": ["Portalconfig.PortalTitle"],
