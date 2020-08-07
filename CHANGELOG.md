@@ -22,7 +22,8 @@
 - Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 
 ### Changed
-- Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von VUE. Weiterhin heißt es fortan "Datei-Import".
+- Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js.
+- Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von Vue.js. Weiterhin heißt es fortan "Datei-Import".
 - Babel wurde, um einen Support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.
 - Die Version des Packages fs-extra wurde in der package.json aktualisiert.
 - Die Version des Packages replace-in-file wurde in der package.json aktualisiert.
