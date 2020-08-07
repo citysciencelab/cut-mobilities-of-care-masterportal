@@ -50,32 +50,30 @@ function checkWhereDeprecated (deprecatedPath, config) {
  * @returns {Object} - returns an object with the three mentioned above parameters.
 */
 function getDeprecatedParameters (entry, config) {
-    let parameters = {};
+    const newSplittedPath = entry[0].split(".");
+    let oldSplittedPath = "",
+        output = "",
+        deprecatedKey = "",
+        parameters = {};
 
-    try {
-        const newSplittedPath = entry[0].split(".");
-        let oldSplittedPath = "",
-            output = "",
-            deprecatedKey = "";
-
-        for (const oldPathes of entry[1]) {
+    for (const oldPathes of entry[1]) {
+        try {
             oldSplittedPath = oldPathes.split(".");
+            output = oldSplittedPath.reduce((object, index) => object[index], config);
+            deprecatedKey = oldSplittedPath[oldSplittedPath.length - 1];
+            parameters = {
+                "newSplittedPath": newSplittedPath,
+                "oldSplittedPath": oldSplittedPath,
+                "output": output,
+                "deprecatedKey": deprecatedKey
+            };
+            return parameters;
         }
-
-        output = oldSplittedPath.reduce((object, index) => object[index], config);
-        deprecatedKey = oldSplittedPath[oldSplittedPath.length - 1];
-
-        parameters = {
-            "newSplittedPath": newSplittedPath,
-            "oldSplittedPath": oldSplittedPath,
-            "output": output,
-            "deprecatedKey": deprecatedKey
-        };
-        return parameters;
+        catch {
+            return parameters;
+        }
     }
-    catch {
-        return parameters;
-    }
+    return parameters;
 }
 
 /**
