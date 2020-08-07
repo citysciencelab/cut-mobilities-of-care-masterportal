@@ -1,32 +1,72 @@
 import {expect} from "chai";
 import sinon from "sinon";
-import getters from "../../../store/gettersSupplyCoord";
-import stateSupplyCoord from "../../../store/stateSupplyCoord";
+import Getters from "../../../store/gettersSupplyCoord";
+import {createLocalVue} from "@vue/test-utils";
+import Vuex from "vuex";
 
-const {
-    selectPointerMove,
-    projections,
-    mapProjection,
-    positionMapProjection,
-    updatePosition,
-    currentProjectionName,
-    currentProjection,
-    currentSelection,
-    coordinatesEastingField,
-    coordinatesNorthingField
-} = getters;
+const localVue = createLocalVue();
 
+localVue.use(Vuex);
 
-describe("SupplyCoord", function () {
+describe("Getters.vue", () => {
+    let getters;
+
+    beforeEach(() => {
+        getters = {
+            active: () => false,
+            id: () => "supplyCoord",
+            selectPointerMove: () => null,
+            projections: () => [],
+            mapProjection: () => null,
+            positionMapProjection: () => [],
+            updatePosition: () => true,
+            currentProjectionName: () => "EPSG:25832",
+            currentProjection: () => null,
+            currentSelection: () => "EPSG:25832",
+            coordinatesEastingField: () => "",
+            coordinatesNorthingField: () => "",
+
+            // defaults for config.json parameters
+            name: () => "Koordinaten abfragen",
+            glyphicon: () => "glyphicon-screenshot",
+            renderToWindow: () => true,
+            resizableWindow: () => true,
+            isActive: () => false,
+            isVisibleInMenu: () => true,
+            isRoot: () => false,
+            parentId: () => "tool",
+            type: () => "tool",
+            deactivateGFI: () => true
+        };
+    });
+
     describe("SupplyCoord getters", function () {
+        it("returns the active from state", function () {
+            const state = {
+                active: true
+            };
+
+            expect(getters.active()).to.be.false;
+            expect(Getters.active(state)).to.be.true;
+        });
+        it("returns the id from state", function () {
+            const newId = "Neue_Id",
+                id = "supplyCoord",
+                state = {
+                    id: newId
+                };
+
+            expect(getters.id()).to.be.equals(id);
+            expect(Getters.id(state)).to.equals(newId);
+        });
         it("returns the selectPointerMove from state", function () {
             const emptyFunc = sinon.stub(),
                 state = {
                     selectPointerMove: emptyFunc
                 };
 
-            expect(selectPointerMove(stateSupplyCoord)).to.equals(null);
-            expect(selectPointerMove(state)).to.equals(emptyFunc);
+            expect(getters.selectPointerMove()).to.equals(null);
+            expect(Getters.selectPointerMove(state)).to.equals(emptyFunc);
         });
         it("returns the projections from state", function () {
             const proj = [{name: "projection 1", projName: "utm"},
@@ -35,8 +75,8 @@ describe("SupplyCoord", function () {
                     projections: proj
                 };
 
-            expect(projections(stateSupplyCoord)).to.be.an("array").that.is.empty;
-            expect(projections(state)).to.equals(proj);
+            expect(getters.projections()).to.be.an("array").that.is.empty;
+            expect(Getters.projections(state)).to.equals(proj);
         });
         it("returns the mapProjection from state", function () {
             const proj = {name: "projection 1", projName: "utm"},
@@ -44,8 +84,8 @@ describe("SupplyCoord", function () {
                     mapProjection: proj
                 };
 
-            expect(mapProjection(stateSupplyCoord)).to.be.null;
-            expect(mapProjection(state)).to.equals(proj);
+            expect(getters.mapProjection()).to.be.null;
+            expect(Getters.mapProjection(state)).to.equals(proj);
         });
         it("returns the positionMapProjection from state", function () {
             const pos = [100, 200],
@@ -53,16 +93,16 @@ describe("SupplyCoord", function () {
                     positionMapProjection: pos
                 };
 
-            expect(positionMapProjection(stateSupplyCoord)).to.be.an("array").that.is.empty;
-            expect(positionMapProjection(state)).to.equals(pos);
+            expect(getters.positionMapProjection()).to.be.an("array").that.is.empty;
+            expect(Getters.positionMapProjection(state)).to.equals(pos);
         });
         it("returns the updatePosition from state", function () {
             const state = {
                 updatePosition: false
             };
 
-            expect(updatePosition(stateSupplyCoord)).to.be.true;
-            expect(updatePosition(state)).to.be.false;
+            expect(getters.updatePosition()).to.be.true;
+            expect(Getters.updatePosition(state)).to.be.false;
         });
         it("returns the currentProjectionName from state", function () {
             const name = "EPSG:25832",
@@ -71,8 +111,8 @@ describe("SupplyCoord", function () {
                     currentProjectionName: name2
                 };
 
-            expect(currentProjectionName(stateSupplyCoord)).to.be.equals(name);
-            expect(currentProjectionName(state)).to.be.equals(name2);
+            expect(getters.currentProjectionName()).to.be.equals(name);
+            expect(Getters.currentProjectionName(state)).to.be.equals(name2);
         });
         it("returns the currentProjection from state", function () {
             const proj = {name: "projection 1", projName: "utm"},
@@ -80,8 +120,8 @@ describe("SupplyCoord", function () {
                     currentProjection: proj
                 };
 
-            expect(currentProjection(stateSupplyCoord)).to.be.null;
-            expect(currentProjection(state)).to.equals(proj);
+            expect(getters.currentProjection()).to.be.null;
+            expect(Getters.currentProjection(state)).to.equals(proj);
         });
         it("returns the currentSelection from state", function () {
             const name = "EPSG:25832",
@@ -90,8 +130,8 @@ describe("SupplyCoord", function () {
                     currentSelection: name2
                 };
 
-            expect(currentSelection(stateSupplyCoord)).to.be.equals(name);
-            expect(currentSelection(state)).to.be.equals(name2);
+            expect(getters.currentSelection()).to.be.equals(name);
+            expect(Getters.currentSelection(state)).to.be.equals(name2);
         });
         it("returns the coordinatesEastingField from state", function () {
             const value = "160° 00′ 00″",
@@ -99,8 +139,8 @@ describe("SupplyCoord", function () {
                     coordinatesEastingField: value
                 };
 
-            expect(coordinatesEastingField(stateSupplyCoord)).to.be.equals("");
-            expect(coordinatesEastingField(state)).to.be.equals(value);
+            expect(getters.coordinatesEastingField()).to.be.equals("");
+            expect(Getters.coordinatesEastingField(state)).to.be.equals(value);
         });
         it("returns the coordinatesNorthingField from state", function () {
             const value = "100° 00′ 00″ E",
@@ -108,40 +148,40 @@ describe("SupplyCoord", function () {
                     coordinatesNorthingField: value
                 };
 
-            expect(coordinatesNorthingField(stateSupplyCoord)).to.be.equals("");
-            expect(coordinatesNorthingField(state)).to.be.equals(value);
+            expect(getters.coordinatesNorthingField()).to.be.equals("");
+            expect(Getters.coordinatesNorthingField(state)).to.be.equals(value);
         });
     });
     describe("testing default values", function () {
         it("returns the name default value from state", function () {
-            expect(getters.name(stateSupplyCoord)).to.be.equals("Koordinaten abfragen");
+            expect(getters.name()).to.be.equals("Koordinaten abfragen");
         });
         it("returns the glyphicon default value from state", function () {
-            expect(getters.glyphicon(stateSupplyCoord)).to.equals("glyphicon-screenshot");
+            expect(getters.glyphicon()).to.equals("glyphicon-screenshot");
         });
         it("returns the renderToWindow default value from state", function () {
-            expect(getters.renderToWindow(stateSupplyCoord)).to.be.true;
+            expect(getters.renderToWindow()).to.be.true;
         });
         it("returns the resizableWindow default value from state", function () {
-            expect(getters.resizableWindow(stateSupplyCoord)).to.be.true;
+            expect(getters.resizableWindow()).to.be.true;
         });
         it("returns the isActive default value from state", function () {
-            expect(getters.isActive(stateSupplyCoord)).to.be.false;
+            expect(getters.isActive()).to.be.false;
         });
         it("returns the isVisibleInMenu default value from state", function () {
-            expect(getters.isVisibleInMenu(stateSupplyCoord)).to.be.true;
+            expect(getters.isVisibleInMenu()).to.be.true;
         });
         it("returns the isRoot default value from state", function () {
-            expect(getters.isRoot(stateSupplyCoord)).to.be.false;
+            expect(getters.isRoot()).to.be.false;
         });
         it("returns the parentId default value from state", function () {
-            expect(getters.parentId(stateSupplyCoord)).to.equals("tool");
+            expect(getters.parentId()).to.equals("tool");
         });
         it("returns the type default value from state", function () {
-            expect(getters.type(stateSupplyCoord)).to.equals("tool");
+            expect(getters.type()).to.equals("tool");
         });
         it("returns the deactivateGFI default value from state", function () {
-            expect(getters.deactivateGFI(stateSupplyCoord)).to.be.true;
+            expect(getters.deactivateGFI()).to.be.true;
         });
 
     });
