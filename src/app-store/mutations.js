@@ -18,13 +18,12 @@ const deprecatedCode = {
     "portalTitle.link": ["Portalconfig.LogoLink"],
     "portalTitle.toolTip": ["Portalconfig.LogoToolTip"],
     "toolTip": ["Portalconfig.portalTitle.tooltip"],
-    "filter": ["Portalconfig.menu.wfsFeatureFilter", "Themenconfig.Fachdaten.Layer.extendedFilter"],
+    "filter": ["Portalconfig.menu.wfsFeatureFilter", "Themenconfig.Fachdaten.Layer.extendedFilter"], // nicht die config ändern, sonder eine warnung ausgeben, dass diese Module nicht mehr aktuell sind und der filter stattdessen konfiguriert werden muss!
     "zoomToResultOnHover": ["Portalconfig.searchBar.bkg.zoomToResult"],
     "treeType": ["Portalconfig.Baumtyp"],
     "layerId": ["Portalconfig.controls.overviewMap.baselayer"],
     "startResolution": ["Portalconfig.mapView.resolution"],
-    "startZoomLevel": ["Portalconfig.searchbar.zoomLevel"],
-    "supplyCoord": ["Portalconfig.menu.tools.children.coord", "Portalconfig.menu.coord"]
+    "startZoomLevel": ["Portalconfig.searchbar.zoomLevel"]
 };
 
 /**
@@ -56,6 +55,7 @@ function checkWhereDeprecated (deprecatedPath, config) {
                 }
             }
         }
+        // eine warning einbauen - modul deprecated. Bitte das und das bentuzen. Wurde automatisiert geändert zu XY.
     });
     return updatedConfig;
 }
@@ -117,6 +117,7 @@ function replaceDeprecatedCode (parameters, config) {
     path.forEach((element, index) => {
         if (index === path.length - 1 && output !== undefined) {
             current[element] = output;
+            console.warn(parameters.deprecatedKey + " is deprecated. Please use " + parameters.currentCode + " in the config.json instead. For this session it is automatically replaced.");
         }
         else {
             if (!current[element]) {
