@@ -81,7 +81,6 @@ import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
-import "es6-promise/auto";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 import SelectFeaturesView from "../modules/tools/selectFeatures/view";
 
