@@ -12,18 +12,17 @@
 // Therefore define an array where all the possible paths are stored.
 // Later the algorithm will detect which path is the correct and defined one. This path is used for the new parameter.
 
-const deprecatedCode = {
-    "portalTitle.title": ["Portalconfig.PortalTitle"],
-    "portalTitle.logo": ["Portalconfig.PortalLogo"],
-    "portalTitle.link": ["Portalconfig.LogoLink"],
-    "portalTitle.toolTip": ["Portalconfig.LogoToolTip"],
-    "toolTip": ["Portalconfig.portalTitle.tooltip"],
-    "filter": ["Portalconfig.menu.wfsFeatureFilter", "Themenconfig.Fachdaten.Layer.extendedFilter"], // nicht die config ändern, sonder eine warnung ausgeben, dass diese Module nicht mehr aktuell sind und der filter stattdessen konfiguriert werden muss!
-    "zoomToResultOnHover": ["Portalconfig.searchBar.bkg.zoomToResult"],
-    "treeType": ["Portalconfig.Baumtyp"],
-    "layerId": ["Portalconfig.controls.overviewMap.baselayer"],
-    "startResolution": ["Portalconfig.mapView.resolution"],
-    "startZoomLevel": ["Portalconfig.searchbar.zoomLevel"]
+const deprecatedParams = {
+    "Portalconfig.portalTitle.title": ["Portalconfig.PortalTitle"],
+    "Portalconfig.portalTitle.logo": ["Portalconfig.PortalLogo"],
+    "Portalconfig.portalTitle.link": ["Portalconfig.LogoLink"],
+    "Portalconfig.portalTitle.toolTip": ["Portalconfig.LogoToolTip", "Portalconfig.portalTitle.tooltip"],
+    // "filter": ["Portalconfig.menu.wfsFeatureFilter", "Themenconfig.Fachdaten.Layer.extendedFilter"], // nicht die config ändern, sonder eine warnung ausgeben, dass diese Module nicht mehr aktuell sind und der filter stattdessen konfiguriert werden muss!
+    "Portalconfig.searchBar.bkg.zoomToResultOnHover": ["Portalconfig.searchBar.bkg.zoomToResult"],
+    "Portalconfig.treeType": ["Portalconfig.Baumtyp"],
+    "Portalconfig.controls.overviewMap.layerId": ["Portalconfig.controls.overviewMap.baselayer"],
+    "Portalconfig.mapView.startResolution": ["Portalconfig.mapView.resolution"],
+    "Portalconfig.searchbar.startZoomLevel": ["Portalconfig.searchbar.zoomLevel"]
 };
 
 /**
@@ -38,24 +37,10 @@ function checkWhereDeprecated (deprecatedPath, config) {
         updatedConfig = {...config};
 
     Object.entries(deprecatedPath).forEach((entry) => {
-        if (entry[1].length === 1) {
-            parameters = getDeprecatedParameters(entry[1][0], config);
-            if (parameters.output !== undefined) {
-                parameters.currentCode = entry[0];
-                updatedConfig = replaceDeprecatedCode(parameters, updatedConfig);
-            }
+        parameters = getDeprecatedParameters(entry, config);
+        if (parameters.output !== undefined) {
+            updatedConfig = replaceDeprecatedCode(parameters, updatedConfig);
         }
-        else {
-            for (const path of entry[1]) {
-                parameters = getDeprecatedParameters(path, config);
-
-                if (parameters.output !== undefined) {
-                    parameters.currentCode = entry[0];
-                    updatedConfig = replaceDeprecatedCode(parameters, updatedConfig);
-                }
-            }
-        }
-        // eine warning einbauen - modul deprecated. Bitte das und das bentuzen. Wurde automatisiert geändert zu XY.
     });
     return updatedConfig;
 }
@@ -73,12 +58,21 @@ function getDeprecatedParameters (entry, config) {
     let parameters = {};
 
     try {
-        const splittedPath = entry.split("."),
-            output = splittedPath.reduce((object, index) => object[index], config),
-            deprecatedKey = splittedPath[splittedPath.length - 1];
+        const newSplittedPath = entry[0].split(".");
+        let oldSplittedPath = "",
+            output = "",
+            deprecatedKey = "";
+
+        for (const oldPathes of entry[1]) {
+            oldSplittedPath = oldPathes.split(".");
+        }
+
+        output = oldSplittedPath.reduce((object, index) => object[index], config);
+        deprecatedKey = oldSplittedPath[oldSplittedPath.length - 1];
 
         parameters = {
-            "splittedPath": splittedPath,
+            "newSplittedPath": newSplittedPath,
+            "oldSplittedPath": oldSplittedPath,
             "output": output,
             "deprecatedKey": deprecatedKey
         };
@@ -99,25 +93,15 @@ function getDeprecatedParameters (entry, config) {
 */
 function replaceDeprecatedCode (parameters, config) {
     const updatedConfig = {...config},
-        path = parameters.splittedPath,
         output = parameters.output,
         deprecatedKey = parameters.deprecatedKey,
-        splittedCurrentPath = parameters.currentCode.split(".");
+        splittedCurrentPath = parameters.newSplittedPath;
     let current = updatedConfig;
 
-    path.pop();
-    if (splittedCurrentPath.length === 1) {
-        path.push(parameters.currentCode);
-    }
-    else {
-        splittedCurrentPath.forEach((pathElement) => {
-            path.push(pathElement);
-        });
-    }
-    path.forEach((element, index) => {
-        if (index === path.length - 1 && output !== undefined) {
+    splittedCurrentPath.forEach((element, index) => {
+        if (index === splittedCurrentPath.length - 1 && output !== undefined) {
             current[element] = output;
-            console.warn(parameters.deprecatedKey + " is deprecated. Please use " + parameters.currentCode + " in the config.json instead. For this session it is automatically replaced.");
+            console.warn(parameters.deprecatedKey + " is deprecated. Instead, please use the following path/parameter: " + String(parameters.newSplittedPath).replace(/,/g, ".") + " in the config.json. For this session it is automatically replaced.");
         }
         else {
             if (!current[element]) {
@@ -139,7 +123,7 @@ export default {
      * @returns {void}
      */
     setConfigJson (state, config) {
-        state.configJson = checkWhereDeprecated(deprecatedCode, config);
+        state.configJson = checkWhereDeprecated(deprecatedParams, config);
     },
     /**
      * Sets config.js.
