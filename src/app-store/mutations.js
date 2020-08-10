@@ -12,7 +12,6 @@ const deprecatedParams = {
     "Portalconfig.portalTitle.logo": ["Portalconfig.PortalLogo"],
     "Portalconfig.portalTitle.link": ["Portalconfig.LogoLink"],
     "Portalconfig.portalTitle.toolTip": ["Portalconfig.LogoToolTip", "Portalconfig.portalTitle.tooltip"],
-    // "filter": ["Portalconfig.menu.wfsFeatureFilter", "Themenconfig.Fachdaten.Layer.extendedFilter"], // nicht die config ändern, sonder eine warnung ausgeben, dass diese Module nicht mehr aktuell sind und der filter stattdessen konfiguriert werden muss!
     "Portalconfig.searchBar.bkg.zoomToResultOnHover": ["Portalconfig.searchBar.bkg.zoomToResult"],
     "Portalconfig.treeType": ["Portalconfig.Baumtyp"],
     "Portalconfig.controls.overviewMap.layerId": ["Portalconfig.controls.overviewMap.baselayer"],
