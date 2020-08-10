@@ -130,7 +130,7 @@ const initialState = Object.assign({}, stateDraw),
                     const featureCount = state.layer.getSource().getFeatures().length;
 
                     if (featureCount > maxFeatures - 1) {
-                        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures}));
+                        dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures}), {root: true});
                         dispatch("deactivateDrawInteractions");
                         dispatch("removeInteraction", interaction);
                     }

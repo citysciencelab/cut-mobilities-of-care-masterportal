@@ -87,7 +87,7 @@ function getCircleExtentByDistanceLon (circleCenter, circleDiameter, map) {
 * @param {Boolean} payload.doubleCircle Determines if a doubleCircle is supposed to be drawn.
 * @returns {void}
 */
-export function drawInteractionOnDrawEvent ({state, commit, rootState}, {drawInteraction, doubleCircle}) {
+export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}, {drawInteraction, doubleCircle}) {
     const interaction = state["drawInteraction" + drawInteraction],
         circleMethod = state.circleMethod,
         drawType = state.drawType,
@@ -105,26 +105,25 @@ export function drawInteractionOnDrawEvent ({state, commit, rootState}, {drawInt
 
                 if (drawType.id === "drawDoubleCircle") {
                     if (outerDiameter === null || outerDiameter === 0) {
-                        // TODO: Change all alert triggers to dispatches for the alerting module
-                        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.undefinedTwoCircles"));
+                        dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedTwoCircles"), {root: true});
                         layerSource.removeFeature(event.feature);
                         state.outerBorderColor = "#E10019";
                     }
                     else {
-                        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.undefinedInnerCircle"));
+                        dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedInnerCircle"), {root: true});
                         layerSource.removeFeature(event.feature);
                         state.outerBorderColor = "";
                     }
                 }
                 else {
-                    Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.undefinedDiameter"));
+                    dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedDiameter"), {root: true});
                     layerSource.removeFeature(event.feature);
                 }
             }
             else {
                 if (outerDiameter === null || outerDiameter === 0) {
                     if (drawType.id === "drawDoubleCircle") {
-                        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.undefinedOuterCircle"));
+                        dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedOuterCircle"), {root: true});
                         layerSource.removeFeature(event.feature);
                         state.outerBorderColor = "#E10019";
                     }

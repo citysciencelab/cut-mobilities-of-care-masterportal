@@ -244,7 +244,7 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
             }
             catch (e) {
                 // The given JSON was invalid
-                Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.draw.geometryDrawFailed"));
+                dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.geometryDrawFailed"), {root: true});
             }
         }
     }
