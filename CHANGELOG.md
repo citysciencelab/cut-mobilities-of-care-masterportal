@@ -20,6 +20,7 @@
 - Für VTL wurde ein Tool hergestellt, mit dem zwischen externen Styles gewechselt werden kann.
 - Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
 - Das Tool filter kann nun auch geclusterte Vektordienste filtern.
+- Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
 
 ### Changed
 - Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von VUE. Weiterhin heißt es fortan "Datei-Import".
