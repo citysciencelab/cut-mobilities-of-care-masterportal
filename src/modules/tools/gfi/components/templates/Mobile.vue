@@ -1,14 +1,13 @@
 <script>
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
-import Modal from "../../../../../share-components/modals/Modal.vue";
+import {upperFirst} from "../../../../../utils/stringFunctions";
 
 export default {
     name: "Mobile",
     components: {
         Default,
-        Schulinfo,
-        Modal
+        Schulinfo
     },
     props: {
         feature: {
@@ -17,110 +16,98 @@ export default {
         }
     },
     computed: {
-        currentTheme: function () {
-            return this.upperFirst(this.feature.theme);
+        /**
+         * Returns the title of the gfi.
+         * @returns {string} the title
+         */
+        title: function () {
+            return this.feature.getTitle();
+        },
+        /**
+         * Returns the theme in which the feature should be displayed.
+         * It only works if the theme has the same name as the theme component.
+         * @returns {string} the name of the theme
+         */
+        theme: function () {
+            return upperFirst(this.feature.getTheme());
         }
     },
     methods: {
-        upperFirst (string) {
-            return string ? string.charAt(0).toUpperCase() + string.slice(1) : "";
+        close () {
+            this.$emit("close");
         },
-        minimize: function () {
-            console.info(4555);
+        closeByClickOutside: function (event) {
+            // stop event bubbling
+            if (event.target !== this.$el) {
+                return;
+            }
+            this.close();
         }
     }
 };
 </script>
 
 <template>
-    <Modal
-        :show-modal="true"
+    <div
+        class="modal-mask"
+        @mousedown="closeByClickOutside"
     >
-        <!-- header slot -->
-        <component
-            :is="currentTheme"
-            @:my-event="minimize"
-        />
-        <!-- footer slot -->
-        <div class="modal-footer gfi-footer">
-            <div class="pager-left <% if(themeIndex === 0) {print (' disabled') }%>">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </div>
-            <div class="pager-right <% if(themeIndex === numberOfThemes - 1) {print (' disabled') }%>">
-                <span class="glyphicon glyphicon-chevron-right"></span>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button
+                        type="button"
+                        class="close"
+                        aria-label="Close"
+                        @click="close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        {{ title }}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <component
+                        :is="theme"
+                        :feature="feature"
+                    />
+                </div>
+                <div class="modal-footer">
+                    <slot name="footer" />
+                </div>
             </div>
         </div>
-    </Modal>
+    </div>
 </template>
 
 
-<style lang="less">
-@color_1: rgb(85, 85, 85);
-@color_2: rgb(119, 119, 119);
-@background_color_1: white;
-@background_color_2: rgb(255, 255, 255);
+<style lang="less" scoped>
+@import "~variables";
 
-.gfi-mobile {
-    color: @color_1;
-    font-size: 14px;
-    .modal-header {
-        padding: 0;
-        border-bottom: 0;
-    }
-    .modal-title {
-        padding: 8px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-    .glyphicon-remove {
-        font-size: 16px;
-        float: right;
-        padding: 12px;
-    }
-    .modal-body {
-        padding: 0;
-        overflow-y: auto;
-    }
-    .gfi-image-zoom-button {
-        top: -17px;
-        background-color: @background_color_1;
-        padding: 2px;
-    }
-    .gfi-image-copyright {
-        top: -19px;
-        position: relative;
-        font-size: 0.9em;
-        padding: 2px;
-        background-color: @background_color_1;
-    }
-    table {
-        margin: 0;
-    }
+.modal-mask {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: @shadow_overlay;
 }
-.gfi-footer {
+
+.modal-header button {
+    font-size: 26px;
+}
+
+.modal-body {
+    overflow-y: auto;
+    max-height: 66vh;
     padding: 0;
-    color: @color_2;
-    text-align: center;
+}
+
+.modal-footer {
+    padding: 0;
     font-size: 22px;
-    >div {
-        background: #f3f3f3;
-        padding: 6px;
-        cursor: pointer;
-        width: 50%;
-    }
-    >.disabled {
-        cursor: not-allowed;
-        background-color: @background_color_2;
-        opacity: 0.2;
-    }
-    >.pager-left {
-        float: left;
-        border-right: 1px solid #ddd;
-    }
-    >.pager-right {
-        float: right;
-    }
 }
 
 </style>
