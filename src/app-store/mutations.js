@@ -16,7 +16,7 @@ const deprecatedParamsConfigJson = {
         "Portalconfig.treeType": ["Portalconfig.Baumtyp"],
         "Portalconfig.controls.overviewMap.layerId": ["Portalconfig.controls.overviewMap.baselayer"],
         "Portalconfig.mapView.startResolution": ["Portalconfig.mapView.resolution"],
-        "Portalconfig.searchbar.startZoomLevel": ["Portalconfig.searchbar.zoomLevel"]
+        "Portalconfig.searchBar.startZoomLevel": ["Portalconfig.searchBar.zoomLevel"]
     },
     deprecatedParamsConfigJs = {
         "startUpModul": ["isInitOpen"]
@@ -35,7 +35,7 @@ function checkWhereDeprecated (deprecatedPath, config) {
 
     Object.entries(deprecatedPath).forEach((entry) => {
         parameters = getDeprecatedParameters(entry, config);
-        if (parameters !== undefined) {
+        if (parameters !== undefined && parameters.output !== undefined) {
             updatedConfig = replaceDeprecatedCode(parameters, config);
         }
     });
@@ -56,27 +56,23 @@ function getDeprecatedParameters (entry, config) {
     let oldSplittedPath = "",
         output = "",
         deprecatedKey = "",
-        parameters = {};
+        parameters;
 
     entry[1].forEach((oldPathes) => {
-        try {
-            oldSplittedPath = oldPathes.split(".");
-            output = oldSplittedPath.reduce((object, index) => object[index], config);
-            deprecatedKey = oldSplittedPath[oldSplittedPath.length - 1];
-            if (output !== undefined) {
-                parameters = {
-                    "newSplittedPath": newSplittedPath,
-                    "oldSplittedPath": oldSplittedPath,
-                    "output": output,
-                    "deprecatedKey": deprecatedKey
-                };
-            }
+        oldSplittedPath = oldPathes.split(".");
+        output = oldSplittedPath.reduce((object, index) => object[index], config);
+        if (output === undefined) {
+            return;
         }
-        catch {
-            return parameters;
-        }
-        return parameters;
+        deprecatedKey = oldSplittedPath[oldSplittedPath.length - 1];
+        parameters = {
+            "newSplittedPath": newSplittedPath,
+            "oldSplittedPath": oldSplittedPath,
+            "output": output,
+            "deprecatedKey": deprecatedKey
+        };
     });
+    return parameters;
 }
 
 /**
