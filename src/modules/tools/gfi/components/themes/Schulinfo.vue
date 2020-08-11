@@ -2,9 +2,10 @@
 
 export default {
     name: "Schulinfo",
-    methods: {
-        upperFirst (string) {
-            return string ? string.charAt(0).toUpperCase() + string.slice(1) : "";
+    props: {
+        feature: {
+            type: Object,
+            required: true
         }
     }
 };
@@ -15,6 +16,14 @@ export default {
         <h1>
             Schulinfo
         </h1>
+        <ul>
+            <li
+                v-for="(value, name) in feature.olFeature.getProperties()"
+                :key="name"
+            >
+                {{ name }}: {{ value }}
+            </li>
+        </ul>
     </div>
 </template>
 
