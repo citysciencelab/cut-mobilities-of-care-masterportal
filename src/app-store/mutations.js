@@ -35,7 +35,9 @@ function checkWhereDeprecated (deprecatedPath, config) {
 
     Object.entries(deprecatedPath).forEach((entry) => {
         parameters = getDeprecatedParameters(entry, config);
-        updatedConfig = replaceDeprecatedCode(parameters, config);
+        if (parameters !== undefined) {
+            updatedConfig = replaceDeprecatedCode(parameters, config);
+        }
     });
     return updatedConfig;
 }
@@ -68,14 +70,13 @@ function getDeprecatedParameters (entry, config) {
                     "output": output,
                     "deprecatedKey": deprecatedKey
                 };
-                return parameters;
             }
         }
         catch {
             return parameters;
         }
+        return parameters;
     });
-    return parameters;
 }
 
 /**
