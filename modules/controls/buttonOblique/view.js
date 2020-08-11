@@ -1,6 +1,7 @@
 import ButtonObliqueTemplate from "text-loader!./template.html";
 import ButtonObliqueTemplateTable from "text-loader!./templateTable.html";
 import ButtonObliqueModel from "./model";
+import store from "../../../src/app-store/index";
 /**
  * @member ButtonObliqueTemplate
  * @description Template used for the "oblique aerial photos" button
@@ -164,7 +165,7 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
             this.$("#ObliqueTable-title-open").hide();
             this.$("#ObliqueTable-title-close").show();
             Radio.trigger("ObliqueMap", "activate");
-            Radio.trigger("Alert", "alert", i18next.t("common:modules.controls.oblique.betaWarningOblique"));
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.controls.oblique.betaWarningOblique"));
         }
     }
 });

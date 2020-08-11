@@ -48,6 +48,7 @@
 - Mit Google Earth erstellte KML Dateien werden mit dem Tool "Datei-Import" nun besser dargestellt.
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
 - Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
+- Ein Fehler in der VisibleVector Suche wurde behoben der verhindert hat, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
 
 ---
 
