@@ -22,6 +22,8 @@ export default {
          * @returns {Object[]} The configured Tools.
          */
         configuredTools () {
+            console.log(this.getters);
+
             const configPossibilities = [this.menuConfig, this.menuConfig.tools.children],
                 configuredTools = [];
 

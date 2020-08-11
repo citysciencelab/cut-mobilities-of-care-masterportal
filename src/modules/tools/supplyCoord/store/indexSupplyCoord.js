@@ -5,7 +5,7 @@ import state from "./stateSupplyCoord";
 
 export default {
     namespaced: true,
-    state,
+    state: {...state},
     mutations,
     actions,
     getters

@@ -31,6 +31,7 @@
             "print": "Karte Drucken",
             "measure": "Strecke / Fläche messen",
             "coord": "Koordinaten abfragen",
+            "supplyCoord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
             "kmlimport": "Datei-Import",
             "routing": "Routenplaner",

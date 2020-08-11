@@ -31,6 +31,7 @@
             "print": "Print map",
             "measure": "Measure distance / area",
             "coord": "Query coordinates",
+            "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
             "kmlimport": "Import file",
             "routing": "Route planner",
