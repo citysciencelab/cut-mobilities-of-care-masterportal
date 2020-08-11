@@ -56,20 +56,20 @@ const gettersMap = {
                 feature.get("features").forEach(function (clusteredFeature) {
                     featuresAtPixel.push({
                         html: null,
-                        theme: layer.get("gfiTheme"),
-                        title: layer.get("name"),
+                        getTheme: () => layer.get("gfiTheme"),
+                        getTitle: () => layer.get("name"),
                         attributesToShow: layer.get("gfiAttributes"),
-                        olFeatures: clusteredFeature
+                        olFeature: clusteredFeature
                     });
                 });
             }
             else {
                 featuresAtPixel.push({
                     html: null,
-                    theme: layer.get("gfiTheme"),
-                    title: layer.get("name"),
+                    getTheme: () => layer.get("gfiTheme"),
+                    getTitle: () => layer.get("name"),
                     attributesToShow: layer.get("gfiAttributes"),
-                    olFeatures: feature
+                    olFeature: feature
                 });
             }
         });
