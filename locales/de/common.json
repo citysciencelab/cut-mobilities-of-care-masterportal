@@ -580,7 +580,8 @@
                 "showOverviewControl": "Übersichtskarte einblenden",
                 "hideOverviewControl": "Übersichtskarte ausblenden",
                 "showOverviewTable": "Mini-Map einschalten",
-                "hideOverviewTable": "Mini-Map ausschalten"
+                "hideOverviewTable": "Mini-Map ausschalten",
+                "missingLayerId": "Die Overviewmap konnte nicht erstellt werden."
             },
             "mousePosition": {
                 "hint": "Bewegen Sie die Maus über die Karte",

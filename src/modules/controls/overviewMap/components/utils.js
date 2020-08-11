@@ -2,6 +2,7 @@ import ImageWMS from "ol/source/ImageWMS.js";
 import Image from "ol/layer/Image.js";
 import View from "ol/View.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import store from "../../../../app-store/index";
 
 /*
  * NOTE I'm unsure where these belong.
@@ -36,11 +37,11 @@ export function getOverviewMapLayer (id) {
 
     if (!layerId) {
         console.error("Missing layerId for control overviewMap. Could not infer initially visible base layer id.");
-        Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden.");
+        store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.controls.overviewMap.missingLayerId"));
     }
     else if (!ovmLayer) {
         console.error(`Could not create overviewMap for (inferred?) id "${layerId}". Given id: "${id}".`);
-        Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden.");
+        store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.controls.overviewMap.missingLayerId"));
     }
 
     return ovmLayer;
