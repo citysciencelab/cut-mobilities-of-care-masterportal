@@ -1,4 +1,5 @@
 import Template from "text-loader!./template.html";
+import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
@@ -21,7 +22,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires ModelList#RadioRequestModelListSetIsSelectedOnParent
      */
     initialize: function () {
-        this.checkChildrenDatasets();
+        checkChildrenDatasets(this.model);
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isVisibleInTree": this.removeIfNotVisible,
@@ -228,24 +229,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     unhighlightLayerInformationIcon: function () {
         this.$el.find("span.glyphicon-info-sign").removeClass("highlightLayerInformationIcon");
         this.model.setLayerInfoChecked(false);
-    },
-    /**
-     * Checks group layers for children with datasets (metadata) to decide
-     * whether an info button should be shown for the group layer. It will
-     * be shown if a single child has datasets not undefined and not false.
-     * @returns {void}
-     */
-    checkChildrenDatasets: function () {
-        if (this.model.has("children")) {
-            const children = this.model.get("children");
-
-            for (const {datasets} of children) {
-                if (typeof datasets !== "undefined" && datasets !== false) {
-                    this.model.set({datasets: true});
-                    break;
-                }
-            }
-        }
     }
 });
 
