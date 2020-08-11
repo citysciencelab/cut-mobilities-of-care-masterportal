@@ -1,11 +1,14 @@
 import Model from "@modules/tools/gfi/themes/elektroladesaeulen/model.js";
 import * as moment from "moment";
 import {expect} from "chai";
+import Util from "@testUtil";
 
-let model;
+let model,
+    util;
 
 before(function () {
     model = new Model();
+    util = new Util();
 
     moment.locale("de");
 });
@@ -377,9 +380,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
             expect(model.processDataForAllWeekdays(["xyz", 83247], "", "")).to.be.an("array").that.is.empty;
         });
         it("should return an array with seven arrays that contains divided data for correct data without lastDay input", function () {
-            const utc = model.get("utc") ? model.get("utc") : "+1",
-                utcSubInMinutes = parseInt(utc.substring(1, 2), 10) * 60,
-                historicalData = [{
+            const historicalData = [{
                     Observations: [{
                         phenomenonTime: "2018-06-17T10:55:52",
                         result: "available",
@@ -399,7 +400,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                     }]
                 }],
                 endDay = "2018-06-19",
-                timezoneOffsetInMinutes = new Date().getTimezoneOffset() + utcSubInMinutes;
+                utc = model.get("utc") ? model.get("utc") : "+1";
 
             expect(model.processDataForAllWeekdays(historicalData, "", endDay)).to.be.an("array").to.have.deep.members([
                 [[{
@@ -419,17 +420,17 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                     result: "charging"
                 }]],
                 [[{
-                    phenomenonTime: moment("2018-06-17T10:55:52").add(timezoneOffsetInMinutes, "m").format("YYYY-MM-DDTHH:mm:ss"),
+                    phenomenonTime: util.changeTimeZone("2018-06-17T10:55:52", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "available",
                     index: 0
                 }],
                 [{
-                    phenomenonTime: moment("2018-06-17T12:59:15").add(timezoneOffsetInMinutes, "m").format("YYYY-MM-DDTHH:mm:ss"),
+                    phenomenonTime: util.changeTimeZone("2018-06-17T12:59:15", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "charging",
                     index: 0
                 },
                 {
-                    phenomenonTime: moment("2018-06-17T12:57:15").add(timezoneOffsetInMinutes, "m").format("YYYY-MM-DDTHH:mm:ss"),
+                    phenomenonTime: util.changeTimeZone("2018-06-17T12:57:15", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "available",
                     index: 1
 
