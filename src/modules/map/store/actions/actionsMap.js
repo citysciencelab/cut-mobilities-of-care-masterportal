@@ -166,10 +166,10 @@ const actions = {
 
                 featureInfos.forEach(function (feature) {
                     features.push({
-                        "title": layer.get("name"),
-                        "theme": layer.get("gfiTheme"),
+                        getTheme: () => layer.get("gfiTheme"),
+                        getTitle: () => layer.get("name"),
                         "attributesToShow": layer.get("gfiAttributes"),
-                        "olFeatures": mimeType === "text/xml" ? feature : null,
+                        "olFeature": mimeType === "text/xml" ? feature : null,
                         "html": mimeType === "text/html" ? feature : null
                     });
                 });
