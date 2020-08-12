@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<%if (selectedFeaturesWithRenderInformation.length) {%>
+<%if (Array.isArray(selectedFeaturesWithRenderInformation) && selectedFeaturesWithRenderInformation.length > 0) {%>
     <div class="select-features-tables">
-        <%selectedFeaturesWithRenderInformation.forEach(({feature, properties}, index) => {%>
-            <%if (properties.length) {%>
+        <%selectedFeaturesWithRenderInformation.forEach(function (obj, index) {%>
+            <%if (obj.hasOwnProperty("properties") && Array.isArray(obj.properties) && obj.properties.length > 0) {%>
                 <table class="table table-striped table-bordered">
                     <tbody>
-                        <%properties.forEach(([key, value]) => {%>
+                        <%obj.properties.forEach(function (arr) {%>
+                            <%if (!Array.isArray(arr) || arr.length !== 2) { return; }%>
                             <tr>
-                                <td><%=key%></td>
-                                <td><%=value%></td>
+                                <td><%=arr[0]%></td>
+                                <td><%=arr[1]%></td>
                             </tr>
                         <%});%>
                     </tbody>
