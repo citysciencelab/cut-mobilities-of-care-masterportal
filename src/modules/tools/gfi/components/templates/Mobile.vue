@@ -50,7 +50,7 @@ export default {
 <template>
     <div
         class="modal-mask"
-        @mousedown="closeByClickOutside"
+        @click="closeByClickOutside"
     >
         <div class="modal-dialog">
             <div class="modal-content">
