@@ -47,11 +47,16 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-    },
-    mounted () {
+        this.initialize();
         if (this.isActive) {
             this.setActive(true);
         }
+    },
+    /**
+     * Activates this tool, if it has to start by url params
+     * @returns {void}
+     */
+    mounted () {
         this.activateByUrlParam();
     },
     methods: {
