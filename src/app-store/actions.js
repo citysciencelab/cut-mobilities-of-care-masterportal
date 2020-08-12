@@ -13,10 +13,8 @@ export default {
             parameters = {};
 
         Object.entries(deprecatedPath).forEach((entry) => {
-            // parameters = commit("getDeprecatedParameters", entry, config);
             parameters = this.getDeprecatedParameters(entry, config);
             if (parameters !== undefined && parameters.output !== undefined) {
-                // updatedConfig = commit("replaceDeprecatedCode", parameters, config);
                 updatedConfig = this.replaceDeprecatedCode(parameters, config);
             }
         });
