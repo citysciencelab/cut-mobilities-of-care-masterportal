@@ -417,6 +417,10 @@
             "name": "translate#common:menu.tools.scaleSwitcher",
             "glyphicon": "glyphicon-resize-full",
             "renderToWindow": true
+          },
+          "VueAddon": {
+            "name": "AddonTool",
+            "glyphicon": "glyphicon-screenshot"
           }
         }
       },

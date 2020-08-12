@@ -49,6 +49,16 @@ const actions = {
      */
     pushAttributesToStoreElements: (context, configuredTool) => {
         return fetchFirstModuleConfig(context, [configuredTool.configPath], configuredTool.component.name);
+    },
+
+    /**
+     * Adds a tool dynamically to componentMap.
+     * @param {Object} state state object; in this case rootState = state
+     * @param {object} tool tool to be added dynamically
+     * @returns {void}
+     */
+    addTool: ({state, commit}, tool) => {
+        commit("setComponentMap", Object.assign(state.componentMap, {[tool.default.name]: tool.default}));
     }
 };
 
