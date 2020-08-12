@@ -76,6 +76,9 @@ export default {
                 current[element] = output;
                 console.warn(parameters.deprecatedKey + " is deprecated. Instead, please use the following path/parameter: " + String(parameters.newSplittedPath).replace(/,/g, ".") + " in the config.json. For this session it is automatically replaced.");
             }
+            else if (output === undefined) {
+                return;
+            }
             else {
                 if (!current[element]) {
                     current[element] = {};
