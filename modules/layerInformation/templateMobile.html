@@ -38,31 +38,33 @@
                 <br>
                 <div class="tab-content">
                     <div id="legende" class="tab-pane fade in active">
-                      <p>
-                        <% if (legend.legend.length === 0 || legend.legend[0].img === "") {
-                            print ("<p>Legende wird erst beim aktivieren des Layers geladen</p>");                    
-                        }
-                        else if (legend.legend === null) {
-                            print ("<p>Keine Legende vorhanden</p>");   
-                        }
-                        else {
-                            legend.legend.forEach(function (legend) {
-                                print (legend.html);
-                            });
-                        } %>
-                      </p>
+                        <p>
+                            <% if (legend.legend === null) {
+                                print ("<p>Keine Legende vorhanden</p>");
+                            }
+                            else if (legend.legend.length === 0 || legend.legend[0].img === "") {
+                                print ("<p>Legende wird erst beim aktivieren des Layers geladen</p>");
+                            }
+                            else {
+                                legend.legend.forEach(function (legend) {
+                                    print (legend.html);
+                                });
+                            } %>
+                        </p>
                     </div>
                     <div id="LayerInfoDataDownload" class="tab-pane fade">
                         <ul class="list-unstyled">
-                            <% downloadLinks.forEach(function (downloadLink) { %>
-                                <li><a href="<%= downloadLink[1] %>" target="_blank"><%= downloadLink[0] %> </a><li>
-                            <% }); %>
+                            <% if (downloadLinks !== null) { %>
+                                <% downloadLinks.forEach(function (downloadLink) { %>
+                                    <li><a href="<%= downloadLink[1] %>" target="_blank"><%= downloadLink[0] %> </a><li>
+                                <% }); %>
+                            <% } %>
                         </ul>
                     </div>
                     <div id="url" class="tab-pane fade">
-                      <ul class="list-unstyled">
-                        <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
-                      </ul>
+                        <ul class="list-unstyled">
+                            <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
+                        </ul>
                   </div>
                 </div>
         </div>
