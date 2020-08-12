@@ -47,7 +47,7 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.initialize();
+
         if (this.isActive) {
             this.setActive(true);
         }

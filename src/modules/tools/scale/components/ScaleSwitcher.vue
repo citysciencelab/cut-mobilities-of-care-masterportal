@@ -30,7 +30,6 @@ export default {
      */
     created () {
         this.$on("close", this.close);
-        this.initialize();
 
         if (this.isActive) {
             this.setActive(true);
@@ -41,9 +40,6 @@ export default {
      * @returns {void}
      */
     mounted () {
-        if (this.isActive) {
-            this.setActive(true);
-        }
         this.activateByUrlParam();
     },
     methods: {
