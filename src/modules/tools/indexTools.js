@@ -1,6 +1,7 @@
 
 import state from "./stateTools";
 import getters from "./gettersTools";
+import mutations from "./mutationsTools";
 import actions from "./actionsTools";
 import ScaleSwitcher from "./scale/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
@@ -19,5 +20,6 @@ export default {
     },
     state,
     getters,
+    mutations,
     actions
 };

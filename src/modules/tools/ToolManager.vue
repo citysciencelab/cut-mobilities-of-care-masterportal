@@ -1,59 +1,24 @@
 <script>
-import {mapGetters} from "vuex";
-import {mapActions} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 
 export default {
     name: "ToolManager",
-    data () {
-        return {
-            /** Path array of possible config locations for tools */
-            configPossibilitiesPaths: [
-                "configJson.Portalconfig.menu",
-                "configJson.Portalconfig.menu.tools.children"
-            ]
-        };
-    },
     computed: {
         ...mapGetters(["menuConfig"]),
-        ...mapGetters("Tools", ["componentMap"]),
-        /**
-         * Filters the configured tools from the two configuration options:
-         * "portalconfigs.menu" and "portalconfigs.menu.tools.children" in config.json.
-         * @returns {Object[]} The configured Tools.
-         */
-        configuredTools () {
-            console.log(this.getters);
-
-            const configPossibilities = [this.menuConfig, this.menuConfig.tools.children],
-                configuredTools = [];
-
-            configPossibilities.forEach((toolsFromConfig, index) => {
-                Object
-                    .keys(toolsFromConfig)
-                    .map(key => {
-                        if (this.componentMap[key]) {
-                            return {
-                                component: this.componentMap[key],
-                                configPath: this.configPossibilitiesPaths[index] + "." + key,
-                                key
-                            };
-                        }
-                        return key;
-                    })
-                    .filter(tool => typeof tool === "object")
-                    .forEach(configuredTool => configuredTools.push(configuredTool));
-            });
-
-            return configuredTools;
-        }
+        ...mapGetters("Tools", ["configuredTools"])
     },
     created () {
-        /** Push the configured attributes to store from all configured tools. */
+        this.setConfiguredTools(this.menuConfig);
+
+        // /** Push the configured attributes to store from all configured tools. */
         this.configuredTools.forEach(configuredTool => this.pushAttributesToStoreElements(configuredTool));
     },
     methods: {
         ...mapActions("Tools", [
             "pushAttributesToStoreElements"
+        ]),
+        ...mapMutations("Tools", [
+            "setConfiguredTools"
         ])
     }
 };

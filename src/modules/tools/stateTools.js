@@ -12,7 +12,8 @@ const state = {
          */
         coord: SupplyCoord,
         kmlimport: KmlImport
-    }
+    },
+    configuredTools: []
 };
 
 export default state;
