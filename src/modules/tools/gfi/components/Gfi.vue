@@ -3,6 +3,7 @@ import {mapGetters} from "vuex";
 import getters from "../store/gettersGfi";
 import Mobile from "./templates/Mobile.vue";
 import Detached from "./templates/Detached.vue";
+import {omit} from "../../../../utils/objectHelpers";
 
 export default {
     name: "Gfi",
@@ -20,7 +21,8 @@ export default {
         ...mapGetters({
             isMobile: "mobile",
             desktopType: "gfiDesktopType",
-            isTable: "isTableStyle"
+            isTable: "isTableStyle",
+            ignoredKeys: "ignoredKeys"
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
         ...mapGetters("Map", ["gfiFeatures"]),
@@ -44,10 +46,21 @@ export default {
         },
         /**
          * Returns the feature depending on the pager index.
-         * @returns {object} - the current feature
+         * @returns {object|null} - the current feature
          */
         feature: function () {
-            return this.gfiFeatures[this.pagerIndex] || {};
+            if (this.gfiFeatures !== null) {
+                return this.gfiFeatures[this.pagerIndex];
+            }
+            return null;
+        }
+    },
+    beforeUpdate () {
+        if (this.feature !== null && this.feature.getProperties() !== null) {
+            console.info(this.feature.getProperties());
+            const mappedProperties = this.prepareProperties(this.feature.getProperties(), this.feature.getAttributesToShow(), this.ignoredKeys);
+
+            this.feature.getMappedProperties = () => mappedProperties;
         }
     },
     methods: {
@@ -77,13 +90,43 @@ export default {
             if (this.pagerIndex > 0) {
                 this.pagerIndex -= 1;
             }
+        },
+        /**
+         * Checks which properties should be displayed.
+         * If all should be displayed, the ignoredKeys omitted.
+         * Otherwise the properties are mapped
+         * @param {object} properties - the feature properties
+         * @param {object} mappingObject - "gfiAttributes" from the layer
+         * @param {string[]} ignoredKeys - configured in the config.js
+         * @returns {object} prepared properties - mapped by MappingObject or omitted by ignoredKeys
+         */
+        prepareProperties: function (properties, mappingObject, ignoredKeys) {
+            if (mappingObject === "showAll") {
+                return omit(properties, ignoredKeys);
+            }
+            return this.mapProperties(properties, mappingObject);
+        },
+        /**
+         * Maps the feature properties by the given object.
+         * @param {object} properties - the feature properties
+         * @param {object} mappingObject - "gfiAttributes" from the layer
+         * @returns {object} mapped properties
+         */
+        mapProperties: function (properties, mappingObject) {
+            const mappedProperties = {};
+
+            Object.keys(mappingObject).forEach(key => {
+                mappedProperties[mappingObject[key]] = properties[key];
+            });
+
+            return mappedProperties;
         }
     }
 };
 </script>
 
 <template>
-    <div v-if="isVisible">
+    <div v-if="isVisible && feature.getHtml() === null">
         <component
             :is="currentViewType"
             :feature="feature"

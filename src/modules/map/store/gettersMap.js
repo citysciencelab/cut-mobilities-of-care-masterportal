@@ -55,21 +55,21 @@ const gettersMap = {
             if (feature.getProperties().features) {
                 feature.get("features").forEach(function (clusteredFeature) {
                     featuresAtPixel.push({
-                        html: null,
+                        getHtml: () => null,
                         getTheme: () => layer.get("gfiTheme"),
                         getTitle: () => layer.get("name"),
-                        attributesToShow: layer.get("gfiAttributes"),
-                        olFeature: clusteredFeature
+                        getProperties: () => clusteredFeature.getProperties(),
+                        getAttributesToShow: () => layer.get("gfiAttributes")
                     });
                 });
             }
             else {
                 featuresAtPixel.push({
-                    html: null,
+                    getHtml: () => null,
                     getTheme: () => layer.get("gfiTheme"),
                     getTitle: () => layer.get("name"),
-                    attributesToShow: layer.get("gfiAttributes"),
-                    olFeature: feature
+                    getProperties: () => feature.getProperties(),
+                    getAttributesToShow: () => layer.get("gfiAttributes")
                 });
             }
         });
