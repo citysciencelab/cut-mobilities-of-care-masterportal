@@ -1,7 +1,7 @@
 <script>
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
-import {upperFirst} from "../../../../../utils/stringFunctions";
+import {upperFirst} from "../../../../../utils/stringHelpers";
 
 export default {
     name: "Detached",
@@ -44,6 +44,7 @@ export default {
         <!-- theme -->
         <component
             :is="theme"
+            :feature="feature"
         />
         <!-- footer -->
         <slot name="footer" />

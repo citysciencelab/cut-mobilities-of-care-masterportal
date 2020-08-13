@@ -166,17 +166,16 @@ const actions = {
 
                 featureInfos.forEach(function (feature) {
                     features.push({
-                        getTheme: () => layer.get("gfiTheme"),
+                        getTheme: () => layer.get("gfiTheme") || "default",
                         getTitle: () => layer.get("name"),
-                        "attributesToShow": layer.get("gfiAttributes"),
-                        "olFeature": mimeType === "text/xml" ? feature : null,
-                        "html": mimeType === "text/html" ? feature : null
+                        getAttributesToShow: () => layer.get("gfiAttributes") || "showAll",
+                        getProperties: () => mimeType === "text/xml" ? feature.getProperties() : null,
+                        getHtml: () => mimeType === "text/html" ? feature : null
                     });
                 });
                 return features;
             });
         }));
-
 
         // only commit if features found
         if (gfiFeaturesAtPixel.concat(...gfiFeatures).length > 0) {

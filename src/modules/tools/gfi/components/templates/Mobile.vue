@@ -1,7 +1,7 @@
 <script>
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
-import {upperFirst} from "../../../../../utils/stringFunctions";
+import {upperFirst} from "../../../../../utils/stringHelpers";
 
 export default {
     name: "Mobile",
