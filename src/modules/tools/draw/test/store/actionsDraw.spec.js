@@ -530,7 +530,7 @@ describe("actionsDraw", () => {
             expect(un.calledOnce).to.be.true;
             expect(un.firstCall.args).to.eql(["addFeature", listener]);
 
-            expect(commit.callCount).to.equal(12);
+            expect(commit.callCount).to.equal(13);
             expect(commit.getCall(0).args).to.eql(["setActive", false]);
             expect(commit.getCall(1).args).to.eql(["setCircleMethod", initialState.circleMethod]);
             expect(commit.getCall(2).args).to.eql(["setCircleInnerDiameter", initialState.circleInnerDiameter]);
@@ -543,6 +543,7 @@ describe("actionsDraw", () => {
             expect(commit.getCall(9).args).to.eql(["setOpacityContour", initialState.opacityContour]);
             expect(commit.getCall(10).args).to.eql(["setPointSize", initialState.pointSize]);
             expect(commit.getCall(11).args).to.eql(["setSymbol", iconSymbol]);
+            expect(commit.getCall(12).args).to.eql(["setWithGUI", initialState.withGUI]);
 
             expect(dispatch.callCount).to.equal(7);
             expect(dispatch.getCall(0).args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);

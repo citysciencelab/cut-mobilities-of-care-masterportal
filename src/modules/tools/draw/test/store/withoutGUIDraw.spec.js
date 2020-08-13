@@ -115,53 +115,62 @@ describe("withoutGUIDraw", () => {
         it("should commit and dispatch as intended if the given drawType is not a Point, LineString, Polygon or Circle", () => {
             actions.initializeWithoutGUI({state, commit, dispatch}, {drawType});
 
-            expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setRenderToWindow", false]);
-            expect(dispatch.calledOnce).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["setActive", true]);
+            expect(commit.calledTwice).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setWithGUI", false]);
+            expect(commit.secondCall.args).to.eql(["setActive", true]);
         });
         it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle", () => {
             drawType = "Point";
 
             actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, maxFeatures});
 
-            expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setRenderToWindow", false]);
-            expect(commit.secondCall.args).to.eql(["setDrawType", {id: "drawPoint", geometry: "Point"}]);
-            expect(dispatch.calledTwice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["setActive", true]);
-            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(commit.callCount).to.equal(4);
+            expect(commit.firstCall.args).to.eql(["setWithGUI", false]);
+            expect(commit.secondCall.args).to.eql(["setActive", true]);
+            expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawPoint", geometry: "Point"}]);
+            expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
+
         });
         it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the color is defined", () => {
             drawType = "LineString";
 
             actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, color, maxFeatures});
 
-            expect(commit.calledThrice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setRenderToWindow", false]);
-            expect(commit.secondCall.args).to.eql(["setDrawType", {id: "drawLine", geometry: "LineString"}]);
-            expect(commit.thirdCall.args).to.eql(["setColor", color]);
-            expect(dispatch.calledTwice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["setActive", true]);
-            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(commit.callCount).to.equal(5);
+            expect(commit.firstCall.args).to.eql(["setWithGUI", false]);
+            expect(commit.secondCall.args).to.eql(["setActive", true]);
+            expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawLine", geometry: "LineString"}]);
+            expect(commit.getCall(3).args).to.eql(["setColor", color]);
+            expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
         });
         it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the opacity is defined", () => {
             const opacity = "3.5",
                 resultColor = [0, 1, 2, 3.5];
 
-            drawType = "LineString";
+            drawType = "Polygon";
             state.color = resultColor.slice(0, 3);
 
             actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, opacity, maxFeatures});
 
-            expect(commit.callCount).to.equal(4);
-            expect(commit.firstCall.args).to.eql(["setRenderToWindow", false]);
-            expect(commit.secondCall.args).to.eql(["setDrawType", {id: "drawLine", geometry: "LineString"}]);
-            expect(commit.thirdCall.args).to.eql(["setColor", resultColor]);
-            expect(commit.lastCall.args).to.eql(["setOpacity", "3.5"]);
-            expect(dispatch.calledTwice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["setActive", true]);
-            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(commit.callCount).to.equal(6);
+            expect(commit.firstCall.args).to.eql(["setWithGUI", false]);
+            expect(commit.secondCall.args).to.eql(["setActive", true]);
+            expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawArea", geometry: "Polygon"}]);
+            expect(commit.getCall(3).args).to.eql(["setColor", resultColor]);
+            expect(commit.getCall(4).args).to.eql(["setOpacity", "3.5"]);
+            expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
+            expect(dispatch.secondCall.args).to.eql(["createSelectInteractionAndAddToMap", false]);
+            expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
         });
     });
 });

@@ -21,7 +21,7 @@ describe("actionsSetterDraw", () => {
             request = sinon.spy(() => ({}));
             trigger = sinon.spy();
             state = {
-                renderToWindow: false
+                withGUI: false
             };
             sinon.stub(Radio, "request").callsFake(request);
             sinon.stub(Radio, "trigger").callsFake(trigger);
@@ -56,9 +56,9 @@ describe("actionsSetterDraw", () => {
             expect(trigger.calledOnce).to.be.true;
             expect(trigger.firstCall.args).to.eql(["RemoteInterface", "postMessage", {"initDrawTool": true}]);
         });
-        it("should commit and dispatch as intended if 'active' and 'renderToWindow' are true", () => {
+        it("should commit and dispatch as intended if 'active' and 'withGUI' are true", () => {
             active = true;
-            state.renderToWindow = true;
+            state.withGUI = true;
 
             actions.setActive({state, commit, dispatch}, active);
 
