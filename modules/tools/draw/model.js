@@ -134,7 +134,8 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         downloadBtnText: "",
         deleteBtnText: "",
         deleteAllBtnText: "",
-        idCounter: 0
+        idCounter: 0,
+        withoutGUI: false
     }),
     /**
      * @class DrawModel
@@ -209,6 +210,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @property {String} deleteBtnText: "" contains the translated text
      * @property {String} deleteAllBtnText: "" contains the translated text
      * @property {Number} idCounter=0 counter for unique ids
+     * @property {String} withoutGUI=false set to true, to finish draw without gui on another way than usual
      * @listens Tools.Draw#RadioRequestDrawGetLayer
      * @listens Tools.Draw#RadioRequestDrawDownloadWithoutGUI
      * @listens Tools.Draw#RadioTriggerDrawInitWithoutGUI
@@ -607,10 +609,14 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("renderToWindow", false);
         this.setIsActive(true);
 
+        // do this after setting active
+        this.setFreehand(para_object.freehand === true);
+
         if ($.inArray(para_object.drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
             this.setDrawType(para_object.drawType, para_object.drawType + " " + this.get("draw"));
             if (para_object.color) {
-                this.set("color", para_object.color);
+                this.setColor(para_object.color);
+                this.setColorContour(para_object.color);
             }
             if (para_object.opacity) {
                 newColor = this.get("color");
@@ -844,10 +850,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @returns {void}
      */
     cancelDrawWithoutGUI: function (cursor) {
+        this.set("withoutGUI", true);
         this.deactivateDrawInteraction();
         this.deactivateSelectInteraction();
         this.deactivateModifyInteraction();
-        this.resetModule();
         // Turn GFI on again after drawing
         this.setIsActive(false);
         if (cursor !== undefined && cursor.cursor) {
@@ -943,6 +949,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
 
             let geojson = {};
 
+            // NOTE: is used only for Dipas (08-2020): inputMap contains the map
             if (typeof Config.inputMap !== "undefined") {
 
                 geojson = this.downloadFeaturesWithoutGUI({"targetProjection": Config.inputMap.targetProjection}, evt.feature);
@@ -983,9 +990,10 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         drawInteraction.on("drawend", function (evt) {
             evt.feature.set("styleId", that.uniqueId());
 
+            // NOTE: is used only for Dipas (08-2020): inputMap contains the map and drawing is cancelled and editing is started
             if (typeof Config.inputMap !== "undefined") {
 
-                that.cancelDrawWithoutGUI();
+                that.cancelDrawWithoutGUI({cursor: "auto"});
                 that.editFeaturesWithoutGUI();
 
                 geojson = that.downloadFeaturesWithoutGUI({"targetProjection": Config.inputMap.targetProjection}, evt.feature);

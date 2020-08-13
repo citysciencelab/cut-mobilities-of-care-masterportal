@@ -760,9 +760,6 @@ describe("drawModel", function () {
         });
         it("should reset Module", function () {
             expect(model.get("radius")).to.deep.equal(model.defaults.radius);
-            expect(model.get("opacity")).is.equal(model.defaults.opacity);
-            expect(model.get("color")).is.equal(model.defaults.color);
-            expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
         });
         it("should deactivate Tool", function () {
             expect(model.get("isActive")).to.be.false;
