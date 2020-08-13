@@ -11,6 +11,7 @@ export default {
     scaleLineConfig: state => state?.configJs?.scaleLine || null,
     uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
     gfiDesktopType: state => state?.configJs.gfiWindow || "detached",
+    ignoredKeys: state => state?.configJs.ignoredKeys || null,
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
