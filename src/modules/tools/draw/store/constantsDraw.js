@@ -26,6 +26,7 @@ const colorOptions = [
         {value: "Circle", id: "drawDoubleCircle"},
         {value: "Point", id: "writeText"}
     ],
+    errorBorder = "#E10019",
     fontOptions = [
         {caption: "Arial", value: "Arial"},
         {caption: "Calibri", value: "Calibri"},
@@ -78,6 +79,7 @@ export {
     colorOptions,
     colorContourOptions,
     drawTypeOptions,
+    errorBorder,
     fontOptions,
     fontSizeOptions,
     keyStore,

@@ -443,7 +443,7 @@
                 "drawArea": "Draw area",
                 "drawCircle": "Draw circle",
                 "drawDoubleCircle": "Draw double circle",
-                "doubleCirclePlaceholder": "Click on the map to place the circle",
+                "doubleCirclePlaceholder": "Please enter a diameter",
                 "diameter": "Diameter",
                 "outerDiameter": "Outer diameter",
                 "unit": "Unit",

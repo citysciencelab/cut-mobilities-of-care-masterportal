@@ -1,4 +1,5 @@
 import {createStyle} from "./style/createStyle";
+import {errorBorder} from "../constantsDraw";
 import {getMapProjection} from "masterportalAPI/src/crs";
 import {toLonLat, transform} from "ol/proj";
 import {transformNaNToNull} from "../../../../../utils/transformNaNToNull";
@@ -101,13 +102,13 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
                 circleCenter = event.feature.getGeometry().getCenter();
 
             if (innerDiameter === null || innerDiameter === 0) {
-                state.innerBorderColor = "#E10019";
+                state.innerBorderColor = errorBorder;
 
                 if (drawType.id === "drawDoubleCircle") {
                     if (outerDiameter === null || outerDiameter === 0) {
                         dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedTwoCircles"), {root: true});
                         layerSource.removeFeature(event.feature);
-                        state.outerBorderColor = "#E10019";
+                        state.outerBorderColor = errorBorder;
                     }
                     else {
                         dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedInnerCircle"), {root: true});
@@ -125,7 +126,7 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
                     if (drawType.id === "drawDoubleCircle") {
                         dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedOuterCircle"), {root: true});
                         layerSource.removeFeature(event.feature);
-                        state.outerBorderColor = "#E10019";
+                        state.outerBorderColor = errorBorder;
                     }
                     else {
                         calculateCircle(event, circleCenter, circleDiameter, rootState.Map.map);

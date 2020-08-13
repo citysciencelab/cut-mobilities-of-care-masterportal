@@ -553,7 +553,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
      * Sets all Tools (except the legend, the given tool and the gfi,
      * if the model attribute deactivateGFI is true) to isActive=false
-     * @param {Tool} activatedToolModel Tool model that has to be activated
+     * @param {Tool} activatedToolModel Model of the Tool (Backbone) or the state of the Tool (Vue).
      * @returns {void}
      */
     setActiveToolsToFalse: function (activatedToolModel) {

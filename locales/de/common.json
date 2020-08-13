@@ -452,7 +452,7 @@
                 "drawArea": "Fläche zeichnen",
                 "drawCircle": "Kreis zeichnen",
                 "drawDoubleCircle": "Doppelkreis zeichnen",
-                "doubleCirclePlaceholder": "Klicken Sie auf die Karte um den Kreis zu platzieren",
+                "doubleCirclePlaceholder": "Bitte geben Sie einen Durchmesser ein",
                 "diameter": "Durchmesser",
                 "outerDiameter": "Äußerer Durchmesser",
                 "unit": "Einheit",

@@ -48,7 +48,7 @@ function setActive ({state, commit, dispatch}, active) {
         dispatch("createSelectInteractionAndAddToMap", false);
         dispatch("createModifyInteractionAndAddToMap", false);
 
-        if (state.renderToWindow) {
+        if (state.withGUI) {
             // TODO: Add glyphicon glyphicon-pencil to the span of the Component CursorAttachment
             dispatch("toggleInteraction", "draw");
         }

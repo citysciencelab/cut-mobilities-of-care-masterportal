@@ -199,8 +199,8 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
         collection.setActiveToolsToFalse(state);
     }
 
-    commit("setRenderToWindow", false);
-    dispatch("setActive", true);
+    commit("setWithGUI", false);
+    commit("setActive", true);
 
     if (["Point", "LineString", "Polygon", "Circle"].indexOf(drawType) > -1) {
         commit("setDrawType", {id: getDrawId(drawType), geometry: drawType});
@@ -216,7 +216,11 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
             commit("setOpacity", opacity);
         }
 
+        commit("setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
+
         dispatch("createDrawInteractionAndAddToMap", {active: true, maxFeatures});
+        dispatch("createSelectInteractionAndAddToMap", false);
+        dispatch("createModifyInteractionAndAddToMap", false);
 
         if (initialJSON) {
             try {

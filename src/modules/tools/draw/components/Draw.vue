@@ -39,8 +39,8 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        // NOTE: setActive call on created is needed for the RemoteInterface so that the Radio can be interacted with
-        this.setActive(false);
+        this.setActive(this.active);
+        this.activateByUrlParam();
     },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
@@ -64,8 +64,9 @@ export default {
     <Tool
         :title="$t('modules.tools.draw.title')"
         :icon="glyphicon"
-        :active="active && renderToWindow"
+        :active="active && withGUI"
         :render-to-window="renderToWindow"
+        :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>

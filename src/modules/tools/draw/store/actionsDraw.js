@@ -51,6 +51,19 @@ function createSelectInteraction (layer) {
 const initialState = Object.assign({}, stateDraw),
     actions = {
         /**
+         * Activates the tool if it is activated via the URL with '?isinitopen=draw'.
+         *
+         * @param {Object} context actions context object.
+         * @returns {void}
+         */
+        activateByUrlParam ({rootState, dispatch}) {
+            const mappings = ["draw"];
+
+            if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen.toLowerCase()) !== -1) {
+                dispatch("setActive", true);
+            }
+        },
+        /**
          * Adds an interaction to the current map instance.
          *
          * @param {Object} context actions context object.
@@ -312,6 +325,7 @@ const initialState = Object.assign({}, stateDraw),
             commit("setOpacityContour", initialState.opacityContour);
             commit("setPointSize", initialState.pointSize);
             commit("setSymbol", getters.iconList[0]);
+            commit("setWithGUI", initialState.withGUI);
             // TODO: Clear the cursor from the map
             state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
         },
@@ -339,20 +353,18 @@ const initialState = Object.assign({}, stateDraw),
          * @returns {void}
          */
         toggleInteraction ({commit, dispatch}, interaction) {
+            commit("setCurrentInteraction", interaction);
             if (interaction === "draw") {
-                commit("setCurrentInteraction", interaction);
                 dispatch("manipulateInteraction", {interaction: "draw", active: true});
                 dispatch("manipulateInteraction", {interaction: "modify", active: false});
                 dispatch("manipulateInteraction", {interaction: "delete", active: false});
             }
             else if (interaction === "modify") {
-                commit("setCurrentInteraction", interaction);
                 dispatch("manipulateInteraction", {interaction: "draw", active: false});
                 dispatch("manipulateInteraction", {interaction: "modify", active: true});
                 dispatch("manipulateInteraction", {interaction: "delete", active: false});
             }
             else if (interaction === "delete") {
-                commit("setCurrentInteraction", interaction);
                 dispatch("manipulateInteraction", {interaction: "draw", active: false});
                 dispatch("manipulateInteraction", {interaction: "modify", active: false});
                 dispatch("manipulateInteraction", {interaction: "delete", active: true});

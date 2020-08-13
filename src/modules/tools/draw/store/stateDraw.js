@@ -27,11 +27,13 @@
  * @property {Number} pointSize The size of the point.
  * @property {Number[]} redoArray Array of the IDs of features removed through the undo button.
  * @property {Boolean} renderToWindow Decides whether the Tool should be displayed.
+ * @property {Boolean} resizableWindow Determines whether the Tool window can be resized.
  * @property {module:ol/interaction/Select} selectInteraction The select interaction of the draw tool.
  * @property {Number} strokeWidth Stroke width.
  * @property {Object} symbol The symbol for the point.
  * @property {String} text The text to be written if the drawType "writeText" is chosen.
  * @property {String} unit The unit of measurement (e.g. "km").
+ * @property {Boolean} withGUI Determines whether the window for the draw tool is rendered or not.
  * @property {Number} zIndex Determines in which order features are rendered on the view.
  */
 const state = {
@@ -66,6 +68,7 @@ const state = {
     pointSize: 6,
     redoArray: [],
     renderToWindow: true,
+    resizableWindow: true,
     selectInteraction: null,
     strokeWidth: 1,
     symbol: {
@@ -73,8 +76,9 @@ const state = {
         type: "simple_point",
         value: "simple_point"
     },
-    text: "Klicken Sie auf die Karte um den Text zu platzieren",
+    text: "",
     unit: null,
+    withGUI: true,
     zIndex: 0
 };
 
