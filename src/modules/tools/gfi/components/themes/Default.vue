@@ -1,4 +1,6 @@
 <script>
+import {upperFirst} from "../../../../../utils/stringHelpers";
+import {mapGetters} from "vuex";
 
 export default {
     name: "Default",
@@ -9,8 +11,11 @@ export default {
         }
     },
     computed: {
-        featureProperties () {
-            return this.feature.olFeature.getProperties();
+        ...mapGetters(["ignoredKeys"])
+    },
+    methods: {
+        beautifyKey: function (key) {
+            return upperFirst(key).replace(/_/g, " ");
         }
     }
 };
@@ -20,11 +25,19 @@ export default {
     <table class="table table-hover">
         <tbody>
             <tr
-                v-for="(value, name) in featureProperties"
-                :key="name"
+                v-for="(value, key) in feature.getMappedProperties()"
+                :key="key"
             >
-                <th>{{ name }}</th>
-                <td>{{ value }}</td>
+                <th>{{ beautifyKey(key) }}</th>
+                <td v-if="typeof value === 'string' && value.startsWith('http', 0)">
+                    <a
+                        :href="value"
+                        target="_blank"
+                    >Link</a>
+                </td>
+                <td v-else>
+                    {{ value }}
+                </td>
             </tr>
         </tbody>
     </table>

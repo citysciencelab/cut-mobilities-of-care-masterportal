@@ -2,7 +2,7 @@ import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import Feature from "ol/Feature";
 
 // Testlayer für ESRI -> Geologische_Karte_5000
-// Testlayer für html -> Bohrdaten GLA
+// Testlayer für html -> Bohrdaten GLA & Eventlots
 
 /**
  * handles the GetFeatureInfo request
@@ -33,7 +33,7 @@ function requestGfi (mimeType, url) {
                 return parseFeatures(doc);
             }
             // mimeType === "text/html" -> other formats are currently not supported
-            return doc;
+            return [doc];
         })
         .catch(error => {
             console.warn(error);
