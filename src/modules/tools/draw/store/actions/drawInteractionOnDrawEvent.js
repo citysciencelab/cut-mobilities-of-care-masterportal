@@ -1,10 +1,10 @@
 import {createStyle} from "./style/createStyle";
-import {errorBorder} from "../constantsDraw";
 import {getMapProjection} from "masterportalAPI/src/crs";
 import {toLonLat, transform} from "ol/proj";
 import {transformNaNToNull} from "../../../../../utils/transformNaNToNull";
 
-const earthRadius = 6378137;
+const earthRadius = 6378137,
+    errorBorder = "#E10019";
 
 /**
  * Helper Function to coordinate the calculation of a circle.
