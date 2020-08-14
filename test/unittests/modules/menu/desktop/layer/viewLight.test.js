@@ -1,6 +1,5 @@
 import LayerView from "@modules/menu/desktop/layer/viewLight.js";
 import {expect} from "chai";
-import {spy, assert} from "sinon";
 
 describe("menu/desktop/layer/viewLight", function () {
     let fakeModel,
@@ -117,55 +116,6 @@ describe("menu/desktop/layer/viewLight", function () {
             layerView.rerender();
 
             expect(layerView.$el.find(".glyphicon-tint").length).to.be.equal(0);
-        });
-    });
-    describe("checkChildrenDatasets", function () {
-        /**
-         * @param {boolean} hasChildren whether context should have children
-         * @param {boolean} indicateDatasets whether children should hold datasets
-         * @returns {object} context object for this describe
-         */
-        function createContext (hasChildren, indicateDatasets) {
-            return {
-                model: {
-                    has: key => ({children: hasChildren})[key],
-                    get: key => ({children: hasChildren
-                        ? [{datasets: indicateDatasets}, {datasets: indicateDatasets}]
-                        : undefined})[key],
-                    set: spy()
-                }
-            };
-        }
-
-        it("Should not change datasets field if no children exist", function () {
-            const {checkChildrenDatasets} = LayerView.prototype,
-                context = createContext(false);
-
-            checkChildrenDatasets.call(context);
-
-            assert.notCalled(context.model.set);
-        });
-
-        it("Should change datasets field if children exist and one child indicates datasets to show exist", function () {
-            const {checkChildrenDatasets} = LayerView.prototype,
-                context = createContext(true, true);
-
-            checkChildrenDatasets.call(context);
-
-            assert.calledOnce(context.model.set);
-            assert.calledWithMatch(context.model.set, {datasets: true});
-        });
-
-        it("Should not change datasets field if children exist and no child indicates datasets to show exist", function () {
-            const {checkChildrenDatasets} = LayerView.prototype,
-                contextFalse = createContext(true, false),
-                contextUndefined = createContext(true, undefined);
-
-            checkChildrenDatasets.call(contextFalse);
-            checkChildrenDatasets.call(contextUndefined);
-
-            assert.notCalled(contextFalse.model.set);
-            assert.notCalled(contextUndefined.model.set);
         });
     });
 });
