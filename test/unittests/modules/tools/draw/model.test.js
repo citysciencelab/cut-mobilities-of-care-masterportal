@@ -763,9 +763,9 @@ describe("drawModel", function () {
         it("should reset Module", function () {
             expect(model.get("radius")).to.deep.equal(model.defaults.radius);
         });
-    });
-    it("should deactivate Tool", function () {
-        expect(model.get("isActive")).to.be.false;
+        it("should deactivate Tool", function () {
+            -            expect(model.get("isActive")).to.be.false;
+        });
     });
 
     describe("downloadFeaturesWithoutGUI", function () {
