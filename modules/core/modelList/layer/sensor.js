@@ -742,19 +742,18 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             return;
         }
 
-        const mqtt = new SensorThingsMqtt(),
-            mqttOptions = Object.assign({
-                host: this.get("url").split("/")[2],
-                protocol: "wss",
-                path: this.get("mqttPath"),
+        const mqttOptions = Object.assign({
+                mqttUrl: "wss://" + this.get("url").split("/")[2] + this.get("mqttPath"),
+                mqttVersion: "3.1.1",
+                rhPath: this.get("url"),
                 context: this
             }, this.get("mqttOptions")),
-            client = mqtt.connect(mqttOptions);
+            mqtt = new SensorThingsMqtt(mqttOptions);
 
-        this.setMqttClient(client);
+        this.setMqttClient(mqtt);
 
         // messages from the server
-        client.on("message", function (topic, jsonData) {
+        mqtt.on("message", (topic, jsonData) => {
             const regex = /\((.*)\)/; // search value in topic, that represents the datastreamid on position 1
 
             jsonData.dataStreamId = topic.match(regex)[1];
@@ -775,13 +774,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         dataStreamIds.forEach(function (id) {
             if (client && id && !subscriptionTopics[id]) {
-                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {
-                    rmSimulate: true,
-                    rmUrl: this.get("url")
-                });
+                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {rh: 0});
                 subscriptionTopics[id] = true;
             }
-        }.bind(this));
+        });
     },
 
     /**

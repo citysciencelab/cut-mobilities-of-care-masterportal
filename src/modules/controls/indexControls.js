@@ -29,15 +29,7 @@ export default {
             attributions: Attributions,
             backForward: BackForward,
             fullScreen: FullScreen,
-            get "overviewmap" () {
-                console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead.");
-                return OverviewMap;
-            },
             overviewMap: OverviewMap,
-            get "totalview" () {
-                console.warn("'totalview' is deprecated. Please use 'totalView' instead.");
-                return TotalView;
-            },
             totalView: TotalView,
             zoom: Zoom,
             freeze: Freeze

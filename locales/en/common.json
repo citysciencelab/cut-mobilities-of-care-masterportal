@@ -43,7 +43,8 @@
             "saveSelection": "Save selection",
             "getInfos": "Retrieve information",
             "addWms": "Add WMS",
-            "scaleSwitcher": "Scale switcher"
+            "scaleSwitcher": "Scale switcher",
+            "selectFeatures": "Select features"
         },
         "legend": "Explanations",
         "contact": "Mail",
@@ -88,6 +89,21 @@
         },
         "layerInformation": {
             "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
+        },
+        "featureViaURL": {
+            "coordLabel": "Coordinates",
+            "featureLabel": "Label",
+            "folderName": "Features given by URL",
+            "typeLabel": "Type of geometry",
+            "messages": {
+                "featureParsing": "FeatureViaURL: Not all features from the URL could be parsed.",
+                "featureParsingAll": "FeatureViaURL: The features weren't given in the correct datatype. Please refer to the documentation.",
+                "featureParsingNoneAdded": "FeatureViaURL: All given features miss atleast on parameter. No features were added to the Map. Please refer to the documentation.",
+                "geometryNotSupported": "FeatureViaURL: The geometryType {{geometryType}} for the Layer {{layerId}} is not supported.",
+                "layerNotFound": "FeatureViaURL: The layer with the id {{layerId}} was not found.",
+                "noLayers": "FeatureViaURL: No layers were defined in the config for the given features.",
+                "noNameDefined": "FeatureViaURL: No name was defined for the layer with the id {{layerId}}."
+            }
         },
         "quickHelp": {
             "titleTag": "Open help",
@@ -187,12 +203,20 @@
                 "withLegendLabel": "With legend",
                 "printLabel": "Print",
                 "withInfoLabel": "With information",
+                "vtlWarning": "Since MapFish 3 does not support Vector Tile Layers, the following active layers will not appear in the print view:",
                 "layoutNameList": {
                     "A4 Hochformat": "A4 portrait format",
                     "A4 Querformat": "A4 landscape format",
                     "A3 Hochformat": "A3 portrait format",
                     "A3 Querformat": "A3 landscape format"
                 }
+            },
+            "styleVT": {
+              "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",
+              "noStyleableLayers": "There are currently no topics to which this tool could be applied.",
+              "theme": "Theme",
+              "chooseTheme": "Please choose active theme",
+              "style": "Style"
             },
             "styleWMS": {
                 "noStyleableLayers": "There are currently no classifiable topics to which this tool could be applied.",
@@ -320,6 +344,11 @@
                 "plot": "Plot",
                 "parcelNumberPlaceholder": "Enter number",
                 "generateReport": "Generate report"
+            },
+            "selectFeatures": {
+              "zoomToFeature": "Zoom to this feature",
+              "noFeatureChosen": "No feature chosen. Select features by holding down Ctrl and dragging a box around the features to choose.",
+              "propertylessFeature": "Element without attributes"
             },
             "supplyCoord": {
                 "title": "Query Coordinates",
@@ -542,7 +571,8 @@
                 "showOverviewControl": "Show overview map",
                 "hideOverviewControl": "Hide overview map",
                 "showOverviewTable": "show mini map",
-                "hideOverviewTable": "hide mini map"
+                "hideOverviewTable": "hide mini map",
+                "missingLayerId": "The overview map could not be created."
             },
             "mousePosition": {
                 "hint": "Move the computer mouse over your screen.",

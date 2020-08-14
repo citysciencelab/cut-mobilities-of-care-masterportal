@@ -11,7 +11,10 @@
 </span>
 <span class="pull-right">
     <% if (typeof styleable !== "undefined" && styleable === true) { %>
-            <span class="glyphicon glyphicon-tint" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
+            <span class="glyphicon glyphicon-tint styleWMS" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
+    <% } %>
+    <% if (typeof typ !== "undefined" && typ === "VectorTile" && vtStyles && vtStyles.length > 1) { %>
+        <span class="glyphicon glyphicon-tint styleVT" data-toggle="tooltip" data-placement="bottom" title="Style für Layer auswählen"></span>
     <% } %>
     <% if (typeof datasets !== "undefined" && datasets !== false) { %>
         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="<%=infosAndLegendText%>"></span>

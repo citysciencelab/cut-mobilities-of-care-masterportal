@@ -1,6 +1,6 @@
 # Changelog Masterportal
  Alle wichtigen Änderungen in diesem Projekt werden in dieser Datei abgelegt.
- 
+
  Es wird die [Semantische Versionierung](https://semver.org/spec/v2.0.0.html) verwendet.
 
 
@@ -15,6 +15,11 @@
 - Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
 - Die “gfiAttribute”-keys können jetzt auch Objektpfade sein, analog zum neuen Styling.
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
+- Es wurde die Möglichkeit hinzugefügt über die URL Feature zu übergeben, welche dann in einem GeoJSON-Layer dargestellt werden.
+- Es können nun Vector Tile Layer (VTL) als Layer eingebunden werden.
+- Für VTL wurde ein Tool hergestellt, mit dem zwischen externen Styles gewechselt werden kann.
+- Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
+- Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 
 ### Changed
 - Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
@@ -43,6 +48,7 @@
 - Mit Google Earth erstellte KML Dateien werden mit dem Tool "Datei-Import" nun besser dargestellt.
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
 - Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
+- Ein Fehler in der VisibleVector Suche wurde behoben der verhindert hat, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
 
 ---
 
@@ -71,7 +77,7 @@
 ## v2.5.2 - 2020-06-09
 ### Fixed
 - Die Portal-Konfiguration "singleBaselayer": "true" führt jetzt dazu, dass immer nur ein Hauptlayer ausgewählt werden kann.
-- Das Label der Version im Footer wird jetzt korrekt übersetzt. 
+- Das Label der Version im Footer wird jetzt korrekt übersetzt.
 - Legenden, die den gleichen Namen und das gleiche Image haben, werden nur noch einmal für jeden Layer dargestellt.
 - In der Layerinformation wird, wenn keine Metadaten geladen wurden, der Link für "weitere Metadaten" nicht mehr dargestellt.
 - Der Infotext für Checkboxen wird nun beim Start nicht mehr ausgeklappt und hat nun den richtigen Style.

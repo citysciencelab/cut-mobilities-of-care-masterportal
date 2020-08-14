@@ -1,5 +1,6 @@
 import Template from "text-loader!./template.html";
 import "jquery-ui/ui/widgets/draggable";
+import isURL from "../../../src/utils/isURL";
 /**
  * @member FeatureListerTemplate
  * @description Template used to create the feature lister
@@ -147,8 +148,13 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             this.$(".featurelist-details-li").remove();
             Object.entries(props).forEach(([key, value]) => {
                 this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
-                this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + value + "</li>");
-            });
+                let content = value;
+
+                if (isURL(value)) {
+                    content = "<a href=" + value + " target=\"_blank\">" + value + "</a>";
+                }
+                this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + content + "</li>");
+            }, this);
             this.switchTabToDetails();
         }
         else {

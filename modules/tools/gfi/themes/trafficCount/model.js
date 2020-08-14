@@ -223,9 +223,9 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             url = feature.get("requestUrl"),
             sensorThingsApiVersion = "v" + feature.get("versionUrl"),
             mqttOptions = {
-                host: feature.get("requestUrl").split("/")[2],
-                protocol: "wss",
-                path: "/mqtt",
+                mqttUrl: "wss://" + feature.get("requestUrl").split("/")[2] + "/mqtt",
+                mqttVersion: "3.1.1",
+                rhPath: url,
                 context: this
             };
 

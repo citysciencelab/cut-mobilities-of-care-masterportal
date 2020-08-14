@@ -44,7 +44,8 @@
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
             "wfsTransaction": "WFS-T Tool",
-            "scaleSwitcher": "Maßstab umschalten"
+            "scaleSwitcher": "Maßstab umschalten",
+            "selectFeatures": "Features auswählen"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -97,6 +98,21 @@
         },
         "layerInformation": {
             "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
+        },
+        "featureViaURL": {
+            "coordLabel": "Koordinaten",
+            "featureLabel": "Beschriftung",
+            "folderName": "Über URL übergebene Feature",
+            "typeLabel": "Geometrietyp",
+            "messages": {
+                "featureParsing": "FeatureViaURL: Es konnten nicht alle übergebenen Feature verarbeitet werden.",
+                "featureParsingAll": "FeatureViaURL: Alle übergebenen Feature wurden nicht mit dem richtigen Datentyp übergeben. Bitte beachten Sie die Dokumentation.",
+                "featureParsingNoneAdded": "FeatureViaURL: Allen übergebenen Feature fehlen mindestens ein Parameter. Es wurden keine Feature der Karte hinzugefügt. Bitte beachten Sie die Dokumentation.",
+                "geometryNotSupported": "FeatureViaURL: Der in der Konfiguration für den Layer {{layerId}} deklarierte Geometrietyp {{geometryType}} wird nicht unterstützt.",
+                "layerNotFound": "FeatureViaURL: Es konnte kein Layer mit der ID {{layerId}} gefunden werden.",
+                "noLayers": "FeatureViaURL: Für die übergebenen Feature wurden keine Layer in der Konfiguration definiert.",
+                "noNameDefined": "FeatureViaURL: Es wurde kein Name für den Layer mit der ID {{layerId}} in der Konfiguration definiert."
+            }
         },
         "quickHelp": {
             "titleTag": "Hilfe öffnen",
@@ -196,12 +212,20 @@
                 "withLegendLabel": "Mit Legende",
                 "printLabel": "Drucken",
                 "withInfoLabel": "Mit Informationen",
+                "vtlWarning": "Da MapFish 3 keine Vector Tile Layer unterstützt, werden die folgenden aktiven Layer nicht in der Printansicht erscheinen:",
                 "layoutNameList": {
                     "A4 Hochformat": "A4 Hochformat",
                     "A4 Querformat": "A4 Querformat",
                     "A3 Hochformat": "A3 Hochformat",
                     "A3 Querformat": "A3 Querformat"
                 }
+            },
+            "styleVT": {
+              "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
+              "noStyleableLayers": "Derzeit sind keine Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+              "theme": "Thema",
+              "chooseTheme": "Bitte aktives Thema auswählen",
+              "style": "Style"
             },
             "styleWMS": {
                 "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
@@ -329,6 +353,11 @@
                 "plot": "Flur",
                 "parcelNumberPlaceholder": "Nummer eingeben",
                 "generateReport": "Bericht erzeugen"
+            },
+            "selectFeatures": {
+              "zoomToFeature": "Auf dieses Feature zoomen",
+              "noFeatureChosen": "Keine Features ausgewählt. Wählen Sie Features durch Halten von Strg und Ziehen einer Box um die auszuwählenden Features.",
+              "propertylessFeature": "Element ohne Attribute"
             },
             "supplyCoord": {
                 "title": "Koordinaten abfragen",
@@ -551,7 +580,8 @@
                 "showOverviewControl": "Übersichtskarte einblenden",
                 "hideOverviewControl": "Übersichtskarte ausblenden",
                 "showOverviewTable": "Mini-Map einschalten",
-                "hideOverviewTable": "Mini-Map ausschalten"
+                "hideOverviewTable": "Mini-Map ausschalten",
+                "missingLayerId": "Die Overviewmap konnte nicht erstellt werden."
             },
             "mousePosition": {
                 "hint": "Bewegen Sie die Maus über die Karte",

@@ -145,22 +145,13 @@ function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFall
         break;
     }
 
-    if (missingSources.length > 0) {
-        console.warn("Config für \"" + moduleName + "\" wurde an folgenden Orten nicht gefunden.", missingSources);
-    }
-
     if (!source && recursiveFallback) {
-        console.warn("Config für \"" + moduleName + "\" konnte an keinem der angegebenen Pfade gefunden werden. Es wird versucht die PortalConfig automatisch zu durchsuchen.");
         source = context.rootGetters.toolConfig(moduleName);
     }
 
     if (source) {
         context.state = deepMerge(source, context.state);
         success = true;
-    }
-
-    if (!success) {
-        console.warn("Config für \"" + moduleName + "\" wurde nicht geladen.");
     }
 
     return success;

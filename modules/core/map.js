@@ -12,7 +12,7 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
-import Store from "../../src/app-store";
+import store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
@@ -441,7 +441,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         let layerModel;
 
         if (layer) {
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {"name": layer.get("name")});
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
         }
 
         // if the layer is already at the correct position, do nothing
@@ -695,7 +695,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     setMap: function (value) {
         this.set("map", value);
-        Store.dispatch("Map/setMap", {map: value});
+        store.dispatch("Map/setMap", {map: value});
     }
 
 });

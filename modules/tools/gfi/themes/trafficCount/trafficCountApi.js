@@ -44,11 +44,9 @@ export class TrafficCountApi {
         /** @private */
         this.sensorThingsVersion = sensorThingsVersion;
         /** @private */
-        this.http = sensorThingsHttpOpt || new SensorThingsHttp();
+        this.http = sensorThingsHttpOpt || new SensorThingsHttp({removeIotLinks: true});
         /** @private */
-        this.mqtt = sensorThingsMqttOpt || new SensorThingsMqtt();
-        /** @private */
-        this.mqttClient = this.mqtt && typeof this.mqtt.connect === "function" ? this.mqtt.connect(mqttOptions) : false;
+        this.mqttClient = sensorThingsMqttOpt || new SensorThingsMqtt(mqttOptions);
         /** @private */
         this.httpHost = httpHost;
         /** @private */
@@ -62,7 +60,7 @@ export class TrafficCountApi {
 
         // set the mqtt listener
         if (this.mqttClient && typeof this.mqttClient.on === "function") {
-            this.mqttClient.on("message", (topic, payload) => {
+            this.mqttClient.on("message", (topic, payload, packet) => {
                 if (this.subscriptionTopics.hasOwnProperty(topic)) {
                     if (!Array.isArray(this.subscriptionTopics[topic])) {
                         return;
@@ -73,7 +71,7 @@ export class TrafficCountApi {
                             // continue
                             return;
                         }
-                        callback(payload);
+                        callback(payload, packet);
                     });
                 }
             });
@@ -254,9 +252,9 @@ export class TrafficCountApi {
             const datastreamId = dataset[0].Datastreams[0]["@iot.id"],
                 topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
-            // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-            this.mqttSubscribe(topic, {retain: 2}, (payload) => {
-                if (payload && payload.hasOwnProperty("retained") && payload.retained === true) {
+            // set retain handling rh to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
+            this.mqttSubscribe(topic, {rh: 2}, (payload, packet) => {
+                if (packet && packet.hasOwnProperty("retain") && packet.retain === true) {
                     // this message is a retained message, so its content is already in sum
                     return;
                 }
@@ -330,8 +328,8 @@ export class TrafficCountApi {
                     topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
                 // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                this.mqttSubscribe(topic, {retain: 2}, (payload) => {
-                    if (payload && payload.hasOwnProperty("retained") && payload.retained === true) {
+                this.mqttSubscribe(topic, {rh: 2}, (payload, packet) => {
+                    if (packet && packet.hasOwnProperty("retain") && packet.retain === true) {
                         // this message is a retained message, so its content is already in sum
                         return;
                     }
@@ -389,8 +387,8 @@ export class TrafficCountApi {
                     topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
                 // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                this.mqttSubscribe(topic, {retain: 2}, (payload) => {
-                    if (payload && payload.hasOwnProperty("retained") && payload.retained === true) {
+                this.mqttSubscribe(topic, {rh: 2}, (payload, packet) => {
+                    if (packet && packet.hasOwnProperty("retain") && packet.retain === true) {
                         // this message is a retained message, so its content is already in sum
                         return;
                     }
@@ -580,8 +578,8 @@ export class TrafficCountApi {
                         topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
                     // set retain to 2 to avoid getting the last message from the server, as this message is already included in the server call above (see doc\sensorThings_EN.md)
-                    this.mqttSubscribe(topic, {retain: 2}, (payload) => {
-                        if (payload && payload.hasOwnProperty("retained") && payload.retained === true) {
+                    this.mqttSubscribe(topic, {rh: 2}, (payload, packet) => {
+                        if (packet && packet.hasOwnProperty("retain") && packet.retain === true) {
                             // this message is a retained message, so its content is already in sum
                             return;
                         }
@@ -630,11 +628,7 @@ export class TrafficCountApi {
                     topic = this.sensorThingsVersion + "/Datastreams(" + datastreamId + ")/Observations";
 
                 // set retain to 0 to get the last message from the server immediately (see doc\sensorThings_EN.md)
-                this.mqttSubscribe(topic, {
-                    retain: 0,
-                    rmSimulate: true,
-                    rmUrl: this.httpHost
-                }, (payload) => {
+                this.mqttSubscribe(topic, {rh: 0}, (payload) => {
                     if (payload && payload.hasOwnProperty("phenomenonTime")) {
                         if (typeof onupdate === "function") {
                             const datetime = moment(this.parsePhenomenonTime(payload.phenomenonTime)).format("YYYY-MM-DD HH:mm:ss");
@@ -775,14 +769,6 @@ export class TrafficCountApi {
      */
     getSensorThingsHttp () {
         return this.http;
-    }
-
-    /**
-     * gets the on construction initialized mqtt connector
-     * @returns {Object}  the SensorThingsMqtt
-     */
-    getSensorThingsMqtt () {
-        return this.mqtt;
     }
 
     /**

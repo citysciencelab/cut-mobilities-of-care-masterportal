@@ -137,6 +137,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
 
+        this.addItem({
+            type: "featureViaURL",
+            attr: this.get("portalConfig").featureViaURL
+        });
+
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
             this.parseTree(this.get("baselayer"), "tree", 0);
@@ -368,13 +373,18 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} name - todo
-     * @param {*} id - todo
-     * @param {*} geojson - todo
+     * Creates the Masterportal Configuration for a GeoJSON Layer.
+     * Adds the configuration to be parsed into the Portal.
+     *
+     * @param {String} name Name of the layer.
+     * @param {String} id Unique identifier for the layer.
+     * @param {(String | Object)} geojson GeoJSON for the layer containing the features.
+     * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
+     * @param {String} [parentId] Id for the correct position of the layer in the layertree.
+     * @param {(String | Object)} [gfiAttributes="showAll"] Attributes to be shown when clicking on the feature using the GFI tool.
      * @returns {void}
      */
-    addGeoJSONLayer: function (name, id, geojson) {
+    addGeoJSONLayer: function (name, id, geojson, styleId, parentId, gfiAttributes = "showAll") {
         const layer = {
             type: "layer",
             name: name,
@@ -384,7 +394,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             transparent: true,
             minScale: "0",
             maxScale: "350000",
-            gfiAttributes: "showAll",
+            gfiAttributes: gfiAttributes,
             layerAttribution: "nicht vorhanden",
             legendURL: "",
             isBaseLayer: false,
@@ -394,6 +404,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             datasets: [],
             urlIsVsible: true
         };
+
+        if (styleId !== undefined) {
+            layer.styleId = styleId;
+        }
+        if (parentId !== undefined) {
+            layer.parentId = parentId;
+        }
 
         this.addItem(layer);
     },

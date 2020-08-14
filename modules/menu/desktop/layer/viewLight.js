@@ -12,7 +12,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         "click .glyphicon-plus-sign": "incTransparency",
         "click .glyphicon-minus-sign": "decTransparency",
         "change select": "setTransparency",
-        "click .glyphicon-tint": "openStyleWMS",
+        "click .styleWMS": "openStyleWMS",
+        "click .styleVT": "openStyleVT",
         "click .remove-layer": "removeLayer"
     },
 
@@ -202,6 +203,15 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * Triggers the parser to remove the item/layer
      * Executes removeLayer in the model
      * Removes the element
+     * Select a style for vector tile leyer.
+     * @returns {void}
+     */
+    openStyleVT: function () {
+        Radio.trigger("StyleVT", "open", this.model);
+    },
+
+    /**
+     * todo
      * @fires Parser#RadioTriggerParserRemoveItem
      * @returns {void}
      */
