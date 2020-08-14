@@ -51,6 +51,8 @@
 - Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
 - Ein Fehler in der VisibleVector Suche wurde behoben der verhindert hat, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
 - In Geo-Online kann der Marker wieder über die URL gesetzt werden.
+- Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn 
+
 ---
 
 ## v2.5.3 - 2020-06-29

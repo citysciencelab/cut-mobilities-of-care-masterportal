@@ -764,7 +764,7 @@ describe("drawModel", function () {
             expect(model.get("radius")).to.deep.equal(model.defaults.radius);
         });
         it("should deactivate Tool", function () {
-            -            expect(model.get("isActive")).to.be.false;
+            expect(model.get("isActive")).to.be.false;
         });
     });
 
