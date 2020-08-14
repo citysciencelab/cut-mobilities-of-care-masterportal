@@ -1,16 +1,15 @@
-
 <% valueModelsToShow.forEach(function (model) { %>
     <div class="multicheckbox <% if (model.get('isSelected')) {print('checked');} %>">
         <span class="icon-checkbox<% if (!model.get('isSelected')) {print('2');} %>"></span>
-        <% const iconPath = model.get('iconPath'); %>
-        <% if (iconPath && iconPath.indexOf("</svg>") !== -1) { %>
+        <% if (model.get('iconPath')) { %>
             <span>
-                <div><%= iconPath %></div>
+            <% if (model.get('iconPath').startsWith('<svg ')) { %>
+                <span class="multicheckbox-svg"><%= model.get('iconPath') %></span>
+            <%  } else { %>
+                <img class="multicheckbox-icon" src="<%= model.get('iconPath') %>">
+            <% } %>
             </span>
-            <% } else  {%>
-            <span>
-                <img class="multicheckbox-icon" src="<%= iconPath %>">
-            </span>
-        <% } %>
+        <%  } %>
+        <span class="multicheckbox-label"><%= model.get("displayName") %></span>
     </div>
 <% }); %>

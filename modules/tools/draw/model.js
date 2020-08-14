@@ -609,8 +609,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.set("renderToWindow", false);
         this.setIsActive(true);
 
-        // do this after setting active
-        this.setFreehand(para_object.freehand === true);
+        this.setFreehand(false);
 
         if ($.inArray(para_object.drawType, ["Point", "LineString", "Polygon", "Circle"]) > -1) {
             this.setDrawType(para_object.drawType, para_object.drawType + " " + this.get("draw"));
@@ -944,21 +943,29 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
      * @return {void}
      */
     createModifyInteractionListener: function (modifyInteraction) {
-
         modifyInteraction.on("modifyend", function (evt) {
 
-            let geojson = {};
+            let geojson = {},
+                centerPoint = "",
+                centerPointCoords = [],
+                geojsonAddCenter = {};
 
-            // NOTE: is used only for Dipas (08-2020): inputMap contains the map
+            // NOTE: is used only for dipas/diplanung (08-2020): inputMap contains the map
             if (typeof Config.inputMap !== "undefined") {
+                centerPointCoords = this.createCenterPoint(evt.features.getArray()[0], Config.inputMap.targetProjection);
 
+                centerPoint = {type: "Point", coordinates: centerPointCoords};
                 geojson = this.downloadFeaturesWithoutGUI({"targetProjection": Config.inputMap.targetProjection}, evt.feature);
-                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geojson});
+                geojsonAddCenter = JSON.parse(geojson);
+                if (geojsonAddCenter.features[0].properties === null) {
+                    geojsonAddCenter.features[0].properties = {};
+                }
+                geojsonAddCenter.features[0].properties.centerPoint = centerPoint;
+                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geojsonAddCenter)});
             }
 
         }.bind(this));
     },
-
     /**
      * creates the draw interaction to draw in the map
      * @param {object} drawType - contains the geometry and description
@@ -985,19 +992,30 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     createDrawInteractionListener: function (drawInteraction, maxFeatures, doubleIsActive) {
         const that = this,
             layer = this.get("layer");
-        let geojson = {};
+        let geojson = {},
+            centerPoint = "",
+            centerPointCoords = [],
+            geojsonAddCenter = {};
 
         drawInteraction.on("drawend", function (evt) {
             evt.feature.set("styleId", that.uniqueId());
 
-            // NOTE: is used only for Dipas (08-2020): inputMap contains the map and drawing is cancelled and editing is started
+            // NOTE: is used only for dipas/diplanung (08-2020): inputMap contains the map and drawing is cancelled and editing is started
             if (typeof Config.inputMap !== "undefined") {
 
                 that.cancelDrawWithoutGUI({cursor: "auto"});
                 that.editFeaturesWithoutGUI();
 
+                centerPointCoords = that.createCenterPoint(evt.feature, Config.inputMap.targetProjection);
+                centerPoint = {type: "Point", coordinates: centerPointCoords};
+
                 geojson = that.downloadFeaturesWithoutGUI({"targetProjection": Config.inputMap.targetProjection}, evt.feature);
-                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geojson});
+                geojsonAddCenter = JSON.parse(geojson);
+                if (geojsonAddCenter.features[0].properties === null) {
+                    geojsonAddCenter.features[0].properties = {};
+                }
+                geojsonAddCenter.features[0].properties.centerPoint = centerPoint;
+                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geojsonAddCenter)});
             }
 
         });
@@ -1582,6 +1600,59 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
         this.setIdCounter(id);
         return prefix ? prefix + id : id;
     },
+    /**
+     * Returns the center point of a line or polygon
+     * @param {feature} feat line or polgyon
+     * @param {String} targetProjection target projection if the projection differs from the map's projection
+     * @returns {Array} coordinates of center point of the geometry
+     */
+    createCenterPoint: function (feat, targetProjection) {
+        let featureType = "",
+            centerPoint = [],
+            centerPointCoords = [];
+
+        const map = Radio.request("Map", "getMap");
+
+        featureType = feat.getGeometry().getType();
+
+        if (featureType === "Polygon") {
+
+            if (targetProjection !== undefined) {
+
+                centerPoint = transform(feat.getGeometry().getInteriorPoint().getCoordinates(), getMapProjection(map), targetProjection);
+
+                centerPointCoords = centerPoint.slice(0, -1);
+            }
+            else {
+
+                centerPoint = feat.getGeometry().getInteriorPoint().getCoordinates();
+
+                centerPointCoords = centerPoint.slice(0, -1);
+            }
+        }
+        else if (featureType === "LineString") {
+            if (targetProjection !== undefined) {
+
+                centerPointCoords = transform(feat.getGeometry().getCoordinateAt(0.5), getMapProjection(map), targetProjection);
+            }
+            else {
+
+                centerPointCoords = feat.getGeometry().getCoordinateAt(0.5);
+            }
+        }
+        else if (featureType === "Point") {
+
+            if (targetProjection !== undefined) {
+                centerPointCoords = transform(feat.getGeometry().getCoordinates(), getMapProjection(map), targetProjection);
+            }
+            else {
+                centerPointCoords = feat.getGeometry().getCoordinates();
+            }
+        }
+
+        return centerPointCoords;
+    },
+
 
     /**
      * setter for drawType
