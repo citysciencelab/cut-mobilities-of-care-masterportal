@@ -54,8 +54,8 @@ export class TrafficCountApi {
         /** @private */
         this.subscriptionTopics = {};
         /** @private */
-        this.layerNameInfix = "";
-        // this.layerNameInfix = "_Zaehlfeld";
+        // this.layerNameInfix = "";
+        this.layerNameInfix = "_Zaehlfeld";
         // this.layerNameInfix = "_Zaehlstelle";
 
         // set the mqtt listener
@@ -216,7 +216,7 @@ export class TrafficCountApi {
     /**
      * gets the sum for a single day excluding todays last 15 minutes
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} day the day as String in format YYYY-MM-DD
      * @param {Callback} [onupdate] as event function(date, value) fires initialy and anytime server site changes are made
      * @param {Callback} [onerror] as function(error) to fire on error
@@ -275,7 +275,7 @@ export class TrafficCountApi {
     /**
      * gets the sum of a year excluding todays last 15 minutes
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} year the year as String in format YYYY
      * @param {Callback} onupdate as event function(year, value) fires initialy and anytime server site changes are made
      * @param {Callback} [onerror] as function(error) to fire on error
@@ -349,7 +349,7 @@ export class TrafficCountApi {
     /**
      * gets the total sum excluding todays last 15 minutes
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {Callback} onupdate as event function(firstDate, value) fires initialy and anytime server site changes are made
      * @param {Callback} [onerror] as function(error) to fire on error
      * @param {Callback} [onstart] as function() to fire before any async action has started
@@ -408,7 +408,7 @@ export class TrafficCountApi {
     /**
      * gets the strongest day in the given year excluding today
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} year the year as String in format YYYY
      * @param {Callback} onupdate as event function(date, value)
      * @param {Callback} [onerror] as function(error) to fire on error
@@ -439,7 +439,7 @@ export class TrafficCountApi {
     /**
      * gets the strongest week in the given year excluding the current week
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} year the year as String in format YYYY
      * @param {Callback} onupdate as event function(calendarWeek, value)
      * @param {Callback} [onerror] as function(error) to fire on error
@@ -470,7 +470,7 @@ export class TrafficCountApi {
     /**
      * gets the strongest month in the given year including the current month
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} year the year as String in format YYYY
      * @param {Callback} onupdate as event function(month, value)
      * @param {Callback} [onerror] as function(error) to fire on error
@@ -520,7 +520,7 @@ export class TrafficCountApi {
     /**
      * gets the data for a diagram or table for the given interval
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} timeSettings configuration
      * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
      * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
@@ -607,7 +607,7 @@ export class TrafficCountApi {
     /**
      * subscribes the last change of data based on 15 minutes
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {Callback} [onupdate] as event function(phenomenonTime) fires initialy and anytime server site changes are made
      * @param {Callback} [onerror] as function(error) to fire on error
      * @param {Callback} [onstart] as function() to fire before any async action has started
@@ -671,7 +671,7 @@ export class TrafficCountApi {
     /**
      * gets the title and the data without subscription for the given thingId, meansOfTransport and timeSettings
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} timeSettings time configuration
      * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
      * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
@@ -707,7 +707,7 @@ export class TrafficCountApi {
     /**
      * gets the first date on a weekly basis ever recorded without subscription
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {Callback} onsuccess as event function(firstDate) fires once
      * @param {Callback} [onerror] as function(error) to fire on error
      * @param {Callback} [onstart] as function() to fire before any async action has started
