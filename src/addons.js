@@ -19,9 +19,6 @@ export default async function (config) {
                     storeModule = await import(/* webpackChunkName: "[request]" */ "../addons/" + entryPointParts[0] + "/store/" + entryPointParts[1] + ".js"),
                     component = await import(/* webpackChunkName: "[request]" */ "../addons/" + entryPointParts[0] + "/components/" + entryPointParts[1] + ".vue");
 
-                // Add the component to vue instance globally
-                Vue.component(component.default.name, component.default);
-
                 // Add the addonKey to a global array on vue instance
                 Vue.prototype.$addons.push(component.default.name);
 
