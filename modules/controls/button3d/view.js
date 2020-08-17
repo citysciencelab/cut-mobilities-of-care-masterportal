@@ -226,14 +226,11 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @returns {void}
      */
     controlsMapChangeClose2D: function (activeTools, supportedIn3d) {
-        const betaWarning = i18next.exists("common:modules.controls.3d.betaWarning") ? i18next.t("common:modules.controls.3d.betaWarning") : "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!";
-
         this.$("#3d-titel-open").hide();
         this.$("#3d-titel-close").show();
         Radio.trigger("Filter", "disable");
         Radio.trigger("ModelList", "toggleWfsCluster", false);
         Radio.trigger("Map", "activateMap3d");
-        Radio.trigger("Alert", "alert", betaWarning);
 
         activeTools.forEach(tool => {
             if (!supportedIn3d.includes(tool.get("id"))) {
