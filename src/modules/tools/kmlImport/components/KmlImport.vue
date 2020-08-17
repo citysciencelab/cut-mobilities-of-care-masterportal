@@ -47,7 +47,7 @@ export default {
         }
     },
     /**
-     * Put initialize here if mounting occurs after config parsing
+     *  Activates this tool, if it has to start by url params
      * @returns {void}
      */
     mounted () {

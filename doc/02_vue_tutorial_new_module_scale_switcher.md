@@ -259,25 +259,28 @@ methods: {
     }
 ```
 ### Initialisierung des ScaleSwitchers in dem mounted lifecycle hook
-In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* den lifecycle hook "mounted" implementieren. Darin müssen bei allen Tools die actions *initialize* und *activateByUrlParam* aufgerufen werden. Es wird abgefragt, ob die *isActive*-Konfiguration in der config.json auf *true* gesetzt ist, dann wird der ScaleSwitcher aktiviert.
+In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* den lifecycle hook "mounted" implementieren. Hier muss bei allen Tools die actions *activateByUrlParam* aufgerufen werden. 
 ```js
 ...
 mounted () {
-    this.initialize();
-    if (this.isActive) {
-        this.setActive(true);
-    }
     this.activateByUrlParam();
 },
 ```
 ### Schliessen des Scale-Switcher-Fensters
 In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* den lifecycle hook "created" implementieren. Hier wird ein "close"-Listener hinzugefügt, der auf das vom Tool per *emit* gefeuerte Event "close" hört und dann die Methode *close* aufruft. Diese Methode setzt im state *active* auf *false*.
 
+Hier muss bei allen Tools die actions *initialize* aufgerufen werden. Es wird abgefragt, ob die *isActive*-Konfiguration in der config.json auf *true* gesetzt ist, dann wird der ScaleSwitcher aktiviert.
+
 ACHTUNG: Da der core vom masterportal im Moment noch in backbone implementiert ist, muss danach das zugehörige backbone model deaktiviert werden.
 ```js
 ...
 created () {
     this.$on("close", this.close);
+    this.initialize();
+
+    if (this.isActive) {
+        this.setActive(true);
+    }
 },
 ...
 methods: {
