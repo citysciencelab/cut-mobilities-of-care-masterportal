@@ -1,5 +1,5 @@
 import {generateSimpleMutations} from "../../app-store/utils/generators";
-import ToolsState from "./stateTools";
+import toolsState from "./stateTools";
 
 const mutations = {
     /**
@@ -8,7 +8,7 @@ const mutations = {
      * {setKey:   (state, payload) => *   state[key] = payload * }
      * will be returned.
      */
-    ...generateSimpleMutations(ToolsState),
+    ...generateSimpleMutations(toolsState),
 
     /**
      * Filters the configured tools from the two configuration options:
