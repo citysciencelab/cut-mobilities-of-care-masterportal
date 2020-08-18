@@ -3,7 +3,9 @@ import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 /** @const {String} [Path array of possible config locations. First one found will be used] */
 /** @const {object} [vue actions] */
 const configPaths = [
-        "configJson.Portalconfig.legend"
+        "configJson.Portalconfig.legend",
+        "configJson.Portalconfig.menu.legend",
+        "configJson.Portalconfig.menu.tools.children.legend"
     ],
     actions = {
         /**

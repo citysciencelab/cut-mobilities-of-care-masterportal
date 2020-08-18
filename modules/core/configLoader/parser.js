@@ -222,7 +222,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
                     this.addItem(downloadItem);
                 }
-                this.addItem(toolitem);
+                /**
+                 * @deprecated Due to refactorment, legend is no longer considered a tool.
+                 * Item for legend MUST NOT be added.
+                 */
+                if (toolitem.id !== "legend") {
+                    this.addItem(toolitem);
+                }
             }
         }, this);
     },
