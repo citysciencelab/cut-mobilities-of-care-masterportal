@@ -454,15 +454,14 @@ export default {
                         {{ legendObj.name }}
                     </div>
                     <LegendSingleLayer
-                        :legend="legendObj.legend"
+                        :legendObj="legendObj"
                         :renderToId="''"
                     />
                 </div>
             </div>
         </div>
         <LegendSingleLayer
-            v-if="layerInfoLegend.hasOwnProperty('legend') && layerInfoLegend.legend.length > 0"
-            :legend="layerInfoLegend.legend"
+            :legendObj="layerInfoLegend"
             :renderToId="'layerinfo-legend'"
         />
     </div>

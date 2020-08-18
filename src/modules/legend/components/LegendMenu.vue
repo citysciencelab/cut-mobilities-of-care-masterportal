@@ -36,6 +36,7 @@ export default {
         <li
             v-if="showLegendInMenu"
             id="legend-menu"
+            :class="{ open: showLegend }"
             class="dropdown dropdown-folder"
             @click="toggleLegend"
         >
@@ -56,6 +57,7 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
     #legend-menu {
+        border-right: 1px solid #e5e5e5;
         font-size: 14px;
         float: left;
         cursor: pointer;

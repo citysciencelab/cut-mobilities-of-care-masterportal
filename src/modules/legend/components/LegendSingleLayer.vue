@@ -3,8 +3,8 @@ export default {
     name: "LegendSingleLayer",
     components: {},
     props: {
-        legend: {
-            type: Array,
+        legendObj: {
+            type: Object,
             required: true
         },
         renderToId: {
@@ -13,7 +13,7 @@ export default {
         }
     },
     mounted () {
-        if (this.renderToId !== "") {
+        if (this.renderToId !== "" && document.getElementById(this.renderToId)) {
             // $(this.$el).insertAfter(document.getElementById(this.renderToId));
             document.getElementById(this.renderToId).append(this.$el);
         }
@@ -24,7 +24,7 @@ export default {
 <template>
     <div class="layer-legend">
         <div
-            v-for="legendPart in legend"
+            v-for="legendPart in legendObj.legend"
             :key="JSON.stringify(legendPart)"
         >
             <!--Legend as Image or SVG-->
