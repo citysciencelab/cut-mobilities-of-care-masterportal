@@ -47,7 +47,11 @@
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen"
         },
-        "legend": "Legende",
+        "legend": {
+          "name": "Legende",
+          "linkToPdf": "Zur externen Legende (PDF)",
+          "noLegendForLayerInfo": "Legende nicht verfügbar"
+        },
         "contact": "Kontakt",
         "info": "Informationen"
     },

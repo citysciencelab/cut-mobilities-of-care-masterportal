@@ -438,7 +438,7 @@ export default {
                     :class="glyphicon"
                     class="glyphicon hidden-sm"
                 />
-                <span>{{ $t("menu.legend") }}</span>
+                <span>{{ $t("menu.legend.name") }}</span>
                 <span
                     class="glyphicon glyphicon-remove close-legend float-right"
                     @click="closeLegend"

@@ -4,12 +4,19 @@ export default {
     components: {},
     props: {
         legendObj: {
-            type: Object,
+            type: Object && undefined,
             required: true
         },
         renderToId: {
             type: String,
             required: true
+        }
+    },
+    watch: {
+        legendObj () {
+            if (this.renderToId !== "") {
+                document.getElementById(this.renderToId).append(this.$el);
+            }
         }
     },
     mounted () {
@@ -24,33 +31,44 @@ export default {
 <template>
     <div class="layer-legend">
         <div
-            v-for="legendPart in legendObj.legend"
-            :key="JSON.stringify(legendPart)"
+            v-if="legendObj !== undefined"
         >
-            <!--Legend as Image or SVG-->
-            <img
-                v-if="(typeof legendPart === 'string' && !legendPart.endsWith('.pdf'))"
-                :src="legendPart"
+            <div
+                v-for="legendPart in legendObj.legend"
+                :key="JSON.stringify(legendPart)"
             >
+                <!--Legend as Image or SVG-->
+                <img
+                    v-if="(typeof legendPart === 'string' && !legendPart.endsWith('.pdf'))"
+                    :src="legendPart"
+                >
 
-            <!--Legend PDF as Link-->
-            <a
-                v-if="(typeof legendPart === 'string' && legendPart.endsWith('.pdf'))"
-                :href="legendPart"
-                target="_blank"
-                :title="legendPart"
-            >
-                Zur externen Legende (PDF)
-            </a>
+                <!--Legend PDF as Link-->
+                <a
+                    v-if="(typeof legendPart === 'string' && legendPart.endsWith('.pdf'))"
+                    :href="legendPart"
+                    target="_blank"
+                    :title="legendPart"
+                >
+                    {{ $t("menu.legend.linkToPdf") }}
+                </a>
 
-            <!--Legend as Image from Object-->
-            <img
-                v-if="(typeof legendPart === 'object')"
-                :src="legendPart.graphic"
-            >
-            <span
-                v-if="(typeof legendPart === 'object')"
-            >{{ legendPart.name }}</span>
+                <!--Legend as Image from Object-->
+                <img
+                    v-if="(typeof legendPart === 'object')"
+                    :src="legendPart.graphic"
+                >
+                <span
+                    v-if="(typeof legendPart === 'object')"
+                >{{ legendPart.name }}</span>
+            </div>
+        </div>
+        <div
+            v-else
+        >
+            <span>
+                {{ $t("menu.legend.noLegendForLayerInfo") }}
+            </span>
         </div>
     </div>
 </template>

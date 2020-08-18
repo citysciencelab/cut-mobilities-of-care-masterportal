@@ -48,7 +48,7 @@ export default {
                     :class="glyphicon"
                     class="glyphicon hidden-sm"
                 ></span>
-                <span class="menuitem">{{ $t("menu.legend") }}</span>
+                <span class="menuitem">{{ $t("menu.legend.name") }}</span>
             </a>
         </li>
     </ul>
