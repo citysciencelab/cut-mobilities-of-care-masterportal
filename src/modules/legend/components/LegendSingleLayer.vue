@@ -61,5 +61,8 @@ export default {
     .layer-legend {
         padding-top: 5px;
         padding-bottom: 5px;
+        img {
+            max-width: 100%;
+        }
     }
 </style>
