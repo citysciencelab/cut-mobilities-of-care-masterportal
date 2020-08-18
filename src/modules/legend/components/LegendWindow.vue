@@ -21,6 +21,24 @@ export default {
 
                 visibleLayers.forEach(layer => this.toggleLayerInLegend(layer));
             }
+        },
+        layerIdForLayerInfo (layerIdForLayerInfo) {
+            const layerForLayerInfo = Radio.request("ModelList", "getModelByAttributes", {type: "layer", id: layerIdForLayerInfo});
+            let legendObj = null,
+                isValidLegend = null;
+
+            layerForLayerInfo.createLayer();
+            legendObj = {
+                id: layerForLayerInfo.get("id"),
+                name: layerForLayerInfo.get("name"),
+                legend: this.prepareLegend(layerForLayerInfo.get("legend")),
+                position: layerForLayerInfo.get("selectionIDX")
+            };
+            isValidLegend = this.isValidLegendObj(legendObj);
+
+            if (isValidLegend) {
+                this.setLegendForLayerInfo(legendObj);
+            }
         }
     },
     mounted () {

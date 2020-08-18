@@ -52,7 +52,7 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
             containment: "#map",
             handle: ".header"
         });
-        this.createLayerInfoLegend();
+        this.setLayerIdForLayerInfo();
         this.delegateEvents();
         return this;
     },
@@ -61,19 +61,11 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
      * Triggers the event to create layerinfo legend
      * @returns {void}
      */
-    createLayerInfoLegend: function () {
+    setLayerIdForLayerInfo: function () {
         const state = legendStore.state;
 
-        this.removeLayerInfoLegend();
-        // legendStore.commit("createLayerInfoLegend", this.model.get("id"));
-        legendStore.actions.createLayerInfoLegend({state}, this.model.get("id"));
-    },
-
-    removeLayerInfoLegend: function () {
-        const state = legendStore.state;
-
-        // legendStore.commit("removeLayerInfoLegend");
-        legendStore.actions.removeLayerInfoLegend({state});
+        // legendStore.commit("setLayerIdForLayerInfo", this.model.get("id"));
+        legendStore.actions.setLayerIdForLayerInfo({state}, this.model.get("id"));
     },
     /**
      * Toggles the tab after click.
@@ -114,7 +106,6 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
         $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").remove(this.$el);
         this.model.setIsVisible(false);
         Radio.trigger("LayerInformation", "unhighlightLayerInformationIcon");
-        this.removeLayerInfoLegend();
     }
 });
 

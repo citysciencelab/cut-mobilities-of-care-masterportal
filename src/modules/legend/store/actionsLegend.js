@@ -63,15 +63,11 @@ const configPaths = [
             });
         },
 
-        createLayerInfoLegend: function ({state}, id) {
-            const legendById = state.legends.filter((legendObj) => {
-                return legendObj.id === id;
-            })[0];
-
-            state.layerInfoLegend = legendById;
+        setLayerIdForLayerInfo: function ({state}, id) {
+            state.layerIdForLayerInfo = id;
         },
-        removeLayerInfoLegend: function ({state}) {
-            state.layerInfoLegend = {};
+        setLegendForLayerInfo: function ({state}, legendObj) {
+            state.layerInfoLegend = legendObj;
         }
     };
 
