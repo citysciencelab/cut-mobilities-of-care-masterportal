@@ -125,7 +125,8 @@ export default {
     },
 
     setSelectedFiletype: ({commit}, newFiletype) => {
-        commit("selectedFiletype", newFiletype);
+        commit("setSelectedFiletype", newFiletype);
+
     },
 
     importKML: ({state, dispatch}, datasrc) => {
