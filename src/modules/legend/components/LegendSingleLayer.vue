@@ -18,19 +18,13 @@ export default {
                 document.getElementById(this.renderToId).append(this.$el);
             }
         }
-    },
-    mounted () {
-        if (this.renderToId !== "" && document.getElementById(this.renderToId)) {
-            // $(this.$el).insertAfter(document.getElementById(this.renderToId));
-            document.getElementById(this.renderToId).append(this.$el);
-        }
     }
 };
 </script>
 
 <template>
     <div class="layer-legend">
-        <div
+        <template
             v-if="legendObj !== undefined"
         >
             <div
@@ -50,7 +44,7 @@ export default {
                     target="_blank"
                     :title="legendPart"
                 >
-                    {{ $t("menu.legend.linkToPdf") }}
+                    {{ $t("common:menu.legend.linkToPdf") }}
                 </a>
 
                 <!--Legend as Image from Object-->
@@ -62,14 +56,14 @@ export default {
                     v-if="(typeof legendPart === 'object')"
                 >{{ legendPart.name }}</span>
             </div>
-        </div>
-        <div
+        </template>
+        <template
             v-else
         >
             <span>
-                {{ $t("menu.legend.noLegendForLayerInfo") }}
+                {{ $t("common:menu.legend.noLegendForLayerInfo") }}
             </span>
-        </div>
+        </template>
     </div>
 </template>
 
