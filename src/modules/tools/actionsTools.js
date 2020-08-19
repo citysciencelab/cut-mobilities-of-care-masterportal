@@ -14,7 +14,7 @@ const actions = {
         Object.keys(state).forEach(toolId => {
             const tool = state[toolId];
 
-            if (tool && tool.id === id) {
+            if (tool && tool.id.toLowerCase() === id.toLowerCase()) {
                 dispatch(toolId + "/setActive", active);
             }
         });
