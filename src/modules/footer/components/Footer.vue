@@ -20,7 +20,10 @@ export default {
         ...mapGetters(["footerConfig", "mobile", "masterPortalVersionNumber"]),
         ...mapGetters("Footer", Object.keys(getters)),
         showLanguageSwitcher () {
-            return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
+            if (this.$i18n) {
+                return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
+            }
+            return false;
         }
     },
     mounted () {
