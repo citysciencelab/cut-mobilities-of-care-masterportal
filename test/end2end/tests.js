@@ -35,7 +35,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
             builder.withCapabilities(capability);
         }
 
-        describe(`MasterTests in ${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
+        describe(`${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
             this.timeout(3600000);
 
             if (isBasic(url) && !is2D(mode)) {

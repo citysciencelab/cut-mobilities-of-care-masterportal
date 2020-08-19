@@ -7,7 +7,7 @@
 const merge = require("webpack-merge"),
     Common = require("./webpack.common.js"),
     Mocha = require("mocha"),
-    mocha = new Mocha({bail: true, fullTrace: true}),
+    mocha = new Mocha({fullTrace: true}),
     fse = require("fs-extra"),
     execute = require("child-process-promise").exec;
 
