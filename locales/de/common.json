@@ -554,8 +554,7 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Ansicht einschalten",
-                "closeView3d": "Ansicht ausschalten",
-                "betaWarning": "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!"
+                "closeView3d": "Ansicht ausschalten"
             },
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",
