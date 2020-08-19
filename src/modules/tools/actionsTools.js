@@ -13,7 +13,7 @@ const actions = {
      * @returns {void}
      */
     setToolActive ({state, dispatch}, {id, active}) {
-        const toolId = Object.keys(state).find(tool => state[tool]?.id.toLowerCase() === id.toLowerCase());
+        const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase());
 
         if (toolId !== undefined) {
             dispatch(toolId + "/setActive", active);
@@ -30,7 +30,7 @@ const actions = {
      * @returns {void}
      */
     languageChanged ({state, commit}, {id, name}) {
-        const toolId = Object.keys(state).find(tool => state[tool]?.id.toLowerCase() === id.toLowerCase());
+        const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase());
 
         if (toolId !== undefined) {
             commit(toolId + "/setName", name);

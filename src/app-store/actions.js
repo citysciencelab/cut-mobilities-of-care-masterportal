@@ -9,11 +9,12 @@ export default {
     * @returns {Object} - returns a new config (.json or .js) without the deprecated parameters. They were replaced by the actual ones.
     */
     checkWhereDeprecated (deprecatedPath, config) {
-        let updatedConfig = {},
+        let updatedConfig = config,
             parameters = {};
 
         Object.entries(deprecatedPath).forEach((entry) => {
             parameters = this.getDeprecatedParameters(entry, config);
+
             if (parameters !== undefined && parameters.output !== undefined) {
                 updatedConfig = this.replaceDeprecatedCode(parameters, config);
             }

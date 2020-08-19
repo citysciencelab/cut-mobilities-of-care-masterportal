@@ -201,3 +201,21 @@ describe("checkWhereDeprecated", function () {
         expect(testReturn.Portalconfig.portalTitle.tooltip).to.undefined;
     });
 });
+describe("checkWhereDeprecated", function () {
+    it("it should return an object with input values", function () {
+        const config = {
+                Portalconfig: {
+                    "portalTitle": {
+                        "title": "Testname",
+                        "logo": "Testlogo",
+                        "link": "Testlink",
+                        "toolTip": "Testtooltip"
+                    }
+                }
+            },
+            testReturn = actions.checkWhereDeprecated(deprecatedParamsConfigJson, config);
+
+        expect(testReturn.Portalconfig).to.be.an("Object");
+        expect(testReturn.Portalconfig).to.equal(config.Portalconfig);
+    });
+});

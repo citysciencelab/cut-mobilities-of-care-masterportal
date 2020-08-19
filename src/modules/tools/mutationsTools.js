@@ -14,16 +14,16 @@ const mutations = {
      * Filters the configured tools from the two configuration options:
      * "portalconfigs.menu" and "portalconfigs.menu.tools.children" in config.json.
      * @param {object} state the state of Tools-module
-     * @param {object} [menuConfig={}] The menu entry of config.json
+     * @param {object} menuConfig The menu entry of config.json
      * @returns {Object[]} The configured Tools.
      */
-    setConfiguredTools (state, menuConfig = {}) {
+    setConfiguredTools (state, menuConfig) {
         const configPossibilitiesPaths = [
                 "configJson.Portalconfig.menu",
                 "configJson.Portalconfig.menu.tools.children"
             ],
             configPossibilities = [
-                menuConfig,
+                menuConfig || {},
                 menuConfig?.tools?.children || {}
             ],
             configuredTools = [];
