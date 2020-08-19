@@ -222,7 +222,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     pushToIsInitOpen: function (value) {
-        const isInitOpenArray = this.get("isInitOpen"),
+        let isInitOpenArray = this.get("isInitOpen"),
             msg = "";
 
         isInitOpenArray.push(value);
