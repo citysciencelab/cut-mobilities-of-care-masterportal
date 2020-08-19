@@ -175,9 +175,11 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
      * @returns {void}
      */
     minimize: function () {
-        this.model.setCollapse(true);
-        this.model.set("maxPosTop", this.$el.css("top"));
-        this.model.set("maxPosLeft", this.$el.css("left"));
+        if (!this.model.get("isCollapsed")) {
+            this.model.setCollapse(true);
+            this.model.set("maxPosTop", this.$el.css("top"));
+            this.model.set("maxPosLeft", this.$el.css("left"));
+        }
         this.$(".win-body").hide();
         this.$(".glyphicon-minus").hide();
         this.$el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
