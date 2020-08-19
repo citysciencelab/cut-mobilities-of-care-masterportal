@@ -47,6 +47,7 @@ function getByArraySyntax (obj, pathArray) {
 
     return getByArraySyntax(obj[step], pathArray);
 }
+export {getByArraySyntax};
 
 /**
  * Creates flat array of strings out of a variety of possible path arrays or strings.

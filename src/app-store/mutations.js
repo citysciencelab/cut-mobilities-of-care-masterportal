@@ -1,4 +1,30 @@
-const mutations = {
+import actions from "../app-store/actions"; // https://stackoverflow.com/questions/40487627/can-i-call-commit-from-one-of-mutations-in-vuex-store
+
+// The objects deprecatedParamsConfigJson and deprecatedParamsConfigJs store the current respectively new parameters and the related deprecated parameters.
+// The key describes the current parameter or more precisely the path to the new/current path.
+// The corresponding value describes the old path with the deprecated parameter.
+// Later on the algorithm takes the old path, estimates the content and rewrites the content to the new path / new parameter.
+// The old deprecated path will be removed.
+// Please notice that the replacement only effects the state. This means that the changes only have impact on the vue-components.
+// Nevertheless you can or even should specify deprecated backbone parameters here.
+
+const deprecatedParamsConfigJson = {
+        "Portalconfig.portalTitle.title": ["Portalconfig.PortalTitle"],
+        "Portalconfig.portalTitle.logo": ["Portalconfig.PortalLogo"],
+        "Portalconfig.portalTitle.link": ["Portalconfig.LogoLink"],
+        "Portalconfig.portalTitle.toolTip": ["Portalconfig.portalTitle.tooltip", "Portalconfig.LogoToolTip"],
+        "Portalconfig.searchBar.bkg.zoomToResultOnHover": ["Portalconfig.searchBar.bkg.zoomToResult"],
+        "Portalconfig.treeType": ["Portalconfig.Baumtyp"],
+        "Portalconfig.controls.overviewMap.layerId": ["Portalconfig.controls.overviewMap.baselayer"],
+        "Portalconfig.mapView.startResolution": ["Portalconfig.mapView.resolution"],
+        "Portalconfig.searchBar.startZoomLevel": ["Portalconfig.searchBar.zoomLevel"]
+    },
+    deprecatedParamsConfigJs = {
+        "startUpModul": ["isInitOpen"]
+    };
+
+export default {
+
     /**
      * Sets config.json.
      * @param {object} state store state
@@ -6,7 +32,7 @@ const mutations = {
      * @returns {void}
      */
     setConfigJson (state, config) {
-        state.configJson = config;
+        state.configJson = actions.checkWhereDeprecated(deprecatedParamsConfigJson, config);
     },
     /**
      * Sets config.js.
@@ -15,7 +41,7 @@ const mutations = {
      * @returns {void}
      */
     setConfigJs (state, config) {
-        state.configJs = config;
+        state.configJs = actions.checkWhereDeprecated(deprecatedParamsConfigJs, config);
     },
     /**
      * Sets mobile flag.
@@ -36,5 +62,3 @@ const mutations = {
         state.i18NextInitialized = isInitialized;
     }
 };
-
-export default mutations;

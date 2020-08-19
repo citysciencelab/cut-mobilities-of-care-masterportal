@@ -45,7 +45,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         meansOfTransportLabel: "",
 
         meansOfTransportFahrzeuge: "AnzFahrzeuge",
-        meansOfTransportFahrraeder: "AnzFahrraeder",
+        meansOfTransportFahrraeder: "Anzahl_Fahrraeder",
         meansOfTransportSV: "AntSV",
 
         propTrafficCountApi: null,
@@ -81,11 +81,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         isCreated: false,
         typeAssoc: {
             AnzFahrzeuge: "",
-            AnzFahrraeder: ""
+            Anzahl_Fahrraeder: ""
         },
         meansOfTransportAssoc: {
             AnzFahrzeuge: "",
-            AnzFahrraeder: ""
+            Anzahl_Fahrraeder: ""
         },
         dayInterval: "15-Min",
         weekInterval: "1-Tag",
@@ -156,11 +156,11 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             calendarweek: i18next.t("common:modules.tools.gfi.themes.trafficCount.calendarweek"),
             meansOfTransportAssoc: {
                 AnzFahrzeuge: i18next.t("common:modules.tools.gfi.themes.trafficCount.carLabel"),
-                AnzFahrraeder: i18next.t("common:modules.tools.gfi.themes.trafficCount.bicycleLabel")
+                Anzahl_Fahrraeder: i18next.t("common:modules.tools.gfi.themes.trafficCount.bicycleLabel")
             },
             typeAssoc: {
                 AnzFahrzeuge: i18next.t("common:modules.tools.gfi.themes.trafficCount.infraredsensor"),
-                AnzFahrraeder: i18next.t("common:modules.tools.gfi.themes.trafficCount.countingstation")
+                Anzahl_Fahrraeder: i18next.t("common:modules.tools.gfi.themes.trafficCount.countingstation")
             },
             idLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.idLabel"),
             typeLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.typeLabel"),
@@ -1047,7 +1047,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * refreshes the diagram for a dataset based on day
      * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
-     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {String} meansOfTransport - AnzFahrzeuge | Anzahl_Fahrraeder | AntSV
      * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
      * @returns {Void}  -
      */
@@ -1086,7 +1086,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * refreshes the diagram for a dataset based on week
      * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
-     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {String} meansOfTransport - AnzFahrzeuge | Anzahl_Fahrraeder | AntSV
      * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
      * @returns {Void}  -
      */
@@ -1133,7 +1133,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      * refreshes the diagram for a dataset based on year
      * @param {Object} dataset the dataset to refresh the diagram with as object{date: value}
      * @param {String} year the year from the calendar as String
-     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {String} meansOfTransport - AnzFahrzeuge | Anzahl_Fahrraeder | AntSV
      * @param {String} selector the dom selector of the diagram (e.g. an id as "#...")
      * @returns {Void}  -
      */
@@ -1356,7 +1356,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      *get Data set in right format for drawing the chart
      * @param {Array} dataset the dataset getting from api
-     * @param {String} meansOfTransport - AnzFahrzeuge | AnzFahrraeder | AntSV
+     * @param {String} meansOfTransport - AnzFahrzeuge | Anzahl_Fahrraeder | AntSV
      * @param {Array} colors the color to be signed to every data list
      * @param {String} xAttr the attribute to use for x axis values (e.g. week, weekday, hour)
      * @param {String} yAttr the attribute to use for y axis values (e.g. value1234, number5222) - must be unique for this line as it is used as attrName in attrToShowArray as well
@@ -1628,7 +1628,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * gets the download data for the last 7 days for the given thingId and meansOfTransport
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
      * @param {Callback} [onerror] as function(error) to fire on error
      * @param {Callback} [onstart] as function() to fire before any async action has started
@@ -1649,7 +1649,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * gets the download data for the 54 weeks for the given thingId and meansOfTransport
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
      * @param {Callback} [onerror] as function(error) to fire on error
      * @param {Callback} [onstart] as function() to fire before any async action has started
@@ -1670,7 +1670,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
     /**
      * gets the download data since the beginning
      * @param {Integer} thingId the ID of the thing
-     * @param {String} meansOfTransport the transportation as 'AnzFahrraeder' or 'AnzFahrzeuge'
+     * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
      * @param {Callback} [onerror] as function(error) to fire on error
      * @param {Callback} [onstart] as function() to fire before any async action has started
