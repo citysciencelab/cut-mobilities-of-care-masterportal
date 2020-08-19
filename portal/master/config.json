@@ -421,7 +421,7 @@
         }
       },
       "legend": {
-        "name": "translate#common:menu.legend",
+        "name": "translate#common:menu.legend.name",
         "glyphicon": "glyphicon-book"
       },
       "contact": {

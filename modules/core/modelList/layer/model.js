@@ -77,6 +77,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @fires Core#RadioRequestMapViewGetResoByScale
      * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @fires Alerting#RadioTriggerAlertAlert
+     * @fires LegendComponent:RadioTriggerLegendComponentUpdateLegend
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsVisibleInMap
      * @listens Layer#changeTransparency
@@ -311,6 +312,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Layer#event:RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#event:RadioTriggerLayerSetLayerInfoChecked
      * @listens Core#RadioTriggerMapChange
+     * @fires LegendComponent:RadioTriggerLegendComponentUpdateLegend
      * @param {Radio.channel} channel Radio channel of this module
      * @return {void}
      */
@@ -371,7 +373,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "change:isSelected": function () {
                 this.toggleLayerOnMap();
             },
-            "change:transparency": this.updateLayerTransparency
+            "change:transparency": this.updateLayerTransparency,
+            "change:legend": function () {
+                Radio.trigger("LegendComponent", "updateLegend");
+            }
         });
     },
 

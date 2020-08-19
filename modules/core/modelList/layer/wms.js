@@ -155,7 +155,7 @@ const WMSLayer = Layer.extend({
             }
         }
 
-        if (legend === true) {
+        if (legend === true || Array.isArray(legend)) {
             const layerNames = this.get("layers").split(",");
 
             if (layerNames.length === 1) {

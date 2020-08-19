@@ -17,9 +17,7 @@ export default {
     watch: {
         showLegend (showLegend) {
             if (showLegend) {
-                const visibleLayers = this.getVisibleLayers();
-
-                visibleLayers.forEach(layer => this.toggleLayerInLegend(layer));
+                this.createLegend();
             }
         },
         layerIdForLayerInfo (layerIdForLayerInfo) {
@@ -47,6 +45,7 @@ export default {
     created () {
         this.listenToLayerVisibilityChanged();
         this.listenToUpdatedSelectedLayerList();
+        this.listenToLayerLegendUpdate();
     },
     updated () {
         $(this.$el).draggable({
@@ -66,6 +65,12 @@ export default {
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
         ...mapMutations("Legend", Object.keys(mutations)),
+
+        createLegend () {
+            const visibleLayers = this.getVisibleLayers();
+
+            visibleLayers.forEach(layer => this.toggleLayerInLegend(layer));
+        },
 
         /**
          * Listens to changed layer visibility
@@ -91,6 +96,17 @@ export default {
             });
         },
 
+        /**
+         * Listens to changed layer legend
+         * @returns {void}
+         */
+        listenToLayerLegendUpdate () {
+            Backbone.Events.listenTo(Radio.channel("LegendComponent"), {
+                "updateLegend": () => {
+                    this.createLegend();
+                }
+            });
+        },
         /**
          * Closes the legend.
          * @returns {void}
@@ -139,12 +155,12 @@ export default {
                 },
                 isValidLegend = this.isValidLegendObj(legendObj),
                 isNotYetInLegend = isValidLegend && this.isLayerNotYetInLegend(id),
-                isPositionChanged = isValidLegend && !isNotYetInLegend && this.isPositionChanged(id, legendObj.position);
+                isLegendChanged = isValidLegend && !isNotYetInLegend && this.isLegendChanged(id, legendObj);
 
             if (isNotYetInLegend) {
                 this.addLegend(legendObj);
             }
-            else if (isPositionChanged) {
+            else if (isLegendChanged) {
                 this.removeLegend(id);
                 this.addLegend(legendObj);
             }
@@ -159,10 +175,10 @@ export default {
         prepareLegend (legendInfos) {
             let preparedLegend = [];
 
-            if (this.isArrayOfStrings(legendInfos) || typeof legendInfos === "boolean" || !legendInfos) {
+            if (this.isArrayOfStrings(legendInfos)) {
                 preparedLegend = legendInfos;
             }
-            else {
+            else if (Array.isArray(legendInfos)) {
                 legendInfos.forEach(legendInfo => {
                     const geometryType = legendInfo.geometryType,
                         name = legendInfo.label,
@@ -171,14 +187,21 @@ export default {
                         name
                     };
 
-                    if (geometryType === "Point") {
-                        legendObj = this.prepareLegendForPoint(legendObj, style);
+                    if (geometryType) {
+
+                        if (geometryType === "Point") {
+                            legendObj = this.prepareLegendForPoint(legendObj, style);
+                        }
+                        else if (geometryType === "LineString") {
+                            legendObj = this.prepareLegendForLineString(legendObj, style);
+                        }
+                        else if (geometryType === "Polygon") {
+                            legendObj = this.prepareLegendForPolygon(legendObj, style);
+                        }
                     }
-                    else if (geometryType === "LineString") {
-                        legendObj = this.prepareLegendForLineString(legendObj, style);
-                    }
-                    else if (geometryType === "Polygon") {
-                        legendObj = this.prepareLegendForPolygon(legendObj, style);
+                    /** Style WMS */
+                    else if (legendInfo.hasOwnProperty("name") && legendInfo.hasOwnProperty("graphic")) {
+                        legendObj = legendInfo;
                     }
                     preparedLegend.push(legendObj);
                 });
@@ -286,11 +309,10 @@ export default {
          * @returns {Object} - prepared legendObj.
          */
         prepareLegendForLineString (legendObj, style) {
-            const clonedStyle = style.clone(),
-                strokeColor = clonedStyle.get("lineStrokeColor") ? this.colorToRgb(clonedStyle.get("lineStrokeColor")) : "black",
-                strokeWidth = clonedStyle.get("lineStrokeWidth"),
-                strokeOpacity = clonedStyle.get("lineStrokeColor")[3] || 0,
-                strokeDash = clonedStyle.get("lineStrokeDash") ? clonedStyle.get("lineStrokeDash").join(" ") : undefined;
+            const strokeColor = style.get("lineStrokeColor") ? this.colorToRgb(style.get("lineStrokeColor")) : "black",
+                strokeWidth = style.get("lineStrokeWidth"),
+                strokeOpacity = style.get("lineStrokeColor")[3] || 0,
+                strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
             let svg = "data:image/svg+xml;charset=utf-8,";
 
             svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
@@ -402,22 +424,22 @@ export default {
         },
 
         /**
-         * Checks if the position of the layer has changed
+         * Checks if the legend object of the layer has changed
          * @param {String} layerId Id of layer
-         * @param {Number} position position of layer in map
-         * @returns {Boolean} - Flag if the position has changed
+         * @param {Object} legendObj The legend object to be checked.
+         * @returns {Boolean} - Flag if the legendObject has changed
          */
-        isPositionChanged (layerId, position) {
-            let isPositionChanged = false;
-            const layerLegend = this.legends.filter((legendObj) => {
-                return legendObj.id === layerId;
+        isLegendChanged (layerId, legendObj) {
+            let isLegendChanged = false;
+            const layerLegend = this.legends.filter((legend) => {
+                return legend.id === layerId;
             })[0];
 
-            if (layerLegend && layerLegend.position !== position) {
-                isPositionChanged = true;
+            if (btoa(JSON.stringify(layerLegend)) !== btoa(JSON.stringify(legendObj))) {
+                isLegendChanged = true;
             }
 
-            return isPositionChanged;
+            return isLegendChanged;
         },
 
         /**

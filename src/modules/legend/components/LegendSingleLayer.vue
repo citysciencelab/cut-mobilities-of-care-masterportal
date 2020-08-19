@@ -31,30 +31,55 @@ export default {
                 v-for="legendPart in legendObj.legend"
                 :key="JSON.stringify(legendPart)"
             >
-                <!--Legend as Image or SVG-->
-                <img
-                    v-if="(typeof legendPart === 'string' && !legendPart.endsWith('.pdf'))"
-                    :src="legendPart"
+                <!-- String -->
+                <template
+                    v-if="typeof legendPart === 'string'"
                 >
+                    <!--Legend as Image-->
+                    <img
+                        v-if="!legendPart.endsWith('.pdf') && !legendPart.endsWith('</svg>')"
+                        :src="legendPart"
+                    >
+                    <!--Legend as SVG-->
+                    <div
+                        v-if="legendPart.endsWith('</svg>')"
+                    >
+                        {{ legendPart }}
+                    </div>
+                    <!--Legend PDF as Link-->
+                    <a
+                        v-if="legendPart.endsWith('.pdf')"
+                        :href="legendPart"
+                        target="_blank"
+                        :title="legendPart"
+                    >
+                        {{ $t("common:menu.legend.linkToPdf") }}
+                    </a>
+                </template>
 
-                <!--Legend PDF as Link-->
-                <a
-                    v-if="(typeof legendPart === 'string' && legendPart.endsWith('.pdf'))"
-                    :href="legendPart"
-                    target="_blank"
-                    :title="legendPart"
+                <!-- Object -->
+                <template
+                    v-if="typeof legendPart === 'object'"
                 >
-                    {{ $t("common:menu.legend.linkToPdf") }}
-                </a>
+                    <!--Legend as Image or SVG -->
+                    <img
+                        v-if="!legendPart.graphic.endsWith('.pdf')"
+                        :src="legendPart.graphic"
+                    >
 
-                <!--Legend as Image from Object-->
-                <img
-                    v-if="(typeof legendPart === 'object')"
-                    :src="legendPart.graphic"
-                >
-                <span
-                    v-if="(typeof legendPart === 'object')"
-                >{{ legendPart.name }}</span>
+                    <!--Legend PDF as Link-->
+                    <a
+                        v-if="legendPart.graphic.endsWith('.pdf')"
+                        :href="legendPart.graphic"
+                        target="_blank"
+                        :title="legendPart.graphic"
+                    >
+                        {{ $t("common:menu.legend.linkToPdf") }}
+                    </a>
+                    <span>
+                        {{ legendPart.name }}
+                    </span>
+                </template>
             </div>
         </template>
         <template

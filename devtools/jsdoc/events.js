@@ -189,6 +189,13 @@
  */
 
 
+/** -------------------- LEGEND COMPONENT-------------------- */
+
+/**
+ * @event LegendComponent#RadioTriggerLegendComponentUpdateLegend
+ * @example Radio.trigger("LegendComponent", "updateLegend")
+ */
+
 /** -------------------- LEGEND -------------------- */
 
 /**
