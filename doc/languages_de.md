@@ -59,7 +59,7 @@ Für Einsteiger empfehlen wir einen kurzen Blick in die JSON-Anleitungen:
 ## Sprachdateien
 
 Sprachdateien sind der Kern der Übersetzungen. Jede Sprache benötigt eigene Übersetzungsdateien.
-Wir haben uns entschieden, die Übersetzungen in drei verschiedene Dateien aufzuteilen:
+Wir haben uns entschieden, die Übersetzungen in zwei verschiedene Dateien aufzuteilen:
 
 1. common
 2. additional
