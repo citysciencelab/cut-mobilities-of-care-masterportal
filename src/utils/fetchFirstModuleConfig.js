@@ -168,11 +168,11 @@ export {fetchFirstModuleConfig};
  * @returns {object} - The resulting merged object
  */
 function deepMerge (source, target) {
-    if (source instanceof Object === false || Array.isArray(source)) {
+    if (source instanceof Object === false) {
         return target;
     }
 
-    if (target instanceof Object === false) {
+    if (target instanceof Object === false || Array.isArray(source)) {
         return {...source};
     }
 

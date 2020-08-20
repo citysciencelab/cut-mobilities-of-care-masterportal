@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
+import Footer from "../modules/footer/store/indexfooter";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 
@@ -21,6 +22,7 @@ const store = new Vuex.Store({
     modules: {
         Map,
         Alerting,
+        Footer,
         Tools: {
             ...toolsModule
         },
