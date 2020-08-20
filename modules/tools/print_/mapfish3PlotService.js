@@ -421,8 +421,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     drawMask: function (mapSize, context) {
-        const mapWidth = mapSize[0] * DEVICE_PIXEL_RATIO,
-            mapHeight = mapSize[1] * DEVICE_PIXEL_RATIO;
+        const ration = context.canvas.width > mapSize[0] ? DEVICE_PIXEL_RATIO : 1,
+            mapWidth = mapSize[0] * ration,
+            mapHeight = mapSize[1] * ration;
 
         context.beginPath();
         // Outside polygon, must be clockwise
@@ -444,7 +445,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     drawPrintPage: function (mapSize, resolution, printMapSize, scale, context) {
-        const ration = context.canvas.height > printMapSize[1] ? DEVICE_PIXEL_RATIO : 1,
+        const ration = context.canvas.width > mapSize[0] ? DEVICE_PIXEL_RATIO : 1,
             center = [mapSize[0] * ration / 2, mapSize[1] * ration / 2],
             boundWidth = printMapSize[0] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ration,
             boundHeight = printMapSize[1] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ration,
