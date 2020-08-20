@@ -59,7 +59,7 @@ export default {
                         {{ $t(mobile ? $t(url.alias_mobil) : $t(url.alias)) }}
                     </a>
                     <span
-                        v-if="index <= Object.keys(urls).length || showVersion"
+                        v-if="index < Object.keys(urls).length - 1 || showVersion"
                         class="glyphicon glyphicon-option-vertical hidden-xs"
                     />
                 </span>
