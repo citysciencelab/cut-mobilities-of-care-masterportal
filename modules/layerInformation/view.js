@@ -1,7 +1,7 @@
 import Template from "text-loader!./template.html";
 import "jquery-ui/ui/widgets/draggable";
 import "bootstrap/js/tab";
-import legendStore from "../../src/modules/legend/store/indexLegend.js";
+import store from "../../src/app-store";
 /**
  * @member LayerInformationTemplate
  * @description Template used to create the layer information
@@ -62,10 +62,7 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
      * @returns {void}
      */
     setLayerIdForLayerInfo: function () {
-        const state = legendStore.state;
-
-        // legendStore.commit("setLayerIdForLayerInfo", this.model.get("id"));
-        legendStore.actions.setLayerIdForLayerInfo({state}, this.model.get("id"));
+        store.commit("Legend/setLayerIdForLayerInfo", this.model.get("id"));
     },
     /**
      * Toggles the tab after click.

@@ -25,7 +25,6 @@ export default {
             let legendObj = null,
                 isValidLegend = null;
 
-            layerForLayerInfo.createLayer();
             legendObj = {
                 id: layerForLayerInfo.get("id"),
                 name: layerForLayerInfo.get("name"),
