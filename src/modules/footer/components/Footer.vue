@@ -20,10 +20,7 @@ export default {
         ...mapGetters(["footerConfig", "mobile", "masterPortalVersionNumber"]),
         ...mapGetters("Footer", Object.keys(getters)),
         showLanguageSwitcher () {
-            if (this.$i18n) {
-                return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
-            }
-            return false;
+            return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
         }
     },
     mounted () {
@@ -61,13 +58,15 @@ export default {
                     >
                         {{ $t(mobile ? url.alias_mobil : url.alias) }}
                     </a>
-                    <span class="glyphicon glyphicon-option-vertical hidden-xs" />
+                    <span
+                        v-if="index <= urls.length || showVersion"
+                        class="glyphicon glyphicon-option-vertical hidden-xs"
+                    />
                 </span>
             </template>
             <template v-if="showVersion">
                 <span class="hidden-xs">
                     {{ $t("masterPortalVersion", {masterPortalVersionNumber}) }}
-                    <span class="glyphicon glyphicon-option-vertical hidden-xs" />
                 </span>
             </template>
             <span class="spacer" />
@@ -107,7 +106,6 @@ export default {
 
         .glyphicon-option-vertical {
             padding: 0 8px;
-            font-size: 12px;
         }
 
         .footer-mouse-position {

@@ -9,6 +9,14 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 config.mocks.$t = key => key;
+config.mocks.$i18n = {
+    i18next: {
+        options: {
+            isEnabled: () => sinon.stub(),
+            getLanguages: () => sinon.stub()
+        }
+    }
+};
 
 describe("Footer.vue", () => {
     const mockConfigJs = {
@@ -55,7 +63,7 @@ describe("Footer.vue", () => {
         expect(wrapper.find("#footer").exists()).to.be.true;
     });
 
-    it("renders the masterportal version in footer", async () => {
+    it("renders the masterportal version in footer", () => {
         store.commit("Footer/setShowVersion", true);
         const wrapper = shallowMount(FooterComponent, {
             store,
@@ -66,8 +74,6 @@ describe("Footer.vue", () => {
             },
             localVue
         });
-
-        await wrapper.vm.$nextTick();
 
         expect(wrapper.find(".hidden-xs").exists()).to.be.true;
     });
