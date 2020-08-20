@@ -1,5 +1,5 @@
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
     name: "Title",
@@ -12,9 +12,13 @@ export default {
         ])
     },
     mounted () {
+        setTimeout(() => {
+            this.initialize();
+        }, 0);
         $(this.$el).insertAfter(document.getElementById("root"));
     },
     created () {
+
         const myBus = Backbone.Events;
 
         myBus.listenTo(Radio.channel("Title"), {
@@ -26,6 +30,7 @@ export default {
         });
     },
     methods: {
+        ...mapActions("Title", ["initialize"]),
         /**
         * Depending on the available space, the titletext and titlelogo is rendered.
         * @returns {void}
