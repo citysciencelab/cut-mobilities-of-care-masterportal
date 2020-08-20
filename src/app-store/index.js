@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
-import Footer from "../modules/footer/store/indexfooter";
+import Footer from "../modules/footer/store/indexFooter";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 
