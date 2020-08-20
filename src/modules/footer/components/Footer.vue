@@ -56,10 +56,10 @@ export default {
                         :href="url.url"
                         target="_blank"
                     >
-                        {{ $t(mobile ? url.alias_mobil : url.alias) }}
+                        {{ $t(mobile ? $t(url.alias_mobil) : $t(url.alias)) }}
                     </a>
                     <span
-                        v-if="index <= urls.length || showVersion"
+                        v-if="index <= Object.keys(urls).length || showVersion"
                         class="glyphicon glyphicon-option-vertical hidden-xs"
                     />
                 </span>
