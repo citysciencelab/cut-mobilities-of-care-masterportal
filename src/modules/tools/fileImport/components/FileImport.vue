@@ -4,18 +4,18 @@ import {mapGetters} from "vuex";
 import {mapActions} from "vuex";
 
 export default {
-    name: "KmlImport",
+    name: "FileImport",
     components: {
         Tool
     },
     data () {
         return {
             dzIsDropHovering: false,
-            storePath: this.$store.state.Tools.KmlImport
+            storePath: this.$store.state.Tools.FileImport
         };
     },
     computed: {
-        ...mapGetters("Tools/KmlImport", [
+        ...mapGetters("Tools/FileImport", [
             "deactivateGFI",
             "glyphicon",
             "active",
@@ -54,7 +54,7 @@ export default {
         this.activateByUrlParam();
     },
     methods: {
-        ...mapActions("Tools/KmlImport", [
+        ...mapActions("Tools/FileImport", [
             "activateByUrlParam",
             "importKML",
             "setSelectedFiletype",
@@ -110,7 +110,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('modules.tools.kmlImport.title')"
+        :title="$t('modules.tools.fileImport.title')"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
@@ -125,7 +125,7 @@ export default {
                 <p
                     id="cta"
                 >
-                    {{ $t("modules.tools.kmlImport.captions.intro") }}
+                    {{ $t("modules.tools.fileImport.captions.intro") }}
                 </p>
                 <div
                     id="drop-area-fake"
@@ -138,7 +138,7 @@ export default {
                         <p
                             class="caption"
                         >
-                            {{ $t("modules.tools.kmlImport.captions.dropzone") }}
+                            {{ $t("modules.tools.fileImport.captions.dropzone") }}
                         </p>
                     </div>
 
@@ -161,7 +161,7 @@ export default {
                             type="file"
                             @change="onInputChange"
                         />
-                        {{ $t("modules.tools.kmlImport.captions.browse") }}
+                        {{ $t("modules.tools.fileImport.captions.browse") }}
                     </label>
                 </div>
                 <div
@@ -172,7 +172,7 @@ export default {
                     v-if="importedFileNames.length > 0"
                     id="imported-filenames"
                 >
-                    <label>{{ $t("modules.tools.kmlImport.successfulImportedLabel") }}</label>
+                    <label>{{ $t("modules.tools.fileImport.successfulImportedLabel") }}</label>
                     <ul>
                         <li
                             v-for="(filename, index) in importedFileNames"

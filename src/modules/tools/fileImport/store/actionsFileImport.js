@@ -111,7 +111,7 @@ export default {
     },
 
     activateByUrlParam: ({rootState, commit}) => {
-        const mappings = ["kmlimport"];
+        const mappings = ["kmlimport", "fileimport"];
 
         if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen.toLowerCase()) !== -1) {
             commit("setActive", true);
@@ -139,7 +139,7 @@ export default {
         if (format === false) {
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
-                content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFormat")
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFormat")
             };
 
             dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
@@ -152,7 +152,7 @@ export default {
         catch (ex) {
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
-                content: i18next.t("common:modules.tools.kmlImport.alertingMessages.formatError")
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.formatError")
             };
 
             dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
@@ -162,7 +162,7 @@ export default {
         if (!Array.isArray(features) || features.length === 0) {
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
-                content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFileContent")
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFileContent")
             };
 
             dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
@@ -191,7 +191,7 @@ export default {
 
         alertingMessage = {
             category: i18next.t("common:modules.alerting.categories.info"),
-            content: i18next.t("common:modules.tools.kmlImport.alertingMessages.success", {filename: datasrc.filename})
+            content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: datasrc.filename})
         };
 
         dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});

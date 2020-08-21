@@ -34,7 +34,7 @@
             "coord": "Koordinaten abfragen",
             "supplyCoord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
-            "kmlimport": "Datei-Import",
+            "fileimport": "Datei-Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
             "styleWMS": "Style WMS",
@@ -321,7 +321,7 @@
                 "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
                 "contenNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
             },
-            "kmlImport": {
+            "fileImport": {
                 "captions": {
                     "intro": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.",
                     "dropzone": "Datei hier ablegen",

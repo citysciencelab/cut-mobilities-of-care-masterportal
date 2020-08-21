@@ -34,7 +34,7 @@
             "coord": "Query coordinates",
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
-            "kmlimport": "Import file",
+            "fileimport": "Import file",
             "routing": "Route planner",
             "draw": "Drawing / writing",
             "styleWMS": "Style WMS",
@@ -312,7 +312,7 @@
                 "contentSaved": "Content was copied to the clipboard.",
                 "contenNotSaved": "Content could not be copied to the clipboard."
             },
-            "kmlImport": {
+            "fileImport": {
                 "captions": {
                     "intro": "Import your file via drag and drop or alternatively use the browse dialogue.",
                     "dropzone": "Drop file here",

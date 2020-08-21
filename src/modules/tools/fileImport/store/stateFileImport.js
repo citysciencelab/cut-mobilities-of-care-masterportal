@@ -1,6 +1,6 @@
 /**
  * User type definition
- * @typedef {object} KmlImportState
+ * @typedef {object} FileImportState
  * @property {boolean}  active - if true, component is rendered
  * @property {boolean}  deactivateGFI - if true, component activation deactivates gfi component
  * @property {string}   glyphicon - icon next to title
@@ -22,7 +22,7 @@ export default {
     active: false,
     deactivateGFI: false,
     glyphicon: "glyphicon-load",
-    id: "kmlImport",
+    id: "fileImport",
     isActive: false,
     name: "KML-Datei laden",
     onlyDesktop: true,
@@ -33,18 +33,18 @@ export default {
     importedFileNames: [],
     supportedFiletypes: {
         auto: {
-            caption: "common:modules.tools.kmlImport.captions.supportedFiletypes.auto"
+            caption: "common:modules.tools.fileImport.captions.supportedFiletypes.auto"
         },
         kml: {
-            caption: "common:modules.tools.kmlImport.captions.supportedFiletypes.kml",
+            caption: "common:modules.tools.fileImport.captions.supportedFiletypes.kml",
             rgx: /\.kml$/i
         },
         gpx: {
-            caption: "common:modules.tools.kmlImport.captions.supportedFiletypes.gpx",
+            caption: "common:modules.tools.fileImport.captions.supportedFiletypes.gpx",
             rgx: /\.gpx$/i
         },
         geojson: {
-            caption: "common:modules.tools.kmlImport.captions.supportedFiletypes.geojson",
+            caption: "common:modules.tools.fileImport.captions.supportedFiletypes.geojson",
             rgx: /\.(geo)?json$/i
         }
     },

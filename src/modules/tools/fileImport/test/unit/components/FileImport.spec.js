@@ -1,7 +1,7 @@
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import KmlImportComponent from "../../../components/KmlImport.vue";
-import KmlImport from "../../../store/indexKmlImport";
+import FileImportComponent from "../../../components/FileImport.vue";
+import FileImport from "../../../store/indexFileImport";
 import {expect} from "chai";
 
 const localVue = createLocalVue();
@@ -10,16 +10,16 @@ localVue.use(Vuex);
 
 config.mocks.$t = key => key;
 
-describe("KmlImport.vue", () => {
+describe("FileImport.vue", () => {
     const
         mockConfigJson = {
             Portalconfig: {
                 menu: {
                     tools: {
                         children: {
-                            kmlimport:
+                            fileimport:
                             {
-                                "title": "translate#common:menu.tools.kmlImport",
+                                "title": "translate#common:menu.tools.fileImport",
                                 "glyphicon": "glyphicon-resize-full",
                                 "renderToWindow": true
                             }
@@ -38,7 +38,7 @@ describe("KmlImport.vue", () => {
                 Tools: {
                     namespaced: true,
                     modules: {
-                        KmlImport
+                        FileImport
                     }
                 }
             },
@@ -46,24 +46,24 @@ describe("KmlImport.vue", () => {
                 configJson: mockConfigJson
             }
         });
-        store.dispatch("Tools/KmlImport/setActive", true);
+        store.dispatch("Tools/FileImport/setActive", true);
     });
 
-    it("renders the kmlImport", () => {
-        const wrapper = shallowMount(KmlImportComponent, {store, localVue});
+    it("renders the fileImport", () => {
+        const wrapper = shallowMount(FileImportComponent, {store, localVue});
 
         expect(wrapper.find("#kml-import").exists()).to.be.true;
     });
 
-    it("do not render the kmlImport tool if not active", () => {
-        store.dispatch("Tools/KmlImport/setActive", false);
-        const wrapper = shallowMount(KmlImportComponent, {store, localVue});
+    it("do not render the fileImport tool if not active", () => {
+        store.dispatch("Tools/FileImport/setActive", false);
+        const wrapper = shallowMount(FileImportComponent, {store, localVue});
 
         expect(wrapper.find("#kml-import").exists()).to.be.false;
     });
 
     it("import method is initially set to \"auto\"", () => {
-        const wrapper = shallowMount(KmlImportComponent, {store, localVue});
+        const wrapper = shallowMount(FileImportComponent, {store, localVue});
 
         expect(wrapper.vm.selectedFiletype).to.equal("auto");
     });

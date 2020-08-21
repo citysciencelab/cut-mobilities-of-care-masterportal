@@ -178,8 +178,8 @@
                         "name": "Koordinatensuche",
                         "glyphicon": "glyphicon-record"
                     },
-                    "kmlimport": {
-                        "name": "KML Import",
+                    "fileimport": {
+                        "name": "Datei Import",
                         "glyphicon": "glyphicon-import"
                     },
                     "draw": {
