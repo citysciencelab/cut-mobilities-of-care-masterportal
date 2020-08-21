@@ -219,9 +219,10 @@ gegen sich selbst geprüft werden.
 ```
 
 ## Abbildungsvorschriften
-Nachfolgende werden die Inhalte beschrieben, die unter *style*, wie unter [Aufbau](#markdown-header-aufbau) vorgestellt, gesetzt werden können.
+Nachfolgend werden die Inhalte beschrieben, die unter *style*, wie unter [Aufbau](#markdown-header-aufbau) vorgestellt, gesetzt werden können.
 
-Das Styling sind vom Geometrietyp des Features abhängig. Alle *MultiGeometry-Features*  bestehen aus einfachen *Features*. Innerhalb eines *MultiGeomtry-Features* wird über seine *Feature* iteriert und jedes Feature wird individuell gestylt. Folgende Geometrietypen können bislang gestylt werden:
+Das Styling ist vom Geometrietyp des Features abhängig. Alle *MultiGeometry-Features*  bestehen aus einfachen *Features*. Innerhalb eines *MultiGeomtry-Features* wird über seine *Feature* iteriert und jedes Feature wird individuell gestylt. Folgende Geometrietypen können bislang gestylt werden:
+
 
 - [Linestring](#markdown-header-linestring)
 - [Point](#markdown-header-point)
@@ -229,6 +230,8 @@ Das Styling sind vom Geometrietyp des Features abhängig. Alle *MultiGeometry-Fe
 - [Cesium](#markdown-header-cesium)
 
 > Hinweis: Es ist nicht möglich, MultiGeometrien zu stylen, die innerhalb einer GeometryCollection (double nested) definiert sind.
+
+Bei einem WFS-Layer wird der Geometrietyp mittels eines Aufrufes des DescribeFeatureTypes ermittelt. In einigen Fällen wird der Typ "Geometry" ermittelt, dabei werden für die Geometrien: LineString, Point und Polygon Styles angelegt. Dies kann mittels des Attributes styleGeometryType in der config.json an dem jeweiligen Layer überschrieben werden [styleGeometryType](config.json.md#markdown-header-themenconfiglayervector).
 
 Das Styling erfolgt auf Grundlage des jeweiligen Geometrietyps des Features, indem für jeden Typ default-Abbildungsvorschriften angewandt werden, die über die Einträge in *style* übersteuert werden können.
 
