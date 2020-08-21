@@ -22,7 +22,7 @@ export default {
             "isActive",
             "renderToWindow",
             "resizableWindow",
-            "supportedFiletypes"
+            "importedFileNames"
         ]),
         selectedFiletype: {
             get () {
@@ -164,30 +164,24 @@ export default {
                         {{ $t("modules.tools.kmlImport.captions.browse") }}
                     </label>
                 </div>
-
                 <div
+                    v-if="importedFileNames.length > 0"
                     id="h-seperator"
                 />
-
-                <div
-                    id="selectedFiletype-form-container"
+                <p
+                    v-if="importedFileNames.length > 0"
+                    id="imported-filenames"
                 >
-                    <form>
-                        <label
-                            v-for="(alertCategory, categoryKey) of supportedFiletypes"
-                            :key="categoryKey"
+                    <label>{{ $t("modules.tools.kmlImport.successfulImportedLabel") }}</label>
+                    <ul>
+                        <li
+                            v-for="(filename, index) in importedFileNames"
+                            :key="index"
                         >
-                            <input
-                                v-model="selectedFiletype"
-                                type="radio"
-                                :value="categoryKey"
-                                name="selectedFiletype"
-                                @input="setSelectedFiletype"
-                            />
-                            {{ $t(alertCategory.caption) }}
-                        </label>
-                    </form>
-                </div>
+                            {{ filename }}
+                        </li>
+                    </ul>
+                </p>
             </div>
         </template>
     </Tool>

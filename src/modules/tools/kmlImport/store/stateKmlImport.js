@@ -12,6 +12,7 @@
  * @property {boolean}  renderToWindow - if true, component is rendered in a window pane instead of sidebar
  * @property {boolean}  resizableWindow - if true and if rendered to window pane, the pane is resizable
  * @property {string}   selectedFiletype - This controls, which openlayers format is used when displaying the file data. Using "auto" will result in selecting one format according to the filename's suffix.
+ * @property {array}   importedFileNames - list of names of successful imported files
  * @property {object}   supportedFiletypes - Configuration object which is used to generate the selectedFiletype radio form from.
  * @property {string}   title - Module title
  * @property {string}   type - Module type
@@ -29,6 +30,7 @@ export default {
     renderToWindow: true,
     resizableWindow: false,
     selectedFiletype: "auto",
+    importedFileNames: [],
     supportedFiletypes: {
         auto: {
             caption: "common:modules.tools.kmlImport.captions.supportedFiletypes.auto"

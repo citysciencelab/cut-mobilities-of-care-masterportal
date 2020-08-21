@@ -339,6 +339,7 @@
                     "missingFileContent": "Fehler beim Lesen der Datei. Bitte überprüfen Sie den Dateityp sowie den Inhalt der Datei. Falls die Datei fehlerfrei ist, wenden Sie sich bitte an den Support.",
                     "missingFormat": "Das gewählte Dateiformat ist nicht konfiguriert. Bitte wenden Sie sich an den Support."
                 },
+                "successfulImportedLabel": "Erfolgreich importiert:",
                 "title": "Datei importieren"
             },
             "parcelSearch": {

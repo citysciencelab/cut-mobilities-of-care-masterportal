@@ -330,6 +330,7 @@
                     "missingFileContent": "There was an error loading your file. Please check its filetype and content. If still not working, please contact the support.",
                     "missingFormat": "The chosen filetype is not supported. Please contact the support."
                 },
+                "successfulImportedLabel": "Successful imported:",
                 "title": "Import file"
             },
             "parcelSearch": {

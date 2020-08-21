@@ -195,5 +195,17 @@ export default {
         };
 
         dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
+        dispatch("addImportedFilename", datasrc.filename);
+    },
+    /**
+     * Adss the name of a successful imported file to list of imported filenames
+     * @param {string} fileName name of the file
+     * @returns {void}
+     */
+    addImportedFilename: ({state, commit}, fileName) => {
+        const fileNames = [... state.importedFileNames];
+
+        fileNames.push(fileName);
+        commit("setImportedFileNames", fileNames);
     }
 };
