@@ -355,7 +355,7 @@ const initialState = Object.assign({}, stateDraw),
             commit("setPointSize", initialState.pointSize);
             commit("setSymbol", getters.iconList[0]);
             commit("setWithoutGUI", initialState.withoutGUI);
-            // TODO: Clear the cursor from the map
+
             state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
         },
         ...setter,

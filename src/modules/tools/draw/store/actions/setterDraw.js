@@ -264,11 +264,12 @@ function setStrokeWidth ({commit, dispatch}, {target}) {
  * @param {HTMLSelectElement} event.target The HTML select element for the symbol.
  * @returns {void}
  */
-function setSymbol ({commit, dispatch, getters}, {target}) {
-    const selectedElement = target.options[target.selectedIndex];
+function setSymbol ({state, commit, dispatch}, {target}) {
+    const selectedElement = target.options[target.selectedIndex],
+        iconList = Object.values(state.iconList);
 
     // Find the correct symbol
-    commit("setSymbol", getters.iconList.filter(icon => icon.id === selectedElement.value)[0]);
+    commit("setSymbol", iconList.filter(icon => icon.id === selectedElement.value)[0]);
     dispatch("updateDrawInteraction");
 }
 

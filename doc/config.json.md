@@ -1424,7 +1424,7 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
 |glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
-|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{caption: "translate#common:modules.tools.draw.iconList.iconPoint", type: "simple_point", value: "simple_point"}, {caption: "translate#common:modules.tools.draw.iconList.iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {id: "iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
 
 **Beispiel**
 
@@ -1434,67 +1434,67 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
     "name": "Zeichnen / Schreiben",
     "glyphicon": "glyphicon-pencil",
     "iconList": [
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconPoint",
-			"type": "simple_point",
-			"value": "simple_point"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
-			"type": "glyphicon",
-			"value": "\ue103"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconCD",
-			"type": "glyphicon",
-			"value": "\ue201"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconHat",
-			"type": "glyphicon",
-			"value": "\ue233"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconFire",
-			"type": "glyphicon",
-			"value": "\ue104"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconMovie",
-			"type": "glyphicon",
-			"value": "\ue009"
-		},
-		{
-		    "caption": "translate#common:modules.tools.draw.iconList.iconFlag",
-			"type": "glyphicon",
-			"value": "\ue034"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
-			"type": "glyphicon",
-			"value": "\ue135"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconMusic",
-			"type": "glyphicon",
-			"value": "\ue002"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconStreet",
-			"type": "glyphicon",
-			"value": "\ue024"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
-			"type": "image",
-			"value": "/img/tools/draw/cloud.png"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconTent",
-			"type": "glyphicon",
-			"value": "\u26fa"
-		}
-	]
+        {
+           "id": "iconPoint",
+           "type": "simple_point",
+           "value": "simple_point"
+        },
+        {
+           "id": "iconLeaf",
+           "type": "glyphicon",
+           "value": "\ue103"
+        },
+        {
+           "id": "iconCD",
+           "type": "glyphicon",
+           "value": "\ue201"
+        },
+        {
+           "id": "iconHat",
+           "type": "glyphicon",
+           "value": "\ue233"
+        },
+        {
+           "id": "iconFire",
+           "type": "glyphicon",
+           "value": "\ue104"
+        },
+        {
+           "id": "iconMovie",
+           "type": "glyphicon",
+           "value": "\ue009"
+        },
+        {
+           "id": "iconFlag",
+           "type": "glyphicon",
+           "value": "\ue034"
+        },
+        {
+           "id": "iconGlobe",
+           "type": "glyphicon",
+           "value": "\ue135"
+        },
+        {
+           "id": "iconMusic",
+           "type": "glyphicon",
+           "value": "\ue002"
+        },
+        {
+           "id": "iconStreet",
+           "type": "glyphicon",
+           "value": "\ue024"
+        },
+        {
+           "id": "iconCloud",
+           "type": "image",
+           "value": "/img/tools/draw/cloud.png"
+        },
+        {
+           "id": "iconTent",
+           "type": "glyphicon",
+           "value": "\u26fa"
+        }
+    ]
 }
 ```
 
@@ -1506,7 +1506,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
+|id|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
 |type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/tools/draw/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
@@ -1515,13 +1515,13 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 ```
 #!json
 {
-	"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
+	"id": "iconCloud",
 	"type": "image",
 	"value": "/img/tools/draw/cloud.png"
 }
 
 {
-    "caption": "translate#common:modules.tools.draw.iconList.iconFire",
+    "id": "iconFire",
     "type": "glyphicon",
     "value": "\ue104"
 }
