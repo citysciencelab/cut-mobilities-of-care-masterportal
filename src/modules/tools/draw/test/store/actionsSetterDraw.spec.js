@@ -253,12 +253,13 @@ describe("actionsSetterDraw", () => {
     describe("setSymbol", () => {
         it("should commit as intended", () => {
             const myIcon = Symbol(),
-                otherIcon = Symbol(),
-                getters = {iconList: [{id: otherIcon}, {id: myIcon}]};
+                otherIcon = Symbol();
+
+            state = {iconList: [{id: otherIcon}, {id: myIcon}]};
 
             target = {options: [{value: myIcon}], selectedIndex: 0};
 
-            actions.setSymbol({commit, dispatch, getters}, {target});
+            actions.setSymbol({state, commit, dispatch}, {target});
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setSymbol", {id: myIcon}]);
