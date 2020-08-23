@@ -3,6 +3,10 @@ import {expect} from "chai";
 import actions from "../../store/actionsDraw";
 import stateDraw from "../../store/stateDraw";
 import {Draw} from "ol/interaction.js";
+import Feature from "ol/Feature";
+import Polygon from "ol/geom/Polygon";
+import LineString from "ol/geom/LineString";
+
 
 describe("actionsDraw", () => {
     let commit, dispatch, state;
@@ -38,6 +42,48 @@ describe("actionsDraw", () => {
             actions.clearLayer({state});
 
             expect(clear.calledOnce).to.be.true;
+        });
+    });
+    describe("createCenterPoint", () => {
+        const lineFeat = new Feature({geometry: new LineString([[565647.1112172041, 5935140.711690446], [566028.1110114643, 5934812.628534278], [566546.6940647627, 5934770.295223804]])}),
+            polygonFeat = new Feature({geometry: new Polygon([[[565086.1948534324, 5934664.461947621], [565657.6945448224, 5934738.54524095], [565625.9445619675, 5934357.545446689], [565234.3614400891, 5934346.962119071], [565086.1948534324, 5934664.461947621]]])}),
+            targetProjection = "EPSG:4326";
+        let centerPoint,
+            rootState;
+
+        beforeEach(() => {
+            rootState = {
+                Map: {
+                    map: {
+                        getView: () => ({
+                            getProjection: () => ({
+                                getCode: () => "EPSG:25832"
+                            })
+                        })
+                    }
+                }
+            };
+        });
+
+        it("should return the center point of a polygon with the projection EPSG:4326", () => {
+            centerPoint = actions.createCenterPoint({rootState}, {feature: polygonFeat, targetProjection});
+
+            expect(centerPoint).to.eql([9.987132463729269, 53.55569205016286]);
+        });
+        it("should return the center point of a line with the projection EPSG:4326", () => {
+            centerPoint = actions.createCenterPoint({rootState}, {feature: lineFeat, targetProjection});
+
+            expect(centerPoint).to.eql([9.996919156243193, 53.55803037141494]);
+        });
+        it("should return the center point of a polygon in the map's projection", () => {
+            centerPoint = actions.createCenterPoint({rootState}, {feature: polygonFeat});
+
+            expect(centerPoint).to.eql([565392.1853131973, 5934542.75368001]);
+        });
+        it("should return center point of line in the map's projection", () => {
+            centerPoint = actions.createCenterPoint({rootState}, {feature: lineFeat});
+
+            expect(centerPoint).to.eql([566036.8402080259, 5934811.915946803]);
         });
     });
     describe("createDrawInteractionAndAddToMap", () => {
@@ -543,7 +589,7 @@ describe("actionsDraw", () => {
             expect(commit.getCall(9).args).to.eql(["setOpacityContour", initialState.opacityContour]);
             expect(commit.getCall(10).args).to.eql(["setPointSize", initialState.pointSize]);
             expect(commit.getCall(11).args).to.eql(["setSymbol", iconSymbol]);
-            expect(commit.getCall(12).args).to.eql(["setWithGUI", initialState.withGUI]);
+            expect(commit.getCall(12).args).to.eql(["setWithoutGUI", initialState.withoutGUI]);
 
             expect(dispatch.callCount).to.equal(7);
             expect(dispatch.getCall(0).args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);

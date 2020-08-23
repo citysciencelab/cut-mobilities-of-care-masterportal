@@ -1,52 +1,14 @@
-import {Select, Modify, Draw} from "ol/interaction.js";
+import {Draw} from "ol/interaction.js";
+import {getMapProjection, transform} from "masterportalAPI/src/crs";
 
-import {createStyle} from "./actions/style/createStyle";
 import {drawInteractionOnDrawEvent} from "./actions/drawInteractionOnDrawEvent";
 import * as setter from "./actions/setterDraw";
 import * as withoutGUI from "./actions/withoutGUIDraw";
+import {createDrawInteraction, createModifyInteraction, createSelectInteraction} from "../utils/createInteractions";
 
 import stateDraw from "./stateDraw";
 
 // NOTE: The Update and the Redo Buttons weren't working with the select and modify interaction in Backbone and are not yet working in Vue too.
-
-/**
- * Creates a draw interaction to draw features on the map.
- *
- * @param {Object} state actions context object.
- * @returns {ol/interaction/Draw} draw interaction
- */
-function createDrawInteraction (state) {
-    return new Draw({
-        source: state.layer.getSource(),
-        type: state.drawType.geometry,
-        style: createStyle(state),
-        freehand: state.freeHand
-    });
-}
-
-/**
- * Creates a modify interaction and returns it.
- *
- * @param  {module:ol/layer/Vector} layer The layer in which the features are drawn.
- * @returns {module:ol/interaction/Modify} The modify interaction.
- */
-function createModifyInteraction (layer) {
-    return new Modify({
-        source: layer.getSource()
-    });
-}
-
-/**
- * Creates a select interaction (for deleting features) and returns it.
- *
- * @param  {module:ol/layer/Vector} layer The layer in which the features are drawn.
- * @returns {module:ol/interaction/Select} The select interaction.
- */
-function createSelectInteraction (layer) {
-    return new Select({
-        layers: [layer]
-    });
-}
 
 const initialState = Object.assign({}, stateDraw),
     actions = {
@@ -81,6 +43,50 @@ const initialState = Object.assign({}, stateDraw),
          */
         clearLayer ({state}) {
             state.layer.getSource().clear();
+        },
+        /**
+         * Returns the center point of a Line or Polygon or a point itself.
+         * If a targetprojection is given, the values are transformed.
+         *
+         * @param {Object} context actions context object.
+         * @param {Object} prm Parameter object.
+         * @param {module:ol/Feature} prm.feature Line, Polygon or Point.
+         * @param {String} prm.targetProjection Target projection if the projection differs from the map's projection.
+         * @returns {Array} Coordinates of the center point of the geometry.
+         */
+        createCenterPoint ({rootState}, {feature, targetProjection}) {
+            let centerPoint,
+                centerPointCoords = [];
+
+            const featureType = feature.getGeometry().getType(),
+                map = rootState.Map.map;
+
+            if (featureType === "LineString") {
+                if (targetProjection !== undefined) {
+                    centerPointCoords = transform(getMapProjection(map), targetProjection, feature.getGeometry().getCoordinateAt(0.5));
+                }
+                else {
+                    centerPointCoords = feature.getGeometry().getCoordinateAt(0.5);
+                }
+            }
+            else if (featureType === "Point") {
+                if (targetProjection !== undefined) {
+                    centerPointCoords = transform(getMapProjection(map), targetProjection, feature.getGeometry().getCoordinates());
+                }
+                else {
+                    centerPointCoords = feature.getGeometry().getCoordinates();
+                }
+            }
+            else if (featureType === "Polygon") {
+                if (targetProjection !== undefined) {
+                    centerPoint = transform(getMapProjection(map), targetProjection, feature.getGeometry().getInteriorPoint().getCoordinates());
+                }
+                else {
+                    centerPoint = feature.getGeometry().getInteriorPoint().getCoordinates();
+                }
+                centerPointCoords = centerPoint.slice(0, -1);
+            }
+            return centerPointCoords;
         },
         /**
          * Creates a draw interaction to add to the map.
@@ -121,17 +127,29 @@ const initialState = Object.assign({}, stateDraw),
          */
         createDrawInteractionListener ({state, dispatch}, {doubleCircle, drawInteraction, maxFeatures}) {
             const interaction = state["drawInteraction" + drawInteraction];
-            let geoJSON;
+            let centerPoint,
+                centerPointCoords,
+                geoJSON,
+                geoJSONAddCenter;
 
             interaction.on("drawend", function (event) {
                 event.feature.set("styleId", dispatch("uniqueID"));
 
+                // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map, drawing is cancelled and editing is started
                 if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
-                    dispatch("cancelDrawWithoutGUI");
+                    dispatch("cancelDrawWithoutGUI", {cursor: "auto"});
                     dispatch("editFeaturesWithoutGUI");
 
+                    centerPointCoords = dispatch("createCenterPoint", {feature: event.feature, targetProjection: Config.inputMap.targetProjection});
+                    centerPoint = {type: "Point", coordinates: centerPointCoords};
                     geoJSON = dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetprojection}, currentFeature: event.feature});
-                    Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geoJSON});
+                    geoJSONAddCenter = JSON.parse(geoJSON);
+
+                    if (geoJSONAddCenter.features[0].properties === null) {
+                        geoJSONAddCenter.features[0].properties = {};
+                    }
+                    geoJSONAddCenter.features[0].properties.centerPoint = centerPoint;
+                    Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geoJSONAddCenter)});
                 }
             });
             interaction.on("drawstart", function () {
@@ -174,11 +192,22 @@ const initialState = Object.assign({}, stateDraw),
          */
         createModifyInteractionListener ({state, dispatch}) {
             state.modifyInteraction.on("modifyend", event => {
-                let geoJSON;
+                let centerPoint,
+                    centerPointCoords,
+                    geoJSON,
+                    geoJSONAddCenter;
 
+                // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map
                 if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
+                    centerPointCoords = dispatch("createCenterPoint", {feature: event.features.getArray()[0], targetProjection: Config.inputMap.targetProjection});
+                    centerPoint = {type: "Point", coordinates: centerPointCoords};
                     geoJSON = dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetProjection}, currentFeature: event.feature});
-                    Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": geoJSON});
+                    geoJSONAddCenter = JSON.parse(geoJSON);
+                    if (geoJSONAddCenter.features[0].properties === null) {
+                        geoJSONAddCenter.features[0].properties = {};
+                    }
+                    geoJSONAddCenter.features[0].properties.centerPoint = centerPoint;
+                    Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geoJSONAddCenter)});
                 }
             });
         },
@@ -325,7 +354,7 @@ const initialState = Object.assign({}, stateDraw),
             commit("setOpacityContour", initialState.opacityContour);
             commit("setPointSize", initialState.pointSize);
             commit("setSymbol", getters.iconList[0]);
-            commit("setWithGUI", initialState.withGUI);
+            commit("setWithoutGUI", initialState.withoutGUI);
             // TODO: Clear the cursor from the map
             state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
         },
