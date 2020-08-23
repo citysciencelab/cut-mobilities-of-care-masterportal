@@ -33,7 +33,6 @@ export default {
             totalView: TotalView,
             zoom: Zoom,
             freeze: Freeze
-
         },
         // config.json.md control keys where the matching element is to be hidden in mobile mode
         mobileHiddenControls: [
@@ -44,7 +43,7 @@ export default {
             "totalView",
             "freeze"
         ],
-        bottomControls: ["attributions", "overviewmap", "overviewMap"]
+        bottomControls: ["attributions", "overviewMap"]
     },
     mutations,
     getters

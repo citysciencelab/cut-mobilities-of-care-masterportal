@@ -1,7 +1,7 @@
 const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype */{
     defaults: {
         placeholder: "Suche",
-        recommendedList: "",
+        recommendedList: [],
         recommendedListLength: 5,
         quickHelp: false,
         searchString: "",
@@ -28,11 +28,11 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
      * @memberof Searchbar
      * @constructs
      * @property {String} placeholder="" todo
-     * @property {String} recommendedList="" todo
+     * @property {Object[]} recommendedList=[] the list of shown (recommended) hits
      * @property {Number} recommendedListLength=5 todo
      * @property {Boolean} quickHelp=false todo
      * @property {String} searchString="" the current string in the search mask
-     * @property {Array} hitList=[] todo
+     * @property {Object[]} hitList=[] an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry
      * @property {Boolean} isInitialSearch=true Flag that is set to false at the end of the initial search (ParametricURL).
      * @property {Boolean} isInitialRecommendedListCreated=false Has the recommended list already been generated after the initial search?
      * @property {String[]} knownInitialSearchTasks=["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"] Search algorithms for which an initial search is possible

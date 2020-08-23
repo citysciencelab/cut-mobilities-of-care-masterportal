@@ -47,22 +47,21 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-    },
-    /**
-     * Put initialize here if mounting occurs after config parsing
-     * @returns {void}
-     */
-    mounted () {
-        this.initialize();
+
         if (this.isActive) {
             this.setActive(true);
         }
+    },
+    /**
+     * Activates this tool, if it has to start by url params
+     * @returns {void}
+     */
+    mounted () {
         this.activateByUrlParam();
     },
     methods: {
         ...mapActions("Tools/SupplyCoord", [
             "activateByUrlParam",
-            "initialize",
             "checkPosition",
             "changedPosition",
             "positionClicked",

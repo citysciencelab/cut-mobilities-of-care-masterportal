@@ -41,13 +41,13 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.initialize();
+
         if (this.isActive) {
             this.setActive(true);
         }
     },
     /**
-     * Put initialize here if mounting occurs after config parsing
+     *  Activates this tool, if it has to start by url params
      * @returns {void}
      */
     mounted () {
@@ -56,7 +56,6 @@ export default {
     methods: {
         ...mapActions("Tools/KmlImport", [
             "activateByUrlParam",
-            "initialize",
             "importKML",
             "setSelectedFiletype",
             "setActive"

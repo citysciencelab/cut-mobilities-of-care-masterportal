@@ -123,14 +123,20 @@ function isFirefox (browsername) {
  */
 function getBsCapabilities (browserstackuser, browserstackkey) {
     const base = {
-        "seleniumVersion": "4.0.0-alpha.5",
+        // do not set selenium version here, then selenium uses the detected_language, see "Input Capabilities" of each test in browserstack
         "acceptSslCerts": true,
         "project": "MasterPortal",
         "browserstack.local": true,
         "browserstack.user": browserstackuser,
         "browserstack.key": browserstackkey,
         // resolution of device, not resolution of browser window
-        "resolution": "1024x768"
+        "resolution": "1024x768",
+        "browserstack.debug": false,
+        "browserstack.networkLogs": true,
+        "browserstack.console": "verbose",
+        "browserstack.idleTimeout": 300,
+        // Use this capability to specify a custom delay between the execution of Selenium commands.
+        "browserstack.browserstackautoWait": 50
     };
 
     return [

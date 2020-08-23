@@ -1,5 +1,6 @@
 import Model from "@modules/tools/gfi/themes/model.js";
 import {expect} from "chai";
+import * as moment from "moment";
 
 let model;
 
@@ -166,9 +167,10 @@ describe("tools/gfi/themes/Model", function () {
                     bar: "bar",
                     foo_bar: "2020-04-14T11:00:00.000Z",
                     bar_foo: "bar_foo"
-                };
+                },
+                defaultFormat = "DD.MM.YYYY HH:mm:ss";
 
-            expect(model.prepareGfiValueFromObject(key, obj, gfi)).to.equal("14.04.2020 13:00:00");
+            expect(model.prepareGfiValueFromObject(key, obj, gfi)).to.equal(moment("2020-04-14T11:00:00.000Z").format(defaultFormat));
         });
         it("Should return value of attribute that contains 'o__b' and convert it to date with given format 'DD.MM.YYYY'", function () {
             const key = "o_b",

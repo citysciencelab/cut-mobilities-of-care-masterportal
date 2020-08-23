@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
-import ScaleLine from "../../../../../src/modules/scaleLine/components/ScaleLine.vue";
+import ScaleLine from "../../../components/ScaleLine.vue";
 import {expect} from "chai";
 
 const localVue = createLocalVue();

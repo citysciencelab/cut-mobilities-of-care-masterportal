@@ -78,7 +78,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
         }
         $("div.collapse.navbar-collapse ul.nav-menu").empty();
         $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
-        this.loadMenu();
+        this.loadMenu(true);
     },
 
     /**
@@ -108,11 +108,11 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
 
     /**
      * Prüft initial und nach jedem Resize, ob und welches Menü geladen werden muss und lädt bzw. entfernt Module.
-     * @param  {Object} caller this MenuLoader
+     * @param  {boolean} isReload if true, this is a  reload
      * @return {Object}        this
      * @fires Map#RadioTriggerMapUpdateSize
      */
-    loadMenu: function () {
+    loadMenu: function (isReload = false) {
         const isMobile = Radio.request("Util", "isViewMobile"),
             channel = Radio.channel("Menuloader");
 
@@ -146,7 +146,9 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             }
             // Nachdem die MapSize geändert wurde, muss die Map aktualisiert werden.
             channel.trigger("ready", this.currentMenu.id);
-            Radio.trigger("Map", "updateSize");
+            if (!isReload) {
+                Radio.trigger("Map", "updateSize");
+            }
         }
     }
 });

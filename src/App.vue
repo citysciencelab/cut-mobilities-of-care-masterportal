@@ -49,6 +49,7 @@ export default {
         font-size: @font_size_default;
 
         .map-region {
+            display: flex;
             flex-grow: 1;
         }
     }
