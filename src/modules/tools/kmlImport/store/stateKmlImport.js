@@ -7,7 +7,6 @@
  * @property {string}   id - internal id of component
  * @property {boolean}  isActive - if true, component will be initially rendered
  * @property {string}   name - Module name
- * @property {boolean}  renderToWindow - if true, component is rendered in desktop only
  * @property {string}   parentId - Id of parent node
  * @property {boolean}  renderToWindow - if true, component is rendered in a window pane instead of sidebar
  * @property {boolean}  resizableWindow - if true and if rendered to window pane, the pane is resizable
