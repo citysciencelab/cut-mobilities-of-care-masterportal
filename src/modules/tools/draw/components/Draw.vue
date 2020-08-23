@@ -62,9 +62,9 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('modules.tools.draw.title')"
+        :title="$t('common:modules.tools.draw.title')"
         :icon="glyphicon"
-        :active="active && withGUI"
+        :active="active && !withoutGUI"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"

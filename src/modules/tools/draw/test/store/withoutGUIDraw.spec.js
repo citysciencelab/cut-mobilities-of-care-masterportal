@@ -115,19 +115,23 @@ describe("withoutGUIDraw", () => {
         it("should commit and dispatch as intended if the given drawType is not a Point, LineString, Polygon or Circle", () => {
             actions.initializeWithoutGUI({state, commit, dispatch}, {drawType});
 
-            expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setWithGUI", false]);
-            expect(commit.secondCall.args).to.eql(["setActive", true]);
+            expect(commit.callCount).to.equal(4);
+            expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
+            expect(commit.secondCall.args).to.eql(["setRenderToWindow", false]);
+            expect(commit.thirdCall.args).to.eql(["setWithoutGUI", true]);
+            expect(commit.lastCall.args).to.eql(["setActive", true]);
         });
         it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle", () => {
             drawType = "Point";
 
             actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, maxFeatures});
 
-            expect(commit.callCount).to.equal(4);
-            expect(commit.firstCall.args).to.eql(["setWithGUI", false]);
-            expect(commit.secondCall.args).to.eql(["setActive", true]);
-            expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawPoint", geometry: "Point"}]);
+            expect(commit.callCount).to.equal(6);
+            expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
+            expect(commit.secondCall.args).to.eql(["setRenderToWindow", false]);
+            expect(commit.thirdCall.args).to.eql(["setWithoutGUI", true]);
+            expect(commit.getCall(3).args).to.eql(["setActive", true]);
+            expect(commit.getCall(4).args).to.eql(["setDrawType", {id: "drawPoint", geometry: "Point"}]);
             expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
@@ -140,11 +144,14 @@ describe("withoutGUIDraw", () => {
 
             actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, color, maxFeatures});
 
-            expect(commit.callCount).to.equal(5);
-            expect(commit.firstCall.args).to.eql(["setWithGUI", false]);
-            expect(commit.secondCall.args).to.eql(["setActive", true]);
-            expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawLine", geometry: "LineString"}]);
-            expect(commit.getCall(3).args).to.eql(["setColor", color]);
+            expect(commit.callCount).to.equal(8);
+            expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
+            expect(commit.secondCall.args).to.eql(["setRenderToWindow", false]);
+            expect(commit.thirdCall.args).to.eql(["setWithoutGUI", true]);
+            expect(commit.getCall(3).args).to.eql(["setActive", true]);
+            expect(commit.getCall(4).args).to.eql(["setDrawType", {id: "drawLine", geometry: "LineString"}]);
+            expect(commit.getCall(5).args).to.eql(["setColor", color]);
+            expect(commit.getCall(6).args).to.eql(["setColorContour", color]);
             expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
@@ -160,12 +167,14 @@ describe("withoutGUIDraw", () => {
 
             actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, opacity, maxFeatures});
 
-            expect(commit.callCount).to.equal(6);
-            expect(commit.firstCall.args).to.eql(["setWithGUI", false]);
-            expect(commit.secondCall.args).to.eql(["setActive", true]);
-            expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawArea", geometry: "Polygon"}]);
-            expect(commit.getCall(3).args).to.eql(["setColor", resultColor]);
-            expect(commit.getCall(4).args).to.eql(["setOpacity", "3.5"]);
+            expect(commit.callCount).to.equal(8);
+            expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
+            expect(commit.secondCall.args).to.eql(["setRenderToWindow", false]);
+            expect(commit.thirdCall.args).to.eql(["setWithoutGUI", true]);
+            expect(commit.getCall(3).args).to.eql(["setActive", true]);
+            expect(commit.getCall(4).args).to.eql(["setDrawType", {id: "drawArea", geometry: "Polygon"}]);
+            expect(commit.getCall(5).args).to.eql(["setColor", resultColor]);
+            expect(commit.getCall(6).args).to.eql(["setOpacity", "3.5"]);
             expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);

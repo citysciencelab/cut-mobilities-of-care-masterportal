@@ -19,6 +19,7 @@
  * @property {String} id Internal Identifier for the Tool.
  * @property {Integer} idCounter Amount of features drawn.
  * @property {String} innerBorderColor The color of the border of the dropdown menu for the selection of the inner radius of a circle.
+ * @property {Boolean} isVisibleInMenu TODO: Currently has no use. Update this comment when there is a usage.
  * @property {module:ol/layer/Vector} layer The layer in which the features are drawn.
  * @property {module:ol/interaction/Modify} modifyInteraction The modify interaction of the draw tool.
  * @property {Number} opacity The opacity of the color of the drawn features. NOTE: The values of the transparencyOptions are opacity values.
@@ -26,14 +27,14 @@
  * @property {String} outerBorderColor The color of the border of the dropdown menu for the selection of the outer radius of a circle.
  * @property {Number} pointSize The size of the point.
  * @property {Number[]} redoArray Array of the IDs of features removed through the undo button.
- * @property {Boolean} renderToWindow Decides whether the Tool should be displayed.
+ * @property {Boolean} renderToWindow Decides whether the Tool should be displayed as a window or as a sidebar.
  * @property {Boolean} resizableWindow Determines whether the Tool window can be resized.
  * @property {module:ol/interaction/Select} selectInteraction The select interaction of the draw tool.
  * @property {Number} strokeWidth Stroke width.
  * @property {Object} symbol The symbol for the point.
  * @property {String} text The text to be written if the drawType "writeText" is chosen.
  * @property {String} unit The unit of measurement (e.g. "km").
- * @property {Boolean} withGUI Determines whether the window for the draw tool is rendered or not.
+ * @property {Boolean} withoutGUI Determines whether the window for the draw tool is rendered or not.
  * @property {Number} zIndex Determines in which order features are rendered on the view.
  */
 const state = {
@@ -60,6 +61,7 @@ const state = {
     id: "draw",
     idCounter: 0,
     innerBorderColor: "",
+    isVisibleInMenu: true,
     layer: null,
     modifyInteraction: null,
     opacity: 1,
@@ -78,7 +80,7 @@ const state = {
     },
     text: "",
     unit: null,
-    withGUI: true,
+    withoutGUI: false,
     zIndex: 0
 };
 

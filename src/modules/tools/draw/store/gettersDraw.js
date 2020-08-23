@@ -3,6 +3,7 @@ import initialState from "./stateDraw";
 
 const getters = {
     ...generateSimpleGetters(initialState),
+    glyphicon: (_state, _getters, rootState) => rootState?.configJson?.Portalconfig?.menu?.tools?.children?.draw?.glyphicon || "glyphicon-pencil",
     iconList: (_state, _getters, rootState) => rootState?.configJson?.Portalconfig?.menu?.tools?.children?.draw?.iconList ||
         [
             {
@@ -15,8 +16,7 @@ const getters = {
                 type: "glyphicon",
                 value: "\ue103"
             }
-        ],
-    glyphicon: (_state, _getters, rootState) => rootState?.configJson?.Portalconfig?.menu?.tools?.children?.draw?.glyphicon || "glyphicon-pencil"
+        ]
 };
 
 export default getters;

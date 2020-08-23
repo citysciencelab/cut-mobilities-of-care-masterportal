@@ -1,5 +1,5 @@
 import {fromCircle} from "ol/geom/Polygon.js";
-import {createStyle} from "./style/createStyle";
+import {createStyle} from "../../utils/style/createStyle";
 import Feature from "ol/Feature";
 import {getMapProjection} from "masterportalAPI/src/crs";
 import {GeoJSON} from "ol/format.js";
@@ -199,7 +199,9 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
         collection.setActiveToolsToFalse(state);
     }
 
-    commit("setWithGUI", false);
+    commit("setFreeHand", false);
+    commit("setRenderToWindow", false);
+    commit("setWithoutGUI", true);
     commit("setActive", true);
 
     if (["Point", "LineString", "Polygon", "Circle"].indexOf(drawType) > -1) {
@@ -207,6 +209,7 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
 
         if (color) {
             commit("setColor", color);
+            commit("setColorContour", color);
         }
         if (opacity) {
             newColor = state.color;
