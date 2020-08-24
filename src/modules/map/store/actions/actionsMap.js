@@ -1,7 +1,6 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
 import requestGfi from "../../../../api/wmsGetFeatureInfo";
-import getFeatureInfoUrls from "./getFeatureInfoUrls";
 
 let unsubscribes = [],
     loopId = null;

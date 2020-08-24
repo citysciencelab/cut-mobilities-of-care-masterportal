@@ -16,7 +16,9 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 isActive: () => true,
-                gfiFeatures: () => []
+                gfiFeatures: () => [{
+                    getHtml: () => null
+                }]
             },
             localVue
         });
@@ -29,7 +31,9 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => false,
                 isActive: () => true,
-                gfiFeatures: () => []
+                gfiFeatures: () => [{
+                    getHtml: () => null
+                }]
             },
             localVue
         });
@@ -41,7 +45,7 @@ describe("Gfi.vue", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
                 isActive: () => false,
-                gfiFeatures: () => []
+                gfiFeatures: () => null
             },
             localVue
         });
@@ -53,7 +57,9 @@ describe("Gfi.vue", () => {
     it("no child component should be found if gfi has no features", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
-                gfiFeatures: () => null
+                isMobile: () => true,
+                isActive: () => true,
+                gfiFeatures: () => []
             },
             localVue
         });
@@ -90,7 +96,8 @@ describe("Gfi.vue", () => {
                         "olFeature": {
                             getProperties: sinon.stub()
                         },
-                        "html": null
+                        getHtml: () => null,
+                        getMappedProperties: () => null
                     },
                     {
                         getTheme: () => "default",
@@ -99,7 +106,8 @@ describe("Gfi.vue", () => {
                         "olFeature": {
                             getProperties: sinon.stub()
                         },
-                        "html": null
+                        getHtml: () => null,
+                        getMappedProperties: () => null
                     }]
                 },
                 localVue,
@@ -123,7 +131,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 },
                 {}]
             },
@@ -146,7 +155,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 },
                 {
                     getTheme: () => "default",
@@ -155,7 +165,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null
                 }]
             },
             localVue
@@ -177,7 +187,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 },
                 {
                     getTheme: () => "default",
@@ -186,7 +197,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 }]
             },
             localVue
@@ -209,7 +221,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 },
                 {}]
             },
@@ -231,7 +244,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 },
                 {}]
             },
@@ -258,7 +272,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 }]
             },
             localVue
@@ -284,7 +299,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 }]
             },
             localVue
@@ -311,7 +327,8 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    "html": null
+                    getHtml: () => null,
+                    getMappedProperties: () => null
                 }, {}]
             },
             localVue
