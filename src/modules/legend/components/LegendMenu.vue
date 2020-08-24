@@ -45,7 +45,7 @@ export default {
             <li
                 v-if="showLegendInMenu"
                 id="legend-menu"
-                :class="{ open: showLegend }"
+                :class="{ 'open': showLegend }"
                 class="dropdown dropdown-folder"
                 @click="toggleLegend"
             >

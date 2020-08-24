@@ -5,6 +5,7 @@ import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
 import LegendSingleLayer from "./LegendSingleLayer.vue";
+import isMobile from "../../../utils/isMobile";
 
 export default {
     name: "LegendWindow",
@@ -12,7 +13,10 @@ export default {
         LegendSingleLayer
     },
     computed: {
-        ...mapGetters("Legend", Object.keys(getters))
+        ...mapGetters("Legend", Object.keys(getters)),
+        isMobile () {
+            return isMobile();
+        }
     },
     watch: {
         showLegend (showLegend) {
@@ -21,6 +25,43 @@ export default {
             }
         },
         layerIdForLayerInfo (layerIdForLayerInfo) {
+            this.createLegendForLayerInfo(layerIdForLayerInfo);
+        }
+    },
+    mounted () {
+        this.getLegendConfig();
+    },
+    created () {
+        this.listenToLayerVisibilityChanged();
+        this.listenToUpdatedSelectedLayerList();
+        this.listenToLayerLegendUpdate();
+    },
+    updated () {
+        $(this.$el).draggable({
+            containment: "#map",
+            handle: ".legend-title"
+        });
+    },
+    methods: {
+        ...mapActions("Legend", Object.keys(actions)),
+        ...mapMutations("Legend", Object.keys(mutations)),
+
+        /**
+         * Creates the legend.
+         * @returns {void}
+         */
+        createLegend () {
+            const visibleLayers = this.getVisibleLayers();
+
+            visibleLayers.forEach(layer => this.toggleLayerInLegend(layer));
+        },
+
+        /**
+         * Creates the legend for the layer info.
+         * @param {String} layerIdForLayerInfo Id of layer to create the layer info legend.
+         * @returns {void}
+         */
+        createLegendForLayerInfo (layerIdForLayerInfo) {
             const layerForLayerInfo = Radio.request("ModelList", "getModelByAttributes", {type: "layer", id: layerIdForLayerInfo});
             let legendObj = null,
                 isValidLegend = null;
@@ -36,39 +77,6 @@ export default {
             if (isValidLegend) {
                 this.setLegendForLayerInfo(legendObj);
             }
-        }
-    },
-    mounted () {
-        this.getLegendConfig();
-    },
-    created () {
-        this.listenToLayerVisibilityChanged();
-        this.listenToUpdatedSelectedLayerList();
-        this.listenToLayerLegendUpdate();
-    },
-    updated () {
-        $(this.$el).draggable({
-            containment: "#map",
-            handle: ".legend-title",
-            start: function (event, ui) {
-                ui.helper.css({
-                    right: "auto",
-                    bottom: "auto"
-                });
-            },
-            stop: function (event, ui) {
-                ui.helper.css({"height": "", "width": ""});
-            }
-        });
-    },
-    methods: {
-        ...mapActions("Legend", Object.keys(actions)),
-        ...mapMutations("Legend", Object.keys(mutations)),
-
-        createLegend () {
-            const visibleLayers = this.getVisibleLayers();
-
-            visibleLayers.forEach(layer => this.toggleLayerInLegend(layer));
         },
 
         /**
@@ -249,6 +257,7 @@ export default {
 
             return intervalStyle;
         },
+
         /**
          * Creats an SVG for interval circle bar style.
          * @param {String} scalingAttribute attribute that contains the values of a feature
@@ -467,10 +476,13 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div
+        id="legend"
+        :class="isMobile ? 'legend-mobile' : 'legend'"
+    >
         <div
             v-if="showLegend"
-            id="legend-window"
+            :class="isMobile ? 'legend-window-mobile' : 'legend-window'"
         >
             <div class="legend-title">
                 <span
@@ -509,11 +521,25 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
 
-    #legend-window {
-        position: absolute;
-        right: 100px;
-        background-color: #ffffff;
-        width:300px;
+    #legend.legend-mobile {
+        width: 100%;
+    }
+    #legend {
+        .legend-window {
+            position: absolute;
+            width: 300px;
+            right: 100px;
+            top: 20px;
+            background-color: #ffffff;
+        }
+        .legend-window-mobile {
+            position: absolute;
+            width: calc(100% - 20px);
+            top: 10px;
+            left: 10px;
+            background-color: #ffffff;
+            z-index: 1;
+        }
         .legend-title {
             padding: 10px;
             border-bottom: 2px solid #aaaaaa;
