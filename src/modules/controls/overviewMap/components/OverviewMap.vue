@@ -20,15 +20,9 @@ export default {
         ControlIcon
     },
     props: {
-        /** @deprecated resolution of mini-map view */
-        resolution: {
+        /** resolution of mini-map view */
+        startResolution: {
             type: Number,
-            required: false,
-            default: null
-        },
-        /** @deprecated id of layer to show in mini-map */
-        baselayer: {
-            type: String,
             required: false,
             default: null
         },
@@ -64,15 +58,6 @@ export default {
     created () {
         this.checkModeVisibility();
         this.mapChannel.on("change", this.checkModeVisibility);
-
-        // deprecation warnings
-        if (this.baselayer !== null) {
-            console.warn("Using 'baselayer' in 'overviewMap'. Please note this is deprecated. Use 'layerId' instead.");
-        }
-
-        if (this.resolution !== null) {
-            console.warn("Using 'resolution' in 'overviewMap'. Please note this is deprecated.");
-        }
     },
     beforeDestroy () {
         this.mapChannel.off("change", this.checkModeVisibility);

@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {losesCenter} = require("../../../../../../test/end2end/library/utils"),
+    {losesCenter, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {until, By, Button} = webdriver;
@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function OverviewMap ({builder, url, resolution, browsername}) {
+function OverviewMap ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && (isCustom(url) || isMaster(url));
 
     if (testIsApplicable) {
@@ -18,10 +18,19 @@ function OverviewMap ({builder, url, resolution, browsername}) {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

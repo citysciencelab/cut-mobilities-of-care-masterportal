@@ -41,7 +41,7 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.initialize();
+
         if (this.isActive) {
             this.setActive(true);
         }
@@ -56,7 +56,6 @@ export default {
     methods: {
         ...mapActions("Tools/KmlImport", [
             "activateByUrlParam",
-            "initialize",
             "importKML",
             "setSelectedFiletype",
             "setActive"

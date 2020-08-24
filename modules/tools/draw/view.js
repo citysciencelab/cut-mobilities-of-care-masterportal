@@ -70,8 +70,14 @@ const DrawToolView = Backbone.View.extend(/** @lends DrawToolView.prototype */{
         if (isActive && this.model.get("renderToWindow")) {
             this.renderSurface(model);
         }
-        else {
+        else if (isActive && !this.model.get("renderToWindow")) {
+            return this;
+        }
+        else if (this.model.get("withoutGUI") === false) {
             this.removeSurface();
+        }
+        else {
+            this.model.set("withoutGUI", false);
         }
         return this;
     },

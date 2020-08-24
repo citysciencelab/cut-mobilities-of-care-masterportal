@@ -3,13 +3,14 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button} = webdriver;
 
 /**
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function FreezeTests ({builder, url, resolution, browsername}) {
+function FreezeTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && // function not available mobile
         (isCustom(url) || isMaster(url)); // freeze only active in these
 
@@ -18,6 +19,10 @@ function FreezeTests ({builder, url, resolution, browsername}) {
             let driver, freezeButton, unfreezeButton, topicButton, tree;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
                 topicButton = await driver.findElement(By.css("#root .dropdown:first-child"));
                 tree = await driver.findElement(By.id("tree"));
@@ -25,6 +30,11 @@ function FreezeTests ({builder, url, resolution, browsername}) {
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

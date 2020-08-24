@@ -2,8 +2,9 @@ import {expect} from "chai";
 import {TrafficCountApi} from "@modules/tools/gfi/themes/trafficCount/trafficCountApi";
 import moment from "moment";
 
-// change language from moment.js to german
-moment.locale("de");
+before(function () {
+    moment.locale("de");
+});
 
 describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
     describe("TrafficCountApi.constructor", function () {
@@ -1597,7 +1598,8 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     interval: "interval",
                     from: "2020-03-20",
                     until: "2020-03-30"
-                };
+                },
+                format = "YYYY-MM-DD HH:mm:ss";
 
             api.downloadData("thingId", "meansOfTransport", timeSettings, result => {
                 lastResult = result;
@@ -1607,9 +1609,10 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             expect(lastResult.title).to.equal("title");
             expect(lastResult.data).to.be.an("object");
             expect(lastResult.data.meansOfTransport).to.be.an("object");
-            expect(lastResult.data.meansOfTransport["2020-03-22 01:00:00"]).to.equal(1);
-            expect(lastResult.data.meansOfTransport["2020-03-23 13:14:30"]).to.equal(2);
-            expect(lastResult.data.meansOfTransport["2020-03-25 00:59:59"]).to.equal(3);
+
+            expect(lastResult.data.meansOfTransport[moment(phenomenonTimeA).format(format)]).to.equal(1);
+            expect(lastResult.data.meansOfTransport[moment(phenomenonTimeB).format(format)]).to.equal(2);
+            expect(lastResult.data.meansOfTransport[moment(phenomenonTimeC).format(format)]).to.equal(3);
         });
     });
 });

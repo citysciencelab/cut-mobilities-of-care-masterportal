@@ -34,7 +34,7 @@
 					"searchByCoord": {
 						"name": "Koordinatensuche"
 					},
-					"coord": {
+					"supplyCoord": {
 						"name": "Koordinaten abfragen",
 						"glyphicon": "glyphicon-screenshot"
 					},

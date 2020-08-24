@@ -3,6 +3,8 @@ import {Select, Modify, Draw} from "ol/interaction.js";
 import {Style, Text} from "ol/style.js";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
+import Polygon from "ol/geom/Polygon";
+import LineString from "ol/geom/LineString";
 import Model from "@modules/tools/draw/model.js";
 import ModelList from "@modules/core/modelList/list.js";
 import {expect} from "chai";
@@ -760,9 +762,6 @@ describe("drawModel", function () {
         });
         it("should reset Module", function () {
             expect(model.get("radius")).to.deep.equal(model.defaults.radius);
-            expect(model.get("opacity")).is.equal(model.defaults.opacity);
-            expect(model.get("color")).is.equal(model.defaults.color);
-            expect(model.get("drawType")).to.deep.equal(model.defaults.drawType);
         });
         it("should deactivate Tool", function () {
             expect(model.get("isActive")).to.be.false;
@@ -785,4 +784,33 @@ describe("drawModel", function () {
         });
 
     });
+
+    describe("createCenterPoint", function () {
+        const polygonFeat = new Feature({geometry: new Polygon([[[565086.1948534324, 5934664.461947621], [565657.6945448224, 5934738.54524095], [565625.9445619675, 5934357.545446689], [565234.3614400891, 5934346.962119071], [565086.1948534324, 5934664.461947621]]])}),
+            lineFeat = new Feature({geometry: new LineString([[565647.1112172041, 5935140.711690446], [566028.1110114643, 5934812.628534278], [566546.6940647627, 5934770.295223804]])});
+
+        let centerPoint;
+
+        it("should return center point of polygon in EPSG:4326", function () {
+            centerPoint = model.createCenterPoint(polygonFeat, "EPSG:4326");
+            expect(centerPoint).to.deep.equal([9.987132463729269, 53.55569205016286]);
+        });
+
+        it("should return center point of line in EPSG:4326", function () {
+            centerPoint = model.createCenterPoint(lineFeat, "EPSG:4326");
+            expect(centerPoint).to.deep.equal([9.996919156243193, 53.55803037141494]);
+        });
+
+        it("should return center point of polygon in the map's projection", function () {
+            centerPoint = model.createCenterPoint(polygonFeat);
+            expect(centerPoint).to.deep.equal([565392.1853131973, 5934542.75368001]);
+        });
+
+        it("should return center point of line in the map's projection", function () {
+            centerPoint = model.createCenterPoint(lineFeat);
+            expect(centerPoint).to.deep.equal([566036.8402080259, 5934811.915946803]);
+        });
+
+    });
+
 });

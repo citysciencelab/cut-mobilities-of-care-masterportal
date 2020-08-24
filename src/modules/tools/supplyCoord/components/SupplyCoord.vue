@@ -47,7 +47,7 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.initialize();
+
         if (this.isActive) {
             this.setActive(true);
         }
@@ -62,7 +62,6 @@ export default {
     methods: {
         ...mapActions("Tools/SupplyCoord", [
             "activateByUrlParam",
-            "initialize",
             "checkPosition",
             "changedPosition",
             "positionClicked",

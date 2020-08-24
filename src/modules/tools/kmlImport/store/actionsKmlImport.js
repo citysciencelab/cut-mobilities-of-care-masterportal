@@ -1,15 +1,11 @@
-import {fetchFirstModuleConfig} from "../../../../utils/fetchFirstModuleConfig";
 import {KML, GeoJSON, GPX} from "ol/format.js";
 import {Circle as CircleStyle, Fill, Stroke, Style} from "ol/style";
 
-const configPaths = [
-        "configJson.Portalconfig.menu.tools.children.kmlimport"
-    ],
-    supportedFormats = {
-        kml: new KML({extractStyles: true}),
-        gpx: new GPX(),
-        geojson: new GeoJSON()
-    };
+const supportedFormats = {
+    kml: new KML({extractStyles: true}),
+    gpx: new GPX(),
+    geojson: new GeoJSON()
+};
 
 /**
  * Checks given file suffix for any defined Format. Default mappings are defined in state and may be
@@ -110,8 +106,6 @@ function removeBadTags (rawSource) {
 }
 
 export default {
-    initialize: context => fetchFirstModuleConfig(context, configPaths, "kmlimport"),
-
     setActive: ({commit}, value) => {
         commit("setActive", value);
     },
@@ -125,7 +119,8 @@ export default {
     },
 
     setSelectedFiletype: ({commit}, newFiletype) => {
-        commit("selectedFiletype", newFiletype);
+        commit("setSelectedFiletype", newFiletype);
+
     },
 
     importKML: ({state, dispatch}, datasrc) => {

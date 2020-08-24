@@ -1,6 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getResolution, mouseWheelUp, mouseWheelDown} = require("../../../test/end2end/library/scripts"),
+    {logBrowserstackUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver"),
     {isMobile} = require("../../../test/end2end/settings"),
     {By} = webdriver;
@@ -10,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ZoomTests ({builder, url, resolution}) {
+async function ZoomTests ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution); // no mouse wheel on mobile devices
 
     if (testIsApplicable) {
@@ -18,11 +19,20 @@ async function ZoomTests ({builder, url, resolution}) {
             let driver, canvas;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
                 canvas = await driver.findElement(By.css(".ol-viewport"));
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

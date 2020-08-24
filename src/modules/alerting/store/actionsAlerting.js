@@ -4,7 +4,7 @@ import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig.js";
 /** @const {String} [Path array of possible config locations. First one found will be used] */
 /** @const {object} [vue actions] */
 const configPaths = [
-    "configJs.modules.Alerting"
+    "configJs.alerting"
 ];
 
 /**

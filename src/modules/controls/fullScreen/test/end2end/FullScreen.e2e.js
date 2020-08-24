@@ -3,6 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isFullscreen} = require("../../../../../../test/end2end/library/scripts"),
     {isMobile, isMaster, isCustom, isDefault} = require("../../../../../../test/end2end/settings"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {writeScreenshot} = require("../../../../../../test/end2end/library/screenshot"),
     {until, By} = webdriver;
 
@@ -10,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function FullScreenTest ({builder, url, resolution}) {
+function FullScreenTest ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution) &&
         (isMaster(url) || isCustom(url) || isDefault(url));
 
@@ -22,10 +23,19 @@ function FullScreenTest ({builder, url, resolution}) {
             let driver;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

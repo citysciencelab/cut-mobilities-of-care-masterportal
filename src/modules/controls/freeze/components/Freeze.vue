@@ -1,5 +1,6 @@
 <script>
 import ControlIcon from "../../ControlIcon.vue";
+import TableStyleControl from "../../TableStyleControl.vue";
 import FreezeWindow from "./FreezeWindow.vue";
 
 /**
@@ -16,6 +17,11 @@ export default {
         return {
             isActive: false
         };
+    },
+    computed: {
+        component () {
+            return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
+        }
     },
     methods: {
         /**
@@ -39,7 +45,9 @@ export default {
 
 <template>
     <div class="freeze-view-start">
-        <ControlIcon
+        <component
+            :is="component"
+            :class="[component ? 'control' : 'Table']"
             :title="$t(`common:modules.controls.freeze.freeze`)"
             :icon-name="'ban-circle'"
             :on-click="showFreezeWin"

@@ -79,7 +79,7 @@
                         "title": "Mein Titel",
                         "version": "mapfish_print_3"
                     },
-                    "coord": {
+                    "supplyCoord": {
                         "name": "translate#common:menu.tools.coord",
                         "glyphicon": "glyphicon-screenshot"
                     },

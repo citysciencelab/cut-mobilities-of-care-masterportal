@@ -20,6 +20,7 @@
 - Für VTL wurde ein Tool hergestellt, mit dem zwischen externen Styles gewechselt werden kann.
 - Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
 - Das Tool filter kann nun auch geclusterte Vektordienste filtern.
+- Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
 
 ### Changed
 - Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von VUE. Weiterhin heißt es fortan "Datei-Import".
@@ -34,6 +35,7 @@
 ### Deprecated
 - WfsFeatureFilter ist deprecated. Bitte das Modul Filter benutzen.
 - ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
+- Das Attribut coord für das Modul zur Koordinatenabfrage ist deprecated. Bitte das Attribut supplyCoord benutzen.
 
 ### Removed
 - @babel/polyfill wurde aus der package.json entfernt.
@@ -48,6 +50,8 @@
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
 - Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
 - Ein Fehler in der VisibleVector Suche wurde behoben der verhindert hat, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
+- In Geo-Online kann der Marker wieder über die URL gesetzt werden.
+- Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn 
 
 ---
 
