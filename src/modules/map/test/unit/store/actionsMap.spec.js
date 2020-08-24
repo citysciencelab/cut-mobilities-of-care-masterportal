@@ -100,6 +100,7 @@ describe("actionsMap", function () {
         it("commits setGfiFeature", async () => {
             const getters = {
                     clickCoord: sinon.spy(),
+                    mapMode: 0,
                     visibleWmsLayerList: {
                         filter: function () {
                             return [];
@@ -122,6 +123,7 @@ describe("actionsMap", function () {
                     "Tools/Gfi/isActive": true
                 },
                 commit = sinon.spy(),
+                dispatch = sinon.spy(),
                 obj = {
                     coordinate: [4, 56],
                     pixel: [12, 99],
@@ -136,9 +138,9 @@ describe("actionsMap", function () {
                     }
                 };
 
-            actions.updateClick({commit, getters, rootGetters}, obj);
-            expect(commit.calledThrice).to.be.true;
-            expect(commit.args[2]).to.include.members(["setFeaturesAtCoordinate"]);
+            actions.updateClick({getters, commit, dispatch, rootGetters}, obj);
+            expect(commit.calledTwice).to.be.true;
+            expect(commit.args[1]).to.include.members(["setClickPixel"]);
         });
     });
 
