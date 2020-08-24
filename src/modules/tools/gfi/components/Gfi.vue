@@ -49,15 +49,15 @@ export default {
          * @returns {object|null} - the current feature
          */
         feature: function () {
-            if (this.gfiFeatures !== null) {
+            if (this.gfiFeatures !== null && Array.isArray(this.gfiFeatures) && this.gfiFeatures.length > 0) {
                 return this.gfiFeatures[this.pagerIndex];
             }
             return null;
         }
     },
     beforeUpdate () {
-        if (this.feature !== null && this.feature.getProperties() !== null) {
-            console.info(this.feature.getProperties());
+        if (this.feature !== null && this.feature.hasOwnProperty("getProperties") && this.feature.getProperties() !== null) {
+        //    console.info(this.feature.getProperties());
             const mappedProperties = this.prepareProperties(this.feature.getProperties(), this.feature.getAttributesToShow(), this.ignoredKeys);
 
             this.feature.getMappedProperties = () => mappedProperties;
@@ -126,7 +126,7 @@ export default {
 </script>
 
 <template>
-    <div v-if="isVisible && feature.getHtml() === null">
+    <div v-if="isVisible && feature !== null && feature.getHtml() === null">
         <component
             :is="currentViewType"
             :feature="feature"

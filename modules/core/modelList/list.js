@@ -255,7 +255,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new Print(attrs, options);
             }
             // else if (attrs.id === "gfi") {
-                // return new GFI(Object.assign(attrs, Config.hasOwnProperty("gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
+            // return new GFI(Object.assign(attrs, Config.hasOwnProperty("gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
             // }
             else if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
