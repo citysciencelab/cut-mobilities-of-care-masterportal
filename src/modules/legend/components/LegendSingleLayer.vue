@@ -29,7 +29,7 @@ export default {
 <template>
     <div
         :id="id"
-        class="layer-legend"
+        class="layer-legend collapse in"
     >
         <template
             v-if="legendObj !== undefined"
