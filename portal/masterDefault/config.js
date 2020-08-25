@@ -56,7 +56,6 @@ const Config = {
     scaleLine: true,
 
     footer: {
-        visibility: true,
         urls: [
             {
                 "bezeichnung": "common:modules.footer.designation",
