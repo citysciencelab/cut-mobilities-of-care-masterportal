@@ -525,13 +525,6 @@
     "Fachdaten": {
       "Layer": [
         {
-          "id": "15543",
-          "visibility": true
-        },
-        {
-          "id": "8194"
-        },
-        {
           "id": "16100",
           "name": "Hauptkirchen",
           "visibility": true,
@@ -554,6 +547,7 @@
         {
           "id": "2128",
           "styleId": "2128",
+          "styleGeometryType": ["Point"],
           "name": "translate#common:tree.trafficCameras"
         },
         {
@@ -628,6 +622,7 @@
         {
           "id": "47",
           "styleId": "47",
+          "styleGeometryType": "Point",
           "mouseHoverField": [
             "baubeginn",
             "bauende"
@@ -649,10 +644,8 @@
           "styleId": "45",
           "clusterDistance": 40,
           "routable": true,
-          "searchField": "bezeichnung"
-        },
-        {
-          "id": "4479"
+          "searchField": "bezeichnung",
+          "styleGeometryType": "Point"
         },
         {
           "id": [
