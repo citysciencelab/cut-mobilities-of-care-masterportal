@@ -789,12 +789,12 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 
 #### Portalconfig.menu.legend
 
-[inherits]: # (Portalconfig.menu.tool)
-
 Konfigurations-Optionen der Legende.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
+|name|ja|String||Name der Legende.|false|
+|glyphicon|nein|String|"glyphicon-book"|Glyphicon der Legende.|false|
 |showCollapseAllButton|nein|Boolean|false|Option zum Ein- bzw. Ausblenden aller Legenden|false|
 
 ***
@@ -2279,7 +2279,8 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|false|
 |gfiTheme|nein|String|"default"|Wert aus **[services.json](services.json.md)**. Gibt an, welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|true|
 |layerAttribution|nein|String||Wert aus **[services.json](services.json.md)**. HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|false|
-|legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen.|false|
+|legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
+|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
 |maxScale|nein|String||Wert aus **[services.json](services.json.md)**. Maximaler Maßstab bei dem der Layer angezeigt werden soll.|false|
 |minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem der Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer Reload des Layers. Angabe in ms. Minimum ist 500.|false|
@@ -2330,7 +2331,8 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|false|
 |gfiTheme|nein|String|"default"|Wert aus **[services.json](services.json.md)**. Gibt an, welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|true|
 |layerAttribution|nein|String||Wert aus **[services.json](services.json.md)**. HTML String. Dieser wird angezeigt, sobald der Layer aktiv ist.|false|
-|legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen.|false|
+|legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
+|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
 |maxScale|nein|String||Wert aus **[services.json](services.json.md)**. Maximaler Maßstab bei dem der Layer angezeigt werden soll.|false|
 |minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem der Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer Reload des Layers. Angabe in ms. Minimum ist 500.|false|
@@ -2383,7 +2385,7 @@ Hier werden WMS typische Attribute aufgelistet.
     "extent": [454591, 5809000, 700000, 6075769],
     "gfiTheme": "default",
     "layerAttribution": "MyBoldAttribution for layer 123456",
-    "legendURL": "https://myServer/myService/legend.pdf",
+    "legend": "https://myServer/myService/legend.pdf",
     "maxScale": "100000",
     "minScale": "1000",
     "autoRefresh": "10000",
@@ -2612,7 +2614,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
     "extent": [454591, 5809000, 700000, 6075769],
     "gfiTheme": "default",
     "layerAttribution": "MyBoldAttribution for layer 123456",
-    "legendURL": "https://myServer/myService/legend.pdf",
+    "legend": "https://myServer/myService/legend.pdf",
     "maxScale": "100000",
     "minScale": "1000",
     "autoRefresh": "10000",
@@ -2646,7 +2648,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
     "typ" : "GeoJSON",
     "gfiAttributes" : "showAll",
     "layerAttribution" : "nicht vorhanden",
-    "legendURL" : ""
+    "legend" : true
 }
 ```
 
