@@ -475,7 +475,7 @@ export default {
          * @returns {String} - An id consisting of the alphanumeric layername.
          */
         generateId (layerName) {
-            return layerName ? "legend_" + layerName.replace(/[\W_]+/g,"_") : undefined;
+            return layerName ? "legend_" + layerName.replace(/[\W_]+/g, "_") : undefined;
         },
 
         /**
