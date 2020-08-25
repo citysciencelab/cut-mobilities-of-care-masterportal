@@ -265,6 +265,9 @@
                 "serviceThree": "Dienst 3",
                 "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
             },
+            "filter": {
+                "results": "Treffer"
+            },
             "pendler": {
                 "animation": {
                     "domicile": "Wohnort",

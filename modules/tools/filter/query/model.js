@@ -11,7 +11,9 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         isLayerVisible: false,
         activateOnSelection: false,
         searchInMapExtent: true,
-        liveZoomToFeatures: false
+        liveZoomToFeatures: false,
+        // translations
+        results: ""
     },
 
     /**
@@ -54,6 +56,22 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
                 }
             }
         }, this);
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "results": i18next.t("common:modules.tools.filter.results"),
+            "currentLng": lng
+        });
     },
 
     isSearchInMapExtentActive: function () {

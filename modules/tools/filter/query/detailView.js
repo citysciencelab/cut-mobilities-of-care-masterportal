@@ -31,7 +31,10 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
             "rerenderSnippets": this.rerenderSnippets,
             "change:isSelected": this.removeView,
             "change:featureIds": this.updateFeatureCount,
-            "change:isLayerVisible": this.render
+            "change:isLayerVisible": this.render,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
         }, this);
         this.listenTo(this.model.get("snippetCollection"), {
             "valuesChanged": this.renderValueViews,
