@@ -3,18 +3,15 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
-import isMobile from "../../../utils/isMobile";
 
 export default {
     name: "LegendMenu",
     components: {},
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
+        ...mapGetters(["mobile"]),
         showLegendInMenu () {
             return Boolean(this.name);
-        },
-        isMobile () {
-            return isMobile();
         }
     },
     mounted () {
@@ -38,7 +35,7 @@ export default {
 <template>
     <div>
         <ul
-            v-if="!isMobile"
+            v-if="!mobile"
             id="legend-menu"
             class="nav navbar-nav"
         >
@@ -62,7 +59,7 @@ export default {
             </li>
         </ul>
         <ul
-            v-if="isMobile"
+            v-if="mobile"
             id="legend-menu"
             class="nav-menu list-group mobile"
         >
