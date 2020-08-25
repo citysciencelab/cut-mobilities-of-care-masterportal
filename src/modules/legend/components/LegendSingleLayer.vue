@@ -3,6 +3,10 @@ export default {
     name: "LegendSingleLayer",
     components: {},
     props: {
+        id: {
+            type: String && undefined,
+            required: true
+        },
         legendObj: {
             type: Object && undefined,
             required: true
@@ -23,7 +27,10 @@ export default {
 </script>
 
 <template>
-    <div class="layer-legend">
+    <div
+        :id="id"
+        class="layer-legend"
+    >
         <template
             v-if="legendObj !== undefined"
         >

@@ -467,6 +467,15 @@ export default {
                 isValid = false;
             }
             return isValid;
+        },
+
+        /**
+         * Generates an id using the layername and replacing all non alphanumerics with an underscore.
+         * @param {String} layerName The name of the layer.
+         * @returns {String} - An id consisting of the alphanumeric layername.
+         */
+        generateId (layerName) {
+            return layerName ? layerName.replace(/[\W_]+/g,"_") : undefined;
         }
     }
 };
@@ -496,12 +505,15 @@ export default {
                 <div
                     v-for="legendObj in legends"
                     :key="legendObj.name"
-                    class="layer"
+                    class="layer panel panel-default"
                 >
-                    <div class="layer-title">
+                    <div class="layer-title panel-heading" data-toggle="collapse"
+                        :href="'#' + generateId(legendObj.name)"
+                    >
                         {{ legendObj.name }}
                     </div>
                     <LegendSingleLayer
+                        :id="generateId(legendObj.name)"
                         :legendObj="legendObj"
                         :renderToId="''"
                     />
@@ -509,6 +521,7 @@ export default {
             </div>
         </div>
         <LegendSingleLayer
+            :id="generateId(layerInfoLegend.name)"
             :legendObj="layerInfoLegend"
             :renderToId="'layerinfo-legend'"
         />
