@@ -5,7 +5,6 @@ import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
 import LegendSingleLayer from "./LegendSingleLayer.vue";
-import isMobile from "../../../utils/isMobile";
 
 export default {
     name: "LegendWindow",
@@ -14,9 +13,7 @@ export default {
     },
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
-        isMobile () {
-            return isMobile();
-        }
+        ...mapGetters(["mobile"]),
     },
     watch: {
         showLegend (showLegend) {
@@ -478,11 +475,11 @@ export default {
 <template>
     <div
         id="legend"
-        :class="isMobile ? 'legend-mobile' : 'legend'"
+        :class="mobile ? 'legend-mobile' : 'legend'"
     >
         <div
             v-if="showLegend"
-            :class="isMobile ? 'legend-window-mobile' : 'legend-window'"
+            :class="mobile ? 'legend-window-mobile' : 'legend-window'"
         >
             <div class="legend-title">
                 <span
@@ -542,7 +539,7 @@ export default {
         }
         .legend-title {
             padding: 10px;
-            border-bottom: 2px solid #aaaaaa;
+            border-bottom: 2px solid #e7e7e7;
             cursor: move;
             .close-legend {
                 cursor: pointer;
@@ -552,14 +549,15 @@ export default {
             margin-top: 2px;
             max-height: 70vh;
             overflow: auto;
-            .layer {
-                border: 2px solid #aaaaaa;
-                margin: 2px;
-                padding: 5px;
-            }
             .layer-title {
                 padding: 5px;
                 font-weight: bold;
+                background-color: #e7e7e7;
+            }
+            .layer {
+                border: 2px solid #e7e7e7;
+                margin: 2px;
+                padding: 5px;
             }
         }
     }
