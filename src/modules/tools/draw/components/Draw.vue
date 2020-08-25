@@ -256,12 +256,13 @@ export default {
                             :disabled="drawHTMLElements"
                             @change="setSymbol"
                         >
+                            <!-- NOTE: caption of the iconList is deprecated in 3.0.0 -->
                             <option
                                 v-for="option in iconList"
-                                :key="'draw-icon-' + option.id"
-                                :value="option.id"
+                                :key="'draw-icon-' + (option.id ? option.id : option.caption)"
+                                :value="(option.id ? option.id : option.caption)"
                             >
-                                {{ $t("common:modules.tools.draw.iconList." + option.id) }}
+                                {{ $t(option.id ? "common:modules.tools.draw.iconList." + option.id : option.caption) }}
                             </option>
                         </select>
                     </div>

@@ -269,7 +269,8 @@ function setSymbol ({state, commit, dispatch}, {target}) {
         iconList = Object.values(state.iconList);
 
     // Find the correct symbol
-    commit("setSymbol", iconList.filter(icon => icon.id === selectedElement.value)[0]);
+    // NOTE: caption is deprecated in 3.0.0
+    commit("setSymbol", iconList.filter(icon => icon.id ? icon.id === selectedElement.value : icon.caption === selectedElement.value)[0]);
     dispatch("updateDrawInteraction");
 }
 
