@@ -13,7 +13,7 @@ export default {
     },
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
-        ...mapGetters(["mobile"]),
+        ...mapGetters(["mobile"])
     },
     watch: {
         showLegend (showLegend) {
@@ -514,7 +514,7 @@ export default {
 
         /**
          * Expands all layer legends
-         * @retunrs {void}
+         * @returns {void}
          */
         expandAllLegends () {
             this.legends.forEach(legendObj => {
@@ -560,7 +560,9 @@ export default {
                     :key="legendObj.name"
                     class="layer panel panel-default"
                 >
-                    <div class="layer-title panel-heading" data-toggle="collapse"
+                    <div
+                        class="layer-title panel-heading"
+                        data-toggle="collapse"
                         :href="'#' + generateId(legendObj.name)"
                     >
                         {{ legendObj.name }}
