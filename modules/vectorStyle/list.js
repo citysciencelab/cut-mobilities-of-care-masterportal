@@ -115,9 +115,12 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      */
     parseStyles: function (data) {
         const layers = Radio.request("Parser", "getItemsByAttributes", {type: "layer"}),
-            tools = Radio.request("Parser", "getItemsByAttributes", {type: "tool"});
+            tools = Radio.request("Parser", "getItemsByAttributes", {type: "tool"}),
+            dataWithDefaultValue = [...data];
         let styleIds = [],
             filteredData = [];
+
+        dataWithDefaultValue.push({styleId: "default", rules: [{style: {}}]});
 
         styleIds.push(this.getStyleIdsFromLayers(layers));
         styleIds.push(this.getStyleIdForZoomToFeature());
@@ -126,7 +129,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         styleIds.push(this.getFeatureViaURLStyles());
 
         styleIds = Array.isArray(styleIds) ? styleIds.reduce((acc, val) => acc.concat(val), []) : styleIds;
-        filteredData = data.filter(function (styleModel) {
+        filteredData = dataWithDefaultValue.filter(function (styleModel) {
             /**
              * filter for .layerId and styleId as well
              * @deprecated since v 3.0
@@ -139,6 +142,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         });
 
         this.add(filteredData);
+
         return filteredData;
     },
     /**

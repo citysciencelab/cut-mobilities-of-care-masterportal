@@ -118,7 +118,8 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                         isBaseLayer: isBaseLayer,
                         level: level,
                         parentId: parentId,
-                        type: "layer"
+                        type: "layer",
+                        styleId: "default"
                     }, layerExtended);
 
                     item = this.controlsVisibilityInTree(item, treeType, level, layerExtended);

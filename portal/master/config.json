@@ -30,7 +30,7 @@
         "epsg": "EPSG:25832",
         "filter": "filter=(typ:*)",
         "score": 0.6,
-        "zoomToResult": true
+        "zoomToResultOnHover": true
       },
       "osm": {
         "minChars": 3,
@@ -122,7 +122,7 @@
       "visibleWFS": {
         "minChars": 3
       },
-      "zoomLevel": 9,
+      "startZoomLevel": 9,
       "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "mapView": {
