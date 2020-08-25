@@ -324,6 +324,7 @@
             "fileImport": {
                 "captions": {
                     "intro": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.",
+                    "fileTypes": "Es können KML-Dateien (*.kml), GPX-Dateien (*.gpx) oder GeoJson-Dateien (*.geojson, *.json) importiert werden.",
                     "dropzone": "Datei hier ablegen",
                     "browse": "Datei auswählen",
                     "supportedFiletypes": {
@@ -335,9 +336,11 @@
                 },
                 "alertingMessages": {
                     "success": "Die Datei \"{{filename}}\" wurde erfolgreich importiert.",
-                    "formatError": "Die Datei konnte nicht gelesen werden. Bitte prüfen Sie, ob das Format der Datei mit dem gewählten Format übereinstimmt.",
-                    "missingFileContent": "Fehler beim Lesen der Datei. Bitte überprüfen Sie den Dateityp sowie den Inhalt der Datei. Falls die Datei fehlerfrei ist, wenden Sie sich bitte an den Support.",
-                    "missingFormat": "Das gewählte Dateiformat ist nicht konfiguriert. Bitte wenden Sie sich an den Support."
+                    "successPartly": "Die Datei \"{{filename}}\" wurde teilweise importiert.",
+                    "formatError": "Die Datei \"{{filename}}\" konnte nicht gelesen werden. Bitte prüfen Sie, ob die Datei das Format *.kml. *.gpx, *.geojson oder *.json hat.",
+                    "missingFileContent": "Fehler beim Lesen der Datei \"{{filename}}\". Bitte überprüfen Sie den Dateityp sowie den Inhalt der Datei. Falls die Datei fehlerfrei ist, wenden Sie sich bitte an den Support.",
+                    "missingFormat": "Das Dateiformat {{format}} wird nicht unterstützt. Bitte wenden Sie sich an den Support.",
+                    "featureError": "Ein Feature in dieser Datei konnte nicht gelesen werden."
                 },
                 "successfulImportedLabel": "Erfolgreich importiert:",
                 "title": "Datei importieren"

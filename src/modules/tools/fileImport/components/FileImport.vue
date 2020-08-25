@@ -126,6 +126,9 @@ export default {
                     id="cta"
                 >
                     {{ $t("modules.tools.fileImport.captions.intro") }}
+                    <br>
+                    <br>
+                    {{ $t("modules.tools.fileImport.captions.fileTypes") }}
                 </p>
                 <div
                     id="drop-area-fake"
