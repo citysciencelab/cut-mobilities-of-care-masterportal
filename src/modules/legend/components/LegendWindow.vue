@@ -475,7 +475,54 @@ export default {
          * @returns {String} - An id consisting of the alphanumeric layername.
          */
         generateId (layerName) {
-            return layerName ? layerName.replace(/[\W_]+/g,"_") : undefined;
+            return layerName ? "legend_" + layerName.replace(/[\W_]+/g,"_") : undefined;
+        },
+
+        /**
+         * Toggles the layer legends .
+         * @param {Event} evt Click event.
+         * @returns {void}
+         */
+        toggleCollapseAll (evt) {
+            const element = evt.target,
+                hasArrowUp = element.className.includes("glyphicon-arrow-up");
+
+            if (hasArrowUp) {
+                this.collapseAllLegends();
+                element.classList.remove("glyphicon-arrow-up");
+                element.classList.add("glyphicon-arrow-down");
+            }
+            else {
+                this.expandAllLegends();
+                element.classList.remove("glyphicon-arrow-down");
+                element.classList.add("glyphicon-arrow-up");
+            }
+        },
+
+        /**
+         * Collapses all layer legends
+         * @returns {void}
+         */
+        collapseAllLegends () {
+            this.legends.forEach(legendObj => {
+                const id = this.generateId(legendObj.name),
+                    element = document.getElementById(id);
+
+                element.classList.remove("in");
+            });
+        },
+
+        /**
+         * Expands all layer legends
+         * @retunrs {void}
+         */
+        expandAllLegends () {
+            this.legends.forEach(legendObj => {
+                const id = this.generateId(legendObj.name),
+                    element = document.getElementById(id);
+
+                element.classList.add("in");
+            });
         }
     }
 };
@@ -500,6 +547,12 @@ export default {
                     class="glyphicon glyphicon-remove close-legend float-right"
                     @click="closeLegend"
                 ></span>
+                <span
+                    v-if="showCollapseAllButton"
+                    class="glyphicon glyphicon-arrow-up toggle-collapse-all legend float-right"
+                    :title="$t('common:modules.legend.toggleCollapseAll')"
+                    @click="toggleCollapseAll"
+                ></span>
             </div>
             <div class="legend-content">
                 <div
@@ -521,7 +574,6 @@ export default {
             </div>
         </div>
         <LegendSingleLayer
-            :id="generateId(layerInfoLegend.name)"
             :legendObj="layerInfoLegend"
             :renderToId="'layerinfo-legend'"
         />
@@ -572,6 +624,9 @@ export default {
                 margin: 2px;
                 padding: 5px;
             }
+        }
+        .toggle-collapse-all {
+            padding-right: 10px;
         }
     }
 

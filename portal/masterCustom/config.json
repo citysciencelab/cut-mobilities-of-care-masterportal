@@ -376,9 +376,10 @@
               }
            }
         },
-        "legend":{
-         "name": "translate#common:menu.legend.name",
-           "glyphicon":"glyphicon-book"
+        "legend": {
+          "name": "common:modules.legend.name",
+          "glyphicon": "glyphicon-book",
+          "showCollapseAllButton": true
         },
         "contact":{
          "name": "translate#common:menu.contact",

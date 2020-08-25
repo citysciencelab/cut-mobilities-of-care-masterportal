@@ -5,7 +5,8 @@ export default {
     props: {
         id: {
             type: String && undefined,
-            required: true
+            required: false,
+            default: ""
         },
         legendObj: {
             type: Object && undefined,

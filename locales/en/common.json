@@ -48,11 +48,6 @@
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features"
         },
-        "legend": {
-          "name": "Legend",
-          "linkToPdf": "Link to extern legend (PDF)",
-          "noLegendForLayerInfo": "No legend available"
-        },
         "contact": "Mail",
         "info": "Information"
     },
@@ -632,9 +627,10 @@
             }
         },
         "legend": {
-            "title": "Legend",
-            "collapseAll": "Collapse all",
-            "foldOutAll": "Fold out all"
+            "name": "Legend",
+            "linkToPdf": "Link to extern legend (PDF)",
+            "noLegendForLayerInfo": "No legend available",
+            "toggleCollapseAll": "Toggle all legends"
         }
     },
     "snippets": {

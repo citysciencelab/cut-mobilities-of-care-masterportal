@@ -49,11 +49,6 @@
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen"
         },
-        "legend": {
-          "name": "Legende",
-          "linkToPdf": "Zur externen Legende (PDF)",
-          "noLegendForLayerInfo": "Legende nicht verfügbar"
-        },
         "contact": "Kontakt",
         "info": "Informationen"
     },
@@ -641,9 +636,10 @@
             }
         },
         "legend": {
-            "title": "Legende",
-            "collapseAll": "Alle einklappen",
-            "foldOutAll": "Alle ausklappen"
+            "name": "Legende",
+            "linkToPdf": "Zur externen Legende (PDF)",
+            "noLegendForLayerInfo": "Legende nicht verfügbar",
+            "toggleCollapseAll": "Alle Legenden ein-/ausklappen"
         }
     },
     "snippets": {
