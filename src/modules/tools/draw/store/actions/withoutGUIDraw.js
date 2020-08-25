@@ -14,8 +14,12 @@ import MultiPolygon from "ol/geom/MultiPolygon.js";
  * @param {String} cursor If a cursor has been added through the RemoteInterface, it gets removed.
  * @returns {void}
  */
-function cancelDrawWithoutGUI ({dispatch}, cursor) {
-    dispatch("resetModule");
+function cancelDrawWithoutGUI ({commit, dispatch}, cursor) {
+    commit("setWithoutGUI", true);
+    dispatch("manipulateInteraction", {interaction: "draw", active: false});
+    dispatch("manipulateInteraction", {interaction: "modify", active: false});
+    dispatch("manipulateInteraction", {interaction: "delete", active: false});
+    commit("setActive", false);
 
     if (typeof cursor?.cursor !== "undefined") {
         // TODO: The cursor changes from the map need to happen here
@@ -169,8 +173,7 @@ function downloadViaRemoteInterface ({dispatch}, geomType) {
  * @returns {void}
  */
 function editFeaturesWithoutGUI ({dispatch}) {
-    dispatch("manipulateInteraction", {interaction: "draw", active: false});
-    dispatch("createModifyInteractionAndAddToMap");
+    dispatch("toggleInteraction", "modify");
 }
 
 /**

@@ -128,7 +128,6 @@ const initialState = Object.assign({}, stateDraw),
         createDrawInteractionListener ({state, dispatch}, {doubleCircle, drawInteraction, maxFeatures}) {
             const interaction = state["drawInteraction" + drawInteraction];
             let centerPoint,
-                centerPointCoords,
                 geoJSONAddCenter;
 
             interaction.on("drawend", function (event) {
@@ -139,16 +138,18 @@ const initialState = Object.assign({}, stateDraw),
                     dispatch("cancelDrawWithoutGUI", {cursor: "auto"});
                     dispatch("editFeaturesWithoutGUI");
 
-                    centerPointCoords = dispatch("createCenterPoint", {feature: event.feature, targetProjection: Config.inputMap.targetProjection});
-                    centerPoint = {type: "Point", coordinates: centerPointCoords};
-                    dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetprojection}, currentFeature: event.feature}).then(geoJSON => {
-                        geoJSONAddCenter = JSON.parse(geoJSON);
+                    dispatch("createCenterPoint", {feature: event.feature, targetProjection: Config.inputMap.targetProjection}).then(centerPointCoords => {
+                        centerPoint = {type: "Point", coordinates: centerPointCoords};
 
-                        if (geoJSONAddCenter.features[0].properties === null) {
-                            geoJSONAddCenter.features[0].properties = {};
-                        }
-                        geoJSONAddCenter.features[0].properties.centerPoint = centerPoint;
-                        Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geoJSONAddCenter)});
+                        dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetprojection}, currentFeature: event.feature}).then(geoJSON => {
+                            geoJSONAddCenter = JSON.parse(geoJSON);
+
+                            if (geoJSONAddCenter.features[0].properties === null) {
+                                geoJSONAddCenter.features[0].properties = {};
+                            }
+                            geoJSONAddCenter.features[0].properties.centerPoint = centerPoint;
+                            Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geoJSONAddCenter)});
+                        });
                     });
                 }
             });
