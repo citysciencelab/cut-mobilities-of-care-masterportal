@@ -251,7 +251,7 @@ describe("actionsSetterDraw", () => {
         });
     });
     describe("setSymbol", () => {
-        it("should commit as intended", () => {
+        it("should commit as intended if id is used for the symbol", () => {
             const myIcon = Symbol(),
                 otherIcon = Symbol();
 
@@ -263,6 +263,21 @@ describe("actionsSetterDraw", () => {
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setSymbol", {id: myIcon}]);
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+        });
+        it("should commit as intended if caption is used for the symbol", () => {
+            const myIcon = Symbol(),
+                otherIcon = Symbol();
+
+            state = {iconList: [{caption: otherIcon}, {caption: myIcon}]};
+
+            target = {options: [{value: myIcon}], selectedIndex: 0};
+
+            actions.setSymbol({state, commit, dispatch}, {target});
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setSymbol", {caption: myIcon}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
