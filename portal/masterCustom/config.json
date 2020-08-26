@@ -587,7 +587,8 @@
                           "Titel":"Überschwemmungsgebiete",
                           "Layer":[
                              {
-                                "id":"1103"
+                                "id":"1103",
+                                "datasets": false
                              },
                              {
                                 "id":"1104"
@@ -914,6 +915,7 @@
                        }
                     ],
                     "name":"Krankenhäuser und Schulen",
+                    "datasets": false,
                     "visibility":true
                  }
               ]

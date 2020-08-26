@@ -7,7 +7,7 @@
 
 */
 function checkChildrenDatasets (model) {
-    if (model.has("children")) {
+    if (model.get("datasets") !== false && model.has("children")) {
         const children = model.get("children");
 
         for (const {datasets} of children) {
