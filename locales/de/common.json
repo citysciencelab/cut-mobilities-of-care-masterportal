@@ -342,7 +342,7 @@
                     "missingFormat": "Das Dateiformat {{format}} wird nicht unterstützt. Bitte wenden Sie sich an den Support.",
                     "featureError": "Ein Feature in dieser Datei konnte nicht gelesen werden."
                 },
-                "successfulImportedLabel": "Erfolgreich importiert:",
+                "successfullyImportedLabel": "Erfolgreich importiert:",
                 "title": "Datei importieren"
             },
             "parcelSearch": {

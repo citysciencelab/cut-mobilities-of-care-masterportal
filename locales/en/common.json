@@ -333,7 +333,7 @@
                     "missingFormat": "The chosen filetype {{format}} is not supported. Please contact the support.",
                     "featureError": "A feature in this file could not be read."
                 },
-                "successfulImportedLabel": "Successful imported:",
+                "successfullyImportedLabel": "Successful imported:",
                 "title": "Import file"
             },
             "parcelSearch": {

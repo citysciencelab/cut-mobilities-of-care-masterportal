@@ -175,7 +175,7 @@ export default {
                     v-if="importedFileNames.length > 0"
                     id="imported-filenames"
                 >
-                    <label>{{ $t("modules.tools.fileImport.successfulImportedLabel") }}</label>
+                    <label>{{ $t("modules.tools.fileImport.successfullyImportedLabel") }}</label>
                     <ul>
                         <li
                             v-for="(filename, index) in importedFileNames"
