@@ -258,6 +258,8 @@
             },
             "filter": {
                 "results": "Results",
+                "zoomOnResults": "Zoom on results",
+                "filter": "filter",
                 "yourSelection": "Your Selection: ",
                 "noFilterOptionSelected": "No filter option selected",
                 "deleteAll": "Delete all"

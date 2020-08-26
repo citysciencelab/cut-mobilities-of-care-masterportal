@@ -14,6 +14,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         liveZoomToFeatures: false,
         // translations
         results: "",
+        filter: "",
         yourSelection: "",
         noFilterOptionSelected: "",
         deleteAll: ""
@@ -73,6 +74,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
     changeLang: function (lng) {
         this.set({
             "results": i18next.t("common:modules.tools.filter.results"),
+            "filter": i18next.t("common:modules.tools.filter.filter"),
             "yourSelection": i18next.t("common:modules.tools.filter.yourSelection"),
             "noFilterOptionSelected": i18next.t("common:modules.tools.filter.noFilterOptionSelected"),
             "deleteAll": i18next.t("common:modules.tools.filter.deleteAll"),
