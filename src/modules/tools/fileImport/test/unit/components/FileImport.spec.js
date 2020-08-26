@@ -17,7 +17,7 @@ describe("FileImport.vue", () => {
                 menu: {
                     tools: {
                         children: {
-                            fileimport:
+                            fileImport:
                             {
                                 "title": "translate#common:menu.tools.fileImport",
                                 "glyphicon": "glyphicon-resize-full",

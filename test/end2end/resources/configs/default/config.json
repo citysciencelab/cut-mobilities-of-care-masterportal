@@ -178,7 +178,7 @@
                         "name": "Koordinatensuche",
                         "glyphicon": "glyphicon-record"
                     },
-                    "fileimport": {
+                    "fileImport": {
                         "name": "Datei Import",
                         "glyphicon": "glyphicon-import"
                     },

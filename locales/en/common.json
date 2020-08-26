@@ -34,7 +34,7 @@
             "coord": "Query coordinates",
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
-            "fileimport": "Import file",
+            "fileImport": "Import file",
             "routing": "Route planner",
             "draw": "Drawing / writing",
             "styleWMS": "Style WMS",

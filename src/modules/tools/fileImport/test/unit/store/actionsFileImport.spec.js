@@ -27,10 +27,10 @@ before(() => {
 
 describe("actionsFileImport", function () {
     describe("activateByUrlParam", function () {
-        it("activateByUrlParam  isinitopen=fileimport", done => {
+        it("activateByUrlParam  isinitopen=fileImport", done => {
             const rootState = {
                 queryParams: {
-                    "isinitopen": "fileimport"
+                    "isinitopen": "fileImport"
                 }
             };
 

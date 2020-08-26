@@ -50,7 +50,7 @@
 						"name": "Zeichnen / Schreiben",
 						"glyphicon": "glyphicon-pencil"
 					},
-					"fileimport": {
+					"fileImport": {
 						"name": "Datei Import"
 					},
 					"saveSelection": {

@@ -18,7 +18,7 @@ const deprecatedParamsConfigJson = {
         "Portalconfig.controls.overviewMap.layerId": ["Portalconfig.controls.overviewMap.baselayer"],
         "Portalconfig.mapView.startResolution": ["Portalconfig.mapView.resolution"],
         "Portalconfig.searchBar.startZoomLevel": ["Portalconfig.searchBar.zoomLevel"],
-        "Portalconfig.menu.tools.children.fileimport": ["Portalconfig.menu.tools.children.kmlimport", "Portalconfig.Portalconfig.menu.kmlimport"]
+        "Portalconfig.menu.tools.children.fileImport": ["Portalconfig.menu.tools.children.kmlimport", "Portalconfig.Portalconfig.menu.kmlimport"]
     },
     deprecatedParamsConfigJs = {
         "startUpModul": ["isInitOpen"]

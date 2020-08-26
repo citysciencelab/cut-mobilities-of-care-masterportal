@@ -17,7 +17,7 @@ const state = {
          * @deprecated in 3.0.0
          */
         coord: SupplyCoord,
-        fileimport: FileImport
+        fileImport: FileImport
     },
     configuredTools: []
 };
