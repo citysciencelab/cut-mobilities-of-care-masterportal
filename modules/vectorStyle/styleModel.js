@@ -615,7 +615,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {String | null} label for this styleObject
      */
     createLegendLabel: function (rule, styleObject) {
-        if (styleObject?.attributes.hasOwnProperty("legendValue")) {
+        if (styleObject?.attributes?.hasOwnProperty("legendValue")) {
             return styleObject.attributes.legendValue.toString();
         }
         else if (rule.hasOwnProperty("conditions")) {

@@ -632,7 +632,8 @@
             "baubeginn",
             "bauende"
           ],
-          "autoRefresh": 6000
+          "autoRefresh": 6000,
+          "clusterDistance": 50
         },
         {
           "id": "2714",

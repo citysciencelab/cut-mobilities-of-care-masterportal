@@ -42,9 +42,9 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
          */
         "clusterType": "circle",
         // for type circle
-        "clusterCircleRadius": 10,
-        "clusterCircleFillColor": [0, 153, 255, 1],
-        "clusterCircleStrokeColor": [0, 0, 0, 1],
+        "clusterCircleRadius": 15,
+        "clusterCircleFillColor": [0, 154, 205, 1],
+        "clusterCircleStrokeColor": [0, 0, 0, 0],
         "clusterCircleStrokeWidth": 2,
         // for type icon
         "clusterImageName": "blank.png",

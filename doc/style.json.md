@@ -360,11 +360,11 @@ Es gibt zwei Arten clusterTexte darzustellen. Sie werden im Attribut *clusterTex
 |clusterTextAlign|   | String | "center"|Ausrichtung des Textes am Feature.|
 |clusterTextFont|   | String | "Comic Sans MS"|Font des Textes am Feature.|
 |clusterTextScale|   | Integer | 2 | Skalierung des Textes.|
-|clusterTextOffsetX|   | Integer | 10 | Offset des Textes in X-Richtung.|
-|clusterTextOffsetY|   | Integer | -8 | Offset des Textes in Y-Richtung.|
+|clusterTextOffsetX|   | Integer | 0 | Offset des Textes in X-Richtung.|
+|clusterTextOffsetY|   | Integer | 2 | Offset des Textes in Y-Richtung.|
 |clusterTextFillColor|   | Integer[] | [255, 255, 255, 1] | Füllfarbe des Textes in rgba. |
 |clusterTextStrokeColor|   | Integer[] | [0, 0, 0, 0] | Randfarbe des Textes in rgba.|
-|clusterTextStrokeWidth|   | Integer | 3 | Breite der Textstriche.|
+|clusterTextStrokeWidth|   | Integer | 0 | Breite der Textstriche.|
 
 > Hinweis: Eine Cluster-Beschriftung ist gegenüber einer allgemeinen Beschriftung höher priorisiert.
 
