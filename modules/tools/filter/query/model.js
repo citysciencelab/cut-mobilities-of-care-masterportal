@@ -13,7 +13,10 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         searchInMapExtent: true,
         liveZoomToFeatures: false,
         // translations
-        results: ""
+        results: "",
+        yourSelection: "",
+        noFilterOptionSelected: "",
+        deleteAll: ""
     },
 
     /**
@@ -70,6 +73,9 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
     changeLang: function (lng) {
         this.set({
             "results": i18next.t("common:modules.tools.filter.results"),
+            "yourSelection": i18next.t("common:modules.tools.filter.yourSelection"),
+            "noFilterOptionSelected": i18next.t("common:modules.tools.filter.noFilterOptionSelected"),
+            "deleteAll": i18next.t("common:modules.tools.filter.deleteAll"),
             "currentLng": lng
         });
     },

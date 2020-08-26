@@ -266,7 +266,10 @@
                 "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
             },
             "filter": {
-                "results": "Treffer"
+                "results": "Treffer",
+                "yourSelection": "Ihre Auswahl: ",
+                "noFilterOptionSelected": "Noch keine Filteroption ausgewählt",
+                "deleteAll":"Alles löschen"
             },
             "pendler": {
                 "animation": {

@@ -257,7 +257,10 @@
                 "key": "Configuration of tool <b>{{alertMessage.x}}</b> incorrect: <b>sliderType</b> \"{{alertMessage.y}}\" is not yet implemented!"
             },
             "filter": {
-                "results": "Results"
+                "results": "Results",
+                "yourSelection": "Your Selection: ",
+                "noFilterOptionSelected": "No filter option selected",
+                "deleteAll": "Delete all"
             },
             "pendler": {
                 "animation": {
