@@ -1,6 +1,7 @@
 import {expect} from "chai";
 import Util from "@testUtil";
 import Model from "@modules/cswParser/model.js";
+import * as moment from "moment";
 
 describe("modules/cswParser", function () {
     let model,
@@ -22,19 +23,19 @@ describe("modules/cswParser", function () {
             expect(model.parseDate()).to.be.null;
         });
         it("should return latest date for given xmlDoc", function () {
-            expect(model.parseDate(xmlDoc)).to.be.a("string").to.equal("31.12.2013");
+            expect(model.parseDate(xmlDoc)).to.be.a("string").to.equal(moment("2013-12-31T00:00:00.000+01:00").format("DD.MM.YYYY"));
         });
         it("should return null because no revision date is found", function () {
             expect(model.parseDate(xmlDoc, "revision")).to.be.null;
         });
         it("should return latest date for given xmlDoc", function () {
-            expect(model.parseDate(xmlDoc, "publication")).to.be.a("string").to.equal("31.12.2013");
+            expect(model.parseDate(xmlDoc, "publication")).to.be.a("string").to.equal(moment("2013-12-31T00:00:00.000+01:00").format("DD.MM.YYYY"));
         });
         it("should return null because no revision date is found", function () {
             expect(model.parseDate(xmlDoc, "creation")).to.be.null;
         });
         it("should return publication date as fallback to creation date", function () {
-            expect(model.parseDate(xmlDoc, "creation", "publication")).to.be.a("string").to.equal("31.12.2013");
+            expect(model.parseDate(xmlDoc, "creation", "publication")).to.be.a("string").to.equal(moment("2013-12-31T00:00:00.000+01:00").format("DD.MM.YYYY"));
         });
         it("should return null because neither revision date nor creation create are found", function () {
             expect(model.parseDate(xmlDoc, "revision", "creation")).to.be.null;

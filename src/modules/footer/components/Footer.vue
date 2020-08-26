@@ -1,11 +1,14 @@
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
+import getters from "../store/gettersFooter";
+import mutations from "../store/mutationsFooter";
 import ScaleLine from "../../scaleLine/components/ScaleLine.vue";
 import Language from "../../language/components/Language.vue";
 import MousePosition from "../../controls/mousePosition/components/MousePosition.vue";
 
-/* TODO implement missing feature toolModelId */
-
+/**
+ * Footer that is displayed below the map. The version of the masterportal and links can be displayed here.
+ */
 export default {
     name: "Footer",
     components: {
@@ -15,18 +18,23 @@ export default {
     },
     computed: {
         ...mapGetters(["footerConfig", "mobile", "masterPortalVersionNumber"]),
-        showFooter () {
-            return Boolean(this.footerConfig);
-        },
-        urls () {
-            return this.footerConfig?.urls;
-        },
-        showVersion () {
-            return this.footerConfig?.showVersion;
-        },
+        ...mapGetters("Footer", Object.keys(getters)),
         showLanguageSwitcher () {
             return this.$i18n.i18next.options.isEnabled() && Object.keys(this.$i18n.i18next.options.getLanguages()).length > 1;
         }
+    },
+    mounted () {
+        this.initialize();
+
+        if (this.footerConfig) {
+            this.setShowFooter(true);
+        }
+    },
+    methods: {
+        ...mapActions("Footer", [
+            "initialize"
+        ]),
+        ...mapMutations("Footer", Object.keys(mutations))
     }
 };
 </script>
@@ -48,15 +56,17 @@ export default {
                         :href="url.url"
                         target="_blank"
                     >
-                        {{ $t(mobile ? url.alias_mobil : url.alias) }}
+                        {{ $t(mobile ? $t(url.alias_mobil) : $t(url.alias)) }}
                     </a>
-                    <span class="glyphicon glyphicon-option-vertical hidden-xs" />
+                    <span
+                        v-if="index < Object.keys(urls).length - 1 || showVersion"
+                        class="glyphicon glyphicon-option-vertical hidden-xs"
+                    />
                 </span>
             </template>
             <template v-if="showVersion">
                 <span class="hidden-xs">
-                    Version: {{ masterPortalVersionNumber }}
-                    <span class="glyphicon glyphicon-option-vertical hidden-xs" />
+                    {{ $t("masterPortalVersion", {masterPortalVersionNumber}) }}
                 </span>
             </template>
             <span class="spacer" />
@@ -96,7 +106,6 @@ export default {
 
         .glyphicon-option-vertical {
             padding: 0 8px;
-            font-size: 12px;
         }
 
         .footer-mouse-position {

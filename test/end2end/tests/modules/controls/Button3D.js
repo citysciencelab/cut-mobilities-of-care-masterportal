@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
-    {clickFeature} = require("../../../library/utils"),
+    {clickFeature, logBrowserstackUrlToTest} = require("../../../library/utils"),
     {getCenter, getTilt, getResolution, getHeading, setTilt, setCenter} = require("../../../library/scripts"),
     {isMaster, isCustom, isDefault, is2D, isMobile} = require("../../../settings"),
     {Button, By, until} = webdriver;
@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function Button3DTests ({builder, url, resolution, mode}) {
+function Button3DTests ({builder, url, resolution, mode, capability}) {
     /* only run tests in
      * - non-mobile mode (does not have 3D mode)
      * - 2D mode, because de-/activating 3D is part of this test (3D mode is for rerunning other tools/search/... tests in 3D)
@@ -30,6 +30,10 @@ function Button3DTests ({builder, url, resolution, mode}) {
             let driver, button3D, tiltDown, tiltUp, zoomInButton, zoomOutButton, north, east, south, west, northPointer;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
                 await driver.wait(until.elementLocated(By.css("#button3D")));
                 button3D = await driver.findElement(By.css("#button3D"));
@@ -46,6 +50,11 @@ function Button3DTests ({builder, url, resolution, mode}) {
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

@@ -1,6 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
+    {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {getDirection, getCenter, areAllLayersHidden, isObModeOn, getObModeResolution} = require("../../../library/scripts"),
     {isDefault, isCustom, is2D, isMobile} = require("../../../settings"),
     {By, until} = webdriver,
@@ -30,7 +31,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function Button3DTests ({builder, url, resolution, mode}) {
+function Button3DTests ({builder, url, resolution, mode, capability}) {
     /* only run tests
      * - in non-mobile mode (does not have OB mode)
      * - in custom and default (have OB mode)
@@ -46,12 +47,21 @@ function Button3DTests ({builder, url, resolution, mode}) {
         let driver, buttonOB, zoomInButton, zoomOutButton, northPointer, westPointer;
 
         before(async function () {
+            if (capability) {
+                capability.name = this.currentTest.fullTitle();
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
             await driver.wait(until.elementLocated(By.css("#buttonOblique")));
             buttonOB = await driver.findElement(By.css("#buttonOblique"));
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

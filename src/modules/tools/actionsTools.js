@@ -1,3 +1,5 @@
+import {fetchFirstModuleConfig} from "../../utils/fetchFirstModuleConfig";
+
 const actions = {
     /**
      * Sets the parameter "active" to the given parameter for the tool with the given id.
@@ -11,13 +13,11 @@ const actions = {
      * @returns {void}
      */
     setToolActive ({state, dispatch}, {id, active}) {
-        Object.keys(state).forEach(toolId => {
-            const tool = state[toolId];
+        const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase());
 
-            if (tool && tool.id === id) {
-                dispatch(toolId + "/setActive", active);
-            }
-        });
+        if (toolId !== undefined) {
+            dispatch(toolId + "/setActive", active);
+        }
     },
     /**
      * Sets the translated name of the tool to the given parameter for the tool with the given id.
@@ -30,13 +30,31 @@ const actions = {
      * @returns {void}
      */
     languageChanged ({state, commit}, {id, name}) {
-        Object.keys(state).forEach(toolId => {
-            const tool = state[toolId];
+        const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase());
 
-            if (tool && tool.id === id) {
-                commit(toolId + "/setName", name);
-            }
-        });
+        if (toolId !== undefined) {
+            commit(toolId + "/setName", name);
+        }
+    },
+
+    /**
+     * Sets the config-params for every configured tool into state from that tool.
+     * @param {object} context the context Vue instance
+     * @param {object} configuredTool the tool component
+     * @returns {boolean} false, if config does not contain the tool
+     */
+    pushAttributesToStoreElements: (context, configuredTool) => {
+        return fetchFirstModuleConfig(context, [configuredTool.configPath], configuredTool.component.name);
+    },
+
+    /**
+     * Adds a tool dynamically to componentMap.
+     * @param {Object} state state object; in this case rootState = state
+     * @param {object} tool tool to be added dynamically
+     * @returns {void}
+     */
+    addTool: ({state, commit}, tool) => {
+        commit("setComponentMap", Object.assign(state.componentMap, {[tool.default.name]: tool.default}));
     }
 };
 

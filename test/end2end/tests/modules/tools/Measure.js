@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {areRegExpsInMeasureLayer, hasVectorLayerLength, getCoordinatesOfXthFeatureInLayer} = require("../../../library/scripts"),
-    {reclickUntilNotStale} = require("../../../library/utils"),
+    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../library/utils"),
     {isMobile, is3D} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function MeasureTests ({builder, url, resolution, mode}) {
+async function MeasureTests ({builder, url, resolution, mode, capability}) {
     const testIsApplicable = !isMobile(resolution);
 
     if (testIsApplicable) {
@@ -21,10 +21,19 @@ async function MeasureTests ({builder, url, resolution, mode}) {
                     let driver, dropdownGeometry, dropdownUnit, questionIcon, deleteButton, viewport;
 
                     before(async function () {
+                        if (capability) {
+                            capability.name = this.currentTest.fullTitle();
+                            builder.withCapabilities(capability);
+                        }
                         driver = await initDriver(builder, url, resolution);
                     });
 
                     after(async function () {
+                        if (capability) {
+                            driver.session_.then(function (sessionData) {
+                                logBrowserstackUrlToTest(sessionData.id_);
+                            });
+                        }
                         await driver.quit();
                     });
 

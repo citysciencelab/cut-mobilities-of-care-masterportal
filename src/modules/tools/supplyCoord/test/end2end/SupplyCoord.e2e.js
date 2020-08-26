@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {reclickUntilNotStale} = require("../../../../../../test/end2end/library/utils"),
+    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {isMobile, isBasic} = require("../../../../../../test/end2end/settings"),
     namedProjectionsBasic = require("../../../../../../portal/basic/config").namedProjections,
     namedProjectionsMaster = require("../../../../../../portal/master/config").namedProjections,
@@ -14,7 +14,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function CoordTests ({builder, url, resolution, config}) {
+async function CoordTests ({builder, url, resolution, config, capability}) {
     describe("SupplyCoord", function () {
         const selectors = {
             tools: By.xpath("//ul[@id='tools']/.."),
@@ -65,10 +65,19 @@ async function CoordTests ({builder, url, resolution, config}) {
         }
 
         before(async function () {
+            if (capability) {
+                capability.name = this.currentTest.fullTitle();
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 

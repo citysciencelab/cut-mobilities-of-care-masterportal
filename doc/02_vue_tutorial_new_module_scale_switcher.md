@@ -7,7 +7,7 @@ Wir wollen ein Tool schreiben, über welches man den Kartenmaßstab steuern kann
 Darüber hinaus soll unser Tool auf Änderungen des Kartenmaßstabes reagieren und den entsprechend aktuellen Maßstab im Drop-Down-Menu anzeigen.
 
 ### Neues Tool anlegen
-In das Verzeichnis "src/modules/tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen sollte ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scale". Darunter  die Ordner "components" und "store" anlegen und darin die für dieses Tool benötigten Dateien anlegen. Ebenso die Dateien für die Tests anlegen. Das [Tutorial für vue-Tests](02_vue_tutorial_tests zum_scale_switcher.md) beschreibt, wie der ScaleSwitcher getestet werden kann.
+In das Verzeichnis "src/modules/tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen soll ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scale". Darunter  die Ordner "components" und "store" anlegen und darin die für dieses Tool benötigten Dateien anlegen. Ebenso die Dateien für die Tests anlegen. Das [Tutorial für vue-Tests](02_vue_tutorial_tests zum_scale_switcher.md) beschreibt, wie der ScaleSwitcher getestet werden kann.
 ```
 src
 |-- modules
@@ -58,21 +58,26 @@ export default {
 ```
 
 ### ScaleSwitcher-Komponente registrieren
-In die Datei *src/MapRegion.vue* wechseln, ScaleSwitcher importieren und als Komponente hinzufügen. Die ScaleSwitcher-Komponente wird im Template-Bereich der MapRegion genutzt. Sie wird nur erzeugt, wenn die [*v-if* Direktive](https://vuejs.org/v2/api/#v-if) "configJson" im state vorhanden ist.
-```vue
+In die Datei *src/modules/tools/stateTools.js* wechseln, ScaleSwitcher importieren und als Komponente in der componentMap hinzufügen. Der ToolManager (src/modules/tools/ToolManager.vue) initialisiert die ScaleSwitcher-Komponente und lädt die Konfiguration des ScaleSwitchers aus der Konfigurationsdatei config.json und stellt diese im state zur Verfügung. Die Konfiguration wird unter den Pfaden "configJson.Portalconfig.menu.scaleSwitcher" und "configJson.Portalconfig.menu.tools.children.scaleSwitcher" in der config.json gesucht. Siehe auch [Dokumentation config.json](config.json.md). Die ToolManager.vue ist im Template-Bereich der MapRegion registriert. Sie wird nur erzeugt, wenn die [*v-if* Direktive](https://vuejs.org/v2/api/#v-if) "configJson" im state vorhanden ist.
+```js
+import ScaleSwitcher from "./scale/components/ScaleSwitcher.vue";
+... // import further Tools
 
-import ScaleSwitcher from "./modules/tools/scale/components/ScaleSwitcher.vue";
+/**
+ * User type definition
+ * @typedef {object} ToolsState
+ * @property {object} componentMap contains all tool components
+ * @property {object[]} configuredTools gets all tools that should be initialized
+ */
+const state = {
+    componentMap: {
+        scaleSwitcher: ScaleSwitcher
+        ... // further Tools
+    },
+    configuredTools: []
+};
 
-export default {
-    name: "MapRegion",
-    components: {
-        ...
-        ScaleSwitcher
-
-<template>
-        ...
-        <ScaleSwitcher v-if="configJson" />
-</template>
+export default state;
 ```
 ### state definieren
 Den [Vuex state](https://vuex.vuejs.org/guide/state.html) in der Datei *modules/tools/scale/store/stateScaleSwitcher.js* festlegen.
@@ -143,9 +148,8 @@ export default mutations;
 
 ```
 ### actions definieren
-[Vuex actions](https://vuex.vuejs.org/guide/actions.html#actions) in der Datei *modules/tools/scale/store/actionsScaleSwitcher.js* festlegen. Die actions "initialize" und "activateByUrlParam" sind bei jedem Tool verpflichtend.
+[Vuex actions](https://vuex.vuejs.org/guide/actions.html#actions) in der Datei *modules/tools/scale/store/actionsScaleSwitcher.js* festlegen. Die action "activateByUrlParam" ist bei jedem Tool verpflichtend.
 
-- "initialize" lädt die Konfiguartion des ScaleSwitchers aus der Konfigurationsdatei config.json und stellt diese im state zur Verfügung. Die Konfiguration wird in den unter "configPaths" angegebenen Pfaden in der config.json gesucht.  Siehe auch [Dokumentation config.json](config.json.md).
 - "activateByUrlParam" prüft ob die Url den Parameter "isinitopen" für den ScaleSwitcher enthält und aktiviert ihn gegebenenfalls. Siehe auch [Dokumentation Url-Parameter](URL-Parameter.md).
 - die action "setActive" ist speziell für den ScaleSwitcher. Sie setzt den state "active" des Tools auf true, dann wird das Tool gerendert (siehe property active am Tool.vue).
 ```js
@@ -153,77 +157,68 @@ import {fetchFirstModuleConfig} from "../../../../utils/fetchFirstModuleConfig";
 
 /** @const {String} [Path array of possible config locations. First one found will be used] */
 /** @const {object} [vue actions] */
-const configPaths = [
-        "configJson.Portalconfig.menu.tools.children.scaleSwitcher"
-    ],
-    actions = {
-        /**
-         * Sets the config-params of this tool into state.
-         * @param {object} context the context Vue instance
-         * @returns {boolean} false, if config does not contain the tool
-         */
-        initialize: context => {
-            return fetchFirstModuleConfig(context, configPaths, "ScaleSwitcher");
-        },
-        /**
-         * Checks if this tool should be open initially controlled by the url param "isinitopen".
-         * @returns {void}
-         */
-        activateByUrlParam: ({rootState, commit}) => {
-            const mappings = ["scaleSwitcher"];
+const actions = {
+    /**
+     * Checks if this tool should be open initially controlled by the url param "isinitopen".
+     * @returns {void}
+     */
+    activateByUrlParam: ({rootState, commit}) => {
+        const mappings = ["scaleSwitcher"];
 
-            if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen) !== -1) {
-                commit("setActive", true);
-            }
-        },
-        /**
-        * Sets the active property of the state to the given value.
-        * Also starts processes if the tool is be activated (active === true).
-        * @param {boolean} active Value deciding whether the tool gets activated or deactivated.
-        * @returns {void}
-        */
-        setActive ({commit, rootState}, active) {
-            commit("setActive", active);
+        if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen) !== -1) {
+            commit("setActive", true);
         }
-    };
+    },
+    /**
+    * Sets the active property of the state to the given value.
+    * Also starts processes if the tool is be activated (active === true).
+    * @param {boolean} active Value deciding whether the tool gets activated or deactivated.
+    * @returns {void}
+    */
+    setActive ({commit, rootState}, active) {
+        commit("setActive", active);
+    }
+};
 
 export default actions;
 ```
 ### store/index-Datei füllen
 In die Datei *src/modules/tools/scale/store/indexScaleSwitcher.js* wechseln. Dort den state, die getters, mutations und actions importieren und als default exportieren.
-Dabei wird die Funktion *composeModules* genutzt, es werden Modulvererbungsanforderung mit Komposition gelöst.
 ```js
-import GenericTool from "../../indexTools";
-import composeModules from "../../../../app-store/utils/composeModules";
 import mutations from "./mutationsScaleSwitcher";
 import actions from "./actionsScaleSwitcher";
 import getters from "./gettersScaleSwitcher";
 import state from "./stateScaleSwitcher";
 
-export default composeModules([GenericTool, {
+export default {
     namespaced: true,
     state,
     mutations,
     actions,
     getters
-}]);
+};
 ```
 ### state, getter, mutations und actions dem vuex store bekannt geben
-In die Datei *src/app-store/index.js* wechseln, die Datei *src/modules/tools/scale/store/indexScaleSwitcher.js* importieren und und dem vuex store als *module* hinzufügen.
+In die Datei *src/modules/tools/indexTools.js* wechseln, die Datei *src/modules/tools/scale/store/indexScaleSwitcher.js* importieren und und dem vuex store als *module* hinzufügen.
 ```js
-import ScaleSwitcher from "../modules/tools/scale/store/indexScaleSwitcher";
+import state from "./stateTools";
+import getters from "./gettersTools";
+import mutations from "./mutationsTools";
+import actions from "./actionsTools";
+import ScaleSwitcher from "./scale/store/indexScaleSwitcher";
+... // import further Tools
 
-const store = new Vuex.Store({
+export default {
+    namespaced: true,
     modules: {
-        Map,
-        Alerting,
-        Tools: {
-            namespaced: true,
-            modules: {
-                ScaleSwitcher,
-                ... //other tools
-            },
-            ...
+        ScaleSwitcher
+        ... // further Tools
+    },
+    state,
+    getters,
+    mutations,
+    actions
+};
 ```
 ### getters in der ScaleSwitcher.vue als computed properties bereitstellen
 In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* "mapGetters" aus vuex und die getters des ScaleSwitchers importieren. Alle getter-keys des ScaleSwitchers und die getter *scale* und *scales* aus der Map bereitstellen. Für *scale* wird zusätzlich ein setter bereitgestellt. Mit *scale* kann der aktuelle Maßstab der Karte (Map) und über *scales* alle verfügbaren Maßstäbe der Karte abgefragt werden.
@@ -259,7 +254,7 @@ methods: {
     }
 ```
 ### Initialisierung des ScaleSwitchers in dem mounted lifecycle hook
-In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* den lifecycle hook "mounted" implementieren. Hier muss bei allen Tools die actions *activateByUrlParam* aufgerufen werden. 
+In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* den lifecycle hook "mounted" implementieren. Hier muss bei allen Tools die actions *activateByUrlParam* aufgerufen werden.
 ```js
 ...
 mounted () {
@@ -269,14 +264,13 @@ mounted () {
 ### Schliessen des Scale-Switcher-Fensters
 In der Datei *modules/tools/scale/components/ScaleSwitcher.vue* den lifecycle hook "created" implementieren. Hier wird ein "close"-Listener hinzugefügt, der auf das vom Tool per *emit* gefeuerte Event "close" hört und dann die Methode *close* aufruft. Diese Methode setzt im state *active* auf *false*.
 
-Hier muss bei allen Tools die actions *initialize* aufgerufen werden. Es wird abgefragt, ob die *isActive*-Konfiguration in der config.json auf *true* gesetzt ist, dann wird der ScaleSwitcher aktiviert.
+Es wird abgefragt, ob die *isActive*-Konfiguration in der config.json auf *true* gesetzt ist, dann wird der ScaleSwitcher aktiviert.
 
 ACHTUNG: Da der core vom masterportal im Moment noch in backbone implementiert ist, muss danach das zugehörige backbone model deaktiviert werden.
 ```js
 ...
 created () {
     this.$on("close", this.close);
-    this.initialize();
 
     if (this.isActive) {
         this.setActive(true);
@@ -300,7 +294,7 @@ methods: {
 ### Das Template in der ScaleSwitcher.vue füllen
 Datei *modules/tools/scale/components/ScaleSwitcher.vue* öffnen und den template-Bereich füllen. Das HTML des ScaleSwitchers liegt innerhalb des Tools in einen weiteren template-Bereich.
 
-- es wird ein slot des Tools angegeben:  `<template v-slot:toolBody> ` in dem der ScaleSwitcher gerendert wird.
+- es wird ein slot des Tools angegeben: `<template v-slot:toolBody> ` in dem der ScaleSwitcher gerendert wird.
 - dem Tool werden die benötigten Parameter mitgegeben
 - das äussere div-Element bekommt eine eindeutige id und die [*v-if* Direktive](https://vuejs.org/v2/api/#v-if) "active". So wird das div und dessen Inhalt nur gerendert, wenn *active* im state *true* ist
 - in einer [*v-for* Direktive](https://vuejs.org/v2/api/#v-for) werden die *option*-Elemente mit den Werten der verfügbaren Maßstäbe *scales* aus dem state gefüllt

@@ -1,11 +1,14 @@
 import Model from "@modules/tools/gfi/themes/elektroladesaeulen/model.js";
 import * as moment from "moment";
 import {expect} from "chai";
+import Util from "@testUtil";
 
-let model;
+let model,
+    util;
 
 before(function () {
     model = new Model();
+    util = new Util();
 
     moment.locale("de");
 });
@@ -396,7 +399,8 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                         index: 1
                     }]
                 }],
-                endDay = "2018-06-19";
+                endDay = "2018-06-19",
+                utc = model.get("utc") ? model.get("utc") : "+1";
 
             expect(model.processDataForAllWeekdays(historicalData, "", endDay)).to.be.an("array").to.have.deep.members([
                 [[{
@@ -416,17 +420,17 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                     result: "charging"
                 }]],
                 [[{
-                    phenomenonTime: "2018-06-17T10:55:52",
+                    phenomenonTime: util.changeTimeZone("2018-06-17T10:55:52", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "available",
                     index: 0
                 }],
                 [{
-                    phenomenonTime: "2018-06-17T12:59:15",
+                    phenomenonTime: util.changeTimeZone("2018-06-17T12:59:15", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "charging",
                     index: 0
                 },
                 {
-                    phenomenonTime: "2018-06-17T12:57:15",
+                    phenomenonTime: util.changeTimeZone("2018-06-17T12:57:15", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "available",
                     index: 1
 

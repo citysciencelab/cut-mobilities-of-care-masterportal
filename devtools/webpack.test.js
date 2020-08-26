@@ -27,7 +27,7 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                exclude: /\bcore-js\b/,
+                exclude: /\bcore-js\b|\bvideo.js\b|\bsinon\b|\bturf\b/,
                 use: {
                     loader: "babel-loader"
                 }

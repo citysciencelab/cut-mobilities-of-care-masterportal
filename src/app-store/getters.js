@@ -7,6 +7,7 @@ export default {
     loaderText: state => state?.configJs?.loaderText || "",
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
+    menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
     portalConfig: state => state?.configJson?.Portalconfig || null,
     // styles
     simpleStyle: state => (state?.queryParams?.style || "").toLowerCase() === "simple",

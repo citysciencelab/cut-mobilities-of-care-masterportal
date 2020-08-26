@@ -357,10 +357,10 @@ describe("tools/gfi/themes/trafficCount", function () {
                         "03:30": 71
                     },
                     trucksArr: {},
-                    meansOfTransport: "AnzFahrraeder"
+                    meansOfTransport: "Anzahl_Fahrraeder"
                 }];
 
-            model.prepareTableContent([dataset], "day", "Datum", [{from: "2020-03-31", until: "2020-03-31"}], "AnzFahrraeder");
+            model.prepareTableContent([dataset], "day", "Datum", [{from: "2020-03-31", until: "2020-03-31"}], "Anzahl_Fahrraeder");
 
             expect(model.get("dayTableContent")).to.deep.equal(tblContentExpected);
         });

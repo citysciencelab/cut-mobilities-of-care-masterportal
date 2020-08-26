@@ -2,13 +2,14 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isCustom, isMaster} = require("../../../../../../test/end2end/settings"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
 /**
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function AttributionsTests ({builder, url, resolution}) {
+function AttributionsTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isCustom(url) || isMaster(url); // attributions only active in custom/master
 
     if (testIsApplicable) {
@@ -16,10 +17,19 @@ function AttributionsTests ({builder, url, resolution}) {
             let driver, attributionsButton, attributionsDiv;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 
