@@ -1,5 +1,6 @@
 import TemplateSettings from "text-loader!./templateSettings.html";
 import Template from "text-loader!./templateLight.html";
+import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
@@ -33,6 +34,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires Parser#RadioTriggerParserRemoveItem
      */
     initialize: function () {
+        checkChildrenDatasets(this.model);
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
