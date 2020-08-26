@@ -82,6 +82,13 @@
     "date": "Datum",
     "time": "Zeit",
     "modules": {
+        "core": {
+          "modelList": {
+            "layer": {
+              "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist."
+            }
+          }
+        },
         "alerting": {
             "categories": {
                 "error": "Fehler",

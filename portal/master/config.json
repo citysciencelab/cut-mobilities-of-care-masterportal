@@ -525,6 +525,11 @@
     "Fachdaten": {
       "Layer": [
         {
+          "id": "1132",
+          "styleId": "1132",
+          "visibility": true
+        },
+        {
           "id": "16100",
           "name": "Hauptkirchen",
           "visibility": true,

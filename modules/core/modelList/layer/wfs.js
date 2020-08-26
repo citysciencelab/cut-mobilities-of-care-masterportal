@@ -224,7 +224,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     styling: function () {
-        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const styleId = this.get("styleId"),
+            stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
         let isClusterfeature;
 
         if (stylelistmodel !== undefined) {
@@ -237,6 +238,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
 
                 return stylelistmodel.createStyle(feat, isClusterfeature);
             });
+        }
+        else {
+            console.error(i18next.t("common:modules.core.modelList.layer.wrongStyleId", {styleId}));
         }
 
         this.get("layer").setStyle(this.get("style"));
