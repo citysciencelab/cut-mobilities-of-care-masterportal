@@ -52,13 +52,7 @@
 - Ein Fehler in der VisibleVector Suche wurde behoben der verhindert hat, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
 - In Geo-Online kann der Marker wieder über die URL gesetzt werden.
 - Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn
-
----
-
-## v2.5.4 - 2020-08-27
-### Fixed
-- 3D Tileset Layer werden nun korrekt über die Legende aktiviert/deaktiviert
-- Ein Fehler in der Suche mittels des Gazetters, der bei Hausnummern mit Zusatz aufgetreten ist wurde behoben.
+- Im Styling wurde das Feld legendValue nicht ausgelesen. Dies funktioniert nun wieder.
 
 ---
 
