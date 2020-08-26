@@ -65,7 +65,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
     if (state.layer !== undefined && state.layer !== null) {
         features = state.layer.getSource().getFeatures();
 
-        if (payload?.currentFeature !== undefined) {
+        if (payload?.currentFeature !== undefined && features.every(feature => feature.get("styleId") !== payload?.currentFeature.get("styleId"))) {
             features.push(payload.currentFeature);
         }
         if (payload?.prmObject?.geomType === "multiGeometry") {

@@ -131,27 +131,29 @@ const initialState = Object.assign({}, stateDraw),
                 geoJSONAddCenter;
 
             interaction.on("drawend", function (event) {
-                event.feature.set("styleId", dispatch("uniqueID"));
+                dispatch("uniqueID").then(id => {
+                    event.feature.set("styleId", id);
 
-                // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map, drawing is cancelled and editing is started
-                if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
-                    dispatch("cancelDrawWithoutGUI", {cursor: "auto"});
-                    dispatch("editFeaturesWithoutGUI");
+                    // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map, drawing is cancelled and editing is started
+                    if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
+                        dispatch("cancelDrawWithoutGUI", {cursor: "auto"});
+                        dispatch("editFeaturesWithoutGUI");
 
-                    dispatch("createCenterPoint", {feature: event.feature, targetProjection: Config.inputMap.targetProjection}).then(centerPointCoords => {
-                        centerPoint = {type: "Point", coordinates: centerPointCoords};
+                        dispatch("createCenterPoint", {feature: event.feature, targetProjection: Config.inputMap.targetProjection}).then(centerPointCoords => {
+                            centerPoint = {type: "Point", coordinates: centerPointCoords};
 
-                        dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetprojection}, currentFeature: event.feature}).then(geoJSON => {
-                            geoJSONAddCenter = JSON.parse(geoJSON);
+                            dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetprojection}, currentFeature: event.feature}).then(geoJSON => {
+                                geoJSONAddCenter = JSON.parse(geoJSON);
 
-                            if (geoJSONAddCenter.features[0].properties === null) {
-                                geoJSONAddCenter.features[0].properties = {};
-                            }
-                            geoJSONAddCenter.features[0].properties.centerPoint = centerPoint;
-                            Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geoJSONAddCenter)});
+                                if (geoJSONAddCenter.features[0].properties === null) {
+                                    geoJSONAddCenter.features[0].properties = {};
+                                }
+                                geoJSONAddCenter.features[0].properties.centerPoint = centerPoint;
+                                Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geoJSONAddCenter)});
+                            });
                         });
-                    });
-                }
+                    }
+                });
             });
             interaction.on("drawstart", function () {
                 dispatch("drawInteractionOnDrawEvent", {drawInteraction, doubleCircle});
