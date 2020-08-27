@@ -2,7 +2,7 @@
 import Alerting from "./modules/alerting/components/Alerting.vue";
 import ScaleSwitcher from "./modules/tools/scale/components/ScaleSwitcher.vue";
 import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
-import KmlImport from "./modules/tools/kmlImport/components/KmlImport.vue";
+import FileImport from "./modules/tools/fileImport/components/FileImport.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
@@ -19,7 +19,7 @@ export default {
         LegendWindow,
         ScaleSwitcher,
         SupplyCoord,
-        KmlImport,
+        FileImport,
         Footer,
         Gfi
     },
@@ -51,7 +51,7 @@ export default {
         <ToolManager v-if="configJson" />
         <ScaleSwitcher v-if="configJson" />
         <SupplyCoord v-if="configJson" />
-        <KmlImport v-if="configJson" />
+        <FileImport v-if="configJson" />
         <Gfi v-if="configJson" />
         <template v-if="i18NextInitialized">
             <component
