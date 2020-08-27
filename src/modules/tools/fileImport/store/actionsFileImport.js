@@ -220,7 +220,7 @@ export default {
         dispatch("addImportedFilename", datasrc.filename);
     },
     /**
-     * Adss the name of a successful imported file to list of imported filenames
+     * Adss the name of a successfully imported file to list of imported filenames
      * @param {string} fileName name of the file
      * @returns {void}
      */
