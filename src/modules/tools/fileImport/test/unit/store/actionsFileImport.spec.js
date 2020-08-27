@@ -1,7 +1,7 @@
 /**/
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
-import actions from "../../../store/actionsKmlImport";
-import importedState from "../../../store/stateKmlImport";
+import actions from "../../../store/actionsFileImport";
+import importedState from "../../../store/stateFileImport";
 import rawSources from "../../ressources/rawSources.js";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
@@ -25,12 +25,12 @@ before(() => {
     });
 });
 
-describe("actionsKmlImport", function () {
+describe("actionsFileImport", function () {
     describe("activateByUrlParam", function () {
-        it("activateByUrlParam  isinitopen=kmlimport", done => {
+        it("activateByUrlParam  isinitopen=fileImport", done => {
             const rootState = {
                 queryParams: {
-                    "isinitopen": "kmlimport"
+                    "isinitopen": "fileImport"
                 }
             };
 
@@ -64,7 +64,7 @@ describe("actionsKmlImport", function () {
                 type: "Alerting/addSingleAlert",
                 payload: {
                     category: i18next.t("common:modules.alerting.categories.info"),
-                    content: i18next.t("common:modules.tools.kmlImport.alertingMessages.success", {filename: payload.filename})},
+                    content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: payload.filename})},
                 dispatch: true
             }], {}, done);
         });
@@ -76,7 +76,7 @@ describe("actionsKmlImport", function () {
                 type: "Alerting/addSingleAlert",
                 payload: {
                     category: i18next.t("common:modules.alerting.categories.error"),
-                    content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFormat")
+                    content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFormat")
                 },
                 dispatch: true
             }], {}, done);
@@ -89,7 +89,7 @@ describe("actionsKmlImport", function () {
                 type: "Alerting/addSingleAlert",
                 payload: {
                     category: i18next.t("common:modules.alerting.categories.error"),
-                    content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFileContent")
+                    content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFileContent")
                 },
                 dispatch: true
             }], {}, done);
@@ -102,7 +102,7 @@ describe("actionsKmlImport", function () {
                 type: "Alerting/addSingleAlert",
                 payload: {
                     category: i18next.t("common:modules.alerting.categories.error"),
-                    content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFileContent")
+                    content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFileContent")
                 },
                 dispatch: true
             }], {}, done);
@@ -115,7 +115,7 @@ describe("actionsKmlImport", function () {
                 type: "Alerting/addSingleAlert",
                 payload: {
                     category: i18next.t("common:modules.alerting.categories.info"),
-                    content: i18next.t("common:modules.tools.kmlImport.alertingMessages.success", {filename: payload.filename})},
+                    content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: payload.filename})},
                 dispatch: true
             }], {}, done);
         });
@@ -127,7 +127,7 @@ describe("actionsKmlImport", function () {
                 type: "Alerting/addSingleAlert",
                 payload: {
                     category: i18next.t("common:modules.alerting.categories.info"),
-                    content: i18next.t("common:modules.tools.kmlImport.alertingMessages.success", {filename: payload.filename})},
+                    content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: payload.filename})},
                 dispatch: true
             }], {}, done);
         });
@@ -141,7 +141,7 @@ describe("actionsKmlImport", function () {
                 type: "Alerting/addSingleAlert",
                 payload: {
                     category: i18next.t("common:modules.alerting.categories.error"),
-                    content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFileContent")},
+                    content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFileContent")},
                 dispatch: true
             }], {}, done);
         });

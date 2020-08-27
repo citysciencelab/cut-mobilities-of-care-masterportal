@@ -34,7 +34,7 @@
             "coord": "Query coordinates",
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
-            "kmlimport": "Import file",
+            "fileImport": "Import file",
             "routing": "Route planner",
             "draw": "Drawing / writing",
             "styleWMS": "Style WMS",
@@ -312,9 +312,10 @@
                 "contentSaved": "Content was copied to the clipboard.",
                 "contenNotSaved": "Content could not be copied to the clipboard."
             },
-            "kmlImport": {
+            "fileImport": {
                 "captions": {
                     "intro": "Import your file via drag and drop or alternatively use the browse dialogue.",
+                    "fileTypes": "KML files (*.kml), GPX files (*.gpx) or GeoJson files (*.geojson, *.json) can be imported.",
                     "dropzone": "Drop file here",
                     "browse": "Browse files",
                     "supportedFiletypes": {
@@ -326,10 +327,13 @@
                 },
                 "alertingMessages": {
                     "success": "The file \"{{filename}}\" has been successfully imported.",
-                    "formatError": "File could not be read. Please check if actual filetype is matching your chosen filetype.",
-                    "missingFileContent": "There was an error loading your file. Please check its filetype and content. If still not working, please contact the support.",
-                    "missingFormat": "The chosen filetype is not supported. Please contact the support."
+                    "successPartly": "The file \"{{filename}}\" was partially imported.",
+                    "formatError": "File \"{{filename}}\" could not be read. Please check if actual filetype is matching your chosen filetype.",
+                    "missingFileContent": "There was an error loading your file \"{{filename}}\". Please check its filetype and content. If still not working, please contact the support.",
+                    "missingFormat": "The chosen filetype {{format}} is not supported. Please contact the support.",
+                    "featureError": "A feature in this file could not be read."
                 },
+                "successfullyImportedLabel": "Successfully imported:",
                 "title": "Import file"
             },
             "parcelSearch": {
