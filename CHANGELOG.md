@@ -56,6 +56,13 @@
 
 ---
 
+## v2.5.4 - 2020-08-27
+### Fixed
+- 3D Tileset Layer werden nun korrekt über die Legende aktiviert/deaktiviert
+- Ein Fehler in der Suche mittels des Gazetters, der bei Hausnummern mit Zusatz aufgetreten ist wurde behoben.
+
+---
+
 ## v2.5.3 - 2020-06-29
 ### Added
 - Multipolygone werden nun von der SpecialWFS Suche verarbeitet. Interne Polygone bspw. von B-Plänen werden fortan berücksichtigt und bei der Darstellung ausgespart.
