@@ -86,6 +86,14 @@ const initialState = Object.assign({}, stateDraw),
                 }
                 centerPointCoords = centerPoint.slice(0, -1);
             }
+            else if (featureType === "Circle") {
+                if (targetProjection !== undefined) {
+                    centerPointCoords = transform(getMapProjection(map), targetProjection, feature.getGeometry().getCenter());
+                }
+                else {
+                    centerPointCoords = feature.getGeometry().getCenter();
+                }
+            }
             return centerPointCoords;
         },
         /**
