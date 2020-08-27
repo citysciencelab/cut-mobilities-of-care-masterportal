@@ -126,7 +126,10 @@ export default {
 </script>
 
 <template>
-    <div v-if="isVisible && feature !== null">
+    <div
+        v-if="isVisible && feature !== null"
+        class="gfi"
+    >
         <component
             :is="currentViewType"
             :feature="feature"
@@ -157,6 +160,10 @@ export default {
 
 <style lang="less" scoped>
 @import "~variables";
+
+.gfi {
+    color: #555555;
+}
 
 .pager {
     background: @shadow;
