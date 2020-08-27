@@ -46,7 +46,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      */
     initialize: function () {
-        const channel = Radio.channel("ParametricURL");
+        const channel = Radio.channel("ParametricURL"),
+            query = location.search.substr(1);
 
         channel.reply({
             "getResult": function () {
@@ -105,8 +106,22 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "pushToIsInitOpen": this.pushToIsInitOpen
         }, this);
 
-        this.parseURL(location.search.substr(1), this.possibleUrlParameters());
+        if (this.checkisURLQueryValid(query)) {
+            this.parseURL(query, this.possibleUrlParameters());
+        }
+        else {
+            console.warn("The URL-parameters contain illegal information!");
+        }
         channel.trigger("ready");
+    },
+
+    /**
+     * Checks if the query contains html content, if so it is not valid.
+     * @param {string} query - The URL-Parameters
+     * @return {boolean} Is the query valid.
+     */
+    checkisURLQueryValid: function (query) {
+        return !(/<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>/).test(decodeURIComponent(query));
     },
 
     /**
