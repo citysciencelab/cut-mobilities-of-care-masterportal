@@ -58,7 +58,9 @@ export default {
                 v-for="(value, key) in feature.getMappedProperties()"
                 :key="key"
             >
-                <th>{{ beautify(key) }}</th>
+                <td class="bold">
+                    {{ beautify(key) }}
+                </td>
                 <td v-if="isLink(value)">
                     <a
                         :href="value"
@@ -91,8 +93,10 @@ export default {
 <style lang="less" scoped>
 @import "~variables";
 
-th {
-    font-family: @font_family_accent;
+td {
+    &.bold{
+        font-family: @font_family_accent;
+    }
 }
 .gfi-iFrame {
     width: 100%;

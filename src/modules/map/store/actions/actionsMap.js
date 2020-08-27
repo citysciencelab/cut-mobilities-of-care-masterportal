@@ -133,6 +133,7 @@ const actions = {
         }
 
         if (rootGetters["Tools/Gfi/isActive"]) {
+            commit("setGfiFeatures", null);
             dispatch("collectGfiFeatures");
         }
     },
