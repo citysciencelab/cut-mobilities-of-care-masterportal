@@ -5,7 +5,6 @@
 
 
 ## Unreleased - in development
-
 ### Added
 - Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
@@ -52,7 +51,14 @@
 - Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
 - Ein Fehler in der VisibleVector Suche wurde behoben der verhindert hat, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
 - In Geo-Online kann der Marker wieder über die URL gesetzt werden.
-- Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn 
+- Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn
+
+---
+
+## v2.5.4 - 2020-08-27
+### Fixed
+- 3D Tileset Layer werden nun korrekt über die Legende aktiviert/deaktiviert
+- Ein Fehler in der Suche mittels des Gazetters, der bei Hausnummern mit Zusatz aufgetreten ist wurde behoben.
 
 ---
 
