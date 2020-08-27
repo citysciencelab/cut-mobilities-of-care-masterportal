@@ -14,10 +14,15 @@ describe("withoutGUIDraw", () => {
 
     describe("cancelDrawWithoutGUI", () => {
         it("should dispatch as intended", () => {
-            actions.cancelDrawWithoutGUI({dispatch});
+            actions.cancelDrawWithoutGUI({commit, dispatch});
 
-            expect(dispatch.calledOnce).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["resetModule"]);
+            expect(commit.calledTwice).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setWithoutGUI", true]);
+            expect(commit.secondCall.args).to.eql(["setActive", false]);
+            expect(dispatch.calledThrice).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
+            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
+            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
         });
     });
     describe("downloadFeaturesWithoutGUI", () => {
@@ -95,9 +100,8 @@ describe("withoutGUIDraw", () => {
         it("should dispatch as aspected", () => {
             actions.editFeaturesWithoutGUI({dispatch});
 
-            expect(dispatch.calledTwice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
-            expect(dispatch.secondCall.args).to.eql(["createModifyInteractionAndAddToMap"]);
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["toggleInteraction", "modify"]);
         });
     });
     describe("initializeWithoutGUI", () => {
