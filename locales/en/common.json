@@ -89,7 +89,7 @@
         "core": {
           "modelList": {
             "layer": {
-              "wrongStyleId": "No style object could be found under the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used."
+              "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used."
             }
           }
         },
