@@ -21,8 +21,8 @@ describe("withoutGUIDraw", () => {
             expect(commit.secondCall.args).to.eql(["setActive", false]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
-            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
-            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+            expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
+            expect(dispatch.thirdCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
         });
     });
     describe("downloadFeaturesWithoutGUI", () => {
