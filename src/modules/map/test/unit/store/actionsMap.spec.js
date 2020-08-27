@@ -90,7 +90,7 @@ describe("actionsMap", function () {
                 };
 
             actions.updateClick({commit, getters, dispatch, rootGetters}, obj);
-            expect(commit.calledTwice).to.be.true;
+            expect(commit.calledThrice).to.be.true;
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.args[0]).to.include.members(["collectGfiFeatures"]);
         });
@@ -139,7 +139,7 @@ describe("actionsMap", function () {
                 };
 
             actions.updateClick({getters, commit, dispatch, rootGetters}, obj);
-            expect(commit.calledTwice).to.be.true;
+            expect(commit.calledThrice).to.be.true;
             expect(commit.args[1]).to.include.members(["setClickPixel"]);
         });
     });
