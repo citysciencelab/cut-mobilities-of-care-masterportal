@@ -61,11 +61,14 @@ export default {
                         aria-label="Close"
                         @click="close"
                     >
-                        <span aria-hidden="true">&times;</span>
+                        <span
+                            class="glyphicon glyphicon-remove"
+                        >
+                        </span>
                     </button>
-                    <h4 class="modal-title">
+                    <h5 class="modal-title">
                         {{ title }}
-                    </h4>
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <component
@@ -86,23 +89,34 @@ export default {
 @import "~variables";
 
 .modal-mask {
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: @shadow_overlay;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: @shadow_overlay;
 }
 
-.modal-header button {
-    font-size: 26px;
+.modal-header {
+    padding: 0 15px;
+    button {
+        font-size: 16px;
+        padding-top: 13px;
+        opacity: 0.6;
+    }
+    .modal-title {
+        margin: 10px 0;
+    }
 }
 
 .modal-body {
     overflow-y: auto;
     max-height: 66vh;
     padding: 0;
+    table {
+        margin-bottom: 0;
+    }
 }
 
 .modal-footer {
