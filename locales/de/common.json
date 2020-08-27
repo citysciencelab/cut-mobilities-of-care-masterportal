@@ -216,7 +216,7 @@
                 "titlePlaceholder": "Mein Titel",
                 "layoutLabel": "Layout",
                 "formatLabel": "Format",
-                "scaleLabel": "Maßstab",
+                "scaleLabel": "Druckmaßstab",
                 "withLegendLabel": "Mit Legende",
                 "printLabel": "Drucken",
                 "withInfoLabel": "Mit Informationen",

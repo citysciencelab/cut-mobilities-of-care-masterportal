@@ -207,7 +207,7 @@
                 "titlePlaceholder": "My title",
                 "layoutLabel": "Layout",
                 "formatLabel": "Format",
-                "scaleLabel": "Scale",
+                "scaleLabel": "Printing scale",
                 "withLegendLabel": "With legend",
                 "printLabel": "Print",
                 "withInfoLabel": "With information",
