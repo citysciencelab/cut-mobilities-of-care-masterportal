@@ -9,6 +9,7 @@ const WMSLayer = Layer.extend({
         // extended die Layer defaults by value
         return Object.assign(Layer.prototype.defaults, {
             infoFormat: "text/xml",
+            gfiAsNewWindow: false,
             // Eine Veränderung der CACHEID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
             cacheId: parseInt(Math.random() * 10000000, 10),
             supported: ["2D", "3D"],
@@ -120,6 +121,7 @@ const WMSLayer = Layer.extend({
                 gfiTheme: this.get("gfiTheme"),
                 gfiAttributes: this.get("gfiAttributes"),
                 infoFormat: this.get("infoFormat"),
+                gfiAsNewWindow: this.get("gfiAsNewWindow"),
                 featureCount: this.get("featureCount")
             };
 
@@ -304,7 +306,25 @@ const WMSLayer = Layer.extend({
     */
     newCacheId: function () {
         this.set("cacheId", parseInt(Math.random() * 10000000, 10));
+    },
+
+    /**
+     * setter for gfiAsNewWindow
+     * @param {Boolean} value see doc/config.json.md for more information
+     * @return {Void}  -
+     */
+    setGfiAsNewWindow: function (value) {
+        this.set("gfiAsNewWindow", value);
+    },
+
+    /**
+     * getter for gfiAsNewWindow
+     * @return {Boolean}  see doc/config.json.md for more information
+     */
+    getGfiAsNewWindow: function () {
+        return this.get("gfiAsNewWindow");
     }
+
 });
 
 export default WMSLayer;

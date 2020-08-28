@@ -160,20 +160,35 @@ const actions = {
                 },
                 url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
 
-            return requestGfi(mimeType, url).then(featureInfos => {
-                const features = [];
+            if (mimeType === "text/xml") {
+                return requestGfi(mimeType, url).then(featureInfos => {
+                    const features = [];
 
-                featureInfos.forEach(function (feature) {
-                    features.push({
-                        getTheme: () => layer.get("gfiTheme") || "default",
-                        getTitle: () => layer.get("name"),
-                        getAttributesToShow: () => layer.get("gfiAttributes") || "showAll",
-                        getProperties: () => mimeType === "text/xml" ? feature.getProperties() : null,
-                        getHtml: () => mimeType === "text/html" ? feature : null
+                    featureInfos.forEach(function (feature) {
+                        features.push({
+                            // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
+                            getTheme: () => "default", // layer.get("gfiTheme") || "default",
+                            getTitle: () => layer.get("name"),
+                            getAttributesToShow: () => layer.get("gfiAttributes") || "showAll",
+                            getProperties: () => feature.getProperties(),
+                            getGfiUrl: () => url
+                        });
                     });
+                    return features;
                 });
-                return features;
-            });
+            }
+
+            // mimeType === "text/html"
+            return [{
+                // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
+                getTheme: () => "default", // layer.get("gfiTheme") || "default",
+                getTitle: () => layer.get("name"),
+                getAttributesToShow: () => layer.get("gfiAttributes") || "showAll",
+                getProperties: () => null,
+                getGfiUrl: () => url,
+                // must open http as popup (only ssl in iframe)
+                isGfiAsNewWindow: () => layer.get("gfiAsNewWindow") || url.startsWith("http:", 0)
+            }];
         }));
 
         // only commit if features found

@@ -126,7 +126,7 @@ export default {
 </script>
 
 <template>
-    <div v-if="isVisible && feature !== null && feature.getHtml() === null">
+    <div v-if="isVisible && feature !== null">
         <component
             :is="currentViewType"
             :feature="feature"
