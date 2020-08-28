@@ -1,7 +1,7 @@
 import Draw from "./draw/components/Draw.vue";
 import ScaleSwitcher from "./scale/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
-import KmlImport from "./kmlImport/components/KmlImport.vue";
+import FileImport from "./fileImport/components/FileImport.vue";
 
 /**
  * User type definition
@@ -19,7 +19,7 @@ const state = {
          * @deprecated in 3.0.0
          */
         coord: SupplyCoord,
-        kmlimport: KmlImport
+        fileImport: FileImport
     },
     configuredTools: []
 };

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <% if (typeof treeType === "undefined") { %>
 <div class="layer-info-item pull-right">
-    <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
+    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
+        <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
+    <% } %>
 </div>
 <% } else { %>
 <div class="layer-info-item pull-right">

@@ -111,7 +111,7 @@ export default {
     },
 
     activateByUrlParam: ({rootState, commit}) => {
-        const mappings = ["kmlimport"];
+        const mappings = ["kmlimport", "fileimport"];
 
         if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen.toLowerCase()) !== -1) {
             commit("setActive", true);
@@ -127,8 +127,8 @@ export default {
         const
             vectorLayer = datasrc.layer,
             format = getFormat(datasrc.filename, state.selectedFiletype, state.supportedFiletypes, supportedFormats);
-
         let
+            featureError = false,
             alertingMessage,
             features;
 
@@ -137,9 +137,12 @@ export default {
         }
 
         if (format === false) {
+            const fileNameSplit = datasrc.filename.split("."),
+                fileFormat = fileNameSplit.length > 0 ? "*." + fileNameSplit[fileNameSplit.length - 1] : "unknown";
+
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
-                content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFormat")
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFormat", {format: fileFormat})
             };
 
             dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
@@ -152,7 +155,7 @@ export default {
         catch (ex) {
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
-                content: i18next.t("common:modules.tools.kmlImport.alertingMessages.formatError")
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.formatError", {filename: datasrc.filename})
             };
 
             dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
@@ -162,7 +165,7 @@ export default {
         if (!Array.isArray(features) || features.length === 0) {
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
-                content: i18next.t("common:modules.tools.kmlImport.alertingMessages.missingFileContent")
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.missingFileContent", {filename: datasrc.filename})
             };
 
             dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
@@ -172,16 +175,27 @@ export default {
         features.forEach(feature => {
             let geometries;
 
-            if (feature.getGeometry().getType() === "GeometryCollection") {
-                geometries = feature.getGeometry().getGeometries();
+            if (feature.getGeometry() === null) {
+                featureError = true;
+                alertingMessage = {
+                    category: i18next.t("common:modules.alerting.categories.error"),
+                    content: i18next.t("common:modules.tools.fileImport.alertingMessages.featureError")
+                };
+
+                dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
             }
             else {
-                geometries = [feature.getGeometry()];
-            }
+                if (feature.getGeometry().getType() === "GeometryCollection") {
+                    geometries = feature.getGeometry().getGeometries();
+                }
+                else {
+                    geometries = [feature.getGeometry()];
+                }
 
-            geometries.forEach(geometry => {
-                geometry.transform("EPSG:4326", "EPSG:25832");
-            });
+                geometries.forEach(geometry => {
+                    geometry.transform("EPSG:4326", "EPSG:25832");
+                });
+            }
         });
 
         vectorLayer.getSource().addFeatures(features);
@@ -189,11 +203,31 @@ export default {
             vectorLayer.setStyle((feature) => createDefaultStyles()[feature.getGeometry().getType()]);
         }
 
-        alertingMessage = {
-            category: i18next.t("common:modules.alerting.categories.info"),
-            content: i18next.t("common:modules.tools.kmlImport.alertingMessages.success", {filename: datasrc.filename})
-        };
+        if (featureError) {
+            alertingMessage = {
+                category: i18next.t("common:modules.alerting.categories.info"),
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.successPartly", {filename: datasrc.filename})
+            };
+        }
+        else {
+            alertingMessage = {
+                category: i18next.t("common:modules.alerting.categories.info"),
+                content: i18next.t("common:modules.tools.fileImport.alertingMessages.success", {filename: datasrc.filename})
+            };
+        }
 
         dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
+        dispatch("addImportedFilename", datasrc.filename);
+    },
+    /**
+     * Adss the name of a successfully imported file to list of imported filenames
+     * @param {string} fileName name of the file
+     * @returns {void}
+     */
+    addImportedFilename: ({state, commit}, fileName) => {
+        const fileNames = [... state.importedFileNames];
+
+        fileNames.push(fileName);
+        commit("setImportedFileNames", fileNames);
     }
 };

@@ -1,7 +1,6 @@
 const Config = {
     clickCounter: {},
     footer: {
-        visibility: true,
         urls: [
             {
                 "bezeichnung": "common:modules.footer.designation",

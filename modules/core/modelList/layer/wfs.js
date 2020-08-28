@@ -224,7 +224,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     styling: function () {
-        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const styleId = this.get("styleId"),
+            stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
         let isClusterfeature;
 
         if (stylelistmodel !== undefined) {
@@ -237,6 +238,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
 
                 return stylelistmodel.createStyle(feat, isClusterfeature);
             });
+        }
+        else {
+            console.error(i18next.t("common:modules.core.modelList.layer.wrongStyleId", {styleId}));
         }
 
         this.get("layer").setStyle(this.get("style"));
@@ -253,7 +257,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
             if (style !== undefined) {
                 if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
-                    style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
+                    style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
                 }
                 this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
             }

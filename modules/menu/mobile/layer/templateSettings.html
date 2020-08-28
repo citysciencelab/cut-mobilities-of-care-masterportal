@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <div class="item-settings">
   <div class="layer-info-item pull-right">
-    <span class="glyphicon glyphicon-info-sign"></span>
+    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
+      <span class="glyphicon glyphicon-info-sign"></span>
+    <% } %>
   </div>
   <% if (typeof treeType === "undefined") { %>
   <div class="layer-sort-item pull-right">

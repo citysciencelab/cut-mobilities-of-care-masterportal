@@ -13,7 +13,7 @@ Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](https://www.hamburg.
 
 ## für Entwickler
 * [Dokumentation für Entwickler](doc/devdoc.md)
-* [Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](doc/02_tutorial_new_module_scale_switcher.md)
+* [Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/02_vue_tutorial_new_module_scale_switcher.md)
 * [Community Board (Entwicklerforum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
 
 
