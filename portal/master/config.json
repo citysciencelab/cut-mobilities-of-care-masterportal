@@ -671,7 +671,8 @@
         },
         {
           "id": "2407",
-          "infoFormat": "text/html"
+          "infoFormat": "text/html",
+          "gfiAsNewWindow": true
         },
         {
           "id": "1711",
