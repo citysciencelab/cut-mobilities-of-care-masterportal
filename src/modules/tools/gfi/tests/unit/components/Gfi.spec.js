@@ -17,7 +17,7 @@ describe("Gfi.vue", () => {
                 isMobile: () => true,
                 isActive: () => true,
                 gfiFeatures: () => [{
-                    getHtml: () => null
+                    getGfiUrl: () => null
                 }]
             },
             localVue
@@ -32,7 +32,7 @@ describe("Gfi.vue", () => {
                 isMobile: () => false,
                 isActive: () => true,
                 gfiFeatures: () => [{
-                    getHtml: () => null
+                    getGfiUrl: () => null
                 }]
             },
             localVue
@@ -96,7 +96,7 @@ describe("Gfi.vue", () => {
                         "olFeature": {
                             getProperties: sinon.stub()
                         },
-                        getHtml: () => null,
+                        getGfiUrl: () => null,
                         getMappedProperties: () => null
                     },
                     {
@@ -106,7 +106,7 @@ describe("Gfi.vue", () => {
                         "olFeature": {
                             getProperties: sinon.stub()
                         },
-                        getHtml: () => null,
+                        getGfiUrl: () => null,
                         getMappedProperties: () => null
                     }]
                 },
@@ -131,7 +131,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 },
                 {}]
@@ -155,7 +155,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 },
                 {
@@ -165,7 +165,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null
+                    getGfiUrl: () => null
                 }]
             },
             localVue
@@ -187,7 +187,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 },
                 {
@@ -197,7 +197,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 }]
             },
@@ -221,7 +221,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 },
                 {}]
@@ -244,7 +244,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 },
                 {}]
@@ -272,7 +272,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 }]
             },
@@ -299,7 +299,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 }]
             },
@@ -327,7 +327,7 @@ describe("Gfi.vue", () => {
                     "olFeature": {
                         getProperties: sinon.stub()
                     },
-                    getHtml: () => null,
+                    getGfiUrl: () => null,
                     getMappedProperties: () => null
                 }, {}]
             },

@@ -55,8 +55,9 @@ const gettersMap = {
             if (feature.getProperties().features) {
                 feature.get("features").forEach(function (clusteredFeature) {
                     featuresAtPixel.push({
-                        getHtml: () => null,
-                        getTheme: () => layer.get("gfiTheme"),
+                        getGfiUrl: () => null,
+                        // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
+                        getTheme: () => "default", // layer.get("gfiTheme"),
                         getTitle: () => layer.get("name"),
                         getProperties: () => clusteredFeature.getProperties(),
                         getAttributesToShow: () => layer.get("gfiAttributes")
@@ -65,8 +66,9 @@ const gettersMap = {
             }
             else {
                 featuresAtPixel.push({
-                    getHtml: () => null,
-                    getTheme: () => layer.get("gfiTheme"),
+                    getGfiUrl: () => null,
+                    // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
+                    getTheme: () => "default", // layer.get("gfiTheme"),
                     getTitle: () => layer.get("name"),
                     getProperties: () => feature.getProperties(),
                     getAttributesToShow: () => layer.get("gfiAttributes")

@@ -2364,8 +2364,9 @@ Hier werden WMS typische Attribute aufgelistet.
 |featureCount|nein|Integer|1|Anzahl der Features, die bei einer GetFeatureInfo-Abfrage zurückgegeben werden sollen.|false|
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
-|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|false|
-|styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück. In diesem Fall muss das Attribute **name** ebenfalls vom Typ String[] sein und genauso viele Einträge enthalten wie das sytle Attribute, damit zu jedem Style ein Name im Themenbaum zugeordnet werden kann.|true|
+|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html|false|
+|gfiAsNewWindow|nein|Boolean|false|Wird nur berücksichtigt wenn infoFormat text/html ist. Wenn true, wird der HTML-Inhalt, statt in einem iFrame, in einem neuen Browser-Fenster geöffnet. gfiAsNewWindow wird automatisch auf true gesetzt, wenn die aufzurufende Url nicht SSL-verschlüsselt ist (https). Bitte beachten Sie, dass automatische Weiterleitungen (z.B. per Javascript) im iFrame auf eine unsichere http-Verbindung (kein SSL) nicht automatisch erkannt und vom Browser unterbunden werden (no mixed content). Setzen Sie in einem solchen Fall gfiAsNewWindow auf true.|false|
+|styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
 
 **Beispiel**
 ```
@@ -2388,6 +2389,7 @@ Hier werden WMS typische Attribute aufgelistet.
     "featureCount": 2,
     "geomType": "geometry",
     "infoFormat": "text/html",
+    "gfiAsNewWindow": true,
     "styleable": true,
     "styles": ["firstStyle", "secondStyle"]
 }
