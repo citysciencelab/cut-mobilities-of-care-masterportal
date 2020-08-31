@@ -60,18 +60,19 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
     /**
      * Requests the DescribeFeatureType of the wfs layer and starts the function to parse the xml and creates the legend info
-     * @param   {string} wfsUrl url from layer
+     * @param   {string} wfsURL url from layer
      * @param   {string} version wfs version from layer
      * @param   {string} featureType wfs feature type from layer
+     * @param   {string[] | string} styleGeometryType The configured geometry type of the layer
      * @returns {void}
      */
-    getGeometryTypeFromWFS: function (wfsUrl, version, featureType) {
+    getGeometryTypeFromWFS: function (wfsURL, version, featureType, styleGeometryType) {
         const params = {
             "SERVICE": "WFS",
             "VERSION": version,
             "REQUEST": "DescribeFeatureType"
         };
-        let url = wfsUrl + "?";
+        let url = wfsURL + "?";
 
         Object.keys(params).forEach(key => {
             url += key + "=" + params[key] + "&";
@@ -83,7 +84,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
             .then(responseXML => {
                 const subElements = this.getSubelementsFromXML(responseXML, featureType),
-                    geometryTypes = this.getTypeAttributesFromSubelements(subElements);
+                    geometryTypes = this.getTypeAttributesFromSubelements(subElements, styleGeometryType);
 
                 this.createLegendInfo(geometryTypes);
             })
@@ -117,22 +118,26 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
     /**
      * Parses the geometry types from the subelements
-     * @param   {object[]} subElements xml subelements
+     * @param   {object[]} [subElements=[]] xml subelements
+     * @param   {string[] | string} styleGeometryType The configured geometry type of the layer
      * @returns {string[]} geometry types of the layer
      */
-    getTypeAttributesFromSubelements: function (subElements = []) {
+    getTypeAttributesFromSubelements: function (subElements = [], styleGeometryType) {
         const geometryType = [];
 
         subElements.forEach(elements => {
             const typeAttribute = elements.getAttribute("type");
-            let geomType;
+            let geomType = styleGeometryType;
 
             if (typeAttribute && typeAttribute.includes("gml")) {
-                geomType = typeAttribute.split("gml:")[1].replace("PropertyType", "");
+                geomType = styleGeometryType || typeAttribute.split("gml:")[1].replace("PropertyType", "");
                 if (geomType === "Geometry") {
                     geometryType.push("Point");
                     geometryType.push("Polygon");
                     geometryType.push("LineString");
+                }
+                else if (Array.isArray(geomType)) {
+                    geomType.forEach(singleGeomType => geometryType.push(singleGeomType));
                 }
                 else {
                     geometryType.push(geomType);
@@ -283,7 +288,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                     simpleStyle.setGeometry(geometry);
                     olStyle.push(simpleStyle);
                 }
-            }, this);
+            });
         }
         else {
             const simpleStyle = this.getSimpleGeometryStyle(geometryType, feature, rules, isClustered);
@@ -598,6 +603,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 "styleObject": styleObject,
                 "label": this.createLegendLabel(rule, styleObject)
             });
+
             Radio.trigger("Legend", "setLayerList");
         }
     },
@@ -609,8 +615,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {String | null} label for this styleObject
      */
     createLegendLabel: function (rule, styleObject) {
-        if (styleObject.hasOwnProperty("legendValue")) {
-            return styleObject.legendValue.toString();
+        if (styleObject?.attributes?.hasOwnProperty("legendValue")) {
+            return styleObject.attributes.legendValue.toString();
         }
         else if (rule.hasOwnProperty("conditions")) {
             let label = "";

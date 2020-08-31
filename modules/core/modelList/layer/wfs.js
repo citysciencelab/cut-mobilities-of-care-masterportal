@@ -224,8 +224,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     styling: function () {
-        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-        let isClusterFeature;
+        const styleId = this.get("styleId"),
+            styleModel = Radio.request("StyleList", "returnModelById", styleId);
+        let isClusterfeature;
 
         if (styleModel !== undefined) {
             this.setStyle(function (feature) {
@@ -237,6 +238,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
 
                 return styleModel.createStyle(feat, isClusterFeature);
             });
+        }
+        else {
+            console.error(i18next.t("common:modules.core.modelList.layer.wrongStyleId", {styleId}));
         }
 
         this.get("layer").setStyle(this.get("style"));
@@ -268,8 +272,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         }
 
         if (styleModel && legend === true) {
+            styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
             if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
-                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
+                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
             }
             this.setLegend(styleModel.getLegendInfos());
         }

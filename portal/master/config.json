@@ -30,7 +30,7 @@
         "epsg": "EPSG:25832",
         "filter": "filter=(typ:*)",
         "score": 0.6,
-        "zoomToResult": true
+        "zoomToResultOnHover": true
       },
       "osm": {
         "minChars": 3,
@@ -122,7 +122,7 @@
       "visibleWFS": {
         "minChars": 3
       },
-      "zoomLevel": 9,
+      "startZoomLevel": 9,
       "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "mapView": {
@@ -329,8 +329,8 @@
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
-          "kmlimport": {
-            "name": "translate#common:menu.tools.kmlimport",
+          "fileImport": {
+            "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
           },
           "extendedFilter": {
@@ -526,11 +526,9 @@
     "Fachdaten": {
       "Layer": [
         {
-          "id": "15543",
-          "visibility": true
-        },
-        {
-          "id": "8194"
+          "id": "1132",
+          "styleId": "1132",
+          "name": "100 Jahre Stadtgruen POIs"
         },
         {
           "id": "16100",
@@ -555,6 +553,7 @@
         {
           "id": "2128",
           "styleId": "2128",
+          "styleGeometryType": ["Point"],
           "name": "translate#common:tree.trafficCameras"
         },
         {
@@ -629,11 +628,13 @@
         {
           "id": "47",
           "styleId": "47",
+          "styleGeometryType": "Point",
           "mouseHoverField": [
             "baubeginn",
             "bauende"
           ],
-          "autoRefresh": 6000
+          "autoRefresh": 6000,
+          "clusterDistance": 50
         },
         {
           "id": "2714",
@@ -650,10 +651,8 @@
           "styleId": "45",
           "clusterDistance": 40,
           "routable": true,
-          "searchField": "bezeichnung"
-        },
-        {
-          "id": "4479"
+          "searchField": "bezeichnung",
+          "styleGeometryType": "Point"
         },
         {
           "id": [
