@@ -15,8 +15,12 @@ export default {
         }
     },
     mounted () {
+        const root = document.getElementById("root");
+
         this.getLegendConfig();
-        $(this.$el).insertAfter(document.getElementById("root"));
+        if (root) {
+            root.after(this.$el);
+        }
     },
     methods: {
         ...mapActions("Legend", Object.keys(actions)),
@@ -41,7 +45,6 @@ export default {
         >
             <li
                 v-if="showLegendInMenu"
-                id="legend-menu"
                 :class="{ 'open': showLegend }"
                 class="dropdown dropdown-folder"
                 @click="toggleLegend"
