@@ -29,6 +29,14 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             }, this);
         }
 
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": function (isViewMobile) {
+                if (!isViewMobile) {
+                    $(".modal-backdrop").remove();
+                }
+            }
+        });
+
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": function () {
                 const collection = Radio.request("ModelList", "getCollection");

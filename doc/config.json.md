@@ -921,9 +921,10 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
 |extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt voraus.|false|
 |featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektorlayers auf.|false|
+|fileImport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von Dateien des Typs *.kml, *.geojson und *. gpx. Über dieses Werkzeug können solche Dateien importiert werden.|false|
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Filtermodul mit dem sich Vektordaten aus WFS filtern lassen.|false|
 |gfi|nein|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||Mit der GetFeatureInfo(gfi) lassen sich Informationen zu beliebigen Layern anzeigen. Dabei werden bei einem WMS die Daten über die GetFeatureInfo geladen. Bei Vektordaten (WFS, Sensor, GeoJSON usw.) werden die angezeigten Attribute aus den Daten selbst verwendet.|false|
-|kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
+|kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "fileImport" verwenden.|false|
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
@@ -2597,6 +2598,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|false|
 |additionalInfoField|nein|String|"name"|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden, wird der Layername angegeben.|false|
 |styleId|nein|String||Id die den Style definiert. Id wird in der **[style.json](style.json.md)** aufgelöst.|false|
+|styleGeometryType|nein|String[],String||Geometrietypen für einen WFS-Style, falls nur bestimmte Geometrien eines Layers angezeigt werden sollen **[siehe dazu](style.json.md#markdown-header-abbildungsvorschriften)**.
 |hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|false|
 |vtStyles|nein|**[vtStyle](#markdown-header-themenconfiglayervectorvtstyle)**[]||Auswählbare externe Style-Definition (nur für Vector Tile Layer)|false|
 

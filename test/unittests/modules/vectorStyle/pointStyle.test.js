@@ -63,7 +63,7 @@ describe("textStyleModel", function () {
         it("should create circle cluster style", function () {
             expect(styleModel.createCircleClusterStyle()).to.be.an.instanceof(Style);
             expect(styleModel.createCircleClusterStyle().getImage()).to.be.an.instanceof(Circle);
-            expect(styleModel.createCircleClusterStyle().getImage().getRadius()).to.equal(10);
+            expect(styleModel.createCircleClusterStyle().getImage().getRadius()).to.equal(15);
         });
     });
 

@@ -43,17 +43,17 @@ const TextStyleModel = StyleModel.extend(/** @lends TextStyleModel.prototype */{
         /**
          * @type {number}
          */
-        "clusterTextOffsetX": 10,
+        "clusterTextOffsetX": 0,
         /**
          * @type {number}
          */
-        "clusterTextOffsetY": -8,
+        "clusterTextOffsetY": 2,
         "clusterTextFillColor": [255, 255, 255, 1],
         "clusterTextStrokeColor": [0, 0, 0, 0],
         /**
          * @type {number}
          */
-        "clusterTextStrokeWidth": 3,
+        "clusterTextStrokeWidth": 0,
 
         // simple text
         "textAlign": "center",

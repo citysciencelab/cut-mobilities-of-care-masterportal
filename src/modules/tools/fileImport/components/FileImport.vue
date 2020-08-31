@@ -4,25 +4,25 @@ import {mapGetters} from "vuex";
 import {mapActions} from "vuex";
 
 export default {
-    name: "KmlImport",
+    name: "FileImport",
     components: {
         Tool
     },
     data () {
         return {
             dzIsDropHovering: false,
-            storePath: this.$store.state.Tools.KmlImport
+            storePath: this.$store.state.Tools.FileImport
         };
     },
     computed: {
-        ...mapGetters("Tools/KmlImport", [
+        ...mapGetters("Tools/FileImport", [
             "deactivateGFI",
             "glyphicon",
             "active",
             "isActive",
             "renderToWindow",
             "resizableWindow",
-            "supportedFiletypes"
+            "importedFileNames"
         ]),
         selectedFiletype: {
             get () {
@@ -54,7 +54,7 @@ export default {
         this.activateByUrlParam();
     },
     methods: {
-        ...mapActions("Tools/KmlImport", [
+        ...mapActions("Tools/FileImport", [
             "activateByUrlParam",
             "importKML",
             "setSelectedFiletype",
@@ -110,7 +110,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('modules.tools.kmlImport.title')"
+        :title="$t('modules.tools.fileImport.title')"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
@@ -125,7 +125,10 @@ export default {
                 <p
                     id="cta"
                 >
-                    {{ $t("modules.tools.kmlImport.captions.intro") }}
+                    {{ $t("modules.tools.fileImport.captions.intro") }}
+                    <br>
+                    <br>
+                    {{ $t("modules.tools.fileImport.captions.fileTypes") }}
                 </p>
                 <div
                     id="drop-area-fake"
@@ -138,7 +141,7 @@ export default {
                         <p
                             class="caption"
                         >
-                            {{ $t("modules.tools.kmlImport.captions.dropzone") }}
+                            {{ $t("modules.tools.fileImport.captions.dropzone") }}
                         </p>
                     </div>
 
@@ -161,33 +164,27 @@ export default {
                             type="file"
                             @change="onInputChange"
                         />
-                        {{ $t("modules.tools.kmlImport.captions.browse") }}
+                        {{ $t("modules.tools.fileImport.captions.browse") }}
                     </label>
                 </div>
-
                 <div
+                    v-if="importedFileNames.length > 0"
                     id="h-seperator"
                 />
-
-                <div
-                    id="selectedFiletype-form-container"
+                <p
+                    v-if="importedFileNames.length > 0"
+                    id="imported-filenames"
                 >
-                    <form>
-                        <label
-                            v-for="(alertCategory, categoryKey) of supportedFiletypes"
-                            :key="categoryKey"
+                    <label>{{ $t("modules.tools.fileImport.successfullyImportedLabel") }}</label>
+                    <ul>
+                        <li
+                            v-for="(filename, index) in importedFileNames"
+                            :key="index"
                         >
-                            <input
-                                v-model="selectedFiletype"
-                                type="radio"
-                                :value="categoryKey"
-                                name="selectedFiletype"
-                                @input="setSelectedFiletype"
-                            />
-                            {{ $t(alertCategory.caption) }}
-                        </label>
-                    </form>
-                </div>
+                            {{ filename }}
+                        </li>
+                    </ul>
+                </p>
             </div>
         </template>
     </Tool>

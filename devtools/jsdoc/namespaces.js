@@ -622,12 +622,6 @@
  */
 
 /**
- * @namespace KmlImport
- * @memberof Tools
- * @description Module for import of KML data to the map.
- */
-
-/**
  * @namespace LayerSlider
  * @memberof Tools
  * @description Animates several configured layers consecutively (e.g. to show time series).

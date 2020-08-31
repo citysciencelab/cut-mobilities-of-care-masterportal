@@ -5,7 +5,7 @@ import mutations from "./mutationsTools";
 import actions from "./actionsTools";
 import ScaleSwitcher from "./scale/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
-import KmlImport from "./kmlImport/store/indexKmlImport";
+import FileImport from "./fileImport/store/indexFileImport";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -16,7 +16,7 @@ export default {
     modules: {
         ScaleSwitcher,
         SupplyCoord,
-        KmlImport
+        FileImport
     },
     state,
     getters,

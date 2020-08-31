@@ -2244,13 +2244,6 @@
  * @example Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layerName, layerId, geojson)
  */
 
-/** -------------------- TOOLS.KMLIMPORT -------------------- */
-
-/**
- * @event Tools.Kmlimport#ChangeIsActive
- * @description Fired when param isActive changes
- */
-
 /** -------------------- TOOLS.WFST -------------------- */
 
 /**

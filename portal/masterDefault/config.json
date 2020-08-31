@@ -87,8 +87,8 @@
                         "name": "translate#common:menu.tools.searchByCoord",
                         "glyphicon": "glyphicon-record"
                     },
-                    "kmlimport": {
-                        "name": "translate#common:menu.tools.kmlimport",
+                    "fileImport": {
+                        "name": "translate#common:menu.tools.fileImport",
                         "glyphicon": "glyphicon-import"
                     },
                     "draw": {
