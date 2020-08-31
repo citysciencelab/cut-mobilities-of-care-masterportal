@@ -32,6 +32,13 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
      * @property {boolean} activateOnSelection=false todo
      * @property {boolean} searchInMapExtent=true Flag for the search in the current map extent.
      * @property {boolean} liveZoomToFeatures=false todo
+     * @property {String} result: "" contains the translated text
+     * @property {String} results: "" contains the translated text
+     * @property {String} filter: "" contains the translated text
+     * @property {String} yourSelection: "" contains the translated text
+     * @property {String} noFilterOptionSelected: "" contains the translated text
+     * @property {String} deleteAll: "" contains the translated text
+     * @listens i18next#RadioTriggerLanguageChanged
      * @returns {void}
      */
     superInitialize: function () {
