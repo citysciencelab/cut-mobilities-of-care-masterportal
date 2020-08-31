@@ -226,7 +226,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     styling: function () {
         const styleId = this.get("styleId"),
             styleModel = Radio.request("StyleList", "returnModelById", styleId);
-        let isClusterfeature;
+        let isClusterFeature = false;
 
         if (styleModel !== undefined) {
             this.setStyle(function (feature) {
