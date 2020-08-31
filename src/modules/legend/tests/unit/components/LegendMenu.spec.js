@@ -39,7 +39,15 @@ describe("LegendMenu.vue", () => {
         const wrapper = shallowMount(LegendMenuComponent, {store, localVue});
 
         expect(wrapper.find("#legend-menu").exists()).to.be.true;
-        wrapper.destroy();
     });
 
+    describe("LegendMenu.vue methods", () => {
+        it("toggleLegend", () => {
+            const wrapper = shallowMount(LegendMenuComponent, {store, localVue});
+
+            store.state.Legend.showLegend = false;
+            wrapper.vm.toggleLegend();
+            expect(store.state.Legend.showLegend).to.be.equals(true);
+        });
+    });
 });
