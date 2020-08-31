@@ -276,7 +276,7 @@
                 "result": "Treffer",
                 "results": "Treffer",
                 "zoomOnResults": "Zoom auf Treffer",
-                "filter": "Filter",
+                "filter": "-Filter",
                 "yourSelection": "Ihre Auswahl: ",
                 "noFilterOptionSelected": "Noch keine Filteroption ausgewählt",
                 "deleteAll":"Alles löschen"
