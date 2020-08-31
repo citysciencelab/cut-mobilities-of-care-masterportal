@@ -266,6 +266,7 @@
                 "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
             },
             "filter": {
+                "result": "Treffer",
                 "results": "Treffer",
                 "zoomOnResults": "Zoom auf Treffer",
                 "filter": "Filter",

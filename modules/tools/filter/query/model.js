@@ -13,6 +13,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         searchInMapExtent: true,
         liveZoomToFeatures: false,
         // translations
+        result: "",
         results: "",
         filter: "",
         yourSelection: "",
@@ -73,6 +74,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
      */
     changeLang: function (lng) {
         this.set({
+            "result": i18next.t("common:modules.tools.filter.result"),
             "results": i18next.t("common:modules.tools.filter.results"),
             "filter": i18next.t("common:modules.tools.filter.filter"),
             "yourSelection": i18next.t("common:modules.tools.filter.yourSelection"),

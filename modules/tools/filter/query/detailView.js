@@ -92,7 +92,12 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @returns {void}
      */
     updateFeatureCount: function (model, value) {
-        this.$el.find(".feature-count").html(value.length + " Treffer");
+        if (value.length === 1) {
+            this.$el.find(".feature-count").html(value.length + " " + this.model.get("result"));
+        }
+        else {
+            this.$el.find(".feature-count").html(value.length + " " + this.model.get("results"));
+        }
         this.$el.find(".detailview-head .zoom-btn")
             .animate({opacity: 0.6}, 500)
             .animate({opacity: 1.0}, 500);

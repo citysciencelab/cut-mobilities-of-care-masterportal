@@ -257,6 +257,7 @@
                 "key": "Configuration of tool <b>{{alertMessage.x}}</b> incorrect: <b>sliderType</b> \"{{alertMessage.y}}\" is not yet implemented!"
             },
             "filter": {
+                "result": "Result",
                 "results": "Results",
                 "zoomOnResults": "Zoom on results",
                 "filter": "filter",

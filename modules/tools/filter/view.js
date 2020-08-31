@@ -25,6 +25,10 @@ const FilterView = Backbone.View.extend({
                     this.$el.remove();
                     Radio.trigger("Sidebar", "toggle", false);
                 }
+            },
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+                this.renderDetailView(this.model, this.model.get("isActive"));
             }
         });
         this.listenTo(this.model.get("queryCollection"), {
@@ -33,6 +37,10 @@ const FilterView = Backbone.View.extend({
                     this.renderDetailView();
                 }
                 this.model.closeGFI();
+            },
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+                this.renderDetailView(this.model, this.model.get("isActive"));
             },
             "renderDetailView": this.renderDetailView,
             "add": function () {
