@@ -29,6 +29,7 @@ const FilterView = Backbone.View.extend({
             "change:currentLng": () => {
                 this.render(this.model, this.model.get("isActive"));
                 this.renderDetailView(this.model, this.model.get("isActive"));
+                this.renderSimpleViews(this.model, this.model.get("isActive"));
             }
         });
         this.listenTo(this.model.get("queryCollection"), {
