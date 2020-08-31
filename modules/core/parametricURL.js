@@ -121,7 +121,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @return {boolean} Is the query valid.
      */
     checkisURLQueryValid: function (query) {
-        return !(/<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>/).test(decodeURIComponent(query));
+        return !(/(<([^>]+)>)/g).test(decodeURIComponent(query));
     },
 
     /**

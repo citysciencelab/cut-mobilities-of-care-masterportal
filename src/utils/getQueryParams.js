@@ -6,7 +6,7 @@ const locationSearch = location.search.substr(1);
  * @return {boolean} Is the query valid.
  */
 function checkisURLQueryValid (query) {
-    return !(/<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>/).test(decodeURIComponent(query));
+    return !(/(<([^>]+)>)/g).test(decodeURIComponent(query));
 }
 
 /**
