@@ -1,5 +1,6 @@
 import stateMap from "./state";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
+import {createGfiFeature} from "./actions/getWmsFeaturesByMimeType.js";
 
 const gettersMap = {
     ...generateSimpleGetters(stateMap),
@@ -54,25 +55,21 @@ const gettersMap = {
             // cluster feature
             if (feature.getProperties().features) {
                 feature.get("features").forEach(function (clusteredFeature) {
-                    featuresAtPixel.push({
-                        getGfiUrl: () => null,
-                        // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
-                        getTheme: () => "default", // layer.get("gfiTheme"),
-                        getTitle: () => layer.get("name"),
-                        getProperties: () => clusteredFeature.getProperties(),
-                        getAttributesToShow: () => layer.get("gfiAttributes")
-                    });
+                    featuresAtPixel.push(createGfiFeature(
+                        layer.get("name"),
+                        layer.get("gfiTheme"),
+                        layer.get("gfiAttributes"),
+                        clusteredFeature.getProperties()
+                    ));
                 });
             }
             else {
-                featuresAtPixel.push({
-                    getGfiUrl: () => null,
-                    // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
-                    getTheme: () => "default", // layer.get("gfiTheme"),
-                    getTitle: () => layer.get("name"),
-                    getProperties: () => feature.getProperties(),
-                    getAttributesToShow: () => layer.get("gfiAttributes")
-                });
+                featuresAtPixel.push(createGfiFeature(
+                    layer.get("name"),
+                    layer.get("gfiTheme"),
+                    layer.get("gfiAttributes"),
+                    feature.getProperties()
+                ));
             }
         });
         return featuresAtPixel;
