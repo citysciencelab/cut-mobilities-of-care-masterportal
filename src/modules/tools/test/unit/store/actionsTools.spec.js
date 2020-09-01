@@ -2,7 +2,7 @@ import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../actionsTools";
 import sinon from "sinon";
 
-const {setToolActive, languageChanged, addTool} = actions;
+const {setToolActive, languageChanged, addTool, activateByUrlParam} = actions;
 
 describe("actionsTools", function () {
     describe("setToolActive", function () {
@@ -77,6 +77,30 @@ describe("actionsTools", function () {
             testAction(addTool, tool, state, {}, [
                 {type: "setComponentMap", payload: Object.assign(state.componentMap, {[tool.default.name]: tool.default})}
             ], {}, done);
+        });
+    });
+
+    describe("activateByUrlParam", function () {
+        it("activateByUrlParam  isinitopen=scaleSwitcher", done => {
+            const rootState = {
+                    queryParams: {
+                        "isinitopen": "scaleSwitcher"
+                    }
+                },
+                toolName = "ScaleSwitcher";
+
+            testAction(activateByUrlParam, toolName, {}, rootState, [
+                {type: toolName + "/setActive", payload: true}
+            ], {}, done);
+        });
+        it("activateByUrlParam no isinitopen", done => {
+            const rootState = {
+                    queryParams: {
+                    }
+                },
+                toolName = "ScaleSwitcher";
+
+            testAction(activateByUrlParam, toolName, {}, rootState, [], {}, done);
         });
     });
 });

@@ -13,19 +13,6 @@ import stateDraw from "./stateDraw";
 const initialState = Object.assign({}, stateDraw),
     actions = {
         /**
-         * Activates the tool if it is activated via the URL with '?isinitopen=draw'.
-         *
-         * @param {Object} context actions context object.
-         * @returns {void}
-         */
-        activateByUrlParam ({rootState, dispatch}) {
-            const mappings = ["draw"];
-
-            if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen.toLowerCase()) !== -1) {
-                dispatch("setActive", true);
-            }
-        },
-        /**
          * Adds an interaction to the current map instance.
          *
          * @param {Object} context actions context object.

@@ -110,14 +110,6 @@ export default {
         commit("setActive", value);
     },
 
-    activateByUrlParam: ({rootState, commit}) => {
-        const mappings = ["kmlimport", "fileimport"];
-
-        if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen.toLowerCase()) !== -1) {
-            commit("setActive", true);
-        }
-    },
-
     setSelectedFiletype: ({commit}, newFiletype) => {
         commit("setSelectedFiletype", newFiletype);
 

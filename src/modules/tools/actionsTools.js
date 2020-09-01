@@ -55,6 +55,17 @@ const actions = {
      */
     addTool: ({state, commit}, tool) => {
         commit("setComponentMap", Object.assign(state.componentMap, {[tool.default.name]: tool.default}));
+    },
+
+    /**
+     * Checks if a tool should be open initially controlled by the url param "isinitopen".
+     * @param {string} toolName - Name from the toolComponent
+     * @returns {void}
+     */
+    activateByUrlParam: ({rootState, commit}, toolName) => {
+        if (rootState.queryParams instanceof Object && toolName?.toLowerCase() === rootState?.queryParams?.isinitopen?.toLowerCase()) {
+            commit(toolName + "/setActive", true);
+        }
     }
 };
 

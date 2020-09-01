@@ -40,7 +40,6 @@ export default {
     created () {
         this.$on("close", this.close);
         this.setActive(this.active);
-        this.activateByUrlParam();
     },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
@@ -62,7 +61,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('common:modules.tools.draw.title')"
+        :title="name"
         :icon="glyphicon"
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"

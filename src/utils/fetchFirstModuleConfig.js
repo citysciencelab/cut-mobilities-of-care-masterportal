@@ -111,7 +111,7 @@ function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFall
     const missingSources = [],
         missingDefaultValues = [],
         // no real config-params, e.g. added during parsing: must not be in state as default
-        defaultsNotInState = ["i18nextTranslate", "useConfigName"],
+        defaultsNotInState = ["i18nextTranslate", "useConfigName", "type", "parentId", "onlyDesktop"],
         state = context.state[moduleName] || context.state;
 
     let source,

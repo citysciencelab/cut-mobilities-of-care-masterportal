@@ -12,9 +12,6 @@ const {
     resizableWindow,
     isActive,
     isVisibleInMenu,
-    isRoot,
-    parentId,
-    type,
     deactivateGFI
 } = getters;
 
@@ -45,15 +42,6 @@ describe("ScaleSwitcher", function () {
         });
         it("returns the isVisibleInMenu default value from state", function () {
             expect(isVisibleInMenu(stateScaleSwitcher)).to.be.true;
-        });
-        it("returns the isRoot default value from state", function () {
-            expect(isRoot(stateScaleSwitcher)).to.be.false;
-        });
-        it("returns the parentId default value from state", function () {
-            expect(parentId(stateScaleSwitcher)).to.equals("tool");
-        });
-        it("returns the type default value from state", function () {
-            expect(type(stateScaleSwitcher)).to.equals("tool");
         });
         it("returns the deactivateGFI default value from state", function () {
             expect(deactivateGFI(stateScaleSwitcher)).to.be.false;

@@ -52,16 +52,8 @@ export default {
             this.setActive(true);
         }
     },
-    /**
-     * Activates this tool, if it has to start by url params
-     * @returns {void}
-     */
-    mounted () {
-        this.activateByUrlParam();
-    },
     methods: {
         ...mapActions("Tools/SupplyCoord", [
-            "activateByUrlParam",
             "checkPosition",
             "changedPosition",
             "positionClicked",

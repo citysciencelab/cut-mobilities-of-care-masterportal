@@ -1,30 +1,9 @@
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsScaleSwitcher";
 
-const {setActive, activateByUrlParam} = actions;
+const {setActive} = actions;
 
 describe("actionsScaleSwitcher", function () {
-    describe("activateByUrlParam", function () {
-        it("activateByUrlParam  isinitopen=scaleSwitcher", done => {
-            const rootState = {
-                queryParams: {
-                    "isinitopen": "scaleSwitcher"
-                }
-            };
-
-            testAction(activateByUrlParam, null, {active: false}, rootState, [
-                {type: "setActive", payload: true}
-            ], {}, done);
-        });
-        it("activateByUrlParam no isinitopen", done => {
-            const rootState = {
-                queryParams: {
-                }
-            };
-
-            testAction(activateByUrlParam, null, {active: false}, rootState, [], {}, done);
-        });
-    });
     describe("setActive", function () {
         const rootState = {
             Map: {

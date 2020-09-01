@@ -13,9 +13,13 @@ export default {
         /** Push the configured attributes to store from all configured tools. */
         this.configuredTools.forEach(configuredTool => this.pushAttributesToStoreElements(configuredTool));
     },
+    mounted () {
+        this.configuredTools.forEach(configuredTool => this.activateByUrlParam(configuredTool?.component?.name));
+    },
     methods: {
         ...mapActions("Tools", [
-            "pushAttributesToStoreElements"
+            "pushAttributesToStoreElements",
+            "activateByUrlParam"
         ]),
         ...mapMutations("Tools", [
             "setConfiguredTools"
