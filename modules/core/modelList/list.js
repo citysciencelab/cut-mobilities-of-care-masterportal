@@ -24,7 +24,6 @@ import PrintV2 from "../../tools/print/model";
 import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Measure from "../../tools/measure/model";
-import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
@@ -281,9 +280,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "measure") {
                 return new Measure(attrs, options);
-            }
-            else if (attrs.id === "draw") {
-                return new Draw(attrs, options);
             }
             else if (attrs.id === "download") {
                 return new Download(attrs, options);
@@ -557,17 +553,20 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
      * Sets all Tools (except the legend, the given tool and the gfi,
      * if the model attribute deactivateGFI is true) to isActive=false
-     * @param {Tool} activatedToolModel Tool model that has to be activated
+     * @param {Tool} activatedToolModel Model of the Tool (Backbone) or the state of the Tool (Vue).
      * @returns {void}
      */
     setActiveToolsToFalse: function (activatedToolModel) {
         const legendModel = this.findWhere({id: "legend"}),
             activeTools = this.where({isActive: true}),
             activatedToolModels = Array.isArray(activatedToolModel) ? activatedToolModel : [activatedToolModel],
-            alwaysActiveTools = [...activatedToolModels, ...this.alwaysActiveTools, legendModel];
+            alwaysActiveTools = [...activatedToolModels, ...this.alwaysActiveTools, legendModel],
+            deactivateGFI = typeof activatedToolModel.get === "function"
+                ? activatedToolModel.get("deactivateGFI")
+                : activatedToolModel.deactivateGFI;
         let activeToolsToDeactivate = [];
 
-        if (!activatedToolModel.get("deactivateGFI")) {
+        if (!deactivateGFI) {
             alwaysActiveTools.push(this.findWhere({id: "gfi"}));
         }
 

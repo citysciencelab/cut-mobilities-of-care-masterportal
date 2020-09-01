@@ -1,3 +1,4 @@
+import Draw from "./draw/components/Draw.vue";
 import ScaleSwitcher from "./scale/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
@@ -10,6 +11,7 @@ import FileImport from "./fileImport/components/FileImport.vue";
  */
 const state = {
     componentMap: {
+        draw: Draw,
         scaleSwitcher: ScaleSwitcher,
         supplyCoord: SupplyCoord,
         /**
