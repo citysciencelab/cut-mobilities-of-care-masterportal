@@ -3,6 +3,7 @@ import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import LegendMenuComponent from "../../../components/LegendMenu.vue";
 import Legend from "../../../store/indexLegend";
 import {expect} from "chai";
+import sinon from "sinon";
 
 const localVue = createLocalVue();
 
@@ -11,17 +12,26 @@ config.mocks.$t = key => key;
 
 describe("LegendMenu.vue", () => {
     const mockConfigJson = {
-        Portalconfig: {
-            menu: {
-                legend: {
-                    name: "common:modules.legend.name",
-                    glyphicon: "glyphicon-book",
-                    showCollapseAllButton: true
+            Portalconfig: {
+                menu: {
+                    legend: {
+                        name: "common:modules.legend.name",
+                        glyphicon: "glyphicon-book",
+                        showCollapseAllButton: true
+                    }
                 }
             }
-        }
-    };
-    let store;
+        },
+        getters = {
+            mobile: state => state.mobile
+        },
+        mutations = {
+            setMobile (state, mobile) {
+                state.mobile = mobile;
+            }
+        };
+    let store,
+        wrapper;
 
     beforeEach(() => {
         store = new Vuex.Store({
@@ -31,19 +41,32 @@ describe("LegendMenu.vue", () => {
             },
             state: {
                 configJson: mockConfigJson
-            }
+            },
+            getters,
+            mutations
         });
     });
 
+    afterEach(() => {
+        if (wrapper) {
+            wrapper.destroy();
+        }
+    });
+
     it("renders the legend in Menu", () => {
-        const wrapper = shallowMount(LegendMenuComponent, {store, localVue});
+        wrapper = shallowMount(LegendMenuComponent, {store, localVue});
 
         expect(wrapper.find("#legend-menu").exists()).to.be.true;
+    });
+    it("renders the legend in mobile view", () => {
+        store.commit("setMobile", true);
+        wrapper = shallowMount(LegendMenuComponent, {store, localVue});
+        expect(wrapper.find("#legend-menu.mobile").exists()).to.be.true;
     });
 
     describe("LegendMenu.vue methods", () => {
         it("toggleLegend", () => {
-            const wrapper = shallowMount(LegendMenuComponent, {store, localVue});
+            wrapper = shallowMount(LegendMenuComponent, {store, localVue});
 
             store.state.Legend.showLegend = false;
             wrapper.vm.toggleLegend();
