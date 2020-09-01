@@ -1,6 +1,6 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
-import requestGfi from "../../../../api/wmsGetFeatureInfo";
+import {getWmsFeaturesByMimeType} from "./getWmsFeaturesByMimeType";
 
 let unsubscribes = [],
     loopId = null;
@@ -154,41 +154,17 @@ const actions = {
 
         gfiFeatures = await Promise.all(gfiWmsLayerList.map(layer => {
             const mimeType = layer.get("infoFormat"),
+                layerName = layer.get("name"),
+                gfiTheme = layer.get("gfiTheme") || "default",
+                gfiAttributes = layer.get("gfiAttributes"),
                 gfiParams = {
                     INFO_FORMAT: mimeType,
                     FEATURE_COUNT: layer.get("featureCount")
                 },
-                url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
+                url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams),
+                gfiAsNewWindow = layer.get("gfiAsNewWindow");
 
-            if (mimeType === "text/xml") {
-                return requestGfi(mimeType, url).then(featureInfos => {
-                    const features = [];
-
-                    featureInfos.forEach(function (feature) {
-                        features.push({
-                            // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
-                            getTheme: () => "default", // layer.get("gfiTheme") || "default",
-                            getTitle: () => layer.get("name"),
-                            getAttributesToShow: () => layer.get("gfiAttributes") || "showAll",
-                            getProperties: () => feature.getProperties(),
-                            getGfiUrl: () => url
-                        });
-                    });
-                    return features;
-                });
-            }
-
-            // mimeType === "text/html"
-            return [{
-                // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
-                getTheme: () => "default", // layer.get("gfiTheme") || "default",
-                getTitle: () => layer.get("name"),
-                getAttributesToShow: () => layer.get("gfiAttributes") || "showAll",
-                getProperties: () => null,
-                getGfiUrl: () => url,
-                // must open http as popup (only ssl in iframe)
-                isGfiAsNewWindow: () => layer.get("gfiAsNewWindow") || url.startsWith("http:", 0)
-            }];
+            return getWmsFeaturesByMimeType(mimeType, url, layerName, gfiTheme, gfiAttributes, gfiAsNewWindow);
         }));
 
         // only commit if features found
