@@ -9,7 +9,7 @@ const WMSLayer = Layer.extend({
         // extended die Layer defaults by value
         return Object.assign(Layer.prototype.defaults, {
             infoFormat: "text/xml",
-            gfiAsNewWindow: false,
+            gfiAsNewWindow: null,
             // Eine Veränderung der CACHEID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
             cacheId: parseInt(Math.random() * 10000000, 10),
             supported: ["2D", "3D"],
@@ -310,8 +310,10 @@ const WMSLayer = Layer.extend({
 
     /**
      * setter for gfiAsNewWindow
-     * @param {Boolean} value see doc/config.json.md for more information
-     * @return {Void}  -
+     * @param {Object} value see doc/config.json.md for more information
+     * @param {String} [value.name="_blank"] the browsing context or the target attribute to open the window (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
+     * @param {String} [value.specs=""] a comma-separated list of items - the setup to open the window with (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
+     * @returns {Void}  -
      */
     setGfiAsNewWindow: function (value) {
         this.set("gfiAsNewWindow", value);
@@ -319,7 +321,7 @@ const WMSLayer = Layer.extend({
 
     /**
      * getter for gfiAsNewWindow
-     * @return {Boolean}  see doc/config.json.md for more information
+     * @returns {Object}  see setGfiAsNewWindow above or doc/config.json.md for more information
      */
     getGfiAsNewWindow: function () {
         return this.get("gfiAsNewWindow");

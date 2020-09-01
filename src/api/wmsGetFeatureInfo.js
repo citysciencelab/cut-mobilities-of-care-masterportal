@@ -8,7 +8,7 @@ import Feature from "ol/Feature";
  * handles the GetFeatureInfo request
  * @param {string} mimeType - text/xml | text/html
  * @param {string} url - the GetFeatureInfo request url
- * @returns {Promise} Promise object represents the GetFeatureInfo request
+ * @returns {Promise<module:ol/Feature[]>}  Promise object represents the GetFeatureInfo request
  */
 function requestGfi (mimeType, url) {
     const domParser = new DOMParser();
