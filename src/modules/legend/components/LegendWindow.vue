@@ -134,10 +134,13 @@ export default {
          */
         toggleLayerInLegend (layer) {
             const isVisibleInMap = layer.get("isVisibleInMap"),
-                layerId = layer.get("id");
+                layerId = layer.get("id"),
+                layerName = layer.get("name"),
+                layerLegend = layer.get("legend"),
+                layerSelectionIDX = layer.get("selectionIDX");
 
             if (isVisibleInMap) {
-                this.generateLegend(layer);
+                this.generateLegend(layerId, layerName, layerLegend, layerSelectionIDX);
             }
             else {
                 this.removeLegend(layerId);
@@ -146,16 +149,18 @@ export default {
 
         /**
          * Generates the legend object and adds it to the legend array in the store.
-         * @param {Object} layer layer.
+         * @param {String} id Id of layer.
+         * @param {String} name Name of layer.
+         * @param {Object[]} legend Legend of layer.
+         * @param {Number} selectionIDX SelectionIDX of layer.
          * @returns {void}
          */
-        generateLegend (layer) {
-            const id = layer.get("id"),
-                legendObj = {
+        generateLegend (id, name, legend, selectionIDX) {
+            const legendObj = {
                     id: id,
-                    name: layer.get("name"),
-                    legend: this.prepareLegend(layer.get("legend")),
-                    position: layer.get("selectionIDX")
+                    name: name,
+                    legend: this.prepareLegend(legend),
+                    position: selectionIDX
                 },
                 isValidLegend = this.isValidLegendObj(legendObj),
                 isNotYetInLegend = isValidLegend && this.isLayerNotYetInLegend(id),
@@ -388,9 +393,11 @@ export default {
             let isArrayOfStrings = false;
 
             if (Array.isArray(input)) {
-                isArrayOfStrings = input.every(legendInfo => {
-                    return typeof legendInfo === "string";
-                });
+                if (input.length > 0) {
+                    isArrayOfStrings = input.every(legendInfo => {
+                        return typeof legendInfo === "string";
+                    });
+                }
             }
             return isArrayOfStrings;
         },
@@ -479,7 +486,7 @@ export default {
         },
 
         /**
-         * Toggles the layer legends .
+         * Toggles the layer legends.
          * @param {Event} evt Click event.
          * @returns {void}
          */
