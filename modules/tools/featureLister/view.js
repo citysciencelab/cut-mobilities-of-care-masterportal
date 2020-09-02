@@ -65,8 +65,8 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
 
     /**
      * Renders the feature lister
-     * @param {Object} model todo
-     * @param {String} value todo
+     * @param {Backbone.model} model - The featurelLister model.
+     * @param {boolean} value - Tool is active.
      * @return {FeatureListerView} returns this
      */
     render: function (model, value) {
@@ -77,6 +77,9 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             this.delegateEvents();
         }
         else {
+            this.$("#featurelist-list").hide();
+            this.$("#featurelist-details").hide();
+            this.model.set("layerid", {});
             this.undelegateEvents();
         }
         return this;
@@ -84,14 +87,14 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
 
     /**
      * Toggles the feature lister
-     * @param {String} value todo
+     * @param {boolean} value - Tool is active.
      * @return {void}
      */
     toggle: function (value) {
         if (this.$el.is(":visible") === true || value === true) {
             this.updateVisibleLayer();
             this.model.checkVisibleLayer();
-            // wenn nur ein Layer gefunden, lade diesen sofort
+            // if only one layer found, load it immediately
             if (this.model.get("layerlist").length === 1) {
                 this.model.set("layerid", this.model.get("layerlist")[0].id);
             }
