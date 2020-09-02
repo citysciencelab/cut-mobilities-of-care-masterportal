@@ -557,6 +557,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {void}
      */
     setActiveToolsToFalse: function (activatedToolModel) {
+        console.log(activatedToolModel);
         const legendModel = this.findWhere({id: "legend"}),
             activeTools = this.where({isActive: true}),
             activatedToolModels = Array.isArray(activatedToolModel) ? activatedToolModel : [activatedToolModel],
@@ -569,10 +570,12 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         if (!deactivateGFI) {
             alwaysActiveTools.push(this.findWhere({id: "gfi"}));
         }
-
+        console.log(this);
+console.log(activeTools);
         activeToolsToDeactivate = activeTools.filter(tool => !alwaysActiveTools.includes(tool));
         activeToolsToDeactivate.forEach((tool) => {
             tool.setIsActive(false);
+            console.log(tool.id);
             store.dispatch("Tools/setToolActive", {id: tool.id, active: false});
         });
     },

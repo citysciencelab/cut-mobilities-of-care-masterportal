@@ -5,7 +5,6 @@
  * @property {boolean}  deactivateGFI - if true, component activation deactivates gfi component
  * @property {string}   glyphicon - icon next to title
  * @property {string}   id - internal id of component
- * @property {boolean}  isActive - if true, component will be initially rendered
  * @property {string}   name - Module name
  * @property {boolean}  renderToWindow - if true, component is rendered in a window pane instead of sidebar
  * @property {boolean}  resizableWindow - if true and if rendered to window pane, the pane is resizable
@@ -20,7 +19,6 @@ export default {
     deactivateGFI: false,
     glyphicon: "glyphicon-load",
     id: "fileImport",
-    isActive: false,
     name: "KML-Datei laden",
     onlyDesktop: true,
     renderToWindow: true,

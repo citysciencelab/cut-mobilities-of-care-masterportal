@@ -39,7 +39,6 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.setActive(this.active);
     },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
@@ -47,6 +46,7 @@ export default {
         close () {
             // NOTE: Line 50 can be moved to Line 41 when everything is completly in Vue
             this.resetModule();
+            this.setActive(false);
             // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
 

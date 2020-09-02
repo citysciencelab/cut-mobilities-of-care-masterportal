@@ -7,18 +7,20 @@ const actions = {
      *
      * @param {Object} context context object
      * @param {Object} state state object; in this case rootState = state
+     * @param {Function} commit store commit function
      * @param {Object} payload The given parameters
      * @param {String} payload.id The id of the Tool to be (de-)activated
-     * @param {String} active Value for (de-)activation
+     * @param {String} payload.active Value for (de-)activation
      * @returns {void}
      */
-    setToolActive ({state, dispatch}, {id, active}) {
+    setToolActive ({state, commit}, {id, active}) {
         const toolId = Object.keys(state).find(tool => state[tool]?.id?.toLowerCase() === id?.toLowerCase());
 
         if (toolId !== undefined) {
-            dispatch(toolId + "/setActive", active);
+            commit(toolId + "/setActive", active);
         }
     },
+
     /**
      * Sets the translated name of the tool to the given parameter for the tool with the given id.
      *
@@ -62,9 +64,47 @@ const actions = {
      * @param {string} toolName - Name from the toolComponent
      * @returns {void}
      */
-    activateByUrlParam: ({rootState, commit}, toolName) => {
+    activateByUrlParam: ({rootState, state, commit, dispatch}, toolName) => {
         if (rootState.queryParams instanceof Object && toolName?.toLowerCase() === rootState?.queryParams?.isinitopen?.toLowerCase()) {
+            const isActiveTools = Object.keys(state).filter(tool => state[tool]?.active === true);
+
+            isActiveTools.forEach(tool => commit(tool + "/setActive", false));
             commit(toolName + "/setActive", true);
+            dispatch("activateToolInModelList", toolName);
+        }
+    },
+
+    /**
+    * Sets the active property of the state form tool which has the parameter isActive: true
+    * Also starts processes if the tool is be activated (active === true).
+    * @param {Object} state state object; in this case rootState = state
+    * @param {Function} commit store commit function
+    * @returns {void}
+    */
+    setToolActiveByConfig ({state, commit, dispatch}) {
+        const isActiveTools = Object.keys(state).filter(tool => state[tool]?.active === true);
+
+        commit(isActiveTools[0] + "/setActive", true);
+        dispatch("activateToolInModelList", isActiveTools[0]);
+
+        if (isActiveTools.length > 1) {
+            isActiveTools.shift();
+            isActiveTools.forEach(tool => commit(tool + "/setActive", false));
+            console.warn("More than one tool has the configuration parameter 'isActive': true. Only the first entry is considered. Therefore the tool: " + isActiveTools[0] + " is activated");
+        }
+    },
+
+    /**
+     * Activates an tool in the ModelList
+     * @param {Object} state state object; in this case rootState = state
+     * @param {string} activeTool The tool to activate.
+     * @returns {void}
+     */
+    activateToolInModelList ({state}, activeTool) {
+        const model = Radio.request("ModelList", "getModelByAttributes", {id: state[activeTool]?.id});
+
+        if (model) {
+            model.set("isActive", true);
         }
     }
 };

@@ -301,7 +301,8 @@
           },
           "supplyCoord": {
             "name": "translate#common:menu.tools.coord",
-            "glyphicon": "glyphicon-screenshot"
+            "glyphicon": "glyphicon-screenshot",
+            "active": true
           },
           "shadow": {
             "name": "Schatten",
@@ -416,10 +417,12 @@
           {
             "name": "translate#common:menu.tools.scaleSwitcher",
             "glyphicon": "glyphicon-resize-full",
-            "renderToWindow": true
+            "renderToWindow": true,
+            "active": true
           },
           "VueAddon": {
             "name": "AddonTool",
+            "active": true,
             "glyphicon": "glyphicon-screenshot"
           }
         }

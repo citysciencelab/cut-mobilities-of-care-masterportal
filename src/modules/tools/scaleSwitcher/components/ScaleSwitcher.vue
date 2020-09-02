@@ -30,15 +30,8 @@ export default {
      */
     created () {
         this.$on("close", this.close);
-
-        if (this.isActive) {
-            this.setActive(true);
-        }
     },
     methods: {
-        ...mapActions("Tools/ScaleSwitcher", [
-            "activateByUrlParam"
-        ]),
         ...mapActions("Map", ["setResolutionByIndex"]),
         ...mapMutations("Tools/ScaleSwitcher", Object.keys(mutations)),
 
@@ -51,9 +44,11 @@ export default {
 
             // TODO replace trigger when ModelList is migrated
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
+            console.log(this.$store.state.Tools.ScaleSwitcher.id);
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.ScaleSwitcher.id});
 
             if (model) {
+                console.log(model);
                 model.set("isActive", false);
             }
         }

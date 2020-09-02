@@ -47,10 +47,6 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-
-        if (this.isActive) {
-            this.setActive(true);
-        }
     },
     methods: {
         ...mapActions("Tools/SupplyCoord", [

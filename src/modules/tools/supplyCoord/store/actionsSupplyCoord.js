@@ -3,15 +3,6 @@ import isMobile from "../../../../utils/isMobile";
 
 export default {
     /**
-        * Sets the active property of the state to the given value.
-        * Also starts processes if the tool is be activated (active === true).
-        * @param {boolean} active Value deciding whether the tool gets activated or deactivated.
-        * @returns {void}
-        */
-    setActive ({commit}, active) {
-        commit("setActive", active);
-    },
-    /**
      * Remembers the projection and shows mapmarker at the given position.
      * @param {object} event - pointerdown-event, to get the position from
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker

@@ -106,10 +106,6 @@ function removeBadTags (rawSource) {
 }
 
 export default {
-    setActive: ({commit}, value) => {
-        commit("setActive", value);
-    },
-
     setSelectedFiletype: ({commit}, newFiletype) => {
         commit("setSelectedFiletype", newFiletype);
 
