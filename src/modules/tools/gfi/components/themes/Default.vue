@@ -1,6 +1,5 @@
 <script>
 import {upperFirst} from "../../../../../utils/stringHelpers";
-import {mapGetters} from "vuex";
 
 export default {
     name: "Default",
@@ -10,12 +9,43 @@ export default {
             required: true
         }
     },
-    computed: {
-        ...mapGetters(["ignoredKeys"])
-    },
     methods: {
-        beautifyKey: function (key) {
-            return upperFirst(key).replace(/_/g, " ");
+        /**
+         * Beautifies a string by always uppercase the first letter and replacing all underscores by spaces.
+         * @param {string} value - string to beautify
+         * @returns {string} uppercased value
+         */
+        beautify: function (value) {
+            return upperFirst(value).replace(/_/g, " ");
+        },
+        /**
+         * Checks if the string is a link.
+         * @param {string} value - string to check
+         * @returns {boolean} true | false
+         */
+        isLink: function (value) {
+            const regExp = new RegExp(/\b(https?|ftp|file)/);
+
+            return regExp.test(value);
+        },
+        /**
+         * Checks if the string is a phonenumber.
+         * Convention: Phone numbers must start with "+49"
+         * @param {string} value - string to check
+         * @returns {boolean} true | false
+         */
+        isPhoneNumber: function (value) {
+            const regExp = new RegExp(/^\+[0-9]{2}[^a-zA-Z]*/);
+
+            return regExp.test(value);
+        },
+        /**
+         * Edits a phone number to link it
+         * @param {string} value - a phone number
+         * @returns {string} edited phone number
+         */
+        editPhoneNumber: function (value) {
+            return "tel:" + value.replace(/ /g, "").replace(/-/g, "");
         }
     }
 };
@@ -28,12 +58,15 @@ export default {
                 v-for="(value, key) in feature.getMappedProperties()"
                 :key="key"
             >
-                <th>{{ beautifyKey(key) }}</th>
-                <td v-if="typeof value === 'string' && value.startsWith('http', 0)">
+                <th>{{ beautify(key) }}</th>
+                <td v-if="isLink(value)">
                     <a
                         :href="value"
                         target="_blank"
                     >Link</a>
+                </td>
+                <td v-else-if="isPhoneNumber(value)">
+                    <a :href="editPhoneNumber(value)">{{ value }}</a>
                 </td>
                 <td v-else>
                     {{ value }}
