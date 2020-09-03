@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
+import RemoteInterface from "../modules/remoteInterface/store/indexRemoteInterface";
 import Footer from "../modules/footer/store/indexFooter";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
@@ -22,6 +23,7 @@ const store = new Vuex.Store({
     modules: {
         Map,
         Alerting,
+        RemoteInterface,
         Footer,
         Tools: {
             ...toolsModule

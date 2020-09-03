@@ -30,6 +30,8 @@ const RemoteInterface = Backbone.Model.extend({
      * @returns {void}
      */
     receiveMessage: function (event) {
+        console.log("receive OK: ", event);
+        
         if (event.origin !== this.get("postMessageUrl")) {
             return;
         }
@@ -116,6 +118,8 @@ const RemoteInterface = Backbone.Model.extend({
         Radio.trigger("Map", "removeAllFeaturesFromLayer", "gewerbeflaechen");
     },
     resetView: function () {
+        console.log("OK");
+        
         Radio.trigger("MapView", "resetView");
         Radio.trigger("MapMarker", "hideMarker");
     },

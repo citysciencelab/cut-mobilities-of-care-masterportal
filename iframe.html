@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html style="height:100%">
+<body style="height:100%">
+
+<style>
+    html, body { height:100%; }
+    button { width: 50px; }
+    
+    
+</style>
+
+<iframe 
+    id="iframe"
+    src="https://localhost:9001/portal/master"
+    width="100%"
+    height="85%"
+    name="SELFHTML_in_a_box"
+></iframe>
+
+<button id="b1">1</button>
+<button id="b2">2</button>
+<button id="b3">3</button>
+<button id="b4">4</button>
+
+</body>
+
+<script>
+    const iframe1 = document.getElementById("iframe"),
+        b1 = document.getElementById("b1"),
+        b2 = document.getElementById("b2"),
+        b3 = document.getElementById("b3"),
+        b4 = document.getElementById("b4");
+    
+    b1.addEventListener("click", event => {
+        iframe1.contentWindow.postMessage({
+            radio_channel: "RemoteInterface",
+            radio_function: "resetView",
+            radio_para_object: {}
+        });
+    });
+    b2.addEventListener("click", event => {
+        iframe1.contentWindow.postMessage({
+            namespace: "Alerting",
+            action: "addSingleAlert",
+            args: {content: "foo"}
+        });
+    });
+
+    window.addEventListener("message", function (messageEvent) {
+        console.log("----");
+        console.log(messageEvent);
+        console.log("----");
+        if (messageEvent.data === "portalReady") {
+            console.log("PORTAL READY");
+            
+            console.log(Radio.request("RemoteInterface", "getZoomLevel"));
+            Radio.request("RemoteInterface", "getZoomLevel");
+        }
+    }, false);
+
+
+
+</script>
+
+</html>

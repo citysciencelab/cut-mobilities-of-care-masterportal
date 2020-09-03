@@ -1,6 +1,7 @@
 <script>
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
+import RemoteInterface from "./modules/remoteInterface/components/RemoteInterface.vue";
 import MapModuleDebug from "./modules/map/components/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
 
@@ -9,7 +10,8 @@ export default {
     components: {
         MainNav,
         MapRegion,
-        MapModuleDebug
+        MapModuleDebug,
+        RemoteInterface
     },
     data: () => ({isDevMode})
 };
@@ -24,6 +26,7 @@ export default {
         <MainNav />
         <MapRegion class="map-region" />
         <MapModuleDebug v-if="isDevMode" />
+        <RemoteInterface />
         <!-- keep loader last so it's above it all -->
         <!--
             NOTE currently doesn't work in all browser since vue renders too late;
