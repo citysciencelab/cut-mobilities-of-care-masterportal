@@ -57,7 +57,6 @@ describe("Default.vue", () => {
 
     it("should remove minus in all linked phone numbers", () => {
         wrapper.findAll("a[href^='tel']").wrappers.forEach(function (a) {
-            console.info(a.attributes("href"));
             expect(a.attributes("href").search("-")).to.be.equal(-1);
         });
     });
