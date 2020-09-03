@@ -1,11 +1,14 @@
 <script>
+import {mapGetters} from "vuex";
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import {upperFirst} from "../../../../../utils/stringHelpers";
-import "jquery-ui/ui/widgets/draggable";
+import Overlay from "ol/Overlay.js";
+import "bootstrap/js/tooltip";
+import "bootstrap/js/popover";
 
 export default {
-    name: "Detached",
+    name: "Attached",
     components: {
         Default,
         Schulinfo
@@ -16,7 +19,13 @@ export default {
             required: true
         }
     },
+    data () {
+        return {
+            overlay: new Overlay({element: undefined})
+        };
+    },
     computed: {
+        ...mapGetters("Map", ["clickCoord"]),
         /**
          * Returns the title of the gfi.
          * @returns {string} the title
@@ -33,25 +42,13 @@ export default {
             return upperFirst(this.feature.getTheme());
         },
         /**
-         * Returns the custom style for the gfi window.
-         * it will always show the window on the top right.
-         * @returns {Object} the style in the object
-         */
-        styleAll: function () {
-            const right = document.getElementsByClassName("right-bar")[0].offsetWidth + 10 + "px";
-
-            return {
-                "right": right
-            };
-        },
-        /**
-         * Returns the custom style for the gfi content.
-         * it will make the content croll.
+         * Returns the custom style for the gfi window content.
+         * it will make sure the gfi window in the browser window.
          * @returns {Object} the style in the object
          */
         styleContent: function () {
             const maxWidth = Math.round(document.getElementById("map").offsetWidth / 2.2) + "px",
-                maxHeight = window.innerHeight - 100 - 34 - 43 + "px"; // 100 pixer for the navi. 34 for header, 43 is the distance from bottom
+                maxHeight = Math.round(document.getElementById("map").offsetHeight) - 300 - 34 - 43 + "px";
 
             return {
                 "max-width": maxWidth,
@@ -61,31 +58,72 @@ export default {
     },
     mounted: function () {
         this.$nextTick(function () {
-            $(".gfi-detached").draggable({
-                containment: "#map",
-                handle: ".gfi-header",
-                drag: function () {
-                    $(".gfi-detached").css("right", "inherit");
-                },
-                stop: function (evt, ui) {
-                    $(".gfi-detached").css("left", (ui.position.left + 1) + "px");
-                }
-            });
+            this.createOverlay();
+            this.createPopover();
         });
+    },
+    beforeDestroy: function () {
+        this.removePopover();
     },
     methods: {
         close () {
+            this.removePopover();
             this.$emit("close");
+        },
+
+        /**
+         * it will create an overlay for the attached theme
+         * @returns {void}
+         */
+        createOverlay () {
+            const gfipopup = document.createElement("DIV");
+
+            // creating the overlay
+            gfipopup.id = "gfipopup";
+            document.body.appendChild(gfipopup);
+            Radio.trigger("Map", "addOverlay", this.overlay);
+            this.overlay.setElement(document.getElementById("gfipopup"));
+            this.overlay.setPosition(this.clickCoord);
+        },
+
+        /**
+         * it will create the popup window as attached theme
+         * @returns {void}
+         */
+        createPopover () {
+            $(this.overlay.getElement()).popover({
+                content: this.$el,
+                html: true,
+                viewport: ".ol-viewport",
+                placement: function () {
+                    if (this.getPosition().top > document.getElementById("map").offsetHeight / 2) {
+                        return "top";
+                    }
+
+                    return "bottom";
+
+                }
+            });
+
+            $(this.overlay.getElement()).popover("show");
+        },
+
+        /**
+         * it will remove the popup window as attached theme and make the standard gfi theme visible again
+         * @returns {void}
+         */
+        removePopover () {
+            if (this.overlay.getElement()) {
+                $(this.overlay.getElement()).popover("destroy");
+                $(this.overlay.getElement()).remove();
+            }
         }
     }
 };
 </script>
 
 <template>
-    <div
-        class="gfi-detached"
-        :style="styleAll"
-    >
+    <div class="gfi-attached">
         <!-- header -->
         <div class="gfi-header">
             <button
@@ -121,13 +159,8 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    .gfi-detached {
-        position: absolute;
-        min-width: 250px;
-        top: 50px;
-        margin: 10px 10px 30px 10px;
+    .gfi-attached {
         background-color: #ffffff;
-        box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.3);
     }
     .gfi-header {
         font-size: 13px;
@@ -136,9 +169,6 @@ export default {
         color: #646262;
         padding: 0px 15px;
         border-bottom: 1px solid #e5e5e5;
-        &.ui-draggable-handle {
-            cursor: move;
-        }
         button {
             font-size: 16px;
             opacity: 0.6;
@@ -149,5 +179,14 @@ export default {
         table {
             margin-bottom: 0;
         }
+    }
+    .popover {
+        padding: 0;
+        min-width: 40vw;
+        border: 0;
+        z-index: 1;
+    }
+    .popover-content {
+        padding: 0;
     }
 </style>
