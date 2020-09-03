@@ -1,9 +1,11 @@
 <script>
-import {mapGetters} from "vuex";
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import Solaratlas from "../themes/Solaratlas.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
+import Trinkwasser from "../themes/Trinkwasser.vue";
+
+import {mapGetters} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
 import Overlay from "ol/Overlay.js";
 import "bootstrap/js/tooltip";
@@ -15,7 +17,8 @@ export default {
         Default,
         Schulinfo,
         Solaratlas,
-        TrafficCount
+        TrafficCount,
+        Trinkwasser
     },
     props: {
         feature: {
