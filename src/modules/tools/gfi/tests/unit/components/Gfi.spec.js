@@ -26,10 +26,28 @@ describe("Gfi.vue", () => {
         expect(wrapper.findComponent({name: "Mobile"}).exists()).to.be.true;
     });
 
+    it("should find the child component Attached", () => {
+        const wrapper = shallowMount(GfiComponent, {
+            computed: {
+                isMobile: () => false,
+                isTable: () => false,
+                desktopType: () => "attached",
+                isActive: () => true,
+                gfiFeatures: () => [{
+                    getGfiUrl: () => null
+                }]
+            },
+            localVue
+        });
+
+        expect(wrapper.findComponent({name: "Attached"}).exists()).to.be.true;
+    });
+
     it("should find the child component Detached", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
                 isMobile: () => false,
+                desktopType: () => "",
                 isActive: () => true,
                 isTable: () => false,
                 gfiFeatures: () => [{
@@ -46,6 +64,7 @@ describe("Gfi.vue", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
                 isMobile: () => false,
+                desktopType: () => "",
                 isActive: () => true,
                 isTable: () => true,
                 gfiFeatures: () => [{
@@ -164,6 +183,7 @@ describe("Gfi.vue", () => {
         const wrapper = mount(GfiComponent, {
             computed: {
                 isMobile: () => true,
+                desktopType: () => "",
                 isActive: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
@@ -196,6 +216,7 @@ describe("Gfi.vue", () => {
         const wrapper = mount(GfiComponent, {
             computed: {
                 isMobile: () => true,
+                desktopType: () => "",
                 isActive: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
@@ -230,6 +251,7 @@ describe("Gfi.vue", () => {
         const wrapper = mount(GfiComponent, {
             computed: {
                 isMobile: () => true,
+                desktopType: () => "",
                 isActive: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
@@ -253,6 +275,7 @@ describe("Gfi.vue", () => {
         const wrapper = mount(GfiComponent, {
             computed: {
                 isMobile: () => true,
+                desktopType: () => "",
                 isActive: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
@@ -281,6 +304,7 @@ describe("Gfi.vue", () => {
             },
             computed: {
                 isMobile: () => true,
+                desktopType: () => "",
                 isActive: () => true,
                 gfiFeatures: () => [{}, {
                     getTheme: () => "default",
@@ -308,6 +332,7 @@ describe("Gfi.vue", () => {
             },
             computed: {
                 isMobile: () => true,
+                desktopType: () => "",
                 isActive: () => true,
                 gfiFeatures: () => [{}, {
                     getTheme: () => "default",
@@ -336,6 +361,7 @@ describe("Gfi.vue", () => {
             },
             computed: {
                 isMobile: () => true,
+                desktopType: () => "",
                 isActive: () => true,
                 gfiFeatures: () => [{}, {
                     getTheme: () => "default",
