@@ -10,7 +10,6 @@ const {
     glyphicon,
     renderToWindow,
     resizableWindow,
-    isActive,
     isVisibleInMenu,
     deactivateGFI
 } = getters;
@@ -36,9 +35,6 @@ describe("ScaleSwitcher", function () {
         });
         it("returns the resizableWindow default value from state", function () {
             expect(resizableWindow(stateScaleSwitcher)).to.be.true;
-        });
-        it("returns the isActive default value from state", function () {
-            expect(isActive(stateScaleSwitcher)).to.be.false;
         });
         it("returns the isVisibleInMenu default value from state", function () {
             expect(isVisibleInMenu(stateScaleSwitcher)).to.be.true;

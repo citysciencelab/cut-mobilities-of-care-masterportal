@@ -27,11 +27,16 @@ export default {
         }
     },
     watch: {
-        active (newValue) {
+        /**
+         * Sets the active property of the state to the given value.
+         * @param {boolean} value Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (value) {
             // TODO replace trigger when MapMarker is migrated
             Radio.trigger("MapMarker", "hideMarker");
 
-            if (newValue) {
+            if (value) {
                 // active is true
                 this.addPointerMoveHandlerToMap(this.setCoordinates);
                 this.createInteraction();

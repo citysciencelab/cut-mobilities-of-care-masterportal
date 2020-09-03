@@ -9,12 +9,11 @@ export default {
     },
     created () {
         this.setConfiguredTools(this.menuConfig);
-
+    },
+    mounted () {
         /** Push the configured attributes to store from all configured tools. */
         this.configuredTools.forEach(configuredTool => this.pushAttributesToStoreElements(configuredTool));
 
-    },
-    mounted () {
         this.setToolActiveByConfig();
         this.configuredTools.forEach(configuredTool => this.activateByUrlParam(configuredTool?.component?.name));
     },

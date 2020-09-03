@@ -82,20 +82,26 @@ const actions = {
     * @returns {void}
     */
     setToolActiveByConfig ({state, commit, dispatch}) {
-        const isActiveTools = Object.keys(state).filter(tool => state[tool]?.active === true);
+        const activeToolsInState = Object.keys(state).filter(tool => state[tool]?.active === true);
 
-        commit(isActiveTools[0] + "/setActive", true);
-        dispatch("activateToolInModelList", isActiveTools[0]);
+        if (activeToolsInState.length > 0) {
+            commit(activeToolsInState[0] + "/setActive", true);
+            dispatch("activateToolInModelList", activeToolsInState[0]);
 
-        if (isActiveTools.length > 1) {
-            isActiveTools.shift();
-            isActiveTools.forEach(tool => commit(tool + "/setActive", false));
-            console.warn("More than one tool has the configuration parameter 'isActive': true. Only the first entry is considered. Therefore the tool: " + isActiveTools[0] + " is activated");
+            if (activeToolsInState.length > 1) {
+                activeToolsInState.shift();
+                activeToolsInState.forEach(tool => commit(tool + "/setActive", false));
+
+                console.error("More than one tool has the configuration parameter 'active': true."
+                    + " Only one entry is considered. Therefore the tool(s): "
+                    + activeToolsInState
+                    + " is/are not activated!");
+            }
         }
     },
 
     /**
-     * Activates an tool in the ModelList
+     * Activates a tool in the ModelList
      * @param {Object} state state object; in this case rootState = state
      * @param {string} activeTool The tool to activate.
      * @returns {void}

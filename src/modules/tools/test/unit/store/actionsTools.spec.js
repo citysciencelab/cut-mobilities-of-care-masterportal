@@ -2,7 +2,7 @@ import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../actionsTools";
 import sinon from "sinon";
 
-const {setToolActive, languageChanged, addTool, activateByUrlParam} = actions;
+const {setToolActive, languageChanged, addTool, activateByUrlParam, setToolActiveByConfig} = actions;
 
 describe("actionsTools", function () {
     describe("setToolActive", function () {
@@ -103,31 +103,42 @@ describe("actionsTools", function () {
             testAction(activateByUrlParam, toolName, {}, rootState, [], {}, done);
         });
     });
-    describe("setActive", function () {
-        const rootState = {
-            Map: {
-                scale: "60033.65329850641"
-            }
-        };
 
-        it("setActive(true) should set rounded currentScale", done => {
-            const payload = true,
-                mutationActivePayload = true;
+    describe("setToolActiveByConfig", function () {
+        it("activate a tool with active = true", done => {
+            const state = {
+                ScaleSwitcher: {
+                    active: true
+                }
+            };
 
-            testAction(setActive, payload, {}, rootState, [
-                {type: "setActive", payload: mutationActivePayload}
+            testAction(setToolActiveByConfig, {}, state, {}, [
+                {type: "ScaleSwitcher/setActive", payload: true}
             ], {}, done);
 
         });
-        it("setActive(false) should not set currentScale", done => {
-            const payload = false,
-                mutationActivePayload = false;
+        it("activate only the first tool with active = true", done => {
+            const state = {
+                SupplyCoord: {
+                    active: true
+                },
+                ScaleSwitcher: {
+                    active: true
+                },
+                FileImport: {
+                    active: true
+                }
+            };
 
-            testAction(setActive, payload, {}, rootState, [
-                {type: "setActive", payload: mutationActivePayload}
+            testAction(setToolActiveByConfig, {}, state, {}, [
+                {type: "SupplyCoord/setActive", payload: true}
             ], {}, done);
-
+            testAction(setToolActiveByConfig, {}, state, {}, [
+                {type: "ScaleSwitcher/setActive", payload: false}
+            ], {}, done);
+            testAction(setToolActiveByConfig, {}, state, {}, [
+                {type: "FileImport/setActive", payload: false}
+            ], {}, done);
         });
     });
-
 });

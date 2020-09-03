@@ -19,7 +19,6 @@ export default {
         ...mapGetters("Tools/Draw", constants.keyStore.getters),
         /**
          * Enables or disables all the select or input elements depending on if the currentInteraction is "draw".
-         *
          * @returns {Boolean} currentInteraction === "draw": return false and activate the HTML elements, else: return true and deactivate the HTML elements.
          */
         drawHTMLElements () {
@@ -27,7 +26,6 @@ export default {
         },
         /**
          * Disables the input for the diameter and the unit for the drawType "drawCircle" if the circleMethod is not set to "defined".
-         *
          * @returns {Boolean} return false if drawing is enabled and circleMethod is set to "defined", else return true.
          */
         drawCircleMethods () {
@@ -36,6 +34,18 @@ export default {
                 : this.drawHTMLElements;
         }
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
+    },
+    watch: {
+        /**
+          * Starts the action for processes, if the tool is be activated (active === true).
+          * @param {boolean} value Value deciding whether the tool gets activated or deactivated.
+          * @returns {void}
+         */
+        active (value) {
+            if (value) {
+                this.setActive(value);
+            }
+        }
     },
     created () {
         this.$on("close", this.close);
@@ -46,7 +56,6 @@ export default {
         close () {
             // NOTE: Line 50 can be moved to Line 41 when everything is completly in Vue
             this.resetModule();
-            this.setActive(false);
             // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
 

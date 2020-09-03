@@ -112,9 +112,6 @@ describe("SupplyCoord", function () {
         it("returns the resizableWindow default value from state", function () {
             expect(getters.resizableWindow(stateSupplyCoord)).to.be.true;
         });
-        it("returns the isActive default value from state", function () {
-            expect(getters.isActive(stateSupplyCoord)).to.be.false;
-        });
         it("returns the isVisibleInMenu default value from state", function () {
             expect(getters.isVisibleInMenu(stateSupplyCoord)).to.be.true;
         });
