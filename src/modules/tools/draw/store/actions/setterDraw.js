@@ -1,5 +1,3 @@
-import DownloadView from "../../../../../../modules/tools/download/view";
-
 /**
  * Function to adjust the value / diameter to the units meters or kilometers.
  *
@@ -23,8 +21,6 @@ function setActive ({state, commit, dispatch}, active) {
     const channel = Radio.channel("Draw");
 
     commit("setActive", active);
-
-    new DownloadView();
 
     channel.reply({
         "getLayer": function () {

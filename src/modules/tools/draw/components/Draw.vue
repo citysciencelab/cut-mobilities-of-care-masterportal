@@ -2,6 +2,7 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsDraw";
+import DownloadView from "../../../../../modules/tools/download/view";
 
 export default {
     name: "Draw",
@@ -43,6 +44,7 @@ export default {
          */
         active (value) {
             if (value) {
+                new DownloadView(this.$store);
                 this.setActive(value);
             }
         }

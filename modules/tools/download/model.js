@@ -3,7 +3,7 @@ import {KML, GeoJSON, GPX} from "ol/format.js";
 import Tool from "../../core/modelList/tool/model";
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
-import store from "../../../src/app-store/index";
+// import store from "../../../src/app-store/index";
 
 const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -110,8 +110,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
         this.setFormats(obj.formats);
         this.setFeatures(obj.features);
 
-        Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", false);
-        store.dispatch("Tools/setToolActive", {id: "draw", active: false});
+        Radio.trigger("ModelList", "setActiveToolsToFalse", Radio.request("ModelList", "getModelByAttributes", {id: "download"}));
         this.set("isActive", true);
     },
 
@@ -488,6 +487,15 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      */
     setIsInternetExplorer: function (value) {
         this.set("isInternetExplorer", value);
+    },
+
+    /**
+     * Setter for attribute "store".
+     * @param {Boolean} value The Vuex store.
+     * @returns {void}
+     */
+    setStore: function (value) {
+        this.set("store", value);
     }
 });
 
