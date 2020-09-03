@@ -29,13 +29,13 @@ export default {
             return regExp.test(value);
         },
         /**
-         * Checks if the string is a phonenumber.
+         * Checks if the string is a phone number.
          * Convention: Phone numbers must start with "+49"
          * @param {string} value - string to check
          * @returns {boolean} true | false
          */
         isPhoneNumber: function (value) {
-            const regExp = new RegExp(/^\+[0-9]{2}[^a-zA-Z]*/);
+            const regExp = new RegExp(/^\+[0-9]{2}[^a-zA-Z]*$/);
 
             return regExp.test(value);
         },
