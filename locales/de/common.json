@@ -87,6 +87,9 @@
             "layer": {
               "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist."
             }
+          },
+          "parametricURL": {
+            "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden."
           }
         },
         "alerting": {
@@ -652,6 +655,9 @@
             "title": "Legende",
             "collapseAll": "Alle einklappen",
             "foldOutAll": "Alle ausklappen"
+        },
+        "zoomToGeometry": {
+          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter."
         }
     },
     "snippets": {

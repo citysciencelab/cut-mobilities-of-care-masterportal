@@ -1,4 +1,5 @@
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import store from "../../src/app-store/index";
 
 const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype */{
     defaults: {
@@ -434,12 +435,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 gemometryToZoom = geometries[parseInt(gemometryFromUrl, 10) - 1];
             }
             else {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
-                    + "<br>"
-                    + "<small>Der Parameter " + property + "=" + gemometryFromUrl + " existiert nicht.</small>",
-                    kategorie: "alert-warning"
-                });
+                store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.alertZoomToGeometry"));
             }
         }
 
