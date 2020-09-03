@@ -32,6 +32,11 @@ export default {
             return upperFirst(this.feature.getTheme());
         }
     },
+    mounted: function () {
+        this.$nextTick(function () {
+            this.showMobileComponent();
+        });
+    },
     methods: {
         close () {
             this.$emit("close");
@@ -42,6 +47,17 @@ export default {
                 return;
             }
             this.close();
+        },
+
+        /**
+         * it will show this mobile component if it is switched from attached theme.
+         * the method is to fore to insert this component into parent gfi element.
+         * @returns {void}
+         */
+        showMobileComponent: function () {
+            if (!document.getElementsByClassName("modal-dialog").length && document.getElementsByClassName("gfi").length) {
+                document.getElementsByClassName("gfi")[0].appendChild(this.$el);
+            }
         }
     }
 };

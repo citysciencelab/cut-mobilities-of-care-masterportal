@@ -1,16 +1,16 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
-import Detached from "../../../components/templates/Detached.vue";
+import Attached from "../../../components/templates/Attached.vue";
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("Gfi Detached.vue", () => {
+describe("Gfi Attached.vue", () => {
 
     it("should have a title", () => {
-        const wrapper = shallowMount(Detached, {
+        const wrapper = shallowMount(Attached, {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
@@ -18,9 +18,7 @@ describe("Gfi Detached.vue", () => {
                 }
             },
             computed: {
-                styleAll: () => [{
-                    "right": ""
-                }],
+                clickCoord: () => [],
                 styleContent: () => [{
                     "max-width": "",
                     "max-height": ""
@@ -33,7 +31,7 @@ describe("Gfi Detached.vue", () => {
     });
 
     it("should have the child component Default (-Theme)", () => {
-        const wrapper = shallowMount(Detached, {
+        const wrapper = shallowMount(Attached, {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
@@ -41,9 +39,7 @@ describe("Gfi Detached.vue", () => {
                 }
             },
             computed: {
-                styleAll: () => [{
-                    "right": ""
-                }],
+                clickCoord: () => [],
                 styleContent: () => [{
                     "max-width": "",
                     "max-height": ""
@@ -56,7 +52,7 @@ describe("Gfi Detached.vue", () => {
     });
 
     it("should have a close button", async () => {
-        const wrapper = shallowMount(Detached, {
+        const wrapper = shallowMount(Attached, {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
@@ -64,9 +60,7 @@ describe("Gfi Detached.vue", () => {
                 }
             },
             computed: {
-                styleAll: () => [{
-                    "right": ""
-                }],
+                clickCoord: () => [],
                 styleContent: () => [{
                     "max-width": "",
                     "max-height": ""
@@ -80,7 +74,7 @@ describe("Gfi Detached.vue", () => {
 
 
     it("should emitted close event if button is clicked", async () => {
-        const wrapper = shallowMount(Detached, {
+        const wrapper = shallowMount(Attached, {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
@@ -88,9 +82,7 @@ describe("Gfi Detached.vue", () => {
                     }
                 },
                 computed: {
-                    styleAll: () => [{
-                        "right": ""
-                    }],
+                    clickCoord: () => [],
                     styleContent: () => [{
                         "max-width": "",
                         "max-height": ""
@@ -106,7 +98,7 @@ describe("Gfi Detached.vue", () => {
     });
 
     it("should not emitted close event if clicked inside the content", async () => {
-        const wrapper = shallowMount(Detached, {
+        const wrapper = shallowMount(Attached, {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
@@ -114,9 +106,7 @@ describe("Gfi Detached.vue", () => {
                     }
                 },
                 computed: {
-                    styleAll: () => [{
-                        "right": ""
-                    }],
+                    clickCoord: () => [],
                     styleContent: () => [{
                         "max-width": "",
                         "max-height": ""
@@ -132,7 +122,7 @@ describe("Gfi Detached.vue", () => {
     });
 
     it("should render the footer slot within .gfi-footer", () => {
-        const wrapper = shallowMount(Detached, {
+        const wrapper = shallowMount(Attached, {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
@@ -140,9 +130,7 @@ describe("Gfi Detached.vue", () => {
                     }
                 },
                 computed: {
-                    styleAll: () => [{
-                        "right": ""
-                    }],
+                    clickCoord: () => [],
                     styleContent: () => [{
                         "max-width": "",
                         "max-height": ""
