@@ -1,5 +1,6 @@
 import DownloadTemplate from "text-loader!./template.html";
 import DownloadModel from "./model";
+import store from "../../../src/app-store/index";
 
 const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
     events: {
@@ -56,6 +57,7 @@ const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
         this.model.set("isActive", false);
         this.model.reset();
         Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", true);
+        store.dispatch("Tools/setToolActive", {id: "draw", active: true});
     },
 
     /**
