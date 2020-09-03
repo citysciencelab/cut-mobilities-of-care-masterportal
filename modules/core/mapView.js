@@ -37,7 +37,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @fires Core#RadioRequestParametricURLGetCenter
      * @fires Core#RadioRequestParametricURLGetProjectionFromUrl
      * @fires Core#RadioRequestParametricURLGetZoomLevel
-     * @fires Alerting#RadioTriggerAlertAlert
      * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapViewChangedCenter
