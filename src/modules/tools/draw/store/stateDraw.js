@@ -94,7 +94,7 @@ const symbol = {
         unit: null,
         withoutGUI: false,
         zIndex: 0,
-        name: "Test"
+        name: "Zeichnen / Schreiben"
     };
 
 export default state;

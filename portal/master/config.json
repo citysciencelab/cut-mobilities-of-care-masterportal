@@ -301,7 +301,7 @@
           },
           "supplyCoord": {
             "name": "translate#common:menu.tools.coord",
-            "glyphicon": "glyphicon-resize-full"
+            "glyphicon": "glyphicon-screenshot"
           },
           "shadow": {
             "name": "Schatten",
