@@ -241,7 +241,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             visibilityListString = result.hasOwnProperty("VISIBILITY") ? result.VISIBILITY : "",
             transparencyListString = result.hasOwnProperty("TRANSPARENCY") ? result.TRANSPARENCY : "",
             layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
-            layerParams = [];
+            layerParams = [],
+            wrongIdsPositions = [];
         let visibilityList,
             transparencyList;
 
@@ -294,11 +295,28 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 Radio.trigger("Parser", "addItemAtTop", layerToPush);
             }
             else if (layerConfigured === undefined) {
-                Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
+                wrongIdsPositions.push(index + 1);
             }
         });
 
+        this.alertWrongLayerIds(wrongIdsPositions);
         this.setLayerParams(layerParams);
+    },
+
+    /**
+     * Build alert for wrong layerids
+     * @param {string[]} wrongIdsPositions - The positions from wrong layerids.
+     * @returns {void}
+     */
+    alertWrongLayerIds: function (wrongIdsPositions) {
+        if (wrongIdsPositions.length > 0) {
+            let wrongIdsPositionsConcat = wrongIdsPositions.shift();
+
+            wrongIdsPositions.forEach(position => {
+                wrongIdsPositionsConcat = wrongIdsPositionsConcat + ", " + String(position);
+            });
+            store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.parametricURL.alertWrongLayerIds", {wrongIdsPositionsConcat: wrongIdsPositionsConcat}));
+        }
     },
 
     /**
