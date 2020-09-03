@@ -93,7 +93,9 @@ export default {
 <style lang="less" scoped>
 @import "~variables";
 
-td {
+.table > tbody > tr > td {
+    padding: 5px 8px;
+    font-size: 12px;
     &.bold{
         font-family: @font_family_accent;
     }

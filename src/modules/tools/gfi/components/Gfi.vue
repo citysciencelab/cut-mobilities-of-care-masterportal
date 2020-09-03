@@ -4,6 +4,7 @@ import getters from "../store/gettersGfi";
 import Mobile from "./templates/Mobile.vue";
 import Detached from "./templates/Detached.vue";
 import Table from "./templates/Table.vue";
+import Attached from "./templates/Attached.vue";
 import {omit} from "../../../../utils/objectHelpers";
 
 export default {
@@ -11,7 +12,8 @@ export default {
     components: {
         Mobile,
         Detached,
-        Table
+        Table,
+        Attached
     },
     data () {
         return {
@@ -36,6 +38,9 @@ export default {
         currentViewType: function () {
             if (this.isMobile) {
                 return "Mobile";
+            }
+            else if (this.desktopType === "attached") {
+                return "Attached";
             }
             else if (this.isTable) {
                 return "Table";
