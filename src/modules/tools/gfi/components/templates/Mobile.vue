@@ -3,6 +3,8 @@ import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import Solaratlas from "../themes/Solaratlas.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
+import Trinkwasser from "../themes/Trinkwasser.vue";
+
 import upperFirst from "../../../../../utils/upperFirst";
 
 export default {
@@ -11,7 +13,8 @@ export default {
         Default,
         Schulinfo,
         Solaratlas,
-        TrafficCount
+        TrafficCount,
+        Trinkwasser
     },
     props: {
         feature: {
