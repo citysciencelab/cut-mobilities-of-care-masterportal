@@ -18,8 +18,9 @@ describe("Default.vue", () => {
                         return {
                             phone_number: "+49123 456-789",
                             phonenumber_2: "040/123456",
-                            phonenumber3: "+040/123456",
+                            phonenumber3: "+040gg/123456",
                             phonenumber4: "49 123456",
+                            phonenumber5: "+43123456",
                             url: "https",
                             url2: "file",
                             Test_String: "Hallo Welt"
@@ -56,6 +57,7 @@ describe("Default.vue", () => {
 
     it("should remove minus in all linked phone numbers", () => {
         wrapper.findAll("a[href^='tel']").wrappers.forEach(function (a) {
+            console.info(a.attributes("href"));
             expect(a.attributes("href").search("-")).to.be.equal(-1);
         });
     });
