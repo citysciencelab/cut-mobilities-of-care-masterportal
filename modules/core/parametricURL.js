@@ -39,7 +39,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @listens Core#RadioRequestParametricURLGetBrwLayerName
      * @listens Core#RadioRequestParametricURLGetMarkerFromUrl
      * @listens Core#RadioTriggerParametricURLUpdateQueryStringParam
-     * @listens Core#RadioTriggerParametricURLPushToIsInitOpen
      * @fires Core#RadioTriggerParametricURLReady
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
@@ -103,8 +102,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         }, this);
 
         channel.on({
-            "updateQueryStringParam": this.updateQueryStringParam,
-            "pushToIsInitOpen": this.pushToIsInitOpen
+            "updateQueryStringParam": this.updateQueryStringParam
         }, this);
 
         if (this.checkisURLQueryValid(query)) {
@@ -230,32 +228,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         const factor = Math.pow(10, isFinite(precision) ? precision : 0);
 
         return Math.round(num * factor) / factor;
-    },
-
-    /**
-     * todo
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    pushToIsInitOpen: function (value) {
-        let isInitOpenArray = this.get("isInitOpen"),
-            msg = "";
-
-        isInitOpenArray.push(value);
-        isInitOpenArray = [...new Set(isInitOpenArray)];
-
-        if (isInitOpenArray.length > 1) {
-            msg += "Fehlerhafte Kombination von Portalkonfiguration und parametrisiertem Aufruf.<br>";
-            isInitOpenArray.forEach((tool, index) => {
-                msg += tool;
-                if (index < isInitOpenArray.length - 1) {
-                    msg += " und ";
-                }
-            });
-            msg += " können nicht gleichzeitig geöffnet sein";
-            Radio.trigger("Alert", "alert", msg);
-        }
-        this.setIsInitOpenArray(isInitOpenArray);
     },
 
     /**

@@ -2125,11 +2125,6 @@
  */
 
 /**
- * @event Core#RadioTriggerParametricURLPushToIsInitOpen
- * @description todo
- */
-
-/**
  * @event Core#RadioTriggerParametricURLReady
  * @description todo
  */
