@@ -19,7 +19,9 @@ export default {
 
     watch: {},
 
-    created: function () {},
+    created: function () {
+        this.initialize();
+    },
 
     mounted: function () {
         if (this.postMessageUrl) {
@@ -31,6 +33,7 @@ export default {
 
     methods: {
         ...mapActions("RemoteInterface", [
+            "initialize",
             "processMessage"    
         ]),
     }

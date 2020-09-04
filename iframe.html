@@ -45,6 +45,13 @@
             args: {content: "foo"}
         });
     });
+    b3.addEventListener("click", event => {
+        iframe1.contentWindow.postMessage({
+            namespace: "Tools/Draw",
+            action: "initializeWithoutGUI",
+            args: {"drawType": "Polygon", "color": [127,255,0,0.5], "opacity": 0.5, "maxFeatures": null, "initialJSON": null}
+        });
+    });
 
     window.addEventListener("message", function (messageEvent) {
         console.log("----");

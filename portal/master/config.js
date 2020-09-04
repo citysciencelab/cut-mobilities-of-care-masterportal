@@ -2,6 +2,7 @@ const Config = {
     remoteInterface: {
          postMessageUrl: "https://localhost:9001"
     },
+    inputMap: {targetProjection: "EPSG:4326"},
     addons: ["einwohnerabfrage", "VueAddon"],
     alerting: {
         // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json"
