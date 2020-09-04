@@ -1,8 +1,9 @@
 image: node:12.13.1
 
 pipelines:
-    pull-requests:
-        - step:
+  pull-requests:
+      - step:
+          script:
             caches:
                 - node
             name: build and test in Browser
