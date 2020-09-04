@@ -10,7 +10,7 @@ import actions from "./actionsTools";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
-import ScaleSwitcher from "./scale/store/indexScaleSwitcher";
+import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 
 /**
