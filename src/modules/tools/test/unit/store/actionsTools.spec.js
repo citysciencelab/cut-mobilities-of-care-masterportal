@@ -2,7 +2,7 @@ import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../actionsTools";
 import sinon from "sinon";
 
-const {setToolActive, languageChanged, addTool, activateByUrlParam, setToolActiveByConfig} = actions;
+const {controlActivationOfTools, setToolActive, languageChanged, addTool, activateByUrlParam, setToolActiveByConfig} = actions;
 
 describe("actionsTools", function () {
     describe("setToolActive", function () {
@@ -80,6 +80,32 @@ describe("actionsTools", function () {
         });
     });
 
+    describe("controlActivationOfTools", function () {
+        it("controlActivationOfTools activeTool = SupplyCoord", done => {
+            const state = {
+                    Draw: {
+                        active: true
+                    },
+                    ScaleSwitcher: {
+                        active: true
+                    },
+                    SupplyCoord: {
+                        active: false
+                    }
+                },
+                activeToolName = "SupplyCoord";
+
+            testAction(controlActivationOfTools, activeToolName, state, {}, [
+                {type: "Draw/setActive", payload: false},
+                {type: "ScaleSwitcher/setActive", payload: false},
+                {type: "SupplyCoord/setActive", payload: true}
+            ], {
+                getConfiguredToolNames: ["Draw", "ScaleSwitcher", "SupplyCoord"],
+                getActiveToolNames: ["Draw", "ScaleSwitcher"]
+            }, done);
+        });
+    });
+
     describe("activateByUrlParam", function () {
         it("activateByUrlParam  isinitopen=scaleSwitcher", done => {
             const rootState = {
@@ -90,7 +116,7 @@ describe("actionsTools", function () {
                 toolName = "ScaleSwitcher";
 
             testAction(activateByUrlParam, toolName, {}, rootState, [
-                {type: toolName + "/setActive", payload: true}
+                {type: "controlActivationOfTools", payload: toolName, dispatch: true}
             ], {}, done);
         });
         it("activateByUrlParam no isinitopen", done => {
@@ -113,8 +139,10 @@ describe("actionsTools", function () {
             };
 
             testAction(setToolActiveByConfig, {}, state, {}, [
-                {type: "ScaleSwitcher/setActive", payload: true}
-            ], {}, done);
+                {type: "controlActivationOfTools", payload: "ScaleSwitcher", dispatch: true}
+            ], {
+                getActiveToolNames: ["ScaleSwitcher"]
+            }, done);
 
         });
         it("activate only the first tool with active = true", done => {
@@ -131,14 +159,10 @@ describe("actionsTools", function () {
             };
 
             testAction(setToolActiveByConfig, {}, state, {}, [
-                {type: "SupplyCoord/setActive", payload: true}
-            ], {}, done);
-            testAction(setToolActiveByConfig, {}, state, {}, [
-                {type: "ScaleSwitcher/setActive", payload: false}
-            ], {}, done);
-            testAction(setToolActiveByConfig, {}, state, {}, [
-                {type: "FileImport/setActive", payload: false}
-            ], {}, done);
+                {type: "controlActivationOfTools", payload: "SupplyCoord", dispatch: true}
+            ], {
+                getActiveToolNames: ["SupplyCoord", "ScaleSwitcher", "FileImport"]
+            }, done);
         });
     });
 });
