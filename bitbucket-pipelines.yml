@@ -1,9 +1,9 @@
 image: node:12.13.1
 
 pipelines:
-  pull-requests:
-      - step:
-          script:
+    pull-requests:
+        '**': #this runs as default for any branch not elsewhere defined    
+        - step:
             caches:
                 - node
             name: build and test in Browser
