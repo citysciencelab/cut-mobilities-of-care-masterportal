@@ -2,7 +2,7 @@ import Theme from "../model";
 
 const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
     defaults: {
-        iconPath: "",
+        iconPath: "https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png",
         gfiAttributesDipas: {
             "Thema": "",
             "name": "",
@@ -11,8 +11,7 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
             "nid": "",
             "Rubric": ""
         }
-
-    }),
+    },
     /**
      * @class DipasTheme
      * @extends Theme
