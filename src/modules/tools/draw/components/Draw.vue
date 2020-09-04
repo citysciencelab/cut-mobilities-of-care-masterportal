@@ -47,6 +47,9 @@ export default {
                 new DownloadView(this.$store);
                 this.setActive(value);
             }
+            else {
+                this.resetModule();
+            }
         }
     },
     created () {
