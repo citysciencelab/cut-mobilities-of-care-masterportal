@@ -2,6 +2,7 @@
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import {upperFirst} from "../../../../../utils/stringHelpers";
+import "jquery-ui/ui/widgets/draggable";
 
 export default {
     name: "Detached",
@@ -34,7 +35,7 @@ export default {
         /**
          * Returns the custom style for the gfi window.
          * it will always show the window on the top right.
-         * @returns {string} the style in the object
+         * @returns {Object} the style in the object
          */
         styleObject: function () {
             const maxWidth = Math.round(document.getElementById("map").offsetWidth / 2.2) + "px",
