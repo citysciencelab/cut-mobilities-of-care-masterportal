@@ -1,6 +1,7 @@
 import stateMap from "./state";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
 import {createGfiFeature} from "./actions/getWmsFeaturesByMimeType.js";
+import {getGfiFeaturesByTileFeature} from "./actions/getGfiFeaturesByTileFeature.js";
 
 const gettersMap = {
     ...generateSimpleGetters(stateMap),
@@ -48,7 +49,7 @@ const gettersMap = {
      * @param {number[]} state.clickPixel - the pixel coordinate of the click event
      * @returns {object[]} gfi features
      */
-    gfiFeaturesAtPixel: ({map, clickPixel}) => {
+    gfiFeaturesAtPixel: ({map, map3d, clickPixel}) => {
         const featuresAtPixel = [];
 
         map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
@@ -72,6 +73,23 @@ const gettersMap = {
                 ));
             }
         });
+
+        if (map3d && Array.isArray(clickPixel) && clickPixel.length === 2) {
+            // add features from map3d
+            const scene = map3d.getCesiumScene(),
+                tileFeatures = scene.drillPick({x: clickPixel[0], y: clickPixel[1]});
+
+            tileFeatures.forEach(tileFeature => {
+                const gfiFeatures = getGfiFeaturesByTileFeature(tileFeature);
+
+                if (Array.isArray(gfiFeatures)) {
+                    gfiFeatures.forEach(gfiFeature => {
+                        featuresAtPixel.push(gfiFeature);
+                    });
+                }
+            });
+        }
+
         return featuresAtPixel;
     },
 

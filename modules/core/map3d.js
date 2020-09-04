@@ -176,7 +176,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
                 }
             }
 
-            Store.dispatch("Map/updateClick", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: Radio.request("Map", "getMap")});
+            Store.dispatch("Map/updateClick", {map3d, position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: Radio.request("Map", "getMap")});
             Radio.trigger("Map", "clickedWindowPosition", {position: event.position, pickedPosition: transformedPickedPosition, coordinate: transformedCoords, latitude: coords[0], longitude: coords[1], resolution: resolution, originalEvent: event, map: Radio.request("Map", "getMap")});
         }
     },

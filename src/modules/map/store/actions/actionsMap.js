@@ -130,6 +130,7 @@ const actions = {
         else {
             commit("setClickCoord", evt.pickedPosition);
             commit("setClickPixel", [evt.position.x, evt.position.y]);
+            commit("setMap3d", evt.map3d);
         }
 
         if (rootGetters["Tools/Gfi/active"]) {

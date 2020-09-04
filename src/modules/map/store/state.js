@@ -32,6 +32,7 @@ import {MapMode} from "./enums";
  */
 const state = {
     map: null,
+    map3d: null,
     layerList: null,
     gfiFeatures: null,
     initialZoomLevel: null,

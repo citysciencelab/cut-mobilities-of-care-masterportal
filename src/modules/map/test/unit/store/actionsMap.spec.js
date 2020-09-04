@@ -64,14 +64,16 @@ describe("actionsMap", function () {
                     position: {
                         x: 12,
                         y: 99
-                    }
+                    },
+                    map3d: "map3d"
                 };
 
             actions.updateClick({commit, getters, rootGetters}, obj);
-            expect(commit.calledTwice).to.be.true;
+            expect(commit.calledThrice).to.be.true;
             expect(commit.args).to.deep.equal([
                 ["setClickCoord", [4, 56]],
-                ["setClickPixel", [12, 99]]
+                ["setClickPixel", [12, 99]],
+                ["setMap3d", "map3d"]
             ]);
         });
 
