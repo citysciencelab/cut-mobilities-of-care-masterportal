@@ -136,14 +136,16 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
             if ($(datetype).attr("codeListValue") === "download") {
                 linkName = $("gmd\\:name,name", element)[0].textContent;
                 if (linkName.indexOf("Download") !== -1) {
-                    linkName = linkName.replace("Download", "");
+                    linkName = linkName.replace("Download ", "");
                 }
                 link = $("gmd\\:URL,URL", element)[0].textContent;
-                downloadLinks.push([linkName, link]);
+                downloadLinks.push({linkName, link});
             }
         });
-        return downloadLinks.length > 0 ? downloadLinks : null;
+
+        return downloadLinks.length > 0 ? Radio.request("Util", "sortBy", downloadLinks, "linkName") : null;
     },
+
     /**
      * Parses the title part of the data returned by the meta data request.
      * @param {Object} xmlDoc Result of the meta data request.

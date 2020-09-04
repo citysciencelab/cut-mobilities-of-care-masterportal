@@ -184,12 +184,13 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
         this.$("#featurelist-list").show();
         this.$("#featurelist-details").hide();
     },
+
     /**
      * Changes the tab to the tab 'theme'
      * @return {void}
      */
     switchTabToTheme: function () {
-        Object.entries(this.$(".featurelist-navtabs").children()).forEach(([, child]) => {
+        this.$(".featurelist-navtabs").children().toArray().forEach(child => {
             if (child.id === "featurelistThemeChooser") {
                 this.$(child).removeClass("disabled");
                 this.$(child).addClass("active");
@@ -198,12 +199,14 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
                 this.$(child).removeClass("active");
             }
         });
+
         this.$("#featurelist-themes").show();
         this.$("#featurelist-list").hide();
         this.$("#featurelist-details").hide();
         this.model.downlightFeature();
         this.model.set("layerid", {});
     },
+
     /**
      * Changes the tab to the tab 'details'
      * @param {Event} evt Event, which tab has been clicked
@@ -254,10 +257,11 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      */
     newTheme: function (evt) {
         this.model.set("layerid", evt.currentTarget.id);
-        // setze active Class
-        Object.entries(this.$(evt.currentTarget.parentElement.children)).forEach(li => {
+
+        this.$(evt.currentTarget.parentElement.children).toArray().forEach(li => {
             this.$(li).removeClass("active");
         });
+
         this.$(evt.currentTarget).addClass("active");
     },
     /**
@@ -401,6 +405,9 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             this.delegateEvents();
         }
         else {
+            this.$("#featurelist-list").hide();
+            this.$("#featurelist-details").hide();
+            this.model.set("layerid", {});
             this.undelegateEvents();
         }
         return this;

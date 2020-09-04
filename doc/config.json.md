@@ -541,7 +541,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|zoomMode|nein|enum["none", "once", "always"]|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.).|false|
+|zoomMode|nein|enum["once", "always"]|"once"|Der Standort wird bestimmt und der Marker wird an- oder ausgeschaltet. Dafür ist es notwendig das Portal über **https** zu laden. Modi: *once* (Es wird einmalig auf den Standort gezoomt. ), *always* (Die Karte wird mit jedem Einschalten auf den Standort gezoomt.).|false|
 |poiDistances|nein|Boolean/Integer[]|true|Bei poiDistances=true werden die Defaultwerte verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände in Metern angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|false|
 
 **Beispiel mit poiDistances vom Typ Boolean**
@@ -1425,7 +1425,7 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
 |glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
-|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{caption: "translate#common:modules.tools.draw.iconList.iconPoint", type: "simple_point", value: "simple_point"}, {caption: "translate#common:modules.tools.draw.iconList.iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {id: "iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
 
 **Beispiel**
 
@@ -1435,67 +1435,67 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
     "name": "Zeichnen / Schreiben",
     "glyphicon": "glyphicon-pencil",
     "iconList": [
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconPoint",
-			"type": "simple_point",
-			"value": "simple_point"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
-			"type": "glyphicon",
-			"value": "\ue103"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconCD",
-			"type": "glyphicon",
-			"value": "\ue201"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconHat",
-			"type": "glyphicon",
-			"value": "\ue233"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconFire",
-			"type": "glyphicon",
-			"value": "\ue104"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconMovie",
-			"type": "glyphicon",
-			"value": "\ue009"
-		},
-		{
-		    "caption": "translate#common:modules.tools.draw.iconList.iconFlag",
-			"type": "glyphicon",
-			"value": "\ue034"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
-			"type": "glyphicon",
-			"value": "\ue135"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconMusic",
-			"type": "glyphicon",
-			"value": "\ue002"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconStreet",
-			"type": "glyphicon",
-			"value": "\ue024"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
-			"type": "image",
-			"value": "/img/tools/draw/cloud.png"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconTent",
-			"type": "glyphicon",
-			"value": "\u26fa"
-		}
-	]
+        {
+           "id": "iconPoint",
+           "type": "simple_point",
+           "value": "simple_point"
+        },
+        {
+           "id": "iconLeaf",
+           "type": "glyphicon",
+           "value": "\ue103"
+        },
+        {
+           "id": "iconCD",
+           "type": "glyphicon",
+           "value": "\ue201"
+        },
+        {
+           "id": "iconHat",
+           "type": "glyphicon",
+           "value": "\ue233"
+        },
+        {
+           "id": "iconFire",
+           "type": "glyphicon",
+           "value": "\ue104"
+        },
+        {
+           "id": "iconMovie",
+           "type": "glyphicon",
+           "value": "\ue009"
+        },
+        {
+           "id": "iconFlag",
+           "type": "glyphicon",
+           "value": "\ue034"
+        },
+        {
+           "id": "iconGlobe",
+           "type": "glyphicon",
+           "value": "\ue135"
+        },
+        {
+           "id": "iconMusic",
+           "type": "glyphicon",
+           "value": "\ue002"
+        },
+        {
+           "id": "iconStreet",
+           "type": "glyphicon",
+           "value": "\ue024"
+        },
+        {
+           "id": "iconCloud",
+           "type": "image",
+           "value": "/img/tools/draw/cloud.png"
+        },
+        {
+           "id": "iconTent",
+           "type": "glyphicon",
+           "value": "\u26fa"
+        }
+    ]
 }
 ```
 
@@ -1507,7 +1507,8 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
+|id|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei (meistens `common`) angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
+|caption|nein|String||Deprecated in 3.0.0 Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Ggü. der id muss hier nicht die id aus der Sprachdatei sondern der gesamte Pfad (`modules.tools.draw.iconList` + id) angegeben werden.|false|
 |type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/tools/draw/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
@@ -1516,13 +1517,13 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 ```
 #!json
 {
-	"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
+	"id": "iconCloud",
 	"type": "image",
 	"value": "/img/tools/draw/cloud.png"
 }
 
 {
-    "caption": "translate#common:modules.tools.draw.iconList.iconFire",
+    "id": "iconFire",
     "type": "glyphicon",
     "value": "\ue104"
 }
@@ -2322,7 +2323,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen. ACHTUNG: Hierbei ist wichtig, dass die angegebenen ids dieselbe URL ansprechen, also den selben Dienst benutzen.|false|
+|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen. ACHTUNG: Hierbei ist wichtig, dass die angegebenen ids dieselbe URL ansprechen, also den selben Dienst benutzen. Bei Konfiguration eines Arrays von Ids ist die Angabe der minScale und maxScale in der services.json für jeden Layer notwendig.|false|
 |name|nein|String||Name des Layers.|false|
 |entities|ja|**[Entity3D](#markdown-header-themenconfiglayerentity3d)**[]||Modelle, die angezeigt werden sollen |false|
 |transparency|nein|Integer|0|Transparenz des Layers.|false|

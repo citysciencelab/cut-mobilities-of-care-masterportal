@@ -54,7 +54,7 @@ export default {
         state.mobile = mobile;
     },
     /**
-     * Sets i18NextInitialized flag. Is done afetr languages for addons are loaded.
+     * Sets i18NextInitialized flag. Is done after languages for addons are loaded.
      * @param {object} state store state
      * @param {boolean} isInitialized whether i18Next is initialized
      * @returns {void}

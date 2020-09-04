@@ -43,7 +43,7 @@
 					},
 					"draw": {
 						"name": "Zeichnen / Schreiben",
-						"glyphicon": "glyphicon-pencil"
+                        "glyphicon": "glyphicon-pencil"
 					},
 					"fileImport": {
 						"name": "Datei Import"
