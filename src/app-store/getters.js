@@ -7,7 +7,7 @@ export default {
     // configJS destructuring
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",
-    uiStyle: state => getQueryParams()?.uiStyle || state?.configJs?.uiStyle,
+    uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
