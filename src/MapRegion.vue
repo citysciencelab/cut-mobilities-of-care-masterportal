@@ -1,13 +1,9 @@
 <script>
 import Alerting from "./modules/alerting/components/Alerting.vue";
-import ScaleSwitcher from "./modules/tools/scale/components/ScaleSwitcher.vue";
-import SupplyCoord from "./modules/tools/supplyCoord/components/SupplyCoord.vue";
-import FileImport from "./modules/tools/fileImport/components/FileImport.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
-import Gfi from "./modules/tools/gfi/components/Gfi.vue";
 import {mapState} from "vuex";
 
 export default {
@@ -17,11 +13,7 @@ export default {
         ToolManager,
         Alerting,
         LegendWindow,
-        ScaleSwitcher,
-        SupplyCoord,
-        FileImport,
-        Footer,
-        Gfi
+        Footer
     },
     computed: {
         ...mapState([
@@ -49,10 +41,6 @@ export default {
         <Alerting />
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
         <ToolManager v-if="configJson" />
-        <ScaleSwitcher v-if="configJson" />
-        <SupplyCoord v-if="configJson" />
-        <FileImport v-if="configJson" />
-        <Gfi v-if="configJson" />
         <template v-if="i18NextInitialized">
             <component
                 :is="$options.components[addonKey]"
