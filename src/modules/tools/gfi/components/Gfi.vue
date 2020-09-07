@@ -3,13 +3,15 @@ import {mapGetters} from "vuex";
 import getters from "../store/gettersGfi";
 import Mobile from "./templates/Mobile.vue";
 import Detached from "./templates/Detached.vue";
+import Table from "./templates/Table.vue";
 import {omit} from "../../../../utils/objectHelpers";
 
 export default {
     name: "Gfi",
     components: {
         Mobile,
-        Detached
+        Detached,
+        Table
     },
     data () {
         return {
@@ -34,6 +36,9 @@ export default {
         currentViewType: function () {
             if (this.isMobile) {
                 return "Mobile";
+            }
+            else if (this.isTable) {
+                return "Table";
             }
             return "Detached";
         },
