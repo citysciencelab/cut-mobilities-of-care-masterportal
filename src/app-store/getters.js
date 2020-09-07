@@ -1,3 +1,5 @@
+import getQueryParams from "../utils/getQueryParams";
+
 export default {
     masterPortalVersionNumber: state => state?.masterPortalVersionNumber,
     mobile: state => state.mobile,
@@ -5,6 +7,7 @@ export default {
     // configJS destructuring
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",
+    uiStyle: state => getQueryParams()?.uiStyle || state?.configJs?.uiStyle,
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
