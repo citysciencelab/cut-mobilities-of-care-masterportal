@@ -9,7 +9,8 @@ import actions from "./actionsTools";
  */
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
-import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
+import Gfi from "./gfi/store/indexGfi";
+import ScaleSwitcher from "./scale/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 
 /**
@@ -21,6 +22,7 @@ export default {
     modules: {
         Draw,
         FileImport,
+        Gfi,
         ScaleSwitcher,
         SupplyCoord
     },
