@@ -57,28 +57,32 @@ describe("LegendWindow.vue", () => {
     LegendWindowComponent.updated = undefined;
 
     describe("LegendWindow.vue rendering", () => {
-        it("renders the legend window in desktop view", () => {
-            wrapper = shallowMount(LegendWindowComponent, {store, localVue});
+        describe("render in desktop and mobile", () => {
+            it("renders the legend window in desktop view", () => {
+                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
 
-            expect(wrapper.find(".legend-window").exists()).to.be.true;
+                expect(wrapper.find(".legend-window").exists()).to.be.true;
+            });
+            it("renders the legend window in mobile view", () => {
+                store.commit("setMobile", true);
+                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
+                expect(wrapper.find(".legend-window-mobile").exists()).to.be.true;
+            });
         });
-        it("renders the legend window in mobile view", () => {
-            store.commit("setMobile", true);
-            wrapper = shallowMount(LegendWindowComponent, {store, localVue});
-            expect(wrapper.find(".legend-window-mobile").exists()).to.be.true;
-        });
-        it("renders the legend window with the collapseAllButton based on the config", () => {
-            wrapper = shallowMount(LegendWindowComponent, {store, localVue});
-            expect(wrapper.find("span.glyphicon-arrow-up").exists()).to.be.true;
-        });
-        it("renders the legend window without the collapseAllButton based on the config", () => {
-            store.state.Legend.showCollapseAllButton = false;
-            wrapper = shallowMount(LegendWindowComponent, {store, localVue});
-            expect(wrapper.find("span.glyphicon-arrow-up").exists()).to.be.false;
+        describe("showCollapseAllButton", () => {
+            it("renders the legend window with the collapseAllButton based on the config", () => {
+                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
+                expect(wrapper.find("span.glyphicon-arrow-up").exists()).to.be.true;
+            });
+            it("renders the legend window without the collapseAllButton based on the config", () => {
+                store.state.Legend.showCollapseAllButton = false;
+                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
+                expect(wrapper.find("span.glyphicon-arrow-up").exists()).to.be.false;
+            });
         });
     });
     describe("LegendMenu.vue methods", () => {
-        describe("LegendMenu.vue isValidLegendObj", () => {
+        describe("isValidLegendObj", () => {
             it("returns false if position is negative", () => {
                 const legendObj = {
                     id: "1",
@@ -145,7 +149,7 @@ describe("LegendWindow.vue", () => {
                 expect(wrapper.vm.isValidLegendObj(legendObj)).to.be.equals(true);
             });
         });
-        describe("LegendMenu.vue generateId", () => {
+        describe("generateId", () => {
             it("generates id", () => {
                 wrapper = shallowMount(LegendWindowComponent, {store, localVue});
                 expect(wrapper.vm.generateId("Layername 1")).to.be.equals("legend_Layername_1");
@@ -229,7 +233,7 @@ describe("LegendWindow.vue", () => {
                 expect(wrapper.vm.isLegendChanged(legendObj.id, legendObj)).to.be.equals(false);
             });
         });
-        describe("LegendMenu.vue isArrayOfStrings", () => {
+        describe("isArrayOfStrings", () => {
             it("returns true if input is an array of strings", () => {
                 const input = ["a", "", "abc"];
 
@@ -251,7 +255,7 @@ describe("LegendWindow.vue", () => {
                 expect(wrapper.vm.isArrayOfStrings(["", "", "", undefined])).to.be.equals(false);
             });
         });
-        describe("LegendMenu.vue colorToRgb", () => {
+        describe("colorToRgb", () => {
             it("transforms a color array into a rgb-color string", () => {
                 wrapper = shallowMount(LegendWindowComponent, {store, localVue});
                 expect(wrapper.vm.colorToRgb([1, 2, 3])).to.be.equals("rgb(1,2,3)");
