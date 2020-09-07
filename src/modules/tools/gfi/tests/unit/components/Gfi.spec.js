@@ -31,6 +31,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => false,
                 isActive: () => true,
+                isTable: () => false,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }]
@@ -39,6 +40,22 @@ describe("Gfi.vue", () => {
         });
 
         expect(wrapper.findComponent({name: "Detached"}).exists()).to.be.true;
+    });
+
+    it("should find the child component Table", () => {
+        const wrapper = shallowMount(GfiComponent, {
+            computed: {
+                isMobile: () => false,
+                isActive: () => true,
+                isTable: () => true,
+                gfiFeatures: () => [{
+                    getGfiUrl: () => null
+                }]
+            },
+            localVue
+        });
+
+        expect(wrapper.findComponent({name: "Table"}).exists()).to.be.true;
     });
 
     it("no child component should be found if gfi is not activated", () => {
