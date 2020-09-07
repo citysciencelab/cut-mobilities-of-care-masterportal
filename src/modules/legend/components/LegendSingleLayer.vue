@@ -61,7 +61,7 @@ export default {
                         target="_blank"
                         :title="legendPart"
                     >
-                        {{ $t("common:menu.legend.linkToPdf") }}
+                        {{ $t("common:modules.legend.linkToPdf") }}
                     </a>
                 </template>
 
@@ -82,7 +82,7 @@ export default {
                         target="_blank"
                         :title="legendPart.graphic"
                     >
-                        {{ $t("common:menu.legend.linkToPdf") }}
+                        {{ $t("common:modules.legend.linkToPdf") }}
                     </a>
                     <span>
                         {{ legendPart.name }}
