@@ -1,4 +1,4 @@
-import isURL from "./isURL.js";
+import isURL from "../../isURL.js";
 import {expect} from "chai";
 
 describe("isURL", function () {

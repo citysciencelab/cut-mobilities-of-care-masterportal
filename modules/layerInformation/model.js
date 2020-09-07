@@ -82,7 +82,17 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     fetchedMetaData: function (cswObj) {
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
-            this.updateMetaData(cswObj.parsedData);
+
+            if (this.get("layerName") === cswObj?.layerName && cswObj?.parsedData?.downloadLinks) {
+                const downloadLinks = this.get("downloadLinks");
+
+                cswObj.parsedData.downloadLinks.forEach(link => downloadLinks.push(link));
+                this.setDownloadLinks(Radio.request("Util", "sortBy", downloadLinks, "linkName"));
+            }
+            else {
+                this.updateMetaData(cswObj.parsedData);
+                this.setLayerName(cswObj.layerName);
+            }
         }
     },
     /**
@@ -123,17 +133,25 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     * @returns {void}
     */
     requestMetaData: function (attrs) {
-        const metaId = this.areMetaIdsSet(attrs.metaID) ? attrs.metaID[0] : null,
-            uniqueId = this.uniqueId("layerinfo"),
-            cswObj = {};
+        if (Array.isArray(attrs.metaID) && attrs.metaID.length > 1) {
+            attrs.metaID.forEach(metaID => {
+                this.requestMetaData(Object.assign(attrs, {metaID: [metaID]}));
+            });
+        }
+        else {
+            const metaId = this.areMetaIdsSet(attrs.metaID) ? attrs.metaID[0] : null,
+                uniqueId = this.uniqueId("layerinfo"),
+                cswObj = {};
 
-        if (metaId !== null) {
-            this.get("uniqueIdList").push(uniqueId);
-            cswObj.layerName = attrs.layername;
-            cswObj.metaId = metaId;
-            cswObj.keyList = ["abstractText", "datePublication", "dateRevision", "periodicity", "title", "downloadLinks"];
-            cswObj.uniqueId = uniqueId;
-            Radio.trigger("CswParser", "getMetaData", cswObj);
+            if (metaId !== null) {
+                this.get("uniqueIdList").push(uniqueId);
+                cswObj.layerName = attrs.layername;
+                cswObj.metaId = metaId;
+                cswObj.keyList = ["abstractText", "datePublication", "dateRevision", "periodicity", "title", "downloadLinks"];
+                cswObj.uniqueId = uniqueId;
+
+                Radio.trigger("CswParser", "getMetaData", cswObj);
+            }
         }
     },
     /**
@@ -276,6 +294,22 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     */
     setUrlIsVisible: function (value) {
         this.set("urlIsVisible", value);
+    },
+    /**
+    * Setter function for downloadLinks
+    * @param {Object} value the element
+    * @returns {void}
+    */
+    setDownloadLinks: function (value) {
+        this.set("downloadLinks", value);
+    },
+    /**
+    * Setter function for layerName
+    * @param {Object} value the element
+    * @returns {void}
+    */
+    setLayerName: function (value) {
+        this.set("layerName", value);
     },
     /**
     * Getter function for overlay element

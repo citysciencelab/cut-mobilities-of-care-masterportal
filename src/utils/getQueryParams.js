@@ -1,18 +1,33 @@
+const locationSearch = location.search.substr(1);
+
+/**
+ * Checks if the query contains html content, if so it is not valid.
+ * @param {string} query - The URL-Parameters
+ * @return {boolean} Is the query valid.
+ */
+function checkisURLQueryValid (query) {
+    return !(/(<([^>]+)>)/g).test(decodeURIComponent(query));
+}
+
 /**
  * Reads params from the URL and makes them available in the store.
+ * @param {string} [query=locationSearch] The url-parameter
  * @returns {object} url parameters as object.<string, string>
  */
-function getQueryParams () {
+function getQueryParams (query = locationSearch) {
     const queryParams = {};
 
     try {
-        if (location.search) {
-            const query = location.search.substr(1); // remove "?" character
-
+        if (query !== undefined) {
             query.split("&").forEach(item => {
                 const [key, value] = item.split("=");
 
-                queryParams[key] = decodeURIComponent(value);
+                if (checkisURLQueryValid(value)) {
+                    queryParams[key] = decodeURIComponent(value);
+                }
+                else {
+                    console.warn("The URL-parameters contain illegal information!");
+                }
             });
         }
     }

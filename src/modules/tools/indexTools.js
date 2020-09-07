@@ -3,9 +3,10 @@ import state from "./stateTools";
 import getters from "./gettersTools";
 import mutations from "./mutationsTools";
 import actions from "./actionsTools";
+import Draw from "./draw/store/indexDraw";
+import FileImport from "./fileImport/store/indexFileImport";
 import ScaleSwitcher from "./scale/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
-import FileImport from "./fileImport/store/indexFileImport";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -14,9 +15,10 @@ import FileImport from "./fileImport/store/indexFileImport";
 export default {
     namespaced: true,
     modules: {
+        Draw,
+        FileImport,
         ScaleSwitcher,
-        SupplyCoord,
-        FileImport
+        SupplyCoord
     },
     state,
     getters,

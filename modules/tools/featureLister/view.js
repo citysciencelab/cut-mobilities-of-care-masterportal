@@ -62,6 +62,47 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
     },
     className: "featurelist-win",
     template: _.template(Template),
+
+    /**
+     * Renders the feature lister
+     * @param {Backbone.model} model - The featurelLister model.
+     * @param {boolean} value - Tool is active.
+     * @return {FeatureListerView} returns this
+     */
+    render: function (model, value) {
+        if (value) {
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template(model.toJSON()));
+            this.toggle(value);
+            this.delegateEvents();
+        }
+        else {
+            this.$("#featurelist-list").hide();
+            this.$("#featurelist-details").hide();
+            this.model.set("layerid", {});
+            this.undelegateEvents();
+        }
+        return this;
+    },
+
+    /**
+     * Toggles the feature lister
+     * @param {boolean} value - Tool is active.
+     * @return {void}
+     */
+    toggle: function (value) {
+        if (this.$el.is(":visible") === true || value === true) {
+            this.updateVisibleLayer();
+            this.model.checkVisibleLayer();
+            // if only one layer found, load it immediately
+            if (this.model.get("layerlist").length === 1) {
+                this.model.set("layerid", this.model.get("layerlist")[0].id);
+            }
+            this.setMaxHeight();
+        }
+        this.model.downlightFeature();
+    },
+
     /**
      * When the model receives the closing of a gfi, the corresponding elements in the table must be un-highlighted
      * @return {void}
@@ -99,14 +140,17 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
             sortOrder = this.$(spanTarget).hasClass("glyphicon-sort-by-alphabet-alt") ? "ascending" : "descending",
             sortColumn = spanTarget.parentElement.textContent,
             tableLength = this.$("#featurelist-list-table tr").length - 1,
-            features = this.model.get("layer").features.filter(function (feature) {
-                return feature.id >= 0 && feature.id <= tableLength;
+            features = this.model.get("layer").features.filter(feature => {
+                return feature.id >= 0 && feature.id < tableLength;
             }),
-            featuresExtended = features.forEach(feature => {
-                Object.assign(feature, feature.properties);
-            });
+            featuresExtended = [];
+        let featuresSorted = [];
 
-        let featuresSorted = Radio.request("Util", "sortBy", featuresExtended, sortColumn);
+        features.forEach(feature => {
+            featuresExtended.push(Object.assign(feature, feature.properties));
+        });
+
+        featuresSorted = Radio.request("Util", "sortBy", featuresExtended, sortColumn);
 
         this.$(".featurelist-list-table-th-sorted").removeClass("featurelist-list-table-th-sorted");
         if (sortOrder === "ascending") {
@@ -184,12 +228,13 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
         this.$("#featurelist-list").show();
         this.$("#featurelist-details").hide();
     },
+
     /**
      * Changes the tab to the tab 'theme'
      * @return {void}
      */
     switchTabToTheme: function () {
-        Object.entries(this.$(".featurelist-navtabs").children()).forEach(([, child]) => {
+        this.$(".featurelist-navtabs").children().toArray().forEach(child => {
             if (child.id === "featurelistThemeChooser") {
                 this.$(child).removeClass("disabled");
                 this.$(child).addClass("active");
@@ -198,12 +243,14 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
                 this.$(child).removeClass("active");
             }
         });
+
         this.$("#featurelist-themes").show();
         this.$("#featurelist-list").hide();
         this.$("#featurelist-details").hide();
         this.model.downlightFeature();
         this.model.set("layerid", {});
     },
+
     /**
      * Changes the tab to the tab 'details'
      * @param {Event} evt Event, which tab has been clicked
@@ -244,6 +291,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
     hoverTr: function (evt) {
         const featureid = evt.currentTarget.id;
 
+        this.model.checkVisibleLayer();
         this.model.downlightFeature();
         this.model.highlightFeature(featureid);
     },
@@ -254,10 +302,11 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      */
     newTheme: function (evt) {
         this.model.set("layerid", evt.currentTarget.id);
-        // setze active Class
-        Object.entries(this.$(evt.currentTarget.parentElement.children)).forEach(li => {
+
+        this.$(evt.currentTarget.parentElement.children).toArray().forEach(li => {
             this.$(li).removeClass("active");
         });
+
         this.$(evt.currentTarget).addClass("active");
     },
     /**
@@ -386,40 +435,6 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
         ll.forEach(layer => {
             this.$("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
         });
-    },
-    /**
-     * Renders the feature lister
-     * @param {Object} model todo
-     * @param {String} value todo
-     * @return {FeatureListerView} returns this
-     */
-    render: function (model, value) {
-        if (value) {
-            this.setElement(document.getElementsByClassName("win-body")[0]);
-            this.$el.html(this.template(model.toJSON()));
-            this.toggle();
-            this.delegateEvents();
-        }
-        else {
-            this.undelegateEvents();
-        }
-        return this;
-    },
-    /**
-     * Toggles the feature lister
-     * @return {void}
-     */
-    toggle: function () {
-        if (this.$el.is(":visible") === true) {
-            this.updateVisibleLayer();
-            this.model.checkVisibleLayer();
-            // wenn nur ein Layer gefunden, lade diesen sofort
-            if (this.model.get("layerlist").length === 1) {
-                this.model.set("layerid", this.model.get("layerlist")[0].id);
-            }
-            this.setMaxHeight();
-        }
-        this.model.downlightFeature();
     },
     /**
      * Set the maximal height which may be used by the feature lister table
