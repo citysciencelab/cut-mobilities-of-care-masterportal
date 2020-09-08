@@ -132,7 +132,7 @@ const actions = {
             commit("setClickPixel", [evt.position.x, evt.position.y]);
         }
 
-        if (rootGetters["Tools/Gfi/isActive"]) {
+        if (rootGetters["Tools/Gfi/active"]) {
             commit("setGfiFeatures", null);
             dispatch("collectGfiFeatures");
         }

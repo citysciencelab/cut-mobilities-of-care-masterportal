@@ -295,7 +295,7 @@
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
             "glyphicon": "glyphicon-info-sign",
-            "isActive": true
+            "active": true
           },
           "print": {
             "name": "translate#common:menu.tools.print",
