@@ -60,6 +60,7 @@ export default {
                     this.style.msTransformOrigin = transformOrigin;
                     this.style.webkitTransformOrigin = transformOrigin;
                     this.style.mozTransformOrigin = transformOrigin;
+                    this.style.right = "inherit";
                 }
             });
         });
