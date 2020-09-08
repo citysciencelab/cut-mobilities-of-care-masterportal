@@ -1,5 +1,5 @@
 const state = {
-    isActive: true
+    active: false
 };
 
 export default state;
