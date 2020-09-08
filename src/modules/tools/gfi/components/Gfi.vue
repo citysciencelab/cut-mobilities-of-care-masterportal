@@ -52,7 +52,7 @@ export default {
          * @returns {boolean} gfi visibility
          */
         isVisible: function () {
-            return this.gfiFeatures !== null && this.isActive;
+            return this.gfiFeatures !== null && this.active;
         },
         /**
          * Returns the feature depending on the pager index.
@@ -65,9 +65,20 @@ export default {
             return null;
         }
     },
+    watch: {
+        /**
+         * Whenever active changes and it's false, reset function will call
+         * @param {boolean} newValue - is gfi active
+         * @returns {void}
+         */
+        active: function (newValue) {
+            if (!newValue) {
+                this.reset();
+            }
+        }
+    },
     beforeUpdate () {
         if (this.feature !== null && this.feature.hasOwnProperty("getProperties") && this.feature.getProperties() !== null) {
-        //    console.info(this.feature.getProperties());
             const mappedProperties = this.prepareProperties(this.feature.getProperties(), this.feature.getAttributesToShow(), this.ignoredKeys);
 
             this.feature.getMappedProperties = () => mappedProperties;
