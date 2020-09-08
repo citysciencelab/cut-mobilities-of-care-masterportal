@@ -15,7 +15,7 @@ describe("Gfi.vue", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
                 isMobile: () => true,
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }]
@@ -48,7 +48,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => false,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 isTable: () => false,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
@@ -80,7 +80,7 @@ describe("Gfi.vue", () => {
     it("no child component should be found if gfi is not activated", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
-                isActive: () => false,
+                active: () => false,
                 gfiFeatures: () => null
             },
             localVue
@@ -94,7 +94,7 @@ describe("Gfi.vue", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
                 isMobile: () => true,
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => []
             },
             localVue
@@ -124,7 +124,7 @@ describe("Gfi.vue", () => {
                 },
                 computed: {
                     isMobile: () => true,
-                    isActive: () => true,
+                    active: () => true,
                     gfiFeatures: () => [{
                         getTheme: () => "default",
                         getTitle: () => "Hallo",
@@ -159,7 +159,7 @@ describe("Gfi.vue", () => {
         const wrapper = mount(GfiComponent, {
             computed: {
                 isMobile: () => true,
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
                     getTitle: () => "Feature 1",
@@ -184,7 +184,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
                     getTitle: () => "Feature 1",
@@ -217,7 +217,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
                     getTitle: () => "Feature 1",
@@ -252,7 +252,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
                     getTitle: () => "Feature 1",
@@ -276,7 +276,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{
                     getTheme: () => "default",
                     getTitle: () => "Feature 1",
@@ -305,7 +305,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{}, {
                     getTheme: () => "default",
                     getTitle: () => "Feature 1",
@@ -333,7 +333,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{}, {
                     getTheme: () => "default",
                     getTitle: () => "Feature 1",
@@ -362,7 +362,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{}, {
                     getTheme: () => "default",
                     getTitle: () => "Feature 1",

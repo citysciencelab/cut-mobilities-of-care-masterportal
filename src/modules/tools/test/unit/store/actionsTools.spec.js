@@ -1,6 +1,7 @@
 import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../actionsTools";
 import sinon from "sinon";
+import {expect} from "chai";
 
 const {
     controlActivationOfTools,
@@ -15,30 +16,48 @@ describe("src/modules/tools/actionsTools.js", () => {
     describe("setToolActive", () => {
         const state = {
             ScaleSwitcher: {
-                id: "scaleSwitcher"
+                id: "scaleSwitcher",
+                deactivateGFI: false
+            },
+            Gfi: {
+                id: "gfi"
             }
         };
 
-        it("setToolActive set one tool to active", done => {
+        it("setToolActive set one tool and gfi to active", done => {
             const payload = {
                 id: "scaleSwitcher",
                 active: true
             };
 
             testAction(setToolActive, payload, state, {}, [
-                {type: Object.keys(state)[0] + "/setActive", payload: payload.active, dispatch: true}
+                {type: Object.keys(state)[0] + "/setActive", payload: payload.active, dispatch: true},
+                {type: "Gfi/setActive", payload: payload.active, commit: true}
             ], {}, done);
         });
-        it("setToolActive deactivate a tool", done => {
+        it("setToolActive deactivate a tool and activate gfi", done => {
             const payload = {
                 id: "scaleSwitcher",
                 active: false
             };
 
             testAction(setToolActive, payload, state, {}, [
-                {type: Object.keys(state)[0] + "/setActive", payload: payload.active, dispatch: true}
+                {type: Object.keys(state)[0] + "/setActive", payload: payload.active, commit: true},
+                {type: "Gfi/setActive", payload: true, commit: true}
             ], {}, done);
         });
+
+        it("setToolActive activate gfi", done => {
+            const payload = {
+                id: "gfi",
+                active: true
+            };
+
+            testAction(setToolActive, payload, state, {}, [
+                {type: Object.keys(state)[1] + "/setActive", payload: payload.active, commit: true}
+            ], {}, done);
+        });
+
         it("setToolActive no tool is active by payload.id is not defined", done => {
             const payload = {
                 id: "otherTool",
@@ -47,6 +66,7 @@ describe("src/modules/tools/actionsTools.js", () => {
 
             testAction(setToolActive, payload, state, {}, [], {}, done);
         });
+
     });
 
     describe("languageChanged", () => {
