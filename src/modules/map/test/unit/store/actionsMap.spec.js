@@ -34,7 +34,7 @@ describe("actionsMap", function () {
                     mapMode: 0
                 },
                 rootGetters = {
-                    "Tools/Gfi/isActive": false
+                    "Tools/Gfi/active": false
                 },
                 commit = sinon.spy(),
                 obj = {
@@ -56,7 +56,7 @@ describe("actionsMap", function () {
                     mapMode: 1
                 },
                 rootGetters = {
-                    "Tools/Gfi/isActive": false
+                    "Tools/Gfi/active": false
                 },
                 commit = sinon.spy(),
                 obj = {
@@ -80,7 +80,7 @@ describe("actionsMap", function () {
                     mapMode: 0
                 },
                 rootGetters = {
-                    "Tools/Gfi/isActive": true
+                    "Tools/Gfi/active": true
                 },
                 dispatch = sinon.spy(),
                 commit = sinon.spy(),
@@ -120,7 +120,7 @@ describe("actionsMap", function () {
                     }
                 },
                 rootGetters = {
-                    "Tools/Gfi/isActive": true
+                    "Tools/Gfi/active": true
                 },
                 commit = sinon.spy(),
                 dispatch = sinon.spy(),
