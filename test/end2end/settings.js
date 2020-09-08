@@ -136,7 +136,7 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
         "browserstack.console": "verbose",
         "browserstack.idleTimeout": 300,
         // Use this capability to specify a custom delay between the execution of Selenium commands.
-        "browserstack.browserstackautoWait": 50
+        "browserstack.autoWait": 50
     };
 
     return [
