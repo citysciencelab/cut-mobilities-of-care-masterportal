@@ -1,7 +1,6 @@
 import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../actionsTools";
 import sinon from "sinon";
-import {expect} from "chai";
 
 const {
     controlActivationOfTools,
