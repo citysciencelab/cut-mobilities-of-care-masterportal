@@ -18,6 +18,9 @@ const actions = {
 
         if (toolId !== undefined) {
             commit(toolId + "/setActive", active);
+            if (toolId !== "Gfi") {
+                commit("Gfi/setActive", !state[toolId].deactivateGFI);
+            }
         }
     },
 
