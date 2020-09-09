@@ -1,4 +1,5 @@
 <script>
+import {mapGetters, mapMutations} from "vuex";
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
@@ -19,6 +20,8 @@ export default {
         }
     },
     computed: {
+        ...mapGetters("Map", ["clickCoord"]),
+
         /**
          * Returns the title of the gfi.
          * @returns {string} the title
@@ -77,8 +80,13 @@ export default {
                 }
             });
         });
+        this.clickDown();
+    },
+    beforeDestroy: function () {
+        Radio.trigger("MapMarker", "hideMarker");
     },
     methods: {
+        ...mapMutations("Map", ["setCenter"]),
         close () {
             this.$emit("close");
         },
@@ -103,6 +111,16 @@ export default {
             }
 
             return theme;
+        },
+
+        /**
+         * Set Marker and Center.
+         * @returns {void}
+         */
+        clickDown () {
+            Radio.trigger("MapMarker", "showMarker", this.clickCoord);
+            // this.$store.commit("Map/setCenter", this.clickCoord);
+            Radio.trigger("MapView", "setCenter", this.clickCoord);
         }
     }
 };
