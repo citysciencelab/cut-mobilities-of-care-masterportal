@@ -18,6 +18,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 }
             },
             computed: {
+                clickCoord: () => [],
                 styleAll: () => [{
                     "right": ""
                 }],
@@ -41,6 +42,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 }
             },
             computed: {
+                clickCoord: () => [],
                 styleAll: () => [{
                     "right": ""
                 }],
@@ -64,6 +66,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 }
             },
             computed: {
+                clickCoord: () => [],
                 styleAll: () => [{
                     "right": ""
                 }],
@@ -88,6 +91,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     }
                 },
                 computed: {
+                    clickCoord: () => [],
                     styleAll: () => [{
                         "right": ""
                     }],
@@ -114,6 +118,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     }
                 },
                 computed: {
+                    clickCoord: () => [],
                     styleAll: () => [{
                         "right": ""
                     }],
@@ -140,6 +145,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     }
                 },
                 computed: {
+                    clickCoord: () => [],
                     styleAll: () => [{
                         "right": ""
                     }],
