@@ -56,6 +56,30 @@ export class TrafficCountCache {
     }
 
     /**
+     * gets the direction of the thing
+     * @param {Integer} thingId the ID of the thing
+     * @param {Function} [onupdate] as function(direction) to set the direction
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} [simpleCacheCallOpt=null] using this function instead of inner simpleCacheCall (for testing)
+     * @param {TrafficCountApi} [trafficCountApiOpt=null] the api to use (for testing)
+     * @returns {Void}  -
+     */
+    updateDirection (thingId, onupdate, onerror, onstart, oncomplete, simpleCacheCallOpt = null, trafficCountApiOpt = null) {
+        const key = "updateDirection" + thingId;
+
+        (simpleCacheCallOpt || this.simpleCacheCall).bind(this)(key, (callback) => {
+            (trafficCountApiOpt || this.api).updateDirection(thingId, (...args) => {
+                if (typeof callback === "function") {
+                    return callback(...args);
+                }
+                return null;
+            }, onerror);
+        }, onupdate, onupdate, onstart, oncomplete);
+    }
+
+    /**
      * gets the sum for a single day excluding todays last 15 minutes
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'

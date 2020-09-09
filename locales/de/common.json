@@ -418,6 +418,7 @@
                         "idLabel": "ID:",
                         "typeLabel": "Art: ",
                         "meansOfTransportLabel": "Verkehrsmittel: ",
+                        "directionLabel": "Richtung:",
                         "carsHeaderSuffix": "KFZ abs.",
                         "trucksHeaderSuffix": "SV-Anteil in %",
                         "yAxisTextDay": "Anzahl / 15 Min.",

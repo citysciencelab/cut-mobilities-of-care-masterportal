@@ -431,7 +431,6 @@ describe("tools/gfi/themes/trafficCount/trafficCountCache", function () {
         });
     });
 
-
     describe("updateTitle", () => {
         it("should create a cache key and a callback as a function", () => {
             const expectedKey = "updateTitlethingId";
@@ -486,6 +485,74 @@ describe("tools/gfi/themes/trafficCount/trafficCountCache", function () {
                 lastValue = value;
             }, "onerror", "onstart", "oncomplete", null, {
                 updateTitle: (thingId, callback) => {
+                    firstCallback = callback;
+                    callback("foo");
+                }
+            });
+
+            expect(lastValue).to.equal("foo");
+            expect(typeof firstCallback).to.equal("function");
+
+            // simulate subscription
+            firstCallback("bar");
+            expect(lastValue).to.equal("bar");
+        });
+    });
+
+    describe("updateDirection", () => {
+        it("should create a cache key and a callback as a function", () => {
+            const expectedKey = "updateDirectionthingId";
+            let lastKey = "",
+                lastApiCall = null,
+                lastOnupdate = null,
+                lastObserver = null,
+                lastOnstart = null,
+                lastOncomplete = null;
+
+            cache.updateDirection("thingId", "onupdate", "onerror", "onstart", "oncomplete", (key, apiCall, onupdate, observer, onstart, oncomplete) => {
+                lastKey = key;
+                lastApiCall = apiCall;
+                lastOnupdate = onupdate;
+                lastObserver = observer;
+                lastOnstart = onstart;
+                lastOncomplete = oncomplete;
+            });
+
+            expect(lastKey).to.equal(expectedKey);
+            expect(typeof lastApiCall).to.equal("function");
+            expect(lastOnupdate).to.equal("onupdate");
+            expect(lastObserver).to.equal("onupdate");
+            expect(lastOnstart).to.equal("onstart");
+            expect(lastOncomplete).to.equal("oncomplete");
+        });
+        it("should call updateDirection on the given api and fetch the received data", () => {
+            const expectedData = "data";
+            let lastData = null,
+                lastOnerror = null;
+
+            cache.updateDirection("thingId", "onupdate", "onerror", "onstart", "oncomplete", (key, apiCall) => {
+                apiCall((data) => {
+                    lastData = data;
+                });
+            }, {
+                updateDirection: (thingId, callback, onerror) => {
+                    lastOnerror = onerror;
+                    callback("data");
+                }
+            });
+
+            expect(lastData).to.equal(expectedData);
+            expect(lastOnerror).to.equal("onerror");
+        });
+        it("should be the handler of subscriptions for its key", () => {
+            let lastValue = null,
+                firstCallback = null;
+
+            // use inner simpleCacheCall
+            cache.updateDirection("thingId", value => {
+                lastValue = value;
+            }, "onerror", "onstart", "oncomplete", null, {
+                updateDirection: (thingId, callback) => {
                     firstCallback = callback;
                     callback("foo");
                 }

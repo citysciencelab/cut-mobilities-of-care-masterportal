@@ -2,9 +2,8 @@ import {expect} from "chai";
 import {TrafficCountApi} from "@modules/tools/gfi/themes/trafficCount/trafficCountApi";
 import moment from "moment";
 
-before(function () {
-    moment.locale("de");
-});
+// change language from moment.js to german
+moment.locale("de");
 
 describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
     describe("TrafficCountApi.constructor", function () {
@@ -317,6 +316,101 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 lastError = error;
             });
             expect(lastError).to.be.a.string;
+        });
+    });
+
+    describe("TrafficCountApi.updateDirection", function () {
+        it("updateDirection: should build a correct url and call it via given http dummy", function () {
+            let lastOnupdate = false,
+                lastOnstart = false,
+                lastOncomplete = false,
+                lastOnerror = false,
+                lastUrl = false;
+            const dummySensorThingsHttp = {
+                    get: (url, onupdate, onstart, oncomplete, onerror) => {
+                        lastUrl = url;
+                        lastOnupdate = onupdate;
+                        lastOnstart = onstart;
+                        lastOncomplete = oncomplete;
+                        lastOnerror = onerror;
+                    }
+                },
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
+
+            api.updateDirection("thingId", "onupdate", "onerror", "onstart", "oncomplete");
+
+            expect(lastUrl).to.equal("httpHost/sensorThingsVersion/Things(thingId)");
+            expect(typeof lastOnupdate === "function").to.be.true;
+            expect(lastOnerror).to.equal("onerror");
+            expect(lastOnstart).to.equal("onstart");
+            expect(lastOncomplete).to.equal("oncomplete");
+        });
+        it("updateDirection: should call onupdate with the property child element 'richtung' of the first element in the received payload", function () {
+            let getDirection = "";
+            const dummySensorThingsHttp = {
+                    get: (url, onupdate) => {
+                        onupdate([{
+                            properties: {
+                                richtung: "2"
+                            }
+                        }]);
+                    }
+                },
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
+
+            api.updateDirection(false, direction => {
+                getDirection = direction;
+            });
+
+            expect(getDirection).to.equal("2");
+        });
+        it("updateDirection: should call onerror with an error message if no property child element 'richtung' was found on the first element in the received payload", function () {
+            let getError = false;
+            const dummySensorThingsHttp = {
+                    get: false
+                },
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
+
+            getError = false;
+            dummySensorThingsHttp.get = (url, onupdate) => {
+                return onupdate([{
+                    foo: "bar"
+                }]);
+            };
+            api.updateDirection(false, false, (error) => {
+                getError = error;
+            });
+            expect(getError).to.be.a.string;
+
+            getError = false;
+            dummySensorThingsHttp.get = (url, onupdate) => {
+                onupdate(["foo"]);
+                return false;
+            };
+            api.updateDirection(false, false, (error) => {
+                getError = error;
+            });
+            expect(getError).to.be.a.string;
+
+            getError = false;
+            dummySensorThingsHttp.get = (url, onupdate) => {
+                onupdate("foo");
+                return false;
+            };
+            api.updateDirection(false, false, (error) => {
+                getError = error;
+            });
+            expect(getError).to.be.a.string;
+
+            getError = false;
+            dummySensorThingsHttp.get = (url, onupdate) => {
+                onupdate();
+                return false;
+            };
+            api.updateDirection(false, false, (error) => {
+                getError = error;
+            });
+            expect(getError).to.be.a.string;
         });
     });
 
@@ -1598,8 +1692,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     interval: "interval",
                     from: "2020-03-20",
                     until: "2020-03-30"
-                },
-                format = "YYYY-MM-DD HH:mm:ss";
+                };
 
             api.downloadData("thingId", "meansOfTransport", timeSettings, result => {
                 lastResult = result;
@@ -1609,10 +1702,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             expect(lastResult.title).to.equal("title");
             expect(lastResult.data).to.be.an("object");
             expect(lastResult.data.meansOfTransport).to.be.an("object");
-
-            expect(lastResult.data.meansOfTransport[moment(phenomenonTimeA).format(format)]).to.equal(1);
-            expect(lastResult.data.meansOfTransport[moment(phenomenonTimeB).format(format)]).to.equal(2);
-            expect(lastResult.data.meansOfTransport[moment(phenomenonTimeC).format(format)]).to.equal(3);
+            expect(lastResult.data.meansOfTransport["2020-03-22 01:00:00"]).to.equal(1);
+            expect(lastResult.data.meansOfTransport["2020-03-23 13:14:30"]).to.equal(2);
+            expect(lastResult.data.meansOfTransport["2020-03-25 00:59:59"]).to.equal(3);
         });
     });
 });
