@@ -203,7 +203,6 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
     }
 
     commit("setFreeHand", false);
-    commit("setRenderToWindow", false);
     commit("setWithoutGUI", true);
 
     if (["Point", "LineString", "Polygon", "Circle"].indexOf(drawType) > -1) {

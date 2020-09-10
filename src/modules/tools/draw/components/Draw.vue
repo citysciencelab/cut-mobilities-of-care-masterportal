@@ -65,7 +65,7 @@ export default {
             "initWithoutGUI": prmObject => this.initializeWithoutGUI(prmObject),
             "deleteAllFeatures": () => this.clearLayer(),
             "editWithoutGUI": () => this.editFeaturesWithoutGUI(),
-            "cancelDrawWithoutGUI": cursor => this.cancelDrawWithoutGUI(cursor),
+            "cancelDrawWithoutGUI": () => this.close(),
             "downloadViaRemoteInterface": geomType => this.downloadViaRemoteInterface(geomType)
         });
 
