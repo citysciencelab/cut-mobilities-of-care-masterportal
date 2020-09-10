@@ -137,7 +137,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             },
             "toggleDefaultTool": this.toggleDefaultTool,
             "refreshLightTree": this.refreshLightTree,
-            "addAlwaysActiveTool": this.addAlwaysActiveTool
+            "addAlwaysActiveTool": this.addAlwaysActiveTool,
+            "setActiveToolsToFalse": this.setActiveToolsToFalse
         }, this);
 
         this.listenTo(this, {

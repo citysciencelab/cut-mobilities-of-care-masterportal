@@ -30,22 +30,8 @@ export default {
      */
     created () {
         this.$on("close", this.close);
-
-        if (this.isActive) {
-            this.setActive(true);
-        }
-    },
-    /**
-     *  Activates this tool, if it has to start by url params
-     * @returns {void}
-     */
-    mounted () {
-        this.activateByUrlParam();
     },
     methods: {
-        ...mapActions("Tools/ScaleSwitcher", [
-            "activateByUrlParam"
-        ]),
         ...mapActions("Map", ["setResolutionByIndex"]),
         ...mapMutations("Tools/ScaleSwitcher", Object.keys(mutations)),
 

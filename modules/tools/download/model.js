@@ -108,7 +108,8 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
 
         this.setFormats(obj.formats);
         this.setFeatures(obj.features);
-        Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", false);
+
+        Radio.trigger("ModelList", "setActiveToolsToFalse", Radio.request("ModelList", "getModelByAttributes", {id: "download"}));
         this.set("isActive", true);
     },
 
@@ -485,6 +486,15 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      */
     setIsInternetExplorer: function (value) {
         this.set("isInternetExplorer", value);
+    },
+
+    /**
+     * Setter for attribute "store".
+     * @param {Boolean} value The Vuex store.
+     * @returns {void}
+     */
+    setStore: function (value) {
+        this.set("store", value);
     }
 });
 

@@ -62,7 +62,7 @@ describe("ScaleSwitcher.vue", () => {
                 configJson: mockConfigJson
             }
         });
-        store.dispatch("Tools/ScaleSwitcher/setActive", true);
+        store.commit("Tools/ScaleSwitcher/setActive", true);
     });
 
     it("renders the scaleSwitcher", () => {
@@ -72,7 +72,7 @@ describe("ScaleSwitcher.vue", () => {
     });
 
     it("do not render the scaleSwitchers select if not active", () => {
-        store.dispatch("Tools/ScaleSwitcher/setActive", false);
+        store.commit("Tools/ScaleSwitcher/setActive", false);
         const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue});
 
         expect(wrapper.find("#scale-switcher").exists()).to.be.false;
