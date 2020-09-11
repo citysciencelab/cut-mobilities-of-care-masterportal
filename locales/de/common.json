@@ -514,7 +514,8 @@
                     "iconGlobe": "Globus",
                     "iconMusic": "Musik",
                     "iconStreet": "Straße",
-                    "iconTent": "Zelt"
+                    "iconTent": "Zelt",
+                    "iconMeadow": "Wiese"
                 }
             },
             "download": {

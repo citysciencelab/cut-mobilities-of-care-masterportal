@@ -31,9 +31,9 @@ export function createIconStyle (color, pointSize, symbol, zIndex) {
         style = new Style({
             image: new Icon({
                 src: symbol.value,
-                scale: 1 / (96 / pointSize),
-                opacity: color[3],
-                color: color.slice(0, 3)
+                scale: symbol?.scale ? symbol.scale : 1 / (96 / pointSize),
+                // funktioniert nicht bei kml:
+                opacity: symbol?.opacity ? symbol?.opacity : color[3]
             }),
             zIndex: zIndex
         });

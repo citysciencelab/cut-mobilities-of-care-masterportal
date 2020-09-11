@@ -112,6 +112,21 @@ export default {
             if (this.mapElement.style.cursor === "grabbing") {
                 this.mapElement.style.cursor = "pointer";
             }
+        },
+        getIconLabelKey (option) {
+            if (option.id) {
+                if (this.$i18n.i18next.exists(option.id)) {
+                    return option.id;
+                }
+                else if (this.$i18n.i18next.exists("common:modules.tools.draw.iconList." + option.id)) {
+                    return "common:modules.tools.draw.iconList." + option.id;
+                }
+                else if (option.caption) {
+                    return option.caption;
+                }
+                return option.id;
+            }
+            return "noName";
         }
     }
 };
@@ -320,7 +335,7 @@ export default {
                                 :key="'draw-icon-' + (option.id ? option.id : option.caption)"
                                 :value="(option.id ? option.id : option.caption)"
                             >
-                                {{ $t(option.id ? "common:modules.tools.draw.iconList." + option.id : option.caption) }}
+                                {{ $t(getIconLabelKey(option)) }}
                             </option>
                         </select>
                     </div>

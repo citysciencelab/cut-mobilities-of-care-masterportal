@@ -505,7 +505,8 @@
                     "iconGlobe": "Globe",
                     "iconMusic": "Music",
                     "iconStreet": "Street",
-                    "iconTent": "Tent"
+                    "iconTent": "Tent",
+                    "iconMeadow": "Meadow"
                 }
             },
             "download": {
