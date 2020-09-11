@@ -116,6 +116,7 @@ export default {
             if (this.overlay.getElement()) {
                 $(this.overlay.getElement()).popover("destroy");
                 $(this.overlay.getElement()).remove();
+                $(this.overlay.getElement()).parent().remove();
             }
         }
     }
@@ -180,13 +181,18 @@ export default {
             margin-bottom: 0;
         }
     }
-    .popover {
-        padding: 0;
-        min-width: 40vw;
-        border: 0;
-        z-index: 1;
-    }
-    .popover-content {
-        padding: 0;
+</style>
+
+<style lang="less">
+    .ol-viewport {
+        .popover {
+            padding: 0;
+            min-width: 40vw;
+            border: 0;
+            z-index: 1;
+        }
+        .popover-content {
+            padding: 0;
+        }
     }
 </style>
