@@ -32,7 +32,7 @@ describe("Gfi.vue", () => {
                 isMobile: () => false,
                 isTable: () => false,
                 desktopType: () => "attached",
-                isActive: () => true,
+                active: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }]
@@ -65,7 +65,7 @@ describe("Gfi.vue", () => {
             computed: {
                 isMobile: () => false,
                 desktopType: () => "",
-                isActive: () => true,
+                active: () => true,
                 isTable: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
