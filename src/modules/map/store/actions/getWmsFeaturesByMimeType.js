@@ -1,4 +1,4 @@
-import requestGfi from "../../../../api/wmsGetFeatureInfo";
+import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
 
 /**
  * returns a list of wms features for the given url and mimeType

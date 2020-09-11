@@ -1,5 +1,6 @@
 import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import Feature from "ol/Feature";
+import axios from "axios";
 
 // Testlayer für ESRI -> Geologische_Karte_5000
 // Testlayer für html -> Bohrdaten GLA & Eventlots
@@ -10,24 +11,10 @@ import Feature from "ol/Feature";
  * @param {string} url - the GetFeatureInfo request url
  * @returns {Promise<module:ol/Feature[]>}  Promise object represents the GetFeatureInfo request
  */
-function requestGfi (mimeType, url) {
-    const domParser = new DOMParser();
-
-    return fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            return response.text();
-        })
-        .then(responseText => domParser.parseFromString(responseText, mimeType))
-        .then(doc => {
-            // if the parsing process fails, the DOMParser does not throw an exception, but instead returns an error document
-            if (doc.getElementsByTagName("parsererror").length > 0) {
-                throw Error("Parsing Document: " + doc.getElementsByTagName("parsererror")[0].textContent);
-            }
-            return doc;
-        })
+export function requestGfi (mimeType, url) {
+    return axios.get(url)
+        .then(response => handleResponseAxios(response))
+        .then(docString => parseDocumentString(docString, mimeType))
         .then(doc => {
             if (mimeType === "text/xml") {
                 return parseFeatures(doc);
@@ -41,21 +28,83 @@ function requestGfi (mimeType, url) {
 }
 
 /**
+ * returns the data from the axios response
+ * @throws will throw an error if the response is not valid
+ * @param {Object} response the response gotten by axios
+ * @returns {Object} the received data or undefined if an error occured
+ */
+export function handleResponseAxios (response) {
+    if (
+        response === null
+        || typeof response !== "object"
+        || !response.hasOwnProperty("status")
+        || !response.hasOwnProperty("statusText")
+        || !response.hasOwnProperty("data")
+    ) {
+        console.warn("requestGfi, handleResponseAxios: response", response);
+        throw Error("requestGfi, handleResponseAxios: the received response is not valid");
+    }
+    else if (response.status !== 200) {
+        console.warn("requestGfi, handleResponseAxios: response", response);
+        throw Error("requestGfi, handleResponseAxios: the received status code indicates an error");
+    }
+
+    return response.data;
+}
+
+/**
+ * parses the given string as DOM document
+ * @throws will throw an error - parsing errors are reported on the console by DOMParser
+ * @param {String} documentString the string to parse
+ * @param {mimeType} mimeType the mimeType to use (text/xml, text/html) - other formats are currently not supported and may not work
+ * @param {Function} [parseFromStringOpt=null] a function(documentString, mimeType) for parsing the document (for testing only)
+ * @returns {(Document|XMLDocument)}  a valid document, free of parser errors
+ */
+export function parseDocumentString (documentString, mimeType, parseFromStringOpt = null) {
+    const domParser = new DOMParser(),
+        doc = typeof parseFromStringOpt === "function" ? parseFromStringOpt(documentString, mimeType) : domParser.parseFromString(documentString, mimeType);
+    let errObj = null,
+        parsererror = null;
+
+    if (doc === null || typeof doc !== "object" || !(doc instanceof Document) && doc.constructor.name !== "XMLDocument") {
+        // parsing errors are reported on the console by DOMParser
+        throw Error("requestGfi, checkParsingProcess: the received doc is no valid Document nor XMLDocument");
+    }
+
+    parsererror = doc.getElementsByTagName("parsererror");
+
+    if (parsererror instanceof HTMLCollection && parsererror.length > 0) {
+        for (errObj of parsererror) {
+            console.warn("requestGfi, parseDocumentString: parsererror", errObj);
+            throw Error("requestGfi, parseDocumentString: the parsererror has reported a problem");
+        }
+    }
+
+    return doc;
+}
+
+/**
  * Parses the response into openlayers features
- * @param {XMLDocument} data - data to be parsed
+ * @throws will throw an error
+ * @param {XMLDocument} doc - data to be parsed
  * @returns {module:ol/Feature[]} array of openlayers features
  */
-function parseFeatures (data) {
+function parseFeatures (doc) {
+    if (!(doc instanceof XMLDocument)) {
+        console.warn("requestGfi, parseFeatures: doc", doc);
+        throw Error("requestGfi, parseFeatures: the received doc is no valid XMLDocument");
+    }
+
     // OGC-conform
-    if (data.firstChild.tagName === "FeatureCollection") {
+    if (doc.firstChild.tagName === "FeatureCollection") {
         const gfiFormat = new WMSGetFeatureInfo();
 
-        return gfiFormat.readFeatures(data).flat();
+        return gfiFormat.readFeatures(doc).flat();
     }
     // ESRI...
     const features = [];
 
-    data.getElementsByTagName("FIELDS").forEach(element => {
+    doc.getElementsByTagName("FIELDS").forEach(element => {
         const feature = new Feature();
 
         element.attributes.forEach(attribute => {
@@ -66,4 +115,4 @@ function parseFeatures (data) {
     return features;
 }
 
-export default requestGfi;
+export default {requestGfi, handleResponseAxios, parseDocumentString};
