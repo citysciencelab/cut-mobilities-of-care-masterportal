@@ -116,7 +116,7 @@ export default {
             if (this.overlay.getElement()) {
                 $(this.overlay.getElement()).popover("destroy");
                 $(this.overlay.getElement()).remove();
-                $(this.overlay.getElement()).parent().remove();
+                Radio.trigger("Map", "removeOverlay", this.overlay);
             }
         }
     }
