@@ -2191,7 +2191,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |Titel|ja|String||Titel des Ordners.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
 |Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
-|isFolderSelectable|nein|Boolean|true|Bewirkt, dass alle Layer eines Ordners auf einmal über einen Hacken aktiviert bzw. deaktiviert werden können.|false|
+|isFolderSelectable|nein|Boolean|true|Bewirkt, dass alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden können.|false|
 
 **Beispiel Ordner mit einem Layer**
 ```
