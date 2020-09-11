@@ -83,7 +83,7 @@ const symbol = {
         opacity: 1,
         opacityContour: 1,
         outerBorderColor: "",
-        pointSize: 6,
+        pointSize: 16,
         redoArray: [],
         renderToWindow: true,
         resizableWindow: true,
