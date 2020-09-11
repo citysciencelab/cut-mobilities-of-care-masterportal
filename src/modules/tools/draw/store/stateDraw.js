@@ -69,9 +69,22 @@ const symbol = {
         iconList: [
             symbol,
             {
-                id: "iconLeaf",
-                type: "glyphicon",
-                value: "\ue103"
+                id: "iconCloud",
+                type: "image",
+                scale: 1,
+                value: "/img/tools/draw/cloud.png"
+            },
+            {
+                id: "iconMeadow",
+                type: "image",
+                scale: 0.8,
+                value: "../../lgv-config/img/wiese.png"
+            },
+            {
+                id: "gelber Pin",
+                type: "image",
+                scale: 0.5,
+                value: "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
             }
         ],
         id: "draw",
