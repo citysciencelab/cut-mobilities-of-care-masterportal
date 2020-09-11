@@ -139,6 +139,29 @@ export default {
 
         try {
             features = format.readFeatures(datasrc.raw);
+
+
+            if (format instanceof KML) {
+                const indices = [];
+
+                features.forEach((feature, i) => {
+                    if (feature.getGeometry().getType() === "Point") {
+                        if (feature.values_.name === undefined) {
+                            // import of point no text: showPointNames must be false
+                            indices.push(i);
+                        }
+                    }
+                });
+                if (indices.length > 0) {
+                    // type Point with no names (=Icons) have to be imported with special options, else if downloaded over draw tool again there will be an error
+                    const specialFormat = new KML({extractStyles: true, showPointNames: false}),
+                        featuresNoPointNames = specialFormat.readFeatures(datasrc.raw);
+
+                    indices.forEach((index) => {
+                        features[index] = featuresNoPointNames[index];
+                    });
+                }
+            }
         }
         catch (ex) {
             alertingMessage = {
@@ -208,7 +231,7 @@ export default {
         dispatch("addImportedFilename", datasrc.filename);
     },
     /**
-     * Adss the name of a successfully imported file to list of imported filenames
+     * Adds the name of a successfully imported file to list of imported filenames
      * @param {string} fileName name of the file
      * @returns {void}
      */

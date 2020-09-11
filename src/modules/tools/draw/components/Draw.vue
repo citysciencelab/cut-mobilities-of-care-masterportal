@@ -326,30 +326,6 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id === 'drawPoint'"
-                    class="form-group form-group-sm"
-                >
-                    <label class="col-md-5 col-sm-5 control-label">
-                        {{ $t("common:modules.tools.draw.size") }}
-                    </label>
-                    <div class="col-md-7 col-sm-7">
-                        <select
-                            id="tool-draw-pointSize"
-                            class="form-control input-sm"
-                            :disabled="drawHTMLElements"
-                            @change="setPointSize"
-                        >
-                            <option
-                                v-for="option in constants.pointSizeOptions"
-                                :key="'draw-pointSize-' + option.value"
-                                :value="option.value"
-                            >
-                                {{ option.caption }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div
                     v-if="drawType.id !== 'drawPoint' && drawType.id !== 'writeText'"
                     class="form-group form-group-sm"
                 >
@@ -374,7 +350,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve'"
+                    v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve'&& drawType.id !== 'drawPoint'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
@@ -450,7 +426,31 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve'"
+                    v-if="drawType.id === 'drawPoint'"
+                    class="form-group form-group-sm"
+                >
+                    <label class="col-md-5 col-sm-5 control-label">
+                        {{ $t("common:modules.tools.draw.color") }}
+                    </label>
+                    <div class="col-md-7 col-sm-7">
+                        <select
+                            id="tool-draw-pointColor"
+                            class="form-control input-sm"
+                            :disabled="drawHTMLElements"
+                            @change="setColor"
+                        >
+                            <option
+                                v-for="option in constants.pointColorOptions"
+                                :key="'draw-color-' + option.color"
+                                :value="option.value"
+                            >
+                                {{ $t("common:colors." + option.color) }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div
+                    v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve' && drawType.id !== 'drawPoint'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">

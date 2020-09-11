@@ -176,64 +176,177 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @return {String} - The converted features as string.
      */
     convertFeaturesToKML: function (features, format) {
-        const pointOpacities = [],
-            pointColors = [],
-            pointRadiuses = [],
-            textFonts = [];
+        const featureCount = features.length,
+            pointOpacities = new Array(featureCount),
+            pointColors = new Array(featureCount),
+            pointRadiuses = new Array(featureCount),
+            hasIconUrl = new Array(featureCount),
+            textFonts = new Array(featureCount),
+            skip = new Array(featureCount),
+            that = this;
         let convertedFeatures = [];
 
-        features.forEach(feature => {
-            const type = feature.getGeometry().getType(),
-                styles = feature.getStyleFunction().call(feature),
-                style = styles[0];
-            let color;
+        pointOpacities.fill(undefined, 0, featureCount);
+        pointColors.fill(undefined, 0, featureCount);
+        pointRadiuses.fill(undefined, 0, featureCount);
+        hasIconUrl.fill(false, 0, featureCount);
+        textFonts.fill(undefined, 0, featureCount);
+        skip.fill(false, 0, featureCount);
 
-            if (type === "Point") {
-                if (feature.getStyle().getText()) {
-                    textFonts.push(feature.getStyle().getText().getFont());
-                    pointOpacities.push(undefined);
-                    pointColors.push(undefined);
-                    pointRadiuses.push(undefined);
+        features.forEach((feature, i) => {
+            const type = feature.getGeometry().getType();
+            let styles,
+                style,
+                color;
+
+            if (feature.getGeometry().getType() === "Point" && feature.values_.name !== undefined) {
+                // imported kml with text, can be used as it is
+                skip[i] = true;
+            }
+            else {
+                try {
+                    styles = feature.getStyleFunction().call(feature);
+                    style = styles[0];
                 }
-                else {
-                    color = style.getImage().getFill().getColor();
-                    pointOpacities.push(style.getImage().getFill().getColor()[3]);
-                    pointColors.push(color[0] + "," + color[1] + "," + color[2]);
-                    pointRadiuses.push(style.getImage().getRadius());
-                    textFonts.push(undefined);
+                catch (ex) {
+                    // only happens if an imported kml is exported, can be skipped
+                    skip[i] = true;
                 }
 
+                if (type === "Point") {
+                    if (style.getImage() !== null && style.getImage().iconImage_ !== undefined) {
+                        // imported kml with link to svg icon, has iconUrl from previous import
+                        hasIconUrl[i] = true;
+                    }
+                    else if (feature.getStyle().getText()) {
+                        textFonts[i] = feature.getStyle().getText().getFont();
+                    }
+                    else {
+                        color = style.getImage().getFill().getColor();
+                        pointOpacities[i] = style.getImage().getFill().getColor()[3];
+                        pointColors[i] = [color[0], color[1], color[2]];
+                        pointRadiuses[i] = style.getImage().getRadius();
+                    }
+
+                }
             }
         }, this);
 
         convertedFeatures = $.parseXML(this.convertFeatures(features, format));
 
-        $(convertedFeatures).find("Point").each(function (i, point) {
-            const placemark = point.parentNode;
-            let style,
-                pointStyle,
-                fontStyle;
+        $(convertedFeatures).find("Placemark").each(function (i, placemark) {
+            const style = $(placemark).find("Style")[0];
 
-            if ($(placemark).find("name")[0]) {
-                style = $(placemark).find("LabelStyle")[0];
-                fontStyle = "<font>" + textFonts[i] + "</font>";
-                $(style).append($(fontStyle));
-            }
-            else {
-                style = $(placemark).find("Style")[0];
-                pointStyle = "<pointstyle>";
+            if ($(placemark).find("Point") && skip[i] === false) {
+                if ($(placemark).find("name")[0]) {
+                    const labelStyle = $(placemark).find("LabelStyle")[0],
+                        iconUrl = window.location.origin + "/img/kmlIcons/circle_blue.svg";
 
-                pointStyle += "<color>" + pointColors[i] + "</color>";
-                pointStyle += "<transparency>" + pointOpacities[i] + "</transparency>";
-                pointStyle += "<radius>" + pointRadiuses[i] + "</radius>";
-                pointStyle += "</pointstyle>";
+                    if (textFonts[i]) {
+                        $(labelStyle).append(that.addScaleToLableStyle(that.getScaleFromFontSize(textFonts[i])));
+                    }
+                    $(style).append(that.createIconStyle(iconUrl, 0));
+                }
+                else if (hasIconUrl[i] === false) {
+                    const iconUrl = window.location.origin + "/img/kmlIcons/circle_" + that.getIconColor(pointColors[i]) + ".svg",
+                        iconStyle = that.createIconStyle(iconUrl, 1);
 
-                $(style).append($(pointStyle));
+                    $(style).append(iconStyle);
+                }
             }
 
         });
         return new XMLSerializer().serializeToString(convertedFeatures);
     },
+
+    /**
+     * Returns an scale-value for kml name tag, depending on the font size
+     * @param {string} fontSize size as string got from feature style text
+     * @returns {number} the scale
+     */
+    getScaleFromFontSize: function (fontSize) {
+        const size = parseInt(fontSize.substr(0, 2), 10);
+
+        if (size <= 12) {
+            return 0;
+        }
+        else if (size <= 20) {
+            return 1;
+        }
+        else if (size <= 32) {
+            return 2;
+        }
+        return 1;
+    },
+
+    /**
+     * Adds the scale to the LabelStyle-Part of a Point-KML.
+     * @param {number} scale to add
+     * @returns {string} the LabelStyle part of a kml-file.
+     */
+    addScaleToLableStyle: function (scale) {
+        let style = "<colorMode>normal</colorMode>";
+
+        style += "<scale>" + scale + "</scale>";
+
+        return style;
+    },
+
+    /**
+     * Returns the IconStyle-Part of the Point-KML containing a link to a svg.
+     * @param {string} url to the icon
+     * @param {number} scale of the icon, 0 means icon is not displayed
+     * @returns {string} the IconStyle part of a kml-file.
+     */
+    createIconStyle: function (url, scale) {
+        let style = "<IconStyle>";
+
+        style += "<scale>" + scale + "</scale>";
+        style += "<Icon>";
+        style += "<href>" + url + "</href>";
+        style += "</Icon>";
+        style += "</IconStyle>";
+
+        return style;
+    },
+
+
+    /**
+     * Compares the 3 first values in the color-array with constant values for colors.
+     * @param {array} color containing the rgb-Values of a color
+     * @returns {string} a textual value for each color, e.g. "blue"
+     */
+    getIconColor: function (color) {
+        let colorString = "";
+
+        if (this.allCompareEqual(color, [55, 126, 184])) {
+            colorString = "blue";
+        }
+        else if (this.allCompareEqual(color, [255, 255, 255])) {
+            colorString = "white";
+        }
+        else if (this.allCompareEqual(color, [0, 0, 0])) {
+            colorString = "black";
+        }
+        else if (this.allCompareEqual(color, [77, 175, 74])) {
+            colorString = "green";
+        }
+        else if (this.allCompareEqual(color, [228, 26, 28])) {
+            colorString = "red";
+        }
+        return colorString;
+    },
+
+    /**
+     * Compares the first, second and third entry in the given arrays for equality.
+     * @param {array} array1 to compare
+     * @param {array} array2 to compare
+     * @returns {boolean} true, if entry 1-3 are equals
+     */
+    allCompareEqual: function (array1, array2) {
+        return array1[0] === array2[0] && array1[1] === array2[1] && array1[2] === array2[2];
+    },
+
 
     /**
      * Gets the projection in proj4 format.
