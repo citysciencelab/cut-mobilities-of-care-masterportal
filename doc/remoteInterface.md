@@ -150,3 +150,39 @@ Remote-Interface wird Folgendes aufrufen:
 ```js
 Radio.request("MyRadioChannel", "myRequestedFunction", {"param1": "param1", "paramX": "paramX"});
 ```
+
+## Kommunikation vom Masterportal nach außen
+So, wie vom Parent Window über den iframe Events *an* das Masterportal geschuckt werden können, ist es ebenfalls möglich, in die entgegengesetzte Richtung zu kommunizieren.
+
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|params|Object|Parameter als Object, welche an das Parent Window geschickt werden|
+
+#### Beispiel
+
+Innerhalb eines Vue Components:
+```js
+this.$remoteInterface.sendMessage({"param1": "param1", "paramX": "paramX"});
+```
+
+Innerhalb einer VueX Action:
+```js
+this._vm.$remoteInterface.sendMessage({"param1": "param1", "paramX": "paramX"});
+```
+
+Remote-Interface wird Folgendes aufrufen:
+```js
+parent.postMessage({"param1": "param1", "paramX": "paramX"}, options.postMessageUrl);
+```
+
+## Kommunikation vom Masterportal nach außen via Backbone Radio (depricated)
+Ebensfalls noch möglich ist die Kommunikation über Backbone Radio.
+
+|Name|Typ|Beschreibung|
+|----|---|------------|
+|params|Object|Parameter als Object, welche an das Parent Window geschickt werden|
+
+#### Beispiel
+```js
+Radio.trigger("RemoteInterface", "postMessage", {"param1": "param1", "paramX": "paramX"});
+```

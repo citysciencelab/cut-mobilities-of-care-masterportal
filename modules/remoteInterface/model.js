@@ -30,8 +30,6 @@ const RemoteInterface = Backbone.Model.extend({
      * @returns {void}
      */
     receiveMessage: function (event) {
-        console.log("receive OK: ", event);
-        
         if (event.origin !== this.get("postMessageUrl")) {
             return;
         }
