@@ -116,8 +116,6 @@ const RemoteInterface = Backbone.Model.extend({
         Radio.trigger("Map", "removeAllFeaturesFromLayer", "gewerbeflaechen");
     },
     resetView: function () {
-        console.log("OK");
-        
         Radio.trigger("MapView", "resetView");
         Radio.trigger("MapMarker", "hideMarker");
     },

@@ -202,9 +202,6 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
         collection.setActiveToolsToFalse(state);
     }
 
-    console.log(drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent);
-    
-
     commit("setFreeHand", false);
     commit("setRenderToWindow", false);
     commit("setWithoutGUI", true);
