@@ -1,7 +1,6 @@
 <script>
 import MainNav from "./MainNav.vue";
 import MapRegion from "./MapRegion.vue";
-import RemoteInterface from "./modules/remoteInterface/components/RemoteInterface.vue";
 import MapModuleDebug from "./modules/map/components/MapModuleDebug.vue";
 import isDevMode from "./utils/isDevMode";
 
