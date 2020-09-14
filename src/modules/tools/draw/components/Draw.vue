@@ -53,6 +53,23 @@ export default {
         }
     },
     created () {
+        const channel = Radio.channel("Draw");
+
+        channel.reply({
+            "getLayer": function () {
+                return this.layer;
+            },
+            "downloadWithoutGUI": payload => this.downloadFeaturesWithoutGUI(payload)
+        });
+        channel.on({
+            "initWithoutGUI": prmObject => this.initializeWithoutGUI(prmObject),
+            "deleteAllFeatures": () => this.clearLayer(),
+            "editWithoutGUI": () => this.editFeaturesWithoutGUI(),
+            "cancelDrawWithoutGUI": () => this.close(),
+            "downloadViaRemoteInterface": geomType => this.downloadViaRemoteInterface(geomType)
+        });
+
+        Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
         this.$on("close", this.close);
     },
     methods: {
