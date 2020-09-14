@@ -38,12 +38,12 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @return {Object[]} layerList - Objekte from services.json
      */
     filterList: function (layerList = []) {
-        return layerList.filter(function (element) {
+        return layerList.filter(element => {
             if (!element.hasOwnProperty("datasets")) {
                 return false;
             }
 
-            return element.datasets.length > 0 && ["WMS", "Terrain3D", "TileSet3D", "Oblique"].includes(element.typ);
+            return element.datasets.length > 0 && ["WMS", "SensorThings", "Terrain3D", "TileSet3D", "Oblique"].includes(element.typ);
         });
     },
 
@@ -70,9 +70,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @return {Object[]} layerList - Objects from services.json that are assigned to exactly one dataset
      */
     createLayerPerDataset: function (layerList) {
-        const layerListPerDataset = layerList.filter(function (element) {
-            return element.datasets.length > 1;
-        });
+        const layerListPerDataset = layerList.filter(element => element.datasets.length > 1);
 
         layerListPerDataset.forEach(layer => {
             layer.datasets.forEach((ds, index) => {
@@ -83,9 +81,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
                 layerList.push(newLayer);
             });
         });
-        return layerList.filter(function (element) {
-            return element.datasets.length === 1;
-        });
+        return layerList.filter(element => element.datasets.length === 1);
     },
 
     /**
