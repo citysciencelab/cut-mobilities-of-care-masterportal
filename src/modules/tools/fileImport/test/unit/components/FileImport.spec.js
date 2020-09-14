@@ -46,7 +46,7 @@ describe("FileImport.vue", () => {
                 configJson: mockConfigJson
             }
         });
-        store.dispatch("Tools/FileImport/setActive", true);
+        store.commit("Tools/FileImport/setActive", true);
     });
 
     it("renders the fileImport", () => {
@@ -56,7 +56,7 @@ describe("FileImport.vue", () => {
     });
 
     it("do not render the fileImport tool if not active", () => {
-        store.dispatch("Tools/FileImport/setActive", false);
+        store.commit("Tools/FileImport/setActive", false);
         const wrapper = shallowMount(FileImportComponent, {store, localVue});
 
         expect(wrapper.find("#kml-import").exists()).to.be.false;

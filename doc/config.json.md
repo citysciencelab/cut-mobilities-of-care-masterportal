@@ -541,7 +541,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|zoomMode|nein|enum["none", "once", "always"]|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.).|false|
+|zoomMode|nein|enum["once", "always"]|"once"|Der Standort wird bestimmt und der Marker wird an- oder ausgeschaltet. Dafür ist es notwendig das Portal über **https** zu laden. Modi: *once* (Es wird einmalig auf den Standort gezoomt. ), *always* (Die Karte wird mit jedem Einschalten auf den Standort gezoomt.).|false|
 |poiDistances|nein|Boolean/Integer[]|true|Bei poiDistances=true werden die Defaultwerte verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände in Metern angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|false|
 
 **Beispiel mit poiDistances vom Typ Boolean**
@@ -915,7 +915,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |----|-------------|---|-------|------------|------|
 |addWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Themenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|false|
 |animation|nein|**[animation](#markdown-header-portalconfigmenutoolanimation)**||Pendleranimation als punkthafte Objekte.|false|
-|compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vektor-Features.|false|
+|compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vektor-Features. Fuktioniert nur in Verbindung mit dem GFI-Theme **Schulinfo**!|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemeldet werden.|false|
 |coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
@@ -951,7 +951,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|active|nein|Boolean|false|Gibt an, ob ein Werkzeug beim starten des Portals geöffnet ist.
+|active|nein|Boolean|false|Gibt an, ob ein Werkzeug beim starten des Portals geöffnet ist.|false|
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
 |isVisibleInMenu|nein|Boolean|true|Flag, ob das Tool unter Werkzeuge angezeigt wird.|false|
 |keepOpen|nein|Boolean|false|Flag, ob das Tool parallel zu anderen Tools geöffnet bleibt.|false|
@@ -2191,6 +2191,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |Titel|ja|String||Titel des Ordners.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
 |Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
+|isFolderSelectable|nein|Boolean|true|Bewirkt, dass alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden können.|false|
 
 **Beispiel Ordner mit einem Layer**
 ```
@@ -2216,6 +2217,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
     "Ordner": [
         {
             "Titel": "Mein erster Ordner",
+            "isFolderSelectable": true,
             "Ordner": [
                 {
                     "Titel": "Mein zweiter Ordner",

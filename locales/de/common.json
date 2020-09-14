@@ -87,6 +87,10 @@
             "layer": {
               "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist."
             }
+          },
+          "parametricURL": {
+            "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
+            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die LAYERIDS am den Positionen: <b>{{wrongIdsPositionsConcat}}</b> existieren nicht und werden ignoriert!"
           }
         },
         "alerting": {
@@ -414,6 +418,7 @@
                         "idLabel": "ID:",
                         "typeLabel": "Art: ",
                         "meansOfTransportLabel": "Verkehrsmittel: ",
+                        "directionLabel": "Richtung:",
                         "carsHeaderSuffix": "KFZ abs.",
                         "trucksHeaderSuffix": "SV-Anteil in %",
                         "yAxisTextDay": "Anzahl / 15 Min.",
@@ -447,7 +452,6 @@
                 "hdmsNorthingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
             },
             "draw": {
-                "title": "Zeichnungen erstellen",
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
                 "draw": "zeichnen",
                 "geometryDrawFailed": "Die übergebene Geometrie konnte nicht dargestellt werden.",
@@ -653,6 +657,9 @@
             "title": "Legende",
             "collapseAll": "Alle einklappen",
             "foldOutAll": "Alle ausklappen"
+        },
+        "zoomToGeometry": {
+          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter."
         }
     },
     "snippets": {

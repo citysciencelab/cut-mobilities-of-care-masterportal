@@ -214,6 +214,30 @@ export class TrafficCountApi {
     }
 
     /**
+     * gets the direction of the thing
+     * @param {Integer} thingId the ID of the thing
+     * @param {Callback} [onupdate] as function(direction) to set the direction
+     * @param {Callback} [onerror] as function(error) to fire on error
+     * @param {Callback} [onstart] as function() to fire before any async action has started
+     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @returns {Void}  -
+     */
+    updateDirection (thingId, onupdate, onerror, onstart, oncomplete) {
+        const url = this.baseUrlHttp + "/Things(" + thingId + ")";
+
+        return this.http.get(url, (dataset) => {
+            if (Array.isArray(dataset) && dataset.length > 0 && dataset[0].hasOwnProperty("properties") && dataset[0].properties.hasOwnProperty("richtung")) {
+                if (typeof onupdate === "function") {
+                    onupdate(dataset[0].properties.richtung);
+                }
+            }
+            else {
+                (onerror || this.defaultErrorHandler)("TrafficCountAPI.updateDirection: the response does not include a Thing with a proper name", dataset);
+            }
+        }, onstart, oncomplete, onerror || this.defaultErrorHandler);
+    }
+
+    /**
      * gets the sum for a single day excluding todays last 15 minutes
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'

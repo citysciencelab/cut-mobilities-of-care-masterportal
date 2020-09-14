@@ -56,7 +56,7 @@
                         <ul class="list-unstyled">
                             <% if (downloadLinks !== null) { %>
                                 <% downloadLinks.forEach(function (downloadLink) { %>
-                                    <li><a href="<%= downloadLink[1] %>" target="_blank"><%= downloadLink[0] %> </a><li>
+                                    <li><a href="<%= downloadLink.link %>" target="_blank"><%= downloadLink.linkName %> </a><li>
                                 <% }); %>
                             <% } %>
                         </ul>

@@ -2,6 +2,7 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsDraw";
+import DownloadView from "../../../../../modules/tools/download/view";
 
 export default {
     name: "Draw",
@@ -19,7 +20,6 @@ export default {
         ...mapGetters("Tools/Draw", constants.keyStore.getters),
         /**
          * Enables or disables all the select or input elements depending on if the currentInteraction is "draw".
-         *
          * @returns {Boolean} currentInteraction === "draw": return false and activate the HTML elements, else: return true and deactivate the HTML elements.
          */
         drawHTMLElements () {
@@ -27,7 +27,6 @@ export default {
         },
         /**
          * Disables the input for the diameter and the unit for the drawType "drawCircle" if the circleMethod is not set to "defined".
-         *
          * @returns {Boolean} return false if drawing is enabled and circleMethod is set to "defined", else return true.
          */
         drawCircleMethods () {
@@ -37,10 +36,41 @@ export default {
         }
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
     },
+    watch: {
+        /**
+          * Starts the action for processes, if the tool is be activated (active === true).
+          * @param {boolean} value Value deciding whether the tool gets activated or deactivated.
+          * @returns {void}
+         */
+        active (value) {
+            if (value) {
+                new DownloadView(this.$store);
+                this.setActive(value);
+            }
+            else {
+                this.resetModule();
+            }
+        }
+    },
     created () {
+        const channel = Radio.channel("Draw");
+
+        channel.reply({
+            "getLayer": function () {
+                return this.layer;
+            },
+            "downloadWithoutGUI": payload => this.downloadFeaturesWithoutGUI(payload)
+        });
+        channel.on({
+            "initWithoutGUI": prmObject => this.initializeWithoutGUI(prmObject),
+            "deleteAllFeatures": () => this.clearLayer(),
+            "editWithoutGUI": () => this.editFeaturesWithoutGUI(),
+            "cancelDrawWithoutGUI": () => this.close(),
+            "downloadViaRemoteInterface": geomType => this.downloadViaRemoteInterface(geomType)
+        });
+
+        Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
         this.$on("close", this.close);
-        this.setActive(this.active);
-        this.activateByUrlParam();
     },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
@@ -62,7 +92,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('common:modules.tools.draw.title')"
+        :title="name"
         :icon="glyphicon"
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"

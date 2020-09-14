@@ -27,6 +27,7 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
             "change:title": this.renderTitle,
             "change:type": this.renderType,
             "change:meansOfTransport": this.renderMeansOfTransport,
+            "change:direction": this.renderDirection,
             "change:lastUpdate": this.renderLastUpdate,
             "change:totalDesc": this.renderTotalDesc,
             "change:totalValue": this.renderTotalValue,
@@ -160,6 +161,16 @@ const TrafficCountView = ThemeView.extend(/** @lends TrafficCountView.prototype 
      */
     renderTitle: function (model, value) {
         this.$el.find("#title").text(value);
+    },
+
+    /**
+     * render direction
+     * @param   {Object} model containing model
+     * @param   {String} value element value
+     * @returns {Void}  -
+     */
+    renderDirection: function (model, value) {
+        this.$el.find("#direction").text(value);
     },
 
     /**

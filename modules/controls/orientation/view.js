@@ -13,7 +13,7 @@ const OrientationView = Backbone.View.extend({
             poiDistances = null,
             channel = null;
 
-        this.model = new OrientationModel(attr.config);
+        this.model = new OrientationModel(Object.assign(attr.config, attr.config.attr));
         showGeolocation = this.model.get("isGeoLocationPossible");
         showPoi = this.model.get("showPoi");
         poiDistances = this.model.get("poiDistances");

@@ -1,5 +1,3 @@
-import DownloadView from "../../../../../../modules/tools/download/view";
-
 /**
  * Function to adjust the value / diameter to the units meters or kilometers.
  *
@@ -20,26 +18,7 @@ function adjustValueToUnits (diameter, unit) {
  * @returns {void}
  */
 function setActive ({state, commit, dispatch}, active) {
-    const channel = Radio.channel("Draw");
-
     commit("setActive", active);
-
-    new DownloadView();
-
-    channel.reply({
-        "getLayer": function () {
-            return state.layer;
-        },
-        "downloadWithoutGUI": payload => dispatch("downloadFeaturesWithoutGUI", payload)
-    });
-    channel.on({
-        "initWithoutGUI": prmObject => dispatch("initializeWithoutGUI", prmObject),
-        "deleteAllFeatures": () => dispatch("clearLayer"),
-        "editWithoutGUI": () => dispatch("editFeaturesWithoutGUI"),
-        "cancelDrawWithoutGUI": cursor => dispatch("cancelDrawWithoutGUI", cursor),
-        "downloadViaRemoteInterface": geomType => dispatch("downloadViaRemoteInterface", geomType)
-    });
-    Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
 
     if (active) {
         commit("setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
