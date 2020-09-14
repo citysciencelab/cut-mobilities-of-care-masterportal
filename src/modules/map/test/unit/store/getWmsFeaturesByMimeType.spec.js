@@ -16,9 +16,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
 
             expect(feature.getGfiUrl()).to.equal("url");
             expect(feature.getTitle()).to.equal("layerName");
-            // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
-            expect(feature.getTheme()).to.equal("default");
-            // expect(feature.getTheme()).to.equal("gfiTheme");
+            expect(feature.getTheme()).to.equal("gfiTheme");
             expect(feature.getAttributesToShow()).to.equal("attributesToShow");
             expect(feature.getProperties()).to.equal("featureProperties");
         });
@@ -130,9 +128,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
 
             expect(result[0].getGfiUrl()).to.equal("url");
             expect(result[0].getTitle()).to.equal("layerName");
-            // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
-            expect(result[0].getTheme()).to.equal("default");
-            // expect(result[0].getTheme()).to.equal("gfiTheme");
+            expect(result[0].getTheme()).to.equal("gfiTheme");
             expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
             expect(result[0].getProperties()).to.equal("featureProperties");
         });
@@ -180,9 +176,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
 
             expect(result[0].getGfiUrl()).to.equal("url");
             expect(result[0].getTitle()).to.equal("layerName");
-            // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
-            expect(result[0].getTheme()).to.equal("default");
-            // expect(result[0].getTheme()).to.equal("gfiTheme");
+            expect(result[0].getTheme()).to.equal("gfiTheme");
             expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
             expect(result[0].getProperties()).to.equal(null);
         });
