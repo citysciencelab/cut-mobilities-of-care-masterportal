@@ -106,9 +106,7 @@ export function getXmlFeatures (url, layerName, gfiTheme, attributesToShow, call
 export function createGfiFeature (layerName, gfiTheme, attributesToShow, featureProperties, url = "") {
     return {
         getTitle: () => layerName,
-        // TODO MPR: entfernen! Umleiten auf default, um Verhalten von allen Layer-Typen an default zu testen
-        getTheme: () => "default",
-        // getTheme: () => gfiTheme,
+        getTheme: () => gfiTheme,
         getAttributesToShow: () => attributesToShow,
         getProperties: () => featureProperties,
         getGfiUrl: () => url
