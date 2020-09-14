@@ -104,9 +104,5 @@ export default {
     width: 100%;
     min-height: 40vh;
 }
-.gfi-iFrame {
-    width: 100%;
-    min-height: 40vh;
-}
 
 </style>
