@@ -8,7 +8,7 @@ import Polygon from "ol/geom/Polygon";
 import LineString from "ol/geom/LineString";
 
 
-describe("actionsDraw", () => {
+describe("src/modules/tools/draw/store/actionsDraw.js", () => {
     let commit, dispatch, state;
 
     beforeEach(() => {

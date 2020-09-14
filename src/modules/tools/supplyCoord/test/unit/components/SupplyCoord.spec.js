@@ -17,7 +17,7 @@ const localVue = createLocalVue(),
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("SupplyCoord.vue", () => {
+describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
     const mockMapGetters = {
             map: () => sinon.stub(),
             projection: () => sinon.stub(),

@@ -2,7 +2,7 @@ import sinon from "sinon";
 import {expect} from "chai";
 import actions from "../../store/actionsDraw";
 
-describe("actionsSetterDraw", () => {
+describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
     let commit, dispatch, state, target;
 
     beforeEach(() => {

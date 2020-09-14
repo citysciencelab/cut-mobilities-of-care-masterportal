@@ -3,10 +3,9 @@ import sinon from "sinon";
 import getters from "../../../gettersTools";
 import stateTools from "../../../stateTools";
 
-describe("Tools", function () {
-
-    describe("Tools getters", function () {
-        it("returns the componentMap from state", function () {
+describe("src/modules/tools/gettersTools.js", () => {
+    describe("Tools getters", () => {
+        it("returns the componentMap from state", () => {
             const state = {
                 componentMap: {
                     scaleSwitcher: sinon.stub(),
@@ -18,9 +17,7 @@ describe("Tools", function () {
             expect(Object.keys(getters.componentMap(state)).length).to.equals(2);
             expect(getters.componentMap(state)).to.include(state.componentMap);
         });
-    });
-    describe("Tools getters", function () {
-        it("returns the configuredTools from state", function () {
+        it("returns the configuredTools from state", () => {
             const state = {
                 configuredTools: [{key: "supplyCoord"}, {key: "scaleSwitcher"}]
             };
@@ -36,9 +33,7 @@ describe("Tools", function () {
                 }
             ]);
         });
-    });
-    describe("Tools getters", function () {
-        it("returns the active tools from state in this case one", function () {
+        it("returns the active tools from state in this case one", () => {
             const state = {
                 Draw: {
                     active: true
@@ -52,9 +47,7 @@ describe("Tools", function () {
             expect(getters.getActiveToolNames(state).length).to.equals(1);
             expect(getters.getActiveToolNames(state)).to.includes("Draw");
         });
-    });
-    describe("Tools getters", function () {
-        it("returns the active tools from state in this case two", function () {
+        it("returns the active tools from state in this case two", () => {
             const state = {
                 Draw: {
                     active: true
@@ -71,9 +64,7 @@ describe("Tools", function () {
             expect(getters.getActiveToolNames(state).length).to.equals(2);
             expect(getters.getActiveToolNames(state)).to.includes("Draw", "ToolXY");
         });
-    });
-    describe("Tools getters", function () {
-        it("returns an empty array tools from state", function () {
+        it("returns an empty array tools from state", () => {
             const state = {
                 Draw: {
                     active: false
@@ -89,9 +80,7 @@ describe("Tools", function () {
             expect(getters.getActiveToolNames(state)).to.be.an("array");
             expect(getters.getActiveToolNames(state).length).to.equals(0);
         });
-    });
-    describe("Tools getters", function () {
-        it("returns the configured tools from state", function () {
+        it("returns the configured tools from state", () => {
             const state = {
                 configuredTools: [
                     {

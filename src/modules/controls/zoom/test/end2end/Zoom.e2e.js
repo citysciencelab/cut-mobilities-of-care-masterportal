@@ -15,10 +15,10 @@ function ZoomTests ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution);
 
     if (testIsApplicable) {
-        describe("Modules Controls Zoom", function () {
+        describe("Modules Controls Zoom", () => {
             let driver, minus, plus;
 
-            before(async function () {
+            before(async () => {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
@@ -26,33 +26,33 @@ function ZoomTests ({builder, url, resolution, capability}) {
                 driver = await initDriver(builder, url, resolution);
             });
 
-            after(async function () {
+            after(async () => {
                 if (capability) {
-                    driver.session_.then(function (sessionData) {
+                    driver.session_.then(sessionData => {
                         logBrowserstackUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();
             });
 
-            it("should have a plus button", async function () {
+            it("should have a plus button", async () => {
                 plus = await driver.wait(until.elementLocated(By.css("button.control-icon.glyphicon-plus")), 5000);
                 expect(plus).to.exist;
             });
 
-            it("should zoom in after clicking plus button", async function () {
+            it("should zoom in after clicking plus button", async () => {
                 const res = await driver.executeScript(getResolution);
 
                 await plus.click();
                 await driver.wait(async () => res > await driver.executeScript(getResolution), 3000, "Map did not zoom in.");
             });
 
-            it("should have a minus button", async function () {
+            it("should have a minus button", async () => {
                 minus = await driver.findElement(By.css("button.control-icon.glyphicon-minus"));
                 expect(minus).to.exist;
             });
 
-            it("should zoom out after clicking minus button", async function () {
+            it("should zoom out after clicking minus button", async () => {
                 const res = await driver.executeScript(getResolution);
 
                 await minus.click();

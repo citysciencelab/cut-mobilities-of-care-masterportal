@@ -1,10 +1,17 @@
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsSupplyCoord";
 
-const {positionClicked, newProjectionSelected, changedPosition, adjustPosition, setCoordinates, checkPosition} = actions;
+const {
+    positionClicked,
+    newProjectionSelected,
+    changedPosition,
+    adjustPosition,
+    setCoordinates,
+    checkPosition
+} = actions;
 
-describe("actionsSupplyCoord", function () {
-    describe("positionClicked", function () {
+describe("src/modules/tools/supplyCoord/store/actionsSupplyCoord.js", () => {
+    describe("positionClicked", () => {
         it("positionClicked", done => {
             const payload = {
                     coordinate: [1000, 2000]
@@ -22,7 +29,7 @@ describe("actionsSupplyCoord", function () {
             ], {}, done);
         });
     });
-    describe("newProjectionSelected", function () {
+    describe("newProjectionSelected", () => {
         it("newProjectionSelected", done => {
             const state = {
                 currentSelection: "projection 2",
@@ -40,7 +47,7 @@ describe("actionsSupplyCoord", function () {
             }}, done);
         });
     });
-    describe("changedPosition", function () {
+    describe("changedPosition", () => {
         const rootState = {
                 Map: {
                     map: {}
@@ -74,7 +81,7 @@ describe("actionsSupplyCoord", function () {
                 }}, done);
         });
     });
-    describe("adjustPosition", function () {
+    describe("adjustPosition", () => {
         const rootState = {
                 Map: {
                     map: {}
@@ -130,7 +137,7 @@ describe("actionsSupplyCoord", function () {
             testAction(adjustPosition, payload, {}, rootState, [], {}, done);
         });
     });
-    describe("setCoordinates", function () {
+    describe("setCoordinates", () => {
         it("setCoordinates updates position", done => {
             const state = {
                     updatePosition: true
@@ -157,7 +164,7 @@ describe("actionsSupplyCoord", function () {
             testAction(setCoordinates, payload, state, {}, [], {}, done);
         });
     });
-    describe("checkPosition", function () {
+    describe("checkPosition", () => {
         it("checkPosition sets positionMapProjection", done => {
             const state = {
                     updatePosition: true

@@ -10,7 +10,7 @@ localVue.use(Vuex);
 
 config.mocks.$t = key => key;
 
-describe("FileImport.vue", () => {
+describe("src/modules/tools/fileImport/components/FileImport.vue", () => {
     const
         mockConfigJson = {
             Portalconfig: {

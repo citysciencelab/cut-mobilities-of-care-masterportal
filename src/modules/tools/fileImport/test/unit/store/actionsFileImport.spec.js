@@ -25,8 +25,8 @@ before(() => {
     });
 });
 
-describe("actionsFileImport", function () {
-    describe("file import - file should add some features to the current draw layer", function () {
+describe("src/modules/tools/fileImport/store/actionsFileImport.js", () => {
+    describe("file import - file should add some features to the current draw layer", () => {
         const
             source = new VectorSource(),
             layer = new VectorLayer({

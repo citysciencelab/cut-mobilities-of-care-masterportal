@@ -8,7 +8,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 
 // Test the ScaleLine component
-describe("ScaleLine.vue", () => {
+describe("src/modules/scaleLine/components/ScaleLine.vue", () => {
     let wrapper;
 
     it("check mapMode normal -> do render", () => {
