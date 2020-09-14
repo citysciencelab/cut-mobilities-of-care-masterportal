@@ -35,7 +35,7 @@
 - Die Version des Packages zip-a-folder wurde in der package.json aktualisiert.
 
 ### Deprecated
-- RemoteInterface via Backbone Radio ist ab jetzt depricated.
+- RemoteInterface via Backbone Radio ist ab jetzt deprecated.
 - WfsFeatureFilter ist deprecated. Bitte das Modul Filter benutzen.
 - ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
 - Das Attribut coord für das Modul zur Koordinatenabfrage ist deprecated. Bitte das Attribut supplyCoord benutzen.
