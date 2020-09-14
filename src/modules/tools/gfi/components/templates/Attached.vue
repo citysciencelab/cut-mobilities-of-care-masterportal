@@ -33,14 +33,16 @@ export default {
         title: function () {
             return this.feature.getTitle();
         },
+
         /**
          * Returns the theme in which the feature should be displayed.
-         * It only works if the theme has the same name as the theme component.
+         * It only works if the theme has the same name as the theme component, otherwise the default theme will be used
          * @returns {string} the name of the theme
          */
         theme: function () {
-            return upperFirst(this.feature.getTheme());
+            return this.getTheme();
         },
+
         /**
          * Returns the custom style for the gfi window content.
          * it will make sure the gfi window in the browser window.
@@ -118,6 +120,28 @@ export default {
                 $(this.overlay.getElement()).remove();
                 Radio.trigger("Map", "removeOverlay", this.overlay);
             }
+        },
+
+        /**
+         * Returns the right gfi Theme
+         * it check if the right Theme (Component) is there, if yes just use this component, otherwise use the default theme
+         * @returns {String} the name of the gfi Theme
+         */
+        getTheme () {
+            const gfiComponents = Object.keys(this.$options.components),
+                configTheme = upperFirst(this.feature.getTheme());
+
+            let theme = "";
+
+            if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
+                theme = configTheme;
+            }
+            else {
+                console.warn(String("The gfi theme '" + configTheme + "' could not be found, the default theme will be used. Please check your configuration!"));
+                theme = "Default";
+            }
+
+            return theme;
         }
     }
 };
