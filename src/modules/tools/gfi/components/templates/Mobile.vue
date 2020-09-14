@@ -1,13 +1,15 @@
 <script>
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
+import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
 import {upperFirst} from "../../../../../utils/stringHelpers";
 
 export default {
     name: "Mobile",
     components: {
         Default,
-        Schulinfo
+        Schulinfo,
+        TrafficCount
     },
     props: {
         feature: {
