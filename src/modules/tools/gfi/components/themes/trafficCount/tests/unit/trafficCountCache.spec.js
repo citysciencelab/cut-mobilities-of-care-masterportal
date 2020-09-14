@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {TrafficCountCache} from "@modules/tools/gfi/themes/trafficCount/trafficCountCache";
+import {TrafficCountCache} from "../../library/trafficCountCache";
 import moment from "moment";
 
 // change language from moment.js to german

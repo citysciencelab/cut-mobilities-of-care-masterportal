@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {TrafficCountApi} from "@modules/tools/gfi/themes/trafficCount/trafficCountApi";
+import {TrafficCountApi} from "../../library/trafficCountApi";
 import moment from "moment";
 
 // change language from moment.js to german

@@ -1,6 +1,7 @@
 <script>
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
+import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
 import {upperFirst} from "../../../../../utils/stringHelpers";
 import "jquery-ui/ui/widgets/draggable";
 
@@ -8,7 +9,8 @@ export default {
     name: "Table",
     components: {
         Default,
-        Schulinfo
+        Schulinfo,
+        TrafficCount
     },
     props: {
         feature: {
