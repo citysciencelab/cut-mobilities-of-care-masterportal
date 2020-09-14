@@ -7,7 +7,7 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("Gfi Mobile.vue", () => {
+describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
 
     it("should have a title", () => {
         const wrapper = shallowMount(Mobile, {
