@@ -37,13 +37,15 @@ Der im Parameter-Object von .postMessage() gewählte Key entspricht dem Namen de
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |nameOfFunction|Array|Parameter für die auszuführende Funktion|
+|domain|String|Domain des Empfänger-Windows|
+
 
 #### Beispiel
 Eine spezifische Funktion kann wie folgt aufgerufen werden:
 
 ```js
 const myIframe = document.getElementById("my-iframe");
-myIframe.contentWindow.postMessage({nameOfFunction: "specificFunction", ["param1", "param2", "paramX"]});
+myIframe.contentWindow.postMessage({nameOfFunction: "specificFunction", ["param1", "param2", "paramX"]}, domain);
 ```
 
 ### Liste Direkt aufrufbarer Funktionen
@@ -53,6 +55,7 @@ Es wird ein Marker an die Zentrumskoordinate des übergebenen Extents gesetzt un
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |showPositionByExtent|Array|Extent, an dessen Zentrumskoordiante ein Marker gesetzt wird.|
+|domain|String|Domain des Empfänger-Windows|
 
 #### Beispiel
 
@@ -67,6 +70,7 @@ Es wird ein Marker an die Zentrumskoordinate des übergebenen Extents gesetzt. A
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |showPositionByExtentNoScroll|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
+|domain|String|Domain des Empfänger-Windows|
 
 #### Beispiel
 ```js
@@ -82,6 +86,7 @@ Ein Feature eines gegebenen WFST-Layers wird modifiziert.
 |layerId|String|Id des Layers.|
 |attributes|String|JSON mit den Attributes des Features.|
 |mode|String|auszuführende Operation. Momentan nur "update" implementiert.|
+|domain|String|Domain des Empfänger-Windows|
 
 #### Beispiel
 ```js
@@ -95,6 +100,7 @@ Die Karte wird auf den übergebenen Extent gezoomt.
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |zoomToExtent|Array|Extent.|
+|domain|String|Domain des Empfänger-Windows|
 
 #### Beispiel
 ```js
@@ -108,6 +114,7 @@ Ein Vektor-Feature in der Karte wird hervorgehoben.
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |highlightfeature|String|LayerId und FeatureId in einem String per Komma separiert|
+|domain|String|Domain des Empfänger-Windows|
 
 #### Beispiel
 ```js
@@ -121,6 +128,7 @@ Der Map-Marker wird versteckt.
 |Name|Typ|Beschreibung|
 |----|---|------------|
 |hidePosition|String|"hidePosition". Dadurch wird der Marker versteckt.|
+|domain|String|Domain des Empfänger-Windows|
 
 #### Beispiel
 ```js
@@ -138,6 +146,7 @@ Achtung: Dieses Feature basiert auf Backbone-Radio, welches im gesamten Projekt 
 |radio_channel|String|Der Radio-Channel, der angesprochen werden soll.|
 |radio_function|String|Die Funktion des Radio-Channels, die angesprochen werden soll.|
 |radio_para_object|Object|(optional) Ein Parameter-Objekt, das an die Radio-Funktion übergeben wird.|
+|domain|String|Domain des Empfänger-Windows|
 
 #### Beispiel
 ```js

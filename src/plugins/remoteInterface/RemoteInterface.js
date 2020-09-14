@@ -3,20 +3,29 @@ import store from "../../app-store";
 export default {
     install (Vue, options) {
         if (options === undefined || typeof options.postMessageUrl !== "string") {
-            console.error("RemoteInterfaceVue could not been installed: Param \"postMessageUrl\" missing.");
+            console.error("RemoteInterface could not been installed: Param \"postMessageUrl\" missing.");
             return;
         }
 
         window.addEventListener("message", event => {
+            let fullActionName = "";
+            
             if (event.data.namespace === undefined || event.data.action === undefined) {
                 return;
             }
+
+            fullActionName = event.data.namespace + "/" + event.data.action;
 
             if (event.data.args === undefined) {
                 event.data.args = null;
             }
 
-            store.dispatch(event.data.namespace + "/" + event.data.action, event.data.args, {root: true});
+            try {
+                store.dispatch(fullActionName, event.data.args, {root: true});
+            }
+            catch (e) {
+                console.error("RemoteInterface could not call \"" + fullActionName + "\". Please ensure this action is available.");
+            }
         });
 
         Vue.prototype.$remoteInterface = {

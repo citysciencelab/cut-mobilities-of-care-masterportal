@@ -37,13 +37,14 @@ Using an object as param, its key represents the name of desired deticated funct
 |Name|Type|Explanation|
 |----|---|------------|
 |nameOfFunction|Array|Params to invoke deticated function|
+|domain|String|Receiver window's domain|
 
 #### Example
 A specific function may be invoked as follows:
 
 ```js
 const myIframe = document.getElementById("my-iframe");
-myIframe.contentWindow.postMessage({nameOfFunction: "specificFunction", ["param1", "param2", "paramX"]});
+myIframe.contentWindow.postMessage({nameOfFunction: "specificFunction", ["param1", "param2", "paramX"]}, domain);
 ```
 
 ### List of deticated functions
@@ -53,6 +54,7 @@ A map marker will be placed at the center of given extent. Map view will be cent
 |Name|Type|Explanation|
 |----|---|------------|
 |showPositionByExtent|Array|Extent, where the map marker shall be set|
+|domain|String|Receiver window's domain|
 
 #### Example
 
@@ -67,6 +69,7 @@ A map marker will be placed at the center of given extent. Map view will not be 
 |Name|Type|Explanation|
 |----|---|------------|
 |showPositionByExtentNoScroll|Array|Extent, where the map marker shall be set|
+|domain|String|Receiver window's domain|
 
 #### Example
 ```js
@@ -82,6 +85,7 @@ Modify a feature of given WFST-Layer.
 |layerId|String|Id of Layer.|
 |attributes|String|JSON containing feature attributes.|
 |mode|String|Name of operation to be executed. Currently, only "update" is available|
+|domain|String|Receiver window's domain|
 
 #### Example
 ```js
@@ -95,6 +99,7 @@ Map view will be centered upon given extent.
 |Name|Type|Explanation|
 |----|---|------------|
 |zoomToExtent|Array|Extent.|
+|domain|String|Receiver window's domain|
 
 #### Example
 ```js
@@ -108,6 +113,7 @@ Highlight a vector feature on the map.
 |Name|Type|Explanation|
 |----|---|------------|
 |highlightfeature|String|LayerId and FeatureId as a String separated by comma|
+|domain|String|Receiver window's domain|
 
 #### Example
 ```js
@@ -121,6 +127,7 @@ Hide the map marker.
 |Name|Type|Explanation|
 |----|---|------------|
 |hidePosition|String|Using "hidePosition" hides the marker|
+|domain|String|Receiver window's domain|
 
 #### Example
 ```js
@@ -138,6 +145,7 @@ Notice: As this feature is based upon Backbone Radio, it is depricated all along
 |radio_channel|String|Desired Radio-Channel|
 |radio_function|String|Desired function destributed by the Radio channel|
 |radio_para_object|Object|(optional) A Param-Object to be forwarded to the invoked function|
+|domain|String|Receiver window's domain|
 
 #### Example
 ```js

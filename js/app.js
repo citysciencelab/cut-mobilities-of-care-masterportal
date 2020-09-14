@@ -45,7 +45,8 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
-import RemoteInterfaceVue from "../src/plugins/remoteInterface/remoteInterfaceVue";
+import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
+
 /**
  * WFSFeatureFilterView
  * @deprecated in 3.0.0
