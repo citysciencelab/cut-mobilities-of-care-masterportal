@@ -7,7 +7,7 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("Gfi Detached.vue", () => {
+describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
 
     it("should have a title", () => {
         const wrapper = shallowMount(Detached, {

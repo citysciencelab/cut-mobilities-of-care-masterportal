@@ -26,7 +26,7 @@ const wmsSource = new TileWMS({
         })
     });
 
-describe("actionsMap", function () {
+describe("src/modules/map/store/actions/actionsMap.js", () => {
     describe("updateClick: Listener for click on the map", () => {
         it("commits setClickCoord and setClickPixel in MODE_2D", () => {
             const getters = {

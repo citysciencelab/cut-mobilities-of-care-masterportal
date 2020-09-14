@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import getters from "../getters.js";
 
-describe("app store getters", function () {
+describe("src/app-store/getters.js", () => {
     describe("isSimpleStyle: checks if the simple style is set or not", () => {
         it("should return false if table style is set in the queryParams", () => {
             const state = {
