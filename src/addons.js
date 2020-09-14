@@ -2,7 +2,7 @@ import store from "./app-store";
 import Vue from "vue";
 
 /* eslint-disable no-undef */
-const allAddons = ADDONS || {};
+const allAddons = VUE_ADDONS || {};
 
 /**
  * Adds all addons based on config.js and addonsConf.json to the Vue Instance and store
@@ -17,14 +17,14 @@ export default async function (config) {
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, ""),
                     storeModule = await import(
                         /* webpackChunkName: "[request]" */
-                        /* webpackInclude: /addons\/**\/*.js/ */
+                        /* webpackInclude: /addons\/**\/store\/*.js/ */
                         /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
-                        "../addons/" + entryPoint + ".js"),
+                        `../addons/${entryPoint}/store/${entryPoint}.js`),
                     component = await import(
                         /* webpackChunkName: "[request]" */
-                        /* webpackInclude: /addons\/**\/*.vue/ */
+                        /* webpackInclude: /addons\/**\/components\/*.vue/ */
                         /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
-                        "../addons/" + entryPoint + ".vue");
+                        `../addons/${entryPoint}/components/${entryPoint}.vue`);
 
                 // Add the component to vue instance globally
                 Vue.component(component.default.name, component.default);

@@ -21,7 +21,8 @@ else {
 }
 
 module.exports = function () {
-    const addonsRelPaths = {};
+    const addonsRelPaths = {},
+        vueAddonsRelPaths = {};
 
     for (const addonName in addonEntryPoints) {
         if (typeof addonEntryPoints[addonName] !== "string") {
@@ -37,9 +38,13 @@ module.exports = function () {
                 console.error("############\n------------");
                 throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
             }
+
+            vueAddonsRelPaths[addonName] = addonEntryPoints[addonName];
+        }
+        else {
+            addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
         }
 
-        addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
     }
 
     return {
@@ -104,8 +109,7 @@ module.exports = function () {
                     use: [
                         {
                             loader: MiniCssExtractPlugin.loader,
-                            options: {
-                            }
+                            options: {}
                         },
                         "css-loader",
                         "less-loader"
@@ -158,7 +162,15 @@ module.exports = function () {
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
             // create global constant at compile time
             new webpack.DefinePlugin({
-                ADDONS: JSON.stringify(addonsRelPaths)
+                ADDONS: JSON.stringify(addonsRelPaths),
+                VUE_ADDONS: JSON.stringify(vueAddonsRelPaths)
+            }),
+            // import only a very limited number of timezones
+            // @see https://www.npmjs.com/package/moment-timezone-data-webpack-plugin
+            new MomentTimezoneDataPlugin({
+                matchZones: /Europe\/(Berlin|London)/,
+                startYear: 2019,
+                endYear: new Date().getFullYear()
             })
         ]
     };
