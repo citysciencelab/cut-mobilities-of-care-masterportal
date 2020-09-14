@@ -2,6 +2,7 @@
 import {mapGetters} from "vuex";
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
+import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
 import {upperFirst} from "../../../../../utils/stringHelpers";
 import Overlay from "ol/Overlay.js";
 import "bootstrap/js/tooltip";
@@ -11,7 +12,8 @@ export default {
     name: "Attached",
     components: {
         Default,
-        Schulinfo
+        Schulinfo,
+        TrafficCount
     },
     props: {
         feature: {
