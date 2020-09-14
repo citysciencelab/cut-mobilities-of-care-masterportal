@@ -9,7 +9,7 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("Gfi.vue", () => {
+describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
     it("should find the child component Mobile", () => {
         const wrapper = shallowMount(GfiComponent, {

@@ -7,7 +7,7 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("Gfi Table.vue", () => {
+describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
 
     it("should have a title", () => {
         const wrapper = shallowMount(Table, {
