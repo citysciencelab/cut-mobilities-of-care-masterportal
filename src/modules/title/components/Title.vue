@@ -12,9 +12,9 @@ export default {
         ])
     },
     mounted () {
-        setTimeout(() => {
+        this.$nextTick(() => {
             this.initialize();
-        }, 0);
+        });
         $(this.$el).insertAfter(document.getElementById("root"));
     },
     created () {
