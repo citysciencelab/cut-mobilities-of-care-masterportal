@@ -1,3 +1,4 @@
+/* eslint-disable no-process-env */
 const webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     path = require("path"),
@@ -98,6 +99,7 @@ module.exports = function () {
                         loader: "null-loader"
                     }
                 },
+                // take all files ending with ".js" but not with ".test.js".
                 {
                     test: /\.js$/,
                     exclude: /\bcore-js\b|\.test\.js$/,
@@ -166,14 +168,17 @@ module.exports = function () {
             new webpack.DefinePlugin({
                 ADDONS: JSON.stringify(addonsRelPaths)
             }),
-           getTimezonePlugin()
+            getTimezonePlugin()
         ]
     };
 };
 
-function getTimezonePlugin(){
-    if (process.env.NODE_ENV === "e2eTest")
-    {
+/**
+ * Returns the MomentTimezoneDataPlugin if not running e2e-Tests.
+ * @returns {object} the MomentTimezoneDataPlugin
+ */
+function getTimezonePlugin () {
+    if (process.env.NODE_ENV === "e2eTest") {
         return null;
     }
     // import only a very limited number of timezones
