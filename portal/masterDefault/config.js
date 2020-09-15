@@ -62,11 +62,10 @@ const Config = {
             {
                 "bezeichnung": "",
                 "url": "mailto:LGVGeoPortal-Hilfe@gv.hamburg.de"
-                    + "?subject=Kartenunstimmigkeiten melden"
-                    + "&body=Zur weiteren Bearbeitung bitten wir Sie die nachstehenden Angaben zu machen."
-                    + " Bei Bedarf fügen Sie bitte noch einen Screenshot hinzu."
-                    + " Vielen Dank!"
-                    + "%0A%0A1. Name:%0A2. Telefon:%0A3. Anliegen",
+                    + "?subject=Kartenunstimmigkeiten%20melden"
+                    + "&body=Zur%20weiteren%20Bearbeitung%20bitten%20wir%20Sie%20die%20nachstehenden%20Angaben%20zu%20machen."
+                    + "%20Bei%20Bedarf%20fügen%20Sie%20bitte%20noch%20einen%20Screenshot%20hinzu."
+                    + "%20Vielen%20Dank!%0A%0A1.%20Name:%0A2.%20Telefon:%0A3.%20Anliegen",
                 "alias": "common:modules.footer.cardDiscrepancy"
             }
         ]
