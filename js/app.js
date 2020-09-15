@@ -100,7 +100,8 @@ async function loadApp () {
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
     /* eslint-disable no-undef */
-    let app = {};
+    let app = {},
+        searchbarAttributes = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -386,9 +387,11 @@ async function loadApp () {
 
     new MapMarkerView(mapMarkerConfig);
 
+    searchbarAttributes = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
     sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});
-    sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
-    if (sbconfig) {
+    sbconfig = Object.assign(sbconfig, searchbarAttributes);
+
+    if (searchbarAttributes !== undefined && sbconfig) {
         new SearchbarView(sbconfig);
     }
 
