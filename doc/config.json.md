@@ -2373,7 +2373,7 @@ Hier werden WMS typische Attribute aufgelistet.
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
 |infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|false|
-|styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
+|styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück. In diesem Fall muss das Attribute **name** ebenfalls vom Typ String[] sein und genauso viele Einträge enthalten wie das sytle Attribute, damit zu jedem Style ein Name im Themenbaum zugeordnet werden kann.|true|
 
 **Beispiel**
 ```
