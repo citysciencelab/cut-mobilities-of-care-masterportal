@@ -98,7 +98,6 @@ module.exports = function () {
                         loader: "null-loader"
                     }
                 },
-                // take all files ending with ".js" but not with ".test.js".
                 {
                     test: /\.js$/,
                     exclude: /\bcore-js\b|\.test\.js$/,
@@ -166,14 +165,22 @@ module.exports = function () {
             // create global constant at compile time
             new webpack.DefinePlugin({
                 ADDONS: JSON.stringify(addonsRelPaths)
-            })
-            // import only a very limited number of timezones
-            // @see https://www.npmjs.com/package/moment-timezone-data-webpack-plugin
-            // new MomentTimezoneDataPlugin({
-            //     matchZones: /Europe\/(Berlin|London)/,
-            //     startYear: 2019,
-            //     endYear: new Date().getFullYear()
-            // })
+            }),
+           getTimezonePlugin()
         ]
     };
 };
+
+function getTimezonePlugin(){
+    if (process.env.NODE_ENV === "e2eTest")
+    {
+        return null;
+    }
+    // import only a very limited number of timezones
+    // @see https://www.npmjs.com/package/moment-timezone-data-webpack-plugin
+    return new MomentTimezoneDataPlugin({
+        matchZones: /Europe\/(Berlin|London)/,
+        startYear: 2019,
+        endYear: new Date().getFullYear()
+    });
+}
