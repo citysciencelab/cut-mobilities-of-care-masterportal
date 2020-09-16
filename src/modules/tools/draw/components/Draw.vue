@@ -49,6 +49,15 @@ export default {
             }
             else {
                 this.resetModule();
+                this.resetCanvasCursor();
+            }
+        },
+        drawType (value) {
+            if (["drawDoubleCircle", "drawCircle", "drawArea", "drawLine", "drawCurve"].indexOf(value.id) !== -1) {
+                document.getElementsByTagName("canvas")[0].style.cursor = "crosshair";
+            }
+            else {
+                this.resetCanvasCursor();
             }
         }
     },
@@ -84,6 +93,9 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        resetCanvasCursor () {
+            document.getElementsByTagName("canvas")[0].style.cursor = "";
         }
     }
 };
