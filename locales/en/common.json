@@ -91,6 +91,10 @@
             "layer": {
               "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used."
             }
+          },
+          "parametricURL": {
+            "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
+            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!"
           }
         },
         "cswParser": {
@@ -413,7 +417,8 @@
                         "bicycleLabel": "Bicycle",
                         "idLabel": "ID:",
                         "typeLabel": "Type:",
-                        "meansOfTransportLabel": "Means of transportation:",
+                        "meansOfTransportLabel": "Transportation:",
+                        "directionLabel": "Direction:",
                         "carsHeaderSuffix": "The count of cars",
                         "trucksHeaderSuffix": "Trucks proportion in %",
                         "yAxisTextDay": "Count / 15 Min.",
@@ -652,6 +657,9 @@
             "title": "Legend",
             "collapseAll": "Collapse all",
             "foldOutAll": "Fold out all"
+        },
+        "zoomToGeometry": {
+          "alertNoFoundFeature" : "No object was found! Please check the input parameters."
         }
     },
     "snippets": {

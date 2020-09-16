@@ -1,4 +1,5 @@
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import store from "../../src/app-store/index";
 
 const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype */{
     defaults: {
@@ -38,7 +39,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @listens Core#RadioRequestParametricURLGetBrwLayerName
      * @listens Core#RadioRequestParametricURLGetMarkerFromUrl
      * @listens Core#RadioTriggerParametricURLUpdateQueryStringParam
-     * @listens Core#RadioTriggerParametricURLPushToIsInitOpen
      * @fires Core#RadioTriggerParametricURLReady
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
@@ -102,8 +102,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         }, this);
 
         channel.on({
-            "updateQueryStringParam": this.updateQueryStringParam,
-            "pushToIsInitOpen": this.pushToIsInitOpen
+            "updateQueryStringParam": this.updateQueryStringParam
         }, this);
 
         if (this.checkisURLQueryValid(query)) {
@@ -233,32 +232,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
     /**
      * todo
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    pushToIsInitOpen: function (value) {
-        let isInitOpenArray = this.get("isInitOpen"),
-            msg = "";
-
-        isInitOpenArray.push(value);
-        isInitOpenArray = [...new Set(isInitOpenArray)];
-
-        if (isInitOpenArray.length > 1) {
-            msg += "Fehlerhafte Kombination von Portalkonfiguration und parametrisiertem Aufruf.<br>";
-            isInitOpenArray.forEach((tool, index) => {
-                msg += tool;
-                if (index < isInitOpenArray.length - 1) {
-                    msg += " und ";
-                }
-            });
-            msg += " können nicht gleichzeitig geöffnet sein";
-            Radio.trigger("Alert", "alert", msg);
-        }
-        this.setIsInitOpenArray(isInitOpenArray);
-    },
-
-    /**
-     * todo
      * @param {string} layerIdString - The layerIds.
      * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
@@ -268,7 +241,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             visibilityListString = result.hasOwnProperty("VISIBILITY") ? result.VISIBILITY : "",
             transparencyListString = result.hasOwnProperty("TRANSPARENCY") ? result.TRANSPARENCY : "",
             layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
-            layerParams = [];
+            layerParams = [],
+            wrongIdsPositions = [];
         let visibilityList,
             transparencyList;
 
@@ -321,11 +295,28 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 Radio.trigger("Parser", "addItemAtTop", layerToPush);
             }
             else if (layerConfigured === undefined) {
-                Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
+                wrongIdsPositions.push(index + 1);
             }
         });
 
+        this.alertWrongLayerIds(wrongIdsPositions);
         this.setLayerParams(layerParams);
+    },
+
+    /**
+     * Build alert for wrong layerids
+     * @param {string[]} wrongIdsPositions - The positions from wrong layerids.
+     * @returns {void}
+     */
+    alertWrongLayerIds: function (wrongIdsPositions) {
+        if (wrongIdsPositions.length > 0) {
+            let wrongIdsPositionsConcat = wrongIdsPositions.shift();
+
+            wrongIdsPositions.forEach(position => {
+                wrongIdsPositionsConcat = wrongIdsPositionsConcat + ", " + String(position);
+            });
+            store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.parametricURL.alertWrongLayerIds", {wrongIdsPositionsConcat: wrongIdsPositionsConcat}));
+        }
     },
 
     /**
@@ -434,12 +425,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 gemometryToZoom = geometries[parseInt(gemometryFromUrl, 10) - 1];
             }
             else {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
-                    + "<br>"
-                    + "<small>Der Parameter " + property + "=" + gemometryFromUrl + " existiert nicht.</small>",
-                    kategorie: "alert-warning"
-                });
+                store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.alertZoomToGeometry"));
             }
         }
 

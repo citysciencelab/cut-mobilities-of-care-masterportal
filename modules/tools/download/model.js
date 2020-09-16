@@ -285,7 +285,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * Transform the given polygon coords into the given projections.
      * @param {ol/Coordinate} coords Coordinates.
      * @param {Object} projections Object containing the projections.
-     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformPolygon: function (coords, projections) {
@@ -303,7 +302,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * Transform the given line coords into the given projections.
      * @param {ol/Coordinate} coords Coordinates.
      * @param {Object} projections Object containing the projections.
-     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformLine: function (coords, projections) {
@@ -319,7 +317,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * Transform the given point coords into the given projections.
      * @param {ol/Coordinate} point Coordinates.
      * @param {Object} projections Object containing the projections.
-     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformPoint: function (point, projections) {

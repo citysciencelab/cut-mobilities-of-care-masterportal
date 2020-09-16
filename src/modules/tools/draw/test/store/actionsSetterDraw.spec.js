@@ -35,8 +35,6 @@ describe("actionsSetterDraw", () => {
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setActive", false]);
             expect(dispatch.notCalled).to.be.true;
-            expect(trigger.calledOnce).to.be.true;
-            expect(trigger.firstCall.args).to.eql(["RemoteInterface", "postMessage", {"initDrawTool": true}]);
         });
         it("should commit and dispatch as intended if 'active' is true", () => {
             active = true;
@@ -53,8 +51,6 @@ describe("actionsSetterDraw", () => {
             expect(dispatch.thirdCall.args).to.eql(["createModifyInteractionAndAddToMap", false]);
             expect(request.calledOnce).to.be.true;
             expect(request.firstCall.args).to.eql(["Map", "createLayerIfNotExists", "import_draw_layer"]);
-            expect(trigger.calledOnce).to.be.true;
-            expect(trigger.firstCall.args).to.eql(["RemoteInterface", "postMessage", {"initDrawTool": true}]);
         });
         it("should commit and dispatch as intended if 'active' and 'withoutGUI' are true", () => {
             active = true;
@@ -73,8 +69,6 @@ describe("actionsSetterDraw", () => {
             expect(dispatch.lastCall.args).to.eql(["toggleInteraction", "draw"]);
             expect(request.calledOnce).to.be.true;
             expect(request.firstCall.args).to.eql(["Map", "createLayerIfNotExists", "import_draw_layer"]);
-            expect(trigger.calledOnce).to.be.true;
-            expect(trigger.firstCall.args).to.eql(["RemoteInterface", "postMessage", {"initDrawTool": true}]);
         });
     });
     describe("setCircleInnerDiameter", () => {
