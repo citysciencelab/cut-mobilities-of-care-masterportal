@@ -4,6 +4,7 @@ import Tool from "../../core/modelList/tool/model";
 
 const FilterModel = Tool.extend({
     defaults: Object.assign({}, Tool.prototype.defaults, {
+        initialized: false,
         isGeneric: false,
         isInitOpen: false,
         isVisible: false,

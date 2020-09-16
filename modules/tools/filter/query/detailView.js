@@ -125,6 +125,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
                     view = new SnippetMultiCheckboxView({model: snippet});
                 }
                 else if (snippet.get("type") === "string" || snippet.get("type") === "text") {
+                    // doesn't rerender on language change if dropdown is open (see render method there)
+                    snippet.set("isOpen", false);
                     view = new SnippetDropdownView({model: snippet});
                 }
                 else if (snippet.get("type") === "boolean") {
@@ -137,7 +139,6 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
                 else {
                     view = new SnippetCheckBoxView({model: snippet});
                 }
-
 
                 this.$el.append(view.render().$el);
             });
