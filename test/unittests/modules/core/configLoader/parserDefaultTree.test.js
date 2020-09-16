@@ -40,4 +40,41 @@ describe("core/configLoader/parserDefaultTree", function () {
             expect(getDefaultModel({isFolderSelectable: false}).get("itemList").filter(item => Object.keys({"name": "testFolder"}).every(key => item[key] === {"name": "testFolder"}[key])).length).to.be.equal(1);
         });
     });
+
+    describe("removeWMSBySensorThings", function () {
+        it("should be an empty array by empty array input", function () {
+            expect(getDefaultModel().removeWMSBySensorThings([])).to.be.an("array").that.is.empty;
+        });
+
+        const layerList = [
+            {
+                "id": "100",
+                "typ": "SensorThings",
+                "relatedWMSId": "300"
+            },
+            {
+                "id": "200",
+                "typ": "WMS"
+            },
+            {
+                "id": "300",
+                "typ": "WMS"
+            }
+        ];
+
+        it("should be empty array without duplicate wms", function () {
+            expect(getDefaultModel().removeWMSBySensorThings(layerList).length).to.equal(2);
+            expect(getDefaultModel().removeWMSBySensorThings(layerList)).to.deep.include(
+                {
+                    "id": "100",
+                    "typ": "SensorThings",
+                    "relatedWMSId": "300"
+                },
+                {
+                    "id": "200",
+                    "typ": "WMS"
+                }
+            );
+        });
+    });
 });
