@@ -9,7 +9,7 @@ export default {
 
         window.addEventListener("message", event => {
             let fullActionName = "";
-            
+
             if (event.data.namespace === undefined || event.data.action === undefined) {
                 return;
             }
