@@ -5,46 +5,61 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @class DefaultTreeParser
      * @extends Parser
      * @memberof Core.ConfigLoader
+     * @property {String[]} validLayerTypes=["WMS", "SENSORTHINGS", "TERRAIN3D", "TILESET3D", "OBLIQUE"] The layertypes to show in the defaultTree.
      * @fires Core#RadioRequestUtilIsViewMobile
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @constructs
      */
     defaults: Object.assign({}, Parser.prototype.defaults, {
+        validLayerTypes: ["WMS", "SENSORTHINGS", "TERRAIN3D", "TILESET3D", "OBLIQUE"]
     }),
 
     /**
-     * todo
-     * @param {*} layerList - todo
-     * @param {Object} Layer3dList - the 3d layer list or null
+     * Parses the layer form services.json.
+     * @param {Object[]} layerList - The layers from services.json.
+     * @param {Object[]|null} Layer3dList - The 3d layer list.
      * @returns {void}
      */
     parseTree: function (layerList, Layer3dList) {
-        // Im Default-Tree(FHH-Atlas / GeoOnline) werden nur WMS angezeigt
-        // Und nur Layer die min. einem Metadatensatz zugeordnet sind
-        let newLayerList = this.filterList(layerList);
+        let newLayerList = this.filterValidLayer(layerList, this.get("validLayerTypes"));
 
-        // Entfernt alle Layer, die bereits im Cache dargestellt werden
+        newLayerList = this.removeWMSBySensorThings(newLayerList);
+        // Removes all layers that are already displayed in the cache
         newLayerList = this.deleteLayersIncludeCache(newLayerList);
 
-        // Für Layer mit mehr als 1 Datensatz, wird pro Datensatz 1 zusätzlichen Layer erzeugt
+        // For layers with more than 1 dataset, 1 additional layer is created per dataset
         newLayerList = this.createLayerPerDataset(newLayerList);
 
         this.parseLayerList(newLayerList, Layer3dList);
     },
 
     /**
-     * Filters all objects from the layerList that are not WMS and are assigned to at least one data record.
-     * @param  {Object[]} [layerList=[]] - Objekte from services.json
-     * @return {Object[]} layerList - Objekte from services.json
+     * Filters all objects from the layerList, which are not contained in the validLayerTypes list and are assigned to at least one dataset.
+     * @param  {Object[]} [layerList=[]] - The layers from services.json
+     * @param {String[]} validLayerTypes - The valid layertypes.
+     * @return {Object[]} Valid layers from services.json
      */
-    filterList: function (layerList = []) {
+    filterValidLayer: function (layerList = [], validLayerTypes) {
         return layerList.filter(element => {
             if (!element.hasOwnProperty("datasets")) {
                 return false;
             }
 
-            return element.datasets.length > 0 && ["WMS", "SensorThings", "Terrain3D", "TileSet3D", "Oblique"].includes(element.typ);
+            return element?.datasets?.length > 0 && validLayerTypes.includes(element?.typ.toUpperCase());
         });
+    },
+
+    /**
+     * Removes WMS-Layer containing the same dataset as SensorThings layer, using the attribute relatedWMSId.
+     * @param  {Object[]} [layerList=[]] - The layers from services.json
+     * @returns {Object[]} LayerList without wms duplicates
+     */
+    removeWMSBySensorThings: function (layerList = []) {
+        const sensorThingsLayer = layerList.filter(layer => layer?.typ.toUpperCase() === "SENSORTHINGS"),
+            layerIdsToRemove = sensorThingsLayer.map(layer => layer?.relatedWMSId).filter(layerId => layerId),
+            layerListWithoutWMSDuplicates = layerList.filter(layer => !layerIdsToRemove.includes(layer.id));
+
+        return layerListWithoutWMSDuplicates;
     },
 
     /**
