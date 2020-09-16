@@ -55,7 +55,6 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
      * @returns {Object[]} LayerList without wms duplicates
      */
     removeWMSBySensorThings: function (layerList = []) {
-        // console.log(layerList);
         const sensorThingsLayer = layerList.filter(layer => layer?.typ.toUpperCase() === "SENSORTHINGS"),
             layerIdsToRemove = sensorThingsLayer.map(layer => layer?.relatedWMSId).filter(layerId => layerId),
             layerListWithoutWMSDuplicates = layerList.filter(layer => !layerIdsToRemove.includes(layer.id));
