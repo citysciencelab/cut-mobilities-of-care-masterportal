@@ -61,7 +61,6 @@ import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
-import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/tools/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 /**
@@ -294,10 +293,6 @@ async function loadApp () {
             }
             case "featureLister": {
                 new FeatureLister({model: tool});
-                break;
-            }
-            case "formular": {
-                new Formular({model: tool});
                 break;
             }
             case "legend": {
