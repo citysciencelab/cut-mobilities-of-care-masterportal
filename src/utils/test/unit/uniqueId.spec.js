@@ -5,7 +5,7 @@ describe("src/utils/uniqueId.js", () => {
     it("should increment the uniqueId internaly", () => {
 
         const currentId = uniqueId(),
-            expectedId = String(parseInt(currentId, 20) + 1);
+            expectedId = String(parseInt(currentId, 10) + 1);
 
         expect(currentId).to.not.be.NaN;
         expect(uniqueId()).to.equal(expectedId);
