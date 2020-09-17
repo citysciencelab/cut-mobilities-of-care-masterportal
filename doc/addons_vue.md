@@ -14,6 +14,7 @@ Folgende Struktur ist dabei zu beachten:
 ```
 addons
 |-- MyAddon1
+|    index.js
 |   |-- components
 |	|   |-- MyAddon1.vue
 |   |   |-- ...
@@ -49,10 +50,13 @@ addons
 Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
 
 #### Beispiel **addonsConf.json** ####
-```
+```json
 {
   [...]
-  "MyAddon1": "MyAddon1.js"
+  "MyAddon1": {
+    vue: true,
+    entry: "index.js"
+  }
 }
 ```
 
@@ -68,6 +72,7 @@ Hier legen wir kurz ein Beispiel-Addon an!
 myMasterPortalFolder/
     addons/
         VueAddon/
+            index.js
             components/
                 VueAddon.vue
             store
@@ -79,7 +84,7 @@ myMasterPortalFolder/
 
 2.2. Addon-Code schreiben:
 
-```
+```js
 // myMasterPortalFolder/addons/VueAddon/store/VueAddon.js
 
 import GenericTool from "../../../src/modules/tools/indexTools";
@@ -97,8 +102,8 @@ export default composeModules([GenericTool, {
     getters
 }]);
 ```
-Der state, die mutations, actions und getters können in separaten Dateien liegen oder werden hier direkt angegeben. Die Angabe von ```namespaced:true``` ist verpflichtend.
-```
+Der `state`, die `mutations`, `actions` und `getters` können in separaten Dateien liegen oder werden hier direkt angegeben. Die Angabe von ```namespaced:true``` ist verpflichtend.
+```vue
 // myMasterPortalFolder/addons/VueAddon/components/VueAddon.vue
 
 <script>
@@ -180,18 +185,50 @@ export default {
 
 Alle weiteren Dateien zum VueAddon können [hier](./VueAddon.zip) heruntergeladen werden.
 
-2.3. Die Addons-Config-Datei erstellen:
+2.3 Die `index.js` Datei schreiben:
+Die `index.js` dient dazu alle Komponenten (Vue-Components, Store und Übersetzungen) zu aggregieren und als einen
+Entrypoint bereit zustellen.
 
+Auch wenn man theoretisch den Entrypoint in der `addonsConf.json` beliebig setzen kann, muss dieser zwingend auf
+`index.js` bleiben da webpack sonst das Addon nicht laden wird.
+
+Wichtig ist, dass alle Komponenten korrekt importiert werden und nicht in einem `.default` eine Ebene tiefer im Objekt
+liegen (z.B. wenn man `import * as VueAddonComponent from "./components/VueAddon.vue";` verwendet).
+
+```js
+// myMasterPortalFolder/addons/VueAddon/index.js
+import VueAddonComponent from "./components/VueAddon.vue";
+import VueAddonStore from "./store/VueAddon";
+import deLocale from "./locales/de/additional.json";
+import enLocale from "./locales/en/additional.json";
+
+export default {
+    component: VueAddonComponent,
+    store: VueAddonStore,
+    locales: {
+        de: deLocale,
+        en: enLocale
+    }
+};
 ```
+
+
+2.4. Die Addons-Config-Datei erstellen:
+
+```json
 // myMasterPortalFolder/addons/addonsConf.json
 
 {
-  "VueAddon": "VueAddon.js"
+  "VueAddon": {
+      "vue": true,
+      "entry": "index.js"
+  } 
 }
 ```
 
-2.4. Das Beispiel-Addon in der config.js Datei des Portals aktivieren:
-```
+
+2.5. Das Beispiel-Addon in der config.js Datei des Portals aktivieren:
+```js
 // myMasterPortalFolder/config.js
 
 const Config = {
@@ -200,8 +237,10 @@ const Config = {
     // [...]
 };
 ```
-2.5. Das Beispiel-Addon als Werkzeug in der config.json definieren, damit es als Menüpunkt erscheint.
-```
+
+
+2.6. Das Beispiel-Addon als Werkzeug in der config.json definieren, damit es als Menüpunkt erscheint.
+```json
 // myMasterPortalFolder/config.json
 ...
     "tools": {
@@ -214,18 +253,20 @@ const Config = {
           },
 ```
 
-2.5. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
 
-```
+2.7. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
+
+```js
 /**
  * @namespace ExampleAddon
  * @memberof Addons
  */
 ```
 
-2.6. In der model.js muss bei memberOf als Prefix Addons. angegeben werden.
 
-```
+2.8. In der model.js muss bei memberOf als Prefix Addons. angegeben werden.
+
+```js
 /**
 * @class exampleAddon
 * @extends Tool

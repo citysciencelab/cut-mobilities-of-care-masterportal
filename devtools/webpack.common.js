@@ -25,21 +25,21 @@ module.exports = function () {
         vueAddonsRelPaths = {};
 
     for (const addonName in addonEntryPoints) {
-        if (typeof addonEntryPoints[addonName] !== "string") {
-            console.error("############\n------------");
-            throw new Error("ERROR: WRONG ENTRY IN \"" + addonConfigPath + "\" at key \"" + addonName + "\"\nABORTED...");
-        }
+        let vue = false;
 
-        let addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
+        if (typeof addonEntryPoints[addonName] !== "string") {
+            vue = addonEntryPoints[addonName].vue;
+        }
+        const entry = vue ? addonEntryPoints[addonName].entry : addonEntryPoints[addonName],
+            addonFilePath = path.resolve(addonPath, addonName, entry);
 
         if (!fse.existsSync(addonFilePath)) {
-            addonFilePath = path.resolve(addonPath, addonName, "store", addonEntryPoints[addonName]);
-            if (!fse.existsSync(addonFilePath)) {
-                console.error("############\n------------");
-                throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
-            }
+            console.error("############\n------------");
+            throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
+        }
 
-            vueAddonsRelPaths[addonName] = addonEntryPoints[addonName];
+        if (vue) {
+            vueAddonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName].entry].join("/");
         }
         else {
             addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
