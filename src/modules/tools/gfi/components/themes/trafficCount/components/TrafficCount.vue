@@ -1,5 +1,5 @@
 <script>
-import {TrafficCountCache} from "../library/trafficCountCache";
+// import {TrafficCountCache} from "../library/trafficCountCache";
 import TrafficCountInfo from "./TrafficCountInfo.vue";
 import TrafficCountDay from "./TrafficCountDay.vue";
 import TrafficCountWeek from "./TrafficCountWeek.vue";
