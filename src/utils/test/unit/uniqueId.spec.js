@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import uniqueId from "../../uniqueId";
 
-describe("uniqueId", () => {
+describe("src/utils/uniqueId.js", () => {
     it("should increment the uniqueId internaly", () => {
 
         const currentId = uniqueId(),
