@@ -73,6 +73,10 @@ export default {
             <ScaleLine />
             <Language v-if="showLanguageSwitcher" />
         </template>
+        <ScaleLine
+            v-else
+            class="footer-scaleLine"
+        />
     </div>
 </template>
 
@@ -114,6 +118,12 @@ export default {
             bottom: 100%;
             /* should share bottom-line last control element */
             margin-bottom: 15px;
+        }
+
+        .footer-scaleLine {
+            position: absolute;
+            right: 0;
+            bottom: 100%;
         }
     }
 </style>
