@@ -80,9 +80,10 @@ export default {
                 }
             });
         });
-        this.clickDown();
+        this.setMarker();
     },
     beforeDestroy: function () {
+        // TODO replace trigger when MapMarker is migrated
         Radio.trigger("MapMarker", "hideMarker");
     },
     methods: {
@@ -114,13 +115,14 @@ export default {
         },
 
         /**
+         * Sets the center of the view on the clickCoord and place the MapMarker on it
          * Set Marker and Center.
          * @returns {void}
          */
-        clickDown () {
+        setMarker () {
+            this.setCenter(this.clickCoord);
+            // TODO replace trigger when MapMarker is migrated
             Radio.trigger("MapMarker", "showMarker", this.clickCoord);
-            // this.$store.commit("Map/setCenter", this.clickCoord);
-            Radio.trigger("MapView", "setCenter", this.clickCoord);
         }
     }
 };
