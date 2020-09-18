@@ -6,6 +6,21 @@ import getters from "./gettersMap";
 const mutations = {
     ...generateSimpleMutations(initialState),
     /**
+     * Set the center of the current view.
+     * @param {object} state - the map state
+     * @param {number[]} coord - an array of numbers representing an xy coordinate
+     * @returns {void}
+     */
+    setCenter (state, coord) {
+        if (typeof coord[0] === "number" && typeof coord[1] === "number") {
+            state.center = coord;
+            state.map.getView().setCenter(coord);
+        }
+        else {
+            console.warn("Center was not set. Probably there is a data type error. The format of the coordinate must be an array with two numbers.");
+        }
+    },
+    /**
      * Sets the visibility of a layer.
      * @param {object} state state object
      * @param {object} payload parameter object
