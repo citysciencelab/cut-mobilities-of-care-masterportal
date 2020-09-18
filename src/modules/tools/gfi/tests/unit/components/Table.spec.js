@@ -17,6 +17,9 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                     getTitle: () => "Hallo"
                 }
             },
+            computed: {
+                clickCoord: () => []
+            },
             localVue
         });
 
@@ -30,6 +33,9 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo"
                 }
+            },
+            computed: {
+                clickCoord: () => []
             },
             localVue
         });
@@ -45,6 +51,9 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                     getTitle: () => "Hallo"
                 }
             },
+            computed: {
+                clickCoord: () => []
+            },
             localVue
         });
 
@@ -58,6 +67,9 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                         getTheme: () => "Default",
                         getTitle: () => "Hallo"
                     }
+                },
+                computed: {
+                    clickCoord: () => []
                 },
                 localVue
             }),
@@ -76,6 +88,9 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                         getTitle: () => "Hallo"
                     }
                 },
+                computed: {
+                    clickCoord: () => []
+                },
                 localVue
             }),
             modal = wrapper.find(".gfi-content");
@@ -93,6 +108,9 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                         getTitle: () => "Hallo"
                     }
                 },
+                computed: {
+                    clickCoord: () => []
+                },
                 localVue
             }),
             button = wrapper.find("span.icon-turnarticle");
@@ -108,6 +126,9 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                         getTheme: () => "Default",
                         getTitle: () => "Hallo"
                     }
+                },
+                computed: {
+                    clickCoord: () => []
                 },
                 localVue
             }),
@@ -130,6 +151,9 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 },
                 slots: {
                     footer: "<div>Footer</div>"
+                },
+                computed: {
+                    clickCoord: () => []
                 },
                 localVue
             }),
