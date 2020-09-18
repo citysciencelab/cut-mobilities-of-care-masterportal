@@ -32,6 +32,7 @@ export default {
     @color_1: #777;
 
     #scales {
+        background: fade(@secondary, 70%);
         display: inline-block;
         color: @secondary_contrast;
         text-align: center;
