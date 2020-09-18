@@ -1,6 +1,7 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
+import sinon from "sinon";
 import Detached from "../../../components/templates/Detached.vue";
 
 const localVue = createLocalVue();
@@ -27,6 +28,9 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     "max-height": ""
                 }]
             },
+            methods: {
+                setMarker: () => sinon.stub
+            },
             localVue
         });
 
@@ -50,6 +54,9 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     "max-width": "",
                     "max-height": ""
                 }]
+            },
+            methods: {
+                setMarker: () => sinon.stub
             },
             localVue
         });
@@ -75,6 +82,9 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     "max-height": ""
                 }]
             },
+            methods: {
+                setMarker: () => sinon.stub
+            },
             localVue
         });
 
@@ -99,6 +109,9 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                         "max-width": "",
                         "max-height": ""
                     }]
+                },
+                methods: {
+                    setMarker: () => sinon.stub
                 },
                 localVue
             }),
@@ -126,6 +139,9 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                         "max-width": "",
                         "max-height": ""
                     }]
+                },
+                methods: {
+                    setMarker: () => sinon.stub
                 },
                 localVue
             }),
@@ -156,6 +172,9 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 },
                 slots: {
                     footer: "<div>Footer</div>"
+                },
+                methods: {
+                    setMarker: () => sinon.stub
                 },
                 localVue
             }),
