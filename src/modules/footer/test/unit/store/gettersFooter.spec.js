@@ -8,9 +8,9 @@ const {
     showFooter
 } = getters;
 
-describe("gettersFooter.vue", () => {
-    describe("Footer getters", function () {
-        it("returns the urls from state", function () {
+describe("src/modules/footer/store/gettersFooter.js", () => {
+    describe("Footer getters", () => {
+        it("returns the urls from state", () => {
             const state = {
                 urls: [
                     {
@@ -25,7 +25,7 @@ describe("gettersFooter.vue", () => {
             expect(urls(stateFooter)).to.be.an("array").that.is.empty;
             expect(urls(state)).to.be.an("array").to.equals(state.urls);
         });
-        it("returns the showVersion from state", function () {
+        it("returns the showVersion from state", () => {
             const state = {
                 showVersion: true
             };
@@ -33,7 +33,7 @@ describe("gettersFooter.vue", () => {
             expect(showVersion(stateFooter)).to.be.false;
             expect(showVersion(state)).to.be.true;
         });
-        it("returns the showFooter from state", function () {
+        it("returns the showFooter from state", () => {
             const state = {
                 showFooter: true
             };

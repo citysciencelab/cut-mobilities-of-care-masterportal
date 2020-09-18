@@ -2,7 +2,7 @@ import sinon from "sinon";
 import {expect} from "chai";
 import actions from "../../store/actionsDraw";
 
-describe("withoutGUIDraw", () => {
+describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
     let commit, dispatch, state;
 
     beforeEach(() => {
@@ -69,14 +69,14 @@ describe("withoutGUIDraw", () => {
             };
         });
 
-        it("should return a FeatureCollection for normal geometries", function () {
+        it("should return a FeatureCollection for normal geometries", () => {
             type = "Polygon";
             downloadedFeatures = actions.downloadFeaturesWithoutGUI({state, rootState});
 
             expect(downloadedFeatures).to.eql(JSON.stringify(featureCollectionFromJson));
         });
 
-        it("should return a multiPolygon in the FeatureCollection for multigeometries", function () {
+        it("should return a multiPolygon in the FeatureCollection for multigeometries", () => {
             type = "MultiPolygon";
             downloadedFeatures = actions.downloadFeaturesWithoutGUI({state, rootState}, {"geomType": "multiGeometry"});
 

@@ -18,7 +18,8 @@ const FilterModel = Tool.extend({
         renderToSidebar: true,
         renderToWindow: false,
         glyphicon: "glyphicon-filter",
-        uiStyle: "DEFAULT"
+        uiStyle: "DEFAULT",
+        saveToUrl: true
     }),
     initialize: function () {
         const channel = Radio.channel("Filter");
@@ -195,7 +196,9 @@ const FilterModel = Tool.extend({
             });
             filterObjects.push({name: query.get("name"), isSelected: query.get("isSelected"), rules: ruleList});
         });
-        Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
+        if (this.get("saveToUrl")) {
+            Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
+        }
     },
 
     /**

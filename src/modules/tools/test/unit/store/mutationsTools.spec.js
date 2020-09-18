@@ -4,10 +4,10 @@ import sinon from "sinon";
 
 const {setConfiguredTools} = mutations;
 
-describe("mutationsSTools", function () {
+describe("src/modules/tools/mutationsTools.js", () => {
 
-    describe("setConfiguredTools", function () {
-        it("initially sets the configuredTools without params", function () {
+    describe("setConfiguredTools", () => {
+        it("initially sets the configuredTools without params", () => {
             const state = {
                 configuredTools: []
             };
@@ -16,7 +16,7 @@ describe("mutationsSTools", function () {
 
             expect(state.configuredTools).to.be.an("array").that.is.empty;
         });
-        it("initially sets the configuredTools with menuConfig is empty", function () {
+        it("initially sets the configuredTools with menuConfig is empty", () => {
             const state = {
                     configuredTools: []
                 },
@@ -26,7 +26,7 @@ describe("mutationsSTools", function () {
 
             expect(state.configuredTools).to.be.an("array").that.is.empty;
         });
-        it("initially sets the configuredTools with two tools in the menuConfig", function () {
+        it("initially sets the configuredTools with two tools in the menuConfig", () => {
             const state = {
                     componentMap: {
                         scaleSwitcher: sinon.stub(),

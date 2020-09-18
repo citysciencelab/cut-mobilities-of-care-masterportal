@@ -2,10 +2,17 @@ import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../actionsTools";
 import sinon from "sinon";
 
-const {controlActivationOfTools, setToolActive, languageChanged, addTool, activateByUrlParam, setToolActiveByConfig} = actions;
+const {
+    controlActivationOfTools,
+    setToolActive,
+    languageChanged,
+    addTool,
+    activateByUrlParam,
+    setToolActiveByConfig
+} = actions;
 
-describe("actionsTools", function () {
-    describe("setToolActive", function () {
+describe("src/modules/tools/actionsTools.js", () => {
+    describe("setToolActive", () => {
         const state = {
             ScaleSwitcher: {
                 id: "scaleSwitcher"
@@ -42,7 +49,7 @@ describe("actionsTools", function () {
         });
     });
 
-    describe("languageChanged", function () {
+    describe("languageChanged", () => {
         const state = {
             ScaleSwitcher: {
                 id: "scaleSwitcher"
@@ -61,7 +68,7 @@ describe("actionsTools", function () {
         });
     });
 
-    describe("addTool", function () {
+    describe("addTool", () => {
         it("addTool", done => {
             const tool = {
                     default: {
@@ -80,7 +87,7 @@ describe("actionsTools", function () {
         });
     });
 
-    describe("controlActivationOfTools", function () {
+    describe("controlActivationOfTools", () => {
         it("controlActivationOfTools activeTool = SupplyCoord", done => {
             const state = {
                     Draw: {
@@ -106,7 +113,7 @@ describe("actionsTools", function () {
         });
     });
 
-    describe("activateByUrlParam", function () {
+    describe("activateByUrlParam", () => {
         it("activateByUrlParam  isinitopen=scaleSwitcher", done => {
             const rootState = {
                     queryParams: {
@@ -130,7 +137,7 @@ describe("actionsTools", function () {
         });
     });
 
-    describe("setToolActiveByConfig", function () {
+    describe("setToolActiveByConfig", () => {
         it("activate a tool with active = true", done => {
             const state = {
                 ScaleSwitcher: {

@@ -55,7 +55,7 @@ const MapMarkerModel = Backbone.Model.extend(/** @lends MapMarkerModel.prototype
         const parcelSearchConf = Radio.request("Parser", "getItemsByAttributes", {id: "parcelSearch"})[0],
             type = this.get("type");
 
-        searchConf = searchConf[0] !== undefined && searchConf[0].hasOwnProperty("attr") ? searchConf[0].attr : {};
+        searchConf = searchConf[0]?.attr || {};
 
         Radio.trigger("Map", "addLayerToIndex", [this.get("polygon"), Radio.request("Map", "getLayers").getArray().length]);
 

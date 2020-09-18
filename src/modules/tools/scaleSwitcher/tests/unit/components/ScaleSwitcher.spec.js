@@ -10,7 +10,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("ScaleSwitcher.vue", () => {
+describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
     const scales = ["1000", "5000", "10000"],
         mockMapGetters = {
             scales: () => scales,

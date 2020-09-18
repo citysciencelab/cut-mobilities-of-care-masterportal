@@ -14,34 +14,33 @@ const {
     deactivateGFI
 } = getters;
 
-describe("ScaleSwitcher", function () {
-    describe("ScaleSwitcher getters", function () {
-        it("returns the active from state", function () {
+describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => {
+    describe("ScaleSwitcher getters", () => {
+        it("returns the active from state", () => {
             expect(active(stateScaleSwitcher)).to.be.false;
         });
-        it("returns the id from state", function () {
+        it("returns the id from state", () => {
             expect(id(stateScaleSwitcher)).to.equals("scaleSwitcher");
         });
     });
-    describe("testing default values", function () {
-        it("returns the name default value from state", function () {
+    describe("testing default values", () => {
+        it("returns the name default value from state", () => {
             expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");
         });
-        it("returns the glyphicon default value from state", function () {
+        it("returns the glyphicon default value from state", () => {
             expect(glyphicon(stateScaleSwitcher)).to.equals("glyphicon-resize-full");
         });
-        it("returns the renderToWindow default value from state", function () {
+        it("returns the renderToWindow default value from state", () => {
             expect(renderToWindow(stateScaleSwitcher)).to.be.true;
         });
-        it("returns the resizableWindow default value from state", function () {
+        it("returns the resizableWindow default value from state", () => {
             expect(resizableWindow(stateScaleSwitcher)).to.be.true;
         });
-        it("returns the isVisibleInMenu default value from state", function () {
+        it("returns the isVisibleInMenu default value from state", () => {
             expect(isVisibleInMenu(stateScaleSwitcher)).to.be.true;
         });
-        it("returns the deactivateGFI default value from state", function () {
+        it("returns the deactivateGFI default value from state", () => {
             expect(deactivateGFI(stateScaleSwitcher)).to.be.false;
         });
-
     });
 });

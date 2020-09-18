@@ -3,10 +3,9 @@ import mutations from "../../../store/mutationsFooter";
 
 const {setShowFooter} = mutations;
 
-describe("mutationsFooter", function () {
-
-    describe("setShowFooter", function () {
-        it("set showFooter to true", function () {
+describe("src/modules/footer/store/mutationsFooter.js", () => {
+    describe("setShowFooter", () => {
+        it("set showFooter to true", () => {
             const state = {
                 showFooter: false
             };

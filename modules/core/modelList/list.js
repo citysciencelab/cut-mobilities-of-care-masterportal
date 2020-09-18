@@ -42,7 +42,6 @@ import TreeFilter from "../../treeFilter/model";
  * @deprecated in 3.0.0
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
-import Formular from "../../formular/grenznachweis";
 import FeatureLister from "../../tools/featureLister/model";
 import AddWms from "../../tools/addWMS/model";
 import Shadow from "../../tools/shadow/model";
@@ -327,9 +326,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "featureLister") {
                 return new FeatureLister(attrs, options);
-            }
-            else if (attrs.id === "formular") {
-                return new Formular(attrs, options);
             }
             else if (attrs.id === "colorScale") {
                 return new ColorScale(attrs, options);

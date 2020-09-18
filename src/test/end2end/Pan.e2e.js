@@ -12,10 +12,10 @@ const webdriver = require("selenium-webdriver"),
  */
 async function PanTests ({builder, url, resolution, browsername, capability}) {
     // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-    (isChrome(browsername) ? describe.skip : describe)("Map Pan", function () {
+    (isChrome(browsername) ? describe.skip : describe)("Map Pan", () => {
         let driver;
 
-        before(async function () {
+        before(async () => {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
@@ -23,16 +23,16 @@ async function PanTests ({builder, url, resolution, browsername, capability}) {
             driver = await initDriver(builder, url, resolution);
         });
 
-        after(async function () {
+        after(async () => {
             if (capability) {
-                driver.session_.then(function (sessionData) {
+                driver.session_.then(sessionData => {
                     logBrowserstackUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();
         });
 
-        it("should move when panned", async function () {
+        it("should move when panned", async () => {
             this.timeout(10000);
             const center = await driver.executeScript(getCenter),
                 viewport = await driver.findElement(By.css(".ol-viewport"));

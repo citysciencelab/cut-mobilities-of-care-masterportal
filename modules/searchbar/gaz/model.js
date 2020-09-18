@@ -40,11 +40,7 @@ const GazetteerModel = Backbone.Model.extend({
             "findStreets": this.findStreets,
             "findHouseNumbers": this.findHouseNumbers,
             "adressSearch": this.adressSearch,
-            "streetsWithoutHouseNumberSearch": this.streetsWithoutHouseNumberSearch
-        });
-
-        Radio.channel("Gaz").reply({
-            "adressSearch": this.adressSearch,
+            "streetsWithoutHouseNumberSearch": this.streetsWithoutHouseNumberSearch,
             "streetsSearch": this.streetsSearch
         });
 
