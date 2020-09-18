@@ -11,7 +11,8 @@ const CheckboxSnippetView = Backbone.View.extend({
     initialize: function () {
         this.listenTo(this.model, {
             "renderView": this.render,
-            "removeView": this.remove
+            "removeView": this.remove,
+            "change:currentLng": this.render
         }, this);
     },
     className: "checkbox-container",
