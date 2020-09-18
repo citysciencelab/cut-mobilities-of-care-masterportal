@@ -1,4 +1,5 @@
 <script>
+import {mapGetters} from "vuex";
 import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
@@ -24,6 +25,7 @@ export default {
         };
     },
     computed: {
+        ...mapGetters("Map", ["clickCoord"]),
         /**
          * Returns the title of the gfi.
          * @returns {string} the title
@@ -67,6 +69,12 @@ export default {
                 }
             });
         });
+        // TODO replace trigger when MapMarker is migrated
+        Radio.trigger("MapMarker", "showMarker", this.clickCoord);
+    },
+    beforeDestroy: function () {
+        // TODO replace trigger when MapMarker is migrated
+        Radio.trigger("MapMarker", "hideMarker");
     },
     methods: {
         close () {
