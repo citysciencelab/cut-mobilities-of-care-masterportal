@@ -1,6 +1,5 @@
 import {Style} from "ol/style.js";
 
-import {createCircleStyle} from "./createCircleStyle";
 import {createDrawStyle} from "./createDrawStyle";
 import {createIconStyle} from "./createIconStyle";
 import {createTextStyle} from "./createTextStyle";
@@ -25,10 +24,7 @@ export function createStyle ({color, colorContour, drawType, font, fontSize, poi
     const glyphBool = symbol.type ? symbol.type !== "simple_point" : false; // Normal point or icon
     let style = new Style();
 
-    if (drawType.id === "drawCircle" || drawType.id === "drawDoubleCircle") {
-        style = createCircleStyle(color, colorContour, strokeWidth, zIndex);
-    }
-    else if (drawType.id === "drawPoint" && glyphBool) {
+    if (drawType.id === "drawPoint" && glyphBool) {
         style = createIconStyle(color, pointSize, symbol, zIndex);
     }
     else if (drawType.id === "writeText") {
