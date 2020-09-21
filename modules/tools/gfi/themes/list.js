@@ -6,8 +6,6 @@ import TableThemeView from "./table/view";
 import TableTheme from "./table/model";
 import ReisezeitenThemeView from "./reisezeiten/view";
 import ReisezeitenTheme from "./reisezeiten/model";
-import SolaratlasThemeView from "./solaratlas/view";
-import SolaratlasTheme from "./solaratlas/model";
 import TrinkwasserThemeView from "./trinkwasser/view";
 import TrinkwasserTheme from "./trinkwasser/model";
 import MietenspiegelThemeView from "./mietenspiegel/view";
@@ -86,9 +84,6 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "reisezeiten") {
             theme = new ReisezeitenTheme(attrs, options);
-        }
-        else if (attrs.gfiTheme === "solaratlas") {
-            theme = new SolaratlasTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "trinkwasser") {
             theme = new TrinkwasserTheme(attrs, options);
@@ -198,10 +193,6 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "reisezeiten": {
                 new ReisezeitenThemeView({model: model});
-                break;
-            }
-            case "solaratlas": {
-                new SolaratlasThemeView({model: model});
                 break;
             }
             case "trinkwasser": {
