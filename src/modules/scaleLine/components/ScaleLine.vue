@@ -5,9 +5,9 @@ export default {
     name: "ScaleLine",
     computed: {
         ...mapGetters("Map", ["scaleToOne", "scaleWithUnit", "mapMode"]),
-        ...mapGetters(["mobile", "configJs"]),
+        ...mapGetters(["mobile", "scaleLineConfig"]),
         showScale () {
-            return this.configJs?.scaleLine && !this.mobile && this.mapMode !== "Oblique";
+            return this.scaleLineConfig && !this.mobile && this.mapMode !== "Oblique";
         }
     }
 };

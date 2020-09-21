@@ -6,9 +6,9 @@ export default {
     dpi: state => state.dpi,
     idCounter: state => state?.idCounter,
     // configJS destructuring
-    configJs: state => state?.configJs || null,
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",
+    scaleLineConfig: state => state?.configJs?.scaleLine || null,
     uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
