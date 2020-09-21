@@ -11,6 +11,7 @@ export default {
     },
     data () {
         return {
+            mapElement: document.getElementById("map"),
             storePath: this.$store.state.Tools.Draw,
             constants: constants,
             drawing: true
@@ -46,19 +47,17 @@ export default {
             if (value) {
                 new DownloadView(this.$store);
                 this.setActive(value);
+                this.setCanvasCursor("crosshair");
             }
             else {
                 this.resetModule();
                 this.resetCanvasCursor();
             }
-        },
-        drawType (value) {
-            if (["drawDoubleCircle", "drawCircle", "drawArea", "drawLine", "drawCurve"].indexOf(value.id) !== -1) {
-                document.getElementsByTagName("canvas")[0].style.cursor = "crosshair";
-            }
-            else {
-                this.resetCanvasCursor();
-            }
+        }
+    },
+    mounted () {
+        if (this.active) {
+            this.setCanvasCursor("crosshair");
         }
     },
     created () {
@@ -95,7 +94,24 @@ export default {
             }
         },
         resetCanvasCursor () {
-            document.getElementsByTagName("canvas")[0].style.cursor = "";
+            this.mapElement.style.cursor = "";
+            this.mapElement.onmousedown = undefined;
+            this.mapElement.onmouseup = undefined;
+        },
+        setCanvasCursor (cursorType) {
+            this.mapElement.style.cursor = cursorType;
+            this.mapElement.onmousedown = this.onMouseDown;
+            this.mapElement.onmouseup = this.onMouseUp;
+        },
+        onMouseDown () {
+            if (this.mapElement.style.cursor === "pointer") {
+                this.mapElement.style.cursor = "grabbing";
+            }
+        },
+        onMouseUp () {
+            if (this.mapElement.style.cursor === "grabbing") {
+                this.mapElement.style.cursor = "pointer";
+            }
         }
     }
 };
@@ -466,7 +482,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'draw' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'draw'"
-                            @click="toggleInteraction('draw')"
+                            @click="toggleInteraction('draw'); setCanvasCursor('crosshair')"
                         >
                             <span class="glyphicon glyphicon-pencil" />
                             {{ $t("common:modules.tools.draw.button.draw") }}
@@ -504,7 +520,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'modify' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'modify'"
-                            @click="toggleInteraction('modify')"
+                            @click="toggleInteraction('modify'); setCanvasCursor('pointer')"
                         >
                             <span class="glyphicon glyphicon-wrench" />
                             {{ $t("common:modules.tools.draw.button.edit") }}
@@ -530,7 +546,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'delete'"
-                            @click="toggleInteraction('delete')"
+                            @click="toggleInteraction('delete'); setCanvasCursor('pointer')"
                         >
                             <span class="glyphicon glyphicon-trash" />
                             {{ $t("common:modules.tools.draw.button.delete") }}
