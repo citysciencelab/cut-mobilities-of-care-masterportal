@@ -518,7 +518,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * Zoom to an given extent
+     * Zoom to a given extent
      * @param {String[]} extent - The extent to zoom.
      * @param {Object} options - Options for zoom.
      * @param {string} urlProjection - The projection from RUL parameter.
