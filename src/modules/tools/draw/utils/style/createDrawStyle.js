@@ -14,7 +14,7 @@ import {Circle, Fill, Stroke, Style} from "ol/style.js";
 export function createDrawStyle (color, colorContour, drawGeometryType, pointSize, strokeWidth, zIndex) {
     return new Style({
         image: new Circle({
-            radius: drawGeometryType === "Point" ? pointSize / 2 : 6,
+            radius: drawGeometryType === "Point" ? pointSize / 2 : 0,
             fill: drawGeometryType === "Point"
                 ? new Fill({color: color})
                 : new Fill({color: colorContour})

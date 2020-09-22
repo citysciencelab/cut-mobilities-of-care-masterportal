@@ -1,7 +1,8 @@
 <script>
 import Tool from "../../Tool.vue";
-import {mapGetters} from "vuex";
-import {mapActions} from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
+import getters from "../store/gettersFileImport";
+import mutations from "../store/mutationsFileImport";
 
 export default {
     name: "FileImport",
@@ -15,15 +16,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Tools/FileImport", [
-            "deactivateGFI",
-            "glyphicon",
-            "active",
-            "isActive",
-            "renderToWindow",
-            "resizableWindow",
-            "importedFileNames"
-        ]),
+        ...mapGetters("Tools/FileImport", Object.keys(getters)),
         selectedFiletype: {
             get () {
                 return this.storePath.selectedFiletype;
@@ -41,25 +34,13 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-
-        if (this.isActive) {
-            this.setActive(true);
-        }
-    },
-    /**
-     *  Activates this tool, if it has to start by url params
-     * @returns {void}
-     */
-    mounted () {
-        this.activateByUrlParam();
     },
     methods: {
         ...mapActions("Tools/FileImport", [
-            "activateByUrlParam",
             "importKML",
-            "setSelectedFiletype",
-            "setActive"
+            "setSelectedFiletype"
         ]),
+        ...mapMutations("Tools/FileImport", Object.keys(mutations)),
         onDZDragenter () {
             this.dzIsDropHovering = true;
         },

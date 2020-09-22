@@ -2,6 +2,7 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsDraw";
+import DownloadView from "../../../../../modules/tools/download/view";
 
 export default {
     name: "Draw",
@@ -10,6 +11,7 @@ export default {
     },
     data () {
         return {
+            mapElement: document.getElementById("map"),
             storePath: this.$store.state.Tools.Draw,
             constants: constants,
             drawing: true
@@ -19,7 +21,6 @@ export default {
         ...mapGetters("Tools/Draw", constants.keyStore.getters),
         /**
          * Enables or disables all the select or input elements depending on if the currentInteraction is "draw".
-         *
          * @returns {Boolean} currentInteraction === "draw": return false and activate the HTML elements, else: return true and deactivate the HTML elements.
          */
         drawHTMLElements () {
@@ -27,7 +28,6 @@ export default {
         },
         /**
          * Disables the input for the diameter and the unit for the drawType "drawCircle" if the circleMethod is not set to "defined".
-         *
          * @returns {Boolean} return false if drawing is enabled and circleMethod is set to "defined", else return true.
          */
         drawCircleMethods () {
@@ -37,10 +37,48 @@ export default {
         }
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
     },
+    watch: {
+        /**
+          * Starts the action for processes, if the tool is be activated (active === true).
+          * @param {boolean} value Value deciding whether the tool gets activated or deactivated.
+          * @returns {void}
+         */
+        active (value) {
+            if (value) {
+                new DownloadView(this.$store);
+                this.setActive(value);
+                this.setCanvasCursor("crosshair");
+            }
+            else {
+                this.resetModule();
+                this.resetCanvasCursor();
+            }
+        }
+    },
+    mounted () {
+        if (this.active) {
+            this.setCanvasCursor("crosshair");
+        }
+    },
     created () {
+        const channel = Radio.channel("Draw");
+
+        channel.reply({
+            "getLayer": function () {
+                return this.layer;
+            },
+            "downloadWithoutGUI": payload => this.downloadFeaturesWithoutGUI(payload)
+        });
+        channel.on({
+            "initWithoutGUI": prmObject => this.initializeWithoutGUI(prmObject),
+            "deleteAllFeatures": () => this.clearLayer(),
+            "editWithoutGUI": () => this.editFeaturesWithoutGUI(),
+            "cancelDrawWithoutGUI": () => this.close(),
+            "downloadViaRemoteInterface": geomType => this.downloadViaRemoteInterface(geomType)
+        });
+
+        Radio.trigger("RemoteInterface", "postMessage", {"initDrawTool": true});
         this.$on("close", this.close);
-        this.setActive(this.active);
-        this.activateByUrlParam();
     },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
@@ -54,6 +92,26 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        resetCanvasCursor () {
+            this.mapElement.style.cursor = "";
+            this.mapElement.onmousedown = undefined;
+            this.mapElement.onmouseup = undefined;
+        },
+        setCanvasCursor (cursorType) {
+            this.mapElement.style.cursor = cursorType;
+            this.mapElement.onmousedown = this.onMouseDown;
+            this.mapElement.onmouseup = this.onMouseUp;
+        },
+        onMouseDown () {
+            if (this.mapElement.style.cursor === "pointer") {
+                this.mapElement.style.cursor = "grabbing";
+            }
+        },
+        onMouseUp () {
+            if (this.mapElement.style.cursor === "grabbing") {
+                this.mapElement.style.cursor = "pointer";
+            }
         }
     }
 };
@@ -62,7 +120,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('common:modules.tools.draw.title')"
+        :title="name"
         :icon="glyphicon"
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"
@@ -424,7 +482,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'draw' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'draw'"
-                            @click="toggleInteraction('draw')"
+                            @click="toggleInteraction('draw'); setCanvasCursor('crosshair')"
                         >
                             <span class="glyphicon glyphicon-pencil" />
                             {{ $t("common:modules.tools.draw.button.draw") }}
@@ -462,7 +520,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'modify' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'modify'"
-                            @click="toggleInteraction('modify')"
+                            @click="toggleInteraction('modify'); setCanvasCursor('pointer')"
                         >
                             <span class="glyphicon glyphicon-wrench" />
                             {{ $t("common:modules.tools.draw.button.edit") }}
@@ -488,7 +546,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'delete'"
-                            @click="toggleInteraction('delete')"
+                            @click="toggleInteraction('delete'); setCanvasCursor('pointer')"
                         >
                             <span class="glyphicon glyphicon-trash" />
                             {{ $t("common:modules.tools.draw.button.delete") }}

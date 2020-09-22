@@ -119,7 +119,7 @@ mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
 |alias|nein|String|"Landesbetrieb Geoniformation und Vermessung"|Bezeichnung des Links bei Desktop-Ausspielung.|
 |alias_mobil|nein|String|"LGV"|Bezeichnung bei mobiler Ausspielung.|
 |bezeichnung|nein|String|"Kartographie und Gestaltung: "|Bezeichnung vor dem Link.|
-|url|nein|String|„http://www.geoinfo.hamburg.de/“|Die aufzurufende URL.|
+|url|nein|String||URL die hinter dem ALias verlinkt wird z.B. „https://beispielSeite.de/“. Es besteht auch die Möglichkeit eine E-Mailadresse zu verlinken z.B. "mailto:meine@email.de"|
 |toolModelId|nein|String|"sdpdownload"|Die id des Models dessen Tool geöffnet werden soll, eine url ist dann nicht nötig.|
 
 **Beispiel:**

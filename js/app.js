@@ -45,6 +45,8 @@ import StyleWMSView from "../modules/tools/styleWMS/view";
 import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
+import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
+
 /**
  * WFSFeatureFilterView
  * @deprecated in 3.0.0
@@ -59,7 +61,6 @@ import AddWMSView from "../modules/tools/addWMS/view";
 import RoutingView from "../modules/tools/viomRouting/view";
 import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
-import Formular from "../modules/formular/view";
 import FeatureLister from "../modules/tools/featureLister/view";
 import PrintView from "../modules/tools/print_/view";
 /**
@@ -98,7 +99,8 @@ async function loadApp () {
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
     /* eslint-disable no-undef */
-    let app = {};
+    let app = {},
+        searchbarAttributes = {};
 
     if (Config.hasOwnProperty("uiStyle")) {
         utilConfig.uiStyle = Config.uiStyle.toUpperCase();
@@ -114,6 +116,7 @@ async function loadApp () {
     if (Config.hasOwnProperty("remoteInterface")) {
         new RemoteInterface(Config.remoteInterface);
         new RadioMasterportalAPI();
+        Vue.use(RemoteInterfaceVue, Config.remoteInterface);
     }
 
     if (Config.hasOwnProperty("quickHelp")) {
@@ -292,10 +295,6 @@ async function loadApp () {
                 new FeatureLister({model: tool});
                 break;
             }
-            case "formular": {
-                new Formular({model: tool});
-                break;
-            }
             // case "legend": {
             //     new LegendLoader(tool);
             //     break;
@@ -383,9 +382,11 @@ async function loadApp () {
 
     new MapMarkerView(mapMarkerConfig);
 
+    searchbarAttributes = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
     sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});
-    sbconfig = Object.assign(sbconfig, Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr);
-    if (sbconfig) {
+    sbconfig = Object.assign(sbconfig, searchbarAttributes);
+
+    if (searchbarAttributes !== undefined && sbconfig) {
         new SearchbarView(sbconfig);
     }
 

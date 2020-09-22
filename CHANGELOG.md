@@ -6,6 +6,7 @@
 
 ## Unreleased - in development
 ### Added
+- RemoteInterface wurde für Vue hinzugefügt.
 - Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
 - Ein GFI-Theme trafficCount, zum Anzeigen von Verkehrsmengen wurde hinzugefügt.
@@ -34,6 +35,7 @@
 - Die Version des Packages zip-a-folder wurde in der package.json aktualisiert.
 
 ### Deprecated
+- RemoteInterface via Backbone Radio ist ab jetzt deprecated.
 - WfsFeatureFilter ist deprecated. Bitte das Modul Filter benutzen.
 - ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
 - Das Attribut coord für das Modul zur Koordinatenabfrage ist deprecated. Bitte das Attribut supplyCoord benutzen.

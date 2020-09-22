@@ -1,5 +1,5 @@
 import Draw from "./draw/components/Draw.vue";
-import ScaleSwitcher from "./scale/components/ScaleSwitcher.vue";
+import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 
@@ -14,11 +14,6 @@ const state = {
         draw: Draw,
         scaleSwitcher: ScaleSwitcher,
         supplyCoord: SupplyCoord,
-        /**
-         * coord
-         * @deprecated in 3.0.0
-         */
-        coord: SupplyCoord,
         fileImport: FileImport
     },
     configuredTools: []

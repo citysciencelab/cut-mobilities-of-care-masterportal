@@ -13,19 +13,6 @@ import stateDraw from "./stateDraw";
 const initialState = Object.assign({}, stateDraw),
     actions = {
         /**
-         * Activates the tool if it is activated via the URL with '?isinitopen=draw'.
-         *
-         * @param {Object} context actions context object.
-         * @returns {void}
-         */
-        activateByUrlParam ({rootState, dispatch}) {
-            const mappings = ["draw"];
-
-            if (rootState.queryParams instanceof Object && rootState.queryParams.isinitopen !== undefined && mappings.indexOf(rootState.queryParams.isinitopen.toLowerCase()) !== -1) {
-                dispatch("setActive", true);
-            }
-        },
-        /**
          * Adds an interaction to the current map instance.
          *
          * @param {Object} context actions context object.
@@ -138,7 +125,7 @@ const initialState = Object.assign({}, stateDraw),
             let centerPoint,
                 geoJSONAddCenter;
 
-            interaction.on("drawend", function (event) {
+            interaction.on("drawend", event => {
                 dispatch("uniqueID").then(id => {
                     event.feature.set("styleId", id);
 
@@ -163,12 +150,12 @@ const initialState = Object.assign({}, stateDraw),
                     }
                 });
             });
-            interaction.on("drawstart", function () {
+            interaction.on("drawstart", () => {
                 dispatch("drawInteractionOnDrawEvent", {drawInteraction, doubleCircle});
             });
 
             if (maxFeatures && maxFeatures > 0) {
-                interaction.on("drawstart", function () {
+                interaction.on("drawstart", () => {
                     const featureCount = state.layer.getSource().getFeatures().length;
 
                     if (featureCount > maxFeatures - 1) {
@@ -464,7 +451,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} [payload.feature] feature to be added to the array, if given.
          * @return {void}
          */
-        updateRedoArray: function ({state, commit}, {remove, feature}) {
+        updateRedoArray: ({state, commit}, {remove, feature}) => {
             const redoArray = state.redoArray;
 
             if (remove) {

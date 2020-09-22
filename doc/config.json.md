@@ -63,7 +63,6 @@ Konfiguration der Searchbar
 |visibleWFS|nein|**[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)**||Konfiguration der Suche über die sichtbaren WFS Layer.|false|
 |visibleVector|nein|**[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)**||Konfiguration der Suche über die sichtbaren WFS Layer.|false|
 |zoomLevel|nein|Integer||ZoomLevel, auf das die Searchbar maximal hineinzoomt.|false|
-|renderToDOM|nein|String||HTML-Id an diese sich die Searchbar rendert. Bei "#searchbarInMap" zeichnet sich die Searchbar auf der Karte. Wird verwendet in MeldeMichel.|true|
 |sortByName|nein|Boolean|true|Legt fest ob die Ergebnisse einer Suche alphabetisch nach Namen sortiert werden sollen|false|
 |selectRandomHits|nein|Boolean|true|Wenn `true` wird zufällig ausgewählt, welche Ergebnisse angezeigt werden sollen, wenn die Anzahl der Treffer `recomendedListLength` überschreitet. Wenn `false`, so wird die Liste an Treffern bei `recomendedListLength` abgeschnitten. Möglicherweise werden in diesem Fall trotz nur die Ergebnisse des Suchdienstes verwendet, welcher zuerst eine Liste mit Treffern zurück liefert.|false|
 
@@ -915,7 +914,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |----|-------------|---|-------|------------|------|
 |addWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Themenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|false|
 |animation|nein|**[animation](#markdown-header-portalconfigmenutoolanimation)**||Pendleranimation als punkthafte Objekte.|false|
-|compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vektor-Features.|false|
+|compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vektor-Features. Fuktioniert nur in Verbindung mit dem GFI-Theme **Schulinfo**!|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemeldet werden.|false|
 |coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
@@ -951,7 +950,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|active|nein|Boolean|false|Gibt an, ob ein Werkzeug beim starten des Portals geöffnet ist.
+|active|nein|Boolean|false|Gibt an, ob ein Werkzeug beim starten des Portals geöffnet ist.|false|
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
 |isVisibleInMenu|nein|Boolean|true|Flag, ob das Tool unter Werkzeuge angezeigt wird.|false|
 |keepOpen|nein|Boolean|false|Flag, ob das Tool parallel zu anderen Tools geöffnet bleibt.|false|
@@ -2191,6 +2190,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |Titel|ja|String||Titel des Ordners.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
 |Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
+|isFolderSelectable|nein|Boolean|true|Bewirkt, dass alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden können.|false|
 
 **Beispiel Ordner mit einem Layer**
 ```
@@ -2216,6 +2216,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
     "Ordner": [
         {
             "Titel": "Mein erster Ordner",
+            "isFolderSelectable": true,
             "Ordner": [
                 {
                     "Titel": "Mein zweiter Ordner",
@@ -2368,12 +2369,13 @@ Hier werden WMS typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
+|name|nein|String/String[]||Name des Layers. Falls das Attribute **styles** konfiguriert wird, muss dieses Attribute als Tpy String[] konfiguriert werden.|false|
 |attributesToStyle|nein|String[]||Array von Attributen nach denen der WMS gestylt werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |featureCount|nein|Integer|1|Anzahl der Features, die bei einer GetFeatureInfo-Abfrage zurückgegeben werden sollen.|false|
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
 |infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|false|
-|styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
+|styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück. In diesem Fall muss das Attribute **name** ebenfalls vom Typ String[] sein und genauso viele Einträge enthalten wie das sytle Attribute, damit zu jedem Style ein Name im Themenbaum zugeordnet werden kann.|true|
 
 **Beispiel**
 ```

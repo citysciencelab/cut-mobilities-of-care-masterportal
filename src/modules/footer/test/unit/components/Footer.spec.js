@@ -18,7 +18,7 @@ config.mocks.$i18n = {
     }
 };
 
-describe("Footer.vue", () => {
+describe("src/modules/footer/components/Footer.vue", () => {
     const mockConfigJs = {
         footer: {
             urls: [{

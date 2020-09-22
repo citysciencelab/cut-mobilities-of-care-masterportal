@@ -39,9 +39,9 @@ const {memorize, forward, backward} = mutations,
         zoom: 1
     };
 
-describe("mutationsBackForward", function () {
-    describe("memorize", function () {
-        it("notes the current view's state", function () {
+describe("src/modules/controls/backForward/store/mutationsBackForward.js", () => {
+    describe("memorize", () => {
+        it("notes the current view's state", () => {
             const state = {
                 position: null,
                 memory: []
@@ -52,7 +52,7 @@ describe("mutationsBackForward", function () {
             expect(state.position).to.equal(0);
             expect(state.memory).to.eql([zeroMemory]);
         });
-        it("does not note the same state twice", function () {
+        it("does not note the same state twice", () => {
             const state = {
                 position: null,
                 memory: []
@@ -64,7 +64,7 @@ describe("mutationsBackForward", function () {
             expect(state.position).to.equal(0);
             expect(state.memory).to.eql([zeroMemory]);
         });
-        it("notes a different state as second memory", function () {
+        it("notes a different state as second memory", () => {
             const state = {
                 position: null,
                 memory: []
@@ -76,7 +76,7 @@ describe("mutationsBackForward", function () {
             expect(state.position).to.equal(1);
             expect(state.memory).to.eql([zeroMemory, oneMemory]);
         });
-        it("remembers at most ten states, eliminating the oldest state", function () {
+        it("remembers at most ten states, eliminating the oldest state", () => {
             const state = {
                 position: null,
                 memory: []
@@ -109,7 +109,7 @@ describe("mutationsBackForward", function () {
                 zeroMemory
             ]);
         });
-        it("removes memories of future on memorization", function () {
+        it("removes memories of future on memorization", () => {
             const state = {
                 position: 1,
                 memory: [
@@ -130,8 +130,8 @@ describe("mutationsBackForward", function () {
             ]);
         });
     });
-    describe("forward", function () {
-        it("does nothing on initial state", function () {
+    describe("forward", () => {
+        it("does nothing on initial state", () => {
             const state = {
                 position: null,
                 memory: []
@@ -147,7 +147,7 @@ describe("mutationsBackForward", function () {
             expect(state.position).to.be.null;
             expect(state.memory).to.eql([]);
         });
-        it("updates position and view's center/zoom on forward step", function () {
+        it("updates position and view's center/zoom on forward step", () => {
             const state = {
                 position: 0,
                 memory: [{center: [2, 2], zoom: 2}, {center: [5, 5], zoom: 5}]
@@ -163,7 +163,7 @@ describe("mutationsBackForward", function () {
             expect(state.position).to.equal(1);
             expect(state.memory).to.eql([{center: [2, 2], zoom: 2}, {center: [5, 5], zoom: 5}]);
         });
-        it("logs error when trying to move to inexistant memory", function () {
+        it("logs error when trying to move to inexistant memory", () => {
             const state = {
                     position: 0,
                     memory: [{center: [2, 2], zoom: 2}]
@@ -185,8 +185,8 @@ describe("mutationsBackForward", function () {
             console.error = consoleError;
         });
     });
-    describe("backward", function () {
-        it("does nothing on initial state; does not change memory", function () {
+    describe("backward", () => {
+        it("does nothing on initial state; does not change memory", () => {
             const state = {
                 position: null,
                 memory: []
@@ -202,7 +202,7 @@ describe("mutationsBackForward", function () {
             expect(state.position).to.be.null;
             expect(state.memory).to.eql([]);
         });
-        it("updates position and view's center/zoom on backward step; does not change memory", function () {
+        it("updates position and view's center/zoom on backward step; does not change memory", () => {
             const state = {
                 position: 1,
                 memory: [{center: [2, 2], zoom: 2}, {center: [5, 5], zoom: 5}]
@@ -218,7 +218,7 @@ describe("mutationsBackForward", function () {
             expect(state.position).to.equal(0);
             expect(state.memory).to.eql([{center: [2, 2], zoom: 2}, {center: [5, 5], zoom: 5}]);
         });
-        it("logs error when trying to move to inexistant memory", function () {
+        it("logs error when trying to move to inexistant memory", () => {
             const state = {
                     position: 0,
                     memory: [{center: [2, 2], zoom: 2}]

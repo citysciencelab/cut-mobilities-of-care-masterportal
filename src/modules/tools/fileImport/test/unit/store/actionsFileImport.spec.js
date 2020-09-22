@@ -8,7 +8,7 @@ import VectorSource from "ol/source/Vector.js";
 import * as crs from "masterportalAPI/src/crs";
 
 const
-    {activateByUrlParam, importKML} = actions,
+    {importKML} = actions,
     namedProjections = [
         ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
         ["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
@@ -25,30 +25,8 @@ before(() => {
     });
 });
 
-describe("actionsFileImport", function () {
-    describe("activateByUrlParam", function () {
-        it("activateByUrlParam  isinitopen=fileImport", done => {
-            const rootState = {
-                queryParams: {
-                    "isinitopen": "fileImport"
-                }
-            };
-
-            testAction(activateByUrlParam, null, {active: false}, rootState, [
-                {type: "setActive", payload: true}
-            ], {}, done);
-        });
-        it("activateByUrlParam no isinitopen", done => {
-            const rootState = {
-                queryParams: {
-                }
-            };
-
-            testAction(activateByUrlParam, null, {active: false}, rootState, [], {}, done);
-        });
-    });
-
-    describe("file import - file should add some features to the current draw layer", function () {
+describe("src/modules/tools/fileImport/store/actionsFileImport.js", () => {
+    describe("file import - file should add some features to the current draw layer", () => {
         const
             source = new VectorSource(),
             layer = new VectorLayer({

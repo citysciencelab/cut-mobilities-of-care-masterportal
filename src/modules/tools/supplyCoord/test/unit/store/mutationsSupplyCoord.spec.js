@@ -11,14 +11,14 @@ const {setProjections} = mutations,
         ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
     ];
 
-describe("mutationsSupplyCoord", function () {
+describe("src/modules/tools/supplyCoord/store/mutationsSupplyCoord.js", () => {
 
     before(() => {
         crs.registerProjections(namedProjections);
     });
 
-    describe("setProjections", function () {
-        it("initially sets the currentProjectionName to \"EPSG:25832\"", function () {
+    describe("setProjections", () => {
+        it("initially sets the currentProjectionName to \"EPSG:25832\"", () => {
             const state = {
                 projections: [],
                 currentProjectionName: "",
@@ -31,7 +31,7 @@ describe("mutationsSupplyCoord", function () {
             expect(state.currentProjectionName).to.equals("EPSG:25832");
             expect(state.currentSelection).to.equals("EPSG:25832");
         });
-        it("initially sets the currentProjectionName to the first one, if no  \"EPSG:25832\" available", function () {
+        it("initially sets the currentProjectionName to the first one, if no  \"EPSG:25832\" available", () => {
             const state = {
                     projections: [],
                     currentProjectionName: "",
@@ -45,7 +45,7 @@ describe("mutationsSupplyCoord", function () {
             expect(state.currentProjectionName).to.equals(projections[0].name);
             expect(state.currentSelection).to.equals(projections[0].name);
         });
-        it("initially set empty projections", function () {
+        it("initially set empty projections", () => {
             const state = {
                 projections: [],
                 currentProjectionName: "",
@@ -58,7 +58,7 @@ describe("mutationsSupplyCoord", function () {
             expect(state.currentProjectionName).to.be.undefined;
             expect(state.currentSelection).to.be.undefined;
         });
-        it("initially projections are undefined", function () {
+        it("initially projections are undefined", () => {
             const state = {
                 projections: [],
                 currentProjectionName: "",

@@ -90,6 +90,10 @@
             "layer": {
               "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used."
             }
+          },
+          "parametricURL": {
+            "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
+            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!"
           }
         },
         "cswParser": {
@@ -262,6 +266,15 @@
                 "serviceThree": "Service 3",
                 "key": "Configuration of tool <b>{{alertMessage.x}}</b> incorrect: <b>sliderType</b> \"{{alertMessage.y}}\" is not yet implemented!"
             },
+            "filter": {
+                "result": "Result",
+                "results": "Results",
+                "zoomOnResults": "Zoom on results",
+                "filter": " filters",
+                "yourSelection": "Your Selection: ",
+                "noFilterOptionSelected": "No filter option selected",
+                "deleteAll": "Delete all"
+            },
             "pendler": {
                 "animation": {
                     "domicile": "Domicile",
@@ -403,7 +416,8 @@
                         "bicycleLabel": "Bicycle",
                         "idLabel": "ID:",
                         "typeLabel": "Type:",
-                        "meansOfTransportLabel": "Means of transportation:",
+                        "meansOfTransportLabel": "Transportation:",
+                        "directionLabel": "Direction:",
                         "carsHeaderSuffix": "The count of cars",
                         "trucksHeaderSuffix": "Trucks proportion in %",
                         "yAxisTextDay": "Count / 15 Min.",
@@ -437,7 +451,6 @@
                 "hdmsNorthingText": "value for the $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
             },
             "draw": {
-                "title": "Draw Features",
                 "clickToPlaceText": "Click on the map to place the text",
                 "draw": "draw",
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",
@@ -644,6 +657,9 @@
             "linkToPdf": "Link to extern legend (PDF)",
             "noLegendForLayerInfo": "No legend available",
             "toggleCollapseAll": "Toggle all legends"
+        },
+        "zoomToGeometry": {
+          "alertNoFoundFeature" : "No object was found! Please check the input parameters."
         }
     },
     "snippets": {

@@ -11,7 +11,14 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         isLayerVisible: false,
         activateOnSelection: false,
         searchInMapExtent: true,
-        liveZoomToFeatures: false
+        liveZoomToFeatures: false,
+        // translations
+        result: "",
+        results: "",
+        filter: "",
+        yourSelection: "",
+        noFilterOptionSelected: "",
+        deleteAll: ""
     },
 
     /**
@@ -25,6 +32,13 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
      * @property {boolean} activateOnSelection=false todo
      * @property {boolean} searchInMapExtent=true Flag for the search in the current map extent.
      * @property {boolean} liveZoomToFeatures=false todo
+     * @property {String} result: "" contains the translated text
+     * @property {String} results: "" contains the translated text
+     * @property {String} filter: "" contains the translated text
+     * @property {String} yourSelection: "" contains the translated text
+     * @property {String} noFilterOptionSelected: "" contains the translated text
+     * @property {String} deleteAll: "" contains the translated text
+     * @listens i18next#RadioTriggerLanguageChanged
      * @returns {void}
      */
     superInitialize: function () {
@@ -54,6 +68,27 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
                 }
             }
         }, this);
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang();
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "result": i18next.t("common:modules.tools.filter.result"),
+            "results": i18next.t("common:modules.tools.filter.results"),
+            "filter": i18next.t("common:modules.tools.filter.filter"),
+            "yourSelection": i18next.t("common:modules.tools.filter.yourSelection"),
+            "noFilterOptionSelected": i18next.t("common:modules.tools.filter.noFilterOptionSelected"),
+            "deleteAll": i18next.t("common:modules.tools.filter.deleteAll"),
+            "currentLng": lng
+        });
     },
 
     isSearchInMapExtentActive: function () {

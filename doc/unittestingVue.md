@@ -63,7 +63,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("ScaleSwitcher.vue", () => {
+describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
     const scales = ["1000", "5000", "10000"],
         mockMapGetters = {
             scales: () => scales,
@@ -187,9 +187,9 @@ import stateScaleSwitcher from "../../../store/stateScaleSwitcher";
 
 const {currentScale} = getters;
 
-describe("gettersScaleSwitcher", function () {
-    describe("getCurrentScale", function () {
-        it("returns the scale from state", function () {
+describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => {
+    describe("getCurrentScale", () => {
+        it("returns the scale from state", () => {
             const state = {
                 currentScale: "1000"
             };
@@ -197,11 +197,11 @@ describe("gettersScaleSwitcher", function () {
             expect(currentScale(state)).to.equals("1000");
         });
     });
-     describe("testing default values", function () {
-        it("returns the name default value from state", function () {
+    describe("testing default values", () => {
+        it("returns the name default value from state", () => {
             expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");
         });
-    ... //weitere default-Werte testen
+        // (...) - weitere default-Werte testen
     });
 });
 
@@ -217,8 +217,8 @@ import actions from "../../../store/actionsScaleSwitcher";
 
 const {setActive, activateByUrlParam} = actions;
 
-describe("actionsScaleSwitcher", function () {
-    describe("setActive", function () {
+describe("src/modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js", () => {
+    describe("setActive", () => {
         const rootState = {
             Map: {
                 scale: "60033.65329850641"
@@ -259,9 +259,9 @@ import mutations from "../../../store/mutationsScaleSwitcher";
 
 const {setCurrentScale} = mutations;
 
-describe("mutationsScaleSwitcher", function () {
-    describe("setCurrentScale", function () {
-        it("sets the scale to state", function () {
+describe("src/modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js", () => {
+    describe("setCurrentScale", () => {
+        it("sets the scale to state", () => {
             const state = {
                 currentScale: null
             },

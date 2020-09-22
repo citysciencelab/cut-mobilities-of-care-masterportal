@@ -51,10 +51,12 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         propTrafficCountApi: null,
         propThingId: 0,
         propMeansOfTransport: "",
+        directionLabel: "",
 
         title: "",
         type: "",
         meansOfTransport: "",
+        direction: "",
         lastUpdate: "",
 
         totalDesc: "",
@@ -165,6 +167,7 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
             idLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.idLabel"),
             typeLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.typeLabel"),
             meansOfTransportLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.meansOfTransportLabel"),
+            directionLabel: i18next.t("common:modules.tools.gfi.themes.trafficCount.directionLabel"),
             carsHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.carsHeaderSuffix"),
             trucksHeaderSuffix: i18next.t("common:modules.tools.gfi.themes.trafficCount.trucksHeaderSuffix"),
             yAxisTextDay: i18next.t("common:modules.tools.gfi.themes.trafficCount.yAxisTextDay"),
@@ -275,6 +278,18 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
         else {
             this.setMeansOfTransport("");
         }
+
+        // direction
+        api.updateDirection(thingId, direction => {
+            this.setDirection(direction);
+        }, errormsg => {
+            this.setDirection("");
+            console.warn("The direction received is incomplete:", errormsg);
+            Radio.trigger("Alert", "alert", {
+                content: "Die vom Sensor-Server erhaltene Richtung des geöffneten GFI konnte wegen eines API-Fehlers nicht empfangen werden.",
+                category: "Info"
+            });
+        });
 
         // tab body
         if (tabValue === "day") {
@@ -1752,6 +1767,15 @@ const TrafficCountModel = Theme.extend(/** @lends TrafficCountModel.prototype*/{
      */
     setTitle: function (value) {
         this.set("title", value);
+    },
+
+    /**
+     * setter for direction
+     * @param {String} value the direction to be shown in the template
+     * @returns {Void}  -
+     */
+    setDirection: function (value) {
+        this.set("direction", value);
     },
 
     /**

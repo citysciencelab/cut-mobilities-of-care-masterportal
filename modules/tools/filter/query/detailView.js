@@ -89,7 +89,12 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @returns {void}
      */
     updateFeatureCount: function (model, value) {
-        this.$el.find(".feature-count").html(value.length + " Treffer");
+        if (value.length === 1) {
+            this.$el.find(".feature-count").html(value.length + " " + this.model.get("result"));
+        }
+        else {
+            this.$el.find(".feature-count").html(value.length + " " + this.model.get("results"));
+        }
         this.$el.find(".detailview-head .zoom-btn")
             .animate({opacity: 0.6}, 500)
             .animate({opacity: 1.0}, 500);
@@ -120,6 +125,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
                     view = new SnippetMultiCheckboxView({model: snippet});
                 }
                 else if (snippet.get("type") === "string" || snippet.get("type") === "text") {
+                    // doesn't rerender on language change if dropdown is open (see render method there)
+                    snippet.set("isOpen", false);
                     view = new SnippetDropdownView({model: snippet});
                 }
                 else if (snippet.get("type") === "boolean") {
@@ -132,7 +139,6 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
                 else {
                     view = new SnippetCheckBoxView({model: snippet});
                 }
-
 
                 this.$el.append(view.render().$el);
             });

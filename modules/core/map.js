@@ -70,10 +70,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @fires Core#RadioTriggerMapChange
      * @fires Core#RadioTriggerObliqueMapDeactivate
      * @fires Core#RadioTriggerMapBeforeChange
-     * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioRequestMapViewGetProjection
      * @fires Core#RadioRequestMapClickedWindowPosition
-     * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Core#RadioTriggerMapCameraChanged
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Core#RadioTriggerUtilHideLoadingModule
@@ -172,7 +170,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         Radio.trigger("ModelList", "addInitiallyNeededModels");
 
         if (Radio.request("ParametricURL", "getZoomToExtent") !== undefined) {
-            this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
+            this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"), {}, Radio.request("ParametricURL", "getProjectionFromUrl"));
         }
 
         Radio.trigger("Map", "isReady", "gfi", false);
@@ -520,24 +518,25 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} extent - todo
-     * @param {*} options - todo
+     * Zoom to a given extent
+     * @param {String[]} extent - The extent to zoom.
+     * @param {Object} options - Options for zoom.
+     * @param {string} urlProjection - The projection from RUL parameter.
      * @returns {void}
      */
-    zoomToExtent: function (extent, options) {
-        let extentToUse = extent;
-        const projectionGiven = Radio.request("ParametricURL", "getProjectionFromUrl");
+    zoomToExtent: function (extent, options, urlProjection) {
+        let extentToZoom = extent;
 
-        if (typeof projectionGiven !== "undefined") {
+        if (urlProjection !== undefined) {
             const leftBottom = extent.slice(0, 2),
                 topRight = extent.slice(2, 4),
-                transformedLeftBottom = transformToMapProjection(this.get("map"), projectionGiven, leftBottom),
-                transformedTopRight = transformToMapProjection(this.get("map"), projectionGiven, topRight);
+                transformedLeftBottom = transformToMapProjection(this.get("map"), urlProjection, leftBottom),
+                transformedTopRight = transformToMapProjection(this.get("map"), urlProjection, topRight);
 
-            extentToUse = transformedLeftBottom.concat(transformedTopRight);
+            extentToZoom = transformedLeftBottom.concat(transformedTopRight);
         }
-        this.get("view").fit(extentToUse, {size: this.get("map").getSize(), ...options});
+
+        this.get("view").fit(extentToZoom, {size: this.get("map").getSize(), ...options});
     },
 
     /**

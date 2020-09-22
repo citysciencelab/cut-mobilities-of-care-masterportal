@@ -108,7 +108,8 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
 
         this.setFormats(obj.formats);
         this.setFeatures(obj.features);
-        Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", false);
+
+        Radio.trigger("ModelList", "setActiveToolsToFalse", Radio.request("ModelList", "getModelByAttributes", {id: "download"}));
         this.set("isActive", true);
     },
 
@@ -284,7 +285,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * Transform the given polygon coords into the given projections.
      * @param {ol/Coordinate} coords Coordinates.
      * @param {Object} projections Object containing the projections.
-     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformPolygon: function (coords, projections) {
@@ -302,7 +302,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * Transform the given line coords into the given projections.
      * @param {ol/Coordinate} coords Coordinates.
      * @param {Object} projections Object containing the projections.
-     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformLine: function (coords, projections) {
@@ -318,7 +317,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * Transform the given point coords into the given projections.
      * @param {ol/Coordinate} point Coordinates.
      * @param {Object} projections Object containing the projections.
-     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {ol/Coordinate} - The projected coordinates.
      */
     transformPoint: function (point, projections) {
@@ -485,6 +483,15 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      */
     setIsInternetExplorer: function (value) {
         this.set("isInternetExplorer", value);
+    },
+
+    /**
+     * Setter for attribute "store".
+     * @param {Boolean} value The Vuex store.
+     * @returns {void}
+     */
+    setStore: function (value) {
+        this.set("store", value);
     }
 });
 

@@ -93,7 +93,8 @@ const symbol = {
         text: "",
         unit: null,
         withoutGUI: false,
-        zIndex: 0
+        zIndex: 0,
+        name: "Zeichnen / Schreiben"
     };
 
 export default state;

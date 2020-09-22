@@ -4,7 +4,10 @@ const QueryValuesView = Backbone.View.extend({
     },
     initialize: function () {
         this.listenTo(this.model, {
-            "removeView": this.remove
+            "removeView": this.remove,
+            "change:currentLng": () => {
+                this.render(this.model, this.model.get("isActive"));
+            }
         });
     },
     tagName: "span",
