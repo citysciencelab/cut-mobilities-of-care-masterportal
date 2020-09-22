@@ -4,7 +4,6 @@ const webpack = require("webpack"),
     path = require("path"),
     fse = require("fs-extra"),
     VueLoaderPlugin = require("vue-loader/lib/plugin"),
-    MomentTimezoneDataPlugin = require("moment-timezone-data-webpack-plugin"),
 
     rootPath = path.resolve(__dirname, "../"),
     addonPath = path.resolve(rootPath, "addons/"),
@@ -167,25 +166,7 @@ module.exports = function () {
             // create global constant at compile time
             new webpack.DefinePlugin({
                 ADDONS: JSON.stringify(addonsRelPaths)
-            }),
-            getTimezonePlugin()
+            })
         ]
     };
 };
-
-/**
- * Returns the MomentTimezoneDataPlugin if not running e2e-Tests.
- * @returns {object} the MomentTimezoneDataPlugin
- */
-function getTimezonePlugin () {
-    if (process.env.NODE_ENV === "e2eTest") {
-        return null;
-    }
-    // import only a very limited number of timezones
-    // @see https://www.npmjs.com/package/moment-timezone-data-webpack-plugin
-    return new MomentTimezoneDataPlugin({
-        matchZones: /Europe\/(Berlin|London)/,
-        startYear: 2019,
-        endYear: new Date().getFullYear()
-    });
-}

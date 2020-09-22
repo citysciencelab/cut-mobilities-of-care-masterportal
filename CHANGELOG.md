@@ -33,6 +33,7 @@
 - Die Version des Packages null-loader wurde in der package.json aktualisiert.
 - Die Version des Packages https-proxy-agent wurde in der package.json aktualisiert.
 - Die Version des Packages zip-a-folder wurde in der package.json aktualisiert.
+- Das Package moment-timezone-data-webpack-plugin wurde entfernt.
 
 ### Deprecated
 - RemoteInterface via Backbone Radio ist ab jetzt deprecated.
