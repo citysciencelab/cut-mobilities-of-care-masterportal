@@ -36,7 +36,26 @@ export default {
     updated () {
         $(this.$el).draggable({
             containment: "#map",
-            handle: ".legend-title"
+            handle: ".legend-title",
+            stop: function (event, ui) {
+                const legendElem = $(".legend-window"),
+                    legendOuterWidth = legendElem.outerWidth(true),
+                    legendOuterHeight = legendElem.outerHeight(true),
+                    mapWidth = document.getElementById("map").offsetWidth,
+                    mapHeight = document.getElementById("map").offsetHeight;
+
+                if (ui.offset.left - legendOuterWidth < 0) {
+                    ui.helper.css({
+                        left: -(mapWidth - legendOuterWidth)
+                    });
+                }
+
+                if (ui.offset.top + legendOuterHeight >= mapHeight) {
+                    ui.helper.css({
+                        top: mapHeight - legendOuterHeight
+                    });
+                }
+            }
         });
     },
     methods: {
@@ -572,7 +591,7 @@ export default {
                         data-toggle="collapse"
                         :href="'#' + generateId(legendObj.name)"
                     >
-                        {{ legendObj.name }}
+                        <span>{{ legendObj.name }}</span>
                     </div>
                     <LegendSingleLayer
                         :id="generateId(legendObj.name)"
@@ -599,9 +618,10 @@ export default {
         .legend-window {
             position: absolute;
             width: 300px;
-            right: 100px;
-            top: 20px;
+            right: 0px;
+            margin: 10px 10px 30px 10px;
             background-color: #ffffff;
+            z-index: 9999;
         }
         .legend-window-mobile {
             position: absolute;
@@ -617,6 +637,10 @@ export default {
             cursor: move;
             .close-legend {
                 cursor: pointer;
+            };
+            .toggle-collapse-all {
+                padding-right: 10px;
+                cursor: pointer;
             }
         }
         .legend-content {
@@ -627,15 +651,15 @@ export default {
                 padding: 5px;
                 font-weight: bold;
                 background-color: #e7e7e7;
+                span {
+                    vertical-align: -webkit-baseline-middle;
+                }
             }
             .layer {
-                border: 2px solid #e7e7e7;
+                border: unset;
                 margin: 2px;
                 padding: 5px;
             }
-        }
-        .toggle-collapse-all {
-            padding-right: 10px;
         }
     }
 
