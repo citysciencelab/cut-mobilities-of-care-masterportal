@@ -10,6 +10,7 @@ export default {
             type: Array,
             required: true
         },
+
         /**
          * the title of the table - this is the top left field
          */
@@ -36,21 +37,18 @@ export default {
         setRowTitle: {
             type: Function,
             required: true
+        },
+        /**
+         * a function to manipulate the value of a table field
+         * @param {String|null} value the value of the field - this may be null if no data was given
+         * @return {String}  the new value of the field
+         */
+        setFieldValue: {
+            type: Function,
+            required: true
         }
     },
     methods: {
-        /**
-         * returns the input always as String, only null will return an empty String
-         * @param {*} value something to convert into a string
-         * @returns {String}  always String, an empty string if null was given
-         */
-        getValueString (value) {
-            if (value === null) {
-                return "";
-            }
-
-            return String(value);
-        },
         /**
          * a very special function to grap the first dataset of the first dataObj from the given apiData
          * @param {Object[]} apiDataRef an array of data, e.g. [{bikes: {date: valueBike}, cars: {date: valueCar}}]
@@ -68,6 +66,24 @@ export default {
             }
 
             return apiDataRef[0][keys[0]];
+        },
+        /**
+         * returns the first key in an object
+         * @param {Object} obj the object
+         * @returns {String|Boolean}  the first key or false if no key was found
+         */
+        getFirstKeyOfObject (obj) {
+            if (typeof obj !== "object" || obj === null) {
+                return false;
+            }
+
+            const keys = Object.keys(obj);
+
+            if (keys.length === 0) {
+                return false;
+            }
+
+            return keys[0];
         },
         /**
          * flattens the given apiData by pushing keys and datasets into a new Object{key, dataset}
@@ -99,35 +115,40 @@ export default {
 </script>
 
 <template>
-    <table>
-        <thead>
-            <th>{{ tableTitle }}</th>
-            <th
-                v-for="(value, date) in getFirstDataset(apiData)"
-                :key="date"
-            >
-                {{ setColTitle(date) }}
-            </th>
-        </thead>
-        <tbody>
-            <tr
-                v-for="(dataObjFlat, idx) in getFlatApiData(apiData)"
-                :key="idx"
-            >
-                <td>{{ setRowTitle(dataObjFlat.key, dataObjFlat.dataset) }}</td>
-                <td
-                    v-for="(value, date) of dataObjFlat.dataset"
-                    :key="date"
+    <div class="table">
+        <table>
+            <thead>
+                <th>{{ tableTitle }}</th>
+                <th
+                    v-for="(value, datetime) in getFirstDataset(apiData)"
+                    :key="datetime"
                 >
-                    {{ getValueString(value) }}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    {{ setColTitle(datetime) }}
+                </th>
+            </thead>
+            <tbody>
+                <tr
+                    v-for="(dataObjFlat, idx) in getFlatApiData(apiData)"
+                    :key="idx"
+                >
+                    <td>{{ setRowTitle(dataObjFlat.key, getFirstKeyOfObject(dataObjFlat.dataset)) }}</td>
+                    <td
+                        v-for="(value, datetime) of dataObjFlat.dataset"
+                        :key="datetime"
+                    >
+                        {{ setFieldValue(value) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <style scoped>
-
+    div.table {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 </style>
 
 <docs>
@@ -157,11 +178,14 @@ export default {
                     }
                 ],
                 tableTitle: "Test",
-                setColTitle: date => {
-                    return moment(date).format("hh:mm");
+                setColTitle: datetime => {
+                    return moment(datetime).format("hh:mm");
                 },
-                setRowTitle: (meansOfTransports, date) => {
-                    return meansOfTransports + " " + moment(date).format("YYYY");
+                setRowTitle: (meansOfTransports, datetime) => {
+                    return meansOfTransports + " " + moment(datetime).format("YYYY");
+                },
+                setFieldValue: value => {
+                    return value !== null ? String(value) : "";
                 }
             };
         }
@@ -175,6 +199,7 @@ export default {
                 :tableTitle="tableTitle"
                 :setColTitle="setColTitle"
                 :setRowTitle="setRowTitle"
+                :setFieldValue="setFieldValue"
             ></TrafficCountCompTable>
         </div>
     <!--</template>-->
