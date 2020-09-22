@@ -1,5 +1,5 @@
 <script>
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersGfi";
 import Mobile from "./templates/Mobile.vue";
 import Detached from "./templates/Detached.vue";
@@ -75,6 +75,14 @@ export default {
             if (!newValue) {
                 this.reset();
             }
+        },
+        /**
+         * Whenever feature changes, put it into the store
+         * @param {object|null} newValue - the current feature
+         * @returns {void}
+         */
+        feature: function (newValue) {
+            this.setCurrentFeature(newValue);
         }
     },
     beforeUpdate () {
@@ -85,13 +93,15 @@ export default {
         }
     },
     methods: {
+        ...mapMutations("Map", ["setGfiFeatures"]),
+        ...mapMutations("Tools/Gfi", ["setCurrentFeature"]),
         /**
          * Reset means to set the gfiFeatures to null and the pager index to zero.
          * This closes the gfi window/modal/popover.
          * @returns {void}
          */
         reset: function () {
-            this.$store.commit("Map/setGfiFeatures", null);
+            this.setGfiFeatures(null);
             this.pagerIndex = 0;
         },
         /**
