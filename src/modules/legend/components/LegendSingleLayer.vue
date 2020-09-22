@@ -110,4 +110,9 @@ export default {
             max-width: 100%;
         }
     }
+    .layer-legend.collapsing {
+        -webkit-transition: none;
+        transition: none;
+        display: none;
+    }
 </style>
