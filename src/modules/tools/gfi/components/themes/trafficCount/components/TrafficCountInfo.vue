@@ -466,6 +466,8 @@ export default {
     </div>
 </template>
 
-<style scoped>
-
+<style lang="less" scoped>
+    table {
+        margin-bottom: 0;
+    }
 </style>
