@@ -77,15 +77,36 @@ export default {
             return this.$t("common:modules.tools.gfi.themes.trafficCount.directionLabel");
         }
     },
+    watch: {
+        // When the gfi window switched with arrow, the connection will be refreshed
+        feature: {
+            handler (newVal, oldVal) {
+                if (oldVal) {
+                    this.createDataConnection(newVal.getProperties(), null);
+                    this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
+                }
+            },
+            immediate: true
+        },
+
+        // When language is switched, the header will be rerendered
+        directionLabel: {
+            handler (newVal, oldVal) {
+                if (oldVal) {
+                    this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
+                }
+            },
+            immediate: true
+        }
+    },
     created: function () {
-        this.createDataConnection(this.feature.getProperties());
+        this.createDataConnection(this.feature.getProperties(), null);
     },
     mounted: function () {
         this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
     },
-    updated: function () {
-        // In case the language is switched, all the translations should be done
-        this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
+    beforeDestroy: function () {
+        this.api.unsubscribeEverything();
     },
     methods: {
         /**
@@ -142,6 +163,7 @@ export default {
 
             return false;
         },
+
         /**
          * set the header of gfi theme
          * @param {Object} api the api from library
@@ -256,6 +278,9 @@ export default {
                 <TrafficCountInfo
                     id="infos"
                     class="tab-pane fade in active"
+                    :api="api"
+                    :thingId="propThingId"
+                    :meansOfTransport="propMeansOfTransport"
                 />
                 <TrafficCountDay
                     id="day"
