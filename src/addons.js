@@ -17,7 +17,7 @@ export default async function (config) {
                 try {
                     const addonModule = await import(
                         /* webpackChunkName: "[request]" */
-                        /* webpackInclude: /addons\/**\/index.js/ */
+                        /* webpackInclude: /addons\/.*\/index.js$/ */
                         /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
                         `../addons/${allAddons[addonKey]}`
                     ),
