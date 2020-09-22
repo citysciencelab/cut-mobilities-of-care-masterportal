@@ -12,7 +12,7 @@ const mutations = {
      * @returns {void}
      */
     setCenter (state, coord) {
-        if (typeof coord[0] === "number" && typeof coord[1] === "number") {
+        if (Array.isArray(coord) && coord.length === 2 && typeof coord[0] === "number" && typeof coord[1] === "number") {
             state.center = coord;
             state.map.getView().setCenter(coord);
         }
