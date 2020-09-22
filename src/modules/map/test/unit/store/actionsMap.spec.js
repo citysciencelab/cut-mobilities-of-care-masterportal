@@ -1,29 +1,6 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import actions from "../../../store/actions/actionsMap.js";
-import Map from "ol/Map";
-import TileLayer from "ol/layer/Tile";
-import TileWMS from "ol/source/TileWMS";
-import View from "ol/View";
-
-// get data from https://openlayers.org/en/latest/examples/getfeatureinfo-tile.html
-const wmsSource = new TileWMS({
-        url: "https://ahocevar.com/geoserver/wms",
-        params: {"LAYERS": "ne:ne", "TILED": true},
-        serverType: "geoserver",
-        crossOrigin: "anonymous"
-    }),
-    wmsLayer = new TileLayer({
-        source: wmsSource,
-        INFO_FORMAT: "text/html"
-    }),
-    map = new Map({
-        layers: [wmsLayer],
-        view: new View({
-            center: [0, 0],
-            zoom: 1
-        })
-    });
 
 describe("src/modules/map/store/actions/actionsMap.js", () => {
     describe("updateClick: Listener for click on the map", () => {
