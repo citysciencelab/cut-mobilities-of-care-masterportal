@@ -32,29 +32,19 @@ describe("src/modules/tools/gfi/components/themes/trafficCount/components/Traffi
                     }
                 ],
                 tableTitle: "tableTitle",
-                setColTitle (date) {
-                    return date;
+                setColTitle (datetime) {
+                    return datetime;
                 },
-                setRowTitle (key, dataset) {
-                    const date = Object.keys(dataset)[0];
-
-                    return String(key) + String(date);
+                setRowTitle (key, datetime) {
+                    return String(key) + String(datetime);
+                },
+                setFieldValue: value => {
+                    return value !== null ? value : "";
                 }
             }
         });
     });
 
-    describe("getValueString", () => {
-        it("should always return the input as String, but an empty string if null was given", () => {
-            expect(wrapper.vm.getValueString(null)).to.be.a("string").and.to.be.empty;
-            expect(wrapper.vm.getValueString(undefined)).to.equal("undefined");
-            expect(wrapper.vm.getValueString("string")).to.equal("string");
-            expect(wrapper.vm.getValueString(0)).to.equal("0");
-            expect(wrapper.vm.getValueString(1)).to.equal("1");
-            expect(wrapper.vm.getValueString(false)).to.equal("false");
-            expect(wrapper.vm.getValueString(true)).to.equal("true");
-        });
-    });
     describe("getFirstDataset", () => {
         it("should return the dataset of the first dataObj in the given array", () => {
             const result = wrapper.vm.getFirstDataset(wrapper.vm.apiData),
