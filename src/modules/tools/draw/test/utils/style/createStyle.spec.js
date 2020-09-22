@@ -55,7 +55,6 @@ describe("src/modules/tools/draw/utils/style/createStyle.js", () => {
                 drawType = {value: "Point", id: "drawPoint"},
                 result = createStyle({color, drawType, symbol}).getImage();
 
-            expect(result.getColor()).to.deep.equal(color.slice(0, 3));
             expect(result.getOpacity()).to.deep.equal(color[3]);
         });
         it("the result color should be the same as the input color for text", () => {

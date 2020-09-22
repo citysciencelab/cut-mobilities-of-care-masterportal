@@ -34,7 +34,6 @@ describe("src/modules/tools/draw/utils/style/createIconStyle.js", () => {
                 zIndex = 0,
                 result = createIconStyle(color, pointSize, symbol, zIndex);
 
-            expect(result.getImage().getColor()).to.deep.equal(color.slice(0, 3));
             expect(result.getImage().getOpacity()).to.equal(color[3]);
         });
         it("the result glyphicon should be the same as the input glyphicon", () => {
