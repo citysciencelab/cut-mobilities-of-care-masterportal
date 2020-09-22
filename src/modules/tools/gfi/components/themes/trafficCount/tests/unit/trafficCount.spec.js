@@ -95,4 +95,13 @@ describe("TraffiCount.vue", () => {
             expect(wrapper.vm.direction).to.equal("");
         });
     });
+
+    describe("setCurrentTabId", () => {
+        it("returns the current tab id after clicking the tab", async () => {
+            const tab = wrapper.find(".nav-pills");
+
+            await tab.trigger("click");
+            expect(wrapper.vm.currentTabId).to.equal("infos");
+        });
+    });
 });

@@ -4,6 +4,7 @@ import TrafficCountInfo from "./TrafficCountInfo.vue";
 import TrafficCountDay from "./TrafficCountDay.vue";
 import TrafficCountWeek from "./TrafficCountWeek.vue";
 import TrafficCountYear from "./TrafficCountYear.vue";
+import TrafficCountFooter from "./TrafficCountFooter.vue";
 
 export default {
     name: "TrafficCount",
@@ -11,7 +12,8 @@ export default {
         TrafficCountInfo,
         TrafficCountDay,
         TrafficCountWeek,
-        TrafficCountYear
+        TrafficCountYear,
+        TrafficCountFooter
     },
     props: {
         feature: {
@@ -27,7 +29,8 @@ export default {
             title: "",
             type: "",
             meansOfTransport: "",
-            direction: ""
+            direction: "",
+            currentTabId: "infos"
         };
     },
     computed: {
@@ -165,6 +168,17 @@ export default {
         },
 
         /**
+         * set the current tab id after clicking.
+         * @param {Object[]} evt the target of current click event
+         * @returns {Void} -
+         */
+        setCurrentTabId: function (evt) {
+            if (evt && evt.target && evt.target.hash) {
+                this.currentTabId = evt.target.hash.substring(1);
+            }
+        },
+
+        /**
          * set the header of gfi theme
          * @param {Object} api the api from library
          * @param {String} thingId the current thing Id
@@ -245,6 +259,7 @@ export default {
         <div>
             <ul
                 class="nav nav-pills"
+                @click="setCurrentTabId"
             >
                 <li
                     value="infos"
@@ -296,10 +311,17 @@ export default {
                 />
             </div>
         </div>
+        <TrafficCountFooter
+            class="footer"
+            :currentTabId="currentTabId"
+            :api="api"
+            :thingId="propThingId"
+            :meansOfTransport="propMeansOfTransport"
+        />
     </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
     .header {
         min-width: 280px;
         margin: 0 auto;

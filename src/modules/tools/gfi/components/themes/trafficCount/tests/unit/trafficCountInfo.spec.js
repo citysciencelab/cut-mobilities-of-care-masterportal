@@ -1,7 +1,7 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue, config} from "@vue/test-utils";
 import {expect} from "chai";
-import traffiCountInfo from "../../components/TrafficCountInfo.vue";
+import trafficCountInfo from "../../components/TrafficCountInfo.vue";
 
 const localVue = createLocalVue();
 
@@ -33,7 +33,7 @@ describe("TraffiCountInfo.vue", () => {
     };
 
     beforeEach(() => {
-        wrapper = shallowMount(traffiCountInfo, {
+        wrapper = shallowMount(trafficCountInfo, {
             propsData: {
                 api: dummyApi,
                 thingId: 5508,
