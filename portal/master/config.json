@@ -301,7 +301,7 @@
             "name": "translate#common:menu.tools.print",
             "glyphicon": "glyphicon-print",
             "mapfishServiceId": "mapfish_qs",
-            "printAppId": "mrh",
+            "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
             "legendText": "Mit Legende",
