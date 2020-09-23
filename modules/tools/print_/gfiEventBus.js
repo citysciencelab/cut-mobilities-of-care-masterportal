@@ -24,5 +24,13 @@ Radio.channel("GFI").reply({
             return [feature.getMappedProperties(), feature.getTitle(), coordinate];
         }
         return [];
+    },
+    "getIsVisible": function () {
+        const feature = store.getters["Tools/Gfi/currentFeature"];
+
+        if (feature !== null) {
+            return true;
+        }
+        return false;
     }
 });
