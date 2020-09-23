@@ -2,6 +2,7 @@ import Tool from "../../core/modelList/tool/model";
 import {Icon} from "ol/style.js";
 import {Circle, Polygon} from "ol/geom.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
+import "./gfiEventBus.js";
 
 const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
