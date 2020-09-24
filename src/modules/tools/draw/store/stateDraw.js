@@ -1,6 +1,6 @@
 const symbol = {
         id: "iconPoint",
-        type: "simple_point",
+        type: "svg",
         value: "simple_point"
     },
     /**
@@ -58,7 +58,7 @@ const symbol = {
         drawInteraction: null,
         drawInteractionTwo: null,
         drawType: {
-            id: "drawPoint",
+            id: "drawSymbol",
             geometry: "Point"
         },
         fId: 0,
@@ -85,6 +85,12 @@ const symbol = {
                 type: "image",
                 scale: 0.5,
                 value: "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+            },
+            {
+                id: "Kreis orange gross",
+                type: "image",
+                scale: 1,
+                value: "/img/tools/draw/circle_orange_big_opacity05.svg"
             }
         ],
         id: "draw",

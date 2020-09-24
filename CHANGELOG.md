@@ -23,7 +23,7 @@
 - Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
 
 ### Changed
-- Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js.
+- Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Das Zeichnen von Punkten wurde geändert, alle Punkte basieren jetzt auf Bild-Dateien. Größe und Deckkraft können nicht mehr eingestellt werden, für diese Funktionalität steht das Zeichnen von Kreisen zur Verfügung. Das Bereitstellen von anderen Bilddateien wurde angepasst, siehe Doku der config.json.
 - Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
 - Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von Vue.js. Weiterhin heißt es fortan "Datei-Import".
 - Babel wurde, um einen Support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.

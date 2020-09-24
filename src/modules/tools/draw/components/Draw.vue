@@ -127,6 +127,9 @@ export default {
                 return option.id;
             }
             return "noName";
+        },
+        isColorSelected (option) {
+            return this.color ? this.color.slice(0, this.color.length - 1).join(",") === option.value.join(",") : constants.pointColorOptions[0].color.join(",") === option.value.join(",");
         }
     }
 };
@@ -316,7 +319,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id === 'drawPoint'"
+                    v-if="drawType.id === 'drawSymbol'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
@@ -341,7 +344,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id !== 'drawPoint' && drawType.id !== 'writeText'"
+                    v-if="drawType.id !== 'drawSymbol' && drawType.id !== 'writeText'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
@@ -365,7 +368,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve'&& drawType.id !== 'drawPoint'"
+                    v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve'&& drawType.id !== 'drawSymbol'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
@@ -417,7 +420,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id !== 'drawPoint' && drawType.id !== 'writeText'"
+                    v-if="drawType.id !== 'drawSymbol' && drawType.id !== 'writeText'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
@@ -441,7 +444,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id === 'drawPoint'"
+                    v-if="drawType.id === 'drawSymbol' && symbol.id === 'iconPoint'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
@@ -458,6 +461,7 @@ export default {
                                 v-for="option in constants.pointColorOptions"
                                 :key="'draw-color-' + option.color"
                                 :value="option.value"
+                                :selected="isColorSelected(option)"
                             >
                                 {{ $t("common:colors." + option.color) }}
                             </option>
@@ -465,7 +469,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve' && drawType.id !== 'drawPoint'"
+                    v-if="drawType.id !== 'drawLine' && drawType.id !== 'drawCurve' && drawType.id !== 'drawSymbol'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">

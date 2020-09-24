@@ -460,7 +460,7 @@
                 "undefinedOuterCircle": "Please also define the outer circle.",
                 "limitReached": "You have already drawn {{count}} object, please delete it before continuing!",
                 "limitReached_plural": "You have already drawn {{count}} objects, please delete one before proceeding!",
-                "drawPoint": "Draw point",
+                "drawSymbol": "Draw symbol",
                 "writeText": "Write text",
                 "drawLine": "Draw line",
                 "drawCurve": "Draw curve",

@@ -21,10 +21,10 @@ import {createTextStyle} from "./createTextStyle";
  * @returns {module:ol/style/Style} style of the draw interaction
  */
 export function createStyle ({color, colorContour, drawType, font, fontSize, pointSize, strokeWidth, symbol, text, zIndex}) {
-    const glyphBool = symbol.type ? symbol.type !== "simple_point" : false; // Normal point or icon
+    const isSvg = symbol.type ? symbol.type === "svg" : false; // svg or icon
     let style = new Style();
 
-    if (drawType.id === "drawPoint" && glyphBool) {
+    if (drawType.id === "drawSymbol" && !isSvg) {
         style = createIconStyle(color, pointSize, symbol, zIndex);
     }
     else if (drawType.id === "writeText") {

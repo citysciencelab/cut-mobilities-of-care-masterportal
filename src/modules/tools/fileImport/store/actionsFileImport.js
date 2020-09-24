@@ -145,7 +145,7 @@ export default {
                 const indices = [];
 
                 features.forEach((feature, i) => {
-                    if (feature.getGeometry().getType() === "Point") {
+                    if (feature.getGeometry() !== null && feature.getGeometry().getType() === "Point") {
                         if (feature.values_.name === undefined) {
                             // import of point no text: showPointNames must be false
                             indices.push(i);
@@ -164,6 +164,7 @@ export default {
             }
         }
         catch (ex) {
+            console.warn(ex);
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
                 content: i18next.t("common:modules.tools.fileImport.alertingMessages.formatError", {filename: datasrc.filename})

@@ -12,20 +12,14 @@ const colorOptions = [
         {color: "white", value: [255, 255, 255]},
         {color: "yellow", value: [255, 255, 51]}
     ],
-    pointColorOptions = [
-        colorOptions[0], // blue
-        colorOptions[6], // white
-        colorOptions[1], // black
-        colorOptions[2], // green
-        colorOptions[5]// red
-    ],
+    pointColorOptions = colorOptions,
     colorContourOptions = [
         colorOptions[1],
         colorOptions[0],
         ...colorOptions.slice(2)
     ],
     drawTypeOptions = [
-        {value: "Point", id: "drawPoint"},
+        {value: "Point", id: "drawSymbol"},
         {value: "LineString", id: "drawLine"},
         {value: "LineString", id: "drawCurve"},
         {value: "Polygon", id: "drawArea"},
