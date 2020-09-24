@@ -1,6 +1,7 @@
 <script>
 import TrafficCountCompDiagram from "./TrafficCountCompDiagram.vue";
 import TrafficCountCompTable from "./TrafficCountCompTable.vue";
+import TrafficCountCheckbox from "./TrafficCountCheckbox.vue";
 import {addMissingDataYear} from "../library/addMissingData.js";
 import thousandsSeparator from "../../../../../../../utils/thousandsSeparator.js";
 import moment from "moment";
@@ -9,7 +10,8 @@ export default {
     name: "TrafficCountYear",
     components: {
         TrafficCountCompDiagram,
-        TrafficCountCompTable
+        TrafficCountCompTable,
+        TrafficCountCheckbox
     },
     data () {
         return {
@@ -64,7 +66,9 @@ export default {
             },
             setFieldValue: value => {
                 return thousandsSeparator(value);
-            }
+            },
+            diagramYear: "diagramYear",
+            tableYear: "tableYear"
         };
     },
     mounted () {
@@ -93,22 +97,32 @@ export default {
 
 <template>
     <div>
-        <TrafficCountCompDiagram
-            :apiData="apiData"
-            :setTooltipValue="setTooltipValue"
-            :yAxisTicks="yAxisTicks"
-            :renderLabelXAxis="renderLabelXAxis"
-            :renderLabelYAxis="renderLabelYAxis"
-            :descriptionYAxis="descriptionYAxis"
-            :renderLabelLegend="renderLabelLegend"
+        <TrafficCountCheckbox
+            :tableDiagramId="diagramYear"
         />
-        <TrafficCountCompTable
-            :apiData="apiData"
-            :tableTitle="tableTitle"
-            :setColTitle="setColTitle"
-            :setRowTitle="setRowTitle"
-            :setFieldValue="setFieldValue"
+        <div id="diagramYear">
+            <TrafficCountCompDiagram
+                :apiData="apiData"
+                :setTooltipValue="setTooltipValue"
+                :yAxisTicks="yAxisTicks"
+                :renderLabelXAxis="renderLabelXAxis"
+                :renderLabelYAxis="renderLabelYAxis"
+                :descriptionYAxis="descriptionYAxis"
+                :renderLabelLegend="renderLabelLegend"
+            />
+        </div>
+        <TrafficCountCheckbox
+            :tableDiagramId="tableYear"
         />
+        <div id="tableYear">
+            <TrafficCountCompTable
+                :apiData="apiData"
+                :tableTitle="tableTitle"
+                :setColTitle="setColTitle"
+                :setRowTitle="setRowTitle"
+                :setFieldValue="setFieldValue"
+            />
+        </div>
     </div>
 </template>
 
