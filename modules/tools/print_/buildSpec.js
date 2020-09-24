@@ -4,6 +4,7 @@ import {fromCircle} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Image, Tile, Vector, Group} from "ol/layer.js";
+import store from "../../../src/app-store/index";
 
 const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype */{
     defaults: {
@@ -819,33 +820,35 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * gets legendParams and builds legend object for mapfish print
      * @param  {Boolean} isLegendSelected flag if legend has to be printed
-     * @param  {Object[]}  legendParams params derived from legend module
      * @param {Boolean} isMetaDataAvailable flag to print metadata
      * @return {void}
      */
-    buildLegend: function (isLegendSelected, legendParams, isMetaDataAvailable) {
+    buildLegend: function (isLegendSelected, isMetaDataAvailable) {
         const legendObject = {},
-            metaDataLayerList = [];
+            metaDataLayerList = [],
+            legends = store.state.Legend.legends;
 
-        if (isLegendSelected && legendParams.length > 0) {
+        if (isLegendSelected && legends.length > 0) {
             legendObject.layers = [];
-            legendParams.forEach(function (layerParam) {
+            legends.forEach(function (legendObj) {
+                const legendContainsPdf = this.legendContainsPdf(legendObj.legend);
+
                 if (isMetaDataAvailable) {
-                    metaDataLayerList.push(layerParam.layername);
+                    metaDataLayerList.push(legendObj.name);
                 }
 
-                if (layerParam.legend && Array.isArray(layerParam.legend) && layerParam.legend.length > 0 && layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
+                if (legendContainsPdf) {
                     Radio.trigger("Alert", "alert", {
                         kategorie: "alert-info",
-                        text: "<b>Der Layer \"" + layerParam.layername + "\" enthält eine als PDF vordefinierte Legende. " +
+                        text: "<b>Der Layer \"" + legendObj.name + "\" enthält eine als PDF vordefinierte Legende. " +
                             "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
-                            "Sie können sich die vordefinierte Legende <a href='" + layerParam.legend[0].img + "' target='_blank'><b>hier</b></a> separat herunterladen."
+                            "Sie können sich die vordefinierte Legende aus der Legende im Menü separat herunterladen."
                     });
                 }
                 else {
                     legendObject.layers.push({
-                        layerName: layerParam.layername,
-                        values: this.prepareLegendAttributes(layerParam)
+                        layerName: legendObj.name,
+                        values: this.prepareLegendAttributes(legendObj.legend)
                     });
                 }
             }.bind(this));
@@ -858,6 +861,20 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 this.getMetaData(layerName);
             }.bind(this));
         }
+    },
+
+    legendContainsPdf: function (legend) {
+        return legend.some(legendPart => {
+            let isPdf = false;
+
+            if (typeof legendPart === "object") {
+                isPdf = legendPart.graphic.endsWith(".pdf");
+            }
+            else {
+                isPdf = legendPart.endsWith(".pdf");
+            }
+            return isPdf;
+        });
     },
 
     /**
@@ -885,157 +902,47 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
     /**
      * Prepares Attributes for legend in mapfish-print template
-     * @param {Object} layerParam Params of layer.
+     * @param {Object} legend Legend of layer.
      * @returns {Object[]} - prepared legend attributes.
      */
-    prepareLegendAttributes: function (layerParam) {
-        const valuesArray = [],
-            typ = layerParam.legend && Array.isArray(layerParam.legend) && layerParam.legend.length > 0 ? layerParam.legend[0].typ : "";
+    prepareLegendAttributes: function (legend) {
+        const valuesArray = [];
 
-        if (typ === "WMS") {
-            valuesArray.push(this.createWmsLegendList(layerParam.legend[0].img));
-        }
-        else if (typ === "WFS") {
-            valuesArray.push(this.createWfsLegendList(layerParam.legend[0].img, layerParam.legend[0].legendname, layerParam.layerName));
-        }
-        else if (typ === "styleWMS") {
-            valuesArray.push(this.createStyleWmsLegendList(layerParam.legend[0].params));
-        }
+        legend.forEach(legendPart => {
+            const legendObj = {
+                    legendType: "",
+                    geometryType: "",
+                    imageUrl: "",
+                    color: "",
+                    label: ""
+                },
+                graphic = typeof legendPart === "object" ? legendPart.graphic : legendPart;
 
+            if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
+                legendObj.legendType = "wmsGetLegendGraphic";
+                legendObj.imageUrl = graphic;
+            }
+            if (graphic.indexOf("<svg") !== -1) {
+                legendObj.color = this.getFillColorFromSVG(graphic);
+                legendObj.legendType = "geometry";
+                legendObj.geometryType = "polygon";
+            }
+            else {
+                legendObj.legendType = "wfsImage";
+                legendObj.imageUrl = graphic;
+            }
+            valuesArray.push(legendObj);
+        });
         return [].concat(...valuesArray);
     },
 
     /**
-     * Creates the wms legend list for mapfish print
-     * @param {String[]} urls params for wms legend cration.
-     * @returns {Object[]} - prepared wms legens for mapfish print.
-     */
-    createWmsLegendList: function (urls) {
-        const wmsLegendList = [];
-        let legendUrls = urls;
-
-        if (typeof urls === "string") {
-            legendUrls = [legendUrls];
-        }
-
-        legendUrls.forEach(function (url) {
-            const wmsLegendObject = {
-                legendType: "wmsGetLegendGraphic",
-                geometryType: "",
-                imageUrl: url,
-                color: "",
-                label: ""
-            };
-
-            wmsLegendList.push(wmsLegendObject);
-        });
-        return wmsLegendList;
-    },
-
-    /**
-     * Creates wfs legend list for mapfish print
-     * @param {String|String[]} urls Urls of legends.
-     * @param {String[]} legendNames Names of legend.
-     * @param {String} layerName Name of layer.
-     * @returns {Object[]} - List of wfs legends to mapfish print template.
-     */
-    createWfsLegendList: function (urls, legendNames, layerName) {
-        const wfsLegendList = [];
-        let wfsLegendObject;
-
-        if (Array.isArray(urls)) {
-            urls.forEach(function (url, index) {
-                wfsLegendObject = this.createWfsLegendObject(url, legendNames[index]);
-                wfsLegendList.push(wfsLegendObject);
-            }.bind(this));
-        }
-        else {
-            wfsLegendObject = this.createWfsLegendObject(urls, layerName);
-            wfsLegendList.push(wfsLegendObject);
-        }
-
-        return wfsLegendList;
-    },
-
-    /**
-     * Creates legend object for wfs layer for mapfish print
-     * @param {String} url Url of image.
-     * @param {String} label Label.
-     * @returns {Object} - wfs legend object
-     */
-    createWfsLegendObject: function (url, label) {
-        const wfsLegendObject = {
-            legendType: "",
-            geometryType: "",
-            imageUrl: "",
-            color: "",
-            label: label
-        };
-
-        if (url.indexOf("<svg") !== -1) {
-            wfsLegendObject.color = this.getFillFromSVG(url);
-            wfsLegendObject.legendType = "geometry";
-            wfsLegendObject.geometryType = "polygon";
-        }
-        else {
-            wfsLegendObject.legendType = "wfsImage";
-            wfsLegendObject.imageUrl = this.createLegendImageUrl(url);
-        }
-
-        return wfsLegendObject;
-    },
-
-    /**
-     * Creates a legend list for all style wms styyled layers.
-     * @param {Object[]} legendObjects Special styleWMS params
-     * @returns {Object[]} - legend list from stlyed wms layer for mapfish print.
-     */
-    createStyleWmsLegendList: function (legendObjects) {
-        const styleWmsLegendList = [];
-
-        legendObjects.forEach(function (styleWmsParam) {
-            styleWmsLegendList.push({
-                legendType: "geometry",
-                geometryType: "polygon",
-                imageUrl: "",
-                color: styleWmsParam.color,
-                label: styleWmsParam.startRange + " - " + styleWmsParam.stopRange
-            });
-        });
-        return styleWmsLegendList;
-    },
-    /**
      * Returns Fill color from SVG as hex.
      * @param {String} svgString String of SVG.
-     * @returns {String} - Fill color as hex.
+     * @returns {String} - Fill color from SVG.
      */
-    getFillFromSVG: function (svgString) {
-        const indexOfFill = svgString.indexOf("fill:") + 5,
-            hexLength = 6 + 1;
-        let hexColor = "#000000";
-
-        if (svgString.indexOf("fill:") !== -1) {
-            hexColor = svgString.substring(indexOfFill, indexOfFill + hexLength);
-        }
-        return hexColor;
-    },
-
-    /**
-     * Creates the legend image url.
-     * @param {String} path Path.
-     * @returns {String} - Url for legend path.
-     */
-    createLegendImageUrl: function (path) {
-        let url = path,
-            image;
-
-        if (url.indexOf("http") === -1) {
-            url = this.buildGraphicPath();
-            image = path.substring(path.lastIndexOf("/"));
-            url = url + image;
-        }
-
-        return url;
+    getFillColorFromSVG: function (svgString) {
+        return svgString.split(/fill:(.+)/)[1].split(/;(.+)/)[0];
     },
 
     /**

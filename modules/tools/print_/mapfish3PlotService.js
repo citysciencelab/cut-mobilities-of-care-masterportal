@@ -255,10 +255,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             spec.setMetadata(true);
         }
         if (this.get("isLegendAvailable")) {
-            if (this.get("isLegendSelected")) {
-                Radio.trigger("Legend", "setLayerList");
-            }
-            spec.buildLegend(this.get("isLegendSelected"), Radio.request("Legend", "getLegendParams"), this.get("isMetaDataAvailable"));
+            spec.buildLegend(this.get("isLegendSelected"), this.get("isMetaDataAvailable"));
         }
         if (this.get("isScaleAvailable")) {
             spec.buildScale(this.get("currentScale"));
