@@ -532,9 +532,11 @@ export default {
         collapseAllLegends () {
             this.legends.forEach(legendObj => {
                 const id = this.generateId(legendObj.name),
-                    element = document.getElementById(id);
+                    layerLegendElement = document.getElementById(id),
+                    layerTitleElement = layerLegendElement.parentElement.firstChild;
 
-                element.classList.remove("in");
+                layerTitleElement.classList.add("collapsed");
+                layerLegendElement.classList.remove("in");
             });
         },
 
@@ -545,9 +547,12 @@ export default {
         expandAllLegends () {
             this.legends.forEach(legendObj => {
                 const id = this.generateId(legendObj.name),
-                    element = document.getElementById(id);
+                    layerLegendElement = document.getElementById(id),
+                    layerTitleElement = layerLegendElement.parentElement.firstChild;
 
-                element.classList.add("in");
+                layerTitleElement.classList.remove("collapsed");
+                layerLegendElement.classList.add("in");
+                layerLegendElement.removeAttribute("style");
             });
         }
     }
@@ -589,7 +594,7 @@ export default {
                     <div
                         class="layer-title panel-heading"
                         data-toggle="collapse"
-                        :href="'#' + generateId(legendObj.name)"
+                        :data-target="'#' + generateId(legendObj.name)"
                     >
                         <span>{{ legendObj.name }}</span>
                     </div>
