@@ -343,8 +343,7 @@
             },
             "fileImport": {
                 "captions": {
-                    "intro": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.",
-                    "fileTypes": "Es können KML-Dateien (*.kml), GPX-Dateien (*.gpx) oder GeoJson-Dateien (*.geojson, *.json) importiert werden.",
+                    "intro": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.<br><br>Es können KML-Dateien (*.kml), GPX-Dateien (*.gpx) oder GeoJson-Dateien (*.geojson, *.json) importiert werden.",
                     "dropzone": "Datei hier ablegen",
                     "browse": "Datei auswählen",
                     "supportedFiletypes": {
