@@ -505,15 +505,6 @@
                     "iconPoint": "Punkt",
                     "iconLeaf": "Blatt",
                     "iconCloud": "Wolke",
-                    "iconCD": "CD",
-                    "iconHat": "Doktorhut",
-                    "iconFire": "Feuer",
-                    "iconMovie": "Film",
-                    "iconFlag": "Flagge",
-                    "iconGlobe": "Globus",
-                    "iconMusic": "Musik",
-                    "iconStreet": "Straße",
-                    "iconTent": "Zelt",
                     "iconMeadow": "Wiese"
                 }
             },

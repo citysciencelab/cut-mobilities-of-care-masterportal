@@ -84,47 +84,6 @@ describe("styleFunctionsDraw", () => {
     });
 
     describe("createIconStyle", () => {
-        it("the result color should be the same as the input color for a symbol of type glyphicon", function () {
-            const color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = {
-                    id: "iconLeaf",
-                    type: "glyphicon",
-                    value: "\ue103"
-                },
-                zIndex = 0,
-                result = createIconStyle(color, pointSize, symbol, zIndex);
-
-            expect(result.getText().getFill().getColor()).to.equal(color);
-        });
-        // it("the result color should be the same as the input color for a symbol of type image whereas the opacity is saved in a different parameter", function () {
-        //     // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
-        //     const color = [0, 0, 0, 1],
-        //         pointSize = 16,
-        //         symbol = {
-        //             id: "iconCloud",
-        //             type: "image",
-        //             value: iconPath + "cloud.png"
-        //         },
-        //         zIndex = 0,
-        //         result = createIconStyle(color, pointSize, symbol, zIndex);
-
-        //     expect(result.getImage().getColor()).to.deep.equal(color.slice(0, 3));
-        //     expect(result.getImage().getOpacity()).to.equal(color[3]);
-        // });
-        it("the result glyphicon should be the same as the input glyphicon", function () {
-            const color = [0, 0, 0, 1],
-                pointSize = 16,
-                symbol = {
-                    id: "iconLeaf",
-                    type: "glyphicon",
-                    value: "\ue103"
-                },
-                zIndex = 0,
-                result = createIconStyle(color, pointSize, symbol, zIndex);
-
-            expect(result.getText().getText()).to.equal(symbol.value);
-        });
         it("the result path to the image should be the same as the input path", function () {
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             const color = [0, 0, 0, 1],
@@ -139,13 +98,14 @@ describe("styleFunctionsDraw", () => {
 
             expect(result.getImage().getSrc()).to.equal(symbol.value);
         });
-        it("the method should throw an Error if the symbol is not of type \"glyphicon\" or \"image\"", function () {
+        it("the method should throw an Error if the symbol is not of type \"image\"", function () {
             const color = [0, 0, 0, 1],
                 pointSize = 16,
                 symbol = {
-                    id: "Image",
-                    type: "my_personal_image",
-                    value: iconPath + "my_personal_image.png"
+                    id: "iconCloud",
+                    type: "glyphicon",
+                    scale: 1,
+                    value: "/img/tools/draw/cloud.png"
                 },
                 zIndex = 0;
 
@@ -180,12 +140,6 @@ describe("styleFunctionsDraw", () => {
                 symbol = {type: undefined};
 
             expect(createStyle({color, drawType, symbol}).getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as the input color for a point of type glyphicon", function () {
-            const symbol = {type: "glyphicon", value: "\ue103"},
-                drawType = {value: "Point", id: "drawSymbol"};
-
-            expect(createStyle({color, drawType, symbol}).getText().getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as the input color for text", function () {
             const drawType = {value: "Point", id: "writeText"},

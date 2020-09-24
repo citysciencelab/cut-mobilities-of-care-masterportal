@@ -496,15 +496,6 @@
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
                     "iconCloud": "Cloud",
-                    "iconCD": "CD",
-                    "iconHat": "Graduation Cap",
-                    "iconFire": "Fire",
-                    "iconMovie": "Movie",
-                    "iconFlag": "Flag",
-                    "iconGlobe": "Globe",
-                    "iconMusic": "Music",
-                    "iconStreet": "Street",
-                    "iconTent": "Tent",
                     "iconMeadow": "Meadow"
                 }
             },
