@@ -62,6 +62,12 @@
 
 ## v2.5.4 - 2020-08-27
 ### Fixed
+- SpecialWFS sucher funktioniert über mehere angegebene propertyNames im Array.
+
+---
+
+## v2.5.4 - 2020-08-27
+### Fixed
 - 3D Tileset Layer werden nun korrekt über die Legende aktiviert/deaktiviert
 - Ein Fehler in der Suche mittels des Gazetters, der bei Hausnummern mit Zusatz aufgetreten ist wurde behoben.
 
