@@ -1,4 +1,4 @@
-import {Fill, Icon, Style, Text} from "ol/style.js";
+import {Icon, Style} from "ol/style.js";
 
 /**
  * Creates and returns a feature style for points with an icon.
@@ -13,21 +13,7 @@ import {Fill, Icon, Style, Text} from "ol/style.js";
 export function createIconStyle (color, pointSize, symbol, zIndex) {
     let style;
 
-    if (symbol.type === "glyphicon") {
-        style = new Style({
-            text: new Text({
-                text: symbol.value,
-                font: "normal " + pointSize + "px \"Glyphicons Halflings\"",
-                fill: new Fill({
-                    color: color
-                })
-            }),
-            zIndex: zIndex
-        });
-    }
-    // The Size of the image needs to be fixed. As the example picture has a width / height of 96, this is used.
-    // To use the opacity given by the color parameter it has to be separately added
-    else if (symbol.type === "image") {
+    if (symbol.type === "image") {
         style = new Style({
             image: new Icon({
                 src: symbol.value,

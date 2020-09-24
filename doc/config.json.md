@@ -1423,8 +1423,7 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
-|glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
-|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {id: "iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {"id": "gelber Pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines farbigen Punktes oder eines Symbols hat. Es können wie im Beispiel eigene Bild-Dateien verwendet werden.|false|
 
 **Beispiel**
 
@@ -1435,64 +1434,33 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
     "glyphicon": "glyphicon-pencil",
     "iconList": [
         {
-           "id": "iconPoint",
-           "type": "simple_point",
-           "value": "simple_point"
+            "id": "iconPoint",
+            "type": "simple_point",
+            "value": "simple_point"
         },
         {
-           "id": "iconLeaf",
-           "type": "glyphicon",
-           "value": "\ue103"
+            "id": "iconCloud",
+            "type": "image",
+            "scale": 1,
+            "value": "/img/tools/draw/cloud.png"
         },
         {
-           "id": "iconCD",
-           "type": "glyphicon",
-           "value": "\ue201"
+            "id": "iconMeadow",
+            "type": "image",
+            "scale": 0.8,
+            "value": "../../lgv-config/img/wiese.png"
         },
         {
-           "id": "iconHat",
-           "type": "glyphicon",
-           "value": "\ue233"
+            "id": "gelber Pin",
+            "type": "image",
+            "scale": 0.5,
+            "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
         },
         {
-           "id": "iconFire",
-           "type": "glyphicon",
-           "value": "\ue104"
-        },
-        {
-           "id": "iconMovie",
-           "type": "glyphicon",
-           "value": "\ue009"
-        },
-        {
-           "id": "iconFlag",
-           "type": "glyphicon",
-           "value": "\ue034"
-        },
-        {
-           "id": "iconGlobe",
-           "type": "glyphicon",
-           "value": "\ue135"
-        },
-        {
-           "id": "iconMusic",
-           "type": "glyphicon",
-           "value": "\ue002"
-        },
-        {
-           "id": "iconStreet",
-           "type": "glyphicon",
-           "value": "\ue024"
-        },
-        {
-           "id": "iconCloud",
-           "type": "image",
-           "value": "/img/tools/draw/cloud.png"
-        },
-        {
-           "id": "iconTent",
-           "type": "glyphicon",
-           "value": "\u26fa"
+            "id": "Kreis orange gross",
+            "type": "image",
+            "scale": 1,
+            "value": "/img/tools/draw/circle_orange_big_opacity05.svg"
         }
     ]
 }
@@ -1506,26 +1474,33 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|id|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei (meistens `common`) angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
+|id|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei (meistens `common`) angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte. Wird dieser Schlüssel in der Übersetzungesdatei nicht gefunden, dann wird die `id` in der Oberfläche angezeigt.|false|
 |caption|nein|String||Deprecated in 3.0.0 Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Ggü. der id muss hier nicht die id aus der Sprachdatei sondern der gesamte Pfad (`modules.tools.draw.iconList` + id) angegeben werden.|false|
-|type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/tools/draw/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
+|type|ja|enum["image", "simple_point"]||Typ des zu zeichnenden Objektes.Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild oder der svg-Datei des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/tools/draw/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen, alternativ kann ein scale-Faktor angegeben werden. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
+|scale|nein|number||Skalierungsfaktor|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
 **Beispiele**
 
 ```
 #!json
-{
-	"id": "iconCloud",
-	"type": "image",
-	"value": "/img/tools/draw/cloud.png"
-}
-
-{
-    "id": "iconFire",
-    "type": "glyphicon",
-    "value": "\ue104"
-}
+    {
+        "id": "iconPoint",
+        "type": "simple_point",
+        "value": "simple_point"
+    },
+    {
+        "id": "iconMeadow",
+        "type": "image",
+        "scale": 0.8,
+        "value": "../../lgv-config/img/wiese.png"
+    },
+    {
+        "id": "gelber Pin",
+        "type": "image",
+        "scale": 0.5,
+        "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+    },
 ```
 
 ***

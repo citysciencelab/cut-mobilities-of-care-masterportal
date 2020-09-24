@@ -1,6 +1,6 @@
 const symbol = {
         id: "iconPoint",
-        type: "svg",
+        type: "simple_point",
         value: "simple_point"
     },
     /**
@@ -69,28 +69,10 @@ const symbol = {
         iconList: [
             symbol,
             {
-                id: "iconCloud",
-                type: "image",
-                scale: 1,
-                value: "/img/tools/draw/cloud.png"
-            },
-            {
-                id: "iconMeadow",
-                type: "image",
-                scale: 0.8,
-                value: "../../lgv-config/img/wiese.png"
-            },
-            {
-                id: "gelber Pin",
-                type: "image",
-                scale: 0.5,
-                value: "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
-            },
-            {
-                id: "Kreis orange gross",
-                type: "image",
-                scale: 1,
-                value: "/img/tools/draw/circle_orange_big_opacity05.svg"
+                "id": "gelber Pin",
+                "type": "image",
+                "scale": 0.5,
+                "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
             }
         ],
         id: "draw",

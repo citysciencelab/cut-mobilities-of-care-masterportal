@@ -1,5 +1,4 @@
 import {KML, GeoJSON, GPX} from "ol/format.js";
-import {Circle as CircleStyle, Fill, Stroke, Style} from "ol/style";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true}),

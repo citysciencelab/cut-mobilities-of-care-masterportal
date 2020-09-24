@@ -48,6 +48,7 @@
 - url-polyfill wurde aus der package.json entfernt.
 - fs wurde aus der package.json entfernt.
 - Der Requestor wurde direkt in dem Tool featurelister integriert und daher entfernt.
+- Vom Tool "Draw" wird der Typ "glyphicon" nicht mehr von der iconList unterstützt, er wurde entfernt. Es sollen nur Bild-Dateien genutzt werden, siehe Doku der config.json.
 
 ### Fixed
 - Mit Google Earth erstellte KML Dateien werden mit dem Tool "Datei-Import" nun besser dargestellt.
