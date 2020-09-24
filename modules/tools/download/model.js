@@ -3,6 +3,7 @@ import {KML, GeoJSON, GPX} from "ol/format.js";
 import Tool from "../../core/modelList/tool/model";
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
+import * as constants from "../../../src/modules/tools/draw/store/constantsDraw";
 
 const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -18,6 +19,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
         fileName: "",
         isInternetExplorer: undefined,
         blob: undefined,
+        colorConstants: [],
         // translations:
         createFirstText: "",
         unknownGeometry: "",
@@ -60,6 +62,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @constructs
      */
     initialize: function () {
+        this.setColorConstants(constants.pointColorOptions);
         this.superInitialize();
         this.changeLang(i18next.language);
         this.listenTo(this.get("channel"), {
@@ -158,7 +161,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             const featureClone = feature.clone(),
                 transCoord = this.transformCoords(featureClone.getGeometry(), this.getProjections("EPSG:25832", "EPSG:4326", "32"));
 
-            if (transCoord.length === 3) {
+            if (transCoord.length === 3 && transCoord[2] === 0) {
                 transCoord.pop();
             }
 
@@ -179,8 +182,8 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
         const featureCount = features.length,
             pointOpacities = new Array(featureCount),
             pointColors = new Array(featureCount),
-            pointRadiuses = new Array(featureCount),
             hasIconUrl = new Array(featureCount),
+            anchors = new Array(featureCount),
             textFonts = new Array(featureCount),
             skip = new Array(featureCount),
             that = this;
@@ -188,8 +191,8 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
 
         pointOpacities.fill(undefined, 0, featureCount);
         pointColors.fill(undefined, 0, featureCount);
-        pointRadiuses.fill(undefined, 0, featureCount);
         hasIconUrl.fill(false, 0, featureCount);
+        anchors.fill(undefined, 0, featureCount);
         textFonts.fill(undefined, 0, featureCount);
         skip.fill(false, 0, featureCount);
 
@@ -217,6 +220,12 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
                     if (style.getImage() !== null && style.getImage().iconImage_ !== undefined) {
                         // imported kml with link to svg icon, has iconUrl from previous import
                         hasIconUrl[i] = true;
+                        const anchorXUnits = style.getImage().anchorXUnits_,
+                            anchorYUnits = style.getImage().anchorYUnits_,
+                            anchor = style.getImage().anchor_;
+
+                        anchors[i] = {xUnit: anchorXUnits, yunit: anchorYUnits, anchor: anchor};
+
                     }
                     else if (feature.getStyle().getText()) {
                         textFonts[i] = feature.getStyle().getText().getFont();
@@ -225,7 +234,6 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
                         color = style.getImage().getFill().getColor();
                         pointOpacities[i] = style.getImage().getFill().getColor()[3];
                         pointColors[i] = [color[0], color[1], color[2]];
-                        pointRadiuses[i] = style.getImage().getRadius();
                     }
 
                 }
@@ -237,21 +245,26 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
         $(convertedFeatures).find("Placemark").each(function (i, placemark) {
             const style = $(placemark).find("Style")[0];
 
-            if ($(placemark).find("Point") && skip[i] === false) {
+            if ($(placemark).find("Point").length > 0 && skip[i] === false) {
                 if ($(placemark).find("name")[0]) {
                     const labelStyle = $(placemark).find("LabelStyle")[0],
-                        iconUrl = window.location.origin + "/img/kmlIcons/circle_blue.svg";
+                        iconUrl = window.location.origin + "/img/tools/draw/circle_blue.svg";
 
                     if (textFonts[i]) {
-                        $(labelStyle).append(that.addScaleToLableStyle(that.getScaleFromFontSize(textFonts[i])));
+                        $(labelStyle).append(that.getKmlScaleOfLableStyle(that.getScaleFromFontSize(textFonts[i])));
                     }
-                    $(style).append(that.createIconStyle(iconUrl, 0));
+                    $(style).append(that.createKmlIconStyle(iconUrl, 0));
                 }
-                else if (hasIconUrl[i] === false) {
-                    const iconUrl = window.location.origin + "/img/kmlIcons/circle_" + that.getIconColor(pointColors[i]) + ".svg",
-                        iconStyle = that.createIconStyle(iconUrl, 1);
+                else if (hasIconUrl[i] === false && pointColors[i]) {
+                    const iconUrl = window.location.origin + "/img/tools/draw/circle_" + that.getIconColor(pointColors[i]) + ".svg",
+                        iconStyle = that.createKmlIconStyle(iconUrl, 1);
 
                     $(style).append(iconStyle);
+                }
+                else if (hasIconUrl[i] === true && anchors[i] !== undefined) {
+                    const iconStyle = $(placemark).find("IconStyle")[0];
+
+                    $(iconStyle).append(that.getKmlHotSpotOfIconStyle(anchors[i]));
                 }
             }
 
@@ -280,25 +293,43 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     },
 
     /**
+     * Constructs the hotspot-tag (anchoring of the icon) of an IconStyle-Part of a Point-KML.
+     * @see https://developers.google.com/kml/documentation/kmlreference#hotspot
+     * @param {object} anchor to get the values from
+     * @returns {string} hotspot-tag for a kml IconStyle
+     */
+    getKmlHotSpotOfIconStyle: function (anchor) {
+        let style = "<hotSpot ";
+
+        style += "x=\"" + anchor.anchor[0] + "\" ";
+        style += "y=\"" + anchor.anchor[1] + "\" ";
+        style += "xunits=\"" + anchor.xUnit + "\" ";
+        style += "yunits=\"" + anchor.yunit + "\" ";
+        style += " />";
+        return style;
+    },
+
+    /**
      * Adds the scale to the LabelStyle-Part of a Point-KML.
+     * @see https://developers.google.com/kml/documentation/kmlreference#iconstyle
      * @param {number} scale to add
      * @returns {string} the LabelStyle part of a kml-file.
      */
-    addScaleToLableStyle: function (scale) {
+    getKmlScaleOfLableStyle: function (scale) {
         let style = "<colorMode>normal</colorMode>";
 
         style += "<scale>" + scale + "</scale>";
-
         return style;
     },
 
     /**
      * Returns the IconStyle-Part of the Point-KML containing a link to a svg.
+     * @see https://developers.google.com/kml/documentation/kmlreference#iconstyle
      * @param {string} url to the icon
      * @param {number} scale of the icon, 0 means icon is not displayed
      * @returns {string} the IconStyle part of a kml-file.
      */
-    createIconStyle: function (url, scale) {
+    createKmlIconStyle: function (url, scale) {
         let style = "<IconStyle>";
 
         style += "<scale>" + scale + "</scale>";
@@ -317,24 +348,13 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {string} a textual value for each color, e.g. "blue"
      */
     getIconColor: function (color) {
-        let colorString = "";
+        const colorConstants = this.get("colorConstants"),
+            colOption = colorConstants.filter(option => this.allCompareEqual(color, option.value));
 
-        if (this.allCompareEqual(color, [55, 126, 184])) {
-            colorString = "blue";
+        if (colOption && colOption[0]) {
+            return colOption[0].color;
         }
-        else if (this.allCompareEqual(color, [255, 255, 255])) {
-            colorString = "white";
-        }
-        else if (this.allCompareEqual(color, [0, 0, 0])) {
-            colorString = "black";
-        }
-        else if (this.allCompareEqual(color, [77, 175, 74])) {
-            colorString = "green";
-        }
-        else if (this.allCompareEqual(color, [228, 26, 28])) {
-            colorString = "red";
-        }
-        return colorString;
+        return "";
     },
 
     /**
@@ -344,6 +364,9 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {boolean} true, if entry 1-3 are equals
      */
     allCompareEqual: function (array1, array2) {
+        if (!array1 || array1.length < 3 || !array2 || array2.length < 3) {
+            return false;
+        }
         return array1[0] === array2[0] && array1[1] === array2[1] && array1[2] === array2[2];
     },
 
@@ -587,6 +610,14 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      */
     setBlob: function (value) {
         this.set("blob", value);
+    },
+    /**
+     * Setter for attribute "blob".
+     * @param {Blob} value Blob.
+     * @returns {void}
+     */
+    setColorConstants: function (value) {
+        this.set("colorConstants", value);
     },
 
     /**

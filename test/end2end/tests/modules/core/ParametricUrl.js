@@ -232,11 +232,11 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
         it("?isinitopen= allows opening tools initially", async function () {
             const toolName = "draw",
-                checkSelector = By.css("div#window #drawPoint");
+                checkSelector = By.css("div#window #drawSymbol");
 
             await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
 
-            // assume draw tool loaded when #drawPoint option is detected - should be unique
+            // assume draw tool loaded when #drawSymbol option is detected - should be unique
             await driver.wait(until.elementLocated(checkSelector));
         });
 
