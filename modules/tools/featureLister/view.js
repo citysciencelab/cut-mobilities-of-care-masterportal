@@ -1,6 +1,6 @@
 import Template from "text-loader!./template.html";
 import "jquery-ui/ui/widgets/draggable";
-import isURL from "../../../src/utils/isURL";
+import {isUrl} from "../../../src/utils/urlHelper";
 /**
  * @member FeatureListerTemplate
  * @description Template used to create the feature lister
@@ -194,7 +194,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
                 this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'><strong>" + key + "</strong></li>");
                 let content = value;
 
-                if (isURL(value)) {
+                if (isUrl(value)) {
                     content = "<a href=" + value + " target=\"_blank\">" + value + "</a>";
                 }
                 this.$(".featurelist-details-ul").append("<li class='list-group-item featurelist-details-li'>" + content + "</li>");
