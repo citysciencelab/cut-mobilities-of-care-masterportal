@@ -1,5 +1,6 @@
 import * as moment from "moment";
 import uniqueId from "../../src/utils/uniqueId.js";
+import punctuate from "../../src/utils/punctuate.js";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -143,23 +144,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {string} punctuated value
      */
     punctuate: function (value) {
-        const pattern = /(-?\d+)(\d{3})/,
-            stringValue = value.toString();
-
-        let decimals,
-            predecimals = stringValue;
-
-        if (stringValue.indexOf(".") !== -1) {
-            predecimals = stringValue.split(".")[0];
-            decimals = stringValue.split(".")[1];
-        }
-        while (pattern.test(predecimals)) {
-            predecimals = predecimals.replace(pattern, "$1.$2");
-        }
-        if (decimals) {
-            return predecimals + "," + decimals;
-        }
-        return predecimals;
+        return punctuate(value);
     },
 
     /**
