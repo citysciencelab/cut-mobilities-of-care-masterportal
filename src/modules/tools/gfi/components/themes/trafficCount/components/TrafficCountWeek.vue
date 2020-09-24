@@ -1,6 +1,7 @@
 <script>
 import TrafficCountCompDiagram from "./TrafficCountCompDiagram.vue";
 import TrafficCountCompTable from "./TrafficCountCompTable.vue";
+import TrafficCountCheckbox from "./TrafficCountCheckbox.vue";
 import {addMissingDataWeek} from "../library/addMissingData.js";
 import thousandsSeparator from "../../../../../../../utils/thousandsSeparator.js";
 import moment from "moment";
@@ -9,7 +10,8 @@ export default {
     name: "TrafficCountWeek",
     components: {
         TrafficCountCompDiagram,
-        TrafficCountCompTable
+        TrafficCountCompTable,
+        TrafficCountCheckbox
     },
     data () {
         return {
@@ -67,7 +69,9 @@ export default {
             },
             setFieldValue: value => {
                 return thousandsSeparator(value);
-            }
+            },
+            diagramWeek: "diagramWeek",
+            tableWeek: "tableWeek"
         };
     },
     mounted () {
@@ -96,22 +100,32 @@ export default {
 
 <template>
     <div>
-        <TrafficCountCompDiagram
-            :apiData="apiData"
-            :setTooltipValue="setTooltipValue"
-            :yAxisTicks="yAxisTicks"
-            :renderLabelXAxis="renderLabelXAxis"
-            :renderLabelYAxis="renderLabelYAxis"
-            :descriptionYAxis="descriptionYAxis"
-            :renderLabelLegend="renderLabelLegend"
+        <TrafficCountCheckbox
+            :tableDiagramId="diagramWeek"
         />
-        <TrafficCountCompTable
-            :apiData="apiData"
-            :tableTitle="tableTitle"
-            :setColTitle="setColTitle"
-            :setRowTitle="setRowTitle"
-            :setFieldValue="setFieldValue"
+        <div id="diagramWeek">
+            <TrafficCountCompDiagram
+                :apiData="apiData"
+                :setTooltipValue="setTooltipValue"
+                :yAxisTicks="yAxisTicks"
+                :renderLabelXAxis="renderLabelXAxis"
+                :renderLabelYAxis="renderLabelYAxis"
+                :descriptionYAxis="descriptionYAxis"
+                :renderLabelLegend="renderLabelLegend"
+            />
+        </div>
+        <TrafficCountCheckbox
+            :tableDiagramId="tableWeek"
         />
+        <div id="tableWeek">
+            <TrafficCountCompTable
+                :apiData="apiData"
+                :tableTitle="tableTitle"
+                :setColTitle="setColTitle"
+                :setRowTitle="setRowTitle"
+                :setFieldValue="setFieldValue"
+            />
+        </div>
     </div>
 </template>
 

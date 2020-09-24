@@ -1,6 +1,7 @@
 <script>
 import TrafficCountCompDiagram from "./TrafficCountCompDiagram.vue";
 import TrafficCountCompTable from "./TrafficCountCompTable.vue";
+import TrafficCountCheckbox from "./TrafficCountCheckbox.vue";
 import {addMissingDataDay} from "../library/addMissingData.js";
 import thousandsSeparator from "../../../../../../../utils/thousandsSeparator.js";
 import moment from "moment";
@@ -9,7 +10,8 @@ export default {
     name: "TrafficCountDay",
     components: {
         TrafficCountCompDiagram,
-        TrafficCountCompTable
+        TrafficCountCompTable,
+        TrafficCountCheckbox
     },
     data () {
         return {
@@ -58,7 +60,9 @@ export default {
             },
             setFieldValue: value => {
                 return thousandsSeparator(value);
-            }
+            },
+            diagramDay: "diagramDay",
+            tableDay: "tableDay"
         };
     },
     mounted () {
@@ -87,23 +91,33 @@ export default {
 
 <template>
     <div>
-        <TrafficCountCompDiagram
-            :apiData="apiData"
-            :setTooltipValue="setTooltipValue"
-            :xAxisTicks="xAxisTicks"
-            :yAxisTicks="yAxisTicks"
-            :renderLabelXAxis="renderLabelXAxis"
-            :renderLabelYAxis="renderLabelYAxis"
-            :descriptionYAxis="descriptionYAxis"
-            :renderLabelLegend="renderLabelLegend"
+        <TrafficCountCheckbox
+            :tableDiagramId="diagramDay"
         />
-        <TrafficCountCompTable
-            :apiData="apiData"
-            :tableTitle="tableTitle"
-            :setColTitle="setColTitle"
-            :setRowTitle="setRowTitle"
-            :setFieldValue="setFieldValue"
+        <div id="diagramDay">
+            <TrafficCountCompDiagram
+                :apiData="apiData"
+                :setTooltipValue="setTooltipValue"
+                :xAxisTicks="xAxisTicks"
+                :yAxisTicks="yAxisTicks"
+                :renderLabelXAxis="renderLabelXAxis"
+                :renderLabelYAxis="renderLabelYAxis"
+                :descriptionYAxis="descriptionYAxis"
+                :renderLabelLegend="renderLabelLegend"
+            />
+        </div>
+        <TrafficCountCheckbox
+            :tableDiagramId="tableDay"
         />
+        <div id="tableDay">
+            <TrafficCountCompTable
+                :apiData="apiData"
+                :tableTitle="tableTitle"
+                :setColTitle="setColTitle"
+                :setRowTitle="setRowTitle"
+                :setFieldValue="setFieldValue"
+            />
+        </div>
     </div>
 </template>
 
