@@ -922,7 +922,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 legendObj.legendType = "wmsGetLegendGraphic";
                 legendObj.imageUrl = graphic;
             }
-            if (graphic.indexOf("<svg") !== -1) {
+            else if (graphic.indexOf("<svg") !== -1) {
                 legendObj.color = this.getFillColorFromSVG(graphic);
                 legendObj.legendType = "geometry";
                 legendObj.geometryType = "polygon";

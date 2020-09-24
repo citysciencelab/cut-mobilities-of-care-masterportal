@@ -169,6 +169,132 @@ describe("tools/print_/buildSpec", function () {
             });
         });
     });
+    describe("legendContainsPdf", function () {
+        it("should return false if legend array of strings does not contain PDF", function () {
+            const legend = ["foobar", "barfoo"];
+
+            expect(buildSpecModel.legendContainsPdf(legend)).to.be.false;
+        });
+        it("should return true if legend array of strings contains PDF", function () {
+            const legend = ["foobar", "some.pdf", "barfoo"];
+
+            expect(buildSpecModel.legendContainsPdf(legend)).to.be.true;
+        });
+        it("should return false if legend array of objects does not contain PDF", function () {
+            const legend = [
+                {
+                    graphic: "foobar",
+                    name: "name_foobar"
+                },
+                {
+                    graphic: "barfoo",
+                    name: "name_barfoo"
+                }];
+
+            expect(buildSpecModel.legendContainsPdf(legend)).to.be.false;
+        });
+        it("should return true if legend array of objects contains PDF", function () {
+            const legend = [
+                {
+                    graphic: "foobar",
+                    name: "name_foobar"
+                },
+                {
+                    graphic: "some.pdf",
+                    name: "name_some_pdf"
+                },
+                {
+                    graphic: "barfoo",
+                    name: "name_barfoo"
+                }];
+
+            expect(buildSpecModel.legendContainsPdf(legend)).to.be.true;
+        });
+    });
+    describe("prepareLegendAttributes", function () {
+        it("should return prepared legend attributes for legend array of strings", function () {
+            const legend = [
+                "SomeGetLegendGraphicRequest",
+                "<svg some really short svg with fill:rgb(255,0,0);></svg",
+                "barfoo.png"
+            ];
+
+            expect(buildSpecModel.prepareLegendAttributes(legend)).to.deep.equal([
+                {
+                    legendType: "wmsGetLegendGraphic",
+                    geometryType: "",
+                    imageUrl: "SomeGetLegendGraphicRequest",
+                    color: "",
+                    label: undefined
+                },
+                {
+                    legendType: "geometry",
+                    geometryType: "polygon",
+                    imageUrl: "",
+                    color: "rgb(255,0,0)",
+                    label: undefined
+                },
+                {
+                    legendType: "wfsImage",
+                    geometryType: "",
+                    imageUrl: "barfoo.png",
+                    color: "",
+                    label: undefined
+                }
+            ]);
+        });
+        it("should return prepared legend attributes for legend array of object", function () {
+            const legend = [
+                {
+                    graphic: "SomeGetLegendGraphicRequest",
+                    name: "name_WMS"
+                },
+                {
+                    graphic: "<svg some really short svg with fill:rgb(255,0,0);></svg",
+                    name: "name_SVG"
+                },
+                {
+                    graphic: "barfoo.png",
+                    name: "name_WFS_Image"
+                }];
+
+            expect(buildSpecModel.prepareLegendAttributes(legend)).to.deep.equal([
+                {
+                    legendType: "wmsGetLegendGraphic",
+                    geometryType: "",
+                    imageUrl: "SomeGetLegendGraphicRequest",
+                    color: "",
+                    label: "name_WMS"
+                },
+                {
+                    legendType: "geometry",
+                    geometryType: "polygon",
+                    imageUrl: "",
+                    color: "rgb(255,0,0)",
+                    label: "name_SVG"
+                },
+                {
+                    legendType: "wfsImage",
+                    geometryType: "",
+                    imageUrl: "barfoo.png",
+                    color: "",
+                    label: "name_WFS_Image"
+                }
+            ]);
+        });
+    });
+    describe("getFillColorFromSVG", function () {
+        it("should return fillcolor from svg string in rgb", function () {
+            const svg_string = "<svg foobar fill:rgb(255,0,0);/>";
+
+            expect(buildSpecModel.getFillColorFromSVG(svg_string)).to.equal("rgb(255,0,0)");
+        });
+        it("should return fillcolor from svg string in hex", function () {
+            const svg_string = "<svg foobar fill:#ff0000;/>";
+
+            expect(buildSpecModel.getFillColorFromSVG(svg_string)).to.equal("#ff0000");
+        });
+    });
     describe("prepareGfiAttributes", function () {
         it("should create gfi attributes array", function () {
             const gfiAttributes = {
