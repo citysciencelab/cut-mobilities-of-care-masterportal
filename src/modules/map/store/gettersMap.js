@@ -60,7 +60,8 @@ const gettersMap = {
                         layer.get("name"),
                         layer.get("gfiTheme"),
                         layer.get("gfiAttributes"),
-                        clusteredFeature.getProperties()
+                        clusteredFeature.getProperties(),
+                        clusteredFeature.getId()
                     ));
                 });
             }
@@ -69,7 +70,8 @@ const gettersMap = {
                     layer.get("name"),
                     layer.get("gfiTheme"),
                     layer.get("gfiAttributes"),
-                    feature.getProperties()
+                    feature.getProperties(),
+                    feature.getId()
                 ));
             }
         });
