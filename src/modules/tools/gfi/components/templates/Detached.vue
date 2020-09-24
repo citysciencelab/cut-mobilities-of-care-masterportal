@@ -4,7 +4,7 @@ import Default from "../themes/Default.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import Solaratlas from "../themes/Solaratlas.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
-import {upperFirst} from "../../../../../utils/stringHelpers";
+import upperFirst from "../../../../../utils/upperFirst";
 import "jquery-ui/ui/widgets/draggable";
 
 export default {
