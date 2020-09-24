@@ -818,7 +818,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return hex.length === 1 ? "0" + hex : hex;
     },
     /**
-     * gets legendParams and builds legend object for mapfish print
+     * gets legend from legend vue store and builds legend object for mapfish print
      * @param  {Boolean} isLegendSelected flag if legend has to be printed
      * @param {Boolean} isMetaDataAvailable flag to print metadata
      * @return {void}
@@ -914,7 +914,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     geometryType: "",
                     imageUrl: "",
                     color: "",
-                    label: ""
+                    label: legendPart.name
                 },
                 graphic = typeof legendPart === "object" ? legendPart.graphic : legendPart;
 
