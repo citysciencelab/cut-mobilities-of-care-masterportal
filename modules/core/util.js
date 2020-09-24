@@ -1,4 +1,5 @@
 import * as moment from "moment";
+import uniqueId from "../../src/utils/uniqueId.js";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -865,28 +866,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {String}  a globally-unique id
      */
     uniqueId: function (prefix) {
-        const idCounter = String(this.getIdCounter());
-
-        this.incIdCounter();
-
-        return prefix ? prefix + idCounter : idCounter;
-    },
-
-    /**
-     * gets the current idCounter
-     * @returns {Integer}  the current idCounter
-     */
-    getIdCounter: function () {
-        return Util.idCounter;
-    },
-
-    /**
-     * increments the idCounter
-     * @post the static idCounter (Util.idCounter) is incremented by 1
-     * @returns {Void}  -
-     */
-    incIdCounter: function () {
-        Util.idCounter++;
+        return uniqueId(prefix);
     },
 
     /**
@@ -1205,9 +1185,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         });
         return data;
     }
-}, {
-    // globally-unique id for Util.uniqueId([prefix]) - this is a static backbone variable (Util.idCounter)
-    idCounter: 1
 });
 
 export default Util;
