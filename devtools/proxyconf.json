@@ -32,7 +32,7 @@
   },
   "/geoportaltest_metropolregion_hamburg_de": {
     "target": "https://geoportaltest.metropolregion.hamburg.de",
-    "agent": ""
+    "secure": false
   },
   "/metaver_de": {
     "target": "https://metaver.de",
