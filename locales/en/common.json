@@ -333,8 +333,7 @@
             },
             "fileImport": {
                 "captions": {
-                    "intro": "Import your file via drag and drop or alternatively use the browse dialogue.",
-                    "fileTypes": "KML files (*.kml), GPX files (*.gpx) or GeoJson files (*.geojson, *.json) can be imported.",
+                    "intro": "Import your file via drag and drop or alternatively use the browse dialogue.<br><br>KML files (*.kml), GPX files (*.gpx) or GeoJson files (*.geojson, *.json) can be imported.",
                     "dropzone": "Drop file here",
                     "browse": "Browse files",
                     "supportedFiletypes": {

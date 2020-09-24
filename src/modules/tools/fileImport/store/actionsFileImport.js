@@ -47,43 +47,6 @@ function getFormat (filename, selectedFiletype, supportedFiletypes, availableFor
 }
 
 /**
- * Creates a simple default style for specific features.
- * May be augmented with more styles or made configurable later on.
- *
- * @returns {Object} Returns the style object applicable with Layer.setStyle().
- */
-function createDefaultStyles () {
-    const style = {
-        "Point": new Style({
-            image: new CircleStyle({
-                fill: new Fill({
-                    color: "rgba(255,255,0,0.6)"
-                }),
-                radius: 8,
-                stroke: new Stroke({
-                    color: "#FFFF00",
-                    width: 2
-                })
-            })
-        }),
-        "LineString": new Style({
-            stroke: new Stroke({
-                color: "#FF0000",
-                width: 4
-            })
-        }),
-        "MultiLineString": new Style({
-            stroke: new Stroke({
-                color: "#00FF00",
-                width: 4
-            })
-        })
-    };
-
-    return style;
-}
-
-/**
  * Checks for OL-unsupported tags and removes them.
  * Currently unsupported tags are:
  *      - cascadingStyle
@@ -211,9 +174,6 @@ export default {
         });
 
         vectorLayer.getSource().addFeatures(features);
-        if (format instanceof GPX || format instanceof GeoJSON) {
-            vectorLayer.setStyle((feature) => createDefaultStyles()[feature.getGeometry().getType()]);
-        }
 
         if (featureError) {
             alertingMessage = {
