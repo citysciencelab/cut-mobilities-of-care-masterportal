@@ -20,12 +20,12 @@ import {createTextStyle} from "./createTextStyle";
  * @param {Number} state.zIndex Determines in which order features are rendered on the view.
  * @returns {module:ol/style/Style} style of the draw interaction
  */
-export function createStyle ({color, colorContour, drawType, font, fontSize, pointSize, strokeWidth, symbol, text, zIndex}) {
+export function createStyle ({color, colorContour, drawType, font, fontSize, imgPath, pointSize, strokeWidth, symbol, text, zIndex} ) {
     const isSimplePoint = symbol.type ? symbol.type === "simple_point" : false;
     let style = new Style();
 
     if (drawType.id === "drawSymbol" && !isSimplePoint) {
-        style = createIconStyle(color, pointSize, symbol, zIndex);
+        style = createIconStyle(color, imgPath, pointSize, symbol, zIndex);
     }
     else if (drawType.id === "writeText") {
         style = createTextStyle(color, font, fontSize, text, 9999);

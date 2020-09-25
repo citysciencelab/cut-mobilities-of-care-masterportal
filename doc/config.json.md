@@ -1439,28 +1439,16 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
             "value": "simple_point"
         },
         {
-            "id": "iconCloud",
-            "type": "image",
-            "scale": 1,
-            "value": "/img/tools/draw/cloud.png"
-        },
-        {
             "id": "iconMeadow",
             "type": "image",
             "scale": 0.8,
-            "value": "../../lgv-config/img/wiese.png"
+            "value": "wiese.png"
         },
         {
             "id": "gelber Pin",
             "type": "image",
             "scale": 0.5,
             "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
-        },
-        {
-            "id": "Kreis orange gross",
-            "type": "image",
-            "scale": 1,
-            "value": "/img/tools/draw/circle_orange_big_opacity05.svg"
         }
     ]
 }
@@ -1478,7 +1466,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 |caption|nein|String||Deprecated in 3.0.0 Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Ggü. der id muss hier nicht die id aus der Sprachdatei sondern der gesamte Pfad (`modules.tools.draw.iconList` + id) angegeben werden.|false|
 |type|ja|enum["image", "simple_point"]||Typ des zu zeichnenden Objektes.Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild oder der svg-Datei des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/tools/draw/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen, alternativ kann ein scale-Faktor angegeben werden. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
 |scale|nein|number||Skalierungsfaktor|false|
-|value|ja|String||Wert, des zu zeichnenden Objektes.|false|
+|value|ja|String||Wert, des zu zeichnenden Objektes. Wenn ohne Pfad oder Url, dann wird der Eintrag aus der config.js - `wfsImgPath` als Dateiort angenommen.|false|
 
 **Beispiele**
 
@@ -1493,7 +1481,7 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
         "id": "iconMeadow",
         "type": "image",
         "scale": 0.8,
-        "value": "../../lgv-config/img/wiese.png"
+        "value": "wiese.png"
     },
     {
         "id": "gelber Pin",
