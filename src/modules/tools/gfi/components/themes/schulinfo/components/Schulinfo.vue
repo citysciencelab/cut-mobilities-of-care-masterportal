@@ -1,8 +1,6 @@
 <script>
 import themeConfig from "../themeConfig.json";
-// import {mapGetters, mapActions, mapMutations} from "vuex";
-// import getters from "../store/gettersSchulinfo";
-// import mutations from "../store/mutationsSchulinfo";
+import {mapGetters} from "vuex";
 
 export default {
     name: "Schulinfo",
@@ -14,32 +12,31 @@ export default {
     },
     data: () => {
         return {
-            assignedFeatureProperties: []
+            assignedFeatureProperties: [],
+            removeFromCompareListTitle: "Von der Vergleichsliste entfernen",
+            addToCompareListTitle: "Auf die Vergleichsliste"
         };
     },
     computed: {
-        // ...mapGetters("Tools/Gfi/Schulinfo", Object.keys(getters)),
-        // ...mapGetters("Tools/Gfi/Schulinfo", ["assignedFeatureProperties", "getSelectedProperty"])
+        ...mapGetters("Map", ["gfiFeatures"]),
+
+        featureProperties: function () {
+            return this.feature.getProperties();
+        },
+
+        olFeature: function () {
+            return this.feature.getOlFeature();
+        },
+
+        getAssignedFeatureProperties: function () {
+            return this.assignedFeatureProperties;
+        }
     },
     created () {
-        // console.log(this.feature);
-        // this.feature.on("propertychange", this.toggleStarGlyphicon.bind(this));
-
         this.assignedFeatureProperties = this.assignFeatureProperties(this.feature);
     },
-    // mounted () {
-    //     this.getSelectedProperty().attributes.forEach(attribute => {
-    //         console.log(attribute);
-    //     })
-    // },
 
     methods: {
-        // ...mapActions("Tools/Gfi/Schulinfo", [
-        //     "assignFeatureProperties",
-        //     "toggleSelectedCategory"
-        // ]),
-        // ...mapMutations("Tools/Gfi/Schulinfo", Object.keys(mutations)),
-
         assignFeatureProperties: (feature) => {
             const topics = JSON.parse(JSON.stringify(themeConfig)).themen,
                 assignedFeatureProperties = [];
@@ -78,16 +75,35 @@ export default {
             return assignedFeatureProperties.find(property => property.isSelected === true);
         },
 
-        toggleStarGlyphicon: function (event) {
-            if (event.key === "isOnCompareList") {
-                const glyphiconElement = this.$("span:nth-child(2)");
+        /**
+         * sets the schulwegrouting tool active,
+         * hide the gfi window and takes over the school for the routing
+         * @returns {void}
+         */
+        takeRoute: function () {
+            Radio.trigger("ModelList", "setModelAttributesById", "schulwegrouting", {isActive: true});
+            this.$parent.close();
+            Radio.trigger("Schulwegrouting", "selectSchool", this.featureProperties.schul_id);
+        },
 
-                if (event.target.isOnCompareList) {
-                    this.highlightStarGlyphicon(glyphiconElement);
-                }
-                else {
-                    this.unhighlighStarGlyphicon(glyphiconElement);
-                }
+        /**
+         * triggers the event "addFeatureToList"
+         * to the CompareFeatures module to add the feature
+         * @param {Event} event todo
+         * @returns {void}
+         */
+        toogleFeatureToCompareList: function (event) {
+            if (event.target.classList.contains("glyphicon-star-empty")) {
+                const uniquelayerId = this.feature.getLayerId() + Radio.request("Util", "uniqueId", "_");
+
+                this.olFeature.set("layerId", uniquelayerId);
+
+                Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
+                this.highlightStarGlyphicon(event.target);
+            }
+            else {
+                Radio.trigger("CompareFeatures", "removeFeatureFromList", this.olFeature);
+                this.unhighlighStarGlyphicon(event.target);
             }
         },
 
@@ -97,9 +113,8 @@ export default {
          * @returns {void}
          */
         highlightStarGlyphicon: function (glyphiconElement) {
-            glyphiconElement.addClass("glyphicon-star");
-            glyphiconElement.removeClass("glyphicon-star-empty");
-            glyphiconElement.attr("title", "Von der Vergleichsliste entfernen");
+            glyphiconElement.classList.add("glyphicon-star");
+            glyphiconElement.classList.remove("glyphicon-star-empty");
         },
 
         /**
@@ -108,9 +123,8 @@ export default {
          * @returns {void}
          */
         unhighlighStarGlyphicon: function (glyphiconElement) {
-            glyphiconElement.addClass("glyphicon-star-empty");
-            glyphiconElement.removeClass("glyphicon-star");
-            glyphiconElement.attr("title", "Auf die Vergleichsliste");
+            glyphiconElement.classList.add("glyphicon-star-empty");
+            glyphiconElement.classList.remove("glyphicon-star");
         }
     }
 };
@@ -123,7 +137,7 @@ export default {
                 class="btn-group btn-group-sm col-xs-9"
             >
                 <button
-                    v-for="category in assignedFeatureProperties"
+                    v-for="category in getAssignedFeatureProperties"
                     :key="category.name"
                     :value="category.name"
                     class="btn btn-default"
@@ -137,16 +151,18 @@ export default {
                 <span
                     class="glyphicon glyphicon-map-marker pull-right"
                     title="Schule als Ziel übernehmen"
+                    @click="takeRoute"
                 ></span>
-                <span
+                <!-- <span
                     v-if="feature.isOnCompareList"
                     class="glyphicon glyphicon-star pull-right"
-                    title="Von der Vergleichsliste entfernen"
-                ></span>
+                    :title="isOnComparelistTitle"
+                    @click="removeFeatureFromCompareList"
+                ></span> -->
                 <span
-                    v-else
                     class="glyphicon glyphicon-star-empty pull-right"
-                    title="Auf die Vergleichsliste"
+                    :title="addToCompareListTitle"
+                    @click="toogleFeatureToCompareList"
                 ></span>
             </div>
         </div>
