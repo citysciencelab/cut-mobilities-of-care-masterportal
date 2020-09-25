@@ -7,16 +7,17 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
      * @extends StyleModel
      * @memberof VectorStyle.Style
      * @constructs
-     * @property {Object} styles styling properties to overwrite defaults
-     * @property {Object[]} rules The rules of the style.
+     * @property {Object} style styling properties to overwrite defaults
+     * @property {Object} conditions styling conditions
      */
     defaults: {
-        rules: []
+        style: {},
+        conditions: {}
     },
 
-    initialize: function (styles, rules) {
-        this.overwriteStyling(styles);
-        this.setRules(rules);
+    initialize: function (rule) {
+        this.overwriteStyling(rule.style);
+        this.setConditions(rule.conditions);
     },
 
     /**
@@ -24,42 +25,32 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
     * @returns {ol/style} - The created style.
     */
     getStyle: function () {
-        const conditions = this.createConditions(this.get("rules"));
-
-        return new Cesium.Cesium3DTileStyle({
-            color: {
-                conditions: conditions
-            }
-        });
+        return this.createCondition(this.get("conditions"), this.get("style"));
     },
 
     /**
      * Creates the cesium tile style conditions.
-     * @param {Object[]} rules Rules.
-     * @returns {*} - Conditions for cesium 3d tile style.
+     * @param {Object} conditions Condition.
+     * @param {Object} style Style.
+     * @returns {*} - Condition for cesium 3d tile style.
      */
-    createConditions: function (rules) {
-        const styleConditions = [];
+    createCondition: function (conditions, style) {
+        const ruleColor = style.color,
+            condition = [];
+        let ruleCondition;
 
-        rules.forEach(rule => {
-            const ruleColor = rule.style.color,
-                conditions = [];
-            let ruleCondition;
+        if (conditions) {
+            Object.keys(conditions).forEach(key => {
+                const value = conditions[key];
 
-            if (rule.hasOwnProperty("conditions")) {
-                Object.keys(rule.conditions).forEach(key => {
-                    const value = rule.conditions[key];
-
-                    conditions.push([key, value]);
-                });
-                ruleCondition = this.createCesiumConditionForRule(conditions);
-                styleConditions.push([ruleCondition, ruleColor]);
-            }
-            else {
-                styleConditions.push(["true", ruleColor]);
-            }
-        });
-        return styleConditions;
+                condition.push([key, value]);
+            });
+            ruleCondition = [this.createCesiumConditionForRule(condition), ruleColor];
+        }
+        else {
+            ruleCondition = ["true", ruleColor];
+        }
+        return ruleCondition;
     },
 
     /**
@@ -98,12 +89,12 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
     },
 
     /**
-     * Setter for attribute "rules"
-     * @param {Object[]} value Rules for styling
+     * Setter fir attribute "conditions"
+     * @param {*} conditions conditions
      * @returns {void}
      */
-    setRules: function (value) {
-        this.set("rules", value);
+    setConditions: function (conditions) {
+        this.set("conditions", conditions);
     }
 });
 

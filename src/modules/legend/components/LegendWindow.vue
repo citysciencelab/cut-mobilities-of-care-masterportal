@@ -89,7 +89,6 @@ export default {
                 position: layerForLayerInfo.get("selectionIDX")
             };
             isValidLegend = this.isValidLegendObj(legendObj);
-
             if (isValidLegend) {
                 this.setLegendForLayerInfo(legendObj);
             }
@@ -225,6 +224,10 @@ export default {
                         }
                         else if (geometryType === "Polygon") {
                             legendObj = this.prepareLegendForPolygon(legendObj, style);
+                        }
+                        else if (geometryType === "Cesium") {
+                            legendObj.name = this.prepareNameForCesium(style);
+                            legendObj = this.prepareLegendForCesium(legendObj, style);
                         }
                     }
                     /** Style WMS */
@@ -392,6 +395,52 @@ export default {
 
             legendObj.graphic = svg;
             return legendObj;
+        },
+
+        /**
+         * Prepares the legend for cesium style.
+         * @param {Object} legendObj The legend object.
+         * @param {Object} style The styleModel.
+         * @returns {Object} - prepare legendObj
+         */
+        prepareLegendForCesium (legendObj, style) {
+            const color = style.get("style") ? style.get("style").color : "black";
+            let svg = "data:image/svg+xml;charset=utf-8,";
+
+            svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+            svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
+            svg += color;
+            svg += ";fill-opacity:";
+            svg += 1;
+            svg += ";stroke:";
+            svg += color;
+            svg += ";stroke-opacity:";
+            svg += 1;
+            svg += ";stroke-width:";
+            svg += 1;
+            svg += ";'/>";
+            svg += "</svg>";
+
+            legendObj.graphic = svg;
+            return legendObj;
+        },
+
+        /**
+         * Creates the Name for Cesium
+         * @param {Object} style Style.
+         * @returns {String} - prepared name
+        */
+        prepareNameForCesium: function (style) {
+            const conditions = style.get("conditions");
+            let name = "";
+
+            Object.keys(conditions).forEach(attribute => {
+                const value = style.get("conditions")[attribute];
+
+                name += value;
+            });
+
+            return name;
         },
 
         /**
