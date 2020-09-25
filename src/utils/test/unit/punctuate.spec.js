@@ -5,7 +5,7 @@ describe("punctuate", function () {
     let model;
 
     /**
-     * Used to test instance independent incrementing
+     * Used to test instance independent punctuating
      */
     class TestModel {
         /**
