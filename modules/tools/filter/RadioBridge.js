@@ -5,15 +5,6 @@
  */
 import store from "../../../src/app-store";
 
-store.watch((state, getters) => getters["Tools/Gfi/currentFeature"], feature => {
-    if (feature !== null) {
-        Radio.trigger("GFI", "isVisible", true);
-    }
-    else {
-        Radio.trigger("GFI", "isVisible", false);
-    }
-});
-
 Radio.channel("GFI").reply({
     "getVisibleTheme": function () {
         const feature = store.getters["Tools/Gfi/currentFeature"];
