@@ -39,7 +39,7 @@ const CesiumStyleModel = StyleModel.extend(/** @lends CesiumStyleModel.prototype
             condition = [];
         let ruleCondition;
 
-        if (conditions) {
+        if (conditions && Object.keys(conditions).length > 0) {
             Object.keys(conditions).forEach(key => {
                 const value = conditions[key];
 
