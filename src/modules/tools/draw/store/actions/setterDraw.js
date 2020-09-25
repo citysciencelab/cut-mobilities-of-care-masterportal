@@ -17,11 +17,12 @@ function adjustValueToUnits (diameter, unit) {
  * @param {Boolean} active Value deciding whether the tool gets activated or deactivated.
  * @returns {void}
  */
-function setActive ({state, commit, dispatch}, active) {
+function setActive ({state, commit, dispatch, rootState}, active) {
     commit("setActive", active);
 
     if (active) {
         commit("setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
+        commit("setImgPath", rootState?.configJs?.wfsImgPath);
 
         dispatch("createDrawInteractionAndAddToMap", {active: true});
         dispatch("createSelectInteractionAndAddToMap", false);

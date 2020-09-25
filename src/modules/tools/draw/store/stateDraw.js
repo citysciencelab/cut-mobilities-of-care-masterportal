@@ -95,7 +95,8 @@ const symbol = {
         unit: null,
         withoutGUI: false,
         zIndex: 0,
-        name: "Zeichnen / Schreiben"
+        name: "Zeichnen / Schreiben",
+        imgPath: ""
     };
 
 export default state;

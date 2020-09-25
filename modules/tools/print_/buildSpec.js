@@ -187,6 +187,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             });
 
         if (features.length > 0) {
+            console.log("buildVector from layer:",layer);
+            console.log("features",features);
             return this.buildVector(layer, features);
         }
 
@@ -416,7 +418,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return obj;
     },
 
-    /**
+   /**
      * Generates the point Style for icons
      * @param {ol.style} style Style of layer.
      * @param {ol.layer} layer Ol-layer.
@@ -427,7 +429,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             type: "point",
             graphicWidth: style.getSize()[0] * style.getScale(),
             graphicHeight: style.getSize()[1] * style.getScale(),
-            externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc()),
+            externalGraphic: this.buildGraphicPath(style.getSrc()),
             graphicOpacity: layer.getOpacity()
         };
     },
@@ -435,14 +437,23 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * derives the url of the image from the server the app is running on
      * if the app is running on localhost the images from test.geoportal-hamburg.de are used
-     * @return {String} path to image directory
+     * @param {object} src the image source
+     * @return {String} path or url to image directory
      */
-    buildGraphicPath: function () {
-        let url = "https://test.geoportal-hamburg.de/lgv-config/img";
+    buildGraphicPath: function (src) {
         const origin = window.location.origin;
+        let url = Config.wfsImgPath + this.getImageName(src);
 
-        if (origin.indexOf("localhost") === -1) {
-            url = origin + "/lgv-config/img";
+        if(src.indexOf("http") === 0 && src.indexOf("localhost") === -1){
+            url = src;
+        }
+        else if(src.charAt(0) === "/"){
+            url = origin + src;
+            console.log('1 return ',url);
+        }
+        else if (origin.indexOf("localhost") === -1) {
+            //backwards-compatibility:
+            url = origin + "/lgv-config/img" + this.getImageName(src);
         }
         return url;
     },
@@ -623,7 +634,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     getImageName: function (imageSrc) {
         const start = imageSrc.lastIndexOf("/");
 
-        return imageSrc.indexOf("/") !== -1 ? imageSrc.substr(start) : "/" + imageSrc;
+        return imageSrc.indexOf("/") !== -1 ? imageSrc.substr(start + 1) : "/" + imageSrc;
     },
 
     /**
@@ -689,7 +700,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         let styles;
 
         if (feature.getStyleFunction() !== undefined) {
-            styles = feature.getStyleFunction().call(feature);
+                styles = feature.getStyleFunction().call(feature);
         }
         else {
             styles = layer.getStyleFunction().call(layer, feature);
