@@ -60,7 +60,7 @@
 
 ---
 
-## v2.5.4 - 2020-08-27
+## v2.5.5 - 2020-09-24
 ### Fixed
 - SpecialWFS sucher funktioniert über mehere angegebene propertyNames im Array.
 
