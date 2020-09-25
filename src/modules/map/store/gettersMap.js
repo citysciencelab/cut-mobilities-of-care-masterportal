@@ -62,7 +62,7 @@ const gettersMap = {
      * @param {number[]} state.clickPixel - the pixel coordinate of the click event
      * @returns {object[]} gfi features
      */
-    gfiFeaturesAtPixel: ({map, map3d, clickPixel}) => {
+    gfiFeaturesAtPixel: (state, {map, map3d, clickPixel}) => {
         const featuresAtPixel = [];
 
         map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
