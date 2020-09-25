@@ -2,7 +2,7 @@ import Tool from "../../core/modelList/tool/model";
 import BuildSpecModel from "./buildSpec";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import BuildCanvasModel from "./buildCanvas";
-import "./gfiEventBus.js";
+import "./RadioBridge.js";
 
 const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
