@@ -186,8 +186,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             });
 
         if (features.length > 0) {
-            console.log("buildVector from layer:",layer);
-            console.log("features",features);
             return this.buildVector(layer, features);
         }
 
@@ -417,7 +415,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return obj;
     },
 
-   /**
+    /**
      * Generates the point Style for icons
      * @param {ol.style} style Style of layer.
      * @param {ol.layer} layer Ol-layer.
@@ -443,15 +441,14 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         const origin = window.location.origin;
         let url = Config.wfsImgPath + this.getImageName(src);
 
-        if(src.indexOf("http") === 0 && src.indexOf("localhost") === -1){
+        if (src.indexOf("http") === 0 && src.indexOf("localhost") === -1) {
             url = src;
         }
-        else if(src.charAt(0) === "/"){
+        else if (src.charAt(0) === "/") {
             url = origin + src;
-            console.log('1 return ',url);
         }
         else if (origin.indexOf("localhost") === -1) {
-            //backwards-compatibility:
+            // backwards-compatibility:
             url = origin + "/lgv-config/img" + this.getImageName(src);
         }
         return url;
@@ -699,7 +696,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         let styles;
 
         if (feature.getStyleFunction() !== undefined) {
-                styles = feature.getStyleFunction().call(feature);
+            styles = feature.getStyleFunction().call(feature);
         }
         else {
             styles = layer.getStyleFunction().call(layer, feature);
