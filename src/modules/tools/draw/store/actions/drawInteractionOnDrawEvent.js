@@ -1,6 +1,5 @@
 import {createStyle} from "../../utils/style/createStyle";
 import {calculateCircle} from "../../utils/circleCalculations";
-import {transformNaNToNull} from "../../../../../utils/transformNaNToNull";
 
 const errorBorder = "#E10019";
 
@@ -22,8 +21,8 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
 
     commit("setAddFeatureListener", layerSource.once("addfeature", event => {
         if (circleMethod === "defined" && drawType.geometry === "Circle") {
-            const innerDiameter = transformNaNToNull(state.circleInnerDiameter),
-                outerDiameter = transformNaNToNull(state.circleOuterDiameter),
+            const innerDiameter = !isNaN(state.circleInnerDiameter) ? state.circleInnerDiameter : null,
+                outerDiameter = !isNaN(state.circleOuterDiameter) ? state.circleOuterDiameter : null,
                 circleDiameter = doubleCircle ? outerDiameter : innerDiameter,
                 circleCenter = event.feature.getGeometry().getCenter();
 

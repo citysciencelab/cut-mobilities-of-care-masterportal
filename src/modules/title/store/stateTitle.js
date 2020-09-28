@@ -7,8 +7,8 @@
  * @property {string} toolTip defines the default toolTip. String which is displayed if you hover over the title.
  */
 export default {
-    title: "Master",
-    logo: "https://geoportal-hamburg.de/lgv-config/img/hh-logo.png",
-    link: "https://geoinfo.hamburg.de",
-    toolTip: "Landesbetrieb Geoinformation und Vermessung"
+    title: undefined,
+    logo: undefined,
+    link: undefined,
+    toolTip: undefined
 };

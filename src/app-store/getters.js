@@ -4,6 +4,7 @@ export default {
     masterPortalVersionNumber: state => state?.masterPortalVersionNumber,
     mobile: state => state.mobile,
     dpi: state => state.dpi,
+    idCounter: state => state?.idCounter,
     // configJS destructuring
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",

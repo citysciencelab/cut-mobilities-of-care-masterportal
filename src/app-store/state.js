@@ -12,7 +12,8 @@ const state = {
     queryParams: getQueryParams(),
     masterPortalVersionNumber,
     isDevMode,
-    i18NextInitialized: false
+    i18NextInitialized: false,
+    idCounter: 1
 };
 
 export default state;

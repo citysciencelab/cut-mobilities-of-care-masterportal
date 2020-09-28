@@ -165,6 +165,7 @@ const SpecialWFSModel = Backbone.Model.extend({
 
                 data = this.getWFS110Xml(def, searchString);
                 def.url = this.manipulateUrlForProxy(def.url);
+                def.searchString = searchString;
                 this.sendRequest(def, data);
             });
         }
@@ -241,35 +242,38 @@ const SpecialWFSModel = Backbone.Model.extend({
             glyphicon = definition.glyphicon ? definition.glyphicon : this.get("glyphicon"),
             elements = data.getElementsByTagNameNS("*", typeName.split(":")[1]),
             multiGeometries = ["MULTIPOLYGON"];
-        let geometry;
 
         for (const element of elements) {
-            if (element.getElementsByTagName(propertyNames).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
-                const elementGeometryName = element.getElementsByTagNameNS("*", geometryName.split(":")[1])[0],
-                    elementGeometryFirstChild = elementGeometryName.firstElementChild,
-                    firstChildNameUpperCase = elementGeometryFirstChild.localName.toUpperCase(),
-                    identifier = element.getElementsByTagName(propertyNames)[0].textContent;
-                let interiorGeometry = [];
+            propertyNames.forEach(propertyName => {
+                if (element.getElementsByTagName(propertyName).length > 0 && element.getElementsByTagName(geometryName).length > 0) {
+                    if (element.getElementsByTagName(propertyName)[0].textContent.toUpperCase().includes(definition.searchString.toUpperCase())) {
+                        const elementGeometryName = element.getElementsByTagNameNS("*", geometryName.split(":")[1])[0],
+                            elementGeometryFirstChild = elementGeometryName.firstElementChild,
+                            firstChildNameUpperCase = elementGeometryFirstChild.localName.toUpperCase(),
+                            identifier = element.getElementsByTagName(propertyName)[0].textContent;
+                        let interiorGeometry = [],
+                            geometry;
 
-                if (multiGeometries.includes(firstChildNameUpperCase)) {
-                    const memberName = elementGeometryFirstChild.firstElementChild.localName,
-                        geometryMembers = elementGeometryName.getElementsByTagNameNS("*", memberName),
-                        coordinates = this.getInteriorAndExteriorPolygonMembers(geometryMembers);
+                        if (multiGeometries.includes(firstChildNameUpperCase)) {
+                            const memberName = elementGeometryFirstChild.firstElementChild.localName,
+                                geometryMembers = elementGeometryName.getElementsByTagNameNS("*", memberName),
+                                coordinates = this.getInteriorAndExteriorPolygonMembers(geometryMembers);
 
-                    geometry = coordinates[0];
-                    interiorGeometry = coordinates[1];
+                            geometry = coordinates[0];
+                            interiorGeometry = coordinates[1];
+                        }
+                        else {
+                            const geometryString = element.getElementsByTagName(geometryName)[0].textContent;
+
+                            geometry = geometryString.trim().split(" ");
+                        }
+                        this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon);
+                    }
                 }
                 else {
-                    const geometryString = element.getElementsByTagName(geometryName)[0].textContent;
-
-                    geometry = geometryString.trim().split(" ");
+                    console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
                 }
-
-                this.pushHitListObjects(type, identifier, firstChildNameUpperCase, geometry, interiorGeometry, glyphicon);
-            }
-            else {
-                console.error("Missing properties in specialWFS-Response. Ignoring Feature...");
-            }
+            });
         }
         Radio.trigger("Searchbar", "createRecommendedList", "specialWFS");
     },

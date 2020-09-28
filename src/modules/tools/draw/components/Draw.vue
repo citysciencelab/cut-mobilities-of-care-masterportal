@@ -383,13 +383,15 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <select
                             id="tool-draw-opacity"
+                            :key="`tool-draw-opacity-select`"
                             class="form-control input-sm"
                             :disabled="drawHTMLElements"
                             @change="setOpacity"
                         >
                             <option
                                 v-for="option in constants.transparencyOptions"
-                                :key="'draw-opacity-' + option.value"
+                                :key="'draw-opacity-option-' + option.value"
+                                :selected="option.value === opacity"
                                 :value="option.value"
                             >
                                 {{ option.caption }}
@@ -407,13 +409,15 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <select
                             id="tool-draw-opacityContour"
+                            :key="`tool-draw-opacityContour-select`"
                             class="form-control input-sm"
                             :disabled="drawHTMLElements"
                             @change="setOpacityContour"
                         >
                             <option
                                 v-for="option in constants.transparencyOptions.slice(0, constants.transparencyOptions.length -1)"
-                                :key="'draw-opacityContour-' + option.value"
+                                :key="'draw-opacityContour-option-' + option.value"
+                                :selected="option.value === opacityContour"
                                 :value="option.value"
                             >
                                 {{ option.caption }}
