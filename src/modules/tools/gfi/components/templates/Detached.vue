@@ -50,10 +50,16 @@ export default {
          * @returns {Object} the style in the object
          */
         styleAll: function () {
-            const right = document.getElementsByClassName("right-bar")[0].offsetWidth + 10 + "px";
+            const rightBarWidth = document.getElementsByClassName("right-bar")[0].offsetWidth;
+
+            if (document.getElementsByClassName("sidebar")[0]) {
+                return {
+                    "right": rightBarWidth + 10 + document.getElementsByClassName("sidebar")[0].offsetWidth + "px"
+                };
+            }
 
             return {
-                "right": right
+                "right": rightBarWidth + 10 + "px"
             };
         },
 
