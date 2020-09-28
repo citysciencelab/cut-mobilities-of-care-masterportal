@@ -1,5 +1,6 @@
 <script>
-import {upperFirst} from "../../../../../utils/stringHelpers";
+import beautifyWfsKeys from "../../../../../utils/beautifyWfsKeys.js";
+import {isWebLink} from "../../../../../utils/urlHelper.js";
 
 export default {
     name: "ActiveCityMaps",
@@ -10,24 +11,8 @@ export default {
         }
     },
     methods: {
-        /**
-         * Beautifies a string by always uppercase the first letter and replacing all underscores by spaces.
-         * @param {string} value - string to beautify
-         * @returns {string} uppercased value
-         */
-        beautify: function (value) {
-            return upperFirst(value).replace(/_/g, " ");
-        },
-        /**
-         * Checks if the string is a link.
-         * @param {string} value - string to check
-         * @returns {boolean} true | false
-         */
-        isLink: function (value) {
-            const regExp = new RegExp(/\b(https?|ftp|file)/);
-
-            return regExp.test(value);
-        },
+        beautifyWfsKeys,
+        isWebLink,
         /**
          * Checks if the string includes a pipe
          * @param {string} value - string to check
@@ -48,9 +33,9 @@ export default {
                 :key="key"
             >
                 <td class="bold">
-                    {{ beautify(key) }}
+                    {{ beautifyWfsKeys(key) }}
                 </td>
-                <td v-if="isLink(value)">
+                <td v-if="isWebLink(value)">
                     <a
                         :href="value"
                         target="_blank"
