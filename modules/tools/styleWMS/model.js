@@ -94,8 +94,6 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @fires List#RadioTriggerModelListSetModelAttributesById
      * @fires List#RadioRequestModelListGetModelByAttributes
      * @fires Util#RadioRequestUtilGetProxyUrl
-     * @fires StyleWMS#RadioTriggerStyleWMSResetParamsStyleWMS
-     * @fires StyleWMS#RadioTriggerStyleWMSUpdateParamsStyleWMS
      * @fires StyleWMSModel#sync
      * @fires StyleWMSModel#changeIsactive
      * @listens i18next#RadioTriggerLanguageChanged

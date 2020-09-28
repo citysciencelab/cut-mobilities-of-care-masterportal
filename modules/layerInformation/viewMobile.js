@@ -57,7 +57,7 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
 
         if (legends.legend !== null) {
             legends.legend.forEach(legend => {
-                console.error("Some Old Legend stuff was done here...")
+                console.error("Some Old Legend stuff was done here... " + legend + " cannot be shown");
                 // legend.html = this.contentTemplate(legend);
             });
         }

@@ -8,20 +8,6 @@
  */
 
 /**
- * @event StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
- * @param {Object} model Layer model to be styled
- * @description Resets the stylewms params for legend
- * @example Radio.trigger("StyleWMS", "resetParamsStyleWMS", model)
- */
-
-/**
- * @event StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
- * @param {Object[]} attributes -
- * @description Sets the style wms params for legend so that the legend can be updated
- * @example Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes)
- */
-
-/**
  * @event StyleWMS#changeModel
  * @description Triggered when layer model to style changes
  */
