@@ -5,6 +5,7 @@ import {MapMode} from "./enums";
  * User type definition
  * @typedef {object} MapState
  * @property {?module:ol/Map} map currently active map instance
+ * @property {?[number, number]} size - The size in pixels of the map in the DOM
  * @property {?module:ol/layer[]} layerList - all layers of the map
  * @property {?object[]} gfiFeatures - features for the gfi
  * @property {?number} initialZoomLevel initial zoom level
@@ -32,6 +33,7 @@ import {MapMode} from "./enums";
  */
 const state = {
     map: null,
+    size: null,
     map3d: null,
     layerList: null,
     gfiFeatures: null,
