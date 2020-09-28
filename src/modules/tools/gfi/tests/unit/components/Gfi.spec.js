@@ -414,7 +414,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
             secondDetachedComponent = "";
 
         firstDetachedComponent = wrapper.findComponent({name: "Detached"});
-        await wrapper.setData({componentKey: 1});
+        await wrapper.setData({componentKey: true});
         secondDetachedComponent = wrapper.findComponent({name: "Detached"});
 
         expect(firstDetachedComponent.exists()).to.be.false;
