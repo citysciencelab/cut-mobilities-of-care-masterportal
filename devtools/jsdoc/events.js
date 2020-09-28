@@ -196,39 +196,6 @@
  * @example Radio.trigger("LegendComponent", "updateLegend")
  */
 
-/** -------------------- LEGEND -------------------- */
-
-/**
- * @event Legend#RadioRequestLegendGetLegend
- * @param {layer} layer The layer, to which the legend should be returned.
- * @example Radio.request("Legend", "getLegend", layer)
- */
-
-/**
- * @event Legend#RadioRequestLegendGetLegendParams
- * @returns {Object} legendParams legendParams
- */
-
-/**
- * @event Legend#RadioTriggerLegendSetLayerList
- * @description todo
- */
-
-/**
- * @event Legend#hide
- * @description todo
- */
-
-/**
- * @event Legend#changeLegendParams
- * @description todo
- */
-
-/**
- * @event Legend#changeParamsStyleWMSArray
- * @description todo
- */
-
 
 /** -------------------- PARSER -------------------- */
 
