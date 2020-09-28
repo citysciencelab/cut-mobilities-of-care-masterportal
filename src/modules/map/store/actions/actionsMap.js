@@ -63,7 +63,8 @@ const actions = {
         unsubscribes = [
             map.on("moveend", evt => dispatch("updateViewState", evt)),
             map.on("pointermove", evt => dispatch("updatePointer", evt)),
-            map.on("click", evt => dispatch("updateClick", evt))
+            map.on("click", evt => dispatch("updateClick", evt)),
+            map.on("change:size", evt => commit("setSize", evt.target.getSize()))
         ];
     },
 

@@ -18,7 +18,9 @@ export default {
     data () {
         return {
             // current index of the pagination and so also for the feature in the gfiFeatures
-            pagerIndex: 0
+            pagerIndex: 0,
+            // key for re-render child(detached) component
+            componentKey: 0
         };
     },
     computed: {
@@ -29,7 +31,10 @@ export default {
             ignoredKeys: "ignoredKeys"
         }),
         ...mapGetters("Tools/Gfi", Object.keys(getters)),
-        ...mapGetters("Map", ["gfiFeatures"]),
+        ...mapGetters("Map", {
+            gfiFeatures: "gfiFeatures",
+            mapSize: "size"
+        }),
         /**
          * Returns the current view type.
          * It only works if the string has the same name as the component (in ./templates).
@@ -83,6 +88,16 @@ export default {
          */
         feature: function (newValue) {
             this.setCurrentFeature(newValue);
+        },
+        /**
+         * Whenever mapSize changes, increase component key by one
+         * to force re-render detached component (key-changing).
+         * @returns {void}
+         */
+        mapSize: function () {
+            if (this.currentViewType === "Detached") {
+                this.componentKey += 1;
+            }
         }
     },
     beforeUpdate () {
@@ -163,6 +178,7 @@ export default {
     >
         <component
             :is="currentViewType"
+            :key="componentKey"
             :feature="feature"
             @close="reset"
         >
