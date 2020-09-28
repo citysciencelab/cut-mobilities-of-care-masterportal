@@ -18,7 +18,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 active: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
-                }]
+                }],
+                mapSize: () => []
             },
             localVue
         });
@@ -35,7 +36,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 active: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
-                }]
+                }],
+                mapSize: () => []
             },
             localVue
         });
@@ -52,7 +54,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isTable: () => false,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
-                }]
+                }],
+                mapSize: () => []
             },
             localVue
         });
@@ -69,7 +72,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isTable: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
-                }]
+                }],
+                mapSize: () => []
             },
             localVue
         });
@@ -81,7 +85,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
         const wrapper = shallowMount(GfiComponent, {
             computed: {
                 active: () => false,
-                gfiFeatures: () => null
+                gfiFeatures: () => null,
+                mapSize: () => []
             },
             localVue
         });
@@ -95,7 +100,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
             computed: {
                 isMobile: () => true,
                 active: () => true,
-                gfiFeatures: () => []
+                gfiFeatures: () => [],
+                mapSize: () => []
             },
             localVue
         });
@@ -144,7 +150,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         },
                         getGfiUrl: () => null,
                         getMappedProperties: () => null
-                    }]
+                    }],
+                    mapSize: () => []
                 },
                 localVue,
                 store
@@ -170,7 +177,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getGfiUrl: () => null,
                     getMappedProperties: () => null
                 },
-                {}]
+                {}],
+                mapSize: () => []
             },
             localVue
         });
@@ -203,7 +211,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getProperties: sinon.stub()
                     },
                     getGfiUrl: () => null
-                }]
+                }],
+                mapSize: () => []
             },
             localVue
         });
@@ -237,7 +246,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     },
                     getGfiUrl: () => null,
                     getMappedProperties: () => null
-                }]
+                }],
+                mapSize: () => []
             },
             localVue
         });
@@ -263,7 +273,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getGfiUrl: () => null,
                     getMappedProperties: () => null
                 },
-                {}]
+                {}],
+                mapSize: () => []
             },
             localVue
         });
@@ -287,7 +298,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getGfiUrl: () => null,
                     getMappedProperties: () => null
                 },
-                {}]
+                {}],
+                mapSize: () => []
             },
             localVue
         });
@@ -315,7 +327,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     },
                     getGfiUrl: () => null,
                     getMappedProperties: () => null
-                }]
+                }],
+                mapSize: () => []
             },
             localVue
         });
@@ -343,7 +356,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     },
                     getGfiUrl: () => null,
                     getMappedProperties: () => null
-                }]
+                }],
+                mapSize: () => []
             },
             localVue
         });
@@ -372,12 +386,38 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     },
                     getGfiUrl: () => null,
                     getMappedProperties: () => null
-                }, {}]
+                }, {}],
+                mapSize: () => []
             },
             localVue
         });
 
         expect(wrapper.find(".pager-left").classes("disabled")).to.be.false;
         expect(wrapper.find(".pager-right").classes("disabled")).to.be.false;
+    });
+
+    it("should find a new detached component, if componentKey was changed", async () => {
+        const wrapper = shallowMount(GfiComponent, {
+            computed: {
+                isMobile: () => false,
+                desktopType: () => "",
+                active: () => true,
+                isTable: () => false,
+                gfiFeatures: () => [{
+                    getGfiUrl: () => null
+                }],
+                mapSize: () => []
+            },
+            localVue
+        });
+        let firstDetachedComponent = "",
+            secondDetachedComponent = "";
+
+        firstDetachedComponent = wrapper.findComponent({name: "Detached"});
+        await wrapper.setData({componentKey: 1});
+        secondDetachedComponent = wrapper.findComponent({name: "Detached"});
+
+        expect(firstDetachedComponent.exists()).to.be.false;
+        expect(secondDetachedComponent.exists()).to.be.true;
     });
 });
