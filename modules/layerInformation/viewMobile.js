@@ -1,5 +1,5 @@
 import TemplateMobile from "text-loader!./templateMobile.html";
-import ContentTemplate from "text-loader!../legend/content.html";
+// import ContentTemplate from "text-loader!../legend/content.html";
 import "bootstrap/js/tab";
 import "bootstrap/js/modal";
 /**
@@ -35,7 +35,7 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
     },
     className: "modal fade layerinformation",
     template: _.template(TemplateMobile),
-    contentTemplate: _.template(ContentTemplate),
+    // contentTemplate: _.template(ContentTemplate),
     /**
     * todo
     * @returns {*} returns this
@@ -57,7 +57,8 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
 
         if (legends.legend !== null) {
             legends.legend.forEach(legend => {
-                legend.html = this.contentTemplate(legend);
+                console.error("Some Old Legend stuff was done here...")
+                // legend.html = this.contentTemplate(legend);
             });
         }
     },

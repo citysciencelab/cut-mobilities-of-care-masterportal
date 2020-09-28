@@ -865,23 +865,6 @@
  */
 
 /**
- * @namespace Legend
- * @description Shows the legend of all activated layers in a popup on the map.
- */
-
-/**
- * @namespace Desktop
- * @memberof Legend
- * @description Desktop specific version of the legend popup.
- */
-
-/**
- * @namespace Mobile
- * @memberof Legend
- * @description Mobile specific version of the legend popup.
- */
-
-/**
  * @namespace Main
  * @description Loading basic requirements such as the css. Then it starts the App.
  */
