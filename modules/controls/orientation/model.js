@@ -143,7 +143,6 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         }
 
         this.set("tracking", false);
-        this.set("firstGeolocation", true);
     },
     track: function () {
         let geolocation = null;
@@ -198,9 +197,12 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
                 this.positionMarker(centerPosition);
             }
         }
-        else {
+        else if (zoomMode === "always") {
             this.positionMarker(centerPosition);
             this.zoomAndCenter(centerPosition);
+        }
+        else {
+            console.error("The configured zoomMode: " + zoomMode + " does not exist. Please use the params 'once' or 'always'!");
         }
     },
     onError: function () {

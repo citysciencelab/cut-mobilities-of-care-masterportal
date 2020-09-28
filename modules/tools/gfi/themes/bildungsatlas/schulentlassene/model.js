@@ -1,7 +1,7 @@
 import Theme from "../../model";
 
 const SchulentlasseneTheme = Theme.extend(/** @lends SchulentlasseneTheme.prototype */{
-    defaults: _.extend({}, Theme.prototype.defaults, {
+    defaults: Object.assign({}, Theme.prototype.defaults, {
         warningPrefix: "Regionaler Bildungsatlas - Schulentlassene ",
         maxYearsToShowInDiagrams: 10,
 
@@ -87,8 +87,8 @@ const SchulentlasseneTheme = Theme.extend(/** @lends SchulentlasseneTheme.protot
 
                 if (isVisible) {
                     // as there seems to be currently no way to write the graph with d3 into the template dom at this point (template is not applied yet), a simple timeout is used instead of a pure solution
-                    setTimeout(_.bind(this.createGraphZeitverlauf, this), timeOut);
-                    setTimeout(_.bind(this.createGraphAbschluesse, this), timeOut);
+                    setTimeout(this.createGraphZeitverlauf.bind(this), timeOut);
+                    setTimeout(this.createGraphAbschluesse.bind(this), timeOut);
                 }
             }
         });
@@ -270,7 +270,7 @@ const SchulentlasseneTheme = Theme.extend(/** @lends SchulentlasseneTheme.protot
             result.push(obj);
         }
 
-        result = _.sortBy(result, "fullyear");
+        result.sort((valueA, valueB) => valueA.fullyear - valueB.fullyear);
 
         // cut array to have only max. maxYearsToShowInDiagrams values
         result = result.slice(Math.max(0, result.length - maxYearsToShowInDiagrams));

@@ -9,7 +9,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("BackForward.vue", () => {
+describe("src/modules/controls/backForward/components/BackForward.vue", () => {
     let store,
         memorize,
         zoom,

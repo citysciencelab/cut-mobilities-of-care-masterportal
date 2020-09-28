@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../test/end2end/library/scripts"),
-    {losesCenter} = require("../../../test/end2end/library/utils"),
+    {losesCenter, logBrowserstackUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver"),
     {isChrome} = require("../../../test/end2end/settings"),
     {By, Button} = webdriver;
@@ -10,20 +10,29 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function PanTests ({builder, url, resolution, browsername}) {
+async function PanTests ({builder, url, resolution, browsername, capability}) {
     // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-    (isChrome(browsername) ? describe.skip : describe)("Map Pan", function () {
+    (isChrome(browsername) ? describe.skip : describe)("Map Pan", () => {
         let driver;
 
-        before(async function () {
+        before(async () => {
+            if (capability) {
+                capability.name = this.currentTest.fullTitle();
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
         });
 
-        after(async function () {
+        after(async () => {
+            if (capability) {
+                driver.session_.then(sessionData => {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 
-        it("should move when panned", async function () {
+        it("should move when panned", async () => {
             this.timeout(10000);
             const center = await driver.executeScript(getCenter),
                 viewport = await driver.findElement(By.css(".ol-viewport"));

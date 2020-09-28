@@ -1,6 +1,6 @@
 import DefaultTreeParser from "./parserDefaultTree";
 import CustomTreeParser from "./parserCustomTree";
-import Store from "../../../src/app-store";
+import store from "../../../src/app-store";
 
 const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
     defaults: {
@@ -22,60 +22,31 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         const defaultConfigPath = this.get("defaultConfigPath");
 
         this.url = this.getUrlPath(options.url, this.requestConfigFromUtil(), defaultConfigPath);
-        this.fetchData(defaultConfigPath);
+        this.fetchData();
     },
 
     /**
      * Fetches the Data from the config.json.
-     * @param {string} defaultConfigPath The default path to config.json
      * @returns {void}
      */
-    fetchData: function (defaultConfigPath) {
+    fetchData: function () {
         this.fetch({async: false,
-            error: function (model, xhr, error) {
-                const statusText = xhr.statusText;
-                let message,
-                    position,
-                    snippet,
-                    textStatus;
+            error: (model, xhr, error) => {
+                Radio.trigger("Alert", "alert", {text: "Die gewünschte Konfigurationsdatei konnte unter folgendem Pfad nicht geladen werden:<br>" + this.url});
 
-                // SyntaxError for consoletesting, propably because of older version.
-                if (statusText === "Not Found" || statusText.indexOf("SyntaxError") !== -1) {
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Die Datei \"" + model.url + "\" ist nicht vorhanden!</strong>"
-                        + "<br> Es wird versucht die config.json unter dem Standardpfad zu laden",
-                        kategorie: "alert-warning"
-                    });
-                    if (this.url !== defaultConfigPath) {
-                        this.url = defaultConfigPath;
-                        this.fetchData(defaultConfigPath);
-                    }
-                }
-                else {
-                    message = error.errorThrown.message;
-                    position = parseInt(message.substring(message.lastIndexOf(" ")), 10);
-                    snippet = xhr.responseText.substring(position - 30, position + 30);
-                    textStatus = error.textStatus;
-                    Radio.trigger("Alert", "alert", {
-                        text: "<strong>Die Datei '" + model.url + "' konnte leider nicht geladen werden!</strong> <br> " +
-                        "<small>Details: " + textStatus + " - " + error.errorThrown.message + ".</small><br>" +
-                        "<small>Auszug:" + snippet + "</small>",
-                        kategorie: "alert-warning"
-                    });
-                    if (textStatus === "parsererror") {
-                        // reload page once
-                        if (window.localStorage) {
-                            if (!localStorage.getItem("firstLoad")) {
-                                localStorage.firstLoad = true;
-                                window.location.reload();
-                            }
-                            else {
-                                localStorage.removeItem("firstLoad");
-                            }
+                if (error.textStatus === "parsererror") {
+                    // reload page once
+                    if (window.localStorage) {
+                        if (!localStorage.getItem("firstLoad")) {
+                            localStorage.firstLoad = true;
+                            window.location.reload();
+                        }
+                        else {
+                            localStorage.removeItem("firstLoad");
                         }
                     }
                 }
-            }.bind(this)
+            }
         });
     },
 
@@ -124,15 +95,15 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
 
         this.addTranslationToRawConfig(response, "translate#");
 
-        Store.commit("setConfigJson", response);
+        store.commit("setConfigJson", response);
 
         attributes = {
             portalConfig: response.Portalconfig,
             baselayer: response.Themenconfig.Hintergrundkarten,
             overlayer: response.Themenconfig.Fachdaten,
             overlayer_3d: response.Themenconfig.Fachdaten_3D,
-            treeType: _.has(response.Portalconfig, "treeType") ? response.Portalconfig.treeType : "light",
-            isFolderSelectable: this.parseIsFolderSelectable(_.property(["tree", "isFolderSelectable"])(Config)),
+            treeType: response.Portalconfig.hasOwnProperty("treeType") ? response.Portalconfig.treeType : "light",
+            isFolderSelectable: this.parseIsFolderSelectable(Config?.tree?.isFolderSelectable),
             snippetInfos: this.requestSnippetInfos()
         };
 
@@ -250,10 +221,10 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * @deprecated in 3.0.0. Remove whole function and call!
      */
     updateTreeType: function (attributes, response) {
-        if (_.has(response.Portalconfig, "treeType")) {
+        if (response.Portalconfig.hasOwnProperty("treeType")) {
             attributes.treeType = response.Portalconfig.treeType;
         }
-        else if (_.has(response.Portalconfig, "Baumtyp")) {
+        else if (response.Portalconfig.hasOwnProperty("Baumtyp")) {
             attributes.treeType = response.Portalconfig.Baumtyp;
             console.warn("Attribute 'Baumtyp' is deprecated. Please use 'treeType' instead.");
         }
@@ -297,11 +268,11 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
         let infos,
             url;
 
-        if (_.has(Config, "infoJson")) {
+        if (Config.hasOwnProperty("infoJson")) {
             url = Config.infoJson;
         }
 
-        if (!_.isUndefined(url)) {
+        if (url !== undefined) {
             $.ajax({
                 url: url,
                 async: false,

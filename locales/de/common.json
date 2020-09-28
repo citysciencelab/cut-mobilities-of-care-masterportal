@@ -1,4 +1,5 @@
 {
+    "masterPortalVersion": "Masterportal V. {{masterPortalVersionNumber}}",
     "button": {
         "back": "Zurück",
         "download": "Herunterladen",
@@ -31,17 +32,22 @@
             "print": "Karte Drucken",
             "measure": "Strecke / Fläche messen",
             "coord": "Koordinaten abfragen",
+            "supplyCoord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
-            "kmlimport": "KML Import",
+            "fileImport": "Datei-Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
+            "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
+            "layerSlider": "Zeitreihe",
             "featureLister": "Liste",
             "saveSelection": "Auswahl speichern",
             "getInfos": "Informationen abfragen",
             "addWms": "WMS hinzufügen",
-            "wfsTransaction": "WFS-T Tool"
+            "wfsTransaction": "WFS-T Tool",
+            "scaleSwitcher": "Maßstab umschalten",
+            "selectFeatures": "Features auswählen"
         },
         "legend": "Legende",
         "contact": "Kontakt",
@@ -76,6 +82,25 @@
     "date": "Datum",
     "time": "Zeit",
     "modules": {
+        "core": {
+          "modelList": {
+            "layer": {
+              "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist."
+            }
+          },
+          "parametricURL": {
+            "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
+            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die LAYERIDS am den Positionen: <b>{{wrongIdsPositionsConcat}}</b> existieren nicht und werden ignoriert!"
+          }
+        },
+        "alerting": {
+            "categories": {
+                "error": "Fehler",
+                "info": "Info",
+                "success": "Erfolg",
+                "warning": "Achtung"
+            }
+        },
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
@@ -86,6 +111,21 @@
         },
         "layerInformation": {
             "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
+        },
+        "featureViaURL": {
+            "coordLabel": "Koordinaten",
+            "featureLabel": "Beschriftung",
+            "folderName": "Über URL übergebene Feature",
+            "typeLabel": "Geometrietyp",
+            "messages": {
+                "featureParsing": "FeatureViaURL: Es konnten nicht alle übergebenen Feature verarbeitet werden.",
+                "featureParsingAll": "FeatureViaURL: Alle übergebenen Feature wurden nicht mit dem richtigen Datentyp übergeben. Bitte beachten Sie die Dokumentation.",
+                "featureParsingNoneAdded": "FeatureViaURL: Allen übergebenen Feature fehlen mindestens ein Parameter. Es wurden keine Feature der Karte hinzugefügt. Bitte beachten Sie die Dokumentation.",
+                "geometryNotSupported": "FeatureViaURL: Der in der Konfiguration für den Layer {{layerId}} deklarierte Geometrietyp {{geometryType}} wird nicht unterstützt.",
+                "layerNotFound": "FeatureViaURL: Es konnte kein Layer mit der ID {{layerId}} gefunden werden.",
+                "noLayers": "FeatureViaURL: Für die übergebenen Feature wurden keine Layer in der Konfiguration definiert.",
+                "noNameDefined": "FeatureViaURL: Es wurde kein Name für den Layer mit der ID {{layerId}} in der Konfiguration definiert."
+            }
         },
         "quickHelp": {
             "titleTag": "Hilfe öffnen",
@@ -144,7 +184,6 @@
         },
         "footer": {
             "designation": "Kartographie und Gestaltung:",
-            "version": "Masterportal V.",
             "cardDiscrepancy": "Kartenunstimmigkeit"
         },
         "tools": {
@@ -181,16 +220,42 @@
                 "titlePlaceholder": "Mein Titel",
                 "layoutLabel": "Layout",
                 "formatLabel": "Format",
-                "scaleLabel": "Maßstab",
+                "scaleLabel": "Druckmaßstab",
                 "withLegendLabel": "Mit Legende",
                 "printLabel": "Drucken",
                 "withInfoLabel": "Mit Informationen",
+                "vtlWarning": "Da MapFish 3 keine Vector Tile Layer unterstützt, werden die folgenden aktiven Layer nicht in der Printansicht erscheinen:",
                 "layoutNameList": {
                     "A4 Hochformat": "A4 Hochformat",
                     "A4 Querformat": "A4 Querformat",
                     "A3 Hochformat": "A3 Hochformat",
                     "A3 Querformat": "A3 Querformat"
                 }
+            },
+            "styleVT": {
+              "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
+              "noStyleableLayers": "Derzeit sind keine Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+              "theme": "Thema",
+              "chooseTheme": "Bitte aktives Thema auswählen",
+              "style": "Style"
+            },
+            "styleWMS": {
+                "noStyleableLayers": "Derzeit sind keine klassifizierbaren Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
+                "theme": "Thema",
+                "chooseTheme": "Bitte Thema auswählen",
+                "attribute": "Attribut",
+                "chooseAttribute": "Bitte Attribut wählen",
+                "countOfClasses": "Anzahl der Klassen",
+                "chooseNumberOfClasses": "Bitte Anzahl der Klassen auswählen",
+                "rangeOfValues": "Wertebereich Klasse",
+                "from": "von",
+                "to": "bis",
+                "reset": "Zurücksetzen",
+                "apply": "Anwenden",
+                "pleaseEnterInteger": "Bitte tragen Sie eine ganze Zahl ein.",
+                "pleaseChooseColor": "Bitte wählen Sie eine Farbe aus.",
+                "checkTheValues": "Überprüfen Sie die Werte.",
+                "overlappingValueRanges": "Überprüfen Sie die Werte. Wertebereiche dürfen sich nicht überschneiden."
             },
             "featureLister": {
                 "chooseTheme": "Thema wählen",
@@ -201,6 +266,24 @@
                 "detailsOfSelected": "Details des ausgewählten Features",
                 "alert": "Der Versuch das selektierte Feature zu zeigen ist fehlgeschlagen, da es keine Geometrie hat.",
                 "key": "{{shownFeatures.x}} von {{shownFeatures.y}} Features gelistet"
+            },
+            "layerSlider": {
+                "displayLayers": "Anzeige diverser Layer.",
+                "title": "Simulation von Beispiel-WMS",
+                "titleNotConfigured": "Titel nicht konfiguriert",
+                "serviceOne": "Dienst 1",
+                "serviceTwo": "Dienst 2",
+                "serviceThree": "Dienst 3",
+                "key": "Konfiguration von Werkzeug <b>{{alertMessage.x}}</b> fehlerhaft: <b>sliderType</b> \"{{alertMessage.y}}\" ist noch nicht implementiert!"
+            },
+            "filter": {
+                "result": "Treffer",
+                "results": "Treffer",
+                "zoomOnResults": "Zoom auf Treffer",
+                "filter": "-Filter",
+                "yourSelection": "Ihre Auswahl: ",
+                "noFilterOptionSelected": "Noch keine Filteroption ausgewählt",
+                "deleteAll":"Alles löschen"
             },
             "pendler": {
                 "animation": {
@@ -258,12 +341,29 @@
                 "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
                 "contenNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
             },
-            "kmlImport": {
-                "unknownGeometry": "Unbekannte Geometry",
-                "chooseFileFirst": "Bitte wählen Sie zuerst eine KML-Datei zum Importieren aus",
-                "fakeButton": "Datei auswählen (keine ausgewählt)",
-                "importButton": "IMPORT",
-                "file": "Datei"
+            "fileImport": {
+                "captions": {
+                    "intro": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.",
+                    "fileTypes": "Es können KML-Dateien (*.kml), GPX-Dateien (*.gpx) oder GeoJson-Dateien (*.geojson, *.json) importiert werden.",
+                    "dropzone": "Datei hier ablegen",
+                    "browse": "Datei auswählen",
+                    "supportedFiletypes": {
+                        "auto": "Automatische Erkennung",
+                        "kml": "KML-Datei (*.kml)",
+                        "gpx": "GPX-Datei (*.gpx)",
+                        "geojson": "GeoJson-Datei (*.geojson, *.json)"
+                    }
+                },
+                "alertingMessages": {
+                    "success": "Die Datei \"{{filename}}\" wurde erfolgreich importiert.",
+                    "successPartly": "Die Datei \"{{filename}}\" wurde teilweise importiert.",
+                    "formatError": "Die Datei \"{{filename}}\" konnte nicht gelesen werden. Bitte prüfen Sie, ob die Datei das Format *.kml. *.gpx, *.geojson oder *.json hat.",
+                    "missingFileContent": "Fehler beim Lesen der Datei \"{{filename}}\". Bitte überprüfen Sie den Dateityp sowie den Inhalt der Datei. Falls die Datei fehlerfrei ist, wenden Sie sich bitte an den Support.",
+                    "missingFormat": "Das Dateiformat {{format}} wird nicht unterstützt. Bitte wenden Sie sich an den Support.",
+                    "featureError": "Ein Feature in dieser Datei konnte nicht gelesen werden."
+                },
+                "successfullyImportedLabel": "Erfolgreich importiert:",
+                "title": "Datei importieren"
             },
             "parcelSearch": {
                 "wrongConfig": "Ungültige oder unvollständige Konfiguration",
@@ -279,7 +379,12 @@
                 "parcelNumberPlaceholder": "Nummer eingeben",
                 "generateReport": "Bericht erzeugen"
             },
-            "getCoord": {
+            "selectFeatures": {
+              "zoomToFeature": "Auf dieses Feature zoomen",
+              "noFeatureChosen": "Keine Features ausgewählt. Wählen Sie Features durch Halten von Strg und Ziehen einer Box um die auszuwählenden Features.",
+              "propertylessFeature": "Element ohne Attribute"
+            },
+            "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
                 "hdms": {
@@ -293,7 +398,42 @@
             },
             "gfi": {
                 "themes": {
-                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes."
+                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
+                    "trafficCount": {
+                        "infoLabel": "Info",
+                        "dayLabel": "Tag",
+                        "weekLabel": "Woche",
+                        "yearLabel": "Jahr",
+                        "period": "Zeitraum",
+                        "number": "Anzahl",
+                        "totalSince": "Insgesamt seit",
+                        "sinceBeginningOfTheYear": "Seit Jahresbeginn",
+                        "overThePastYear": "Im Vorjahr",
+                        "onThePreviousDay": "Am Vortag",
+                        "highestDay": "Stärkster Tag im Jahr",
+                        "highestWeek": "Stärkste Woche im Jahr",
+                        "highestMonth": "Stärkster Monat im Jahr",
+                        "dateLabel": "Datum",
+                        "clockLabel": "Uhr",
+                        "tableLabel": "Tabelle",
+                        "notice": "Aufgrund nicht verfügbarer Daten können Lücken im Diagramm und leere Tabellenzellen auftreten.",
+                        "lastupdateLabel": "Letzte Aktualisierung:",
+                        "diagramLabel": "Diagramm",
+                        "calendarweek": "KW",
+                        "infraredsensor": "Infrarotsensor",
+                        "countingstation": "Zählstation",
+                        "carLabel": "KFZ",
+                        "bicycleLabel": "Fahrrad",
+                        "idLabel": "ID:",
+                        "typeLabel": "Art: ",
+                        "meansOfTransportLabel": "Verkehrsmittel: ",
+                        "directionLabel": "Richtung:",
+                        "carsHeaderSuffix": "KFZ abs.",
+                        "trucksHeaderSuffix": "SV-Anteil in %",
+                        "yAxisTextDay": "Anzahl / 15 Min.",
+                        "yAxisTextWeek": "Anzahl / Tag",
+                        "yAxisTextYear": "Anzahl / Woche"
+                    }
                 }
             },
             "viomRouting": {
@@ -317,17 +457,17 @@
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
                     "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
                 },
-                "hdmsEastingText": "Wert der $t(common:modules.tools.getCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "Wert der $t(common:modules.tools.getCoord.hdms.northingLabel)"
+                "hdmsEastingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
                 "draw": "zeichnen",
                 "geometryDrawFailed": "Die übergebene Geometrie konnte nicht dargestellt werden.",
-                "defindeTwoCircles": "Bitte definieren Sie beide Kreise.",
-                "defindeInnerCircle": "Bitte definieren Sie auch den inneren Kreis.",
-                "defindeDiameter": "Bitte geben Sie einen Durchmesser an.",
-                "defindeOuterCircle": "Bitte definieren Sie auch den äußeren Kreis.",
+                "undefinedTwoCircles": "Bitte definieren Sie beide Kreise.",
+                "undefinedInnerCircle": "Bitte definieren Sie auch den inneren Kreis.",
+                "undefinedDiameter": "Bitte geben Sie einen Durchmesser an.",
+                "undefinedOuterCircle": "Bitte definieren Sie auch den äußeren Kreis.",
                 "limitReached": "Sie haben bereits {{count}} Objekt gezeichnet, bitte löschen Sie dieses, bevor Sie fortfahren!",
                 "limitReached_plural": "Sie haben bereits {{count}} Objekte gezeichnet, bitte löschen Sie erst eines, bevor Sie fortfahren!",
                 "drawPoint": "Punkt zeichnen",
@@ -337,7 +477,7 @@
                 "drawArea": "Fläche zeichnen",
                 "drawCircle": "Kreis zeichnen",
                 "drawDoubleCircle": "Doppelkreis zeichnen",
-                "doubleCirclePlaceholder": "Klicken Sie auf die Karte um den Kreis zu platzieren",
+                "doubleCirclePlaceholder": "Bitte geben Sie einen Durchmesser ein",
                 "diameter": "Durchmesser",
                 "outerDiameter": "Äußerer Durchmesser",
                 "unit": "Einheit",
@@ -349,7 +489,7 @@
                 "outlineColor": "Umrissfarbe",
                 "fontSize": "Schriftgröße",
                 "fontName": "Schriftart",
-                "size": "Größe (Radius)",
+                "size": "Größe (in px)",
                 "lineWidth": "Strichstärke",
                 "transparency": "Transparenz",
                 "color": "Füllfarbe",
@@ -361,6 +501,7 @@
                     "delete": "Geometrie / Text löschen",
                     "deleteAll": "Alles löschen"
                 },
+                "symbol": "Symbol",
                 "iconList": {
                     "iconPoint": "Punkt",
                     "iconLeaf": "Blatt",
@@ -394,6 +535,9 @@
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche"
+            },
+            "scaleSwitcher": {
+                "label": "Maßstab"
             }
         },
         "controls": {
@@ -437,8 +581,7 @@
             "3d": {
                 "buttonTitle": "3D",
                 "openView3d": "Ansicht einschalten",
-                "closeView3d": "Ansicht ausschalten",
-                "betaWarning": "Der 3D-Modus befindet sich zur Zeit noch in der Beta-Version!"
+                "closeView3d": "Ansicht ausschalten"
             },
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",
@@ -463,7 +606,8 @@
                 "showOverviewControl": "Übersichtskarte einblenden",
                 "hideOverviewControl": "Übersichtskarte ausblenden",
                 "showOverviewTable": "Mini-Map einschalten",
-                "hideOverviewTable": "Mini-Map ausschalten"
+                "hideOverviewTable": "Mini-Map ausschalten",
+                "missingLayerId": "Die Overviewmap konnte nicht erstellt werden."
             },
             "mousePosition": {
                 "hint": "Bewegen Sie die Maus über die Karte",
@@ -522,6 +666,9 @@
             "title": "Legende",
             "collapseAll": "Alle einklappen",
             "foldOutAll": "Alle ausklappen"
+        },
+        "zoomToGeometry": {
+          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter."
         }
     },
     "snippets": {

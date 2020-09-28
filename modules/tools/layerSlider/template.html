@@ -5,7 +5,7 @@
 	<div class="player">
 		<div class="progress">
 			<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="<%= layerIds.length %>">
-				<span class="sr-only">Anzeige diverser Layer.</span>
+				<span class="sr-only"><%=displayLayers%></span>
 			</div>
 		</div>
 		<div class="input-group">
@@ -23,7 +23,7 @@
 					<span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
 				</button>
 			</span>
-			<input id="title" type="text" class="form-control" placeholder="Titel nicht konfiguriert" readonly="true"/>
+			<input id="title" type="text" class="form-control" placeholder="<%=titleNotConfigured%>" readonly="true"/>
 		</div>
 	</div>
 

@@ -23,16 +23,18 @@ const ActiveCityMapsTheme = Theme.extend({
         const element = this.get("gfiContent"),
             children = [];
 
-        if (_.isString(element) && element.match(/content="text\/html/g)) {
+        if (typeof element === "string" && element.match(/content="text\/html/g)) {
             children.push(element);
         }
         else {
-            _.each(element, function (ele, index) {
-                _.each(ele, function (val, key) {
+            element.forEach((ele, index) => {
+                Object.entries(ele).forEach(oneElement => {
                     let copyright,
                         imgView,
                         videoView;
-                    const valString = String(val);
+                    const value = oneElement[1],
+                        key = oneElement[0],
+                        valString = String(value);
 
                     if (valString.substr(0, 4) === "http"
                         && (valString.search(/\.jpg/i) !== -1 || valString.search(/\.png/i) !== -1 || valString.search(/\.jpeg/i) !== -1 || valString.search(/\.gif/i) !== -1)) {
@@ -67,7 +69,7 @@ const ActiveCityMapsTheme = Theme.extend({
                             val: videoView,
                             type: "video"
                         });
-                        if (_.has(element, "mobil_video")) {
+                        if (element.hasOwnProperty("mobil_video")) {
                             element.mobil_video = "#";
                         }
                     }
@@ -80,15 +82,13 @@ const ActiveCityMapsTheme = Theme.extend({
                             val: videoView,
                             type: "mobil_video"
                         });
-                        if (_.has(element, "video")) {
+                        if (element.hasOwnProperty("video")) {
                             element.video = "#";
                         }
                     }
                     // lösche leere Dummy-Einträge wieder raus.
-                    element[index] = _.omit(element[index], function (value) {
-                        return value === "#";
-                    });
-                }, this);
+                    Radio.request("Util", "omit", element[index], ["#"]);
+                });
             });
         }
         if (children.length > 0) {
@@ -100,13 +100,13 @@ const ActiveCityMapsTheme = Theme.extend({
     getVectorGfi: function () {
         const gfiContentList = [];
 
-        _.each(this.get("gfiFeatureList"), function (feature) {
+        this.get("gfiFeatureList").forEach(feature => {
             let gfiContent;
 
             gfiContent = this.translateGFI([feature.getProperties()], this.get("gfiAttributes"));
             gfiContent = this.getManipulateDate(gfiContent)[0];
             gfiContentList.push(gfiContent);
-        }, this);
+        });
         this.cloneCollModels(gfiContentList);
         this.setGfiContent(gfiContentList);
         this.setIsReady(true);
@@ -120,7 +120,7 @@ const ActiveCityMapsTheme = Theme.extend({
         const gfiContent = this.get("gfiContent")[0];
         let featureInfos = [];
 
-        if (!_.isUndefined(gfiContent)) {
+        if (gfiContent !== undefined) {
             featureInfos = [];
             featureInfos = this.createFeatureInfos(gfiContent);
             this.setFeatureInfos(featureInfos);
@@ -135,7 +135,9 @@ const ActiveCityMapsTheme = Theme.extend({
     createFeatureInfos: function (gfiContent) {
         const featureInfos = [];
 
-        _.each(gfiContent, function (attribute, key) {
+        Object.entries(gfiContent).forEach(content => {
+            const attribute = content[1],
+                key = content[0];
             let gfiAttributes;
 
             if (attribute.indexOf("|") !== -1) {

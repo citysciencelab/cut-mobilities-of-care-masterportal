@@ -51,6 +51,34 @@
  * @description Triggered when setSLD changes
  */
 
+/** -------------------- StyleVT -------------------- */
+
+/**
+ * @event StyleVT#RadioTriggerStyleVTOpenStyleVT
+ * @param {Object} model Layer model to be styled
+ * @description Opens the Tool and sets the layer model. Event is triggered by clicking on the glyphicon in the layer tree.
+ * @example Radio.trigger("StyleVT", "open", model)
+ */
+
+/**
+ * @event StyleVT#changeIsActive
+ * @description Triggered when stylevt model gets (de-)activated
+ */
+
+/**
+ * @event StyleVT#changeModel
+ * @description Triggered when selected layer model is changed
+ */
+
+/**
+ * @event StyleVT#changeCurrentLng
+ * @description Triggered when current language is changed
+ */
+
+/**
+ * @event StyleVT#changeVectorTileLayerList
+ * @description Triggered when available layer set is changed
+ */
 
 /** -------------------- SIDEBAR -------------------- */
 
@@ -217,7 +245,7 @@
  */
 /**
  * @event Core.ConfigLoader#RadioRequestParserGetTreeType
- * @returns {*} todo
+ * @returns {string} tree type from config.js file
  * @example Radio.request("Parser", "getTreeType")
  */
 /**
@@ -1187,7 +1215,7 @@
  * @event Searchbar#RadioTriggerSearchbarPushHits
  * @description trigger transfer of search hits as a list
  * @param {String} sListname Name of list
- * @param {Array} aHitListArray Array of search hits
+ * @param {Object[]} aHitListArray an array of object{id, name, type} with optional values: coordinate, glyphicon, geom, adress, locationFinder, metaName, osm, marker, geometryType, interiorGeometry
  * @example Radio.trigger("Searchbar", "pushHits", "hitList", aHitListArray);
  */
 
@@ -1487,7 +1515,7 @@
  * @returns {String} - masterportal version number
  * @example Radio.request("Util", "getMasterPortalVersionNumber");
  */
- 
+
 /**
  * @event Core#RadioRequestUtilSortBy
  * @description This sort function sorts arrays, objects and strings. This is a replacement for underscores sortBy
@@ -1810,6 +1838,17 @@
  * @example Radio.trigger("CswParser", "fetchedMetaData", cswObj);
  */
 
+/** -------------------- SelectFeatures -------------------- */
+
+/**
+ * @event Tools.SelectFeatures#changeIsActive
+ * @description Triggered when isActive changes
+ */
+
+/**
+ * @event Tools.SelectFeatures#updatedSelection
+ * @description Triggered when selection changes
+ */
 
 /** -------------------- FeatureLister -------------------- */
 
@@ -2005,6 +2044,11 @@
  * @description todo
  */
 
+ /**
+  * @event Core#RadioRequestParametricURLGetFeatureViaURL
+  * @returns {Object[]} Returns the features given by the user via the URL.
+  */
+
 /**
  * @event Core#RadioRequestParametricURLGetProjectionFromUrl
  * @description todo
@@ -2077,11 +2121,6 @@
 
 /**
  * @event Core#RadioTriggerParametricURLUpdateQueryStringParam
- * @description todo
- */
-
-/**
- * @event Core#RadioTriggerParametricURLPushToIsInitOpen
  * @description todo
  */
 
@@ -2198,13 +2237,6 @@
  * @param {String} layerId - The Id of the layers (can be selected alphanumerically, but should be unique)
  * @param {String} geojson - A valid GeoJson. If no crs is defined in the Json, EPSG:4326 is assumed..
  * @example Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layerName, layerId, geojson)
- */
-
-/** -------------------- TOOLS.KMLIMPORT -------------------- */
-
-/**
- * @event Tools.Kmlimport#ChangeIsActive
- * @description Fired when param isActive changes
  */
 
 /** -------------------- TOOLS.WFST -------------------- */
@@ -2434,13 +2466,6 @@
  /**
  * @event Tools.LayerSlider#changeActiveLayer
  * @description Event fired when layer slider model changes its attribute "activeLayer".
- */
-
-/** -------------------- TOOLS.GETCOORD -------------------- */
-
-/**
- * @event Tools.GetCoord#RadioTriggerChangeIsActive
- * @description todo
  */
 
 /** -------------------- TOOLS.DRAW -------------------- */

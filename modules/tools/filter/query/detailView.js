@@ -75,8 +75,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @returns {void}
      */
     rerenderSnippets: function (changedValue) {
-        _.each(this.model.get("snippetCollection").models, function (snippet) {
-            if (_.isUndefined(changedValue) || snippet.get("name") !== changedValue.get("attr")) {
+        this.model.get("snippetCollection").models.forEach(snippet => {
+            if (changedValue === undefined || snippet.get("name") !== changedValue.get("attr")) {
                 snippet.trigger("render");
             }
         });
@@ -89,7 +89,12 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @returns {void}
      */
     updateFeatureCount: function (model, value) {
-        this.$el.find(".feature-count").html(value.length + " Treffer");
+        if (value.length === 1) {
+            this.$el.find(".feature-count").html(value.length + " " + this.model.get("result"));
+        }
+        else {
+            this.$el.find(".feature-count").html(value.length + " " + this.model.get("results"));
+        }
         this.$el.find(".detailview-head .zoom-btn")
             .animate({opacity: 0.6}, 500)
             .animate({opacity: 1.0}, 500);
@@ -115,11 +120,13 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         let view;
 
         if (this.model.get("isLayerVisible")) {
-            _.each(this.model.get("snippetCollection").models, function (snippet) {
+            this.model.get("snippetCollection").models.forEach(snippet => {
                 if (snippet.get("snippetType") === "checkbox-classic") {
                     view = new SnippetMultiCheckboxView({model: snippet});
                 }
                 else if (snippet.get("type") === "string" || snippet.get("type") === "text") {
+                    // doesn't rerender on language change if dropdown is open (see render method there)
+                    snippet.set("isOpen", false);
                     view = new SnippetDropdownView({model: snippet});
                 }
                 else if (snippet.get("type") === "boolean") {
@@ -133,9 +140,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
                     view = new SnippetCheckBoxView({model: snippet});
                 }
 
-
                 this.$el.append(view.render().$el);
-            }, this);
+            });
         }
         else {
             this.removeView();
@@ -151,8 +157,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         let countSelectedValues = 0,
             view;
 
-        _.each(this.model.get("snippetCollection").models, function (snippet) {
-            _.each(snippet.get("valuesCollection").models, function (valueModel) {
+        this.model.get("snippetCollection").models.forEach(snippet => {
+            snippet.get("valuesCollection").models.forEach(valueModel => {
                 valueModel.trigger("removeView");
 
                 if (valueModel.get("isSelected")) {
@@ -161,8 +167,8 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
                     this.$el.find(".value-views-container .text:nth-child(1)").after(view.render().$el);
                 }
-            }, this);
-        }, this);
+            });
+        });
 
         if (countSelectedValues === 0) {
             this.$el.find(".text:last-child").show();

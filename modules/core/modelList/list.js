@@ -9,6 +9,7 @@ import HeatmapLayer from "./layer/heatmap";
 import TerrainLayer from "./layer/terrain";
 import EntitiesLayer from "./layer/entities";
 import TileSetLayer from "./layer/tileset";
+import VectorTileLayer from "./layer/vectorTile";
 import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
@@ -23,14 +24,12 @@ import PrintV2 from "../../tools/print/model";
 import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Measure from "../../tools/measure/model";
-import Draw from "../../tools/draw/model";
 import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
-import KmlImport from "../../tools/kmlImport/model";
 import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
@@ -43,13 +42,13 @@ import TreeFilter from "../../treeFilter/model";
  * @deprecated in 3.0.0
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
-import Formular from "../../formular/grenznachweis";
 import FeatureLister from "../../tools/featureLister/model";
 import AddWms from "../../tools/addWMS/model";
 import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
+import StyleVT from "../../tools/styleVT/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewPoint/model";
@@ -57,6 +56,7 @@ import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
 import store from "../../../src/app-store/index";
 import WfstModel from "../../tools/wfst/model";
+import SelectFeaturesTool from "../../tools/selectFeatures/model";
 
 const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
@@ -110,7 +110,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return this.where(attributes);
             },
             "getModelByAttributes": function (attributes) {
-                return !_.isUndefined(this.findWhere(attributes)) ? this.findWhere(attributes) : this.retrieveGroupModel(attributes);
+                return this.findWhere(attributes) !== undefined ? this.findWhere(attributes) : this.retrieveGroupModel(attributes);
             }
         }, this);
 
@@ -136,7 +136,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             },
             "toggleDefaultTool": this.toggleDefaultTool,
             "refreshLightTree": this.refreshLightTree,
-            "addAlwaysActiveTool": this.addAlwaysActiveTool
+            "addAlwaysActiveTool": this.addAlwaysActiveTool,
+            "setActiveToolsToFalse": this.setActiveToolsToFalse
         }, this);
 
         this.listenTo(this, {
@@ -231,6 +232,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.typ === "Oblique") {
                 return new ObliqueLayer(attrs, options);
             }
+            else if (attrs.typ === "VectorTile") {
+                return new VectorTileLayer(attrs, options);
+            }
         }
         else if (attrs.type === "folder") {
             return new Folder(attrs, options);
@@ -243,21 +247,24 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                  * @deprecated in 3.0.0
                  */
                 if (attrs.version === undefined) {
-                    return new PrintV2(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                    return new PrintV2(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 else if (attrs.version === "HighResolutionPlotService") {
-                    return new HighResolutionPrint(_.extend(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
+                    return new HighResolutionPrint(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new Print(attrs, options);
             }
             else if (attrs.id === "gfi") {
-                return new GFI(_.extend(attrs, _.has(Config, "gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
+                return new GFI(Object.assign(attrs, Config.hasOwnProperty("gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
             }
             else if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
             }
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
+            }
+            else if (attrs.id === "styleVT") {
+                return new StyleVT(attrs, options);
             }
             else if (attrs.id === "compareFeatures") {
                 return new CompareFeatures(attrs, options);
@@ -274,9 +281,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "measure") {
                 return new Measure(attrs, options);
             }
-            else if (attrs.id === "draw") {
-                return new Draw(attrs, options);
-            }
             else if (attrs.id === "download") {
                 return new Download(attrs, options);
             }
@@ -284,7 +288,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new SearchByCoord(attrs, options);
             }
             else if (attrs.id === "saveSelection") {
-                return new SaveSelection(_.extend(attrs, _.has(Config, "simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
+                return new SaveSelection(Object.assign(attrs, Config.hasOwnProperty("simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
             }
             else if (attrs.id === "lines") {
                 return new Lines(attrs, options);
@@ -299,7 +303,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 return new AddWms(attrs, options);
             }
             else if (attrs.id === "treeFilter") {
-                return new TreeFilter(_.extend(attrs, _.has(Config, "treeConf") ? {treeConf: Config.treeConf} : {}), options);
+                return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);
             }
             else if (attrs.id === "contact") {
                 return new Contact(attrs, options);
@@ -318,16 +322,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
              */
             else if (attrs.id === "extendedFilter") {
                 console.warn("Tool: 'extendedFilter' is deprecated. Please use 'filter' instead.");
-                return new ExtendedFilter(_.extend(attrs, _.has(Config, "ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
+                return new ExtendedFilter(Object.assign(attrs, Config.hasOwnProperty("ignoredKeys") ? {ignoredKeys: Config.ignoredKeys} : {}), options);
             }
             else if (attrs.id === "featureLister") {
                 return new FeatureLister(attrs, options);
-            }
-            else if (attrs.id === "kmlimport") {
-                return new KmlImport(attrs, options);
-            }
-            else if (attrs.id === "formular") {
-                return new Formular(attrs, options);
             }
             else if (attrs.id === "colorScale") {
                 return new ColorScale(attrs, options);
@@ -349,6 +347,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "virtualcity") {
                 return new VirtualCityModel(attrs, options);
+            }
+            else if (attrs.id === "selectFeatures") {
+                return new SelectFeaturesTool(attrs, options);
             }
             return new Tool(attrs, options);
         }
@@ -395,7 +396,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         else {
             children = this.where({parentId: parentId});
         }
-        _.each(children, function (item) {
+        children.forEach(item => {
             item.setIsVisibleInTree(false);
         });
     },
@@ -436,7 +437,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         children = children.concat(additionalChildren);
 
-        _.each(children, function (child) {
+        children.forEach(child => {
             child.setIsVisibleInTree(false);
             if (child.get("type") === "folder") {
                 if (isMobile) {
@@ -444,7 +445,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 }
                 this.setAllDescendantsInvisible(child.get("id"), isMobile);
             }
-        }, this);
+        });
     },
 
     /**
@@ -455,12 +456,12 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setAllDescendantsVisible: function (parentId) {
         const children = this.where({parentId: parentId});
 
-        _.each(children, function (child) {
+        children.forEach(child => {
             child.setIsVisibleInTree(true);
             if (child.get("type") === "folder" && child.get("isExpanded")) {
                 this.setAllDescendantsVisible(child.get("id"));
             }
-        }, this);
+        });
     },
 
     /**
@@ -495,7 +496,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         descendantModels = descendantModels.reverse();
 
         // Setting each layer as selected will trigger rerender of OL canvas and displayed selected layers.
-        _.each(descendantModels, function (childModel) {
+        descendantModels.forEach(childModel => {
             childModel.setIsSelected(model.get("isSelected"));
         });
     },
@@ -536,9 +537,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setIsSelectedOnParent: function (model) {
         const layers = this.where({parentId: model.get("parentId")}),
             folderModel = this.findWhere({id: model.get("parentId")}),
-            allLayersSelected = _.every(layers, function (layer) {
-                return layer.get("isSelected") === true;
-            });
+            allLayersSelected = layers.every(layer => layer.get("isSelected") === true);
 
         if (allLayersSelected === true) {
             folderModel.setIsSelected(true);
@@ -551,24 +550,27 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     /**
      * Sets all Tools (except the legend, the given tool and the gfi,
      * if the model attribute deactivateGFI is true) to isActive=false
-     * @param {Tool} activatedToolModel Tool model that has to be activated
+     * @param {Tool} activatedToolModel Model of the Tool (Backbone) or the state of the Tool (Vue).
      * @returns {void}
      */
     setActiveToolsToFalse: function (activatedToolModel) {
         const legendModel = this.findWhere({id: "legend"}),
             activeTools = this.where({isActive: true}),
             activatedToolModels = Array.isArray(activatedToolModel) ? activatedToolModel : [activatedToolModel],
-            alwaysActiveTools = [...activatedToolModels, ...this.alwaysActiveTools, legendModel];
+            alwaysActiveTools = [...activatedToolModels, ...this.alwaysActiveTools, legendModel],
+            deactivateGFI = typeof activatedToolModel.get === "function"
+                ? activatedToolModel.get("deactivateGFI")
+                : activatedToolModel.deactivateGFI;
         let activeToolsToDeactivate = [];
 
-        if (!activatedToolModel.get("deactivateGFI")) {
+        if (!deactivateGFI) {
             alwaysActiveTools.push(this.findWhere({id: "gfi"}));
         }
 
         activeToolsToDeactivate = activeTools.filter(tool => !alwaysActiveTools.includes(tool));
         activeToolsToDeactivate.forEach((tool) => {
             tool.setIsActive(false);
-            store.commit("setToolActive", {id: tool.id, active: false});
+            store.dispatch("Tools/setToolActive", {id: tool.id, active: false});
         });
     },
 
@@ -579,13 +581,12 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     toggleDefaultTool: function () {
         const legendModel = this.findWhere({id: "legend"}),
             defaultTool = this.getDefaultTool();
-
         let activeTools = this.where({isActive: true});
 
-        activeTools = _.without(activeTools, legendModel);
+        activeTools = activeTools.filter(tool => tool !== legendModel);
         if (activeTools.length === 0 && defaultTool !== undefined) {
             defaultTool.setIsActive(true);
-            store.commit("setToolActive", {id: defaultTool.id, active: true});
+            store.dispatch("Tools/setToolActive", {id: defaultTool.id, active: true});
         }
     },
 
@@ -650,9 +651,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      */
     resetLayerIndeces: function (layers) {
         // we start indexing at 1 because 0 is defined as newly selected layer
-        _.each(layers, function (oLayerModel, newSelectionIndex) {
+        layers.forEach((oLayerModel, newSelectionIndex) => {
             oLayerModel.setSelectionIDX(newSelectionIndex + 1);
-        }, this);
+        });
         return layers;
     },
 
@@ -738,9 +739,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     updateLayerView: function () {
         const sortedLayers = this.getSortedTreeLayers();
 
-        _.each(sortedLayers, function (layer) {
+        sortedLayers.forEach(layer => {
             Radio.trigger("Map", "addLayerToIndex", [layer.get("layer"), layer.get("selectionIDX")]);
-        }, this);
+        });
 
         return sortedLayers;
     },
@@ -753,7 +754,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setIsSettingVisible: function (value) {
         const models = this.where({type: "layer"});
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             model.setIsSettingVisible(value);
         });
     },
@@ -794,23 +795,23 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (paramLayers.length > 0) {
             itemIsVisibleInMap = Radio.request("Parser", "getItemsByAttributes", {isVisibleInMap: true});
-            _.each(itemIsVisibleInMap, function (layer) {
+            itemIsVisibleInMap.forEach(layer => {
                 layer.isVisibleInMap = false;
                 layer.isSelected = false;
-            }, this);
+            });
 
-            _.each(paramLayers, function (paramLayer) {
+            paramLayers.forEach(paramLayer => {
                 lightModel = Radio.request("Parser", "getItemByAttributes", {id: paramLayer.id});
 
-                if (_.isUndefined(lightModel) === false) {
+                if (lightModel !== undefined) {
                     this.add(lightModel);
                     this.setModelAttributesById(paramLayer.id, {isSelected: true, transparency: paramLayer.transparency});
                     // selektierte Layer werden automatisch sichtbar geschaltet, daher muss hier nochmal der Layer auf nicht sichtbar gestellt werden
-                    if (paramLayer.visibility === false && _.isUndefined(this.get(paramLayer.id)) === false) {
+                    if (paramLayer.visibility === false && this.get(paramLayer.id) !== undefined) {
                         this.get(paramLayer.id).setIsVisibleInMap(false);
                     }
                 }
-            }, this);
+            });
             this.addModelsByAttributes({typ: "Oblique"});
         }
         else {
@@ -831,11 +832,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     mergeParamsToLightModels: function (lightModels, paramLayers) {
         lightModels.reverse();
         // Merge die parametrisierten Einstellungen an die geparsten Models
-        if (_.isUndefined(paramLayers) === false && paramLayers.length !== 0) {
-            _.each(lightModels, function (lightModel) {
-                const hit = _.find(paramLayers, function (paramLayer) {
-                    return paramLayer.id === lightModel.id;
-                });
+        if (paramLayers !== undefined && paramLayers.length !== 0) {
+            lightModels.forEach(lightModel => {
+                const hit = paramLayers.find(paramLayer => paramLayer.id === lightModel.id);
 
                 if (hit) {
                     lightModel.isSelected = hit.visibility;
@@ -858,7 +857,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     setModelAttributesById: function (id, attrs) {
         const model = this.get(id);
 
-        if (_.isUndefined(model) === false) {
+        if (model !== undefined) {
             model.set(attrs);
         }
     },
@@ -925,7 +924,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     */
     scrollToLayer: function (overlayerName) {
         const $Overlayer = $("#Overlayer"),
-            element = _.findWhere($Overlayer.find("span"), {title: overlayerName});
+            element = $Overlayer.find("span").toArray().find(layer => layer.title === overlayerName);
+
         let overlayOffsetToTop,
             overlayerHeight,
             elementOffsetFromTop,
@@ -960,7 +960,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         this.add(lightSiblingsModels);
         // Abbruchbedingung
-        if (_.isUndefined(parentModel) === false && parentModel.id !== "tree") {
+        if (parentModel !== undefined && parentModel.id !== "tree") {
             this.addAndExpandModelsRecursive(parentModel.parentId);
             this.get(parentModel.id).setIsExpanded(true);
         }
@@ -973,11 +973,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     toggleCatalogs: function (id) {
-        _.each(this.where({parentId: "tree"}), function (model) {
+        this.where({parentId: "tree"}).forEach(model => {
             if (model.get("id") !== id && !model.get("isAlwaysExpanded")) {
                 model.setIsExpanded(false);
             }
-        }, this);
+        });
     },
 
     /**
@@ -986,14 +986,14 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     * @return {void}
     */
     removeModelsByParentId: function (parentId) {
-        _.each(this.where({parentId: parentId}), function (model) {
+        this.where({parentId: parentId}).forEach(model => {
             if (model.get("type") === "layer" && model.get("isVisibleInMap") === true) {
                 model.setIsVisibleInMap(false);
             }
             model.setIsVisibleInTree(false);
 
             this.remove(model);
-        }, this);
+        });
     },
 
     /**
@@ -1031,13 +1031,13 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @returns {Object} model
      */
     retrieveGroupModel: function (attributes) {
-        const layerId = _.isObject(attributes) ? attributes.id : attributes,
+        const layerId = typeof attributes === "object" ? attributes.id : attributes,
             groupModels = this.filter(function (model) {
                 return model.get("typ") === "GROUP";
             });
 
-        return _.find(groupModels, function (groupModel) {
-            return _.find(groupModel.get("children"), function (child) {
+        return groupModels.find(groupModel => {
+            return groupModel.get("children").find(child => {
                 return child.id === layerId;
             });
         });
@@ -1094,10 +1094,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     getModelById: function (id) {
         let model = this.get(id);
 
-        if (_.isUndefined(model)) {
-            model = _.find(this.retrieveGroupModel(id).get("layerSource"), function (child) {
-                return child.get("id") === id;
-            });
+        if (model === undefined) {
+            model = this.retrieveGroupModel(id).get("layerSource").find(child => child.get("id") === id);
         }
         return model;
     },

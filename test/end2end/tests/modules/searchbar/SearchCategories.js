@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
-    {reclickUntilNotStale} = require("../../../library/utils"),
+    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../library/utils"),
     {getCenter, setCenter, getResolution, setResolution, hasVectorLayerLength, hasVectorLayerStyle} = require("../../../library/scripts"),
     {isDefault} = require("../../../settings"),
     {By, until} = webdriver;
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function SearchCategories ({builder, url, resolution}) {
+async function SearchCategories ({builder, url, resolution, capability}) {
     const testIsApplicable = isDefault(url); // only default config has sufficiently configured search bar for test
 
     if (testIsApplicable) {
@@ -90,6 +90,10 @@ async function SearchCategories ({builder, url, resolution}) {
             before(async function () {
                 const searchInputSelector = By.css("#searchInput");
 
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
                 await driver.wait(until.elementLocated(searchInputSelector));
                 searchInput = await driver.findElement(searchInputSelector);
@@ -101,6 +105,11 @@ async function SearchCategories ({builder, url, resolution}) {
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

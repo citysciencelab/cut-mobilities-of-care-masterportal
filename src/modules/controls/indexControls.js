@@ -29,19 +29,10 @@ export default {
             attributions: Attributions,
             backForward: BackForward,
             fullScreen: FullScreen,
-            get "overviewmap" () {
-                console.warn("'overviewmap' is deprecated. Please use 'overviewMap' instead.");
-                return OverviewMap;
-            },
             overviewMap: OverviewMap,
-            get "totalview" () {
-                console.warn("'totalview' is deprecated. Please use 'totalView' instead.");
-                return TotalView;
-            },
             totalView: TotalView,
             zoom: Zoom,
             freeze: Freeze
-
         },
         // config.json.md control keys where the matching element is to be hidden in mobile mode
         mobileHiddenControls: [
@@ -52,7 +43,7 @@ export default {
             "totalView",
             "freeze"
         ],
-        bottomControls: ["attributions", "overviewmap", "overviewMap"]
+        bottomControls: ["attributions", "overviewMap"]
     },
     mutations,
     getters

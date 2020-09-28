@@ -4,29 +4,39 @@ const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {losesCenter} = require("../../../../../../test/end2end/library/utils"),
     {isMaster, isCustom, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button, until} = webdriver;
 
 /**
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function TotalViewTests ({builder, url, resolution, browsername}) {
+function TotalViewTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = (isMaster(url) || isCustom(url)) && // only active here
         !isMobile(resolution); // not visible on mobile devices
 
     if (testIsApplicable) {
-        describe("Modules Controls TotalView", function () {
+        describe("Modules Controls TotalView", () => {
             let driver, totalViewButton;
 
-            before(async function () {
+            before(async () => {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
-            after(async function () {
+            after(async () => {
+                if (capability) {
+                    driver.session_.then(sessionData => {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 
-            it("should have a total view button", async function () {
+            it("should have a total view button", async () => {
                 await driver.wait(until.elementLocated(By.css(".total-view-button")), 9000);
                 totalViewButton = await driver.findElement(By.css(".total-view-button"));
 
@@ -34,7 +44,7 @@ function TotalViewTests ({builder, url, resolution, browsername}) {
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("should reset position on click after panning", async function () {
+            (isChrome(browsername) ? it.skip : it)("should reset position on click after panning", async () => {
                 const center = await driver.executeScript(getCenter),
                     viewport = await driver.findElement(By.css(".ol-viewport"));
 

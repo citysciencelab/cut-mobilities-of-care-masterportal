@@ -24,14 +24,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             it("should take the given dummy instead of creating a new instance of SensorThingsMqtt", function () {
                 const api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", "foo", "noSingletonOpt");
 
-                expect(api.getSensorThingsMqtt()).to.equal("foo");
-                expect(api.getMqttClient()).to.be.false;
-            });
-            it("should create a new instance of SensorThingsMqtt on construction if no dummy was given", function () {
-                const api = new TrafficCountApi("httpHost", "sensorThingsVersion", {host: "foo"}, "sensorThingsHttpOpt", false, "noSingletonOpt");
-
-                expect(api.getSensorThingsMqtt().constructor.name).to.equal("SensorThingsMqtt");
-                expect(api.getMqttClient().constructor.name).to.equal("SensorThingsMqttClient");
+                expect(api.getMqttClient()).to.equal("foo");
             });
         });
 
@@ -52,31 +45,13 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         });
 
         describe("TrafficCountApi.constructor: SensorThingsMqttClient", function () {
-            it("should use the given mqtt options to get the client from SensorThingsMqtt", function () {
-                let lastMqttOptions = false;
-                const dummySensorThingsMqtt = {
-                        connect: (mqttOptions) => {
-                            lastMqttOptions = mqttOptions;
-
-                            return "baz";
-                        }
-                    },
-                    api = new TrafficCountApi("httpHost", "sensorThingsVersion", {"foo": "bar"}, "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt");
-
-                expect(lastMqttOptions).to.deep.equal({"foo": "bar"});
-                expect(api.getMqttClient()).to.equal("baz");
-            });
             it("should set the on message event with an event", function () {
                 let lastEventName = false,
                     lastCallback = false;
                 const dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            on: (eventName, callback) => {
-                                lastEventName = eventName;
-                                lastCallback = callback;
-                            }
-                        };
+                    on: (eventName, callback) => {
+                        lastEventName = eventName;
+                        lastCallback = callback;
                     }
                 };
 
@@ -88,12 +63,8 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             it("should set the on message event with an event(topic, payload) that will give payload to all callbacks stored in subscriptionTopics[topic]", function () {
                 let lastCallback = false;
                 const dummySensorThingsMqtt = {
-                        connect: () => {
-                            return {
-                                on: (eventName, callback) => {
-                                    lastCallback = callback;
-                                }
-                            };
+                        on: (eventName, callback) => {
+                            lastCallback = callback;
                         }
                     },
                     api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt"),
@@ -241,13 +212,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             let lastTopic = false,
                 lastMqttOptions = false;
             const dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", "sensorThingsHttpOpt", dummySensorThingsMqtt, "noSingletonOpt");
@@ -352,6 +319,101 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         });
     });
 
+    describe("TrafficCountApi.updateDirection", function () {
+        it("updateDirection: should build a correct url and call it via given http dummy", function () {
+            let lastOnupdate = false,
+                lastOnstart = false,
+                lastOncomplete = false,
+                lastOnerror = false,
+                lastUrl = false;
+            const dummySensorThingsHttp = {
+                    get: (url, onupdate, onstart, oncomplete, onerror) => {
+                        lastUrl = url;
+                        lastOnupdate = onupdate;
+                        lastOnstart = onstart;
+                        lastOncomplete = oncomplete;
+                        lastOnerror = onerror;
+                    }
+                },
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
+
+            api.updateDirection("thingId", "onupdate", "onerror", "onstart", "oncomplete");
+
+            expect(lastUrl).to.equal("httpHost/sensorThingsVersion/Things(thingId)");
+            expect(typeof lastOnupdate === "function").to.be.true;
+            expect(lastOnerror).to.equal("onerror");
+            expect(lastOnstart).to.equal("onstart");
+            expect(lastOncomplete).to.equal("oncomplete");
+        });
+        it("updateDirection: should call onupdate with the property child element 'richtung' of the first element in the received payload", function () {
+            let getDirection = "";
+            const dummySensorThingsHttp = {
+                    get: (url, onupdate) => {
+                        onupdate([{
+                            properties: {
+                                richtung: "2"
+                            }
+                        }]);
+                    }
+                },
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
+
+            api.updateDirection(false, direction => {
+                getDirection = direction;
+            });
+
+            expect(getDirection).to.equal("2");
+        });
+        it("updateDirection: should call onerror with an error message if no property child element 'richtung' was found on the first element in the received payload", function () {
+            let getError = false;
+            const dummySensorThingsHttp = {
+                    get: false
+                },
+                api = new TrafficCountApi("httpHost", "sensorThingsVersion", "mqttOptions", dummySensorThingsHttp, "sensorThingsMqttOpt", "noSingletonOpt");
+
+            getError = false;
+            dummySensorThingsHttp.get = (url, onupdate) => {
+                return onupdate([{
+                    foo: "bar"
+                }]);
+            };
+            api.updateDirection(false, false, (error) => {
+                getError = error;
+            });
+            expect(getError).to.be.a.string;
+
+            getError = false;
+            dummySensorThingsHttp.get = (url, onupdate) => {
+                onupdate(["foo"]);
+                return false;
+            };
+            api.updateDirection(false, false, (error) => {
+                getError = error;
+            });
+            expect(getError).to.be.a.string;
+
+            getError = false;
+            dummySensorThingsHttp.get = (url, onupdate) => {
+                onupdate("foo");
+                return false;
+            };
+            api.updateDirection(false, false, (error) => {
+                getError = error;
+            });
+            expect(getError).to.be.a.string;
+
+            getError = false;
+            dummySensorThingsHttp.get = (url, onupdate) => {
+                onupdate();
+                return false;
+            };
+            api.updateDirection(false, false, (error) => {
+                getError = error;
+            });
+            expect(getError).to.be.a.string;
+        });
+    });
+
     describe("TrafficCountApi.updateDay", function () {
         it("updateDay: should build a correct url and call it via given http dummy", function () {
             let lastOnupdate = false,
@@ -374,7 +436,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateDay("thingId", "meansOfTransport", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "dayTodayOpt");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_15-Min';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_15-Min';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -424,18 +486,14 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt"),
                 expectedTopic = "v1234/Datastreams(foo)/Observations",
-                expectedMqttOptions = {retain: 2};
+                expectedMqttOptions = {rh: 2};
 
             // hint: day === dayTodayOpt with "day" === "day"
             api.updateDay("thingId", "meansOfTransport", "2020-03-20", "onupdate", "onerror", "onstart", "oncomplete", "2020-03-20");
@@ -457,13 +515,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
@@ -590,7 +644,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateYear("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete", "2021");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Woche';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Woche';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -685,13 +739,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
@@ -831,7 +881,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateTotal("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Woche';$expand=Observations)");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Woche';$expand=Observations)");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1039,7 +1089,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                 api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
                 expectedFrom = new Date("2020-01-01 00:00:00").toISOString(),
                 expectedUntil = new Date("2021-01-01 00:00:00").toISOString(),
-                expectedUrl = "https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))";
+                expectedUrl = "https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))";
 
             api.updateHighestWorkloadDay("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete");
 
@@ -1101,7 +1151,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateHighestWorkloadWeek("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Woche';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Woche';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + ";$orderby=result DESC;$top=1))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1158,7 +1208,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateHighestWorkloadMonth("thingId", "meansOfTransport", "2020", "onupdate", "onerror", "onstart", "oncomplete");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_1-Tag';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime lt " + expectedUntil + "))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1224,7 +1274,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.updateDataset("thingId", "meansOfTransport", timeSettings, "onupdate", "onerror", "onstart", "oncomplete", "todayUntilOpt");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_interval';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime le " + expectedUntil + ";$orderby=phenomenonTime asc))");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_interval';$expand=Observations($filter=phenomenonTime ge " + expectedFrom + " and phenomenonTime le " + expectedUntil + ";$orderby=phenomenonTime asc))");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1286,13 +1336,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt"),
@@ -1306,7 +1352,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             api.updateDataset("thingId", "meansOfTransport", timeSettings, "onupdate", "onerror", "onstart", "oncomplete", "2020-03-20");
 
             expect(lastTopic).to.equal("v1234/Datastreams(foo)/Observations");
-            expect(lastMqttOptions).to.deep.equal({retain: 2});
+            expect(lastMqttOptions).to.deep.equal({rh: 2});
         });
         it("updateDataset: should resend the result with new data to onupdate anytime a subscribed message was received", function () {
             let lastDataset = false;
@@ -1455,7 +1501,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             api.subscribeLastUpdate("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
-            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport_15-Min')");
+            expect(lastUrl).to.equal("https://www.example.com/v1234/Things(thingId)?$expand=Datastreams($filter=properties/layerName eq 'meansOfTransport" + api.getLayerNameInfix() + "_15-Min')");
             expect(typeof lastOnupdate === "function").to.be.true;
             expect(lastOnerror).to.equal("onerror");
             expect(lastOnstart).to.equal("onstart");
@@ -1479,7 +1525,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
 
             expect(api.getSubscriptionTopics().hasOwnProperty(expectedTopic)).to.be.true;
         });
-        it("subscribeLastUpdate: should subscribe to a subscription topic with mqtt options retain 0 and rmSimulate true", function () {
+        it("subscribeLastUpdate: should subscribe to a subscription topic with mqtt options rh 0", function () {
             let lastTopic = false,
                 lastMqttOptions = false;
             const dummySensorThingsHttp = {
@@ -1492,13 +1538,9 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
                     }
                 },
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            subscribe: (topic, mqttOptions) => {
-                                lastTopic = topic;
-                                lastMqttOptions = mqttOptions;
-                            }
-                        };
+                    subscribe: (topic, mqttOptions) => {
+                        lastTopic = topic;
+                        lastMqttOptions = mqttOptions;
                     }
                 },
                 api = new TrafficCountApi("https://www.example.com", "v1234", {host: "foobar"}, dummySensorThingsHttp, dummySensorThingsMqtt, "noSingletonOpt");
@@ -1506,7 +1548,7 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             api.subscribeLastUpdate("thingId", "meansOfTransport", "onupdate", "onerror", "onstart", "oncomplete");
 
             expect(lastTopic).to.equal("v1234/Datastreams(foo)/Observations");
-            expect(lastMqttOptions).to.deep.equal({retain: 0, rmSimulate: true});
+            expect(lastMqttOptions).to.deep.equal({rh: 0});
         });
         it("subscribeLastUpdate: should push an event to subscriptionTopics that will hand over phenomenonTime to the given onupdate handler", function () {
             let lastDatetime = false,
@@ -1590,12 +1632,8 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
         it("unsubscribeEverything: should call unsubscribe on the given mqtt client for each topic found in subscription topics", function () {
             const unsubscribedTopics = [],
                 dummySensorThingsMqtt = {
-                    connect: () => {
-                        return {
-                            unsubscribe: (topic) => {
-                                unsubscribedTopics.push(topic);
-                            }
-                        };
+                    unsubscribe: (topic) => {
+                        unsubscribedTopics.push(topic);
                     }
                 },
                 api = new TrafficCountApi(false, false, {}, true, dummySensorThingsMqtt, "noSingletonOpt");
@@ -1618,6 +1656,55 @@ describe("tools/gfi/themes/trafficCount/trafficCountApi", function () {
             });
 
             expect(onsuccessCalled).to.be.true;
+        });
+    });
+
+    describe("downloadData", () => {
+        it("should receive a resultset with title and data", () => {
+            let lastResult = false;
+            const phenomenonTimeA = "2020-03-22T00:00:00.000Z",
+                phenomenonTimeB = "2020-03-23T12:14:30.123Z",
+                phenomenonTimeC = "2020-03-24T23:59:59.999Z",
+                dummySensorThingsHttp = {
+                    get: (url, onupdate) => {
+                        if (url === "https://www.example.com/v1234/Things(thingId)") {
+                            // updateTitle
+                            onupdate([{
+                                name: "title"
+                            }]);
+                            return;
+                        }
+
+                        onupdate([{
+                            Datastreams: [{
+                                "@iot.id": "foo",
+                                Observations: [
+                                    {result: 1, phenomenonTime: phenomenonTimeA},
+                                    {result: 2, phenomenonTime: phenomenonTimeB},
+                                    {result: 3, phenomenonTime: phenomenonTimeC}
+                                ]
+                            }]
+                        }]);
+                    }
+                },
+                api = new TrafficCountApi("https://www.example.com", "v1234", {}, dummySensorThingsHttp, true, "noSingletonOpt"),
+                timeSettings = {
+                    interval: "interval",
+                    from: "2020-03-20",
+                    until: "2020-03-30"
+                };
+
+            api.downloadData("thingId", "meansOfTransport", timeSettings, result => {
+                lastResult = result;
+            }, "onerror", "onstart", "oncomplete");
+
+            expect(lastResult).to.be.an("object");
+            expect(lastResult.title).to.equal("title");
+            expect(lastResult.data).to.be.an("object");
+            expect(lastResult.data.meansOfTransport).to.be.an("object");
+            expect(lastResult.data.meansOfTransport["2020-03-22 01:00:00"]).to.equal(1);
+            expect(lastResult.data.meansOfTransport["2020-03-23 13:14:30"]).to.equal(2);
+            expect(lastResult.data.meansOfTransport["2020-03-25 00:59:59"]).to.equal(3);
         });
     });
 });

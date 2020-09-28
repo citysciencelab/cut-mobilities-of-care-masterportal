@@ -2,10 +2,11 @@
 @background_color_2: rgba(0, 0, 0, 0.5);
 
 .sidebar {
-    height: calc(100% - 50px);
-    float: right;
+    top: 0;
+    right: 0;
+    bottom: 50px;
     display: none;
-    position: relative;
+    position: absolute;
     width: 30%;
     background-color: @background_color_1;
     z-index: 2;
@@ -45,13 +46,12 @@
 .drag-bar {
     position:absolute;
     display: inline-block;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 120px);
     line-height: calc(100vh - 50px);
     vertical-align: top;
     width:20px;
     text-align: center;
     font-size: 24px;
-    border-right: 1px solid #fafafa;
     cursor: grab;
     &:hover {
         background: rgb(250, 250, 250);

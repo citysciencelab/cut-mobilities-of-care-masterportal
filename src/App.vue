@@ -24,6 +24,7 @@ export default {
         <MainNav />
         <MapRegion class="map-region" />
         <MapModuleDebug v-if="isDevMode" />
+
         <!-- keep loader last so it's above it all -->
         <!--
             NOTE currently doesn't work in all browser since vue renders too late;
@@ -49,6 +50,7 @@ export default {
         font-size: @font_size_default;
 
         .map-region {
+            display: flex;
             flex-grow: 1;
         }
     }

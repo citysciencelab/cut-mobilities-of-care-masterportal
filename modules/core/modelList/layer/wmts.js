@@ -27,11 +27,13 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
         this.listenTo(this, "change:layerSource", () => {
-            if (this.get("optionsFromCapabilities")) {
+            const hasOptionsFromCapabilities = Boolean(this.get("optionsFromCapabilities"));
+
+            if (hasOptionsFromCapabilities) {
                 this.updateLayerSource();
             }
-            if (this.get("layerSource").getState() === "ready") {
-                // state of wmts source is ready, trigger removeloadinglayer
+            if (hasOptionsFromCapabilities && this.get("layerSource").getState() === "ready") {
+                // state of optionsFromCapabilities wmts source is ready, trigger removeloadinglayer
                 Radio.trigger("Map", "removeLoadingLayer");
             }
         });

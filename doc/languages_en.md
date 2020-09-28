@@ -60,7 +60,7 @@ For beginners we recommend a short look into JSON guides:
 ## Language Files
 
 Language files are the core of the translations. Any language needs its own translation files.
-We decided to split translations into three different files:
+We decided to split translations into two different files:
 
 1. common
 2. additional

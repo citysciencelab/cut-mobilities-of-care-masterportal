@@ -1,9 +1,9 @@
+/* eslint-disable no-process-env */
 const webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     path = require("path"),
     fse = require("fs-extra"),
     VueLoaderPlugin = require("vue-loader/lib/plugin"),
-    MomentTimezoneDataPlugin = require("moment-timezone-data-webpack-plugin"),
 
     rootPath = path.resolve(__dirname, "../"),
     addonPath = path.resolve(rootPath, "addons/"),
@@ -36,11 +36,14 @@ module.exports = function () {
             throw new Error("ERROR: WRONG ENTRY IN \"" + addonConfigPath + "\" at key \"" + addonName + "\"\nABORTED...");
         }
 
-        const addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
+        let addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
 
         if (!fse.existsSync(addonFilePath)) {
-            console.error("############\n------------");
-            throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
+            addonFilePath = path.resolve(addonPath, addonName, "store", addonEntryPoints[addonName]);
+            if (!fse.existsSync(addonFilePath)) {
+                console.error("############\n------------");
+                throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
+            }
         }
 
         addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
@@ -163,13 +166,6 @@ module.exports = function () {
             // create global constant at compile time
             new webpack.DefinePlugin({
                 ADDONS: JSON.stringify(addonsRelPaths)
-            }),
-            // import only a very limited number of timezones
-            // @see https://www.npmjs.com/package/moment-timezone-data-webpack-plugin
-            new MomentTimezoneDataPlugin({
-                matchZones: /Europe\/(Berlin|London)/,
-                startYear: 2019,
-                endYear: new Date().getFullYear()
             })
         ]
     };

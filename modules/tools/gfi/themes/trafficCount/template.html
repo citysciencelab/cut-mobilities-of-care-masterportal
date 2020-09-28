@@ -2,23 +2,24 @@
 <div>
     <div class="header">
         <div>
-            ID: <span id="title"><%= title %></span><br>
-            Art: <span id="type"><%= type %></span><br>
-            Verkehrsmittel: <span id="meansOfTransport"><%= meansOfTransport %></span>
+            <%= idLabel %> <span id="title"><%= title %></span><br>
+            <%= typeLabel %> <span id="type"><%= type %></span><br>
+            <%= meansOfTransportLabel %> <span id="meansOfTransport"><%= meansOfTransport %></span><br>
+            <%= directionLabel %> <span id="direction"><%= direction %></span>
         </div>
     </div>
     <ul class="nav nav-pills">
         <li value= "infos" class="tab-toggle active">
-            <a data-toggle="tab" href="#infos">Info</a>
+            <a data-toggle="tab" href="#infos"><%= infoLabel %></a>
         </li>
         <li value= "day" class="tab-toggle">
-            <a data-toggle="tab" href="#day">Tag</a>
+            <a data-toggle="tab" href="#day"><%= dayLabel %></a>
         </li>
         <li value= "week" class="tab-toggle">
-            <a data-toggle="tab" href="#week">Woche</a>
+            <a data-toggle="tab" href="#week"><%= weekLabel %></a>
         </li>
         <li value= "year" class="tab-toggle">
-            <a data-toggle="tab" href="#year">Jahr</a>
+            <a data-toggle="tab" href="#year"><%= yearLabel %></a>
         </li>
     </ul>
     <div class="tab-content">
@@ -26,46 +27,46 @@
             <div class="padded">
                 <table class="table table-hover table-striped">
                     <tbody>
-                        <tr colspan = "3">
-                            <td class="bold">&nbsp;</td>
-                            <td class="bold">Zeitraum</td>
-                            <td class="bold">Anzahl</td>
-                        </tr>
-                        <tr colspan = "3">
-                            <td class="bold">insgesamt seit</td>
-                            <td id="totalDesc" class="text-right"><%= totalDesc %></td>
-                            <td id="totalValue" class="text-right"><%= totalValue %></td>
-                        </tr>
-                        <tr colspan = "3">
-                            <td class="bold">seit Jahresbeginn</td>
-                            <td id="thisYearDesc" class="text-right"><%= thisYearDesc %></td>
-                            <td id="thisYearValue" class="text-right"><%= thisYearValue %></td>
-                        </tr>
-                        <tr colspan = "3">
-                            <td class="bold">im Vorjahr</td>
-                            <td id="lastYearDesc" class="text-right"><%= lastYearDesc %></td>
-                            <td id="lastYearValue" class="text-right"><%= lastYearValue %></td>
-                        </tr>
-                        <tr colspan = "3">
-                            <td class="bold">am Vortag</td>
-                            <td id="lastDayDesc" class="text-right"><%= lastDayDesc %></td>
-                            <td id="lastDayValue" class="text-right"><%= lastDayValue %></td>
-                        </tr>
-                        <tr colspan = "3">
-                            <td class="bold">Stärkster Tag im Jahr</td>
-                            <td id="highestWorkloadDayDesc" class="text-right"><%= highestWorkloadDayDesc %></td>
-                            <td id="highestWorkloadDayValue" class="text-right"><%= highestWorkloadDayValue %></td>
-                        </tr>
-                        <tr colspan = "3">
-                            <td class="bold">Stärkste Woche im Jahr</td>
-                            <td id="highestWorkloadWeekDesc" class="text-right"><%= highestWorkloadWeekDesc %></td>
-                            <td id="highestWorkloadWeekValue" class="text-right"><%= highestWorkloadWeekValue %></td>
-                        </tr>
-                        <tr colspan = "3">
-                            <td class="bold">Stärkster Monat im Jahr</td>
-                            <td id="highestWorkloadMonthDesc" class="text-right"><%= highestWorkloadMonthDesc %></td>
-                            <td id="highestWorkloadMonthValue" class="text-right"><%= highestWorkloadMonthValue %></td>
-                        </tr>
+                    <tr colspan = "3">
+                        <td class="bold">&nbsp;</td>
+                        <td class="bold"><%= period %></td>
+                        <td class="bold"><%= number %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold"><%= totalSince %></td>
+                        <td id="totalDesc" class="text-right"><%= totalDesc %></td>
+                        <td id="totalValue" class="text-right"><%= totalValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold"><%= sinceBeginningOfTheYear %></td>
+                        <td id="thisYearDesc" class="text-right"><%= thisYearDesc %></td>
+                        <td id="thisYearValue" class="text-right"><%= thisYearValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold"><%= overThePastYear%></td>
+                        <td id="lastYearDesc" class="text-right"><%= lastYearDesc %></td>
+                        <td id="lastYearValue" class="text-right"><%= lastYearValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold"><%= onThePreviousDay %></td>
+                        <td id="lastDayDesc" class="text-right"><%= lastDayDesc %></td>
+                        <td id="lastDayValue" class="text-right"><%= lastDayValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold"><%= highestDay %></td>
+                        <td id="highestWorkloadDayDesc" class="text-right"><%= highestWorkloadDayDesc %></td>
+                        <td id="highestWorkloadDayValue" class="text-right"><%= highestWorkloadDayValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold"><%= highestWeek %></td>
+                        <td id="highestWorkloadWeekDesc" class="text-right"><%= highestWorkloadWeekDesc %></td>
+                        <td id="highestWorkloadWeekValue" class="text-right"><%= highestWorkloadWeekValue %></td>
+                    </tr>
+                    <tr colspan = "3">
+                        <td class="bold"><%= highestMonth %></td>
+                        <td id="highestWorkloadMonthDesc" class="text-right"><%= highestWorkloadMonthDesc %></td>
+                        <td id="highestWorkloadMonthValue" class="text-right"><%= highestWorkloadMonthValue %></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -83,28 +84,16 @@
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="diagramCheck-day" checked>
-                <label class="form-check-label" for="diagramCheck-day">Diagramm</label>
+                <label class="form-check-label" for="diagramCheck-day"><%= diagramLabel %></label>
             </div>
             <div id="diagramday" class="trafficCountDiagramDay_<%= themeId %> padded" style="position:relative;">
-                <div class="graph-tooltip-div graph-tooltip-div-day_<%= themeId %>"></div>
+                <canvas></canvas>
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="tableCheck-day">
-                <label class="form-check-label" for="tableCheck-day">Tabelle</label>
+                <label class="form-check-label" for="tableCheck-day"><%= tableLabel %></label>
             </div>
             <div id="tableday" class="tab-pane table inactive">
-                <table class="table table-striped text-align-center table-condensed table-bordered text-nowrap">
-                    <tbody>
-                        <tr id="dayTableContentHeader" class="contentHeader">
-                        </tr>
-                        <tr id="dayTableContentCars" class="contentBody">
-                        </tr>
-                        <tr id="dayTableContentBicycles" class="contentBody">
-                        </tr>
-                        <tr id="dayTableContentTrucks" class="contentBody">
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
         <div id="week" class="graph tab-pane fade">
@@ -120,28 +109,16 @@
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="diagramCheck-week" checked>
-                <label class="form-check-label" for="diagramCheck-week">Diagramm</label>
+                <label class="form-check-label" for="diagramCheck-week"><%= diagramLabel %></label>
             </div>
             <div id="diagramweek" class="trafficCountDiagramWeek_<%= themeId %> padded" style="position:relative;">
-                <div class="graph-tooltip-div graph-tooltip-div-week_<%= themeId %>"></div>
+                <canvas></canvas>
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="tableCheck-week">
-                <label class="form-check-label" for="tableCheck-week">Tabelle</label>
+                <label class="form-check-label" for="tableCheck-week"><%= tableLabel %></label>
             </div>
             <div id="tableweek" class="tab-pane table inactive">
-                <table class="table table-striped text-align-center table-condensed table-bordered text-nowrap">
-                    <tbody>
-                        <tr id="weekTableContentHeader" class="contentHeader">
-                        </tr>
-                        <tr id="weekTableContentCars" class="contentBody">
-                        </tr>
-                        <tr id="weekTableContentBicycles" class="contentBody">
-                        </tr>
-                        <tr id="weekTableContentTrucks" class="contentBody">
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
         <div id="year" class="graph tab-pane fade">
@@ -157,37 +134,28 @@
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="diagramCheck-year" checked>
-                <label class="form-check-label" for="diagramCheck-year">Diagramm</label>
+                <label class="form-check-label" for="diagramCheck-year"><%= diagramLabel %></label>
             </div>
             <div id="diagramyear" class="trafficCountDiagramYear_<%= themeId %> padded" style="position:relative;">
-                <div class="graph-tooltip-div graph-tooltip-div-year_<%= themeId %>"></div>
+                <canvas></canvas>
             </div>
             <div class="tab-pane form-check">
                 <input type="checkbox" class="form-check-input" id="tableCheck-year">
-                <label class="form-check-label" for="tableCheck-year">Tabelle</label>
+                <label class="form-check-label" for="tableCheck-year"><%= tableLabel %></label>
             </div>
             <div id="tableyear" class="tab-pane table inactive">
-                <table class="table table-striped text-align-center table-condensed table-bordered text-nowrap">
-                    <tbody>
-                        <tr id="yearTableContentHeader" class="contentHeader">
-                        </tr>
-                        <tr id="yearTableContentCars" class="contentBody">
-                        </tr>
-                        <tr id="yearTableContentBicycles" class="contentBody">
-                        </tr>
-                        <tr id="yearTableContentTrucks" class="contentBody">
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
         <div class="tab-bottom infos">
+            <div class="indication">
+                <span><%= notice %></span>
+            </div>
             <table class="table table-striped">
                 <tbody>
-                    <tr colspan = "2">
-                        <td class="bold">letzte Aktualisierung:</td>
-                        <td class="text-right"><span id="lastUpdate"><%= lastUpdate %></span></td>
-                    </tr>
+                <tr>
+                    <td class="text-left bold"><%= lastupdateLabel %></td>
+                    <td class="text-right"><span id="lastUpdate"><%= lastUpdate %></span></td>
+                </tr>
                 </tbody>
             </table>
         </div>

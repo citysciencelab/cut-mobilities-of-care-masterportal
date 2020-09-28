@@ -8,11 +8,11 @@
 /**
  * Finds all models in the ModelList that have the layerAttribution parameter,
  * including children of group layers.
- * @param {Array} modelList list with all models
+ * @param {Array} [modelList=[]] list with all models
  * @param {Array} found already found models; used for recursion
  * @returns {Array} all models with configured layer attributions
  */
-function getModelsWithLayerAttributionsFrom (modelList, found = []) {
+function getModelsWithLayerAttributionsFrom (modelList = [], found = []) {
     modelList.forEach(model => {
         if (model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden") {
             found.push(model);

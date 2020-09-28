@@ -1,4 +1,5 @@
 import * as moment from "moment";
+import uniqueId from "../../src/utils/uniqueId.js";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -124,7 +125,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             }
         });
 
-        $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
+        $(window).on("resize", this.toggleIsViewMobile.bind(this));
         this.parseConfigFromURL();
     },
 
@@ -444,24 +445,37 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * Sorts Objects not as address.
-     * @param {Object[]} input Array with object to be sorted.
+     * @param {Object[]} [input=[]] Array with object to be sorted.
      * @param {String} first First attribute to sort by.
      * @param {String} second Second attribute to sort by.
      * @returns {Object[]} - Sorted array of objects.
      */
-    sortObjectsNonAddress: function (input, first, second) {
-        let sortedObj = input;
+    sortObjectsNonAddress: function (input = [], first, second) {
+        const sortedOjectSecond = input.sort((elementA, elementB) => this.compareInputs(elementA, elementB, second)),
+            sortedObjectFirst = sortedOjectSecond.sort((elementA, elementB) => this.compareInputs(elementA, elementB, first));
 
-        sortedObj = _.chain(input)
-            .sortBy(function (element) {
-                return element[second];
-            })
-            .sortBy(function (element) {
-                return parseInt(element[first], 10);
-            })
-            .value();
+        return sortedObjectFirst;
+    },
 
-        return sortedObj;
+    /**
+     * Compare two elements.
+     * @param {object} elementA - The first object.
+     * @param {object} elementB - The second object.
+     * @param {string|number} value - value by sort.
+     * @returns {number} Sort sequence in numbers
+     */
+    compareInputs: function (elementA, elementB, value) {
+        const firstElement = isNaN(parseInt(elementA[value], 10)) ? elementA[value] : parseInt(elementA[value], 10),
+            secondElement = isNaN(parseInt(elementB[value], 10)) ? elementB[value] : parseInt(elementB[value], 10);
+
+        if (firstElement < secondElement) {
+            return -1;
+        }
+        else if (firstElement > secondElement) {
+            return 1;
+        }
+
+        return 0;
     },
 
     /**
@@ -725,8 +739,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
         });
 
-        if (_.has(result, "CONFIG")) {
-            config = _.values(_.pick(result, "CONFIG"))[0];
+        if (result.hasOwnProperty("CONFIG")) {
+            config = result.CONFIG;
 
             if (config.slice(-5) === ".json") {
                 this.setConfig(config);
@@ -751,7 +765,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     convertArrayOfObjectsToCsv: function (data, colDeli, lineDeli) {
         const keys = Object.keys(data[0]),
-            columnDelimiter = colDeli || ",",
+            columnDelimiter = colDeli || ";",
             lineDelimiter = lineDeli || "\n";
 
         // header line
@@ -835,11 +849,11 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * Groups the elements of an array based on the given function.
      * Use Array.prototype.map() to map the values of an array to a function or property name.
      * Use Array.prototype.reduce() to create an object, where the keys are produced from the mapped results.
-     * @param {array} arr - elements to group
+     * @param {array} [arr=[]] - elements to group
      * @param {function} fn - reducer function
      * @returns {object} - the grouped object
      */
-    groupBy: function (arr, fn) {
+    groupBy: function (arr = [], fn) {
         return arr.map(typeof fn === "function" ? fn : val => val[fn]).reduce((acc, val, i) => {
             acc[val] = (acc[val] || []).concat(arr[i]);
             return acc;
@@ -852,28 +866,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {String}  a globally-unique id
      */
     uniqueId: function (prefix) {
-        const idCounter = String(this.getIdCounter());
-
-        this.incIdCounter();
-
-        return prefix ? prefix + idCounter : idCounter;
-    },
-
-    /**
-     * gets the current idCounter
-     * @returns {Integer}  the current idCounter
-     */
-    getIdCounter: function () {
-        return Util.idCounter;
-    },
-
-    /**
-     * increments the idCounter
-     * @post the static idCounter (Util.idCounter) is incremented by 1
-     * @returns {Void}  -
-     */
-    incIdCounter: function () {
-        Util.idCounter++;
+        return uniqueId(prefix);
     },
 
     /**
@@ -988,6 +981,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         const arrayWithStrings = [];
 
         array.forEach(element => arrayWithStrings.push(String(element)));
+
         return arrayWithStrings;
     },
 
@@ -1191,9 +1185,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         });
         return data;
     }
-}, {
-    // globally-unique id for Util.uniqueId([prefix]) - this is a static backbone variable (Util.idCounter)
-    idCounter: 1
 });
 
 export default Util;

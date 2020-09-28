@@ -1,18 +1,11 @@
 import * as moment from "moment";
-import {fetchFirstModuleConfig} from "../../../utils/helper.js";
+import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig.js";
 
-// Path array of possible config locations. First one found will be used.
+/** @const {String} [Path array of possible config locations. First one found will be used] */
+/** @const {object} [vue actions] */
 const configPaths = [
-    "configJson.modules.Alerting.Not.existing",
-    "configJs.modules.Alerting"
+    "configJs.alerting"
 ];
-// In case we need more than one config, we need to define that many path arrays.
-/*
-const additionalConfigPaths = [
-        "configJs.modules.Alerting.Not.existing",
-        "configJson.modules.Alerting"
-    ];
-*/
 
 /**
  * Finds an alert by hash value

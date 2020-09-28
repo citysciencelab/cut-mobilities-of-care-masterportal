@@ -16,12 +16,12 @@
         <table class="table table-striped">
             <thead>
                 <th>Kategorie</th>
-                <% _.each(years, function (year){%>
+                <% years.forEach(function (year){%>
                 <th><%=year%></th>
                 <%});%>
             </thead>
             <tbody>
-                <% _.each(rowNames, function (name) { %>
+                <% rowNames.forEach(function (name) { %>
                 <tr>
                     <% if (name === "DTV") { %>
                         <td class="kategory">DTV (Kfz/24h)</td>
@@ -35,10 +35,10 @@
                     else { %>
                         <td class="kategory">Baustelleneinfluss</td>
                     <% }
-                    _.each(years, function(year) { %>
+                    years.forEach(function(year) { %>
                         <td class="data">
-                        <% if(!_.isUndefined(_.findWhere(dataset, {year: year})[name])) {
-                        print(_.findWhere(dataset, {year: year})[name].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+                        <% if(dataset.find(function(data) {return data.year === year})[name] !== undefined) {
+                        print(dataset.find(function(data) {return data.year === year})[name].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."));
                         } %>
                         </td>
                     <% });%>

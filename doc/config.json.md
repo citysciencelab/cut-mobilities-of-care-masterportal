@@ -63,7 +63,6 @@ Konfiguration der Searchbar
 |visibleWFS|nein|**[visibleWFS](#markdown-header-portalconfigsearchbarvisiblewfs)**||Konfiguration der Suche über die sichtbaren WFS Layer.|false|
 |visibleVector|nein|**[visibleVector](#markdown-header-portalconfigsearchbarvisiblevector)**||Konfiguration der Suche über die sichtbaren WFS Layer.|false|
 |zoomLevel|nein|Integer||ZoomLevel, auf das die Searchbar maximal hineinzoomt.|false|
-|renderToDOM|nein|String||HTML-Id an diese sich die Searchbar rendert. Bei "#searchbarInMap" zeichnet sich die Searchbar auf der Karte. Wird verwendet in MeldeMichel.|true|
 |sortByName|nein|Boolean|true|Legt fest ob die Ergebnisse einer Suche alphabetisch nach Namen sortiert werden sollen|false|
 |selectRandomHits|nein|Boolean|true|Wenn `true` wird zufällig ausgewählt, welche Ergebnisse angezeigt werden sollen, wenn die Anzahl der Treffer `recomendedListLength` überschreitet. Wenn `false`, so wird die Liste an Treffern bei `recomendedListLength` abgeschnitten. Möglicherweise werden in diesem Fall trotz nur die Ergebnisse des Suchdienstes verwendet, welcher zuerst eine Liste mit Treffern zurück liefert.|false|
 
@@ -103,7 +102,10 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 |score|nein|Number|0.6|Score der die Qualität der Suchergebnisse definiert.|false|
 |suggestCount|nein|Integer|20|Anzahl der Vorschläge.|false|
 |suggestServiceId|ja|String||Id des Vorschlagsdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
-|zoomToResult|nein|Boolean||Gibt an, ob auf das Feature beim Mousehover auf die Adresse gezoomt werden soll.|false|
+|zoomToResult|nein|Boolean|false|Deprecated in 3.0.0. Bitte "zoomToResultOnHover" oder "zoomToResultOnClick" verwenden. Gibt an, ob auf das Feature beim Mousehover auf die Adresse gezoomt werden soll.|false|
+|zoomToResultOnHover|nein|Boolean|false|Gibt an, ob auf das Feature beim Mousehover auf die Adresse gezoomt werden soll.|false|
+|zoomToResultOnClick|nein|Boolean|true|Gibt an, ob auf das Feature beim Klick auf die Adresse gezoomt werden soll.|false|
+|zoomLevel|nein|Boolean|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
 
 **Beispiel**
 ```
@@ -117,7 +119,9 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
     "epsg": "EPSG:25832",
     "filter": "filter=(typ:*)",
     "score": 0.6,
-    "zoomToResult": true
+    "zoomToResultOnHover": false,
+    "zoomToResultOnClick": true,
+    "zoomLevel": 10
 }
 ```
 
@@ -536,7 +540,7 @@ Das Attribut attributions kann vom Typ Boolean oder Object sein. Wenn es vom Typ
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|zoomMode|nein|enum["none", "once", "always"]|"once"|*none* (Die Standortbestimmung ist deaktiviert.), *once* (Es wird einmalig beim Laden der Standort bestimmt und einmalig auf den Standort gezoomt.), *always* (Die Karte bleibt immer auf den Nutzerstandort gezoomt.).|false|
+|zoomMode|nein|enum["once", "always"]|"once"|Der Standort wird bestimmt und der Marker wird an- oder ausgeschaltet. Dafür ist es notwendig das Portal über **https** zu laden. Modi: *once* (Es wird einmalig auf den Standort gezoomt. ), *always* (Die Karte wird mit jedem Einschalten auf den Standort gezoomt.).|false|
 |poiDistances|nein|Boolean/Integer[]|true|Bei poiDistances=true werden die Defaultwerte verwendet. Legt fest, ob "In meiner Nähe" geladen wird und zeigt eine Liste von Features in der Umgebung an. Bei Angabe eines Array werden die darin definierten Abstände in Metern angeboten. Bei Angabe von true werden diese Abstände angeboten: [500,1000,2000].|false|
 
 **Beispiel mit poiDistances vom Typ Boolean**
@@ -910,15 +914,16 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |----|-------------|---|-------|------------|------|
 |addWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Themenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|false|
 |animation|nein|**[animation](#markdown-header-portalconfigmenutoolanimation)**||Pendleranimation als punkthafte Objekte.|false|
-|compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vektor-Features.|false|
+|compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Vergleichsmöglichkeit von Vektor-Features. Fuktioniert nur in Verbindung mit dem GFI-Theme **Schulinfo**!|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemeldet werden.|false|
-|coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
+|coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
 |extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt voraus.|false|
 |featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektorlayers auf.|false|
+|fileImport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von Dateien des Typs *.kml, *.geojson und *. gpx. Über dieses Werkzeug können solche Dateien importiert werden.|false|
 |filter|nein|**[filter](#markdown-header-portalconfigmenutoolfilter)**||Filtermodul mit dem sich Vektordaten aus WFS filtern lassen.|false|
 |gfi|nein|**[gfi](#markdown-header-portalconfigmenutoolgfi)**||Mit der GetFeatureInfo(gfi) lassen sich Informationen zu beliebigen Layern anzeigen. Dabei werden bei einem WMS die Daten über die GetFeatureInfo geladen. Bei Vektordaten (WFS, Sensor, GeoJSON usw.) werden die angezeigten Attribute aus den Daten selbst verwendet.|false|
-|kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von KML Dateien. Über dieses Werkzeug können KML Dateien importiert werden.|false|
+|kmlimport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "fileImport" verwenden.|false|
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
@@ -929,8 +934,11 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
 |saveSelection|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
 |searchByCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
+|selectFeatures|nein|**[tool](#markdown-header-portalconfigmenutool)**||Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute.|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
 |styleWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
+|styleVT|nein|**[tool](#markdown-header-portalconfigmenutool)**||Style-Auswahl zu VT-Diensten. Ermöglicht das Umschalten des Stylings eines Vector Tile Layers, wenn in der services.json mehrere Styles für ihn eingetragen sind.|false|
+|supplyCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
 |wfsFeatureFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Filtern von WFS Features. Über dieses Werkzeug können WFS features gefiltert werden. Dies setzt jedoch eine Konfiguration der "filterOptions" am WFS-Layer-Objekt voraus.|false|
 |wfst|nein|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T Modul mit dem Features visualisiert, erstellt, aktualisiert und gelöscht werden können.|false|
@@ -942,13 +950,14 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|name|ja|String||Name des Werkzeuges im Menu.|false|
+|active|nein|Boolean|false|Gibt an, ob ein Werkzeug beim starten des Portals geöffnet ist.|false|
 |glyphicon|nein|String||CSS Klasse des Glyphicons, das vor dem Toolnamen im Menu angezeigt wird.|false|
-|onlyDesktop|nein|Boolean|false|Flag, ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
 |isVisibleInMenu|nein|Boolean|true|Flag, ob das Tool unter Werkzeuge angezeigt wird.|false|
+|keepOpen|nein|Boolean|false|Flag, ob das Tool parallel zu anderen Tools geöffnet bleibt.|false|
+|name|ja|String||Name des Werkzeuges im Menu.|false|
+|onlyDesktop|nein|Boolean|false|Flag, ob das Werkzeug nur im Desktop Modus sichtbar sein soll.|false|
 |renderToWindow|nein|Boolean|true|Flag, ob das Tool beim Anklicken im frei schwebenden Fenster dargestellt werden soll.|false|
 |resizableWindow|nein|Boolean|false|Flag, ob das Tool-Fenster vergrößer-/verkleinerbar ist.|false|
-|keepOpen|nein|Boolean|false|Flag, ob das Tool parallel zu anderen Tools geöffnet bleibt.|false|
 
 **Beispiel eines Tools**
 ```
@@ -1078,7 +1087,7 @@ Liste der Einstellungen zum Überschreiben von Vektorstyles bei GFI Abfragen.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Der Filter bietet eine Vielzahl von Möglichkeiten um Vektor-Daten filtern zu können. Er kann jedoch keine geclusterten Features filtern.
+Der Filter bietet eine Vielzahl von Möglichkeiten um Vektor-Daten filtern zu können.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1221,7 +1230,7 @@ Filterregel die die Daten immer vorfiltert.
 
 #### Portalconfig.menu.tool.filter.predefinedQuery.attributeWhiteListObject
 Ein AttributeWhiteList Objekt kann entweder ein String sein, welcher den Attributnamen repräsentiert.
-Er kann aber auch ein Objekt sein.
+Er kann aber auch ein Objekt sein. Erfolgt der Eintrag als Objekt, so kann eine Umbennung der zu filternden Attribute vorgenommen werden. Der Schlüssel muss dabei der originale Attributname sein. Der zugehörige Wert ist der alternative Name.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1308,7 +1317,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 (Deprecated in 3.0.0) oder MapfishPrint 3.
+Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 (Deprecated in 3.0.0) oder MapfishPrint 3. Das Drucken von Vector Tile Layern wird nicht unterstützt, da die Druckdienste es nicht unterstützen; falls der User versucht die Anzeige zu so einem Layer zu drucken, wird ihm eine Hinweismeldung dazu angezeigt.
 
 **ACHTUNG: Backend notwendig!**
 
@@ -1415,7 +1424,7 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
 |glyphicon|nein|String|glyphicon-pencil|Symbol, welches beim Zeichnen an Stelle des Mauszeigers dargestellt wird.|false|
-|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{caption: "translate#common:modules.tools.draw.iconList.iconPoint", type: "simple_point", value: "simple_point"}, {caption: "translate#common:modules.tools.draw.iconList.iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {id: "iconLeaf", type: "glyphicon", value: "\ue103"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines Punktes hat.|false|
 
 **Beispiel**
 
@@ -1425,67 +1434,67 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
     "name": "Zeichnen / Schreiben",
     "glyphicon": "glyphicon-pencil",
     "iconList": [
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconPoint",
-			"type": "simple_point",
-			"value": "simple_point"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconLeaf",
-			"type": "glyphicon",
-			"value": "\ue103"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconCD",
-			"type": "glyphicon",
-			"value": "\ue201"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconHat",
-			"type": "glyphicon",
-			"value": "\ue233"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconFire",
-			"type": "glyphicon",
-			"value": "\ue104"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconMovie",
-			"type": "glyphicon",
-			"value": "\ue009"
-		},
-		{
-		    "caption": "translate#common:modules.tools.draw.iconList.iconFlag",
-			"type": "glyphicon",
-			"value": "\ue034"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconGlobe",
-			"type": "glyphicon",
-			"value": "\ue135"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconMusic",
-			"type": "glyphicon",
-			"value": "\ue002"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconStreet",
-			"type": "glyphicon",
-			"value": "\ue024"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
-			"type": "image",
-			"value": "/img/tools/draw/cloud.png"
-		},
-		{
-			"caption": "translate#common:modules.tools.draw.iconList.iconTent",
-			"type": "glyphicon",
-			"value": "\u26fa"
-		}
-	]
+        {
+           "id": "iconPoint",
+           "type": "simple_point",
+           "value": "simple_point"
+        },
+        {
+           "id": "iconLeaf",
+           "type": "glyphicon",
+           "value": "\ue103"
+        },
+        {
+           "id": "iconCD",
+           "type": "glyphicon",
+           "value": "\ue201"
+        },
+        {
+           "id": "iconHat",
+           "type": "glyphicon",
+           "value": "\ue233"
+        },
+        {
+           "id": "iconFire",
+           "type": "glyphicon",
+           "value": "\ue104"
+        },
+        {
+           "id": "iconMovie",
+           "type": "glyphicon",
+           "value": "\ue009"
+        },
+        {
+           "id": "iconFlag",
+           "type": "glyphicon",
+           "value": "\ue034"
+        },
+        {
+           "id": "iconGlobe",
+           "type": "glyphicon",
+           "value": "\ue135"
+        },
+        {
+           "id": "iconMusic",
+           "type": "glyphicon",
+           "value": "\ue002"
+        },
+        {
+           "id": "iconStreet",
+           "type": "glyphicon",
+           "value": "\ue024"
+        },
+        {
+           "id": "iconCloud",
+           "type": "image",
+           "value": "/img/tools/draw/cloud.png"
+        },
+        {
+           "id": "iconTent",
+           "type": "glyphicon",
+           "value": "\u26fa"
+        }
+    ]
 }
 ```
 
@@ -1497,7 +1506,8 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|caption|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
+|id|ja|String||Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Diese muss in der Sprachdatei (meistens `common`) angelegt werden unter dem Punkt `modules.tools.draw.iconList`, wobei der darauffolgende Parameter standardmäßig mit `icon` beginnen und eine repräsentative Beschreibung darstellen sollte.|false|
+|caption|nein|String||Deprecated in 3.0.0 Die Beschriftung des Symbols, welche im Auswahlmenü dargestellt wird. Ggü. der id muss hier nicht die id aus der Sprachdatei sondern der gesamte Pfad (`modules.tools.draw.iconList` + id) angegeben werden.|false|
 |type|ja|enum["glyphicon", "image", "simple_point"]||Typ des zu zeichnenden Objektes. Bei `glyphicon` wird ein Icon gezeichnet, welches dem Unicode aus `value` entspricht. Bei `image` wird ein Bild gezeichnet, welches dem PNG-Bild des Pfades aus `value` entspricht. Diese Bilder werden standardmäßig im Verzeichnis `/img/tools/draw/` abgelegt und sollten eine Seitenlänge von 96px für eine korrekte Skalierung aufweisen. Bei `simple_point` wird ein normaler Punkt gezeichnet.|false|
 |value|ja|String||Wert, des zu zeichnenden Objektes.|false|
 
@@ -1506,13 +1516,13 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 ```
 #!json
 {
-	"caption": "translate#common:modules.tools.draw.iconList.iconCloud",
+	"id": "iconCloud",
 	"type": "image",
 	"value": "/img/tools/draw/cloud.png"
 }
 
 {
-    "caption": "translate#common:modules.tools.draw.iconList.iconFire",
+    "id": "iconFire",
     "type": "glyphicon",
     "value": "\ue104"
 }
@@ -2180,6 +2190,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |Titel|ja|String||Titel des Ordners.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
 |Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
+|isFolderSelectable|nein|Boolean|true|Bewirkt, dass alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden können.|false|
 
 **Beispiel Ordner mit einem Layer**
 ```
@@ -2205,6 +2216,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
     "Ordner": [
         {
             "Titel": "Mein erster Ordner",
+            "isFolderSelectable": true,
             "Ordner": [
                 {
                     "Titel": "Mein zweiter Ordner",
@@ -2312,7 +2324,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen. ACHTUNG: Hierbei ist wichtig, dass die angegebenen ids dieselbe URL ansprechen, also den selben Dienst benutzen.|false|
+|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen. ACHTUNG: Hierbei ist wichtig, dass die angegebenen ids dieselbe URL ansprechen, also den selben Dienst benutzen. Bei Konfiguration eines Arrays von Ids ist die Angabe der minScale und maxScale in der services.json für jeden Layer notwendig.|false|
 |name|nein|String||Name des Layers.|false|
 |entities|ja|**[Entity3D](#markdown-header-themenconfiglayerentity3d)**[]||Modelle, die angezeigt werden sollen |false|
 |transparency|nein|Integer|0|Transparenz des Layers.|false|
@@ -2355,12 +2367,13 @@ Hier werden WMS typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
+|name|nein|String/String[]||Name des Layers. Falls das Attribute **styles** konfiguriert wird, muss dieses Attribute als Tpy String[] konfiguriert werden.|false|
 |attributesToStyle|nein|String[]||Array von Attributen nach denen der WMS gestylt werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |featureCount|nein|Integer|1|Anzahl der Features, die bei einer GetFeatureInfo-Abfrage zurückgegeben werden sollen.|false|
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
 |infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll.|false|
-|styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
+|styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück. In diesem Fall muss das Attribute **name** ebenfalls vom Typ String[] sein und genauso viele Einträge enthalten wie das sytle Attribute, damit zu jedem Style ein Name im Themenbaum zugeordnet werden kann.|true|
 
 **Beispiel**
 ```
@@ -2576,7 +2589,7 @@ Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der K
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), [SensorLayer](sensorThings.md).
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), [SensorLayer](sensorThings.md), und Vector Tile Layer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2588,7 +2601,9 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|false|
 |additionalInfoField|nein|String|"name"|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden, wird der Layername angegeben.|false|
 |styleId|nein|String||Id die den Style definiert. Id wird in der **[style.json](style.json.md)** aufgelöst.|false|
+|styleGeometryType|nein|String[],String||Geometrietypen für einen WFS-Style, falls nur bestimmte Geometrien eines Layers angezeigt werden sollen **[siehe dazu](style.json.md#markdown-header-abbildungsvorschriften)**.
 |hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|false|
+|vtStyles|nein|**[vtStyle](#markdown-header-themenconfiglayervectorvtstyle)**[]||Auswählbare externe Style-Definition (nur für Vector Tile Layer)|false|
 
 **Beispiel**
 ```
@@ -2660,6 +2675,27 @@ Filteroption die vom Werkzeug "wfsFeatureFilter" in **[tools](#markdown-header-p
     "filterName": "Filter_1",
     "filterString": ["*", "value1", "value2"],
     "filterType": "combo"
+}
+```
+
+#### Themenconfig.Layer.Vector.vtStyle
+Style-Definition; nur für Vector Tile Layer.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|id|ja|String||serviceübergreifend eindeutige ID|false|
+|name|ja|String||Anzeigename, z.B. für das Auswahltool|false|
+|url|ja|String||URL, von der der Style bezogen werden kann. Die verlinkte JSON muss zur [Mapbox Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/) passen.|false|
+|defaultStyle|nein|String||Falls hier `true` gesetzt ist, wird der Style initial ausgewählt, unabhängig von seinem Index; wenn das Feld nirgends auf `true` gesetzt ist, wird der erste Style benutzt|false|
+
+**Beispiel**
+```
+#!json
+{
+    "id": "EINDEUTIGE_ID",
+    "name": "Rote Linien",
+    "url": "https://example.com/asdf/styles/root.json",
+    "defaultStyle": true
 }
 ```
 

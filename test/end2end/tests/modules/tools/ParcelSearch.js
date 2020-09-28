@@ -3,6 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../library/driver"),
     {getCenter} = require("../../../library/scripts"),
     {isDefault, isCustom, isMaster} = require("../../../settings"),
+    {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
 /**
@@ -12,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ParcelSearchTests ({builder, url, resolution}) {
+async function ParcelSearchTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isDefault(url) || isCustom(url) || isMaster(url),
         withCadastral = isCustom(url);
 
@@ -37,10 +38,19 @@ async function ParcelSearchTests ({builder, url, resolution}) {
             let driver, searchMarker, districtField, parcelField, submitButton;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

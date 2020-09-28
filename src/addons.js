@@ -15,20 +15,19 @@ export default async function (config) {
         const addons = config.map(async addonKey => {
             try {
                 const entryPoint = allAddons[addonKey].replace(/\.js$/, ""),
-                    storeModule = await import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".js"),
-                    component = await import(/* webpackChunkName: "[request]" */ "../addons/" + entryPoint + ".vue");
-
-                // Add the component to vue instance globally
-                Vue.component(component.default.name, component.default);
+                    entryPointParts = entryPoint.split("/"),
+                    storeModule = await import(/* webpackChunkName: "[request]" */ "../addons/" + entryPointParts[0] + "/store/" + entryPointParts[1] + ".js"),
+                    component = await import(/* webpackChunkName: "[request]" */ "../addons/" + entryPointParts[0] + "/components/" + entryPointParts[1] + ".vue");
 
                 // Add the addonKey to a global array on vue instance
                 Vue.prototype.$addons.push(component.default.name);
 
                 // register the vuex store module
                 store.registerModule(["Tools", component.default.name], storeModule.default);
+                store.dispatch("Tools/addTool", component);
             }
             catch (e) {
-                console.warn(`The module ${addonKey} does not include a Vue-component and/or vuex-store-module. Please make sure the folder contains a ${addonKey}.vue and ${addonKey}.js file.`);
+                console.warn(`The module ${addonKey} does not include a Vue-component and/or vuex-store-module. Please make sure the folder contains a ${addonKey}.vue and ${addonKey}.js file. Maybe it is an backbone-addon.`);
             }
         });
 

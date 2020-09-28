@@ -1,4 +1,6 @@
 <script>
+import {mapGetters} from "vuex";
+
 export default {
     name: "Tool",
     props: {
@@ -38,6 +40,7 @@ export default {
         };
     },
     computed: {
+        ...mapGetters(["uiStyle"]),
         clientWidth () {
             return this.width * window.innerWidth + "px";
         }
@@ -117,7 +120,7 @@ export default {
             this.maxPosTop = el.css("top");
             this.maxPosLeft = el.css("left");
             $(".win-body-vue").hide();
-            $(".glyphicon-minus").hide();
+            el.find(".glyphicon-minus").hide();
             el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
             $(".header").addClass("header-min");
             el.draggable("disable");
@@ -222,7 +225,10 @@ export default {
 <template>
     <div
         v-if="active"
-        :class="[renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue']"
+        :class="[
+            (renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue'),
+            (uiStyle === 'TABLE' ? 'table-tool-win-all-vue': '')
+        ]"
         :style="[renderToWindow ? '' : {width: clientWidth}]"
     >
         <div
@@ -269,6 +275,7 @@ export default {
 @import "~variables";
 @color_1: rgb(85, 85, 85);
 @color_2: rgb(255, 255, 255);
+@font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
 @font_family_2: "MasterPortalFont", sans-serif;
 @background_color_1: rgb(255, 255, 255);
 @background_color_2: #e10019;
@@ -279,8 +286,7 @@ export default {
     > .header {
         padding-left: 10px;
         border-bottom: 1px solid rgb(229, 229, 229);
-        font-family: @font_family_narrow;
-        background: white;
+        font-family: @font_family_1;
         > .move {
             cursor: move;
         }
@@ -325,6 +331,11 @@ export default {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
     z-index: 999;
     max-width: 500px;
+
+    .drag-bar {
+        display:none;
+    }
+
     .header();
     > .header-min {
         background-color: @background_color_2;
@@ -352,7 +363,7 @@ export default {
     background-color: @background_color_1;
     max-height: 72vh;
 }
-.table-tool-win-all {
+.table-tool-win-all-vue {
     font-family: @font_family_2;
     border-radius: 12px;
     background-color: @background_color_4;
@@ -375,24 +386,7 @@ export default {
         }
     }
 }
-.table-tool-window {
-    transform: rotate(0deg);
-}
-.table-tool-window-90deg {
-    left: 20px;
-    transform: rotate(90deg);
-}
-.table-tool-window-180deg {
-    top: 20px;
-    left: 20px;
-    margin-bottom: 30px;
-    transform: rotate(180deg);
-}
-.table-tool-window-270deg {
-    top: 40px;
-    margin-bottom: 30px;
-    transform: rotate(270deg);
-}
+
 .sidebar-vue {
     float: left;
     display: block;

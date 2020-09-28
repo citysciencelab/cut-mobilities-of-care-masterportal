@@ -39,10 +39,8 @@ const GazetteerModel = Backbone.Model.extend({
         this.listenTo(Radio.channel("Gaz"), {
             "findStreets": this.findStreets,
             "findHouseNumbers": this.findHouseNumbers,
-            "adressSearch": this.adressSearch
-        });
-        Radio.channel("Gaz").reply({
             "adressSearch": this.adressSearch,
+            "streetsWithoutHouseNumberSearch": this.streetsWithoutHouseNumberSearch,
             "streetsSearch": this.streetsSearch
         });
 
@@ -148,7 +146,7 @@ const GazetteerModel = Backbone.Model.extend({
             houseNumbers = [];
         let sortedHouseNumbers = null;
 
-        hits.each(function (i, hit) {
+        hits.toArray().forEach(hit => {
             houseNumbers.push({
                 position: $(hit).find("gml\\:pos,pos")[0].textContent,
                 number: $(hit).find("dog\\:hausnummer,hausnummer")[0].textContent,
@@ -172,13 +170,24 @@ const GazetteerModel = Backbone.Model.extend({
     adressSearch: function (adress) {
         if (adress.affix && adress.affix !== "") {
             this.setTypeOfRequest("adress1");
-            this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber) + "&zusatz=" + encodeURIComponent(adress.affix), this.triggerGetAdress, this.get("typeOfRequest"));
+            this.sendRequest("StoredQuery_ID=AdresseMitZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber) + "&zusatz=" + encodeURIComponent(adress.affix.toLowerCase()), this.triggerGetAdress, this.get("typeOfRequest"));
         }
         else {
             this.setTypeOfRequest("adress2");
             this.sendRequest("StoredQuery_ID=AdresseOhneZusatz&strassenname=" + encodeURIComponent(adress.streetname) + "&hausnummer=" + encodeURIComponent(adress.housenumber), this.triggerGetAdress, this.get("typeOfRequest"));
         }
     },
+
+    /**
+    * Search for streets without subsequent search for house numbers.
+    * @param {Object} adress - Addressobject
+    * @param {string} adress.streetname - Streetname
+    * @returns {void}
+    */
+    streetsWithoutHouseNumberSearch: function (adress) {
+        this.sendRequest("StoredQuery_ID=findeStrasse&strassenname=" + encodeURIComponent(adress.streetname), this.triggerGetStreetsWithoutHouseNumber, this.get("typeOfRequest"));
+    },
+
     streetsSearch: function (adress) {
         this.setTypeOfRequest("searchHouseNumbers1");
         this.sendRequest("StoredQuery_ID=HausnummernZuStrasse&strassenname=" + encodeURIComponent(adress.name), this.triggerGetStreets, this.get("typeOfRequest"));
@@ -225,6 +234,7 @@ const GazetteerModel = Backbone.Model.extend({
 
         $("#searchInput").val(this.get("searchString"));
     },
+
     /**
     * @description Methode zur Weiterleitung der adressSearch
     * @param {xml} data - Response
@@ -232,6 +242,15 @@ const GazetteerModel = Backbone.Model.extend({
     */
     triggerGetAdress: function (data) {
         Radio.trigger("Gaz", "getAdress", data);
+    },
+
+    /**
+    * Send street data via radio
+    * @param {xml} data - Response
+    * @returns {void}
+    */
+    triggerGetStreetsWithoutHouseNumber: function (data) {
+        Radio.trigger("Gaz", "getStreetsWithoutHouseNumber", data);
     },
 
     /**

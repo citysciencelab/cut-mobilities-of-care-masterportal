@@ -99,8 +99,10 @@ Ruft man initial nur den relevanten Bereich vom Server ab, kann sich dies positi
 
 
 ### Die REST API - mqtt ###
-Das mqtt Protokoll wurde für das Intenet of Things (IoT) entwickelt. Es hält eine bidirektionale Verbindung zum Server offen und kommuniziert über pull- und push-Nachrichten.
-Die meisten Browser-Implementierungen nutzen unter dem mqtt Protokoll socket.io, da Browser direktes mqtt normalerweise nicht können. Das mqtt-Paket von npm ist ein gutes Beispiel für eine solche Implementierung.
+Das mqtt Protokoll wurde für das Intenet of Things (IoT) entwickelt.
+Es hält eine bidirektionale Verbindung zum Server offen und kommuniziert über pull- und push-Nachrichten.
+Die meisten Browser-Implementierungen nutzen unter dem mqtt Protokoll socket.io, da Browser direktes mqtt normalerweise nicht können.
+Das mqtt-Paket von npm ist ein gutes Beispiel für eine solche Implementierung.
 
 Mithilfe des mqtt Protokolls abonniert der Client (Browser) ein Topic (Thema).
 Ein Topic verweist mithilfe eines REST Pfads auf eine Entität (die Tabellen aus dem Daten-Model), über deren Änderung informiert werden soll (z.B. "v1.0/Datastreams(74)/Observations").
@@ -115,33 +117,14 @@ Wie bereits erwähnt, sind Topics reine REST Pfade ohne Query. Beispiel:
  - dies kann man abonnieren: mqtt://iot.hamburg.de/v1.0/Datastreams(74)/Observations
  - dies kann man nicht abonnieren: mqtt://iot.hamburg.de/v1.0/Datastreams(74)?$expand=Observations
 
-Die aktuelle mqtt Version im Masterportal ist: 3.1.1
+Aktuelle mqtt Versionen:
 
- - Informationen zu mqtt 3.1.1: [https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html)
- - Informationen zu mqtt 5.0.0: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html)
-
-
-
-### mqtt - Retained Messages ###
-
-Laut mqtt Protokoll muss ein Publisher (Sensor) dem Broker (Server) mitteilen, wenn er selten Aktualisierungen vornimmt.
-Der Publisher motiviert den Broker dazu seine jeweils letzte Nachricht im Arbeitsspeicher zu halten, um sie neu abonnierenden Clients direkt zur Verfügung zu stellen, da er selbst erst in später Zukunft wieder von sich hören lassen wird.
-Hat ein Publisher hingegen eine hohe Nachrichten-Frequenz (z.B. jede Sekunde), teilt er dem Broker mit, dass sich ein Bereithalten seiner Nachrichten nicht lohnt, da er eh sofort die nächste schickt.
-
-Als *Retained Messages* werden solche Nachrichten bezeichnet, die der Broker zwar ganz normal im Permaspeicher speichert, die jedoch zusätzlich im Arbeitsspeicher für künftige Abonnements bereit hält.
-Würde es keine *Retained Messages* geben, würden immer nur gerade empfangene Nachrichten vom Broker an die abonnierten Clients gesendet.
-
- - Mehr Informationen zu *Retained Messages* wie der Publisher sie vom Broker verlangt: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901104](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901104)
- - Mehr Informationen zu *Retained Messages* wie der Client sie vom Broker verlangt: [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440)
+ - mqtt v3.1:   [http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/mqtt-v3r1.html](http://public.dhe.ibm.com/software/dw/webservices/ws-mqtt/mqtt-v3r1.html)
+ - mqtt v3.1.1: [https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html)
+ - mqtt v5.0:   [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html)
 
 
 
-### FROST Server und Retained Messages ###
-Der FROST Server unterstützt aktuell keine *Retained Messages*.
-Wenn Sie beim Abonnement eines Topics die letzte Nachricht empfangen möchten, die der Broker für dieses Topic erhalten hat, müssen Sie diese Nachricht über einen anderen Weg abrufen.
-Dies ist immer der Fall - unabhängig davon was der Publisher dem Broker zur Behandlung seiner Nachrichten als *Retained Messages* mitteilt.
-
-Um das Problem fehlender *Retained Messages* zu lösen, haben wir für das Masterportal eine Software-Schicht implemntiert die *Retained Messages* simulieren kann. Diese Software-Schicht heißt **[sensorThingsMqtt](#sensorthingsmqtt)**.
 
 
 
@@ -149,9 +132,9 @@ Um das Problem fehlender *Retained Messages* zu lösen, haben wir für das Maste
 ## SensorThingsHttp ##
 Die SensorThingsAPI sieht ein automatisches Splitten von zu großen Server-Antworten vor.
 Bietet der Broker (Server) diese Funktion an, kann sie u.a. dafür genutzt werden den aktuellen Fortschritt (Progress) des Aufrufes in der UI darzustellen (siehe [Automatisches Splitten](#markdown-header-automatisches-splitten)).
-Die Antwort des Servers kann zusätzlich auf einen bestimmten Karten-Ausschnitt (z.B. der Extent des Browsers) eingegrenzt werden. Hierdurch wird die Server-Antwort kleiner (siehe [Automatischer Aufruf im Karten-Ausschnitt](#markdown-header-automatischer-aufruf-im-karten-ausschnitt)).
+Die Antwort des Servers kann zusätzlich auf einen bestimmten Karten-Ausschnitt (z.B. der Extent des Browsers) eingegrenzt werden. Hierdurch wird die Last auf der Datenbank und die Server-Antwort kleiner (siehe [Automatischer Aufruf im Karten-Ausschnitt](#markdown-header-automatischer-aufruf-im-karten-ausschnitt)).
 
-Für das Masterportal haben wir eine Software-Schicht *SensorThingsHttp* implementiert, die den Aufruf und das Splitting für Sie übernimmt.
+Für das Masterportal haben wir eine Software-Schicht *SensorThingsHttp* implementiert, die den Aufruf im Extent des Browsers und das Splitting für Sie übernimmt.
 
 *Hinweis: Bitte beachten Sie, dass das Splitten der Antwort und der Abruf des aktuellen Karten-Ausschnittes nur verfügbar ist, wenn Ihr Server (z.B. FROST Server) entsprechend aufgesetzt ist.*
 
@@ -178,33 +161,34 @@ const http = new SensorThingsHttp(),
     url = "https://iot.hamburg.de/v1.0/Things";
 
 http.get(url, function (response) {
-    // on success
+    // onsuccess
     // do something with the total response
-
 }, function () {
-    // on start
+    // onstart
     Radio.trigger("Util", "showLoader");
-
 }, function () {
-    // on complete (always called)
+    // oncomplete (always called)
     Radio.trigger("Util", "hideLoader");
-
 }, function (error) {
-    // on error
+    // onerror
     console.warn(error);
-
 }, function (progress) {
-    // on wait
+    // onprogress
     // the progress (percentage = Math.round(progress * 100)) to update your progress bar with
-
 });
 
 ```
 
 Bitte beachten Sie, dass *SensorThingsHttp.get()* asynchron arbeitet. Alle Parameter (die vielen Funktionen) sind optional - außer "url". Natürlich macht es Sinn zumindest den onsuccess-Callback mit zu übergeben um an die Response zu kommen.
 
-Hinweis: Es gibt einen optionalen siebten Parameter (httpClient), der benutzt werden kann um den intern verwendeten default Http-Client zu ersetzen.
-Für den Fall, dass Sie einen eigenen Http-Client vorziehen (intern wird axios verwendet) oder eigene Tests schreiben wollen ist eine Funktion mit drei Parametern als Http-Client nötig: function (url, onsuccess, onerror).
+
+### Konfiguration SensorThingsHttp ###
+Die SensorThingsHttp-Klasse kann beim Erstellen einer neuen Instanz mit folgenden Parametern konfiguriert werden:
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|removeIotLinks|Nein|Boolean|false|entfernt alle Vorkommen von "@iot.navigationLink" und "@iot.selfLink" aus dem Response um das Ergebnis schlank zu halten|const http = new SensorThingsHttp({removeIotLinks: true});|
+|httpClient|Nein|Function|null|Für den Fall, dass Sie einen eigenen Http-Client vorziehen (intern wird axios verwendet) oder eigene Tests schreiben wollen ohne eine externe Schnittstelle aufrufen zu müssen.|const http = new SensorThingsHttp({httpClient: (url, onsuccess, onerror) => {}});|
 
 
 
@@ -231,6 +215,101 @@ Im Datensatz finden Sie den angesprochenen Wert "@iot.nextLink", der auf den nä
 
 Rufen Sie den nächsten Link auf ([https://iot.hamburg.de/v1.0/Things?$skip=100](https://iot.hamburg.de/v1.0/Things?$skip=100)) wird Ihnen ein weiterer Datensatz mit einem "@iot.nextLink" geschickt, usw.
 Das Ende erkennen Sie daran, dass der "@iot.nextLink" fehlt.
+
+
+### Komplexe Strukturen mit @iot.nextLink ###
+Wenn Sie nicht auf die Software-Schicht *SensorThingsHttp* angewiesen sein möchten um mit komplexen Strukturen umzugehen, folgt nun eine Erläuterung auf welchen Mechanismus Sie achten müssen.
+
+Komplexere Aufrufe der SensorThingsApi können zu Ergebnissen mit vielen @iot.nextLink führen.
+Der FROST-Server ist in der Lage jedes gelieferte Array (auch in Unterstrukturen) zu splitten und mit einem @iot.nextLink verfolgbar zu machen.
+Diese @iot.nextLink haben initial den Key des gesplitteten Arrays als Prefix. z.B. Observations@iot.nextLink oder Datastreams@iot.nextLink.
+
+**Beispiel**
+
+Die URL [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$expand=Datastreams($top=2;$expand=Observations($top=2))) gibt Ihnen Things mit Datastreams und Observations zurück.
+(Für dieses Beispiel wird durch die Verwendung von $top=X in der Anfrage die Antwort künstlich beschnitten und die Verwendung von @iot.nextLink auf allen Ebenen erzwungen.)
+```
+#!json
+{
+    "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things?$skip=100&$expand=Datastreams%28%24top%3D2%3B%24expand%3DObservations%28%24top%3D2%29%29",
+    "value" : [ {
+        "Datastreams" : [ {
+            "Observations" : [...],
+            "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13976)/Observations?$top=2&$skip=2",
+        }, {
+            "Observations" : [...],
+            "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13978)/Observations?$top=2&$skip=2",
+        } ],
+        "Datastreams@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29",
+    }]
+}
+```
+
+Folgen wir z.B. Datastreams@iot.nextLink [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=2&$expand=Observations%28%24top%3D2%29),
+so erhalten wir wiederum eine komplexe Struktur, diesmal auf Basis des Datastreams:
+```
+#!json
+{
+    "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?$top=2&$skip=4&$expand=Observations%28%24top%3D2%29",
+    "value" : [ {
+        "Observations" : [...],
+        "Observations@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=2&$skip=2",
+    }]
+}
+```
+
+Zu beachten ist, dass Einzel-Objekte (z.B. ein Thing) ohne @iot.nextLink und ohne dem Key "value" geliefert werden. Die Regeln für Unterstrukturen mit @iot.nextLink bleiben bestehen. z.B.: [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)?$expand=Datastreams($top=2)]
+
+
+
+### Tiefenschranken für @iot.nextLink ###
+Die offensichtlichste Tiefenschranke ist die Abwesenheit eines @iot.nextLink.
+
+Es gibt aber eine zweite nicht sofort erkennbare Tiefenschranke:
+Wird eine SensorThingsAPI-Url oder ein @iot.nextLink durch die Verwendung von $top=X in der Anzahl zu übermittelnder Entitäten beschränkt, erhalten wir dennoch einen @iot.nextLink.
+Folgen wir blind allen @iot.nextLink, dann kann dies zu Kaskaden von Server-Anfragen führen. Bei $top=1 und 1000 Entitäten wären dies z.B. 1000 Netzwerk-Anfragen.
+
+Simples Beispiel: [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1]
+```
+#!json
+{
+  "@iot.nextLink" : "https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Datastreams(13980)/Observations?$top=1&$skip=1",
+  "value" : [ {...} ]
+}
+```
+
+Leider können wir nicht davon ausgehen, dass @iot.nextLink immer ignoriert werden kann, wenn eine Limitierung mit $top=X vorgenommen wird.
+Wenn das X in $top=X größer ist als die vom Server voreingestellte maximale Anzahl auszuliefernder Entitäten pro Anfrage, dann müssen wir @iot.nextLink folgen um unser Ergebnis zu komplettieren.
+
+_"In addition, if the $top value exceeds the service-driven pagination limitation (...), the $top query option SHALL be discarded and the server-side pagination limitation SHALL be imposed."_
+[https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#51](https://docs.opengeospatial.org/is/15-078r6/15-078r6.html#51)
+
+Wir müssen also jeden @iot.nextLink durchsuchen nach Vorkommen von "$top=X" bzw. "%24top=X" und "$skip=Y" bzw. "%24skip=Y" um X und Y für diese zweite sehr versteckte Tiefenschranke auswerten zu können.
+
+Zum Glück sind alle $top=X die sich nicht auf die aktuelle Sammlung von Entitäten beziehen im @iot.nextLink url codiert: z.B. "%24top%3DX"
+
+Wir können also zwischen $top=X auf Root-Ebene und $top=X auf Sub-Ebenen problemlos unterscheiden.
+Beispiel: [https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?%24top=2&%24skip=2&%24expand=Observations%28%24top%3D2%29](https://udh-hh-iot-qs.germanynortheast.cloudapp.microsoftazure.de/v1.0/Things(5432)/Datastreams?%24top=2&%24skip=2&%24expand=Observations%28%24top%3D2%29)
+
+Hier die regulären Ausdrücke um das relevante X und Y von $top=X bzw. $skip=Y aus einem @iot.nextLink zu holen:
+
+ - Regex für $top=X: /[\$|%24]top=([0-9]+)/
+ - Regex für $skip=X: /[\$|%24]skip=([0-9]+)/
+
+Und hier der Pseudo-Code um eine Tiefenschranke mit $top=X und $skip=Y zu bauen:
+
+```
+// pseudo code, nextLink wird angenommen
+int topX = fetchTopFromNextLink(nextLink);
+int skipX = fetchSkipFromNextLink(nextLink);
+
+if (topX > 0 && topX <= skipX) {
+    // diesem @iot.nextLink nicht mehr folgen (Tiefenschranke erreicht)
+}
+```
+
+
+
 
 
 ### Aufruf mit "@iot.count" ###
@@ -375,191 +454,266 @@ const extent = Radio.request("MapView", "getCurrentExtent"),
 
 
 
-## sensorThingsMqtt ##
-Der FROST Server unterstützt aktuell keine *Retained Messages*.
-Das Masterportal bietet Ihnen eine eigene mqtt Software Schicht an die *Retained Messages* simulieren kann.
-So können Sie verhindern, dass Sie Ihre eigene Software Architektur wegen fehlender *Retained Messages* im mqtt Protokoll umbauen müssen.
-Die *sensorThingsMqtt*-Schicht lässt sich wie das npm-Paket mqtt bedienen.
+## SensorThingsMqtt ##
+Die Software-Schicht SensorThingsMqtt des Masterportals unterstützt mqtt der Versionen 3.1, 3.1.1 und 5.0.
+Die Version muss SensorThingsMqtt im Constructor mit angegeben werden, daher ist es nötig, dass Sie die mqtt-Version kennen, auf der Ihr Server läuft.
 
-
-
-### Wie man mqtt implementiert ###
-Hier ein einfaches Beispiel zur Implementierung des npm-Paketes mqtt mit Javascript:
+Hier ein funktionierendes Beispiel für mqtt 5.0:
 
 ```
 #!javascript
 
-import mqtt from "mqtt";
+import {SensorThingsMqtt} from "./sensorThingsMqtt";
 
-const client = mqtt.connect({
-    host: "iot.example.com",
-    protocol: "mqtt",
-    path: "/"
-});
-
-client.on("connect", function () {
-    client.subscribe("v1.0/Datastreams(74)/Observations", {
-        qos: 0,
-        retain: 0
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: "wss://iot.hamburg.de/mqtt",
+        mqttVersion: "5.0",
+        context: this
     });
+
+mqtt.on("message", (topic, message, packet) => {
+    // handler
+    console.log("received message:", topic, message, packet);
+}, error => {
+    // onerror
+    console.warn(error);
 });
 
-client.on("message", function (topic, payload) {
-    if (topic === "v1.0/Datastreams(74)/Observations") {
-        // note that payload is an Uint8Array and needs to be converted to JSON first
-        const jsonPayload = JSON.parse(payload);
+mqtt.subscribe("v1.0/Datastreams(1234)/Observations", {
+    rh: 0
+}, () => {
+    // onsuccess
+    console.log("success");
+}, error => {
+    // onerror
+    console.warn(error);
+});
+```
 
-        // do something with jsonPayload
+
+Hier ein funktionierendes Beispiel für 3.1 und 3.1.1:
+
+```
+#!javascript
+
+import {SensorThingsMqtt} from "./sensorThingsMqtt";
+
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: "wss://iot.hamburg.de/mqtt",
+        // mqttVersion: "3.1",
+        mqttVersion: "3.1.1",
+        rhPath: "https://iot.hamburg.de",
+        context: this
+    });
+
+mqtt.on("message", (topic, message, packet) => {
+    // handler
+    console.log("received message:", topic, message, packet);
+}, error => {
+    // onerror
+    console.warn(error);
+});
+
+mqtt.subscribe("v1.0/Datastreams(1234)/Observations", {
+    rh: 0
+}, () => {
+    // onsuccess
+    console.log("success");
+}, error => {
+    // onerror
+    console.warn(error);
+});
+```
+
+Bitte beachten Sie, dass Nachrichten nicht beim "subscribe" erhalten werden, sondern immer über das on(message)-Event angeliefert werden.
+Im on(message)-Event müssen Sie Ihren Prozessen die Nachrichten anhand des mitgelieferten Topics zuspielen.
+
+
+
+
+
+
+### Konfiguration - Constructor ###
+Die SensorThingsMqtt-Schicht wird wie eine normale Klasse per Constructor instanziiert.
+Beim Instanziieren wird im Hintergrund die mqtt-Verbindung zum Server geöffnet.
+Pro Instanz gibt es Eine Verbindung, konfiguriert werden muss die Verbindung über den Constructor.
+
+|name|mandatory|type|default|description|example|
+|----|---------|----|-------|-----------|-------|
+|mqttUrl|yes|String|""|Die Url zum mqtt Service Ihres Servers.|"wss://iot.hamburg.de/mqtt"|
+|mqttVersion|no|String|"3.1.1"|Die mqtt Version auf der Ihr Server läuft.|"3.1", "3.1.1", "5.0"|
+|rhPath|no|String|""|Benötigt für 3.1 und 3.1.1, um eine Simulation vom "Retained Handling" durchzuführen.|"https://iot.hamburg.de"|
+|context|Nein|JavaScript Scope|Der Scope in dem die Events ausgeführt werden.|Wenn hier *this* eingetragen wird, kann *this* in den Events ohne extra binding verwendet werden.|this|
+
+
+#### mqttUrl ####
+Die mqttUrl unter der sich der Browser mit dem mqtt Service Ihres Servers verbindet.
+Die mqttUrl kann folgende Protokolle verwenden: 'mqtt', 'mqtts', 'tcp', 'tls', 'ws', 'wss'. (siehe: [https://www.npmjs.com/package/mqtt](https://www.npmjs.com/package/mqtt))
+
+
+#### mqttVersion ####
+Je nach mqttVersion unterscheiden sich interne Abläufe der SensorThingsMqtt-Schicht leicht.
+
+ - "3.1": Intern wird die protocolId "MQIsdp" benutzt (3.1.1 und 5.0 nutzen "MQTT") und die protocolVersion ist 3 (3.1.1 und 5.0 nutzen protocolVersion 4). Haben Sie einen rhPath angegeben, wird das Retained Handling simuliert.
+ - "3.1.1": Haben Sie einen rhPath angegeben, wird das Retained Handling simuliert.
+ - "5.0": Retained Handling wird nicht simuliert (rhPath braucht nicht angegeben werden, wird ignoriert), das on(disconnect)-Event ist als Feature von 5.0 verfügbar.
+
+
+#### rhPath ####
+Wenn Sie die mqtt Versionen 3.1 oder 3.1.1 verwenden, schalten Sie mit der Angabe eines rhPath die Simulation des Retained Handlings frei.
+
+Falls Sie sich fragen, wie sich dieser Pfad zusammensetzt, sehen Sie den rhPath als fehlendes Prefix eines Topics auf das sie sich subscriben.
+Um Ihren rhPath herauszufinden, gehen Sie wie folgt vor.
+
+Wenn Sie z.B. eine Entität Ihrer SensorThingsApi per http ansprechen über "https://iot.hamburg.de/v1.0/Things(1234)/Datastreams", dann würde das Topic auf das Sie per mqtt subscriben "v1.0/Things(1234)/Datastreams" lauten.
+Ihr rhPath ist der Teil, der übrig bleibt, wenn Sie das Topic von Ihrem http-Pfad entfernen. In diesem Fall bliebe "https://iot.hamburg.de" übrig. Das ist Ihr rhPath.
+
+Beachten Sie bitte, dass sich der Zugriff per http vom Zugriff per mqtt unterscheidet. Daher ist Ihr rhPath mit hoher Wahrscheinlichkeit nicht identisch mit der per Constructor übergebenen mqttUrl.
+
+*Beispiele zur Übersicht*
+
+ - SensorThingsApi: "https://iot.hamburg.de/v1.0/Things(1234)/Datastreams"
+ - mqttUrl: "wss://iot.hamburg.de/mqtt"
+ - Topic: "v1.0/Things(1234)/Datastreams"
+ - rhPath: "https://iot.hamburg.de"
+
+
+
+
+
+### Konfiguration - Subscribe ###
+Über die Instanz von SensorThingsMqtt können Sie beliebige Subscriptions absetzen.
+Beim Ausführen von SensorThingsMqtt.subscribe auf ein Topic, können wiederum Konfigurationen vorgenommen werden.
+
+|name|mandatory|type|default|description|example|
+|----|---------|----|-------|-----------|-------|
+|qos|no|Number|0|"Quality of service" Subscription-Level [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)|0, 1 oder 2|
+|rh|no|Number|2|"This option specifies whether retained messages are sent when the subscription is established." [https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)|0, 1 oder 2|
+
+
+#### rh ####
+Da es Retained Handling (rh) zwischen Browser und Server erst ab mqtt 5.0 gibt, haben wir uns dafür entschieden Retained Handling für mqtt 3.1 und mqtt 3.1.1 mit unserer SensorThingsMqtt-Schicht per http zu "simulieren".
+
+Daher ist es nun, unabhängig von Ihrer mqtt-Version, möglich das Retained Handling einzustellen mit rh := 0, 1 oder 2
+
+ - rh := 0; Sie erhalten sofort die letzte (alte) Nachricht für das Topic vom Server per on(message)-Event.
+ - rh := 1; Sie erhalten sofort die letzte (alte) Nachricht für das Topic, wenn der Prozess der Erste in Ihrer Applikation ist, der auf dem Topic subscribed.
+ - rh := 2; Sie erhalten keine "alte" Nachricht, sondern nur künftige und damit immer neue Nachrichten.
+
+
+
+
+
+### Retained Handling ###
+Retained Handling ist - wie wir finden - eine so wichtige Funktionalität, dass wir sie für die mqtt-Versionen 3.1 und 3.1.1 mit unserer SensorThingsMqtt-Schicht simulieren.
+
+Eine "Retained Message" ist eine "alte" Nachricht von einem Sensor, die der Server zwischengespeichert hat, um sie dem Abonnenten je nach eingestelltem rh-Flag auszuliefern.
+
+```
+#!javascript
+
+import {SensorThingsMqtt} from "./sensorThingsMqtt";
+
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: "wss://iot.hamburg.de/mqtt",
+        mqttVersion: "5.0",
+        context: this
+    });
+
+mqtt.on("message", (topic, message, packet) => {
+    if (packet.retain === 1) {
+        console.log("this is a retained message");
+    }
+    else {
+        console.log("this is a new message");
     }
 });
+
+mqtt.subscribe("v1.0/Datastreams(1234)/Observations", {rh: 0});
 ```
 
-Da der FROST Server keine *Retained Messages* unterstützt, wird das *on message*-Event nach dem Abonnement nicht sofort mit der letzten empfangenen Nachricht vom Broker aufgerufen (getriggert).
-Wenn der hinter dem Topic stehende Publisher (Sensor) langsam ist (z.B. eine Ladesäule), würde das *on message*-Event vielleicht erst in einigen Stunden das erste Mal feuern.
-
-
-### Simulation von Retained Messages ###
-Die Lösung im Masterportal ist die Simulation von *Retained Messages* mit der *SensorThingsMqtt*-Schicht.
-Nach außen hin sieht es so aus, als sei alles normal. Hier eine Beispiel-Implementierung der *SensorThingsMqtt*-Schicht. Beachten Sie die starke Ähnlichkeit zum Beispiel der Implementierung des npm-Paketes mqtt mit Javascript (s.o.):
+Da der eine oder andere Prozess vielleicht keine "Retained Message" erhalten will, ist das Retained Handling per default ausgeschaltet (rh: 2).
 
 ```
 #!javascript
 
-import {SensorThingsMqtt} from "@modules/core/modelList/layer/sensorThingsMqtt";
+import {SensorThingsMqtt} from "./sensorThingsMqtt";
 
-const client = mqtt.connect({
-    host: "iot.example.com",
-    protocol: "mqtt",
-    path: "/",
-    context: this
-});
-
-client.on("connect", function () {
-    client.subscribe("v1.0/Datastreams(74)/Observations", {
-        qos: 0,
-        retain: 0,
-        rmSimulate: true
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: "wss://iot.hamburg.de/mqtt",
+        mqttVersion: "5.0",
+        context: this
     });
-});
 
-client.on("message", function (topic, jsonPayload) {
-    if (topic === "v1.0/Datastreams(74)/Observations") {
-        // note that we already converted the payload to JSON - so no JSON.parse necessary at this point
-        // do something with jsonPayload
+mqtt.on("message", (topic, message, packet) => {
+    if (packet.retain === 1) {
+        console.log("this will never happen");
+    }
+    else {
+        console.log("this is a new message");
     }
 });
+
+mqtt.subscribe("v1.0/Datastreams(1234)/Observations");
 ```
 
-Die Änderungen im Detail:
-
- - context: hier übergeben Sie den für die Events zu verwendenden Scope (dann brauchen Sie kein .bind(this) zu benutzen)
- - rmSimulate: wenn dieses Flag auf true steht, werden *Retained Messages* simuliert. Steht das Flag auf false, gibt es keinen Unterschied zwischen SensorThingsMqtt und dem npm-Paket mqtt.
- - jsonPayload: die *sensorThingsMqtt*-Schicht wandelt alle Antworten vom Broker nach JSON um - daher kein eigenes Umwandeln mehr nötig.
- - bitte beachten Sie, dass wenn Sie *retain* auf 2 stellen, keine Simulation von Retained Messages stattfindet (selbst wenn rmSimulate auf true steht). Nehmen Sie hierzu die mqtt Spezifikation zur Kenntnis: "If the Retain Handling option is not 2, all matching retained messages are sent to the Client." ([Quelle](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc384800440))
-
-
-### Konfiguration ###
-Die *SensorThingsMqtt*-Schicht kann wie das npm-Paket mqtt verwendet werden. Es gibt jedoch Erweiterungen der Funktionen mqtt.connect und client.subscribe.
-
-#### Optionen: SensorThingsMqtt.connect ####
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|host|Ja|String|-|der Host mit dem sich über mqtt verbunden wird|iot.hamburg.de|
-|protocol|Nein|String|mqtt|das zu verwendende Protokoll|mqtt, mqtts, ws, wss, wx, wxs|
-|path|Nein|String|emtpy|der vom Standard abweichende Pfad zur mqtt-Applikation auf dem Server. Dies kann der Fall sein, wenn ein anderes Protokoll als mqtt verwendet wird.|host: "iot.hamburg.de", protocol: "wss", path: "/mqtt" -> results in wss://iot.hamburg.de/mqtt|
-|context|Nein|JavaScript Scope|Der Scope in dem die Events ausgeführt werden.|Wenn hier *this* eingetragen wird, kann *this* in den Events ohne extra binding verwendet werden.|
-
-Beispiel:
+Es gibt Szenarien, in denen zwei Ihrer Prozesse dasselbe Topic abonnieren.
+Es kann sein, dass ein Prozess "Retained Messages" erhalten möchte und ein anderer Prozess keine "Retained Messages" erhalten will.
+Um diesen Konflikt aufzulösen, können Sie im dritten Parameter "packet" des Event-Handlers nachschauen, ob die erhaltene Nachricht eine "Retained Message" ist oder nicht.
 
 ```
 #!javascript
 
-import {SensorThingsMqtt} from "@modules/core/modelList/layer/sensorThingsMqtt";
+import {SensorThingsMqtt} from "./sensorThingsMqtt";
 
-const client = mqtt.connect({
-    host: "iot.hamburg.de",
-    protocol: "wss",
-    path: "/mqtt",
-    context: this
-});
-```
-
-#### Optionen: SensorThingsMqttClient.subscribe ####
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|qos|Nein|Number|0|"The maximum Quality of Service level at which the Server can send Application Messages to the Client." [link](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)|0, 1 or 2|
-|retain|Nein|Number|0|"flag of how to use Retained Messages for this subscription" [link](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc385349265)|0: get latest message on subscription, 1: get latest message only if first to subscribe on topic, 2: do not send messages on subscription|
-|rmSimulate|Nein|Boolean|false|Flag zum Aktivieren der Simulation von *Retained Messages*|true oder false|
-|rmPath|Nein|String|empty|der Pfad-Anteil in dem sich http- und mqtt-Abrufe unterscheiden|wenn http REST http://test.com/subpath/Datastreams , aber mqtt liegt unter mqtt://test.com/Datastreams , dann muss rmPath auf "subpath/" gestellt werden|
-|rmProtocol|Nein|String|"https"|das für die Simulation von *Retained Messages* zu verwendende Protokoll|http, https, ...|
-|rmHttpClient|Nein|Function|SensorThingsClientHttp|Eine Alternativ-Funktion mit der http Aufrufe stattfinden sollen. Per Default wird intern Axios verwendet.|Wenn Sie eine andere Art des Aufrufs von URLs wünschen, stellen Sie rmHttpClient ein als eine Funktion function(url, onsuccess) mit onsuccess als function(resp)|
-
-Beispiel:
-
-```
-#!javascript
-
-import {SensorThingsMqtt} from "@modules/core/modelList/layer/sensorThingsMqtt";
-
-const client = mqtt.connect({
-    host: "test.geoportal-hamburg.de",
-    protocol: "wss",
-    path: "/mqtt",
-    context: this
-});
-
-client.on("connect", function () {
-    client.subscribe("v1.0/Datastreams(74)/Observations", {
-        qos: 0,
-        retain: 0,
-        rmSimulate: true,
-        rmPath: "itsLGVhackathon/",
-        rmProtocol: "https",
-        rmHttpClient: function (url, onsuccess) {
-            $.ajax({
-                dataType: "json",
-                url: url,
-                async: true,
-                type: "GET",
-                success: onsuccess
-            });
-        }
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: "wss://iot.hamburg.de/mqtt",
+        mqttVersion: "5.0",
+        context: this
     });
+
+mqtt.on("message", (topic, message, packet) => {
+    if (topic === "v1.0/Datastreams(1234)/Observations" && packet.retain === 1) {
+        console.log("this is for the second subscription only");
+    }
+    else if (topic === "v1.0/Datastreams(1234)/Observations") {
+        console.log("this is for the first and second subscription");
+    }
+    else if (topic === "v1.0/Things(4321)/Datastreams") {
+        console.log("this is for the third subscription, retain flag is", packet.retain);
+    }
 });
+
+// first subscription
+mqtt.subscribe("v1.0/Datastreams(1234)/Observations", {rh: 2});
+
+// second subscription
+mqtt.subscribe("v1.0/Datastreams(1234)/Observations", {rh: 0});
+
+// third subscription
+mqtt.subscribe("v1.0/Things(4321)/Datastreams", {rh: 0});
 ```
 
 
 
-### Skalierbarkeit und Performanz ###
-Der FROST Server unterstützt aktuell keine *Retained Messages*.
-Unsere Lösung ist die Arbeit mit simulierten *Retained Messages* per http für jedes Abonnement. Diese Lösung skaliert nicht und hat eine geringe Performanz.
-Wir hatten fünf Möglichkeiten zur Auswahl. Um Transparenz zu schaffen werden diese fünf Möglichkeiten hier dargestellt.
-Bitte beachten Sie, dass die performanteste skalierende Methode die Verwendung "echter" *Retained Messages* auf Broker-Seite wäre.
+### Verbindung schließen ###
+Es wird vorkommen, dass Sie die Verbindung zum mqtt-Server sauber schließen möchten.
+Zu diesem Zweck gibt es die Funktion SensorThingsMqtt.end.
 
- 1. der FROST Server unterstützt Retained Messages
-    - skaliert, hohe Performanz
-    - aktuell nicht verfügbar
- 2. ein initialer Abruf aller Nachrichten für alle Topics die abonniert werden sollen
-    - skaliert nicht
-    - Performanz hängt vom Server und dem Netzwerk des Clients ab
-    - clientseitig schwer zu sauber zu implementieren
- 3. Einzelabrufe von Topics bei jedem Abonnement: (Simulation von *Retained Messages*)
-    - skaliert nicht
-    - die Performanz hängt vom Netzwerk des Clients ab
- 4. Schätzen der maximalen Anzahl gleichzeitig abrufbaren Datastream-Observations, ohne dass die Performanz dieses Einen Aufrufes leidet - und dann asynchroner Abruf in entsprechend großen Häppchen.
-    - Die geschätzte maximale Anzahl ist abhängig vom Endanwender (Computer, Browser, Netzwerk) und von der Größen der Datenbank-Tabellen die sortiert werden müssen. Das variiert und macht die Schätzung unmöglich.
-    - Wahrscheinlich wäre ein Zufalls-Wert für die Größe der Häppchen performanter als die Festlegung auf einen Wert.
-    - Wir stoßen hier an die Grenzen dessen, was als Programmierer vertretbar ist.
- 5. Wir legen ein Maximum an gleichzeitig abonnierbaren Features fest (z.B. 200 Features). Wird der Wert überstiegen, wird der Aufruf der Datastream-Observations entsprechend beschnitten und ein Hinweis an den Kunden ausgegeben, dass wir nicht mehr Features unterstützen können.
-    - braucht nicht zu skalieren
-    - hohe Performanz
-    - aus UI-Sicht nicht vertretbar
-    - widerspricht der Philosophie des Masterportals
+```
+#!javascript
 
-Am 30. Januar 2020 haben wir uns für die 3. Möglichkeit entschieden:
+import {SensorThingsMqtt} from "./sensorThingsMqtt";
 
-  - diese ist am einfachsten zu implementieren
-  - diese ist einfach austauschbar, wenn der FROST Server in Zukunft einmal *Retained Messages* anbietet
+const mqtt = new SensorThingsMqtt({
+        mqttUrl: "wss://iot.hamburg.de/mqtt",
+        mqttVersion: "5.0",
+        context: this
+    });
 
+mqtt.end(false, {}, () => {
+    console.log("finished");
+});
+```
 
-
+Bitte beachten Sie, dass die übergebenen Parameter identisch mit den unter [https://www.npmjs.com/package/mqtt#end](https://www.npmjs.com/package/mqtt#end) beschriebenen Parametern sind.

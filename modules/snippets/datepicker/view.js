@@ -47,6 +47,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
 
         datepickerContainer.datepicker({
             todayHighlight: date.get("todayHighlight"),
+            multidate: date.get("multidate"),
             language: date.get("language"),
             defaultViewDate: date.get("date"),
             startDate: date.get("startDate"),
@@ -57,6 +58,7 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             calendarWeeks: date.get("calendarWeeks"),
             format: date.get("format"),
             autoclose: date.get("autoclose"),
+            weekStart: date.get("weekStart"),
             templates: {
                 leftArrow: "<i class=\"glyphicon glyphicon-triangle-left\"></i>",
                 rightArrow: "<i class=\"glyphicon glyphicon-triangle-right\"></i>"
@@ -68,8 +70,15 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
             date.get("inputs").on("changeDate", this.changeDate.bind(this), null);
 
             // listener to set classes for selectWeek
-            if (date.get("selectWeek")) {
+            if (this.model.get("selectWeek")) {
                 date.get("inputs").on("show", this.showWeekpicker.bind(this), null);
+            }
+            // set date in year datepicker
+            if (date.get("minViewMode") === "years" && date.get("maxViewMode") === "years") {
+                date.get("inputs").datepicker("setDate", date.get("date"));
+            }
+            else if (!Array.isArray(date.get("date"))) {
+                date.get("inputs").datepicker("update", moment(date.get("date")).format("DD.MM.YYYY"));
             }
         }
 
@@ -79,13 +88,26 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
 
     /**
      * Is triggered when the selected date of the datepicker changes. Sets value to the model.
-     * @param   {evt} evt Event fired by the datepicker
+     * @param {Event} evt changeData Event
      * @returns {void}
      */
     changeDate: function (evt) {
-        const newDate = evt.date;
+        if (this.model.get("mutexChangeEvent") === false) {
+            return;
+        }
 
-        this.model.updateValues(newDate);
+        let dates = evt.dates;
+
+        if (this.model.get("selectWeek")) {
+            this.model.set("mutexChangeEvent", false);
+
+            dates = this.model.getDatesForWeekPicker([...dates]);
+            this.model.get("inputs").datepicker("clearDates");
+            this.model.get("inputs").datepicker("setDates", dates);
+            this.model.set("mutexChangeEvent", true);
+        }
+
+        this.model.updateValues(dates);
     },
 
     /**
@@ -95,15 +117,6 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
      * @returns {void}
      */
     updateDOM: function (value) {
-        const inputs = this.model.get("valuesCollection").at(0).get("inputs");
-
-        if (inputs) {
-            // input must be setted like 25.03.2020
-            inputs.datepicker("update", moment(value).format("DD.MM.YYYY"));
-
-            return;
-        }
-
         this.$el.find(".datepicker-container").datepicker("update", value);
     },
 

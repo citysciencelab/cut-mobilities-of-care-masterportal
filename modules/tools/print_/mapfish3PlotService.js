@@ -161,6 +161,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             withLegendLabel: i18next.t("common:modules.tools.print.withLegendLabel"),
             printLabel: i18next.t("common:modules.tools.print.printLabel"),
             withInfoLabel: i18next.t("common:modules.tools.print.withInfoLabel"),
+            vtlWarning: i18next.t("common:modules.tools.print.vtlWarning"),
             layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true}),
             currentLng: lng
         });
@@ -269,7 +270,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         }
         spec = spec.toJSON();
 
-        spec = Radio.request("Util", "omit", spec, "uniqueIdList");
+        spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
         this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
     },
 
@@ -333,11 +334,26 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     togglePostrenderListener: function (model, value) {
-        const canvasModel = new BuildCanvasModel();
+        const canvasModel = new BuildCanvasModel(),
+            foundVectorTileLayers = [];
+
+        /*
+         * Since MapFish 3 does not yet support VTL (see https://github.com/mapfish/mapfish-print/issues/659),
+         * they are filtered in the following code and an alert is shown to the user informing him about which
+         * layers will not be printed.
+         */
         let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
+                if (layer.get("typ") === "VectorTile") {
+                    foundVectorTileLayers.push(layer.get("name"));
+                    return false;
+                }
                 return layer.getVisible() === true;
             }),
             canvasLayer;
+
+        if (foundVectorTileLayers.length && this.get("isActive")) {
+            Radio.trigger("Alert", "alert", `${this.get("vtlWarning")} ${foundVectorTileLayers.join(", ")}`);
+        }
 
         visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
 
@@ -405,8 +421,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     drawMask: function (mapSize, context) {
-        const mapWidth = mapSize[0] * DEVICE_PIXEL_RATIO,
-            mapHeight = mapSize[1] * DEVICE_PIXEL_RATIO;
+        const ration = context.canvas.width > mapSize[0] ? DEVICE_PIXEL_RATIO : 1,
+            mapWidth = mapSize[0] * ration,
+            mapHeight = mapSize[1] * ration;
 
         context.beginPath();
         // Outside polygon, must be clockwise
@@ -428,7 +445,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     drawPrintPage: function (mapSize, resolution, printMapSize, scale, context) {
-        const ration = context.canvas.height > printMapSize[1] ? DEVICE_PIXEL_RATIO : 1,
+        const ration = context.canvas.width > mapSize[0] ? DEVICE_PIXEL_RATIO : 1,
             center = [mapSize[0] * ration / 2, mapSize[1] * ration / 2],
             boundWidth = printMapSize[0] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ration,
             boundHeight = printMapSize[1] / this.get("DOTS_PER_INCH") / this.get("INCHES_PER_METER") * scale / resolution * ration,
@@ -673,6 +690,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      */
     setMapfishServiceUrl: function (value) {
         this.set("mapfishServiceUrl", value);
+    },
+
+    /**
+     * Setter for placeholder.
+     * @param {string} value - Placeholder for the title.
+     * @returns {void}
+     */
+    setTitlePlaceholder: function (value) {
+        this.set("titlePlaceholder", value);
     },
 
     /**

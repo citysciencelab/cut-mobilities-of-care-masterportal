@@ -6,6 +6,7 @@ describe("tools/gfi/themes/trafficCount", function () {
 
     before(function () {
         model = new Model();
+        model.set("calendarweek", "KW");
     });
     describe("onIsVisibleEvent should set internal variable", function () {
         it("should set isCreated to false", function () {
@@ -29,11 +30,11 @@ describe("tools/gfi/themes/trafficCount", function () {
             expect(model.addThousandPoints("foo1234bar56789")).to.equal("foo1.234bar56.789");
         });
         it("should return a zero as string if anything but a number or string is given", function () {
-            expect(model.addThousandPoints(undefined)).to.equal("0");
-            expect(model.addThousandPoints(false)).to.equal("0");
-            expect(model.addThousandPoints(null)).to.equal("0");
-            expect(model.addThousandPoints([])).to.equal("0");
-            expect(model.addThousandPoints({})).to.equal("0");
+            expect(model.addThousandPoints(undefined)).to.equal("");
+            expect(model.addThousandPoints(false)).to.equal("");
+            expect(model.addThousandPoints(null)).to.equal("");
+            expect(model.addThousandPoints([])).to.equal("");
+            expect(model.addThousandPoints({})).to.equal("");
         });
     });
     describe("getMeansOfTransportFromDatastream", function () {
@@ -112,31 +113,10 @@ describe("tools/gfi/themes/trafficCount", function () {
         });
     });
 
-    describe("addD3LineData", function () {
-        it("should create an array of objects{class, style, (xAttr), (yAttr)} that can be used as dataset for the D3 diagram", function () {
-            const lineData = model.addD3LineData("classname", "stylename", "xAttr", "yAttr", function () {
-                    return "foobar";
-                }, {
-                    "foo": "bar"
-                }, {
-                    "foobar": {"xAttr": "foobar"}
-                }),
-                lineDataExpected = [{
-                    class: "classname",
-                    style: "stylename",
-                    date: "foo",
-                    xAttr: "foobar",
-                    yAttr: "bar"
-                }];
-
-            expect(lineData).to.deep.equal(lineDataExpected);
-        });
-    });
-
     describe("getXAxisTickValuesDay", function () {
         it("should generate an array of xAxis Attributes to be shown in the diagram", function () {
             const xAxisTickValues = model.getXAxisTickValuesDay(),
-                xAxisTickValuesExpected = ["00:00", "06:00", "12:00", "18:00", "23:00"];
+                xAxisTickValuesExpected = ["00:00", "00:15", "00:30", "00:45", "01:00", "01:15", "01:30", "01:45", "02:00", "02:15", "02:30", "02:45", "03:00", "03:15", "03:30", "03:45", "04:00", "04:15", "04:30", "04:45", "05:00", "05:15", "05:30", "05:45", "06:00", "06:15", "06:30", "06:45", "07:00", "07:15", "07:30", "07:45", "08:00", "08:15", "08:30", "08:45", "09:00", "09:15", "09:30", "09:45", "10:00", "10:15", "10:30", "10:45", "11:00", "11:15", "11:30", "11:45", "12:00", "12:15", "12:30", "12:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45", "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15", "21:30", "21:45", "22:00", "22:15", "22:30", "22:45", "23:00", "23:15", "23:30", "23:45", "24:00"];
 
             expect(xAxisTickValues).to.deep.equal(xAxisTickValuesExpected);
         });
@@ -154,22 +134,9 @@ describe("tools/gfi/themes/trafficCount", function () {
     describe("getXAxisTickValuesYear", function () {
         it("should generate an array of xAxis Attributes to be shown in the diagram", function () {
             const xAxisTickValues = model.getXAxisTickValuesYear(),
-                xAxisTickValuesExpected = [
-                    "Jan.",
-                    "Feb.",
-                    "März",
-                    "Apr.",
-                    "Mai",
-                    "Juni",
-                    "Juli",
-                    "Aug.",
-                    "Sep.",
-                    "Okt.",
-                    "Nov.",
-                    "Dez."
-                ];
+                xAxisTickValuesExpected = ["KW01", "KW02", "KW03", "KW04", "KW05", "KW06", "KW07", "KW08", "KW09", "KW10", "KW11", "KW12", "KW13", "KW14", "KW15", "KW16", "KW17", "KW18", "KW19", "KW20", "KW21", "KW22", "KW23", "KW24", "KW25", "KW26", "KW27", "KW28", "KW29", "KW30", "KW31", "KW32", "KW33", "KW34", "KW35", "KW36", "KW37", "KW38", "KW39", "KW40", "KW41", "KW42", "KW43", "KW44", "KW45", "KW46", "KW47", "KW48", "KW49", "KW50", "KW51", "KW52"];
 
-            expect(xAxisTickValues).to.deep.equal(xAxisTickValuesExpected);
+            expect(xAxisTickValues).to.include.members(xAxisTickValuesExpected);
         });
     });
 
@@ -235,212 +202,57 @@ describe("tools/gfi/themes/trafficCount", function () {
         });
     });
 
-    describe("createD3Config", function () {
-        it("should return a specific object for the given data", function () {
-            const axis = {
-                    xAttr: "xAttr",
-                    xAxisTicks: "xAxisTicks",
-                    xAxisLabel: "xAxisLabel",
-                    yAxisLabel: "yAxisLabel"
-                },
-                graphConfig = model.createD3Config("legendData", "selector", "selectorTooltip", "width", "height", axis, "attrToShowArray", "setTooltipValue", "dataset"),
-                graphConfigExpected = {
-                    legendData: "legendData",
-                    graphType: "Linegraph",
-                    selector: "selector",
-                    width: "width",
-                    height: "height",
-                    margin: {
-                        top: 20,
-                        right: 20,
-                        bottom: 40,
-                        left: 60
-                    },
-                    svgClass: "graph-svg",
-                    selectorTooltip: "selectorTooltip",
-                    scaleTypeX: "ordinal",
-                    scaleTypeY: "linear",
-                    xAxisTicks: "xAxisTicks",
-                    dotSize: 2,
-                    yAxisTicks: {
-                        ticks: 5,
-                        factor: ",f"
-                    },
-                    data: "dataset",
-                    xAttr: "xAttr",
-                    xAxisLabel: "xAxisLabel",
-                    yAxisLabel: "yAxisLabel",
-                    attrToShowArray: "attrToShowArray",
-                    setTooltipValue: "setTooltipValue"
-                };
+    describe("getLineData", function () {
+        it("should create an array of objects{(xAttr), (yAttr)} that can be used as dataset for the chart diagram", function () {
+            const lineData = model.getLineData("weekday", "count", () => {
+                    return "Mo";
+                }, {date: 1455}, {Mo: {weekday: "Mo"}}),
+                lineDataExpected = [{
+                    count: 1455,
+                    date: "date",
+                    weekday: "Mo"
+                }];
 
-            expect(graphConfig).to.deep.equal(graphConfigExpected);
+            expect(lineData).to.deep.equal(lineDataExpected);
         });
     });
 
-    describe("prepareTableContent", function () {
-        it("should return a specific object for the given dataset of day for bicycles", function () {
+    describe("getPointData", function () {
+        it("should create an array of each line that can be used as dataset for the chart diagram", function () {
+            const pointData = model.getPointData([{
+                    count: 1455,
+                    date: "date",
+                    weekday: "Mo"
+                }]),
+                pointDataExpected = [1455];
 
-            const dataset =
-                    {
-                        trucks: [],
-                        cars: [],
-                        bicycles: [
-                            {date: "2020-03-31", hour: "00:15", result: 84},
-                            {date: "2020-03-31", hour: "00:30", result: 82},
-                            {date: "2020-03-31", hour: "00:45", result: 76},
-                            {date: "2020-03-31", hour: "01:00", result: 96},
-                            {date: "2020-03-31", hour: "01:15", result: 74},
-                            {date: "2020-03-31", hour: "01:30", result: 72},
-                            {date: "2020-03-31", hour: "01:45", result: 70},
-                            {date: "2020-03-31", hour: "02:00", result: 69},
-                            {date: "2020-03-31", hour: "02:15", result: 58},
-                            {date: "2020-03-31", hour: "02:30", result: 89},
-                            {date: "2020-03-31", hour: "02:45", result: 70},
-                            {date: "2020-03-31", hour: "03:00", result: 75},
-                            {date: "2020-03-31", hour: "03:15", result: 93},
-                            {date: "2020-03-31", hour: "03:30", result: 71},
-                            {date: "2020-03-31", hour: "03:45", result: 85},
-                            {date: "2020-03-31", hour: "04:00", result: 89},
-                            {date: "2020-03-31", hour: "04:15", result: 62},
-                            {date: "2020-03-31", hour: "04:30", result: 69},
-                            {date: "2020-03-31", hour: "04:45", result: 62},
-                            {date: "2020-03-31", hour: "05:00", result: 82},
-                            {date: "2020-03-31", hour: "05:15", result: 91},
-                            {date: "2020-03-31", hour: "05:30", result: 72},
-                            {date: "2020-03-31", hour: "05:45", result: 88},
-                            {date: "2020-03-31", hour: "06:00", result: 54},
-                            {date: "2020-03-31", hour: "06:15", result: 50},
-                            {date: "2020-03-31", hour: "06:30", result: 72},
-                            {date: "2020-03-31", hour: "06:45", result: 62},
-                            {date: "2020-03-31", hour: "07:00", result: 91},
-                            {date: "2020-03-31", hour: "07:15", result: 81},
-                            {date: "2020-03-31", hour: "07:30", result: 88},
-                            {date: "2020-03-31", hour: "07:45", result: 82},
-                            {date: "2020-03-31", hour: "08:00", result: 77},
-                            {date: "2020-03-31", hour: "08:15", result: 75},
-                            {date: "2020-03-31", hour: "08:30", result: 97},
-                            {date: "2020-03-31", hour: "08:45", result: 69},
-                            {date: "2020-03-31", hour: "09:00", result: 92},
-                            {date: "2020-03-31", hour: "09:15", result: 75},
-                            {date: "2020-03-31", hour: "09:30", result: 91},
-                            {date: "2020-03-31", hour: "09:45", result: 88},
-                            {date: "2020-03-31", hour: "10:00", result: 81},
-                            {date: "2020-03-31", hour: "10:15", result: 65},
-                            {date: "2020-03-31", hour: "10:30", result: 65},
-                            {date: "2020-03-31", hour: "10:45", result: 71},
-                            {date: "2020-03-31", hour: "11:00", result: 105},
-                            {date: "2020-03-31", hour: "11:15", result: 65},
-                            {date: "2020-03-31", hour: "11:30", result: 78}
-                        ]
+            expect(pointData).to.deep.equal(pointDataExpected);
+        });
+    });
+
+    describe("getDataSetsForChart", function () {
+        it("should create an array of datasets for the chart diagram", function () {
+            const pointData = model.getDataSetsForChart(
+                    [{AnzFahrzeuge: {"date": 1455}}],
+                    "AnzFahrzeuge",
+                    ["#337ab7"],
+                    "weekday",
+                    "count",
+                    () => {
+                        return "KW 26 / 2020";
                     },
+                    () => {
+                        return "Mo";
+                    },
+                    {Mo: {weekday: "Mo"}}),
+                pointDataExpected = [{
+                    backgroundColor: "#337ab7",
+                    borderColor: "#337ab7",
+                    data: [1455],
+                    label: "KW 26 / 2020"
+                }];
 
-                tblContentExpected = {
-                    day: {
-                        title: "Datum",
-                        firstColumn: "31.03.2020",
-                        headerArr: [
-                            "00:15",
-                            "00:30",
-                            "00:45",
-                            "01:00",
-                            "01:15",
-                            "01:30",
-                            "01:45",
-                            "02:00",
-                            "02:15",
-                            "02:30",
-                            "02:45",
-                            "03:00",
-                            "03:15",
-                            "03:30",
-                            "03:45",
-                            "04:00",
-                            "04:15",
-                            "04:30",
-                            "04:45",
-                            "05:00",
-                            "05:15",
-                            "05:30",
-                            "05:45",
-                            "06:00",
-                            "06:15",
-                            "06:30",
-                            "06:45",
-                            "07:00",
-                            "07:15",
-                            "07:30",
-                            "07:45",
-                            "08:00",
-                            "08:15",
-                            "08:30",
-                            "08:45",
-                            "09:00",
-                            "09:15",
-                            "09:30",
-                            "09:45",
-                            "10:00",
-                            "10:15",
-                            "10:30",
-                            "10:45",
-                            "11:00",
-                            "11:15",
-                            "11:30"
-                        ],
-                        bicyclesArr: [
-                            84,
-                            82,
-                            76,
-                            96,
-                            74,
-                            72,
-                            70,
-                            69,
-                            58,
-                            89,
-                            70,
-                            75,
-                            93,
-                            71,
-                            85,
-                            89,
-                            62,
-                            69,
-                            62,
-                            82,
-                            91,
-                            72,
-                            88,
-                            54,
-                            50,
-                            72,
-                            62,
-                            91,
-                            81,
-                            88,
-                            82,
-                            77,
-                            75,
-                            97,
-                            69,
-                            92,
-                            75,
-                            91,
-                            88,
-                            81,
-                            65,
-                            65,
-                            71,
-                            105,
-                            65,
-                            78
-                        ]
-                    }
-                };
-
-            model.prepareTableContent(dataset, "day", "Datum");
-
-            expect(model.get("dayTableContent")).to.deep.equal(tblContentExpected);
+            expect(pointData).to.deep.equal(pointDataExpected);
         });
     });
 
@@ -465,146 +277,90 @@ describe("tools/gfi/themes/trafficCount", function () {
                             {date: "2020-03-31", hour: "02:45", result: 70},
                             {date: "2020-03-31", hour: "03:00", result: 75},
                             {date: "2020-03-31", hour: "03:15", result: 93},
-                            {date: "2020-03-31", hour: "03:30", result: 71},
-                            {date: "2020-03-31", hour: "03:45", result: 85},
-                            {date: "2020-03-31", hour: "04:00", result: 89},
-                            {date: "2020-03-31", hour: "04:15", result: 62},
-                            {date: "2020-03-31", hour: "04:30", result: 69},
-                            {date: "2020-03-31", hour: "04:45", result: 62},
-                            {date: "2020-03-31", hour: "05:00", result: 82},
-                            {date: "2020-03-31", hour: "05:15", result: 91},
-                            {date: "2020-03-31", hour: "05:30", result: 72},
-                            {date: "2020-03-31", hour: "05:45", result: 88},
-                            {date: "2020-03-31", hour: "06:00", result: 54},
-                            {date: "2020-03-31", hour: "06:15", result: 50},
-                            {date: "2020-03-31", hour: "06:30", result: 72},
-                            {date: "2020-03-31", hour: "06:45", result: 62},
-                            {date: "2020-03-31", hour: "07:00", result: 91},
-                            {date: "2020-03-31", hour: "07:15", result: 81},
-                            {date: "2020-03-31", hour: "07:30", result: 88},
-                            {date: "2020-03-31", hour: "07:45", result: 82},
-                            {date: "2020-03-31", hour: "08:00", result: 77},
-                            {date: "2020-03-31", hour: "08:15", result: 75},
-                            {date: "2020-03-31", hour: "08:30", result: 97},
-                            {date: "2020-03-31", hour: "08:45", result: 69},
-                            {date: "2020-03-31", hour: "09:00", result: 92},
-                            {date: "2020-03-31", hour: "09:15", result: 75},
-                            {date: "2020-03-31", hour: "09:30", result: 91},
-                            {date: "2020-03-31", hour: "09:45", result: 88},
-                            {date: "2020-03-31", hour: "10:00", result: 81},
-                            {date: "2020-03-31", hour: "10:15", result: 65},
-                            {date: "2020-03-31", hour: "10:30", result: 65},
-                            {date: "2020-03-31", hour: "10:45", result: 71},
-                            {date: "2020-03-31", hour: "11:00", result: 105},
-                            {date: "2020-03-31", hour: "11:15", result: 65},
-                            {date: "2020-03-31", hour: "11:30", result: 78}
+                            {date: "2020-03-31", hour: "03:30", result: 71}
                         ]
                     },
 
-                tblContentExpected = {
-                    day: {
-                        title: "Datum",
-                        firstColumn: "31.03.2020",
-                        headerArr: [
-                            "00:15",
-                            "00:30",
-                            "00:45",
-                            "01:00",
-                            "01:15",
-                            "01:30",
-                            "01:45",
-                            "02:00",
-                            "02:15",
-                            "02:30",
-                            "02:45",
-                            "03:00",
-                            "03:15",
-                            "03:30",
-                            "03:45",
-                            "04:00",
-                            "04:15",
-                            "04:30",
-                            "04:45",
-                            "05:00",
-                            "05:15",
-                            "05:30",
-                            "05:45",
-                            "06:00",
-                            "06:15",
-                            "06:30",
-                            "06:45",
-                            "07:00",
-                            "07:15",
-                            "07:30",
-                            "07:45",
-                            "08:00",
-                            "08:15",
-                            "08:30",
-                            "08:45",
-                            "09:00",
-                            "09:15",
-                            "09:30",
-                            "09:45",
-                            "10:00",
-                            "10:15",
-                            "10:30",
-                            "10:45",
-                            "11:00",
-                            "11:15",
-                            "11:30"
-                        ],
-                        carsArr: [
-                            84,
-                            82,
-                            76,
-                            96,
-                            74,
-                            72,
-                            70,
-                            69,
-                            58,
-                            89,
-                            70,
-                            75,
-                            93,
-                            71,
-                            85,
-                            89,
-                            62,
-                            69,
-                            62,
-                            82,
-                            91,
-                            72,
-                            88,
-                            54,
-                            50,
-                            72,
-                            62,
-                            91,
-                            81,
-                            88,
-                            82,
-                            77,
-                            75,
-                            97,
-                            69,
-                            92,
-                            75,
-                            91,
-                            88,
-                            81,
-                            65,
-                            65,
-                            71,
-                            105,
-                            65,
-                            78
-                        ]
-                    }
-                };
+                tblContentExpected = [{
+                    title: "Datum",
+                    firstColumn: "31.03.2020",
+                    bicyclesArr: {},
+                    carsArr: {
+                        "00:15": 84,
+                        "00:30": 82,
+                        "00:45": 76,
+                        "01:00": 96,
+                        "01:15": 74,
+                        "01:30": 72,
+                        "01:45": 70,
+                        "02:00": 69,
+                        "02:15": 58,
+                        "02:30": 89,
+                        "02:45": 70,
+                        "03:00": 75,
+                        "03:15": 93,
+                        "03:30": 71
+                    },
+                    trucksArr: {},
+                    meansOfTransport: "AnzFahrzeuge"
+                }];
 
-            model.prepareTableContent(dataset, "day", "Datum");
+            model.prepareTableContent([dataset], "day", "Datum", [{from: "2020-03-31", until: "2020-03-31"}], "AnzFahrzeuge");
+
+            expect(model.get("dayTableContent")).to.deep.equal(tblContentExpected);
+        });
+    });
+
+    describe("prepareTableContent", function () {
+        it("should return a specific object for the given dataset of day for bicycles", function () {
+
+            const dataset =
+                    {
+                        trucks: [],
+                        cars: [],
+                        bicycles: [
+                            {date: "2020-03-31", hour: "00:15", result: 84},
+                            {date: "2020-03-31", hour: "00:30", result: 82},
+                            {date: "2020-03-31", hour: "00:45", result: 76},
+                            {date: "2020-03-31", hour: "01:00", result: 96},
+                            {date: "2020-03-31", hour: "01:15", result: 74},
+                            {date: "2020-03-31", hour: "01:30", result: 72},
+                            {date: "2020-03-31", hour: "01:45", result: 70},
+                            {date: "2020-03-31", hour: "02:00", result: 69},
+                            {date: "2020-03-31", hour: "02:15", result: 58},
+                            {date: "2020-03-31", hour: "02:30", result: 89},
+                            {date: "2020-03-31", hour: "02:45", result: 70},
+                            {date: "2020-03-31", hour: "03:00", result: 75},
+                            {date: "2020-03-31", hour: "03:15", result: 93},
+                            {date: "2020-03-31", hour: "03:30", result: 71}
+                        ]
+                    },
+
+                tblContentExpected = [{
+                    title: "Datum",
+                    firstColumn: "31.03.2020",
+                    carsArr: {},
+                    bicyclesArr: {
+                        "00:15": 84,
+                        "00:30": 82,
+                        "00:45": 76,
+                        "01:00": 96,
+                        "01:15": 74,
+                        "01:30": 72,
+                        "01:45": 70,
+                        "02:00": 69,
+                        "02:15": 58,
+                        "02:30": 89,
+                        "02:45": 70,
+                        "03:00": 75,
+                        "03:15": 93,
+                        "03:30": 71
+                    },
+                    trucksArr: {},
+                    meansOfTransport: "Anzahl_Fahrraeder"
+                }];
+
+            model.prepareTableContent([dataset], "day", "Datum", [{from: "2020-03-31", until: "2020-03-31"}], "Anzahl_Fahrraeder");
 
             expect(model.get("dayTableContent")).to.deep.equal(tblContentExpected);
         });
@@ -618,322 +374,678 @@ describe("tools/gfi/themes/trafficCount", function () {
                         trucks: [],
                         bicycles: [],
                         cars: [
-                            {date: "2020-03-16", hour: "01:00", result: 3870},
-                            {date: "2020-03-16", hour: "02:00", result: 2351},
-                            {date: "2020-03-16", hour: "03:00", result: 2563},
-                            {date: "2020-03-16", hour: "04:00", result: 2412},
-                            {date: "2020-03-16", hour: "05:00", result: 2835},
-                            {date: "2020-03-16", hour: "06:00", result: 1287},
-                            {date: "2020-03-16", hour: "07:00", result: 1784},
-                            {date: "2020-03-16", hour: "08:00", result: 1540},
-                            {date: "2020-03-16", hour: "09:00", result: 1365},
-                            {date: "2020-03-16", hour: "10:00", result: 2988},
-                            {date: "2020-03-16", hour: "11:00", result: 3236},
-                            {date: "2020-03-16", hour: "12:00", result: 2914},
-                            {date: "2020-03-16", hour: "13:00", result: 2218},
-                            {date: "2020-03-16", hour: "14:00", result: 3111},
-                            {date: "2020-03-16", hour: "15:00", result: 2533},
-                            {date: "2020-03-16", hour: "16:00", result: 3534},
-                            {date: "2020-03-16", hour: "17:00", result: 2341},
-                            {date: "2020-03-16", hour: "18:00", result: 2900},
-                            {date: "2020-03-16", hour: "19:00", result: 3273},
-                            {date: "2020-03-16", hour: "20:00", result: 2919},
-                            {date: "2020-03-16", hour: "21:00", result: 1241},
-                            {date: "2020-03-16", hour: "22:00", result: 4003},
-                            {date: "2020-03-16", hour: "23:00", result: 3398},
-                            {date: "2020-03-17", hour: "00:00", result: 2595},
-                            {date: "2020-03-17", hour: "01:00", result: 4354},
-                            {date: "2020-03-17", hour: "02:00", result: 2576},
-                            {date: "2020-03-17", hour: "03:00", result: 3004},
-                            {date: "2020-03-17", hour: "04:00", result: 3004},
-                            {date: "2020-03-17", hour: "05:00", result: 3404},
-                            {date: "2020-03-17", hour: "06:00", result: 1962},
-                            {date: "2020-03-17", hour: "07:00", result: 2101},
-                            {date: "2020-03-17", hour: "08:00", result: 2771},
-                            {date: "2020-03-17", hour: "09:00", result: 1785},
-                            {date: "2020-03-17", hour: "10:00", result: 3868},
-                            {date: "2020-03-17", hour: "11:00", result: 1650},
-                            {date: "2020-03-17", hour: "12:00", result: 2769},
-                            {date: "2020-03-17", hour: "13:00", result: 3184},
-                            {date: "2020-03-17", hour: "14:00", result: 3754},
-                            {date: "2020-03-17", hour: "15:00", result: 2632},
-                            {date: "2020-03-17", hour: "16:00", result: 1337},
-                            {date: "2020-03-17", hour: "17:00", result: 1392},
-                            {date: "2020-03-17", hour: "18:00", result: 3584},
-                            {date: "2020-03-17", hour: "19:00", result: 4151},
-                            {date: "2020-03-17", hour: "20:00", result: 1801},
-                            {date: "2020-03-17", hour: "21:00", result: 4076},
-                            {date: "2020-03-17", hour: "22:00", result: 3548},
-                            {date: "2020-03-17", hour: "23:00", result: 3903},
-                            {date: "2020-03-18", hour: "00:00", result: 2023},
-                            {date: "2020-03-18", hour: "01:00", result: 4244},
-                            {date: "2020-03-18", hour: "02:00", result: 3970},
-                            {date: "2020-03-18", hour: "03:00", result: 2675},
-                            {date: "2020-03-18", hour: "04:00", result: 3104},
-                            {date: "2020-03-18", hour: "05:00", result: 3028},
-                            {date: "2020-03-18", hour: "06:00", result: 1630},
-                            {date: "2020-03-18", hour: "07:00", result: 2430},
-                            {date: "2020-03-18", hour: "08:00", result: 4319},
-                            {date: "2020-03-18", hour: "09:00", result: 2824},
-                            {date: "2020-03-18", hour: "10:00", result: 3938},
-                            {date: "2020-03-18", hour: "11:00", result: 3312},
-                            {date: "2020-03-18", hour: "12:00", result: 2055},
-                            {date: "2020-03-18", hour: "13:00", result: 2976},
-                            {date: "2020-03-18", hour: "14:00", result: 1211},
-                            {date: "2020-03-18", hour: "15:00", result: 2939},
-                            {date: "2020-03-18", hour: "16:00", result: 1468},
-                            {date: "2020-03-18", hour: "17:00", result: 3151},
-                            {date: "2020-03-18", hour: "18:00", result: 2027},
-                            {date: "2020-03-18", hour: "19:00", result: 1621},
-                            {date: "2020-03-18", hour: "20:00", result: 4397},
-                            {date: "2020-03-18", hour: "21:00", result: 3324},
-                            {date: "2020-03-18", hour: "22:00", result: 3665},
-                            {date: "2020-03-18", hour: "23:00", result: 2766},
-                            {date: "2020-03-19", hour: "00:00", result: 4167},
-                            {date: "2020-03-19", hour: "01:00", result: 2484},
-                            {date: "2020-03-19", hour: "02:00", result: 4373}
+                            {date: "2020-03-16", result: 1324},
+                            {date: "2020-03-17", result: 1381},
+                            {date: "2020-03-18", result: 1619},
+                            {date: "2020-03-19", result: 1409},
+                            {date: "2020-03-20", result: 1567},
+                            {date: "2020-03-21", result: 1464}
                         ]
                     },
 
                 tblContentExpected = {
-                    week: {
-                        title: "Woche",
-                        firstColumn: "12/2020",
-                        headerDateArr: [
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "16.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "17.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "18.03.2020",
-                            "19.03.2020",
-                            "19.03.2020",
-                            "19.03.2020"
-                        ],
-                        headerHourArr: [
-                            "01:00",
-                            "02:00",
-                            "03:00",
-                            "04:00",
-                            "05:00",
-                            "06:00",
-                            "07:00",
-                            "08:00",
-                            "09:00",
-                            "10:00",
-                            "11:00",
-                            "12:00",
-                            "13:00",
-                            "14:00",
-                            "15:00",
-                            "16:00",
-                            "17:00",
-                            "18:00",
-                            "19:00",
-                            "20:00",
-                            "21:00",
-                            "22:00",
-                            "23:00",
-                            "00:00",
-                            "01:00",
-                            "02:00",
-                            "03:00",
-                            "04:00",
-                            "05:00",
-                            "06:00",
-                            "07:00",
-                            "08:00",
-                            "09:00",
-                            "10:00",
-                            "11:00",
-                            "12:00",
-                            "13:00",
-                            "14:00",
-                            "15:00",
-                            "16:00",
-                            "17:00",
-                            "18:00",
-                            "19:00",
-                            "20:00",
-                            "21:00",
-                            "22:00",
-                            "23:00",
-                            "00:00",
-                            "01:00",
-                            "02:00",
-                            "03:00",
-                            "04:00",
-                            "05:00",
-                            "06:00",
-                            "07:00",
-                            "08:00",
-                            "09:00",
-                            "10:00",
-                            "11:00",
-                            "12:00",
-                            "13:00",
-                            "14:00",
-                            "15:00",
-                            "16:00",
-                            "17:00",
-                            "18:00",
-                            "19:00",
-                            "20:00",
-                            "21:00",
-                            "22:00",
-                            "23:00",
-                            "00:00",
-                            "01:00",
-                            "02:00"
-                        ],
-                        carsArr: [
-                            3870,
-                            2351,
-                            2563,
-                            2412,
-                            2835,
-                            1287,
-                            1784,
-                            1540,
-                            1365,
-                            2988,
-                            3236,
-                            2914,
-                            2218,
-                            3111,
-                            2533,
-                            3534,
-                            2341,
-                            2900,
-                            3273,
-                            2919,
-                            1241,
-                            4003,
-                            3398,
-                            2595,
-                            4354,
-                            2576,
-                            3004,
-                            3004,
-                            3404,
-                            1962,
-                            2101,
-                            2771,
-                            1785,
-                            3868,
-                            1650,
-                            2769,
-                            3184,
-                            3754,
-                            2632,
-                            1337,
-                            1392,
-                            3584,
-                            4151,
-                            1801,
-                            4076,
-                            3548,
-                            3903,
-                            2023,
-                            4244,
-                            3970,
-                            2675,
-                            3104,
-                            3028,
-                            1630,
-                            2430,
-                            4319,
-                            2824,
-                            3938,
-                            3312,
-                            2055,
-                            2976,
-                            1211,
-                            2939,
-                            1468,
-                            3151,
-                            2027,
-                            1621,
-                            4397,
-                            3324,
-                            3665,
-                            2766,
-                            4167,
-                            2484,
-                            4373
-                        ]
-                    }
+                    title: "Woche",
+                    firstColumn: "12/2020",
+                    headerDateArr: [
+                        "16.03.2020",
+                        "17.03.2020",
+                        "18.03.2020",
+                        "19.03.2020",
+                        "20.03.2020",
+                        "21.03.2020"
+                    ],
+                    carsArr: {
+                        "16.03.2020": 1324,
+                        "17.03.2020": 1381,
+                        "18.03.2020": 1619,
+                        "19.03.2020": 1409,
+                        "20.03.2020": 1567,
+                        "21.03.2020": 1464
+                    },
+                    trucksArr: {},
+                    bicyclesArr: {},
+                    meansOfTransport: "AnzFahrzeuge"
                 };
 
-            model.prepareTableContent(dataset, "week", "Woche");
+            model.prepareTableContent([dataset], "week", "Woche", [{from: "2020-03-16", until: "2020-03-21"}], "AnzFahrzeuge");
 
-            expect(model.get("weekTableContent")).to.deep.equal(tblContentExpected);
+            expect(model.get("weekTableContent")[0]).to.deep.equal(tblContentExpected);
+        });
+    });
+
+    describe("prepareTableContent", function () {
+        it("should return a specific object for the given dataset of week for cars", function () {
+
+            const dataset =
+                    {
+                        trucks: [],
+                        bicycles: [],
+                        cars: [
+                            {date: "2020-03-16", result: 1324},
+                            {date: "2020-03-17", result: 1378},
+                            {date: "2020-03-18", result: ""},
+                            {date: "2020-03-19", result: 1409},
+                            {date: "2020-03-20", result: 1567},
+                            {date: "2020-03-21", result: 1464}
+                        ]
+                    },
+
+                tblContentExpected = {
+                    title: "Woche",
+                    firstColumn: "12/2020",
+                    headerDateArr: [
+                        "16.03.2020",
+                        "17.03.2020",
+                        "18.03.2020",
+                        "19.03.2020",
+                        "20.03.2020",
+                        "21.03.2020"
+                    ],
+                    carsArr: {
+                        "16.03.2020": 1324,
+                        "17.03.2020": 1378,
+                        "18.03.2020": "",
+                        "19.03.2020": 1409,
+                        "20.03.2020": 1567,
+                        "21.03.2020": 1464
+                    },
+                    trucksArr: {},
+                    bicyclesArr: {},
+                    meansOfTransport: "AnzFahrzeuge"
+                };
+
+            model.prepareTableContent([dataset], "week", "Woche", [{from: "2020-03-16", until: "2020-03-21"}], "AnzFahrzeuge");
+            expect(model.get("weekTableContent")[0]).to.deep.equal(tblContentExpected);
+        });
+    });
+
+    describe("prepareDatasetHourly", function () {
+        it("should return a specific object for the given dataset of day for cars and trucks", function () {
+
+            const dataset =
+                    {
+                        "AnzFahrzeuge": {
+                            "2020-06-17 00:00:01": "",
+                            "2020-06-17 00:15:01": null,
+                            "2020-06-17 00:30:01": undefined,
+                            "2020-06-17 00:45:01": 229,
+                            "2020-06-17 01:00:01": 285,
+                            "2020-06-17 01:15:01": 190,
+                            "2020-06-17 01:30:01": 990,
+                            "2020-06-17 01:45:01": 255,
+                            "2020-06-17 02:00:01": 222,
+                            "2020-06-17 02:15:01": 240,
+                            "2020-06-17 02:30:01": 958,
+                            "2020-06-17 02:45:01": 216,
+                            "2020-06-17 03:00:01": 273,
+                            "2020-06-17 03:15:01": 265,
+                            "2020-06-17 03:30:01": 855,
+                            "2020-06-17 03:45:01": 193,
+                            "2020-06-17 04:00:01": 180,
+                            "2020-06-17 04:15:01": 241,
+                            "2020-06-17 04:30:01": 763,
+                            "2020-06-17 04:45:01": 174,
+                            "2020-06-17 05:00:01": 201,
+                            "2020-06-17 05:15:01": 215,
+                            "2020-06-17 05:30:01": 968,
+                            "2020-06-17 05:45:01": 231,
+                            "2020-06-17 06:00:01": 202,
+                            "2020-06-17 06:15:01": 347,
+                            "2020-06-17 06:30:01": 873,
+                            "2020-06-17 06:45:01": 252,
+                            "2020-06-17 07:00:01": 264,
+                            "2020-06-17 07:15:01": 196,
+                            "2020-06-17 07:30:01": 851,
+                            "2020-06-17 07:45:01": 174,
+                            "2020-06-17 08:00:01": 254,
+                            "2020-06-17 08:15:01": 218,
+                            "2020-06-17 08:30:01": 896,
+                            "2020-06-17 08:45:01": 180,
+                            "2020-06-17 09:00:01": 252,
+                            "2020-06-17 09:15:01": 239,
+                            "2020-06-17 09:30:01": 906,
+                            "2020-06-17 09:45:01": 296,
+                            "2020-06-17 10:00:01": 173,
+                            "2020-06-17 10:15:01": 223,
+                            "2020-06-17 10:30:01": 275,
+                            "2020-06-17 10:45:01": 204,
+                            "2020-06-17 11:00:01": 220
+                        },
+                        "AntSV": {
+                            "2020-06-17 00:00:01": 0.23,
+                            "2020-06-17 00:15:01": 0.08,
+                            "2020-06-17 00:30:01": 0.15,
+                            "2020-06-17 00:45:01": 0.27,
+                            "2020-06-17 01:00:01": 0.1,
+                            "2020-06-17 01:15:01": 0,
+                            "2020-06-17 01:30:01": 0.18,
+                            "2020-06-17 01:45:01": 0.23,
+                            "2020-06-17 02:00:01": 0.16,
+                            "2020-06-17 02:15:01": 0.12,
+                            "2020-06-17 02:30:01": 0.19,
+                            "2020-06-17 02:45:01": 0.01,
+                            "2020-06-17 03:00:01": 0.18,
+                            "2020-06-17 03:15:01": 0.05,
+                            "2020-06-17 03:30:01": 0.16,
+                            "2020-06-17 03:45:01": 0.29,
+                            "2020-06-17 04:00:01": 0.24,
+                            "2020-06-17 04:15:01": 0.04,
+                            "2020-06-17 04:30:01": 0.17,
+                            "2020-06-17 04:45:01": 0.08,
+                            "2020-06-17 05:00:01": 0.26,
+                            "2020-06-17 05:15:01": 0.09,
+                            "2020-06-17 05:30:01": 0.09,
+                            "2020-06-17 05:45:01": 0.17,
+                            "2020-06-17 06:00:01": 0.2,
+                            "2020-06-17 06:15:01": 0.29,
+                            "2020-06-17 06:30:01": 0.29,
+                            "2020-06-17 06:45:01": 0.16,
+                            "2020-06-17 07:00:01": 0.29,
+                            "2020-06-17 07:15:01": 0.06,
+                            "2020-06-17 07:30:01": 0.26,
+                            "2020-06-17 07:45:01": 0.09,
+                            "2020-06-17 08:00:01": 0.05,
+                            "2020-06-17 08:15:01": 0.07,
+                            "2020-06-17 08:30:01": 0.21,
+                            "2020-06-17 08:45:01": 0.06,
+                            "2020-06-17 09:00:01": 0.08,
+                            "2020-06-17 09:15:01": 0.02,
+                            "2020-06-17 09:30:01": 0.27,
+                            "2020-06-17 09:45:01": 0.14,
+                            "2020-06-17 10:00:01": 0.27,
+                            "2020-06-17 10:15:01": 0.29,
+                            "2020-06-17 10:30:01": 0.27,
+                            "2020-06-17 10:45:01": 0.19,
+                            "2020-06-17 11:00:01": 0.26
+                        }
+                    },
+
+                tblContentExpected = [{
+                    "trucks": [
+                        {
+                            "date": "2020-06-17",
+                            "hour": "00:00",
+                            "result": 0.23
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "00:15",
+                            "result": 0.08
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "00:30",
+                            "result": 0.15
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "00:45",
+                            "result": 0.27
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "01:00",
+                            "result": 0.1
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "01:15",
+                            "result": 0
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "01:30",
+                            "result": 0.18
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "01:45",
+                            "result": 0.23
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "02:00",
+                            "result": 0.16
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "02:15",
+                            "result": 0.12
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "02:30",
+                            "result": 0.19
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "02:45",
+                            "result": 0.01
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "03:00",
+                            "result": 0.18
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "03:15",
+                            "result": 0.05
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "03:30",
+                            "result": 0.16
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "03:45",
+                            "result": 0.29
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "04:00",
+                            "result": 0.24
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "04:15",
+                            "result": 0.04
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "04:30",
+                            "result": 0.17
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "04:45",
+                            "result": 0.08
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "05:00",
+                            "result": 0.26
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "05:15",
+                            "result": 0.09
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "05:30",
+                            "result": 0.09
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "05:45",
+                            "result": 0.17
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "06:00",
+                            "result": 0.2
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "06:15",
+                            "result": 0.29
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "06:30",
+                            "result": 0.29
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "06:45",
+                            "result": 0.16
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "07:00",
+                            "result": 0.29
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "07:15",
+                            "result": 0.06
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "07:30",
+                            "result": 0.26
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "07:45",
+                            "result": 0.09
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "08:00",
+                            "result": 0.05
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "08:15",
+                            "result": 0.07
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "08:30",
+                            "result": 0.21
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "08:45",
+                            "result": 0.06
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "09:00",
+                            "result": 0.08
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "09:15",
+                            "result": 0.02
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "09:30",
+                            "result": 0.27
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "09:45",
+                            "result": 0.14
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "10:00",
+                            "result": 0.27
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "10:15",
+                            "result": 0.29
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "10:30",
+                            "result": 0.27
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "10:45",
+                            "result": 0.19
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "11:00",
+                            "result": 0.26
+                        }
+                    ],
+                    "cars": [
+                        {
+                            "date": "2020-06-17",
+                            "hour": "00:00",
+                            "result": ""
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "00:15",
+                            "result": ""
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "00:30",
+                            "result": ""
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "00:45",
+                            "result": "229"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "01:00",
+                            "result": "285"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "01:15",
+                            "result": "190"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "01:30",
+                            "result": "990"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "01:45",
+                            "result": "255"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "02:00",
+                            "result": "222"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "02:15",
+                            "result": "240"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "02:30",
+                            "result": "958"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "02:45",
+                            "result": "216"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "03:00",
+                            "result": "273"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "03:15",
+                            "result": "265"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "03:30",
+                            "result": "855"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "03:45",
+                            "result": "193"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "04:00",
+                            "result": "180"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "04:15",
+                            "result": "241"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "04:30",
+                            "result": "763"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "04:45",
+                            "result": "174"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "05:00",
+                            "result": "201"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "05:15",
+                            "result": "215"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "05:30",
+                            "result": "968"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "05:45",
+                            "result": "231"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "06:00",
+                            "result": "202"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "06:15",
+                            "result": "347"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "06:30",
+                            "result": "873"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "06:45",
+                            "result": "252"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "07:00",
+                            "result": "264"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "07:15",
+                            "result": "196"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "07:30",
+                            "result": "851"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "07:45",
+                            "result": "174"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "08:00",
+                            "result": "254"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "08:15",
+                            "result": "218"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "08:30",
+                            "result": "896"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "08:45",
+                            "result": "180"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "09:00",
+                            "result": "252"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "09:15",
+                            "result": "239"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "09:30",
+                            "result": "906"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "09:45",
+                            "result": "296"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "10:00",
+                            "result": "173"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "10:15",
+                            "result": "223"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "10:30",
+                            "result": "275"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "10:45",
+                            "result": "204"
+                        },
+                        {
+                            "date": "2020-06-17",
+                            "hour": "11:00",
+                            "result": "220"
+                        }
+                    ],
+                    "bicycles": []
+                }];
+
+            expect(model.prepareDatasetHourly([dataset])).to.deep.equal(tblContentExpected);
+        });
+    });
+
+    describe("prepareDataForDownload", function () {
+        it("should return the prepared data for the csv download", function () {
+            const obj = {
+                    "2020-06-23 00:00:01": 0.16,
+                    "2020-06-23 00:15:01": 0.07,
+                    "2020-06-23 00:30:01": 0.13,
+                    "2020-06-23 00:45:01": 0.15
+                },
+                dataDay = model.prepareDataForDownload(obj, "day"),
+                dataWeek = model.prepareDataForDownload(obj, "week"),
+                dataYear = model.prepareDataForDownload(obj, "year");
+
+            expect(dataDay[0]).to.have.all.keys("Datum", "Uhrzeit von", "Anzahl");
+            expect(dataDay[0].Datum).to.equal("2020-06-23");
+            expect(dataDay[1]["Uhrzeit von"]).to.equal("00:15");
+            expect(dataDay[2].Anzahl).to.equal(0.13);
+
+            expect(dataWeek[0]).to.have.all.keys("Datum", "Anzahl");
+            expect(dataWeek[0].Datum).to.equal("2020-06-23");
+            expect(dataWeek[2].Anzahl).to.equal(0.13);
+
+            expect(dataYear[0]).to.have.all.keys("Kalenderwoche ab", "Anzahl");
+            expect(dataYear[0]["Kalenderwoche ab"]).to.equal("2020-06-23");
+            expect(dataYear[2].Anzahl).to.equal(0.13);
         });
     });
 });
-

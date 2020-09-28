@@ -11,7 +11,9 @@ const state = {
     dpi: getDpi(),
     queryParams: getQueryParams(),
     masterPortalVersionNumber,
-    isDevMode
+    isDevMode,
+    i18NextInitialized: false,
+    idCounter: 1
 };
 
 export default state;

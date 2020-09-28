@@ -1,6 +1,7 @@
 import Template from "text-loader!./template.html";
 import SelectionTemplate from "text-loader!./templateSelection.html";
 import SettingsTemplate from "text-loader!./templateSettings.html";
+import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
@@ -30,6 +31,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      */
     initialize: function () {
+        checkChildrenDatasets(this.model);
         this.listenTo(this.model, {
             "change:isSelected change:isVisibleInMap": this.render,
             "change:isSettingVisible": this.renderSetting,

@@ -37,7 +37,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @fires Core#RadioRequestParametricURLGetCenter
      * @fires Core#RadioRequestParametricURLGetProjectionFromUrl
      * @fires Core#RadioRequestParametricURLGetZoomLevel
-     * @fires Alerting#RadioTriggerAlertAlert
      * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapViewChangedCenter
@@ -109,6 +108,10 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
             Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
         }, this);
         Radio.trigger("MapView", "changedOptions", Radio.request("Util", "findWhereJs", this.get("options"), {resolution: this.get("view").getConstrainedResolution(this.get("view").getResolution())}));
+        // NOTE: used for scaleSwitcher-tutorial
+        store.commit("Map/setScales", {scales: this.get("options").map(function (option) {
+            return option.scale;
+        })});
     },
 
     /**

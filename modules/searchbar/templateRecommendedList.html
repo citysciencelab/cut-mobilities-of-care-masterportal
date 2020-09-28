@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<% _.each(recommendedList, function (hit, index) { %>
-    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= _.isUndefined(hit.metaName)? hit.name: hit.metaName %>">
+<% recommendedList.forEach(function (hit, index) { %>
+    <li id="<%= hit.id %>" class="list-group-item hit" data-toggle="tooltip" data-placement="bottom" title="<%= hit.metaName === undefined ? hit.name: hit.metaName %>">
         <p id="searchInputLi">
             <% if (hit.glyphicon !== undefined) { %>
                 <span class="glyphicon <%= hit.glyphicon %>"></span>
             <% } else { %>
                 <img src="<%= hit.imageSrc %>">
             <% } %>
-            <span class="list-group-item-name"><%= _.isUndefined(hit.shortName)? hit.name : hit.shortName %></span>
-            <small class="list-group-item-theme"><%= _.isUndefined(hit.additionalInfo)? hit.type: hit.additionalInfo %></small>
+            <span class="list-group-item-name"><%= hit.shortName === undefined ? hit.name : hit.shortName %></span>
+            <small class="list-group-item-theme"><%= hit.additionalInfo === undefined ? hit.type: hit.additionalInfo %></small>
         </p>
     </li>
 <% }); %>
 <% if (uiStyle === "TABLE") { %>
     <% if (hitList.length >= recommendedListLength && hitList.length !== 0) { %>
         <li class="list-group-item results"><div><span><%= showAllResultsText %></span><span class="glyphicon glyphicon-play-circle"></span></div></li>
-        <div id="search-funnel"></div>
-        <div id="search-right-funnel-corner"></div>
+        <div class="search-funnel"></div>
+        <div class="search-right-funnel-corner"></div>
     <% } else if (hitList.length < recommendedListLength && hitList.length !== 0) { %>
         <li class="list-group-item results"></li>
-        <div id="search-funnel"></div>
-        <div id="search-right-funnel-corner"></div>
+        <div class="search-funnel"></div>
+        <div class="search-right-funnel-corner"></div>
     <% } %>
 <% } else { %>
     <% if (hitList.length >= recommendedListLength) { %>

@@ -283,7 +283,7 @@ class WMSRasterSynchronizer extends olcsAbstractSynchronizer {
                         this.cesiumLayers.add(cesiumObjects[i], position);
                     }
                 }
-            }, this));
+            }.bind(this)));
 
             this.olLayerListenKeys[uid].push(...listenKeyArray);
         }

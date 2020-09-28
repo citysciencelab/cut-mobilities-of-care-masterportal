@@ -27,7 +27,7 @@ const DefaultTheme = Theme.extend({
      * @returns {void}
      */
     checkRoutable: function () {
-        if (_.isUndefined(Radio.request("Parser", "getItemByAttributes", {id: "routing"})) === false) {
+        if (Radio.request("Parser", "getItemByAttributes", {id: "routing"}) !== undefined) {
             if (this.get("routable") === true) {
                 this.set("routable", new RoutableView());
             }
@@ -41,16 +41,18 @@ const DefaultTheme = Theme.extend({
      * @returns {void}
      */
     replaceValuesWithChildObjects: function () {
-        const element = this.get("gfiContent"),
+        const element = this.get("gfiContent") !== undefined ? this.get("gfiContent") : [],
             children = [];
 
-        if (_.isString(element) && element.match(/content="text\/html/g)) {
+        if (typeof element === "string" && element.match(/content="text\/html/g)) {
             children.push(element);
         }
         else {
-            _.each(element, function (ele, index) {
-                _.each(ele, function (val, key) {
-                    const valString = String(val);
+            element.forEach((ele, index) => {
+                Object.entries(ele).forEach(oneElement => {
+                    const value = oneElement[1],
+                        key = oneElement[0],
+                        valString = String(value);
                     let copyright,
                         imgView,
                         videoView;
@@ -88,7 +90,7 @@ const DefaultTheme = Theme.extend({
                             val: videoView,
                             type: "video"
                         });
-                        if (_.has(element, "mobil_video")) {
+                        if (element.hasOwnProperty("mobil_video")) {
                             element.mobil_video = "#";
                         }
                     }
@@ -101,15 +103,13 @@ const DefaultTheme = Theme.extend({
                             val: videoView,
                             type: "mobil_video"
                         });
-                        if (_.has(element, "video")) {
+                        if (element.hasOwnProperty("video")) {
                             element.video = "#";
                         }
                     }
                     // lösche leere Dummy-Einträge wieder raus.
-                    element[index] = _.omit(element[index], function (value) {
-                        return value === "#";
-                    });
-                }, this);
+                    Radio.request("Util", "omit", element[index], ["#"]);
+                });
             });
         }
         if (children.length > 0) {

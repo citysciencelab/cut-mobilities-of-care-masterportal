@@ -12,6 +12,7 @@ describe("menu/desktop/layer/viewLight", function () {
                 return 42;
             },
 
+            children: [{datasets: false}],
             isSettingVisible: false,
             isStyleable: false,
             showSettings: true,
@@ -26,18 +27,8 @@ describe("menu/desktop/layer/viewLight", function () {
                 this.isStyleable = value;
             },
 
-            get: function (value) {
-                switch (value) {
-                    case "isSettingVisible":
-                        return this.isSettingVisible;
-                    case "isStyleable":
-                        return this.isStyleable;
-                    case "showSettings":
-                        return this.showSettings;
-                    case "supported":
-                        return this.supported;
-                    case "isRemovable":
-                        return this.isRemovable;
+            get: function (key) {
+                switch (key) {
                     case "removeTopicText":
                         return "removeTopicText";
                     case "changeClassDivisionText":
@@ -57,7 +48,7 @@ describe("menu/desktop/layer/viewLight", function () {
                     case "levelDownText":
                         return "levelDownText";
                     default:
-                        return null;
+                        return this[key] || null;
                 }
             },
 

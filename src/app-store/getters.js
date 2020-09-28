@@ -1,12 +1,17 @@
+import getQueryParams from "../utils/getQueryParams";
+
 export default {
     masterPortalVersionNumber: state => state?.masterPortalVersionNumber,
     mobile: state => state.mobile,
     dpi: state => state.dpi,
+    idCounter: state => state?.idCounter,
     // configJS destructuring
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",
+    uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
+    menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
     portalConfig: state => state?.configJson?.Portalconfig || null,
     // styles
     simpleStyle: state => (state?.queryParams?.style || "").toLowerCase() === "simple",

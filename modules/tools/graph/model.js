@@ -328,13 +328,13 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * Creates the basic structure of a graph.
      * @param {SVG} svg The svg.
-     * @param {Object[]} data Data for graph.
+     * @param {Object[]} [data=[]] Data for graph.
      * @param {String} className Class name of point.
      * @param {Object} d3line D3 line object.
-     * @returns {Void}  -
+     * @returns {void}
      */
-    appendDataToSvg: function (svg, data, className, d3line) {
-        const dataToAdd = data.filter(function (obj) {
+    appendDataToSvg: function (svg, data = [], className, d3line) {
+        const dataToAdd = data.filter(obj => {
             return obj.yAttrToShow !== "-";
         });
 
@@ -448,7 +448,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * Appends line points to created line.
      * @param {SVG} svg Svg.
-     * @param {Object[]} data Data for graph.
+     * @param {Object[]} [data=[]] Data for graph.
      * @param {Object} scaleX Scale for x-axis.
      * @param {Object} scaleY Scale for y-axis.
      * @param {String} xAttr Attribute name for x-axis.
@@ -458,7 +458,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Function} [setTooltipValue] (optional) a function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
      * @returns {Void}  -
      */
-    appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue) {
+    appendLinePointsToSvg: function (svg, data = [], scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue) {
         const dat = data.filter(function (obj) {
                 return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
             }),

@@ -13,7 +13,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
 |cache|nein|Boolean||Ist dieser Layer Teil eines gecachten Dienstes? Wenn true wird bei Portalen, die in der **[config.json](config.json.md)** den „Baumtyp“ = „default“ benutzen, dieser Layer den Layern vorgezogen, die mit demselben Metadatensatz verknüpft sind, aber „cache“ = false haben. Bei anderen Baumtypen hat dieser Parameter keine Auswirkungen.|`false`|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|nein|Object||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der **[rest-services.json](rest-services.json.md)** die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der **[config.json](config.json.md)** der Baumtyp *default* gesetzt ist.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|nein|Object/Boolean||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der **[rest-services.json](rest-services.json.md)** die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der **[config.json](config.json.md)** der Baumtyp *default* gesetzt ist. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
 |featureCount|ja|String||Anzahl der zurückzugebenden Features bei GFI-Abfragen. Entspricht dem *GetFeatureInfo-Parameter "FEATURE_COUNT"*|`"1"`|
 |format|ja|String||Grafikformat der Kachel, die vom Portal über den *GetMap* aufgerufen wird. Muss einem der Werte aus den Capabilities unter *Capability/Request/GetMap/Format* entsprechen.|`"image/jpeg"`|
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
@@ -24,7 +24,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |layers|ja|String||Layername im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *Layer/Layer/Name* entsprechen.|`"1"`|
 |legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`"ignore"`|
 |maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"1000000"`|
-|minScale|nein|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
+|minScale|ja|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Luftbilder DOP 10"`|
 |singleTile|nein|Boolean||Soll die Grafik als eine große Kachel ausgeliefert werden? Wenn true wird immer der gesamte Kartenausschnitt angefragt, wenn false wird der Kartenausschnitt in kleineren Kacheln angefragt und zusammengesetzt.|`false`|
 |tilesize|ja|String||Kachelgröße in Pixel. Diese wird verwandt wenn singleTile=false gesetzt ist.|`"512"`|
@@ -81,9 +81,9 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 
 ## WMTS-Layer ##
 
-Es gibt zwei Wege, einen WMTS-Layer im Masterportal zu definieren:  
+Es gibt zwei Wege, einen WMTS-Layer im Masterportal zu definieren:
 
-A) Angabe aller nachfolgenden WMTS-Parameter  
+A) Angabe aller nachfolgenden WMTS-Parameter
 B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
@@ -168,7 +168,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
 |featureNS|ja|String||featureNamespace. Ist gewöhnlich im Header der WFS-Capabilities referenziert und löst den Namespace auf, der unter FeatureType/Name angegeben wird.|`"http://www.deegree.org/app"`|
 |featureType|ja|String||featureType-Name im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *FeatureTypeList/FeatureType/Name* entsprechen. Allerdings ohne Namespace.|`"bab_vkl"`|
 |featurePrefix|nein|String||Dient der eindeutigen Identifizierung eines FeatureTypes im Dienst.|
@@ -241,6 +241,63 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
     "legendURL" : "",
     "datasets" : []
   }
+```
+
+***
+## Vector Tile Layer ##
+
+[Diese Beschreibung](https://docs.mapbox.com/vector-tiles/specification/#what-the-spec-doesnt-cover) verdeutlicht, was VTL umfasst und was nicht.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|**[datasets](#markdown-header-wms_wfs_datasets)**|nein|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
+|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
+|gfiFormat|nein|String/Object||Optionale Steuerung des Inhaltes der GFI-Informationen für diesen Layer. Der Inhalt kann im Rahmen eines Projektes frei gewählt werden. Die Steuerung der Inhalte über diesen Parameter ist z.B. bei der Verwendung eines gfi-Themes für mehrere Layer von zentraler Bedeutung.|`{"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}`|
+|epsg|ja|String||EPSG-String; wird zum Abgleich benutzt, bei Schiefstand wird jedoch nur eine Warnung ausgegeben. VTL sollten aus Performanzgründen serverseitig passend vorgehalten werden.|`"EPSG:3857"`|
+|id|ja|String||Frei wählbare Layer-ID|`"41"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|transparency|nein|number|`0`|Initiale Layertransparenz von 0 bis 100 inklusive|`0`|
+|visibility|nein|boolean|`false`|Ob Layer initial sichtbar ist|`true`|
+|maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"1000000"`|
+|minScale|nein|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
+|legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt. Da Vector Tile Layer sich durch clientseitige Stylebarkeit auszeichnen, wird es in der Regel keine Legende geben, und viele Anbieter unterstützen auch keine Legenden für VTL.|`"ignore"`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
+|vtStyles|nein|vtStyle[]||Siehe Beispiel und Definition in **[config.json](config.json.md)**. Beschreibt verfügbare Styles, aus denen mit dem Tool styleVT ausgewählt werden kann.|siehe Beispiel unten|
+|typ|ja|String||Muss in diesem Fall "VectorTile" sein.|`"VectorTile"`|
+|url|ja|String||Dienste URL|`"https://example.com/3857/tile/{z}/{y}/{x}.pbf"`|
+
+**Beispiel VectorTile:**
+
+```
+#!json
+
+{
+  "id": "UNIQUE_ID",
+  "name": "Ein Vektortilelayername",
+  "epsg": "EPSG:3857",
+  "url": "https://example.com/3857/tile/{z}/{y}/{x}.pbf",
+  "typ": "VectorTile",
+  "transparency": 0,
+  "visibility": true,
+  "minScale": 4000,
+  "maxScale": 200000,
+  "legendURL": "ignore",
+  "gfiAttributes": "showAll",
+  "gfiTheme": "default",
+  "vtStyles": [
+    {
+      "id": "STYLE_1",
+      "name": "Tagesansicht",
+      "url": "https://example.com/3857/resources/styles/day.json",
+      "defaultStyle": true
+    },
+    {
+      "id": "STYLE_2",
+      "name": "Nachtansicht",
+      "url": "https://example.com/3857/resources/styles/night.json",
+    }
+  ]
+}
 ```
 
 ***
@@ -356,7 +413,7 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
 
 ## WMS_WFS_datasets ##
 
-Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter *kategorie..* werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.
+Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter *kategorie..* werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -617,7 +674,7 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
@@ -671,7 +728,7 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
@@ -721,7 +778,7 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|
@@ -772,7 +829,7 @@ Entities Layer um 3D Modelle im Gltf oder Glb Format darzustellen.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt.||
+|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|nein|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.|`""`|

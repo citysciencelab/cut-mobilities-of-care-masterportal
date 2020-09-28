@@ -46,7 +46,7 @@ const MultiCheckboxModel = SnippetModel.extend({
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
             value: value,
-            iconPath: isNewVectorStyle ? this.getIconPath() : this.getIconPathOld(value),
+            iconPath: isNewVectorStyle ? this.getIconPath(value) : this.getIconPathOld(value),
             displayName: value,
             isSelected: this.get("isInitialLoad") ? true : this.get("preselectedValues").indexOf(value) !== -1,
             isSelectable: true,
@@ -56,9 +56,10 @@ const MultiCheckboxModel = SnippetModel.extend({
 
     /**
      * Determines the iconPath and returns it
+     * @param  {string} value - value of category to display in multiCheckbox
      * @returns {string} - path to Icon
      */
-    getIconPath: function () {
+    getIconPath: function (value) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
         let styleId,
             styleModel,
@@ -74,30 +75,129 @@ const MultiCheckboxModel = SnippetModel.extend({
 
         if (styleModel && styleModel.getLegendInfos() && Array.isArray(styleModel.getLegendInfos())) {
 
-            styleModel.getLegendInfos().forEach(legendInfo => {
-                if (legendInfo.geometryType) {
-                    if (legendInfo.geometryType === "Point") {
-                        const type = legendInfo.styleObject.get("type");
-
-                        if (type === "icon") {
-                            iconPath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
-                        }
-                        else if (type === "circle") {
+            styleModel.getLegendInfos().forEach(function (legendInfo) {
+                if (legendInfo.label === value) {
+                    // always show icon if configured, independend of geometry type
+                    if (legendInfo.styleObject.get("type") === "icon") {
+                        iconPath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
+                    }
+                    else if (legendInfo.geometryType) {
+                        if (legendInfo.geometryType === "Point") {
                             iconPath = this.createCircleSVG(styleModel);
                         }
-                    }
-                    else if (legendInfo.geometryType === "LineString") {
-                        iconPath = this.createLineSVG(legendInfo.styleObject);
-                    }
-                    else if (legendInfo.geometryType === "Polygon") {
-                        iconPath = this.createPolygonSVG(legendInfo.styleObject);
+                        else if (legendInfo.geometryType === "LineString") {
+                            iconPath = this.createLineSVG(legendInfo.styleObject);
+                        }
+                        else if (legendInfo.geometryType === "Polygon") {
+                            iconPath = this.createPolygonSVG(legendInfo.styleObject);
+                        }
                     }
                 }
-            });
+            }.bind(this));
         }
 
         return iconPath;
     },
+
+    /**
+     * Creates an SVG for a polygon
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createPolygonSVG: function (style) {
+        let svg = "";
+        const fillColor = style.get("polygonFillColor") ? this.colorToRgb(style.get("polygonFillColor")) : "black",
+            strokeColor = style.get("polygonStrokeColor") ? this.colorToRgb(style.get("polygonStrokeColor")) : "black",
+            strokeWidth = style.get("polygonStrokeWidth"),
+            fillOpacity = style.get("polygonFillColor")[3] || 0,
+            strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
+
+        svg += "<svg height='25' width='25'>";
+        svg += "<polygon points='5,5 20,5 20,20 5,20' style='fill:";
+        svg += fillColor;
+        svg += ";fill-opacity:";
+        svg += fillOpacity;
+        svg += ";stroke:";
+        svg += strokeColor;
+        svg += ";stroke-opacity:";
+        svg += strokeOpacity;
+        svg += ";stroke-width:";
+        svg += strokeWidth;
+        svg += ";'/>";
+        svg += "</svg>";
+
+        return svg;
+    },
+
+    /**
+     * Creates an SVG for a circle
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createCircleSVG: function (style) {
+        let svg = "";
+        const circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
+            circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
+            circleStrokeWidth = style.get("circleStrokeWidth"),
+            circleFillColor = style.get("circleFillColor") ? this.colorToRgb(style.get("circleFillColor")) : "black",
+            circleFillOpacity = style.get("circleFillColor")[3] || 0;
+
+        svg += "<svg height='25' width='25'>";
+        svg += "<circle cx='12.5' cy='12.5' r='10' stroke='";
+        svg += circleStrokeColor;
+        svg += "' stroke-opacity='";
+        svg += circleStrokeOpacity;
+        svg += "' stroke-width='";
+        svg += circleStrokeWidth;
+        svg += "' fill='";
+        svg += circleFillColor;
+        svg += "' fill-opacity='";
+        svg += circleFillOpacity;
+        svg += "'/>";
+        svg += "</svg>";
+
+        return svg;
+    },
+
+    /**
+     * Creates an SVG for a line
+     * @param   {vectorStyle} style feature styles
+     * @returns {string} svg
+     */
+    createLineSVG: function (style) {
+        let svg = "";
+        const strokeColor = style.get("lineStrokeColor") ? this.colorToRgb(style.get("lineStrokeColor")) : "black",
+            strokeWidth = style.get("lineStrokeWidth"),
+            strokeOpacity = style.get("lineStrokeColor")[3] || 0,
+            strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
+
+        svg += "<svg height='25' width='25'>";
+        svg += "<path d='M 05 20 L 20 05' stroke='";
+        svg += strokeColor;
+        svg += "' stroke-opacity='";
+        svg += strokeOpacity;
+        svg += "' stroke-width='";
+        svg += strokeWidth;
+        if (strokeDash) {
+            svg += "' stroke-dasharray='";
+            svg += strokeDash;
+        }
+        svg += "' fill='none'/>";
+        svg += "</svg>";
+
+        return svg;
+    },
+
+
+    /**
+     * Returns a rgb color string that can be interpreted in SVG.
+     * @param   {integer[]} color color set in style
+     * @returns {string} svg color
+     */
+    colorToRgb: function (color) {
+        return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+    },
+
 
     /**
      * creates a model value and adds it to the value collection

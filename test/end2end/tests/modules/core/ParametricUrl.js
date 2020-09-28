@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getUnnavigatedDriver, loadUrl} = require("../../../library/driver"),
     {imageLoaded, getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
-    {centersTo, clickFeature} = require("../../../library/utils"),
+    {centersTo, clickFeature, logBrowserstackUrlToTest} = require("../../../library/utils"),
     {isBasic, isCustom, isDefault, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -11,15 +11,24 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ParameterTests ({builder, url, resolution, mode}) {
+async function ParameterTests ({builder, url, resolution, mode, capability}) {
     describe("URL Query Parameters", function () {
         let driver, gfi, counter;
 
         before(async function () {
+            if (capability) {
+                capability.name = this.currentTest.fullTitle();
+                builder.withCapabilities(capability);
+            }
             driver = await getUnnavigatedDriver(builder, resolution);
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 
@@ -206,8 +215,7 @@ async function ParameterTests ({builder, url, resolution, mode}) {
         }
 
         if (isMaster(url) || isCustom(url)) {
-            // TODO resolve timeout issue
-            it.skip("?featureid= displays markers for features", async function () {
+            it("?featureid= displays markers for features", async function () {
                 await loadUrl(driver, `${url}?featureid=18,26`, mode);
                 await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
                     {coordinate: [568814.3835, 5931819.377], image: "https://geoportal-hamburg.de/lgv-config/img/location_eventlotse.svg"},
@@ -222,21 +230,14 @@ async function ParameterTests ({builder, url, resolution, mode}) {
             expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
         });
 
-        // TODO find a way to initially detect which tool it is (translation sometimes too slow)
-        it.skip("?isinitopen= allows opening tools initially", async function () {
+        it("?isinitopen= allows opening tools initially", async function () {
             const toolName = "draw",
-                possibleTitles = ["Drawing / Writing", "Zeichnen / Schreiben"],
-                titleSelector = "div#window div.win-heading.header p.title span";
+                checkSelector = By.css("div#window #drawPoint");
 
             await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
 
-            expect(possibleTitles).to.include(
-                await (
-                    await driver.wait(
-                        until.elementIsVisible(
-                            await driver.wait(until.elementLocated(By.css(titleSelector)))
-                        ), 10000, `Loading By("${titleSelector}") in scenario "${url}?isinitopen=${toolName}" failed.`
-                    )).getText());
+            // assume draw tool loaded when #drawPoint option is detected - should be unique
+            await driver.wait(until.elementLocated(checkSelector));
         });
 
         if (isCustom(url) || isMaster(url) || isDefault(url)) {

@@ -30,7 +30,7 @@
         "epsg": "EPSG:25832",
         "filter": "filter=(typ:*)",
         "score": 0.6,
-        "zoomToResult": true
+        "zoomToResultOnHover": true
       },
       "osm": {
         "minChars": 3,
@@ -122,7 +122,7 @@
       "visibleWFS": {
         "minChars": 3
       },
-      "zoomLevel": 9,
+      "startZoomLevel": 9,
       "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "mapView": {
@@ -179,15 +179,15 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "bilingual"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Anzahl Schüler",
+              "schwerpunktschule": "Schwerpunktschule",
+              "bilingual": "Bilingual"
+            }
           },
           {
             "layerId": "8712",
@@ -203,17 +203,17 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Schülerzahl",
+              "schwerpunktschule": "Schwerpunktschule Inklusion",
+              "fremdsprache": "Fremdsprachen",
+              "fremdsprache_mit_klasse": "Fremdsprachen ab Klassenstufe",
+              "schulische_ausrichtung": "Schwerpunkte in den Angeboten"
+            }
           },
           {
             "layerId": "8712",
@@ -229,16 +229,16 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Schülerzahl",
+              "fremdsprache": "Fremdsprachen",
+              "fremdsprache_mit_klasse": "Fremdsprachen ab Klassenstufe",
+              "schulische_ausrichtung": "Schwerpunkte in den Angeboten"
+            }
           },
           {
             "layerId": "8712",
@@ -253,13 +253,13 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "ganztagsform",
-              "foerderart",
-              "abschluss"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "ganztagsform": "Ganztagsform",
+              "foerderart": "Förderart",
+              "abschluss": "Abschluss"
+            }
           },
           {
             "layerId": "1711",
@@ -267,10 +267,10 @@
             "isSelected": true,
             "name": "Krankenhäuser",
             "predefinedRules": [],
-            "attributeWhiteList": [
-              "teilnahme_geburtsklinik",
-              "teilnahme_notversorgung"
-            ]
+            "attributeWhiteList": {
+              "teilnahme_geburtsklinik": "Geburtshilfe",
+              "teilnahme_notversorgung": "Not- und Unfallversorgung"
+            }
           }
         ]
       },
@@ -299,7 +299,7 @@
             "name": "translate#common:menu.tools.measure",
             "glyphicon": "glyphicon-resize-full"
           },
-          "coord": {
+          "supplyCoord": {
             "name": "translate#common:menu.tools.coord",
             "glyphicon": "glyphicon-screenshot"
           },
@@ -329,8 +329,8 @@
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
-          "kmlimport": {
-            "name": "translate#common:menu.tools.kmlimport",
+          "fileImport": {
+            "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
           },
           "extendedFilter": {
@@ -351,7 +351,7 @@
             "glyphicon": "glyphicon-pencil"
           },
           "styleWMS": {
-            "name": "Style WMS",
+            "name": "translate#common:menu.tools.styleWMS",
             "glyphicon": "glyphicon-tint"
           },
           "featureLister": {
@@ -393,24 +393,34 @@
             "glyphicon": "glyphicon-share"
           },
           "layerSlider": {
-            "name": "Zeitreihe",
+            "name": "translate#common:menu.tools.layerSlider",
             "glyphicon": "glyphicon-film",
-            "title": "Simulation von Beispiel-WMS",
+            "title": "translate#common:modules.tools.layerSlider.title",
             "timeInterval": 2000,
             "layerIds": [
               {
-                "title": "Dienst 1",
+                "title": "translate#common:modules.tools.layerSlider.serviceOne",
                 "layerId": "8730"
               },
               {
-                "title": "Dienst 2",
+                "title": "translate#common:modules.tools.layerSlider.serviceTwo",
                 "layerId": "2426"
               },
               {
-                "title": "Dienst 3",
+                "title": "translate#common:modules.tools.layerSlider.serviceThree",
                 "layerId": "4561"
               }
             ]
+          },
+          "scaleSwitcher":
+          {
+            "name": "translate#common:menu.tools.scaleSwitcher",
+            "glyphicon": "glyphicon-resize-full",
+            "renderToWindow": true
+          },
+          "VueAddon": {
+            "name": "AddonTool",
+            "glyphicon": "glyphicon-screenshot"
           }
         }
       },
@@ -515,11 +525,9 @@
     "Fachdaten": {
       "Layer": [
         {
-          "id": "15543",
-          "visibility": true
-        },
-        {
-          "id": "8194"
+          "id": "1132",
+          "styleId": "1132",
+          "name": "100 Jahre Stadtgruen POIs"
         },
         {
           "id": "16100",
@@ -544,6 +552,7 @@
         {
           "id": "2128",
           "styleId": "2128",
+          "styleGeometryType": ["Point"],
           "name": "translate#common:tree.trafficCameras"
         },
         {
@@ -618,11 +627,13 @@
         {
           "id": "47",
           "styleId": "47",
+          "styleGeometryType": "Point",
           "mouseHoverField": [
             "baubeginn",
             "bauende"
           ],
-          "autoRefresh": 6000
+          "autoRefresh": 6000,
+          "clusterDistance": 50
         },
         {
           "id": "2714",
@@ -639,10 +650,8 @@
           "styleId": "45",
           "clusterDistance": 40,
           "routable": true,
-          "searchField": "bezeichnung"
-        },
-        {
-          "id": "4479"
+          "searchField": "bezeichnung",
+          "styleGeometryType": "Point"
         },
         {
           "id": [

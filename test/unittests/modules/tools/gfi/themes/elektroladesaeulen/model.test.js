@@ -1,11 +1,14 @@
 import Model from "@modules/tools/gfi/themes/elektroladesaeulen/model.js";
 import * as moment from "moment";
 import {expect} from "chai";
+import Util from "@testUtil";
 
-let model;
+let model,
+    util;
 
 before(function () {
     model = new Model();
+    util = new Util();
 
     moment.locale("de");
 });
@@ -31,7 +34,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                 .and.to.nested.include({"DatastreamID[0]": "100"})
                 .and.to.nested.include({"DatastreamID[1]": "200"});
         });
-        it("should return an empty object for incorrect object without Pipes input", function () {
+        it("should return an object with values without Pipes input", function () {
             const properties = {
                 Stecker: "Typ2/Schuko",
                 DatastreamID: 100
@@ -396,7 +399,8 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                         index: 1
                     }]
                 }],
-                endDay = "2018-06-19";
+                endDay = "2018-06-19",
+                utc = model.get("utc") ? model.get("utc") : "+1";
 
             expect(model.processDataForAllWeekdays(historicalData, "", endDay)).to.be.an("array").to.have.deep.members([
                 [[{
@@ -416,17 +420,17 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                     result: "charging"
                 }]],
                 [[{
-                    phenomenonTime: "2018-06-17T10:55:52",
+                    phenomenonTime: util.changeTimeZone("2018-06-17T10:55:52", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "available",
                     index: 0
                 }],
                 [{
-                    phenomenonTime: "2018-06-17T12:59:15",
+                    phenomenonTime: util.changeTimeZone("2018-06-17T12:59:15", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "charging",
                     index: 0
                 },
                 {
-                    phenomenonTime: "2018-06-17T12:57:15",
+                    phenomenonTime: util.changeTimeZone("2018-06-17T12:57:15", "YYYY-MM-DDTHH:mm:ss", utc),
                     result: "available",
                     index: 1
 
@@ -491,7 +495,7 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
         it("should return number 0 for empty input", function () {
             expect(model.calculateOneHour([], "", -1, "", "", "")).to.be.a("number").to.equal(0);
         });
-        it("should return number 0 for empty input", function () {
+        it("should return number 0 for incorrect input", function () {
             expect(model.calculateOneHour([{test: "123"}], "abc", -999, "1123", "hhh", "bbb")).to.be.a("number").to.equal(0);
         });
         it("should return number 0.167 for a result change after 10 minutes input", function () {
@@ -543,13 +547,6 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
         });
         it("should return an empty array for empty input", function () {
             expect(model.calculateWorkloadPerDayPerHour([], "")).to.be.an("array").that.is.empty;
-        });
-        it("should return an array with 24 objects array for incorrect input", function () {
-            expect(model.calculateWorkloadPerDayPerHour(["abc"], "123")).to.be.an("array").to.have.deep.members([{
-                0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0,
-                8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0, 14: 0,
-                15: 0, 16: 0, 17: 0, 18: 0, 19: 0, 20: 0, 21: 0, 22: 0, 23: 0
-            }]);
         });
         it("should return an array with 24 objects representing the workload array for correct input", function () {
             const divideDataByWeekday = [[{

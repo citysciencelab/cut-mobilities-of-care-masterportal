@@ -1,6 +1,6 @@
 {
 	"Portalconfig": {
-		"treeType": "light",
+        "treeType": "light",
 		"searchBar": {
 			"osm": {
 				"minChars": 3,
@@ -34,7 +34,7 @@
 					"searchByCoord": {
 						"name": "Koordinatensuche"
 					},
-					"coord": {
+					"supplyCoord": {
 						"name": "Koordinaten abfragen",
 						"glyphicon": "glyphicon-screenshot"
 					},
@@ -43,10 +43,10 @@
 					},
 					"draw": {
 						"name": "Zeichnen / Schreiben",
-						"glyphicon": "glyphicon-pencil"
+                        "glyphicon": "glyphicon-pencil"
 					},
-					"kmlimport": {
-						"name": "KML Import"
+					"fileImport": {
+						"name": "Datei Import"
 					},
 					"saveSelection": {
 						"name": "Auswahl speichern"

@@ -12,11 +12,13 @@ const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
      * @class DownloadView
      * @extends Backbone.View
      * @memberof Tools.Download
+     * @param {object} store - The Vuex store.
      * @listens Tools.Download#changeIsActive
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @constructs
      */
-    initialize: function () {
+    initialize: function (store) {
+        this.model.setStore(store);
         this.listenTo(this.model, {
             "change:isActive": this.render,
             "change:createFirstText": function () {
@@ -55,7 +57,9 @@ const DownloadView = Backbone.View.extend(/** @lends DownloadView.prototype */{
     back: function () {
         this.model.set("isActive", false);
         this.model.reset();
+
         Radio.request("ModelList", "getModelByAttributes", {id: "draw"}).set("isActive", true);
+        this.model.get("store").dispatch("Tools/setToolActive", {id: "draw", active: true});
     },
 
     /**

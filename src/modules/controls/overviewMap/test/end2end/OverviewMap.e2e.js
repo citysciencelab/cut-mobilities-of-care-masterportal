@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {losesCenter} = require("../../../../../../test/end2end/library/utils"),
+    {losesCenter, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {until, By, Button} = webdriver;
@@ -10,29 +10,38 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function OverviewMap ({builder, url, resolution, browsername}) {
+function OverviewMap ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && (isCustom(url) || isMaster(url));
 
     if (testIsApplicable) {
-        describe("Modules Controls OverviewMap", function () {
+        describe("Modules Controls OverviewMap", () => {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
-            before(async function () {
+            before(async () => {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
-            after(async function () {
+            after(async () => {
+                if (capability) {
+                    driver.session_.then(sessionData => {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 
-            it("has an overview map button", async function () {
+            it("has an overview map button", async () => {
                 await driver.wait(until.elementLocated(By.css(".overviewmap-button")), 9000);
                 overviewMapButton = await driver.findElement(By.css(".overviewmap-button"));
 
                 expect(overviewMapButton).to.exist;
             });
 
-            it("closes/opens overview map on clicking overview map button", async function () {
+            it("closes/opens overview map on clicking overview map button", async () => {
                 // open - is closed initially in master, is open initially in custom
                 if (isMaster(url)) {
                     // NOTE: next line is a crutch until control layout issues are resolved; WD won't scroll by itself
@@ -74,7 +83,7 @@ function OverviewMap ({builder, url, resolution, browsername}) {
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("allows panning the map from the overview map", async function () {
+            (isChrome(browsername) ? it.skip : it)("allows panning the map from the overview map", async () => {
                 const center = await driver.executeScript(getCenter);
 
                 overviewMapBox = await driver.findElement(By.css(".ol-overviewmap-box"));

@@ -1,6 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getResolution, mouseWheelUp, mouseWheelDown} = require("../../../test/end2end/library/scripts"),
+    {logBrowserstackUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver"),
     {isMobile} = require("../../../test/end2end/settings"),
     {By} = webdriver;
@@ -10,23 +11,32 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function ZoomTests ({builder, url, resolution}) {
+async function ZoomTests ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution); // no mouse wheel on mobile devices
 
     if (testIsApplicable) {
-        describe("Map Zoom with MouseWheel", function () {
+        describe("Map Zoom with MouseWheel", () => {
             let driver, canvas;
 
-            before(async function () {
+            before(async () => {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
                 canvas = await driver.findElement(By.css(".ol-viewport"));
             });
 
-            after(async function () {
+            after(async () => {
+                if (capability) {
+                    driver.session_.then(sessionData => {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 
-            it("should zoom in on mouse wheel up", async function () {
+            it("should zoom in on mouse wheel up", async () => {
                 this.timeout(15000);
                 const res = await driver.executeScript(getResolution);
 
@@ -38,7 +48,7 @@ async function ZoomTests ({builder, url, resolution}) {
                 } while (res <= await driver.executeScript(getResolution));
             });
 
-            it("should zoom out on mouse wheel down", async function () {
+            it("should zoom out on mouse wheel down", async () => {
                 this.timeout(15000);
                 const res = await driver.executeScript(getResolution);
 

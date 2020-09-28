@@ -4,29 +4,39 @@ const webdriver = require("selenium-webdriver"),
     {onMoveEnd} = require("../../../../../../test/end2end/library/scriptsAsync"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
 /**
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-function BackForwardTests ({builder, url, resolution, browsername}) {
+function BackForwardTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && // buttons not visible mobile
         (isCustom(url) || isMaster(url)); // backForward active in these portals
 
     if (testIsApplicable) {
-        describe("Modules Controls BackForward", function () {
+        describe("Modules Controls BackForward", () => {
             let driver, forwardButton, backwardButton;
 
-            before(async function () {
+            before(async () => {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
-            after(async function () {
+            after(async () => {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 
-            it("should provide the forward and backward button", async function () {
+            it("should provide the forward and backward button", async () => {
                 await driver.wait(until.elementLocated(By.css(".back-forward-buttons .forward")), 50000);
                 forwardButton = driver.findElement(By.css(".back-forward-buttons .forward"));
                 backwardButton = driver.findElement(By.css(".back-forward-buttons .backward"));
@@ -36,7 +46,7 @@ function BackForwardTests ({builder, url, resolution, browsername}) {
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("should move forwards/backwards after panning on button click", async function () {
+            (isChrome(browsername) ? it.skip : it)("should move forwards/backwards after panning on button click", async () => {
                 const viewport = await driver.findElement(By.css(".ol-viewport")),
                     positions = [];
 

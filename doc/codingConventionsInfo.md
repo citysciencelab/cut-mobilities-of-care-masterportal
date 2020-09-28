@@ -4,6 +4,8 @@ Es folgen - falls vorhanden - Erläuterungen und Beispiele zu den jeweiligen Pun
 
 ---
 
+### Teil A
+
 #### A.1.6
 Derzeit ist Babel nicht in der Lage, TPL Dateien zu übersetzen und Internet Explorer unterstützt keine Pfeil-Funktionen.
 
@@ -15,7 +17,7 @@ Weitere Infos bezüglich Vue befinden sich [hier](./conventions/vue.md).
 ---
 
 #### A.4.3
-*Beispiel des JSDoc zweier Funktionen*  
+*Beispiel des JSDoc zweier Funktionen*
 ```javascript
 /**
 * This function does some things that are explained right here.
@@ -40,7 +42,7 @@ functionWithParamsAndReturn: function (param1) {
 ---
 
 #### A.4.4
-*Beispiel einer initialize() Funktion*  
+*Beispiel einer initialize() Funktion*
 ```javascript
 defaults: {
         channel: Radio.channel("Alert"),
@@ -75,7 +77,7 @@ initialize: function () {
 },
 ```
 
-*Beispiel einer Instanziierung eines Templates:*  
+*Beispiel einer Instanziierung eines Templates:*
 ```javascript
 /**
  * @member AlertingTemplate
@@ -88,7 +90,7 @@ template: _.template(AlertingTemplate),
 ---
 
 #### A.4.5
-*Kommentar bei Vererbung*  
+*Kommentar bei Vererbung*
 ```javascript
     const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
 ```
@@ -96,8 +98,8 @@ template: _.template(AlertingTemplate),
 ---
 
 #### A.4.6
-*Definition von Namespaces:*  
-*Beispiel des Namespaces Alerting in Root:*  
+*Definition von Namespaces:*
+*Beispiel des Namespaces Alerting in Root:*
 ```javascript
 /**
  * @namespace Alerting
@@ -106,7 +108,7 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel des Namespaces Modellist als Unterordner des Core:*  
+*Beispiel des Namespaces Modellist als Unterordner des Core:*
 ```javascript
 /**
  * @namespace ModelList
@@ -115,7 +117,7 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Innerhalb von verschachtelten Namespaces:*  
+*Beispiel: Innerhalb von verschachtelten Namespaces:*
 ```javascript
 /**
  * @event Core.ModelList.Layer#changeIsSelected
@@ -125,8 +127,8 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel mit Namespace eines Moduls:*  
-*Beispiel eines Events, das zum Namespace "Alerting" gehört:*  
+*Beispiel mit Namespace eines Moduls:*
+*Beispiel eines Events, das zum Namespace "Alerting" gehört:*
 ```javascript
 /**
  * @event Alerting#RadioTriggerAlertAlert
@@ -138,8 +140,8 @@ template: _.template(AlertingTemplate),
 ---
 
 #### A.4.7
-*Definition von Events:*  
-*Beispiel: Radio.trigger("Channel", "Event");*  
+*Definition von Events:*
+*Beispiel: Radio.trigger("Channel", "Event");*
 ```javascript
 /**
  * @event Namespace#RadioTriggerChannelEvent
@@ -148,7 +150,7 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Radio.trigger("Channel", "EventWithData", data);*  
+*Beispiel: Radio.trigger("Channel", "EventWithData", data);*
 ```javascript
 /**
  * @event Namespace#RadioTriggerChannelEventWithData
@@ -158,7 +160,7 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Radio.request("Channel", "Event");*  
+*Beispiel: Radio.request("Channel", "Event");*
 ```javascript
 /**
  * @event Namespace#RadioRequestChannelEvent
@@ -168,7 +170,7 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Radio.request("Channel", "EventWithData", data);*  
+*Beispiel: Radio.request("Channel", "EventWithData", data);*
 ```javascript
 /**
  * @event Namespace#RadioRequestChannelEventWithData
@@ -179,7 +181,7 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Model.trigger("myTrigger");*  
+*Beispiel: Model.trigger("myTrigger");*
 ```javascript
 /**
  * @event Namespace#MyTrigger
@@ -187,7 +189,7 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Model.trigger("myTriggerWithData", data);*  
+*Beispiel: Model.trigger("myTriggerWithData", data);*
 ```javascript
 /**
  * @event Namespace#MyTriggerWithData
@@ -198,7 +200,7 @@ template: _.template(AlertingTemplate),
 
 *Beispiel: this.listenTo(this, {
     "change:attributeOne": this.doSomething
-});*  
+});*
 ```javascript
 /**
  * @event Namespace#changeAttributeOne
@@ -209,7 +211,7 @@ template: _.template(AlertingTemplate),
 ---
 
 #### A.5.1
-*Beispiele einer testbaren und einer nicht testbaren Funktion*  
+*Beispiele einer testbaren und einer nicht testbaren Funktion*
 ```javascript
 function testbareFunktion (uebergabeParameter) {
     let rueckgabeParameter = "Hello " + uebergabeParameter;
@@ -221,7 +223,7 @@ const arr = [];
 function nichtTestbareFunktion (param) {
     setTimeout(() => {
         arr.push(param);
-    }, 1000);      
+    }, 1000);
 }
 
 ```
@@ -229,27 +231,27 @@ function nichtTestbareFunktion (param) {
 ---
 
 #### A.5.2
-Weitere Informationen zu Unit-Tests [hier](./unittesting.md).
+Weitere Informationen zu Unit-Tests [hier](./unittestingVue.md).
 
-Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mocha](https://mochajs.org/)** verwendet.  
+Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mocha](https://mochajs.org/)** verwendet.
 
 ---
 
 #### A.6.2
-Erweitere die Dokumentation in den .md-Dateien wie im Folgenden beschrieben:  
-a) Erweitere die **[config.js.md](./config.js.md)**, wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.  
-b) Erweitere die **[config.json.md](./config.json.md)**, wenn du neue Konfigurationsparameter für die Portaloberfläche erzeugt hast oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.  
-c) Es werden immer die folgenden Parameter in der Dokumentation für die Konfigurationsparameter befüllt:  
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|  
-"Expert" gibt es nur in der config.json.  
-d) Ein Parameter endet in der .md Datei immer mit einer horizontalen Trennlinie.  
-e) Je nach Verschachtelung des Parameters wird die Überschrift ausgewählt. Auf der obersten Ebene mit # darunter mit ##.  
-f) Konfigurationsparameter die ein Objekt sind und selber weitere Parameter enthalten werden in einem eigenen Bereich einzeln beschrieben und verlinkt.  
-g) Bei komplexen Konfigurationsparametern ist eine Beispielkonfiguration gefordert.  
-h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[rest-services.json.md](./rest-services.json.md)** und **[style.json.md](./style.json.md)**, wenn du für diese globalen Konfigurationsdateien neue Parameter benötigst/verwendest.  
+Erweitere die Dokumentation in den .md-Dateien wie im Folgenden beschrieben:
+a) Erweitere die **[config.js.md](./config.js.md)**, wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
+b) Erweitere die **[config.json.md](./config.json.md)**, wenn du neue Konfigurationsparameter für die Portaloberfläche erzeugt hast oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
+c) Es werden immer die folgenden Parameter in der Dokumentation für die Konfigurationsparameter befüllt:
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+"Expert" gibt es nur in der config.json.
+d) Ein Parameter endet in der .md Datei immer mit einer horizontalen Trennlinie.
+e) Je nach Verschachtelung des Parameters wird die Überschrift ausgewählt. Auf der obersten Ebene mit # darunter mit ##.
+f) Konfigurationsparameter die ein Objekt sind und selber weitere Parameter enthalten werden in einem eigenen Bereich einzeln beschrieben und verlinkt.
+g) Bei komplexen Konfigurationsparametern ist eine Beispielkonfiguration gefordert.
+h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[rest-services.json.md](./rest-services.json.md)** und **[style.json.md](./style.json.md)**, wenn du für diese globalen Konfigurationsdateien neue Parameter benötigst/verwendest.
 
 
-*Verschachtelung in .json wird mit der Anzahl von # dargestellt:*  
+*Verschachtelung in .json wird mit der Anzahl von # dargestellt:*
 ```
     # config.json
     .
@@ -259,7 +261,7 @@ h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[r
     ## Portalconfig
 ```
 
-*8.3.6 - Parameter sind verschachtelt, wenn sie selber ein Objekt sind*  
+*8.3.6 - Parameter sind verschachtelt, wenn sie selber ein Objekt sind*
 ```
     ## Portalconfig
     |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -271,7 +273,7 @@ h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[r
 
 ```
 
-*8.3.7 - Beispiel einer komplexen Beispielkonfiguration*  
+*8.3.7 - Beispiel einer komplexen Beispielkonfiguration*
 ```
     "osm": {
         "minChars": 3,
@@ -285,19 +287,19 @@ h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[r
 ---
 
 #### A.6.4
-Bei Veränderung/Refactoring/Löschen eines Parameters:  
-a) Markiere den Parameter in der Doku mit "Deprecated in [nächstes Major-Release]".  
-b) Markiere den Code für den alten Parameter mit "@deprecated in [nächstes Major-Release]" im JSDoc.  
+Bei Veränderung/Refactoring/Löschen eines Parameters:
+a) Markiere den Parameter in der Doku mit "Deprecated in [nächstes Major-Release]".
+b) Markiere den Code für den alten Parameter mit "@deprecated in [nächstes Major-Release]" im JSDoc.
 
-*Beispiel Änderung eines Parameters:*  
-*Beispiel des deprecated Parameters "Baumtyp" in der config.json.md:*  
+*Beispiel Änderung eines Parameters:*
+*Beispiel des deprecated Parameters "Baumtyp" in der config.json.md:*
 ```markdown
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |Baumtyp|nein|enum["light", "default", "custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|false|
 ```
 
-*Beispiel des deprecated Parameter "Baumtyp" im Code:*  
+*Beispiel des deprecated Parameter "Baumtyp" im Code:*
 ```javascript
 /**
 * this.updateTreeType
@@ -330,32 +332,56 @@ updateTreeType: function (attributes, response) {
 ---
 
 #### A.7.1
-Es wird die Bibliothek [i18next](https://www.i18next.com/) verwendet.  
+Es wird die Bibliothek [i18next](https://www.i18next.com/) verwendet.
 
 ---
 
 #### A.8.3
-Weitere Informationen zur Versionierung [hier](./Versionierung.md).  
-Schreibe für jeden Pull request einen Eintrag im [CHANGELOG](../CHANGELOG.md) unter dem Punkt Unreleased. Vermeide Fachjargon. Der Changelog soll die NutzerIn und EntwicklerIn informieren.  
+Weitere Informationen zur Versionierung [hier](./Versionierung.md).
+Schreibe für jeden Pull request einen Eintrag im [CHANGELOG](../CHANGELOG.md) unter dem Punkt Unreleased. Vermeide Fachjargon. Der Changelog soll die NutzerIn und EntwicklerIn informieren.
 
+---
 
-## C Weiteres
+### Teil B (optional)
 
-#### C.1 Ausgabe von Fehlermeldungen
-C.1.1 Verwende das Alerting-Modul.  
-C.1.2 Gib eine sprechende Fehlermeldung, die der NutzerIn erklärt was schiefgelaufen ist.  
-C.1.3 Fehler nur dann auswerfen, wenn sie relevant für die NutzerIn sind und sich auf den aktuellen Arbeitsschritt beziehen.  
-C.1.4 Wenn der NutzerIn ein Fehler mitgeteilt wird, sagen dass etwas schiefgelaufen ist, warum etwas schiefgelaufen ist und was die NutzerIn tun kann, um den Fehler zu beheben! Wenn nichts getan werden kann überlegen, ob der Fehler der NutzerIn mitgeteilt werden muss.  
-C.1.5 Gib technische Fehlermeldung (für die EntwicklerIn) als console.error() oder console.warn() aus.  
+#### B.3.1
+```
+import state from "./state";
+import {generateSimpleMutations} from "~generators";
 
-*Beispiel mit einfachem Text:*  
-```javascript
-    Radio.trigger("Alert", "alert", "My First Alert Message.");
+const mutations = {
+    ...generateSimpleMutations(state),
 ```
 
-*Beispiele von Fehlermeldungen:*  
-Negativ-Beispiel: "CSW-Request fehlgeschlagen".  
-Positiv-Beispiel: "Die weiteren Informationen zu Themen konnten nicht geladen werden."  
+----
 
-Negativ-Beispiel: "Sie haben das Passwort vergessen".  
-Positiv-Beispiel: "Bitte geben sie ihr Passwort an".  
+#### B.4.2
+* [mapState](https://vuex.vuejs.org/guide/state.html#the-mapstate-helper)
+* [mapGetters](https://vuex.vuejs.org/guide/getters.html#the-mapgetters-helper)
+* [mapMutations](https://vuex.vuejs.org/guide/mutations.html#committing-mutations-in-components)
+* [mapActions](https://vuex.vuejs.org/guide/actions.html#dispatching-actions-in-components)
+
+---
+
+#### B.5.4
+```
+<style lang="less" scoped>
+    @import "~variables";
+</style>
+```
+
+---
+
+#### B.6
+*Beispiel mit einfachem Text:*
+```javascript
+    import store from "masterportal/src/app-store/index";
+    store.dispatch("Alerting/addSingleAlert", "My First Alert Message.");
+```
+
+*Beispiele von Fehlermeldungen:*
+Negativ-Beispiel: "CSW-Request fehlgeschlagen".
+Positiv-Beispiel: "Die weiteren Informationen zu Themen konnten nicht geladen werden."
+
+Negativ-Beispiel: "Sie haben das Passwort vergessen".
+Positiv-Beispiel: "Bitte geben sie ihr Passwort an".

@@ -26,6 +26,16 @@ const mutations = {
      */
     setLayerOpacity (state, {layerId, opacity}) {
         getters.layers(state)[layerId].opacity = opacity;
+    },
+    /**
+     * Sets the scales for the map.
+     * @param {object} state state object
+     * @param {object} payload parameter object
+     * @param {string} payload.scales list of scales
+     * @returns {void}
+     */
+    setScales (state, {scales}) {
+        state.scales = scales;
     }
 };
 

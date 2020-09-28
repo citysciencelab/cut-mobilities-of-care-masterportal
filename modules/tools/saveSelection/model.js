@@ -29,7 +29,6 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
      * @property {Boolean} glyphicon="glyphicon-share" todo
      * @property {String} saveSelectionText="", filled with "Speichern Sie diese URL als Lesezeichen ab"- translated
      * @constructs
-     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
      * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapRegisterListener
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker

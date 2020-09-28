@@ -174,7 +174,7 @@ const Menu = Backbone.View.extend({
         distArray.push(distLeft);
         distArray.push(distTop);
         distArray.push(distRight);
-        minDist = _.min(distArray);
+        minDist = Math.min(...distArray);
         minPos = distArray.indexOf(minDist);
 
         return minPos;

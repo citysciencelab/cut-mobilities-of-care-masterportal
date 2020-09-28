@@ -19,7 +19,7 @@
                             <%= element.layername %>
                         </h4>
                     </div>
-                    <% element.legend.forEach(function (layerdefinition) { %>
+                    <% element.legend && element.legend.forEach(function (layerdefinition) { %>
                     <div id="collapseEins<%=index%>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="überschriftEins<%=index%>">
                         <div class="panel-body panel-legend">
                             <%= layerdefinition.html %>
