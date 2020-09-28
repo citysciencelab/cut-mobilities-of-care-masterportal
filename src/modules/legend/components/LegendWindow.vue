@@ -469,28 +469,6 @@ export default {
             }
             return isArrayOfStrings;
         },
-        /* example WMS
-            {
-                name: "Layername",
-                legend: [
-                    "https://geoportal.muenchen.de/geoserver/gsm/wms?VERSION=1.0.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=gsm:citywise"
-                ],
-                position:1
-            }
-        */
-
-        /* example vector
-            {
-                name: "Layername",
-                legend: [
-                    {
-                        name: "foobar",
-                        graphic: "<svg>...</svg>"
-                    }
-                ],
-                position:2
-            }
-        */
 
         /**
         * Checks if given layerid is not yet in the legend.

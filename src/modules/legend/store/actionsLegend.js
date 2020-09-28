@@ -23,8 +23,8 @@ const configPaths = [
          * @param {Boolean} showLegend Flag if legend should be shown or not
          * @returns {void}
          */
-        setShowLegend: function ({commit}, showLegend) {
-            commit("showLegend", showLegend);
+        setShowLegend: function ({state}, showLegend) {
+            state.showLegend = showLegend;
         },
 
         /**
