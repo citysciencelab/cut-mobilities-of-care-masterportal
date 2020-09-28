@@ -1,5 +1,6 @@
 <script>
 import Default from "../themes/Default.vue";
+import ActiveCityMaps from "../themes/ActiveCityMaps.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import Solaratlas from "../themes/Solaratlas.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
@@ -15,6 +16,7 @@ export default {
     name: "Attached",
     components: {
         Default,
+        ActiveCityMaps,
         Schulinfo,
         Solaratlas,
         TrafficCount,
