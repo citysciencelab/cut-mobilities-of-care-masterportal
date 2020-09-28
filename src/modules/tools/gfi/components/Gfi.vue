@@ -20,7 +20,7 @@ export default {
             // current index of the pagination and so also for the feature in the gfiFeatures
             pagerIndex: 0,
             // key for re-render child(detached) component
-            componentKey: 0
+            componentKey: false
         };
     },
     computed: {
@@ -90,13 +90,13 @@ export default {
             this.setCurrentFeature(newValue);
         },
         /**
-         * Whenever mapSize changes, increase component key by one
+         * Whenever mapSize changes, component key is changed
          * to force re-render detached component (key-changing).
          * @returns {void}
          */
         mapSize: function () {
             if (this.currentViewType === "Detached") {
-                this.componentKey += 1;
+                this.componentKey = !this.componentKey;
             }
         }
     },
