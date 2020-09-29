@@ -4,7 +4,7 @@ import {createGfiFeature, openFeaturesInNewWindow, getXmlFeatures, getWmsFeature
 describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
     describe("createGfiFeature", () => {
         it("should return an object with specific functions to get the given params", () => {
-            const feature = createGfiFeature("layerName", "gfiTheme", "attributesToShow", "featureProperties", "id", "url");
+            const feature = createGfiFeature("layerName", "gfiTheme", "attributesToShow", "featureProperties", "gfiFormat", "id", "url");
 
             expect(feature).to.be.an("object");
 
@@ -13,6 +13,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(feature.getTheme).to.be.a("function");
             expect(feature.getAttributesToShow).to.be.a("function");
             expect(feature.getProperties).to.be.a("function");
+            expect(feature.getGfiFormat).to.be.a("function");
             expect(feature.getId).to.be.a("function");
 
             expect(feature.getGfiUrl()).to.equal("url");
@@ -20,6 +21,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(feature.getTheme()).to.equal("gfiTheme");
             expect(feature.getAttributesToShow()).to.equal("attributesToShow");
             expect(feature.getProperties()).to.equal("featureProperties");
+            expect(feature.getGfiFormat()).to.equal("gfiFormat");
             expect(feature.getId()).to.equal("id");
         });
     });

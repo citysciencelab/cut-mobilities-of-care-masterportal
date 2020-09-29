@@ -74,6 +74,7 @@ const gettersMap = {
                         layer.get("gfiTheme"),
                         layer.get("gfiAttributes"),
                         clusteredFeature.getProperties(),
+                        layer.get("gfiFormat"),
                         clusteredFeature.getId()
                     ));
                 });
@@ -84,6 +85,7 @@ const gettersMap = {
                     layer.get("gfiTheme"),
                     layer.get("gfiAttributes"),
                     feature.getProperties(),
+                    layer.get("gfiFormat"),
                     feature.getId()
                 ));
             }

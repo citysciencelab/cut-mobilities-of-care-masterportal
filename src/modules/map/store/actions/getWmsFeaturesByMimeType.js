@@ -24,7 +24,7 @@ export function getWmsFeaturesByMimeType (mimeType, url, layerName, gfiTheme, at
     }
 
     // mimeType === "text/html"
-    return [createGfiFeature(layerName, gfiTheme, attributesToShow, null, undefined, url)];
+    return [createGfiFeature(layerName, gfiTheme, attributesToShow, null, null, undefined, url)];
 }
 
 /**
@@ -86,7 +86,7 @@ export function getXmlFeatures (url, layerName, gfiTheme, attributesToShow, call
         if (Array.isArray(featureInfos)) {
             featureInfos.forEach(function (feature) {
                 if (typeof feature === "object" && feature !== null && typeof feature.getProperties === "function") {
-                    result.push(createGfiFeature(layerName, gfiTheme, attributesToShow, feature.getProperties(), feature.getId()));
+                    result.push(createGfiFeature(layerName, gfiTheme, attributesToShow, feature.getProperties(), null, feature.getId()));
                 }
             });
         }
@@ -100,16 +100,18 @@ export function getXmlFeatures (url, layerName, gfiTheme, attributesToShow, call
  * @param {String} gfiTheme the title of the theme - it does not check if the theme exists
  * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
  * @param {?Object} featureProperties an object with the data of the feature as simple key/value pairs
+ * @param {Object} [gfiFormat=null] the gfiFormat as defined at the layer
  * @param {String} [id=""] id the id of the feature
  * @param {String} [url=""] the url to call the wms features from
  * @returns {Object} an object{getTheme, getTitle, getAttributesToShow, getProperties, getId, getGfiUrl}
  */
-export function createGfiFeature (layerName, gfiTheme, attributesToShow, featureProperties, id = "", url = "") {
+export function createGfiFeature (layerName, gfiTheme, attributesToShow, featureProperties, gfiFormat = null, id = "", url = "") {
     return {
         getTitle: () => layerName,
         getTheme: () => gfiTheme,
         getAttributesToShow: () => attributesToShow,
         getProperties: () => featureProperties,
+        getGfiFormat: () => gfiFormat,
         getId: () => id,
         getGfiUrl: () => url
     };
