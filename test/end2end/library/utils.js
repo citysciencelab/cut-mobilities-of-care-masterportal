@@ -68,6 +68,8 @@ async function clickFeature (driver, coordinates) {
     const viewport = await driver.findElement(By.css(".ol-viewport"));
 
     await driver.executeScript(setCenter, coordinates);
+    // wait until re-centering is sure to be done - may click old center else ...
+    await new Promise(r => setTimeout(r, 10));
     await viewport.click();
 }
 
