@@ -119,7 +119,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     prepareLayerObject: function () {
-        const options = this.combineOptions(this.get("cesium3DTilesetOptions"), this.get("url")),
+        const options = this.combineOptions(this.get("cesium3DTilesetOptions"), Radio.request("Util", "getProxyURL", this.get("url"))),
             tileset = new Cesium.Cesium3DTileset(options);
 
         tileset.style = this.styling();
