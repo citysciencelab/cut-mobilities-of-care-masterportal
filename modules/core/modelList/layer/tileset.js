@@ -171,9 +171,6 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         }
 
         if (styleModel && legend === true) {
-            if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
-                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
-            }
             this.setLegend(styleModel.getLegendInfos());
         }
         else if (typeof legend === "string") {
