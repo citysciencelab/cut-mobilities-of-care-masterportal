@@ -997,7 +997,7 @@ describe("tools/print_/buildSpec", function () {
                 }),
                 style = buildSpecModel.getFeatureStyle(pointFeatures[0], vectorLayer)[0];
 
-            expect(buildSpecModel.getImageName(style.getImage().getSrc())).to.equal("/krankenhaus.png");
+            expect(buildSpecModel.getImageName(style.getImage().getSrc())).to.equal("krankenhaus.png");
         });
     });
     describe("rgbStringToRgbArray", function () {
