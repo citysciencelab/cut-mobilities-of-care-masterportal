@@ -43,6 +43,19 @@ const gettersMap = {
     },
 
     /**
+     * gets all visible wms layers at the current resolution
+     * @param {object} state - the map state
+     * @param {object} getters - the map getters
+     * @param {object[]} getters.visibleWmsLayerList - all visible wms layers in the map
+     * @returns {object[]} all visible wms layers at the current resolution
+     */
+    visibleWmsLayerListAtResolution: (state, {visibleWmsLayerList, resolution}) => {
+        return visibleWmsLayerList.filter(layer => {
+            return resolution <= layer.get("maxResolution") && resolution >= layer.get("minResolution");
+        });
+    },
+
+    /**
      * gets the features at the given pixel for the gfi
      * @param {object} state - the map state
      * @param {object} state.map - the openlayers map
