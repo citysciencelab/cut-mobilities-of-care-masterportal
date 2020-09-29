@@ -148,8 +148,8 @@ const actions = {
      * @returns {void}
      */
     async collectGfiFeatures ({getters, commit}) {
-        const {clickCoord, visibleWmsLayerList, resolution, projection, gfiFeaturesAtPixel} = getters,
-            gfiWmsLayerList = visibleWmsLayerList.filter(layer => {
+        const {clickCoord, visibleWmsLayerListAtResolution, resolution, projection, gfiFeaturesAtPixel} = getters,
+            gfiWmsLayerList = visibleWmsLayerListAtResolution.filter(layer => {
                 return layer.get("gfiAttributes") !== "ignore";
             });
 
