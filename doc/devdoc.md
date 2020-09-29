@@ -6,7 +6,7 @@ Um Erweiterungen für das MasterPortal zu schreiben und beizutragen finden sie h
 
 Es sind folgende Code-Konventionen einzuhalten:
 
-* **[Code-Konventionen](conventions.md)**
+* **[Code-Konventionen](codingConventions.md)**
 
 Um Code dem Projekt beizutragen ist der Workflow und die "Definition of Done" einzuhalten:
 
