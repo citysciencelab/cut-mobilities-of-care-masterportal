@@ -48,7 +48,7 @@
         "hitGlyphicon": "glyphicon-list"
       },
       "visibleVector": {
-        "gfiOnClick": false
+        "gfiOnClick": true
       },
       "specialWFS": {
         "minChars": 3,
