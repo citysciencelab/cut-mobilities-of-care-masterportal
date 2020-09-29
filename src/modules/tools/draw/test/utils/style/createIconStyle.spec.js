@@ -19,7 +19,7 @@ describe("src/modules/tools/draw/utils/style/createIconStyle.js", () => {
                     value: iconPath + "cloud.png"
                 },
                 zIndex = 0,
-                result = createIconStyle(color, pointSize, symbol, zIndex);
+                result = createIconStyle(color, "", pointSize, symbol, zIndex);
 
             expect(result.getImage().getOpacity()).to.equal(color[3]);
         });
@@ -33,9 +33,24 @@ describe("src/modules/tools/draw/utils/style/createIconStyle.js", () => {
                     value: iconPath + "cloud.png"
                 },
                 zIndex = 0,
-                result = createIconStyle(color, pointSize, symbol, zIndex);
+                result = createIconStyle(color, "", pointSize, symbol, zIndex);
 
             expect(result.getImage().getSrc()).to.equal(symbol.value);
+        });  
+        it("value without path shall result in imgPath + value", () => {
+            // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
+            const color = [0, 0, 0, 1],
+                imgPath = "/lgv-config/img",
+                pointSize = 16,
+                symbol = {
+                    caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),
+                    type: "image",
+                    value: "cloud.png"
+                },
+                zIndex = 0,
+                result = createIconStyle(color, imgPath, pointSize, symbol, zIndex);
+
+            expect(result.getImage().getSrc()).to.equal(imgPath + symbol.value);
         });
         it("the method should throw an Error if the symbol is not of type \"image\"", () => {
             const color = [0, 0, 0, 1],
@@ -47,7 +62,7 @@ describe("src/modules/tools/draw/utils/style/createIconStyle.js", () => {
                 },
                 zIndex = 0;
 
-            expect(() => createIconStyle(color, pointSize, symbol, zIndex)).to.throw(Error, `Draw: The given type ${symbol.type} of the symbol is not supported!`);
+            expect(() => createIconStyle(color, "", pointSize, symbol, zIndex)).to.throw(Error, `Draw: The given type ${symbol.type} of the symbol is not supported!`);
         });
     });
 });

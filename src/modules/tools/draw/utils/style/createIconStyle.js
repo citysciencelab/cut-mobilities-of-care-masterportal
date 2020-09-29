@@ -17,7 +17,7 @@ export function createIconStyle (color, imgPath, pointSize, symbol, zIndex) {
     if (symbol.type === "image") {
         style = new Style({
             image: new Icon({
-                src: symbol.value.indexOf("/") === -1 ? imgPath + symbol.value : symbol.value,
+                src: symbol.value.indexOf("/") === -1 && imgPath ? imgPath + symbol.value : symbol.value,
                 scale: symbol?.scale ? symbol.scale : 1 / (96 / pointSize),
                 // funktioniert nicht bei kml:
                 opacity: symbol?.opacity ? symbol?.opacity : color[3]

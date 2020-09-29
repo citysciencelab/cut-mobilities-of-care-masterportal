@@ -94,7 +94,7 @@ describe("styleFunctionsDraw", () => {
                     value: iconPath + "cloud.png"
                 },
                 zIndex = 0,
-                result = createIconStyle(color, pointSize, symbol, zIndex);
+                result = createIconStyle(color, "", pointSize, symbol, zIndex);
 
             expect(result.getImage().getSrc()).to.equal(symbol.value);
         });
@@ -109,7 +109,7 @@ describe("styleFunctionsDraw", () => {
                 },
                 zIndex = 0;
 
-            expect(() => createIconStyle(color, pointSize, symbol, zIndex)).to.throw(Error, `Draw: The given type ${symbol.type} of the symbol is not supported!`);
+            expect(() => createIconStyle(color, "", pointSize, symbol, zIndex)).to.throw(Error, `Draw: The given type ${symbol.type} of the symbol is not supported!`);
         });
     });
 
