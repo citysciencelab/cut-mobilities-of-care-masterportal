@@ -1034,13 +1034,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - Url for legend path.
      */
     createLegendImageUrl: function (path) {
-        let url = path,
-            image;
+        let url = path;
 
         if (url.indexOf("http") === -1) {
-            url = this.buildGraphicPath();
-            image = path.substring(path.lastIndexOf("/"));
-            url = url + image;
+            url = this.buildGraphicPath(url);
         }
 
         return url;
