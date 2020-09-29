@@ -12,6 +12,7 @@ import LocationFinderModel from "./locationFinder/model";
 import GdiModel from "./gdi/model";
 import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
+import "./RadioBridge.js";
 
 /**
  * @member SearchbarTemplate
