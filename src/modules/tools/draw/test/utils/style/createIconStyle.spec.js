@@ -36,7 +36,7 @@ describe("src/modules/tools/draw/utils/style/createIconStyle.js", () => {
                 result = createIconStyle(color, "", pointSize, symbol, zIndex);
 
             expect(result.getImage().getSrc()).to.equal(symbol.value);
-        });  
+        });
         it("value without path shall result in imgPath + value", () => {
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             const color = [0, 0, 0, 1],
