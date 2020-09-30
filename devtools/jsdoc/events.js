@@ -8,20 +8,6 @@
  */
 
 /**
- * @event StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
- * @param {Object} model Layer model to be styled
- * @description Resets the stylewms params for legend
- * @example Radio.trigger("StyleWMS", "resetParamsStyleWMS", model)
- */
-
-/**
- * @event StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
- * @param {Object[]} attributes -
- * @description Sets the style wms params for legend so that the legend can be updated
- * @example Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes)
- */
-
-/**
  * @event StyleWMS#changeModel
  * @description Triggered when layer model to style changes
  */
@@ -189,37 +175,11 @@
  */
 
 
-/** -------------------- LEGEND -------------------- */
+/** -------------------- LEGEND COMPONENT-------------------- */
 
 /**
- * @event Legend#RadioRequestLegendGetLegend
- * @param {layer} layer The layer, to which the legend should be returned.
- * @example Radio.request("Legend", "getLegend", layer)
- */
-
-/**
- * @event Legend#RadioRequestLegendGetLegendParams
- * @returns {Object} legendParams legendParams
- */
-
-/**
- * @event Legend#RadioTriggerLegendSetLayerList
- * @description todo
- */
-
-/**
- * @event Legend#hide
- * @description todo
- */
-
-/**
- * @event Legend#changeLegendParams
- * @description todo
- */
-
-/**
- * @event Legend#changeParamsStyleWMSArray
- * @description todo
+ * @event LegendComponent#RadioTriggerLegendComponentUpdateLegend
+ * @example Radio.trigger("LegendComponent", "updateLegend")
  */
 
 

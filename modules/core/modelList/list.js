@@ -14,7 +14,7 @@ import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
-import Legend from "../../legend/model";
+// import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
 /**
  * PrintV2
@@ -269,9 +269,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "compareFeatures") {
                 return new CompareFeatures(attrs, options);
             }
-            else if (attrs.id === "legend") {
-                return new Legend(attrs, options);
-            }
+            // else if (attrs.id === "legend") {
+            //     return new Legend(attrs, options);
+            // }
             else if (attrs.id === "filter") {
                 return new Filter(attrs, options);
             }

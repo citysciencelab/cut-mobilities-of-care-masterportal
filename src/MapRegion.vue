@@ -2,6 +2,7 @@
 import Alerting from "./modules/alerting/components/Alerting.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
+import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
 import {mapState} from "vuex";
 
@@ -11,6 +12,7 @@ export default {
         ControlBar,
         ToolManager,
         Alerting,
+        LegendWindow,
         Footer
     },
     computed: {
@@ -31,6 +33,7 @@ export default {
         />
         <!-- HUD elements; always present -->
         <div class="elements-positioned-over-map">
+            <LegendWindow />
             <ControlBar class="controls" />
             <Footer />
         </div>

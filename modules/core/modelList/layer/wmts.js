@@ -206,36 +206,52 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     /**
      * If no legendURL is set an Error is written on the console.
      * For the OptionsFromCapabilities way:
-     * If legendURL is empty, WMTS-Capabilities will be searched for a legendURL (OGC Standard)
-     * If a legendURL is found, legend will be rebuild
+     * If legend is empty, WMTS-Capabilities will be searched for a legendURL (OGC Standard)
+     * If a legend is found, legend will be rebuild
      *
      * @returns {void}
      */
-    createLegendURL: function () {
-        let legendURL = this.get("legendURL");
+    createLegend: function () {
+        let legend = this.get("legend");
         const capabilitiesUrl = this.get("capabilitiesUrl");
 
-        if ((this.get("optionsFromCapabilities") === undefined) && (legendURL === "" || legendURL === undefined)) {
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if ((this.get("optionsFromCapabilities") === undefined) && (legend === true)) {
             console.error("WMTS: No legendURL is specified for the layer!");
         }
 
-        else if (this.get("optionsFromCapabilities") && !legendURL) {
+        else if (this.get("optionsFromCapabilities") && !legend) {
             this.fetchWMTSCapabilities(capabilitiesUrl)
                 .then(function (result) {
                     result.Contents.Layer.forEach(function (layer) {
                         if (layer.Identifier === this.get("layers")) {
-                            const getLegendURL = Radio.request("Util", "searchNestedObject", layer, "LegendURL");
+                            const getLegend = Radio.request("Util", "searchNestedObject", layer, "LegendURL");
 
-                            if (getLegendURL !== null && getLegendURL !== undefined) {
-                                legendURL = getLegendURL.LegendURL[0].href;
+                            if (getLegend !== null && getLegend !== undefined) {
+                                legend = getLegend.Legend[0].href;
 
-                                this.setLegendURL(legendURL);
+                                this.setLegend(legend);
 
                                 // rebuild Legend
                                 Radio.trigger("Legend", "setLayerList");
                             }
                             else {
-                                this.setLegendURL(null);
+                                this.setLegend(null);
                                 console.warn("no legend url found for layer " + this.get("layers"));
                             }
 

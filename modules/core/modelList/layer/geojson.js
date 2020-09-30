@@ -87,6 +87,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
                 this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
             }
         }
+        this.createLegend();
     },
 
     /**
@@ -377,19 +378,35 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     },
 
     /**
-     * creates the legendUrl used by layerinformation
-     * @fires StyleList#RadioRequestReturnModelById
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
-    createLegendURL: function () {
-        let style;
+    createLegend: function () {
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let legend = this.get("legend");
 
-        if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
-            style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-
-            if (style !== undefined) {
-                this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+            if (this.get("legendURL") === "") {
+                legend = true;
             }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (styleModel && legend === true) {
+            this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
         }
     },
 

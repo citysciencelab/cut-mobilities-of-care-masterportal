@@ -94,8 +94,6 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @fires List#RadioTriggerModelListSetModelAttributesById
      * @fires List#RadioRequestModelListGetModelByAttributes
      * @fires Util#RadioRequestUtilGetProxyUrl
-     * @fires StyleWMS#RadioTriggerStyleWMSResetParamsStyleWMS
-     * @fires StyleWMS#RadioTriggerStyleWMSUpdateParamsStyleWMS
      * @fires StyleWMSModel#sync
      * @fires StyleWMSModel#changeIsactive
      * @listens i18next#RadioTriggerLanguageChanged
@@ -383,23 +381,61 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     },
 
     /**
-     * Triggers the legend to update itself
+     * Updates the legend of the layer
      * @param {Object[]} attributes Attributes for creating the legend from StyleWMS
-     * @fires StyleWMS#RadioTriggerStyleWmsUpdateParamsStyleWMS
      * @returns {void}
      */
     updateLegend: function (attributes) {
-        attributes.styleWMSName = this.get("model").get("name");
-        Radio.trigger("StyleWMS", "updateParamsStyleWMS", attributes);
+        const layer = this.get("model"),
+            legend = [];
+
+        attributes.forEach(attribute => {
+            const graphic = this.createSvgGraphic(attribute.color);
+
+            legend.push({
+                name: attribute.startRange + " - " + attribute.stopRange,
+                graphic: graphic
+            });
+        });
+        layer.setLegend(legend);
+    },
+
+    createSvgGraphic: function (color) {
+        let svg = "data:image/svg+xml;charset=utf-8,";
+
+        svg += "<svg height='35' width='35' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+        svg += "<polygon points='5,5 30,5 30,30 5,30' style='fill:";
+        svg += this.hexToRgbString(color);
+        svg += ";'/>";
+        svg += "</svg>";
+
+        return svg;
+    },
+
+    /**
+     * Converts hex value to rgbarray.
+     * @param {String} hex Color as hex string.
+     * @returns {String} - Color als rgb string.
+     */
+    hexToRgbString: function (hex) {
+        const rgbArray = hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => "#" + r + r + g + g + b + b)
+            .substring(1).match(/.{2}/g)
+            .map(x => parseInt(x, 16));
+        let rgbString = rgbArray.toString(", ");
+
+        rgbString = "rgb(" + rgbString + ")";
+
+        return rgbString;
     },
 
     /**
      * Triggers the legend to reset the stylewms params
-     * @fires StyleWMS#RadioTriggerStyleWmsResetParamsStyleWMS
      * @returns {void}
      */
     resetLegend: function () {
-        Radio.trigger("StyleWMS", "resetParamsStyleWMS", this.get("model"));
+        const layer = this.get("model");
+
+        layer.createLegend();
     },
 
     /**

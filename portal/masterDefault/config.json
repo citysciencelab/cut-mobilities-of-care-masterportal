@@ -170,8 +170,9 @@
                 }
             },
             "legend": {
-                "name": "translate#common:menu.legend",
-                "glyphicon": "glyphicon-book"
+              "name": "common:modules.legend.name",
+              "glyphicon": "glyphicon-book",
+              "showCollapseAllButton": true
             },
             "contact": {
                 "name": "translate#common:menu.contact",

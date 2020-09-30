@@ -236,7 +236,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             return styleObject.getStyle();
         }
         else if (geometryType === "Cesium") {
-            styleObject = new CesiumStyle(style, rule);
+            styleObject = new CesiumStyle(rule);
+            this.addLegendInfo("Cesium", styleObject, rule);
             return styleObject.getStyle();
         }
         else if (geometryType === "Circle") {
@@ -290,13 +291,17 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 }
             });
         }
+        else if (geometryType === "Cesium") {
+            rules.forEach(rule => {
+                const simpleStyle = this.getSimpleGeometryStyle(geometryType, feature, rule, isClustered);
+
+                olStyle.push(simpleStyle);
+            });
+        }
         else {
             const simpleStyle = this.getSimpleGeometryStyle(geometryType, feature, rules, isClustered);
 
-            if (geometryType !== "Cesium") {
-                simpleStyle.setGeometry(geometryType);
-            }
-
+            simpleStyle.setGeometry(geometryType);
             olStyle.push(simpleStyle);
         }
 
@@ -603,8 +608,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 "styleObject": styleObject,
                 "label": this.createLegendLabel(rule, styleObject)
             });
-
-            Radio.trigger("Legend", "setLayerList");
         }
     },
 

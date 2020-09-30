@@ -114,7 +114,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (this.get("isSelected")) {
             this.updateSource(true);
         }
-        this.createLegendURL();
+        this.createLegend();
     },
 
     /**
@@ -225,18 +225,18 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      */
     styling: function () {
         const styleId = this.get("styleId"),
-            stylelistmodel = Radio.request("StyleList", "returnModelById", styleId);
-        let isClusterfeature;
+            styleModel = Radio.request("StyleList", "returnModelById", styleId);
+        let isClusterFeature = false;
 
-        if (stylelistmodel !== undefined) {
+        if (styleModel !== undefined) {
             this.setStyle(function (feature) {
                 // in manchen Fällen war feature undefined und in "this" geschrieben.
                 // konnte nicht nachvollziehen, wann das so ist.
                 const feat = feature !== undefined ? feature : this;
 
-                isClusterfeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
+                isClusterFeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
 
-                return stylelistmodel.createStyle(feat, isClusterfeature);
+                return styleModel.createStyle(feat, isClusterFeature);
             });
         }
         else {
@@ -247,20 +247,38 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     },
 
     /**
-     * Generates a legend url.
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
-    createLegendURL: function () {
-        let style;
+    createLegend: function () {
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let legend = this.get("legend");
 
-        if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
-            style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-            if (style !== undefined) {
-                if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
-                    style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
-                }
-                this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+            if (this.get("legendURL") === "") {
+                legend = true;
             }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (styleModel && legend === true) {
+            if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
+            }
+            this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
         }
     },
 

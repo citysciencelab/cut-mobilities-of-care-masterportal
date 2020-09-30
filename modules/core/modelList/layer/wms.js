@@ -127,29 +127,50 @@ const WMSLayer = Layer.extend({
         else {
             this.setLayer(new Image(layerobjects));
         }
+        this.createLegend();
     },
 
     /**
      * Wenn der Parameter "legendURL" leer ist, wird er auf GetLegendGraphic gesetzt.
      * @return {void}
      */
-    createLegendURL: function () {
-        const legendURL = [],
+    createLegend: function () {
+        const legends = [],
             version = this.get("version");
+        let legend = this.get("legend");
 
-        if (this.get("legendURL") === "" || this.get("legendURL") === undefined) {
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (legend === true || Array.isArray(legend)) {
             const layerNames = this.get("layers").split(",");
 
             if (layerNames.length === 1) {
-                legendURL.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers")));
+                legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers")));
             }
             else if (layerNames.length > 1) {
                 layerNames.forEach(layerName => {
-                    legendURL.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName));
+                    legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName));
                 });
             }
 
-            this.set("legendURL", legendURL);
+            this.setLegend(legends);
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legends]);
         }
     },
 

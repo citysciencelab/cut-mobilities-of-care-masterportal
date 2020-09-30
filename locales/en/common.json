@@ -48,7 +48,6 @@
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features"
         },
-        "legend": "Explanations",
         "contact": "Mail",
         "info": "Information"
     },
@@ -654,9 +653,10 @@
             }
         },
         "legend": {
-            "title": "Legend",
-            "collapseAll": "Collapse all",
-            "foldOutAll": "Fold out all"
+            "name": "Legend",
+            "linkToPdf": "Link to extern legend (PDF)",
+            "noLegendForLayerInfo": "No legend available",
+            "toggleCollapseAll": "Toggle all legends"
         },
         "zoomToGeometry": {
           "alertNoFoundFeature" : "No object was found! Please check the input parameters."

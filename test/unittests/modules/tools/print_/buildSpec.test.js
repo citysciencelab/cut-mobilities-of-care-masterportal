@@ -169,88 +169,130 @@ describe("tools/print_/buildSpec", function () {
             });
         });
     });
+    describe("legendContainsPdf", function () {
+        it("should return false if legend array of strings does not contain PDF", function () {
+            const legend = ["foobar", "barfoo"];
+
+            expect(buildSpecModel.legendContainsPdf(legend)).to.be.false;
+        });
+        it("should return true if legend array of strings contains PDF", function () {
+            const legend = ["foobar", "some.pdf", "barfoo"];
+
+            expect(buildSpecModel.legendContainsPdf(legend)).to.be.true;
+        });
+        it("should return false if legend array of objects does not contain PDF", function () {
+            const legend = [
+                {
+                    graphic: "foobar",
+                    name: "name_foobar"
+                },
+                {
+                    graphic: "barfoo",
+                    name: "name_barfoo"
+                }];
+
+            expect(buildSpecModel.legendContainsPdf(legend)).to.be.false;
+        });
+        it("should return true if legend array of objects contains PDF", function () {
+            const legend = [
+                {
+                    graphic: "foobar",
+                    name: "name_foobar"
+                },
+                {
+                    graphic: "some.pdf",
+                    name: "name_some_pdf"
+                },
+                {
+                    graphic: "barfoo",
+                    name: "name_barfoo"
+                }];
+
+            expect(buildSpecModel.legendContainsPdf(legend)).to.be.true;
+        });
+    });
     describe("prepareLegendAttributes", function () {
-        it("should create legend attributes array for WMS", function () {
-            const layerParam = {
-                layername: "Layer1",
-                legend: [{
-                    img: ["http://GetlegendGraphicRequest1", "http://GetlegendGraphicRequest2"],
-                    typ: "WMS"
-                }]
-            };
+        it("should return prepared legend attributes for legend array of strings", function () {
+            const legend = [
+                "SomeGetLegendGraphicRequest",
+                "<svg some really short svg with fill:rgb(255,0,0);></svg",
+                "barfoo.png"
+            ];
 
-            expect(buildSpecModel.prepareLegendAttributes(layerParam)[0]).to.deep.own.include({
-                legendType: "wmsGetLegendGraphic",
-                geometryType: "",
-                imageUrl: "http://GetlegendGraphicRequest1",
-                color: "",
-                label: ""
-            });
-            expect(buildSpecModel.prepareLegendAttributes(layerParam)[1]).to.deep.own.include({
-                legendType: "wmsGetLegendGraphic",
-                geometryType: "",
-                imageUrl: "http://GetlegendGraphicRequest2",
-                color: "",
-                label: ""
-            });
+            expect(buildSpecModel.prepareLegendAttributes(legend)).to.deep.equal([
+                {
+                    legendType: "wmsGetLegendGraphic",
+                    geometryType: "",
+                    imageUrl: "SomeGetLegendGraphicRequest",
+                    color: "",
+                    label: undefined
+                },
+                {
+                    legendType: "geometry",
+                    geometryType: "polygon",
+                    imageUrl: "",
+                    color: "rgb(255,0,0)",
+                    label: undefined
+                },
+                {
+                    legendType: "wfsImage",
+                    geometryType: "",
+                    imageUrl: "barfoo.png",
+                    color: "",
+                    label: undefined
+                }
+            ]);
         });
-        it("should create legend attributes array for WFS", function () {
-            const layerParam = {
-                layername: "Layer1",
-                legend: [{
-                    img: ["/lgv-config/img/imgLink1.png", "/lgv-config/img/imgLink2.png"],
-                    legendname: ["Layer1", "Layer2"],
-                    typ: "WFS"
-                }]
-            };
+        it("should return prepared legend attributes for legend array of object", function () {
+            const legend = [
+                {
+                    graphic: "SomeGetLegendGraphicRequest",
+                    name: "name_WMS"
+                },
+                {
+                    graphic: "<svg some really short svg with fill:rgb(255,0,0);></svg",
+                    name: "name_SVG"
+                },
+                {
+                    graphic: "barfoo.png",
+                    name: "name_WFS_Image"
+                }];
 
-            expect(buildSpecModel.prepareLegendAttributes(layerParam)[0]).to.deep.own.include({
-                legendType: "wfsImage",
-                geometryType: "",
-                imageUrl: "null/lgv-config/img/imgLink1.png",
-                color: "",
-                label: "Layer1"
-            });
-            expect(buildSpecModel.prepareLegendAttributes(layerParam)[1]).to.deep.own.include({
-                legendType: "wfsImage",
-                geometryType: "",
-                imageUrl: "null/lgv-config/img/imgLink2.png",
-                color: "",
-                label: "Layer2"
-            });
+            expect(buildSpecModel.prepareLegendAttributes(legend)).to.deep.equal([
+                {
+                    legendType: "wmsGetLegendGraphic",
+                    geometryType: "",
+                    imageUrl: "SomeGetLegendGraphicRequest",
+                    color: "",
+                    label: "name_WMS"
+                },
+                {
+                    legendType: "geometry",
+                    geometryType: "polygon",
+                    imageUrl: "",
+                    color: "rgb(255,0,0)",
+                    label: "name_SVG"
+                },
+                {
+                    legendType: "wfsImage",
+                    geometryType: "",
+                    imageUrl: "barfoo.png",
+                    color: "",
+                    label: "name_WFS_Image"
+                }
+            ]);
         });
-        it("should create legend attributes array for styleWMS", function () {
-            const layerParam = {
-                legend: [{
-                    params: [
-                        {color: "#000000", startRange: "1", stopRange: "2"},
-                        {color: "#ff0000", startRange: "3", stopRange: "4"},
-                        {color: "#00ff00", startRange: "5", stopRange: "6"}],
-                    typ: "styleWMS"
-                }]
-            };
+    });
+    describe("getFillColorFromSVG", function () {
+        it("should return fillcolor from svg string in rgb", function () {
+            const svg_string = "<svg foobar fill:rgb(255,0,0);/>";
 
-            expect(buildSpecModel.prepareLegendAttributes(layerParam)[0]).to.deep.own.include({
-                legendType: "geometry",
-                geometryType: "polygon",
-                imageUrl: "",
-                color: "#000000",
-                label: "1 - 2"
-            });
-            expect(buildSpecModel.prepareLegendAttributes(layerParam)[1]).to.deep.own.include({
-                legendType: "geometry",
-                geometryType: "polygon",
-                imageUrl: "",
-                color: "#ff0000",
-                label: "3 - 4"
-            });
-            expect(buildSpecModel.prepareLegendAttributes(layerParam)[2]).to.deep.own.include({
-                legendType: "geometry",
-                geometryType: "polygon",
-                imageUrl: "",
-                color: "#00ff00",
-                label: "5 - 6"
-            });
+            expect(buildSpecModel.getFillColorFromSVG(svg_string)).to.equal("rgb(255,0,0)");
+        });
+        it("should return fillcolor from svg string in hex", function () {
+            const svg_string = "<svg foobar fill:#ff0000;/>";
+
+            expect(buildSpecModel.getFillColorFromSVG(svg_string)).to.equal("#ff0000");
         });
     });
     describe("prepareGfiAttributes", function () {

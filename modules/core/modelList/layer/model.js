@@ -11,7 +11,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         isVisibleInMap: false,
         layerInfoClicked: false,
         singleBaselayer: false,
-        legendURL: "",
+        legend: true,
         maxScale: "1000000",
         minScale: "0",
         selectionIDX: 0,
@@ -51,7 +51,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {Boolean} singleBaselayer=false - Flag if only a single baselayer should be selectable at once
      * @property {String} minScale="0" Minimum scale for layer to be displayed
      * @property {String} maxScale="1000000" Maximum scale for layer to be displayed
-     * @property {String} legendURL="" LegendURL to request legend from
+     * @property {String} legend=true Legend for layer
      * @property {String[]} supported=["2D"] Array of Strings to show supported modes "2D" and "3D"
      * @property {Boolean} showSettings=true Flag if layer settings have to be shown
      * @property {Number} hitTolerance=0 Hit tolerance used by layer for map interaction
@@ -77,6 +77,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @fires Core#RadioRequestMapViewGetResoByScale
      * @fires LayerInformation#RadioTriggerLayerInformationAdd
      * @fires Alerting#RadioTriggerAlertAlert
+     * @fires LegendComponent:RadioTriggerLegendComponentUpdateLegend
      * @listens Layer#changeIsSelected
      * @listens Layer#changeIsVisibleInMap
      * @listens Layer#changeTransparency
@@ -300,7 +301,6 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         this.createLayer();
         this.updateLayerTransparency();
         this.getResolutions();
-        this.createLegendURL();
         this.checkForScale(Radio.request("MapView", "getOptions"));
     },
 
@@ -312,6 +312,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @listens Layer#event:RadioTriggerLayerUpdateLayerInfo
      * @listens Layer#event:RadioTriggerLayerSetLayerInfoChecked
      * @listens Core#RadioTriggerMapChange
+     * @fires LegendComponent:RadioTriggerLegendComponentUpdateLegend
      * @param {Radio.channel} channel Radio channel of this module
      * @return {void}
      */
@@ -365,14 +366,17 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "change:isVisibleInMap": function () {
                 // triggert das Ein- und Ausschalten von Layern
                 Radio.trigger("ClickCounter", "layerVisibleChanged");
-                Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"));
+                Radio.trigger("Layer", "layerVisibleChanged", this.get("id"), this.get("isVisibleInMap"), this);
                 this.toggleWindowsInterval();
                 this.toggleAttributionsInterval();
             },
             "change:isSelected": function () {
                 this.toggleLayerOnMap();
             },
-            "change:transparency": this.updateLayerTransparency
+            "change:transparency": this.updateLayerTransparency,
+            "change:legend": function () {
+                Radio.trigger("LegendComponent", "updateLegend");
+            }
         });
     },
 
@@ -575,20 +579,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
-        let legend = "";
         const metaID = [],
             name = this.get("name"),
             layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
-        if (this.get("legendURL") === "") {
-            this.createLegendURL();
-        }
-        legend = Radio.request("Legend", "getLegend", this);
         metaID.push(layerMetaId);
 
         Radio.trigger("LayerInformation", "add", {
             "id": this.get("id"),
-            "legend": legend,
             "metaID": metaID,
             "layername": name,
             "url": this.get("url"),
@@ -750,12 +748,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Setter for legendURL
-     * @param {String} value legendURL
+     * Setter for legend
+     * @param {String} value legend
      * @returns {void}
      */
-    setLegendURL: function (value) {
-        this.set("legendURL", value);
+    setLegend: function (value) {
+        this.set("legend", value);
     },
 
     /**

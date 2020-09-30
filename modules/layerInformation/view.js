@@ -1,15 +1,10 @@
 import Template from "text-loader!./template.html";
-import ContentTemplate from "text-loader!../legend/content.html";
 import "jquery-ui/ui/widgets/draggable";
 import "bootstrap/js/tab";
+import store from "../../src/app-store";
 /**
  * @member LayerInformationTemplate
  * @description Template used to create the layer information
- * @memberof LayerInformation
- */
-/**
- * @member LayerInformationContentTemplate
- * @description Template used to create content of the layer information template
  * @memberof LayerInformation
  */
 const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationView.prototype */{
@@ -44,7 +39,6 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     id: "layerinformation-desktop",
     className: "layerinformation",
     template: _.template(Template),
-    contentTemplate: _.template(ContentTemplate),
     /**
      * Renders this view in an overlay.
      * @returns {this} this view
@@ -52,15 +46,23 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     render: function () {
         const attr = this.model.toJSON();
 
-        this.addContentHTML();
         this.$el.html(this.template(attr));
         $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").append(this.$el);
         this.$el.draggable({
             containment: "#map",
             handle: ".header"
         });
+        this.setLayerIdForLayerInfo();
         this.delegateEvents();
         return this;
+    },
+
+    /**
+     * Triggers the event to create layerinfo legend
+     * @returns {void}
+     */
+    setLayerIdForLayerInfo: function () {
+        store.commit("Legend/setLayerIdForLayerInfo", this.model.get("id"));
     },
     /**
      * Toggles the tab after click.
@@ -88,19 +90,6 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
         $("#" + contentId).addClass("in");
     },
 
-    /**
-     * Adds the legend definition to the rendered HTML, this is needed by the template
-     * @returns {void}
-     */
-    addContentHTML: function () {
-        const legends = this.model.get("legend");
-
-        if (legends.legend !== null) {
-            legends.legend.forEach(function (legend) {
-                legend.html = this.contentTemplate(legend);
-            }, this);
-        }
-    },
     /**
     * Removes this view.
     * @fires Layer#RadioTriggerLayerSetLayerInfoChecked

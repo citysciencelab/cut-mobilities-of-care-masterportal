@@ -5,6 +5,7 @@ import Alerting from "../modules/alerting/store/indexAlerting";
 import Footer from "../modules/footer/store/indexFooter";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
+import Legend from "../modules/legend/store/indexLegend";
 
 import getters from "./getters";
 import mutations from "./mutations";
@@ -22,6 +23,7 @@ const store = new Vuex.Store({
     modules: {
         Map,
         Alerting,
+        Legend,
         Footer,
         Tools: {
             ...toolsModule

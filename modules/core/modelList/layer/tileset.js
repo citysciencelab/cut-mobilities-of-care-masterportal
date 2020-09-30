@@ -24,7 +24,6 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
-        selectionIDX: -1,
         /**
          * [cesium3DTilesetDefaults description]
          * @link https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
@@ -108,6 +107,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
             if (this.get("isSelected") === true) {
                 if (!map3d.getCesiumScene().primitives.contains(tileset)) {
                     map3d.getCesiumScene().primitives.add(tileset);
+                    this.createLegend();
                 }
             }
         }
@@ -119,7 +119,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     prepareLayerObject: function () {
-        const options = this.combineOptions(this.get("cesium3DTilesetOptions"), this.get("url")),
+        const options = this.combineOptions(this.get("cesium3DTilesetOptions"), Radio.request("Util", "getProxyURL", this.get("url"))),
             tileset = new Cesium.Cesium3DTileset(options);
 
         tileset.style = this.styling();
@@ -136,9 +136,46 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         let style;
 
         if (styleModel) {
-            style = styleModel.createStyle()[0];
+            style = new Cesium.Cesium3DTileStyle({
+                color: {
+                    conditions: styleModel.createStyle()
+                }
+            });
         }
         return style;
+    },
+
+    /**
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     * @returns {void}
+     */
+    createLegend: function () {
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let legend = this.get("legend");
+
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (styleModel && legend === true) {
+            this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
+        }
     },
 
     /**

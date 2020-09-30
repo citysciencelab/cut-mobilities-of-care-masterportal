@@ -49,7 +49,6 @@
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen"
         },
-        "legend": "Legende",
         "contact": "Kontakt",
         "info": "Informationen"
     },
@@ -663,9 +662,10 @@
             }
         },
         "legend": {
-            "title": "Legende",
-            "collapseAll": "Alle einklappen",
-            "foldOutAll": "Alle ausklappen"
+            "name": "Legende",
+            "linkToPdf": "Zur externen Legende (PDF)",
+            "noLegendForLayerInfo": "Legende nicht verfügbar",
+            "toggleCollapseAll": "Alle Legenden ein-/ausklappen"
         },
         "zoomToGeometry": {
           "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter."

@@ -30,7 +30,7 @@
     <% } %>
         <hr>
         <ul class="nav nav-tabs">
-            <li value="legende" class="tab-toggle active"><a data-toggle="tab" href="#legende">Legende</a></li>
+            <li value="layerinfo-legend" class="tab-toggle active"><a data-toggle="tab" href="#layerinfo-legend">Legende</a></li>
             <% if (downloadLinks !== null) { %>
             <li value="LayerInfoDataDownload" class="tab-toggle"><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
             <% } %>
@@ -40,21 +40,7 @@
         </ul>
         <br>
         <div class="tab-content">
-            <div id="legende" class="tab-pane fade in active">
-                <p>
-                    <% if (Array.isArray(legend.legend) && (legend.legend.length === 0 || legend.legend[0].img === "")) {
-                        print ("<p>Legende wird erst beim aktivieren des Layers geladen</p>");
-                    }
-                    else if (legend.legend === null) {
-                        print ("<p>Keine Legende vorhanden</p>");
-                    }
-                    else {
-                        legend.legend.forEach(function (legend) {
-                            print (legend.html);
-                        });
-                    } %>
-                </p>
-            </div>
+            <div id="layerinfo-legend" class="tab-pane fade in active"></div>
             <div id="LayerInfoDataDownload" class="tab-pane fade">
                 <ul class="list-unstyled">
                     <% if (downloadLinks !== null) { %>
