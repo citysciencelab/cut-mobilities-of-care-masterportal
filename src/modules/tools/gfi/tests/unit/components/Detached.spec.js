@@ -183,4 +183,60 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         expect(footer.text()).to.be.equal("Footer");
     });
 
+    it("should set 'isContentHtml' to true", async () => {
+        const wrapper = shallowMount(Detached, {
+            propsData: {
+                feature: {
+                    getTheme: () => "Default",
+                    getTitle: () => "Hallo",
+                    getGfiUrl: () => "http"
+                }
+            },
+            computed: {
+                clickCoord: () => [],
+                styleAll: () => [{
+                    "right": ""
+                }],
+                styleContent: () => [{
+                    "max-width": "",
+                    "max-height": ""
+                }]
+            },
+            methods: {
+                setMarker: () => sinon.stub
+            },
+            localVue
+        });
+
+        expect(wrapper.vm.isContentHtml).to.be.true;
+    });
+
+    it("should not set 'isContentHtml' to true", async () => {
+        const wrapper = shallowMount(Detached, {
+            propsData: {
+                feature: {
+                    getTheme: () => "Default",
+                    getTitle: () => "Hallo",
+                    getGfiUrl: () => ""
+                }
+            },
+            computed: {
+                clickCoord: () => [],
+                styleAll: () => [{
+                    "right": ""
+                }],
+                styleContent: () => [{
+                    "max-width": "",
+                    "max-height": ""
+                }]
+            },
+            methods: {
+                setMarker: () => sinon.stub
+            },
+            localVue
+        });
+
+        expect(wrapper.vm.isContentHtml).to.be.false;
+    });
+
 });
