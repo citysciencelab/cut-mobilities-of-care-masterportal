@@ -1,3 +1,5 @@
+import "./RadioBridge.js";
+
 const ClickCounterModel = Backbone.Model.extend(/** @lends ClickCounterModel.prototype */{
     defaults: {
         countframeid: Radio.request("Util", "uniqueId", "countframe"),
