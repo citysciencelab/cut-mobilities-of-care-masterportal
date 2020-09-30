@@ -44,7 +44,7 @@ export default {
                 </td>
             </tr>
         </tbody>
-        <tbody v-else-if="typeof feature.getGfiUrl === 'function' && (typeof feature.isGfiAsNewWindow !== 'function' || !feature.isGfiAsNewWindow())">
+        <tbody v-else-if="typeof feature.getGfiUrl === 'function' && feature.getGfiUrl() !== ''">
             <tr colspan="1">
                 <td>
                     <iframe

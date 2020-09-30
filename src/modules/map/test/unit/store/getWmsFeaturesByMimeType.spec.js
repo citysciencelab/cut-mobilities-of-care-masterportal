@@ -129,7 +129,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(result[0].getAttributesToShow).to.be.a("function");
             expect(result[0].getProperties).to.be.a("function");
 
-            expect(result[0].getGfiUrl()).to.equal("url");
+            expect(result[0].getGfiUrl()).to.equal("");
             expect(result[0].getTitle()).to.equal("layerName");
             expect(result[0].getTheme()).to.equal("gfiTheme");
             expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
