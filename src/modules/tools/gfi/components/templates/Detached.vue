@@ -9,6 +9,7 @@ import Trinkwasser from "../themes/Trinkwasser.vue";
 import {mapGetters, mapMutations} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
 import "jquery-ui/ui/widgets/draggable";
+import "jquery-ui/ui/widgets/resizable";
 
 export default {
     name: "Detached",
@@ -25,6 +26,12 @@ export default {
             type: Object,
             required: true
         }
+    },
+    data () {
+        return {
+            // flag if gfi content is html
+            isContentHtml: false
+        };
     },
     computed: {
         ...mapGetters("Map", ["clickCoord"]),
@@ -71,13 +78,21 @@ export default {
          * @returns {Object} the style in the object
          */
         styleContent: function () {
-            const maxWidth = Math.round(document.getElementById("map").offsetWidth / 2.2) + "px",
-                maxHeight = window.innerHeight - 100 - 34 - 83 + "px"; // 100 pixer for the navi. 34 for header, 83 is the distance from bottom
-
+            if (this.isContentHtml) {
+                return {
+                    "max-width": "inherit",
+                    "max-height": "inherit"
+                };
+            }
             return {
-                "max-width": maxWidth,
-                "max-height": maxHeight
+                "max-width": Math.round(document.getElementById("map").offsetWidth / 2.2) + "px",
+                "max-height": window.innerHeight - 100 - 34 - 83 + "px" // 100 pixer for the navi. 34 for header, 83 is the distance from bottom
             };
+        }
+    },
+    created: function () {
+        if (typeof this.feature.getGfiUrl === "function" && this.feature.getGfiUrl() !== "") {
+            this.isContentHtml = true;
         }
     },
     mounted: function () {
@@ -93,6 +108,10 @@ export default {
                 }
             });
         });
+
+        if (this.isContentHtml) {
+            this.makeResizable();
+        }
         this.setMarker();
     },
     beforeDestroy: function () {
@@ -136,6 +155,21 @@ export default {
             this.setCenter(this.clickCoord);
             // TODO replace trigger when MapMarker is migrated
             Radio.trigger("MapMarker", "showMarker", this.clickCoord);
+        },
+
+        /**
+         * Makes this Component resizable
+         * @returns {void}
+         */
+        makeResizable () {
+            $(".gfi-detached").resizable({
+                minHeight: 440,
+                resize: function (e, ui) {
+                    $(".gfi-detached").find("iframe").css("height", ui.size.height - 60);
+                }
+            });
+            $(".gfi-detached").css("maxWidth", "inherit");
+            $(".gfi-detached").css("minWidth", "45vw");
         }
     }
 };
@@ -205,7 +239,7 @@ export default {
         }
     }
     .gfi-content {
-        overflow: scroll;
+        overflow: auto;
         table {
             margin-bottom: 0;
         }
