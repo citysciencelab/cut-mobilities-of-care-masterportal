@@ -189,7 +189,7 @@ export default {
         >
             <!-- Slot Content for Footer -->
             <template
-                v-if="gfiFeatures.length > 1"
+                v-if="gfiFeatures.length > 1 && usePager"
                 #footer
             >
                 <div
