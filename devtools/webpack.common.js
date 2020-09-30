@@ -8,17 +8,10 @@ const webpack = require("webpack"),
     rootPath = path.resolve(__dirname, "../"),
     addonPath = path.resolve(rootPath, "addons/"),
     addonConfigPath = path.resolve(addonPath, "addonsConf.json"),
-    portalconfigsIdaPath = path.resolve(rootPath, "portalconfigs/ida/main.js"),
     entryPoints = {masterportal: path.resolve(rootPath, "js/main.js")};
 
 let addonEntryPoints = {};
 
-if (!fse.existsSync(portalconfigsIdaPath)) {
-    console.warn("NOTICE: " + portalconfigsIdaPath + " not found. Skipping entrypoint for \"IDA\"");
-}
-else {
-    entryPoints.ida = portalconfigsIdaPath;
-}
 
 if (!fse.existsSync(addonConfigPath)) {
     console.warn("NOTICE: " + addonConfigPath + " not found. Skipping all addons.");
