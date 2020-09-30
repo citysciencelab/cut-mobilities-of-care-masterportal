@@ -7,6 +7,7 @@ import Schulinfo from "../themes/Schulinfo.vue";
 import Solaratlas from "../themes/Solaratlas.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
 import Trinkwasser from "../themes/Trinkwasser.vue";
+import DataTable from "../themes/DataTable.vue";
 import Bildungsatlas from "../themes/bildungsatlas/components/Bildungsatlas.vue";
 
 import {mapGetters} from "vuex";
@@ -26,6 +27,7 @@ export default {
         Solaratlas,
         TrafficCount,
         Trinkwasser,
+        DataTable,
         Bildungsatlas
     },
     props: {
