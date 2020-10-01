@@ -30,30 +30,30 @@ describe("core/Util", function () {
         }
     ];
 
-    describe("punctuate", function () {
+    describe("thousandsSeparator", function () {
         before(function () {
             model = new Model();
         });
         it("should set two points for 7 digit number with decimals", function () {
-            expect(model.punctuate(1234567.890)).to.equal("1.234.567,89");
+            expect(model.thousandsSeparator(1234567.890)).to.equal("1.234.567,89");
         });
         it("should set two  points for 7 digit number", function () {
-            expect(model.punctuate(3456789)).to.equal("3.456.789");
+            expect(model.thousandsSeparator(3456789)).to.equal("3.456.789");
         });
         it("should set point for 4 digit number", function () {
-            expect(model.punctuate(1000)).to.equal("1.000");
+            expect(model.thousandsSeparator(1000)).to.equal("1.000");
         });
         it("should not set point for 3 digit number", function () {
-            expect(model.punctuate(785)).to.equal("785");
+            expect(model.thousandsSeparator(785)).to.equal("785");
         });
         it("should not set point for 2 digit number", function () {
-            expect(model.punctuate(85)).to.equal("85");
+            expect(model.thousandsSeparator(85)).to.equal("85");
         });
         it("should not set point for 1 digit number", function () {
-            expect(model.punctuate(1)).to.equal("1");
+            expect(model.thousandsSeparator(1)).to.equal("1");
         });
         it("should work with 1 digit number with decimals", function () {
-            expect(model.punctuate(5.22)).to.equal("5,22");
+            expect(model.thousandsSeparator(5.22)).to.equal("5,22");
         });
     });
     describe("sort", function () {

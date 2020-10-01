@@ -1,6 +1,6 @@
 import * as moment from "moment";
 import uniqueId from "../../src/utils/uniqueId.js";
-import punctuate from "../../src/utils/punctuate.js";
+import thousandsSeparator from "../../src/utils/thousandsSeparator.js";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -40,7 +40,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetConfig
      * @listens Core#RadioRequestUtilGetUiStyle
      * @listens Core#RadioRequestUtilGetIgnoredKeys
-     * @listens Core#RadioRequestUtilPunctuate
+     * @listens Core#RadioRequestUtilThousandsSeparator
      * @listens Core#RadioRequestUtilSort
      * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
      * @listens Core#RadioRequestUtilGetPathFromLoader
@@ -85,7 +85,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "getIgnoredKeys": function () {
                 return this.get("ignoredKeys");
             },
-            "punctuate": this.punctuate,
+            "thousandsSeparator": this.thousandsSeparator,
             "sort": this.sort,
             "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
@@ -141,10 +141,10 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     /**
      * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
      * @param  {String} value - feature attribute values
-     * @returns {string} punctuated value
+     * @returns {string} thousandsSeparatord value
      */
-    punctuate: function (value) {
-        return punctuate(value);
+    thousandsSeparator: function (value) {
+        return thousandsSeparator(value);
     },
 
     /**
