@@ -43,6 +43,9 @@ describe("TraffiCount.vue", () => {
                     }
                 }
             },
+            computed: {
+                currentLocale: () => "de"
+            },
             localVue
         });
     });

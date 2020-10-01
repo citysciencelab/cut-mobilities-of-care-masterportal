@@ -3,6 +3,7 @@ import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
 import Footer from "../modules/footer/store/indexFooter";
+import Language from "../modules/language/store/indexLanguage";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
 import Legend from "../modules/legend/store/indexLegend";
@@ -25,6 +26,7 @@ const store = new Vuex.Store({
         Alerting,
         Legend,
         Footer,
+        Language,
         Tools: {
             ...toolsModule
         },
