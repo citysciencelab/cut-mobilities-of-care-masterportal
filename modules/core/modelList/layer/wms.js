@@ -119,6 +119,7 @@ const WMSLayer = Layer.extend({
                 legendURL: this.get("legendURL"),
                 routable: this.get("routable"),
                 gfiTheme: this.get("gfiTheme"),
+                gfiIconPath: this.get("gfiIconPath"),
                 gfiAttributes: this.get("gfiAttributes"),
                 infoFormat: this.get("infoFormat"),
                 gfiAsNewWindow: this.get("gfiAsNewWindow"),
