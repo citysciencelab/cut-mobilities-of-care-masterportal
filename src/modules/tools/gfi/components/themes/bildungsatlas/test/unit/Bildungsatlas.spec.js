@@ -133,6 +133,25 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
 
             expect(singleTestWrapper.findComponent({name: "BildungsatlasBarchart"}).exists()).to.be.true;
         });
+        it("should find the child component BildungsatlasSchulentlassene", () => {
+            const singleTestWrapper = shallowMount(Bildungsatlas, {
+                propsData: {
+                    feature: {
+                        getProperties () {
+                            return {};
+                        },
+                        getGfiFormat () {
+                            return {
+                                gfiSubTheme: "BildungsatlasSchulentlassene"
+                            };
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(singleTestWrapper.findComponent({name: "BildungsatlasSchulentlassene"}).exists()).to.be.true;
+        });
     });
 
     describe("components", () => {
