@@ -270,16 +270,18 @@ export default {
                     :descriptionYAxis="descriptionYAxis"
                 ></BildungsatlasCompBarchart>
             </div>
-            <p>
-                <i>
-                    *g.F: geringe Fallzahlen.
-                    Die Werte konnten aus datenschutzrechtlichen Gründen nicht ausgewiesen werden
-                    oder das Gebiet ist unbewohnt.
-                </i>
-            </p>
-            <p>
-                Sie können die Position des Fensters durch Drag&#38;Drop ändern.
-            </p>
+            <div class="footer">
+                <p>
+                    <i>
+                        *g.F: geringe Fallzahlen.
+                        Die Werte konnten aus datenschutzrechtlichen Gründen nicht ausgewiesen werden
+                        oder das Gebiet ist unbewohnt.
+                    </i>
+                </p>
+                <p>
+                    Sie können die Position des Fensters durch Drag&#38;Drop ändern.
+                </p>
+            </div>
         </div>
         <div
             class="tab-panel gfi-info"
@@ -417,7 +419,7 @@ export default {
         }
     }
     .panel {
-        &.graphHeader{
+        &.graphHeader {
             padding: 0 8px 8px;
             border-bottom: 2px solid #ddd;
         }
@@ -428,6 +430,9 @@ export default {
 
     .hidden {
         display: none;
+    }
+    .footer {
+        margin: 0 0 10px 10px;
     }
 }
 </style>
