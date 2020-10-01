@@ -21,6 +21,7 @@
 - Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
 - Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 - Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
+- Es gibt einen neuen Parameter an Layern, die auch das gfiTheme unterstützen: gfiIconPath, er gibt den Pfad zu dem Icon an, dass als fallback genutzt wird, fall kein Icon definiert ist.
 
 ### Changed
 - Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Das Zeichnen von Punkten wurde geändert, alle Punkte basieren jetzt auf Bild-Dateien. Größe und Deckkraft können nicht mehr eingestellt werden, für diese Funktionalität steht das Zeichnen von Kreisen zur Verfügung. Das Bereitstellen von anderen Bilddateien wurde angepasst, siehe Doku der config.json.

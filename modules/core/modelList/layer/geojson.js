@@ -76,6 +76,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             gfiFormat: this.get("gfiFormat"),
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
+            gfiIconPath: this.get("gfiIconPath"),
             id: this.get("id"),
             altitudeMode: this.get("altitudeMode"),
             hitTolerance: this.get("hitTolerance")
