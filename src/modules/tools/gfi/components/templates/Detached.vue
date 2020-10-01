@@ -2,6 +2,7 @@
 import Default from "../themes/Default.vue";
 import ActiveCityMaps from "../themes/ActiveCityMaps.vue";
 import Flaecheninfo from "../themes/flaecheninfo/components/Flaecheninfo.vue";
+import Dipas from "../themes/Dipas.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import Solaratlas from "../themes/Solaratlas.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
@@ -19,6 +20,7 @@ export default {
         Default,
         ActiveCityMaps,
         Flaecheninfo,
+        Dipas,
         Schulinfo,
         Solaratlas,
         TrafficCount,

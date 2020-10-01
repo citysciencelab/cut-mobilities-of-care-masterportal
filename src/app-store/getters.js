@@ -87,7 +87,7 @@ export default {
     /**
      * checks if the table style is set in the query params or in the config.js
      * @param {Object} state - the store state
-     * @returns {Boolean} true if table style is set ohterwise false
+     * @returns {Boolean} true if table style is set otherwise false
      */
     isTableStyle: (state) => {
         if (state?.queryParams?.style) {
@@ -98,6 +98,17 @@ export default {
         }
         else if (state?.configJs?.uiStyle && state.configJs.uiStyle === "table") {
             return true;
+        }
+        return false;
+    },
+    /**
+     * checks if the param useVectorStyleBeta is available in config.js and returns the value
+     * @param {object} state - the store state
+     * @returns {boolean} true useVectorStyleBeta is set to true
+     */
+    useVectorStyleBeta: (state) => {
+        if (typeof state?.configJs?.useVectorStyleBeta === "boolean") {
+            return state.configJs.useVectorStyleBeta;
         }
         return false;
     },
