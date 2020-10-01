@@ -13,6 +13,20 @@ export default {
         TrafficCountCompTable,
         TrafficCountCheckbox
     },
+    props: {
+        api: {
+            type: Object,
+            required: true
+        },
+        thingId: {
+            type: Number,
+            required: true
+        },
+        meansOfTransport: {
+            type: String,
+            required: true
+        }
+    },
     data () {
         return {
             // TODO: update apiData, mit der update-Funktion der Api

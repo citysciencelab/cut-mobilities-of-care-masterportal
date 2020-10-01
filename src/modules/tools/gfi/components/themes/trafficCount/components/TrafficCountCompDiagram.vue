@@ -86,6 +86,8 @@ export default {
     },
     data () {
         return {
+            chartData: {},
+            ctx: "",
             colors: ["#337ab7", "#d73027", "#fc8d59", "#91bfdb", "#542788"],
             fontColorGraph: "black",
             fontColorLegend: "#555555",
@@ -104,14 +106,26 @@ export default {
         };
     },
     watch: {
-        apiData (newData) {
-            this.chart.data = this.createDataForDiagram(newData, this.colors, this.renderLabelLegend);
-            this.chart.update(this.updateAnimation);
+        apiData (newData, oldValue) {
+            if (!oldValue.length) {
+                this.chartData = this.createDataForDiagram(newData, this.colors, this.renderLabelLegend);
+                this.createChart(this.chartData, this.ctx);
+            }
+            else if (Array.isArray(newData) && newData.length) {
+                this.chart.data = this.createDataForDiagram(newData, this.colors, this.renderLabelLegend);
+                this.chart.update(this.updateAnimation);
+            }
+            else {
+                this.chart.destroy();
+            }
         }
     },
     mounted () {
-        const data = this.createDataForDiagram(this.apiData, this.colors, this.renderLabelLegend),
-            ctx = this.$el.getElementsByTagName("canvas")[0].getContext("2d");
+        // Setting the gfi content max width the same as graph
+        this.setContentStyle();
+
+        this.chartData = this.createDataForDiagram(this.apiData, this.colors, this.renderLabelLegend);
+        this.ctx = this.$el.getElementsByTagName("canvas")[0].getContext("2d");
 
         /**
          * @see afterFit https://www.chartjs.org/docs/latest/axes/?h=afterfit
@@ -121,36 +135,32 @@ export default {
             this.height = this.height + 10;
         };
 
-        this.chart = new ChartJs(ctx, this.getChartJsConfig(data, {
-            colorTooltipFont: this.colorTooltipFont,
-            colorTooltipBack: this.colorTooltipBack,
-            setTooltipValue: this.setTooltipValue,
-            fontSizeGraph: this.fontSizeGraph,
-            fontSizeLegend: this.fontSizeLegend,
-            fontColorGraph: this.fontColorGraph,
-            fontColorLegend: this.fontColorLegend,
-            gridLinesColor: this.gridLinesColor,
-            xAxisTicks: this.xAxisTicks,
-            yAxisTicks: this.yAxisTicks,
-            renderLabelXAxis: this.renderLabelXAxis,
-            renderLabelYAxis: this.renderLabelYAxis,
-            descriptionXAxis: this.descriptionXAxis,
-            descriptionYAxis: this.descriptionYAxis
-        }));
+        this.createChart(this.chartData, this.ctx);
     },
     methods: {
         /**
-         * setter for the apiData - change the apiData in the parent element (this setter should be for testing only)
-         * @param {Object[]} apiData the apiData as received by parent
+         * Creating the diagram from chart js
+         * @param {Object[]} data parsed for chartjs format
+         * @param {html} ctx the canvas container for diagram
          * @returns {Void}  -
          */
-        setApiData (apiData) {
-            if (Array.isArray(apiData) && apiData.length > 0) {
-                this.apiData = apiData;
-            }
-            else {
-                this.apiData = [];
-            }
+        createChart (data, ctx) {
+            this.chart = new ChartJs(ctx, this.getChartJsConfig(data, {
+                colorTooltipFont: this.colorTooltipFont,
+                colorTooltipBack: this.colorTooltipBack,
+                setTooltipValue: this.setTooltipValue,
+                fontSizeGraph: this.fontSizeGraph,
+                fontSizeLegend: this.fontSizeLegend,
+                fontColorGraph: this.fontColorGraph,
+                fontColorLegend: this.fontColorLegend,
+                gridLinesColor: this.gridLinesColor,
+                xAxisTicks: this.xAxisTicks,
+                yAxisTicks: this.yAxisTicks,
+                renderLabelXAxis: this.renderLabelXAxis,
+                renderLabelYAxis: this.renderLabelYAxis,
+                descriptionXAxis: this.descriptionXAxis,
+                descriptionYAxis: this.descriptionYAxis
+            }));
         },
         /**
          * creates the datasets for chartjs
@@ -326,6 +336,16 @@ export default {
                     }
                 }
             };
+        },
+
+        /**
+         * Setting the gfi content max width the same as graph
+         * @returns {Void} -
+         */
+        setContentStyle: function () {
+            if (document.getElementsByClassName("gfi-content").length) {
+                document.getElementsByClassName("gfi-content")[0].style.maxWidth = "580px";
+            }
         }
     }
 };
@@ -337,7 +357,7 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
     div.graph {
         width: 580px;
         min-height: 285px;
@@ -345,82 +365,11 @@ export default {
     }
 </style>
 
-<docs>
-    This component works on the data received by the api.
-    The data should be without any gaps and should be in order.
-
-    ```html
-        <script>
-        import TrafficCountCompDiagram from "./TrafficCountCompDiagram.vue";
-
-        export default {
-            name: "TestParent",
-            components: {
-                TrafficCountCompDiagram
-            },
-            data () {
-                return {
-                    apiData: [
-                        {
-                            fahrrad: addMissingDataDay("2020-09-22 00:00:00", {
-                                "2020-09-22 00:00:00": 3000,
-                                "2020-09-22 00:15:00": 4583,
-                                "2020-09-22 00:30:00": 300
-                            })
-                        },
-                        {
-                            fahrrad: addMissingDataDay("2020-09-21 00:00:00", {
-                                "2020-09-21 00:00:00": 1234,
-                                "2020-09-21 00:15:00": 432,
-                                "2020-09-21 00:30:00": 3111
-                            })
-                        }
-                    ],
-                    setTooltipValue: (tooltipItem) => {
-                        return tooltipItem.label + ": " + tooltipItem.value;
-                    },
-                    xAxisTicks: 12,
-                    yAxisTicks: 8,
-                    renderLabelXAxis: (datetime) => {
-                        return datetime;
-                    },
-                    renderLabelYAxis: (yValue) => {
-                        return yValue;
-                    },
-                    descriptionXAxis: "description of x axis",
-                    descriptionYAxis: "description of y axis",
-                    renderLabelLegend: (datetime) => {
-                        return datetime;
-                    }
-                };
-            },
-        };
-        </script>
-
-        <!--<template>-->
-            <div>
-                <div class="graph">
-                    <TrafficCountCompDiagram
-                        :apiData="apiData"
-                        :setTooltipValue="setTooltipValue"
-                        :xAxisTicks="xAxisTicks"
-                        :yAxisTicks="yAxisTicks"
-                        :renderLabelXAxis="renderLabelXAxis"
-                        :renderLabelYAxis="renderLabelYAxis"
-                        :descriptionXAxis="descriptionYAxis"
-                        :descriptionYAxis="descriptionYAxis"
-                        :renderLabelLegend="renderLabelLegend"
-                    />
-                </div>
-            </div>
-        <!--</template>-->
-
-        <style scoped>
-            div.graph {
-                width: 580px;
-                min-height: 285px;
-                padding-bottom: 5px;
-            }
-        </style>
-    ```
-</docs>
+<style lang="less">
+    .dateSelector {
+        width: 230px;
+        float: right;
+        margin-right: 30px;
+        margin-top: -35px;
+    }
+</style>
