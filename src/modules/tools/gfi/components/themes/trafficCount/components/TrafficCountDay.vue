@@ -31,17 +31,16 @@ export default {
     data () {
         return {
             dayDatepicker: null,
-            // TODO: update apiData, mit der update-Funktion der Api
             apiData: [],
 
             // props for diagram
             setTooltipValue: (tooltipItem) => {
-                return moment(tooltipItem.label, "YYYY-MM-DD HH:mm:ss").format("HH:mm") + " Uhr: " + thousandsSeparator(tooltipItem.value);
+                return moment(tooltipItem.label, "YYYY-MM-DD HH:mm:ss").format("HH:mm") + " " + this.$t("common:modules.tools.gfi.themes.trafficCount.clockLabel") + " " + thousandsSeparator(tooltipItem.value);
             },
             xAxisTicks: 12,
             yAxisTicks: 8,
             renderLabelXAxis: (datetime) => {
-                return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm") + " Uhr";
+                return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm") + " " + this.$t("common:modules.tools.gfi.themes.trafficCount.clockLabel");
             },
             renderLabelYAxis: (yValue) => {
                 return thousandsSeparator(yValue);
@@ -68,6 +67,7 @@ export default {
         };
     },
     mounted () {
+        moment.locale(i18next.language);
         this.setDayDatepicker();
     },
     methods: {
@@ -151,11 +151,10 @@ export default {
 
         /**
          * opens the calender
-         * @param   {Event} evt click event
          * @returns {void}
          */
-        toggleCalendar: function (evt) {
-            const input = document.getElementById(evt.currentTarget.id).parentNode.parentNode.querySelector("input");
+        toggleCalendar: function () {
+            const input = this.$el.querySelector("input");
 
             input.focus();
         }
