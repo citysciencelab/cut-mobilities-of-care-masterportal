@@ -14,12 +14,13 @@ describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
             const expected = [
                     "Buildings",
                     "buildings_3d",
+                    "",
                     {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
                     null
                 ],
-                result = getGfiFeature(null, null, (layerName, gfiTheme, attributesToShow, featureProperties) => {
+                result = getGfiFeature(null, null, (layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties) => {
                     // createGfiFeatureOpt
-                    return [layerName, gfiTheme, attributesToShow, featureProperties];
+                    return [layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties];
                 });
 
             expect(result).to.deep.equal(expected);
@@ -28,13 +29,14 @@ describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
             const layerAttributes = {
                     name: "name",
                     gfiTheme: "gfiTheme",
+                    gfiIconPath: "gfiIconPath",
                     gfiAttributes: "gfiAttributes"
                 },
                 properties = "properties",
-                expected = ["name", "gfiTheme", "gfiAttributes", "properties"],
-                result = getGfiFeature(layerAttributes, properties, (layerName, gfiTheme, attributesToShow, featureProperties) => {
+                expected = ["name", "gfiTheme", "gfiIconPath", "gfiAttributes", "properties"],
+                result = getGfiFeature(layerAttributes, properties, (layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties) => {
                     // createGfiFeatureOpt
-                    return [layerName, gfiTheme, attributesToShow, featureProperties];
+                    return [layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties];
                 });
 
             expect(result).to.deep.equal(expected);
@@ -43,7 +45,7 @@ describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
             const properties = {
                     attributes: "properties"
                 },
-                result = getGfiFeature(null, properties, (layerName, gfiTheme, attributesToShow, featureProperties) => {
+                result = getGfiFeature(null, properties, (layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties) => {
                     // createGfiFeatureOpt
                     return featureProperties;
                 });
