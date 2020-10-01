@@ -1,4 +1,6 @@
 <script>
+import {mapGetters} from "vuex";
+
 import {TrafficCountCache} from "../library/trafficCountCache";
 import TrafficCountInfo from "./TrafficCountInfo.vue";
 import TrafficCountDay from "./TrafficCountDay.vue";
@@ -30,10 +32,15 @@ export default {
             type: "",
             meansOfTransport: "",
             direction: "",
-            currentTabId: "infos"
+            currentTabId: "infos",
+            keyInfo: "info",
+            keyDay: "day",
+            keyWeek: "week",
+            keyYear: "year"
         };
     },
     computed: {
+        ...mapGetters("Language", ["currentLocale"]),
         infoLabel: function () {
             return this.$t("common:modules.tools.gfi.themes.trafficCount.infoLabel");
         },
@@ -87,19 +94,28 @@ export default {
                 if (oldVal) {
                     this.createDataConnection(newVal.getProperties(), null);
                     this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
+                    this.keyInfo = this.propThingId + "info";
+                    this.keyDay = this.propThingId + "day";
+                    this.keyWeek = this.propThingId + "week";
+                    this.keyYear = this.propThingId + "year";
+
+                    this.setActiveDefaultTab();
                 }
             },
             immediate: true
         },
 
         // When language is switched, the header will be rerendered
-        directionLabel: {
-            handler (newVal, oldVal) {
-                if (oldVal) {
-                    this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
-                }
-            },
-            immediate: true
+        currentLocale: function (newVal, oldVal) {
+            if (oldVal) {
+                this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
+                this.keyInfo = newVal + "info";
+                this.keyDay = newVal + "day";
+                this.keyWeek = newVal + "week";
+                this.keyYear = newVal + "year";
+
+                this.setActiveDefaultTab();
+            }
         }
     },
     created: function () {
@@ -165,6 +181,14 @@ export default {
             }
 
             return false;
+        },
+
+        /**
+         * set the default infos tab active when switch the language by triggering the click event
+         * @returns {Void} -
+         */
+        setActiveDefaultTab: function () {
+            this.$el.querySelector("li[value='infos'] a").click();
         },
 
         /**
@@ -292,6 +316,7 @@ export default {
             <div class="tab-content">
                 <TrafficCountInfo
                     id="infos"
+                    :key="keyInfo"
                     class="tab-pane fade in active"
                     :api="api"
                     :thingId="propThingId"
@@ -299,15 +324,27 @@ export default {
                 />
                 <TrafficCountDay
                     id="day"
+                    :key="keyDay"
                     class="tab-pane fade"
+                    :api="api"
+                    :thingId="propThingId"
+                    :meansOfTransport="propMeansOfTransport"
                 />
                 <TrafficCountWeek
                     id="week"
+                    :key="keyWeek"
                     class="tab-pane fade"
+                    :api="api"
+                    :thingId="propThingId"
+                    :meansOfTransport="propMeansOfTransport"
                 />
                 <TrafficCountYear
                     id="year"
+                    :key="keyYear"
                     class="tab-pane fade"
+                    :api="api"
+                    :thingId="propThingId"
+                    :meansOfTransport="propMeansOfTransport"
                 />
             </div>
         </div>
@@ -324,6 +361,7 @@ export default {
 <style lang="less" scoped>
     .header {
         min-width: 280px;
+        max-width: 320px;
         margin: 0 auto;
         padding: 0 60px;
     }
