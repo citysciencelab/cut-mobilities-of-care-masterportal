@@ -94,11 +94,7 @@ export default {
                 if (oldVal) {
                     this.createDataConnection(newVal.getProperties(), null);
                     this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
-                    this.keyInfo = this.propThingId + "info";
-                    this.keyDay = this.propThingId + "day";
-                    this.keyWeek = this.propThingId + "week";
-                    this.keyYear = this.propThingId + "year";
-
+                    this.setComponentKey(this.propThingId);
                     this.setActiveDefaultTab();
                 }
             },
@@ -109,11 +105,7 @@ export default {
         currentLocale: function (newVal, oldVal) {
             if (oldVal) {
                 this.setHeader(this.api, this.propThingId, this.propMeansOfTransport);
-                this.keyInfo = newVal + "info";
-                this.keyDay = newVal + "day";
-                this.keyWeek = newVal + "week";
-                this.keyYear = newVal + "year";
-
+                this.setComponentKey(newVal);
                 this.setActiveDefaultTab();
             }
         }
@@ -267,6 +259,18 @@ export default {
          */
         setDirection: function (value) {
             this.direction = value;
+        },
+
+        /**
+         * setter for the compoent key
+         * @param {String} value the dynamic changed value from watch hook
+         * @returns {Void}  -
+         */
+        setComponentKey: function (value) {
+            this.keyInfo = value + "info";
+            this.keyDay = value + "day";
+            this.keyWeek = value + "week";
+            this.keyYear = value + "year";
         }
     }
 };

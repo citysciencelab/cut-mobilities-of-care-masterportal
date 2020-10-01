@@ -107,4 +107,14 @@ describe("TraffiCount.vue", () => {
             expect(wrapper.vm.currentTabId).to.equal("infos");
         });
     });
+
+    describe("setComponentKey", () => {
+        it("returns the key for child components", () => {
+            wrapper.vm.setComponentKey("de");
+            expect(wrapper.vm.keyInfo).to.equal("deinfo");
+            expect(wrapper.vm.keyDay).to.equal("deday");
+            expect(wrapper.vm.keyWeek).to.equal("deweek");
+            expect(wrapper.vm.keyYear).to.equal("deyear");
+        });
+    });
 });

@@ -101,10 +101,8 @@ export default {
                 }
                 this.dayDatepicker.updateValues(moment().toDate());
             }
-            else {
-                if (document.querySelector("#dayDateSelector")) {
-                    document.querySelector("#dayDateSelector").appendChild(new DatepickerView({model: this.dayDatepicker}).render().el);
-                }
+            else if (document.querySelector("#dayDateSelector")) {
+                document.querySelector("#dayDateSelector").appendChild(new DatepickerView({model: this.dayDatepicker}).render().el);
             }
         },
 
