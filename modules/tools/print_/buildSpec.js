@@ -949,30 +949,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @param {String} svgString String of SVG.
      * @returns {String} - Fill color from SVG.
      */
-    getFillFromSVG: function (svgString) {
-        const indexOfFill = svgString.indexOf("fill:") + 5,
-            hexLength = 6 + 1;
-        let hexColor = "#000000";
-
-        if (svgString.indexOf("fill:") !== -1) {
-            hexColor = svgString.substring(indexOfFill, indexOfFill + hexLength);
-        }
-        return hexColor;
-    },
-
-    /**
-     * Creates the legend image url.
-     * @param {String} path Path.
-     * @returns {String} - Url for legend path.
-     */
-    createLegendImageUrl: function (path) {
-        let url = path;
-
-        if (url.indexOf("http") === -1) {
-            url = this.buildGraphicPath(url);
-        }
-
-        return url;
+    getFillColorFromSVG: function (svgString) {
+        return svgString.split(/fill:(.+)/)[1].split(/;(.+)/)[0];
     },
 
     /**
