@@ -17,15 +17,7 @@ export default {
     },
     
     mounted () {
-        this.setUsePager(false);
-        console.log(this.refinedData);
-        
-
-
-        this.gfiFeatures.forEach(singleFeature => {
-            //console.log(singleFeature.getAttributesToShow());
-            
-        });
+        //this.setUsePager(false);
     },
     
     computed: {
@@ -42,7 +34,11 @@ export default {
             
             this.gfiFeatures.forEach(singleFeature => {
                 const attrsToShow = singleFeature.getAttributesToShow(),
+                    
                     valsToShow = singleFeature.getProperties();
+                    console.log(attrsToShow);
+                    console.log(valsToShow);
+                    
                 
                 Object.keys(attrsToShow).forEach(attrKey => {
                     if (valsToShow[attrKey] !== undefined && typeof valsToShow[attrKey] === "string" && result.head.indexOf(attrKey) === -1) {
