@@ -364,7 +364,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {boolean} true, if entry 1-3 are equals
      */
     allCompareEqual: function (array1, array2) {
-        if (!Array.isArray(array1) || Array.isArray(array1) && array1.length < 3 || !Array.isArray(array2)|| Array.isArray(array2) && array2.length < 3) {
+        if (!Array.isArray(array1) || Array.isArray(array1) && array1.length < 3 || !Array.isArray(array2) || Array.isArray(array2) && array2.length < 3) {
             return false;
         }
         return array1[0] === array2[0] && array1[1] === array2[1] && array1[2] === array2[2];
