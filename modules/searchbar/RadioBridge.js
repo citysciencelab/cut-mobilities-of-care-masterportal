@@ -24,3 +24,11 @@ Radio.channel("VisibleVector").on({
         store.commit("Map/setGfiFeatures", [feature]);
     }
 });
+
+Radio.channel("GFI").on({
+    "setIsVisible": function (isVisible) {
+        if (!isVisible) {
+            store.commit("Map/setGfiFeatures", null);
+        }
+    }
+});
