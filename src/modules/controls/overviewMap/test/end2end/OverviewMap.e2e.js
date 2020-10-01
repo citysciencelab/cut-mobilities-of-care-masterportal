@@ -14,10 +14,10 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && (isCustom(url) || isMaster(url));
 
     if (testIsApplicable) {
-        describe("Modules Controls OverviewMap", () => {
+        describe("Modules Controls OverviewMap", function () {
             let driver, overviewMapButton, overviewMap, overviewMapViewport, overviewMapBox;
 
-            before(async () => {
+            before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
@@ -25,23 +25,23 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
                 driver = await initDriver(builder, url, resolution);
             });
 
-            after(async () => {
+            after(async function () {
                 if (capability) {
-                    driver.session_.then(sessionData => {
+                    driver.session_.then(function (sessionData) {
                         logBrowserstackUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();
             });
 
-            it("has an overview map button", async () => {
+            it("has an overview map button", async function () {
                 await driver.wait(until.elementLocated(By.css(".overviewmap-button")), 9000);
                 overviewMapButton = await driver.findElement(By.css(".overviewmap-button"));
 
                 expect(overviewMapButton).to.exist;
             });
 
-            it("closes/opens overview map on clicking overview map button", async () => {
+            it("closes/opens overview map on clicking overview map button", async function () {
                 // open - is closed initially in master, is open initially in custom
                 if (isMaster(url)) {
                     // NOTE: next line is a crutch until control layout issues are resolved; WD won't scroll by itself
@@ -83,7 +83,7 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("allows panning the map from the overview map", async () => {
+            (isChrome(browsername) ? it.skip : it)("allows panning the map from the overview map", async function () {
                 const center = await driver.executeScript(getCenter);
 
                 overviewMapBox = await driver.findElement(By.css(".ol-overviewmap-box"));

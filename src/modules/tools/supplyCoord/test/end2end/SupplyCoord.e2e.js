@@ -15,7 +15,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function CoordTests ({builder, url, resolution, config, capability}) {
-    describe("SupplyCoord", () => {
+    describe("SupplyCoord", function () {
         const selectors = {
             tools: By.xpath("//ul[@id='tools']/.."),
             toolCoord: By.css("ul#tools span.glyphicon-screenshot"),
@@ -64,7 +64,7 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
             expect(searchMarkerPosition)[expectPhrase].equal(await searchMarkerContainer.getAttribute("style"));
         }
 
-        before(async () => {
+        before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
@@ -72,9 +72,9 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
             driver = await initDriver(builder, url, resolution);
         });
 
-        after(async () => {
+        after(async function () {
             if (capability) {
-                driver.session_.then(sessionData => {
+                driver.session_.then(function (sessionData) {
                     logBrowserstackUrlToTest(sessionData.id_);
                 });
             }

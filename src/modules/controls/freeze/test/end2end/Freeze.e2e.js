@@ -15,10 +15,10 @@ function FreezeTests ({builder, url, resolution, browsername, capability}) {
         (isCustom(url) || isMaster(url)); // freeze only active in these
 
     if (testIsApplicable) {
-        describe("Modules Controls Freeze", () => {
+        describe("Modules Controls Freeze", function () {
             let driver, freezeButton, unfreezeButton, topicButton, tree;
 
-            before(async () => {
+            before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
@@ -29,29 +29,29 @@ function FreezeTests ({builder, url, resolution, browsername, capability}) {
                 topicButton.click(); // close tree for upcoming tests
             });
 
-            after(async () => {
+            after(async function () {
                 if (capability) {
-                    driver.session_.then(sessionData => {
+                    driver.session_.then(function (sessionData) {
                         logBrowserstackUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();
             });
 
-            it("should have freeze button", async () => {
+            it("should have freeze button", async function () {
                 freezeButton = await driver.findElement(By.css(".freeze-view-start"));
 
                 expect(freezeButton).to.exist;
             });
 
-            it("should activate the freeze-view element on clicking the freeze button", async () => {
+            it("should activate the freeze-view element on clicking the freeze button", async function () {
                 await freezeButton.click();
 
                 expect(await driver.findElement(By.css(".freeze-view.freeze-activated"))).to.exist;
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("should prevent panning", async () => {
+            (isChrome(browsername) ? it.skip : it)("should prevent panning", async function () {
                 const center = await driver.executeScript(getCenter),
                     viewport = await driver.findElement(By.css(".ol-viewport"));
 
@@ -71,18 +71,18 @@ function FreezeTests ({builder, url, resolution, browsername, capability}) {
                 expect(center).to.eql(await driver.executeScript(getCenter));
             });
 
-            it("should prevent tool opening", async () => {
+            it("should prevent tool opening", async function () {
                 expect(topicButton.click).to.throw();
                 expect(tree.isDisplayed).to.throw();
             });
 
-            it("should have an unfreeze button when active", async () => {
+            it("should have an unfreeze button when active", async function () {
                 unfreezeButton = await driver.findElement(By.css(".freeze-view-close"));
 
                 expect(unfreezeButton).to.exist;
             });
 
-            it("should deactivate the freeze element on clicking the unfreeze button", async () => {
+            it("should deactivate the freeze element on clicking the unfreeze button", async function () {
                 await unfreezeButton.click();
 
                 expect(await driver.findElements(By.css(".freeze-view"))).to.have.lengthOf(0);

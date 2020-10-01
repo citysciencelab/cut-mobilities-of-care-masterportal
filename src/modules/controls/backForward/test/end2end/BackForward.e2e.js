@@ -16,10 +16,10 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
         (isCustom(url) || isMaster(url)); // backForward active in these portals
 
     if (testIsApplicable) {
-        describe("Modules Controls BackForward", () => {
+        describe("Modules Controls BackForward", function () {
             let driver, forwardButton, backwardButton;
 
-            before(async () => {
+            before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
@@ -27,7 +27,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
                 driver = await initDriver(builder, url, resolution);
             });
 
-            after(async () => {
+            after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
                         logBrowserstackUrlToTest(sessionData.id_);
@@ -36,7 +36,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
                 await driver.quit();
             });
 
-            it("should provide the forward and backward button", async () => {
+            it("should provide the forward and backward button", async function () {
                 await driver.wait(until.elementLocated(By.css(".back-forward-buttons .forward")), 50000);
                 forwardButton = driver.findElement(By.css(".back-forward-buttons .forward"));
                 backwardButton = driver.findElement(By.css(".back-forward-buttons .backward"));
@@ -46,7 +46,7 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
             });
 
             // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332
-            (isChrome(browsername) ? it.skip : it)("should move forwards/backwards after panning on button click", async () => {
+            (isChrome(browsername) ? it.skip : it)("should move forwards/backwards after panning on button click", async function () {
                 const viewport = await driver.findElement(By.css(".ol-viewport")),
                     positions = [];
 
