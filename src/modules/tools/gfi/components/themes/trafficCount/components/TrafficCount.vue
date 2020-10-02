@@ -369,4 +369,7 @@ export default {
         margin: 0 auto;
         padding: 0 60px;
     }
+    .footer {
+        position: relative;
+    }
 </style>
