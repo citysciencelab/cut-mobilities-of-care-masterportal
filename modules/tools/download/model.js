@@ -185,8 +185,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             hasIconUrl = new Array(featureCount),
             anchors = new Array(featureCount),
             textFonts = new Array(featureCount),
-            skip = new Array(featureCount),
-            that = this;
+            skip = new Array(featureCount);
         let convertedFeatures = [];
 
         pointOpacities.fill(undefined, 0, featureCount);
@@ -240,31 +239,31 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             }
         }, this);
 
-        convertedFeatures = $.parseXML(this.convertFeatures(features, format));
+        convertedFeatures = new DOMParser().parseFromString(this.convertFeatures(features, format), "text/xml");
 
-        $(convertedFeatures).find("Placemark").each(function (i, placemark) {
-            const style = $(placemark).find("Style")[0];
+        convertedFeatures.getElementsByTagName("Placemark").forEach((placemark, i) => {
+            const style = placemark.getElementsByTagName("Style")[0];
 
-            if ($(placemark).find("Point").length > 0 && skip[i] === false) {
-                if ($(placemark).find("name")[0]) {
-                    const labelStyle = $(placemark).find("LabelStyle")[0],
+            if (placemark.getElementsByTagName("Point").length > 0 && skip[i] === false) {
+                if (placemark.getElementsByTagName("name")[0]) {
+                    const labelStyle = placemark.getElementsByTagName("LabelStyle")[0],
                         iconUrl = window.location.origin + "/img/tools/draw/circle_blue.svg";
 
                     if (textFonts[i]) {
-                        $(labelStyle).append(that.getKmlScaleOfLableStyle(that.getScaleFromFontSize(textFonts[i])));
+                        labelStyle.innerHTML += this.getKmlScaleOfLableStyle(this.getScaleFromFontSize(textFonts[i]));
                     }
-                    $(style).append(that.createKmlIconStyle(iconUrl, 0));
+                    style.innerHTML += this.createKmlIconStyle(iconUrl, 0);
                 }
                 else if (hasIconUrl[i] === false && pointColors[i]) {
-                    const iconUrl = window.location.origin + "/img/tools/draw/circle_" + that.getIconColor(pointColors[i]) + ".svg",
-                        iconStyle = that.createKmlIconStyle(iconUrl, 1);
+                    const iconUrl = window.location.origin + "/img/tools/draw/circle_" + this.getIconColor(pointColors[i]) + ".svg",
+                        iconStyle = this.createKmlIconStyle(iconUrl, 1);
 
-                    $(style).append(iconStyle);
+                    style.innerHTML += iconStyle;
                 }
                 else if (hasIconUrl[i] === true && anchors[i] !== undefined) {
-                    const iconStyle = $(placemark).find("IconStyle")[0];
+                    const iconStyle = placemark.getElementsByTagName("IconStyle")[0];
 
-                    $(iconStyle).append(that.getKmlHotSpotOfIconStyle(anchors[i]));
+                    iconStyle.innerHTML += this.getKmlHotSpotOfIconStyle(anchors[i]);
                 }
             }
 
@@ -510,7 +509,14 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
      * @returns {void}
      */
     setDisabledOnDownloadButton: function (isDisabled) {
-        $(".downloadBtn").prop("disabled", isDisabled);
+        const btn = document.getElementsByClassName("downloadBtn")[0];
+
+        if (isDisabled) {
+            btn.setAttribute("disabled", isDisabled);
+        }
+        else {
+            btn.removeAttribute("disabled");
+        }
     },
 
     /**
@@ -520,7 +526,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
     prepareDownloadButtonNonIE: function () {
         const url = "data:text/plain;charset=utf-8,%EF%BB%BF" + encodeURIComponent(this.get("dataString"));
 
-        $(".downloadFile").attr("href", url);
+        document.getElementsByClassName("downloadFile")[0].setAttribute("href", url);
     },
 
     /**
@@ -543,7 +549,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             window.navigator.msSaveOrOpenBlob(this.get("blob"), this.validateFileNameAndExtension());
         }
         else {
-            $(".downloadFile").attr("download", this.validateFileNameAndExtension());
+            document.getElementsByClassName("downloadFile")[0].setAttribute("download", this.validateFileNameAndExtension());
         }
     },
     /**
