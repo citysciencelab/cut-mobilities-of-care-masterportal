@@ -25,6 +25,7 @@ export default {
     },
     data () {
         return {
+            customStyle: {},
             lastUpdate: "",
             dayInterval: "15-Min",
             weekInterval: "1-Tag",
@@ -70,13 +71,10 @@ export default {
             immediate: true
         },
 
-        currentTabId: {
-            handler (newVal) {
-                if (newVal !== "infos") {
-                    this.updateFooter(newVal);
-                }
-            },
-            immediate: true
+        currentTabId: function (newVal) {
+            if (newVal !== "infos") {
+                this.updateFooter(newVal);
+            }
         }
     },
     mounted: function () {
@@ -163,14 +161,13 @@ export default {
          * @returns {void} -
          */
         fixIndicationPosition: function () {
-            const gfiContent = document.querySelector(".gfi-content"),
-                indicationContent = document.querySelector(".indication");
+            const gfiContent = document.querySelector(".gfi-content");
 
             if (gfiContent) {
                 gfiContent.addEventListener("scroll", () => {
-                    if (indicationContent) {
-                        indicationContent.style.cssText = "left: " + gfiContent.scrollLeft + "px";
-                    }
+                    this.customStyle = {
+                        "left": gfiContent.scrollLeft + "px"
+                    };
                 });
             }
         },
@@ -317,6 +314,7 @@ export default {
         <div
             v-if="currentTabId !== 'infos'"
             class="indication"
+            :style="customStyle"
         >
             {{ indication }}
         </div>
@@ -350,13 +348,16 @@ export default {
 @import "~variables";
 
 .indication {
+    min-width: 456px;
     font-size: 10px;
-    padding: 0 8px;
-    margin-bottom: 15px;
+    position: absolute;
+    left: 0px;
+    margin-left: 5px;
 }
 .download-container {
     float: left;
     margin-left: 8px;
+    margin-top: 25px;
 }
 table {
     margin-bottom: 0;
@@ -367,6 +368,7 @@ table {
         min-width: 280px;
         width: 50%;
         float: right;
+        margin-top: 25px;
         tbody {
             tr {
                 &:nth-of-type(odd){
