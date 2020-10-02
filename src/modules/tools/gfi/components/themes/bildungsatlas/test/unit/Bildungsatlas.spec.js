@@ -134,4 +134,26 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
             expect(singleTestWrapper.findComponent({name: "BildungsatlasBarchart"}).exists()).to.be.true;
         });
     });
+
+    describe("components", () => {
+        it("should find the child component BildungsatlasSchulenWohnort", () => {
+            const singleTestWrapper = shallowMount(Bildungsatlas, {
+                propsData: {
+                    feature: {
+                        getProperties () {
+                            return {};
+                        },
+                        getGfiFormat () {
+                            return {
+                                gfiSubTheme: "BildungsatlasSchulenWohnort"
+                            };
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(singleTestWrapper.findComponent({name: "BildungsatlasSchulenWohnort"}).exists()).to.be.true;
+        });
+    });
 });

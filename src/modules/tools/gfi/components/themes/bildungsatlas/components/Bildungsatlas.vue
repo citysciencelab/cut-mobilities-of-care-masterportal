@@ -1,11 +1,13 @@
 <script>
 import thousandsSeparator from "../../../../../../../utils/thousandsSeparator.js";
 import BildungsatlasBarchart from "./BildungsatlasBarchart.vue";
+import BildungsatlasSchulenWohnort from "./BildungsatlasSchulenWohnort.vue";
 
 export default {
     name: "Bildungsatlas",
     components: {
-        BildungsatlasBarchart
+        BildungsatlasBarchart,
+        BildungsatlasSchulenWohnort
     },
     props: {
         feature: {
@@ -113,4 +115,10 @@ export default {
 </template>
 
 <style lang="less" scoped>
+</style>
+
+<style lang="less">
+    .portal-title a img[alt*="Bildungsatlas"] {
+        width: 80px;
+    }
 </style>
