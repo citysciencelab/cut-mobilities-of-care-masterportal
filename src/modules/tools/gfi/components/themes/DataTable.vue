@@ -17,7 +17,7 @@ export default {
     },
     
     mounted () {
-        //this.setUsePager(false);
+        this.setUsePager(false);
     },
     
     computed: {
@@ -34,11 +34,7 @@ export default {
             
             this.gfiFeatures.forEach(singleFeature => {
                 const attrsToShow = singleFeature.getAttributesToShow(),
-                    
                     valsToShow = singleFeature.getProperties();
-                    console.log(attrsToShow);
-                    console.log(valsToShow);
-                    
                 
                 Object.keys(attrsToShow).forEach(attrKey => {
                     if (valsToShow[attrKey] !== undefined && typeof valsToShow[attrKey] === "string" && result.head.indexOf(attrKey) === -1) {
@@ -51,15 +47,6 @@ export default {
             });
             
             return result;
-        },
-        
-        console: () => console
-    },
-    
-    watch: {
-        feature (newFeature) {
-            //console.log(this.feature);
-            //console.log(newFeature);
         }
     }
 };
@@ -85,7 +72,6 @@ export default {
                     v-for="singleRow in refinedData.rows"
                 >
                     <td
-                        :load="console.log(singleRow)"
                         v-for="propKey in refinedData.head"
                     >
                         {{ singleRow[propKey] ? singleRow[propKey] : '' }}
@@ -95,7 +81,6 @@ export default {
         </table>
     </div>
 </template>
-
 
 <style lang="less" scoped>
 @import "~variables";
@@ -111,6 +96,4 @@ export default {
         }
     }
 }
-
-
 </style>
