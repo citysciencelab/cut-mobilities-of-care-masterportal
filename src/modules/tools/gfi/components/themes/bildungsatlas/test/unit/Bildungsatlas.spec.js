@@ -152,9 +152,6 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
 
             expect(singleTestWrapper.findComponent({name: "BildungsatlasSchulentlassene"}).exists()).to.be.true;
         });
-    });
-
-    describe("components", () => {
         it("should find the child component BildungsatlasSchulenWohnort", () => {
             const singleTestWrapper = shallowMount(Bildungsatlas, {
                 propsData: {
@@ -174,9 +171,25 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
 
             expect(singleTestWrapper.findComponent({name: "BildungsatlasSchulenWohnort"}).exists()).to.be.true;
         });
-    });
+        it("should find the child component BildungsatlasStandorte", () => {
+            const singleTestWrapper = shallowMount(Bildungsatlas, {
+                propsData: {
+                    feature: {
+                        getProperties () {
+                            return {};
+                        },
+                        getGfiFormat () {
+                            return {
+                                gfiSubTheme: "BildungsatlasStandorte"
+                            };
+                        }
+                    }
+                },
+                localVue
+            });
 
-    describe("components", () => {
+            expect(singleTestWrapper.findComponent({name: "BildungsatlasStandorte"}).exists()).to.be.true;
+        });
         it("should find the child component BildungsatlasSchulenEinzugsgebiete", () => {
             const singleTestWrapper = shallowMount(Bildungsatlas, {
                 propsData: {
