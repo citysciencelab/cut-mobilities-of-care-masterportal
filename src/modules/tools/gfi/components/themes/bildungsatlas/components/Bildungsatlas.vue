@@ -4,6 +4,7 @@ import BildungsatlasBarchart from "./BildungsatlasBarchart.vue";
 import BildungsatlasSchulenWohnort from "./BildungsatlasSchulenWohnort.vue";
 import BildungsatlasSchulenEinzugsgebiete from "./BildungsatlasSchulenEinzugsgebiete.vue";
 import BildungsatlasSchulentlassene from "./BildungsatlasSchulentlassene.vue";
+import BildungsatlasStandorte from "./BildungsatlasStandorte.vue";
 
 export default {
     name: "Bildungsatlas",
@@ -11,7 +12,8 @@ export default {
         BildungsatlasBarchart,
         BildungsatlasSchulenWohnort,
         BildungsatlasSchulenEinzugsgebiete,
-        BildungsatlasSchulentlassene
+        BildungsatlasSchulentlassene,
+        BildungsatlasStandorte
     },
     props: {
         feature: {
