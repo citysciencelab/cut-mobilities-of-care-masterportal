@@ -1,7 +1,6 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
-import {mapGetters, mapMutations} from "vuex";
 import DataTableTheme from "../../../components/themes/DataTable.vue";
 
 const localVue = createLocalVue();
@@ -11,8 +10,8 @@ localVue.use(Vuex);
 describe("src/modules/tools/gfi/components/themes/DataTable.vue", () => {
     let wrapper;
 
-    const featureData = [
-        {
+    const expectedUsedKeys = [],
+        featureData = [{
             getMappedProperties: function () {
                 return {};
             },
@@ -99,14 +98,12 @@ describe("src/modules/tools/gfi/components/themes/DataTable.vue", () => {
                     "zink": "71,3"
                 };
             }
-        }        
-    ];
-
-    const mockGetters = {
-        gfiFeatures: () => featureData
-    };
-
-    const store = new Vuex.Store({
+        }],
+        expectedUsedCaptions = [],
+        mockGetters = {
+            gfiFeatures: () => featureData
+        },
+        store = new Vuex.Store({
             namespaces: true,
             modules: {
                 Map: {
@@ -116,19 +113,54 @@ describe("src/modules/tools/gfi/components/themes/DataTable.vue", () => {
             }
         });
 
+    featureData.forEach(singleFeature => {
+        const attributesToShow = singleFeature.getAttributesToShow();
+
+        Object.keys(singleFeature.getProperties()).forEach(propKey => {
+            if (expectedUsedKeys.indexOf(propKey) === -1 && attributesToShow[propKey] !== undefined) {
+                expectedUsedKeys.push(propKey);
+                expectedUsedCaptions.push(attributesToShow[propKey]);
+            }
+        });
+    });
 
     beforeEach(() => {
         wrapper = shallowMount(DataTableTheme, {
             store,
             localVue,
             propsData: {
-                feature: featureData
+                feature: featureData[0]
             }
         });
     });
 
     it("It should exist a container for a data table", () => {
-        
         expect(wrapper.find("#table-data-container").exists()).to.be.true;
+    });
+
+    it("Check the displayed table head", () => {
+        const theads = wrapper.findAll("#table-data-container table th");
+
+        expect(theads.exists()).to.be.true;
+
+        expectedUsedCaptions.forEach((singleCaption, index) => {
+            expect(theads.at(index).text()).to.equal(singleCaption);
+        });
+    });
+
+    it("Check the displayed table data", () => {
+        const trs = wrapper.findAll("#table-data-container table tr");
+
+        expect(trs.exists()).to.be.true;
+
+        trs.wrappers.forEach((tr, indexTr) => {
+            const tds = tr.findAll("td");
+
+            expect(tds.exists()).to.be.true;
+
+            tds.wrappers.forEach((td, indexTd) => {
+                expect(td.text()).to.equal(featureData[indexTr].getProperties()[expectedUsedKeys[indexTd]]);
+            });
+        });
     });
 });
