@@ -326,10 +326,19 @@ export default {
                 clonedStyle.setFeature(olFeature);
                 clonedStyle.setIsClustered(false);
                 olStyle = clonedStyle.getStyle();
-                nominalCircleSegments.push({
-                    name: key,
-                    graphic: olStyle.getImage().getSrc()
-                });
+                if (Array.isArray(olStyle)) {
+                    console.error("Legend yet cannot display two styles on each other, taking top most style");
+                    nominalCircleSegments.push({
+                        name: key,
+                        graphic: olStyle[1].getImage().getSrc()
+                    });
+                }
+                else {
+                    nominalCircleSegments.push({
+                        name: key,
+                        graphic: olStyle.getImage().getSrc()
+                    });
+                }
             });
 
             return nominalCircleSegments;
