@@ -1,6 +1,8 @@
 <script>
 import themeConfig from "../themeConfig.json";
 import {mapGetters} from "vuex";
+import {isWebLink, isEmailAddress} from "../../../../../../../utils/urlHelper.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 
 export default {
     name: "Schulinfo",
@@ -13,7 +15,6 @@ export default {
     data: () => {
         return {
             assignedFeatureProperties: [],
-            titleForCompareList: null,
             removeFromCompareListTitle: "Von der Vergleichsliste entfernen",
             addToCompareListTitle: "Auf die Vergleichsliste",
             featureIsOnCompareList: false
@@ -22,16 +23,8 @@ export default {
     computed: {
         ...mapGetters("Map", ["gfiFeatures"]),
 
-        featureProperties: function () {
-            return this.feature.getProperties();
-        },
-
         olFeature: function () {
             return this.feature.getOlFeature();
-        },
-
-        getAssignedFeatureProperties: function () {
-            return this.assignedFeatureProperties;
         },
 
         getFeatureIsOnCompareList: function () {
@@ -40,34 +33,60 @@ export default {
 
         titleCompareList: function () {
             return this.getFeatureIsOnCompareList ? this.removeFromCompareListTitle : this.addToCompareListTitle;
+        },
+
+        selectedPropertyAttributes: function () {
+            return this.assignedFeatureProperties.find(property => property.isSelected === true)?.attributes;
         }
     },
     created () {
+        this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
         this.assignedFeatureProperties = this.assignFeatureProperties(this.feature);
 
-        this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
         this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
     },
 
     methods: {
+        isWebLink,
+        isPhoneNumber,
+        getPhoneNumberAsWebLink,
+        isEmailAddress,
+
+        /**
+         * Indicates whether the feature is on the comparelist.
+         * @param {event} event The given event.
+         * @returns {void}
+         */
         toggleFeatureIsOnCompareList: function (event) {
             if (event.key === "isOnCompareList") {
                 this.featureIsOnCompareList = event.target.get("isOnCompareList");
             }
         },
 
+        /**
+         * Prepares the properties of the feature using the theme configuration.
+         * @param {ol/feature} feature The used feature.
+         * @returns {object[]} The prepared feature properties.
+         */
         assignFeatureProperties: (feature) => {
             const topics = JSON.parse(JSON.stringify(themeConfig)).themen,
                 assignedFeatureProperties = [];
 
             topics.forEach(topic => {
-                topic.attributes = Object.entries(feature.getProperties())
-                    .filter(([key]) => topic.attributes.includes(key))
-                    .map(([key, value]) => {
-                        return {attributeName: key,
-                            attributeValue: value
-                        };
-                    });
+                const filteredAttributes = [];
+
+                topic.attributes.forEach(attribute => {
+                    const value = feature.getProperties()[attribute];
+
+                    if (value !== undefined) {
+                        filteredAttributes.push({
+                            attributeName: feature.getAttributesToShow()[attribute],
+                            attributeValue: Array.isArray(value) ? value : value.split("|")
+                        });
+                    }
+                });
+
+                topic.attributes = filteredAttributes;
 
                 if (topic.attributes.length > 0) {
                     assignedFeatureProperties.push(topic);
@@ -77,38 +96,38 @@ export default {
             return assignedFeatureProperties;
         },
 
+        /**
+         * Activates the clicked category.
+         * @param {event} event click event
+         * @returns {void}
+         */
         toggleSelectedCategory: function (event) {
-            const properties = this.assignedFeatureProperties,
-                propertyToSelect = properties.find(property => property.name === event.target.value);
-
-            properties.forEach(property => {
-                property.isSelected = false;
+            this.assignedFeatureProperties.forEach(property => {
+                if (property.name === event.target.value) {
+                    property.isSelected = true;
+                }
+                else {
+                    property.isSelected = false;
+                }
             });
-            propertyToSelect.isSelected = true;
 
-            // event.target.parentNode.children.forEach(child => child.classList.remove("btn-select"));
-            // event.target.classList.add("btn-select");
-        },
-
-        selectedProperty: (assignedFeatureProperties) => {
-            return assignedFeatureProperties.find(property => property.isSelected === true);
+            this.assignedFeatureProperties = [...this.assignedFeatureProperties];
         },
 
         /**
          * Sets the schulwegrouting tool active,
-         * hide the gfi window and takes over the school for the routing
+         * hide the gfi window and takes over the school for the routing.
          * @returns {void}
          */
-        takeRoute: function () {
+        changeToSchoolRouting: function () {
             Radio.trigger("ModelList", "setModelAttributesById", "schulwegrouting", {isActive: true});
+            Radio.trigger("Schulwegrouting", "selectSchool", this.feature.getProperties().schul_id);
             this.$parent.close();
-            Radio.trigger("Schulwegrouting", "selectSchool", this.featureProperties.schul_id);
         },
 
         /**
-         * Triggers the event "addFeatureToList"
-         * to the CompareFeatures module to add the feature
-         * @param {Event} event todo
+         * Triggers the event "addFeatureToList" to the CompareFeatures module to add the feature.
+         * @param {Event} event The click event.
          * @returns {void}
          */
         toogleFeatureToCompareList: function (event) {
@@ -128,12 +147,12 @@ export default {
 
 <template>
     <div class="schulinfo">
-        <div class="schulinfo-head row">
+        <div class="schulinfo-head">
             <div
                 class="btn-group btn-group-sm col-xs-9"
             >
                 <button
-                    v-for="category in getAssignedFeatureProperties"
+                    v-for="category in assignedFeatureProperties"
                     :key="category.name"
                     :value="category.name"
                     class="btn btn-default"
@@ -147,7 +166,7 @@ export default {
                 <span
                     class="glyphicon glyphicon-map-marker pull-right"
                     title="Schule als Ziel übernehmen"
-                    @click="takeRoute"
+                    @click="changeToSchoolRouting"
                 ></span>
                 <span
                     :class="['glyphicon', getFeatureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty', 'pull-right']"
@@ -156,16 +175,46 @@ export default {
                 ></span>
             </div>
         </div>
-        <div class="schulinfo-content row">
+        <div class="schulinfo-content">
             <table class="table table-condensed table-hover">
                 <tbody>
                     <tr
-                        v-for="attribute in selectedProperty(assignedFeatureProperties).attributes"
+                        v-for="attribute in selectedPropertyAttributes"
                         :key="attribute.attributeName"
                         colspan="2"
                     >
                         <td class="bold">
                             {{ attribute.attributeName }}
+                        </td>
+                        <td>
+                            <span
+                                v-for="value in attribute.attributeValue"
+                                :key="value"
+                            >
+                                <a
+                                    v-if="isWebLink(value)"
+                                    :href="value"
+                                    target="_blank"
+                                >
+                                    {{ value }}
+                                </a>
+                                <a
+                                    v-else-if="isPhoneNumber(value)"
+                                    :href="getPhoneNumberAsWebLink(value)"
+                                >
+                                    {{ value }}
+                                </a>
+                                <a
+                                    v-else-if="isEmailAddress(value)"
+                                    :href="`mailto:${value}`"
+                                >
+                                    {{ value }}
+                                </a>
+                                <span v-else>
+                                    {{ value }}
+                                </span>
+                                <br>
+                            </span>
                         </td>
                     </tr>
                 </tbody>
@@ -188,11 +237,15 @@ export default {
             font-weight: bold;
         }
     }
+    td {
+        font-size: 13px;
+    }
     .schulinfo-head {
         padding: 8px 0;
         background-color: @background_color_1;
     }
     .btn-group-sm {
+        font-size: 12px;
         .btn-default {
             margin: 4px;
         }
