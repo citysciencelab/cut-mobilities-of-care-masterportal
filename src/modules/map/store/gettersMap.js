@@ -66,8 +66,7 @@ const gettersMap = {
         const featuresAtPixel = [];
 
         map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
-            if (layer.getVisible()) {
-                // cluster feature
+            if (layer.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
                 if (feature.getProperties().features) {
                     feature.get("features").forEach(function (clusteredFeature) {
                         featuresAtPixel.push(createGfiFeature(
