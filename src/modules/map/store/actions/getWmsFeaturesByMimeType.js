@@ -134,7 +134,8 @@ export function getHtmlFeature (url, layerName, gfiTheme, gfiIconPath, attribute
  * @param {Object} [gfiFormat=null] the gfiFormat as defined at the layer
  * @param {String} [id=""] id the id of the feature
  * @param {String} [url=""] the url to call the wms features from
- * @param {olFeature} olFeature the openlayers feature
+ * @param {String} [layerId=""] the ID from the layer
+ * @param {olFeature} [olFeature=null] the openlayers feature
  * @returns {Object} an object{getTheme, getTitle, getAttributesToShow, getProperties, getId, getGfiUrl}
  */
 export function createGfiFeature (layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties, gfiFormat = null, id = "", url = "") {
