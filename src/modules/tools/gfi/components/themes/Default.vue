@@ -39,6 +39,9 @@ export default {
                 <td v-else-if="isPhoneNumber(value)">
                     <a :href="getPhoneNumberAsWebLink(value)">{{ value }}</a>
                 </td>
+                <td v-else-if="isEmailAddress(value)">
+                    <a :href="`mailto:${value}`">{{ value }}</a>
+                </td>
                 <td v-else>
                     {{ value }}
                 </td>
