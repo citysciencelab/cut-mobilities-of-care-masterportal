@@ -2,24 +2,26 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {getCenter} = require("../../../library/scripts"),
-    {isDefault, isCustom, isMaster} = require("../../../settings"),
+    {/* isDefault, isCustom,*/ isMaster} = require("../../../settings"),
     {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
-/**
- * TODO before running this test again, the gemarkungen.json in test/end2end/resources
+/*
+ * TODO for running this test with parcelDenominators (Fluren), the gemarkungen.json in test/end2end/resources
  * has to be programmatically copied over and activated to a testable portal configuration.
+ * For now, this test only checks the HH standard scenario.
+ */
+
+/**
  * Tests regarding parcel search feature.
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
 async function ParcelSearchTests ({builder, url, resolution, capability}) {
-    const testIsApplicable = isDefault(url) || isCustom(url) || isMaster(url),
-        withCadastral = isCustom(url);
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        // TODO currently doesn't work since required .json not reachable from the internet; check if this works after PR
-        describe.skip("ParcelSearch", function () {
+        describe("ParcelSearch", function () {
             const selectors = {
                 tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
                 toolParcelSearch: By.xpath("//a[contains(.,'Flurstückssuche')]"),
@@ -68,10 +70,11 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
                 await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)));
                 await driver.wait(until.elementLocated(selectors.districtField));
                 await driver.wait(until.elementLocated(selectors.districtLabel));
-                if (withCadastral) {
-                    await driver.wait(until.elementLocated(selectors.cadastralDistrictField));
-                    await driver.wait(until.elementLocated(selectors.cadastralDistrictLabel));
-                }
+                // when the test is expanded, this element should also be checked for availability
+                // if (withCadastral) {
+                //     await driver.wait(until.elementLocated(selectors.cadastralDistrictField));
+                //     await driver.wait(until.elementLocated(selectors.cadastralDistrictLabel));
+                // }
                 await driver.wait(until.elementLocated(selectors.parcelLabel));
                 await driver.wait(until.elementLocated(selectors.parcelField));
 
@@ -81,7 +84,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
                 submitButton = await driver.findElement(selectors.submitButton);
             });
 
-            (withCadastral ? it.skip : it)("centers map on and sets marker to parcel after choosing subdistrict and entering a parcel number", async () => {
+            it("search results in centering and setting of a map marker", async () => {
                 expect(await searchMarker.isDisplayed()).to.be.false;
 
                 await driver.wait(until.elementIsVisible(districtField));
@@ -100,7 +103,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
 
                 const minimize = await driver.findElement(selectors.minimize);
 
-                // minimize may not work on first click
+                // minimize may not work on first click (timing issue)
                 while (await driver.findElement(By.css("#window .win-body")).isDisplayed()) {
                     await minimize.click();
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
