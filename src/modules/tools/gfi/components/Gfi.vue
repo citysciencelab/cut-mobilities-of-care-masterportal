@@ -101,10 +101,10 @@ export default {
         }
     },
     beforeUpdate () {
-        if (this.feature !== null && this.feature !== undefined && this.feature.hasOwnProperty("getProperties") && this.feature.getProperties() !== null) {
-            const mappedProperties = this.prepareProperties(this.feature.getProperties(), this.feature.getAttributesToShow(), this.ignoredKeys);
-
-            this.feature.getMappedProperties = () => mappedProperties;
+        if (this.feature !== null) {
+            this.gfiFeatures.forEach(singleFeature => {
+                this.createMappedProperties(singleFeature);
+            });
         }
     },
     methods: {
@@ -135,6 +135,13 @@ export default {
         decreasePagerIndex: function () {
             if (this.pagerIndex > 0) {
                 this.pagerIndex -= 1;
+            }
+        },
+        createMappedProperties: function (singleFeature) {
+            if (singleFeature !== null && singleFeature.hasOwnProperty("getProperties") && singleFeature.getProperties() !== null) {
+                const mappedProperties = this.prepareProperties(singleFeature.getProperties(), singleFeature.getAttributesToShow(), this.ignoredKeys);
+
+                singleFeature.getMappedProperties = () => mappedProperties;
             }
         },
         /**
@@ -185,6 +192,7 @@ export default {
             :is="currentViewType"
             :key="componentKey"
             :feature="feature"
+            :gfiFeatures="gfiFeatures"
             @close="reset"
         >
             <!-- Slot Content for Footer -->

@@ -9,6 +9,11 @@ export default {
         feature: {
             type: Object,
             required: true
+        },
+        gfiFeatures: {
+            type: Array,
+            required: false,
+            default: () => [this.feature]
         }
     },
     methods: {

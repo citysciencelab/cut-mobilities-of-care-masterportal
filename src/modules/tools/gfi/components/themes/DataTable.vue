@@ -6,55 +6,46 @@ import getters from "../../store/gettersGfi";
 export default {
     name: "DataTable",
     props: {
-        feature: {
-            type: Object,
+        gfiFeatures: {
+            type: Array,
             required: true
         }
+    },
+    computed: {
+        refinedData: function () {
+            const result = {
+                head: [],
+                rows: []
+            };
+
+            this.gfiFeatures.forEach(singleFeature => {
+                const mappedProps = singleFeature.getMappedProperties();
+
+                Object.keys(mappedProps).forEach(attrKey => {
+                    if (mappedProps[attrKey] !== undefined && typeof mappedProps[attrKey] === "string" && result.head.indexOf(attrKey) === -1) {
+                        result.head.push(attrKey);
+                    }
+                });
+
+                result.rows.push(mappedProps);
+            });
+
+            return result;
+        }
+    },
+    mounted () {
+        this.setUsePager(false);
     },
     methods: {
         ...mapMutations("Tools/Gfi", ["setUsePager"]),
         ...mapGetters("Tools/Gfi", Object.keys(getters))
-    },
-    
-    mounted () {
-        this.setUsePager(false);
-    },
-    
-    computed: {
-        ...mapGetters("Map", {
-            gfiFeatures: "gfiFeatures"
-        }),
-        
-        refinedData: function () {
-            const result = {
-                mapping: {},
-                head: [],
-                rows: [],
-            };
-            
-            this.gfiFeatures.forEach(singleFeature => {
-                const attrsToShow = singleFeature.getAttributesToShow(),
-                    valsToShow = singleFeature.getProperties();
-                
-                Object.keys(attrsToShow).forEach(attrKey => {
-                    if (valsToShow[attrKey] !== undefined && typeof valsToShow[attrKey] === "string" && result.head.indexOf(attrKey) === -1) {
-                        result.head.push(attrKey);
-                        result.mapping[attrKey] = attrsToShow[attrKey];
-                    }
-                });
-
-                result.rows.push(valsToShow);
-            });
-            
-            return result;
-        }
     }
 };
 </script>
 
 <template>
     <div id="table-data-container">
-        <table 
+        <table
             v-if="refinedData.rows.length > 0"
             class="table table-hover"
         >
@@ -63,20 +54,22 @@ export default {
                     v-for="propNameKey in refinedData.head"
                     :key="propNameKey"
                 >
-                    {{ refinedData.mapping[propNameKey] }}
+                    {{ propNameKey }}
                 </th>
             </thead>
-        
+
             <tbody>
                 <tr
-                    v-for="singleRow in refinedData.rows"
+                    v-for="(singleRow, index1) in refinedData.rows"
+                    :key="index1"
                 >
                     <td
-                        v-for="propKey in refinedData.head"
+                        v-for="(propKey, index2) in refinedData.head"
+                        :key="index2"
                     >
                         {{ singleRow[propKey] ? singleRow[propKey] : '' }}
                     </td>
-                </tr>            
+                </tr>
             </tbody>
         </table>
     </div>
@@ -87,10 +80,10 @@ export default {
 
 #table-data-container {
     margin:6px 15px 0 12px;
-    
+
     table {
         margin: 0;
-        
+
         td, th {
             padding: 6px;
         }
