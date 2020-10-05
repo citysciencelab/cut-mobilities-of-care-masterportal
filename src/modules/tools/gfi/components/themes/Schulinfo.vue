@@ -18,7 +18,7 @@ export default {
         </h1>
         <ul>
             <li
-                v-for="(value, name) in feature.olFeature.getProperties()"
+                v-for="(value, name) in feature.getMappedProperties()"
                 :key="name"
             >
                 {{ name }}: {{ value }}
