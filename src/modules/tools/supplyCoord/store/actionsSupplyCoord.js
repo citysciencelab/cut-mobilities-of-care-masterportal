@@ -4,9 +4,9 @@ import isMobile from "../../../../utils/isMobile";
 export default {
     /**
      * Remembers the projection and shows mapmarker at the given position.
-     * @param {object} event - pointerdown-event, to get the position from
+     * @param {Event} event - pointerdown-event, to get the position from
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
-     * @returns {void}
+     * @returns {Void}  -
      */
     positionClicked: function ({commit, dispatch, state}, event) {
         const updatePosition = isMobile() ? true : state.updatePosition,
@@ -19,10 +19,10 @@ export default {
         // TODO replace trigger when MapMarker is migrated
         Radio.trigger("MapMarker", "showMarker", position);
     },
-    /*
-    * Sets the current projection and its name to state.
-    * @returns {void}
-    */
+    /**
+     * Sets the current projection and its name to state.
+     * @returns {Void}  -
+     */
     newProjectionSelected ({commit, state, getters}) {
         const targetProjectionName = state.currentSelection,
             targetProjection = getters.getProjectionByName(targetProjectionName);
@@ -30,10 +30,10 @@ export default {
         commit("setCurrentProjectionName", targetProjectionName);
         commit("setCurrentProjection", targetProjection);
     },
-    /*
-    * Delegates the calculation and transformation of the position according to the projection
-    * @returns {void}
-    */
+    /**
+     * Delegates the calculation and transformation of the position according to the projection
+     * @returns {Void}  -
+     */
     changedPosition ({dispatch, state, rootState, getters}) {
         const targetProjectionName = state.currentSelection,
             position = getters.getTransformedPosition(rootState.Map.map, targetProjectionName);
@@ -42,12 +42,12 @@ export default {
             dispatch("adjustPosition", {position: position, targetProjection: state.currentProjection});
         }
     },
-    /*
-    * Calculates the clicked position and writes the coordinate-values into the textfields.
-    * @param {object} position transformed coordinates
-    * @param {object} targetProjection selected projection
-    * @returns {void}
-    */
+    /**
+     * Calculates the clicked position and writes the coordinate-values into the textfields.
+     * @param {Number[]} position transformed coordinates
+     * @param {Object} targetProjection selected projection
+     * @returns {Void}  -
+     */
     adjustPosition ({commit}, {position, targetProjection}) {
         let coord, easting, northing;
 
@@ -70,8 +70,8 @@ export default {
     },
     /**
      * Sets the coordinates from the maps pointermove-event.
-     * @param {object} event pointermove-event, to get the position from
-     * @returns {void}
+     * @param {Event} event pointermove-event, to get the position from
+     * @returns {Void}  -
      */
     setCoordinates: function ({state, commit, dispatch}, event) {
         const position = event.coordinate;
@@ -83,8 +83,8 @@ export default {
     },
     /**
      * Checks the position for update and shows the marker at updated position
-     * @param {Array} position contains coordinates of mouse position
-     * @returns {void}
+     * @param {Number[]} position contains coordinates of mouse position
+     * @returns {Void}  -
      */
     checkPosition ({state, commit}, position) {
         if (state.updatePosition) {

@@ -1,7 +1,7 @@
 /**
  * @param {String} fieldName name of the modules' field to merge
- * @param {object[]} modules modules to compose; later appearing modules override
- * @returns {object} composed entry for a field of the modules
+ * @param {Object[]} modules modules to compose; later appearing modules override
+ * @returns {Object} composed entry for a field of the modules
  */
 function composeField (fieldName, modules) {
     return modules
@@ -14,8 +14,8 @@ function composeField (fieldName, modules) {
 
 /**
  * Composes a vuex module from a given array of modules.
- * @param {object[]} modules modules to compose; later appearing modules override
- * @returns {object} composed module
+ * @param {Object[]} modules modules to compose; later appearing modules override
+ * @returns {Object} composed module
  */
 export default function (modules) {
     return {

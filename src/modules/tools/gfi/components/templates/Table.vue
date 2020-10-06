@@ -37,7 +37,7 @@ export default {
         ...mapGetters("Map", ["clickCoord"]),
         /**
          * Returns the title of the gfi.
-         * @returns {string} the title
+         * @returns {String} the title
          */
         title: function () {
             return this.feature.getTitle();
@@ -46,7 +46,7 @@ export default {
         /**
          * Returns the theme in which the feature should be displayed.
          * It only works if the theme has the same name as the theme component, otherwise the default theme will be used
-         * @returns {string} the name of the theme
+         * @returns {String} the name of the theme
          */
         theme: function () {
             return this.getTheme();

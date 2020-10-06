@@ -62,7 +62,7 @@ export default {
         ...mapActions("controls/attributions", ["addAttribution", "removeAttribution", "updateAttributions"]),
         /**
          * Toggles whether attributions flyout is visible.
-         * @returns {void}
+         * @returns {Void}  -
          */
         toggleAttributionsFlyout: function () {
             this.setOpen(!this.open);

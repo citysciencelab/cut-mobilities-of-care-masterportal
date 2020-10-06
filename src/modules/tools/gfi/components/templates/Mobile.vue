@@ -29,7 +29,7 @@ export default {
     computed: {
         /**
          * Returns the title of the gfi.
-         * @returns {string} the title
+         * @returns {String} the title
          */
         title: function () {
             return this.feature.getTitle();
@@ -38,7 +38,7 @@ export default {
         /**
          * Returns the theme in which the feature should be displayed.
          * It only works if the theme has the same name as the theme component, otherwise the default theme will be used
-         * @returns {string} the name of the theme
+         * @returns {String} the name of the theme
          */
         theme: function () {
             return this.getTheme();
@@ -64,7 +64,7 @@ export default {
         /**
          * it will show this mobile component if it is switched from attached theme.
          * the method is to fore to insert this component into parent gfi element.
-         * @returns {void}
+         * @returns {Void}  -
          */
         showMobileComponent: function () {
             if (!document.getElementsByClassName("modal-dialog").length && document.getElementsByClassName("gfi").length) {

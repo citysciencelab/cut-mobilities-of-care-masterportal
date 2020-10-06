@@ -29,8 +29,8 @@ export default {
     watch: {
         /**
          * Sets the active property of the state to the given value.
-         * @param {boolean} value Value deciding whether the tool gets activated or deactivated.
-         * @returns {void}
+         * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
+         * @returns {Void}  -
          */
         active (value) {
             // TODO replace trigger when MapMarker is migrated
@@ -66,13 +66,14 @@ export default {
             addPointerMoveHandlerToMap: "addPointerMoveHandler",
             removePointerMoveHandlerFromMap: "removePointerMoveHandler",
             addInteractionToMap: "addInteraction",
-            removeInteractionFromMap: "removeInteraction"}),
-        /*
-        * Function to initiate the copying of the coordinates from the inputfields.
-        * @fires Util#RadioTriggerUtilCopyToClipboard
-        * @param {event} evt Click Event
-        * @returns {void}
-        */
+            removeInteractionFromMap: "removeInteraction"
+        }),
+        /**
+         * Function to initiate the copying of the coordinates from the inputfields.
+         * @fires Util#RadioTriggerUtilCopyToClipboard
+         * @param {Event} evt Click Event
+         * @returns {Void}  -
+         */
         copyToClipboard ({target}) {
             target.select();
             // seems to be required for mobile devices
@@ -81,8 +82,8 @@ export default {
         },
         /**
          * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
-         * @param {object} event changed selection event
-         * @returns {void}
+         * @param {Event} event changed selection event
+         * @returns {Void}  -
          */
         selectionChanged (event) {
             this.setCurrentSelection(event.target.value);
@@ -91,7 +92,7 @@ export default {
         },
         /**
          * Stores the projections and adds interaction pointermove to map.
-         * @returns {void}
+         * @returns {Void}  -
          */
         createInteraction () {
             const pr = getProjections();
@@ -116,7 +117,7 @@ export default {
         },
         /**
          * Removes the interaction from map.
-         * @returns {void}
+         * @returns {Void}  -
          */
         removeInteraction () {
             this.removeInteractionFromMap(this.selectPointerMove);
@@ -124,7 +125,7 @@ export default {
         },
         /**
          * Closes this tool window by setting active to false
-         * @returns {void}
+         * @returns {Void}  -
          */
         close () {
             this.setActive(false);
@@ -140,8 +141,8 @@ export default {
         },
         /**
          * Returns the label mame depending on the selected projection.
-         * @param {string} key in the language files
-         * @returns {string} the name of the label
+         * @param {String} key in the language files
+         * @returns {String} the name of the label
          */
         label (key) {
             const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";

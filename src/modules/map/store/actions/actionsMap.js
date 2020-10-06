@@ -9,9 +9,9 @@ let unsubscribes = [],
  * When map module is done, the normalized layers should be constructed on the fly when adding layers.
  * For now, these processes happen independently of each other, so we need a hack to get the data.
  * TODO remove this once all layers are added/removed with an action (~= replace map.js with this module)
- * @param {function} commit commit function
+ * @param {Function} commit commit function
  * @param {module:ol/Map} map ol map
- * @returns {void}
+ * @returns {Void}  -
  */
 function loopLayerLoader (commit, map) {
     clearInterval(loopId);
@@ -28,9 +28,9 @@ const actions = {
      * Sets the map to the store. As a side-effect, map-related functions are registered
      * to fire changes when required. Each time a new map is registered, all old listeners
      * are discarded and new ones are registered.
-     * @param {object} state state object
+     * @param {Object} state state object
      * @param {module:ol/Map} map map object
-     * @returns {void}
+     * @returns {Void}  -
      */
     setMap ({commit, dispatch}, {map}) {
         // discard old listeners
@@ -69,9 +69,9 @@ const actions = {
     },
 
     /**
-     * @param {function} commit commit function
+     * @param {Function} commit commit function
      * @param {MapBrowserEvent} evt - Moveend event
-     * @returns {function} update function for state parts to update onmoveend
+     * @returns {Function} update function for state parts to update onmoveend
      */
     updateViewState ({commit, getters, rootGetters}, evt) {
         let map;
@@ -98,9 +98,9 @@ const actions = {
         commit("setCenter", mapView.getCenter());
     },
     /**
-     * @param {function} commit commit function
-     * @param {object} evt update event
-     * @returns {function} update function for mouse coordinate
+     * @param {Function} commit commit function
+     * @param {Object} evt update event
+     * @returns {Function} update function for mouse coordinate
      */
     updatePointer ({commit}, evt) {
         if (evt.dragging) {
@@ -112,12 +112,12 @@ const actions = {
     /**
      * Updates the click coordinate and the related pixel depending on the map mode.
      * If Gfi Tool is active, the features of this coordinate/pixel are set.
-     * @param {object} store.getters - the map getters
-     * @param {function} store.commit - function to commit a mutation
-     * @param {function} store.dispatch - function to dipatch a action
-     * @param {object} store.rootGetters - the store getters
+     * @param {Object} store.getters - the map getters
+     * @param {Function} store.commit - function to commit a mutation
+     * @param {Function} store.dispatch - function to dipatch a action
+     * @param {Object} store.rootGetters - the store getters
      * @param {MapBrowserEvent} evt - Click event in 2D, fake click event in 3D
-     * @returns {void}
+     * @returns {Void}  -
      */
     updateClick ({getters, commit, dispatch, rootGetters}, evt) {
         const {mapMode} = getters;
@@ -142,10 +142,10 @@ const actions = {
 
     /**
      * collects features for the gfi.
-     * @param {object} store context
-     * @param {object} store.getters - the map getters
-     * @param {function} store.commit - function to commit a mutation
-     * @returns {void}
+     * @param {Object} store context
+     * @param {Object} store.getters - the map getters
+     * @param {Function} store.commit - function to commit a mutation
+     * @returns {Void}  -
      */
     async collectGfiFeatures ({getters, commit}) {
         const {clickCoord, visibleWmsLayerListAtResolution, resolution, projection, gfiFeaturesAtPixel} = getters,
@@ -178,9 +178,9 @@ const actions = {
 
     /**
      * Sets a new zoom level to map and store. All other fields will be updated onmoveend.
-     * @param {object} state state object
-     * @param {number} zoomLevel zoom level
-     * @returns {void}
+     * @param {Object} state state object
+     * @param {Number} zoomLevel zoom level
+     * @returns {Void}  -
      */
     setZoomLevel ({getters, commit}, zoomLevel) {
         const {maxZoomLevel, minZoomLevel} = getters;
@@ -198,9 +198,9 @@ const actions = {
     },
     /**
      * Turns a visible layer invisible and the other way around.
-     * @param {object} state state object
-     * @param {string} layerId id of the layer to toggle visibility of
-     * @returns {void}
+     * @param {Object} state state object
+     * @param {String} layerId id of the layer to toggle visibility of
+     * @returns {Void}  -
      */
     toggleLayerVisibility ({getters, commit}, {layerId}) {
         const layer = getters.layers[layerId];
@@ -217,11 +217,11 @@ const actions = {
     },
     /**
      * Sets the opacity of a layer.
-     * @param {object} actionParams first action parameter
-     * @param {object} payload parameter object
-     * @param {string} payload.layerId id of layer to change opacity of
-     * @param {number} payload.value opacity value in range (0, 1)
-     * @returns {void}
+     * @param {Object} actionParams first action parameter
+     * @param {Object} payload parameter object
+     * @param {String} payload.layerId id of layer to change opacity of
+     * @param {Number} payload.value opacity value in range (0, 1)
+     * @returns {Void}  -
      */
     setLayerOpacity ({getters, commit}, {layerId, value}) {
         const layer = getters.layers[layerId];
@@ -236,8 +236,8 @@ const actions = {
     },
     /**
      * Sets center and resolution to initial values.
-     * @param {object} actionParams first action parameter
-     * @returns {void}
+     * @param {Object} actionParams first action parameter
+     * @returns {Void}  -
      */
     resetView ({state}) {
         const {initialCenter, initialResolution, map} = state,
@@ -252,8 +252,8 @@ const actions = {
     /**
      * Sets the resolution by the given index of available resolutions.
      * NOTE: is used by scaleSwitcher tutorial.
-     * @param {number} index of the resolution
-     * @returns {void}
+     * @param {Number} index of the resolution
+     * @returns {Void}  -
      */
     setResolutionByIndex ({state}, index) {
         const {map} = state,
@@ -263,9 +263,9 @@ const actions = {
     },
     /**
      * Adds a listener to maps pointermove and calls callback-funktion
-     * @param {object} state state object
-     * @param {function} callback  to be called on pointermove
-     * @returns {void}
+     * @param {Object} state state object
+     * @param {Function} callback  to be called on pointermove
+     * @returns {Void}  -
      */
     addPointerMoveHandler ({state}, callback) {
         const {map} = state;
@@ -277,9 +277,9 @@ const actions = {
     },
     /**
      * Removes a listener from maps pointermove
-     * @param {object} state state object
-     * @param {function} callback  to be called on pointermove
-     * @returns {void}
+     * @param {Object} state state object
+     * @param {Function} callback  to be called on pointermove
+     * @returns {Void}  -
      */
     removePointerMoveHandler ({state}, callback) {
         const {map} = state;
@@ -288,8 +288,8 @@ const actions = {
     },
     /**
      * Adds an interaction to the map.
-     * @param {interaction} interaction - Interaction to be added to map.
-     * @returns {void}
+     * @param {module:ol/interaction/Interaction} interaction - Interaction to be added to map.
+     * @returns {Void}  -
      */
     addInteraction ({state}, interaction) {
         const {map} = state;
@@ -298,8 +298,8 @@ const actions = {
     },
     /**
      * Removes an interaction from the map.
-     * @param {interaction} interaction - Interaction to be removed from map.
-     * @returns {void}
+     * @param {module:ol/interaction/Interaction} interaction - Interaction to be removed from map.
+     * @returns {Void}  -
      */
     removeInteraction ({state}, interaction) {
         const {map} = state;

@@ -47,7 +47,7 @@ export default {
     methods: {
         /**
          * emitting the function in parent Freeze Component to hide the freezed window
-         * @returns {void}
+         * @returns {Void}  -
          */
         hideFreezeWin () {
             this.$emit("hideFreezeWin");

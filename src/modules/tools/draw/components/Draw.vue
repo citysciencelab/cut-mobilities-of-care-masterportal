@@ -40,8 +40,8 @@ export default {
     watch: {
         /**
           * Starts the action for processes, if the tool is be activated (active === true).
-          * @param {boolean} value Value deciding whether the tool gets activated or deactivated.
-          * @returns {void}
+          * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
+          * @returns {Void}  -
          */
         active (value) {
             if (value) {

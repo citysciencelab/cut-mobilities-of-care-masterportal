@@ -2,16 +2,16 @@ import * as moment from "moment";
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig.js";
 
 /** @const {String} [Path array of possible config locations. First one found will be used] */
-/** @const {object} [vue actions] */
+/** @const {Object} [vue actions] */
 const configPaths = [
     "configJs.alerting"
 ];
 
 /**
  * Finds an alert by hash value
- * @param {array} haystackAlerts - The alert array
- * @param {string} needleHash - Hash of the wanted alert
- * @returns {object|boolean} Retrieved alert or false, if nothing found
+ * @param {Object[]} haystackAlerts an array of objects{hash, ...} with the alerts
+ * @param {String} needleHash Hash of the wanted alert
+ * @returns {Object|Boolean} Retrieved alert or false, if nothing found
  */
 function findSingleAlertByHash (haystackAlerts, needleHash) {
     const foundAlerts = haystackAlerts.filter(singleAlert => singleAlert.hash === needleHash);
@@ -21,8 +21,8 @@ function findSingleAlertByHash (haystackAlerts, needleHash) {
 
 /**
  * Checks if an alert should be displayed considerung its .displayFrom and .displayUntil properties.
- * @param {object} alertToCheck - The alert to check
- * @returns {boolean} True if its defined timespan includes current time
+ * @param {Object} alertToCheck The alert to check
+ * @returns {Boolean} True if its defined timespan includes current time
  */
 function checkAlertLifespan (alertToCheck) {
     return (!alertToCheck.displayFrom || moment().isAfter(alertToCheck.displayFrom)) && (!alertToCheck.displayUntil || moment().isBefore(alertToCheck.displayUntil));
@@ -30,9 +30,9 @@ function checkAlertLifespan (alertToCheck) {
 
 /**
  * Checks if an already displayed alert may be displayed again.
- * @param {array} displayedAlerts - The already displayed Alerts array
- * @param {object} alertToCheck - The alert to check
- * @returns {boolean} True if the given alert may be displayed again
+ * @param {Object} displayedAlerts an object as collection of already displayed alerts with their hash value as associated key
+ * @param {Object} alertToCheck The alert to check as object{hash, once, ...}
+ * @returns {Boolean} True if the given alert may be displayed again
  */
 function checkAlertViewRestriction (displayedAlerts, alertToCheck) {
     const alertDisplayedAt = displayedAlerts[alertToCheck.hash];

@@ -11,9 +11,9 @@ const mutations = {
     ...generateSimpleMutations(supplyCoordState),
     /**
      * Set currect projection to one in the list of projections.
-     * @param {object} state the state of supplyCoord-module
-     * @param {Array} projections list of available projections
-     * @returns {void}
+     * @param {Object} state the state of supplyCoord-module
+     * @param {Object[]} [projections=[]] list of available projections
+     * @returns {Void}  -
      */
     setProjections: (state, projections = []) => {
         const found = projections.filter(projection => projection.name === state.currentProjectionName);

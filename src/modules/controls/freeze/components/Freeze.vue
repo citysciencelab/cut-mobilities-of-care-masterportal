@@ -26,7 +26,7 @@ export default {
     methods: {
         /**
          * showing the freezed window
-         * @returns {void}
+         * @returns {Void}  -
          */
         showFreezeWin () {
             this.isActive = true;
@@ -34,7 +34,7 @@ export default {
 
         /**
          * hiding the freezed window
-         * @returns {void}
+         * @returns {Void}  -
          */
         hideFreezeWin () {
             this.isActive = false;

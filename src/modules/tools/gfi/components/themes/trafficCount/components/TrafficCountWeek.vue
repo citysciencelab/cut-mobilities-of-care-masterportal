@@ -132,9 +132,9 @@ export default {
 
         /**
          * Function is initially triggered and on update
-         * @param   {Date} dates an unsorted array of selected dates of weekday
+         * @param   {Date[]} dates an unsorted array of selected dates of weekday
          * @fires   Alerting#RadioTriggerAlertAlert
-         * @returns {void}
+         * @returns {Void}  -
          */
         weekDatepickerValueChanged: function (dates) {
             const api = this.api,
@@ -183,7 +183,7 @@ export default {
 
         /**
          * opens the calender
-         * @returns {void}
+         * @returns {Void}  -
          */
         toggleCalendar: function () {
             const input = this.$el.querySelector("input");

@@ -2,8 +2,8 @@ const locationSearch = location.search.substr(1);
 
 /**
  * Checks if the query contains html content, if so it is not valid.
- * @param {string} query - The URL-Parameters
- * @return {boolean} Is the query valid.
+ * @param {String} query - The URL-Parameters
+ * @return {Boolean} Is the query valid.
  */
 function checkisURLQueryValid (query) {
     return !(/(<([^>]+)>)/g).test(decodeURIComponent(query));
@@ -11,8 +11,8 @@ function checkisURLQueryValid (query) {
 
 /**
  * Reads params from the URL and makes them available in the store.
- * @param {string} [query=locationSearch] The url-parameter
- * @returns {object} url parameters as object.<string, string>
+ * @param {String} [query=locationSearch] The url-parameter
+ * @returns {Object} url parameters as object.<string, string>
  */
 function getQueryParams (query = locationSearch) {
     const queryParams = {};
