@@ -6,8 +6,8 @@ const getters = {
 
     /**
      * Gets the names of the tools with the parameter active = true.
-     * @param {object} state state of the tools
-     * @returns {object[]} The tools active tools.
+     * @param {Object} state state of the tools
+     * @returns {Object[]} The tools active tools.
      */
     getActiveToolNames: state => {
         return Object.keys(state).filter(tool => state[tool]?.active === true);
@@ -15,8 +15,8 @@ const getters = {
 
     /**
      * Gets the names of all configured tools.
-     * @param {object} state state of the tools.
-     * @returns {string[]} All names of configured tools
+     * @param {Object} state state of the tools.
+     * @returns {String[]} All names of configured tools
      */
     getConfiguredToolNames: state => {
         return state.configuredTools.map(tool => tool.component.name);

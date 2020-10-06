@@ -8,8 +8,8 @@ import {createTextStyle} from "./createTextStyle";
  * Creates and returns the styling for the draw interaction.
  *
  * @param {Object} state state object of the Draw Tool
- * @param {Array} state.color The color of the drawn feature represented as an array.
- * @param {Array} state.colorContour The color of the contours of the drawn feature represented as an array.
+ * @param {String[]} state.color The color of the drawn feature represented as an array.
+ * @param {String[]} state.colorContour The color of the contours of the drawn feature represented as an array.
  * @param {Object} state.drawType The type of the draw interaction. The first parameter represents the type unique identifier of the draw interaction as a String and the second parameter represents the geometry of the drawType as a String.
  * @param {String} state.font The font used for the text interaction.
  * @param {Number} state.fontSize The size of the font used for the text interaction.

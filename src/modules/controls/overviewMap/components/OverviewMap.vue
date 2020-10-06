@@ -86,7 +86,7 @@ export default {
     methods: {
         /**
          * Toggles the visibility of the mini-map.
-         * @returns {void}
+         * @returns {Void}  -
          */
         toggleOverviewMapFlyout () {
             this.open = !this.open;
@@ -96,7 +96,7 @@ export default {
         },
         /**
          * Sets visibility flag depending on map mode; OverviewMap is not available in 3D mode.
-         * @returns {void}
+         * @returns {Void}  -
          */
         checkModeVisibility () {
             this.visibleInMapMode = Radio.request("Map", "getMapMode") !== "3D";

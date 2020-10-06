@@ -40,7 +40,7 @@ export default {
 
         /**
          * Returns the title of the gfi.
-         * @returns {string} the title
+         * @returns {String} the title
          */
         title: function () {
             return this.feature.getTitle();
@@ -49,7 +49,7 @@ export default {
         /**
          * Returns the theme in which the feature should be displayed.
          * It only works if the theme has the same name as the theme component, otherwise the default theme will be used
-         * @returns {string} the name of the theme
+         * @returns {String} the name of the theme
          */
         theme: function () {
             return this.getTheme();
@@ -151,7 +151,7 @@ export default {
         /**
          * Sets the center of the view on the clickCoord and place the MapMarker on it
          * Set Marker and Center.
-         * @returns {void}
+         * @returns {Void}  -
          */
         setMarker () {
             this.setCenter(this.clickCoord);
@@ -161,7 +161,7 @@ export default {
 
         /**
          * Makes this Component resizable
-         * @returns {void}
+         * @returns {Void}  -
          */
         makeResizable () {
             $(".gfi-detached").resizable({

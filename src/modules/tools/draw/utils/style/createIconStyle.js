@@ -3,7 +3,7 @@ import {Icon, Style} from "ol/style.js";
 /**
  * Creates and returns a feature style for points with an icon.
  *
- * @param {Array} color The color of the drawn feature represented as an array.
+ * @param {String[]} color The color of the drawn feature represented as an array.
  * @param {String} imgPath path to images from rootState.wfsImgPath.
  * @param {Number} pointSize The size of the point.
  * @param {Object} symbol The symbol for the point.

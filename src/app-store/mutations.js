@@ -29,36 +29,36 @@ export default {
 
     /**
      * Sets config.json.
-     * @param {object} state store state
-     * @param {object} config config.json
-     * @returns {void}
+     * @param {Object} state store state
+     * @param {Object} config config.json
+     * @returns {Void}  -
      */
     setConfigJson (state, config) {
         state.configJson = actions.checkWhereDeprecated(deprecatedParamsConfigJson, config);
     },
     /**
      * Sets config.js.
-     * @param {object} state store state
-     * @param {object} config config.js
-     * @returns {void}
+     * @param {Object} state store state
+     * @param {Object} config config.js
+     * @returns {Void}  -
      */
     setConfigJs (state, config) {
         state.configJs = actions.checkWhereDeprecated(deprecatedParamsConfigJs, config);
     },
     /**
      * Sets mobile flag.
-     * @param {object} state store state
-     * @param {boolean} mobile whether browser resolution indicates mobile device
-     * @returns {void}
+     * @param {Object} state store state
+     * @param {Boolean} mobile whether browser resolution indicates mobile device
+     * @returns {Void}  -
      */
     setMobile (state, mobile) {
         state.mobile = mobile;
     },
     /**
      * Sets i18NextInitialized flag. Is done after languages for addons are loaded.
-     * @param {object} state store state
-     * @param {boolean} isInitialized whether i18Next is initialized
-     * @returns {void}
+     * @param {Object} state store state
+     * @param {Boolean} isInitialized whether i18Next is initialized
+     * @returns {Void}  -
      */
     setI18Nextinitialized (state, isInitialized) {
         state.i18NextInitialized = isInitialized;

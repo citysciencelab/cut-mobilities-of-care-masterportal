@@ -39,7 +39,7 @@ export default {
         ...mapGetters("Map", ["clickCoord"]),
         /**
          * Returns the title of the gfi.
-         * @returns {string} the title
+         * @returns {String} the title
          */
         title: function () {
             return this.feature.getTitle();
@@ -48,7 +48,7 @@ export default {
         /**
          * Returns the theme in which the feature should be displayed.
          * It only works if the theme has the same name as the theme component, otherwise the default theme will be used
-         * @returns {string} the name of the theme
+         * @returns {String} the name of the theme
          */
         theme: function () {
             return this.getTheme();
@@ -86,7 +86,7 @@ export default {
 
         /**
          * it will create an overlay for the attached theme
-         * @returns {void}
+         * @returns {Void}  -
          */
         createOverlay () {
             const gfipopup = document.createElement("DIV");
@@ -101,7 +101,7 @@ export default {
 
         /**
          * it will create the popup window as attached theme
-         * @returns {void}
+         * @returns {Void}  -
          */
         createPopover () {
             $(this.overlay.getElement()).popover({
@@ -123,7 +123,7 @@ export default {
 
         /**
          * it will remove the popup window as attached theme and make the standard gfi theme visible again
-         * @returns {void}
+         * @returns {Void}  -
          */
         removePopover () {
             if (this.overlay.getElement()) {

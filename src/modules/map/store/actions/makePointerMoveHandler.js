@@ -1,6 +1,6 @@
 /**
- * @param {function} commit commit function
- * @returns {function} update function for mouse coordinate
+ * @param {Function} commit commit function
+ * @returns {Function}  update function for mouse coordinate
  */
 function makePointerMoveHandler (commit) {
     return (evt) => {

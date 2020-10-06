@@ -29,7 +29,7 @@ export default {
     methods: {
         /**
          * Toggle function that shows/hides the mousePosition control.
-         * @returns {void}
+         * @returns {Void}  -
          */
         toggleOpen () {
             this.open = !this.open;

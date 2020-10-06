@@ -192,10 +192,10 @@ export class TrafficCountApi {
     /**
      * gets the title of the thing
      * @param {Integer} thingId the ID of the thing
-     * @param {Callback} [onupdate] as function(title) to set the title with
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} [onupdate] as function(title) to set the title with
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     updateTitle (thingId, onupdate, onerror, onstart, oncomplete) {
@@ -216,10 +216,10 @@ export class TrafficCountApi {
     /**
      * gets the direction of the thing
      * @param {Integer} thingId the ID of the thing
-     * @param {Callback} [onupdate] as function(direction) to set the direction
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} [onupdate] as function(direction) to set the direction
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     updateDirection (thingId, onupdate, onerror, onstart, oncomplete) {
@@ -242,10 +242,10 @@ export class TrafficCountApi {
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} day the day as String in format YYYY-MM-DD
-     * @param {Callback} [onupdate] as event function(date, value) fires initialy and anytime server site changes are made
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} [onupdate] as event function(date, value) fires initialy and anytime server site changes are made
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @param {String} [dayTodayOpt=NOW] as a String marking todays date in format YYYY-MM-DD; if left false, today is set automatically
      * @returns {Void}  -
      */
@@ -301,10 +301,10 @@ export class TrafficCountApi {
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} year the year as String in format YYYY
-     * @param {Callback} onupdate as event function(year, value) fires initialy and anytime server site changes are made
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onupdate as event function(year, value) fires initialy and anytime server site changes are made
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @param {String} [yearTodayOpt=NOW] as a String marking todays year in format YYYY; if left false, todays year is set automatically
      * @returns {Void}  -
      */
@@ -374,10 +374,10 @@ export class TrafficCountApi {
      * gets the total sum excluding todays last 15 minutes
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
-     * @param {Callback} onupdate as event function(firstDate, value) fires initialy and anytime server site changes are made
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onupdate as event function(firstDate, value) fires initialy and anytime server site changes are made
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     updateTotal (thingId, meansOfTransport, onupdate, onerror, onstart, oncomplete) {
@@ -434,10 +434,10 @@ export class TrafficCountApi {
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} year the year as String in format YYYY
-     * @param {Callback} onupdate as event function(date, value)
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onupdate as event function(date, value)
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     updateHighestWorkloadDay (thingId, meansOfTransport, year, onupdate, onerror, onstart, oncomplete) {
@@ -465,10 +465,10 @@ export class TrafficCountApi {
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} year the year as String in format YYYY
-     * @param {Callback} onupdate as event function(calendarWeek, value)
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onupdate as event function(calendarWeek, value)
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     updateHighestWorkloadWeek (thingId, meansOfTransport, year, onupdate, onerror, onstart, oncomplete) {
@@ -496,10 +496,10 @@ export class TrafficCountApi {
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
      * @param {String} year the year as String in format YYYY
-     * @param {Callback} onupdate as event function(month, value)
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onupdate as event function(month, value)
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     updateHighestWorkloadMonth (thingId, meansOfTransport, year, onupdate, onerror, onstart, oncomplete) {
@@ -549,10 +549,10 @@ export class TrafficCountApi {
      * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
      * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
      * @param {String} timeSettings.until the day to end with (inclusive) as String in format YYYY-MM-DD
-     * @param {Callback} onupdate as event function(data) fires initialy and anytime server site changes are made; with data as object {meansOfTransport: {date: value}}
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onupdate as event function(data) fires initialy and anytime server site changes are made; with data as object {meansOfTransport: {date: value}}
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @param {String} [todayUntilOpt=NOW] as a String marking todays date in format YYYY-MM-DD; if left false, today is set automatically
      * @returns {Void}  -
      */
@@ -632,10 +632,10 @@ export class TrafficCountApi {
      * subscribes the last change of data based on 15 minutes
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
-     * @param {Callback} [onupdate] as event function(phenomenonTime) fires initialy and anytime server site changes are made
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} [onupdate] as event function(phenomenonTime) fires initialy and anytime server site changes are made
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     subscribeLastUpdate (thingId, meansOfTransport, onupdate, onerror, onstart, oncomplete) {
@@ -673,7 +673,7 @@ export class TrafficCountApi {
 
     /**
      * unsubscribe all subscriptions that have been made so far by any function of this api
-     * @param {Callback} [onsuccess] an event function() to fire when all subscriptions have been successfully canceled
+     * @param {Function} [onsuccess] an event function() to fire when all subscriptions have been successfully canceled
      * @returns {Void}  -
      */
     unsubscribeEverything (onsuccess) {
@@ -700,10 +700,10 @@ export class TrafficCountApi {
      * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
      * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
      * @param {String} timeSettings.until the day to end with (inclusive) as String in format YYYY-MM-DD
-     * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     downloadData (thingId, meansOfTransport, timeSettings, onsuccess, onerror, onstart, oncomplete) {
@@ -732,10 +732,10 @@ export class TrafficCountApi {
      * gets the first date on a weekly basis ever recorded without subscription
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
-     * @param {Callback} onsuccess as event function(firstDate) fires once
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onsuccess as event function(firstDate) fires once
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     getFirstDateEver (thingId, meansOfTransport, onsuccess, onerror, onstart, oncomplete) {
