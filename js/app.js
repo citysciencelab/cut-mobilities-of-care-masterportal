@@ -413,7 +413,7 @@ async function loadApp () {
                 Object.keys(i18nextLanguages).forEach((lng) => {
                     import(
                         /* webpackChunkName: "additionalLocales" */
-                        /* webpackInclude: /\additional.json$/ */
+                        /* webpackInclude: /[\\\/]additional.json$/ */
                         `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales, true);
@@ -461,7 +461,7 @@ function loadAddOnsAfterLanguageLoaded (legacyAddons) {
 
             import(
                 /* webpackChunkName: "[request]" */
-                /* webpackInclude: /addons\/.*\/*.js$/ */
+                /* webpackInclude: /addons[\\\/].*[\\\/]*.js$/ */
                 /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
                 "../addons/" + entryPoint + ".js").then(module => {
                 /* eslint-disable new-cap */
