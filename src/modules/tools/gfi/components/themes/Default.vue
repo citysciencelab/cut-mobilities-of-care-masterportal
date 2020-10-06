@@ -1,5 +1,5 @@
 <script>
-import beautifyWfsKeys from "../../../../../utils/beautifyWfsKeys.js";
+import beautifyWfsKey from "../../../../../utils/beautifyWfsKey.js";
 import {isWebLink} from "../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../utils/isPhoneNumber.js";
 
@@ -12,7 +12,7 @@ export default {
         }
     },
     methods: {
-        beautifyWfsKeys,
+        beautifyWfsKey,
         isWebLink,
         isPhoneNumber,
         getPhoneNumberAsWebLink
@@ -28,7 +28,7 @@ export default {
                 :key="key"
             >
                 <td class="bold">
-                    {{ beautifyWfsKeys(key) }}
+                    {{ beautifyWfsKey(key) }}
                 </td>
                 <td v-if="isWebLink(value)">
                     <a

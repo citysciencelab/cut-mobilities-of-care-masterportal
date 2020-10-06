@@ -7,7 +7,7 @@
  * @param {Object} [optionsOpt.replacements={"_": " "}] an object with key/value pairs for alternative replacements (e.g. {"_": " ", "+": " "})
  * @returns {String}  a new string with the given replacements, the very first letter may be uppercase based on options
  */
-export default function beautifyWfsKeys (value, optionsOpt = null) {
+export default function beautifyWfsKey (value, optionsOpt = null) {
     if (typeof value !== "string") {
         return "";
     }
