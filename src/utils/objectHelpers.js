@@ -26,7 +26,7 @@ export function omit (object, blacklist) {
 function convertArrayElementsToString (array = []) {
     const arrayWithStrings = [];
 
-    array.forEach(element => arrayWithStrings.push(String(element)));
+    array.forEach(element => arrayWithStrings.push(String(element).toUpperCase()));
 
     return arrayWithStrings;
 }

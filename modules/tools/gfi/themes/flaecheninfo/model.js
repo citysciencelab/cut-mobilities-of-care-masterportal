@@ -49,7 +49,7 @@ const FlaecheninfoTheme = Theme.extend({
                 return foundGfiContent.Flurstück === requestedParcelId ? -1 : 1;
             });
 
-            textContent = Radio.request("Util", "omit", gfiContent[0], this.get("geometryKey"));
+            textContent = Radio.request("Util", "omit", gfiContent[0], [this.get("geometryKey")]);
             ring = gfiContent[0].hasOwnProperty(this.get("geometryKey")) ? gfiContent[0][this.get("geometryKey")] : "";
 
             this.setGfiContent([textContent]);
