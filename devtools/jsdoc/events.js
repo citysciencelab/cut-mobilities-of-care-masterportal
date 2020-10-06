@@ -2518,6 +2518,10 @@
  * @event Tools.ParcelSearch#RadioRequestParcelSearchParcelFound
  * @description Todo
  */
+/**
+ * @event Tools.ParcelSearch#RadioRequestParcelSearchCreateReport
+ * @description Todo
+ */
 
   /** -------------------- TOOLS.GFI -------------------- */
 

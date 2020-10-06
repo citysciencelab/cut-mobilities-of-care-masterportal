@@ -209,15 +209,17 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         }
     },
     buildUrl: function (url, params) {
+        const paramKeys = Object.entries(params);
         let addedUrl = url;
 
-        Object.entries(params).forEach(([key, val]) => {
-            const andSymbol = "&";
-
-            addedUrl += key + "=" + String(val) + andSymbol;
+        paramKeys.forEach(([key, val], i) => {
+            addedUrl += key + "=" + String(val);
+            if (i < paramKeys.length - 1) {
+                addedUrl = addedUrl + "&";
+            }
         });
         // if params is empty object
-        if (addedUrl.charAt(addedUrl.length - 1) !== "?") {
+        if (params.length === 0 && addedUrl.charAt(addedUrl.length - 1) !== "?") {
             addedUrl = addedUrl.slice(0, -1);
         }
         return addedUrl;
