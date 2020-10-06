@@ -5,9 +5,34 @@ import sinon from "sinon";
 import GfiComponent from "../../../components/Gfi.vue";
 import Mobile from "../../../components/templates/Mobile.vue";
 
-const localVue = createLocalVue();
+const localVue = createLocalVue(),
+    mockMutations = {
+        setCurrentFeature: () => sinon.stub()
+    };
 
 localVue.use(Vuex);
+
+/**
+ * Returns the store.
+ * @returns {object} the store
+ */
+function getGfiStore () {
+    return new Vuex.Store({
+        namespaced: true,
+        modules: {
+            Tools: {
+                namespaced: true,
+                modules: {
+                    Gfi: {
+                        namespaced: true,
+                        mutations: mockMutations
+                    }
+                }
+            }
+        }
+    });
+}
+
 
 describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
@@ -19,7 +44,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }],
-                mapSize: () => []
+                mapSize: () => [],
+                showMarker: () => true
             },
             localVue
         });
@@ -37,7 +63,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }],
-                mapSize: () => []
+                mapSize: () => [],
+                showMarker: () => true
             },
             localVue
         });
@@ -55,7 +82,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }],
-                mapSize: () => []
+                mapSize: () => [],
+                showMarker: () => true
             },
             localVue
         });
@@ -73,7 +101,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }],
-                mapSize: () => []
+                mapSize: () => [],
+                showMarker: () => true
             },
             localVue
         });
@@ -114,11 +143,23 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
         const mockMapMutations = {
                 setGfiFeatures: sinon.stub()
             },
+            mockGfiMutations = {
+                setCurrentFeature: sinon.stub()
+            },
             store = new Vuex.Store({
                 modules: {
                     Map: {
                         namespaced: true,
                         mutations: mockMapMutations
+                    },
+                    Tools: {
+                        namespaced: true,
+                        modules: {
+                            Gfi: {
+                                namespaced: true,
+                                mutations: mockGfiMutations
+                            }
+                        }
                     }
                 }
             }),
@@ -163,94 +204,100 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
     });
 
     it("should display the footer", () => {
-        const wrapper = mount(GfiComponent, {
-            computed: {
-                isMobile: () => true,
-                active: () => true,
-                gfiFeatures: () => [{
-                    getTheme: () => "default",
-                    getTitle: () => "Feature 1",
-                    "attributesToShow": "showAll",
-                    "olFeature": {
-                        getProperties: sinon.stub()
+        const store = getGfiStore(),
+            wrapper = mount(GfiComponent, {
+                computed: {
+                    isMobile: () => true,
+                    active: () => true,
+                    gfiFeatures: () => [{
+                        getTheme: () => "default",
+                        getTitle: () => "Feature 1",
+                        "attributesToShow": "showAll",
+                        "olFeature": {
+                            getProperties: sinon.stub()
+                        },
+                        getGfiUrl: () => null,
+                        getMappedProperties: () => null
                     },
-                    getGfiUrl: () => null,
-                    getMappedProperties: () => null
+                    {}],
+                    mapSize: () => []
                 },
-                {}],
-                mapSize: () => []
-            },
-            localVue
-        });
+                store,
+                localVue
+            });
 
         expect(wrapper.find(".pager-left").exists()).to.be.true;
         expect(wrapper.find(".pager-right").exists()).to.be.true;
     });
 
     it("should display the next feature if pager-right is clicked", async () => {
-        const wrapper = mount(GfiComponent, {
-            computed: {
-                isMobile: () => true,
-                desktopType: () => "",
-                active: () => true,
-                gfiFeatures: () => [{
-                    getTheme: () => "default",
-                    getTitle: () => "Feature 1",
-                    "attributesToShow": "showAll",
-                    "olFeature": {
-                        getProperties: sinon.stub()
+        const store = getGfiStore(),
+            wrapper = mount(GfiComponent, {
+                computed: {
+                    isMobile: () => true,
+                    desktopType: () => "",
+                    active: () => true,
+                    gfiFeatures: () => [{
+                        getTheme: () => "default",
+                        getTitle: () => "Feature 1",
+                        "attributesToShow": "showAll",
+                        "olFeature": {
+                            getProperties: sinon.stub()
+                        },
+                        getGfiUrl: () => null,
+                        getMappedProperties: () => null
                     },
-                    getGfiUrl: () => null,
-                    getMappedProperties: () => null
+                    {
+                        getTheme: () => "default",
+                        getTitle: () => "Feature 2",
+                        "attributesToShow": "showAll",
+                        "olFeature": {
+                            getProperties: sinon.stub()
+                        },
+                        getGfiUrl: () => null
+                    }],
+                    mapSize: () => []
                 },
-                {
-                    getTheme: () => "default",
-                    getTitle: () => "Feature 2",
-                    "attributesToShow": "showAll",
-                    "olFeature": {
-                        getProperties: sinon.stub()
-                    },
-                    getGfiUrl: () => null
-                }],
-                mapSize: () => []
-            },
-            localVue
-        });
+                store,
+                localVue
+            });
 
         await wrapper.find(".pager-right").trigger("click");
         expect(wrapper.find(".modal-title").text()).to.equal("Feature 2");
     });
 
     it("should display the previous feature if pager-left is clicked", async () => {
-        const wrapper = mount(GfiComponent, {
-            computed: {
-                isMobile: () => true,
-                desktopType: () => "",
-                active: () => true,
-                gfiFeatures: () => [{
-                    getTheme: () => "default",
-                    getTitle: () => "Feature 1",
-                    "attributesToShow": "showAll",
-                    "olFeature": {
-                        getProperties: sinon.stub()
+        const store = getGfiStore(),
+            wrapper = mount(GfiComponent, {
+                computed: {
+                    isMobile: () => true,
+                    desktopType: () => "",
+                    active: () => true,
+                    gfiFeatures: () => [{
+                        getTheme: () => "default",
+                        getTitle: () => "Feature 1",
+                        "attributesToShow": "showAll",
+                        "olFeature": {
+                            getProperties: sinon.stub()
+                        },
+                        getGfiUrl: () => null,
+                        getMappedProperties: () => null
                     },
-                    getGfiUrl: () => null,
-                    getMappedProperties: () => null
+                    {
+                        getTheme: () => "default",
+                        getTitle: () => "Feature 2",
+                        "attributesToShow": "showAll",
+                        "olFeature": {
+                            getProperties: sinon.stub()
+                        },
+                        getGfiUrl: () => null,
+                        getMappedProperties: () => null
+                    }],
+                    mapSize: () => []
                 },
-                {
-                    getTheme: () => "default",
-                    getTitle: () => "Feature 2",
-                    "attributesToShow": "showAll",
-                    "olFeature": {
-                        getProperties: sinon.stub()
-                    },
-                    getGfiUrl: () => null,
-                    getMappedProperties: () => null
-                }],
-                mapSize: () => []
-            },
-            localVue
-        });
+                store,
+                localVue
+            });
 
         wrapper.setData({pagerIndex: 1});
         await wrapper.find(".pager-left").trigger("click");
@@ -420,4 +467,24 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
         expect(firstDetachedComponent.exists()).to.be.false;
         expect(secondDetachedComponent.exists()).to.be.true;
     });
+
+    it("showMarker should be linke in state", async () => {
+        const wrapper = shallowMount(GfiComponent, {
+            computed: {
+                isMobile: () => false,
+                desktopType: () => "",
+                active: () => true,
+                isTable: () => false,
+                gfiFeatures: () => [{
+                    getGfiUrl: () => null
+                }],
+                mapSize: () => [],
+                showMarker: () => false
+            },
+            localVue
+        });
+
+        expect(wrapper.vm.showMarker).to.be.false;
+    });
+
 });
