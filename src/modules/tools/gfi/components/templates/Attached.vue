@@ -48,7 +48,7 @@ export default {
          * @returns {String} the title
          */
         title: function () {
-            return this.feature.getTitle();
+            return this.feature?.getTitle();
         },
 
         /**
@@ -217,7 +217,7 @@ export default {
         }
     }
     .gfi-content {
-        overflow: scroll;
+        overflow: auto;
         table {
             margin-bottom: 0;
         }
