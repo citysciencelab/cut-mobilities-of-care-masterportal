@@ -1,6 +1,7 @@
 <script>
 import Default from "../themes/Default.vue";
 import ActiveCityMaps from "../themes/ActiveCityMaps.vue";
+import Flaecheninfo from "../themes/flaecheninfo/components/Flaecheninfo.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import Solaratlas from "../themes/Solaratlas.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
@@ -14,6 +15,7 @@ export default {
     components: {
         Default,
         ActiveCityMaps,
+        Flaecheninfo,
         Schulinfo,
         Solaratlas,
         TrafficCount,
