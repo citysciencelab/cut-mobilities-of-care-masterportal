@@ -1,7 +1,8 @@
 <script>
 import themeConfig from "../themeConfig.json";
-import {isWebLink, isEmailAddress} from "../../../../../../../utils/urlHelper.js";
+import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
+import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import uniqueId from "../../../../../../../utils/uniqueId.js";
 
 export default {
@@ -19,14 +20,26 @@ export default {
         };
     },
     computed: {
+        /**
+         * Returns the olFeature associated with the feature.
+         * @returns {ol/feature} The olFeature
+         */
         olFeature: function () {
             return this.feature.getOlFeature();
         },
 
+        /**
+         * Returns the correct title, depending on whether the feature is on the comparelist or not.
+         * @returns {String} Title for the comparelist.
+         */
         titleCompareList: function () {
             return this.featureIsOnCompareList ? "Von der Vergleichsliste entfernen" : "Auf die Vergleichsliste";
         },
 
+        /**
+         * Returns the properties of the selected category.
+         * @returns {object[]} The properties for the selected category.
+         */
         selectedPropertyAttributes: function () {
             return this.assignedFeatureProperties.find(property => property.isSelected === true)?.attributes;
         }
