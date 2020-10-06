@@ -1,8 +1,8 @@
 <script>
 import themeConfig from "../themeConfig.json";
-import {mapGetters} from "vuex";
 import {isWebLink, isEmailAddress} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
+import uniqueId from "../../../../../../../utils/uniqueId.js";
 
 export default {
     name: "Schulinfo",
@@ -15,37 +15,30 @@ export default {
     data: () => {
         return {
             assignedFeatureProperties: [],
-            removeFromCompareListTitle: "Von der Vergleichsliste entfernen",
-            addToCompareListTitle: "Auf die Vergleichsliste",
             featureIsOnCompareList: false
         };
     },
     computed: {
-        ...mapGetters("Map", ["gfiFeatures"]),
-
         olFeature: function () {
             return this.feature.getOlFeature();
         },
 
-        getFeatureIsOnCompareList: function () {
-            return this.featureIsOnCompareList;
-        },
-
         titleCompareList: function () {
-            return this.getFeatureIsOnCompareList ? this.removeFromCompareListTitle : this.addToCompareListTitle;
+            return this.featureIsOnCompareList ? "Von der Vergleichsliste entfernen" : "Auf die Vergleichsliste";
         },
 
         selectedPropertyAttributes: function () {
             return this.assignedFeatureProperties.find(property => property.isSelected === true)?.attributes;
         }
     },
-    created () {
-        this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
-        this.assignedFeatureProperties = this.assignFeatureProperties(this.feature);
-
-        this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
+    watch: {
+        feature (value) {
+            this.initialize(value);
+        }
     },
-
+    created () {
+        this.initialize(this.feature);
+    },
     methods: {
         isWebLink,
         isPhoneNumber,
@@ -53,14 +46,16 @@ export default {
         isEmailAddress,
 
         /**
-         * Indicates whether the feature is on the comparelist.
-         * @param {event} event The given event.
+         * Checks if the feature is on the comparelist.
+         * Starts to prepare the data and sets up the listener.
+         * @param {object} feature The feature from property
          * @returns {void}
          */
-        toggleFeatureIsOnCompareList: function (event) {
-            if (event.key === "isOnCompareList") {
-                this.featureIsOnCompareList = event.target.get("isOnCompareList");
-            }
+        initialize: function (feature) {
+            this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
+            this.assignedFeatureProperties = this.assignFeatureProperties(feature);
+
+            this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
         },
 
         /**
@@ -126,13 +121,24 @@ export default {
         },
 
         /**
+         * Indicates whether the feature is on the comparelist.
+         * @param {event} event The given event.
+         * @returns {void}
+         */
+        toggleFeatureIsOnCompareList: function (event) {
+            if (event.key === "isOnCompareList") {
+                this.featureIsOnCompareList = event.target.get("isOnCompareList");
+            }
+        },
+
+        /**
          * Triggers the event "addFeatureToList" to the CompareFeatures module to add the feature.
          * @param {Event} event The click event.
          * @returns {void}
          */
         toogleFeatureToCompareList: function (event) {
             if (event.target.classList.contains("glyphicon-star-empty")) {
-                const uniquelayerId = this.feature.getLayerId() + Radio.request("Util", "uniqueId", "_"); // todo remove Radio
+                const uniquelayerId = this.feature.getLayerId() + uniqueId("_");
 
                 this.olFeature.set("layerId", uniquelayerId);
                 Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
@@ -169,7 +175,7 @@ export default {
                     @click="changeToSchoolRouting"
                 ></span>
                 <span
-                    :class="['glyphicon', getFeatureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty', 'pull-right']"
+                    :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty', 'pull-right']"
                     :title="titleCompareList"
                     @click="toogleFeatureToCompareList"
                 ></span>
