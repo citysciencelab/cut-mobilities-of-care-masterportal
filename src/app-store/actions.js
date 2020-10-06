@@ -4,8 +4,8 @@ export default {
     /**
      * Function to check if the deprecated parameters could be specified for more than one location e.g. they (location of the parameter or tool) have multiple possible paths.
     * Furthermore the function checks whether the given paths for the parameters are defined or undefined.
-    * @param {String} deprecatedPath - dotted string. The path in the config of the old and deprecated parameter.
-    * @param {config} config - the config.json or config.js.
+    * @param {Object} deprecatedPath an object with keys (dotted string as new path) and String[] as values, holding the old and deprecated paths
+    * @param {Object} config - the config.json or config.js.
     * @returns {Object} - returns a new config (.json or .js) without the deprecated parameters. They were replaced by the actual ones.
     */
     checkWhereDeprecated (deprecatedPath, config) {
@@ -24,10 +24,10 @@ export default {
 
     /**
      * Function to determine:
-     * Firstly: the path as dotted string.
-     * Secondly: the output given by the config.json for the path with the deprecated parameter.
-     * Thirdly: the deprecated key/parameter itself.
-     * @param {Array} entry - Array with the single "steps" / elements of the deprecated path.
+     * Firstly: the path as dotted string (newSplittedPath).
+     * Secondly: the output given by the config.json for the path with the deprecated parameter. (output)
+     * Thirdly: the deprecated key/parameter itself. (deprecatedKey)
+     * @param {[String, String[]]} [entry=[]] - Array with the single "steps" / elements of the deprecated path. entry[0] ist the new path, elem[1] is an array of old paths
      * @param {Object} config - The config.json or config.js.
      * @returns {Object} - returns an object with the three mentioned above parameters.
     */
@@ -59,7 +59,7 @@ export default {
      * Function to find and replace the old deprecated path.
      * Inserts the new and current key into the config instead of the deprecated parameter.
      * The deprecated parameter is deleted. The content is allocated to the new key.
-     * @param {Array} parameters - contains the new current parameter to replace the deprecated parameter. Contains also an object which lists the path of the deprecated parameter, the output/content of the deprecated parameter and the deprecated parameter itself.
+     * @param {Object} parameters - contains the new current parameter to replace the deprecated parameter. Contains also an object which lists the path of the deprecated parameter, the output/content of the deprecated parameter and the deprecated parameter itself.
      * @param {Object} config - the config.json or config.js.
      * @returns {Object} - returns a updated config where the deprecated parameters are replaced by the new and current ones.
     */

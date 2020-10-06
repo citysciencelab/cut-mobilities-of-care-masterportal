@@ -375,10 +375,10 @@ export class TrafficCountCache {
      * @param {String} timeSettings.interval the interval to call as '15-Min', '1-Stunde' or '1-Woche'
      * @param {String} timeSettings.from the day to start from (inclusive) as String in format YYYY-MM-DD
      * @param {String} timeSettings.until the day to end with (inclusive) as String in format YYYY-MM-DD
-     * @param {Callback} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onsuccess as event function(result) with result{title, dataset} and dataset{meansOfTransport: {date: value}}; fired once on success (no subscription)
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @returns {Void}  -
      */
     downloadData (thingId, meansOfTransport, timeSettings, onsuccess, onerror, onstart, oncomplete) {
@@ -390,10 +390,10 @@ export class TrafficCountCache {
      * gets the first date on a weekly basis ever recorded without subscription
      * @param {Integer} thingId the ID of the thing
      * @param {String} meansOfTransport the transportation as 'Anzahl_Fahrraeder' or 'AnzFahrzeuge'
-     * @param {Callback} onsuccess as event function(firstDate) fires once
-     * @param {Callback} [onerror] as function(error) to fire on error
-     * @param {Callback} [onstart] as function() to fire before any async action has started
-     * @param {Callback} [oncomplete] as function() to fire after every async action no matter what
+     * @param {Function} onsuccess as event function(firstDate) fires once
+     * @param {Function} [onerror] as function(error) to fire on error
+     * @param {Function} [onstart] as function() to fire before any async action has started
+     * @param {Function} [oncomplete] as function() to fire after every async action no matter what
      * @param {Function} [simpleCacheCallOpt=null] using this function instead of inner simpleCacheCall (for testing)
      * @param {TrafficCountApi} [trafficCountApiOpt=null] the api to use (for testing)
      * @returns {Void}  -

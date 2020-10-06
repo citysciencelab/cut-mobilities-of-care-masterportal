@@ -1,24 +1,24 @@
 /**
  * User type definition
- * @typedef {object} SupplyCoordState
- * @property {boolean} active if true, SupplyCoord will rendered
- * @property {string} id id of the SupplyCoord component
+ * @typedef {Object} SupplyCoordState
+ * @property {Boolean} active if true, SupplyCoord will rendered
+ * @property {String} id id of the SupplyCoord component
  * @property {module:ol/interaction/Pointer} selectPointerMove contains interaction listener to map
- * @property {object[]} projections list of available projections
- * @property {object} mapProjection projection of the map
- * @property {number[]} positionMapProjection position of the projection in the map
- * @property {boolean} updatePosition if true, position is updated in tool
- * @property {string} currentProjectionName name of the current projection
- * @property {object} currentProjection the current projection
- * @property {string} currentSelection currently selected projection value
- * @property {string} coordinatesEastingField label of the easting field
- * @property {string} coordinatesNorthingField label of the northing field
- * @property {string} name displayed as title (config-param)
- * @property {string} glyphicon icon next to title (config-param)
- * @property {boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
- * @property {boolean} resizableWindow if true, window is resizable (config-param)
- * @property {boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
- * @property {boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
+ * @property {Object[]} projections list of available projections
+ * @property {Object} mapProjection projection of the map
+ * @property {Number[]} positionMapProjection position of the projection in the map
+ * @property {Boolean} updatePosition if true, position is updated in tool
+ * @property {String} currentProjectionName name of the current projection
+ * @property {Object} currentProjection the current projection
+ * @property {String} currentSelection currently selected projection value
+ * @property {String} coordinatesEastingField label of the easting field
+ * @property {String} coordinatesNorthingField label of the northing field
+ * @property {String} name displayed as title (config-param)
+ * @property {String} glyphicon icon next to title (config-param)
+ * @property {Boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
+ * @property {Boolean} resizableWindow if true, window is resizable (config-param)
+ * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
+ * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
  */
 const state = {
     active: false,

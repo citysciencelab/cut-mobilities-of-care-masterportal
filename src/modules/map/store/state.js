@@ -3,32 +3,32 @@ import {MapMode} from "./enums";
 
 /**
  * User type definition
- * @typedef {object} MapState
+ * @typedef {Object} MapState
  * @property {?module:ol/Map} map currently active map instance
- * @property {?[number, number]} size - The size in pixels of the map in the DOM
+ * @property {?[Number, Number]} size - The size in pixels of the map in the DOM
  * @property {?module:ol/layer[]} layerList - all layers of the map
- * @property {?object[]} gfiFeatures - features for the gfi
- * @property {?number} initialZoomLevel initial zoom level
- * @property {?number} zoomLevel active zoom level
- * @property {?number} maxZoomLevel maximum zoom level
- * @property {?number} minZoomLevel minimum zoom level
- * @property {?number} scale scale 1:x, where x is saved here
- * @property {?number} initialResolution initial resolution
- * @property {?number} resolution active resolution (changes with zoom level)
- * @property {?number} maxResolution maximum resolution
- * @property {?number} minResolution minimum resolution
- * @property {?[number, number]} clickCoord - the coordinate where the mouse click event triggered
- * @property {?[number, number]} clickPixel - the pixel where the mouse click event triggered relative to the viewport
+ * @property {?Object[]} gfiFeatures - features for the gfi
+ * @property {?Number} initialZoomLevel initial zoom level
+ * @property {?Number} zoomLevel active zoom level
+ * @property {?Number} maxZoomLevel maximum zoom level
+ * @property {?Number} minZoomLevel minimum zoom level
+ * @property {?Number} scale scale 1:x, where x is saved here
+ * @property {?Number} initialResolution initial resolution
+ * @property {?Number} resolution active resolution (changes with zoom level)
+ * @property {?Number} maxResolution maximum resolution
+ * @property {?Number} minResolution minimum resolution
+ * @property {?[Number, Number]} clickCoord - the coordinate where the mouse click event triggered
+ * @property {?[Number, Number]} clickPixel - the pixel where the mouse click event triggered relative to the viewport
  * @property {?Object[]} featuresAtCoordinate - features at the click coordinate
- * @property {?[number, number]} initialCenter initial center coordinate
- * @property {?[number, number]} center coordinate
- * @property {?[number, number, number, number]} bbox current bounding box
- * @property {?string} projection name of currently active projection
- * @property {?number} rotation current rotation
- * @property {?number[]} layerIds list of layer ids
- * @property {?object.<string, LayerData>} layers register of existing layers
- * @property {?number[]} overlayIds list of layer ids
- * @property {?object.<string, LayerData>} overlays list of existing overlays
+ * @property {?[Number, Number]} initialCenter initial center coordinate
+ * @property {?[Number, Number]} center coordinate
+ * @property {?[Number, Number, Number, Number]} bbox current bounding box
+ * @property {?String} projection name of currently active projection
+ * @property {?Number} rotation current rotation
+ * @property {?String[]} layerIds list of layer ids as String (may contain others than numbers, e.g. "1933geofox_stations")
+ * @property {?Object.<String, LayerData>} layers register of existing layers
+ * @property {?Number[]} overlayIds list of layer ids
+ * @property {?Object.<String, LayerData>} overlays list of existing overlays
  * @property {MapMode} mapMode
  */
 const state = {

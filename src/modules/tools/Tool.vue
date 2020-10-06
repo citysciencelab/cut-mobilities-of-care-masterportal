@@ -98,7 +98,7 @@ export default {
     methods: {
         /**
          * Updates the size of the map depending on sidebars visibility
-         *  @return {void}
+         *  @return {Void}  -
          */
         updateMap () {
             if (!this.renderToWindow && this.active) {
@@ -112,7 +112,7 @@ export default {
         },
         /**
          * Minimizes the Window
-         *  @return {void}
+         *  @return {Void}  -
          */
         minimize: function () {
             const el = $(this.$el);
@@ -127,7 +127,7 @@ export default {
         },
         /**
          * Maximizes the Window
-         *  @return {void}
+         *  @return {Void}  -
          */
         maximize: function () {
             if ($(".win-body-vue").css("display") === "none") {
@@ -143,7 +143,7 @@ export default {
         /**
          * Updates size of map and emits event to parent.
          * @param {Event} event the click event
-         * @return {void}
+         * @return {Void}  -
          */
         close (event) {
             this.updateMap();
@@ -153,7 +153,7 @@ export default {
         /**
          * adds the eventListeners to the window Object
          * responsible for handling the drag Events on Keyboard and Touch
-         * @returns {void}
+         * @returns {Void}  -
          */
         addEventListeners () {
             window.addEventListener("mouseup", () => {
@@ -172,7 +172,7 @@ export default {
         /**
          * adds the eventListeners to the window Object
          * responsible for handling the drag Events on Keyboard and Touch
-         * @returns {void}
+         * @returns {Void}  -
          */
         removeEventListeners () {
             window.removeEventListener("mouseup", () => {
@@ -190,8 +190,8 @@ export default {
         },
         /**
          * handles the drag Start event to resize the sidebar
-         * @param {*} event the DOM-event
-         * @returns {void}
+         * @param {Event} event the DOM-event
+         * @returns {Void}  -
          */
         dragStart: function (event) {
             event.preventDefault();
@@ -200,7 +200,7 @@ export default {
         /**
          * handles the drag move event to resize the sidebar
          * @param {Event} event the DOM-event
-         * @returns {void}
+         * @returns {Void}  -
          */
         dragMove: function (event) {
             if (this.isDragging) {
@@ -212,7 +212,7 @@ export default {
         },
         /**
          * handles the drag End event to resize the sidebar
-         * @returns {void}
+         * @returns {Void}  -
          */
         dragEnd () {
             this.isDragging = false;

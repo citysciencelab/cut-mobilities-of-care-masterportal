@@ -89,7 +89,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
     describe("createDrawInteractionAndAddToMap", () => {
         /**
          * @param {String} id id to use for drawType
-         * @returns {object} a mocked state for this test
+         * @returns {Object}  a mocked state for this test
          */
         function getState (id) {
             return {

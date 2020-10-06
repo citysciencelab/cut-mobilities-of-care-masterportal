@@ -46,7 +46,7 @@ export default {
         /**
          * toggle the table or diagram by clicking the checkbox
          * @param {Object[]} evt the target of current click event
-         * @returns {void} -
+         * @returns {Void}  -
          */
         toggleTableDiagram: function (evt) {
             if (evt && evt.target) {

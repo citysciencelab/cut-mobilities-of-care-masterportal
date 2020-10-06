@@ -45,7 +45,7 @@ export default {
     methods: {
         /**
          * Turns simple mode on.
-         * @returns {void}
+         * @returns {Void}  -
          */
         turnSimple () {
             this.simple = true;

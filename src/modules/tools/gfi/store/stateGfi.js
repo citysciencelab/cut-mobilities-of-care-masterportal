@@ -1,8 +1,8 @@
 /**
  * User type definition
- * @typedef {object} GfiState
- * @property {boolean} active - true if the gfi is active
- * @property {?object} currentFeature - the current feature that is displayed
+ * @typedef {Object} GfiState
+ * @property {Boolean} active - true if the gfi is active
+ * @property {?Object} currentFeature - the current feature that is displayed
  *
  */
 const state = {

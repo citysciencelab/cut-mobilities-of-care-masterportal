@@ -68,8 +68,8 @@ export default {
 
     /**
      * checks if the simple style is set in the query params or in the config.js
-     * @param {object} state - the store state
-     * @returns {boolean} true if simple style is set otherwise false
+     * @param {Object} state - the store state
+     * @returns {Boolean} true if simple style is set otherwise false
      */
     isSimpleStyle: (state) => {
         if (state?.queryParams?.style) {
@@ -86,8 +86,8 @@ export default {
 
     /**
      * checks if the table style is set in the query params or in the config.js
-     * @param {object} state - the store state
-     * @returns {boolean} true if table style is set ohterwise false
+     * @param {Object} state - the store state
+     * @returns {Boolean} true if table style is set ohterwise false
      */
     isTableStyle: (state) => {
         if (state?.queryParams?.style) {
@@ -104,11 +104,11 @@ export default {
 
     /**
      * checks if the default style is set
-     * @param {object} state - the store state
-     * @param {object} getters - the store getters
-     * @param {boolean} getters.isSimpleStyle -
-     * @param {boolean} getters.isTableStyle -
-     * @returns {boolean} false if simple style or table style is set otherwise true
+     * @param {Object} state - the store state
+     * @param {Object} getters - the store getters
+     * @param {Boolean} getters.isSimpleStyle -
+     * @param {Boolean} getters.isTableStyle -
+     * @returns {Boolean} false if simple style or table style is set otherwise true
      */
     isDefaultStyle: (state, {isSimpleStyle, isTableStyle}) => {
         return !isSimpleStyle && !isTableStyle;

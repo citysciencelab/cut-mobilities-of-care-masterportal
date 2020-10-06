@@ -7,8 +7,8 @@ import axios from "axios";
 
 /**
  * handles the GetFeatureInfo request
- * @param {string} mimeType - text/xml | text/html
- * @param {string} url - the GetFeatureInfo request url
+ * @param {String} mimeType - text/xml | text/html
+ * @param {String} url - the GetFeatureInfo request url
  * @returns {Promise<module:ol/Feature[]>}  Promise object represents the GetFeatureInfo request
  */
 export function requestGfi (mimeType, url) {
@@ -56,7 +56,7 @@ export function handleResponseAxios (response) {
  * parses the given string as DOM document
  * @throws will throw an error - parsing errors are reported on the console by DOMParser
  * @param {String} documentString the string to parse
- * @param {mimeType} mimeType the mimeType to use (text/xml, text/html) - other formats are currently not supported and may not work
+ * @param {String} mimeType the mimeType to use (text/xml, text/html) - other formats are currently not supported and may not work
  * @param {Function} [parseFromStringOpt=null] a function(documentString, mimeType) for parsing the document (for testing only)
  * @returns {(Document|XMLDocument)}  a valid document, free of parser errors
  */
