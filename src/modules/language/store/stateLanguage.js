@@ -1,6 +1,6 @@
 /**
  * User type definition
- * @typedef {object}languageState
+ * @typedef {Object} languageState
  * @property {String} currentLocale - the current language code
  *
  */

@@ -6,8 +6,8 @@ const allAddons = VUE_ADDONS || {};
 
 /**
  * Adds all addons based on config.js and addonsConf.json to the Vue Instance and store
- * @param {string[]} config The array of addonKeys specified in config.js
- * @returns {void}
+ * @param {String[]} config The array of addonKeys specified in config.js
+ * @returns {Void}  -
  */
 export default async function (config) {
     Vue.prototype.$addons = []; // add .$addons in any case to make sure it's always defined

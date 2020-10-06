@@ -8,8 +8,13 @@ const webdriver = require("selenium-webdriver"),
     {By, Button, until} = webdriver;
 
 /**
- * @param {e2eTestParams} params parameter set
- * @returns {void}
+ * @param {Object} params e2eTestParams
+ * @param {module:selenium-webdriver.Builder} params.builder the selenium.Builder object
+ * @param {String} params.url the url to test
+ * @param {String} params.resolution formatted as "AxB" with A, B integers
+ * @param {String} params.browsername the name of the broser (to use chrome put "chrome" into the name)
+ * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
+ * @returns {Void}  -
  */
 function TotalViewTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = (isMaster(url) || isCustom(url)) && // only active here

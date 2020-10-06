@@ -15,8 +15,8 @@ export default {
         isWebLink,
         /**
          * Checks if the string includes a pipe
-         * @param {string} value - string to check
-         * @returns {boolean} true | false
+         * @param {String} value - string to check
+         * @returns {Boolean} true | false
          */
         hasPipe: function (value) {
             return value.includes("|");

@@ -1,8 +1,8 @@
 /**
- * @typedef {object} LayerData minimal implementation, more to come
- * @property {string} name layer name
- * @property {boolean} visibility layer visibility
- * @property {number} opacity layer opacity in [0, 1] range
+ * @typedef {Object} LayerData minimal implementation, more to come
+ * @property {String} name layer name
+ * @property {Boolean} visibility layer visibility
+ * @property {Number} opacity layer opacity in [0, 1] range
  * @property {module:ol/layer} olLayer openlayers layer object kept for quick access
  */
 

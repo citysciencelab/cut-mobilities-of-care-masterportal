@@ -42,7 +42,7 @@ export default {
     computed: {
         ...mapGetters(["controlsConfig", "mobile", "isSimpleStyle"]),
         ...mapGetters("controls", ["componentMap", "mobileHiddenControls", "bottomControls"]),
-        /** @returns {object} contains controls to-be-rendered sorted by placement */
+        /** @returns {Object} contains controls to-be-rendered sorted by placement */
         categorizedControls () {
             const categorizedControls = {
                 top: [],

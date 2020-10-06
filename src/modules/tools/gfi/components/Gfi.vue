@@ -38,7 +38,7 @@ export default {
         /**
          * Returns the current view type.
          * It only works if the string has the same name as the component (in ./templates).
-         * @returns {string} the current view type (Detached or Mobile)
+         * @returns {String} the current view type (Detached or Mobile)
          */
         currentViewType: function () {
             if (this.isMobile) {
@@ -54,14 +54,14 @@ export default {
         },
         /**
          * Is visible if there is at least one feature and the gfi is activated.
-         * @returns {boolean} gfi visibility
+         * @returns {Boolean} gfi visibility
          */
         isVisible: function () {
             return this.gfiFeatures !== null && this.active;
         },
         /**
          * Returns the feature depending on the pager index.
-         * @returns {object|null} - the current feature
+         * @returns {?Object} - the current feature
          */
         feature: function () {
             if (this.gfiFeatures !== null && Array.isArray(this.gfiFeatures) && this.gfiFeatures.length > 0) {
@@ -73,8 +73,8 @@ export default {
     watch: {
         /**
          * Whenever active changes and it's false, reset function will call
-         * @param {boolean} newValue - is gfi active
-         * @returns {void}
+         * @param {Boolean} newValue - is gfi active
+         * @returns {Void}  -
          */
         active: function (newValue) {
             if (!newValue) {
@@ -83,8 +83,8 @@ export default {
         },
         /**
          * Whenever feature changes, put it into the store
-         * @param {object|null} newValue - the current feature
-         * @returns {void}
+         * @param {?Object} newValue - the current feature
+         * @returns {Void}  -
          */
         feature: function (newValue) {
             this.setCurrentFeature(newValue);
@@ -92,7 +92,7 @@ export default {
         /**
          * Whenever mapSize changes, component key is changed
          * to force re-render detached component (key-changing).
-         * @returns {void}
+         * @returns {Void}  -
          */
         mapSize: function () {
             if (this.currentViewType === "Detached") {
@@ -113,7 +113,7 @@ export default {
         /**
          * Reset means to set the gfiFeatures to null and the pager index to zero.
          * This closes the gfi window/modal/popover.
-         * @returns {void}
+         * @returns {Void}  -
          */
         reset: function () {
             this.setGfiFeatures(null);
@@ -121,7 +121,7 @@ export default {
         },
         /**
          * Increases the index for the pagination.
-         * @returns {void}
+         * @returns {Void}  -
          */
         increasePagerIndex: function () {
             if (this.pagerIndex < this.gfiFeatures.length - 1) {
@@ -130,7 +130,7 @@ export default {
         },
         /**
          * Decreases the index for the pagination.
-         * @returns {void}
+         * @returns {Void}  -
          */
         decreasePagerIndex: function () {
             if (this.pagerIndex > 0) {
@@ -141,10 +141,10 @@ export default {
          * Checks which properties should be displayed.
          * If all should be displayed, the ignoredKeys omitted.
          * Otherwise the properties are mapped
-         * @param {object} properties - the feature properties
-         * @param {object} mappingObject - "gfiAttributes" from the layer
-         * @param {string[]} ignoredKeys - configured in the config.js
-         * @returns {object} prepared properties - mapped by MappingObject or omitted by ignoredKeys
+         * @param {Object} properties - the feature properties
+         * @param {Object} mappingObject - "gfiAttributes" from the layer
+         * @param {String[]} ignoredKeys - configured in the config.js
+         * @returns {Object} prepared properties - mapped by MappingObject or omitted by ignoredKeys
          */
         prepareProperties: function (properties, mappingObject, ignoredKeys) {
             if (mappingObject === "showAll" && Array.isArray(ignoredKeys)) {
@@ -154,9 +154,9 @@ export default {
         },
         /**
          * Maps the feature properties by the given object.
-         * @param {object} properties - the feature properties
-         * @param {object} mappingObject - "gfiAttributes" from the layer
-         * @returns {object} mapped properties
+         * @param {Object} properties - the feature properties
+         * @param {Object} mappingObject - "gfiAttributes" from the layer
+         * @returns {Object} mapped properties
          */
         mapProperties: function (properties, mappingObject) {
             const mappedProperties = {};

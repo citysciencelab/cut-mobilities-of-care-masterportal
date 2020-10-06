@@ -8,9 +8,9 @@ const gettersMap = {
 
     /**
      * gets all visible layers
-     * @param {object} state - the map state
-     * @param {object[]} state.layerList - all avaible layers in the map
-     * @returns {object[]} all visible layers
+     * @param {Object} state - the map state
+     * @param {Object[]} state.layerList - all avaible layers in the map
+     * @returns {Object[]} all visible layers
      */
     visibleLayerList: ({layerList}) => {
         return layerList.filter(layer => layer.getVisible());
@@ -18,10 +18,10 @@ const gettersMap = {
 
     /**
      * gets all visible wms layers
-     * @param {object} state - the map state
-     * @param {object} getters - the map getters
-     * @param {object[]} getters.visibleLayerList - all visible layers in the map
-     * @returns {object[]} all visible wms layers
+     * @param {Object} state - the map state
+     * @param {Object} getters - the map getters
+     * @param {Object[]} getters.visibleLayerList - all visible layers in the map
+     * @returns {Object[]} all visible wms layers
      */
     visibleWmsLayerList: (state, {visibleLayerList}) => {
         const list = [];
@@ -44,10 +44,10 @@ const gettersMap = {
 
     /**
      * gets all visible wms layers at the current resolution
-     * @param {object} state - the map state
-     * @param {object} getters - the map getters
-     * @param {object[]} getters.visibleWmsLayerList - all visible wms layers in the map
-     * @returns {object[]} all visible wms layers at the current resolution
+     * @param {Object} state - the map state
+     * @param {Object} getters - the map getters
+     * @param {Object[]} getters.visibleWmsLayerList - all visible wms layers in the map
+     * @returns {Object[]} all visible wms layers at the current resolution
      */
     visibleWmsLayerListAtResolution: (state, {visibleWmsLayerList, resolution}) => {
         return visibleWmsLayerList.filter(layer => {
@@ -57,10 +57,10 @@ const gettersMap = {
 
     /**
      * gets the features at the given pixel for the gfi
-     * @param {object} state - the map state
-     * @param {object} state.map - the openlayers map
-     * @param {number[]} state.clickPixel - the pixel coordinate of the click event
-     * @returns {object[]} gfi features
+     * @param {Object} state - the map state
+     * @param {Object} state.map - the openlayers map
+     * @param {Number[]} state.clickPixel - the pixel coordinate of the click event
+     * @returns {Object[]} gfi features
      */
     gfiFeaturesAtPixel: ({map, map3d, clickPixel}) => {
         const featuresAtPixel = [];
@@ -111,8 +111,8 @@ const gettersMap = {
     },
 
     /**
-     * @param {object} s state
-     * @returns {boolean} true if map is not in initial zoom/center
+     * @param {Object} s state
+     * @returns {Boolean} true if map is not in initial zoom/center
      */
     hasMoved: ({map, initialZoomLevel, initialCenter}) => {
         const view = map.getView(),
@@ -123,28 +123,28 @@ const gettersMap = {
             initialZoomLevel !== view.getZoom();
     },
     /**
-     * @param {object} _ state
-     * @param {object} g getters
-     * @returns {function} layer getter by id
+     * @param {Object} _ state
+     * @param {Object} g getters
+     * @returns {Function} layer getter by id
      */
     layerById: (_, g) => id => g.layers[id],
     /**
-     * @param {object} _ state
-     * @param {object} g getters
-     * @returns {boolean} whether current zoom level is the maximum zoom level
+     * @param {Object} _ state
+     * @param {Object} g getters
+     * @returns {Boolean} whether current zoom level is the maximum zoom level
      */
     maximumZoomLevelActive: (_, g) => g.zoomLevel >= g.maxZoomLevel,
     /**
-     * @param {object} _ state
-     * @param {object} g getters
-     * @returns {boolean} whether current zoom level is the minimal zoom level
+     * @param {Object} _ state
+     * @param {Object} g getters
+     * @returns {Boolean} whether current zoom level is the minimal zoom level
      */
     minimumZoomLevelActive: (_, g) => g.zoomLevel <= g.minZoomLevel,
     /**
-     * @param {object} _ state
-     * @param {object} params getter parameters
-     * @param {object} params.scale x from computed scale value 1:x
-     * @returns {string} pretty-printed scale to 2cms
+     * @param {Object} _ state
+     * @param {Object} params getter parameters
+     * @param {Object} params.scale x from computed scale value 1:x
+     * @returns {String} pretty-printed scale to 2cms
      */
     scaleWithUnit: (_, {scale}) => {
         const scaleNumber = Math.round(0.02 * scale);
@@ -152,10 +152,10 @@ const gettersMap = {
         return scaleNumber >= 1000 ? `${Math.round(scaleNumber / 100) / 10} km` : `${scaleNumber} m`;
     },
     /**
-     * @param {object} _ state
-     * @param {object} params getter parameters
-     * @param {object} params.scale x from computed scale value 1:x
-     * @returns {string} pretty-printed scale to 2cms
+     * @param {Object} _ state
+     * @param {Object} params getter parameters
+     * @param {Object} params.scale x from computed scale value 1:x
+     * @returns {String} pretty-printed scale to 2cms
      */
     scaleToOne: (_, {scale}) => {
         if (scale > 10000) {
@@ -167,10 +167,10 @@ const gettersMap = {
         return `1 : ${Math.round(scale).toLocaleString()}`;
     },
     /**
-     * @param {object} _ state
-     * @param {object} params getter parameters
-     * @param {object} params.scale x from computed scale value 1:x
-     * @returns {string} pretty-printed scale to 2cms
+     * @param {Object} _ state
+     * @param {Object} params getter parameters
+     * @param {Object} params.scale x from computed scale value 1:x
+     * @returns {String} pretty-printed scale to 2cms
      */
     prettyMouseCoord: (_, {mouseCoord}) => mouseCoord ? `${mouseCoord[0].toString().substr(0, 9)}, ${mouseCoord[1].toString().substr(0, 10)}` : "",
     projectionCode: (_, g) => g.projection?.getCode(),
