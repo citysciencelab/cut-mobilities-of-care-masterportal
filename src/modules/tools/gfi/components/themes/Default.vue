@@ -2,6 +2,7 @@
 import beautifyWfsKey from "../../../../../utils/beautifyWfsKey.js";
 import {isWebLink} from "../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../utils/isPhoneNumber.js";
+import {isEmailAddress} from "../../../../../utils/isEmailAddress.js";
 
 export default {
     name: "Default",
@@ -15,7 +16,8 @@ export default {
         beautifyWfsKey,
         isWebLink,
         isPhoneNumber,
-        getPhoneNumberAsWebLink
+        getPhoneNumberAsWebLink,
+        isEmailAddress
     }
 };
 </script>
