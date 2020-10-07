@@ -1,11 +1,16 @@
+import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
 import SchulinfoTheme from "../../components/Schulinfo.vue";
 import Feature from "ol/Feature";
+import VectorSource from "ol/source/Vector";
+import VectorLayer from "ol/layer/Vector";
 import ThemeConfig from "../../themeConfig.json";
 
 const localVue = createLocalVue();
+
+localVue.use(Vuex);
 
 describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () => {
     const properties = {
@@ -25,15 +30,24 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
             "kantine_vorh": "true",
             "kapitelbezeichnung": "Stadtteilschulen"
         },
-        olFeature = new Feature({"isOnCompareList": false});
+        olFeature = new Feature({
+            isOnCompareList: false
+        }),
+        vectorLayer = new VectorLayer({
+            id: "1234",
+            source: new VectorSource()
+        });
     let wrapper;
+
+    olFeature.setId("feature1");
+    vectorLayer.getSource().addFeature(olFeature);
 
     beforeEach(() => {
         wrapper = shallowMount(SchulinfoTheme, {
             propsData: {
                 feature: {
-                    getOlFeature: () => olFeature,
-                    getLayerId: () =>sinon.stub(),
+                    getId: () => "feature1",
+                    getLayerId: () => "1234",
                     getProperties: () => properties,
                     getAttributesToShow: () => sinon.stub()
                 }
@@ -41,7 +55,18 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
             localVue,
             mocks: {
                 $t: (msg) => msg
-            }
+            },
+            store: new Vuex.Store({
+                namespaces: true,
+                modules: {
+                    Map: {
+                        namespaced: true,
+                        getters: {
+                            layerList: () => [vectorLayer]
+                        }
+                    }
+                }
+            })
         });
     });
 

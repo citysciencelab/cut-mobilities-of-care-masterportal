@@ -1,4 +1,5 @@
 <script>
+import {mapGetters} from "vuex";
 import ThemeConfig from "../themeConfig.json";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
@@ -20,12 +21,16 @@ export default {
         };
     },
     computed: {
+        ...mapGetters("Map", ["layerList"]),
+
         /**
          * Returns the olFeature associated with the feature.
          * @returns {ol/feature} The olFeature
          */
         olFeature: function () {
-            return this.feature.getOlFeature();
+            const foundLayer = this.layerList.find(layer => layer.get("id") === this.feature.getLayerId());
+
+            return foundLayer.getSource().getFeatures().find(feature => feature.getId() === this.feature.getId());
         },
 
         /**
