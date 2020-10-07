@@ -1,5 +1,5 @@
 <script>
-import themeConfig from "../themeConfig.json";
+import ThemeConfig from "../themeConfig.json";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
@@ -77,7 +77,7 @@ export default {
          * @returns {object[]} The prepared feature properties.
          */
         assignFeatureProperties: (feature) => {
-            const topics = JSON.parse(JSON.stringify(themeConfig)).themen,
+            const topics = JSON.parse(JSON.stringify(ThemeConfig)).themen,
                 assignedFeatureProperties = [];
 
             topics.forEach(topic => {
@@ -127,7 +127,7 @@ export default {
          * hide the gfi window and takes over the school for the routing.
          * @returns {void}
          */
-        changeToSchoolRouting: function () {
+        changeToSchoolrouting: function () {
             Radio.trigger("ModelList", "setModelAttributesById", "schulwegrouting", {isActive: true});
             Radio.trigger("Schulwegrouting", "selectSchool", this.feature.getProperties().schul_id);
             this.$parent.close();
@@ -150,7 +150,7 @@ export default {
          * @returns {void}
          */
         toogleFeatureToCompareList: function (event) {
-            if (event.target.classList.contains("glyphicon-star-empty")) {
+            if (event?.target?.classList?.contains("glyphicon-star-empty")) {
                 const uniquelayerId = this.feature.getLayerId() + uniqueId("_");
 
                 this.olFeature.set("layerId", uniquelayerId);
@@ -185,7 +185,7 @@ export default {
                 <span
                     class="glyphicon glyphicon-map-marker pull-right"
                     title="Schule als Ziel übernehmen"
-                    @click="changeToSchoolRouting"
+                    @click="changeToSchoolrouting"
                 ></span>
                 <span
                     :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty', 'pull-right']"
