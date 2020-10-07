@@ -1,11 +1,8 @@
-import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import SolaratlasTheme from "../../../components/themes/Solaratlas.vue";
 
 const localVue = createLocalVue();
-
-localVue.use(Vuex);
 
 describe("src/modules/tools/gfi/components/themes/Solaratlas.vue", () => {
     let wrapper;
