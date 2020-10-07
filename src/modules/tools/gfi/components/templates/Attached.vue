@@ -58,21 +58,6 @@ export default {
          */
         theme: function () {
             return this.getTheme();
-        },
-
-        /**
-         * Returns the custom style for the gfi window content.
-         * it will make sure the gfi window in the browser window.
-         * @returns {Object} the style in the object
-         */
-        styleContent: function () {
-            const maxWidth = Math.round(document.getElementById("map").offsetWidth / 2.2) + "px",
-                maxHeight = Math.round(document.getElementById("map").offsetHeight) - 300 - 34 - 43 + "px";
-
-            return {
-                "max-width": maxWidth,
-                "max-height": maxHeight
-            };
         }
     },
     mounted: function () {
@@ -186,7 +171,6 @@ export default {
         <!-- theme -->
         <div
             class="gfi-content"
-            :style="styleContent"
         >
             <component
                 :is="theme"
@@ -222,6 +206,13 @@ export default {
             margin-bottom: 0;
         }
     }
+   @media (min-width: 768px) {
+    .gfi-content {
+        width: 100%;
+        height: 40vh;
+    }
+   }
+
 </style>
 
 <style lang="less">
