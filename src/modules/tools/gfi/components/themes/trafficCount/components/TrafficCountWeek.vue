@@ -6,6 +6,7 @@ import thousandsSeparator from "../../../../../../../utils/thousandsSeparator.js
 import moment from "moment";
 import DatepickerModel from "../../../../../../../../modules/snippets/datepicker/model";
 import DatepickerView from "../../../../../../../../modules/snippets/datepicker/view";
+import {addMissingDataWeek} from "../library/addMissingData.js";
 
 export default {
     name: "TrafficCountWeek",
@@ -157,6 +158,16 @@ export default {
                 });
 
                 api.updateDataset(thingId, meansOfTransport, timeSettings, datasets => {
+                    if (Array.isArray(datasets)) {
+                        datasets.forEach((transportData, idx) => {
+                            const from = typeof timeSettings[idx] === "object" ? timeSettings[idx].from + " 00:00:00" : "";
+
+                            Object.keys(transportData).forEach(transportKey => {
+                                datasets[idx][transportKey] = addMissingDataWeek(from, datasets[idx][transportKey]);
+                            });
+                        });
+                    }
+
                     this.apiData = datasets;
                 }, errormsg => {
                     this.apiData = [];
