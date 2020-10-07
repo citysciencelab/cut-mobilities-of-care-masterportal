@@ -173,7 +173,7 @@ export default {
     <div class="schulinfo">
         <div class="schulinfo-head">
             <div
-                class="btn-group btn-group-sm col-xs-9"
+                class="btn-group btn-group-sm"
             >
                 <button
                     v-for="category in assignedFeatureProperties"
@@ -185,18 +185,18 @@ export default {
                 >
                     {{ category.name }}
                 </button>
-            </div>
-            <div class="col-xs-3">
-                <span
-                    class="glyphicon glyphicon-map-marker pull-right"
-                    title="Schule als Ziel übernehmen"
-                    @click="changeToSchoolrouting"
-                ></span>
-                <span
-                    :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty', 'pull-right']"
-                    :title="titleCompareList"
-                    @click="toogleFeatureToCompareList"
-                ></span>
+                <div id="favorite-mapmarker-container">
+                    <span
+                        class="glyphicon glyphicon-map-marker"
+                        title="Schule als Ziel übernehmen"
+                        @click="changeToSchoolrouting"
+                    ></span>
+                    <span
+                        :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
+                        :title="titleCompareList"
+                        @click="toogleFeatureToCompareList"
+                    ></span>
+                </div>
             </div>
         </div>
         <div class="schulinfo-content">
@@ -267,12 +267,20 @@ export default {
     .schulinfo-head {
         padding: 8px 0;
         background-color: @background_color_1;
+        position: relative;
     }
     .btn-group-sm {
         font-size: 12px;
         .btn-default {
             margin: 4px;
         }
+        padding-right: 64px;
+    }
+    #favorite-mapmarker-container {
+        position: absolute;
+        right: 0;
+        top: 5px;
+        font-size: 0;
     }
     .btn-select {
         color: @color_1;
@@ -291,12 +299,6 @@ export default {
     }
     .glyphicon-star {
         color: @color_2;
-    }
-}
-@media (min-width: 768px) {
-    .schulinfo {
-        width: 100%;
-        height: 40vh;
     }
 }
 </style>
