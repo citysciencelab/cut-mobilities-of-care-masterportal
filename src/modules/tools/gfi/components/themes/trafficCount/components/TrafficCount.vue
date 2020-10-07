@@ -372,4 +372,7 @@ export default {
     .footer {
         position: relative;
     }
+    .tab-content {
+        padding: 5px;
+    }
 </style>
