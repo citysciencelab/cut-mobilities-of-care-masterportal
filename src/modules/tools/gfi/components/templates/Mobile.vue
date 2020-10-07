@@ -6,6 +6,7 @@ import Dipas from "../themes/Dipas.vue";
 import Schulinfo from "../themes/Schulinfo.vue";
 import Solaratlas from "../themes/Solaratlas.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
+import DataTable from "../themes/dataTable/components/DataTable.vue";
 import Trinkwasser from "../themes/Trinkwasser.vue";
 import Bildungsatlas from "../themes/bildungsatlas/components/Bildungsatlas.vue";
 
@@ -20,6 +21,7 @@ export default {
         Dipas,
         Schulinfo,
         Solaratlas,
+        DataTable,
         TrafficCount,
         Trinkwasser,
         Bildungsatlas
