@@ -153,7 +153,8 @@ const actions = {
                 return layer.get("gfiAttributes") !== "ignore";
             });
 
-        let gfiFeatures = [];
+        let allFeatures = [],
+            gfiFeatures = [];
 
         gfiFeatures = await Promise.all(gfiWmsLayerList.map(layer => {
             const mimeType = layer.get("infoFormat"),
@@ -170,9 +171,11 @@ const actions = {
             return getWmsFeaturesByMimeType(mimeType, url, layerName, gfiTheme, gfiAttributes, gfiAsNewWindow);
         }));
 
+        allFeatures = gfiFeaturesAtPixel.concat(...gfiFeatures[0]);
+
         // only commit if features found
-        if (gfiFeaturesAtPixel.concat(...gfiFeatures).length > 0) {
-            commit("setGfiFeatures", gfiFeaturesAtPixel.concat(...gfiFeatures));
+        if (allFeatures.length > 0) {
+            commit("setGfiFeatures", allFeatures);
         }
     },
 

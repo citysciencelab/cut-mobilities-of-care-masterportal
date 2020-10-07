@@ -1,5 +1,5 @@
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters} from "vuex";
 import {omit} from "../../../../../../../utils/objectHelpers";
 
 export default {
@@ -20,27 +20,35 @@ export default {
             gfiFeatures: "gfiFeatures"
         })
     },
-    watch: {
-        feature: {
-            immediate: true,
-            handler () {
-                this.filterPropsAndHighlightRing();
-            }
-        }
-    },
     mounted () {
-        this.setShowMarker(false);
+        this.$parent.$emit("hidemarker");
+        this.filterPropsAndHighlightRing();
     },
     methods: {
-        ...mapMutations("Tools/Gfi", ["setShowMarker"]),
         /**
          * Filters the features properties and highlights the border of the parcel.
          * @returns {void}
          */
         filterPropsAndHighlightRing () {
-            const propsMapped = this.feature.getMappedProperties();
+            const requestedParcelId = Radio.request("GFI", "getRequestedParcelId");
+            let propsMapped = this.feature.getMappedProperties(),
+                ring = "";
 
-            this.highlightRing(this.getCoordinates(propsMapped.Umringspolygon));
+
+            // Sometimes parcel service returns multiple results as center points parcels may be inside another
+            // parcel. Because this, results are filtered this way.
+            if (requestedParcelId !== false && typeof this.gfiFeatures.filter === "function") {
+                const gfiContent = this.gfiFeatures.filter(foundGfiContent => {
+                    return foundGfiContent.getProperties().flurstueck === requestedParcelId;
+                });
+
+                if (gfiContent[0]) {
+                    propsMapped = gfiContent[0].getMappedProperties();
+                }
+            }
+
+            ring = this.getCoordinates(propsMapped.Umringspolygon);
+            this.highlightRing(ring);
             this.filteredProps = omit(propsMapped, ["Umringspolygon"]);
         },
         /**
@@ -89,7 +97,7 @@ export default {
 
 <template>
     <div
-        v-if="feature && Object.keys(feature.getMappedProperties()).length > 0"
+        v-if="filteredProps"
         id="flaecheninfo"
     >
         <table class="table table-hover">
