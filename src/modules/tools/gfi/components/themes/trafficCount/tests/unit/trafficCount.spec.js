@@ -37,7 +37,7 @@ describe("TraffiCount.vue", () => {
                                         }
                                 }
                             ],
-                            "requestUrl": "https://iot.hamburg.de",
+                            "requestUrl": "test://api",
                             "versionUrl": "1.0"
                         };
                     }
