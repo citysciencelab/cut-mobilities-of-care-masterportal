@@ -2,12 +2,14 @@
 import thousandsSeparator from "../../../../../../../utils/thousandsSeparator.js";
 import BildungsatlasBarchart from "./BildungsatlasBarchart.vue";
 import BildungsatlasSchulenWohnort from "./BildungsatlasSchulenWohnort.vue";
+import BildungsatlasSchulenEinzugsgebiete from "./BildungsatlasSchulenEinzugsgebiete.vue";
 
 export default {
     name: "Bildungsatlas",
     components: {
         BildungsatlasBarchart,
-        BildungsatlasSchulenWohnort
+        BildungsatlasSchulenWohnort,
+        BildungsatlasSchulenEinzugsgebiete
     },
     props: {
         feature: {
