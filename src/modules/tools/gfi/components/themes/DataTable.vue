@@ -19,6 +19,7 @@ export default {
             };
 
             this.gfiFeatures.forEach(singleFeature => {
+            
                 const mappedProps = singleFeature.getMappedProperties();
 
                 Object.keys(mappedProps).forEach(attrKey => {
@@ -29,7 +30,7 @@ export default {
 
                 result.rows.push(mappedProps);
             });
-
+            
             return result;
         }
     },
