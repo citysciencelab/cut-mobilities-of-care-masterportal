@@ -64,7 +64,7 @@ export default {
         <ul
             v-if="mobile"
             id="legend-menu"
-            class="nav-menu list-group mobile"
+            class="list-group mobile"
         >
             <li
                 v-if="showLegendInMenu"
