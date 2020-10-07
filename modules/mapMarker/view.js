@@ -178,8 +178,10 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
                 break;
             }
             case "flaecheninfo": {
-                this.model.setWkt("POLYGON", coord);
-                this.showPolygon();
+                if (coord.length > 2) {
+                    this.model.setWkt("POLYGON", coord);
+                    this.showPolygon();
+                }
                 Radio.trigger("MapView", "setCenter", coord, this.model.get("zoomLevel"));
                 break;
             }

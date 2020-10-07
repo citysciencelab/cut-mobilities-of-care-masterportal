@@ -11,7 +11,11 @@ describe("src/modules/tools/gfi/components/themes/flaecheninfo/components/Flaech
 
     const ring = "POLYGON ((563096.043 5933356.232,563096.639 5933358.031,563097.273 5933356.634,563096.043 5933356.232))",
         props = {"flurstueck": "aValue", "gemarkung": "bValue", "amtliche_flaeche": "10", "wktgeom": ring},
-        mappedProps = {"Flurstück": "aValue", "Gemarkung": "bValue", "Fläche_qm": "10", "Umringspolygon": ring},
+        mappedProps = {"Flurstück": "aValue", "Gemarkung": "bValue", "Fläche_qm": "10", "Umringspolygon": ring};
+    let report = false,
+        wrapper;
+
+    beforeEach(() => {
         wrapper = shallowMount(Flaecheninfo, {
             propsData: {
                 feature: {
@@ -20,7 +24,7 @@ describe("src/modules/tools/gfi/components/themes/flaecheninfo/components/Flaech
                 }
             },
             computed: {
-                setShowMarker: () => sinon.stub
+                gfiFeatures: () => sinon.stub
             },
             methods: {
                 createReport: () => {
@@ -29,15 +33,14 @@ describe("src/modules/tools/gfi/components/themes/flaecheninfo/components/Flaech
             },
             localVue
         });
-    let report = false;
+    });
 
     it("should exist", () => {
-        wrapper.vm.filterPropsAndHighlightRing();
         expect(wrapper.findAll("#flaecheninfo").at(0).exists()).to.be.true;
     });
 
-    it("should contain gfi attributes", () => {
-        wrapper.vm.filterPropsAndHighlightRing();
+    it("should contain gfi attributes", async () => {
+        await wrapper.vm.$nextTick();
         expect(wrapper.findAll("td").at(0).text()).to.equal("Flurstück");
         expect(wrapper.findAll("td").at(1).text()).to.equal("aValue");
         expect(wrapper.findAll("td").at(2).text()).to.equal("Gemarkung");
@@ -49,7 +52,6 @@ describe("src/modules/tools/gfi/components/themes/flaecheninfo/components/Flaech
     it("should contain button that triggers report", async () => {
         let button = null;
 
-        wrapper.vm.filterPropsAndHighlightRing();
         expect(report).to.be.false;
         button = wrapper.findAll("button").at(0);
         expect(button.exists()).to.be.true;
@@ -68,7 +70,6 @@ describe("src/modules/tools/gfi/components/themes/flaecheninfo/components/Flaech
         expect(result).to.be.equal("");
     });
     it("test method filterPropsAndHighlightRing", () => {
-        wrapper.vm.filterPropsAndHighlightRing();
         expect(wrapper.vm.filteredProps).not.to.have.nested.property("Umringspolygon");
         expect(wrapper.vm.filteredProps).to.have.nested.property("Flurstück");
         expect(wrapper.vm.filteredProps).to.have.nested.property("Gemarkung");

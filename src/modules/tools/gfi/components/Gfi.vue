@@ -101,7 +101,7 @@ export default {
         }
     },
     beforeUpdate () {
-        if (this.feature !== null && this.feature.hasOwnProperty("getProperties") && this.feature.getProperties() !== null && this.feature.getAttributesToShow()) {
+        if (this.feature !== null && this.feature.hasOwnProperty("getProperties") && this.feature.getProperties() !== null) {
             const mappedProperties = this.prepareProperties(this.feature.getProperties(), this.feature.getAttributesToShow(), this.ignoredKeys);
 
             this.feature.getMappedProperties = () => mappedProperties;
