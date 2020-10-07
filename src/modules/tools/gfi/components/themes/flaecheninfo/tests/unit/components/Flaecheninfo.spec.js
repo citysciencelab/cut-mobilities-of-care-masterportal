@@ -36,7 +36,7 @@ describe("src/modules/tools/gfi/components/themes/flaecheninfo/components/Flaech
     });
 
     it("should exist", () => {
-        expect(wrapper.findAll("#flaecheninfo").at(0).exists()).to.be.true;
+        expect(wrapper.find("div").exists()).to.be.true;
     });
 
     it("should contain gfi attributes", async () => {
