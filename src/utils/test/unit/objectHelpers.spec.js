@@ -31,6 +31,12 @@ describe("src/utils/objectHelpers.js", () => {
         });
         it("should return the 3. entry by number array input", function () {
             expect(omit(objectNumber, [1, 2])).to.deep.equal({3: "baz"});
+        });  
+        it("should return obj, because ignoreCase is false", function () {
+            expect(omit(obj, ["A", "B"])).to.deep.equal(obj);
+        });
+        it("should return the 3. entry, because ignoreCase is true", function () {
+            expect(omit(obj, ["A", "B"], true)).to.deep.equal({c: "baz"});
         });
     });
 });
