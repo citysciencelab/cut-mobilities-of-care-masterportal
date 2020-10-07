@@ -44,8 +44,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }],
-                mapSize: () => [],
-                showMarker: () => true
+                mapSize: () => []
             },
             localVue
         });
@@ -63,8 +62,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }],
-                mapSize: () => [],
-                showMarker: () => true
+                mapSize: () => []
             },
             localVue
         });
@@ -82,8 +80,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }],
-                mapSize: () => [],
-                showMarker: () => true
+                mapSize: () => []
             },
             localVue
         });
@@ -101,8 +98,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [{
                     getGfiUrl: () => null
                 }],
-                mapSize: () => [],
-                showMarker: () => true
+                mapSize: () => []
             },
             localVue
         });
@@ -466,25 +462,6 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
         expect(firstDetachedComponent.exists()).to.be.false;
         expect(secondDetachedComponent.exists()).to.be.true;
-    });
-
-    it("showMarker should be linke in state", async () => {
-        const wrapper = shallowMount(GfiComponent, {
-            computed: {
-                isMobile: () => false,
-                desktopType: () => "",
-                active: () => true,
-                isTable: () => false,
-                gfiFeatures: () => [{
-                    getGfiUrl: () => null
-                }],
-                mapSize: () => [],
-                showMarker: () => false
-            },
-            localVue
-        });
-
-        expect(wrapper.vm.showMarker).to.be.false;
     });
 
 });

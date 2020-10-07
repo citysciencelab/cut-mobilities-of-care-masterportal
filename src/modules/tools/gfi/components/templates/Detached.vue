@@ -34,12 +34,12 @@ export default {
     data () {
         return {
             // flag if gfi content is html
-            isContentHtml: false
+            isContentHtml: false,
+            showMarker: true
         };
     },
     computed: {
         ...mapGetters("Map", ["clickCoord"]),
-        ...mapGetters("Tools/Gfi", ["showMarker"]),
 
         /**
          * Returns the title of the gfi.
@@ -99,6 +99,9 @@ export default {
         if (typeof this.feature.getGfiUrl === "function" && this.feature.getGfiUrl() !== "") {
             this.isContentHtml = true;
         }
+        this.$on("hidemarker", () => {
+            this.showMarker = false;
+        });
     },
     mounted: function () {
         this.$nextTick(function () {

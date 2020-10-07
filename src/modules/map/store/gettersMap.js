@@ -56,38 +56,40 @@ const gettersMap = {
     },
 
     /**
-     * gets the features at the given pixel for the gfi
-     * @param {Object} state - the map state
-     * @param {Object} state.map - the openlayers map
-     * @param {Number[]} state.clickPixel - the pixel coordinate of the click event
-     * @returns {Object[]} gfi features
+     * gets the features at the given pixel for the gfi, besides features with name 'mapMarker'
+     * @param {object} state - the map state
+     * @param {object} state.map - the openlayers map
+     * @param {number[]} state.clickPixel - the pixel coordinate of the click event
+     * @returns {object[]} gfi features
      */
     gfiFeaturesAtPixel: ({map, map3d, clickPixel}) => {
         const featuresAtPixel = [];
 
         map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
-            // cluster feature
-            if (feature.getProperties().features) {
-                feature.get("features").forEach(function (clusteredFeature) {
+            if (layer.get("name") !== "mapMarker") {
+                // cluster feature
+                if (feature.getProperties().features) {
+                    feature.get("features").forEach(function (clusteredFeature) {
+                        featuresAtPixel.push(createGfiFeature(
+                            layer.get("name"),
+                            layer.get("gfiTheme"),
+                            layer.get("gfiAttributes"),
+                            clusteredFeature.getProperties(),
+                            layer.get("gfiFormat"),
+                            clusteredFeature.getId()
+                        ));
+                    });
+                }
+                else {
                     featuresAtPixel.push(createGfiFeature(
                         layer.get("name"),
                         layer.get("gfiTheme"),
                         layer.get("gfiAttributes"),
-                        clusteredFeature.getProperties(),
+                        feature.getProperties(),
                         layer.get("gfiFormat"),
-                        clusteredFeature.getId()
+                        feature.getId()
                     ));
-                });
-            }
-            else {
-                featuresAtPixel.push(createGfiFeature(
-                    layer.get("name"),
-                    layer.get("gfiTheme"),
-                    layer.get("gfiAttributes"),
-                    feature.getProperties(),
-                    layer.get("gfiFormat"),
-                    feature.getId()
-                ));
+                }
             }
         });
 

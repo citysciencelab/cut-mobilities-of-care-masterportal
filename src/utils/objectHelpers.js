@@ -10,7 +10,7 @@
 export function omit (object, blacklist, ignoreCase = false) {
     const keys = Object.keys(object ? object : {}),
         blacklistWithStrings = convertArrayElementsToString(blacklist, ignoreCase),
-        filteredKeys = keys.filter(key => !blacklistWithStrings.includes(ignoreCase? key.toUpperCase(): key)),
+        filteredKeys = keys.filter(key => !blacklistWithStrings.includes(ignoreCase ? key.toUpperCase() : key)),
         filteredObj = filteredKeys.reduce((result, key) => {
             result[key] = object[key];
             return result;
