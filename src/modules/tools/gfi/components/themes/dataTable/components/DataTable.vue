@@ -1,7 +1,7 @@
 <script>
 
 import {mapGetters, mapMutations} from "vuex";
-import getters from "../../store/gettersGfi";
+import getters from "../../../../store/gettersGfi";
 
 export default {
     name: "DataTable",

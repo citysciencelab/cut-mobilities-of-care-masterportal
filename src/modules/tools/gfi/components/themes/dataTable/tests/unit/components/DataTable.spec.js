@@ -1,13 +1,13 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
-import DataTableTheme from "../../../components/themes/DataTable.vue";
+import DataTableTheme from "../../../components/DataTable.vue";
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("src/modules/tools/gfi/components/themes/DataTable.vue", () => {
+describe("/src/modules/tools/gfi/components/themes/dataTable/components/DataTable.vue", () => {
     let wrapper;
 
     const expectedUsedKeys = [],
