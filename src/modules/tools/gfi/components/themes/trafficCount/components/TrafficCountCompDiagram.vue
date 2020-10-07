@@ -368,8 +368,23 @@ export default {
 <style lang="less">
     .dateSelector {
         width: 230px;
+        height: 35px;
         float: right;
         margin-right: 30px;
         margin-top: -35px;
+        font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+    }
+
+    @media (max-width: 580px) {
+        .dateSelector {
+            width: 100%;
+            padding: 0 10px;
+            margin-top: 10px;
+            margin-right: 0px;
+            margin-bottom: 20px;
+        }
+        #dayDateInput, #weekDateInput, #yearDateInput {
+            text-align: center;
+        }
     }
 </style>

@@ -116,15 +116,20 @@ export default {
 
 <template>
     <div class="table">
-        <table>
+        <table class="table-responsive table-striped text-align-center table-condensed table-bordered text-nowrap">
             <thead>
-                <th>{{ tableTitle }}</th>
-                <th
-                    v-for="(value, datetime) in getFirstDataset(apiData)"
-                    :key="datetime"
-                >
-                    {{ setColTitle(datetime) }}
-                </th>
+                <tr>
+                    <th class="th-first-col">
+                        {{ tableTitle }}
+                    </th>
+                    <th
+                        v-for="(value, datetime) in getFirstDataset(apiData)"
+                        :key="datetime"
+                        class="th-rest-cols"
+                    >
+                        {{ setColTitle(datetime) }}
+                    </th>
+                </tr>
             </thead>
             <tbody>
                 <tr
@@ -147,7 +152,20 @@ export default {
 <style scoped>
     div.table {
         margin-top: 5px;
-        margin-bottom: 5px;
+        margin-bottom: 0px;
+    }
+    .table-responsive {
+        margin-bottom: 0px;
+    }
+    .th-first-col {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 16px;
+    }
+    .th-rest-cols {
+        text-align: center;
+        vertical-align: middle;
+        font-size: 13px;
     }
 </style>
 
