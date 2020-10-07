@@ -109,7 +109,7 @@ describe("src/modules/tools/gfi/components/themes/DataTable.vue", () => {
 
     it("Check the displayed table head", () => {
         const theads = wrapper.findAll("#table-data-container table th");
-        
+
         expect(theads.exists()).to.be.true;
 
         wrapper.vm.refinedData.head.forEach((singleCaption, index) => {
