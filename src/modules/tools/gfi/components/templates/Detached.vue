@@ -37,7 +37,9 @@ export default {
         gfiFeatures: {
             type: Array,
             required: false,
-            default: () => [this.feature]
+            default: function () {
+                return [this.feature];
+            }
         }
     },
     data () {
