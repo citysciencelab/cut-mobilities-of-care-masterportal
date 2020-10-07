@@ -148,7 +148,7 @@ export default {
          */
         prepareProperties: function (properties, mappingObject, ignoredKeys) {
             if (mappingObject === "showAll" && Array.isArray(ignoredKeys)) {
-                return omit(properties, ignoredKeys);
+                return omit(properties, ignoredKeys, true);
             }
             return this.mapProperties(properties, mappingObject);
         },
