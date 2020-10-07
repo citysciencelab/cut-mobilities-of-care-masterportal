@@ -300,7 +300,10 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
             this.setParcelFound(true);
 
             Radio.trigger("MapMarker", "zoomTo", {type: this.get("mapMarkerType"), coordinate: coordinate});
-            Radio.trigger("ParcelSearch", "parcelFound", attributes);
+            // use a timeout here, else the resolution-change is not ready and in the addon showParcelGfi/RadioBridge the wrong result is returned for parcelsearch
+            setTimeout(() => {
+                Radio.trigger("ParcelSearch", "parcelFound", attributes);
+            }, 500);
         }
     },
 
