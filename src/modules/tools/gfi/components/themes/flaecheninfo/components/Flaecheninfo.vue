@@ -98,7 +98,6 @@ export default {
 <template>
     <div
         v-if="filteredProps"
-        id="flaecheninfo"
     >
         <table class="table table-hover">
             <tbody>
