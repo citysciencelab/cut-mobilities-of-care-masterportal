@@ -161,6 +161,10 @@ export default {
         mapProperties: function (properties, mappingObject) {
             const mappedProperties = {};
 
+            if (mappingObject === undefined) {
+                return mappedProperties;
+            }
+
             Object.keys(mappingObject).forEach(key => {
                 if (properties[key] !== undefined) {
                     mappedProperties[mappingObject[key]] = properties[key];
