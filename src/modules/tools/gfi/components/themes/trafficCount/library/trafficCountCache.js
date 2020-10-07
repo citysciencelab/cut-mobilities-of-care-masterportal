@@ -17,7 +17,7 @@ import {TrafficCountApi} from "./trafficCountApi";
 export class TrafficCountCache {
     /**
      * constructor of TrafficCountCache
-     * @param {String} httpHost the host (incl. protocol) to call any http request with
+     * @param {String} httpHost the host (incl. protocol) to call any http request with or "test://api" if TrafficCountApi shouldn't be initialized
      * @param {String} sensorThingsVersion the used version of the SensorThingsAPI (e.g. "v1.0")
      * @param {Object} [mqttOptions] the options to connect to mqtt with
      * @param {Object} [sensorThingsApiOpt] an optional api for testing
@@ -26,7 +26,15 @@ export class TrafficCountCache {
      */
     constructor (httpHost, sensorThingsVersion, mqttOptions, sensorThingsApiOpt) {
         /** @private */
-        this.api = sensorThingsApiOpt || new TrafficCountApi(httpHost, sensorThingsVersion, mqttOptions);
+        this.api = sensorThingsApiOpt || (httpHost === "test://api" ? {
+            // please check with TrafficCount.vue created & mounted which functions are needed
+            updateTitle: () => {
+                return false;
+            },
+            updateDirection: () => {
+                return false;
+            }
+        } : new TrafficCountApi(httpHost, sensorThingsVersion, mqttOptions));
         /** @private */
         this.cache = {};
     }
