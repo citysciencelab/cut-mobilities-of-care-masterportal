@@ -97,34 +97,34 @@ describe("src/modules/tools/gfi/components/themes/trafficCount/components/Traffi
         it("should call setRowTitle for the first column of each row", () => {
             const tr = wrapper.findAll("tr");
 
-            expect(tr.at(0).findAll("td").at(0).text()).to.equal("truckdate3");
-            expect(tr.at(1).findAll("td").at(0).text()).to.equal("cardate2");
-            expect(tr.at(2).findAll("td").at(0).text()).to.equal("bikedate1");
+            expect(tr.at(1).findAll("td").at(0).text()).to.equal("truckdate3");
+            expect(tr.at(2).findAll("td").at(0).text()).to.equal("cardate2");
+            expect(tr.at(3).findAll("td").at(0).text()).to.equal("bikedate1");
 
-            expect(tr.at(3).findAll("td").at(0).text()).to.equal("cardate5");
-            expect(tr.at(4).findAll("td").at(0).text()).to.equal("truckdate6");
-            expect(tr.at(5).findAll("td").at(0).text()).to.equal("bikedate4");
+            expect(tr.at(4).findAll("td").at(0).text()).to.equal("cardate5");
+            expect(tr.at(5).findAll("td").at(0).text()).to.equal("truckdate6");
+            expect(tr.at(6).findAll("td").at(0).text()).to.equal("bikedate4");
 
-            expect(tr.at(6).findAll("td").at(0).text()).to.equal("cardate8");
-            expect(tr.at(7).findAll("td").at(0).text()).to.equal("bikedate7");
-            expect(tr.at(8).findAll("td").at(0).text()).to.equal("truckdate9");
+            expect(tr.at(7).findAll("td").at(0).text()).to.equal("cardate8");
+            expect(tr.at(8).findAll("td").at(0).text()).to.equal("bikedate7");
+            expect(tr.at(9).findAll("td").at(0).text()).to.equal("truckdate9");
         });
         it("should place the value of each dataset into the fields of the table", () => {
             const tr = wrapper.findAll("tr");
 
-            expect(tr.at(0).findAll("td").at(1).text()).to.equal("value3");
-            expect(tr.at(0).findAll("td").at(2).text()).to.equal("value33");
-            expect(tr.at(1).findAll("td").at(1).text()).to.equal("value2");
-            expect(tr.at(1).findAll("td").at(2).text()).to.equal("");
-            expect(tr.at(2).findAll("td").at(1).text()).to.equal("value1");
+            expect(tr.at(1).findAll("td").at(1).text()).to.equal("value3");
+            expect(tr.at(1).findAll("td").at(2).text()).to.equal("value33");
+            expect(tr.at(2).findAll("td").at(1).text()).to.equal("value2");
+            expect(tr.at(2).findAll("td").at(2).text()).to.equal("");
+            expect(tr.at(3).findAll("td").at(1).text()).to.equal("value1");
 
-            expect(tr.at(3).findAll("td").at(1).text()).to.equal("value5");
-            expect(tr.at(4).findAll("td").at(1).text()).to.equal("value6");
-            expect(tr.at(5).findAll("td").at(1).text()).to.equal("value4");
+            expect(tr.at(4).findAll("td").at(1).text()).to.equal("value5");
+            expect(tr.at(5).findAll("td").at(1).text()).to.equal("value6");
+            expect(tr.at(6).findAll("td").at(1).text()).to.equal("value4");
 
-            expect(tr.at(6).findAll("td").at(1).text()).to.equal("value8");
-            expect(tr.at(7).findAll("td").at(1).text()).to.equal("value7");
-            expect(tr.at(8).findAll("td").at(1).text()).to.equal("value9");
+            expect(tr.at(7).findAll("td").at(1).text()).to.equal("value8");
+            expect(tr.at(8).findAll("td").at(1).text()).to.equal("value7");
+            expect(tr.at(9).findAll("td").at(1).text()).to.equal("value9");
         });
     });
 });

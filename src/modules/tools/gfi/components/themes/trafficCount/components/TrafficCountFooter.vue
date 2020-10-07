@@ -356,8 +356,7 @@ export default {
 }
 .download-container {
     float: left;
-    margin-left: 8px;
-    margin-top: 25px;
+    padding: 26px 0 10px 7px;
 }
 table {
     margin-bottom: 0;
