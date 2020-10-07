@@ -149,23 +149,23 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
         });
     });
 
-    it("should link all properties as phone number if the property starts with '+[xx]' (x = any Number)", () => {
+    it("should render all properties as phone number if the property starts with '+[xx]' (x = any Number)", () => {
         wrapper.findAll("a[href^=tel]").wrappers.forEach(a => {
             expect(a.attributes("href")).to.have.string("tel:");
         });
     });
 
-    it("should link all properties as phone number if the property starts with '+[xx]' (x = any Number)", () => {
+    it("should render all properties as phone number if the property starts with '+[xx]' (x = any Number)", () => {
         expect(wrapper.find("a[href^=tel]").attributes("href")).to.have.string("tel:");
         expect(wrapper.find("a[href^=tel]").text()).equals("+49 40 123456789");
     });
 
-    it("should link all properties as email if the property starts is an email", () => {
+    it("should render all properties as email if the property contains a @", () => {
         expect(wrapper.find("a[href^=mailto]").attributes("href")).to.have.string("@");
         expect(wrapper.find("a[href^=mailto]").text()).equals("example@schulmail.com");
     });
 
-    it("should link all properties as link if the property starts with http", () => {
+    it("should render all properties as link if the property starts with http", () => {
         expect(wrapper.find("a[href^=http]").text()).equals("https://example.de");
     });
 });

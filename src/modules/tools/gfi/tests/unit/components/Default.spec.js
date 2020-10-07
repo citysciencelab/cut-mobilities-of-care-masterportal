@@ -72,4 +72,11 @@ describe("src/modules/tools/gfi/components/themes/Default.vue", () => {
             expect(a.text()).to.be.equal("Link");
         });
     });
+
+    it("should render all properties as email if the property contains an @", () => {
+        wrapper.findAll("a[href^=mailto]").wrappers.forEach(a => {
+            expect(a.attributes("href")).to.have.string("@");
+        });
+    });
+
 });
