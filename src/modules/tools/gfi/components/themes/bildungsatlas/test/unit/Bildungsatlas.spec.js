@@ -156,4 +156,26 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
             expect(singleTestWrapper.findComponent({name: "BildungsatlasSchulenWohnort"}).exists()).to.be.true;
         });
     });
+
+    describe("components", () => {
+        it("should find the child component BildungsatlasSchulenEinzugsgebiete", () => {
+            const singleTestWrapper = shallowMount(Bildungsatlas, {
+                propsData: {
+                    feature: {
+                        getProperties () {
+                            return {};
+                        },
+                        getGfiFormat () {
+                            return {
+                                gfiSubTheme: "BildungsatlasSchulenEinzugsgebiete"
+                            };
+                        }
+                    }
+                },
+                localVue
+            });
+
+            expect(singleTestWrapper.findComponent({name: "BildungsatlasSchulenEinzugsgebiete"}).exists()).to.be.true;
+        });
+    });
 });
