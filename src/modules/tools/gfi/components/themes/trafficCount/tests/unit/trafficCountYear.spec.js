@@ -2,6 +2,7 @@ import Vuex from "vuex";
 import {shallowMount, createLocalVue, config} from "@vue/test-utils";
 import {expect} from "chai";
 import trafficCountYear from "../../components/TrafficCountYear.vue";
+import {addMissingDataYear} from "../../library/addMissingData.js";
 
 const localVue = createLocalVue();
 
@@ -12,8 +13,8 @@ config.mocks.$t = key => key;
 describe("TrafficCountYear.vue", () => {
     let wrapper;
     const dummyApi = {
-        updateDataset: (thingId, meansOfTransport, timeSettings, datasets) => {
-            datasets([
+        updateDataset: (thingId, meansOfTransport, timeSettings, onupdate) => {
+            onupdate([
                 {
                     fahrrad: {
                         "2020-07-20 00:00:01": 114,
@@ -51,11 +52,11 @@ describe("TrafficCountYear.vue", () => {
                 ],
                 data = [
                     {
-                        fahrrad: {
-                            "2020-07-20 00:00:01": 114,
-                            "2020-07-27 00:00:01": 202,
-                            "2020-08-03 00:00:01": 179
-                        }
+                        fahrrad: addMissingDataYear("2020", {
+                            "2020-07-20 00:00:00": 114,
+                            "2020-07-27 00:00:00": 202,
+                            "2020-08-03 00:00:00": 179
+                        })
                     }
                 ];
 
