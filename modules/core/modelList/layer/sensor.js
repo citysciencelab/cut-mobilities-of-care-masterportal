@@ -7,6 +7,7 @@ import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {buffer, containsExtent} from "ol/extent";
 import {GeoJSON} from "ol/format.js";
+import changeTimeZone from "../../../../src/utils/changeTimeZone.js";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -230,7 +231,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             feature;
 
         if (Array.isArray(sensorData)) {
-            sensorData.forEach(function (data, index) {
+            sensorData.forEach((data, index) => {
                 if (data.hasOwnProperty("location") && data.location && epsg !== undefined) {
                     feature = this.parseJson(data.location);
                 }
@@ -249,7 +250,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 feature = this.aggregateDataStreamValue(feature);
                 feature = this.aggregateDataStreamPhenomenonTime(feature);
                 features.push(feature);
-            }, this);
+            });
 
             // only features with geometry
             features = features.filter(subFeature => subFeature.getGeometry() !== undefined);
@@ -278,6 +279,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     dataStreamValues.push(feature.get("dataStream_" + id + "_" + dataStreamName));
                 }
             });
+
             modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "), true);
         }
         return modifiedFeature;
@@ -367,7 +369,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
              * @returns {Void}  -
              */
             httpOnSucess = function (result) {
-                // on success
                 let allThings;
 
                 allThings = this.flattenArray(result);
@@ -451,32 +452,35 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
         thing.properties.dataStreamId = [];
         thing.properties.dataStreamName = [];
+        thing.properties.dataStreamValue = [];
+
         dataStreams.forEach(dataStream => {
             const dataStreamId = String(dataStream["@iot.id"]),
-                propertiesType = dataStream.hasOwnProperty("ObservedProperty") && dataStream.ObservedProperty.hasOwnProperty("name") ? dataStream.ObservedProperty.name : undefined,
-                unitOfMeasurementName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
-                dataStreamName = propertiesType ? propertiesType : unitOfMeasurementName,
-                key = "dataStream_" + dataStreamId + "_" + dataStreamName,
-                value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
-                timezone = this.get("timezone");
-            let phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
+                dataStreamName = dataStream.name,
+                dataStreamValue = dataStream?.Observations[0]?.result,
+                key = "dataStream_" + dataStreamId + "_" + dataStreamName;
+            let phenomenonTime = dataStream?.Observations[0]?.phenomenonTime;
 
-            phenomenonTime = Radio.request("Util", "changeTimeZone", phenomenonTime, this.get("utc"));
+            thing.properties = Object.assign(thing.properties, dataStream.properties);
+            phenomenonTime = changeTimeZone(phenomenonTime, this.get("utc"));
 
-            if (this.get("showNoDataValue") && !value) {
+            if (this.get("showNoDataValue") && !dataStreamValue) {
                 thing.properties[key] = this.get("noDataValue");
                 thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
                 thing.properties.dataStreamId.push(dataStreamId);
                 thing.properties.dataStreamName.push(dataStreamName);
+                thing.properties.dataStreamValue.push(this.get("noDataValue"));
             }
-            else if (value) {
-                thing.properties[key] = value;
-                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, timezone);
+            else if (dataStreamValue) {
+                thing.properties[key] = dataStreamValue;
+                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, this.get("timezone"));
                 thing.properties.dataStreamId.push(dataStreamId);
                 thing.properties.dataStreamName.push(dataStreamName);
+                thing.properties.dataStreamValue.push(dataStreamValue);
             }
         });
         thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
+        thing.properties.dataStreamValue = thing.properties.dataStreamValue.join(" | ");
         thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
     },
 
@@ -618,6 +622,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
+     * Todo, überdenken ob diese Funktion noch benötigt wird, da die meisten Attribute bereits am Thing hängen!!!!!!!!
+     *
      * Aggregates the properties of the things.
      * @param {Object[]} allThings - all things
      * @returns {Object[]} - aggregatedThings
@@ -631,7 +637,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             if (Array.isArray(thing)) {
                 let keys = [],
                     props = {},
-                    datastreams = [];
+                    datastreams = []; //  todo werden die hier benötigt???
 
                 aggregatedThing.location = this.getJsonGeometry(thing[0], 0);
                 thing.forEach(thing2 => {
@@ -726,7 +732,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (stylelistmodel !== undefined) {
-            this.setStyle(function (feature) {
+            this.setStyle(feature => {
                 return stylelistmodel.createStyle(feature, isClustered);
             });
         }

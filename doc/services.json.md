@@ -329,7 +329,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 |mergeThingsByCoordinates|nein|Boolean|false|Gibt an ob Things mit gleicher Coordinate zusammenfasst werden sollen.|`true`|
 |loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
-|showNoDataValues|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
+|showNoDataValue|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
 |noDataValue|nein|String|"no data"|Platzhalter für nciht vorhandenen Observations der Datastreams.|`"Keine Daten"`|
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
