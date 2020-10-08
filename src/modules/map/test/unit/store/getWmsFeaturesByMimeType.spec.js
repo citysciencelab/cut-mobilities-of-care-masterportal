@@ -113,7 +113,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(lastUrl).to.equal("url");
         });
         it("should call requestGfi and return a wms feature with the received properties", async () => {
-            const result = await getXmlFeatures("url", "layerName", "gfiIconPath", "gfiTheme", "attributesToShow", () => {
+            const result = await getXmlFeatures("url", "layerName", "gfiTheme", "gfiIconPath", "attributesToShow", () => {
                 // dummy for requestGfi
                 return new Promise(resolve => {
                     // simulation of featureInfos[feature{getProperties()}]
