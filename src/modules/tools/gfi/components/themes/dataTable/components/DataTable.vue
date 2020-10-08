@@ -1,6 +1,6 @@
 <script>
 
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters} from "vuex";
 import getters from "../../../../store/gettersGfi";
 
 export default {
