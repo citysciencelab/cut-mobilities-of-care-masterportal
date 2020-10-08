@@ -88,7 +88,7 @@ export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attribute
         if (Array.isArray(featureInfos)) {
             featureInfos.forEach(function (feature) {
                 if (typeof feature === "object" && feature !== null && typeof feature.getProperties === "function") {
-                    result.push(createGfiFeature(layerName, gfiTheme,gfiIconPath,  attributesToShow, feature.getProperties(), null, feature.getId()));
+                    result.push(createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, feature.getProperties(), null, feature.getId()));
                 }
             });
         }
