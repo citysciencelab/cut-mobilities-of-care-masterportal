@@ -10,67 +10,60 @@ localVue.use(Vuex);
 describe("/src/modules/tools/gfi/components/themes/dataTable/components/DataTable.vue", () => {
     let wrapper;
 
-    const expectedUsedKeys = [],
-        featureData = [{
+    const featureData = {
             getTheme: () => "DataTable",
             getTitle: () => "DataTable",
             getAttributesToShow: () => {
                 return {};
             },
             getProperties: () => {
-                return {};
-            },
-            getMappedProperties: function () {
-                return {
-                    "Entnahme Datum": "2019",
-                    "OHG in Meter": "0.10",
-                    "UHG in Meter": "0.35",
-                    "Arsen": "15,9",
-                    "Cadmium": "1,38",
-                    "Chrom": "21,6",
-                    "Kupfer": "290,0",
-                    "Quecksilber": "0,285",
-                    "Nickel": "24,9",
-                    "Blei": "289,0",
-                    "Thallium": "---",
-                    "Zink": "393,0",
-                    "Molybdän": "4,53",
-                    "Einheit": "mg/kg TM"
-                };
+                return [{
+                    getMappedProperties: () => {
+                        return {
+                            "Entnahme Datum": "2019",
+                            "OHG in Meter": "0.10",
+                            "UHG in Meter": "0.35",
+                            "Arsen": "15,9",
+                            "Cadmium": "1,38",
+                            "Chrom": "21,6",
+                            "Kupfer": "290,0",
+                            "Quecksilber": "0,285",
+                            "Nickel": "24,9",
+                            "Blei": "289,0",
+                            "Thallium": "---",
+                            "Zink": "393,0",
+                            "Molybdän": "4,53",
+                            "Einheit": "mg/kg TM"
+                        };
+                    }
+                },
+                {
+                    getMappedProperties: () => {
+                        return {
+                            "Entnahme Datum": "2019",
+                            "OHG in Meter": "0.00",
+                            "UHG in Meter": "0.10",
+                            "Arsen": "14,7",
+                            "Cadmium": "1,34",
+                            "Chrom": "40,5",
+                            "Kupfer": "774,0",
+                            "Quecksilber": "0,346",
+                            "Nickel": "22,9",
+                            "Blei": "209,0",
+                            "Thallium": "---",
+                            "Zink": "568,0",
+                            "Molybdän": "19,8",
+                            "Einheit": "mg/kg TM"
+                        };
+                    }
+                }];
             }
         },
-        {
-            getTheme: () => "DataTable",
-            getTitle: () => "DataTable",
-            getAttributesToShow: () => {
-                return {};
-            },
-            getProperties: () => {
-                return {};
-            },
-            getMappedProperties: function () {
-                return {
-                    "Entnahme Datum": "2019",
-                    "OHG in Meter": "0.00",
-                    "UHG in Meter": "0.10",
-                    "Arsen": "14,7",
-                    "Cadmium": "1,34",
-                    "Chrom": "40,5",
-                    "Kupfer": "774,0",
-                    "Quecksilber": "0,346",
-                    "Nickel": "22,9",
-                    "Blei": "209,0",
-                    "Thallium": "---",
-                    "Zink": "568,0",
-                    "Molybdän": "19,8",
-                    "Einheit": "mg/kg TM"
-                };
-            }
-        }],
-        expectedUsedCaptions = [],
+
         mockGetters = {
             gfiFeatures: () => featureData
         },
+
         store = new Vuex.Store({
             namespaces: true,
             modules: {
@@ -81,24 +74,12 @@ describe("/src/modules/tools/gfi/components/themes/dataTable/components/DataTabl
             }
         });
 
-    featureData.forEach(singleFeature => {
-        const attributesToShow = singleFeature.getAttributesToShow();
-
-        Object.keys(singleFeature.getProperties()).forEach(propKey => {
-            if (expectedUsedKeys.indexOf(propKey) === -1 && attributesToShow[propKey] !== undefined) {
-                expectedUsedKeys.push(propKey);
-                expectedUsedCaptions.push(attributesToShow[propKey]);
-            }
-        });
-    });
-
     beforeEach(() => {
         wrapper = shallowMount(DataTableTheme, {
             store,
             localVue,
             propsData: {
-                feature: featureData[0],
-                gfiFeatures: featureData
+                feature: featureData
             }
         });
     });
