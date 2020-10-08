@@ -56,7 +56,7 @@ const gettersMap = {
     },
 
     /**
-     * gets the features at the given pixel for the gfi, besides features with name 'mapMarker'
+     * gets the features at the given pixel for the gfi
      * @param {object} state - the map state
      * @param {object} state.map - the openlayers map
      * @param {number[]} state.clickPixel - the pixel coordinate of the click event
