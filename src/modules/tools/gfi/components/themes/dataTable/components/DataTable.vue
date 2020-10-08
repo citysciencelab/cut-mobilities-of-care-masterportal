@@ -35,7 +35,6 @@ export default {
         }
     },
     methods: {
-        ...mapMutations("Tools/Gfi", ["setUsePager"]),
         ...mapGetters("Tools/Gfi", Object.keys(getters))
     }
 };
