@@ -25,7 +25,7 @@ async function GdiSearch ({builder, url, resolution, capability}) {
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);
-            await driver.wait(until.elementLocated(searchInputSelector));
+            await driver.wait(until.elementLocated(searchInputSelector), 5000);
             searchInput = await driver.findElement(searchInputSelector);
         });
 
@@ -45,7 +45,7 @@ async function GdiSearch ({builder, url, resolution, capability}) {
                 await searchInput.sendKeys(searchString);
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL"))));
-                await driver.wait(until.elementLocated(topicSelector));
+                await driver.wait(until.elementLocated(topicSelector), 5000);
             });
         }
 
@@ -101,7 +101,7 @@ async function GdiSearch ({builder, url, resolution, capability}) {
 
             it("selects the layer as first layer in 'Selected Layers'", async function () {
                 await (await driver.findElement(selectedLayerGlyphSelector)).click();
-                await driver.wait(until.elementLocated(selectedLayerFirstEntrySelector));
+                await driver.wait(until.elementLocated(selectedLayerFirstEntrySelector), 5000);
                 expect(await (await driver.findElement(selectedLayerFirstEntrySelector)).getText()).to.contain(layerName);
             });
         }

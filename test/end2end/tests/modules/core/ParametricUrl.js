@@ -241,7 +241,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
 
             // assume draw tool loaded when #drawSymbol option is detected - should be unique
-            await driver.wait(until.elementLocated(checkSelector));
+            await driver.wait(until.elementLocated(checkSelector), 10000);
         });
 
         /*
@@ -318,7 +318,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 await loadUrl(driver, `${url}?mdid=EBA4BF12-3ED2-4305-9B67-8E689FE8C445`, mode);
 
                 // check if active in tree
-                await driver.wait(until.elementLocated(topicSelector));
+                await driver.wait(until.elementLocated(topicSelector), 10000);
                 await (await driver.findElement(topicSelector)).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
                 await driver.findElement(By.css("ul#SelectedLayer .layer-item:first-child span.glyphicon-check"));
