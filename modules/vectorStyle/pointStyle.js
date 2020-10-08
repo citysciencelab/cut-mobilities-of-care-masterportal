@@ -87,7 +87,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     * @returns {ol/style} - The created style.
     */
     getStyle: function () {
-        const isClustered = this.get("isClustered"),
+        const type = this.get("type").toLowerCase(),
+            isClustered = this.get("isClustered"),
             feature = this.get("feature");
 
         if (isClustered && feature.get("features").length > 1) {
@@ -99,16 +100,16 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             }
         }
 
-        if (this.get("type") === "icon") {
+        if (type === "icon") {
             return this.createIconPointStyle();
         }
-        else if (this.get("type") === "circle") {
+        else if (type === "circle") {
             return this.createCirclePointStyle();
         }
-        else if (this.get("type") === "nominal") {
+        else if (type === "nominal") {
             return this.createNominalPointStyle();
         }
-        else if (this.get("type") === "interval") {
+        else if (type === "interval") {
             return this.createIntervalPointStyle();
         }
 
@@ -241,7 +242,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
         // create style from svg and image
         if (imageName !== imageNameDefault) {
             imageStyle = this.createIconPointStyle();
-            style = [imageStyle, style];
+            style = [style, imageStyle];
         }
 
         return style;
