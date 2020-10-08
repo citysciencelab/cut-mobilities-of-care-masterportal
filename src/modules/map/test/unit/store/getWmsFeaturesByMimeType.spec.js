@@ -4,7 +4,7 @@ import {createGfiFeature, openFeaturesInNewWindow, getXmlFeatures, getWmsFeature
 describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
     describe("createGfiFeature", () => {
         it("should return an object with specific functions to get the given params", () => {
-            const feature = createGfiFeature("layerName", "gfiTheme", "https://url/einzelmarker_dunkel.png","attributesToShow", "featureProperties", "gfiFormat", "id", "url");
+            const feature = createGfiFeature("layerName", "gfiTheme", "https://url/einzelmarker_dunkel.png", "attributesToShow", "featureProperties", "gfiFormat", "id", "url");
 
             expect(feature).to.be.an("object");
 
