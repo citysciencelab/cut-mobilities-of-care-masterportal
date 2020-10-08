@@ -32,14 +32,6 @@ export default {
         feature: {
             type: Object,
             required: true
-        },
-        gfiFeatures: {
-            type: Array,
-            required: false,
-            default: function () {
-                return [this.feature];
-            }
-
         }
     },
     data () {
@@ -235,7 +227,6 @@ export default {
             <component
                 :is="theme"
                 :feature="feature"
-                :gfiFeatures="gfiFeatures"
             />
         </div>
         <!-- footer -->

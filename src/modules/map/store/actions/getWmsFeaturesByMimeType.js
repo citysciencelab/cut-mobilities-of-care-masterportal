@@ -83,7 +83,7 @@ export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attribute
         return [];
     }
     return callRequestGfi("text/xml", url).then(featureInfos => {
-        const result = [];
+        let result = [];
 
         if (Array.isArray(featureInfos)) {
             featureInfos.forEach(function (feature) {
@@ -92,6 +92,12 @@ export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attribute
                 }
             });
         }
+
+        // Create a merged feature because some themes might display multiple features at once
+        if (result.length > 0 && ["DataTable"].indexOf(gfiTheme) !== -1) {
+            result = [createGfiFeature(layerName, gfiTheme, attributesToShow, result, null, null)];
+        }
+
         return result;
     });
 }

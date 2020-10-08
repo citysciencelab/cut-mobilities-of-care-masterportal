@@ -6,8 +6,8 @@ import getters from "../../../../store/gettersGfi";
 export default {
     name: "DataTable",
     props: {
-        gfiFeatures: {
-            type: Array,
+        feature: {
+            type: Object,
             required: true
         }
     },
@@ -18,7 +18,7 @@ export default {
                 rows: []
             };
 
-            this.gfiFeatures.forEach(singleFeature => {
+            this.feature.getProperties().forEach(singleFeature => {
 
                 const mappedProps = singleFeature.getMappedProperties();
 
@@ -34,9 +34,7 @@ export default {
             return result;
         }
     },
-    mounted () {
-        this.setUsePager(false);
-    },
+    mounted () {},
     methods: {
         ...mapMutations("Tools/Gfi", ["setUsePager"]),
         ...mapGetters("Tools/Gfi", Object.keys(getters))
