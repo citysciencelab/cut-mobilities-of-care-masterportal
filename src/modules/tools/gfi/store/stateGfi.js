@@ -7,8 +7,7 @@
  */
 const state = {
     active: false,
-    currentFeature: null,
-    usePager: true
+    currentFeature: null
 };
 
 export default state;
