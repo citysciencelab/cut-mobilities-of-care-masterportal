@@ -30,13 +30,6 @@ export default {
         feature: {
             type: Object,
             required: true
-        },
-        gfiFeatures: {
-            type: Array,
-            required: false,
-            default: function () {
-                return [this.feature];
-            }
         }
     },
     computed: {
@@ -137,7 +130,6 @@ export default {
                     <component
                         :is="theme"
                         :feature="feature"
-                        :gfiFeatures="gfiFeatures"
                     />
                 </div>
                 <div class="modal-footer">

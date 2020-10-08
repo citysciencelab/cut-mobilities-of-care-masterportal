@@ -101,11 +101,7 @@ export default {
         }
     },
     beforeUpdate () {
-        if (this.feature !== null) {
-            this.gfiFeatures.forEach(singleFeature => {
-                this.createMappedProperties(singleFeature);
-            });
-        }
+        this.createMappedProperties(this.feature);
     },
     methods: {
         ...mapMutations("Map", ["setGfiFeatures"]),
@@ -137,12 +133,19 @@ export default {
                 this.pagerIndex -= 1;
             }
         },
-        createMappedProperties: function (singleFeature) {
-            if (singleFeature !== null && singleFeature.hasOwnProperty("getProperties") && singleFeature.getProperties() !== null) {
-                const mappedProperties = this.prepareProperties(singleFeature.getProperties(), singleFeature.getAttributesToShow(), this.ignoredKeys);
-
-                singleFeature.getMappedProperties = () => mappedProperties;
+        createMappedProperties: function (feature) {
+            if(feature === null || !feature.hasOwnProperty("getProperties") || feature.getProperties() === null) {
+                return;
             }
+
+            if (Array.isArray(feature.getProperties())) {
+                feature.getProperties().forEach(singleFeature => {
+                    this.createMappedProperties(singleFeature);
+                });
+                return;
+            }
+
+            feature.getMappedProperties = () => this.prepareProperties(feature.getProperties(), feature.getAttributesToShow(), this.ignoredKeys);
         },
         /**
          * Checks which properties should be displayed.
