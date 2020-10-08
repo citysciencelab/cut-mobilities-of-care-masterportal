@@ -15,10 +15,10 @@ async function ZoomTests ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution); // no mouse wheel on mobile devices
 
     if (testIsApplicable) {
-        describe("Map Zoom with MouseWheel", () => {
+        describe("Map Zoom with MouseWheel", function () {
             let driver, canvas;
 
-            before(async () => {
+            before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
@@ -27,16 +27,16 @@ async function ZoomTests ({builder, url, resolution, capability}) {
                 canvas = await driver.findElement(By.css(".ol-viewport"));
             });
 
-            after(async () => {
+            after(async function () {
                 if (capability) {
-                    driver.session_.then(sessionData => {
+                    driver.session_.then(function (sessionData) {
                         logBrowserstackUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();
             });
 
-            it("should zoom in on mouse wheel up", async () => {
+            it("should zoom in on mouse wheel up", async function () {
                 this.timeout(15000);
                 const res = await driver.executeScript(getResolution);
 
@@ -48,7 +48,7 @@ async function ZoomTests ({builder, url, resolution, capability}) {
                 } while (res <= await driver.executeScript(getResolution));
             });
 
-            it("should zoom out on mouse wheel down", async () => {
+            it("should zoom out on mouse wheel down", async function () {
                 this.timeout(15000);
                 const res = await driver.executeScript(getResolution);
 
