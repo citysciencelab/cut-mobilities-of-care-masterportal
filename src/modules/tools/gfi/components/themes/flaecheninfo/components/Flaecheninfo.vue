@@ -20,6 +20,11 @@ export default {
             gfiFeatures: "gfiFeatures"
         })
     },
+     watch: {
+        feature (feature) {
+           this.filterPropsAndHighlightRing();
+        }
+    },
     mounted () {
         this.$parent.$emit("hidemarker");
         this.filterPropsAndHighlightRing();
