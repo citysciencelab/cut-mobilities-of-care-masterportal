@@ -66,7 +66,7 @@ const gettersMap = {
         const featuresAtPixel = [];
 
         map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
-            if (layer.get("name") !== "mapMarker") {
+            if (layer.getVisible()) {
                 // cluster feature
                 if (feature.getProperties().features) {
                     feature.get("features").forEach(function (clusteredFeature) {

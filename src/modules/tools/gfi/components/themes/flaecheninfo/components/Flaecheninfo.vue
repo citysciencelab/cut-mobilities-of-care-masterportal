@@ -20,9 +20,9 @@ export default {
             gfiFeatures: "gfiFeatures"
         })
     },
-     watch: {
-        feature (feature) {
-           this.filterPropsAndHighlightRing();
+    watch: {
+        feature () {
+            this.filterPropsAndHighlightRing();
         }
     },
     mounted () {
