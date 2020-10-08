@@ -18,7 +18,7 @@
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts --timeout 15000",
     "test:watch": "npm run test -- --watch",
-    "test:vue": "mochapack --recursive --webpack-config devtools/webpack.vue.test.js ./src/**/Dipas.spec.js",
+    "test:vue": "mochapack --recursive --webpack-config devtools/webpack.vue.test.js ./test/unittests/**/*.spec.js ./src/**/*.spec.js ./addons/**/*.spec.js",
     "test:vue:watch": "npm run test:vue -- --watch",
     "test:all": "npm run test && npm run test:vue",
     "test:all:watch": "npm-run-all --parallel test:watch test:vue:watch",
