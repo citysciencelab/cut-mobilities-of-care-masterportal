@@ -131,7 +131,7 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
             expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
             expect(commit.secondCall.args).to.eql(["setWithoutGUI", true]);
-            expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawPoint", geometry: "Point"}]);
+            expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawSymbol", geometry: "Point"}]);
             expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);

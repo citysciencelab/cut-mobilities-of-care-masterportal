@@ -58,7 +58,7 @@ const symbol = {
         drawInteraction: null,
         drawInteractionTwo: null,
         drawType: {
-            id: "drawPoint",
+            id: "drawSymbol",
             geometry: "Point"
         },
         fId: 0,
@@ -69,9 +69,10 @@ const symbol = {
         iconList: [
             symbol,
             {
-                id: "iconLeaf",
-                type: "glyphicon",
-                value: "\ue103"
+                "id": "gelber Pin",
+                "type": "image",
+                "scale": 0.5,
+                "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
             }
         ],
         id: "draw",
@@ -83,7 +84,7 @@ const symbol = {
         opacity: 1,
         opacityContour: 1,
         outerBorderColor: "",
-        pointSize: 6,
+        pointSize: 16,
         redoArray: [],
         renderToWindow: true,
         resizableWindow: true,
@@ -94,7 +95,8 @@ const symbol = {
         unit: null,
         withoutGUI: false,
         zIndex: 0,
-        name: "Zeichnen / Schreiben"
+        name: "Zeichnen / Schreiben",
+        imgPath: ""
     };
 
 export default state;

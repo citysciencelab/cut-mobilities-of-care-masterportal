@@ -12,7 +12,7 @@ describe("src/modules/scaleLine/components/ScaleLine.vue", () => {
     let wrapper;
 
     it("check mapMode normal -> do render", () => {
-        wrapper = createWrapper(false, 0, "1 : 60.000", "1.2 km");
+        wrapper = createWrapper(false, 0, "1 : 60.000", "1.2 km", true);
 
         expect(wrapper.find("#scales").exists()).to.equal(true);
         expect(wrapper.find(".scale-line").text()).to.equals("1.2 km");
@@ -20,13 +20,25 @@ describe("src/modules/scaleLine/components/ScaleLine.vue", () => {
     });
 
     it("check mapMode Oblique -> do not render", () => {
-        wrapper = createWrapper(false, "Oblique", "1 : 60.000", "1.2 km");
+        wrapper = createWrapper(false, "Oblique", "1 : 60.000", "1.2 km", true);
 
         expect(wrapper.find("#scales").exists()).to.equal(false);
     });
 
     it("check mobile=true -> do not render", () => {
-        wrapper = createWrapper(true, 0, "1 : 60.000", "1.2 km");
+        wrapper = createWrapper(true, 0, "1 : 60.000", "1.2 km", true);
+
+        expect(wrapper.find("#scales").exists()).to.equal(false);
+    });
+
+    it("check scaleLine=false -> do not render", () => {
+        wrapper = createWrapper(false, 0, "1 : 60.000", "1.2 km", false);
+
+        expect(wrapper.find("#scales").exists()).to.equal(false);
+    });
+
+    it("check scaleLine is not configured in configJs -> do not render", () => {
+        wrapper = createWrapper(false, 0, "1 : 60.000", "1.2 km", null);
 
         expect(wrapper.find("#scales").exists()).to.equal(false);
     });
@@ -40,19 +52,21 @@ describe("src/modules/scaleLine/components/ScaleLine.vue", () => {
 
     /**
      * Helper Function to create a wrapper.
-     * @param {*} mobile getter mobile
-     * @param {*} mapMode getter mapMode
-     * @param {*} scaleToOne  getter scaleToOne
-     * @param {*} scaleWithUnit  getter scaleWithUnit
+     * @param {boolean} mobile getter mobile
+     * @param {number} mapMode getter mapMode
+     * @param {string} scaleToOne  getter scaleToOne
+     * @param {string} scaleWithUnit  getter scaleWithUnit
+     * @param {object} scaleLineConfig  getter scaleLineConfig
      * @return {Object} the shallowMounted wrapper
      */
-    function createWrapper (mobile, mapMode, scaleToOne, scaleWithUnit) {
+    function createWrapper (mobile, mapMode, scaleToOne, scaleWithUnit, scaleLineConfig) {
         return shallowMount(ScaleLine, {
             computed: {
                 mobile: () => mobile,
                 mapMode: () => mapMode,
                 scaleToOne: () => scaleToOne,
-                scaleWithUnit: () => scaleWithUnit
+                scaleWithUnit: () => scaleWithUnit,
+                scaleLineConfig: () => scaleLineConfig
             },
             localVue
         });

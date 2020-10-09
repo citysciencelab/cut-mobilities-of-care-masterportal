@@ -23,7 +23,7 @@
 - Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
 
 ### Changed
-- Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js.
+- Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Das Zeichnen von Punkten wurde geändert, alle Punkte basieren jetzt auf Bild-Dateien. Größe und Deckkraft können nicht mehr eingestellt werden, für diese Funktionalität steht das Zeichnen von Kreisen zur Verfügung. Das Bereitstellen von anderen Bilddateien wurde angepasst, siehe Doku der config.json.
 - Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
 - Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von Vue.js. Weiterhin heißt es fortan "Datei-Import".
 - Babel wurde, um einen Support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.
@@ -48,6 +48,7 @@
 - url-polyfill wurde aus der package.json entfernt.
 - fs wurde aus der package.json entfernt.
 - Der Requestor wurde direkt in dem Tool featurelister integriert und daher entfernt.
+- Vom Tool "Draw" wird der Typ "glyphicon" nicht mehr von der iconList unterstützt, er wurde entfernt. Es sollen nur Bild-Dateien genutzt werden, siehe Doku der config.json.
 
 ### Fixed
 - Mit Google Earth erstellte KML Dateien werden mit dem Tool "Datei-Import" nun besser dargestellt.

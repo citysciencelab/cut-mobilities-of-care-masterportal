@@ -333,8 +333,7 @@
             },
             "fileImport": {
                 "captions": {
-                    "intro": "Import your file via drag and drop or alternatively use the browse dialogue.",
-                    "fileTypes": "KML files (*.kml), GPX files (*.gpx) or GeoJson files (*.geojson, *.json) can be imported.",
+                    "intro": "Import your file via drag and drop or alternatively use the browse dialogue.<br><br>KML files (*.kml), GPX files (*.gpx) or GeoJson files (*.geojson, *.json) can be imported.",
                     "dropzone": "Drop file here",
                     "browse": "Browse files",
                     "supportedFiletypes": {
@@ -460,7 +459,7 @@
                 "undefinedOuterCircle": "Please also define the outer circle.",
                 "limitReached": "You have already drawn {{count}} object, please delete it before continuing!",
                 "limitReached_plural": "You have already drawn {{count}} objects, please delete one before proceeding!",
-                "drawPoint": "Draw point",
+                "drawSymbol": "Draw symbol",
                 "writeText": "Write text",
                 "drawLine": "Draw line",
                 "drawCurve": "Draw curve",
@@ -496,15 +495,7 @@
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
                     "iconCloud": "Cloud",
-                    "iconCD": "CD",
-                    "iconHat": "Graduation Cap",
-                    "iconFire": "Fire",
-                    "iconMovie": "Movie",
-                    "iconFlag": "Flag",
-                    "iconGlobe": "Globe",
-                    "iconMusic": "Music",
-                    "iconStreet": "Street",
-                    "iconTent": "Tent"
+                    "iconMeadow": "Meadow"
                 }
             },
             "download": {

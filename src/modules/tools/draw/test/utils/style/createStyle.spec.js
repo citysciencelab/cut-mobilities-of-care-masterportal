@@ -37,25 +37,12 @@ describe("src/modules/tools/draw/utils/style/createStyle.js", () => {
 
             expect(createStyle({color, drawType, symbol}).getFill().getColor()).to.deep.equal(color);
         });
-        it("the result color should be the same as the input color for a point of type simple_point", () => {
-            const symbol = {type: "simple_point", value: "simple_point"},
-                drawType = {value: "Point", id: "drawPoint"};
-
-            expect(createStyle({color, drawType, symbol}).getFill().getColor()).to.deep.equal(color);
-        });
-        it("the result color should be the same as the input color for a point of type glyphicon", () => {
-            const symbol = {type: "glyphicon", value: "\ue103"},
-                drawType = {value: "Point", id: "drawPoint"};
-
-            expect(createStyle({color, drawType, symbol}).getText().getFill().getColor()).to.deep.equal(color);
-        });
         it("the result color should be the same as input color excluding the opacity which should be set as a separate parameter for a point of type image", () => {
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             const symbol = {type: "image", value: iconPath + "cloud.png"},
-                drawType = {value: "Point", id: "drawPoint"},
+                drawType = {value: "Point", id: "drawSymbol"},
                 result = createStyle({color, drawType, symbol}).getImage();
 
-            expect(result.getColor()).to.deep.equal(color.slice(0, 3));
             expect(result.getOpacity()).to.deep.equal(color[3]);
         });
         it("the result color should be the same as the input color for text", () => {

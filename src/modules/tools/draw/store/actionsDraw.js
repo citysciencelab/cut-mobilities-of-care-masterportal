@@ -278,13 +278,11 @@ const initialState = Object.assign({}, stateDraw),
             else if (interaction === "modify") {
                 if (typeof state.modifyInteraction !== "undefined" && state.modifyInteraction !== null) {
                     state.modifyInteraction.setActive(active);
-                    // TODO: putGlyphToCursor glyphicon glyphicon-pencil (bei deactivate) glyphicon glyphicon-wrench (bei activate)
                 }
             }
             else if (interaction === "delete") {
                 if (typeof state.selectInteraction !== "undefined" && state.selectInteraction !== null) {
                     state.selectInteraction.setActive(active);
-                    // TODO: putGlyphToCursor glyphicon glyphicon-pencil (bei deactivate) glyphicon glyphicon-trash (bei activate)
                 }
             }
         },
