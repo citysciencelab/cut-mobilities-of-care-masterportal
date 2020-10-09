@@ -236,12 +236,13 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
         it("?isinitopen= allows opening tools initially", async function () {
             const toolName = "draw",
-                checkSelector = By.css("div#window #drawSymbol");
+                toolwindow = By.css(".tool-window-vue");
 
             await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
 
-            // assume draw tool loaded when #drawSymbol option is detected - should be unique
-            await driver.wait(until.elementLocated(checkSelector), 10000);
+            await driver.wait(until.elementLocated(toolwindow), 5000);
+            
+            expect(driver.findElement(toolwindow)).to.exist;
         });
 
         /*
@@ -318,7 +319,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 await loadUrl(driver, `${url}?mdid=EBA4BF12-3ED2-4305-9B67-8E689FE8C445`, mode);
 
                 // check if active in tree
-                await driver.wait(until.elementLocated(topicSelector), 10000);
+                await driver.wait(until.elementLocated(topicSelector));
                 await (await driver.findElement(topicSelector)).click();
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
                 await driver.findElement(By.css("ul#SelectedLayer .layer-item:first-child span.glyphicon-check"));
