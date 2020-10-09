@@ -25,13 +25,13 @@ export default {
             this.createLegendForLayerInfo(layerIdForLayerInfo);
         }
     },
-    mounted () {
-        this.getLegendConfig();
-    },
     created () {
         this.listenToLayerVisibilityChanged();
         this.listenToUpdatedSelectedLayerList();
         this.listenToLayerLegendUpdate();
+    },
+    mounted () {
+        this.getLegendConfig();
     },
     updated () {
         $(this.$el).draggable({
@@ -88,6 +88,7 @@ export default {
                 legend: this.prepareLegend(layerForLayerInfo.get("legend")),
                 position: layerForLayerInfo.get("selectionIDX")
             };
+
             isValidLegend = this.isValidLegendObj(legendObj);
             if (isValidLegend) {
                 this.setLegendForLayerInfo(legendObj);
@@ -256,7 +257,7 @@ export default {
          */
         prepareLegendForPoint (legendObj, style) {
             const imgPath = style.get("imagePath"),
-                type = style.get("type"),
+                type = style.get("type").toLowerCase(),
                 imageName = style.get("imageName");
             let newLegendObj = legendObj;
 
@@ -298,10 +299,10 @@ export default {
          * @return {ol.Style} style
          */
         drawNominalStyle (style) {
-            const scalingShape = style.get("scalingShape");
+            const scalingShape = style.get("scalingShape").toLowerCase();
             let nominalStyle = [];
 
-            if (scalingShape === "CIRCLESEGMENTS") {
+            if (scalingShape === "circlesegments") {
                 nominalStyle = this.drawNominalCircleSegments(style);
             }
 
@@ -327,10 +328,11 @@ export default {
                 clonedStyle.setIsClustered(false);
                 olStyle = clonedStyle.getStyle();
                 if (Array.isArray(olStyle)) {
-                    console.error("Legend yet cannot display two styles on each other, taking top most style");
                     nominalCircleSegments.push({
                         name: key,
-                        graphic: olStyle[1].getImage().getSrc()
+                        graphic: [olStyle[0].getImage().getSrc(), olStyle[1].getImage().getSrc()],
+                        iconSize: olStyle[0].getImage().getSize(),
+                        iconSizeDifferenz: (olStyle[1].getImage().getSize()[0] - olStyle[0].getImage().getSize()[0]) / 2
                     });
                 }
                 else {
