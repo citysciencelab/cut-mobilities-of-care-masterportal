@@ -95,7 +95,7 @@ export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attribute
 
         // Create a merged feature because some themes might display multiple features at once
         if (result.length > 0 && ["DataTable"].indexOf(gfiTheme) !== -1) {
-            result = [createGfiFeature(layerName, gfiTheme, attributesToShow, result, null, null)];
+            result = [createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, result, null, null)];
         }
 
         return result;
