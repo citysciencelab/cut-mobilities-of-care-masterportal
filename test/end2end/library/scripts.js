@@ -420,6 +420,35 @@ function setResolution () {
     Backbone.Radio.trigger("MapView", "setConstrainedResolution", arguments[0], 0);
 }
 
+/**
+ * Function will sort out special layers not in tree, e.g. 3D layers, invisible layers, mapMarker layer.
+ * @returns {string[]} layers by id
+ */
+function getOrderedLayerIds () {
+    return Backbone
+        .Radio
+        .request("Map", "getMap")
+        .getLayers()
+        .getArray()
+        .map(layer => {
+            if (layer.get("id")) {
+                // if id available, use it
+                return layer.get("id");
+            }
+            if (layer.get("layers")) {
+                // if children available, fetch their ids (flattened)
+                return layer.get("layers").array_.map(l => l.get("id"));
+            }
+            // else return false to sort layer out
+            return false;
+        })
+        .filter(id => id) // sort out functional layers, e.g. mapMarker layer
+        .filter(id => !["12883", "12884", "13032"].includes(id)) // sort out e.g. oblique layer not initially visible
+        .map(id => Array.isArray(id) ? id[0] : id) // MP always uses first id as representant
+        .map(id => String(parseInt(id, 10))) // e.g. "1933geofox_stations" should only be 1933 for comparison
+        .reverse(); // layers are returned in "inverted" order (last is first in tree)
+}
+
 module.exports = {
     mockGeoLocationAPI,
     mouseWheelUp,
@@ -430,6 +459,7 @@ module.exports = {
     isLayerVisible,
     imageLoaded,
     isObModeOn,
+    getOrderedLayerIds,
     getObModeResolution,
     getCoordinatesOfXthFeatureInLayer,
     hasVectorLayerLength,
