@@ -54,7 +54,7 @@ export default {
             // props for table
             tableTitle: "Datum",
             setColTitle: datetime => {
-                return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm") + " Uhr";
+                return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("HH:mm") + " " + this.$t("common:modules.tools.gfi.themes.trafficCount.clockLabel");
             },
             setRowTitle: (meansOfTransports, datetime) => {
                 return moment(datetime, "YYYY-MM-DD HH:mm:ss").format("DD.MM.YYYY");

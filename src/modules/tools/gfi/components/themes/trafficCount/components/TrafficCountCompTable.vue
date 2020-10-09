@@ -149,10 +149,13 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
     div.table {
         margin-top: 5px;
         margin-bottom: 0px;
+        tbody > tr > td {
+            min-width: 50px;
+        }
     }
     .table-responsive {
         margin-bottom: 0px;
@@ -168,58 +171,3 @@ export default {
         font-size: 13px;
     }
 </style>
-
-<docs>
-    This component works on the data received by the api.
-    The data should be without any gaps and should be in order.
-
-    ```html
-    <script>
-    import TrafficCountCompTable from "./TrafficCountCompTable.vue";
-    import moment from "moment";
-
-    export default {
-        name: "TableTest",
-        components: {
-            TrafficCountCompTable
-        },
-        data: () => {
-            return {
-                apiData: [
-                    {
-                        "fahrraeder": {"2020-09-17 18:00:00": 10, "2020-09-17 18:15:00": 15},
-                        "fahrraeder2": {"2020-09-17 18:00:00": 20, "2020-09-17 18:15:00": 25}
-                    },
-                    {
-                        "fahrraeder": {"2020-09-18 18:00:00": 30},
-                        "fahrraeder2": {"2020-09-18 18:00:00": 40}
-                    }
-                ],
-                tableTitle: "Test",
-                setColTitle: datetime => {
-                    return moment(datetime).format("hh:mm");
-                },
-                setRowTitle: (meansOfTransports, datetime) => {
-                    return meansOfTransports + " " + moment(datetime).format("YYYY");
-                },
-                setFieldValue: value => {
-                    return value !== null ? String(value) : "";
-                }
-            };
-        }
-    };
-    </script>
-
-    <!--<template>-->
-        <div>
-            <TrafficCountCompTable
-                :apiData="apiData"
-                :tableTitle="tableTitle"
-                :setColTitle="setColTitle"
-                :setRowTitle="setRowTitle"
-                :setFieldValue="setFieldValue"
-            ></TrafficCountCompTable>
-        </div>
-    <!--</template>-->
-```
-</docs>
