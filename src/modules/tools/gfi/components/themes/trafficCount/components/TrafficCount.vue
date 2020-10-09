@@ -277,7 +277,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="trafficCount-gfi">
         <div class="header">
             {{ idLabel }} <span id="title">{{ title }}</span><br>
             {{ typeLabel }} <span id="type">{{ type }}</span><br>
