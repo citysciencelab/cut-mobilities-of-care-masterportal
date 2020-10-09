@@ -4,6 +4,7 @@ const webpack = require("webpack"),
     path = require("path"),
     fse = require("fs-extra"),
     VueLoaderPlugin = require("vue-loader/lib/plugin"),
+    MomentTimezoneDataPlugin = require("moment-timezone-data-webpack-plugin"),
 
     rootPath = path.resolve(__dirname, "../"),
     addonPath = path.resolve(rootPath, "addons/"),
