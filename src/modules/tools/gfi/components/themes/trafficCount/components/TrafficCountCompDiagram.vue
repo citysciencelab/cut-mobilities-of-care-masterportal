@@ -363,10 +363,16 @@ export default {
         min-height: 285px;
         padding-bottom: 5px;
     }
+
+    @media (max-width: 580px) {
+        div.graph {
+            width: inherit;
+        }
+    }
 </style>
 
 <style lang="less">
-    .dateSelector {
+    .trafficCount-gfi .dateSelector {
         width: 230px;
         height: 35px;
         float: right;
@@ -376,7 +382,7 @@ export default {
     }
 
     @media (max-width: 580px) {
-        .dateSelector {
+        .trafficCount-gfi .dateSelector {
             width: 100%;
             padding: 0 10px;
             margin-top: 10px;
