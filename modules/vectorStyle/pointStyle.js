@@ -226,6 +226,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
      */
     createNominalPointStyle: function () {
         const feature = this.get("feature"),
+            workingFeature = Array.isArray(feature.get("features")) ? feature.get("features")[0] : feature,
             styleScalingShape = this.get("scalingShape").toUpperCase(),
             imageName = this.get("imageName"),
             imageNameDefault = this.defaults.imageName;
@@ -235,7 +236,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
             imageStyle;
 
         if (styleScalingShape === "CIRCLESEGMENTS") {
-            svgPath = this.createNominalCircleSegments(feature);
+            svgPath = this.createNominalCircleSegments(workingFeature);
             style = this.createSVGStyle(svgPath);
         }
 
