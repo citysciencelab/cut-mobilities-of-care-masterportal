@@ -1,5 +1,4 @@
 import {KML, GeoJSON, GPX} from "ol/format.js";
-import {Circle as CircleStyle, Fill, Stroke, Style} from "ol/style";
 
 const supportedFormats = {
     kml: new KML({extractStyles: true}),
@@ -44,43 +43,6 @@ function getFormat (filename, selectedFiletype, supportedFiletypes, availableFor
         }
     }
     return false;
-}
-
-/**
- * Creates a simple default style for specific features.
- * May be augmented with more styles or made configurable later on.
- *
- * @returns {Object} Returns the style object applicable with Layer.setStyle().
- */
-function createDefaultStyles () {
-    const style = {
-        "Point": new Style({
-            image: new CircleStyle({
-                fill: new Fill({
-                    color: "rgba(255,255,0,0.6)"
-                }),
-                radius: 8,
-                stroke: new Stroke({
-                    color: "#FFFF00",
-                    width: 2
-                })
-            })
-        }),
-        "LineString": new Style({
-            stroke: new Stroke({
-                color: "#FF0000",
-                width: 4
-            })
-        }),
-        "MultiLineString": new Style({
-            stroke: new Stroke({
-                color: "#00FF00",
-                width: 4
-            })
-        })
-    };
-
-    return style;
 }
 
 /**
@@ -139,8 +101,32 @@ export default {
 
         try {
             features = format.readFeatures(datasrc.raw);
+
+
+            if (format instanceof KML) {
+                const indices = [];
+
+                features.forEach((feature, i) => {
+                    if (feature.getGeometry() !== null && feature.getGeometry().getType() === "Point") {
+                        if (feature.values_.name === undefined) {
+                            // import of point no text: showPointNames must be false
+                            indices.push(i);
+                        }
+                    }
+                });
+                if (indices.length > 0) {
+                    // type Point with no names (=Icons) have to be imported with special options, else if downloaded over draw tool again there will be an error
+                    const specialFormat = new KML({extractStyles: true, showPointNames: false}),
+                        featuresNoPointNames = specialFormat.readFeatures(datasrc.raw);
+
+                    indices.forEach((index) => {
+                        features[index] = featuresNoPointNames[index];
+                    });
+                }
+            }
         }
         catch (ex) {
+            console.warn(ex);
             alertingMessage = {
                 category: i18next.t("common:modules.alerting.categories.error"),
                 content: i18next.t("common:modules.tools.fileImport.alertingMessages.formatError", {filename: datasrc.filename})
@@ -187,9 +173,6 @@ export default {
         });
 
         vectorLayer.getSource().addFeatures(features);
-        if (format instanceof GPX || format instanceof GeoJSON) {
-            vectorLayer.setStyle((feature) => createDefaultStyles()[feature.getGeometry().getType()]);
-        }
 
         if (featureError) {
             alertingMessage = {
@@ -208,7 +191,7 @@ export default {
         dispatch("addImportedFilename", datasrc.filename);
     },
     /**
-     * Adss the name of a successfully imported file to list of imported filenames
+     * Adds the name of a successfully imported file to list of imported filenames
      * @param {string} fileName name of the file
      * @returns {void}
      */

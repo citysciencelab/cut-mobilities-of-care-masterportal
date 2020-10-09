@@ -41,7 +41,7 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
 
             actions.setActive({state, commit, dispatch}, active);
 
-            expect(commit.calledTwice).to.be.true;
+            expect(commit.calledThrice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setActive", true]);
             expect(commit.secondCall.args[0]).to.equal("setLayer");
             expect(typeof commit.secondCall.args[1]).to.equal("object");
@@ -58,7 +58,7 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
 
             actions.setActive({state, commit, dispatch}, active);
 
-            expect(commit.calledTwice).to.be.true;
+            expect(commit.calledThrice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setActive", true]);
             expect(commit.secondCall.args[0]).to.equal("setLayer");
             expect(typeof commit.secondCall.args[1]).to.equal("object");

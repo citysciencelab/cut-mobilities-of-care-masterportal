@@ -553,7 +553,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         if (Array.isArray(allThings)) {
             allThings.forEach(function (thing) {
                 // if no datastream exists
-                if (!Array.isArray(thing.Datastreams) || !thing.Datastreams.length) {
+                if (!Array.isArray(thing.Datastreams)) {
                     return;
                 }
 

@@ -105,11 +105,8 @@ export default {
             >
                 <p
                     id="cta"
+                    v-html="$t('modules.tools.fileImport.captions.intro')"
                 >
-                    {{ $t("modules.tools.fileImport.captions.intro") }}
-                    <br>
-                    <br>
-                    {{ $t("modules.tools.fileImport.captions.fileTypes") }}
                 </p>
                 <div
                     id="drop-area-fake"

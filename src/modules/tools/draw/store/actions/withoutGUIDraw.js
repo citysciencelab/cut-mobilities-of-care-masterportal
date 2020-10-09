@@ -272,7 +272,7 @@ function getDrawId (drawType) {
         case "LineString":
             return "drawLine";
         case "Point":
-            return "drawPoint";
+            return "drawSymbol";
         case "Polygon":
             return "drawArea";
         default:

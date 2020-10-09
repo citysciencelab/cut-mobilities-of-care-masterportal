@@ -234,7 +234,14 @@ export default {
                     else if (legendInfo.hasOwnProperty("name") && legendInfo.hasOwnProperty("graphic")) {
                         legendObj = legendInfo;
                     }
-                    preparedLegend.push(legendObj);
+                    if (Array.isArray(legendObj)) {
+                        legendObj.forEach(obj => {
+                            preparedLegend.push(obj);
+                        });
+                    }
+                    else {
+                        preparedLegend.push(legendObj);
+                    }
                 });
 
             }
@@ -251,17 +258,21 @@ export default {
             const imgPath = style.get("imagePath"),
                 type = style.get("type"),
                 imageName = style.get("imageName");
+            let newLegendObj = legendObj;
 
             if (type === "icon") {
-                legendObj.graphic = imgPath + imageName;
+                newLegendObj.graphic = imgPath + imageName;
             }
             else if (type === "circle") {
-                legendObj.graphic = this.drawCircleStyle(style);
+                newLegendObj.graphic = this.drawCircleStyle(style);
             }
             else if (type === "interval") {
-                legendObj.graphic = this.drawIntervalStyle(style);
+                newLegendObj.graphic = this.drawIntervalStyle(style);
             }
-            return legendObj;
+            else if (type === "nominal") {
+                newLegendObj = this.drawNominalStyle(style);
+            }
+            return newLegendObj;
         },
 
         /**
@@ -271,33 +282,87 @@ export default {
          */
         drawIntervalStyle (style) {
             const scalingShape = style.get("scalingShape"),
-                scalingAttribute = style.get("scalingAttribute"),
-                clonedStyle = style.clone();
+                scalingAttribute = style.get("scalingAttribute");
             let intervalStyle = [];
 
             if (scalingShape === "CIRCLE_BAR") {
-                intervalStyle = this.drawIntervalCircleBars(scalingAttribute, clonedStyle);
+                intervalStyle = this.drawIntervalCircleBars(scalingAttribute, style);
             }
 
             return intervalStyle;
         },
 
         /**
+         * Creates nominal scaled advanced style for pointFeatures
+         * @param {Object} style The styleModel.
+         * @return {ol.Style} style
+         */
+        drawNominalStyle (style) {
+            const scalingShape = style.get("scalingShape");
+            let nominalStyle = [];
+
+            if (scalingShape === "CIRCLESEGMENTS") {
+                nominalStyle = this.drawNominalCircleSegments(style);
+            }
+
+            return nominalStyle;
+        },
+        /**
+         * Creats an SVG for nominal circle segment style.
+         * @param {ol.style} style style.
+         * @returns {Array} - style as Array of objects.
+         */
+        drawNominalCircleSegments: function (style) {
+            const scalingAttribute = style.get("scalingAttribute"),
+                scalingValues = style.get("scalingValues"),
+                nominalCircleSegments = [];
+            let olStyle = null;
+
+            Object.keys(scalingValues).forEach(key => {
+                const clonedStyle = style.clone(),
+                    olFeature = new Feature();
+
+                olFeature.set(scalingAttribute, key);
+                clonedStyle.setFeature(olFeature);
+                clonedStyle.setIsClustered(false);
+                olStyle = clonedStyle.getStyle();
+                if (Array.isArray(olStyle)) {
+                    console.error("Legend yet cannot display two styles on each other, taking top most style");
+                    nominalCircleSegments.push({
+                        name: key,
+                        graphic: olStyle[1].getImage().getSrc()
+                    });
+                }
+                else {
+                    nominalCircleSegments.push({
+                        name: key,
+                        graphic: olStyle.getImage().getSrc()
+                    });
+                }
+            });
+
+            return nominalCircleSegments;
+        },
+
+        /**
          * Creats an SVG for interval circle bar style.
          * @param {String} scalingAttribute attribute that contains the values of a feature
-         * @param {ol.style} clonedStyle copy of style
+         * @param {ol.style} style style
          * @returns {String} - style as svg
          */
-        drawIntervalCircleBars: function (scalingAttribute, clonedStyle) {
+        drawIntervalCircleBars: function (scalingAttribute, style) {
             const olFeature = new Feature(),
-                circleBarScalingFactor = clonedStyle.get("circleBarScalingFactor"),
-                barHeight = String(20 / circleBarScalingFactor);
-            let style = null,
+                circleBarScalingFactor = style.get("circleBarScalingFactor"),
+                barHeight = String(20 / circleBarScalingFactor),
+                clonedStyle = style.clone();
+            let olStyle = null,
                 intervalCircleBar = null;
 
             olFeature.set(scalingAttribute, barHeight);
-            style = clonedStyle.getStyle(olFeature, false);
-            intervalCircleBar = style.getImage().getSrc();
+            clonedStyle.setFeature(olFeature);
+            clonedStyle.setIsClustered(false);
+            olStyle = clonedStyle.getStyle();
+            intervalCircleBar = olStyle.getImage().getSrc();
 
             return intervalCircleBar;
         },
