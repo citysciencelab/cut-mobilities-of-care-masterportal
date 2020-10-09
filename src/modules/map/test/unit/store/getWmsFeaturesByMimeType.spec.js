@@ -148,7 +148,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             let lastMimeType = "",
                 lastUrl = "";
 
-            await getHtmlFeature("url", "layerName", "gfiTheme", "attributesToShow", (mimeType, url) => {
+            await getHtmlFeature("url", "layerName", "gfiTheme", "gfiIconPath", "attributesToShow", (mimeType, url) => {
                 // dummy for requestGfi
                 lastMimeType = mimeType;
                 lastUrl = url;
