@@ -368,6 +368,9 @@ table {
         width: 50%;
         float: right;
         margin-top: 25px;
+        @media (max-width: 580px) {
+            min-width: inherit;
+        }
         tbody {
             tr {
                 &:nth-of-type(odd){
