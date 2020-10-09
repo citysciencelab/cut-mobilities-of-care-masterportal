@@ -240,8 +240,8 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
 
         // create style from svg and image
         if (imageName !== imageNameDefault) {
-            imageStyle = this.createSimplePointStyle(feature, false);
-            style = [style, imageStyle];
+            imageStyle = this.createIconPointStyle();
+            style = [imageStyle, style];
         }
 
         return style;
