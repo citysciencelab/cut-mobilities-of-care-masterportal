@@ -48,6 +48,7 @@ export default {
     },
     computed: {
         ...mapGetters("Map", ["map"]),
+        ...mapGetters(["uiStyle"]),
         component () {
             return Radio.request("Util", "getUiStyle") === "TABLE" ? TableStyleControl : ControlIcon;
         },
@@ -111,7 +112,7 @@ export default {
     >
         <component
             :is="component"
-            :class="['overviewmap-button', open ? 'space-above' : '']"
+            :class="['overviewmap-button', (open && uiStyle !== 'TABLE') ? 'space-above' : '']"
             :title="$t(`common:modules.controls.overviewMap.${open ? 'hide' : 'show'}Overview${localeSuffix}`)"
             icon-name="globe"
             :on-click="toggleOverviewMapFlyout"
