@@ -4,6 +4,7 @@ import {expect} from "chai";
 import sinon from "sinon";
 import GfiComponent from "../../../components/Gfi.vue";
 import Mobile from "../../../components/templates/Mobile.vue";
+import moment from "moment";
 
 const localVue = createLocalVue(),
     mockMutations = {
@@ -464,4 +465,441 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
         expect(secondDetachedComponent.exists()).to.be.true;
     });
 
+    describe("prepareGfiValue", function () {
+        it("Should return the value of given key", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                gfi = {
+                    foo: "bar",
+                    bar: "foo",
+                    barfoo: {
+                        firstLevel: "foobar"
+                    }
+                },
+                key = "bar";
+
+            expect(wrapper.vm.prepareGfiValue(gfi, key)).to.equal("foo");
+        });
+        it("Should return the value of given key if key is an object path", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                gfi = {
+                    foo: "bar",
+                    bar: "foo",
+                    barfoo: {
+                        firstLevel: "foobar"
+                    }
+                },
+                key = "@barfoo.firstLevel";
+
+            expect(wrapper.vm.prepareGfiValue(gfi, key)).to.equal("foobar");
+        });
+        it("Should return undefined for key that is not in gfi", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                gfi = {
+                    foo: "bar",
+                    bar: "foo",
+                    barfoo: {
+                        firstLevel: "foobar"
+                    }
+                },
+                key = "foobar";
+
+            expect(wrapper.vm.prepareGfiValue(gfi, key)).to.be.undefined;
+        });
+    });
+    describe("getValueFromPath", function () {
+        it("Should return object on firstLevel attribute", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                gfi = {
+                    foo: "bar",
+                    bar: "foo",
+                    barfoo: {
+                        firstLevel: "foobar"
+                    }
+                },
+                key = "@barfoo.firstLevel";
+
+            expect(wrapper.vm.getValueFromPath(gfi, key)).to.equal("foobar");
+        });
+        it("Should return object on secondLevel attribute", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                gfi = {
+                    foo: "bar",
+                    bar: "foo",
+                    barfoo: {
+                        firstLevel: {
+                            secondLevel: "foobar"
+                        }
+                    }
+                },
+                key = "@barfoo.firstLevel.secondLevel";
+
+            expect(wrapper.vm.getValueFromPath(gfi, key)).to.equal("foobar");
+        });
+        it("Should return object on secondLevel attribute and array position 1", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                gfi = {
+                    foo: "bar",
+                    bar: "foo",
+                    barfoo: {
+                        firstLevel: {
+                            secondLevel: ["foobar", "barfoo"]
+                        }
+                    }
+                },
+                key = "@barfoo.firstLevel.secondLevel.0";
+
+            expect(wrapper.vm.getValueFromPath(gfi, key)).to.equal("foobar");
+        });
+        it("Should return object on secondLevel attribute and array position 2", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                gfi = {
+                    foo: "bar",
+                    bar: "foo",
+                    barfoo: {
+                        firstLevel: {
+                            secondLevel: ["foobar", "barfoo"]
+                        }
+                    }
+                },
+                key = "@barfoo.firstLevel.secondLevel.1";
+
+            expect(wrapper.vm.getValueFromPath(gfi, key)).to.equal("barfoo");
+        });
+        it("Should return object on secondLevel attribute and object in array position 0", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                gfi = {
+                    foo: "bar",
+                    bar: "foo",
+                    barfoo: {
+                        firstLevel: {
+                            secondLevel: [
+                                {
+                                    thirdLevel: "foobar"
+                                }
+                            ]
+                        }
+                    }
+                },
+                key = "@barfoo.firstLevel.secondLevel.0.thirdLevel";
+
+            expect(wrapper.vm.getValueFromPath(gfi, key)).to.equal("foobar");
+        });
+    });
+    describe("prepareGfiValueFromObject", function () {
+        it("Should return value of attribute that starts with 'foo_' and append 'mySuffix'", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                key = "foo_",
+                obj = {
+                    condition: "startsWith",
+                    suffix: "mySuffix"
+                },
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "foo_bar",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("foo_bar mySuffix");
+        });
+        it("Should return value of attribute that contains 'o_b' and convert it to date with default format", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                key = "o_b",
+                obj = {
+                    condition: "contains",
+                    type: "date"
+                },
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "2020-04-14T11:00:00.000Z",
+                    bar_foo: "bar_foo"
+                },
+                defaultFormat = "DD.MM.YYYY HH:mm:ss";
+
+            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal(moment("2020-04-14T11:00:00.000Z").format(defaultFormat));
+        });
+        it("Should return value of attribute that contains 'o__b' and convert it to date with given format 'DD.MM.YYYY'", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                key = "o_b",
+                obj = {
+                    condition: "contains",
+                    type: "date",
+                    format: "DD.MM.YYYY"
+                },
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "2020-04-14T11:00:00.000Z",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.prepareGfiValueFromObject(key, obj, gfi)).to.equal("14.04.2020");
+        });
+    });
+    describe("getValueFromCondition", function () {
+        it("Sould return first key matching the contains condition", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                key = "oo_",
+                condition = "contains",
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "foo_bar",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("foo_bar");
+        });
+        it("Sould return first key matching the startsWidth condition", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                key = "bar",
+                condition = "startsWith",
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "foo_bar",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("bar");
+        });
+        it("Sould return first key matching the startsWidth condition", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                key = "bar_",
+                condition = "startsWith",
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "foo_bar",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("bar_foo");
+        });
+        it("Sould return first key matching the endsWith condition", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                key = "foo",
+                condition = "endsWith",
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "foo_bar",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("foo");
+        });
+        it("Sould return first key matching the endsWith condition", function () {
+            const wrapper = shallowMount(GfiComponent, {
+                    computed: {
+                        isMobile: () => true,
+                        active: () => true,
+                        gfiFeatures: () => [{
+                            getGfiUrl: () => null
+                        }],
+                        mapSize: () => []
+                    },
+                    localVue
+                }),
+                key = "_foo",
+                condition = "endsWith",
+                gfi = {
+                    foo: "foo",
+                    bar: "bar",
+                    foo_bar: "foo_bar",
+                    bar_foo: "bar_foo"
+                };
+
+            expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("bar_foo");
+        });
+    });
+    describe("appendSuffix", function () {
+        const wrapper = shallowMount(GfiComponent, {
+            computed: {
+                isMobile: () => true,
+                active: () => true,
+                gfiFeatures: () => [{
+                    getGfiUrl: () => null
+                }],
+                mapSize: () => []
+            },
+            localVue
+        });
+
+        it("Should leave string value as is, when suffix is undefined", function () {
+            expect(wrapper.vm.appendSuffix("test1", undefined)).to.equal("test1");
+        });
+        it("Should leave number value as is, when suffix is undefined", function () {
+            expect(wrapper.vm.appendSuffix(123, undefined)).to.equal(123);
+        });
+        it("Should leave float value as is, when suffix is undefined", function () {
+            expect(wrapper.vm.appendSuffix(12.3, undefined)).to.equal(12.3);
+        });
+        it("Should leave boolean value as is, when suffix is undefined", function () {
+            expect(wrapper.vm.appendSuffix(true, undefined)).to.be.true;
+        });
+        it("Should append suffix", function () {
+            expect(wrapper.vm.appendSuffix("test1", "suffix")).to.equal("test1 suffix");
+        });
+        it("Should turn number value into string and append suffix", function () {
+            expect(wrapper.vm.appendSuffix(123, "suffix")).to.equal("123 suffix");
+        });
+        it("Should turn float value into string and append suffix", function () {
+            expect(wrapper.vm.appendSuffix(12.3, "suffix")).to.equal("12.3 suffix");
+        });
+        it("Should turn boolean value into string and append suffix", function () {
+            expect(wrapper.vm.appendSuffix(true, "suffix")).to.equal("true suffix");
+        });
+    });
 });
