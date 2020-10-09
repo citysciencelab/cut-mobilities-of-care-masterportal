@@ -10,7 +10,7 @@ Folgende Struktur ist dabei zu beachten:
 
 ## 1. Dateistruktur von Addons ##
 
-1.1. 
+1.1.
 ```
 addons
 |-- MyAddon1
@@ -45,8 +45,9 @@ addons
 |   |   |	|   |-- gettersMyAddon1.spec.js
 |   |   |	|   |-- mutationsMyAddon1.spec.js
 ```
+Der Entrypoint eines jeden Addons muss eine Datei namens **index.js** auf der root-Ebene des Addon-Folders sein.
 
-1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner und dem Namen des *Entrypoints* (MyAddon1.js = index.js) als Values. 
+1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner.
 Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
 
 #### Beispiel **addonsConf.json** ####
@@ -54,8 +55,7 @@ Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordner
 {
   [...]
   "MyAddon1": {
-    vue: true,
-    entry: "index.js"
+    vue: true
   }
 }
 ```
@@ -66,7 +66,7 @@ Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordner
 
 Hier legen wir kurz ein Beispiel-Addon an!
 
-2.1. Dateien erstellen: Das Beispiel-Addon trägt den Namen *VueAddon* und seine Enrypoint-Datei heißt *VueAddon.js* und liegt im Ordner *store*. Die Komponente *VueAddon.vue* liegt im Ordner *components*. Daraus ergibt sich eine Dateistruktur wie folgt:
+2.1. Dateien erstellen: Das Beispiel-Addon trägt den Namen *VueAddon* und seine Enrypoint-Datei heißt *index.js*. Die Komponente *VueAddon.vue* liegt im Ordner *components*. Daraus ergibt sich eine Dateistruktur wie folgt:
 
 ```
 myMasterPortalFolder/
@@ -189,8 +189,7 @@ Alle weiteren Dateien zum VueAddon können [hier](./VueAddon.zip) heruntergelade
 Die `index.js` dient dazu alle Komponenten (Vue-Components, Store und Übersetzungen) zu aggregieren und als einen
 Entrypoint bereit zustellen.
 
-Auch wenn man theoretisch den Entrypoint in der `addonsConf.json` beliebig setzen kann, muss dieser zwingend auf
-`index.js` bleiben da webpack sonst das Addon nicht laden wird.
+Auch wenn man theoretisch den Entrypoint in der `addonsConf.json` beliebig setzen kann, muss dieser zwingend auf `index.js` bleiben da webpack sonst das Addon nicht laden wird!
 
 Wichtig ist, dass alle Komponenten korrekt importiert werden und nicht in einem `.default` eine Ebene tiefer im Objekt
 liegen (z.B. wenn man `import * as VueAddonComponent from "./components/VueAddon.vue";` verwendet).
@@ -220,9 +219,8 @@ export default {
 
 {
   "VueAddon": {
-      "vue": true,
-      "entry": "index.js"
-  } 
+      "vue": true
+  }
 }
 ```
 
