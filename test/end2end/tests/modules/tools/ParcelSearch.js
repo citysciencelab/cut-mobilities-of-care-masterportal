@@ -21,19 +21,17 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("ParcelSearch", function () {
+        describe.only("ParcelSearch", function () {
             const selectors = {
-                tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
-                toolParcelSearch: By.xpath("//a[contains(.,'Flurstückssuche')]"),
-                modal: By.xpath("//div[@id='window']"),
-                districtLabel: By.xpath("//label[contains(.,'Gemarkung')]"),
-                districtField: By.xpath("//select[@id='districtField']"),
-                cadastralDistrictLabel: By.xpath("//label[contains(.,'Flur')]"),
-                cadastralDistrictField: By.xpath("//select[@id='cadastralDistrictField']"),
-                parcelLabel: By.xpath("//label[contains(.,'Flurstücksnummer')]"),
-                parcelField: By.xpath("//input[@id='parcelField']"),
-                searchMarker: By.xpath("//div[@id='searchMarker']"),
-                submitButton: By.xpath("//button[@id='submitbutton']"),
+                tools: By.css("ul#root li.dropdown:nth-child(4)"),
+                toolParcelSearch: By.css("ul#root li.dropdown span.glyphicon-search"),
+                modal: By.css("div#window"),
+                districtLabel: By.css("label[for=\"districtField\"]"),
+                districtField: By.css("select#districtField"),
+                parcelLabel: By.css("label[for=\"parcelField\"]"),
+                parcelField: By.css("input#parcelField"),
+                searchMarker: By.css("div#searchMarker"),
+                submitButton: By.css("button#submitbutton"),
                 minimize: By.css("#window .glyphicon-minus"),
                 maximize: By.css("#window p.title")
             };
@@ -68,15 +66,17 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
                 await toolParcelSearch.click();
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)));
-                await driver.wait(until.elementLocated(selectors.districtField));
-                await driver.wait(until.elementLocated(selectors.districtLabel));
+                await driver.wait(until.elementLocated(selectors.districtLabel), 5000, "districtLabel did not appear.");
+                await driver.wait(until.elementLocated(selectors.districtField), 5000, "districtField did not appear.");
                 // when the test is expanded, this element should also be checked for availability
                 // if (withCadastral) {
+                //     // cadastralDistrictLabel: By.css("label[for=\"cadastralDistrictField\"]"),
                 //     await driver.wait(until.elementLocated(selectors.cadastralDistrictField));
+                //     // cadastralDistrictField: By.css("select#cadastralDistrictField"),
                 //     await driver.wait(until.elementLocated(selectors.cadastralDistrictLabel));
                 // }
-                await driver.wait(until.elementLocated(selectors.parcelLabel));
-                await driver.wait(until.elementLocated(selectors.parcelField));
+                await driver.wait(until.elementLocated(selectors.parcelLabel), 5000, "parcelLabel did not appear.");
+                await driver.wait(until.elementLocated(selectors.parcelField), 5000, "parcelField did not appear.");
 
                 searchMarker = await driver.findElement(selectors.searchMarker);
                 districtField = await driver.findElement(selectors.districtField);
