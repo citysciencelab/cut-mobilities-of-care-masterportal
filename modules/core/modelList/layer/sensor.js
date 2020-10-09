@@ -425,7 +425,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     /**
      * to call on starting of loadSensorThings
      * @fires Core#RadioTriggerUtilShowLoader
-     * @returns {Void}  -
+     * @returns {void}
      */
     loadSensorThingsStart: function () {
         Radio.trigger("Util", "showLoader");
@@ -434,7 +434,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     /**
      * to call on ending of loadSensorThings
      * @fires Core#RadioTriggerUtilHideLoader
-     * @returns {Void}  -
+     * @returns {void}
      */
     loadSensorThingsComplete: function () {
         Radio.trigger("Util", "hideLoader");
@@ -445,7 +445,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * "dataStream_[dataStreamId]_[dataStreamName]" and
      * "dataStream_[dataStreamId]_[dataStreamName]_phenomenonTime".
      * @param {Object} thing thing.
-     * @returns {Void} -
+     * @returns {void}
      */
     getNewestSensorDataOfDatastream (thing) {
         const dataStreams = thing.Datastreams;
@@ -461,27 +461,43 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 key = "dataStream_" + dataStreamId + "_" + dataStreamName;
             let phenomenonTime = dataStream?.Observations[0]?.phenomenonTime;
 
-            thing.properties = Object.assign(thing.properties, dataStream.properties);
+            this.addDatastreamPorperties(thing.properties, dataStream.properties);
             phenomenonTime = changeTimeZone(phenomenonTime, this.get("utc"));
+
+            thing.properties.dataStreamId.push(dataStreamId);
+            thing.properties.dataStreamName.push(dataStreamName);
 
             if (this.get("showNoDataValue") && !dataStreamValue) {
                 thing.properties[key] = this.get("noDataValue");
                 thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
-                thing.properties.dataStreamId.push(dataStreamId);
-                thing.properties.dataStreamName.push(dataStreamName);
                 thing.properties.dataStreamValue.push(this.get("noDataValue"));
             }
             else if (dataStreamValue) {
                 thing.properties[key] = dataStreamValue;
                 thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, this.get("timezone"));
-                thing.properties.dataStreamId.push(dataStreamId);
-                thing.properties.dataStreamName.push(dataStreamName);
                 thing.properties.dataStreamValue.push(dataStreamValue);
             }
         });
         thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
         thing.properties.dataStreamValue = thing.properties.dataStreamValue.join(" | ");
         thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
+    },
+
+    /**
+     * Adds data from datastream to thing with pipe separator.
+     * @param {Object} thingProperties - The properties from thing.
+     * @param {Object} dataStreamProperties - The properties from dataStream.
+     * @returns {void}
+     */
+    addDatastreamPorperties: function (thingProperties, dataStreamProperties) {
+        Object.entries(dataStreamProperties).forEach(([key, value]) => {
+            if (thingProperties[key] !== undefined) {
+                thingProperties[key] = thingProperties[key] + " | " + value;
+            }
+            else {
+                thingProperties[key] = value;
+            }
+        })
     },
 
     /**
