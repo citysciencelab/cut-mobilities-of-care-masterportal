@@ -25,7 +25,7 @@ export function getWmsFeaturesByMimeType (mimeType, url, layerName, gfiTheme, gf
     }
 
     // mimeType === "text/html"
-    return [createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, null, null, undefined, url)];
+    return getHtmlFeature(url, layerName, gfiTheme, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi);
 }
 
 /**
@@ -99,6 +99,27 @@ export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attribute
         }
 
         return result;
+    });
+}
+
+/**
+ * returns a list of objects representing the features called by url
+ * @param {String} url the url to call the wms features from
+ * @param {String} layerName the name of the requesting layer
+ * @param {String} gfiTheme the title of the theme - it does not check if the theme exists
+ * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
+ * @param {Function} callRequestGfi a function (mimeType, url) to call the wms url with
+ * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
+ */
+export function getHtmlFeature (url, layerName, gfiTheme, attributesToShow, callRequestGfi) {
+    if (typeof url !== "string" || typeof callRequestGfi !== "function") {
+        return [];
+    }
+    return callRequestGfi("text/html", url).then(document => {
+        if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0].children.length >= 1) {
+            return [createGfiFeature(layerName, gfiTheme, attributesToShow, null, null, undefined, url)];
+        }
+        return [];
     });
 }
 
