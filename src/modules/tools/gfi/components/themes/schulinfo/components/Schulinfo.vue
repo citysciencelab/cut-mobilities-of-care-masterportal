@@ -25,7 +25,7 @@ export default {
 
         /**
          * Returns the olFeature associated with the feature.
-         * @returns {ol/feature} The olFeature
+         * @returns {ol/Feature} The olFeature
          */
         olFeature: function () {
             const foundLayer = this.layerList.find(layer => layer.get("id") === this.feature.getLayerId());
@@ -43,7 +43,7 @@ export default {
 
         /**
          * Returns the properties of the selected category.
-         * @returns {object[]} The properties for the selected category.
+         * @returns {Object[]} The properties for the selected category.
          */
         selectedPropertyAttributes: function () {
             return this.assignedFeatureProperties.find(property => property.isSelected === true)?.attributes;
@@ -66,7 +66,7 @@ export default {
         /**
          * Checks if the feature is on the comparelist.
          * Starts to prepare the data and sets up the listener.
-         * @param {object} feature The feature from property
+         * @param {Object} feature The feature from property
          * @returns {void}
          */
         initialize: function (feature) {
@@ -78,10 +78,10 @@ export default {
 
         /**
          * Prepares the properties of the feature using the theme configuration.
-         * @param {ol/feature} feature The used feature.
-         * @returns {object[]} The prepared feature properties.
+         * @param {ol/Feature} feature The used feature.
+         * @returns {Object[]} The prepared feature properties.
          */
-        assignFeatureProperties: (feature) => {
+        assignFeatureProperties: function (feature) {
             const topics = JSON.parse(JSON.stringify(ThemeConfig)).themen,
                 assignedFeatureProperties = [];
 
@@ -90,11 +90,12 @@ export default {
 
                 topic.attributes.forEach(attribute => {
                     const value = feature.getProperties()[attribute];
+                    // let beautifiedValue;
 
                     if (value !== undefined) {
                         filteredAttributes.push({
                             attributeName: feature.getAttributesToShow()[attribute],
-                            attributeValue: Array.isArray(value) ? value : value.split("|")
+                            attributeValue: this.beautifyAttribute(value)
                         });
                     }
                 });
@@ -110,8 +111,26 @@ export default {
         },
 
         /**
+         * Splits the attributeValue by pipe and translates true and false.
+         * @param {String} attributeValue - The attribute value.
+         * @returns {String[]} The beautified attributeValues.
+         */
+        beautifyAttribute: function (attributeValue) {
+            if (attributeValue.indexOf("|") !== -1) {
+                return attributeValue.split("|");
+            }
+            if (attributeValue === "true" || attributeValue === "ja") {
+                return ["Ja"];
+            }
+            if (attributeValue === "false" || attributeValue === "nein") {
+                return ["Nein"];
+            }
+            return [attributeValue];
+        },
+
+        /**
          * Activates the clicked category.
-         * @param {event} event click event
+         * @param {Event} event click event
          * @returns {void}
          */
         toggleSelectedCategory: function (event) {
@@ -140,7 +159,7 @@ export default {
 
         /**
          * Indicates whether the feature is on the comparelist.
-         * @param {event} event The given event.
+         * @param {Event} event The given event.
          * @returns {void}
          */
         toggleFeatureIsOnCompareList: function (event) {
@@ -156,9 +175,9 @@ export default {
          */
         toogleFeatureToCompareList: function (event) {
             if (event?.target?.classList?.contains("glyphicon-star-empty")) {
-                const uniquelayerId = this.feature.getLayerId() + uniqueId("_");
+                const uniqueLayerId = this.feature.getLayerId() + uniqueId("_");
 
-                this.olFeature.set("layerId", uniquelayerId);
+                this.olFeature.set("layerId", uniqueLayerId);
                 Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
             }
             else {
@@ -185,16 +204,16 @@ export default {
                 >
                     {{ category.name }}
                 </button>
-                <div id="favorite-mapmarker-container">
-                    <span
-                        class="glyphicon glyphicon-map-marker"
-                        title="Schule als Ziel übernehmen"
-                        @click="changeToSchoolrouting"
-                    ></span>
+                <div class="favorite-mapmarker-container">
                     <span
                         :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
                         :title="titleCompareList"
                         @click="toogleFeatureToCompareList"
+                    ></span>
+                    <span
+                        class="glyphicon glyphicon-map-marker"
+                        title="Schule als Ziel übernehmen"
+                        @click="changeToSchoolrouting"
                     ></span>
                 </div>
             </div>
@@ -234,6 +253,14 @@ export default {
                                 >
                                     {{ value }}
                                 </a>
+                                <span
+                                    v-else-if="attribute.attributeName === 'Oberstufenprofil'"
+                                >
+                                    <b>
+                                        {{ value.split(";")[0] }}
+                                    </b>
+                                    {{ ";" + value.split(";")[1] }}
+                                </span>
                                 <span v-else>
                                     {{ value }}
                                 </span>
@@ -276,7 +303,7 @@ export default {
         }
         padding-right: 64px;
     }
-    #favorite-mapmarker-container {
+    .favorite-mapmarker-container {
         position: absolute;
         right: 0;
         top: 5px;
