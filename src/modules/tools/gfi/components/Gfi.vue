@@ -195,7 +195,6 @@ export default {
             :is="currentViewType"
             :key="componentKey"
             :feature="feature"
-            :gfiFeatures="gfiFeatures"
             @close="reset"
         >
             <!-- Slot Content for Footer -->
