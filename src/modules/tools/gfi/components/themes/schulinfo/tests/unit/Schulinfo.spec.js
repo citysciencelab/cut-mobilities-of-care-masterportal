@@ -28,7 +28,9 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
             "ganztagsform": "GTS teilweise gebunden",
             "is_rebbz": "true",
             "kantine_vorh": "true",
-            "kapitelbezeichnung": "Stadtteilschulen"
+            "kapitelbezeichnung": "Stadtteilschulen",
+            "schwerpunktschule": "true",
+            "oberstufenprofil": "Humans and their environment (bilingual);In diesem bilingualen Profil"
         },
         olFeature = new Feature({
             isOnCompareList: false
@@ -78,7 +80,7 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
     it("should render six buttons with names from topics", () => {
         const topics = ThemeConfig.themen.map(topic => topic.name);
 
-        expect(wrapper.findAll("button").length).to.equal(6);
+        expect(wrapper.findAll("button").length).to.equal(7);
         wrapper.findAll("button").wrappers.forEach(button => {
             expect(topics.includes(button.text())).to.be.true;
         });
@@ -128,12 +130,24 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
         expect(result[1].attributes).to.deep.equal([
             {
                 attributeName: attrToShow.kantine_vorh,
-                attributeValue: [prop.kantine_vorh]
+                attributeValue: ["Ja"]
             }]
         );
     });
 
-    it("should switch the active tab if the info nav button is clicked", async () => {
+    it("should switch the active tab to Oberstufenprofil, if the button is clicked", async () => {
+        const button = wrapper.find("button[value^= Oberstufenprofil]");
+
+        await button.trigger("click");
+
+        expect(wrapper.vm.selectedPropertyAttributes.length).equals(1);
+        expect(wrapper.findAll("tr").length).equals(1);
+        expect(wrapper.findAll("td").length).equals(2);
+        expect(wrapper.findAll("td").wrappers[0].text()).equals("");
+        expect(wrapper.findAll("td").wrappers[1].text()).equals("Humans and their environment (bilingual);In diesem bilingualen Profil");
+    });
+
+    it("should switch the active tab to Mittagsversorgung, if the button is clicked", async () => {
         const button = wrapper.find("button[value^= Mittagsversorgung]");
 
         await button.trigger("click");
@@ -142,7 +156,7 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
         expect(wrapper.findAll("tr").length).equals(1);
         expect(wrapper.findAll("td").length).equals(2);
         expect(wrapper.findAll("td").wrappers[0].text()).equals("");
-        expect(wrapper.findAll("td").wrappers[1].text()).equals("true");
+        expect(wrapper.findAll("td").wrappers[1].text()).equals("Ja");
     });
 
     it("should set the selected category to true and all other to false", () => {
@@ -162,12 +176,12 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
     });
 
     it("should render the table for the first topic", () => {
-        const resultValues = ["Exampleweg", "99999 Neverland", "example Bezirk", "example@schulmail.com", "+49 40 123456789", "https://example.de"],
+        const resultValues = ["Exampleweg", "99999 Neverland", "example Bezirk", "example@schulmail.com", "+49 40 123456789", "https://example.de", "Ja"],
             tdText = wrapper.findAll("td").wrappers.map(td => td.text());
 
-        expect(wrapper.vm.selectedPropertyAttributes.length).equals(6);
-        expect(wrapper.findAll("tr").length).equals(6);
-        expect(wrapper.findAll("td").length).equals(12);
+        expect(wrapper.vm.selectedPropertyAttributes.length).equals(7);
+        expect(wrapper.findAll("tr").length).equals(7);
+        expect(wrapper.findAll("td").length).equals(14);
 
         resultValues.forEach(value => {
             expect(tdText.includes(value)).to.be.true;
