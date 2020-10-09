@@ -1,11 +1,14 @@
 <script>
 import Default from "../themes/components/Default.vue";
+import ContinuousCountingBike from "../themes/continuousCountingBike/components/ContinuousCountingBike.vue";
+
 import upperFirst from "../../../../../utils/upperFirst";
 
 export default {
     name: "Mobile",
     components: {
-        Default
+        Default,
+        ContinuousCountingBike
     },
     props: {
         feature: {
