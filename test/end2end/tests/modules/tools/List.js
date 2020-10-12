@@ -38,7 +38,9 @@ async function ListTests ({builder, url, resolution, capability}) {
                 await (await driver.findElement(By.css("#tools .glyphicon-menu-hamburger"))).click();
 
                 await driver.wait(until.elementIsVisible(
-                    await driver.findElement(By.css("div#window li#featurelistThemeChooser.active"))
+                    await driver.findElement(By.css("div#window li#featurelistThemeChooser.active")),
+                    5000,
+                    "theme chooser was not initially active or did not become visible"
                 ));
                 await driver.findElement(By.css("div#window li#featurelistFeaturelist"));
                 await driver.findElement(By.css("div#window li#featurelistFeaturedetails"));
@@ -47,9 +49,17 @@ async function ListTests ({builder, url, resolution, capability}) {
             });
 
             it("tool lists visible features", async function () {
-                await driver.wait(until.elementIsVisible(hospitalLayerEntry));
+                await driver.wait(
+                    until.elementIsVisible(hospitalLayerEntry),
+                    5000,
+                    "hospital layer entry did not become visible"
+                );
                 await hospitalLayerEntry.click();
-                await driver.wait(until.elementLocated(By.css("#featurelistFeaturelist.active")));
+                await driver.wait(
+                    until.elementLocated(By.css("#featurelistFeaturelist.active")),
+                    5000,
+                    "feature list was not activated"
+                );
                 await driver.findElement(By.css("#featurelist-list-table"));
 
                 featureListEntries = await driver.findElements(By.css("#featurelist-list-table tbody tr"));
@@ -96,7 +106,11 @@ async function ListTests ({builder, url, resolution, capability}) {
                 /* clicking featureListEntries[0] - chromedriver can, geckodriver can't manage to
                  * vertically scroll the tr center into view; workaround: click first cell of first row */
                 await (await driver.findElement(By.css("#featurelist-list-table tbody tr td"))).click();
-                await driver.wait(until.elementLocated(By.css("#featurelistFeaturedetails.active")));
+                await driver.wait(
+                    until.elementLocated(By.css("#featurelistFeaturedetails.active")),
+                    5000,
+                    "details tab was not activated"
+                );
 
                 expect(await driver.executeScript(getCenter)).to.deep.equal([569773.549, 5937127.029]);
                 expect(await driver.executeScript(getResolution)).to.equal(0.13229159522920522);
