@@ -55,8 +55,8 @@ export class TrafficCountApi {
         this.subscriptionTopics = {};
         /** @private */
         // this.layerNameInfix = "";
-        this.layerNameInfix = "_Zaehlfeld";
-        // this.layerNameInfix = "_Zaehlstelle";
+        // this.layerNameInfix = "_Zaehlfeld";
+        this.layerNameInfix = "_Zaehlstelle";
 
         // set the mqtt listener
         if (this.mqttClient && typeof this.mqttClient.on === "function") {
