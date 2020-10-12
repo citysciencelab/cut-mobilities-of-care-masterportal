@@ -141,7 +141,7 @@ export default {
         justify-content: space-between;
 
         padding: 5px;
-        margin: 5px;
+        margin: 5px 5px 12px 5px;
 
         .top-controls, .bottom-controls {
             pointer-events: all;

@@ -285,12 +285,12 @@ Für weitere Informationen siehe auch die [Openlayers Beschreibung](https://open
 |circleStrokeWidth|   |Integer|2|Breite des Kreisrandes.|
 |circleFillColor|   |Integer[]|[0, 153, 255, 1]|Farbe der Kreisfüllung in rgba.|
 
-#### Point.Nominal
-Für jedes Feature wird ein dynamischer Style gesetzt. Dieser Style unterstützt die automatisierte Aktualisierung von Sensor-Features. Für Daten die sich nicht in eine Reihenfolge bringen lassen (z.B. Farben oder Formen).
+#### Point.Interval
+Für jedes Feature wird ein dynamischer Style gesetzt. Dieser Style unterstützt die automatisierte Aktualisierung von Sensor-Features. Für Zahlendaten die eine natürliche Reihenfolge haben (z.B. in der Einheit Meter, oder Grad Celsius).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|scalingShape| x |String||Angabe der Darstellungsart: CIRCLESEGMENTS.|
+|scalingShape| x |String||Angabe der Darstellungsart: CIRCLE_BAR.|
 |scalingAttribute| x |String||Attribut das zur Darstellung verwendet werden soll|
 |circleBarScalingFactor|   |Float|1|Faktor um den Attributwert zu überhöhen. Notwendig bei sehr großen (positiven oder negativen Werten) und bei Werten nahe 0.|
 |circleBarRadius|   |Float|6|Radius des Punktes.|
@@ -300,14 +300,14 @@ Für jedes Feature wird ein dynamischer Style gesetzt. Dieser Style unterstützt
 |circleBarCircleStrokeWidth|   ||1|Breite des Kreisrandes|
 |circleBarLineStrokeColor|   |Integer[]|[0, 0, 0, 1]|Farbe des Balkens in rgba.|
 
-#### Point.Interval
-Für jedes Feature wird ein dynamischer Style gesetzt. Dieser Style unterstützt die automatisierte Aktualisierung von Sensor-Features. Für Zahlendaten die eine natürliche Reihenfolge haben (z.B. in der Einheit Meter, oder Grad Celsius).
+#### Point.Nominal
+Für jedes Feature wird ein dynamischer Style gesetzt. Dieser Style unterstützt die automatisierte Aktualisierung von Sensor-Features. Für Daten die sich nicht in eine Reihenfolge bringen lassen (z.B. Farben oder Formen).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|scalingShape| x |String||Angabe der Darstellungsart: CIRCLE_BAR.|
+|scalingShape| x |String||Angabe der Darstellungsart: CIRCLESEGMENTS.|
 |scalingAttribute| x |String||Attribut das zur Darstellung verwendet werden soll. Kann auch als [Objektpfadverweis](#markdown-header-objektpfadverweise) genutzt werden.|
-|scalingValues|   |Object[]||Attributwerte denen eine Farbe zugeordnet ist, z.B. `{"charging" : [220, 0, 0, 1]}`. Innerhalb des Objektes können beliebig viele Attributwerte angegeben werden.|
+|scalingValues|   |Object||Attributwerte denen eine Farbe zugeordnet ist, z.B. `{"charging" : [220, 0, 0, 1]}`. Innerhalb des Objektes können beliebig viele Attributwerte angegeben werden.|
 |scalingValueDefaultColor|   |Integer[]|[0, 0, 0, 1]|Standardfarbe für alle Attributwerte die nicht in *scalingValues* definiert sind.|
 |circleSegmentsRadius|   |Float|10|Radius der Kreissegmente|
 |circleSegmentsStrokeWidth|   |Float|4|Breite der Kreissegmente|

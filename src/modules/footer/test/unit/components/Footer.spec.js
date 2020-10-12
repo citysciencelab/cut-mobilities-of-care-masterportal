@@ -95,4 +95,37 @@ describe("src/modules/footer/components/Footer.vue", () => {
         expect(wrapper.find("a").text()).to.equals(store.state.Footer.urls[0].alias);
         expect(wrapper.find("a").attributes().href).to.equals(store.state.Footer.urls[0].url);
     });
+
+    it("renders scaleLine exist", async () => {
+        const wrapper = shallowMount(FooterComponent, {
+            store,
+            computed: {
+                footerConfig: () => sinon.stub(),
+                masterPortalVersionNumber: () => sinon.stub(),
+                mobile: () => sinon.stub()
+            },
+            localVue
+        });
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("scaleline-stub").exists()).to.be.true;
+        expect(wrapper.find("scaleline-stub").classes()).to.not.includes("footer-scaleLine");
+    });
+    it("renders scaleLine exist", async () => {
+        const wrapper = shallowMount(FooterComponent, {
+            store,
+            computed: {
+                footerConfig: () => sinon.stub(),
+                masterPortalVersionNumber: () => sinon.stub(),
+                mobile: () => sinon.stub()
+            },
+            localVue
+        });
+
+        store.commit("Footer/setShowFooter", false);
+
+        await wrapper.vm.$nextTick();
+        expect(wrapper.find("scaleline-stub").exists()).to.be.true;
+        expect(wrapper.find("scaleline-stub").classes()).to.includes("footer-scaleLine");
+    });
 });
