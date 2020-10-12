@@ -39,7 +39,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetConfig
      * @listens Core#RadioRequestUtilGetUiStyle
      * @listens Core#RadioRequestUtilGetIgnoredKeys
-     * @listens Core#RadioRequestUtilThousandsSeparator
      * @listens Core#RadioRequestUtilSort
      * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
      * @listens Core#RadioRequestUtilGetPathFromLoader

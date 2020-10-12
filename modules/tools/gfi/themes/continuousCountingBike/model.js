@@ -22,7 +22,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @property {Object} yearDataset={} Empty object for the dataset of the current year
      * @property {String} activeTab="info" Contains the name of the active tab
      * @property {String} downloadLink="" Link for the download data
-     * @fires Util#RadioRequestUtilThousandsSeparator
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      * @listens Theme#changeIsReady
      */
@@ -90,7 +89,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     },
     /**
      * ParseGfiContent parses the gfiContent into several variables for the graphics and for the info tab.
-     * @fires Util#event:RadioRequestUtilThousandsSeparator
      * @return {void}
      */
     parseGfiContent: function () {
@@ -157,7 +155,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     /**
      * splitDayDataset creates a json for the graphic module with the dayLine data.
      * @param  {String} dayLine contains the dayLine data of gfiContent
-     * @fires Util#event:RadioRequestUtilThousandsSeparator
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitDayDataset: function (dayLine) {
@@ -193,7 +190,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     /**
      * splitLastSevenDaysDataset creates a json for the graphic module with the lastSevenDaysLine data.
      * @param  {String} lastSevenDaysLine contains the lastSevenDays data of gfiContent
-     * @fires Util#event:RadioRequestUtilThousandsSeparator
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitLastSevenDaysDataset: function (lastSevenDaysLine) {
@@ -228,7 +224,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     /**
      * splitYearDataset creates a json for the graphic module with the yearLine data.
      * @param  {String} yearLine contains the year data of gfiContent
-     * @fires Util#event:RadioRequestUtilThousandsSeparator
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitYearDataset: function (yearLine) {
