@@ -231,7 +231,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             feature;
 
         if (Array.isArray(sensorData)) {
-            sensorData.forEach((data, index) => {
+            sensorData.forEach(function (data, index) {
                 if (data.hasOwnProperty("location") && data.location && epsg !== undefined) {
                     feature = this.parseJson(data.location);
                 }
@@ -250,7 +250,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 feature = this.aggregateDataStreamValue(feature);
                 feature = this.aggregateDataStreamPhenomenonTime(feature);
                 features.push(feature);
-            });
+            }, this);
 
             // only features with geometry
             features = features.filter(subFeature => subFeature.getGeometry() !== undefined);
@@ -457,17 +457,17 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         dataStreams.forEach(dataStream => {
             const dataStreamId = String(dataStream["@iot.id"]),
                 dataStreamName = dataStream.name,
-                dataStreamValue = dataStream?.Observations[0]?.result,
+                dataStreamValue = dataStream.hasOwnProperty("Observations") ? dataStream.Observations[0]?.result : "",
                 key = "dataStream_" + dataStreamId + "_" + dataStreamName;
-            let phenomenonTime = dataStream?.Observations[0]?.phenomenonTime;
+            let phenomenonTime = dataStream.hasOwnProperty("Observations") ? dataStream.Observations[0]?.phenomenonTime : "";
 
-            this.addDatastreamPorperties(thing.properties, dataStream.properties);
+            this.addDatastreamProperties(thing.properties, dataStream.properties);
             phenomenonTime = changeTimeZone(phenomenonTime, this.get("utc"));
 
             thing.properties.dataStreamId.push(dataStreamId);
             thing.properties.dataStreamName.push(dataStreamName);
 
-            if (this.get("showNoDataValue") && !dataStreamValue) {
+            if (this.get("showNoDataValue")) {
                 thing.properties[key] = this.get("noDataValue");
                 thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
                 thing.properties.dataStreamValue.push(this.get("noDataValue"));
@@ -489,7 +489,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param {Object} dataStreamProperties - The properties from dataStream.
      * @returns {void}
      */
-    addDatastreamPorperties: function (thingProperties, dataStreamProperties) {
+    addDatastreamProperties: function (thingProperties, dataStreamProperties) {
         Object.entries(dataStreamProperties).forEach(([key, value]) => {
             if (thingProperties[key] !== undefined) {
                 thingProperties[key] = thingProperties[key] + " | " + value;
@@ -497,7 +497,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             else {
                 thingProperties[key] = value;
             }
-        })
+        });
     },
 
     /**
@@ -748,7 +748,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
 
         if (stylelistmodel !== undefined) {
-            this.setStyle(feature => {
+            this.setStyle(function (feature) {
                 return stylelistmodel.createStyle(feature, isClustered);
             });
         }
