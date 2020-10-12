@@ -21,7 +21,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe.only("ParcelSearch", function () {
+        describe("ParcelSearch", function () {
             const selectors = {
                 tools: By.css("ul#root li.dropdown:nth-child(4)"),
                 toolParcelSearch: By.css("ul#root li.dropdown span.glyphicon-search"),
@@ -87,7 +87,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
             it("search results in centering and setting of a map marker", async () => {
                 expect(await searchMarker.isDisplayed()).to.be.false;
 
-                await driver.wait(until.elementIsVisible(districtField));
+                await driver.wait(until.elementIsVisible(districtField), 5000, "districtField did not appear");
                 await districtField.click();
                 await (await driver.findElement(By.xpath("//option[@value='0601']"))).click(); // Allermöhe
 
@@ -99,7 +99,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
             });
 
             it("can be minimized", async () => {
-                await driver.wait(until.elementLocated(selectors.minimize));
+                await driver.wait(until.elementLocated(selectors.minimize), 5000, "minimize button did not appear");
 
                 const minimize = await driver.findElement(selectors.minimize);
 
@@ -116,14 +116,22 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
             });
 
             it("can be maximized again", async () => {
-                await driver.wait(until.elementLocated(selectors.maximize));
+                await driver.wait(until.elementLocated(selectors.maximize), 5000, "maximize button did not appear");
 
                 const maximize = await driver.findElement(selectors.maximize);
 
                 await maximize.click();
 
-                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#window .win-body"))));
-                await driver.wait(async () => (await driver.findElements(By.css("#window .win-heading.header-min"))).length === 0);
+                await driver.wait(until.elementIsVisible(
+                    await driver.findElement(By.css("#window .win-body")),
+                    5000,
+                    "window body did not reappear on maximizing"
+                ));
+                await driver.wait(
+                    async () => (await driver.findElements(By.css("#window .win-heading.header-min"))).length === 0,
+                    5000,
+                    "minimized window did not disappear"
+                );
                 expect(await districtField.isDisplayed()).to.be.true;
                 expect(await parcelField.isDisplayed()).to.be.true;
                 expect(await submitButton.isDisplayed()).to.be.true;
