@@ -55,11 +55,23 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
          */
         if (isMaster(url) && isChrome(browsername)) {
             it("shows layers in order of config.json in LT", async function () {
-                await (await driver.wait(until.elementLocated(By.css("ul#root li:first-child")))).click();
+                await (await driver.wait(
+                    until.elementLocated(By.css("ul#root li:first-child")),
+                    5000,
+                    "navigation bar did not appear"
+                )).click();
 
-                const tree = await driver.wait(until.elementLocated(By.css("ul#tree")));
+                const tree = await driver.wait(
+                    until.elementLocated(By.css("ul#tree")),
+                    5000,
+                    "layer tree did not appear"
+                );
 
-                await driver.wait(until.elementIsVisible(tree));
+                await driver.wait(
+                    until.elementIsVisible(tree),
+                    5000,
+                    "layer tree did not become visible"
+                );
 
                 mapOrderedElementTexts = await getOrderedTitleTexts(driver);
                 configGivenTitleOrder = getOrderedTitlesFromConfig(masterConfigJson, services);
@@ -98,7 +110,11 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
             describe("LT options cog", function () {
                 it("displays an option row", async function () {
                     await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-cog"))).click();
-                    await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings")));
+                    await driver.wait(
+                        until.elementLocated(By.css("ul#root li.layer div.layer-settings")),
+                        5000,
+                        "layer settings menu did not appear upon clicking cog symbol"
+                    );
 
                     // wait for animation to finish
                     await new Promise(r => setTimeout(r, 200));
@@ -183,9 +199,9 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
 
                 it("allows removing layer from tree and map", async function () {
                     await (await driver.wait(
-                        until.elementLocated(
-                            By.css("ul#root li.layer div.layer-settings span.remove-layer")
-                        )
+                        until.elementLocated(By.css("ul#root li.layer div.layer-settings span.remove-layer")),
+                        5000,
+                        "layer removal button did not appear in layer cog menu"
                     )).click();
 
                     await new Promise(r => setTimeout(r, 1000));
