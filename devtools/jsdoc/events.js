@@ -1321,13 +1321,6 @@
  */
 
 /**
- * @event Core#RadioRequestUtilThousandsSeparator
- * @description converts value to string and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
- * @param {String} value contains the string wich will be converted
- * @example Radio.request("Util", "thousandsSeparator", "3000.50");
- */
-
-/**
  * @event Core#RadioRequestUtilIsViewMobile
  * @description checks if device is mobile
  * @returns {Boolean} device is mobile

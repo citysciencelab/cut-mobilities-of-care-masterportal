@@ -1,5 +1,6 @@
 import Model from "@modules/core/util.js";
 import {expect} from "chai";
+import thousandsSeparator from "../../../../src/utils/thousandsSeparator";
 
 describe("core/Util", function () {
     let model;
@@ -31,29 +32,47 @@ describe("core/Util", function () {
     ];
 
     describe("thousandsSeparator", function () {
-        before(function () {
-            model = new Model();
+        it("should set two points for 7 digit number with decimals", function () {
+            expect(thousandsSeparator(1234567.890)).to.equal("1.234.567,89");
         });
         it("should set two points for 7 digit number with decimals", function () {
-            expect(model.thousandsSeparator(1234567.890)).to.equal("1.234.567,89");
+            expect(thousandsSeparator(-1234567.890)).to.equal("-1.234.567,89");
         });
         it("should set two  points for 7 digit number", function () {
-            expect(model.thousandsSeparator(3456789)).to.equal("3.456.789");
+            expect(thousandsSeparator(3456789)).to.equal("3.456.789");
+        });
+        it("should set two  points for 7 digit number", function () {
+            expect(thousandsSeparator(-3456789)).to.equal("-3.456.789");
         });
         it("should set point for 4 digit number", function () {
-            expect(model.thousandsSeparator(1000)).to.equal("1.000");
+            expect(thousandsSeparator(1000)).to.equal("1.000");
+        });
+        it("should set point for 4 digit number", function () {
+            expect(thousandsSeparator(-1000)).to.equal("-1.000");
         });
         it("should not set point for 3 digit number", function () {
-            expect(model.thousandsSeparator(785)).to.equal("785");
+            expect(thousandsSeparator(785)).to.equal("785");
+        });
+        it("should not set point for 3 digit number", function () {
+            expect(thousandsSeparator(-785)).to.equal("-785");
         });
         it("should not set point for 2 digit number", function () {
-            expect(model.thousandsSeparator(85)).to.equal("85");
+            expect(thousandsSeparator(85)).to.equal("85");
+        });
+        it("should not set point for 2 digit number", function () {
+            expect(thousandsSeparator(-85)).to.equal("-85");
         });
         it("should not set point for 1 digit number", function () {
-            expect(model.thousandsSeparator(1)).to.equal("1");
+            expect(thousandsSeparator(1)).to.equal("1");
+        });
+        it("should not set point for 1 digit number", function () {
+            expect(thousandsSeparator(-1)).to.equal("-1");
         });
         it("should work with 1 digit number with decimals", function () {
-            expect(model.thousandsSeparator(5.22)).to.equal("5,22");
+            expect(thousandsSeparator(5.22)).to.equal("5,22");
+        });
+        it("should work with 1 digit number with decimals", function () {
+            expect(thousandsSeparator(-5.22)).to.equal("-5,22");
         });
     });
     describe("sort", function () {

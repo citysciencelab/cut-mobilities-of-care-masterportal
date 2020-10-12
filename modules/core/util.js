@@ -1,6 +1,5 @@
 import * as moment from "moment";
 import uniqueId from "../../src/utils/uniqueId.js";
-import thousandsSeparator from "../../src/utils/thousandsSeparator.js";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -85,7 +84,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "getIgnoredKeys": function () {
                 return this.get("ignoredKeys");
             },
-            "thousandsSeparator": this.thousandsSeparator,
             "sort": this.sort,
             "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
@@ -136,15 +134,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     getMasterPortalVersionNumber: function () {
         return require("../../package.json").version;
-    },
-
-    /**
-     * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-     * @param  {String} value - feature attribute values
-     * @returns {string} thousandsSeparatord value
-     */
-    thousandsSeparator: function (value) {
-        return thousandsSeparator(value);
     },
 
     /**

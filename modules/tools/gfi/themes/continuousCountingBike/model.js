@@ -1,6 +1,7 @@
 import Theme from "../model";
 import ImgView from "../../objects/image/view";
 import * as moment from "moment";
+import thousandsSeparator from "../../../../../src/utils/thousandsSeparator";
 
 const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBikeTheme.prototype */{
     defaults: Object.assign({}, Theme.prototype.defaults,
@@ -119,7 +120,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                     isnum = new RegExp(/^\d+$/).test(attribute.split("|")[1]);
                     editedAttribute = attribute.split("|");
                     if (isnum === true) {
-                        editedAttribute[1] = Radio.request("Util", "thousandsSeparator", editedAttribute[1]);
+                        editedAttribute[1] = thousandsSeparator(editedAttribute[1]);
                     }
                     if (key === "Stärkster Monat im Jahr") {
                         strongestFrequentedMonth = new Date(2019, editedAttribute[0] - 1);
@@ -181,7 +182,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 date: splitted[0],
                 timestamp: new Date(year, month, day, hours, minutes, seconds, 0),
                 total: total,
-                tableData: Radio.request("Util", "thousandsSeparator", total),
+                tableData: thousandsSeparator(total),
                 r_in: r_in,
                 r_out: r_out
             });
@@ -214,7 +215,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 style: "circle",
                 timestamp: new Date(year, month, day, 0, 0, 0, 0),
                 total: total,
-                tableData: Radio.request("Util", "thousandsSeparator", total),
+                tableData: thousandsSeparator(total),
                 r_in: r_in,
                 r_out: r_out
             });
@@ -248,7 +249,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
                 year: year,
                 total: total,
-                tableData: Radio.request("Util", "thousandsSeparator", total),
+                tableData: thousandsSeparator(total),
                 r_in: r_in,
                 r_out: r_out
             });
