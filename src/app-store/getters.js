@@ -1,3 +1,5 @@
+import getQueryParams from "../utils/getQueryParams";
+
 export default {
     masterPortalVersionNumber: state => state?.masterPortalVersionNumber,
     mobile: state => state.mobile,
