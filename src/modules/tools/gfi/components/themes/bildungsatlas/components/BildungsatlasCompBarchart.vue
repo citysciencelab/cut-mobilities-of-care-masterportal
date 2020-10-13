@@ -203,6 +203,7 @@ export default {
                                 lineWidth: 1,
                                 drawBorder: false,
                                 drawOnChartArea: true,
+                                zeroLineWidth: 1,
                                 zeroLineColor: options.gridLinesColorZero,
                                 color: options.gridLinesColor
                             },
@@ -227,6 +228,7 @@ export default {
                                 lineWidth: 1,
                                 drawBorder: false,
                                 drawOnChartArea: true,
+                                zeroLineWidth: 1,
                                 zeroLineColor: options.gridLinesColorZero,
                                 color: options.gridLinesColor
                             },

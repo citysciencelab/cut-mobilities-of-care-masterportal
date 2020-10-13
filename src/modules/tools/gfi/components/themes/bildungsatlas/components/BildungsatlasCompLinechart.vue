@@ -173,8 +173,7 @@ export default {
                             padding: 10,
                             boxWidth: 8
                         },
-                        align: "start",
-                        fullWidth: false
+                        align: "start"
                     },
                     tooltips: {
                         bodyFontColor: options.colorTooltipFont,

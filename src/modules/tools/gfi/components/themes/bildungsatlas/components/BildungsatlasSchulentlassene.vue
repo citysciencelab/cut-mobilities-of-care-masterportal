@@ -490,7 +490,7 @@ export default {
 
     .panel {
         &.graphHeader {
-            padding: 0 8px 8px;
+            padding: 0 8px 20px;
             border-bottom: 2px solid #ddd;
         }
     }
@@ -499,9 +499,9 @@ export default {
         padding: 0 10px 10px;
     }
     .linechart {
-        height: 430px;
+        height: 410px;
         position: relative;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
     .footer {
         margin: 0 0 10px 10px;
