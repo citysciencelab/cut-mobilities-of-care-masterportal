@@ -25,7 +25,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         mqttPath: "/mqtt",
         subscriptionTopics: {},
         httpSubFolder: "",
-        mergeThingsByCoordinates: false,
         showNoDataValue: true,
         noDataValue: "no data",
         altitudeMode: "clampToGround",
@@ -194,10 +193,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     initializeConnection: function (onsuccess) {
         const url = this.get("useProxyUrl") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
             version = this.get("version"),
-            urlParams = this.get("urlParameter"),
-            mergeThingsByCoordinates = this.get("mergeThingsByCoordinates");
+            urlParams = this.get("urlParameter");
 
-        this.loadSensorThings(url, version, urlParams, mergeThingsByCoordinates, function (sensorData) {
+        this.loadSensorThings(url, version, urlParams, function (sensorData) {
             const epsg = this.get("epsg"),
                 features = this.createFeatures(sensorData, epsg),
                 isClustered = this.has("clusterDistance");
@@ -351,11 +349,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {String} url - url to service
      * @param  {String} version - version from service
      * @param  {String} urlParams - url parameters
-     * @param  {Boolean} mergeThingsByCoordinates - Flag if things should be merged if they have the same Coordinates
      * @return {array} all things with attributes and location
      * @param  {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
      */
-    loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates, onsuccess) {
+    loadSensorThings: function (url, version, urlParams, onsuccess) {
         const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             http = new SensorThingsHttp(),
             currentExtent = {
@@ -373,9 +370,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
 
                 allThings = this.flattenArray(result);
                 allThings = this.getNewestSensorData(allThings);
-                if (mergeThingsByCoordinates) {
-                    allThings = this.mergeByCoordinates(allThings);
-                }
 
                 allThings = this.aggregatePropertiesOfThings(allThings);
 
@@ -558,36 +552,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }
 
         return String(url) + "/v" + String(versionAsString) + "/Things?" + query;
-    },
-
-    /**
-     * merge things with equal coordinates
-     * @param  {array} allThings - contains all loaded Things
-     * @return {array} merged things
-     */
-    mergeByCoordinates: function (allThings) {
-        const mergeAllThings = [],
-            mergeAllThingsAssoc = {};
-        let jsonGeomString;
-
-        if (Array.isArray(allThings)) {
-            allThings.forEach(function (thing) {
-                // if no datastream exists
-                if (!Array.isArray(thing.Datastreams)) {
-                    return;
-                }
-
-                jsonGeomString = JSON.stringify(this.getJsonGeometry(thing, 0));
-                if (!mergeAllThingsAssoc.hasOwnProperty(jsonGeomString)) {
-                    mergeAllThingsAssoc[jsonGeomString] = [];
-                    mergeAllThings.push(mergeAllThingsAssoc[jsonGeomString]);
-                }
-
-                mergeAllThingsAssoc[jsonGeomString].push(thing);
-            }.bind(this));
-        }
-
-        return mergeAllThings;
     },
 
     /**
