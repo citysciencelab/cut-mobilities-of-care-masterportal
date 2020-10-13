@@ -277,6 +277,34 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         return d3Object;
     },
 
+    createAxisBottomOld: function (scale, xThinningFactor, xAxisTicks) {
+        const unit = xAxisTicks?.hasOwnProperty("unit") ? " " + xAxisTicks.unit : "";
+        let d3Object;
+
+        if (xAxisTicks === undefined || !xAxisTicks.hasOwnProperty("ticks")) {
+            d3Object = scale ? axisBottom(scale) : undefined
+                .tickValues(scale.domain().filter(function (d, i) {
+                    const val = i % xThinningFactor;
+
+                    return !val;
+                }))
+
+                .tickFormat(function (d) {
+                    return d + unit;
+                });
+        }
+        else {
+            d3Object = axisBottom(scale)
+                .ticks(xAxisTicks.ticks, xAxisTicks.factor)
+
+                .tickFormat(function (d) {
+                    return d + unit;
+                });
+        }
+
+        return d3Object;
+    },
+
     /**
      * Creates the axis on the left.
      * @param {Object} scale Scale of left axis.
@@ -299,6 +327,22 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                     return false;
 
                 });
+        }
+
+        return d3Object;
+    },
+
+    createAxisLeftOld: function (scale, yAxisTicks) {
+        let d3Object;
+
+        if (yAxisTicks === "undefined" && !yAxisTicks.hasOwnProperty("ticks")) {
+            d3Object = axisLeft(scale)
+                .tickFormat(function (d) {
+                    return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                });
+        }
+        else {
+            d3Object = axisLeft(scale).ticks(yAxisTicks.ticks, yAxisTicks.factor);
         }
 
         return d3Object;
@@ -404,6 +448,33 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         }
     },
 
+    appendXAxisToSvgOld: function (svg, xAxis, xAxisLabel, AxisOffset, marginTop, height) {
+        const svgBBox = svg.node().getBBox(),
+            text = xAxisLabel?.label ? xAxisLabel.label : xAxisLabel,
+            textOffset = xAxisLabel?.offset ? xAxisLabel.offset : 0,
+            textAnchor = xAxisLabel?.textAnchor ? xAxisLabel.textAnchor : "middle",
+            fill = xAxisLabel?.fill ? xAxisLabel.fill : "#000",
+            fontSize = xAxisLabel?.fontSize ? xAxisLabel.fontSize : 10,
+            heightDraw = height ? height : svgBBox.height - marginTop;
+        let xAxisDraw = xAxis,
+            xAxisBBox = "";
+
+        xAxisDraw = svg.append("g")
+            .attr("transform", "translate(" + AxisOffset + "," + heightDraw + ")")
+            .attr("class", "xAxisDraw")
+            .call(xAxis);
+        xAxisBBox = svg.selectAll(".xAxisDraw").node().getBBox();
+
+        // text for xAxisDraw
+        xAxisDraw.append("text")
+            .attr("x", xAxisBBox.width / 2)
+            .attr("y", xAxisBBox.height + textOffset + 10)
+            .style("text-anchor", textAnchor)
+            .style("fill", fill)
+            .style("font-size", fontSize)
+            .text(text);
+    },
+
     /**
      * Appends the y-axis to the svg
      * @param {SVG} svg SVG.
@@ -443,6 +514,27 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 .style("font-size", fontSize)
                 .text(label);
         }
+    },
+
+    appendYAxisToSvgOld: function (svg, yAxis, yAxisLabel, textOffset, axisOffset) {
+        let yAxisDraw = yAxis,
+            yAxisBBox = "";
+
+        yAxisDraw = svg.append("g")
+            .attr("transform", "translate(0, " + axisOffset + ")")
+            .attr("class", "yAxisDraw")
+            .call(yAxisDraw);
+        yAxisBBox = svg.selectAll(".yAxisDraw").node().getBBox();
+
+        // text for yAxis
+        yAxisDraw.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", 0 - (yAxisBBox.height / 2))
+            .attr("y", 0 - yAxisBBox.width - (2 * textOffset))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .style("fill", "#000")
+            .text(yAxisLabel);
     },
 
     /**
@@ -557,6 +649,15 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             .append("g")
             .attr("class", "graph")
             .attr("transform", "translate(" + left + "," + top + ")");
+    },
+
+    createSvgOld: function (selector, marginObj, width, height, svgClass) {
+        return select(selector).append("svg")
+            .attr("width", width + marginObj.left + marginObj.right)
+            .attr("height", height + marginObj.top + marginObj.bottom)
+            .attr("class", svgClass)
+            .append("g")
+            .attr("transform", "translate(" + marginObj.left + "," + marginObj.top + ")");
     },
 
     /**
@@ -803,21 +904,33 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             yAxisTicks = graphConfig.yAxisTicks,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr, xAxisTicks),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray, yAxisTicks),
-            xAxis = this.createAxisBottom(scaleX, xAxisTicks),
-            yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
-            svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
             barWidth = width / data.length,
             setTooltipValue = graphConfig.setTooltipValue;
 
-        if (graphConfig.hasOwnProperty("legendData")) {
-            this.appendLegend(svg, graphConfig.legendData);
+        if (graphConfig?.grahpSubType === "old") {
+            const xAxis = this.createAxisBottomOld(scaleX, 1, xAxisTicks),
+                yAxis = this.createAxisLeftOld(scaleY, yAxisTicks),
+                svg = this.createSvgOld(selector, margin, width, height, svgClass);
+
+            this.drawBarsOld(svg, data, scaleX, scaleY, height, selector, barWidth, xAttr, attrToShowArray);
+            this.appendYAxisToSvgOld(svg, yAxis, yAxisLabel, 0, 0);
+            this.appendXAxisToSvgOld(svg, xAxis, xAxisLabel, 0, 0, height);
+        }
+        else {
+            const xAxis = this.createAxisBottom(scaleX, xAxisTicks),
+                yAxis = this.createAxisLeft(scaleY, yAxisTicks),
+                svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass);
+
+            if (graphConfig.hasOwnProperty("legendData")) {
+                this.appendLegend(svg, graphConfig.legendData);
+            }
+
+            this.drawBars(svg, data, scaleX, scaleY, selector, xAttr, attrToShowArray, barWidth, setTooltipValue);
+            this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
+            this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width, scaleY);
         }
 
-        this.drawBars(svg, data, scaleX, scaleY, selector, xAttr, attrToShowArray, barWidth, setTooltipValue);
-        this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
-
-        this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width, scaleY);
     },
 
     /**
@@ -888,6 +1001,30 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 }
 
                 // default
+                return (Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %";
+            });
+    },
+
+    drawBarsOld: function (svg, data, x, y, height, selector, barWidth, xAttr, attrToShowArray) {
+        svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar" + selector.split(".")[1])
+            .attr("x", function (d) {
+                return x(d[xAttr]);
+            })
+            .attr("y", function (d) {
+                return y(d[attrToShowArray[0]]);
+            })
+            .attr("width", barWidth - 1)
+            .attr("height", function (d) {
+                return height - y(d[attrToShowArray[0]]);
+            })
+            .on("mouseover", function () {
+                select(this);
+            }, this)
+            .append("title")
+            .text(function (d) {
                 return (Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %";
             });
     },
