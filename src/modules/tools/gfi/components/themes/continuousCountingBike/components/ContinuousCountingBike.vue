@@ -122,7 +122,7 @@ export default {
                     timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
                     year: year,
                     total: total,
-                    tableData: Radio.request("Util", "punctuate", total),
+                    tableData: thousandsSeparator(total),
                     r_in: r_in,
                     r_out: r_out
                 });
@@ -191,7 +191,7 @@ export default {
                     style: "circle",
                     timestamp: new Date(year, month, day, 0, 0, 0, 0),
                     total: total,
-                    tableData: Radio.request("Util", "punctuate", total),
+                    tableData: thousandsSeparator(total),
                     r_in: r_in,
                     r_out: r_out
                 });
@@ -419,7 +419,7 @@ export default {
 
 <template>
     <div class="continuousCountingBike">
-        <div class="panel bikeLevelHeader">
+        <div class="panel bikeLevelHeader  text-align-center">
             <strong>{{ feature.getMappedProperties().Name }}</strong>
             <br>
             <small>Art: {{ feature.getMappedProperties().Typ }}</small>
