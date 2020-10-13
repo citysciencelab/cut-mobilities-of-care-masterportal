@@ -99,6 +99,13 @@ export default {
             if (this.currentViewType === "Detached") {
                 this.componentKey = !this.componentKey;
             }
+        },
+        /**
+         * Whenever gfiFeatures changes, set pagerIndex to zero.
+         * @returns {Void} -
+         */
+        gfiFeatures: function () {
+            this.pagerIndex = 0;
         }
     },
     beforeUpdate () {
@@ -108,13 +115,12 @@ export default {
         ...mapMutations("Map", ["setGfiFeatures"]),
         ...mapMutations("Tools/Gfi", ["setCurrentFeature"]),
         /**
-         * Reset means to set the gfiFeatures to null and the pager index to zero.
+         * Reset means to set the gfiFeatures to null.
          * This closes the gfi window/modal/popover.
          * @returns {Void}  -
          */
         reset: function () {
             this.setGfiFeatures(null);
-            this.pagerIndex = 0;
         },
         /**
          * Increases the index for the pagination.
