@@ -114,7 +114,7 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
         });
     });
     describe("components", () => {
-        it("should find the child component BildungsatlasBarchart", () => {
+        it("should find the child component BildungsatlasBalkendiagramm", () => {
             const singleTestWrapper = shallowMount(Bildungsatlas, {
                 propsData: {
                     feature: {
@@ -123,7 +123,7 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
                         },
                         getGfiFormat () {
                             return {
-                                gfiSubTheme: "BildungsatlasBarchart"
+                                gfiSubTheme: "BildungsatlasBalkendiagramm"
                             };
                         }
                     }
@@ -131,7 +131,7 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
                 localVue
             });
 
-            expect(singleTestWrapper.findComponent({name: "BildungsatlasBarchart"}).exists()).to.be.true;
+            expect(singleTestWrapper.findComponent({name: "BildungsatlasBalkendiagramm"}).exists()).to.be.true;
         });
         it("should find the child component BildungsatlasSchulentlassene", () => {
             const singleTestWrapper = shallowMount(Bildungsatlas, {

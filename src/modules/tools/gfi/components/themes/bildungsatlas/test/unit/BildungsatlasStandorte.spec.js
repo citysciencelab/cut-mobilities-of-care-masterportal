@@ -81,13 +81,6 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
             expect(wrapper.find(".tableStandort").findAll("td").at(0).findAll("span").at(0).text()).to.equal("Borchertring 38");
             expect(wrapper.find(".tableStandort").findAll("td").at(0).findAll("span").at(1).text()).to.equal("22309 Hamburg");
         });
-        it("should create html with the expected website as link with target _blank", () => {
-            const aTag = wrapper.find(".tableWebsite").findAll("td").at(1).find("a");
-
-            expect(aTag.attributes("href")).to.equal("http://www.schuleamsee-hamburg.de");
-            expect(aTag.attributes("target")).to.equal("_blank");
-            expect(aTag.text().trim()).to.equal("http://www.schuleamsee-hamburg.de");
-        });
     });
 
     describe("template - render html with the exepcted data in the table", () => {
@@ -174,6 +167,12 @@ describe("src/modules/tools/gfi/components/themes/bildungsatlas/components/Bildu
             expect(trList.at(13).findAll("td").at(0).text()).to.equal("davon in der Sekundarstufe II");
             expect(trList.at(13).findAll("td").at(0).attributes("class")).to.equal("sublist");
             expect(trList.at(13).findAll("td").at(1).text()).to.equal("BA_Val_0");
+        });
+        it("should create url link", () => {
+            const trList = wrapper.find(".tableStandort").find("tbody").findAll("tr");
+
+            expect(trList.at(14).findAll("td").at(0).text()).to.equal("Website");
+            expect(trList.at(14).findAll("td").at(1).find("a").text()).to.equal("http://www.schuleamsee-hamburg.de");
         });
     });
 });
