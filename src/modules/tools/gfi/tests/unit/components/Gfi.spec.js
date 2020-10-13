@@ -136,7 +136,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
         expect(wrapper.findComponent({name: "Detached"}).exists()).to.be.false;
     });
 
-    it("the close-event should set pagerIndex to zero and call setGfiFeatures commit", async () => {
+    it("the close-event should call setGfiFeatures commit", async () => {
         const mockMapMutations = {
                 setGfiFeatures: sinon.stub()
             },
@@ -197,6 +197,25 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
         await wrapper.findComponent(Mobile).vm.$emit("close");
         expect(mockMapMutations.setGfiFeatures.calledOnce).to.be.true;
+    });
+
+    it("should set pagerIndex to zero if gfiFeatures change", () => {
+        const wrapper = shallowMount(GfiComponent, {
+            data () {
+                return {
+                    pagerIndex: 1
+                };
+            },
+            computed: {
+                isMobile: () => false,
+                active: () => true,
+                mapSize: () => [],
+                gfiFeatures: () => "Test"
+            },
+            localVue
+        });
+
+        wrapper.vm.$options.watch.gfiFeatures.call(wrapper.vm, null);
         expect(wrapper.vm.pagerIndex).to.equal(0);
     });
 
