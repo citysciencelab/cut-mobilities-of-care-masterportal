@@ -185,10 +185,6 @@ export default {
                         ></td>
                         <td>{{ obj.value }}</td>
                     </tr>
-                </tbody>
-            </table>
-            <table class="table table-striped tableWebsite">
-                <tbody>
                     <tr>
                         <td>Website</td>
                         <td>
@@ -298,6 +294,9 @@ export default {
                             text-align: right;
                         }
                     }
+                    &:last-child {
+                        border-bottom: 1px solid #ddd;
+                    }
                 }
             }
         }
@@ -306,7 +305,7 @@ export default {
         margin-top: 10px;
     }
     td.sublist {
-        padding-left: 40px;
+        padding-left: 20px;
     }
 
     .gfi-info {

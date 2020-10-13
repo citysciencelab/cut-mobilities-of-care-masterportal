@@ -3,7 +3,7 @@ import thousandsSeparator from "../../../../../../../utils/thousandsSeparator.js
 import BildungsatlasCompBarchart from "./BildungsatlasCompBarchart.vue";
 
 export default {
-    name: "BildungsatlasBarchart",
+    name: "BildungsatlasBalkendiagramm",
     components: {
         BildungsatlasCompBarchart
     },
