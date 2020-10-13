@@ -602,8 +602,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * Todo, überdenken ob diese Funktion noch benötigt wird, da die meisten Attribute bereits am Thing hängen!!!!!!!!
-     *
      * Aggregates the properties of the things.
      * @param {Object[]} allThings - all things
      * @returns {Object[]} - aggregatedThings
@@ -617,7 +615,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             if (Array.isArray(thing)) {
                 let keys = [],
                     props = {},
-                    datastreams = []; //  todo werden die hier benötigt???
+                    datastreams = [];
 
                 aggregatedThing.location = this.getJsonGeometry(thing[0], 0);
                 thing.forEach(thing2 => {
