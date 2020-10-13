@@ -58,45 +58,41 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
     describe("createGfiHeadingChargingStation", function () {
         it("should return an object with keys and blank values for undefined input", function () {
             expect(model.createGfiHeadingChargingStation(undefined)).to.be.an("object").that.includes({
-                StandortId: "",
-                Adresse: "",
+                Name: "",
+                Beschreibung: "",
                 Eigentümer: ""
             });
         });
         it("should return an object with keys and blank values for empty object input", function () {
             expect(model.createGfiHeadingChargingStation({})).to.be.an("object").that.includes({
-                StandortId: "",
-                Adresse: "",
+                Name: "",
+                Beschreibung: "",
                 Eigentümer: ""
             });
         });
         it("should return an object with adress as object for correct object input", function () {
             const allProperties = {
-                chargings_station_nr: ["100", "100"],
-                location_name: ["Musterstrasse", "Musterstrasse"],
-                postal_code: ["99999", "99999"],
-                city: ["Hamburg", "Hamburg"],
-                owner: ["Mustermann", "Mustermann"]
+                name: ["E-Ladestation DE*SNH*E220", "E-Ladestation DE*SNH*E220"],
+                description: ["Elektoladestation zum Laden von E-Autos.", "Elektoladestation zum Laden von E-Autos."],
+                ownerThing: ["Mustermann", "Mustermann"]
             };
 
             expect(model.createGfiHeadingChargingStation(allProperties)).to.be.an("object").that.includes({
-                StandortId: "100",
-                Adresse: "Musterstrasse, 99999 Hamburg",
+                Name: "E-Ladestation DE*SNH*E220",
+                Beschreibung: "Elektoladestation zum Laden von E-Autos.",
                 Eigentümer: "Mustermann"
             });
         });
         it("should return an object with adress as object for correct object input", function () {
             const allProperties = {
-                chargings_station_nr: [100],
+                name: ["E-Ladestation DE*SNH*E220"],
                 dd: ["Musterstrasse", "Musterstrasse"],
-                thtbeefvvw: ["99999", "99999"],
-                city: ["Hamburg", "Hamburg"],
-                owner: ["Mustermann"]
+                ownerThing: ["Mustermann"]
             };
 
             expect(model.createGfiHeadingChargingStation(allProperties)).to.be.an("object").that.includes({
-                StandortId: "100",
-                Adresse: "",
+                Name: "E-Ladestation DE*SNH*E220",
+                Beschreibung: "",
                 Eigentümer: "Mustermann"
             });
         });

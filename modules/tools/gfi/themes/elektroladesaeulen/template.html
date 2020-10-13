@@ -8,17 +8,20 @@
         <br>
     <% }); %>
 </div>
+
 <ul class="nav nav-pills" >
     <li value= "daten" class="tab-toggle active"><a data-toggle="tab" href="#tabelle">Daten</a></li>
     <li value= "diagrammVerfuegbar" class="tab-toggle"><a data-toggle="tab" href="#diagrammVerfuegbar">Verfügbarkeit</a></li>
     <li value= "diagrammBelegt" class="tab-toggle"><a data-toggle="tab" href="#diagrammBelegt">Auslastung</a></li>
     <li value= "diagrammAusserBetrieb" class="tab-toggle"><a data-toggle="tab" href="#diagrammAusserBetrieb">Außer Betrieb</a></li>
 </ul>
+
 <div class="buttonDiv text-center" hidden="hidden">
     <button id= "left" type="button" class="leftButton kat btn" title="Vorheriger Wochentag"><span class="glyphicon glyphicon-chevron-left"></span></button>
     <span class="day"></span>
     <button id= "right"type="button" class="rightButton kat btn" title="Nächster Wochentag"><span class="glyphicon glyphicon-chevron-right"></span></button>
 </div>
+
 <div class="tab-content">
 <div id= "daten" class="tab-pane fade in active">
     <table class="table">
@@ -31,7 +34,7 @@
             </tr>
         </thead>
         <tbody>
-            <% Object.entries(gfiProperties).forEach(function (property) { 
+            <% Object.entries(gfiProperties).forEach(function(property) {
                 const value = property[1],
                     key = property[0];
             %>
