@@ -26,7 +26,7 @@ async function SearchByCoordTests ({builder, url, resolution, capability}) {
                 searchButton: By.css("div#window .win-body button"),
                 searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]")
             },
-            expectedResolution = isBasic(url) || isCustom(url) || isDefault(url) ? 0.66 : 0.13;
+            expectedResolution = 0.66;
         let driver, searchMarkerContainer, counter;
 
         before(async function () {
