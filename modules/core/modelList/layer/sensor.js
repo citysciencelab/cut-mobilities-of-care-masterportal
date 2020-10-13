@@ -948,19 +948,37 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
         const dataStreamIdIdx = feature.get("dataStreamId").split(" | ").indexOf(String(dataStreamId)),
             dataStreamNameArray = feature.get("dataStreamName").split(" | "),
-            dataStreamName = dataStreamNameArray.hasOwnProperty(dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "";
-        let updatedFeature = feature;
+            dataStreamName = dataStreamNameArray.hasOwnProperty(dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "",
+            preparedResult = result === "" && this.get("showNoDataValue") ? this.get("noDataValue") : result;
 
-        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName, result, true);
-        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime, true);
-        updatedFeature = this.aggregateDataStreamValue(feature);
-        updatedFeature = this.aggregateDataStreamPhenomenonTime(feature);
+        // Here we only work with a reference to the feature, otherwise it leads to blinking behavior with clustered features.
+        feature.set("dataStream_" + dataStreamId + "_" + dataStreamName, preparedResult, true);
+        feature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime, true);
+        feature.set("dataStreamValue", this.replaceStreamProperties(feature, "dataStreamValue", dataStreamId, preparedResult));
+        feature.set("dataStreamPhenomenonTime", this.replaceStreamProperties(feature, "dataStreamPhenomenonTime", dataStreamId, phenomenonTime));
 
-        // Redraw feature (update icon)
-        this.get("layer").getSource().removeFeature(feature);
-        this.get("layer").getSource().addFeature(updatedFeature);
+        Radio.trigger("GFI", "changeFeature", feature);
+    },
 
-        Radio.trigger("GFI", "changeFeature", updatedFeature);
+    /**
+     * Replaced a property of the feature in the place of the given datastreamId.
+     * @param {ol/feature} feature - Feature with properties.
+     * @param {String} property - Property to be updated.
+     * @param  {String} dataStreamId - The dataStreamId.
+     * @param  {String} result - The new value.
+     * @returns {String} - The updated Property.
+     */
+    replaceStreamProperties: function (feature, property, dataStreamId, result) {
+        const dataStreamIds = feature.get("dataStreamId").split(" | "),
+            dataStreamProperty = feature.get(property).split(" | ");
+
+        dataStreamIds.forEach((id, index) => {
+            if (id === dataStreamId) {
+                dataStreamProperty[index] = result;
+            }
+        });
+
+        return dataStreamProperty.join(" | ");
     },
 
     /**
@@ -1020,11 +1038,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     getFeatureByDataStreamId: function (features, id) {
         let feature;
 
-        if (features && features.length > 0 && id) {
+        if (features?.length > 0 && id) {
             feature = features.filter(feat => {
                 return feat.get("dataStreamId") ? feat.get("dataStreamId").includes(id) : false;
             })[0];
         }
+
         return feature;
     },
 
