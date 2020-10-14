@@ -435,7 +435,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 
 ## gfi_theme ##
 
-Das Attribut "gfiTheme" kann entweder als String angegeben werden oder als Objekt.
+Das Attribut "gfiTheme" kann entweder als String oder als Object angegeben werde.
 Wird es als String angegeben, so wird das entsprechende Template verwendet.
 
 Wird es als Objekt verwendet, so gelten folgende Parameter.
@@ -462,7 +462,29 @@ Hier werden die Parameter für die GFI-Templates definiert.
 
 |Name|params|
 |----|------|
+|images|**[params](#markdown-header-gfi_theme_images_params)**|
 |sensor|**[params](#markdown-header-gfi_theme_sensor_params)**|
+
+***
+
+## gfi_theme_images_params ##
+Hier werden die Parameter für das GFI-Template "images" definiert.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|
+|----|-------------|---|-------|------------|
+|imageLinks|nein|String,String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird nur der erste gefundene Wert verwendet.|
+
+**Beispiel gfiTheme für das template "Images":**
+
+```
+#!json
+"gfiTheme": {
+   "name": "images",
+   "params": {
+         "imageLinks": ["imageLink", "linkImage", "abc"],
+   }
+}
+```
 
 ***
 
