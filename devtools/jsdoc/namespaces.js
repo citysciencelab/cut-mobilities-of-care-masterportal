@@ -597,11 +597,6 @@
  * @description GFI Theme for Touch-Table
  */
 
-/**
- * @namespace Trinkwasser
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Trinkwasser
- */
 
 /**
  * @namespace VerkehrsStaerken

@@ -283,9 +283,6 @@ const Theme = Backbone.Model.extend(/** @lends ThemeModel.prototype */{
                 clone.set("gfiContent", [singlePgfi]);
                 clone.set("id", Radio.request("Util", "uniqueId"));
                 clone.set("isReady", true);
-                if (this.get("gfiTheme") === "trinkwasser") {
-                    clone.splitContent();
-                }
                 this.collection.add(clone);
             }
         }, this);
