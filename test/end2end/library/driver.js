@@ -84,9 +84,13 @@ async function getUnnavigatedDriver (builder, resolution) {
         widthHeight = resolution.split("x").map(x => parseInt(x, 10));
 
     await driver.manage().window().setRect({width: widthHeight[0], height: widthHeight[1]});
-    await driver.manage().setTimeouts( { implicit: 5000, pageLoad: 
-        60000, script: 30000 } );
-        
+    await driver.manage().setTimeouts(
+        {
+            implicit: 5000,
+            pageLoad: 60000,
+            script: 30000
+        }
+    );
 
     return driver;
 }

@@ -241,7 +241,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
 
             await driver.wait(until.elementLocated(toolwindow), 5000);
-            
+
             expect(driver.findElement(toolwindow)).to.exist;
         });
 
