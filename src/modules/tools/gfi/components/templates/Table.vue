@@ -186,7 +186,7 @@ export default {
             if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
                 theme = configTheme;
             }
-            else if (this.$themeAddons.includes(configTheme)) { // handling of addon-themes
+            else if (this.$themeAddons && this.$themeAddons.includes(configTheme)) { // handling of addon-themes
                 theme = configTheme;
             }
             else {
