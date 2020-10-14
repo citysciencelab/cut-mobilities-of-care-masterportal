@@ -42,18 +42,18 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                 // retry until functionality is active - may get stuck else
                 do {
                     await (await driver.wait(
-                        until.elementLocated(By.css("ul#root li.dropdown span.glyphicon-book")))
+                        until.elementLocated(By.id("legend-menu")), 2000)
                     ).click();
                     await driver.wait(new Promise(r => setTimeout(r, 50)));
                 } while (
                     // .legend-win only available from the start in master, must check for availability in custom
-                    (await driver.findElements(By.css("div.legend-win"))).length === 0 ||
+                    (await driver.findElements(By.id("legend"))).length === 0 ||
                     // additional check for master: since element is available from the start, wait until visible
-                    !await (await driver.findElements(By.css("div.legend-win")))[0].isDisplayed()
+                    !await (await driver.findElements(By.id("legend")))[0].isDisplayed()
                 );
 
-                const legendContent = await driver.wait(until.elementLocated(By.css("div.legend-win-content"))),
-                    headers = await legendContent.findElements(By.tagName("h4")),
+                const legendContent = await driver.wait(until.elementLocated(By.css("div.legend-content")), 2000),
+                    headers = await legendContent.findElements(By.css("div.layer-title")),
                     text = await getTextOfElements(headers);
 
                 for (const entry of expectedEntries) {
