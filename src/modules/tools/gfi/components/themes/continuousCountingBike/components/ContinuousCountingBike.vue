@@ -24,7 +24,8 @@ export default {
             infoData: [],
             dayData: {},
             weekData: {},
-            yearData: {}
+            yearData: {},
+            downloadLink: ""
         };
     },
     mounted () {
@@ -43,13 +44,12 @@ export default {
                 weekProps = all.hasOwnProperty("Wochenlinie") ? all.Wochenlinie : null,
                 yearProps = all.hasOwnProperty("Jahrgangslinie") ? all.Jahrgangslinie : null;
 
+            this.downloadLink = all.hasOwnProperty("Download") ? all.Download : this.downloadLink;
             this.infoData = infoProps ? this.getInfoData(infoProps) : null;
-            //  this.setDayDataset(this.prepareDayDataset(this.splitDayDataset(dayLine)));
             this.dayData = dayProps ? this.getDayData(this.splitDayData(dayProps)) : null;
-            // this.setLastSevenDaysDataset(this.prepareLastSevenDaysDataset(this.splitLastSevenDaysDataset(lastSevenDaysLine)));
             this.weekData = weekProps ? this.getWeekData(this.splitWeekData(weekProps)) : null;
-            // this.setYearDataset(this.prepareYearDataset(this.splitYearDataset(yearLine)));
             this.yearData = yearProps ? this.getYearData(this.splitYearData(yearProps)) : null;
+             
 
             this.dayData.Name = all.Name;
             this.weekData.Name = all.Name;
@@ -408,13 +408,17 @@ export default {
          * Setting the gfi content max width the same as graph
          * @returns {Void} -
          */
-        setContentStyle: function () {
+        setContentStyle () {
             if (document.getElementsByClassName("gfi-content").length) {
                 document.getElementsByClassName("gfi-content")[0].style.maxWidth = "780px";
             }
-        }
+        },
+        onClick (evt){ 
+            evt.stopPropagation();   
+            window.open(this.downloadLink); 
+        }    
     }
-};
+}
 </script>
 
 <template>
@@ -506,7 +510,11 @@ export default {
             v-if="!isActiveTab('info')"
             class="continuousCountingBike tab-pane downloadButton fade in active"
         >
-            <button class="btn btn-primary csv-download">
+            <button 
+                class="btn btn-primary csv-download"
+                type="button"
+                @click="onClick"
+            >
                 <span class="glyphicon glyphicon-download"></span>Download
             </button>
         </div>
