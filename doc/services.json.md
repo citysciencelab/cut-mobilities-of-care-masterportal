@@ -435,7 +435,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 
 ## gfi_theme ##
 
-Das Attribut "gfiTheme" kann entweder als String oder als Object angegeben werde.
+Das Attribut "gfiTheme" kann entweder als String oder als Object angegeben werden.
 Wird es als String angegeben, so wird das entsprechende Template verwendet.
 
 Wird es als Objekt verwendet, so gelten folgende Parameter.
