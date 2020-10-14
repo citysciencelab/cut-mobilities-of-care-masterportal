@@ -1,5 +1,6 @@
 <script>
 import Default from "../themes/Default.vue";
+import Images from "../themes/images/components/Images.vue";
 import ActiveCityMaps from "../themes/ActiveCityMaps.vue";
 import Flaecheninfo from "../themes/flaecheninfo/components/Flaecheninfo.vue";
 import Dipas from "../themes/Dipas.vue";
@@ -18,6 +19,7 @@ export default {
     name: "Detached",
     components: {
         Default,
+        Images,
         ActiveCityMaps,
         Flaecheninfo,
         Dipas,
@@ -141,7 +143,8 @@ export default {
          */
         getTheme () {
             const gfiComponents = Object.keys(this.$options.components),
-                configTheme = upperFirst(this.feature.getTheme());
+                gfitheme = this.feature.getTheme(),
+                configTheme = upperFirst(typeof gfitheme === "object" ? gfitheme.name : gfitheme);
 
             let theme = "";
 
