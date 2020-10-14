@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
      * effectively changing indices lots of time; do this when all e2e tests have been written
      */
     resolutions = [
-        "1024x768"
+        "1920x1080"
         // "600x800"
     ],
     configs = new Map([
