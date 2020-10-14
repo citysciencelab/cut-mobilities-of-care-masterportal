@@ -44,7 +44,7 @@ export default {
         <template v-if="i18NextInitialized">
             <component
                 :is="$options.components[addonKey]"
-                v-for="addonKey in $addons"
+                v-for="addonKey in $toolAddons"
                 :key="addonKey"
             />
         </template>

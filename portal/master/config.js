@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["einwohnerabfrage", "VueAddon"],
+    addons: ["einwohnerabfrage", "VueAddon", "trinkwasser"],
     alerting: {
         // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json"
     },
