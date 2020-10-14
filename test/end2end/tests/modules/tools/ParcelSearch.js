@@ -66,14 +66,14 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
                 await toolParcelSearch.click();
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)));
-                await driver.wait(until.elementLocated(selectors.districtField));
-                await driver.wait(until.elementLocated(selectors.districtLabel));
+                await driver.wait(until.elementLocated(selectors.districtField), 5000);
+                await driver.wait(until.elementLocated(selectors.districtLabel), 5000);
                 if (withCadastral) {
-                    await driver.wait(until.elementLocated(selectors.cadastralDistrictField));
-                    await driver.wait(until.elementLocated(selectors.cadastralDistrictLabel));
+                    await driver.wait(until.elementLocated(selectors.cadastralDistrictField), 5000);
+                    await driver.wait(until.elementLocated(selectors.cadastralDistrictLabel), 5000);
                 }
-                await driver.wait(until.elementLocated(selectors.parcelLabel));
-                await driver.wait(until.elementLocated(selectors.parcelField));
+                await driver.wait(until.elementLocated(selectors.parcelLabel), 5000);
+                await driver.wait(until.elementLocated(selectors.parcelField), 5000);
 
                 searchMarker = await driver.findElement(selectors.searchMarker);
                 districtField = await driver.findElement(selectors.districtField);
@@ -96,7 +96,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
             });
 
             it("can be minimized", async () => {
-                await driver.wait(until.elementLocated(selectors.minimize));
+                await driver.wait(until.elementLocated(selectors.minimize), 5000);
 
                 const minimize = await driver.findElement(selectors.minimize);
 
@@ -113,7 +113,7 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
             });
 
             it("can be maximized again", async () => {
-                await driver.wait(until.elementLocated(selectors.maximize));
+                await driver.wait(until.elementLocated(selectors.maximize), 5000);
 
                 const maximize = await driver.findElement(selectors.maximize);
 
