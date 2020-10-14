@@ -7,7 +7,6 @@ import Solaratlas from "../themes/Solaratlas.vue";
 import Schulinfo from "../themes/schulinfo/components/Schulinfo.vue";
 import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
 import DataTable from "../themes/dataTable/components/DataTable.vue";
-import Trinkwasser from "../themes/Trinkwasser.vue";
 import Bildungsatlas from "../themes/bildungsatlas/components/Bildungsatlas.vue";
 
 import upperFirst from "../../../../../utils/upperFirst";
@@ -23,7 +22,6 @@ export default {
         Solaratlas,
         DataTable,
         TrafficCount,
-        Trinkwasser,
         Bildungsatlas
     },
     props: {
@@ -90,6 +88,9 @@ export default {
             let theme = "";
 
             if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
+                theme = configTheme;
+            }
+            else if (this.$themeAddons.includes(configTheme)) { // handling of addon-themes
                 theme = configTheme;
             }
             else {
