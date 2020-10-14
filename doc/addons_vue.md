@@ -23,7 +23,7 @@ addons
 |   |   |-- gettersMyAddon1.js
 |   |   |-- indexMyAddon1.js
 |   |   |-- mutationsMyAddon1.js
-|   |   |-- MyAddon1.js //is the equivalent of index.js
+|   |   |-- index.js
 |   |
 |	|-- locales
 |	|   |-- de
@@ -76,7 +76,7 @@ myMasterPortalFolder/
             components/
                 VueAddon.vue
             store
-                VueAddon.js
+                index.js
     devtools/
     doc/
     [...]
@@ -85,7 +85,7 @@ myMasterPortalFolder/
 2.2. Addon-Code schreiben:
 
 ```js
-// myMasterPortalFolder/addons/VueAddon/store/VueAddon.js
+// myMasterPortalFolder/addons/VueAddon/store/index.js
 
 import GenericTool from "../../../src/modules/tools/indexTools";
 import composeModules from "../../../src/app-store/utils/composeModules";
@@ -182,8 +182,6 @@ export default {
     </Tool>
 </template>
 ```
-
-Alle weiteren Dateien zum VueAddon können [hier](./VueAddon.zip) heruntergeladen werden.
 
 2.3 Die `index.js` Datei schreiben:
 Die `index.js` dient dazu alle Komponenten (Vue-Components, Store und Übersetzungen) zu aggregieren und als einen
