@@ -1,7 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getCenter, getResolution, setResolution} = require("../../../library/scripts"),
-    {isBasic, isDefault, isCustom} = require("../../../settings"),
     {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
