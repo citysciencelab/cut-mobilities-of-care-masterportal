@@ -28,7 +28,7 @@ module.exports = function () {
         let vue = false;
 
         if (typeof addonEntryPoints[addonName] !== "string") {
-            vue = addonEntryPoints[addonName].vue;
+            vue = true;
         }
         const entry = vue ? "index.js" : addonEntryPoints[addonName],
             addonFilePath = path.resolve(addonPath, addonName, entry);
@@ -39,7 +39,9 @@ module.exports = function () {
         }
 
         if (vue) {
-            vueAddonsRelPaths[addonName] = [addonName, "index.js"].join("/");
+            vueAddonsRelPaths[addonName] = Object.assign({
+                "entry": [addonName, "index.js"].join("/")
+            }, addonEntryPoints[addonName]);
         }
         else {
             addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
