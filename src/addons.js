@@ -17,11 +17,11 @@ export default async function (config) {
             try {
                 const addonConf = allAddons[addonKey];
 
-                if (addonConf) {
-                    if (addonConf.hasOwnProperty("tool") && addonConf.tool === true) {
+                if (addonConf && addonConf.hasOwnProperty("type")) {
+                    if (addonConf.type === "tool") {
                         await loadToolAddons(addonKey);
                     }
-                    else if (addonConf.hasOwnProperty("gfiTheme") && addonConf.gfiTheme === true) {
+                    else if (addonConf.type === "gfiTheme") {
                         await loadThemes(addonKey);
                     }
                 }

@@ -73,9 +73,9 @@ Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordner
 
 Es werden 2 Arten von Addons unterstützt:
 
-Werkzeuge: `"tool":true`
+Werkzeuge: `"type": "tool"`
 
-GFI-Themes: `"gfiTheme": true`
+GFI-Themes: `"type": "gfiTheme"`
 
 Von allen Einträge in der addonsConf.json, die ein Objekt enthalten wird davon ausgegangen, dass sie mit vue programmiert sind (alte backbone-ddons enthalten nur einen String).
 
@@ -84,10 +84,10 @@ Von allen Einträge in der addonsConf.json, die ein Objekt enthalten wird davon 
 {
   [...]
   "MyAddon1": {
-    "tool":true
-  }
+    "type": "tool"
+  },
   "MyGfiTheme": {
-    "gfiTheme": true
+    "type": "gfiTheme"
   }
 }
 ```
