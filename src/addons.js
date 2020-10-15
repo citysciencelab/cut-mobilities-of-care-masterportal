@@ -15,11 +15,15 @@ export default async function (config) {
     if (config) {
         const addons = config.map(async addonKey => {
             try {
-                if (typeof allAddons[addonKey] !== "undefined") {
-                    await loadToolAddons(addonKey);
-                }
-                else if (typeof allAddons["gfiThemes/" + addonKey] !== "undefined") {
-                    await loadThemes(addonKey);
+                const addonConf = allAddons[addonKey];
+
+                if (addonConf) {
+                    if (addonConf.hasOwnProperty("tool") && addonConf.tool === true) {
+                        await loadToolAddons(addonKey);
+                    }
+                    else if (addonConf.hasOwnProperty("gfiTheme") && addonConf.gfiTheme === true) {
+                        await loadThemes(addonKey);
+                    }
                 }
             }
             catch (e) {
@@ -42,7 +46,7 @@ async function loadThemes (addonKey) {
         /* webpackChunkName: "[request]" */
         /* webpackInclude: /addons[\\\/].*[\\\/]index.js$/ */
         /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
-        `../addons/${allAddons["gfiThemes/" + addonKey]}`
+        `../addons/${allAddons[addonKey].entry}`
     ),
         addon = addonModule.default;
 
@@ -61,7 +65,7 @@ async function loadToolAddons (addonKey) {
         /* webpackChunkName: "[request]" */
         /* webpackInclude: /addons[\\\/].*[\\\/]index.js$/ */
         /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
-        `../addons/${allAddons[addonKey]}`
+        `../addons/${allAddons[addonKey].entry}`
     ),
         addon = addonModule.default;
 
@@ -69,10 +73,6 @@ async function loadToolAddons (addonKey) {
     for (const localeKey in addon.locales) {
         i18next.addResourceBundle(localeKey, "additional", addon.locales[localeKey], true);
     }
-
-
-    // Add the component to vue instance globally
-    Vue.component(addon.component.name, addon.component);
 
     // Add the addonKey to a global array on vue instance
     Vue.prototype.$toolAddons.push(addon.component.name);
