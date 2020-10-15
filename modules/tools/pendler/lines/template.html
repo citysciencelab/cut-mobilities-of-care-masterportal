@@ -3,9 +3,9 @@
     <select id="select-kreis" class="form-control">
         <option disabled selected hidden><%=chooseDistrict%></option>
         <% kreise.forEach(function (element) { %>
-        <% if (element === kreis) { %>
-        <option selected><%= element %></option>
-        <% }
+            <% if (element === kreis) { %>
+                <option selected><%= element %></option>
+            <% }
             else { %>
         <option><%= element %></option>
         <% } %>
@@ -14,20 +14,22 @@
 </div>
 <% if (kreis !== "") { %>
 <div class="form-group">
+    <input type="checkbox" id="pendler-check-gemeinde"
+        <%= featureType === wfsappGemeinde ? "checked" : "" %>
+    />
     <select id="select-gemeinde" class="form-control">
         <option disabled selected hidden><%=chooseBorough%></option>
         <% gemeinden.forEach(function (element) { %>
-        <% if (typeof gemeinde !== "undefined" && element === gemeinde) { %>
-        <option selected><%= element %></option>
-        <% }
+            <% if (typeof gemeinde !== "undefined" && element === gemeinde) { %>
+                <option selected><%= element %></option>
+            <% }
             else { %>
         <option><%= element %></option>
         <% } %>
         <% }); %>
     </select>
 </div>
-<% } %>
-<% if (typeof gemeinde !== "undefined") { %>
+
 <div class="form-group">
     <select id="select-trefferAnzahl" class="form-control">
         <option disabled selected hidden><%=relationshipsToDisplay%></option>
@@ -40,8 +42,7 @@
         <!-- <option value="alle" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "alle") ? "selected" : "" %> >Alle</option> -->
     </select>
 </div>
-<% } %>
-<% if (typeof trefferAnzahl !== "undefined") { %>
+
 <div class="radio">
     <label class=" radio-inline">
         <input type="radio" name="direction" value="wohnort"
@@ -54,7 +55,7 @@
         <%=workplace%>
     </label>
 </div>
-<% } %>
+
 <% if (typeof direction !== "undefined") { %>
 <% if (pendlerLegend.length > 0) { %>
 <table class="table">
@@ -79,4 +80,6 @@
     else if (emptyResult) { %>
 <p class="keinePendlerBewegungen"><%=noCommutersKnown%></p>
 <% } %>
+<% } %>
+
 <% } %>

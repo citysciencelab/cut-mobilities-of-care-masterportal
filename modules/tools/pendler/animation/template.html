@@ -14,6 +14,9 @@
 </div>
 <% if (kreis !== "") { %>
 <div class="form-group">
+    <input type="checkbox" id="pendler-check-gemeinde"
+        <%= featureType === wfsappGemeinde ? "checked" : "" %>
+    />
     <select id="select-gemeinde" class="form-control">
         <option disabled selected hidden><%=chooseBorough%></option>
         <% gemeinden.forEach(function (element) { %>
@@ -26,8 +29,7 @@
         <% }); %>
     </select>
 </div>
-<% } %>
-<% if (typeof gemeinde !== "undefined") { %>
+
 <div class="form-group">
     <select id="select-trefferAnzahl" class="form-control">
         <option disabled selected hidden><%=relationshipsToDisplay%></option>
@@ -40,19 +42,20 @@
         <!-- <option value="alle" <%= (typeof trefferAnzahl !== "undefined" && trefferAnzahl === "alle") ? "selected" : "" %> >Alle</option> -->
     </select>
 </div>
-<% } %>
-<% if (typeof trefferAnzahl !== "undefined") { %>
+
 <div class="radio">
     <label class=" radio-inline">
-        <input type="radio" name="direction" value="wohnort" <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
+        <input type="radio" name="direction" value="wohnort"
+            <% if (typeof direction !== "undefined" && direction === "wohnort") { print ("checked")} %>>
         <%=domicile%>
     </label>
     <label class=" radio-inline">
-        <input type="radio" name="direction" value="arbeitsort" <% if (typeof direction !== "undefined" && direction === "arbeitsort") { print ("checked")} %>>
+        <input type="radio" name="direction" value="arbeitsort"
+            <% if (typeof direction !== "undefined" && direction === "arbeitsort") { print ("checked")} %>>
         <%=workplace%>
     </label>
 </div>
-<% } %>
+
 <% if (typeof direction !== "undefined") { %>
     <% if (pendlerLegend.length > 0) { %>
         <table class="table">
@@ -92,4 +95,5 @@
     else if (emptyResult) { %>
         <p class="keinePendlerBewegungen"><%=noCommutersKnown%></p>
     <% } %>
+<% } %>
 <% } %>

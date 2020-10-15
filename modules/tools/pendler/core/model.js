@@ -16,7 +16,15 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             VERSION: "1.1.0",
             maxFeatures: "10000"
         },
-        featureType: "mrh_einpendler_gemeinde",
+        singleCounties: [
+            "Hamburg",
+            "Lübeck",
+            "Neumünster",
+            "Schwerin"
+        ],
+        wfsappGemeinde: "mrh_einpendler_gemeinde",
+        wfsappKreise: "mrh_pendler_kreise",
+        featureType: "mrh_pendler_kreise",
         attrAnzahl: "anzahl_einpendler",
         attrGemeinde: "wohnort",
         alertId: "",
@@ -105,10 +113,30 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
                 else {
                     this.setAttrGemeinde("arbeitsort");
                 }
-                this.createPostBody(value);
+
+                const mutatedFeatureType = this.mutateFeatureTypeForSingleCounties(
+                        this.get("kreis"),
+                        this.get("singleCounties"),
+                        this.get("featureType"),
+                        this.get("wfsappKreise"),
+                        this.get("wfsappGemeinde")
+                    ),
+                    literal = this.get("featureType") === this.get("wfsappGemeinde") ? this.get("gemeinde") : this.get("kreis");
+
+                this.createPostBody(mutatedFeatureType, value, literal);
             },
             "change:postBody": function (model, value) {
-                this.sendRequest("POST", value, this.parseFeatures);
+                this.sendRequest("POST", value, data => {
+                    const mutatedFeatureType = this.mutateFeatureTypeForSingleCounties(
+                        this.get("kreis"),
+                        this.get("singleCounties"),
+                        this.get("featureType"),
+                        this.get("wfsappKreise"),
+                        this.get("wfsappGemeinde")
+                    );
+
+                    this.parseFeatures(data, mutatedFeatureType);
+                });
             }
         });
         this.listenTo(Radio.channel("Alert"), {
@@ -120,6 +148,23 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             }
         });
         this.sendRequest("GET", this.get("params"), this.parseKreise);
+    },
+
+    /**
+     * as bigger towns have no smaller communities, the data for bigger towns are not available through wfsappKreise
+     * but only through wfsappGemeinde. This is unfortunate and needs a special handling.
+     * @param {String} county the choosen county ("kreis")
+     * @param {String[]} singleCounties the county to get the special handling for - as simple array of strings
+     * @param {String} featureType the choosen app (wfsappKreise or wfsappGemeinde)
+     * @param {String} wfsappKreise the value for featureType (app) "kreis" - passed to avoid global access
+     * @param {String} wfsappGemeinde the value for featureType (app) "gemeinde" - passed to avoid global access
+     * @returns {String} the featureType to use for the wfs request either wfsappKreise or wfsappGemeinde
+     */
+    mutateFeatureTypeForSingleCounties: function (county, singleCounties, featureType, wfsappKreise, wfsappGemeinde) {
+        if (featureType === wfsappKreise && Array.isArray(singleCounties) && singleCounties.indexOf(county) !== -1) {
+            return wfsappGemeinde;
+        }
+        return featureType;
     },
 
     /**
@@ -208,13 +253,14 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
     /**
      * Success Funktion für die Features
-     * @param  {ojbect} data - Response
+     * @param  {Object} data - Response
+     * @param {String} featureType the featureType to use as Query typeName, without app-prefix
      * @returns {void}
      */
-    parseFeatures: function (data) {
+    parseFeatures: function (data, featureType) {
         const wfsReader = new WFS({
             featureNS: "http://www.deegree.org/app",
-            featureType: this.get("featureType")
+            featureType
         });
 
         this.setLineFeatures(wfsReader.readFeatures(data));
@@ -266,17 +312,19 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
     /**
      * Bereite den Inhalt der Abfrage an den WFS vor.
+     * @param {String} featureType the featureType to use as Query typeName, without app-prefix
      * @param {String} value Abzufragender Schlüssel (im Falle des Pendler-Tools: "Wohnort" oder "Arbeitsplatz")
+     * @param {String} literal the location to lookup
      * @returns {void} Kein Rückgabewert
      */
-    createPostBody: function (value) {
+    createPostBody: function (featureType, value, literal) {
         const postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
             "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
-            "<wfs:Query typeName='app:" + this.get("featureType") + "'>" +
+            "<wfs:Query typeName='app:" + featureType + "'>" +
             "<ogc:Filter>" +
             "<ogc:PropertyIsEqualTo>" +
             "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
-            "<ogc:Literal>" + this.get("gemeinde") + "</ogc:Literal>" +
+            "<ogc:Literal>" + literal + "</ogc:Literal>" +
             "</ogc:PropertyIsEqualTo>" +
             "</ogc:Filter>" +
             "</wfs:Query>" +

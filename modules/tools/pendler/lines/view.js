@@ -3,6 +3,7 @@ import LinesTemplate from "text-loader!./template.html";
 const LinesView = Backbone.View.extend({
     events: {
         "change #select-kreis": "setKreis",
+        "change #pendler-check-gemeinde": "checkGemeinde",
         "change #select-gemeinde": "setGemeinde",
         "change #select-trefferAnzahl": "setTrefferAnzahl",
         "change input[type=radio]": "setDirection",
@@ -65,6 +66,15 @@ const LinesView = Backbone.View.extend({
 
     setKreis: function (evt) {
         this.model.setKreis(evt.target.value);
+    },
+
+    checkGemeinde: function (evt) {
+        if (evt.currentTarget.checked === true) {
+            this.model.setFeatureType(this.model.get("wfsappGemeinde"));
+        }
+        else {
+            this.model.setFeatureType(this.model.get("wfsappKreise"));
+        }
     },
 
     setGemeinde: function (evt) {

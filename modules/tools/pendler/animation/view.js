@@ -7,6 +7,7 @@ const AnimationView = Backbone.View.extend({
         "click .csv-download": "createAlertBeforeDownload",
         "click .btn-remove-features": "removeFeatures",
         "change #select-kreis": "setKreis",
+        "change #pendler-check-gemeinde": "checkGemeinde",
         "change #select-gemeinde": "setGemeinde",
         "change #select-trefferAnzahl": "setTrefferAnzahl",
         "change input[type=radio]": "setDirection"
@@ -74,6 +75,15 @@ const AnimationView = Backbone.View.extend({
 
     setKreis: function (evt) {
         this.model.setKreis(evt.target.value);
+    },
+
+    checkGemeinde: function (evt) {
+        if (evt.currentTarget.checked === true) {
+            this.model.setFeatureType(this.model.get("wfsappGemeinde"));
+        }
+        else {
+            this.model.setFeatureType(this.model.get("wfsappKreise"));
+        }
     },
 
     setGemeinde: function (evt) {
