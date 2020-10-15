@@ -1,8 +1,10 @@
 <script>
+import {mapGetters} from "vuex";
 import beautifyWfsKey from "../../../../../../../utils/beautifyWfsKey.js";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
+import uniqueId from "../../../../../../../utils/uniqueId.js";
 
 export default {
     name: "Default",
@@ -14,10 +16,23 @@ export default {
     },
     data: () => {
         return {
-            imageLinks: ["bildlink", "link_bild"]
+            imageLinks: ["bildlink", "link_bild"],
+            featureIsOnCompareList: true
         };
     },
     computed: {
+        ...mapGetters("Map", ["layerList"]),
+
+        /**
+         * Returns the olFeature associated with the feature.
+         * @returns {ol/Feature} The olFeature
+         */
+        olFeature: function () {
+            const foundLayer = this.layerList.find(layer => layer.get("id") === this.feature.getLayerId());
+
+            return foundLayer.getSource().getFeatures().find(feature => feature.getId() === this.feature.getId());
+        },
+
         /**
          * Returns the first value found from the feature properties based on the imageLinks.
          * @return {String} The attribute with image link.
@@ -37,7 +52,7 @@ export default {
         }
     },
     created () {
-        this.replacesConfiguredImageLinks();
+        this.initialize();
     },
     methods: {
         beautifyWfsKey,
@@ -45,6 +60,19 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+
+        /**
+         * Checks if the feature is on the comparelist.
+         * Starts to prepare the data and sets up the listener.
+         * @param {Object} feature The feature from property
+         * @returns {void}
+         */
+        initialize: function () {
+            this.replacesConfiguredImageLinks();
+            this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
+
+            this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
+        },
 
         /**
          * Replaces  the configured imageLinks from the gfiTheme.params to the imageLinks.
@@ -59,6 +87,34 @@ export default {
             else if (typeof imageLinksAttribute === "string") {
                 this.imageLinks = [imageLinksAttribute];
             }
+        },
+
+        /**
+         * Indicates whether the feature is on the comparelist.
+         * @param {Event} event The given event.
+         * @returns {void}
+         */
+        toggleFeatureIsOnCompareList: function (event) {
+            if (event.key === "isOnCompareList") {
+                this.featureIsOnCompareList = event.target.get("isOnCompareList");
+            }
+        },
+
+        /**
+         * Triggers the event "addFeatureToList" to the CompareFeatures module to add the feature.
+         * @param {Event} event The click event.
+         * @returns {void}
+         */
+        toogleFeatureToCompareList: function (event) {
+            if (event?.target?.classList?.contains("glyphicon-star-empty")) {
+                const uniqueLayerId = this.feature.getLayerId() + uniqueId("_");
+
+                this.olFeature.set("layerId", uniqueLayerId);
+                Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
+            }
+            else {
+                Radio.trigger("CompareFeatures", "removeFeatureFromList", this.olFeature);
+            }
         }
     }
 };
@@ -66,6 +122,13 @@ export default {
 
 <template>
     <div class="gfi-theme-images">
+        <div class="favorite-mapmarker-container">
+            <span
+                :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
+                :title="titleCompareList"
+                @click="toogleFeatureToCompareList"
+            ></span>
+        </div>
         <div>
             <a
                 v-if="imageAttribute"
@@ -123,6 +186,7 @@ export default {
 
 <style lang="less" scoped>
 @import "~variables";
+@color: #fec44f;
 
 .table > tbody > tr > td {
     padding: 5px 8px;
@@ -142,6 +206,22 @@ export default {
     display: block;
     text-align: center;
     color: black;
+}
+.favorite-mapmarker-container {
+    float: right;
+    top: 5px;
+    font-size: 0;
+}
+.glyphicon {
+        font-size: 28px;
+        padding: 0 2px;
+        &:hover {
+            cursor: pointer;
+            opacity: 0.5;
+        }
+    }
+.glyphicon-star {
+    color: @color;
 }
 
 </style>
