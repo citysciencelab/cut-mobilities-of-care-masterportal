@@ -1,17 +1,17 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
-import ImagesTheme from "../../components/Images.vue";
+import DefaultTheme from "../../components/Default.vue";
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("src/modules/tools/gfi/components/themes/Images.vue", () => {
+describe("src/modules/tools/gfi/components/themes/default/components/Default.vue", () => {
     let wrapper;
 
     beforeEach(() => {
-        wrapper = shallowMount(ImagesTheme, {
+        wrapper = shallowMount(DefaultTheme, {
             propsData: {
                 feature: {
                     getMappedProperties: function () {
@@ -101,7 +101,7 @@ describe("src/modules/tools/gfi/components/themes/Images.vue", () => {
     });
 
     it("should the img have the source of gfiTheme params as string", () => {
-        const wrapper1 = shallowMount(ImagesTheme, {
+        const wrapper1 = shallowMount(DefaultTheme, {
             propsData: {
                 feature: {
                     getProperties: function () {
@@ -130,7 +130,7 @@ describe("src/modules/tools/gfi/components/themes/Images.vue", () => {
     });
 
     it("should the img have the source of first found element gfiTheme params as array", () => {
-        const wrapper2 = shallowMount(ImagesTheme, {
+        const wrapper2 = shallowMount(DefaultTheme, {
             propsData: {
                 feature: {
                     getProperties: function () {
