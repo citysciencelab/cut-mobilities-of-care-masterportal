@@ -1,6 +1,5 @@
 <script>
-import Default from "../themes/Default.vue";
-import Images from "../themes/images/components/Images.vue";
+import Default from "../themes/default/components/Default.vue";
 import ActiveCityMaps from "../themes/ActiveCityMaps.vue";
 import Flaecheninfo from "../themes/flaecheninfo/components/Flaecheninfo.vue";
 import Dipas from "../themes/Dipas.vue";
@@ -20,7 +19,6 @@ export default {
     name: "Attached",
     components: {
         Default,
-        Images,
         ActiveCityMaps,
         Flaecheninfo,
         Dipas,
