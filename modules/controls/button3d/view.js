@@ -185,6 +185,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         Radio.trigger("Filter", "enable");
         this.$("#3d-titel-close").hide();
         this.$("#3d-titel-open").show();
+        this.model.setButtonTitle("3D");
 
         activeTools.forEach(tool => {
             if (supportedOnlyIn3d.includes(tool.get("id"))) {
@@ -231,6 +232,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
         Radio.trigger("Filter", "disable");
         Radio.trigger("ModelList", "toggleWfsCluster", false);
         Radio.trigger("Map", "activateMap3d");
+        this.model.setButtonTitle("2D");
 
         activeTools.forEach(tool => {
             if (!supportedIn3d.includes(tool.get("id"))) {
