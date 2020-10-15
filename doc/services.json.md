@@ -450,7 +450,7 @@ Wird es als Objekt verwendet, so gelten folgende Parameter.
 ```
 #!json
 "gfiTheme": {
-   "name": "sensor",
+   "name": "default",
    "params": {}
 }
 ```
@@ -462,24 +462,24 @@ Hier werden die Parameter für die GFI-Templates definiert.
 
 |Name|params|
 |----|------|
-|images|**[params](#markdown-header-gfi_theme_images_params)**|
+|default|**[params](#markdown-header-gfi_theme_default_params)**|
 |sensor|**[params](#markdown-header-gfi_theme_sensor_params)**|
 
 ***
 
-## gfi_theme_images_params ##
-Hier werden die Parameter für das GFI-Template "images" definiert.
+## gfi_theme_default_params ##
+Hier werden die Parameter für das GFI-Template "default" definiert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
 |imageLinks|nein|String,String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird nur der erste gefundene Wert verwendet.|
 
-**Beispiel gfiTheme für das template "Images":**
+**Beispiel gfiTheme für das template "Default":**
 
 ```
 #!json
 "gfiTheme": {
-   "name": "images",
+   "name": "default",
    "params": {
          "imageLinks": ["imageLink", "linkImage", "abc"],
    }

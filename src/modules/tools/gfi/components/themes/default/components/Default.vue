@@ -5,7 +5,7 @@ import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 
 export default {
-    name: "Images",
+    name: "Default",
     props: {
         feature: {
             type: Object,
