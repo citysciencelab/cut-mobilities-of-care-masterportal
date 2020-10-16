@@ -25,6 +25,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         wfsappGemeinde: "mrh_einpendler_gemeinde",
         wfsappKreise: "mrh_pendler_kreise",
         featureType: "mrh_pendler_kreise",
+        trefferAnzahl: "top5",
         attrAnzahl: "anzahl_einpendler",
         attrGemeinde: "wohnort",
         alertId: "",
@@ -82,8 +83,9 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
         this.listenTo(this, {
             "change:kreis": function (model, value) {
-                this.unset("gemeinde");
+                this.setFeatureType(this.get("wfsappKreise"));
                 this.unset("direction", {silent: true});
+                this.unset("gemeinde");
                 this.clear();
                 this.setParams({
                     REQUEST: "GetFeature",
@@ -94,8 +96,12 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
                 });
                 this.sendRequest("GET", this.get("params"), this.parseGemeinden);
             },
+            "change:featureType": function () {
+                this.unset("gemeinde", {silent: true});
+                this.unset("direction");
+                this.clear();
+            },
             "change:gemeinde": function () {
-                this.unset("trefferAnzahl", {silent: true});
                 this.unset("direction", {silent: true});
                 this.clear();
             },
