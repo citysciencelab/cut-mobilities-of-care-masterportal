@@ -396,13 +396,19 @@
                 }
             },
             "gfi": {
+                "favoriteIcons": {
+                  "compareFeatureIcon": {
+                    "toCompareList": "Auf die Vergleichsliste",
+                    "fromCompareList": "Von der Vergleichsliste entfernen"
+                  },
+                  "routingicon": {
+                    "routingDestination": "Als Ziel übernehmen"
+                  }
+                },
                 "themes": {
                     "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
                     "default": {
-                      "imgAlt": "Es konnte kein Bild geladen werden.",
-                      "routingDestination": "Als Ziel übernehmen",
-                      "toCompareList": "Auf die Vergleichsliste",
-                      "fromCompareList": "Von der Vergleichsliste entfernen"
+                      "imgAlt": "Es konnte kein Bild geladen werden."
                     },
                     "trafficCount": {
                         "infoLabel": "Info",
@@ -438,6 +444,11 @@
                         "yAxisTextDay": "Anzahl / 15 Min.",
                         "yAxisTextWeek": "Anzahl / Tag",
                         "yAxisTextYear": "Anzahl / Woche"
+                    },
+                    "schulinfo": {
+                      "schoolAsDestination": "Schule als Ziel übernehmen",
+                      "no": "Nein",
+                      "yes": "Ja"
                     },
                     "solaratlas": {
                       "solarPotential": "Solarpotential des Gebäudes: {{ardfull}}",

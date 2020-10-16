@@ -1,13 +1,15 @@
 <script>
-import {mapGetters} from "vuex";
 import ThemeConfig from "../themeConfig.json";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
-import uniqueId from "../../../../../../../utils/uniqueId.js";
+import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
 
 export default {
     name: "Schulinfo",
+    components: {
+        CompareFeatureIcon
+    },
     props: {
         feature: {
             type: Object,
@@ -17,30 +19,10 @@ export default {
     data: () => {
         return {
             assignedFeatureProperties: [],
-            featureIsOnCompareList: false
+            importedComponents: []
         };
     },
     computed: {
-        ...mapGetters("Map", ["layerList"]),
-
-        /**
-         * Returns the olFeature associated with the feature.
-         * @returns {ol/Feature} The olFeature
-         */
-        olFeature: function () {
-            const foundLayer = this.layerList.find(layer => layer.get("id") === this.feature.getLayerId());
-
-            return foundLayer.getSource().getFeatures().find(feature => feature.getId() === this.feature.getId());
-        },
-
-        /**
-         * Returns the correct title, depending on whether the feature is on the comparelist or not.
-         * @returns {String} Title for the comparelist.
-         */
-        titleCompareList: function () {
-            return this.featureIsOnCompareList ? "Von der Vergleichsliste entfernen" : "Auf die Vergleichsliste";
-        },
-
         /**
          * Returns the properties of the selected category.
          * @returns {Object[]} The properties for the selected category.
@@ -56,6 +38,7 @@ export default {
     },
     created () {
         this.initialize(this.feature);
+        this.setImportedComponents();
     },
     methods: {
         isWebLink,
@@ -64,16 +47,25 @@ export default {
         isEmailAddress,
 
         /**
+         * Sets the imported components to importedComponents.
+         * @returns {void}
+         */
+        setImportedComponents: function () {
+            Object.keys(this.$options.components).forEach(componentName => {
+                if (componentName !== "Schulinfo") {
+                    this.importedComponents.push(this.$options.components[componentName]);
+                }
+            });
+        },
+
+        /**
          * Checks if the feature is on the comparelist.
          * Starts to prepare the data and sets up the listener.
          * @param {Object} feature The feature from property
          * @returns {void}
          */
         initialize: function (feature) {
-            this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
             this.assignedFeatureProperties = this.assignFeatureProperties(feature);
-
-            this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
         },
 
         /**
@@ -90,7 +82,6 @@ export default {
 
                 topic.attributes.forEach(attribute => {
                     const value = feature.getProperties()[attribute];
-                    // let beautifiedValue;
 
                     if (value !== undefined) {
                         filteredAttributes.push({
@@ -120,10 +111,10 @@ export default {
                 return attributeValue.split("|");
             }
             if (attributeValue === "true" || attributeValue === "ja") {
-                return ["Ja"];
+                return [this.$t("modules.tools.gfi.themes.schulinfo.yes")];
             }
             if (attributeValue === "false" || attributeValue === "nein") {
-                return ["Nein"];
+                return [this.$t("modules.tools.gfi.themes.schulinfo.no")];
             }
             return [attributeValue];
         },
@@ -158,31 +149,12 @@ export default {
         },
 
         /**
-         * Indicates whether the feature is on the comparelist.
-         * @param {Event} event The given event.
-         * @returns {void}
+         * Checks if a component exists.
+         * @param {String} componentId - The id from component.
+         * @returns {Boolean} The component exists or not.
          */
-        toggleFeatureIsOnCompareList: function (event) {
-            if (event.key === "isOnCompareList") {
-                this.featureIsOnCompareList = event.target.get("isOnCompareList");
-            }
-        },
-
-        /**
-         * Triggers the event "addFeatureToList" to the CompareFeatures module to add the feature.
-         * @param {Event} event The click event.
-         * @returns {void}
-         */
-        toogleFeatureToCompareList: function (event) {
-            if (event?.target?.classList?.contains("glyphicon-star-empty")) {
-                const uniqueLayerId = this.feature.getLayerId() + uniqueId("_");
-
-                this.olFeature.set("layerId", uniqueLayerId);
-                Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
-            }
-            else {
-                Radio.trigger("CompareFeatures", "removeFeatureFromList", this.olFeature);
-            }
+        componentExist: function (componentId) { // todo function auslagern in util
+            return Boolean(Radio.request("ModelList", "getModelByAttributes", {id: componentId}));
         }
     }
 };
@@ -205,14 +177,17 @@ export default {
                     {{ category.name }}
                 </button>
                 <div class="favorite-mapmarker-container">
+                    <template v-for="component in importedComponents">
+                        <component
+                            :is="component"
+                            :key="'favorite-' + component.name"
+                            :feature="feature"
+                        />
+                    </template>
                     <span
-                        :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
-                        :title="titleCompareList"
-                        @click="toogleFeatureToCompareList"
-                    ></span>
-                    <span
+                        v-if="componentExist('schulwegrouting')"
                         class="glyphicon glyphicon-map-marker"
-                        title="Schule als Ziel übernehmen"
+                        :title="$t('modules.tools.gfi.themes.schulinfo.schoolAsDestination')"
                         @click="changeToSchoolrouting"
                     ></span>
                 </div>
