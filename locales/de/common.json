@@ -398,6 +398,12 @@
             "gfi": {
                 "themes": {
                     "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
+                    "default": {
+                      "imgAlt": "Es konnte kein Bild geladen werden.",
+                      "routingDestination": "Als Ziel übernehmen",
+                      "toCompareList": "Auf die Vergleichsliste",
+                      "fromCompareList": "Von der Vergleichsliste entfernen"
+                    },
                     "trafficCount": {
                         "infoLabel": "Info",
                         "dayLabel": "Tag",
@@ -432,9 +438,6 @@
                         "yAxisTextDay": "Anzahl / 15 Min.",
                         "yAxisTextWeek": "Anzahl / Tag",
                         "yAxisTextYear": "Anzahl / Woche"
-                    },
-                    "images": {
-                      "imgAlt": "Es konnte kein Bild geladen werden."
                     },
                     "solaratlas": {
                       "solarPotential": "Solarpotential des Gebäudes: {{ardfull}}",
@@ -472,7 +475,8 @@
                 "currentPosition": "Aktueller Standpunkt",
                 "routingCalcError": "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator",
                 "routingCalcAborted": "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten",
-                "addressRequestFailed": "Adressabfrage fehlgeschlagen"
+                "addressRequestFailed": "Adressabfrage fehlgeschlagen",
+                "selectedDestination": "Gewähltes Ziel"
             },
             "searchByCoord": {
                 "exampleAcronym": "Bsp.",
