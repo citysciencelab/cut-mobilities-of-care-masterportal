@@ -1,4 +1,4 @@
-import state from "./state";
+import state from "./stateMap";
 import mutations from "./mutationsMap";
 import getters from "./gettersMap";
 import actions from "./actions/actionsMap";

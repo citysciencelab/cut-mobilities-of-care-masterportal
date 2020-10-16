@@ -1,4 +1,4 @@
-import stateMap from "./state";
+import stateMap from "./stateMap";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
 import {createGfiFeature} from "./actions/getWmsFeaturesByMimeType.js";
 import {getGfiFeaturesByTileFeature} from "./actions/getGfiFeaturesByTileFeature.js";
