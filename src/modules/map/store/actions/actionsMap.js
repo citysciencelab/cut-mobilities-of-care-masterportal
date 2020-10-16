@@ -159,6 +159,7 @@ const actions = {
         gfiFeatures = await Promise.all(gfiWmsLayerList.map(layer => {
             const mimeType = layer.get("infoFormat"),
                 layerName = layer.get("name"),
+                layerId = layer.get("id"),
                 gfiTheme = layer.get("gfiTheme") || "default",
                 gfiIconPath = layer.get("gfiIconPath"),
                 gfiAttributes = layer.get("gfiAttributes"),
@@ -169,7 +170,7 @@ const actions = {
                 url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams),
                 gfiAsNewWindow = layer.get("gfiAsNewWindow");
 
-            return getWmsFeaturesByMimeType(mimeType, url, layerName, gfiTheme, gfiIconPath, gfiAttributes, gfiAsNewWindow);
+            return getWmsFeaturesByMimeType(mimeType, url, layerName, gfiTheme, gfiIconPath, gfiAttributes, gfiAsNewWindow, null, null, layerId);
         }));
 
         // only commit if features found

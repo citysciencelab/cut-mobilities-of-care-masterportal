@@ -17,21 +17,12 @@ export default {
     data: () => {
         return {
             imageLinks: ["bildlink", "link_bild"],
-            featureIsOnCompareList: true
+            featureIsOnCompareList: true,
+            olFeature: null
         };
     },
     computed: {
-        ...mapGetters("Map", ["layerList"]),
-
-        /**
-         * Returns the olFeature associated with the feature.
-         * @returns {ol/Feature} The olFeature
-         */
-        olFeature: function () {
-            const foundLayer = this.layerList.find(layer => layer.get("id") === this.feature.getLayerId());
-
-            return foundLayer.getSource().getFeatures().find(feature => feature.getId() === this.feature.getId());
-        },
+        ...mapGetters("Map", ["clickCoord", "visibleLayerListWithChildrenFromGroupLayers"]),
 
         /**
          * Returns the first value found from the feature properties based on the imageLinks.
@@ -69,9 +60,40 @@ export default {
          */
         initialize: function () {
             this.replacesConfiguredImageLinks();
-            this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
+            this.fetchOlFeature();
 
-            this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
+            if (this.olFeature) {
+                this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
+                this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
+            }
+        },
+
+        /**
+         * Returns the olFeature from layer in the layerList associated with the feature.
+         * It also searches in clustered features.
+         * @returns {ol/Feature} The olFeature
+         */
+        fetchOlFeature: function () {
+            if (this.visibleLayerListWithChildrenFromGroupLayers.length > 0) {
+                const foundLayer = this.visibleLayerListWithChildrenFromGroupLayers.find(layer => layer.get("id") === this.feature.getLayerId());
+
+                if (foundLayer && typeof foundLayer.get("source").getFeatures === "function") {
+                    const foundFeatures = foundLayer.get("source").getFeatures();
+
+                    foundFeatures.forEach(feature => {
+                        if (feature.get("features")) {
+                            feature.get("features").forEach(feat => {
+                                if (feat?.getId() === this.feature.getId()) {
+                                    this.olFeature = feat;
+                                }
+                            });
+                        }
+                        else if (feature?.getId() === this.feature.getId()) {
+                            this.olFeature = feature;
+                        }
+                    });
+                }
+            }
         },
 
         /**
@@ -87,6 +109,15 @@ export default {
             else if (typeof imageLinksAttribute === "string") {
                 this.imageLinks = [imageLinksAttribute];
             }
+        },
+
+        /**
+         * Checks if a component exists.
+         * @param {String} componentId - The id from component.
+         * @returns {Boolean} The component exists or not.
+         */
+        componentExist: function (componentId) {
+            return Boolean(Radio.request("ModelList", "getModelByAttributes", {id: componentId}));
         },
 
         /**
@@ -110,11 +141,21 @@ export default {
                 const uniqueLayerId = this.feature.getLayerId() + uniqueId("_");
 
                 this.olFeature.set("layerId", uniqueLayerId);
+                this.olFeature.set("layerName", this.feature.getTitle());
                 Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
             }
             else {
                 Radio.trigger("CompareFeatures", "removeFeatureFromList", this.olFeature);
             }
+        },
+
+        /**
+         * Apply the feature as routing destination in Viomrouting.
+         * @returns {void}
+         */
+        setRoutingDestination: function () {
+            Radio.trigger("ModelList", "setModelAttributesById", "routing", {isActive: true});
+            Radio.trigger("ViomRouting", "setRoutingDestination", this.clickCoord);
         }
     }
 };
@@ -122,11 +163,18 @@ export default {
 
 <template>
     <div class="gfi-theme-images">
-        <div class="favorite-mapmarker-container">
+        <div class="favorite-icon-container">
             <span
+                v-if="olFeature && componentExist('compareFeatures')"
                 :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
                 :title="titleCompareList"
                 @click="toogleFeatureToCompareList"
+            ></span>
+            <span
+                v-if="componentExist('routing')"
+                class="glyphicon glyphicon-road"
+                :title="$t('modules.tools.gfi.themes.default.routingDestination')"
+                @click="setRoutingDestination"
             ></span>
         </div>
         <div>
@@ -137,7 +185,7 @@ export default {
             >
                 <img
                     class="gfi-theme-images-image"
-                    :alt="$t('modules.tools.gfi.themes.images.imgAlt')"
+                    :alt="$t('modules.tools.gfi.themes.default.imgAlt')"
                     :src="imageAttribute"
                 >
             </a>
@@ -207,10 +255,9 @@ export default {
     text-align: center;
     color: black;
 }
-.favorite-mapmarker-container {
-    float: right;
-    top: 5px;
-    font-size: 0;
+.favorite-icon-container {
+    display: flex;
+    justify-content: center;
 }
 .glyphicon {
         font-size: 28px;
