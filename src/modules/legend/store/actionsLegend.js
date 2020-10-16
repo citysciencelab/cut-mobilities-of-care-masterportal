@@ -73,6 +73,10 @@ const configPaths = [
             state.layerIdForLayerInfo = id;
         },
 
+        setLayerCounterIdForLayerInfo: function ({state}, time) {
+            state.layerCounterIdForLayerInfo = time;
+        },
+
         /**
          * Sets the legendObj to state.layerInfoLegend
          * @param {Object} param0 State

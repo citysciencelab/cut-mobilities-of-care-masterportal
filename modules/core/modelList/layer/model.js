@@ -608,6 +608,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "urlIsVisible": this.get("urlIsVisible")
         });
 
+        this.createLegend();
         this.setLayerInfoChecked(true);
     },
 
