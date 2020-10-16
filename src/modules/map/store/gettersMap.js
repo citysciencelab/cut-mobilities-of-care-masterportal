@@ -17,29 +17,39 @@ const gettersMap = {
     },
 
     /**
-     * gets all visible wms layers
+     * Gets all visible layers with children from Group layers.
+     * @param {Object} state - The map state.
+     * @param {Object[]} getters.layerList - All visible layers in the map.
+     * @returns {Object[]} all visible layers
+     */
+    visibleLayerListWithChildrenFromGroupLayers: (state, {visibleLayerList}) => {
+        const list = [];
+
+        visibleLayerList.forEach(layer => {
+
+            if (layer.get("layers")) {
+                layer.get("layers").getArray().forEach(childLayer => {
+                    list.push(childLayer);
+                });
+            }
+            else {
+                list.push(layer);
+            }
+        });
+        return list;
+    },
+
+    /**
+     * Gets all visible wms layers.
      * @param {Object} state - the map state
      * @param {Object} getters - the map getters
      * @param {Object[]} getters.visibleLayerList - all visible layers in the map
      * @returns {Object[]} all visible wms layers
      */
-    visibleWmsLayerList: (state, {visibleLayerList}) => {
-        const list = [];
-
-        visibleLayerList.forEach(layer => {
-            // Group Layer
-            if (layer.get("layers")) {
-                layer.get("layers").getArray().forEach(childLayer => {
-                    if (childLayer.get("typ") === "WMS") {
-                        list.push(childLayer);
-                    }
-                });
-            }
-            else if (layer.get("typ") === "WMS") {
-                list.push(layer);
-            }
+    visibleWmsLayerList: (state, {visibleLayerListWithChildrenFromGroupLayers}) => {
+        return visibleLayerListWithChildrenFromGroupLayers.filter(layer => {
+            return layer.get("typ") === "WMS";
         });
-        return list;
     },
 
     /**
