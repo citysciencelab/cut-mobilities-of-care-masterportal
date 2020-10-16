@@ -393,13 +393,19 @@
                 }
             },
             "gfi": {
+                "favoriteIcons": {
+                    "compareFeatureIcon": {
+                      "toCompareList": "To the compare list",
+                      "fromCompareList": "Remove from compare list"
+                    },
+                    "routingicon": {
+                        "routingDestination": "Apply as destination"
+                    }
+                },
                 "themes": {
                     "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
                     "default": {
-                      "imgAlt": "No image could be loaded.",
-                      "routingDestination": "Apply as destination",
-                      "toCompareList": "To the compare list",
-                      "fromCompareList": "Remove from compare list"
+                      "imgAlt": "No image could be loaded."
                     },
                     "trafficCount": {
                         "infoLabel": "Info",
@@ -435,6 +441,11 @@
                         "yAxisTextDay": "Count / 15 Min.",
                         "yAxisTextWeek": "Count / Day",
                         "yAxisTextYear": "Count / Week"
+                    },
+                    "schulinfo": {
+                      "schoolAsDestination": "Adopt school as a destination",
+                      "no": "No",
+                      "yes": "Yes"
                     },
                     "solaratlas": {
                       "solarPotential": "Solar potential of the building: {{ardfull}}",

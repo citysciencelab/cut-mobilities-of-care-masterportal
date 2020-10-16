@@ -1,13 +1,17 @@
 <script>
-import {mapGetters} from "vuex";
 import beautifyWfsKey from "../../../../../../../utils/beautifyWfsKey.js";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
-import uniqueId from "../../../../../../../utils/uniqueId.js";
+import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
+import RoutingIcon from "../../../favoriteIcons/components/RoutingIcon.vue";
 
 export default {
     name: "Default",
+    components: {
+        CompareFeatureIcon,
+        RoutingIcon
+    },
     props: {
         feature: {
             type: Object,
@@ -17,13 +21,10 @@ export default {
     data: () => {
         return {
             imageLinks: ["bildlink", "link_bild"],
-            featureIsOnCompareList: true,
-            olFeature: null
+            importedComponents: []
         };
     },
     computed: {
-        ...mapGetters("Map", ["clickCoord", "visibleLayerListWithChildrenFromGroupLayers"]),
-
         /**
          * Returns the first value found from the feature properties based on the imageLinks.
          * @return {String} The attribute with image link.
@@ -44,6 +45,7 @@ export default {
     },
     created () {
         this.initialize();
+        this.setImportedComponents();
     },
     methods: {
         beautifyWfsKey,
@@ -53,6 +55,18 @@ export default {
         isEmailAddress,
 
         /**
+         * Sets the imported components to importedComponents.
+         * @returns {void}
+         */
+        setImportedComponents: function () { // todo auslagern in eine util Funktion
+            Object.keys(this.$options.components).forEach(componentName => {
+                if (componentName !== "Default") {
+                    this.importedComponents.push(this.$options.components[componentName]);
+                }
+            });
+        },
+
+        /**
          * Checks if the feature is on the comparelist.
          * Starts to prepare the data and sets up the listener.
          * @param {Object} feature The feature from property
@@ -60,40 +74,6 @@ export default {
          */
         initialize: function () {
             this.replacesConfiguredImageLinks();
-            this.fetchOlFeature();
-
-            if (this.olFeature) {
-                this.featureIsOnCompareList = this.olFeature.get("isOnCompareList");
-                this.olFeature.on("propertychange", this.toggleFeatureIsOnCompareList.bind(this));
-            }
-        },
-
-        /**
-         * Returns the olFeature from layer in the layerList associated with the feature.
-         * It also searches in clustered features.
-         * @returns {ol/Feature} The olFeature
-         */
-        fetchOlFeature: function () {
-            if (this.visibleLayerListWithChildrenFromGroupLayers.length > 0) {
-                const foundLayer = this.visibleLayerListWithChildrenFromGroupLayers.find(layer => layer.get("id") === this.feature.getLayerId());
-
-                if (foundLayer && typeof foundLayer.get("source").getFeatures === "function") {
-                    const foundFeatures = foundLayer.get("source").getFeatures();
-
-                    foundFeatures.forEach(feature => {
-                        if (feature.get("features")) {
-                            feature.get("features").forEach(feat => {
-                                if (feat?.getId() === this.feature.getId()) {
-                                    this.olFeature = feat;
-                                }
-                            });
-                        }
-                        else if (feature?.getId() === this.feature.getId()) {
-                            this.olFeature = feature;
-                        }
-                    });
-                }
-            }
         },
 
         /**
@@ -109,53 +89,6 @@ export default {
             else if (typeof imageLinksAttribute === "string") {
                 this.imageLinks = [imageLinksAttribute];
             }
-        },
-
-        /**
-         * Checks if a component exists.
-         * @param {String} componentId - The id from component.
-         * @returns {Boolean} The component exists or not.
-         */
-        componentExist: function (componentId) {
-            return Boolean(Radio.request("ModelList", "getModelByAttributes", {id: componentId}));
-        },
-
-        /**
-         * Indicates whether the feature is on the comparelist.
-         * @param {Event} event The given event.
-         * @returns {void}
-         */
-        toggleFeatureIsOnCompareList: function (event) {
-            if (event.key === "isOnCompareList") {
-                this.featureIsOnCompareList = event.target.get("isOnCompareList");
-            }
-        },
-
-        /**
-         * Triggers the event "addFeatureToList" to the CompareFeatures module to add the feature.
-         * @param {Event} event The click event.
-         * @returns {void}
-         */
-        toogleFeatureToCompareList: function (event) {
-            if (event?.target?.classList?.contains("glyphicon-star-empty")) {
-                const uniqueLayerId = this.feature.getLayerId() + uniqueId("_");
-
-                this.olFeature.set("layerId", uniqueLayerId);
-                this.olFeature.set("layerName", this.feature.getTitle());
-                Radio.trigger("CompareFeatures", "addFeatureToList", this.olFeature);
-            }
-            else {
-                Radio.trigger("CompareFeatures", "removeFeatureFromList", this.olFeature);
-            }
-        },
-
-        /**
-         * Apply the feature as routing destination in Viomrouting.
-         * @returns {void}
-         */
-        setRoutingDestination: function () {
-            Radio.trigger("ModelList", "setModelAttributesById", "routing", {isActive: true});
-            Radio.trigger("ViomRouting", "setRoutingDestination", this.clickCoord);
         }
     }
 };
@@ -164,18 +97,13 @@ export default {
 <template>
     <div class="gfi-theme-images">
         <div class="favorite-icon-container">
-            <span
-                v-if="olFeature && componentExist('compareFeatures')"
-                :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
-                :title="titleCompareList"
-                @click="toogleFeatureToCompareList"
-            ></span>
-            <span
-                v-if="componentExist('routing')"
-                class="glyphicon glyphicon-road"
-                :title="$t('modules.tools.gfi.themes.default.routingDestination')"
-                @click="setRoutingDestination"
-            ></span>
+            <template v-for="component in importedComponents">
+                <component
+                    :is="component"
+                    :key="'favorite-' + component.name"
+                    :feature="feature"
+                />
+            </template>
         </div>
         <div>
             <a
@@ -234,7 +162,7 @@ export default {
 
 <style lang="less" scoped>
 @import "~variables";
-@color: #fec44f;
+
 
 .table > tbody > tr > td {
     padding: 5px 8px;
@@ -258,8 +186,7 @@ export default {
 .favorite-icon-container {
     display: flex;
     justify-content: center;
-}
-.glyphicon {
+    .glyphicon {
         font-size: 28px;
         padding: 0 2px;
         &:hover {
@@ -267,8 +194,7 @@ export default {
             opacity: 0.5;
         }
     }
-.glyphicon-star {
-    color: @color;
 }
+
 
 </style>
