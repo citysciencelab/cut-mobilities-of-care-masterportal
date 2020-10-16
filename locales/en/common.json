@@ -395,6 +395,12 @@
             "gfi": {
                 "themes": {
                     "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
+                    "default": {
+                      "imgAlt": "No image could be loaded.",
+                      "routingDestination": "Apply as destination",
+                      "toCompareList": "To the compare list",
+                      "fromCompareList": "Remove from compare list"
+                    },
                     "trafficCount": {
                         "infoLabel": "Info",
                         "dayLabel": "Day",
@@ -429,9 +435,6 @@
                         "yAxisTextDay": "Count / 15 Min.",
                         "yAxisTextWeek": "Count / Day",
                         "yAxisTextYear": "Count / Week"
-                    },
-                    "images": {
-                      "imgAlt": "No image could be loaded."
                     },
                     "solaratlas": {
                       "solarPotential": "Solar potential of the building: {{ardfull}}",
@@ -469,7 +472,8 @@
                 "currentPosition": "Current position",
                 "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
                 "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
-                "addressRequestFailed": "Address request failed"
+                "addressRequestFailed": "Address request failed",
+                "selectedDestination": "Selected Destination"
             },
             "searchByCoord": {
                 "exampleAcronym": "e.g.",

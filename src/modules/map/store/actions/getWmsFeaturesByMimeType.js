@@ -13,19 +13,20 @@ import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
  * @param {String} [gfiAsNewWindow.specs=""] a comma-separated list of items - the setup to open the window with (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
  * @param {Function} [requestGfiOpt=null] a function (mimeType, url) to call the wms url with (for testing only)
  * @param {Function} [openWindowOpt=null] a function (url, name, specs) to open a new browser window with if gfiAsNewWindow is given (for testing only)
+ * @param {String} layerId the id of the requesting layer
  * @returns {Object[]}  a list of object{getTheme, getIconPath, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
-export function getWmsFeaturesByMimeType (mimeType, url, layerName, gfiTheme, gfiIconPath, attributesToShow, gfiAsNewWindow, requestGfiOpt = null, openWindowOpt = null) {
+export function getWmsFeaturesByMimeType (mimeType, url, layerName, gfiTheme, gfiIconPath, attributesToShow, gfiAsNewWindow, requestGfiOpt = null, openWindowOpt = null, layerId) {
     if (openFeaturesInNewWindow(url, gfiAsNewWindow, typeof openWindowOpt === "function" ? openWindowOpt : window.open) === true) {
         return [];
     }
 
     if (mimeType === "text/xml") {
-        return getXmlFeatures(url, layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi);
+        return getXmlFeatures(url, layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, layerId);
     }
 
     // mimeType === "text/html"
-    return getHtmlFeature(url, layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi);
+    return getHtmlFeature(url, layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, layerId);
 }
 
 /**
@@ -76,9 +77,10 @@ export function openFeaturesInNewWindow (url, gfiAsNewWindow, openWindow) {
  * @param {String} gfiIconPath path to icon used as fallback
  * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
  * @param {Function} callRequestGfi a function (mimeType, url) to call the wms url with
+ * @param {String} layerId the id of the requesting layer
  * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
-export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attributesToShow, callRequestGfi) {
+export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attributesToShow, callRequestGfi, layerId) {
     if (typeof url !== "string" || typeof callRequestGfi !== "function") {
         return [];
     }
@@ -88,14 +90,14 @@ export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attribute
         if (Array.isArray(featureInfos)) {
             featureInfos.forEach(function (feature) {
                 if (typeof feature === "object" && feature !== null && typeof feature.getProperties === "function") {
-                    result.push(createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, feature.getProperties(), null, feature.getId()));
+                    result.push(createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, feature.getProperties(), null, feature.getId(), url, layerId));
                 }
             });
         }
 
         // Create a merged feature because some themes might display multiple features at once
         if (result.length > 0 && ["DataTable"].indexOf(gfiTheme) !== -1) {
-            result = [createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, result, null, null)];
+            result = [createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, result, null, null, url, layerId)];
         }
 
         return result;
