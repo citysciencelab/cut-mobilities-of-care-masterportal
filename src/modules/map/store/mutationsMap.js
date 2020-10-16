@@ -1,6 +1,6 @@
 import {generateSimpleMutations} from "../../../app-store/utils/generators";
 
-import initialState from "./state";
+import initialState from "./stateMap";
 import getters from "./gettersMap";
 
 const mutations = {
