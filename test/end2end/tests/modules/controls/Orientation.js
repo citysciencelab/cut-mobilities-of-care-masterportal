@@ -44,7 +44,7 @@ function Orientation ({builder, url, resolution, capability}) {
             await geolocateButton.click();
 
             await driver.wait(until.elementIsVisible(
-                await driver.wait(until.elementLocated(By.id("geolocation_marker")))
+                await driver.wait(until.elementLocated(By.id("geolocation_marker")), 5000)
             ));
 
             expect(center).not.to.eql(await driver.executeScript(getCenter));
@@ -62,7 +62,7 @@ function Orientation ({builder, url, resolution, capability}) {
 
                 const bikeAndRideSelector = By.xpath("//ul[@id='tree']/li[.//span[contains(.,'Bike and Ride')]]"),
                     themenSelector = By.css("#root .dropdown:first-child"),
-                    topicButton = await driver.wait(until.elementLocated(themenSelector, 5000, "Topic Button not found."));
+                    topicButton = await driver.wait(until.elementLocated(themenSelector, 5000, "Topic Button not found."), 5000);
 
                 await topicButton.click();
                 await (await driver.wait(until.elementLocated(bikeAndRideSelector, 5000, "Layerlist entry 'Bike and Ride' not found."))).click();
@@ -83,10 +83,10 @@ function Orientation ({builder, url, resolution, capability}) {
             it("should open the POI window after click on the poi button", async function () {
                 await poiButton.click();
 
-                await driver.wait(until.elementLocated(By.css("div.modal-dialog")));
-                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'500m')]")));
-                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'1000m')]")));
-                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'2000m')]")));
+                await driver.wait(until.elementLocated(By.css("div.modal-dialog")), 5000);
+                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'500m')]")), 5000);
+                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'1000m')]")), 5000);
+                await driver.wait(until.elementLocated(By.xpath("//ul[contains(@class,'nav')]/li/a[contains(.,'2000m')]")), 5000);
             });
 
             it("should relocate after click on an item", async function () {

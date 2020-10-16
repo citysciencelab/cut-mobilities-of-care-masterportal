@@ -68,7 +68,7 @@ async function GfiTests ({builder, url, resolution, capability}) {
 
         if (isDefault(url)) {
             it("default tree development plans open gfi on click", async function () {
-                const topic = await driver.wait(until.elementLocated(By.xpath("//ul[@id='tree']/..")));
+                const topic = await driver.wait(until.elementLocated(By.xpath("//ul[@id='tree']/..")), 5000);
 
                 // open layer
                 await topic.click();
@@ -79,10 +79,10 @@ async function GfiTests ({builder, url, resolution, capability}) {
 
                 await clickFeature(driver, [554521.38, 5932738.29]);
 
-                await driver.wait(until.elementLocated(By.css("div.gfi")));
+                await driver.wait(until.elementLocated(By.css("div.gfi")), 5000);
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//span[contains(.,'Festgestellte Bebauungspläne (PLIS)')]")));
-                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Finkenwerder37')]")));
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//span[contains(.,'Festgestellte Bebauungspläne (PLIS)')]")), 5000);
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Finkenwerder37')]")), 5000);
             });
         }
 
@@ -255,7 +255,7 @@ async function GfiTests ({builder, url, resolution, capability}) {
                 await clickFeature(driver, [566800.6939276252, 5934968.732616884]);
                 */
 
-                await driver.wait(until.elementLocated(By.css("div.gfi-header.ui-draggable-handle")));
+                await driver.wait(until.elementLocated(By.css("div.gfi-header.ui-draggable-handle")), 5000);
 
                 const header = await driver.findElement(By.css("div.gfi-header.ui-draggable-handle"));
 

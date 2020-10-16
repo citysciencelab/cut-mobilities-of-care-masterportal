@@ -1,4 +1,5 @@
 import Theme from "../model";
+import thousandsSeparator from "../../../../../src/utils/thousandsSeparator";
 
 const ItGbmTheme = Theme.extend({
     initialize: function () {
@@ -36,30 +37,25 @@ const ItGbmTheme = Theme.extend({
 
             // Gewerbliche Standorte
             if (this.get("id") === "10319" && attrArray.includes(key)) {
-                gfiContent[key] = this.punctuate(value) + " ha";
+                gfiContent[key] = this.thousandsSeparator(value) + " ha";
             }
             // Flurstücke
             if (this.get("id") === "10320" && attrArray.includes(key)) {
-                gfiContent[key] = this.punctuate(value) + " m²";
+                gfiContent[key] = this.thousandsSeparator(value) + " m²";
             }
         });
 
         return gfiContent;
     },
     /**
-     * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-     * @param  {String} value - feature attribute values
-     * @return {String} newValue - feature attribute values as string with new punctuation
+     * adds thousands seperators into a number and changes the decimal point
+     * @param {(Number|String)} num the number as number or string
+     * @param {String} [delimAbs="."] the letter(s) to use as thousand point
+     * @param {String} [delimDec=","] the letter(s) to use as decimal point
+     * @returns {(String|Boolean)}  the given number with thousands seperators or false if any invalid num was given
      */
-    punctuate: function (value) {
-        const pattern = /(-?\d+)(\d{3})/;
-        let newValue = value.toString();
-
-        newValue = newValue.replace(".", ",");
-        while (pattern.test(newValue)) {
-            newValue = newValue.replace(pattern, "$1.$2");
-        }
-        return newValue;
+    thousandsSeparator: function (num, delimAbs = ".", delimDec = ",") {
+        return thousandsSeparator(num, delimAbs, delimDec);
     },
     /**
      * triggers feature properties via postMessage
