@@ -90,14 +90,14 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         });
     });
 
-    it("should render an a and img if imageAttribute ist existst in feature.properties", () => {
-        expect(wrapper.find(".gfi-theme-images > div:nth-child(1) > a").exists()).to.be.true;
-        expect(wrapper.find(".gfi-theme-images > div:nth-child(1) > a > img").exists()).to.be.true;
+    it("should render an a and img if imageAttribute is existst in feature.properties", () => {
+        expect(wrapper.find(".gfi-theme-images > div:nth-child(2) > a").exists()).to.be.true;
+        expect(wrapper.find(".gfi-theme-images > div:nth-child(2) > a > img").exists()).to.be.true;
     });
 
     it("should the img have the source of feature properties", () => {
-        expect(wrapper.find(".gfi-theme-images > div:nth-child(1) > a > img").classes()).includes("gfi-theme-images-image");
-        expect(wrapper.find(".gfi-theme-images > div:nth-child(1) > a > img").attributes().src).equals("https://test.png");
+        expect(wrapper.find(".gfi-theme-images > div:nth-child(2) > a > img").classes()).includes("gfi-theme-images-image");
+        expect(wrapper.find(".gfi-theme-images > div:nth-child(2) > a > img").attributes().src).equals("https://test.png");
     });
 
     it("should the img have the source of gfiTheme params as string", () => {
@@ -126,7 +126,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
             }
         });
 
-        expect(wrapper1.find(".gfi-theme-images > div:nth-child(1) > a > img").attributes().src).equals("https://abc.jpeg");
+        expect(wrapper1.find(".gfi-theme-images > div:nth-child(2) > a > img").attributes().src).equals("https://abc.jpeg");
     });
 
     it("should the img have the source of first found element gfiTheme params as array, the order is specified by imageLink", () => {

@@ -1,6 +1,7 @@
 <script>
 import {mapGetters} from "vuex";
 import uniqueId from "../../../../../../utils/uniqueId.js";
+import componentExists from "../../../../../../utils/componentExists.js";
 
 export default {
     name: "CompareFeatureIcon",
@@ -36,6 +37,7 @@ export default {
         this.initialize();
     },
     methods: {
+        componentExists,
 
         /**
          * Checks if the feature is on the comparelist.
@@ -58,7 +60,7 @@ export default {
          * @returns {ol/Feature} The olFeature
          */
         fetchOlFeature: function () {
-            if (this.visibleLayerListWithChildrenFromGroupLayers.length > 0) {
+            if (this.visibleLayerListWithChildrenFromGroupLayers?.length > 0) {
                 const foundLayer = this.visibleLayerListWithChildrenFromGroupLayers.find(layer => layer.get("id") === this.feature.getLayerId());
 
                 if (foundLayer && typeof foundLayer.get("source").getFeatures === "function") {
@@ -107,15 +109,6 @@ export default {
             else {
                 Radio.trigger("CompareFeatures", "removeFeatureFromList", this.olFeature);
             }
-        },
-
-        /**
-         * Checks if a component exists.
-         * @param {String} componentId - The id from component.
-         * @returns {Boolean} The component exists or not.
-         */
-        componentExist: function (componentId) { // todo function auslagern in util
-            return Boolean(Radio.request("ModelList", "getModelByAttributes", {id: componentId}));
         }
     }
 };
@@ -123,7 +116,7 @@ export default {
 
 <template>
     <span
-        v-if="olFeature && componentExist('compareFeatures')"
+        v-if="olFeature && componentExists('compareFeatures')"
         :class="['glyphicon', featureIsOnCompareList ? 'glyphicon-star' : 'glyphicon-star-empty']"
         :title="titleCompareList"
         @click="toogleFeatureToCompareList"

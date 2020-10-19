@@ -1,5 +1,6 @@
 <script>
 import {mapGetters} from "vuex";
+import componentExists from "../../../../../../utils/componentExists.js";
 
 export default {
     name: "RoutingIcon",
@@ -13,6 +14,8 @@ export default {
         ...mapGetters("Map", ["clickCoord"])
     },
     methods: {
+        componentExists,
+
         /**
          * Apply the feature as routing destination in Viomrouting.
          * @returns {void}
@@ -20,15 +23,6 @@ export default {
         setRoutingDestination: function () {
             Radio.trigger("ModelList", "setModelAttributesById", "routing", {isActive: true});
             Radio.trigger("ViomRouting", "setRoutingDestination", this.clickCoord);
-        },
-
-        /**
-         * Checks if a component exists.
-         * @param {String} componentId - The id from component.
-         * @returns {Boolean} The component exists or not.
-         */
-        componentExist: function (componentId) { // todo function auslagern in util
-            return Boolean(Radio.request("ModelList", "getModelByAttributes", {id: componentId}));
         }
     }
 };
@@ -36,7 +30,7 @@ export default {
 
 <template>
     <span
-        v-if="componentExist('routing')"
+        v-if="componentExists('routing')"
         class="glyphicon glyphicon-road"
         :title="$t('modules.tools.gfi.favoriteIcons.routingicon.routingDestination')"
         @click="setRoutingDestination"
