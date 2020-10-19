@@ -170,7 +170,7 @@ const actions = {
                 url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams),
                 gfiAsNewWindow = layer.get("gfiAsNewWindow");
 
-            return getWmsFeaturesByMimeType(mimeType, url, layerName, gfiTheme, gfiIconPath, gfiAttributes, gfiAsNewWindow, null, null, layerId);
+            return getWmsFeaturesByMimeType(mimeType, url, {layerName, layerId}, gfiTheme, gfiIconPath, gfiAttributes, gfiAsNewWindow, null, null);
         }));
 
         // only commit if features found

@@ -4,6 +4,7 @@ import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
+import componentExists from "../../../../../../../utils/componentExists.js";
 
 export default {
     name: "Schulinfo",
@@ -45,6 +46,7 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
+        componentExists,
 
         /**
          * Sets the imported components to importedComponents.
@@ -146,15 +148,6 @@ export default {
             Radio.trigger("ModelList", "setModelAttributesById", "schulwegrouting", {isActive: true});
             Radio.trigger("Schulwegrouting", "selectSchool", this.feature.getProperties().schul_id);
             this.$parent.close();
-        },
-
-        /**
-         * Checks if a component exists.
-         * @param {String} componentId - The id from component.
-         * @returns {Boolean} The component exists or not.
-         */
-        componentExist: function (componentId) { // todo function auslagern in util
-            return Boolean(Radio.request("ModelList", "getModelByAttributes", {id: componentId}));
         }
     }
 };
@@ -185,7 +178,7 @@ export default {
                         />
                     </template>
                     <span
-                        v-if="componentExist('schulwegrouting')"
+                        v-if="componentExists('schulwegrouting')"
                         class="glyphicon glyphicon-map-marker"
                         :title="$t('modules.tools.gfi.themes.schulinfo.schoolAsDestination')"
                         @click="changeToSchoolrouting"
