@@ -585,6 +585,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     showLayerInformation: function () {
         const metaID = [],
             name = this.get("name"),
+            cswUrl = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].csw_url : null,
+            showDowUrl = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].show_doc_url : null,
             layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
 
         metaID.push(layerMetaId);
@@ -595,6 +597,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "layername": name,
             "url": this.get("url"),
             "typ": this.get("typ"),
+            "cswUrl": cswUrl,
+            "showDocUrl": showDowUrl,
             "urlIsVisible": this.get("urlIsVisible")
         });
 

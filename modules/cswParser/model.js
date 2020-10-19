@@ -37,9 +37,26 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
      * @returns {void}
      */
     getMetaData: function (cswObj) {
+        let url;
+
+        if (cswObj.cswUrl === null) {
+            url = this.url();
+        }
+        else {
+            url = cswObj.cswUrl;
+        }
+
         $.ajax({
-            url: this.url(),
-            data: {id: cswObj.metaId},
+            url: url,
+            data: {
+                id: cswObj.metaId,
+                service: "CSW",
+                version: "2.0.2",
+                outputSchema: "http://www.isotc211.org/2005/gmd",
+                request: "GetRecordById",
+                typeNames: "csw:Record",
+                elementsetname: "full"
+            },
             dataType: "xml",
             async: false,
             context: this,
@@ -134,9 +151,11 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
         transferOptions.each(function (index, element) {
             datetype = $("gmd\\:CI_OnLineFunctionCode,CI_OnLineFunctionCode", element);
             if ($(datetype).attr("codeListValue") === "download") {
-                linkName = $("gmd\\:name,name", element)[0].textContent;
-                if (linkName.indexOf("Download") !== -1) {
-                    linkName = linkName.replace("Download ", "");
+                if ($("gmd\\:name,name", element).length !== 0) {
+                    linkName = $("gmd\\:name,name", element)[0].textContent;
+                }
+                else {
+                    linkName = "Download";
                 }
                 link = $("gmd\\:URL,URL", element)[0].textContent;
                 downloadLinks.push({linkName, link});
