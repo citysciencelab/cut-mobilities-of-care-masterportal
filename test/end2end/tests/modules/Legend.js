@@ -42,7 +42,7 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                 // retry until functionality is active - may get stuck else
                 do {
                     await (await driver.wait(
-                        until.elementLocated(By.css("ul#root li.dropdown span.glyphicon-book")))
+                        until.elementLocated(By.id("legend-menu")), 10000)
                     ).click();
                     await driver.wait(new Promise(r => setTimeout(r, 50)));
                 } while (
@@ -52,7 +52,7 @@ async function LegendTests ({builder, config, url, resolution, capability}) {
                     !await (await driver.findElements(By.css("div.legend-win")))[0].isDisplayed()
                 );
 
-                const legendContent = await driver.wait(until.elementLocated(By.css("div.legend-win-content"))),
+                const legendContent = await driver.wait(until.elementLocated(By.css("div.legend-win-content")), 120000),
                     headers = await legendContent.findElements(By.tagName("h4")),
                     text = await getTextOfElements(headers);
 
