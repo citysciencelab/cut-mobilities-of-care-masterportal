@@ -3,9 +3,6 @@ import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
 import SchulinfoTheme from "../../components/Schulinfo.vue";
-import Feature from "ol/Feature";
-import VectorSource from "ol/source/Vector";
-import VectorLayer from "ol/layer/Vector";
 import ThemeConfig from "../../themeConfig.json";
 
 const localVue = createLocalVue();
@@ -14,35 +11,25 @@ localVue.use(Vuex);
 
 describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () => {
     const properties = {
-            "abschluss": "Allgemeine Hochschulreife|erster allgemeinbildender Schulabschluss|Erweiterter erster allgemeinbildender Schulabschluss|mittlerer Schulabschluss|schulischer Teil der Fachhochschulreife",
-            "adresse_ort": "99999 Neverland",
-            "adresse_strasse_hausnr": "Exampleweg",
-            "anzahl_schueler": "500",
-            "anzahl_schueler_gesamt": "5000 an 3 Standorten",
-            "bezirk": "example Bezirk",
-            "schul_telefonnr": "+49 40 123456789",
-            "schul_email": "example@schulmail.com",
-            "schul_homepage": "https://example.de",
-            "fremdsprache": "Englisch|Französisch|Französisch|Spanisch|Spanisch|Türkisch",
-            "fremdsprache_mit_klasse": "Englisch ab Klasse  5|Französisch ab Klasse  11|Französisch ab Klasse  7|Spanisch ab Klasse  11|Spanisch ab Klasse  7|Türkisch ab Klasse  5",
-            "ganztagsform": "GTS teilweise gebunden",
-            "is_rebbz": "true",
-            "kantine_vorh": "true",
-            "kapitelbezeichnung": "Stadtteilschulen",
-            "schwerpunktschule": "true",
-            "oberstufenprofil": "Humans and their environment (bilingual);In diesem bilingualen Profil"
-        },
-        olFeature = new Feature({
-            isOnCompareList: false
-        }),
-        vectorLayer = new VectorLayer({
-            id: "1234",
-            source: new VectorSource()
-        });
+        "abschluss": "Allgemeine Hochschulreife|erster allgemeinbildender Schulabschluss|Erweiterter erster allgemeinbildender Schulabschluss|mittlerer Schulabschluss|schulischer Teil der Fachhochschulreife",
+        "adresse_ort": "99999 Neverland",
+        "adresse_strasse_hausnr": "Exampleweg",
+        "anzahl_schueler": "500",
+        "anzahl_schueler_gesamt": "5000 an 3 Standorten",
+        "bezirk": "example Bezirk",
+        "schul_telefonnr": "+49 40 123456789",
+        "schul_email": "example@schulmail.com",
+        "schul_homepage": "https://example.de",
+        "fremdsprache": "Englisch|Französisch|Französisch|Spanisch|Spanisch|Türkisch",
+        "fremdsprache_mit_klasse": "Englisch ab Klasse  5|Französisch ab Klasse  11|Französisch ab Klasse  7|Spanisch ab Klasse  11|Spanisch ab Klasse  7|Türkisch ab Klasse  5",
+        "ganztagsform": "GTS teilweise gebunden",
+        "is_rebbz": "true",
+        "kantine_vorh": "true",
+        "kapitelbezeichnung": "Stadtteilschulen",
+        "schwerpunktschule": "true",
+        "oberstufenprofil": "Humans and their environment (bilingual);In diesem bilingualen Profil"
+    };
     let wrapper;
-
-    olFeature.setId("feature1");
-    vectorLayer.getSource().addFeature(olFeature);
 
     beforeEach(() => {
         wrapper = shallowMount(SchulinfoTheme, {
@@ -57,18 +44,7 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
             localVue,
             mocks: {
                 $t: (msg) => msg
-            },
-            store: new Vuex.Store({
-                namespaces: true,
-                modules: {
-                    Map: {
-                        namespaced: true,
-                        getters: {
-                            layerList: () => [vectorLayer]
-                        }
-                    }
-                }
-            })
+            }
         });
     });
 
@@ -86,19 +62,6 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
         });
     });
 
-    it("should render empty star buttons by first start gfi", () => {
-        expect(wrapper.findAll("span").wrappers.find(span => span.classes("glyphicon-star-empty")).exists()).to.be.true;
-        expect(wrapper.findAll("span").wrappers.find(span => span.classes("glyphicon-star"))).to.be.undefined;
-    });
-
-    it("should render star button if featureIsOnCompareList is true", async () => {
-        wrapper.setData({featureIsOnCompareList: true});
-
-        await wrapper.vm.$nextTick();
-        expect(wrapper.findAll("span").wrappers.find(span => span.classes("glyphicon-star-empty"))).to.be.undefined;
-        expect(wrapper.findAll("span").wrappers.find(span => span.classes("glyphicon-star")).exists()).to.be.true;
-    });
-
     it("should assign feature properties", () => {
         const prop = {
                 "adresse_strasse_hausnr": "Exampleweg",
@@ -109,7 +72,6 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
                 kantine_vorh: "Kantine vorhanden"
             },
             feature = {
-                getOlFeature: () => olFeature,
                 getLayerId: () =>sinon.stub(),
                 getProperties: () => prop,
                 getAttributesToShow: () => attrToShow
@@ -130,7 +92,7 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
         expect(result[1].attributes).to.deep.equal([
             {
                 attributeName: attrToShow.kantine_vorh,
-                attributeValue: ["Ja"]
+                attributeValue: ["modules.tools.gfi.themes.schulinfo.yes"]
             }]
         );
     });
@@ -156,7 +118,7 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
         expect(wrapper.findAll("tr").length).equals(1);
         expect(wrapper.findAll("td").length).equals(2);
         expect(wrapper.findAll("td").wrappers[0].text()).equals("");
-        expect(wrapper.findAll("td").wrappers[1].text()).equals("Ja");
+        expect(wrapper.findAll("td").wrappers[1].text()).equals("modules.tools.gfi.themes.schulinfo.yes");
     });
 
     it("should set the selected category to true and all other to false", () => {
@@ -176,7 +138,7 @@ describe("src/modules/tools/gfi/components/themes/components/Schulinfo.vue", () 
     });
 
     it("should render the table for the first topic", () => {
-        const resultValues = ["Exampleweg", "99999 Neverland", "example Bezirk", "example@schulmail.com", "+49 40 123456789", "https://example.de", "Ja"],
+        const resultValues = ["Exampleweg", "99999 Neverland", "example Bezirk", "example@schulmail.com", "+49 40 123456789", "https://example.de", "modules.tools.gfi.themes.schulinfo.yes"],
             tdText = wrapper.findAll("td").wrappers.map(td => td.text());
 
         expect(wrapper.vm.selectedPropertyAttributes.length).equals(7);
