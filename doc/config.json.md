@@ -356,7 +356,34 @@ Radio event das ausgelöst werden soll durch Mouseover und Click. Definiert durc
 ***
 
 #### Portalconfig.searchBar.specialWFS
-Konfiguration der SpecialWFS Suche
+Konfiguration der WFS-Suchfunktion "specialWFS": fragt Features eines WFS-Dienstes ab. Der Dienst muss hierfür WFS 2.0 Anfragen zulassen.
+
+Beispielsweise würde bei der Eingabe "Kronenmatten" der Dienst
+https://geoportal.freiburg.de/geoportal_freiburg_de/wfs/stpla_bplan/wfs_mapfile/geltungsbereiche
+folgende Anfrage mit einer xml FeatureCollection beantworten. Die Features der Collection werden anschließend als Suchergebnisse vorgeschlagen.
+
+```
+#!xml
+    <?xml version='1.0' encoding='UTF-8'?>
+    <wfs:GetFeature service='WFS' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml' traverseXlinkDepth='*' version='1.1.0'>
+    <wfs:Query typeName='ms:geltungsbereiche'>
+    <wfs:PropertyName>ms:planbez</wfs:PropertyName>
+    <wfs:PropertyName>ms:msGeometry</wfs:PropertyName>
+    <wfs:maxFeatures>20</wfs:maxFeatures>
+    <ogc:Filter>
+    <ogc:PropertyIsLike matchCase='false' wildCard='*' singleChar='#' escapeChar='!'>
+    <ogc:PropertyName>ms:planbez</ogc:PropertyName>
+    <ogc:Literal>*Kronenmatten*</ogc:Literal>
+    </ogc:PropertyIsLike>
+    </ogc:Filter>
+    </wfs:Query>
+    </wfs:GetFeature>
+```
+
+
+Die WFS 2 query wird dabei dynamisch durch das Masterportal erstellt. Die Konfiguration einer stored query im WFS Dienst ist hierfür nicht erforderlich.
+
+
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -399,10 +426,10 @@ Konfiguration einer Definition bei der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|url|nein|String||URL des WFS.|false|
+|url|nein|String||URL des WFS. Je nach proxy-Konfiguration muss die relative url vom Server des Portals aus angegeben werden. |false|
 |name|nein|String||Name der Kategorie. Erscheint in der Vorschlagsliste.|false|
 |glyphicon|nein|String|"glyhicon-home"|CSS Klasse des Glyphicons das in der Vorschlagsliste erscheint.|false|
-|typeName|nein|String||TypeName des WFS layers.|false|
+|typeName|nein|String||Der Name des abzufragenden Layers innerhalb des WFS.|false|
 |propertyNames|nein|String[]||Array von Attributnamen. Diese Attribute werden durchsucht.|false|
 |geometryName|nein|String|"app:geom"|Attributname der Geometrie wird benötigt um darauf zu zoomen.|false|
 |maxFeatures|nein|Integer|20|Maximale Anzahl an gefundenen Features.|false|
@@ -2153,7 +2180,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |Titel|ja|String||Titel des Ordners.|false|
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
 |Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
-|isFolderSelectable|nein|Boolean|true|Bewirkt, dass alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden können.|false|
+|isFolderSelectable|nein|Boolean|true|Legt fest, ob alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden dürfen.|false|
 
 **Beispiel Ordner mit einem Layer**
 ```
