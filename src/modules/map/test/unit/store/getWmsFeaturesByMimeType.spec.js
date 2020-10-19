@@ -134,7 +134,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(result[0].getAttributesToShow).to.be.a("function");
             expect(result[0].getProperties).to.be.a("function");
 
-            expect(result[0].getGfiUrl()).to.equal("");
+            expect(result[0].getGfiUrl()).to.equal("url");
             expect(result[0].getTitle()).to.equal("layerName");
             expect(result[0].getIconPath()).to.equal("gfiIconPath");
             expect(result[0].getTheme()).to.equal("gfiTheme");
@@ -166,7 +166,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
     describe("getWmsFeaturesByMimeType", () => {
         it("should call openWindow before anything else if http: url is given", async () => {
             let calledOpenWindow = false;
-            const result = await getWmsFeaturesByMimeType("text/xml", "http:url", "layerName", "gfiTheme", "gfiIconPath", "attributesToShow", null, "requestGfi", () => {
+            const result = await getWmsFeaturesByMimeType("text/xml", "http:url", {layerName: "layerName", layerId: "layerId"}, "gfiTheme", "gfiIconPath", "attributesToShow", null, "requestGfi", () => {
                 calledOpenWindow = true;
             });
 
@@ -174,7 +174,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(result).to.be.an("array").to.be.empty;
         });
         it("should call requestGfi if mimeType text/xml is given", async () => {
-            const result = await getWmsFeaturesByMimeType("text/xml", "url", "layerName", "gfiTheme", "gfiIconPath", "attributesToShow", null, () => {
+            const result = await getWmsFeaturesByMimeType("text/xml", "url", {layerName: "layerName", layerId: "layerId"}, "gfiTheme", "gfiIconPath", "attributesToShow", null, () => {
                 // dummy for requestGfi
                 return new Promise(resolve => {
                     // simulation of featureInfos[feature{getProperties()}]

@@ -4,7 +4,9 @@ import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
  * returns a list of wms features for the given url and mimeType
  * @param {String} mimeType the infoFormat of the wms (either text/xml or text/html)
  * @param {String} url the url to call the wms features from
- * @param {String} layerName the name of the requesting layer
+ * @param {Object} layerInfo info of the layer
+ * @param {String} layerInfo.layerName the name of the requesting layer
+ * @param {String} layerInfo.layerId the id of the requesting layer
  * @param {String} gfiTheme the title of the theme - it does not check if the theme exists
  * @param {String} gfiIconPath path to icon used as fallback
  * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
@@ -13,20 +15,19 @@ import {requestGfi} from "../../../../api/wmsGetFeatureInfo";
  * @param {String} [gfiAsNewWindow.specs=""] a comma-separated list of items - the setup to open the window with (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
  * @param {Function} [requestGfiOpt=null] a function (mimeType, url) to call the wms url with (for testing only)
  * @param {Function} [openWindowOpt=null] a function (url, name, specs) to open a new browser window with if gfiAsNewWindow is given (for testing only)
- * @param {String} layerId the id of the requesting layer
  * @returns {Object[]}  a list of object{getTheme, getIconPath, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
-export function getWmsFeaturesByMimeType (mimeType, url, layerName, gfiTheme, gfiIconPath, attributesToShow, gfiAsNewWindow, requestGfiOpt = null, openWindowOpt = null, layerId) {
+export function getWmsFeaturesByMimeType (mimeType, url, layerInfo, gfiTheme, gfiIconPath, attributesToShow, gfiAsNewWindow, requestGfiOpt = null, openWindowOpt = null) {
     if (openFeaturesInNewWindow(url, gfiAsNewWindow, typeof openWindowOpt === "function" ? openWindowOpt : window.open) === true) {
         return [];
     }
 
     if (mimeType === "text/xml") {
-        return getXmlFeatures(url, layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, layerId);
+        return getXmlFeatures(url, layerInfo.layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, layerInfo.layerId);
     }
 
     // mimeType === "text/html"
-    return getHtmlFeature(url, layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, layerId);
+    return getHtmlFeature(url, layerInfo.layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, layerInfo.layerId);
 }
 
 /**
