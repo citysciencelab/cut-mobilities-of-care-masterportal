@@ -1,14 +1,5 @@
 <script>
-import Default from "../themes/default/components/Default.vue";
-import ActiveCityMaps from "../themes/ActiveCityMaps.vue";
-import Flaecheninfo from "../themes/flaecheninfo/components/Flaecheninfo.vue";
-import Dipas from "../themes/Dipas.vue";
-import Solaratlas from "../themes/Solaratlas.vue";
-import Schulinfo from "../themes/schulinfo/components/Schulinfo.vue";
-import TrafficCount from "../themes/trafficCount/components/TrafficCount.vue";
-import DataTable from "../themes/dataTable/components/DataTable.vue";
-import Bildungsatlas from "../themes/bildungsatlas/components/Bildungsatlas.vue";
-
+import Default from "../themes/components/Default.vue";
 import {mapGetters} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
 import Overlay from "ol/Overlay.js";
@@ -18,15 +9,7 @@ import "bootstrap/js/popover";
 export default {
     name: "Attached",
     components: {
-        Default,
-        ActiveCityMaps,
-        Flaecheninfo,
-        Dipas,
-        Schulinfo,
-        Solaratlas,
-        TrafficCount,
-        DataTable,
-        Bildungsatlas
+        Default
     },
     props: {
         feature: {

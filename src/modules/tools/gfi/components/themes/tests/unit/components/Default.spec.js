@@ -1,13 +1,13 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
-import DefaultTheme from "../../components/Default.vue";
+import DefaultTheme from "../../../components/Default.vue";
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("src/modules/tools/gfi/components/themes/default/components/Default.vue", () => {
+describe("src/modules/tools/gfi/components/themes/components/Default.vue", () => {
     let wrapper;
 
     beforeEach(() => {
