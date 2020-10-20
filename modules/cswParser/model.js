@@ -45,9 +45,8 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
         else {
             url = cswObj.cswUrl;
         }
-
         $.ajax({
-            url: url,
+            url: Radio.request("Util", "getProxyURL", url),
             data: {
                 id: cswObj.metaId,
                 service: "CSW",
