@@ -155,16 +155,63 @@ export default {
                 layerId = layer.get("id"),
                 layerName = layer.get("name"),
                 layerLegend = layer.get("legend"),
-                layerSelectionIDX = layer.get("selectionIDX");
+                layerSelectionIDX = layer.get("selectionIDX"),
+                layerTyp = layer.get("typ");
 
             if (isVisibleInMap) {
-                this.generateLegend(layerId, layerName, layerLegend, layerSelectionIDX);
+                if (layerTyp === "GROUP") {
+                    this.generateLegendForGroupLayer(layer);
+                }
+                else {
+                    this.generateLegend(layerId, layerName, layerLegend, layerSelectionIDX);
+                }
             }
             else {
                 this.removeLegend(layerId);
             }
         },
 
+        /**
+         * Prepares the legend with the given legendInfos
+         * @param {ol/Layer/Group} groupLayer grouplayer.
+         * @returns {Object[]} - the prepared legend.
+         */
+        generateLegendForGroupLayer (groupLayer) {
+            const id = groupLayer.get("id"),
+                legendObj = {
+                    id: id,
+                    name: groupLayer.get("name"),
+                    legend: this.prepareLegendForGroupLayer(groupLayer.get("layerSource")),
+                    position: groupLayer.get("selectionIDX")
+                },
+                isValidLegend = this.isValidLegendObj(legendObj),
+                isNotYetInLegend = isValidLegend && this.isLayerNotYetInLegend(id),
+                isLegendChanged = isValidLegend && !isNotYetInLegend && this.isLegendChanged(id, legendObj);
+
+            if (isNotYetInLegend) {
+                this.addLegend(legendObj);
+            }
+            else if (isLegendChanged) {
+                this.removeLegend(id);
+                this.addLegend(legendObj);
+            }
+            this.sortLegend();
+        },
+
+        /**
+         * Prepares the legend array for a grouplayer by iterating over its layers and generating the legend of each child.
+         * @param {ol/Layer/Soure} layerSource Layer sources of group layer.
+         * @returns {Object[]} - merged Legends.
+         */
+        prepareLegendForGroupLayer (layerSource) {
+            let legends = [];
+
+            layerSource.forEach(layer => {
+                legends.push(this.prepareLegend(layer.get("legend")));
+            });
+            legends = legends.flat();
+            return legends;
+        },
         /**
          * Generates the legend object and adds it to the legend array in the store.
          * @param {String} id Id of layer.
