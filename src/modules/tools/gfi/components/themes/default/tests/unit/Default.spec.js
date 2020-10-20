@@ -129,7 +129,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         expect(wrapper1.find(".gfi-theme-images > div:nth-child(1) > a > img").attributes().src).equals("https://abc.jpeg");
     });
 
-    it("should the img have the source of first found element gfiTheme params as array", () => {
+    it("should the img have the source of first found element gfiTheme params as array, the order is specified by imageLink", () => {
         const wrapper2 = shallowMount(DefaultTheme, {
             propsData: {
                 feature: {
@@ -155,7 +155,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
             }
         });
 
-        expect(wrapper2.find(".gfi-theme-images > div:nth-child(1) > a > img").attributes().src).equals("https://test.png");
+        expect(wrapper2.find(".gfi-theme-images > div:nth-child(1) > a > img").attributes().src).equals("https://abc.jpeg");
     });
 
 
