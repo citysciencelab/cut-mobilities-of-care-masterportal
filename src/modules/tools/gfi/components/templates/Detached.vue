@@ -141,8 +141,8 @@ export default {
          */
         getTheme () {
             const gfiComponents = Object.keys(this.$options.components),
-                gfitheme = this.feature.getTheme(),
-                configTheme = upperFirst(typeof gfitheme === "object" ? gfitheme.name : gfitheme);
+                gfiTheme = this.feature.getTheme(),
+                configTheme = upperFirst(typeof gfiTheme === "object" ? gfiTheme.name : gfiTheme);
 
             let theme = "";
 
