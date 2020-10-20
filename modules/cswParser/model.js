@@ -39,7 +39,7 @@ const CswParserModel = Backbone.Model.extend(/** @lends CswParserModel.prototype
     getMetaData: function (cswObj) {
         let url;
 
-        if (cswObj.cswUrl === null) {
+        if (cswObj.cswUrl === null || typeof cswObj.cswUrl === "undefined") {
             url = this.url();
         }
         else {

@@ -583,11 +583,17 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
+        let cswUrl = null,
+            showDocUrl = null,
+            layerMetaId = null;
+
+        if (this.get("datasets") && Array.isArray(this.get("datasets")) && this.get("datasets")[0]) {
+            cswUrl = this.get("datasets")[0].hasOwnProperty("csw_url") ? this.get("datasets")[0].csw_url : null;
+            showDocUrl = this.get("datasets")[0].hasOwnProperty("show_doc_url") ? this.get("datasets")[0].show_doc_url : null;
+            layerMetaId = this.get("datasets")[0].hasOwnProperty("md_id") ? this.get("datasets")[0].md_id : null;
+        }
         const metaID = [],
-            name = this.get("name"),
-            cswUrl = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].csw_url : null,
-            showDowUrl = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].show_doc_url : null,
-            layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
+            name = this.get("name");
 
         metaID.push(layerMetaId);
 
@@ -598,7 +604,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "url": this.get("url"),
             "typ": this.get("typ"),
             "cswUrl": cswUrl,
-            "showDocUrl": showDowUrl,
+            "showDocUrl": showDocUrl,
             "urlIsVisible": this.get("urlIsVisible")
         });
 
