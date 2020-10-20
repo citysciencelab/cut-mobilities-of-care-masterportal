@@ -155,7 +155,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
             }
         });
 
-        expect(wrapper2.find(".gfi-theme-images > div:nth-child(1) > a > img").attributes().src).equals("https://abc.jpeg");
+        expect(wrapper2.find(".gfi-theme-images > div:nth-child(2) > a > img").attributes().src).equals("https://abc.jpeg");
     });
 
 
