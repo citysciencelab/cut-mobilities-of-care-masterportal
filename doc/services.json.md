@@ -472,7 +472,7 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|imageLinks|nein|String,String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird nur der erste gefundene Wert verwendet.|
+|imageLinks|nein|String,String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird in der angegebenen Reihenfolge nach den Attributen gesucht. Der erste Treffer wird verwendet.|
 
 **Beispiel gfiTheme für das template "Default":**
 
