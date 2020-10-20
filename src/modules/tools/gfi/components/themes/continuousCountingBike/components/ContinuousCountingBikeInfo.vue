@@ -13,7 +13,6 @@ export default {
 <template>
     <div class="tab-content">
         <div
-            id="gfiList"
             class="tab-pane fade in active"
         >
             <div class="imageContinuousCountingBikeDiv">
@@ -24,10 +23,10 @@ export default {
                         <td class="subHeader">
                         </td>
                         <td>
-                            Zeitraum
+                            {{ $t("modules.tools.gfi.themes.continuousCountingBike.timeframe") }}
                         </td>
                         <td>
-                            Fahrräder
+                            {{ $t("modules.tools.gfi.themes.continuousCountingBike.bikes") }}
                         </td>
                     </tr>
                     <tr

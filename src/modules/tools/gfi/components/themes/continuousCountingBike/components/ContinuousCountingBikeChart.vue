@@ -71,7 +71,7 @@ export default {
             <label
                 class="form-check-label"
                 for="chartCheck"
-            >Diagramm</label>
+            >{{ $t("modules.tools.gfi.themes.continuousCountingBike.diagram") }}</label>
         </div>
         <div
             id="chart"
@@ -94,7 +94,7 @@ export default {
             <label
                 class="form-check-label"
                 for="tableCheck"
-            >Tabelle</label>
+            >{{ $t("modules.tools.gfi.themes.continuousCountingBike.chart") }}</label>
         </div>
         <div
             v-if="tableVisible && properties.data"
@@ -103,7 +103,7 @@ export default {
             <table class="table table-hover">
                 <thead>
                     <th class="text-align-center">
-                        Name
+                        {{ $t("modules.tools.gfi.themes.continuousCountingBike.name") }}
                     </th>
                     <th
                         v-for="(day, index) in properties.data"
