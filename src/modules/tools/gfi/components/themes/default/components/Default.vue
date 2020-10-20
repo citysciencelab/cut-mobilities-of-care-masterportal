@@ -23,9 +23,17 @@ export default {
          * @return {String} The attribute with image link.
          */
         imageAttribute: function () {
-            const firstAttribute = Object.keys(this.feature.getProperties()).find(key => this.imageLinks.includes(key));
+            const properties = this.feature.getProperties();
 
-            return this.feature.getProperties()[firstAttribute];
+            if (properties === null || typeof properties !== "object" || !Array.isArray(this.imageLinks)) {
+                return undefined;
+            }
+            for (const key of this.imageLinks) {
+                if (properties.hasOwnProperty(key)) {
+                    return properties[key];
+                }
+            }
+            return undefined;
         }
     },
     created () {
