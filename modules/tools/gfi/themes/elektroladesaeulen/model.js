@@ -775,15 +775,20 @@ const ElektroladesaeulenTheme = Theme.extend({
             mean,
             arrayPerHour;
 
-        for (let i = 0; i <= dayLength; i++) {
-            // initialize
+        for (let i = 0; i < dayLength; i++) {
             sum = 0;
             mean = 0;
             arrayPerHour = this.arrayPerHour(dataPerHour, i);
 
             if (arrayPerHour.length === 0) {
-                break;
+                dayMeanArray.push({
+                    hour: i,
+                    sum: 0,
+                    mean: 0
+                });
+                continue;
             }
+
             // remove all undefined data
             arrayPerHour = arrayPerHour.filter(value => {
                 return value !== undefined;
