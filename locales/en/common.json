@@ -407,6 +407,28 @@
                     "default": {
                       "imgAlt": "No image could be loaded."
                     },
+                    "continuousCountingBike":{
+                        "kind": "Kind: {{kind}}",
+                        "info": "info",
+                        "lastDay": "last day",
+                        "lastSevenDays": "last 7 days",
+                        "year": "year",
+                        "timeframe": "Timeframe",
+                        "bikes": "Bicycles",
+                        "bikesSummedUp": "Total bicycles",
+                        "bikesOutOfTown": "Bicycles out of town",
+                        "bikesIntoTown": "Bicycles into town",
+                        "amountBikesPerHour": "Number of bicycles/hour",
+                        "amountBikesPerDay": "Number of bicycles/day",
+                        "amountBikesPerWeek": "Number of bicycles/week",
+                        "dayScheduleAtDate": "Course of the day on {{date}}",
+                        "weekScheduleFromToDate": "Week from {{startDate}} to {{endDate}}",
+                        "yearScheduleInYear": "KW per year {{year}}",
+                        "chart": "table",
+                        "diagram": "diagram",
+                        "name": "name",
+                        "download": "Download"
+                    },
                     "trafficCount": {
                         "infoLabel": "Info",
                         "dayLabel": "Day",
