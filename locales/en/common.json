@@ -96,6 +96,9 @@
             "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!"
           }
         },
+        "alerting": {
+            "hideMessage": "Do not show the message anymore"
+        },
         "cswParser": {
             "noMetadataMessage": "No metadata available."
         },
