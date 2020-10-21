@@ -41,12 +41,10 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
     },
 
     rerender: function () {
-        console.log(this.model.get("valuesCollection").models[0].attributes.language);
         const date = this.model.get("valuesCollection").models[0],
             newLang = this.model.get("currentLng");
 
         date.set({language: newLang});
-        console.log(this.model.get("valuesCollection").models[0].attributes.language);
     },
 
     /**
