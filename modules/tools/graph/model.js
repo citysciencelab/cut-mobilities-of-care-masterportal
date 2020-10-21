@@ -107,14 +107,20 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         // works in this case as clone deep
         const newConfig = JSON.parse(JSON.stringify(graphConfig));
 
-        newConfig.legendData = graphConfig.legendData.map(data => {
-            data.text = i18next.t(data.text);
-            return data;
-        });
+        if (newConfig.legendData) {
+            newConfig.legendData = graphConfig.legendData.map(data => {
+                data.text = i18next.t(data.text);
+                return data;
+            });
+        }
 
-        newConfig.xAxisLabel.label = i18next.t(newConfig.xAxisLabel.label);
-        newConfig.yAxisLabel.label = i18next.t(newConfig.yAxisLabel.label);
-        newConfig.xAxisTicks.unit = i18next.t(newConfig.xAxisTicks.unit);
+        if (newConfig.xAxisLabel) {
+            newConfig.xAxisLabel.label = i18next.t(newConfig.xAxisLabel.label);
+            newConfig.yAxisLabel.label = i18next.t(newConfig.yAxisLabel.label);
+        }
+        if (newConfig.xAxisTicks) {
+            newConfig.xAxisTicks.unit = i18next.t(newConfig.xAxisTicks.unit);
+        }
 
         return newConfig;
     },
