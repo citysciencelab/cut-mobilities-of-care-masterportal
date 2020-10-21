@@ -7,7 +7,7 @@ const allAddons = VUE_ADDONS || {};
 /**
  * Adds all addons based on config.js and addonsConf.json to the Vue Instance and store
  * @param {String[]} config The array of addonKeys specified in config.js
- * @returns {Void}  -
+ * @returns {void}
  */
 export default async function (config) {
     Vue.prototype.$toolAddons = []; // add .$toolAddons to store tools in
@@ -39,7 +39,7 @@ export default async function (config) {
 /**
  * Loads the themes and creates the Vue component and adds it to Vue instance globally
  * @param {String} addonKey specified in config.js
- * @returns {Void} -
+ * @returns {void}
  */
 async function loadThemes (addonKey) {
     const addonModule = await import(
@@ -50,6 +50,11 @@ async function loadThemes (addonKey) {
     ),
         addon = addonModule.default;
 
+    // Add the locale
+    for (const localeKey in addon.locales) {
+        i18next.addResourceBundle(localeKey, "additional", addon.locales[localeKey], true);
+    }
+
     Vue.component(addon.component.name, addon.component);
     // Add the componentName to a global array on vue instance called $themeAddons
     Vue.prototype.$themeAddons.push(addon.component.name);
@@ -58,7 +63,7 @@ async function loadThemes (addonKey) {
  * Loads the tool addon, creates the Vue component and adds it to Vue instance globally.
  * Registeres the store at module "Tools" and adds the local-files.
  * @param {String} addonKey specified in config.js
- * @returns {Void} -
+ * @returns {void}
  */
 async function loadToolAddons (addonKey) {
     const addonModule = await import(
