@@ -32,7 +32,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
             "change:isActive": this.render,
             "toggleButtonValueChanged": this.toggleElements,
             "change:currentLng": () => {
-                this.render();
+                this.rerender();
             }
         });
 
@@ -70,6 +70,23 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
             this.undelegateEvents();
         }
 
+        return this;
+    },
+
+    rerender: async function () {
+        if (this.model.get("isActive")) {
+            await this.datepickerView.rerender();
+            this.ensureSnippetsReady();
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template({}));
+            this.$el.append(this.toggleButtonView.render().el);
+            this.$el.append(this.datepickerView.render().el);
+            this.$el.append(this.timesliderView.render().el);
+            this.$el.append(this.datesliderView.render().el);
+            this.toggleElements(this.model.get("isShadowEnabled"));
+            this.model.toggleShadow(this.model.get("isShadowEnabled"));
+            this.delegateEvents();
+        }
         return this;
     },
 
