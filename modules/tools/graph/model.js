@@ -317,9 +317,6 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         if (xAxisTicks === undefined) {
             d3Object = d3.axisBottom(scale);
         }
-        else if (xAxisTicks.xAxisTickDefinition) {
-            d3Object = d3.axisBottom(scale).ticks(...xAxisTicks.xAxisTickDefinition);
-        }
         else if (xAxisTicks.hasOwnProperty("values") && !xAxisTicks.hasOwnProperty("factor")) {
             d3Object = d3.axisBottom(scale)
                 .tickValues(xAxisTicks.values)
