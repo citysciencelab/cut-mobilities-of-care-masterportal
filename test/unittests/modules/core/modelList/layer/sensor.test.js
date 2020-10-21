@@ -125,17 +125,6 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("mergeByCoordinates", function () {
-        it("should return an array that is empty with undefined input", function () {
-            expect(sensorLayer.mergeByCoordinates(undefined)).to.be.an("array").that.is.empty;
-        });
-        it("should return an array that is empty for array with testdata", function () {
-            const dataArray = [{Test: [{name: "testname"}]}];
-
-            expect(sensorLayer.mergeByCoordinates(dataArray)).to.be.an("array").that.is.empty;
-        });
-    });
-
     describe("getFirstPhenomenonTime", function () {
         it("should return undefined", function () {
             expect(sensorLayer.getFirstPhenomenonTime(undefined)).to.be.undefined;
