@@ -343,7 +343,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         let d3Object;
 
         if (xAxisTicks === undefined || !xAxisTicks.hasOwnProperty("ticks")) {
-            d3Object = scale ? axisBottom(scale) : undefined
+            d3Object = scale ? d3.axisBottom(scale) : undefined
                 .tickValues(scale.domain().filter(function (d, i) {
                     const val = i % xThinningFactor;
 
@@ -355,7 +355,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 });
         }
         else {
-            d3Object = axisBottom(scale)
+            d3Object = d3.axisBottom(scale)
                 .ticks(xAxisTicks.ticks, xAxisTicks.factor)
 
                 .tickFormat(function (d) {
@@ -390,13 +390,13 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         let d3Object;
 
         if (yAxisTicks === "undefined" && !yAxisTicks.hasOwnProperty("ticks")) {
-            d3Object = axisLeft(scale)
+            d3Object = d3.axisLeft(scale)
                 .tickFormat(function (d) {
                     return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 });
         }
         else {
-            d3Object = axisLeft(scale).ticks(yAxisTicks.ticks, yAxisTicks.factor);
+            d3Object = d3.axisLeft(scale).ticks(yAxisTicks.ticks, yAxisTicks.factor);
         }
 
         return d3Object;
@@ -706,7 +706,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     },
 
     createSvgOld: function (selector, marginObj, width, height, svgClass) {
-        return select(selector).append("svg")
+        return d3.select(selector).append("svg")
             .attr("width", width + marginObj.left + marginObj.right)
             .attr("height", height + marginObj.top + marginObj.bottom)
             .attr("class", svgClass)
@@ -1075,7 +1075,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 return height - y(d[attrToShowArray[0]]);
             })
             .on("mouseover", function () {
-                select(this);
+                d3.select(this);
             }, this)
             .append("title")
             .text(function (d) {
