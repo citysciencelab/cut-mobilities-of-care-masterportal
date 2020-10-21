@@ -12,8 +12,6 @@ import SgvOnlineTheme from "./sgvOnline/model";
 import SgvOnlineThemeView from "./sgvOnline/view";
 import VerkehrsStaerkenTheme from "./verkehrsstaerken/model";
 import VerkehrsStaerkenThemeView from "./verkehrsstaerken/view";
-import ContinuousCountingBikeTheme from "./continuousCountingBike/model";
-import ContinuousCountingBikeThemeView from "./continuousCountingBike/view";
 import ItGbmTheme from "./itgbm/model";
 import ItGbmThemeView from "./itgbm/view";
 import DipasThemeView from "./dipas/view";
@@ -87,9 +85,6 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "verkehrsstaerken") {
             theme = new VerkehrsStaerkenTheme(attrs, options);
-        }
-        else if (attrs.gfiTheme === "continuousCountingBike") {
-            theme = new ContinuousCountingBikeTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "itgbm") {
             theme = new ItGbmTheme(attrs, options);
@@ -190,10 +185,6 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "verkehrsstaerken": {
                 new VerkehrsStaerkenThemeView({model: model});
-                break;
-            }
-            case "continuousCountingBike": {
-                new ContinuousCountingBikeThemeView({model: model});
                 break;
             }
             case "itgbm": {
