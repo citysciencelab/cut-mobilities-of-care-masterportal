@@ -414,28 +414,6 @@
                     "default": {
                       "imgAlt": "Es konnte kein Bild geladen werden."
                     },
-                    "continuousCountingBike":{
-                        "kind": "Art: {{kind}}",
-                        "info": "Info",
-                        "lastDay": "letzter Tag",
-                        "lastSevenDays": "letzte 7 Tage",
-                        "year": "Jahr",
-                        "timeframe": "Zeitraum",
-                        "bikes": "Fahrräder",
-                        "bikesSummedUp": "Fahrräder insgesamt",
-                        "bikesOutOfTown": "Fahrräder stadtauswärts",
-                        "bikesIntoTown": "Fahrräder stadteinwärts",
-                        "amountBikesPerHour": "Anzahl Fahrräder/Stunde",
-                        "amountBikesPerDay": "Anzahl Fahrräder/Tag",
-                        "amountBikesPerWeek": "Anzahl Fahrräder/Woche",
-                        "dayScheduleAtDate": "Tagesverlauf am {{date}}",
-                        "weekScheduleFromToDate": "Woche vom {{startDate}} bis {{endDate}}",
-                        "yearScheduleInYear": "KW im Jahr {{year}}",
-                        "chart": "Tabelle",
-                        "diagram": "Diagramm",
-                        "name": "Name",
-                        "download": "Download"
-                    },
                     "trafficCount": {
                         "infoLabel": "Info",
                         "dayLabel": "Tag",
