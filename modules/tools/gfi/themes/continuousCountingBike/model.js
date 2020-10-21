@@ -1,6 +1,7 @@
 import Theme from "../model";
 import ImgView from "../../objects/image/view";
 import * as moment from "moment";
+import thousandsSeparator from "../../../../../src/utils/thousandsSeparator";
 
 const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBikeTheme.prototype */{
     defaults: Object.assign({}, Theme.prototype.defaults,
@@ -21,7 +22,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
      * @property {Object} yearDataset={} Empty object for the dataset of the current year
      * @property {String} activeTab="info" Contains the name of the active tab
      * @property {String} downloadLink="" Link for the download data
-     * @fires Util#RadioRequestUtilPunctuate
      * @fires Tools.Graph#RadioTriggerGraphCreateGraph
      * @listens Theme#changeIsReady
      */
@@ -89,7 +89,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     },
     /**
      * ParseGfiContent parses the gfiContent into several variables for the graphics and for the info tab.
-     * @fires Util#event:RadioRequestUtilPunctuate
      * @return {void}
      */
     parseGfiContent: function () {
@@ -119,7 +118,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                     isnum = new RegExp(/^\d+$/).test(attribute.split("|")[1]);
                     editedAttribute = attribute.split("|");
                     if (isnum === true) {
-                        editedAttribute[1] = Radio.request("Util", "punctuate", editedAttribute[1]);
+                        editedAttribute[1] = thousandsSeparator(editedAttribute[1]);
                     }
                     if (key === "Stärkster Monat im Jahr") {
                         strongestFrequentedMonth = new Date(2019, editedAttribute[0] - 1);
@@ -156,7 +155,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     /**
      * splitDayDataset creates a json for the graphic module with the dayLine data.
      * @param  {String} dayLine contains the dayLine data of gfiContent
-     * @fires Util#event:RadioRequestUtilPunctuate
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitDayDataset: function (dayLine) {
@@ -181,7 +179,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 date: splitted[0],
                 timestamp: new Date(year, month, day, hours, minutes, seconds, 0),
                 total: total,
-                tableData: Radio.request("Util", "punctuate", total),
+                tableData: thousandsSeparator(total),
                 r_in: r_in,
                 r_out: r_out
             });
@@ -192,7 +190,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     /**
      * splitLastSevenDaysDataset creates a json for the graphic module with the lastSevenDaysLine data.
      * @param  {String} lastSevenDaysLine contains the lastSevenDays data of gfiContent
-     * @fires Util#event:RadioRequestUtilPunctuate
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitLastSevenDaysDataset: function (lastSevenDaysLine) {
@@ -214,7 +211,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 style: "circle",
                 timestamp: new Date(year, month, day, 0, 0, 0, 0),
                 total: total,
-                tableData: Radio.request("Util", "punctuate", total),
+                tableData: thousandsSeparator(total),
                 r_in: r_in,
                 r_out: r_out
             });
@@ -227,7 +224,6 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
     /**
      * splitYearDataset creates a json for the graphic module with the yearLine data.
      * @param  {String} yearLine contains the year data of gfiContent
-     * @fires Util#event:RadioRequestUtilPunctuate
      * @return {Array} tempArr array with prepared objects of the data
      */
     splitYearDataset: function (yearLine) {
@@ -248,7 +244,7 @@ const ContinuousCountingBikeTheme = Theme.extend(/** @lends ContinuousCountingBi
                 timestamp: moment().day("Monday").year(year).week(weeknumber).toDate(),
                 year: year,
                 total: total,
-                tableData: Radio.request("Util", "punctuate", total),
+                tableData: thousandsSeparator(total),
                 r_in: r_in,
                 r_out: r_out
             });

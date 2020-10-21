@@ -56,7 +56,7 @@ const actions = {
      * @returns {void}
      */
     addTool: ({state, commit}, tool) => {
-        commit("setComponentMap", Object.assign(state.componentMap, {[tool.default.name]: tool.default}));
+        commit("setComponentMap", Object.assign(state.componentMap, {[tool.name]: tool}));
     },
 
     /**

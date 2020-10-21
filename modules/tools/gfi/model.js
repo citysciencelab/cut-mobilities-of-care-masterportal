@@ -426,6 +426,9 @@ const GFI = Tool.extend(/** @lends GFI.prototype */{
         const vectorGfiParams = [];
 
         layerlist.forEach(vectorLayer => {
+            if (vectorLayer.get("gfiAttributes") === "ignore") {
+                return;
+            }
             const features = Radio.request("Map", "getFeaturesAtPixel", eventPixel, {
                     layerFilter: function (layer) {
                         return layer.get("id") === vectorLayer.get("id");

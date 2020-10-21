@@ -9,17 +9,22 @@ export default {
     components: {},
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
-        ...mapGetters(["mobile"]),
+        ...mapGetters(["mobile", "uiStyle"]),
         showLegendInMenu () {
             return Boolean(this.name);
         }
     },
     mounted () {
-        const root = document.getElementById("root");
+        const root = this.uiStyle === "TABLE" ? document.getElementById("table-tools-menu") : document.getElementById("root");
 
         this.getLegendConfig();
         if (root) {
-            root.after(this.$el);
+            if (this.uiStyle === "TABLE") {
+                root.append(this.$el);
+            }
+            else {
+                root.after(this.$el);
+            }
         }
     },
     methods: {
@@ -37,9 +42,9 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div :class="{ 'table-tool': uiStyle === 'TABLE'}">
         <ul
-            v-if="!mobile"
+            v-if="!mobile && uiStyle !== 'TABLE'"
             id="legend-menu"
             class="nav navbar-nav"
         >
@@ -81,6 +86,18 @@ export default {
                 </div>
             </li>
         </ul>
+        <a
+            v-if="!mobile && uiStyle === 'TABLE'"
+            href="#"
+            class="dropdown-toggle"
+            @click="toggleLegend"
+        >
+            <span
+                :class="glyphicon"
+                class="glyphicon hidden-sm"
+            ></span>
+            <span class="menuitem">{{ $t(name) }}</span>
+        </a>
     </div>
 </template>
 

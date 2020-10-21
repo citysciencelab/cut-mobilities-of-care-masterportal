@@ -35,7 +35,7 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
-                await driver.wait(until.elementLocated(By.css("#button3D")));
+                await driver.wait(until.elementLocated(By.css("#button3D")), 5000);
                 button3D = await driver.findElement(By.css("#button3D"));
 
                 // activate a layer for later testing whether it remains active - other portals have layers active initially
@@ -66,7 +66,7 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
 
             it("button3D press activates 3D mode and 3D mode UI", async function () {
                 await button3D.click();
-                await driver.wait(until.elementLocated(By.css("#orientation3d")));
+                await driver.wait(until.elementLocated(By.css("#orientation3d")), 5000);
 
                 tiltDown = await driver.findElement(By.css("#orientation3d .control-box-container #tilt-down"));
                 tiltUp = await driver.findElement(By.css("#orientation3d .control-box-container #tilt-up"));

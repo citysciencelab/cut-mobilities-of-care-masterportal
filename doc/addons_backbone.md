@@ -17,6 +17,7 @@ Folgende Struktur ist dabei zu beachten:
 ## 1. Dateistruktur von Addons ##
 
 1.1. Jedes *Addon* liegt in einem eigenen Ordner, welcher so heißt, wie in **addonsConf.json** als key definiert. In diesen Ordnern liegen alle für die jeweiligen *Addons* benötigten Dateien. Dazu gehören auch die Ordner **doc**, **jsdoc** und **unittests** mit den jeweiligen **.md**, **.js** und **.test.js** Dateien.
+Es ist möglich, dass Addons eine eigene `package.json` Datei besitzen, um weitere Dependencies zu definieren.
 
 #### Beispiel entsprechende Ordnerstruktur ####
 ```
@@ -32,6 +33,7 @@ myMasterPortalFolder/
                 namespaces.js
             unittests/
                 model.test.js
+            package.json
             [...]
         myAddon2/
             subFolder/
@@ -51,18 +53,34 @@ myMasterPortalFolder/
     [...]
 ```
 
-1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner aus relativen Pfade zu deren *Entrypoints* als Values. Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
+1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner aus relativen Pfade zu deren *Entrypoints* als Values. Das nachfolgende Beispiel basiert auf der oben beschriebenen beispielhaften Ordnerstruktur.
 
 #### Beispiel **addonsConf.json** ####
-```
+```json
 {
   "exampleAddon": "entrypoint.js",
   "myAddon1": "view.js",
   "myAddon2": "subFolder/init.js"
 }
 ```
+1.3. Entrypoint des Addons sollte wenn vorhanden der View Constructor sein.
 
-1.3. Es sollen hier ausschließlich nur die Dateien landen, welche zu *addons* gehören.
+1.4. Es sollen hier ausschließlich nur die Dateien landen, welche zu *addons* gehören.
+
+1.5 Falls weitere Dependencies die noch nicht im Masterportal vorhanden sind für ein Addon benötigt werden, können diese
+über eine eigene `package.json` installiert werde. Dazu reicht eine minimale `package.json` aus:
+
+```json
+{
+  "name": "exampleAddon",
+  "version": "1.0.0",
+  "description": "I'm an example! I can say hello world.",
+  "dependencies": {
+    "hello": "^0.3.2"
+  }
+}
+```
+`npm install` muss für jedes Addon separat ausgeführt werden!
 
 ## 2. Beispiel-Addon ##
 
@@ -84,7 +102,7 @@ myMasterPortalFolder/
 
 2.2. Addon-Code schreiben:
 
-```
+```js
 // myMasterPortalFolder/addons/exampleAddon/model.js
 import Tool from "../../modules/core/modelList/tool/model";
 
@@ -103,14 +121,14 @@ const exampleAddon = Tool.extend({
 export default exampleAddon;
 
 ```
-```
+```js
 // myMasterPortalFolder/addons/exampleAddon/view.js
 import ExampleTemplate from "text-loader!./template.html";
 import ExampleModel from "./model";
 
 const ExampleView = Backbone.View.extend({
-    
-    initialize: function () 
+
+    initialize: function ()
      {
         this.model = new ExampleModel();
         this.listenTo(this.model, {
@@ -125,7 +143,7 @@ const ExampleView = Backbone.View.extend({
     // Konvention: Die Methode fürs zeichnen der View, heißt render.
     render: function (model, value) {
         const attr = model.toJSON();
-    
+
         if (value) {
             //do something like this
             this.setElement(document.getElementsByClassName("win-body")[0]);
@@ -138,16 +156,15 @@ const ExampleView = Backbone.View.extend({
 ```
 2.3. Die Addons-Config-Datei erstellen:
 
-```
 // myMasterPortalFolder/addons/addonsConf.json
-
+```json
 {
   "exampleAddon": "view.js"
 }
 ```
 
 2.4. Das Beispiel-Addon in der config.js Datei des Portals aktivieren:
-```
+```js
 // myMasterPortalFolder/config.js
 
 const Config = {
@@ -171,7 +188,7 @@ const Config = {
 
 2.5. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
 
-```
+```js
 /**
  * @namespace ExampleAddon
  * @memberof Addons
@@ -180,9 +197,9 @@ const Config = {
 
 2.6. In der model.js muss bei memberOf als Prefix Addons. angegeben werden.
 
-```
+```js
 /**
-* @class exampleAddon
+* @class ExampleAddonModel
 * @extends Tool
 * @memberof Addons.ExampleAddon
 * @constructs
