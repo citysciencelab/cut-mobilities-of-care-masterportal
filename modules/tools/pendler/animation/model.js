@@ -1,10 +1,11 @@
 import PendlerCoreModel from "../core/model";
-import {Circle, Fill, Style} from "ol/style.js";
+import {Circle, Fill, Style, Stroke} from "ol/style.js";
 import {Point, LineString} from "ol/geom.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import Feature from "ol/Feature.js";
 import {getVectorContext} from "ol/render.js";
+import thousandsSeparator from "../../../../src/utils/thousandsSeparator";
 
 const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     defaults: Object.assign({}, PendlerCoreModel.prototype.defaults, {
@@ -236,30 +237,22 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * @returns {void}
      */
     createLineString: function (relevantFeatures) {
-        let startPoint,
-            endPoint,
-            steps,
-            directionX,
-            directionY,
-            lineCoords,
-            line,
+        let line,
             newEndPt,
-            i,
-            anzahlPendler,
-            gemeinde;
-
+            i;
 
         this.get("pathLayer").getSource().clear();
 
         relevantFeatures.forEach(feature => {
-            startPoint = feature.getGeometry().getFirstCoordinate();
-            endPoint = feature.getGeometry().getLastCoordinate();
-            steps = this.get("steps");
-            directionX = (endPoint[0] - startPoint[0]) / steps;
-            directionY = (endPoint[1] - startPoint[1]) / steps;
-            lineCoords = [];
-            anzahlPendler = feature.get(this.get("attrAnzahl"));
-            gemeinde = feature.get(this.get("attrGemeinde"));
+            const startPoint = feature.getGeometry().getFirstCoordinate(),
+                endPoint = feature.getGeometry().getLastCoordinate(),
+                steps = this.get("steps"),
+                directionX = (endPoint[0] - startPoint[0]) / steps,
+                directionY = (endPoint[1] - startPoint[1]) / steps,
+                lineCoords = [],
+                anzahlPendler = feature.get(this.get("attrAnzahl")),
+                gemeinde = feature.get(this.get("attrGemeinde")),
+                gemeindeContrary = feature.get(this.get("attrGemeindeContrary"));
 
             for (i = 0; i <= steps; i++) {
                 newEndPt = new Point([startPoint[0] + (i * directionX), startPoint[1] + (i * directionY), 0]);
@@ -271,6 +264,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
                 geometry: new LineString(lineCoords),
                 anzahlPendler: anzahlPendler,
                 gemeindeName: gemeinde,
+                centerName: gemeindeContrary,
                 color: feature.color
             });
 
@@ -279,29 +273,6 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         });
     },
 
-    /**
-     * Prepares the style of the circles
-     * @param {Number} anzahlPendler amount of 'pendler'
-     * @param {String} color dedicated color to draw the circle
-     * @returns {Object} the created style containing a circle
-     */
-    preparePointStyle: function (anzahlPendler, color) {
-        const minVal = this.get("minVal"),
-            maxVal = this.get("maxVal"),
-            minPx = this.get("minPx"),
-            maxPx = this.get("maxPx"),
-            percent = (anzahlPendler * 100) / (maxVal - minVal),
-            pixel = ((maxPx - minPx) / 100) * percent,
-            radius = Math.round(minPx + pixel),
-            style = new Style({
-                image: new Circle({
-                    radius: radius,
-                    fill: new Fill({color: color})
-                })
-            });
-
-        return style;
-    },
     /**
      * Prepares the animation and stops the running animation or starts it. Ensures the 'Anzahl' is always on top of all layers.
      * @returns {void}
@@ -432,27 +403,70 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * @returns {void} Keine Rückgabe
      */
     addFeaturesToLayer: function (features, layer) {
-        let currentPoint, coordinates,
-            newFeature,
-            drawIndex,
-            style;
-
+        this.addCenterLabelToLayer(feature => feature.get("centerName"), features, layer);
         features.forEach(feature => {
-            coordinates = feature.getGeometry().getCoordinates();
-            style = this.preparePointStyle(feature.get("anzahlPendler"), feature.get("color"));
-
-            // Ob die Features bei der Startposition oder der Endposition gezeichnet werden müssen,
-            // ist abhängig von der Anzahl der Durchgänge
-            drawIndex = this.get("animationLimit") % 2 === 1 ? 0 : coordinates.length - 1;
-
-            currentPoint = new Point(coordinates[drawIndex]);
-            newFeature = new Feature(currentPoint);
-            // "styleId" neccessary for print, that style and feature can be linked
-            newFeature.set("styleId", Radio.request("Util", "uniqueId"));
-            newFeature.setStyle(style);
-            layer.getSource().addFeature(newFeature);
+            // to add lines to the animation use addBeamFeatureToLayer:
+            /*
+            this.addBeamFeatureToLayer(feature, layer, {
+                color: [60, 60, 60, 0.5],
+                width: "2"
+            });
+            */
+            this.addLabelFeatureToLayer(feature.get("gemeindeName") + "\n" + thousandsSeparator(feature.get("anzahlPendler")) + "\n\n\n", feature, layer);
+            this.addAnimation(feature, layer);
         });
+
+        this.zoomToExtentOfFeatureGroup(features);
     },
+
+    /**
+     * adds the circles as fixed endpoints of the animation
+     * @param {ol/Feature} feature the ol/Feature - the placement is determined using coordinates of features and this.get("direction")
+     * @param {ol/layer/Vector} layer the layer to add the new features to
+     * @returns {void}
+     */
+    addAnimation: function (feature, layer) {
+        const coordinates = feature.getGeometry().getCoordinates(),
+            style = this.preparePointStyle(feature.get("anzahlPendler"), feature.get("color")),
+            drawIndex = this.get("direction") !== "wohnort" ? 0 : coordinates.length - 1,
+            currentPoint = new Point(coordinates[drawIndex]),
+            newFeature = new Feature(currentPoint);
+
+        // "styleId" neccessary for print, that style and feature can be linked
+        newFeature.set("styleId", Radio.request("Util", "uniqueId"));
+        newFeature.setStyle(style);
+
+        layer.getSource().addFeature(newFeature);
+    },
+
+    /**
+     * Prepares the style of the circles
+     * @param {Number} anzahlPendler amount of 'pendler'
+     * @param {String} color dedicated color to draw the circle
+     * @returns {Object} the created style containing a circle
+     */
+    preparePointStyle: function (anzahlPendler, color) {
+        const minVal = this.get("minVal"),
+            maxVal = this.get("maxVal"),
+            minPx = this.get("minPx"),
+            maxPx = this.get("maxPx"),
+            percent = (anzahlPendler * 100) / (maxVal - minVal),
+            pixel = ((maxPx - minPx) / 100) * percent,
+            radius = Math.round(minPx + pixel),
+            style = new Style({
+                image: new Circle({
+                    radius: radius,
+                    fill: new Fill({color: color}),
+                    stroke: new Stroke({
+                        color: [60, 60, 60, 1],
+                        width: 0.5
+                    })
+                })
+            });
+
+        return style;
+    },
+
     /**
      * Sets the animation count
      * @param {Number} value count of animations

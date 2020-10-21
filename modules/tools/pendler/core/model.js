@@ -1,4 +1,8 @@
 import Tool from "../../../core/modelList/tool/model";
+import {Stroke, Style, Text} from "ol/style.js";
+import {extend as olExpandExtent} from "ol/extent.js";
+import {Point} from "ol/geom.js";
+import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
 
 const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
@@ -28,6 +32,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         trefferAnzahl: "top5",
         attrAnzahl: "anzahl_einpendler",
         attrGemeinde: "wohnort",
+        attrGemeindeContrary: "arbeitsort",
         alertId: "",
         attributionText: "<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
             "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>"
@@ -115,9 +120,11 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
                 this.clear();
                 if (value === "arbeitsort") {
                     this.setAttrGemeinde("wohnort");
+                    this.setAttrGemeindeContrary("arbeitsort");
                 }
                 else {
                     this.setAttrGemeinde("arbeitsort");
+                    this.setAttrGemeindeContrary("wohnort");
                 }
 
                 const mutatedFeatureType = this.mutateFeatureTypeForSingleCounties(
@@ -411,6 +418,139 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
         }
     },
+
+    /**
+     * adds the label for the center of the lines/animations
+     * @param {Function} getLabelText a function (ol/Feature) to get the text for the label with
+     * @param {ol/Feature[]} features an array of ol/Feature - the first entry is used to determine the center point (using this.get("direction"))
+     * @param {ol/layer/Vector} layer the layer to add the new feature to
+     * @returns {void}
+     */
+    addCenterLabelToLayer: function (getLabelText, features, layer) {
+        if (typeof getLabelText !== "function") {
+            return;
+        }
+        const feature = features[0],
+            coordinates = feature.getGeometry().getCoordinates(),
+            // Ob die Features bei der Startposition oder der Endposition gezeichnet werden müssen,
+            // ist abhängig von der Anzahl der Durchgänge
+            drawIndex = this.get("direction") === "wohnort" ? 0 : coordinates.length - 1,
+            currentPoint = new Point(coordinates[drawIndex]),
+            newFeature = new Feature(currentPoint);
+
+        // "styleId" neccessary for print, that style and feature can be linked
+        newFeature.set("styleId", Radio.request("Util", "uniqueId"));
+        newFeature.setStyle(new Style({
+            text: new Text({
+                text: getLabelText(feature),
+                font: "10pt sans-serif",
+                placement: "point",
+                stroke: new Stroke({
+                    color: [255, 255, 255, 0.9],
+                    width: 5
+                })
+            })
+        }));
+
+        layer.getSource().addFeature(newFeature);
+    },
+    /**
+     * adds the label to the ends of the lines/animations (not the center)
+     * @param {String} labelText the label text to place
+     * @param {ol/Feature} feature the ol/Feature - the placement is determined using coordinates of features and this.get("direction")
+     * @param {ol/layer/Vector} layer the layer to add the new features to
+     * @returns {void}
+     */
+    addLabelFeatureToLayer: function (labelText, feature, layer) {
+        const coordinates = feature.getGeometry().getCoordinates(),
+            drawIndex = this.get("direction") !== "wohnort" ? 0 : coordinates.length - 1,
+            currentPoint = new Point(coordinates[drawIndex]),
+            newFeature = new Feature(currentPoint);
+
+        // "styleId" neccessary for print, that style and feature can be linked
+        newFeature.set("styleId", Radio.request("Util", "uniqueId"));
+        newFeature.setStyle(new Style({
+            text: new Text({
+                text: labelText,
+                font: "10pt sans-serif",
+                placement: "point",
+                stroke: new Stroke({
+                    color: [255, 255, 255, 0.9],
+                    width: 5
+                })
+            })
+        }));
+
+        layer.getSource().addFeature(newFeature);
+    },
+    /**
+     * adds lines (beams) into the given layer
+     * @param {ol/Feature} feature the ol/Feature to place
+     * @param {ol/layer/Vector} layer the layer to add the new features to
+     * @param {Object} [styleOpt=null] an assignment to the stroke style
+     * @returns {void}
+     */
+    addBeamFeatureToLayer: function (feature, layer, styleOpt = null) {
+        // Erzeuge die Strahlen
+        const newFeature = new Feature({
+            geometry: feature.getGeometry()
+        });
+
+        newFeature.setStyle(new Style({
+            stroke: new Stroke(Object.assign({
+                color: [192, 9, 9, 1],
+                width: "3"
+            }, styleOpt))
+        }));
+        // "styleId" neccessary for print, that style and feature can be linked
+        newFeature.set("styleId", Radio.request("Util", "uniqueId"));
+        layer.getSource().addFeature(newFeature);
+    },
+
+    /**
+     * zooms to the extent the given features are fitting in
+     * @fires Core#RadioTriggerMapZoomToExtent
+     * @param {ol/Feature[]} features an array of ol/Feature to calculate with
+     * @pre the zoom of the ol map is somewhere
+     * @post the zoom of the ol map is in an extent the given features are fitting in
+     * @returns {void}
+     */
+    zoomToExtentOfFeatureGroup: function (features) {
+        const extents = features.map(feature => {
+                if (!(feature instanceof Feature)) {
+                    return [];
+                }
+                return feature.getGeometry().getExtent();
+            }),
+            extent = this.getMaximumExtentOfGroupOfExtents(extents);
+
+        if (extent) {
+            Radio.trigger("Map", "zoomToExtent", extent, {padding: [20, 20, 20, 400]});
+        }
+    },
+    /**
+     * calculates the maximum extent to fit all the given extents into
+     * @param {Array[]} extents an array of an array of numbers to calculate with
+     * @returns {Number[]}  an array of 4 numbers as maximum extent or null if no extent could be calculated
+     */
+    getMaximumExtentOfGroupOfExtents: function (extents) {
+        let result = null;
+
+        if (!Array.isArray(extents)) {
+            return null;
+        }
+        extents.forEach(extent => {
+            if (!result) {
+                result = extent;
+            }
+            else {
+                olExpandExtent(result, extent);
+            }
+        });
+
+        return result;
+    },
+
     /**
      * resets the window by unsetting 'kreis', 'pendlerLegend' and 'postbody'
      * @returns {void}
@@ -475,6 +615,14 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      */
     setAttrGemeinde: function (value) {
         this.set("attrGemeinde", value);
+    },
+    /**
+     * Sets the attribute for 'Gemeinde'
+     * @param {String} value the attribute name
+     * @returns {void}
+     */
+    setAttrGemeindeContrary: function (value) {
+        this.set("attrGemeindeContrary", value);
     },
     /**
      * Sets the 'Landkreise'
