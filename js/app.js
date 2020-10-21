@@ -83,7 +83,14 @@ import Orientation3DView from "../modules/controls/orientation3d/view";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 import SelectFeaturesView from "../modules/tools/selectFeatures/view";
 
-let sbconfig, controls, controlsView;
+let sbconfig,
+    controls,
+    controlsView;
+
+/* eslint-disable no-process-env */
+if (process.env.NODE_ENV === "development") {
+    Vue.config.devtools = true;
+}
 
 /**
  * load the configuration of master portal
@@ -91,7 +98,7 @@ let sbconfig, controls, controlsView;
  */
 async function loadApp () {
     /* eslint-disable no-undef */
-    const allAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
+    const legacyAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
         layerInformationModelSettings = {},
         cswParserSettings = {},
@@ -393,7 +400,7 @@ async function loadApp () {
         let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
-            if (allAddons[addonKey] !== undefined) {
+            if (legacyAddons[addonKey] !== undefined) {
                 initCounter++;
             }
         });
@@ -402,18 +409,21 @@ async function loadApp () {
 
         // loads all language files from addons for backbone- and vue-addons
         Config.addons.forEach((addonKey) => {
-            if (allAddons[addonKey] !== undefined) {
+            if (legacyAddons[addonKey] !== undefined) {
                 Object.keys(i18nextLanguages).forEach((lng) => {
-                    import(/* webpackChunkName: "additionalLocales" */ `../addons/${addonKey}/locales/${lng}/additional.json`)
+                    import(
+                        /* webpackChunkName: "additionalLocales" */
+                        /* webpackInclude: /[\\\/]additional.json$/ */
+                        `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
                             i18next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
-                            checkInitCounter(initCounter, allAddons);
+                            checkInitCounter(initCounter, legacyAddons);
                         }).catch(error => {
                             initCounter--;
                             console.warn(error);
                             console.warn("Translation files of addon " + addonKey + " could not be loaded or does not exist. Addon is not translated.");
-                            checkInitCounter(initCounter, allAddons);
+                            checkInitCounter(initCounter, legacyAddons);
                         });
                 });
             }
@@ -426,34 +436,34 @@ async function loadApp () {
 /**
  * Checks if all addons are initialized.
  * @param {Number} initCounter init counter
- * @param {Object} allAddons all addons from the config.js
+ * @param {Object} legacyAddons all addons from the config.js
  * @returns {void}
  */
-function checkInitCounter (initCounter, allAddons) {
+function checkInitCounter (initCounter, legacyAddons) {
     if (initCounter === 0) {
         Radio.trigger("Addons", "initialized");
-        loadAddOnsAfterLanguageLoaded(allAddons);
+        loadAddOnsAfterLanguageLoaded(legacyAddons);
         store.commit("setI18Nextinitialized", true);
     }
 }
 
 /**
  * Loads AddOns after the language is loaded
- * @param {Object} allAddons all addons from the config.js
+ * @param {Object} legacyAddons all addons from the config.js
  * @returns {void}
  */
-function loadAddOnsAfterLanguageLoaded (allAddons) {
+function loadAddOnsAfterLanguageLoaded (legacyAddons) {
     Config.addons.forEach((addonKey) => {
-        if (allAddons[addonKey] !== undefined) {
+        if (legacyAddons[addonKey] !== undefined) {
             // .js need to be removed so we can specify specifically in the import statement that
             // webpack only searches for .js files
-            const entryPoint = allAddons[addonKey].replace(/\.js$/, "");
+            const entryPoint = legacyAddons[addonKey].replace(/\.js$/, "");
 
             import(
-                /* webpackChunkName: "[request]" */ /* webpackExclude: /.+(unittests|tests).+/ */ "../addons/" + entryPoint + ".js"
-            ).catch(err => {
-                console.warn("Loading backbone-addons: cannot load addon, is maybe a Vue addon:", entryPoint, "Error:", err);
-            }).then(module => {
+                /* webpackChunkName: "[request]" */
+                /* webpackInclude: /addons[\\\/].*[\\\/]*.js$/ */
+                /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+                "../addons/" + entryPoint + ".js").then(module => {
                 /* eslint-disable new-cap */
                 let addon;
 

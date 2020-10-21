@@ -26,6 +26,7 @@ const ElektroladesaeulenThemeView = ThemeView.extend({
                 graphTyp = $(this).attr("value");
             }
         });
+        $(this).blur();
 
         // clean window
         this.removeAllData();

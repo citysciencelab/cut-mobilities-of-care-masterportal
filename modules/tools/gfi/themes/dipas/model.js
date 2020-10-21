@@ -1,18 +1,9 @@
 import Theme from "../model";
 
 const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
-    defaults: {
-        iconPath: "",
-        gfiAttributesDipas: {
-            "Thema": "",
-            "name": "",
-            "description": "",
-            "link": "",
-            "nid": "",
-            "Rubric": ""
-        }
-
-    },
+    defaults: Object.assign({}, Theme.prototype.defaults, {
+        iconPath: "https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png"
+    }),
     /**
      * @class DipasTheme
      * @extends Theme
@@ -37,11 +28,15 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
      */
     getGfiTheme: function () {
         const gfiContent = this.get("gfiContent"),
-            gfiAttributes = this.get("gfiAttributes");
+            uiStyle = this.get("uiStyle");
+        let parentLocation = "",
+            contributionLink = "";
 
-        Object.keys(gfiAttributes).forEach(value => {
-            this.get("gfiAttributesDipas")[value] = gfiContent[0][gfiAttributes[value]] || value;
-        });
+        if (uiStyle !== "TABLE") {
+            parentLocation = document.referrer;
+            contributionLink = parentLocation.split("#")[0] + "#/contribution/" + gfiContent[0].nid;
+            gfiContent[0].link = contributionLink;
+        }
     },
 
     /**
@@ -69,6 +64,7 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
                 valueStyle = styleModel.get("rules").filter(function (rule) {
                     return rule.conditions.properties.Thema === value;
                 });
+
                 this.fetchIconPath(iconPath, valueStyle);
             }
         }
@@ -115,6 +111,7 @@ const DipasTheme = Theme.extend(/** @lends DipasTheme.prototype */{
     setIconPath: function (value) {
         this.set("iconPath", value);
     }
+
 });
 
 export default DipasTheme;

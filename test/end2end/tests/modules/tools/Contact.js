@@ -47,7 +47,7 @@ async function ContactTests ({builder, url, resolution, capability}) {
                 navBarIcon = await driver.findElement(By.css("div#navbarRow li.dropdown span.glyphicon-envelope"));
                 await navBarIcon.click();
 
-                toolWindow = await driver.wait(until.elementLocated(By.css("div#window")));
+                toolWindow = await driver.wait(until.elementLocated(By.css("div#window")), 5000);
                 await driver.wait(until.elementIsVisible(toolWindow));
             });
 

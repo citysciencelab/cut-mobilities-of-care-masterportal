@@ -39,7 +39,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetConfig
      * @listens Core#RadioRequestUtilGetUiStyle
      * @listens Core#RadioRequestUtilGetIgnoredKeys
-     * @listens Core#RadioRequestUtilPunctuate
      * @listens Core#RadioRequestUtilSort
      * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
      * @listens Core#RadioRequestUtilGetPathFromLoader
@@ -84,7 +83,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "getIgnoredKeys": function () {
                 return this.get("ignoredKeys");
             },
-            "punctuate": this.punctuate,
             "sort": this.sort,
             "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
@@ -135,31 +133,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     getMasterPortalVersionNumber: function () {
         return require("../../package.json").version;
-    },
-
-    /**
-     * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-     * @param  {String} value - feature attribute values
-     * @returns {string} punctuated value
-     */
-    punctuate: function (value) {
-        const pattern = /(-?\d+)(\d{3})/,
-            stringValue = value.toString();
-
-        let decimals,
-            predecimals = stringValue;
-
-        if (stringValue.indexOf(".") !== -1) {
-            predecimals = stringValue.split(".")[0];
-            decimals = stringValue.split(".")[1];
-        }
-        while (pattern.test(predecimals)) {
-            predecimals = predecimals.replace(pattern, "$1.$2");
-        }
-        if (decimals) {
-            return predecimals + "," + decimals;
-        }
-        return predecimals;
     },
 
     /**

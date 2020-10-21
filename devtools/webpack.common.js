@@ -21,25 +21,30 @@ else {
 }
 
 module.exports = function () {
-    const addonsRelPaths = {};
+    const addonsRelPaths = {},
+        vueAddonsRelPaths = {};
 
     for (const addonName in addonEntryPoints) {
-        if (typeof addonEntryPoints[addonName] !== "string") {
-            console.error("############\n------------");
-            throw new Error("ERROR: WRONG ENTRY IN \"" + addonConfigPath + "\" at key \"" + addonName + "\"\nABORTED...");
-        }
+        let vue = false;
 
-        let addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
+        if (typeof addonEntryPoints[addonName] !== "string") {
+            vue = addonEntryPoints[addonName].vue;
+        }
+        const entry = vue ? "index.js" : addonEntryPoints[addonName],
+            addonFilePath = path.resolve(addonPath, addonName, entry);
 
         if (!fse.existsSync(addonFilePath)) {
-            addonFilePath = path.resolve(addonPath, addonName, "store", addonEntryPoints[addonName]);
-            if (!fse.existsSync(addonFilePath)) {
-                console.error("############\n------------");
-                throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
-            }
+            console.error("############\n------------");
+            throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
         }
 
-        addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
+        if (vue) {
+            vueAddonsRelPaths[addonName] = [addonName, "index.js"].join("/");
+        }
+        else {
+            addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
+        }
+
     }
 
     return {
@@ -104,8 +109,7 @@ module.exports = function () {
                     use: [
                         {
                             loader: MiniCssExtractPlugin.loader,
-                            options: {
-                            }
+                            options: {}
                         },
                         "css-loader",
                         "less-loader"
@@ -158,7 +162,8 @@ module.exports = function () {
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
             // create global constant at compile time
             new webpack.DefinePlugin({
-                ADDONS: JSON.stringify(addonsRelPaths)
+                ADDONS: JSON.stringify(addonsRelPaths),
+                VUE_ADDONS: JSON.stringify(vueAddonsRelPaths)
             })
         ]
     };

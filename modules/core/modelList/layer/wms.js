@@ -170,7 +170,7 @@ const WMSLayer = Layer.extend({
             this.setLegend(legends);
         }
         else if (typeof legend === "string") {
-            this.setLegend([legends]);
+            this.setLegend([legend]);
         }
     },
 

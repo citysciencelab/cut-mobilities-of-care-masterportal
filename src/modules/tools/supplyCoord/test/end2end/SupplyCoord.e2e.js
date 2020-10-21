@@ -92,16 +92,16 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
 
             await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal)));
 
-            await driver.wait(until.elementLocated(selectors.header));
+            await driver.wait(until.elementLocated(selectors.header), 5000);
 
-            await driver.wait(until.elementLocated(selectors.coordSystemLabel));
-            await driver.wait(until.elementLocated(selectors.coordSystemSelect));
+            await driver.wait(until.elementLocated(selectors.coordSystemLabel), 5000);
+            await driver.wait(until.elementLocated(selectors.coordSystemSelect), 5000);
 
-            await driver.wait(until.elementLocated(selectors.eastingLabel));
-            eastingField = await driver.wait(until.elementLocated(selectors.eastingField));
+            await driver.wait(until.elementLocated(selectors.eastingLabel), 5000);
+            eastingField = await driver.wait(until.elementLocated(selectors.eastingField), 5000);
 
-            await driver.wait(until.elementLocated(selectors.northingLabel));
-            northingField = await driver.wait(until.elementLocated(selectors.northingField));
+            await driver.wait(until.elementLocated(selectors.northingLabel), 5000);
+            northingField = await driver.wait(until.elementLocated(selectors.northingField), 5000);
 
             searchMarkerContainer = await driver.findElement(selectors.searchMarkerContainer);
             viewport = await driver.findElement(selectors.viewport);

@@ -116,6 +116,7 @@ describe("Multicheckbox Model", function () {
             expect(updatedValue).to.be.false;
         });
     });
+
     describe("SVG Functions", function () {
         const style = new Style();
 

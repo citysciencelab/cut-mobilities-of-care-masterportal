@@ -41,13 +41,6 @@ export default {
         <Alerting />
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
         <ToolManager v-if="configJson" />
-        <template v-if="i18NextInitialized">
-            <component
-                :is="$options.components[addonKey]"
-                v-for="addonKey in $addons"
-                :key="addonKey"
-            />
-        </template>
     </div>
 </template>
 
