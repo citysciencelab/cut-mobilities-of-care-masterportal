@@ -25,9 +25,10 @@ export default {
         };
     },
     computed: {
+        // gfiWindow is deprecated
         ...mapGetters({
             isMobile: "mobile",
-            desktopType: "gfiDesktopType",
+            gfiWindow: "gfiWindow",
             isTable: "isTableStyle",
             ignoredKeys: "ignoredKeys"
         }),
@@ -42,10 +43,16 @@ export default {
          * @returns {String} the current view type (Detached or Mobile)
          */
         currentViewType: function () {
+            // this.gfiWindow is deprecated
+            if (this.gfiWindow) {
+                console.warn("Parameter 'gfiWindow' is deprecated. Please use 'Portalconfig.menu.tool.gfi.desktopType' instead.");
+            }
+
             if (this.isMobile) {
                 return "Mobile";
             }
-            else if (this.desktopType === "attached") {
+            // this.gfiWindow is deprecated
+            else if ((this.desktopType || this.gfiWindow)?.toLowerCase() === "attached") {
                 return "Attached";
             }
             else if (this.isTable) {

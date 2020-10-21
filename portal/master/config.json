@@ -294,6 +294,7 @@
           },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
+            "desktopType": "detached",
             "glyphicon": "glyphicon-info-sign",
             "active": true
           },

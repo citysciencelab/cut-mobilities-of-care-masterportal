@@ -9,6 +9,9 @@ import moment from "moment";
 const localVue = createLocalVue(),
     mockMutations = {
         setCurrentFeature: () => sinon.stub()
+    },
+    mockGetters = {
+        desktopType: () => sinon.stub()
     };
 
 localVue.use(Vuex);
@@ -26,7 +29,8 @@ function getGfiStore () {
                 modules: {
                     Gfi: {
                         namespaced: true,
-                        mutations: mockMutations
+                        mutations: mockMutations,
+                        getters: mockGetters
                     }
                 }
             }
@@ -47,6 +51,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 }],
                 mapSize: () => []
             },
+            store: getGfiStore,
             localVue
         });
 
@@ -65,6 +70,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 }],
                 mapSize: () => []
             },
+            store: getGfiStore,
             localVue
         });
 
@@ -83,6 +89,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 }],
                 mapSize: () => []
             },
+            store: getGfiStore,
             localVue
         });
 
@@ -101,6 +108,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 }],
                 mapSize: () => []
             },
+            store: getGfiStore,
             localVue
         });
 
@@ -129,6 +137,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 gfiFeatures: () => [],
                 mapSize: () => []
             },
+            store: getGfiStore,
             localVue
         });
 
@@ -143,6 +152,9 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
             mockGfiMutations = {
                 setCurrentFeature: sinon.stub()
             },
+            mockGfiGetters = {
+                desktopType: () => sinon.stub()
+            },
             store = new Vuex.Store({
                 modules: {
                     Map: {
@@ -154,7 +166,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         modules: {
                             Gfi: {
                                 namespaced: true,
-                                mutations: mockGfiMutations
+                                mutations: mockGfiMutations,
+                                getters: mockGfiGetters
                             }
                         }
                     }
@@ -206,6 +219,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 mapSize: () => [],
                 gfiFeatures: () => "Test"
             },
+            store: getGfiStore,
             localVue
         });
 
@@ -469,6 +483,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 }],
                 mapSize: () => []
             },
+            store: getGfiStore,
             localVue
         });
         let firstDetachedComponent = "",
@@ -494,6 +509,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 gfi = {
@@ -518,6 +534,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 gfi = {
@@ -542,6 +559,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 gfi = {
@@ -568,6 +586,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 gfi = {
@@ -592,6 +611,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 gfi = {
@@ -618,6 +638,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 gfi = {
@@ -644,6 +665,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 gfi = {
@@ -670,6 +692,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 gfi = {
@@ -702,6 +725,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 key = "foo_",
@@ -729,6 +753,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 key = "o_b",
@@ -757,6 +782,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 key = "o_b",
@@ -787,6 +813,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 key = "oo_",
@@ -811,6 +838,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 key = "bar",
@@ -834,6 +862,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         }],
                         mapSize: () => []
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 key = "bar_",
@@ -857,6 +886,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         }],
                         mapSize: () => []
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 key = "foo",
@@ -880,6 +910,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         }],
                         mapSize: () => []
                     },
+                    store: getGfiStore,
                     localVue
                 }),
                 key = "_foo",
@@ -904,6 +935,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 }],
                 mapSize: () => []
             },
+            store: getGfiStore,
             localVue
         });
 
