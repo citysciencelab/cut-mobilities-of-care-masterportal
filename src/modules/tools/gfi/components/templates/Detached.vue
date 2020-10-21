@@ -1,6 +1,5 @@
 <script>
 import Default from "../themes/components/Default.vue";
-import ContinuousCountingBike from "../themes/continuousCountingBike/components/ContinuousCountingBike.vue";
 
 import {mapGetters, mapMutations} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
@@ -10,8 +9,7 @@ import "jquery-ui/ui/widgets/resizable";
 export default {
     name: "Detached",
     components: {
-        Default,
-        ContinuousCountingBike
+        Default
     },
     props: {
         feature: {

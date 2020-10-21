@@ -1,6 +1,5 @@
 <script>
 import Default from "../themes/components/Default.vue";
-import ContinuousCountingBike from "../themes/continuousCountingBike/components/ContinuousCountingBike.vue";
 
 import {mapGetters} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
@@ -11,8 +10,7 @@ import "bootstrap/js/popover";
 export default {
     name: "Attached",
     components: {
-        Default,
-        ContinuousCountingBike
+        Default
     },
     props: {
         feature: {
