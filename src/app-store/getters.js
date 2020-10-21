@@ -10,7 +10,8 @@ export default {
     loaderText: state => state?.configJs?.loaderText || "",
     scaleLineConfig: state => state?.configJs?.scaleLine || null,
     uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
-    gfiDesktopType: state => state?.configJs.gfiWindow || "detached",
+    // gfiWindow is deprecated
+    gfiWindow: state => state?.configJs.gfiWindow,
     ignoredKeys: state => state?.configJs.ignoredKeys || null,
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
