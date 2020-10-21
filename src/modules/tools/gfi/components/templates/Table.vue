@@ -1,6 +1,5 @@
 <script>
 import Default from "../themes/components/Default.vue";
-
 import {mapGetters} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
 import "jquery-ui/ui/widgets/draggable";

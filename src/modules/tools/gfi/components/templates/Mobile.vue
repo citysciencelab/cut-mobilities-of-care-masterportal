@@ -1,6 +1,5 @@
 <script>
 import Default from "../themes/components/Default.vue";
-
 import upperFirst from "../../../../../utils/upperFirst";
 
 export default {
