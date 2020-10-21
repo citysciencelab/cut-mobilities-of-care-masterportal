@@ -395,11 +395,11 @@
             "gfi": {
                 "favoriteIcons": {
                     "compareFeatureIcon": {
-                      "toCompareList": "To the compare list",
+                      "toCompareList": "Add to compare list",
                       "fromCompareList": "Remove from compare list"
                     },
                     "routingicon": {
-                        "routingDestination": "Apply as destination"
+                        "routingDestination": "Assign as destination"
                     }
                 },
                 "themes": {
@@ -443,7 +443,7 @@
                         "yAxisTextYear": "Count / Week"
                     },
                     "schulinfo": {
-                      "schoolAsDestination": "Adopt school as a destination",
+                      "schoolAsDestination": "Assign school as a destination",
                       "no": "No",
                       "yes": "Yes"
                     },
@@ -484,7 +484,7 @@
                 "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
                 "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
                 "addressRequestFailed": "Address request failed",
-                "selectedDestination": "Selected Destination"
+                "selectedDestination": "Selected destination"
             },
             "searchByCoord": {
                 "exampleAcronym": "e.g.",
