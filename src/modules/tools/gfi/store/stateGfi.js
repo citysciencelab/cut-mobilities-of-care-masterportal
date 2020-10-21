@@ -6,6 +6,7 @@
  * @property {String} glyphicon icon next to title (config-param)
  * @property {boolean} active - true if the gfi is active
  * @property {?object} currentFeature - the current feature that is displayed
+ * @property {?object} desktopType - specifies which template is used in desktop mode
  *
  */
 const state = {
@@ -13,7 +14,8 @@ const state = {
     name: "Informationen abfragen",
     glyphicon: "glyphicon-info-sign",
     active: false,
-    currentFeature: null
+    currentFeature: null,
+    desktopType: ""
 };
 
 export default state;
