@@ -37,6 +37,7 @@
             "fileImport": "Import file",
             "routing": "Route planner",
             "draw": "Drawing / writing",
+            "shadow": "Shadows",
             "styleWMS": "Style WMS",
             "commuterLines": "Commuter (Lines)",
             "commuterAnimation": "Commuter (Animation)",
