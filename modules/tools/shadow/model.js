@@ -31,6 +31,20 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      */
     initialize: function () {
         this.superInitialize();
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang(i18next.language);
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "currentLng": lng
+        });
     },
 
     /**

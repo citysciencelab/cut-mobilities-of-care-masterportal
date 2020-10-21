@@ -21,7 +21,10 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
     initialize: function () {
         this.listenTo(this.model, {
             "updateDOM": this.updateDOM,
-            "removeView": this.remove
+            "removeView": this.remove,
+            "change:currentLng": () => {
+                this.rerender();
+            }
         }, this);
     },
     template: _.template(Template),
@@ -35,6 +38,15 @@ const DatepickerView = Backbone.View.extend(/** @lends DatepickerView.prototype 
         this.initDatepicker();
         this.delegateEvents();
         return this;
+    },
+
+    rerender: function () {
+        console.log(this.model.get("valuesCollection").models[0].attributes.language);
+        const date = this.model.get("valuesCollection").models[0],
+            newLang = this.model.get("currentLng");
+
+        date.set({language: newLang});
+        console.log(this.model.get("valuesCollection").models[0].attributes.language);
     },
 
     /**

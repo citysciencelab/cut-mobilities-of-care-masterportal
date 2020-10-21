@@ -288,7 +288,7 @@
             "glyphicon": "glyphicon-screenshot"
           },
           "shadow": {
-            "name": "Schatten",
+            "name": "translate#common:menu.tools.shadow",
             "glyphicon": "glyphicon-lamp",
             "isShadowEnabled": true
           },

@@ -30,7 +30,10 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "toggleButtonValueChanged": this.toggleElements
+            "toggleButtonValueChanged": this.toggleElements,
+            "change:currentLng": () => {
+                this.render();
+            }
         });
 
         if (Radio.request("Util", "getUiStyle") === "TABLE") {
