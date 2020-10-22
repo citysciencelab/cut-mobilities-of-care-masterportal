@@ -1,5 +1,6 @@
 export default {
-    name: undefined,
+    id: "legend",
+    name: "Legende",
     glyphicon: "glyphicon-book",
     showLegend: false,
     legends: [],

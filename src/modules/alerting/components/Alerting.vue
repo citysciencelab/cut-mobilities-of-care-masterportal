@@ -171,7 +171,7 @@ export default {
                             <a
                                 @click="markAsRead(singleAlert.hash)"
                             >
-                                diese Meldung nicht mehr anzeigen
+                                {{ $t("common:modules.alerting.hideMessage") }}
                             </a>
                         </p>
                     </div>

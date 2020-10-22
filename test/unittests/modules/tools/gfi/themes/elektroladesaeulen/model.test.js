@@ -1,14 +1,11 @@
 import Model from "@modules/tools/gfi/themes/elektroladesaeulen/model.js";
 import * as moment from "moment";
 import {expect} from "chai";
-import Util from "@testUtil";
 
-let model,
-    util;
+let model;
 
 before(function () {
     model = new Model();
-    util = new Util();
 
     moment.locale("de");
 });
@@ -58,45 +55,41 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
     describe("createGfiHeadingChargingStation", function () {
         it("should return an object with keys and blank values for undefined input", function () {
             expect(model.createGfiHeadingChargingStation(undefined)).to.be.an("object").that.includes({
-                StandortId: "",
-                Adresse: "",
+                Name: "",
+                Beschreibung: "",
                 Eigentümer: ""
             });
         });
         it("should return an object with keys and blank values for empty object input", function () {
             expect(model.createGfiHeadingChargingStation({})).to.be.an("object").that.includes({
-                StandortId: "",
-                Adresse: "",
+                Name: "",
+                Beschreibung: "",
                 Eigentümer: ""
             });
         });
         it("should return an object with adress as object for correct object input", function () {
             const allProperties = {
-                chargings_station_nr: ["100", "100"],
-                location_name: ["Musterstrasse", "Musterstrasse"],
-                postal_code: ["99999", "99999"],
-                city: ["Hamburg", "Hamburg"],
-                owner: ["Mustermann", "Mustermann"]
+                name: ["E-Ladestation DE*SNH*E220", "E-Ladestation DE*SNH*E220"],
+                description: ["Elektoladestation zum Laden von E-Autos.", "Elektoladestation zum Laden von E-Autos."],
+                ownerThing: ["Mustermann", "Mustermann"]
             };
 
             expect(model.createGfiHeadingChargingStation(allProperties)).to.be.an("object").that.includes({
-                StandortId: "100",
-                Adresse: "Musterstrasse, 99999 Hamburg",
+                Name: "E-Ladestation DE*SNH*E220",
+                Beschreibung: "Elektoladestation zum Laden von E-Autos.",
                 Eigentümer: "Mustermann"
             });
         });
         it("should return an object with adress as object for correct object input", function () {
             const allProperties = {
-                chargings_station_nr: [100],
+                name: ["E-Ladestation DE*SNH*E220"],
                 dd: ["Musterstrasse", "Musterstrasse"],
-                thtbeefvvw: ["99999", "99999"],
-                city: ["Hamburg", "Hamburg"],
-                owner: ["Mustermann"]
+                ownerThing: ["Mustermann"]
             };
 
             expect(model.createGfiHeadingChargingStation(allProperties)).to.be.an("object").that.includes({
-                StandortId: "100",
-                Adresse: "",
+                Name: "E-Ladestation DE*SNH*E220",
+                Beschreibung: "",
                 Eigentümer: "Mustermann"
             });
         });
@@ -379,65 +372,6 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
         it("should return an empty array for incorrect input", function () {
             expect(model.processDataForAllWeekdays(["xyz", 83247], "", "")).to.be.an("array").that.is.empty;
         });
-        it("should return an array with seven arrays that contains divided data for correct data without lastDay input", function () {
-            const historicalData = [{
-                    Observations: [{
-                        phenomenonTime: "2018-06-17T10:55:52",
-                        result: "available",
-                        index: 0
-                    }]
-                },
-                {
-                    Observations: [{
-                        phenomenonTime: "2018-06-17T12:59:15",
-                        result: "charging",
-                        index: 0
-                    },
-                    {
-                        phenomenonTime: "2018-06-17T12:57:15",
-                        result: "available",
-                        index: 1
-                    }]
-                }],
-                endDay = "2018-06-19",
-                utc = model.get("utc") ? model.get("utc") : "+1";
-
-            expect(model.processDataForAllWeekdays(historicalData, "", endDay)).to.be.an("array").to.have.deep.members([
-                [[{
-                    phenomenonTime: "2018-06-19T00:00:00",
-                    result: "available"
-                }],
-                [{
-                    phenomenonTime: "2018-06-19T00:00:00",
-                    result: "charging"
-                }]],
-                [[{
-                    phenomenonTime: "2018-06-18T00:00:00",
-                    result: "available"
-                }],
-                [{
-                    phenomenonTime: "2018-06-18T00:00:00",
-                    result: "charging"
-                }]],
-                [[{
-                    phenomenonTime: util.changeTimeZone("2018-06-17T10:55:52", "YYYY-MM-DDTHH:mm:ss", utc),
-                    result: "available",
-                    index: 0
-                }],
-                [{
-                    phenomenonTime: util.changeTimeZone("2018-06-17T12:59:15", "YYYY-MM-DDTHH:mm:ss", utc),
-                    result: "charging",
-                    index: 0
-                },
-                {
-                    phenomenonTime: util.changeTimeZone("2018-06-17T12:57:15", "YYYY-MM-DDTHH:mm:ss", utc),
-                    result: "available",
-                    index: 1
-
-                }]],
-                [], [], [], []
-            ]);
-        });
     });
     describe("addGfiParams", function () {
         it("should return an empty string for undefined input", function () {
@@ -594,14 +528,13 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
         });
     });
     describe("calculateSumAndArithmeticMean", function () {
-        it("should return an empty array for undefined input", function () {
-            expect(model.calculateSumAndArithmeticMean(undefined)).to.be.an("array").that.is.empty;
-        });
         it("should return an empty array for empty input", function () {
-            expect(model.calculateSumAndArithmeticMean([])).to.be.an("array").that.is.empty;
+            expect(model.calculateSumAndArithmeticMean([])).to.be.an("array");
+            expect(model.calculateSumAndArithmeticMean([]).length).equals(24);
         });
         it("should return an empty array for incorrect input", function () {
-            expect(model.calculateSumAndArithmeticMean(["abc"])).to.be.an("array").that.is.empty;
+            expect(model.calculateSumAndArithmeticMean(["abc"])).to.be.an("array");
+            expect(model.calculateSumAndArithmeticMean([]).length).equals(24);
         });
         it("should return an empty array for undefined input", function () {
             const dataPerHour = [{
@@ -617,16 +550,128 @@ describe("tools/gfi/themes/elektroladesaeulen", function () {
                 1: 0
             }];
 
-            expect(model.calculateSumAndArithmeticMean(dataPerHour)).to.be.an("array").to.have.deep.members([{
-                hour: 0,
-                sum: 2,
-                mean: 0.667
-            },
-            {
-                hour: 1,
-                sum: 1,
-                mean: 0.333
-            }]);
+            expect(model.calculateSumAndArithmeticMean(dataPerHour)).to.be.an("array").to.have.deep.members([
+                {
+                    hour: 0,
+                    sum: 2,
+                    mean: 0.667
+                },
+                {
+                    hour: 1,
+                    sum: 1,
+                    mean: 0.333
+                },
+                {
+                    hour: 2,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 3,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 4,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 5,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 6,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 7,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 8,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 9,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 10,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 11,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 12,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 13,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 14,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 15,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 16,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 17,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 18,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 19,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 20,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 21,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 22,
+                    sum: 0,
+                    mean: 0
+                },
+                {
+                    hour: 23,
+                    sum: 0,
+                    mean: 0
+                }
+            ]);
         });
     });
     describe("checkValue", function () {

@@ -258,6 +258,23 @@ function areAllLayersHidden () {
 }
 
 /**
+ * Function will check if none of a layer's features' style hold 'null'.
+ * @param {string} id id of layer to check
+ * @returns {boolean} true if all features of a layer are visible
+ */
+function areAllFeaturesOfLayerVisible () {
+    return Backbone.Radio
+        .request("Map", "getMap")
+        .getLayers()
+        .getArray()
+        .find(l => l.get("id") === arguments[0])
+        .getSource()
+        .getFeatures()
+        .map(f => f.getStyle())
+        .reduce((accumulator, current) => accumulator && current !== null, true);
+}
+
+/**
  * @param {string[]} texts texts to search for
  * @returns {boolean} true if all texts are found in order as feature texts
  */
@@ -426,6 +443,7 @@ module.exports = {
     mouseWheelDown,
     areAllLayersHidden,
     areRegExpsInMeasureLayer,
+    areAllFeaturesOfLayerVisible,
     isFullscreen,
     isLayerVisible,
     imageLoaded,

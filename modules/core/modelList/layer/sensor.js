@@ -7,6 +7,7 @@ import {Cluster, Vector as VectorSource} from "ol/source.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {buffer, containsExtent} from "ol/extent";
 import {GeoJSON} from "ol/format.js";
+import changeTimeZone from "../../../../src/utils/changeTimeZone.js";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -24,7 +25,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         mqttPath: "/mqtt",
         subscriptionTopics: {},
         httpSubFolder: "",
-        mergeThingsByCoordinates: false,
         showNoDataValue: true,
         noDataValue: "no data",
         altitudeMode: "clampToGround",
@@ -193,10 +193,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     initializeConnection: function (onsuccess) {
         const url = this.get("useProxyUrl") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
             version = this.get("version"),
-            urlParams = this.get("urlParameter"),
-            mergeThingsByCoordinates = this.get("mergeThingsByCoordinates");
+            urlParams = this.get("urlParameter");
 
-        this.loadSensorThings(url, version, urlParams, mergeThingsByCoordinates, function (sensorData) {
+        this.loadSensorThings(url, version, urlParams, function (sensorData) {
             const epsg = this.get("epsg"),
                 features = this.createFeatures(sensorData, epsg),
                 isClustered = this.has("clusterDistance");
@@ -278,6 +277,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     dataStreamValues.push(feature.get("dataStream_" + id + "_" + dataStreamName));
                 }
             });
+
             modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "), true);
         }
         return modifiedFeature;
@@ -349,11 +349,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @param  {String} url - url to service
      * @param  {String} version - version from service
      * @param  {String} urlParams - url parameters
-     * @param  {Boolean} mergeThingsByCoordinates - Flag if things should be merged if they have the same Coordinates
      * @return {array} all things with attributes and location
      * @param  {Function} onsuccess a callback function (result) with the result to call on success and result: all things with attributes and location
      */
-    loadSensorThings: function (url, version, urlParams, mergeThingsByCoordinates, onsuccess) {
+    loadSensorThings: function (url, version, urlParams, onsuccess) {
         const requestUrl = this.buildSensorThingsUrl(url, version, urlParams),
             http = new SensorThingsHttp(),
             currentExtent = {
@@ -367,14 +366,10 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
              * @returns {Void}  -
              */
             httpOnSucess = function (result) {
-                // on success
                 let allThings;
 
                 allThings = this.flattenArray(result);
                 allThings = this.getNewestSensorData(allThings);
-                if (mergeThingsByCoordinates) {
-                    allThings = this.mergeByCoordinates(allThings);
-                }
 
                 allThings = this.aggregatePropertiesOfThings(allThings);
 
@@ -424,7 +419,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     /**
      * to call on starting of loadSensorThings
      * @fires Core#RadioTriggerUtilShowLoader
-     * @returns {Void}  -
+     * @returns {void}
      */
     loadSensorThingsStart: function () {
         Radio.trigger("Util", "showLoader");
@@ -433,7 +428,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     /**
      * to call on ending of loadSensorThings
      * @fires Core#RadioTriggerUtilHideLoader
-     * @returns {Void}  -
+     * @returns {void}
      */
     loadSensorThingsComplete: function () {
         Radio.trigger("Util", "hideLoader");
@@ -444,40 +439,59 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * "dataStream_[dataStreamId]_[dataStreamName]" and
      * "dataStream_[dataStreamId]_[dataStreamName]_phenomenonTime".
      * @param {Object} thing thing.
-     * @returns {Void} -
+     * @returns {void}
      */
     getNewestSensorDataOfDatastream (thing) {
         const dataStreams = thing.Datastreams;
 
         thing.properties.dataStreamId = [];
         thing.properties.dataStreamName = [];
+        thing.properties.dataStreamValue = [];
+
         dataStreams.forEach(dataStream => {
             const dataStreamId = String(dataStream["@iot.id"]),
-                propertiesType = dataStream.hasOwnProperty("ObservedProperty") && dataStream.ObservedProperty.hasOwnProperty("name") ? dataStream.ObservedProperty.name : undefined,
-                unitOfMeasurementName = dataStream.hasOwnProperty("unitOfMeasurement") && dataStream.unitOfMeasurement.hasOwnProperty("name") ? dataStream.unitOfMeasurement.name : "unknown",
-                dataStreamName = propertiesType ? propertiesType : unitOfMeasurementName,
-                key = "dataStream_" + dataStreamId + "_" + dataStreamName,
-                value = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].result : undefined,
-                timezone = this.get("timezone");
-            let phenomenonTime = dataStream.hasOwnProperty("Observations") && dataStream.Observations.length > 0 ? dataStream.Observations[0].phenomenonTime : undefined;
+                dataStreamName = dataStream.name,
+                dataStreamValue = dataStream.hasOwnProperty("Observations") ? dataStream.Observations[0]?.result : "",
+                key = "dataStream_" + dataStreamId + "_" + dataStreamName;
+            let phenomenonTime = dataStream.hasOwnProperty("Observations") ? dataStream.Observations[0]?.phenomenonTime : "";
 
-            phenomenonTime = Radio.request("Util", "changeTimeZone", phenomenonTime, this.get("utc"));
+            this.addDatastreamProperties(thing.properties, dataStream.properties);
+            phenomenonTime = changeTimeZone(phenomenonTime, this.get("utc"));
 
-            if (this.get("showNoDataValue") && !value) {
+            thing.properties.dataStreamId.push(dataStreamId);
+            thing.properties.dataStreamName.push(dataStreamName);
+
+            if (this.get("showNoDataValue")) {
                 thing.properties[key] = this.get("noDataValue");
                 thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
-                thing.properties.dataStreamId.push(dataStreamId);
-                thing.properties.dataStreamName.push(dataStreamName);
+                thing.properties.dataStreamValue.push(this.get("noDataValue"));
             }
-            else if (value) {
-                thing.properties[key] = value;
-                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, timezone);
-                thing.properties.dataStreamId.push(dataStreamId);
-                thing.properties.dataStreamName.push(dataStreamName);
+            else if (dataStreamValue) {
+                thing.properties[key] = dataStreamValue;
+                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, this.get("timezone"));
+                thing.properties.dataStreamValue.push(dataStreamValue);
             }
         });
         thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
+        thing.properties.dataStreamValue = thing.properties.dataStreamValue.join(" | ");
         thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
+    },
+
+    /**
+     * Adds data from datastream to thing with pipe separator.
+     * @param {Object} thingProperties - The properties from thing.
+     * @param {Object} dataStreamProperties - The properties from dataStream.
+     * @returns {void}
+     */
+    addDatastreamProperties: function (thingProperties, dataStreamProperties) {
+        Object.entries(dataStreamProperties).forEach(([key, value]) => {
+            if (thingProperties[key] !== undefined) {
+                thingProperties[key] = thingProperties[key] + " | " + value;
+            }
+            else {
+                thingProperties[key] = value;
+            }
+        });
     },
 
     /**
@@ -538,36 +552,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }
 
         return String(url) + "/v" + String(versionAsString) + "/Things?" + query;
-    },
-
-    /**
-     * merge things with equal coordinates
-     * @param  {array} allThings - contains all loaded Things
-     * @return {array} merged things
-     */
-    mergeByCoordinates: function (allThings) {
-        const mergeAllThings = [],
-            mergeAllThingsAssoc = {};
-        let jsonGeomString;
-
-        if (Array.isArray(allThings)) {
-            allThings.forEach(function (thing) {
-                // if no datastream exists
-                if (!Array.isArray(thing.Datastreams)) {
-                    return;
-                }
-
-                jsonGeomString = JSON.stringify(this.getJsonGeometry(thing, 0));
-                if (!mergeAllThingsAssoc.hasOwnProperty(jsonGeomString)) {
-                    mergeAllThingsAssoc[jsonGeomString] = [];
-                    mergeAllThings.push(mergeAllThingsAssoc[jsonGeomString]);
-                }
-
-                mergeAllThingsAssoc[jsonGeomString].push(thing);
-            }.bind(this));
-        }
-
-        return mergeAllThings;
     },
 
     /**
@@ -926,19 +910,37 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     liveUpdate: function (feature, dataStreamId, result, phenomenonTime) {
         const dataStreamIdIdx = feature.get("dataStreamId").split(" | ").indexOf(String(dataStreamId)),
             dataStreamNameArray = feature.get("dataStreamName").split(" | "),
-            dataStreamName = dataStreamNameArray.hasOwnProperty(dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "";
-        let updatedFeature = feature;
+            dataStreamName = dataStreamNameArray.hasOwnProperty(dataStreamIdIdx) ? dataStreamNameArray[dataStreamIdIdx] : "",
+            preparedResult = result === "" && this.get("showNoDataValue") ? this.get("noDataValue") : result;
 
-        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName, result, true);
-        updatedFeature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime, true);
-        updatedFeature = this.aggregateDataStreamValue(feature);
-        updatedFeature = this.aggregateDataStreamPhenomenonTime(feature);
+        // Here we only work with a reference to the feature, otherwise it leads to blinking behavior with clustered features.
+        feature.set("dataStream_" + dataStreamId + "_" + dataStreamName, preparedResult, true);
+        feature.set("dataStream_" + dataStreamId + "_" + dataStreamName + "_phenomenonTime", phenomenonTime, true);
+        feature.set("dataStreamValue", this.replaceStreamProperties(feature, "dataStreamValue", dataStreamId, preparedResult));
+        feature.set("dataStreamPhenomenonTime", this.replaceStreamProperties(feature, "dataStreamPhenomenonTime", dataStreamId, phenomenonTime));
 
-        // Redraw feature (update icon)
-        this.get("layer").getSource().removeFeature(feature);
-        this.get("layer").getSource().addFeature(updatedFeature);
+        Radio.trigger("GFI", "changeFeature", feature);
+    },
 
-        Radio.trigger("GFI", "changeFeature", updatedFeature);
+    /**
+     * Replaced a property of the feature in the place of the given datastreamId.
+     * @param {ol/feature} feature - Feature with properties.
+     * @param {String} property - Property to be updated.
+     * @param  {String} dataStreamId - The dataStreamId.
+     * @param  {String} result - The new value.
+     * @returns {String} - The updated Property.
+     */
+    replaceStreamProperties: function (feature, property, dataStreamId, result) {
+        const dataStreamIds = feature.get("dataStreamId").split(" | "),
+            dataStreamProperty = feature.get(property).split(" | ");
+
+        dataStreamIds.forEach((id, index) => {
+            if (id === dataStreamId) {
+                dataStreamProperty[index] = result;
+            }
+        });
+
+        return dataStreamProperty.join(" | ");
     },
 
     /**
@@ -998,11 +1000,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     getFeatureByDataStreamId: function (features, id) {
         let feature;
 
-        if (features && features.length > 0 && id) {
+        if (features?.length > 0 && id) {
             feature = features.filter(feat => {
                 return feat.get("dataStreamId") ? feat.get("dataStreamId").includes(id) : false;
             })[0];
         }
+
         return feature;
     },
 
