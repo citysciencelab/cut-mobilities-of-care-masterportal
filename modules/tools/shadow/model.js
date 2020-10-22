@@ -24,7 +24,9 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         isShadowEnabled: false,
         snippetsReady: false,
         // translations
-        shadowDisplay: ""
+        shadowDisplay: "",
+        time: "",
+        date: ""
     }),
 
     /**
@@ -46,6 +48,8 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
     changeLang: function (lng) {
         this.set({
             "shadowDisplay": i18next.t("common:modules.tools.shadow.shadowDisplay"),
+            "time": i18next.t("common:snippets.slider.time"),
+            "date": i18next.t("common:snippets.slider.date"),
             "currentLng": lng
         });
     },
@@ -58,11 +62,11 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         const minMaxTimes = this.getMinMaxTimesOfCurrentDay(),
             defaultTime = this.getTime(this.get("shadowTime")),
             timesliderStep = 1000 * 60 * 30,
-            timeslider = this.getNewSlider(minMaxTimes, defaultTime, timesliderStep, 1, "Uhrzeit", "time"),
+            timeslider = this.getNewSlider(minMaxTimes, defaultTime, timesliderStep, 1, i18next.t("common:snippets.slider.time"), "time"),
             minMaxDays = this.getMinMaxDatesOfCurrentYear(),
-            defaultDay = this.getDate(this.get("shadowTime")),
+            defaultDay = this.getDate(this.get("sliderTime")),
             datesliderStep = 1000 * 60 * 60 * 24,
-            dateslider = this.getNewSlider(minMaxDays, defaultDay, datesliderStep, 1, "Datum", "date"),
+            dateslider = this.getNewSlider(minMaxDays, defaultDay, datesliderStep, 1, i18next.t("common:snippets.slider.date"), "date"),
             button = this.getNewButton(i18next.t("common:modules.tools.shadow.shadowDisplay"), this.get("isShadowEnabled")),
             datepicker = this.getNewDatepicker(defaultDay, minMaxDays[0], minMaxDays[1], "Datum", "datepicker");
 

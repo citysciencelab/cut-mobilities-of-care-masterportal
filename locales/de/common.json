@@ -697,6 +697,8 @@
             "tooltipMessagePolygon": "Klicken um Stützpunkt hinzuzufügen"
         },
         "slider": {
+            "date": "Datum",
+            "time": "Uhrzeit",
             "outOfRangeErrorMessage": "Der Eingabewert muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!"
         }
     }
