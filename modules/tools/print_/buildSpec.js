@@ -187,7 +187,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     return feature.getStyle().getZIndex();
                 }
                 return 0;
-
             });
 
         if (features.length > 0) {
