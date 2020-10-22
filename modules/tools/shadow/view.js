@@ -87,6 +87,8 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
             this.toggleElements(this.model.get("isShadowEnabled"));
             this.model.toggleShadow(this.model.get("isShadowEnabled"));
             document.getElementsByClassName("title-checkbox")[0].firstChild.nextSibling.innerText = this.model.get("shadowDisplay");
+            document.getElementsByClassName("title-values")[0].children[0].children[0].innerText = this.model.get("timeslider").attributes.displayName;
+            document.getElementsByClassName("title-values")[1].children[0].children[0].innerText = this.model.get("dateslider").attributes.displayName;
             this.delegateEvents();
         }
         return this;

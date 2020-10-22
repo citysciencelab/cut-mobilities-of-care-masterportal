@@ -671,6 +671,8 @@
             "tooltipMessagePolygon": "Click to add a point"
         },
         "slider": {
+            "date": "Date",
+            "time": "Time",
             "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
         }
     }
