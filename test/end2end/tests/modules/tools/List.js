@@ -75,7 +75,10 @@ async function ListTests ({builder, url, resolution, capability}) {
             });
 
             it("hovering a feature changes the feature style", async function () {
-                await driver.actions().move({origin: featureListEntries[14]}).perform();
+                await driver
+                    .actions({bridge: true})
+                    .move({origin: featureListEntries[14]})
+                    .perform();
 
                 /**
                  * While this is a script, it is very specific and probably has no reusability, hence placed here.
