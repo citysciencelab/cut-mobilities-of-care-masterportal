@@ -233,6 +233,9 @@
                     "A3 Querformat": "A3 Querformat"
                 }
             },
+            "shadow": {
+                "shadowDisplay": "Schattendarstellung"
+              },
             "styleVT": {
               "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
               "noStyleableLayers": "Derzeit sind keine Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
