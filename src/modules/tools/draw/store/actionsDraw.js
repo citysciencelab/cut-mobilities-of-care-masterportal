@@ -137,7 +137,7 @@ const initialState = Object.assign({}, stateDraw),
                         dispatch("createCenterPoint", {feature: event.feature, targetProjection: Config.inputMap.targetProjection}).then(centerPointCoords => {
                             centerPoint = {type: "Point", coordinates: centerPointCoords};
 
-                            dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetprojection}, currentFeature: event.feature}).then(geoJSON => {
+                            dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetProjection}, currentFeature: event.feature}).then(geoJSON => {
                                 geoJSONAddCenter = JSON.parse(geoJSON);
 
                                 if (geoJSONAddCenter.features[0].properties === null) {
