@@ -223,6 +223,9 @@
                     "A3 Querformat": "A3 landscape format"
                 }
             },
+            "shadow": {
+                "shadowDisplay": "Shadow display"
+              },
             "styleVT": {
               "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",
               "noStyleableLayers": "There are currently no topics to which this tool could be applied.",

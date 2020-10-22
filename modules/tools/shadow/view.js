@@ -76,6 +76,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
     rerender: async function () {
         if (this.model.get("isActive")) {
             await this.datepickerView.rerender();
+            this.model.prepareSnippets();
             this.ensureSnippetsReady();
             this.setElement(document.getElementsByClassName("win-body")[0]);
             this.$el.html(this.template({}));
@@ -85,6 +86,7 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
             this.$el.append(this.datesliderView.render().el);
             this.toggleElements(this.model.get("isShadowEnabled"));
             this.model.toggleShadow(this.model.get("isShadowEnabled"));
+            document.getElementsByClassName("title-checkbox")[0].firstChild.nextSibling.innerText = this.model.get("shadowDisplay");
             this.delegateEvents();
         }
         return this;

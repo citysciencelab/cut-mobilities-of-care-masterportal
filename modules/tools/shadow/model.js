@@ -22,7 +22,9 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         toggleButton: null,
         datepicker: null,
         isShadowEnabled: false,
-        snippetsReady: false
+        snippetsReady: false,
+        // translations
+        shadowDisplay: ""
     }),
 
     /**
@@ -43,6 +45,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
      */
     changeLang: function (lng) {
         this.set({
+            "shadowDisplay": i18next.t("common:modules.tools.shadow.shadowDisplay"),
             "currentLng": lng
         });
     },
@@ -60,7 +63,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
             defaultDay = this.getDate(this.get("shadowTime")),
             datesliderStep = 1000 * 60 * 60 * 24,
             dateslider = this.getNewSlider(minMaxDays, defaultDay, datesliderStep, 1, "Datum", "date"),
-            button = this.getNewButton("Schattendarstellung", this.get("isShadowEnabled")),
+            button = this.getNewButton(i18next.t("common:modules.tools.shadow.shadowDisplay"), this.get("isShadowEnabled")),
             datepicker = this.getNewDatepicker(defaultDay, minMaxDays[0], minMaxDays[1], "Datum", "datepicker");
 
         this.setCesiumTime(this.combineTimeAndDate(defaultTime, defaultDay));
