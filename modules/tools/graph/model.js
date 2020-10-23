@@ -74,7 +74,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Void}  -
      */
     createGraph: function (graphConfig) {
-        const d3Div = document.getElementById("d3-div");
+        const d3Div = d3.select(graphConfig.selector).nodes()[0];
 
         if (d3Div) {
             this.currentGraphConfig = graphConfig;
