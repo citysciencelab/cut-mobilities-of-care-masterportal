@@ -25,6 +25,7 @@ export default {
     },
     computed: {
         ...mapGetters("Map", ["clickCoord"]),
+        ...mapGetters("Tools/Gfi", ["centerMapToClickPoint"]),
 
         /**
          * Returns the title of the gfi.
@@ -150,7 +151,9 @@ export default {
          */
         setMarker () {
             if (this.showMarker) {
-                this.setCenter(this.clickCoord);
+                if (this.centerMapToClickPoint) {
+                    this.setCenter(this.clickCoord);
+                }
                 // TODO replace trigger when MapMarker is migrated
                 Radio.trigger("MapMarker", "showMarker", this.clickCoord);
             }
