@@ -198,7 +198,7 @@ function getOrderedTitlesFromConfig (configJson, services) {
     }
 
     const testTranslations = {
-        "translate#common:tree.trafficCameras": "Verkehrskameras"
+        "translate#common:tree.trafficCameras": ["Verkehrskameras", "survey cameras (traffic)"]
     };
 
     return [

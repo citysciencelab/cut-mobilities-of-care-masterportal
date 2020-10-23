@@ -12,6 +12,21 @@ const webdriver = require("selenium-webdriver"),
     {By, until} = webdriver;
 
 /**
+ * @param {Array.<(string|string[])>} arrayWithOptions array to compare, but each index may also hold an array of
+ *                                                     options where it suffices if one equals the compareArray entry
+ * @param {string[]} compareArray array to compare with
+ * @returns {boolean} whether arrays match
+ */
+function arrayDeepEqualsWithOptions (arrayWithOptions, compareArray) {
+    return arrayWithOptions.length === compareArray.length &&
+        arrayWithOptions.reduce((bigAnd, current, index) => bigAnd &&
+            (Array.isArray(current)
+                ? current.includes(compareArray[index])
+                : current === compareArray[index])
+        , true);
+}
+
+/**
  * Tests regarding map panning.
  * @param {e2eTestParams} params parameter set
  * @returns {void}
@@ -76,7 +91,7 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                 mapOrderedElementTexts = await getOrderedTitleTexts(driver);
                 configGivenTitleOrder = getOrderedTitlesFromConfig(masterConfigJson, services);
 
-                expect(mapOrderedElementTexts).to.deep.equal(configGivenTitleOrder);
+                expect(arrayDeepEqualsWithOptions(configGivenTitleOrder, mapOrderedElementTexts)).to.be.true;
             });
 
             it("has the same layer order in tree and map in LT", async function () {
