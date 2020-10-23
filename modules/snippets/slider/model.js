@@ -73,7 +73,6 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
             "to": i18next.t("common:snippets.slider.to"),
             "currentLng": lng
         });
-        this.errorMessage();
     },
 
     /**
