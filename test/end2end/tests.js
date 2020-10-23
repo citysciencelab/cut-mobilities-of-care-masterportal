@@ -69,6 +69,9 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     // modules/core
                     require("./tests/modules/core/ParametricUrl.js"),
 
+                    // modules/menu
+                    require("./tests/modules/menu/Layers.js"),
+
                     // modules/searchbar
                     // require("./tests/modules/searchbar/SearchCategories.js"),
                     // require("./tests/modules/searchbar/GdiSearch.js"),
