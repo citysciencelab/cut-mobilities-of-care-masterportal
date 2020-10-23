@@ -19,13 +19,13 @@ const colorOptions = [
         ...colorOptions.slice(2)
     ],
     drawTypeOptions = [
-        {value: "Point", id: "drawSymbol"},
-        {value: "LineString", id: "drawLine"},
-        {value: "LineString", id: "drawCurve"},
-        {value: "Polygon", id: "drawArea"},
-        {value: "Circle", id: "drawCircle"},
-        {value: "Circle", id: "drawDoubleCircle"},
-        {value: "Point", id: "writeText"}
+        {geometry: "Point", id: "drawSymbol"},
+        {geometry: "LineString", id: "drawLine", altGeometry: ["MultiLineString"]},
+        {geometry: "LineString", id: "drawCurve"},
+        {geometry: "Polygon", id: "drawArea"},
+        {geometry: "Circle", id: "drawCircle"},
+        {geometry: "Circle", id: "drawDoubleCircle"},
+        {geometry: "Point", id: "writeText"}
     ],
     fontOptions = [
         {caption: "Arial", value: "Arial"},

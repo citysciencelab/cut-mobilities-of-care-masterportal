@@ -1,7 +1,7 @@
-import {createDrawStyle} from "../../utils/style/createDrawStyle";
-import {createIconStyle} from "../../utils/style/createIconStyle";
-import {createStyle} from "../../utils/style/createStyle";
-import {createTextStyle} from "../../utils/style/createTextStyle";
+import {createDrawStyle} from "../../../utils/style/createDrawStyle";
+import {createIconStyle} from "../../../utils/style/createIconStyle";
+import {createStyle} from "../../../utils/style/createStyle";
+import {createTextStyle} from "../../../utils/style/createTextStyle";
 
 import {Style} from "ol/style.js";
 import {expect} from "chai";
@@ -130,19 +130,19 @@ describe("styleFunctionsDraw", () => {
             expect(result instanceof Style).to.be.true;
         });
         it("the result color should be the same as the input color for a polyline", function () {
-            const drawType = {value: "LineString", id: "drawLine"},
+            const drawType = {geometry: "LineString", id: "drawLine"},
                 symbol = {type: undefined};
 
             expect(createStyle({color, drawType, symbol}).getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as the input color for a polygon", function () {
-            const drawType = {value: "Polygon", id: "drawArea"},
+            const drawType = {geometry: "Polygon", id: "drawArea"},
                 symbol = {type: undefined};
 
             expect(createStyle({color, drawType, symbol}).getFill().getColor()).to.deep.equal(color);
         });
         it("the result color should be the same as the input color for text", function () {
-            const drawType = {value: "Point", id: "writeText"},
+            const drawType = {geometry: "Point", id: "writeText"},
                 symbol = {type: undefined};
 
             color = [255, 0, 0, 1];

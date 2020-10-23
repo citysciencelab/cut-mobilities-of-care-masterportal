@@ -28,6 +28,16 @@ export default {
             return !(this.currentInteraction === "draw");
         },
         /**
+         * Enables or disables the select- or input-boxes depending on the state of currentInteraction and selectedFeature.
+         * @returns {Boolean} false activates the elements, true deactivates the elements
+         */
+        drawHTMLElementsModifyFeature () {
+            if (this.selectedFeature !== null && this.currentInteraction === "modify") {
+                return false;
+            }
+            return !(this.currentInteraction === "draw");
+        },
+        /**
          * Disables the input for the diameter and the unit for the drawType "drawCircle" if the circleMethod is not set to "defined".
          * @returns {Boolean} return false if drawing is enabled and circleMethod is set to "defined", else return true.
          */
@@ -84,8 +94,20 @@ export default {
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions),
+        /**
+         * checks if both given arrays have the same number at their first 3 positions
+         * note: the opacity (4th number) will be ignored - this is only about color
+         * @param {Number[]} a a "color"-array e.g. white: [255, 255, 255, 1] or [255, 255, 255]
+         * @param {Number[]} b another "color"-array to compare with
+         * @returns {Boolean} true: the values at the first 3 positions of the given color arrays are identical
+         */
+        isEqualColorArrays (a, b) {
+            if (Array.isArray(a) && Array.isArray(b) && a.length >= 3 && b.length >= 3) {
+                return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+            }
+            return false;
+        },
         close () {
-            // NOTE: Line 50 can be moved to Line 41 when everything is completly in Vue
             this.resetModule();
             // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = getComponent(this.storePath.id);
@@ -157,7 +179,8 @@ export default {
                     v-for="option in constants.drawTypeOptions"
                     :id="option.id"
                     :key="'draw-drawType-' + option.id"
-                    :value="option.value"
+                    :value="option.geometry"
+                    :selected="option.id === drawType.id"
                 >
                     {{ $t("common:modules.tools.draw." + option.id) }}
                 </option>
@@ -269,7 +292,8 @@ export default {
                             class="form-control"
                             type="text"
                             :placeholder="$t('common:modules.tools.draw.clickToPlaceText')"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
+                            :value="text"
                             @input="setText"
                         >
                     </div>
@@ -285,12 +309,13 @@ export default {
                         <select
                             id="tool-draw-fontSize"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setFontSize"
                         >
                             <option
                                 v-for="option in constants.fontSizeOptions"
                                 :key="'draw-fontSize-' + option.value"
+                                :selected="option.value === fontSize"
                                 :value="option.value"
                             >
                                 {{ option.caption }}
@@ -309,13 +334,14 @@ export default {
                         <select
                             id="tool-draw-font"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setFont"
                         >
                             <option
                                 v-for="option in constants.fontOptions"
                                 :key="'draw-font-' + option.value"
                                 :value="option.value"
+                                :selected="option.value === font"
                             >
                                 {{ option.caption }}
                             </option>
@@ -333,7 +359,7 @@ export default {
                         <select
                             id="tool-draw-symbol"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setSymbol"
                         >
                             <!-- NOTE: caption of the iconList is deprecated in 3.0.0 -->
@@ -341,6 +367,7 @@ export default {
                                 v-for="option in iconList"
                                 :key="'draw-icon-' + (option.id ? option.id : option.caption)"
                                 :value="(option.id ? option.id : option.caption)"
+                                :selected="option.id === symbol.id"
                             >
                                 {{ $t(getIconLabelKey(option)) }}
                             </option>
@@ -358,13 +385,14 @@ export default {
                         <select
                             id="tool-draw-strokeWidth"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setStrokeWidth"
                         >
                             <option
                                 v-for="option in constants.strokeOptions"
                                 :key="'draw-stroke-' + option.value"
                                 :value="option.value"
+                                :selected="option.value === strokeWidth"
                             >
                                 {{ option.caption }}
                             </option>
@@ -383,7 +411,7 @@ export default {
                             id="tool-draw-opacity"
                             :key="`tool-draw-opacity-select`"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setOpacity"
                         >
                             <option
@@ -409,7 +437,7 @@ export default {
                             id="tool-draw-opacityContour"
                             :key="`tool-draw-opacityContour-select`"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setOpacityContour"
                         >
                             <option
@@ -434,13 +462,14 @@ export default {
                         <select
                             id="tool-draw-colorContour"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setColorContour"
                         >
                             <option
                                 v-for="option in constants.colorContourOptions"
                                 :key="'draw-colorContour-' + option.color"
                                 :value="option.value"
+                                :selected="isEqualColorArrays(option.value, colorContour)"
                             >
                                 {{ $t("common:colors." + option.color) }}
                             </option>
@@ -458,7 +487,7 @@ export default {
                         <select
                             id="tool-draw-pointColor"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setColor"
                         >
                             <option
@@ -483,13 +512,14 @@ export default {
                         <select
                             id="tool-draw-color"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setColor"
                         >
                             <option
                                 v-for="option in constants.colorOptions"
                                 :key="'draw-color-' + option.color"
                                 :value="option.value"
+                                :selected="isEqualColorArrays(option.value, color)"
                             >
                                 {{ $t("common:colors." + option.color) }}
                             </option>

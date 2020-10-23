@@ -1,7 +1,7 @@
 import sinon from "sinon";
 import {expect} from "chai";
-import actions from "../../store/actionsDraw";
-import stateDraw from "../../store/stateDraw";
+import actions from "../../../store/actionsDraw";
+import stateDraw from "../../../store/stateDraw";
 import {Draw} from "ol/interaction.js";
 import Feature from "ol/Feature";
 import Polygon from "ol/geom/Polygon";
@@ -277,14 +277,21 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
                 activeSymbol
             );
 
-            expect(commit.calledOnce).to.be.true;
+            expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args[0]).to.equal("setModifyInteraction");
+            expect(commit.secondCall.args[0]).to.equal("setSelectInteractionModify");
             expect(typeof commit.firstCall.args[1]).to.equal("object");
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: activeSymbol}]);
-            expect(dispatch.secondCall.args).to.eql(["createModifyInteractionListener"]);
-            expect(dispatch.thirdCall.args[0]).to.eql("addInteraction");
-            expect(typeof dispatch.thirdCall.args[1]).to.eql("object");
+            expect(typeof commit.secondCall.args[1]).to.equal("object");
+
+            expect(dispatch.callCount).to.equal(5);
+            expect(dispatch.args[0]).to.eql(["manipulateInteraction", {interaction: "modify", active: activeSymbol}]);
+            expect(dispatch.args[1]).to.eql(["createModifyInteractionListener"]);
+            expect(dispatch.args[2][0]).to.eql("addInteraction");
+            expect(typeof dispatch.args[2][1]).to.eql("object");
+
+            expect(dispatch.args[3]).to.eql(["createSelectInteractionModifyListener"]);
+            expect(dispatch.args[4][0]).to.eql("addInteraction");
+            expect(typeof dispatch.args[4][1]).to.eql("object");
         });
     });
     describe("createModifyInteractionListener", () => {
@@ -327,6 +334,30 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(trigger.calledOnce).to.be.true;
             expect(trigger.firstCall.args).to.eql(["RemoteInterface", "postMessage", {"drawEnd": geoJSONSymbol}]);
         });*/
+    });
+    describe("createSelectInteractionModifyListener", () => {
+        let definedFunctions, trigger;
+
+        beforeEach(() => {
+            trigger = sinon.spy();
+            definedFunctions = {
+                select: []
+            };
+            state = {
+                selectInteractionModify: {
+                    on: (key, f) => {
+                        definedFunctions[key].push(f);
+                    }
+                }
+            };
+            sinon.stub(Radio, "trigger").callsFake(trigger);
+        });
+
+        it("should define a select function on the interaction", () => {
+            actions.createSelectInteractionModifyListener({state, dispatch});
+
+            expect(definedFunctions.select).to.have.length(1);
+        });
     });
     describe("createSelectInteractionAndAddToMap", () => {
         it("commits and dispatches as expected", () => {
@@ -556,6 +587,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             color = initialState.color,
             colorContour = initialState.colorContour,
             modifyInteraction = Symbol(),
+            selectInteractionModify = Symbol(),
             selectInteraction = Symbol(),
             un = sinon.spy();
 
@@ -569,6 +601,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
                 drawInteractionTwo,
                 layer: {getSource: () => ({un})},
                 modifyInteraction,
+                selectInteractionModify,
                 selectInteraction
             };
             actions.resetModule({state, commit, dispatch, getters});
@@ -576,28 +609,29 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(un.calledOnce).to.be.true;
             expect(un.firstCall.args).to.eql(["addFeature", listener]);
 
-            expect(commit.callCount).to.equal(13);
+            expect(commit.callCount).to.equal(14);
             expect(commit.getCall(0).args).to.eql(["setActive", false]);
-            expect(commit.getCall(1).args).to.eql(["setCircleMethod", initialState.circleMethod]);
-            expect(commit.getCall(2).args).to.eql(["setCircleInnerDiameter", initialState.circleInnerDiameter]);
-            expect(commit.getCall(3).args).to.eql(["setCircleOuterDiameter", initialState.circleOuterDiameter]);
-            expect(commit.getCall(4).args).to.eql(["setColor", color]);
-            expect(commit.getCall(5).args).to.eql(["setColorContour", colorContour]);
-            expect(commit.getCall(6).args).to.eql(["setDrawType", initialState.drawType]);
-            expect(commit.getCall(7).args).to.eql(["setFreeHand", initialState.freeHand]);
-            expect(commit.getCall(8).args).to.eql(["setOpacity", initialState.opacity]);
-            expect(commit.getCall(9).args).to.eql(["setOpacityContour", initialState.opacityContour]);
-            expect(commit.getCall(10).args).to.eql(["setPointSize", initialState.pointSize]);
-            expect(commit.getCall(11).args).to.eql(["setSymbol", iconSymbol]);
-            expect(commit.getCall(12).args).to.eql(["setWithoutGUI", initialState.withoutGUI]);
+            expect(commit.getCall(1).args).to.eql(["setSelectedFeature", null]);
+            expect(commit.getCall(2).args).to.eql(["setCircleMethod", initialState.circleMethod]);
+            expect(commit.getCall(3).args).to.eql(["setCircleInnerDiameter", initialState.circleInnerDiameter]);
+            expect(commit.getCall(4).args).to.eql(["setCircleOuterDiameter", initialState.circleOuterDiameter]);
+            expect(commit.getCall(5).args).to.eql(["setColor", color]);
+            expect(commit.getCall(6).args).to.eql(["setColorContour", colorContour]);
+            expect(commit.getCall(7).args).to.eql(["setDrawType", initialState.drawType]);
+            expect(commit.getCall(8).args).to.eql(["setFreeHand", initialState.freeHand]);
+            expect(commit.getCall(9).args).to.eql(["setOpacity", initialState.opacity]);
+            expect(commit.getCall(10).args).to.eql(["setOpacityContour", initialState.opacityContour]);
+            expect(commit.getCall(11).args).to.eql(["setPointSize", initialState.pointSize]);
+            expect(commit.getCall(12).args).to.eql(["setSymbol", iconSymbol]);
+            expect(commit.getCall(13).args).to.eql(["setWithoutGUI", initialState.withoutGUI]);
 
             expect(dispatch.callCount).to.equal(7);
-            expect(dispatch.getCall(0).args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
-            expect(dispatch.getCall(1).args).to.eql(["removeInteraction", drawInteraction]);
-            expect(dispatch.getCall(2).args).to.eql(["removeInteraction", drawInteractionTwo]);
-            expect(dispatch.getCall(3).args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
+            expect(dispatch.getCall(0).args).to.eql(["toggleInteraction", "draw"]);
+            expect(dispatch.getCall(1).args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
+            expect(dispatch.getCall(2).args).to.eql(["removeInteraction", drawInteraction]);
+            expect(dispatch.getCall(3).args).to.eql(["removeInteraction", drawInteractionTwo]);
             expect(dispatch.getCall(4).args).to.eql(["removeInteraction", modifyInteraction]);
-            expect(dispatch.getCall(5).args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+            expect(dispatch.getCall(5).args).to.eql(["removeInteraction", selectInteractionModify]);
             expect(dispatch.getCall(6).args).to.eql(["removeInteraction", selectInteraction]);
         });
     });
@@ -630,20 +664,23 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
 
             actions.toggleInteraction({commit, dispatch}, interaction);
 
-            expect(commit.calledOnce).to.be.true;
+            expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "draw"]);
-            expect(dispatch.calledThrice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: true}]);
-            expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
-            expect(dispatch.thirdCall.args).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+            expect(commit.secondCall.args).to.eql(["setSelectedFeature", null]);
+            expect(dispatch.callCount).to.equal(4);
+            expect(dispatch.args[0]).to.eql(["manipulateInteraction", {interaction: "draw", active: true}]);
+            expect(dispatch.args[1]).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);
+            expect(dispatch.args[2]).to.eql(["manipulateInteraction", {interaction: "delete", active: false}]);
+            expect(dispatch.args[3]).to.eql(["updateDrawInteraction"]);
         });
         it("should enable the modify interaction and disable the other interactions if the given interaction equals 'modify'", () => {
             interaction = "modify";
 
             actions.toggleInteraction({commit, dispatch}, interaction);
 
-            expect(commit.calledOnce).to.be.true;
+            expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "modify"]);
+            expect(commit.secondCall.args).to.eql(["setSelectedFeature", null]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
             expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: true}]);
@@ -654,8 +691,9 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
 
             actions.toggleInteraction({commit, dispatch}, interaction);
 
-            expect(commit.calledOnce).to.be.true;
+            expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setCurrentInteraction", "delete"]);
+            expect(commit.secondCall.args).to.eql(["setSelectedFeature", null]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: false}]);
             expect(dispatch.secondCall.args).to.eql(["manipulateInteraction", {interaction: "modify", active: false}]);

@@ -1,6 +1,6 @@
 import sinon from "sinon";
 import {expect} from "chai";
-import actions from "../../store/actionsDraw";
+import actions from "../../../store/actionsDraw";
 
 describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
     let commit, dispatch, state, target;

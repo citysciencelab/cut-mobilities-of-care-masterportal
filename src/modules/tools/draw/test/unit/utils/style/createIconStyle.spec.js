@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {createIconStyle} from "../../../utils/style/createIconStyle";
+import {createIconStyle} from "../../../../utils/style/createIconStyle";
 
 describe("src/modules/tools/draw/utils/style/createIconStyle.js", () => {
     let iconPath;
