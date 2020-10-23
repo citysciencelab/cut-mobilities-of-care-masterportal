@@ -94,6 +94,7 @@
           }
         },
         "alerting": {
+            "hideMessage": "Diese Meldung nicht mehr anzeigen",
             "categories": {
                 "error": "Fehler",
                 "info": "Info",
