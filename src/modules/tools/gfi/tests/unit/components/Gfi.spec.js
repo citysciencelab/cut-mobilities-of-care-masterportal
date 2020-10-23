@@ -11,7 +11,8 @@ const localVue = createLocalVue(),
         setCurrentFeature: () => sinon.stub()
     },
     mockGetters = {
-        desktopType: () => sinon.stub()
+        desktopType: () => sinon.stub(),
+        centerMapToClickPoint: () => sinon.stub()
     };
 
 localVue.use(Vuex);
