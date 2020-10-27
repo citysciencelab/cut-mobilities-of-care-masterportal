@@ -169,6 +169,7 @@ const ShadowModel = Tool.extend(/** @lends ShadowModel.prototype */{
         this.toggleShadow(value);
         this.setIsShadowEnabled(value);
         this.trigger("toggleButtonValueChanged", value);
+        this.get("toggleButton").attributes.label = i18next.t("common:modules.tools.shadow.shadowDisplay");
     },
 
     /**
