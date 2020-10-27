@@ -943,6 +943,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object} graphConfig.yAxisTicks.factor Factor for y-axis-ticks.
      * @param {String} graphConfig.svgClass Class of SVG.
      * @param {Object[]} graphConfig.legendData Data for legend.
+     * @param {Number} graphConfig.legendHeight height of the legend.
      * @param {String} graphConfig.legendData.class CSS class for legend object.
      * @param {String} graphConfig.legendData.text Text for legend object; may be a locale key.
      * @param {Number} graphConfig.legendHeight height of the legend.
