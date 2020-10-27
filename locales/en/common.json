@@ -406,51 +406,6 @@
                     "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
                     "default": {
                       "imgAlt": "No image could be loaded."
-                    },
-                    "trafficCount": {
-                        "infoLabel": "Info",
-                        "dayLabel": "Day",
-                        "weekLabel": "Week",
-                        "yearLabel": "Year",
-                        "period": "Period of time",
-                        "number": "Number",
-                        "totalSince": "Total since",
-                        "sinceBeginningOfTheYear": "Since beginning of the year",
-                        "overThePastYear": "In the previous year",
-                        "onThePreviousDay": "On the previous day",
-                        "highestDay": "Day with highest number in the year",
-                        "highestWeek": "Week with highest number in the year",
-                        "highestMonth": "Month with highest number in the year",
-                        "dateLabel": "Date",
-                        "clockLabel": "",
-                        "tableLabel": "Table",
-                        "notice": "Due to unavailable data, gaps in the chart and empty table cells may occur.",
-                        "lastupdateLabel": "Last update:",
-                        "diagramLabel": "Diagram",
-                        "calendarweek": "CW",
-                        "infraredsensor": "Infrared sensor",
-                        "countingstation": "Counting station",
-                        "carLabel": "Car",
-                        "bicycleLabel": "Bicycle",
-                        "idLabel": "ID:",
-                        "typeLabel": "Type:",
-                        "meansOfTransportLabel": "Transportation:",
-                        "directionLabel": "Direction:",
-                        "carsHeaderSuffix": "The count of cars",
-                        "trucksHeaderSuffix": "Trucks proportion in %",
-                        "yAxisTextDay": "Count / 15 Min.",
-                        "yAxisTextWeek": "Count / Day",
-                        "yAxisTextYear": "Count / Week"
-                    },
-                    "schulinfo": {
-                      "schoolAsDestination": "Assign school as a destination",
-                      "no": "No",
-                      "yes": "Yes"
-                    },
-                    "solaratlas": {
-                      "solarPotential": "Solar potential of the building: {{ardfull}}",
-                      "buildingSuitable": "The total usable area of the building is {{area_pv_m2}} m². The average amount of radiation taking into account the shading for this building is {{ic_mean}} kWh/m²a. <br><br><b>Photovoltaic</b> - Installable PV area<br>very suitable (EK4): {{area_ek4_p}} m²<br>well suitable (EK3): {{area_ek3_p}} m²<br>suitable (EK2): {{area_ek2_p}} m²<br> conditionally suitable (EK1): {{{area_ek1_p}} m²<br><br>On the roof surface a PV system with a peak capacity of approx. {{powerp_15}} kWp can be installed on the roof surface.<br>The predicted power yield of the PV system is approx. MWh/a.<br>The possible CO2 savings amount to {{co2_pv_15}} t/a.<br><br>The figures refer to the use of a solar module with 15% efficiency and a system effectiveness (performance ratio) of 80%. <br><br><b>Solar thermal energy </b> - Installable solar thermal surface very suitable (EK2): {{area_st_2a}} m²<br> well suitable (EK1): {{area_st_1a}} m²<br><br>The possible heat yield is {{p_st_mwh_a}} MWh/a.",
-                      "buildingUnsuitable": "This building is not suitable for the installation of a photovoltaic system. However, if necessary, a solar thermal system can be operated profitably.<br><br><b>Solar thermal system </b> - Installable solar thermal surface <br>very suitable (EK2): {{area_st_2a}} m²<br>well suitable (EK1): {{area_st_1a}} m²<br><br>The possible heat yield is {{p_st_mwh_a}} MWh/a."
                     }
                 }
             },
