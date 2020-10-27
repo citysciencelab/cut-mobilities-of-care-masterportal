@@ -50,8 +50,8 @@ async function loadThemes (addonKey) {
     ),
         addon = addonModule.default;
 
-     // Add the locale
-     for (const localeKey in addon.locales) {
+    // Add the locale
+    for (const localeKey in addon.locales) {
         i18next.addResourceBundle(localeKey, "additional", addon.locales[localeKey], true);
     }
 
