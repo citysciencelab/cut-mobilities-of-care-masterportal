@@ -31,7 +31,7 @@ export default async function (config) {
                 console.warn(`The module ${addonKey} does not include a Vue-component and/or vuex-store-module. Please make sure the folder contains a ${addonKey}.vue and ${addonKey}.js file. Maybe it is an backbone-addon.`, e);
             }
         });
-
+        
         await Promise.all(addons);
     }
 }
@@ -50,8 +50,8 @@ async function loadThemes (addonKey) {
     ),
         addon = addonModule.default;
 
-    // Add the locale
-    for (const localeKey in addon.locales) {
+     // Add the locale
+     for (const localeKey in addon.locales) {
         i18next.addResourceBundle(localeKey, "additional", addon.locales[localeKey], true);
     }
 

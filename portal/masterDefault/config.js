@@ -1,4 +1,5 @@
 const Config = {
+    addons: ["continuousCountingBike", "verkehrsstaerken"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     simpleMap: true,
     wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",

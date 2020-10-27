@@ -10,8 +10,6 @@ import MietenspiegelThemeView from "./mietenspiegel/view";
 import MietenspiegelTheme from "./mietenspiegel/model";
 import SgvOnlineTheme from "./sgvOnline/model";
 import SgvOnlineThemeView from "./sgvOnline/view";
-import VerkehrsStaerkenTheme from "./verkehrsstaerken/model";
-import VerkehrsStaerkenThemeView from "./verkehrsstaerken/view";
 import ItGbmTheme from "./itgbm/model";
 import ItGbmThemeView from "./itgbm/view";
 import DipasThemeView from "./dipas/view";
@@ -82,9 +80,6 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "sgvonline") {
             theme = new SgvOnlineTheme(attrs, options);
-        }
-        else if (attrs.gfiTheme === "verkehrsstaerken") {
-            theme = new VerkehrsStaerkenTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "itgbm") {
             theme = new ItGbmTheme(attrs, options);
@@ -181,10 +176,6 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "sgvonline": {
                 new SgvOnlineThemeView({model: model});
-                break;
-            }
-            case "verkehrsstaerken": {
-                new VerkehrsStaerkenThemeView({model: model});
                 break;
             }
             case "itgbm": {
