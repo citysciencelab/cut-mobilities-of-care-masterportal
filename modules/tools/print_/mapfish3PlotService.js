@@ -3,6 +3,8 @@ import BuildSpecModel from "./buildSpec";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import BuildCanvasModel from "./buildCanvas";
 import "./RadioBridge.js";
+import store from "../../../src/app-store/index";
+import thousandsSeparator from "../../../src/utils/thousandsSeparator.js";
 
 const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -47,7 +49,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         INCHES_PER_METER: 39.37,
         glyphicon: "glyphicon-print",
         eventListener: undefined,
-        moveendListener: undefined,
         dpiForPdf: 200,
         currentLng: "",
         // translations
@@ -59,7 +60,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         withLegendLabel: "",
         withInfoLabel: "",
         printLabel: "",
-        layoutNameList: []
+        layoutNameList: [],
+        currentMapScale: "",
+        hintInfoScale: "",
+        visibleLayer: [],
+        beforeScale: "",
+        afterScale: "",
+        invisibleLayer: [],
+        zoomLevel: null,
+        hintInfo: ""
     }),
 
     /**
@@ -100,6 +109,14 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @property {String} scaleLabel Label text for print-window
      * @property {String} legendLabel Label text for print-window
      * @property {String} printLabel Label text for print-window
+     * @property {String[]} layoutNameList the list of layout name
+     * @property {ol/Layer[]} visibleLayer the list of visibile layers
+     * @property {ol/Layer[]} invisibleLayer the list of invisible but active layer
+     * @property {String} currentMapScale the current map scale
+     * @property {String} hintInfoScale the hint information when the current print scale and map scale are not the same
+     * @property {String} beforeScale the text before the scale
+     * @property {String} afterScale the text after the scale
+     * @property {String} hintInfo the hint text for the layer could not be printed
      * @fires Core#RadioRequestMapViewGetOptions
      * @listens Print#ChangeIsActive
      * @listens MapView#RadioTriggerMapViewChangedOptions
@@ -117,12 +134,27 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                     this.getCapabilites(model, value);
                 }
                 this.togglePostrenderListener(model, value);
+                if (value) {
+                    this.setCurrentMapScale(store.state.Map.scale);
+                }
             }
         });
 
         this.listenTo(Radio.channel("MapView"), {
             "changedOptions": function () {
                 this.setIsScaleSelectedManually(false);
+                if (this.get("eventListener") !== undefined) {
+                    this.updateCanvasLayer();
+                }
+            }
+        });
+
+        this.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": function () {
+                if (this.get("eventListener") !== undefined) {
+                    this.setVisibleLayer(this.getVisibleLayer().concat(this.get("invisibleLayer")));
+                    this.updateCanvasLayer();
+                }
             }
         });
 
@@ -164,6 +196,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             withInfoLabel: i18next.t("common:modules.tools.print.withInfoLabel"),
             vtlWarning: i18next.t("common:modules.tools.print.vtlWarning"),
             layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true}),
+            hintInfoScale: i18next.t("common:modules.tools.print.hintInfoScale"),
+            beforeScale: i18next.t("common:modules.tools.print.invisibleLayer.beforeScale"),
+            afterScale: i18next.t("common:modules.tools.print.invisibleLayer.afterScale"),
             currentLng: lng
         });
     },
@@ -232,9 +267,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     print: function () {
-        const visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
-                return layer.getVisible() === true;
-            }),
+        const visibleLayerList = this.getVisibleLayer(),
             attr = {
                 "layout": this.get("currentLayout").name,
                 "outputFilename": this.get("filename"),
@@ -261,14 +294,14 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         if (this.get("isScaleAvailable")) {
             spec.buildScale(this.get("currentScale"));
         }
-        spec.buildLayers(this.sortVisibleLayerListByZindex(visibleLayerList));
+        spec.buildLayers(visibleLayerList);
 
         if (this.get("isGfiAvailable")) {
             spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
         }
         spec = spec.toJSON();
-
         spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
+
         this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
     },
 
@@ -333,58 +366,52 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      */
     togglePostrenderListener: function (model, value) {
         const canvasModel = new BuildCanvasModel(),
-            foundVectorTileLayers = [];
+            foundVectorTileLayers = [],
+            visibleLayerList = this.getVisibleLayer();
 
         /*
          * Since MapFish 3 does not yet support VTL (see https://github.com/mapfish/mapfish-print/issues/659),
          * they are filtered in the following code and an alert is shown to the user informing him about which
          * layers will not be printed.
          */
-        let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
-                if (layer.get("typ") === "VectorTile") {
-                    foundVectorTileLayers.push(layer.get("name"));
-                    return false;
-                }
-                return layer.getVisible() === true;
-            }),
-            canvasLayer;
+        let canvasLayer;
 
         if (foundVectorTileLayers.length && this.get("isActive")) {
             Radio.trigger("Alert", "alert", `${this.get("vtlWarning")} ${foundVectorTileLayers.join(", ")}`);
         }
 
-        visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
+        this.setVisibleLayer(visibleLayerList);
 
         if (value && model.get("layoutList").length !== 0 && visibleLayerList.length >= 1) {
             canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
             this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
-            this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateCanvasLayer.bind(this)));
         }
         else {
             Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
-            Radio.trigger("Map", "unregisterListener", this.get("moveendListener"));
             this.setEventListener(undefined);
-            this.setMoveendListener(undefined);
+            if (this.get("invisibleLayer").length) {
+                this.setOriginalPrintLayer();
+                this.setHintInfo("");
+            }
         }
         Radio.trigger("Map", "render");
     },
 
     /**
-     * upate to draw the print page rectangle onto the canvas when the map changes
+     * update to draw the print page rectangle onto the canvas when the map changes
      * @returns {void}
      */
     updateCanvasLayer: function () {
-        const canvasModel = new BuildCanvasModel();
-        let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
-                return layer.getVisible() === true;
-            }),
-            canvasLayer = {};
-
-        visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
+        const canvasModel = new BuildCanvasModel(),
+            visibleLayerList = this.getVisibleLayer();
+        let canvasLayer = {};
 
         Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
         canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
-        this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
+        this.setCurrentMapScale(store.state.Map.scale);
+        if (Object.keys(canvasLayer).length) {
+            this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
+        }
     },
 
     /**
@@ -406,10 +433,13 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.getPrintMapScales());
             this.setCurrentScale(scale);
         }
+
         this.drawMask(frameState.size, context);
         this.drawPrintPage(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), scale, context);
         context.fillStyle = "rgba(0, 5, 25, 0.55)";
         context.fill();
+
+        this.setPrintLayers(scale);
     },
 
     /**
@@ -523,6 +553,90 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
+     * returns the visible layers and set into variable
+     * @returns {Number[]} scale list
+     */
+    getVisibleLayer: function () {
+        let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
+            return layer.getVisible() === true;
+        });
+
+        visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
+
+        return visibleLayerList;
+    },
+
+    /**
+     * Getting und showing the layer which is visible in print scale
+     * @param {String} scale - the current print scale
+     * @returns {void} -
+     */
+    setPrintLayers: function (scale) {
+        const visibleLayer = this.get("visibleLayer"),
+            resoByMaxScale = Radio.request("MapView", "getResoByScale", scale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResoByScale", scale, "min"),
+            invisibleLayer = [],
+            beforeScale = this.get("beforeScale"),
+            afterScale = this.get("afterScale");
+
+        let invisibleLayerName = "",
+            hintInfo = "";
+
+        visibleLayer.forEach(layer => {
+            const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
+
+            if (resoByMaxScale > layer.getMaxResolution() || resoByMinScale <= layer.getMinResolution()) {
+                invisibleLayer.push(layer);
+                invisibleLayerName += "- " + layer.get("name") + "<br>";
+                layer.setVisible(false);
+                layerModel.setIsOutOfRange(true);
+            }
+            else {
+                layer.setVisible(true);
+                layerModel.setIsOutOfRange(false);
+            }
+        });
+
+        hintInfo = beforeScale + thousandsSeparator(scale, " ") + afterScale + "<br>" + invisibleLayerName;
+
+        if (invisibleLayer.length && hintInfo !== this.get("hintInfo")) {
+            store.dispatch("Alerting/addSingleAlert", hintInfo);
+            this.setHintInfo(hintInfo);
+        }
+
+        if (!invisibleLayer.length) {
+            this.setHintInfo("");
+        }
+
+        this.setInvisibleLayer(invisibleLayer);
+        this.updateCanvasLayer();
+    },
+
+    /**
+     * Getting und showing the layer which is visible in map scale
+     * @returns {void} -
+     */
+    setOriginalPrintLayer: function () {
+        const invisibleLayer = this.get("invisibleLayer"),
+            mapScale = this.get("currentMapScale"),
+            resoByMaxScale = Radio.request("MapView", "getResoByScale", mapScale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResoByScale", mapScale, "min");
+
+        invisibleLayer.forEach(layer => {
+            const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
+
+            if (resoByMaxScale <= layer.getMaxResolution() && resoByMinScale > layer.getMinResolution()) {
+                layerModel.setIsOutOfRange(false);
+            }
+            else {
+                layerModel.setIsOutOfRange(true);
+            }
+            layer.setVisible(true);
+
+        });
+    },
+
+    /**
      * returns a capabilities attribute object of the current layout, corresponding to the given name
      * @param {string} name - name of the attribute to get
      * @returns {object|undefined} corresponding attribute or null
@@ -552,7 +666,13 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {number} a negative, zero, or positive value
      */
     sortNumbers: function (a, b) {
-        return a - b;
+        if (a < b) {
+            return -1;
+        }
+        if (a > b) {
+            return 1;
+        }
+        return 0;
     },
 
     /**
@@ -700,8 +820,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} value  - todo
+     * setter the event listener
+     * @param {*} value  - the event triggerd with event listener
      * @returns {void}
      */
     setEventListener: function (value) {
@@ -709,12 +829,39 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} value  - todo
+     * setter the current map scale
+     * @param {String} value  - the current map scale
      * @returns {void}
      */
-    setMoveendListener: function (value) {
-        this.set("moveendListener", value);
+    setCurrentMapScale: function (value) {
+        this.set("currentMapScale", value);
+    },
+
+    /**
+     * setter the visible layer list before printing
+     * @param {ol/Layer[]} value  - the visible layer list
+     * @returns {void}
+     */
+    setVisibleLayer: function (value) {
+        this.set("visibleLayer", value);
+    },
+
+    /**
+     * setter the invisible layer list before printing
+     * @param {ol/Layer[]} value  - the invisible layer list
+     * @returns {void}
+     */
+    setInvisibleLayer: function (value) {
+        this.set("invisibleLayer", value);
+    },
+
+    /**
+     * setter for the hint information
+     * @param {String} value - the hint text
+     * @returns {void}
+     */
+    setHintInfo: function (value) {
+        this.set("hintInfo", value);
     }
 });
 
