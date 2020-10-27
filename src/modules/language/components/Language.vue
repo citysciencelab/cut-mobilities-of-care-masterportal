@@ -18,8 +18,9 @@ export default {
     methods: {
         ...mapMutations("Language", ["setCurrentLocale"]),
         translate (language) {
-            i18next.changeLanguage(language);
-            this.setCurrentLocale(language);
+            i18next.changeLanguage(language, () => {
+                this.setCurrentLocale(language);
+            });
         },
         toggleLanguageWindow () {
             this.showWindow = !this.showWindow;
