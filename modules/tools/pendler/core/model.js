@@ -20,12 +20,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             VERSION: "1.1.0",
             maxFeatures: "10000"
         },
-        singleCounties: [
-            "Hamburg",
-            "Lübeck",
-            "Neumünster",
-            "Schwerin"
-        ],
         wfsappGemeinde: "mrh_einpendler_gemeinde",
         wfsappKreise: "mrh_pendler_kreise",
         featureType: "mrh_pendler_kreise",
@@ -127,28 +121,13 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
                     this.setAttrGemeindeContrary("wohnort");
                 }
 
-                const mutatedFeatureType = this.mutateFeatureTypeForSingleCounties(
-                        this.get("kreis"),
-                        this.get("singleCounties"),
-                        this.get("featureType"),
-                        this.get("wfsappKreise"),
-                        this.get("wfsappGemeinde")
-                    ),
-                    literal = this.get("featureType") === this.get("wfsappGemeinde") ? this.get("gemeinde") : this.get("kreis");
+                const literal = this.get("featureType") === this.get("wfsappGemeinde") ? this.get("gemeinde") : this.get("kreis");
 
-                this.createPostBody(mutatedFeatureType, value, literal);
+                this.createPostBody(this.get("featureType"), value, literal);
             },
             "change:postBody": function (model, value) {
                 this.sendRequest("POST", value, data => {
-                    const mutatedFeatureType = this.mutateFeatureTypeForSingleCounties(
-                        this.get("kreis"),
-                        this.get("singleCounties"),
-                        this.get("featureType"),
-                        this.get("wfsappKreise"),
-                        this.get("wfsappGemeinde")
-                    );
-
-                    this.parseFeatures(data, mutatedFeatureType);
+                    this.parseFeatures(data, this.get("featureType"));
                 });
             }
         });
@@ -161,23 +140,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             }
         });
         this.sendRequest("GET", this.get("params"), this.parseKreise);
-    },
-
-    /**
-     * as bigger towns have no smaller communities, the data for bigger towns are not available through wfsappKreise
-     * but only through wfsappGemeinde. This is unfortunate and needs a special handling.
-     * @param {String} county the choosen county ("kreis")
-     * @param {String[]} singleCounties the county to get the special handling for - as simple array of strings
-     * @param {String} featureType the choosen app (wfsappKreise or wfsappGemeinde)
-     * @param {String} wfsappKreise the value for featureType (app) "kreis" - passed to avoid global access
-     * @param {String} wfsappGemeinde the value for featureType (app) "gemeinde" - passed to avoid global access
-     * @returns {String} the featureType to use for the wfs request either wfsappKreise or wfsappGemeinde
-     */
-    mutateFeatureTypeForSingleCounties: function (county, singleCounties, featureType, wfsappKreise, wfsappGemeinde) {
-        if (featureType === wfsappKreise && Array.isArray(singleCounties) && singleCounties.indexOf(county) !== -1) {
-            return wfsappGemeinde;
-        }
-        return featureType;
     },
 
     /**
