@@ -210,9 +210,11 @@ export default {
             layerSource.forEach(layer => {
                 legends.push(this.prepareLegend(layer.get("legend")));
             });
-            legends = legends.flat();
+            // legends = legends.flat(); does not work in unittest and older browser versions
+            legends = [].concat(...legends);
             return legends;
         },
+
         /**
          * Generates the legend object and adds it to the legend array in the store.
          * @param {String} id Id of layer.
