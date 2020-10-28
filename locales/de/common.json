@@ -347,7 +347,10 @@
             },
             "fileImport": {
                 "captions": {
-                    "intro": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.<br><br>Es können KML-Dateien (*.kml), GPX-Dateien (*.gpx) oder GeoJson-Dateien (*.geojson, *.json) importiert werden.",
+                    "introInfo": "Importieren Sie Ihre gewünschte Datei einfach per Drag and Drop oder alternativ mit dem Öffnen-Dialog des Browsers.",
+                    "introFormats": "Es können KML-Dateien (*.kml), GPX-Dateien (*.gpx) oder GeoJson-Dateien (*.geojson, *.json) importiert werden.",
+                    "introDrawTool": "Importierte Geometrien können im Nachhinein verändert werden. Nutzen Sie hierfür das Werkzeug &quot;$t(common:menu.tools.draw)&quot;.",
+                    "drawTool": "$t(common:menu.tools.draw) öffnen",
                     "dropzone": "Datei hier ablegen",
                     "browse": "Datei auswählen",
                     "supportedFiletypes": {

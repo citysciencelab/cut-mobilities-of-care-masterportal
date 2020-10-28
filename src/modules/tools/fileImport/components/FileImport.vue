@@ -85,6 +85,24 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        /**
+         * opens the draw tool, closes fileImport
+         * @pre fileImport is opened
+         * @post fileImport is closed, the draw tool is opened
+         * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
+         * @returns {void}
+         */
+        openDrawTool () {
+            // todo: to select the correct tool in the menu, for now Radio request is used
+            const drawToolModel = Radio.request("ModelList", "getModelByAttributes", {id: "draw"});
+
+            // todo: change menu highlighting - this will also close the current tool:
+            drawToolModel.collection.setActiveToolsToFalse(drawToolModel);
+            drawToolModel.setIsActive(true);
+
+            this.close();
+            this.$store.dispatch("Tools/setToolActive", {id: "draw", active: true});
         }
     }
 };
@@ -102,16 +120,20 @@ export default {
         <template v-slot:toolBody>
             <div
                 v-if="active"
-                id="kml-import"
+                id="tool-file-import"
             >
                 <p
-                    id="cta"
-                    v-html="$t('modules.tools.fileImport.captions.intro')"
+                    class="cta"
+                    v-html="$t('modules.tools.fileImport.captions.introInfo')"
+                >
+                </p>
+                <p
+                    class="cta"
+                    v-html="$t('modules.tools.fileImport.captions.introFormats')"
                 >
                 </p>
                 <div
-                    id="drop-area-fake"
-                    class="vh-center-outer-wrapper"
+                    class="vh-center-outer-wrapper drop-area-fake"
                     :class="dropZoneAdditionalClass"
                 >
                     <div
@@ -125,7 +147,7 @@ export default {
                     </div>
 
                     <div
-                        id="drop-area"
+                        class="drop-area"
                         @drop.prevent="onDrop"
                         @dragover.prevent
                         @dragenter.prevent="onDZDragenter"
@@ -136,9 +158,7 @@ export default {
                 </div>
 
                 <div>
-                    <label
-                        id="upload-button-wrapper"
-                    >
+                    <label class="upload-button-wrapper">
                         <input
                             type="file"
                             @change="onInputChange"
@@ -146,24 +166,38 @@ export default {
                         {{ $t("modules.tools.fileImport.captions.browse") }}
                     </label>
                 </div>
-                <div
-                    v-if="importedFileNames.length > 0"
-                    id="h-seperator"
-                />
-                <p
-                    v-if="importedFileNames.length > 0"
-                    id="imported-filenames"
-                >
-                    <label>{{ $t("modules.tools.fileImport.successfullyImportedLabel") }}</label>
-                    <ul>
-                        <li
-                            v-for="(filename, index) in importedFileNames"
-                            :key="index"
-                        >
-                            {{ filename }}
-                        </li>
-                    </ul>
-                </p>
+
+                <div v-if="importedFileNames.length > 0">
+                    <div class="h-seperator" />
+                    <p class="cta">
+                        <label class="successfullyImportedLabel">
+                            {{ $t("modules.tools.fileImport.successfullyImportedLabel") }}
+                        </label>
+                        <ul>
+                            <li
+                                v-for="(filename, index) in importedFileNames"
+                                :key="index"
+                            >
+                                {{ filename }}
+                            </li>
+                        </ul>
+                    </p>
+                    <div class="h-seperator" />
+                    <p
+                        class="cta introDrawTool"
+                        v-html="$t('modules.tools.fileImport.captions.introDrawTool')"
+                    >
+                    </p>
+                    <div>
+                        <label class="upload-button-wrapper">
+                            <input
+                                type="button"
+                                @click="openDrawTool"
+                            />
+                            {{ $t("modules.tools.fileImport.captions.drawTool") }}
+                        </label>
+                    </div>
+                </div>
             </div>
         </template>
     </Tool>
@@ -172,27 +206,7 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
 
-    #selectedFiletype-form-container {
-        label {
-            display: block;
-            margin:0;
-            font-size:@font_size_big;
-
-            &:hover {
-                text-decoration: underline;
-                cursor: pointer;
-            }
-        }
-        input {
-            margin:0;
-
-            &:hover {
-                cursor: pointer;
-            }
-        }
-    }
-
-    #h-seperator {
+    .h-seperator {
         margin:12px 0 12px 0;
         border: 1px solid #DDDDDD;
     }
@@ -200,8 +214,11 @@ export default {
     input[type="file"] {
         display: none;
     }
+    input[type="button"] {
+        display: none;
+    }
 
-    #upload-button-wrapper {
+    .upload-button-wrapper {
         border: 2px solid #DDDDDD;
         background-color:#FFFFFF;
         display: block;
@@ -217,11 +234,11 @@ export default {
         }
     }
 
-    #cta {
+    .cta {
         margin-bottom:12px;
         max-width:300px;
     }
-    #drop-area-fake {
+    .drop-area-fake {
         background-color: #FFFFFF;
         border-radius: 12px;
         border: 2px dashed @accent_disabled;
@@ -246,7 +263,7 @@ export default {
             color: @accent_disabled;
         }
     }
-    #drop-area {
+    .drop-area {
         position:absolute;
         top:0;
         left:0;
@@ -275,5 +292,12 @@ export default {
         display:inline-block;
         vertical-align:middle;
         position:relative;
+    }
+
+    .successfullyImportedLabel {
+        font-weight: bold;
+    }
+    .introDrawTool {
+        font-style: italic;
     }
 </style>
