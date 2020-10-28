@@ -76,7 +76,7 @@ export default {
                             :style="{
                                 width: legendPart.iconSize[0] + 'px',
                                 height: legendPart.iconSize[1] + 'px',
-                                padding: legendPart.iconSizeDifferenz + 'px'
+                                margin: legendPart.iconSizeDifferenz + 'px'
                             }"
                             class="first-image"
                         >
@@ -88,12 +88,12 @@ export default {
                         </span>
                     </div>
                     <div v-else>
-                        <!--Legend PDF as Link-->
+                        <!--Legend as Image or SVG -->
                         <img
                             v-if="!legendPart.graphic.endsWith('.pdf')"
                             :src="legendPart.graphic"
                         >
-                        <!--Legend as Image or SVG -->
+                        <!--Legend PDF as Link-->
                         <a
                             v-if="legendPart.graphic.endsWith('.pdf')"
                             :href="legendPart.graphic"
