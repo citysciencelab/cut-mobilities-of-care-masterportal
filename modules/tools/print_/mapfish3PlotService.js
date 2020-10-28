@@ -68,7 +68,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         afterScale: "",
         invisibleLayer: [],
         zoomLevel: null,
-        hintInfo: ""
+        hintInfo: "",
+        spec: new BuildSpecModel()
     }),
 
     /**
@@ -283,14 +284,14 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                 }
             };
 
-        let spec = new BuildSpecModel(attr);
+        let spec = this.get("spec");
+
+        spec.set(attr);
 
         if (this.get("isMetaDataAvailable")) {
             spec.setMetadata(true);
         }
-        if (this.get("isLegendAvailable")) {
-            spec.buildLegend(this.get("isLegendSelected"), this.get("isMetaDataAvailable"));
-        }
+
         if (this.get("isScaleAvailable")) {
             spec.buildScale(this.get("currentScale"));
         }
@@ -299,10 +300,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         if (this.get("isGfiAvailable")) {
             spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
         }
-        spec = spec.toJSON();
-        spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
 
-        this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
+        if (this.get("isLegendAvailable")) {
+            spec.buildLegend(this.get("isLegendSelected"), this.get("isMetaDataAvailable"));
+        }
+        else {
+            spec = spec.toJSON();
+            spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
+            this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
+        }
     },
 
     /**
@@ -324,13 +330,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * sends a request to create a print job
-     * @param {string} printAppId - id of the print configuration
      * @param {string} payload - POST body
+     * @param {string} printAppId - id of the print configuration
      * @param {string} format - print job output format
      * @returns {void}
      */
-    createPrintJob: function (printAppId, payload, format) {
-        const url = this.get("mapfishServiceUrl") + printAppId + "/report." + format;
+    createPrintJob: function (payload, printAppId, format) {
+        const printId = printAppId || this.get("printAppId"),
+            printFormat = format || this.get("currentFormat"),
+            url = this.get("mapfishServiceUrl") + printId + "/report." + printFormat;
 
         Radio.trigger("Util", "showLoader");
         this.sendRequest(url, "POST", this.waitForPrintJob, payload);

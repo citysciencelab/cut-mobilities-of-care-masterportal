@@ -5,6 +5,7 @@ import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Image, Tile, Vector, Group} from "ol/layer.js";
 import store from "../../../src/app-store/index";
+import "./RadioBridge.js";
 
 const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype */{
     defaults: {
@@ -21,7 +22,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     initialize: function () {
         this.listenTo(Radio.channel("CswParser"), {
-            "fetchedMetaData": this.fetchedMetaData
+            "fetchedMetaDataForPrint": this.fetchedMetaData
         });
     },
 
@@ -35,6 +36,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
+            if (this.get("uniqueIdList").length === 0) {
+                Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
+            }
         }
     },
 
@@ -904,10 +908,13 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
-        if (isMetaDataAvailable) {
+        if (isMetaDataAvailable && metaDataLayerList.length > 0) {
             metaDataLayerList.forEach(function (layerName) {
                 this.getMetaData(layerName);
             }.bind(this));
+        }
+        else {
+            Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
         }
     },
 
@@ -944,7 +951,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             cswObj.keyList = ["date", "orgaOwner", "address", "email", "tel", "url"];
             cswObj.uniqueId = uniqueId;
 
-            Radio.trigger("CswParser", "getMetaData", cswObj);
+            Radio.trigger("CswParser", "getMetaDataForPrint", cswObj);
         }
     },
 

@@ -2,6 +2,7 @@ const webpack = require("webpack"),
     path = require("path"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
+require("regenerator-runtime/runtime");
 require("jsdom-global")();
 global.DOMParser = window.DOMParser;
 

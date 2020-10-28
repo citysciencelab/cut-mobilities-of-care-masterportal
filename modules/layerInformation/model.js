@@ -1,6 +1,7 @@
 import ViewMobile from "./viewMobile";
 import View from "./view";
 import Overlay from "ol/Overlay.js";
+import "./RadioBridge.js";
 
 const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationModel.prototype */{
     defaults: {
@@ -64,7 +65,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             }
         });
         this.listenTo(Radio.channel("CswParser"), {
-            "fetchedMetaData": this.fetchedMetaData
+            "fetchedMetaDataForLayerInformation": this.fetchedMetaData
         });
         this.bindView(Radio.request("Util", "isViewMobile"));
         this.listenTo(Radio.channel("Map"), {
@@ -93,6 +94,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
                 this.updateMetaData(cswObj.parsedData);
                 this.setLayerName(cswObj.layerName);
             }
+            this.trigger("sync");
         }
     },
     /**
@@ -151,7 +153,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
                 cswObj.keyList = ["abstractText", "datePublication", "dateRevision", "periodicity", "title", "downloadLinks"];
                 cswObj.uniqueId = uniqueId;
 
-                Radio.trigger("CswParser", "getMetaData", cswObj);
+                Radio.trigger("CswParser", "getMetaDataForLayerInformation", cswObj);
             }
         }
     },
@@ -205,21 +207,25 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         this.set(attrs);
         this.setMetadataURL();
         this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetadataMessage"));
-
+        // console.info(this.areMetaIdsSet(this.get("metaID")));
+        // if (this.areMetaIdsSet(this.get("metaID"))) {
+        //     this.requestMetaData(attrs);
+        // }
+        // else {
+        this.set("title", this.get("layername"));
+        this.set("abstractText", i18next.t("common:modules.layerInformation.noMetadataMessage"));
+        this.set("date", null);
+        // this.set("metaURL", null);
+        this.set("downloadLinks", null);
+        this.set("datePublication", null);
+        this.set("dateRevision", null);
+        this.set("periodicity", null);
         if (this.areMetaIdsSet(this.get("metaID"))) {
             this.requestMetaData(attrs);
         }
         else {
-            this.set("title", this.get("layername"));
-            this.set("abstractText", i18next.t("common:modules.layerInformation.noMetadataMessage"));
-            this.set("date", null);
-            this.set("metaURL", null);
-            this.set("downloadLinks", null);
-            this.set("datePublication", null);
-            this.set("dateRevision", null);
-            this.set("periodicity", null);
+            this.trigger("sync");
         }
-        this.trigger("sync");
     },
 
     /**
