@@ -432,9 +432,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object[]} [data=[]] Data for graph.
      * @param {String} className Class name of point.
      * @param {Object} d3line D3 line object.
+     * @param {Number} legendHeight height for the legend in px, if not available it is calculated by bbox
      * @returns {void}
      */
-    appendDataToSvg: function (svg, data = [], className, d3line) {
+    appendDataToSvg: function (svg, data = [], className, d3line, legendHeight) {
         const dataToAdd = data.filter(obj => {
             return obj.yAttrToShow !== "-";
         });
@@ -446,7 +447,9 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
                 if (svg.select(".graph-legend").size() > 0) {
                     y = svg.select(".graph-legend").node().getBBox().height;
-
+                    if (y === 0 && legendHeight) {
+                        y = legendHeight;
+                    }
                     return "translate(0, " + y + ")";
                 }
                 return "translate(0, 0)";
@@ -858,13 +861,13 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         attrToShowArray.forEach(function (yAttrToShow) {
             if (typeof yAttrToShow === "object") {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow.attrName);
-                this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine);
+                this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine, graphConfig.legendHeight);
                 // Add the scatterplot for each point in line
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow.attrName, tooltipDiv, dotSize, setTooltipValue);
             }
             else {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
-                this.appendDataToSvg(svg, data, "line", valueLine);
+                this.appendDataToSvg(svg, data, "line", valueLine, graphConfig.legendHeight);
                 // Add the scatterplot for each point in line
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue);
             }
@@ -942,6 +945,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object[]} graphConfig.legendData Data for legend.
      * @param {String} graphConfig.legendData.class CSS class for legend object.
      * @param {String} graphConfig.legendData.text Text for legend object; may be a locale key.
+     * @param {Number} graphConfig.legendHeight height of the legend.
      * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
      * @returns {Void}  -
      */
