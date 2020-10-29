@@ -362,7 +362,7 @@ export default {
 @import "~variables";
 
 .gfi {
-    color: #555555;
+    color: #333333;
 }
 
 .pager {
