@@ -447,6 +447,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         thing.properties.dataStreamId = [];
         thing.properties.dataStreamName = [];
         thing.properties.dataStreamValue = [];
+        thing.properties.dataPhenomenonTime = [];
 
         dataStreams.forEach(dataStream => {
             const dataStreamId = String(dataStream["@iot.id"]),
@@ -461,20 +462,24 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             thing.properties.dataStreamId.push(dataStreamId);
             thing.properties.dataStreamName.push(dataStreamName);
 
-            if (this.get("showNoDataValue")) {
+            if (dataStreamValue) {
+                thing.properties[key] = dataStreamValue;
+                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, this.get("timezone"));
+                thing.properties.dataStreamValue.push(dataStreamValue);
+                thing.properties.dataPhenomenonTime.push(phenomenonTime);
+            }
+            else if (this.get("showNoDataValue")) {
                 thing.properties[key] = this.get("noDataValue");
                 thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
                 thing.properties.dataStreamValue.push(this.get("noDataValue"));
             }
-            else if (dataStreamValue) {
-                thing.properties[key] = dataStreamValue;
-                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, this.get("timezone"));
-                thing.properties.dataStreamValue.push(dataStreamValue);
-            }
+
         });
+
         thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
         thing.properties.dataStreamValue = thing.properties.dataStreamValue.join(" | ");
         thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
+        thing.properties.dataPhenomenonTime = thing.properties.dataPhenomenonTime.join(" | ");
     },
 
     /**
