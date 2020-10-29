@@ -6,12 +6,11 @@ const webpack = require("webpack"),
     VueLoaderPlugin = require("vue-loader/lib/plugin"),
 
     rootPath = path.resolve(__dirname, "../"),
-    addonPath = path.resolve(rootPath, "addons/"),
-    addonConfigPath = path.resolve(addonPath, "addonsConf.json"),
+    addonBasePath = path.resolve(rootPath, "addons"),
+    addonConfigPath = path.resolve(addonBasePath, "addonsConf.json"),
     entryPoints = {masterportal: path.resolve(rootPath, "js/main.js")};
 
 let addonEntryPoints = {};
-
 
 if (!fse.existsSync(addonConfigPath)) {
     console.warn("NOTICE: " + addonConfigPath + " not found. Skipping all addons.");
@@ -25,26 +24,48 @@ module.exports = function () {
         vueAddonsRelPaths = {};
 
     for (const addonName in addonEntryPoints) {
-        let vue = false;
+        let isVueAddon = false,
+            addonPath = addonName,
+            entryPointFileName = "",
+            addonCombinedRelpath;
 
-        if (typeof addonEntryPoints[addonName] !== "string") {
-            vue = true;
+        if (typeof addonEntryPoints[addonName] === "string") {
+            entryPointFileName = addonEntryPoints[addonName];
         }
-        const entry = vue ? "index.js" : addonEntryPoints[addonName],
-            addonFilePath = path.resolve(addonPath, addonName, entry);
 
-        if (!fse.existsSync(addonFilePath)) {
+        // An addon is recognized as Vue-Addon, if:
+        // - its configuration value is an object
+        // - with at least a key named "type"
+        if (typeof addonEntryPoints[addonName] === "object" && addonEntryPoints[addonName].type !== undefined) {
+            isVueAddon = true;
+            
+            if (typeof addonEntryPoints[addonName].entryPoint === "string") {
+                entryPointFileName = addonEntryPoints[addonName].entryPoint;
+            }
+            else {
+                entryPointFileName = "index.js";
+            }
+
+            if (typeof addonEntryPoints[addonName].path === "string") {
+                addonPath = addonEntryPoints[addonName].path;
+            }
+        }
+
+        addonCombinedRelpath = [addonPath, entryPointFileName].join("/");
+
+        // Now check if file exists
+        if (!fse.existsSync(path.resolve(addonBasePath, addonCombinedRelpath))) {
             console.error("############\n------------");
-            throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
+            throw new Error("ERROR: FILE DOES NOT EXIST \"" + path.resolve(addonBasePath, addonCombinedRelpath) + "\"\nABORTED...");
         }
 
-        if (vue) {
+        if (isVueAddon) {
             vueAddonsRelPaths[addonName] = Object.assign({
-                "entry": [addonName, "index.js"].join("/")
+                "entry": addonCombinedRelpath
             }, addonEntryPoints[addonName]);
         }
         else {
-            addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
+            addonsRelPaths[addonName] = addonCombinedRelpath;
         }
 
     }
