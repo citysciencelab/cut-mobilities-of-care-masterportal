@@ -12,7 +12,7 @@ export default {
     uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
     // gfiWindow is deprecated
     gfiWindow: state => state?.configJs.gfiWindow,
-    ignoredKeys: state => state?.configJs.ignoredKeys || null,
+    ignoredKeys: state => state?.configJs.ignoredKeys || [],
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
