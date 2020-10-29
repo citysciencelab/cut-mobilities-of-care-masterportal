@@ -26,8 +26,7 @@ module.exports = function () {
     for (const addonName in addonEntryPoints) {
         let isVueAddon = false,
             addonPath = addonName,
-            entryPointFileName = "",
-            addonCombinedRelpath;
+            entryPointFileName = "";
 
         if (typeof addonEntryPoints[addonName] === "string") {
             entryPointFileName = addonEntryPoints[addonName];
@@ -38,7 +37,7 @@ module.exports = function () {
         // - with at least a key named "type"
         if (typeof addonEntryPoints[addonName] === "object" && addonEntryPoints[addonName].type !== undefined) {
             isVueAddon = true;
-            
+
             if (typeof addonEntryPoints[addonName].entryPoint === "string") {
                 entryPointFileName = addonEntryPoints[addonName].entryPoint;
             }
@@ -51,7 +50,7 @@ module.exports = function () {
             }
         }
 
-        addonCombinedRelpath = [addonPath, entryPointFileName].join("/");
+        const addonCombinedRelpath = [addonPath, entryPointFileName].join("/");
 
         // Now check if file exists
         if (!fse.existsSync(path.resolve(addonBasePath, addonCombinedRelpath))) {
