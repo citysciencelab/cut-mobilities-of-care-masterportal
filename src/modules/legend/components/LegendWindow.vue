@@ -25,13 +25,13 @@ export default {
             this.createLegendForLayerInfo(layerIdForLayerInfo);
         }
     },
-    mounted () {
-        this.getLegendConfig();
-    },
     created () {
         this.listenToLayerVisibilityChanged();
         this.listenToUpdatedSelectedLayerList();
         this.listenToLayerLegendUpdate();
+    },
+    mounted () {
+        this.getLegendConfig();
     },
     updated () {
         $(this.$el).draggable({
@@ -88,6 +88,7 @@ export default {
                 legend: this.prepareLegend(layerForLayerInfo.get("legend")),
                 position: layerForLayerInfo.get("selectionIDX")
             };
+
             isValidLegend = this.isValidLegendObj(legendObj);
             if (isValidLegend) {
                 this.setLegendForLayerInfo(legendObj);
@@ -155,14 +156,63 @@ export default {
                 layerId = layer.get("id"),
                 layerName = layer.get("name"),
                 layerLegend = layer.get("legend"),
-                layerSelectionIDX = layer.get("selectionIDX");
+                layerSelectionIDX = layer.get("selectionIDX"),
+                layerTyp = layer.get("typ");
 
             if (isVisibleInMap) {
-                this.generateLegend(layerId, layerName, layerLegend, layerSelectionIDX);
+                if (layerTyp === "GROUP") {
+                    this.generateLegendForGroupLayer(layer);
+                }
+                else {
+                    this.generateLegend(layerId, layerName, layerLegend, layerSelectionIDX);
+                }
             }
             else {
                 this.removeLegend(layerId);
             }
+        },
+
+        /**
+         * Prepares the legend with the given legendInfos
+         * @param {ol/Layer/Group} groupLayer grouplayer.
+         * @returns {Object[]} - the prepared legend.
+         */
+        generateLegendForGroupLayer (groupLayer) {
+            const id = groupLayer.get("id"),
+                legendObj = {
+                    id: id,
+                    name: groupLayer.get("name"),
+                    legend: this.prepareLegendForGroupLayer(groupLayer.get("layerSource")),
+                    position: groupLayer.get("selectionIDX")
+                },
+                isValidLegend = this.isValidLegendObj(legendObj),
+                isNotYetInLegend = isValidLegend && this.isLayerNotYetInLegend(id),
+                isLegendChanged = isValidLegend && !isNotYetInLegend && this.isLegendChanged(id, legendObj);
+
+            if (isNotYetInLegend) {
+                this.addLegend(legendObj);
+            }
+            else if (isLegendChanged) {
+                this.removeLegend(id);
+                this.addLegend(legendObj);
+            }
+            this.sortLegend();
+        },
+
+        /**
+         * Prepares the legend array for a grouplayer by iterating over its layers and generating the legend of each child.
+         * @param {ol/Layer/Soure} layerSource Layer sources of group layer.
+         * @returns {Object[]} - merged Legends.
+         */
+        prepareLegendForGroupLayer (layerSource) {
+            let legends = [];
+
+            layerSource.forEach(layer => {
+                legends.push(this.prepareLegend(layer.get("legend")));
+            });
+            // legends = legends.flat(); does not work in unittest and older browser versions
+            legends = [].concat(...legends);
+            return legends;
         },
 
         /**
@@ -256,7 +306,7 @@ export default {
          */
         prepareLegendForPoint (legendObj, style) {
             const imgPath = style.get("imagePath"),
-                type = style.get("type"),
+                type = style.get("type").toLowerCase(),
                 imageName = style.get("imageName");
             let newLegendObj = legendObj;
 
@@ -298,10 +348,10 @@ export default {
          * @return {ol.Style} style
          */
         drawNominalStyle (style) {
-            const scalingShape = style.get("scalingShape");
+            const scalingShape = style.get("scalingShape").toLowerCase();
             let nominalStyle = [];
 
-            if (scalingShape === "CIRCLESEGMENTS") {
+            if (scalingShape === "circlesegments") {
                 nominalStyle = this.drawNominalCircleSegments(style);
             }
 
@@ -320,17 +370,29 @@ export default {
 
             Object.keys(scalingValues).forEach(key => {
                 const clonedStyle = style.clone(),
-                    olFeature = new Feature();
+                    olFeature = new Feature(),
+                    imageScale = clonedStyle.get("imageScale");
+                let svg,
+                    svgSize,
+                    image,
+                    imageSize,
+                    imageSizeWithScale;
 
                 olFeature.set(scalingAttribute, key);
                 clonedStyle.setFeature(olFeature);
                 clonedStyle.setIsClustered(false);
                 olStyle = clonedStyle.getStyle();
                 if (Array.isArray(olStyle)) {
-                    console.error("Legend yet cannot display two styles on each other, taking top most style");
+                    svg = olStyle[0].getImage().getSrc();
+                    svgSize = olStyle[0].getImage().getSize();
+                    image = olStyle[1].getImage().getSrc();
+                    imageSize = olStyle[1].getImage().getSize();
+                    imageSizeWithScale = [imageSize[0] * imageScale, imageSize[1] * imageScale];
                     nominalCircleSegments.push({
                         name: key,
-                        graphic: olStyle[1].getImage().getSrc()
+                        graphic: [svg, image],
+                        iconSize: imageSizeWithScale,
+                        iconSizeDifferenz: Math.abs((imageSize[0] * imageScale - svgSize[0]) / 2)
                     });
                 }
                 else {

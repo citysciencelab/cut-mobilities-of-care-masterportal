@@ -69,24 +69,43 @@ export default {
                 <template
                     v-if="typeof legendPart === 'object'"
                 >
-                    <!--Legend as Image or SVG -->
-                    <img
-                        v-if="!legendPart.graphic.endsWith('.pdf')"
-                        :src="legendPart.graphic"
-                    >
-
-                    <!--Legend PDF as Link-->
-                    <a
-                        v-if="legendPart.graphic.endsWith('.pdf')"
-                        :href="legendPart.graphic"
-                        target="_blank"
-                        :title="legendPart.graphic"
-                    >
-                        {{ $t("common:modules.legend.linkToPdf") }}
-                    </a>
-                    <span>
-                        {{ legendPart.name }}
-                    </span>
+                    <div v-if="Array.isArray(legendPart.graphic)">
+                        <!--Legend as Image or SVG -->
+                        <img
+                            :src="legendPart.graphic[1]"
+                            :style="{
+                                width: legendPart.iconSize[0] + 'px',
+                                height: legendPart.iconSize[1] + 'px',
+                                margin: legendPart.iconSizeDifferenz + 'px'
+                            }"
+                            class="first-image"
+                        >
+                        <img
+                            :src="Array.isArray(legendPart.graphic) ? legendPart.graphic[0] : legendPart.graphic"
+                        >
+                        <span>
+                            {{ legendPart.name }}
+                        </span>
+                    </div>
+                    <div v-else>
+                        <!--Legend as Image or SVG -->
+                        <img
+                            v-if="!legendPart.graphic.endsWith('.pdf')"
+                            :src="legendPart.graphic"
+                        >
+                        <!--Legend PDF as Link-->
+                        <a
+                            v-if="legendPart.graphic.endsWith('.pdf')"
+                            :href="legendPart.graphic"
+                            target="_blank"
+                            :title="legendPart.graphic"
+                        >
+                            {{ $t("common:modules.legend.linkToPdf") }}
+                        </a>
+                        <span>
+                            {{ legendPart.name }}
+                        </span>
+                    </div>
                 </template>
             </div>
         </template>
@@ -114,5 +133,8 @@ export default {
         -webkit-transition: none;
         transition: none;
         display: none;
+    }
+    .first-image {
+        position: absolute;
     }
 </style>

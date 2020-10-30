@@ -37,6 +37,7 @@ const Config = {
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geoportal-hamburg.de/lgv-config/style_v2.json",
+    useVectorStyleBeta: true,
     wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
