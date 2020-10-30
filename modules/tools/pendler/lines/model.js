@@ -149,7 +149,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
         }
 
         labelLayer = this.get("pendlerLabelLayer");
-        if (lineLayer !== undefined) {
+        if (labelLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
         Radio.trigger("MapMarker", "hideMarker");

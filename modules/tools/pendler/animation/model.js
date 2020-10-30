@@ -24,6 +24,12 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         colors: [],
         glyphicon: "glyphicon-play-circle",
         animationLayer: {},
+        // layer to show labels at the start and end of each animation
+        labelLayer: new VectorLayer({
+            source: new VectorSource(),
+            style: null,
+            name: "pendlerLabelLayer"
+        }),
         // translations
         workplace: "",
         domicile: "",
@@ -142,10 +148,16 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         if (this.get("animating")) {
             this.stopAnimation();
         }
-        const animationLayer = this.get("animationLayer");
+        const animationLayer = this.get("animationLayer"),
+            labelLayer = this.get("pendlerLabelLayer");
 
         if (animationLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", animationLayer);
+        }
+        Radio.trigger("MapMarker", "hideMarker");
+
+        if (labelLayer !== undefined) {
+            Radio.trigger("Map", "removeLayer", labelLayer);
         }
         Radio.trigger("MapMarker", "hideMarker");
     },
@@ -279,6 +291,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      */
     prepareAnimation: function () {
         const animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer"),
+            labelLayer = Radio.request("Map", "createLayerIfNotExists", "pendlerLabelLayer"),
             features = this.get("pathLayer").getSource().getFeatures();
 
         if (this.get("direction") === "wohnort") {
@@ -287,11 +300,14 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         else {
             this.setAnimationLimit(1);
         }
-        this.assertLayerOnTop("pendlerLabelLayer");
+
+        labelLayer.getSource().clear();
+        this.setLabelLayer(labelLayer);
+
         this.setAnimationCount(0);
         animationLayer.getSource().clear();
-        animationLayer.setZIndex(9);
-        this.addFeaturesToLayer(features, animationLayer);
+        this.addLabelsToLayer(features, labelLayer);
+        this.addBubblesToLayer(features, animationLayer);
         this.setAnimationLayer(animationLayer);
         animationLayer.on("postrender", this.moveFeature.bind(this));
         if (this.get("animating")) {
@@ -300,6 +316,12 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         else {
             this.startAnimation();
         }
+
+        // set the order to have labels always above the animation
+        this.assertLayerOnTop("animationLayer");
+        this.assertLayerOnTop("pendlerLabelLayer");
+
+        this.zoomToExtentOfFeatureGroup(features);
     },
     /**
      * Starts the aniamtion
@@ -397,26 +419,28 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     },
 
     /**
-     * Füge Punkte nach Ende der Animation dem Layer hinzu
-     * @param {Object[]} features Hinzuzufügende Features
-     * @param {Object} layer Ziel-Layer
-     * @returns {void} Keine Rückgabe
+     * adding labels at the start and end of each geometry
+     * @param {Object[]} features features to add
+     * @param {Object} layer the layer to add the labels to
+     * @returns {void}
      */
-    addFeaturesToLayer: function (features, layer) {
+    addLabelsToLayer: function (features, layer) {
         this.addCenterLabelToLayer(feature => feature.get("centerName"), features, layer);
         features.forEach(feature => {
-            // to add lines to the animation use addBeamFeatureToLayer:
-            /*
-            this.addBeamFeatureToLayer(feature, layer, {
-                color: [60, 60, 60, 0.5],
-                width: "2"
-            });
-            */
             this.addLabelFeatureToLayer(feature.get("gemeindeName") + "\n" + thousandsSeparator(feature.get("anzahlPendler")) + "\n\n\n", feature, layer);
+        });
+    },
+    /**
+     * adding animation bubbles at end of each geometry
+     * this has to be done to be able to animate anything
+     * @param {Object[]} features features to add
+     * @param {Object} layer the layer to add the bubbles to
+     * @returns {void}
+     */
+    addBubblesToLayer: function (features, layer) {
+        features.forEach(feature => {
             this.addAnimation(feature, layer);
         });
-
-        this.zoomToExtentOfFeatureGroup(features);
     },
 
     /**
@@ -538,6 +562,14 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      */
     setAnimationLayer: function (value) {
         this.set("animationLayer", value);
+    },
+    /**
+     * Sets the layer of the labels
+     * @param {Object} value layer of the labels
+     * @returns {void}
+     */
+    setLabelLayer: function (value) {
+        this.set("pendlerLabelLayer", value);
     }
 });
 
