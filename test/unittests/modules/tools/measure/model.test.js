@@ -61,6 +61,7 @@ describe("tools/measure/model", function () {
 
             let textPoint = {};
 
+            model.set("drawingFeature", feature);
             model.setScale(1000);
             model.setUnit("m");
 
@@ -74,6 +75,7 @@ describe("tools/measure/model", function () {
                 feature = new Feature({geometry: geom});
             let textPoint = {};
 
+            model.set("drawingFeature", feature);
             model.setScale(1000);
             model.setUnit("m");
 
@@ -88,6 +90,7 @@ describe("tools/measure/model", function () {
                 feature = new Feature({geometry: geom});
             let textStyles = {};
 
+            model.set("drawingFeature", feature);
             model.setScale(1000);
             model.setUnit("m");
 
@@ -101,6 +104,7 @@ describe("tools/measure/model", function () {
             const geom = new Polygon([[[0, 0], [1000, 0], [0, 1000], [0, 0]]]),
                 feature = new Feature({geometry: geom});
 
+            model.set("drawingFeature", feature);
             model.setScale(1000);
             model.setUnit("m");
 

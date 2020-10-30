@@ -598,10 +598,10 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             geom = feature.getGeometry();
         }
 
-        if (this.get("draw").type_ === "Polygon") {
+        if (geom instanceof Polygon) {
             output = this.formatArea(geom);
         }
-        else if (this.get("draw").type_ === "LineString") {
+        else if (geom instanceof LineString) {
             output = this.formatLength(geom);
         }
 
