@@ -435,11 +435,10 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @returns {this} this
      */
     createInteraction: function (drawType) {
-        
         const that = this,
             value = this.getLocalizedValues()[drawType];
+
         let textPoint;
-        console.log(value);
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
         this.stopListening(Radio.channel("Map"), "clickedWindowPosition");
@@ -455,7 +454,6 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             }));
             this.get("draw").on("drawstart", function (evt) {
                 that.set("drawingFeature", evt.feature);
-                
                 that.setIsDrawing(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
@@ -465,7 +463,6 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             }, this);
             this.get("draw").on("drawend", function (evt) {
                 that.set("drawingFeature", false);
-                
                 that.setIsDrawing(false);
                 evt.feature.set("styleId", evt.feature.ol_uid);
                 that.unregisterPointerMoveListener(that);
