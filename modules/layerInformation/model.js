@@ -207,15 +207,9 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         this.set(attrs);
         this.setMetadataURL();
         this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetadataMessage"));
-        // console.info(this.areMetaIdsSet(this.get("metaID")));
-        // if (this.areMetaIdsSet(this.get("metaID"))) {
-        //     this.requestMetaData(attrs);
-        // }
-        // else {
         this.set("title", this.get("layername"));
         this.set("abstractText", i18next.t("common:modules.layerInformation.noMetadataMessage"));
         this.set("date", null);
-        // this.set("metaURL", null);
         this.set("downloadLinks", null);
         this.set("datePublication", null);
         this.set("dateRevision", null);
