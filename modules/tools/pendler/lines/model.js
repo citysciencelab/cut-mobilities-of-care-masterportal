@@ -66,7 +66,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             // Ein Feature entspricht einer Gemeinde. Extraktion der für die Legende
             // nötigen Attribute (abhängig von der gewünschten Richtung).
             pendlerLegend.push({
-                anzahlPendler: feature.get(this.get("attrAnzahl")),
+                anzahlPendler: thousandsSeparator(feature.get(this.get("attrAnzahl"))),
                 name: feature.get(this.get("attrGemeinde"))
             });
         });

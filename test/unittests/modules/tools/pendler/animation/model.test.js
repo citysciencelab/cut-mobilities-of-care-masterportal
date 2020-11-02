@@ -94,14 +94,21 @@ describe("Pendler-Animation", function () {
         });
 
         it("Jedes Feature hat zur Darstellung in der Legende neben einem Namen auch das Attribut \"Pendler-Anzahl\" und eine Farbe", function () {
+            const features = model.get("pendlerLegend");
 
-            expect(model.get("pendlerLegend")).to.have.lengthOf(5);
+            expect(features).to.have.lengthOf(5);
 
-            model.get("pendlerLegend").forEach(feature => {
+            features.forEach(feature => {
                 expect(feature.name.length).to.be.above(0);
                 expect(feature.color).to.exist;
-                expect(feature.anzahlPendler).to.be.above(0);
+                expect(feature.anzahlPendler).to.exist;
             });
+
+            expect(features[0].anzahlPendler).to.equal("11");
+            expect(features[1].anzahlPendler).to.equal("10");
+            expect(features[2].anzahlPendler).to.equal("9");
+            expect(features[3].anzahlPendler).to.equal("9");
+            expect(features[4].anzahlPendler).to.equal("8");
         });
     });
 });
