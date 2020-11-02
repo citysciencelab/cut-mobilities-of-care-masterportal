@@ -130,7 +130,7 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
         "browserstack.user": browserstackuser,
         "browserstack.key": browserstackkey,
         // resolution of device, not resolution of browser window
-        "resolution": "1024x768",
+        "resolution": "1920x1080",
         "browserstack.debug": false,
         "browserstack.networkLogs": true,
         "browserstack.console": "verbose",
