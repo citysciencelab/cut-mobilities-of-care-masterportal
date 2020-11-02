@@ -493,10 +493,10 @@ Mit diesem Theme lassen sich historische Daten zu einem Layer der SensorThings-A
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|**[charts](#markdown-gfi_theme_sensor_params_charts)**|ja|Object||Enthält die zur Konfiguration der Diagramme.|
-|**[data](#markdown-gfi_theme_sensor_params_data)**|nein|Object||Gibt wie die Spaltenbeschriftungen in den daten sein sollen.|
+|**[charts](#markdown-header-gfi_theme_sensor_params_charts)**|ja|Object||Enthält die zur Konfiguration der Diagramme.|
+|**[data](#markdown-header-gfi_theme_sensor_params_data)**|nein|Object||Gibt wie die Spaltenbeschriftungen in den daten sein sollen.|
 |header|nein|Object|{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}|Gibt an welche Attribute für die Kopfzeilen verwendet werden sollen. Die Anzeigename jedes Attributes lässt sich hier angeben. z.B. lässt sich das Attribut "description" als "Beschreibung" anzeigen. |
-|**[historicalData](#markdown-gfi_theme_sensor_params_historicalData)**|nein|Object||Gibt an für welchen Zeitraum die historischen Observations angefragt werden sollen.|
+|**[historicalData](#markdown-header-gfi_theme_sensor_params_historicalData)**|nein|Object||Gibt an für welchen Zeitraum die historischen Observations angefragt werden sollen.|
 
 **Beispiel gfiTheme für das template "Sensor":**
 
@@ -548,7 +548,7 @@ Hier werden die Parameter für die Anzeige der Grafiken konfiguriert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|values|ja|String[] / **[valuesObject](#markdown-valuesObject)**||Hier wird definiert, zu welchen Results der Observations Grafiken angezeigt werden sollen. Es wird für jeden Result ein eigener Reiter mit einer eigenen Grafik angelegt. Die Results können als Array oder Object angegeben werden. Beim object lassen sich weitere ttribute definieren.|
+|values|ja|String[] / **[valuesObject](#markdown-header-valuesObject)**||Hier wird definiert, zu welchen Results der Observations Grafiken angezeigt werden sollen. Es wird für jeden Result ein eigener Reiter mit einer eigenen Grafik angelegt. Die Results können als Array oder Object angegeben werden. Beim object lassen sich weitere ttribute definieren.|
 |hoverBackgroundColor|nein|String|"rgba(0, 0, 0, 0.8)"|Die Hintergundfarbe der Balken beim Hovern.|
 |barPercentage|nein|Number|1.0|Breite der Balken in der Grafik.|
 
