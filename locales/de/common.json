@@ -201,7 +201,8 @@
                 "errorMessage": "Der angegebene Dienst konnte nicht geladen werden. Bitte stellen Sie sicher, dass die URL richtig angegeben wurde.<br><br> Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes mit folgendem Hinweis:<br><strong>Es soll sichergestellt werden, dass ein CORS-Header für den Dienst gesetzt ist. Dies wird von der <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> im Kapitel 4.7.1 empfohlen.</strong>",
                 "placeholder": "Hier bitte die WMS-URL eingeben.",
                 "textExample": "Beispiel: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
-                "textLoadLayer": "Layer Laden"
+                "textLoadLayer": "Layer Laden",
+                "ifInExtent": "Die über den WMS bereitgestellten Geodaten liegen außerhalb des darstellbaren Bereichs. WMS hinzufügen ist nicht möglich."
             },
             "contact": {
                 "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;$t(common:modules.tools.contact.textSendButton)&quot;",

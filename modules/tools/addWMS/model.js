@@ -1,5 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
 import {WMSCapabilities} from "ol/format.js";
+import {intersects} from 'ol/extent';
 
 const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     /**
@@ -69,7 +70,8 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      * @return {void}
      */
     loadAndAddLayers: function () {
-        const url = $("#wmsUrl").val();
+        const url = $("#wmsUrl").val(),
+            currentExtent = Radio.request("Parser", "getPortalConfig").mapView.extent;
 
         $(".addwms_error").remove();
         if (url === "") {
@@ -82,15 +84,17 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
             context: this,
             url: url + "?request=GetCapabilities&service=WMS",
             success: function (data) {
-                let parser,
-                    uniqId,
-                    capability;
-
                 Radio.trigger("Util", "hideLoader");
                 try {
-                    parser = new WMSCapabilities();
-                    uniqId = this.getAddWmsUniqueId();
-                    capability = parser.read(data);
+                    const parser = new WMSCapabilities(),
+                        uniqId = this.getAddWmsUniqueId(),
+                        capability = parser.read(data),
+                        checkExtent = this.getIfInExtent(capability, currentExtent);
+
+                    if (!checkExtent) {
+                        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.ifInExtent"));
+                        return;
+                    }
 
                     this.setWMSVersion(capability.version);
                     this.setWMSUrl(url);
@@ -148,6 +152,34 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
         else {
             Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.get("wmsUrl"), this.get("version"));
         }
+    },
+
+    /**
+     * Getter if the imported wms layer in the extent of current map
+     * @param {Object} capability the response of the imported wms layer in parsed format
+     * @param {Number[]} currentExtent the extent of current map view
+     * @returns {Boolean} true or false
+     */
+    getIfInExtent: function (capability, currentExtent) {
+        const layer = capability?.Capability?.Layer?.BoundingBox?.filter(bbox => {
+            return bbox?.crs === "EPSG:25832";
+        });
+        let layerExtent;
+
+        // If there is no extent defined or the extent is not right defined, it will import the external wms layer(s).
+        if (!Array.isArray(currentExtent) || currentExtent.length !== 4) {
+            return true;
+        }
+
+        if (Array.isArray(layer) && layer.length && layer[0].hasOwnProperty("extent")) {
+            layerExtent = layer[0].extent;
+        }
+
+        if (Array.isArray(layerExtent) && layerExtent.length === 4) {
+            return intersects(currentExtent, layerExtent);
+        }
+
+        return true;
     },
 
     /**
