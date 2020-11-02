@@ -463,6 +463,7 @@ Hier werden die Parameter für die GFI-Templates definiert.
 |Name|params|
 |----|------|
 |default|**[params](#markdown-header-gfi_theme_default_params)**|
+|sensor|**[params](#markdown-header-gfi_theme_sensor_params)**|
 
 ***
 
@@ -482,6 +483,162 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
    "params": {
          "imageLinks": ["imageLink", "linkImage", "abc"],
    }
+}
+```
+
+***
+
+## gfi_theme_sensor_params ##
+Mit diesem Theme lassen sich historische Daten zu einem Layer der SensorThings-API visualisieren. Dabei wird zu jedem konfigurierten Result der Observations eine Grafik erzeugt. Dieses GFI-Theme lässt sich also nur für Results die einen Status (z.B. bei Ladesäulen die Status: frei, laden, außer Betrieb) beinhalten sinnvoll verwenden.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|
+|----|-------------|---|-------|------------|
+|**[charts](#markdown-gfi_theme_sensor_params_charts)**|ja|Object||Enthält die zur Konfiguration der Diagramme.|
+|**[data](#markdown-gfi_theme_sensor_params_data)**|nein|Object||Gibt wie die Spaltenbeschriftungen in den daten sein sollen.|
+|header|nein|Object|{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}|Gibt an welche Attribute für die Kopfzeilen verwendet werden sollen. Die Anzeigename jedes Attributes lässt sich hier angeben. z.B. lässt sich das Attribut "description" als "Beschreibung" anzeigen. |
+|**[historicalData](#markdown-gfi_theme_sensor_params_historicalData)**|nein|Object||Gibt an für welchen Zeitraum die historischen Observations angefragt werden sollen.|
+
+**Beispiel gfiTheme für das template "Sensor":**
+
+```
+#!json
+"gfiTheme": {
+   "name": "sensor",
+   "params": {
+        "header": {
+            "name": "Name",
+            "description": "Beschreibung",
+            "ownerThing": "Eigentümer"
+        },
+        "data": {
+            "name": "Daten",
+            "firstColumnHeaderName": "Eigenschaften",
+            "columnHeaderAttribute": "layerName"
+        },
+        "charts": {
+            "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+            "barPercentage": 1.1,
+            "values": {
+                "available": {
+                    "title": "Verfügbar",
+                    "color": "rgba(0, 220, 0, 1)"
+                },
+                "charging": {
+                    "title": "Auslastung",
+                    "color": "rgba(220, 0, 0, 1)"
+                },
+                "outoforder": {
+                    "title": "Außer Betrieb",
+                    "color": "rgba(175, 175, 175, 1)"
+                }
+            }
+        },
+        "historicalData": {
+            "periodLength": 3,
+            "periodUnit": "month"
+        }
+    }
+}
+```
+
+***
+
+## gfi_theme_sensor_params_charts ##
+Hier werden die Parameter für die Anzeige der Grafiken konfiguriert.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|
+|----|-------------|---|-------|------------|
+|values|ja|String[] / **[valuesObject](#markdown-valuesObject)**||Hier wird definiert, zu welchen Results der Observations Grafiken angezeigt werden sollen. Es wird für jeden Result ein eigener Reiter mit einer eigenen Grafik angelegt. Die Results können als Array oder Object angegeben werden. Beim object lassen sich weitere ttribute definieren.|
+|hoverBackgroundColor|nein|String|"rgba(0, 0, 0, 0.8)"|Die Hintergundfarbe der Balken beim Hovern.|
+|barPercentage|nein|Number|1.0|Breite der Balken in der Grafik.|
+
+**Beispiel Konfiguration value als Array**
+```
+#!json
+"charts": {
+    "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+    "barPercentage": 1.1,
+    "values": ["available", "charging", "outoforder"]
+}
+```
+
+**Beispiel Konfiguration value als Object**
+```
+#!json
+"charts": {
+    "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+    "barPercentage": 1.1,
+    "values": {
+        "available": {
+            "title": "Verfügbar",
+            "color": "rgba(0, 220, 0, 1)"
+        },
+        "charging": {
+            "title": "Auslastung",
+            "color": "rgba(220, 0, 0, 1)"
+        },
+        "outoforder": {
+            "title": "Außer Betrieb",
+            "color": "rgba(175, 175, 175, 1)"
+        }
+    }
+}
+```
+
+***
+
+## gfi_theme_sensor_params_charts_valuesObject ##
+Hier wird das Layout für eine einzelne Grafik zu einem result konfiguriert.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|
+|----|-------------|---|-------|------------|
+|title|nein|String||Angabe eines Titels für die Grafik|
+|colcor|nein|String|"rgba(0, 0, 0, 1)"|Die Farbe der Balken.|
+
+```
+#!json
+"available": {
+    "title": "Verfügbar",
+    "color": "rgba(0, 220, 0, 1)"
+}
+```
+
+***
+
+## gfi_theme_sensor_params_data ##
+Hier wird der die Anzeige der Sachdaten konfiguriert.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|nein|String||Angabe des Names für den Reiter.|
+|firstColumnHeaderName|nein|String|"Eigenschaften"|Angabe des Titles für die Spalte mit den Attributnamen.|
+|columnHeaderAttribute|nein|String|"dataStreamName"|Angabe des Attributes, das für die Titel der Spalten mit den Attributwerten verwendet werden soll.|
+
+```
+#!json
+"data": {
+    "name": "Daten",
+    "firstColumnHeaderName": "Eigenschaften",
+    "columnHeaderAttribute": "layerName"
+}
+```
+
+***
+
+## gfi_theme_sensor_params_historicalData ##
+Hier wird konfiguriert für welchen Zeitraum die historischen Observations angefragt werden sollen.
+
+|Name|Verpflichtend|Typ|default|Beschreibung|
+|----|-------------|---|-------|------------|
+|name|nein|String||Angabe des Names für den Reiter.|
+|periodLength|nein|Number|3|Angabe der Länge des Zeitraumes.|
+|periodUnit|nein|String|"month"|Angabe der Einheit des Zeitraumes. Möglich sind "month" und "year".|
+
+```
+#!json
+"historicalData": {
+    "periodLength" : 3,
+    "periodUnit" : "month"
 }
 ```
 
