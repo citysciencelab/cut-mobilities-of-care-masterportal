@@ -1,5 +1,6 @@
 <script>
-import Default from "../themes/components/Default.vue";
+import Default from "../themes/default/components/Default.vue";
+import Sensor from "../themes/sensor/components/Sensor.vue";
 import {mapGetters} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
 import Overlay from "ol/Overlay.js";
@@ -9,7 +10,8 @@ import "bootstrap/js/popover";
 export default {
     name: "Attached",
     components: {
-        Default
+        Default,
+        Sensor
     },
     props: {
         feature: {

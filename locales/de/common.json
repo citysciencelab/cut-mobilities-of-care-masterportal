@@ -185,7 +185,7 @@
         },
         "footer": {
             "designation": "Kartographie und Gestaltung:",
-            "cardDiscrepancy": "Kartenunstimmigkeit"
+            "mapDiscrepancy": "Kartenunstimmigkeit"
         },
         "tools": {
             "info": {
@@ -413,6 +413,34 @@
                     "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
                     "default": {
                       "imgAlt": "Es konnte kein Bild geladen werden."
+                    },
+                    "sensor": {
+                      "sensor": {
+                        "dataName": "Daten",
+                        "header": {
+                          "name": "Name",
+                          "description": "Beschreibung",
+                          "ownerThing": "Eigentümer"
+                        }
+                      },
+                      "sensorBarChart": {
+                        "clock": "{{value}} Uhr",
+                        "chartTitleAverage": "Mittelwert aus ",
+                        "month": "{{count}} Monat",
+                        "month_plural": "{{count}} Monaten",
+                        "year": "{{count}} Jahr",
+                        "year_plural": "{{count}} Jahren",
+                        "previousWeekday": "Vorheriger Wochentag",
+                        "nextWeekday": "Nächster Wochentag"
+                      },
+                      "sensorData": {
+                        "firstColumnHeaderName": "Eigenschaften"
+                      },
+                      "chargingStations": {
+                        "available": "Verfügbarkeit",
+                        "charging": "Auslastung",
+                        "outoforder": "Außer Betrieb"
+                      }
                     }
                 }
             },

@@ -178,7 +178,7 @@
         },
         "footer": {
             "designation": "Cartography and design:",
-            "cardDiscrepancy": "Card discrepancy"
+            "mapDiscrepancy": "Map discrepancy"
         },
         "tools": {
             "info": {
@@ -406,6 +406,34 @@
                     "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
                     "default": {
                       "imgAlt": "No image could be loaded."
+                    },
+                    "sensor": {
+                      "sensor": {
+                        "dataName": "Data",
+                        "header": {
+                          "name": "Name",
+                          "description": "Description",
+                          "ownerThing": "Owner"
+                        }
+                      },
+                      "sensorBarChart": {
+                        "clock": "{{value}} o'clock",
+                        "chartTitleAverage": "Average off ",
+                        "month": "{{count}} month",
+                        "month_plural": "{{count}} months",
+                        "year": "{{count}} year",
+                        "year_plural": "{{count}} years",
+                        "previousWeekday": "Previous Weekday",
+                        "nextWeekday": "Next weekday"
+                      },
+                      "sensorData": {
+                        "firstColumnHeaderName": "Properties"
+                      },
+                      "chargingStations": {
+                        "available": "Available",
+                        "charging": "Charging",
+                        "outoforder": "Out of order"
+                      }
                     }
                 }
             },

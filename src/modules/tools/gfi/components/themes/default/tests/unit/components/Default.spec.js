@@ -7,7 +7,7 @@ const localVue = createLocalVue();
 
 localVue.use(Vuex);
 
-describe("src/modules/tools/gfi/components/themes/components/Default.vue", () => {
+describe("src/modules/tools/gfi/components/themes/default/components/Default.vue", () => {
     let wrapper;
 
     beforeEach(() => {

@@ -1,5 +1,6 @@
 <script>
-import Default from "../themes/components/Default.vue";
+import Default from "../themes/default/components/Default.vue";
+import Sensor from "../themes/sensor/components/Sensor.vue";
 import {mapGetters, mapMutations} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
 import "jquery-ui/ui/widgets/draggable";
@@ -8,7 +9,8 @@ import "jquery-ui/ui/widgets/resizable";
 export default {
     name: "Detached",
     components: {
-        Default
+        Default,
+        Sensor
     },
     props: {
         feature: {

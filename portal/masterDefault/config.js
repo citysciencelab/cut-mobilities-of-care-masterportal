@@ -67,7 +67,7 @@ const Config = {
                     + "&body=Zur%20weiteren%20Bearbeitung%20bitten%20wir%20Sie%20die%20nachstehenden%20Angaben%20zu%20machen."
                     + "%20Bei%20Bedarf%20fügen%20Sie%20bitte%20noch%20einen%20Screenshot%20hinzu."
                     + "%20Vielen%20Dank!%0A%0A1.%20Name:%0A2.%20Telefon:%0A3.%20Anliegen",
-                "alias": "common:modules.footer.cardDiscrepancy"
+                "alias": "common:modules.footer.mapDiscrepancy"
             }
         ]
     },

@@ -548,7 +548,7 @@ Hier werden die Parameter für die Anzeige der Grafiken konfiguriert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|values|ja|String[] / **[valuesObject](#markdown-header-valuesObject)**||Hier wird definiert, zu welchen Results der Observations Grafiken angezeigt werden sollen. Es wird für jeden Result ein eigener Reiter mit einer eigenen Grafik angelegt. Die Results können als Array oder Object angegeben werden. Beim object lassen sich weitere ttribute definieren.|
+|values|ja|String[] / **[valuesObject](#markdown-header-gfi_theme_sensor_params_charts_valuesObject)**||Hier wird definiert, zu welchen Results der Observations Grafiken angezeigt werden sollen. Es wird für jeden Result ein eigener Reiter mit einer eigenen Grafik angelegt. Die Results können als Array oder Object angegeben werden. Beim object lassen sich weitere ttribute definieren.|
 |hoverBackgroundColor|nein|String|"rgba(0, 0, 0, 0.8)"|Die Hintergundfarbe der Balken beim Hovern.|
 |barPercentage|nein|Number|1.0|Breite der Balken in der Grafik.|
 

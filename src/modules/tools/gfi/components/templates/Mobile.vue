@@ -1,11 +1,13 @@
 <script>
-import Default from "../themes/components/Default.vue";
+import Default from "../themes/default/components/Default.vue";
+import Sensor from "../themes/sensor/components/Sensor.vue";
 import upperFirst from "../../../../../utils/upperFirst";
 
 export default {
     name: "Mobile",
     components: {
-        Default
+        Default,
+        Sensor
     },
     props: {
         feature: {

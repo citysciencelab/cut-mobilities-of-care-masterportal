@@ -1,5 +1,6 @@
 <script>
-import Default from "../themes/components/Default.vue";
+import Default from "../themes/default/components/Default.vue";
+import Sensor from "../themes/sensor/components/Sensor.vue";
 import {mapGetters} from "vuex";
 import upperFirst from "../../../../../utils/upperFirst";
 import "jquery-ui/ui/widgets/draggable";
@@ -7,7 +8,8 @@ import "jquery-ui/ui/widgets/draggable";
 export default {
     name: "Table",
     components: {
-        Default
+        Default,
+        Sensor
     },
     props: {
         feature: {
