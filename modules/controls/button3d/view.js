@@ -148,9 +148,12 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * @fires Core.ModelList.Tool#RadioRequestToolGetCollection
      * @fires ObliqueMap#RadioRequestObliqueMapIsActive
      * @fires Core#RadioRequestMapIsMap3d
+     * @param {Event} evt - click event
      * @return {void}
      */
-    mapChange: function () {
+    mapChange: function (evt) {
+        // stop bubbling up to parent elements
+        evt.stopPropagation();
         const supportedOnlyIn3d = Radio.request("Tool", "getSupportedOnlyIn3d"),
             supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
             supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
@@ -192,6 +195,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
                 tool.setIsActive(false);
             }
         });
+        document.getElementById("root").firstChild.classList.remove("open");
     },
 
     /**
@@ -239,6 +243,18 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
                 tool.setIsActive(false);
             }
         });
+        this.open3dCatalog();
+    },
+
+    /**
+     * @returns {void}
+     */
+    open3dCatalog: function () {
+        const threed_Layer = Radio.request("ModelList", "getModelByAttributes", {parentId: "3d_daten", isVisibleInMap: true});
+
+        if (threed_Layer) {
+            Radio.trigger("ModelList", "showModelInTree", threed_Layer.get("id"));
+        }
     }
 });
 
