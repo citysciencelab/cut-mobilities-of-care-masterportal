@@ -291,7 +291,7 @@ describe("LegendSingleLayer.vue", () => {
                             name: "foobar",
                             graphic: ["some_string_interpreted_as_image1", "some_string_interpreted_as_image2"],
                             iconSize: ["60", "60"],
-                            iconSizeDifferenz: ["2", "2"]
+                            iconSizeDifferenz: "10"
                         }],
                         position: 1
                     },
@@ -300,6 +300,7 @@ describe("LegendSingleLayer.vue", () => {
             });
             expect(wrapper.findAll("#legend_myLayer > div:nth-child(1) img").wrappers[0].exists()).to.be.true;
             expect(wrapper.findAll("#legend_myLayer > div:nth-child(1) img").wrappers[0].attributes().src).to.equal("some_string_interpreted_as_image2");
+            expect(wrapper.findAll("#legend_myLayer > div:nth-child(1) img").wrappers[0].attributes().style).to.equal("width: 60px; height: 60px; margin: 10px;");
             expect(wrapper.find("#legend_myLayer > div:nth-child(1) span").text()).to.equal("foobar");
             expect(wrapper.findAll("#legend_myLayer > div:nth-child(1) img").wrappers[1].exists()).to.be.true;
             expect(wrapper.findAll("#legend_myLayer > div:nth-child(1) img").wrappers[1].attributes().src).to.equal("some_string_interpreted_as_image1");

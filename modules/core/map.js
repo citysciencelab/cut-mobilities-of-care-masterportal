@@ -119,6 +119,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "setBBox": this.setBBox,
             "render": this.render,
             "zoomToExtent": this.zoomToExtent,
+            "zoomToProjExtent": this.zoomToProjExtent,
             "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
             "registerListener": this.registerListener,
             "unregisterListener": this.unregisterListener,
@@ -537,6 +538,17 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         }
 
         this.get("view").fit(extentToZoom, {size: this.get("map").getSize(), ...options});
+    },
+
+    /**
+     * Zoom to a given extent, this function allows to give projection of extent via remote interface
+     * @param {Object} data - contains extent as String[], options as Object and projection as string
+     * @returns {void}
+     */
+    zoomToProjExtent: function (data) {
+        if (data.extent !== undefined && data.options !== undefined && data.projection !== undefined) {
+            this.zoomToExtent(data.extent, data.options, data.projection);
+        }
     },
 
     /**

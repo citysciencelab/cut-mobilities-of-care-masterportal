@@ -37,6 +37,7 @@
             "fileImport": "Import file",
             "routing": "Route planner",
             "draw": "Drawing / writing",
+            "shadow": "Shadows",
             "styleWMS": "Style WMS",
             "commuterLines": "Commuter (Lines)",
             "commuterAnimation": "Commuter (Animation)",
@@ -225,6 +226,9 @@
                     "A3 Querformat": "A3 landscape format"
                 }
             },
+            "shadow": {
+                "shadowDisplay": "Shadow display"
+              },
             "styleVT": {
               "introText": "Various predefined styles can be applied to VectorTile layers to optimize the view to match your requirements.",
               "noStyleableLayers": "There are currently no topics to which this tool could be applied.",
@@ -664,6 +668,11 @@
             "tooltipMessagePolygon": "Click to add a point"
         },
         "slider": {
+            "date": "Date",
+            "time": "Time",
+            "from": " from",
+            "to":" to",
+            "incorrectEntry": "Incorrect entry, please enter a whole number!",
             "outOfRangeErrorMessage": "The input value must be within the validity range {{minValueSlider}} and {{{maxValueSlider}}!"
         }
     }
