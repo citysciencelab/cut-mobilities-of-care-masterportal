@@ -21,7 +21,6 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @returns {void}
      */
     parseProperties: function () {
-        let gfiProperties = this.splitProperties(gfiContent[0]);
         const gfiContent = this.get("gfiContent"),
             allProperties = this.splitProperties(gfiContent.allProperties),
             dataStreamIds = allProperties.dataStreamId,
@@ -31,6 +30,7 @@ const ElektroladesaeulenTheme = Theme.extend({
             utc = this.get("feature").get("utc"),
             headTitleObject = this.createGfiHeadingChargingStation(allProperties),
             tableheadArray = this.createGfiTableHeadingChargingStation(allProperties);
+        let gfiProperties = this.splitProperties(gfiContent[0]);
 
         gfiProperties = this.changeStateToGerman(gfiProperties);
 
@@ -50,26 +50,16 @@ const ElektroladesaeulenTheme = Theme.extend({
      * @returns {void}
      */
     loadData: function () {
-        let gfiContent,
-            allProperties,
-            dataStreamIds,
-            gfiParams,
-            historicalData,
-            historicalDataClean,
-            endDay,
-            lastDay,
-            dataByWeekday;
-
         if (this.get("isVisible") === true) {
-            gfiContent = this.get("gfiContent");
-            allProperties = this.splitProperties(gfiContent.allProperties);
-            dataStreamIds = allProperties.dataStreamId;
-            gfiParams = this.get("gfiParams");
-            historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams);
-            historicalDataClean = this.dataCleaning(historicalData);
-            lastDay = this.get("lastDate") === undefined ? "" : moment(this.get("lastDate")).format("YYYY-MM-DD");
-            endDay = moment().format("YYYY-MM-DD");
-            dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay, endDay);
+            const gfiContent = this.get("gfiContent"),
+                allProperties = this.splitProperties(gfiContent.allProperties),
+                dataStreamIds = allProperties.dataStreamId,
+                gfiParams = this.get("gfiParams"),
+                historicalData = this.createHistoricalData(false, dataStreamIds, gfiParams),
+                historicalDataClean = this.dataCleaning(historicalData),
+                lastDay = this.get("lastDate") === undefined ? "" : moment(this.get("lastDate")).format("YYYY-MM-DD"),
+                endDay = moment().format("YYYY-MM-DD"),
+                dataByWeekday = this.processDataForAllWeekdays(historicalDataClean, lastDay, endDay);
 
             this.setDataStreamIds(dataStreamIds);
             this.setWeekday(dataByWeekday);
@@ -136,10 +126,9 @@ const ElektroladesaeulenTheme = Theme.extend({
     createGfiHeadingChargingStation: function (allProperties = {}) {
         const headTitleObject = {};
 
-        headTitleObject.StandortId = allProperties.hasOwnProperty("chargings_station_nr") ? String(allProperties.chargings_station_nr[0]) : "";
-        headTitleObject.Adresse = allProperties.hasOwnProperty("chargings_station_nr") && allProperties.hasOwnProperty("postal_code") && allProperties.hasOwnProperty("city")
-            ? allProperties.location_name[0] + ", " + allProperties.postal_code[0] + " " + allProperties.city[0] : "";
-        headTitleObject.Eigentümer = allProperties.hasOwnProperty("owner") ? allProperties.owner[0] : "";
+        headTitleObject.Name = allProperties.hasOwnProperty("name") ? String(allProperties.name[0]) : "";
+        headTitleObject.Beschreibung = allProperties.hasOwnProperty("description") ? allProperties.description[0] : "";
+        headTitleObject.Eigentümer = allProperties.hasOwnProperty("ownerThing") ? allProperties.ownerThing[0] : "";
 
         return headTitleObject;
     },
@@ -167,9 +156,10 @@ const ElektroladesaeulenTheme = Theme.extend({
      */
     changeStateToGerman: function (gfiProperties = {}) {
         const translateObj = {
-                available: "Frei",
-                charging: "Belegt",
-                outoforder: "Außer Betrieb"
+                "available": "Frei",
+                "charging": "Belegt",
+                "outoforder": "Außer Betrieb",
+                "no data": "Keine Daten"
             },
             gfiPropertiesGermanStatus = gfiProperties.hasOwnProperty("Zustand") ? gfiProperties.Zustand : [];
 
@@ -575,6 +565,7 @@ const ElektroladesaeulenTheme = Theme.extend({
         // config for style the graph
         graphConfig = {
             graphType: "BarGraph",
+            grahpSubType: "old",
             selector: graphTag,
             width: width,
             height: height - 5,
@@ -593,7 +584,8 @@ const ElektroladesaeulenTheme = Theme.extend({
                 start: 0,
                 end: 24,
                 ticks: 12,
-                unit: "Uhr"
+                unit: "Uhr",
+                factor: ""
             },
             xAxisLabel: {
                 label: this.createXAxisLabel(day, targetResult),
@@ -602,7 +594,6 @@ const ElektroladesaeulenTheme = Theme.extend({
                 fill: "#000",
                 fontSize: 12
             },
-            yAxisLabel: {},
             xAttr: "hour",
             attrToShowArray: ["mean"]
         };
@@ -784,15 +775,20 @@ const ElektroladesaeulenTheme = Theme.extend({
             mean,
             arrayPerHour;
 
-        for (let i = 0; i <= dayLength; i++) {
-            // initialize
+        for (let i = 0; i < dayLength; i++) {
             sum = 0;
             mean = 0;
             arrayPerHour = this.arrayPerHour(dataPerHour, i);
 
             if (arrayPerHour.length === 0) {
-                break;
+                dayMeanArray.push({
+                    hour: i,
+                    sum: 0,
+                    mean: 0
+                });
+                continue;
             }
+
             // remove all undefined data
             arrayPerHour = arrayPerHour.filter(value => {
                 return value !== undefined;

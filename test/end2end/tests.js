@@ -69,6 +69,9 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     // modules/core
                     require("./tests/modules/core/ParametricUrl.js"),
 
+                    // modules/menu
+                    require("./tests/modules/menu/Layers.js"),
+
                     // modules/searchbar
                     // require("./tests/modules/searchbar/SearchCategories.js"),
                     // require("./tests/modules/searchbar/GdiSearch.js"),
@@ -79,8 +82,9 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     require("./tests/modules/tools/ExtendedFilter.js"),
                     require("./tests/modules/tools/Gfi.js"),
                     require("./tests/modules/Legend.js"),
+                    require("./tests/modules/tools/List.js"),
                     require("./tests/modules/tools/Measure.js"),
-                    // require("./tests/modules/tools/ParcelSearch.js"),
+                    require("./tests/modules/tools/ParcelSearch.js"),
                     require("./tests/modules/tools/SearchByCoord.js"),
 
                     // non-module tests

@@ -29,6 +29,11 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
      */
     initialize: function (attributes) {
         this.superInitialize();
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang(i18next.language);
         this.addValueModel(attributes);
         this.listenTo(this.get("valuesCollection"), {
             "change:date": function (model, value) {
@@ -39,6 +44,16 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
                     this.triggerValuesChanged(model, [value]);
                 }
             }
+        });
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "currentLng": lng
         });
     },
 
@@ -64,7 +79,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
             weekStart: model.weekStart ? model.weekStart : 1,
             type: this.get("type"),
             todayHighlight: model.todayHighlight ? model.todayHighlight : false,
-            language: model.language ? model.language : "de"
+            language: this.currentLng ? this.currentLng : i18next.language
         }));
     },
 

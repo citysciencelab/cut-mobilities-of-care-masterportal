@@ -37,6 +37,7 @@
             "fileImport": "Datei-Import",
             "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
+            "shadow": "Schatten",
             "styleWMS": "Style WMS",
             "commuterLines": "Pendler (Linien)",
             "commuterAnimation": "Pendler (Animation)",
@@ -93,6 +94,7 @@
           }
         },
         "alerting": {
+            "hideMessage": "Diese Meldung nicht mehr anzeigen",
             "categories": {
                 "error": "Fehler",
                 "info": "Info",
@@ -231,6 +233,9 @@
                     "A3 Querformat": "A3 Querformat"
                 }
             },
+            "shadow": {
+                "shadowDisplay": "Schattendarstellung"
+              },
             "styleVT": {
               "introText": "Auf VectorTiles-Layer können verschiedene vordefinierte Styles angewendet werden, um die Ansicht für den jeweiligen Anwendungszweck zu optimieren.",
               "noStyleableLayers": "Derzeit sind keine Themen verfügbar, auf die dieses Werkzeug angewendet werden könnte.",
@@ -433,6 +438,22 @@
                         "yAxisTextYear": "Anzahl / Woche"
                     }
                 }
+            },
+            "graph": {
+              "localeFormat": {
+                "decimal": "\",\"",
+                "thousands": "\".\"",
+                "grouping": "[3]",
+                "currency": "[\"€\", \"\"]",
+                "dateTime": "\"%a %b %e %X %Y\"",
+                "date": "\"%d.%m.%Y\"",
+                "time": "\"%H:%M:%S\"",
+                "periods": "[\"AM\", \"PM\"]",
+                "days": "[\"Sonntag\", \"Montag\", \"Dienstag\", \"Mittwoch\", \"Donnerstag\", \"Freitag\", \"Samstag\"]",
+                "shortDays": "[\"So\", \"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\"]",
+                "months": "[\"Januar\", \"Februar\", \"März\", \"April\", \"Mai\", \"Juni\", \"Juli\", \"August\", \"September\", \"Oktober\", \"November\", \"Dezember\"]",
+                "shortMonths": "[\"Jan\", \"Feb\", \"Mär\", \"Apr\", \"Mai\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Okt\", \"Nov\", \"Dez\"]"
+              }
             },
             "viomRouting": {
                 "startAddressLabel": "Startadresse",
@@ -676,6 +697,11 @@
             "tooltipMessagePolygon": "Klicken um Stützpunkt hinzuzufügen"
         },
         "slider": {
+            "date": "Datum",
+            "time": "Uhrzeit",
+            "from": " ab",
+            "to":" bis",
+            "incorrectEntry": "Fehlerhafte Eingabe, bitte eine ganze Zahl eingeben!",
             "outOfRangeErrorMessage": "Der Eingabewert muss innerhalb des Gültigkeitsbereiches {{minValueSlider}} und {{maxValueSlider}} liegen!"
         }
     }

@@ -262,5 +262,17 @@ describe("LegendWindow.vue", () => {
                 expect(wrapper.vm.colorToRgb([1, 2, 3, 0.5])).to.be.equals("rgb(1,2,3)");
             });
         });
+        describe("prepareLegendForGroupLayer", () => {
+            it("iterates over all layerSources and aggregates the legends", () => {
+                const layerSource = [
+                    new Backbone.Model({legend: ["foobar", "barfoo"]}),
+                    new Backbone.Model({legend: ["barbar"]}),
+                    new Backbone.Model({legend: ["foofoo"]})
+                ];
+
+                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
+                expect(wrapper.vm.prepareLegendForGroupLayer(layerSource)).to.deep.equal(["foobar", "barfoo", "barbar", "foofoo"]);
+            });
+        });
     });
 });
