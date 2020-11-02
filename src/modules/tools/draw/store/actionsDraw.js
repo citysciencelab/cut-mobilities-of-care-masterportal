@@ -271,7 +271,7 @@ const initialState = Object.assign({}, stateDraw),
         },
         /**
          * adds selected values from the state to the "drawState" of the given feature
-         * 
+         *
          * @param {Object} context actions context object.
          * @param {ol/Feature} feature the openlayer feature to append the current "drawState" to
          * @returns {void}
