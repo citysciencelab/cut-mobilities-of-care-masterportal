@@ -65,6 +65,31 @@ addons
 |	|   |-- unit
 |   |	|   |-- components
 |   |   |	|   |-- MyGfiTheme.spec.js
+
+|-- MyGFIThemesFolder
+|   |-- MyGFISubFolder
+|   |   index.js
+|   |   |-- components
+|   |   |   |-- MyGfiTheme.vue
+|   |   |   |-- ...
+|   |   |-- locales
+|   |   |   |-- de
+|   |   |   |   |-- additional.json
+|   |   |   |-- en
+|   |   |   |   |-- additional.json
+|   |   |
+|   |   |-- doc
+|   |   |   |-- config.json.md
+|   |   |
+|   |   |-- test
+|   |   |   |-- end2end
+|   |   |   |   |-- MyGfiTheme.e2e.js
+|   |   |   |-- unit
+|   |   |   |   |-- components
+|   |   |   |   |   |-- MyGfiTheme.spec.js
+
+
+
 ```
 Der Entrypoint eines jeden Addons muss eine Datei namens **index.js** auf der root-Ebene des Addon-Folders sein.
 
@@ -79,6 +104,8 @@ GFI-Themes: `"type": "gfiTheme"`
 
 Von allen Einträge in der addonsConf.json, die ein Objekt enthalten wird davon ausgegangen, dass sie mit vue programmiert sind (alte backbone-ddons enthalten nur einen String).
 
+Standardmäßig entspricht der Key eines Addons dem Namen seines Ordners im Addons Ordner. Mit dem Parameter "path" jedoch kann ein willkürlicher Pfad definiert werden. Dadurch können mehrere Addons in Ordnern gruppiert werden.
+
 #### Beispiel **addonsConf.json** ####
 ```json
 {
@@ -88,6 +115,10 @@ Von allen Einträge in der addonsConf.json, die ein Objekt enthalten wird davon 
   },
   "MyGfiTheme": {
     "type": "gfiTheme"
+  },
+  "AnotherGFITheme": {
+    "type": "gfiTheme",
+    "path": "MyGFIThemesFolder/MyGFISubFolder"
   }
 }
 ```
