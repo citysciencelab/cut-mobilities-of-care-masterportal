@@ -84,10 +84,13 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
 
+            console.info(cswObj.parsedData);
             if (this.get("layerName") === cswObj?.layerName && cswObj?.parsedData?.downloadLinks) {
                 const downloadLinks = this.get("downloadLinks");
-
-                cswObj.parsedData.downloadLinks.forEach(link => downloadLinks.push(link));
+                console.info(this.get("downloadLinks"));
+                cswObj.parsedData.downloadLinks.forEach(link => {
+                    downloadLinks.push(link);
+                });
                 this.setDownloadLinks(Radio.request("Util", "sortBy", downloadLinks, "linkName"));
             }
             else {
@@ -207,17 +210,18 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         this.set(attrs);
         this.setMetadataURL();
         this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetadataMessage"));
-        this.set("title", this.get("layername"));
-        this.set("abstractText", i18next.t("common:modules.layerInformation.noMetadataMessage"));
-        this.set("date", null);
-        this.set("downloadLinks", null);
-        this.set("datePublication", null);
-        this.set("dateRevision", null);
-        this.set("periodicity", null);
         if (this.areMetaIdsSet(this.get("metaID"))) {
+            this.set("downloadLinks", []);
             this.requestMetaData(attrs);
         }
         else {
+            this.set("title", this.get("layername"));
+            this.set("abstractText", i18next.t("common:modules.layerInformation.noMetadataMessage"));
+            this.set("date", null);
+            this.set("downloadLinks", null);
+            this.set("datePublication", null);
+            this.set("dateRevision", null);
+            this.set("periodicity", null);
             this.trigger("sync");
         }
     },

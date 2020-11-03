@@ -19,7 +19,7 @@ export default {
     },
     watch: {
         legendObj () {
-            if (this.renderToId !== "") {
+            if (this.renderToId !== "" && document.getElementById(this.renderToId) !== null) {
                 document.getElementById(this.renderToId).append(this.$el);
             }
         }
