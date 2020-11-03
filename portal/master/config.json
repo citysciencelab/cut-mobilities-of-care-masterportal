@@ -750,6 +750,42 @@
           "name": "Kita und KH"
         },
         {
+          "id": "18106",
+          "styleId": "18106",
+          "clusterDistance": 50,
+          "loadThingsOnlyInCurrentExtent": false,
+          "gfiTheme" : {
+            "name": "sensor",
+            "params" : {
+              "charts": {
+                "barPercentage": 1.1,
+                "values": {
+                  "available": {
+                    "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.available",
+                    "color": "rgba(0, 220, 0, 1)"
+                  },
+                  "charging": {
+                    "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+                    "color": "rgba(220, 0, 0, 1)"
+                  },
+                  "outoforder": {
+                      "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                      "color": "rgba(175, 175, 175, 1)"
+                  }
+                }
+              }
+            }
+          },
+          "gfiAttributes" : {
+            "dataStreamPhenomenonTime": "Letze Zustandsänderung",
+            "dataStreamValue": "Zustand",
+            "connector" : "Stecker",
+            "steckerTyp" : "SteckerTyp",
+            "authMeth2" : "Authentifizierungsmethode",
+            "dataStreamId" : "DataStreamIds"
+          }
+        },
+        {
           "id": "13023"
         }
       ]
