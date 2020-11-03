@@ -71,8 +71,10 @@ export default {
     },
     created () {
         this.dataName = this.gfiParams?.data?.name || this.dataName;
-        this.periodLength = this.gfiParams?.historicalData?.periodLength || this.periodLength;
-        this.periodUnit = this.gfiParams?.historicalData?.periodUnit || this.periodUnit;
+        this.periodLength = typeof this.gfiParams?.historicalData?.periodLength === "number" ?
+            this.gfiParams.historicalData.periodLength : this.periodLength;
+        this.periodUnit = this.gfiParams?.historicalData?.periodUnit === ("year" || "month") ?
+            this.gfiParams.historicalData.periodUnit : this.periodUnit;
 
         this.loadHistoricalData();
     },
@@ -83,16 +85,19 @@ export default {
          * @returns {void}
          */
         loadHistoricalData: function () {
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.feature.getLayerId()}),
-                url = model.get("url"),
-                version = model.get("version"),
-                filterDate = this.createFilterDate(this.periodLength, this.periodUnit),
-                filterDataStream = this.createFilterDataStream(this.feature.getProperties()?.dataStreamId),
-                requestQuery = `${url}v${version}/Datastreams?$select=@iot.id&$expand=Observations`
-                    + `($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt ${filterDate})`
-                    + `&$filter=${filterDataStream}`;
+            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.feature.getLayerId()});
 
-            this.fetchObservations(requestQuery);
+            if (model) {
+                const url = model.get("url"),
+                    version = model.get("version"),
+                    filterDate = this.createFilterDate(this.periodLength, this.periodUnit),
+                    filterDataStream = this.createFilterDataStream(this.feature.getProperties()?.dataStreamId),
+                    requestQuery = `${url}v${version}/Datastreams?$select=@iot.id&$expand=Observations`
+                        + `($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt ${filterDate})`
+                        + `&$filter=${filterDataStream}`;
+
+                this.fetchObservations(requestQuery);
+            }
         },
 
         /**
@@ -222,10 +227,10 @@ export default {
 </script>
 
 <template>
-    <div class="sensor-text">
+    <div class="gfi-theme-sensor">
         <div
             v-if="header"
-            class="sensor-text-align-center"
+            class="sensor-text"
         >
             <strong
                 v-for="(value, key) in getHeader"
@@ -297,10 +302,10 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
 
-    .sensor-text-align-center {
+    .sensor-text {
         text-align: center;
     }
-    .sensor-text {
+    .gfi-theme-sensor {
         width: 65vh;
         height: 45vh;
     }

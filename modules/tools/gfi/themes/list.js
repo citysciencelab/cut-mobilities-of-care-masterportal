@@ -10,8 +10,6 @@ import SgvOnlineTheme from "./sgvOnline/model";
 import SgvOnlineThemeView from "./sgvOnline/view";
 import ItGbmTheme from "./itgbm/model";
 import ItGbmThemeView from "./itgbm/view";
-import ElektroladesaeulenThemeView from "./elektroladesaeulen/view";
-import ElektroladesaeulenTheme from "./elektroladesaeulen/model";
 
 const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
     /**
@@ -44,9 +42,6 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
         }
         else if (attrs.gfiTheme === "itgbm") {
             theme = new ItGbmTheme(attrs, options);
-        }
-        else if (attrs.gfiTheme === "elektroladesaeulen") {
-            theme = new ElektroladesaeulenTheme(attrs, options);
         }
         else if (attrs.gfiTheme === "buildings_3d") {
             theme = new Buildings3dTheme(attrs, options);
@@ -110,10 +105,6 @@ const ThemeList = Backbone.Collection.extend(/** @lends ThemeList.prototype */{
             }
             case "itgbm": {
                 new ItGbmThemeView({model: model});
-                break;
-            }
-            case "elektroladesaeulen": {
-                new ElektroladesaeulenThemeView({model: model});
                 break;
             }
             case "buildings_3d": {
