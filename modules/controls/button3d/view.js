@@ -247,6 +247,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     },
 
     /**
+     * Trigger to the ModelList to opens the tree to show the 3d data
      * @returns {void}
      */
     open3dCatalog: function () {
