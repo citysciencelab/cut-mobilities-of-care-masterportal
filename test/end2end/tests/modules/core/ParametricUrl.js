@@ -44,6 +44,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
         it("?center= allows setting coordinates of map", async function () {
             await loadUrl(driver, `${url}?center=566499,5942803`, mode);
+            await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
 
             const center = await driver.executeScript(getCenter);
 
@@ -56,6 +57,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
                 // Bezirk 1 is Altona according to portal/master/config.js listing
                 await loadUrl(driver, `${url}?zoomtogeometry=1`, mode);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
                 expect(await centersTo(driver, expectedCoordinate)).to.be.true;
             });
 
@@ -63,6 +65,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 const expectedCoordinate = [578867.787, 5924175.483999999];
 
                 await loadUrl(driver, `${url}?zoomtogeometry=bergedorf`, mode);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
                 expect(await centersTo(driver, expectedCoordinate)).to.be.true;
             });
         }
@@ -70,7 +73,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         it("?layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
             // 2426 is "Bezirke"
             await loadUrl(driver, `${url}?layerids=2426&visibility=true&transparency=0`, mode);
-            await driver.wait(until.elementLocated(By.css(".navbar")), 5000);
+            await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
 
             const treeEntry = await driver.findElement(
                     isBasic(url) || isMaster(url)
@@ -87,7 +90,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             // 2426 is "Bezirke"
             // 452 is "Luftbilder DOP 20 (belaubt)"
             await loadUrl(driver, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
-            await driver.wait(until.elementLocated(By.css(".navbar")), 5000);
+            await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
 
             const treeEntryLuftbilder = await driver.findElement(By.css(
                     isBasic(url) || isMaster(url)
@@ -223,6 +226,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         if (isMaster(url) || isCustom(url)) {
             it("?featureid= displays markers for features", async function () {
                 await loadUrl(driver, `${url}?featureid=18,26`, mode);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
                 await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
                     {coordinate: [568814.3835, 5931819.377], image: "https://geoportal-hamburg.de/lgv-config/img/location_eventlotse.svg"},
                     {coordinate: [567043.565, 5934455.808], image: "https://geoportal-hamburg.de/lgv-config/img/location_eventlotse.svg"}
