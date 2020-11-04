@@ -425,7 +425,7 @@
                       },
                       "sensorBarChart": {
                         "clock": "{{value}} Uhr",
-                        "chartTitleAverage": "Mittelwert aus ",
+                        "chartTitleAverage": "Mittelwert aus",
                         "month": "{{count}} Monat",
                         "month_plural": "{{count}} Monaten",
                         "year": "{{count}} Jahr",

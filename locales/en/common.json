@@ -418,7 +418,7 @@
                       },
                       "sensorBarChart": {
                         "clock": "{{value}} o'clock",
-                        "chartTitleAverage": "Average off ",
+                        "chartTitleAverage": "Average off",
                         "month": "{{count}} month",
                         "month_plural": "{{count}} months",
                         "year": "{{count}} year",

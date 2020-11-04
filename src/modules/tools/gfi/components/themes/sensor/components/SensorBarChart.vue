@@ -39,6 +39,7 @@ export default {
     },
     data: () => {
         return {
+            momentLocale: moment().locale(i18next.language),
             weekdayIndex: 0,
             chart: null,
             hoverBackgroundColor: "rgba(0, 0, 0, 0.8)",
@@ -54,7 +55,7 @@ export default {
          * @returns {String} The weekday.
          */
         weekday: function () {
-            return moment().add(this.weekdayIndex, "days").format("dddd");
+            return this.momentLocale.localeData().weekdays(moment().add(this.weekdayIndex, "days"));
         }
     },
     watch: {
@@ -79,7 +80,7 @@ export default {
          * @returns {void}
          */
         initialize: function () {
-            moment.locale(i18next.language);
+            this.momentLocale.locale(i18next.language);
             if (this.show) {
                 this.$nextTick(() => {
                     this.drawChart(this.calculateDataForOneWeekday());
@@ -95,8 +96,8 @@ export default {
             const processedData = calculateWorkloadForOneWeekday(this.processedHistoricalDataByWeekday[this.weekdayIndex], this.targetValue);
 
             this.titleText = [
-                this.chartValue?.title || "",
-                "(" + this.$t("common:modules.tools.gfi.themes.sensor.sensorBarChart.chartTitleAverage")
+                this.$t(this.chartValue?.title || ""),
+                `(${this.$t("common:modules.tools.gfi.themes.sensor.sensorBarChart.chartTitleAverage")} `
                 + this.$t(`common:modules.tools.gfi.themes.sensor.sensorBarChart.${this.periodUnit}`, {count: this.periodLength}) + ")"
             ];
 

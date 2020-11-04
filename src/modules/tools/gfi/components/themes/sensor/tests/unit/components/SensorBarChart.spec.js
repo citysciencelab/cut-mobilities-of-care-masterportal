@@ -111,7 +111,7 @@ describe("src/modules/tools/gfi/components/themes/senor/components/SensorBarChar
                 display: true,
                 position: "bottom",
                 text: ["Ein schoener Titel",
-                    "(common:modules.tools.gfi.themes.sensor.sensorBarChart.chartTitleAveragecommon:modules.tools.gfi.themes.sensor.sensorBarChart.month)"]
+                    "(common:modules.tools.gfi.themes.sensor.sensorBarChart.chartTitleAverage common:modules.tools.gfi.themes.sensor.sensorBarChart.month)"]
             }
         );
     });

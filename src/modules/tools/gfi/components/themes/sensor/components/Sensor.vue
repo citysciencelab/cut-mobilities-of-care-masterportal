@@ -20,17 +20,11 @@ export default {
     },
     data: function () {
         return {
-            dataName: this.$t("common:modules.tools.gfi.themes.sensor.sensor.dataName"),
             periodLength: 3,
             periodUnit: "month",
             processedHistoricalDataByWeekday: [],
             activeTab: "data",
-            startDate: "",
-            header: {
-                name: this.$t("common:modules.tools.gfi.themes.sensor.sensor.header.name"),
-                description: this.$t("common:modules.tools.gfi.themes.sensor.sensor.header.description"),
-                ownerThing: this.$t("common:modules.tools.gfi.themes.sensor.sensor.header.ownerThing")
-            }
+            startDate: ""
         };
     },
     computed: {
@@ -43,16 +37,29 @@ export default {
         },
 
         /**
+         * Gets the configured data name attributes.
+         * @returns {Object} The header attributes.
+         */
+        dataName: function () {
+            return this.gfiParams?.data?.name || this.$t("common:modules.tools.gfi.themes.sensor.sensor.dataName");
+        },
+
+        /**
          * Gets the configured header attributes.
          * @returns {Object} The header attributes.
          */
-        getHeader: function () {
-            const header = this.gfiParams?.header || this.header;
+        header: function () {
+            const header = this.gfiParams?.header || {
+                name: this.$t("common:modules.tools.gfi.themes.sensor.sensor.header.name"),
+                description: this.$t("common:modules.tools.gfi.themes.sensor.sensor.header.description"),
+                ownerThing: this.$t("common:modules.tools.gfi.themes.sensor.sensor.header.ownerThing")
+            };
 
             // "useConfigName" is set in the preparser, should be removed, with the refactoring of the core
             if (header.hasOwnProperty("useConfigName")) {
-                delete header.useConfigName;
+                delete this.header.useConfigName;
             }
+
             return header;
         },
 
@@ -70,7 +77,6 @@ export default {
         }
     },
     created () {
-        this.dataName = this.gfiParams?.data?.name || this.dataName;
         this.periodLength = typeof this.gfiParams?.historicalData?.periodLength === "number" ?
             this.gfiParams.historicalData.periodLength : this.periodLength;
         this.periodUnit = this.gfiParams?.historicalData?.periodUnit === ("year" || "month") ?
@@ -191,7 +197,7 @@ export default {
          * @returns {Boolean} Is true if the given tab name is active.
          */
         isActiveTab (tab) {
-            return this.activeTab === tab;
+            return this.activeTab === String(tab);
         },
 
         /**
@@ -201,7 +207,7 @@ export default {
          */
         setActiveTab (evt) {
             if (evt?.target?.hash && this.processedHistoricalDataByWeekday.length > 0) {
-                this.activeTab = evt.target.hash.substring(1);
+                this.activeTab = String(evt.target.hash.substring(1));
             }
         },
 
@@ -220,7 +226,7 @@ export default {
          * @returns {String} The created href
          */
         createHref: function (value) {
-            return `#${value}`;
+            return `#${String(value)}`;
         }
     }
 };
@@ -233,7 +239,7 @@ export default {
             class="sensor-text"
         >
             <strong
-                v-for="(value, key) in getHeader"
+                v-for="(value, key) in header"
                 :key="key"
             >
                 {{ value + ": " + feature.getProperties()[key] }}
@@ -261,16 +267,16 @@ export default {
                     :key="key"
                     value="value?.title || value"
                     :class="{
-                        active: isActiveTab(encodeURIComponent(value.title || value)),
+                        active: isActiveTab(key),
                         disabled: processedHistoricalDataByWeekday.length === 0
                     }"
                 >
                     <a
-                        data-toggle="tab"
-                        :href="processedHistoricalDataByWeekday.length === 0 ? '' : createHref(encodeURIComponent(value.title || value))"
+                        :data-toggle="processedHistoricalDataByWeekday.length === 0 ? 'buttons' : 'tab'"
+                        :href="processedHistoricalDataByWeekday.length === 0 ? '' : createHref(key)"
                         @click="setActiveTab"
                     >
-                        {{ value.title || value }}
+                        {{ $t(value.title || value) }}
                     </a>
                 </li>
             </ul>
@@ -286,8 +292,8 @@ export default {
             <SensorChartsBarChart
                 v-for="(value, key) in chartvalues"
                 :key="`sensorCharts-barChartComponent-${key}`"
-                :class="getTabPaneClasses(encodeURIComponent(value.title || value))"
-                :show="isActiveTab(encodeURIComponent(value.title || value))"
+                :class="getTabPaneClasses(key)"
+                :show="isActiveTab(key)"
                 :chartValue="typeof value === 'object' ? value : {title: value}"
                 :targetValue="typeof key === 'number' ? value : key"
                 :chartsParams="gfiParams.charts"

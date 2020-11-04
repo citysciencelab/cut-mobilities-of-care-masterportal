@@ -18,11 +18,20 @@ export default {
     },
     data: function () {
         return {
-            firstColumnHeaderName: this.$t("common:modules.tools.gfi.themes.sensor.sensorData.firstColumnHeaderName"),
+            // firstColumnHeaderName: this.$t("common:modules.tools.gfi.themes.sensor.sensorData.firstColumnHeaderName"),
             columnHeaderAttribute: "dataStreamName"
         };
     },
     computed: {
+        /**
+         * Gets the firstColumnHeaderName.
+         * @returns {String} Th firstColumnHeaderName.
+         */
+        firstColumnHeaderName: function () {
+            return this.feature.getTheme()?.params?.data?.firstColumnHeaderName ||
+                this.$t("common:modules.tools.gfi.themes.sensor.sensorData.firstColumnHeaderName");
+        },
+
         /**
          * Splits the mappepd properties attribute using the "|" parameter.
          * @returns {Object} mappedProperties with splitted values as array.
@@ -46,7 +55,7 @@ export default {
         }
     },
     created () {
-        this.firstColumnHeaderName = this.feature.getTheme()?.params?.data?.firstColumnHeaderName || this.firstColumnHeaderName;
+        // this.firstColumnHeaderName = this.feature.getTheme()?.params?.data?.firstColumnHeaderName || this.firstColumnHeaderName;
         this.columnHeaderAttribute = this.feature.getTheme()?.params?.data?.columnHeaderAttribute || this.columnHeaderAttribute;
     },
     methods: {
