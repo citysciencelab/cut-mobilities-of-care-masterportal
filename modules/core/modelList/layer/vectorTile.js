@@ -38,7 +38,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     createLayerSource: function () {
         this.setLayerSource(new OpenLayersVectorTileSource({
             format: new MVT(),
-            url: this.get("url")
+            url: Radio.request("Util", "getProxyURL", this.get("url"))
         }));
     },
 
