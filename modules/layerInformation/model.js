@@ -84,10 +84,9 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
 
-            console.info(cswObj.parsedData);
             if (this.get("layerName") === cswObj?.layerName && cswObj?.parsedData?.downloadLinks) {
                 const downloadLinks = this.get("downloadLinks");
-                console.info(this.get("downloadLinks"));
+
                 cswObj.parsedData.downloadLinks.forEach(link => {
                     downloadLinks.push(link);
                 });

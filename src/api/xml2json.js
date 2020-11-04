@@ -13,7 +13,6 @@ export default function xml2json (srcDom) {
     // base case for recursion
     if (!children.length) {
         if (srcDom.hasAttributes()) {
-            // console.info(srcDom.attributes);
             return {
                 getValue: () => srcDom.innerHTML,
                 getAttributes: () => parseNodeAttributes(srcDom.attributes)

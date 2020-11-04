@@ -149,7 +149,7 @@ function parseContactByRole (json, role) {
 
     if (Array.isArray(pointOfContacts)) {
         pointOfContacts.forEach(contact => {
-            if (contact.CI_ResponsibleParty?.role?.CI_RoleCode?.getAttributes()?.codeListValue === role) {
+            if (contact?.CI_ResponsibleParty?.role?.CI_RoleCode?.getAttributes()?.codeListValue === role) {
                 dateValue = {
                     name: contact.CI_ResponsibleParty?.organisationName?.CharacterString?.getValue(),
                     street: contact.CI_ResponsibleParty?.contactInfo?.CI_Contact?.address?.CI_Address?.deliveryPoint?.CharacterString?.getValue(),
@@ -163,7 +163,7 @@ function parseContactByRole (json, role) {
             }
         });
     }
-    else if (pointOfContacts.CI_ResponsibleParty?.role?.CI_RoleCode?.getAttributes()?.codeListValue === role) {
+    else if (pointOfContacts?.CI_ResponsibleParty?.role?.CI_RoleCode?.getAttributes()?.codeListValue === role) {
         dateValue = {
             name: pointOfContacts.CI_ResponsibleParty?.organisationName?.CharacterString?.getValue(),
             street: pointOfContacts.CI_ResponsibleParty?.contactInfo?.CI_Contact?.address?.CI_Address?.deliveryPoint?.CharacterString?.getValue(),
