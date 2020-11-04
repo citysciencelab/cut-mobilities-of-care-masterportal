@@ -62,6 +62,7 @@ in der normalen cmd **UND** in der Admin-cmd (cmd als Admin ausführen).
 außerdem
 # setx http_proxy <proxy-url:port>
 # setx https_proxy <proxy-url:port>
+# setx proxy <proxy-url:port>
 --> danach alle cmds schließen und neu starten, damit die Änderungen wirksam werden
 
 Die Proxies müssen ebenfalls in den Systemvariablen eingetragen werden.
