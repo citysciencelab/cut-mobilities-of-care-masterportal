@@ -1,6 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
 import {WMSCapabilities} from "ol/format.js";
-import {intersects} from 'ol/extent';
+import {intersects} from "ol/extent";
 
 const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     /**
