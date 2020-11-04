@@ -589,11 +589,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                 invisibleLayer.push(layer);
                 invisibleLayerName += "- " + layer.get("name") + "<br>";
                 layer.setVisible(false);
-                layerModel.setIsOutOfRange(true);
+                if (layerModel !== undefined) {
+                    layerModel.setIsOutOfRange(true);
+                }
             }
             else {
                 layer.setVisible(true);
-                layerModel.setIsOutOfRange(false);
+                if (layerModel !== undefined) {
+                    layerModel.setIsOutOfRange(false);
+                }
             }
         });
 
