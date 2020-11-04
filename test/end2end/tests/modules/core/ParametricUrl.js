@@ -70,6 +70,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         it("?layerids=, &visibility=, and &transparency= work together to display a layer in tree and map as configured", async function () {
             // 2426 is "Bezirke"
             await loadUrl(driver, `${url}?layerids=2426&visibility=true&transparency=0`, mode);
+            await driver.wait(until.elementLocated(By.css(".navbar")), 5000);
 
             const treeEntry = await driver.findElement(
                     isBasic(url) || isMaster(url)
@@ -86,6 +87,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             // 2426 is "Bezirke"
             // 452 is "Luftbilder DOP 20 (belaubt)"
             await loadUrl(driver, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
+            await driver.wait(until.elementLocated(By.css(".navbar")), 5000);
 
             const treeEntryLuftbilder = await driver.findElement(By.css(
                     isBasic(url) || isMaster(url)
