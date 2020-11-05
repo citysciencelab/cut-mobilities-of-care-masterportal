@@ -484,14 +484,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     addDatastreamProperties: function (thingProperties, dataStreamProperties) {
-        Object.entries(dataStreamProperties).forEach(([key, value]) => {
-            if (thingProperties[key] !== undefined) {
-                thingProperties[key] = thingProperties[key] + " | " + value;
-            }
-            else {
-                thingProperties[key] = value;
-            }
-        });
+        if (dataStreamProperties) {
+            Object.entries(dataStreamProperties).forEach(([key, value]) => {
+                if (thingProperties[key] !== undefined) {
+                    thingProperties[key] = thingProperties[key] + " | " + value;
+                }
+                else {
+                    thingProperties[key] = value;
+                }
+            });
+        }
     },
 
     /**
