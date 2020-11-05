@@ -244,13 +244,8 @@ export default {
     }
     .gfi-content {
         overflow: auto;
-        margin: 5px 20px 5px 20px;
         table {
             margin-bottom: 0;
         }
-    }
-    .gfi-footer {
-        color: #646262;
-        font-size: 22px;
     }
 </style>

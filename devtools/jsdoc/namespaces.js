@@ -508,12 +508,6 @@
  */
 
 /**
- * @namespace Bildungsatlas
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Bildungsatlas
- */
-
-/**
  * @namespace Buildings3D
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for Buildings3D
@@ -559,12 +553,6 @@
  * @namespace MietenSpiegel
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for MietenSpiegel
- */
-
-/**
- * @namespace ReiseZeiten
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for ReiseZeiten
  */
 
 /**

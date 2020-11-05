@@ -358,34 +358,39 @@ export default {
 </template>
 
 
-<style lang="less" scoped>
+<style lang="less">
 @import "~variables";
 
 .gfi {
     color: @secondary_contrast;
 }
-
-.pager {
-    background: @shadow;
-    padding: 6px;
-    cursor: pointer;
-    width: 50%;
-    margin: 0;
+.bold{
+    font-weight: bold;
 }
+.gfi-footer {
+        color: #646262;
+        font-size: 22px;
+         .pager {
+            padding: 6px;
+            cursor: pointer;
+            width: 50%;
+            margin: 0;
+        }
 
-.pager-left {
-    float: left;
-    border-right: 1px solid #ddd;
-}
+        .pager-left {
+            float: left;
+            border-right: 1px solid #ddd;
+        }
 
-.pager-right {
-    float: right;
-}
+        .pager-right {
+            float: right;
+        }
+        .disabled {
+            cursor: not-allowed;
+            background-color: @primary_inactive_contrast;
+            opacity: 0.2;
+        }
 
-.disabled {
-    cursor: not-allowed;
-    background-color: @primary_inactive_contrast;
-    opacity: 0.2;
-}
+    }
 
 </style>
