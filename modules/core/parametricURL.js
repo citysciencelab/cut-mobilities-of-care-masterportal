@@ -146,12 +146,10 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                     console.warn("The URL-Parameter: " + parameterNameUpperCase + " is not supported in The Masterportal!");
                 }
             });
-            
+
             this.setResult(result);
             Object.keys(result).forEach(param => {
                 if (possibleUrlParameters.hasOwnProperty(param)) {
-                    console.log(3);
-                    
                     possibleUrlParameters[param](result[param], param);
                 }
             });
@@ -240,8 +238,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     createLayerParams: function (layerIdString) {
-        console.log(layerIdString);
-        
         const result = this.get("result"),
             visibilityListString = result.hasOwnProperty("VISIBILITY") ? result.VISIBILITY : "",
             transparencyListString = result.hasOwnProperty("TRANSPARENCY") ? result.TRANSPARENCY : "",
@@ -285,19 +281,17 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         layerIdList.forEach((val, index) => {
             const layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
                 layerExisting = getLayerWhere({id: val}),
-                treeType = Radio.request("Parser", "getTreeType");
-
-            let layerToPush,
+                treeType = Radio.request("Parser", "getTreeType"),
                 optionsOfLayer = {
                     id: val,
                     visibility: visibilityList[index]
                 };
 
+            let layerToPush;
 
             if (transparencyList[index] !== null) {
                 optionsOfLayer.transparency = transparencyList[index];
             }
-            
             layerParams.push(optionsOfLayer);
 
             if (layerConfigured === undefined && layerExisting !== null && treeType === "light") {
@@ -372,11 +366,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         layers.forEach(layer => {
             layerParams.push({id: layer.id, visibility: true, transparency: 0});
         });
-        
-        console.log("HALLO");
-        console.log(layer.id);
-        
-        
+
         this.setLayerParams(layerParams);
     },
 
@@ -592,7 +582,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             window.history.replaceState({}, "", baseUrl + params);
         }
 
-        console.log(1);
         this.parseURL(location.search.substr(1), this.possibleUrlParameters());
     },
 
