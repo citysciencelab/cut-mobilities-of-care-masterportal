@@ -328,7 +328,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
                 }
             });
         }
-        else if (this.get("typ") === "WFS" && Radio.request("Parser", "getTreeType") === "light") {
+        else if (
+            (this.get("typ") === "WFS" || this.get("typ") === "GeoJSON")
+            && Radio.request("Parser", "getTreeType") === "light"
+        ) {
             this.listenToOnce(this, {
                 // data will be loaded at first selection
                 "change:isSelected": function () {
