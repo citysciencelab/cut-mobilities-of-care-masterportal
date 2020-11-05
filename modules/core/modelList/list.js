@@ -837,8 +837,8 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 const hit = paramLayers.find(paramLayer => paramLayer.id === lightModel.id);
 
                 if (hit) {
-                    lightModel.isSelected = hit.visibility;
-                    lightModel.transparency = hit.transparency;
+                    lightModel = Object.assign(lightModel, hit);
+                    lightModel.isSelected = true;
                 }
                 else {
                     lightModel.isSelected = false;
