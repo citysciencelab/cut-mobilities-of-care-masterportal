@@ -502,21 +502,9 @@
  */
 
 /**
- * @namespace ActiveCityMaps
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for ActiveCityMaps
- */
-
-/**
  * @namespace Buildings3D
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for Buildings3D
- */
-
-/**
- * @namespace ContiniuousCountingBikeTheme
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for ContiniuousCountingBike
  */
 
 /**
@@ -526,77 +514,11 @@
  */
 
 /**
- * @namespace Dipas
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for DIPAS (touch table)
- */
-
-/**
- * @namespace Elektroladesaeulen
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for ElektroladeSaeulen
- */
-
-/**
- * @namespace FlaechenInfo
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for FlaechenInfo
- */
-
-/**
- * @namespace Itgbm
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for itgbm
- */
-
-/**
- * @namespace MietenSpiegel
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for MietenSpiegel
- */
-
-/**
- * @namespace SchulInfo
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for SchulInfo
- */
-
-/**
- * @namespace SvgOnline
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for SvgOnline
- */
-
-/**
- * @namespace SolarAtlas
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for SolarAtlas
- */
-
-/**
  * @namespace Sensor
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for Sensordata
  */
-
-/**
- * @namespace Table
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Touch-Table
- */
-
-
-/**
- * @namespace VerkehrsStaerken
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for VerkehrsStaerken
- */
-
-/**
- * @namespace TrafficCount
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for traffic counter
- */
+y
 
 /**
  * @namespace Graph
