@@ -5,7 +5,7 @@ import {intersects} from "ol/extent";
 const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     /**
      * @class AddWMSModel
-     * @description After imporing and parsing the external wms layers to insert the layer into menu
+     * @description After importing and parsing the external wms layers to insert the layer into menu
      * @extends Tool
      * @memberof Tools.AddWMS
      * @constructs
@@ -70,8 +70,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      * @return {void}
      */
     loadAndAddLayers: function () {
-        const url = $("#wmsUrl").val(),
-            currentExtent = Radio.request("Parser", "getPortalConfig").mapView.extent;
+        const url = $("#wmsUrl").val();
 
         $(".addwms_error").remove();
         if (url === "") {
@@ -89,6 +88,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
                     const parser = new WMSCapabilities(),
                         uniqId = this.getAddWmsUniqueId(),
                         capability = parser.read(data),
+                        currentExtent = Radio.request("Parser", "getPortalConfig")?.mapView?.extent,
                         checkExtent = this.getIfInExtent(capability, currentExtent);
 
                     if (!checkExtent) {
@@ -133,7 +133,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     },
 
     /**
-     * Appding folders and layers to the menu based on the given layer object
+     * Appending folders and layers to the menu based on the given layer object
      * @info recursive function
      * @param {Object} object the ol layer to hang into the menu as new folder or new layer
      * @param {String} parentId the id of the parent object in the menu

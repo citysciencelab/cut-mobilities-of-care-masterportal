@@ -159,7 +159,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
      * @returns {void}
      */
     showHintInfoScale: function (evt) {
-        if (!evt || !evt.type) {
+        if (!evt?.type) {
             return;
         }
 

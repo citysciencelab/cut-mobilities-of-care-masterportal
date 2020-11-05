@@ -241,7 +241,7 @@ const initialState = Object.assign({}, stateDraw),
 
                 commit("setSelectedFeature", feature);
 
-                if (feature.get("drawState") === undefined) {
+                if (typeof feature.get("drawState") === "undefined") {
                     // setDrawType changes visibility of all select- and input-boxes
                     commit("setDrawType", getDrawTypeByGeometryType(feature.getGeometry().getType(), drawTypeOptions));
 

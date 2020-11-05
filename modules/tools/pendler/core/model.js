@@ -389,7 +389,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @returns {void}
      */
     addCenterLabelToLayer: function (getLabelText, features, layer) {
-        if (typeof getLabelText !== "function") {
+        if (typeof getLabelText !== "function" || !Array.isArray(features)) {
             return;
         }
         const feature = features[0],
@@ -579,7 +579,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         this.set("attrGemeinde", value);
     },
     /**
-     * Sets the attribute for 'Gemeinde'
+     * Sets the attribute for 'GemeindeContrary'
      * @param {String} value the attribute name
      * @returns {void}
      */

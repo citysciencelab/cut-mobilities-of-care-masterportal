@@ -247,14 +247,14 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     },
 
     /**
-     * Trigger to the ModelList to opens the tree to show the 3d data
+     * Trigger to the ModelList to open the tree to show the 3d data
      * @returns {void}
      */
     open3dCatalog: function () {
-        const threed_Layer = Radio.request("ModelList", "getModelByAttributes", {parentId: "3d_daten", isVisibleInMap: true});
+        const layer3d = Radio.request("ModelList", "getModelByAttributes", {parentId: "3d_daten", isVisibleInMap: true});
 
-        if (threed_Layer) {
-            Radio.trigger("ModelList", "showModelInTree", threed_Layer.get("id"));
+        if (layer3d) {
+            Radio.trigger("ModelList", "showModelInTree", layer3d.get("id"));
         }
     }
 });

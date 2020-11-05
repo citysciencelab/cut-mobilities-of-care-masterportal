@@ -64,8 +64,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         currentMapScale: "",
         hintInfoScale: "",
         visibleLayer: [],
-        beforeScale: "",
-        afterScale: "",
         invisibleLayer: [],
         zoomLevel: null,
         hintInfo: "",
@@ -115,8 +113,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @property {ol/Layer[]} invisibleLayer the list of invisible but active layer
      * @property {String} currentMapScale the current map scale
      * @property {String} hintInfoScale the hint information when the current print scale and map scale are not the same
-     * @property {String} beforeScale the text before the scale
-     * @property {String} afterScale the text after the scale
      * @property {String} hintInfo the hint text for the layer could not be printed
      * @fires Core#RadioRequestMapViewGetOptions
      * @listens Print#ChangeIsActive
@@ -144,7 +140,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         this.listenTo(Radio.channel("MapView"), {
             "changedOptions": function () {
                 this.setIsScaleSelectedManually(false);
-                if (this.get("eventListener") !== undefined) {
+                if (typeof this.get("eventListener") !== "undefined") {
                     this.updateCanvasLayer();
                 }
             }
@@ -152,7 +148,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
         this.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": function () {
-                if (this.get("eventListener") !== undefined) {
+                if (typeof this.get("eventListener") !== "undefined") {
                     this.setVisibleLayer(this.getVisibleLayer().concat(this.get("invisibleLayer")));
                     this.updateCanvasLayer();
                 }
@@ -198,8 +194,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             vtlWarning: i18next.t("common:modules.tools.print.vtlWarning"),
             layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true}),
             hintInfoScale: i18next.t("common:modules.tools.print.hintInfoScale"),
-            beforeScale: i18next.t("common:modules.tools.print.invisibleLayer.beforeScale"),
-            afterScale: i18next.t("common:modules.tools.print.invisibleLayer.afterScale"),
             currentLng: lng
         });
     },
@@ -382,8 +376,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
          * they are filtered in the following code and an alert is shown to the user informing him about which
          * layers will not be printed.
          */
-        let canvasLayer;
-
         if (foundVectorTileLayers.length && this.get("isActive")) {
             Radio.trigger("Alert", "alert", `${this.get("vtlWarning")} ${foundVectorTileLayers.join(", ")}`);
         }
@@ -391,7 +383,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         this.setVisibleLayer(visibleLayerList);
 
         if (value && model.get("layoutList").length !== 0 && visibleLayerList.length >= 1) {
-            canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
+            const canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
+
             this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
         }
         else {
@@ -583,11 +576,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         const visibleLayer = this.get("visibleLayer"),
             resoByMaxScale = Radio.request("MapView", "getResoByScale", scale, "max"),
             resoByMinScale = Radio.request("MapView", "getResoByScale", scale, "min"),
-            invisibleLayer = [],
-            beforeScale = this.get("beforeScale"),
-            afterScale = this.get("afterScale");
+            invisibleLayer = [];
 
-        let invisibleLayerName = "",
+        let invisibleLayerNames = "",
             hintInfo = "";
 
         visibleLayer.forEach(layer => {
@@ -595,7 +586,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
             if (resoByMaxScale > layer.getMaxResolution() || resoByMinScale <= layer.getMinResolution()) {
                 invisibleLayer.push(layer);
-                invisibleLayerName += "- " + layer.get("name") + "<br>";
+                invisibleLayerNames += "- " + layer.get("name") + "<br>";
                 layer.setVisible(false);
                 if (layerModel !== undefined) {
                     layerModel.setIsOutOfRange(true);
@@ -609,7 +600,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             }
         });
 
-        hintInfo = beforeScale + thousandsSeparator(scale, " ") + afterScale + "<br>" + invisibleLayerName;
+        hintInfo = i18next.t("common:modules.tools.print.invisibleLayer", {scale: "1: " + thousandsSeparator(scale, " ")});
+        hintInfo = hintInfo + "<br>" + invisibleLayerNames;
 
         if (invisibleLayer.length && hintInfo !== this.get("hintInfo")) {
             store.dispatch("Alerting/addSingleAlert", hintInfo);
@@ -678,13 +670,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {number} a negative, zero, or positive value
      */
     sortNumbers: function (a, b) {
-        if (a < b) {
-            return -1;
-        }
-        if (a > b) {
-            return 1;
-        }
-        return 0;
+        return a - b;
     },
 
     /**
@@ -833,7 +819,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * setter the event listener
-     * @param {*} value  - the event triggerd with event listener
+     * @param {*} value - the event triggerd with event listener
      * @returns {void}
      */
     setEventListener: function (value) {
@@ -842,7 +828,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * setter the current map scale
-     * @param {String} value  - the current map scale
+     * @param {String} value - the current map scale
      * @returns {void}
      */
     setCurrentMapScale: function (value) {
@@ -851,7 +837,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * setter the visible layer list before printing
-     * @param {ol/Layer[]} value  - the visible layer list
+     * @param {ol/Layer[]} value - the visible layer list
      * @returns {void}
      */
     setVisibleLayer: function (value) {
@@ -860,7 +846,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * setter the invisible layer list before printing
-     * @param {ol/Layer[]} value  - the invisible layer list
+     * @param {ol/Layer[]} value - the invisible layer list
      * @returns {void}
      */
     setInvisibleLayer: function (value) {

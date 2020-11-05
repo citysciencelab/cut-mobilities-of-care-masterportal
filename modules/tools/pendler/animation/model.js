@@ -317,7 +317,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
             this.startAnimation();
         }
 
-        // set the order to have labels always above the animation
+        // set the order to have labels allways above the animation
         this.assertLayerOnTop("animationLayer");
         this.assertLayerOnTop("pendlerLabelLayer");
 
@@ -431,7 +431,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         });
     },
     /**
-     * adding animation bubbles at end of each geometry
+     * adding animation bubbles at the end of each geometry
      * this has to be done to be able to animate anything
      * @param {Object[]} features features to add
      * @param {Object} layer the layer to add the bubbles to
@@ -474,7 +474,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
             maxVal = this.get("maxVal"),
             minPx = this.get("minPx"),
             maxPx = this.get("maxPx"),
-            percent = (anzahlPendler * 100) / (maxVal - minVal),
+            percent = (anzahlPendler * 100) / Math.max(1, maxVal - minVal),
             pixel = ((maxPx - minPx) / 100) * percent,
             radius = Math.round(minPx + pixel),
             style = new Style({
