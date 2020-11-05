@@ -472,21 +472,9 @@
  */
 
 /**
- * @namespace Image
- * @memberof Tools.GFI.Objects
- * @description Images in the GFI-popup.
- */
-
-/**
  * @namespace RoutingButton
  * @memberof Tools.GFI.Objects
  * @description Routing button in the GFI-popup.
- */
-
-/**
- * @namespace Video
- * @memberof Tools.GFI.Objects
- * @description Videos in the GFI-popup.
  */
 
 /**
@@ -502,12 +490,6 @@
  */
 
 /**
- * @namespace Buildings3D
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Buildings3D
- */
-
-/**
  * @namespace Default
  * @memberof Tools.GFI.Themes
  * @description Default GFI Theme
@@ -518,7 +500,6 @@
  * @memberof Tools.GFI.Themes
  * @description GFI Theme for Sensordata
  */
-y
 
 /**
  * @namespace Graph
