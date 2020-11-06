@@ -27,7 +27,7 @@ export function getWmsFeaturesByMimeType (mimeType, url, layerInfo, gfiTheme, gf
     }
 
     // mimeType === "text/html"
-    return getHtmlFeature(url, layerInfo.layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, layerInfo.layerId);
+    return getHtmlFeature(url, layerInfo.layerName, gfiTheme, gfiIconPath, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, mimeType);
 }
 
 /**
@@ -113,15 +113,16 @@ export function getXmlFeatures (url, layerName, gfiTheme, gfiIconPath, attribute
  * @param {String} gfiIconPath path to icon used as fallback
  * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
  * @param {Function} callRequestGfi a function (mimeType, url) to call the wms url with
+ * @param {String} [mimeType=""] the mimeType from the layer
  * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
-export function getHtmlFeature (url, layerName, gfiTheme, gfiIconPath, attributesToShow, callRequestGfi) {
+export function getHtmlFeature (url, layerName, gfiTheme, gfiIconPath, attributesToShow, callRequestGfi, mimeType) {
     if (typeof url !== "string" || typeof callRequestGfi !== "function") {
         return [];
     }
     return callRequestGfi("text/html", url).then(document => {
-        if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0].children.length >= 1) {
-            return [createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, null, null, undefined, url)];
+        if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0]?.children.length >= 1) {
+            return [createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, null, null, undefined, {url, mimeType}, null)];
         }
         return [];
     });
@@ -136,7 +137,7 @@ export function getHtmlFeature (url, layerName, gfiTheme, gfiIconPath, attribute
  * @param {?Object} featureProperties an object with the data of the feature as simple key/value pairs
  * @param {Object} [gfiFormat=null] the gfiFormat as defined at the layer
  * @param {String} [id=""] id the id of the feature
- * @param {String} [url=""] the url to call the wms features from
+ * @param {String|Object} [url=""] the url to call the wms features from
  * @param {String} [layerId=""] the ID from the layer
  * @returns {Object} an object{getTitle, getTheme, getIconPath, getAttributesToShow, getProperties, getGfiFormat, getId, getGfiUrl, getLayerId}
  */

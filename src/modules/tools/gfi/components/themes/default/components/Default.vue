@@ -41,6 +41,9 @@ export default {
                 }
             }
             return undefined;
+        },
+        mimeType: function () {
+            return this.feature.getGfiUrl()?.mimeType;
         }
     },
     created () {
@@ -144,11 +147,11 @@ export default {
                     </td>
                 </tr>
             </tbody>
-            <tbody v-else-if="typeof feature.getGfiUrl === 'function' && feature.getGfiUrl() !== ''">
+            <tbody v-else-if="mimeType === 'text/html'">
                 <tr colspan="1">
                     <td>
                         <iframe
-                            :src="feature.getGfiUrl()"
+                            :src="feature.getGfiUrl().url"
                             class="gfi-iFrame"
                         >
                         </iframe>
@@ -173,6 +176,8 @@ export default {
 }
 .gfi-iFrame {
     width: 100%;
+    height: 100%;
+    resize: both;
 }
 .gfi-theme-images {
     height: 100%;

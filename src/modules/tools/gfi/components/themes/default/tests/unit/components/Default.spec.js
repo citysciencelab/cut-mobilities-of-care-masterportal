@@ -33,6 +33,11 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                     },
                     getTheme: function () {
                         return "images";
+                    },
+                    getGfiUrl: () => {
+                        return {
+                            "url": "http", "mimeType": "text/html"
+                        };
                     }
                 }
             },
@@ -117,7 +122,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                                 imageLink: "abc"
                             }
                         };
-                    }
+                    },
+                    getGfiUrl: () => ""
                 }
             },
             localVue,
@@ -146,7 +152,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                                 imageLink: ["abc", "xyz"]
                             }
                         };
-                    }
+                    },
+                    getGfiUrl: () => ""
                 }
             },
             localVue,

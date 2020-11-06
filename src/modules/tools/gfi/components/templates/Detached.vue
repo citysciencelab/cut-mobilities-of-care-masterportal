@@ -84,7 +84,7 @@ export default {
         }
     },
     created: function () {
-        if (typeof this.feature.getGfiUrl === "function" && this.feature.getGfiUrl() !== "") {
+        if (this.feature.getGfiUrl()?.mimeType === "text/html") {
             this.isContentHtml = true;
         }
         this.$on("hidemarker", () => {
@@ -105,9 +105,6 @@ export default {
             });
         });
 
-        if (this.isContentHtml) {
-            this.makeResizable();
-        }
         this.setMarker();
     },
     beforeDestroy: function () {
@@ -159,21 +156,6 @@ export default {
                 // TODO replace trigger when MapMarker is migrated
                 Radio.trigger("MapMarker", "showMarker", this.clickCoord);
             }
-        },
-
-        /**
-         * Makes this Component resizable
-         * @returns {Void}  -
-         */
-        makeResizable () {
-            $(".gfi-detached").resizable({
-                minHeight: 440,
-                resize: function (e, ui) {
-                    $(".gfi-detached").find("iframe").css("height", ui.size.height - 60);
-                }
-            });
-            $(".gfi-detached").css("maxWidth", "inherit");
-            $(".gfi-detached").css("minWidth", "45vw");
         }
     }
 };

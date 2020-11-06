@@ -15,7 +15,8 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
-                    getTitle: () => "Hallo"
+                    getTitle: () => "Hallo",
+                    getGfiUrl: () => ""
                 }
             },
             computed: {
@@ -42,7 +43,8 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
-                    getTitle: () => "Hallo"
+                    getTitle: () => "Hallo",
+                    getGfiUrl: () => ""
                 }
             },
             computed: {
@@ -69,7 +71,8 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
-                    getTitle: () => "Hallo"
+                    getTitle: () => "Hallo",
+                    getGfiUrl: () => ""
                 }
             },
             computed: {
@@ -97,7 +100,8 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
-                        getTitle: () => "Hallo"
+                        getTitle: () => "Hallo",
+                        getGfiUrl: () => ""
                     }
                 },
                 computed: {
@@ -127,7 +131,8 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
-                        getTitle: () => "Hallo"
+                        getTitle: () => "Hallo",
+                        getGfiUrl: () => ""
                     }
                 },
                 computed: {
@@ -157,7 +162,8 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
-                        getTitle: () => "Hallo"
+                        getTitle: () => "Hallo",
+                        getGfiUrl: () => ""
                     }
                 },
                 computed: {
@@ -189,7 +195,11 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 feature: {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
-                    getGfiUrl: () => "http"
+                    getGfiUrl: () => {
+                        return {
+                            "url": "http", "mimeType": "text/html"
+                        };
+                    }
                 }
             },
             computed: {
