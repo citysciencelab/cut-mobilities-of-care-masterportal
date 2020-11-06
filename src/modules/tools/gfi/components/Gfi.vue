@@ -371,6 +371,7 @@ export default {
         color: #646262;
         font-size: 22px;
          .pager {
+            background-color: @secondary;
             padding: 6px;
             cursor: pointer;
             width: 50%;
