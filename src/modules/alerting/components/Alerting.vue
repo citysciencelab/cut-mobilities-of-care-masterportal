@@ -27,6 +27,16 @@ export default {
             "sortedAlerts"
         ]),
 
+        currentUrl: () => {
+            // remove hashes
+            let urlToCheck = document.URL.replace(/#.*$/, "");
+
+            // then remove get params and make it end with slash
+            urlToCheck = urlToCheck.replace(/\/*\?.*$/, "/");
+
+            return urlToCheck;            
+        },
+
         console: () => console
     },
 
@@ -83,43 +93,39 @@ export default {
             "setDisplayedAlerts"
         ]),
 
+        axiosCallback: function (response) {
+            // handle success
+            const data = response.data,
+                collectedAlerts = [];
+
+            let collectedAlertIds = [];
+
+            if (data.alerts === undefined || typeof data.alerts !== "object") {
+                console.warn("No alerts defined.");
+                return;
+            }
+
+            if (Array.isArray(data.globalAlerts)) {
+                collectedAlertIds = [...collectedAlertIds, ...data.globalAlerts];
+            }
+
+            if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object") {
+                collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[this.currentUrl]];
+            }
+
+            for (const alertId in data.alerts) {
+                if (collectedAlertIds.includes(alertId)) {
+                    collectedAlerts.push(data.alerts[alertId]);
+                }
+            }
+
+            collectedAlerts.forEach(singleAlert => {
+                this.addSingleAlert(singleAlert);
+            });            
+        },
+
         fetchBroadcast: function (fetchBroadcastUrl) {
-            // remove hashes
-            let urlToCheck = document.URL.replace(/#.*$/, "");
-
-            // then remove get params and make it end with slash
-            urlToCheck = urlToCheck.replace(/\/*\?.*$/, "/");
-
-            axios.get(fetchBroadcastUrl).then(response => {
-                // handle success
-                const data = response.data,
-                    collectedAlerts = [];
-
-                let collectedAlertIds = [];
-
-                if (data.alerts === undefined || typeof data.alerts !== "object") {
-                    console.warn("No alerts defined.");
-                    return;
-                }
-
-                if (Array.isArray(data.globalAlerts)) {
-                    collectedAlertIds = [...collectedAlertIds, ...data.globalAlerts];
-                }
-
-                if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object") {
-                    collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[urlToCheck]];
-                }
-
-                for (const alertId in data.alerts) {
-                    if (collectedAlertIds.includes(alertId)) {
-                        collectedAlerts.push(data.alerts[alertId]);
-                    }
-                }
-
-                collectedAlerts.forEach(singleAlert => {
-                    this.addSingleAlert(singleAlert);
-                });
-            }).catch(function (error) {
+            axios.get(fetchBroadcastUrl).then(this.axiosCallback).catch(function (error) {
                 console.warn(error);
             });
         },

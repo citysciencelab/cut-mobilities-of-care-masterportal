@@ -101,6 +101,7 @@
     "mocha-loader": "^2.0.0",
     "mocha-webpack": "^2.0.0-beta.0",
     "mochapack": "^2.0.0",
+    "mock-local-storage": "^1.1.15",
     "node-fetch": "^2.6.1",
     "npm-run-all": "^4.1.5",
     "null-loader": "^4.0.0",
@@ -129,5 +130,9 @@
     "hooks": {
       "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
     }
+  },
+  "jest": {
+    "verbose": true,
+    "testURL": "localhost"
   }
 }
