@@ -1299,15 +1299,6 @@
 /** -------------------- UTIL -------------------- */
 
 /**
- * @event Core#RadioRequestUtilChangeTimeZone
- * @description Changes the timezone for the given historical data.
- * @param {Object[]} historicalData data from feature.
- * @param {Object[]} utc timezone.
- * @returns {Object[]} data with changed timezone.
- * @example Radio.request("Util", "changeTimeZone", historicalData, utc);
- */
-
-/**
  * @event Core#RadioTriggerUtilIsViewMobileChanged
  * @description is triggered by Util if mobil is changed
  * @param {boolean} isViewMobile flag if current view is in mobile mode

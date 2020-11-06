@@ -1,7 +1,6 @@
 import {addProjection} from "ol/proj.js";
 import Projection from "ol/proj/Projection.js";
 import {WFS} from "ol/format.js";
-import * as moment from "moment";
 
 const fs = require("fs"),
 
@@ -50,13 +49,6 @@ const fs = require("fs"),
         },
         parseXML: function (xmlStr) {
             return new window.DOMParser().parseFromString(xmlStr, "text/xml");
-        },
-        changeTimeZone: function (date, format, utc) {
-            const utcSubInMinutes = parseInt(utc.substring(1, 2), 10) * 60,
-                timezoneOffsetInMinutes = new Date().getTimezoneOffset() + utcSubInMinutes;
-
-            return moment(date).isDST() ? moment(date).add(timezoneOffsetInMinutes + 60, "m").format(format) :
-                moment(date).add(timezoneOffsetInMinutes, "m").format(format);
         }
     });
 
