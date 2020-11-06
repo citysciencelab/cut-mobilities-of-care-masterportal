@@ -183,7 +183,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     getDrawLayerInfo: function (layer, extent) {
         const featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
             features = Radio.request("Util", "sortBy", featuresInExtent, function (feature) {
-                return feature.getStyle().getZIndex();
+                if (feature.getStyle() && typeof feature.getStyle === "function" && typeof feature.getStyle().getZIndex === "function") {
+                    return feature.getStyle().getZIndex();
+                }
+                return 0;
+
             });
 
         if (features.length > 0) {
@@ -387,7 +391,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (style.getImage() instanceof CircleStyle) {
             return this.buildPointStyleCircle(style.getImage());
         }
-        else if (style.getImage() instanceof Icon) {
+        else if (style.getImage() instanceof Icon && style.getImage().getScale() > 0) {
             return this.buildPointStyleIcon(style.getImage(), layer);
         }
         return this.buildTextStyle(style.getText());
@@ -462,11 +466,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - Text Style for mapfish print.
      */
     buildTextStyle: function (style) {
-        // There are different kinds of font definitions: One sets size and font and an other sets only the name. Both are used in masterportal.
-        const isFontSizeInFont = style.getFont().split(" ").length === 2 && style.getFont().split(" ")[0].endsWith("px"),
+        // use openlayers kml default font, if not set
+        const font = style.getFont() ? style.getFont() : "bold 16px Helvetica",
+            isFontSizeInFont = font.split(" ").length === 2 && font.split(" ")[0].endsWith("px"),
             textScale = style.getScale() ? style.getScale() : 1,
-            fontSize = isFontSizeInFont ? style.getFont().split(" ")[0] : 10 * textScale,
-            fontFamily = isFontSizeInFont ? style.getFont().split(" ")[1] : style.getFont(),
+            fontSize = isFontSizeInFont ? font.split(" ")[0] : 10 * textScale,
+            fontFamily = isFontSizeInFont ? font.split(" ")[1] : font,
             fontColor = style.getFill().getColor();
 
         return {
@@ -697,7 +702,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         let styles;
 
         if (feature.getStyleFunction() !== undefined) {
-            styles = feature.getStyleFunction().call(feature);
+            try {
+                styles = feature.getStyleFunction().call(feature);
+            }
+            catch (e) {
+                styles = feature.getStyleFunction().call(this, feature);
+            }
         }
         else {
             styles = layer.getStyleFunction().call(layer, feature);
