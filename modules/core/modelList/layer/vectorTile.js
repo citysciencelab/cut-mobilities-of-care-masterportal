@@ -1,7 +1,9 @@
 import MVT from "ol/format/MVT";
 import OpenLayersVectorTileLayer from "ol/layer/VectorTile";
 import OpenLayersVectorTileSource from "ol/source/VectorTile";
+import {createXYZ} from "ol/tilegrid";
 import stylefunction from "ol-mapbox-style/dist/stylefunction";
+import store from "../../../../src/app-store/index";
 
 import Layer from "./model";
 
@@ -36,10 +38,22 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @return {void}
      */
     createLayerSource: function () {
-        this.setLayerSource(new OpenLayersVectorTileSource({
-            format: new MVT(),
-            url: Radio.request("Util", "getProxyURL", this.get("url"))
-        }));
+        const params = {
+                projection: this.get("epsg") ? this.get("epsg") : store.state.Map.projection.getCode(),
+                tilePixelRatio: 1,
+                format: new MVT(),
+                url: Radio.request("Util", "getProxyURL", this.get("url"))
+            },
+            tileGrid = this.get("tileGridExtent") ? createXYZ({
+                extent: this.get("tileGridExtent"),
+                maxResolution: store.state.Map.maxResolution,
+                maxZoom: store.state.Map.maxZoomLevel
+            }) : null;
+
+        if (tileGrid) {
+            params.tileGrid = tileGrid;
+        }
+        this.setLayerSource(new OpenLayersVectorTileSource(params));
     },
 
     /**
