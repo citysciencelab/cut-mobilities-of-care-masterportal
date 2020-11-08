@@ -267,7 +267,7 @@ async function GfiTests ({builder, url, resolution, capability}) {
 
                 // make element reach lower bounds
                 await driver.actions({bridge: true})
-                    .dragAndDrop(header, {x: -50, y: 250})
+                    .dragAndDrop(header, {x: -50, y: 350})
                     .perform();
                 const {y} = await header.getRect(); // eslint-disable-line one-var
 
