@@ -332,7 +332,7 @@ zoomToGeometry: {
 |----|-------------|---|-------|------------|
 |epsg|nein|Integer|4326|EPSG-Code für die Projektion der übergebenen Koordinaten der Feature.|
 |**[layers](#markdown-header-featureviaurllayers)**|ja|Object[]||Array an Layerkonfigurationen für die übergebenen Feature.|
-|zoomTo||String||Id des **[layers](#markdown-header-featureviaurllayers)**, zu welchem beim Start des Masterportals gezoomed werden soll. Beim Nichtangabe wird der normale Startpunkt der Karte verwendet.|
+|zoomTo||String oder Array||Id des **[layers](#markdown-header-featureviaurllayers)** oder Array von möglichen Layern, zu welchen beim Start des Masterportals gezoomed werden soll. Beim Nichtangabe wird der normale Startpunkt der Karte verwendet.|
 
 **Beispiel:**
 ```

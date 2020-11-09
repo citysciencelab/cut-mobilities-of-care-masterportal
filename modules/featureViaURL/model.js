@@ -146,7 +146,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             }
             this.get("layerIds").push(layerId);
             Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
-            if (typeof zoomTo !== "undefined" && zoomTo === layerId) {
+            if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {
                 Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(layerId), layerId);
             }
         });
