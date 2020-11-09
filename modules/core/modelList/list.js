@@ -14,7 +14,6 @@ import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
-// import Legend from "../../legend/model";
 import Filter from "../../tools/filter/model";
 /**
  * PrintV2
@@ -50,7 +49,6 @@ import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
 import StyleVT from "../../tools/styleVT/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
-// import GFI from "../../tools/gfi/model";
 import Viewpoint from "./viewPoint/model";
 import ColorScale from "../../tools/colorScale/model";
 import VirtualCityModel from "../../tools/virtualCity/model";
@@ -254,9 +252,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
                 }
                 return new Print(attrs, options);
             }
-            // else if (attrs.id === "gfi") {
-            // return new GFI(Object.assign(attrs, Config.hasOwnProperty("gfiWindow") ? {desktopViewType: Config.gfiWindow} : {}), options);
-            // }
             else if (attrs.id === "parcelSearch") {
                 return new ParcelSearch(attrs, options);
             }
@@ -269,9 +264,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "compareFeatures") {
                 return new CompareFeatures(attrs, options);
             }
-            // else if (attrs.id === "legend") {
-            //     return new Legend(attrs, options);
-            // }
             else if (attrs.id === "filter") {
                 return new Filter(attrs, options);
             }

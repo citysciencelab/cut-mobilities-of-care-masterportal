@@ -14,7 +14,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {String} params.resolution formatted as "AxB" with A, B integers
  * @param {String} params.browsername the name of the broser (to use chrome put "chrome" into the name)
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
- * @returns {Void}  -
+ * @returns {void}
  */
 function TotalViewTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = (isMaster(url) || isCustom(url)) && // only active here

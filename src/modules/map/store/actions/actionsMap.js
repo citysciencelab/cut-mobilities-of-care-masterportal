@@ -11,7 +11,7 @@ let unsubscribes = [],
  * TODO remove this once all layers are added/removed with an action (~= replace map.js with this module)
  * @param {Function} commit commit function
  * @param {module:ol/Map} map ol map
- * @returns {Void}  -
+ * @returns {void}
  */
 function loopLayerLoader (commit, map) {
     clearInterval(loopId);
@@ -30,7 +30,7 @@ const actions = {
      * are discarded and new ones are registered.
      * @param {Object} state state object
      * @param {module:ol/Map} map map object
-     * @returns {Void}  -
+     * @returns {void}
      */
     setMap ({commit, dispatch}, {map}) {
         // discard old listeners
@@ -117,7 +117,7 @@ const actions = {
      * @param {Function} store.dispatch - function to dipatch a action
      * @param {Object} store.rootGetters - the store getters
      * @param {MapBrowserEvent} evt - Click event in 2D, fake click event in 3D
-     * @returns {Void}  -
+     * @returns {void}
      */
     updateClick ({getters, commit, dispatch, rootGetters}, evt) {
         const {mapMode} = getters;
@@ -146,7 +146,7 @@ const actions = {
      * @param {Object} store context
      * @param {Object} store.getters - the map getters
      * @param {Function} store.commit - function to commit a mutation
-     * @returns {Void}  -
+     * @returns {void}
      */
     async collectGfiFeatures ({getters, commit}) {
         const {clickCoord, visibleWmsLayerListAtResolution, resolution, projection, gfiFeaturesAtPixel} = getters,
@@ -183,7 +183,7 @@ const actions = {
      * Sets a new zoom level to map and store. All other fields will be updated onmoveend.
      * @param {Object} state state object
      * @param {Number} zoomLevel zoom level
-     * @returns {Void}  -
+     * @returns {void}
      */
     setZoomLevel ({getters, commit}, zoomLevel) {
         const {maxZoomLevel, minZoomLevel} = getters;
@@ -203,7 +203,7 @@ const actions = {
      * Turns a visible layer invisible and the other way around.
      * @param {Object} state state object
      * @param {String} layerId id of the layer to toggle visibility of
-     * @returns {Void}  -
+     * @returns {void}
      */
     toggleLayerVisibility ({getters, commit}, {layerId}) {
         const layer = getters.layers[layerId];
@@ -224,7 +224,7 @@ const actions = {
      * @param {Object} payload parameter object
      * @param {String} payload.layerId id of layer to change opacity of
      * @param {Number} payload.value opacity value in range (0, 1)
-     * @returns {Void}  -
+     * @returns {void}
      */
     setLayerOpacity ({getters, commit}, {layerId, value}) {
         const layer = getters.layers[layerId];
@@ -240,7 +240,7 @@ const actions = {
     /**
      * Sets center and resolution to initial values.
      * @param {Object} actionParams first action parameter
-     * @returns {Void}  -
+     * @returns {void}
      */
     resetView ({state}) {
         const {initialCenter, initialResolution, map} = state,
@@ -256,7 +256,7 @@ const actions = {
      * Sets the resolution by the given index of available resolutions.
      * NOTE: is used by scaleSwitcher tutorial.
      * @param {Number} index of the resolution
-     * @returns {Void}  -
+     * @returns {void}
      */
     setResolutionByIndex ({state}, index) {
         const {map} = state,
@@ -268,7 +268,7 @@ const actions = {
      * Adds a listener to maps pointermove and calls callback-funktion
      * @param {Object} state state object
      * @param {Function} callback  to be called on pointermove
-     * @returns {Void}  -
+     * @returns {void}
      */
     addPointerMoveHandler ({state}, callback) {
         const {map} = state;
@@ -282,7 +282,7 @@ const actions = {
      * Removes a listener from maps pointermove
      * @param {Object} state state object
      * @param {Function} callback  to be called on pointermove
-     * @returns {Void}  -
+     * @returns {void}
      */
     removePointerMoveHandler ({state}, callback) {
         const {map} = state;
@@ -292,7 +292,7 @@ const actions = {
     /**
      * Adds an interaction to the map.
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be added to map.
-     * @returns {Void}  -
+     * @returns {void}
      */
     addInteraction ({state}, interaction) {
         const {map} = state;
@@ -302,7 +302,7 @@ const actions = {
     /**
      * Removes an interaction from the map.
      * @param {module:ol/interaction/Interaction} interaction - Interaction to be removed from map.
-     * @returns {Void}  -
+     * @returns {void}
      */
     removeInteraction ({state}, interaction) {
         const {map} = state;

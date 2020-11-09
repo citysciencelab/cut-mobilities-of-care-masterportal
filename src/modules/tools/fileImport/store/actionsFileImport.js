@@ -193,7 +193,7 @@ export default {
     /**
      * Adds the name of a successfully imported file to list of imported filenames
      * @param {String} fileName name of the file
-     * @returns {Void}  -
+     * @returns {void}
      */
     addImportedFilename: ({state, commit}, fileName) => {
         const fileNames = [... state.importedFileNames];

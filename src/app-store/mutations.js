@@ -31,7 +31,7 @@ export default {
      * Sets config.json.
      * @param {Object} state store state
      * @param {Object} config config.json
-     * @returns {Void}  -
+     * @returns {void}
      */
     setConfigJson (state, config) {
         state.configJson = actions.checkWhereDeprecated(deprecatedParamsConfigJson, config);
@@ -40,7 +40,7 @@ export default {
      * Sets config.js.
      * @param {Object} state store state
      * @param {Object} config config.js
-     * @returns {Void}  -
+     * @returns {void}
      */
     setConfigJs (state, config) {
         state.configJs = actions.checkWhereDeprecated(deprecatedParamsConfigJs, config);
@@ -49,7 +49,7 @@ export default {
      * Sets mobile flag.
      * @param {Object} state store state
      * @param {Boolean} mobile whether browser resolution indicates mobile device
-     * @returns {Void}  -
+     * @returns {void}
      */
     setMobile (state, mobile) {
         state.mobile = mobile;
@@ -58,7 +58,7 @@ export default {
      * Sets i18NextInitialized flag. Is done after languages for addons are loaded.
      * @param {Object} state store state
      * @param {Boolean} isInitialized whether i18Next is initialized
-     * @returns {Void}  -
+     * @returns {void}
      */
     setI18Nextinitialized (state, isInitialized) {
         state.i18NextInitialized = isInitialized;

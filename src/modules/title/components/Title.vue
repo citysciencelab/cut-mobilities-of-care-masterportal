@@ -33,7 +33,7 @@ export default {
         ...mapActions("Title", ["initialize"]),
         /**
         * Depending on the available space, the titletext and titlelogo is rendered.
-        * @returns {Void}  -
+        * @returns {void}
         */
         renderDependingOnSpace: function () {
             let navMenuWidth,

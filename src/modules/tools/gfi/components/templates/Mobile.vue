@@ -53,7 +53,7 @@ export default {
         /**
          * it will show this mobile component if it is switched from attached theme.
          * the method is to fore to insert this component into parent gfi element.
-         * @returns {Void}  -
+         * @returns {void}
          */
         showMobileComponent: function () {
             if (!document.getElementsByClassName("modal-dialog").length && document.getElementsByClassName("gfi").length) {

@@ -13,7 +13,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {String} params.resolution formatted as "AxB" with A, B integers
  * @param {String} params.browsername the name of the broser (to use chrome put "chrome" into the name)
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
- * @returns {Void}  -
+ * @returns {void}
  */
 async function PanTests ({builder, url, resolution, browsername, capability}) {
     // canvas panning is currently broken in Chrome, see https://github.com/SeleniumHQ/selenium/issues/6332

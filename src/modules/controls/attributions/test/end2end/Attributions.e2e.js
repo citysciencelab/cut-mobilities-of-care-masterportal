@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {String} params.url the url to test
  * @param {String} params.resolution formatted as "AxB" with A, B integers
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
- * @returns {Void}  -
+ * @returns {void}
  */
 function AttributionsTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isCustom(url) || isMaster(url); // attributions only active in custom/master

@@ -42,7 +42,7 @@ export default {
          * Checks the map mode to note whether the zoom control is supposed to be
          * visible, which is only the case in 2D mode. In all other modes, more
          * complex navigation elements provide this element's function.
-         * @returns {Void}  -
+         * @returns {void}
          */
         checkModeVisibility () {
             this.visibleInMapMode = Radio.request("Map", "getMapMode") === "2D";

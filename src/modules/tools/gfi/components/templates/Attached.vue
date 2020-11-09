@@ -60,7 +60,7 @@ export default {
 
         /**
          * it will create an overlay for the attached theme
-         * @returns {Void}  -
+         * @returns {void}
          */
         createOverlay () {
             const gfipopup = document.createElement("DIV");
@@ -75,7 +75,7 @@ export default {
 
         /**
          * it will create the popup window as attached theme
-         * @returns {Void}  -
+         * @returns {void}
          */
         createPopover () {
             $(this.overlay.getElement()).popover({
@@ -97,7 +97,7 @@ export default {
 
         /**
          * it will remove the popup window as attached theme and make the standard gfi theme visible again
-         * @returns {Void}  -
+         * @returns {void}
          */
         removePopover () {
             if (this.overlay.getElement()) {

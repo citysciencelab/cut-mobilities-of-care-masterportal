@@ -56,7 +56,7 @@ export default {
         /**
          * Re-fetches all currently active layer attributions. Preserves attributions with type unequal to "layer".
          * @param {Object} params vuex action parameter object
-         * @returns {Void}  -
+         * @returns {void}
          */
         updateAttributions ({commit, getters}) {
             const nonLayerAttributions = getters.attributionList.filter(({type}) => type !== "layer");
@@ -70,7 +70,7 @@ export default {
          * Adds an attribution if no samey object is already present.
          * @param {Object} context action context
          * @param {AttributionListItem} item to be added
-         * @returns {Void}  -
+         * @returns {void}
          */
         addAttribution ({state, commit}, item) {
             const {attributionList} = state;
@@ -86,7 +86,7 @@ export default {
          * Remove item from attributionList if name, text, and type are equal.
          * @param {Object} context action context
          * @param {AttributionListItem} item to be removed
-         * @returns {Void}  -
+         * @returns {void}
          */
         removeAttribution ({state, commit}, item) {
             commit("setAttributions", state.attributionList.filter(
@@ -101,7 +101,7 @@ export default {
          * If list was cleared, attributions flyout is also closed.
          * @param {Object} state previous state
          * @param {AttributionListItem[]} attributionList new list
-         * @returns {Void}  -
+         * @returns {void}
          */
         setAttributions (state, attributionList) {
             if (attributionList.length > state.attributionList.length) {
@@ -116,7 +116,7 @@ export default {
          * Used to open/close the attributions flyout.
          * @param {Object} state previous state
          * @param {Boolean} open whether the flyout should be rendered
-         * @returns {Void}  -
+         * @returns {void}
          */
         setOpen (state, open) {
             state.open = open;

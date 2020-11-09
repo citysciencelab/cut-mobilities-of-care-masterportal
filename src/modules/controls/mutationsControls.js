@@ -7,7 +7,7 @@ export default {
      * @param {Object} control Vue Component
      * @param {Boolean} [hiddenMobile=false] whether component is visible in mobile resolution
      * @param {Boolean} [bottomControlsFlag=false] whether component is to be shown at lower end of the page
-     * @returns {Void}  -
+     * @returns {void}
      */
     registerModule (state, name, control, hiddenMobile = false, bottomControlsFlag = false) {
         state.componentMap = {
@@ -31,7 +31,7 @@ export default {
      * Removes a control element.
      * @param {Object} state current state
      * @param {String} name name of control to remove from state
-     * @returns {Void}  -
+     * @returns {void}
      */
     unregisterModule (state, name) {
         const nextMap = {...state.componentMap};

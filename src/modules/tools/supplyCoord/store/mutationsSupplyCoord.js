@@ -13,7 +13,7 @@ const mutations = {
      * Set currect projection to one in the list of projections.
      * @param {Object} state the state of supplyCoord-module
      * @param {Object[]} [projections=[]] list of available projections
-     * @returns {Void}  -
+     * @returns {void}
      */
     setProjections: (state, projections = []) => {
         const found = projections.filter(projection => projection.name === state.currentProjectionName);

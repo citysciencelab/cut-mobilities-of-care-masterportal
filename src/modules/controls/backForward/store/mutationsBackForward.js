@@ -1,8 +1,9 @@
 /**
+ * updates map and state as side-effect
  * @param {Object} state state object
  * @param {module:ol/Map} map openlayers map object
  * @param {Number} diff indices to move by
- * @returns {Void}  updates map and state as side-effect
+ * @returns {void}
  */
 function changeActiveMemory (state, map, diff) {
     const {memory, position} = state,
@@ -30,7 +31,7 @@ export default {
      * When memorizing while not on last position, following memories are discarded.
      * @param {Object} state module state
      * @param {module:ol/Map} map ol map object
-     * @returns {Void}  -
+     * @returns {void}
      */
     memorize (state, map) {
         const view = map.getView(),
@@ -64,7 +65,7 @@ export default {
      * Changes view and state to next memory.
      * @param {Object} state module state
      * @param {module:ol/Map} map ol map object
-     * @returns {Void}  -
+     * @returns {void}
      */
     forward (state, map) {
         changeActiveMemory(state, map, +1);
@@ -73,7 +74,7 @@ export default {
      * Changes view and state to previous memory.
      * @param {Object} state module state
      * @param {module:ol/Map} map ol map object
-     * @returns {Void}  -
+     * @returns {void}
      */
     backward (state, map) {
         changeActiveMemory(state, map, -1);

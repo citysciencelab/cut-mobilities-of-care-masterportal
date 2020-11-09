@@ -6,7 +6,7 @@ export default {
      * Remembers the projection and shows mapmarker at the given position.
      * @param {Event} event - pointerdown-event, to get the position from
      * @fires MapMarker#RadioTriggerMapMarkerShowMarker
-     * @returns {Void}  -
+     * @returns {void}
      */
     positionClicked: function ({commit, dispatch, state}, event) {
         const updatePosition = isMobile() ? true : state.updatePosition,
@@ -21,7 +21,7 @@ export default {
     },
     /**
      * Sets the current projection and its name to state.
-     * @returns {Void}  -
+     * @returns {void}
      */
     newProjectionSelected ({commit, state, getters}) {
         const targetProjectionName = state.currentSelection,
@@ -32,7 +32,7 @@ export default {
     },
     /**
      * Delegates the calculation and transformation of the position according to the projection
-     * @returns {Void}  -
+     * @returns {void}
      */
     changedPosition ({dispatch, state, rootState, getters}) {
         const targetProjectionName = state.currentSelection,
@@ -46,7 +46,7 @@ export default {
      * Calculates the clicked position and writes the coordinate-values into the textfields.
      * @param {Number[]} position transformed coordinates
      * @param {Object} targetProjection selected projection
-     * @returns {Void}  -
+     * @returns {void}
      */
     adjustPosition ({commit}, {position, targetProjection}) {
         let coord, easting, northing;
@@ -71,7 +71,7 @@ export default {
     /**
      * Sets the coordinates from the maps pointermove-event.
      * @param {Event} event pointermove-event, to get the position from
-     * @returns {Void}  -
+     * @returns {void}
      */
     setCoordinates: function ({state, commit, dispatch}, event) {
         const position = event.coordinate;
@@ -84,7 +84,7 @@ export default {
     /**
      * Checks the position for update and shows the marker at updated position
      * @param {Number[]} position contains coordinates of mouse position
-     * @returns {Void}  -
+     * @returns {void}
      */
     checkPosition ({state, commit}, position) {
         if (state.updatePosition) {

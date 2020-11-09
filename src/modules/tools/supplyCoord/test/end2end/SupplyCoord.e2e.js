@@ -17,7 +17,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {String} params.resolution formatted as "AxB" with A, B integers
  * @param {String} param.config to switch the config between namedProjectionsBasic, -Master -Default or -Custom ("basic", "master", "default", "custom")
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
- * @returns {Void}  -
+ * @returns {void}
  */
 async function CoordTests ({builder, url, resolution, config, capability}) {
     describe("SupplyCoord", function () {
@@ -45,7 +45,7 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
          * @param {Object} params parameter object
          * @param {Boolean} [params.clickAfterFirstMove=false] if true, will click after first mouse move
          * @param {Boolean} [params.expectUnchanged=false] if true, will expect values for east, north, and marker style to be unchanges
-         * @returns {Void}  -
+         * @returns {void}
          */
         async function moveAndClickAndCheck ({clickAfterFirstMove = false, expectUnchanged = false}) {
             let firstMove = driver.actions({bridge: true})

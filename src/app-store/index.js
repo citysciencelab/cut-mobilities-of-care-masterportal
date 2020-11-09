@@ -47,7 +47,7 @@ export default store;
  * Debounce function
  * @param {Function} callback - The callback form debounce function.
  * @param {Number} wait - Wait before the callback function is called.
- * @returns {Void}  -
+ * @returns {void}
  */
 function debounce (callback, wait) {
     let timeout;

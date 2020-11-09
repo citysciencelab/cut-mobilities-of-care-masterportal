@@ -30,7 +30,7 @@ export default {
         /**
          * Sets the active property of the state to the given value.
          * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
-         * @returns {Void}  -
+         * @returns {void}
          */
         active (value) {
             // TODO replace trigger when MapMarker is migrated
@@ -72,7 +72,7 @@ export default {
          * Function to initiate the copying of the coordinates from the inputfields.
          * @fires Util#RadioTriggerUtilCopyToClipboard
          * @param {Event} evt Click Event
-         * @returns {Void}  -
+         * @returns {void}
          */
         copyToClipboard ({target}) {
             target.select();
@@ -83,7 +83,7 @@ export default {
         /**
          * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
          * @param {Event} event changed selection event
-         * @returns {Void}  -
+         * @returns {void}
          */
         selectionChanged (event) {
             this.setCurrentSelection(event.target.value);
@@ -92,7 +92,7 @@ export default {
         },
         /**
          * Stores the projections and adds interaction pointermove to map.
-         * @returns {Void}  -
+         * @returns {void}
          */
         createInteraction () {
             const pr = getProjections();
@@ -117,7 +117,7 @@ export default {
         },
         /**
          * Removes the interaction from map.
-         * @returns {Void}  -
+         * @returns {void}
          */
         removeInteraction () {
             this.removeInteractionFromMap(this.selectPointerMove);
@@ -125,7 +125,7 @@ export default {
         },
         /**
          * Closes this tool window by setting active to false
-         * @returns {Void}  -
+         * @returns {void}
          */
         close () {
             this.setActive(false);

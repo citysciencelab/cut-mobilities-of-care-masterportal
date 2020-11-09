@@ -26,7 +26,7 @@ function getIdCounter () {
 /**
  * increments the idCounter
  * @post the static idCounter (Util.idCounter) is incremented by 1
- * @returns {Void}  -
+ * @returns {void}
  */
 function incIdCounter () {
     state.idCounter++;

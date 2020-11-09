@@ -82,7 +82,7 @@ export default {
         /**
          * Whenever active changes and it's false, reset function will call
          * @param {Boolean} newValue - is gfi active
-         * @returns {Void}  -
+         * @returns {void}
          */
         active: function (newValue) {
             if (!newValue) {
@@ -92,7 +92,7 @@ export default {
         /**
          * Whenever feature changes, put it into the store
          * @param {?Object} newValue - the current feature
-         * @returns {Void}  -
+         * @returns {void}
          */
         feature: function (newValue) {
             this.setCurrentFeature(newValue);
@@ -100,7 +100,7 @@ export default {
         /**
          * Whenever mapSize changes, component key is changed
          * to force re-render detached component (key-changing).
-         * @returns {Void}  -
+         * @returns {void}
          */
         mapSize: function () {
             if (this.currentViewType === "Detached") {
@@ -109,7 +109,7 @@ export default {
         },
         /**
          * Whenever gfiFeatures changes, set pagerIndex to zero.
-         * @returns {Void} -
+         * @returns {void}
          */
         gfiFeatures: function () {
             this.pagerIndex = 0;
@@ -124,14 +124,14 @@ export default {
         /**
          * Reset means to set the gfiFeatures to null.
          * This closes the gfi window/modal/popover.
-         * @returns {Void}  -
+         * @returns {void}
          */
         reset: function () {
             this.setGfiFeatures(null);
         },
         /**
          * Increases the index for the pagination.
-         * @returns {Void}  -
+         * @returns {void}
          */
         increasePagerIndex: function () {
             if (this.pagerIndex < this.gfiFeatures.length - 1) {
@@ -140,7 +140,7 @@ export default {
         },
         /**
          * Decreases the index for the pagination.
-         * @returns {Void}  -
+         * @returns {void}
          */
         decreasePagerIndex: function () {
             if (this.pagerIndex > 0) {

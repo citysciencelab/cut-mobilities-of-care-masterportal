@@ -12,7 +12,7 @@ import MultiPolygon from "ol/geom/MultiPolygon.js";
  *
  * @param {Object} contect actions context object.
  * @param {String} cursor If a cursor has been added through the RemoteInterface, it gets removed.
- * @returns {Void}  -
+ * @returns {void}
  */
 function cancelDrawWithoutGUI ({commit, dispatch}, cursor) {
     commit("setWithoutGUI", true);
@@ -153,7 +153,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
  *
  * @param {Object} context actions context object.
  * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
- * @returns {Void}  -
+ * @returns {void}
  */
 function downloadViaRemoteInterface ({dispatch}, geomType) {
     dispatch("downloadFeaturesWithoutGUI", geomType).then(result => {
@@ -170,7 +170,7 @@ function downloadViaRemoteInterface ({dispatch}, geomType) {
  * Used in the RemoteInterface.
  *
  * @param {Object} context actions context object.
- * @returns {Void}  -
+ * @returns {void}
  */
 function editFeaturesWithoutGUI ({dispatch}) {
     dispatch("toggleInteraction", "modify");

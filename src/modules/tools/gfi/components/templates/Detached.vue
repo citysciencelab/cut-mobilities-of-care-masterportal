@@ -146,7 +146,7 @@ export default {
         /**
          * Sets the center of the view on the clickCoord and place the MapMarker on it
          * Set Marker and Center.
-         * @returns {Void}  -
+         * @returns {void}
          */
         setMarker () {
             if (this.showMarker) {

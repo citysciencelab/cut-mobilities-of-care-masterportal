@@ -17,7 +17,7 @@ const initialState = Object.assign({}, stateDraw),
          *
          * @param {Object} context actions context object.
          * @param {module:ol/interaction/Interaction} interaction interaction with the map.
-         * @returns {Void}  -
+         * @returns {void}
          */
         addInteraction ({rootState}, interaction) {
             rootState.Map.map.addInteraction(interaction);
@@ -26,7 +26,7 @@ const initialState = Object.assign({}, stateDraw),
          * Removes all features from the layer.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         clearLayer ({state}) {
             state.layer.getSource().clear();
@@ -90,7 +90,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} payload payload object.
          * @param {Boolean} payload.active Decides whether the draw interations are active or not.
          * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
-         * @returns {Void}  -
+         * @returns {void}
          */
         createDrawInteractionAndAddToMap ({state, commit, dispatch}, {active, maxFeatures}) {
             const drawInteraction = createDrawInteraction(state);
@@ -118,7 +118,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Boolean} payload.doubleCircle Determines if a doubleCircle is supposed to be drawn.
          * @param {String} payload.drawInteraction Either an empty String or "Two" to identify for which drawInteraction this is used.
          * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
-         * @returns {Void}  -
+         * @returns {void}
          */
         createDrawInteractionListener ({state, dispatch}, {doubleCircle, drawInteraction, maxFeatures}) {
             const interaction = state["drawInteraction" + drawInteraction];
@@ -171,7 +171,7 @@ const initialState = Object.assign({}, stateDraw),
          *
          * @param {Object} context actions context object.
          * @param {Boolean} active Decides whether the modify interaction is active or not.
-         * @returns {Void}  -
+         * @returns {void}
          */
         createModifyInteractionAndAddToMap ({state, commit, dispatch}, active) {
             const modifyInteraction = createModifyInteraction(state.layer);
@@ -186,7 +186,7 @@ const initialState = Object.assign({}, stateDraw),
          * NOTE: For text only the position can be changed. This can be done by clicking at highlighted (on-hover) bottom-left corner of the text.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         createModifyInteractionListener ({state, dispatch}) {
             state.modifyInteraction.on("modifyend", event => {
@@ -216,7 +216,7 @@ const initialState = Object.assign({}, stateDraw),
          *
          * @param {Object} context actions context object.
          * @param {Boolean} active Decides whether the select interaction is active or not.
-         * @returns {Void}  -
+         * @returns {void}
          */
         createSelectInteractionAndAddToMap ({state, commit, dispatch}, active) {
             const selectInteraction = createSelectInteraction(state.layer);
@@ -230,7 +230,7 @@ const initialState = Object.assign({}, stateDraw),
          * Listener to select (for deletion) the features through the select interaction.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         createSelectInteractionListener ({state}) {
             state.selectInteraction.on("select", event => {
@@ -245,7 +245,7 @@ const initialState = Object.assign({}, stateDraw),
          * NOTE: This is mainly used with the RemoteInterface because otherwise not all interactions are removed.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         deactivateDrawInteractions ({state, rootState}) {
             rootState.Map.map.getInteractions().forEach(int => {
@@ -264,7 +264,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @param {String} payload.interaction name of the interaction to be manipulated.
          * @param {Boolean} payload.active Value to set the drawInteractions to.
-         * @return {Void}  -
+         * @return {void}
          */
         manipulateInteraction ({state}, {interaction, active}) {
             if (interaction === "draw") {
@@ -290,7 +290,7 @@ const initialState = Object.assign({}, stateDraw),
          * Restores the last deleted element of the feature array of the layer.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         redoLastStep ({state, commit, dispatch}) {
             const redoArray = state.redoArray,
@@ -311,7 +311,7 @@ const initialState = Object.assign({}, stateDraw),
          *
          * @param {Object} context actions context object.
          * @param {ol/interaction/Interaction} interaction interaction with the map
-         * @returns {Void}  -
+         * @returns {void}
          */
         removeInteraction ({rootState}, interaction) {
             rootState.Map.map.removeInteraction(interaction);
@@ -320,7 +320,7 @@ const initialState = Object.assign({}, stateDraw),
          * Resets the Draw Tool.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         resetModule ({state, commit, dispatch, getters}) {
             const color = initialState.color,
@@ -361,7 +361,7 @@ const initialState = Object.assign({}, stateDraw),
          * NOTE: Draw Tool is not hidden.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         startDownloadTool ({state}) {
             const features = state.layer.getSource().getFeatures();
@@ -376,7 +376,7 @@ const initialState = Object.assign({}, stateDraw),
          *
          * @param {Object} context actions context object.
          * @param {String} interaction The interaction to be enabled.
-         * @returns {Void}  -
+         * @returns {void}
          */
         toggleInteraction ({commit, dispatch}, interaction) {
             commit("setCurrentInteraction", interaction);
@@ -400,7 +400,7 @@ const initialState = Object.assign({}, stateDraw),
          * Deletes the last element in the feature array of the layer.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         undoLastStep ({state, dispatch}) {
             const features = state.layer.getSource().getFeatures(),
@@ -429,7 +429,7 @@ const initialState = Object.assign({}, stateDraw),
          * Updates the drawInteractions on the map and creates a new one.
          *
          * @param {Object} context actions context object.
-         * @returns {Void}  -
+         * @returns {void}
          */
         updateDrawInteraction ({state, commit, dispatch}) {
             dispatch("removeInteraction", state.drawInteraction);
@@ -447,7 +447,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} payload payload object.
          * @param {Boolean} payload.remove Remove one feature from the array if true.
          * @param {Object} [payload.feature] feature to be added to the array, if given.
-         * @return {Void}  -
+         * @return {void}
          */
         updateRedoArray: ({state, commit}, {remove, feature}) => {
             const redoArray = state.redoArray;

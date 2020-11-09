@@ -26,7 +26,7 @@ export default {
 
     /**
      * Lifecycle hook: adds a "close"-Listener to close the tool.
-     * @returns {Void}  -
+     * @returns {void}
      */
     created () {
         this.$on("close", this.close);
@@ -37,7 +37,7 @@ export default {
 
         /**
          * Sets active to false.
-         * @returns {Void}  -
+         * @returns {void}
          */
         close () {
             this.setActive(false);

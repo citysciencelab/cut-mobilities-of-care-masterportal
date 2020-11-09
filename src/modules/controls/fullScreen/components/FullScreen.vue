@@ -95,7 +95,7 @@ export default {
         /**
          * Defines the variable "active" depending on whether the fullscreenmode is activated or deactivated.
          * Is necessary to capture the termination of the fullscreenmode via the ESC key and to render the fullscreenbutton correctly (on/off) in the further process.
-         * @returns {Void}  -
+         * @returns {void}
          */
         escapeHandler () {
             this.active = isFullScreen();
@@ -103,7 +103,7 @@ export default {
 
         /**
          * Toggles between fullscreen and normal screen.
-         * @returns {Void}  -
+         * @returns {void}
          */
         toggleFullScreen () {
             // if portal is in an iframe, it can't be set to fullscreen - open new tab for better access

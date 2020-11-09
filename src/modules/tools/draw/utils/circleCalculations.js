@@ -9,7 +9,7 @@ const earthRadius = 6378137;
  * @param {module:ol/coordinate~Coordinate} circleCenter The center of the circle to be calculated.
  * @param {Number} circleDiameter The diameter of the circle to be calculated.
  * @param {module:ol/Map} map Map object.
- * @returns {Void}  -
+ * @returns {void}
  */
 function calculateCircle (event, circleCenter, circleDiameter, map) {
     const resultCoordinates = [

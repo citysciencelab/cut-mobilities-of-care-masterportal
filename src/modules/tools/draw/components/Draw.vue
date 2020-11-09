@@ -41,7 +41,7 @@ export default {
         /**
           * Starts the action for processes, if the tool is be activated (active === true).
           * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
-          * @returns {Void}  -
+          * @returns {void}
          */
         active (value) {
             if (value) {
