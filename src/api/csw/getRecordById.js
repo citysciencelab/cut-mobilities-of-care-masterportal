@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as moment from "moment";
 import xml2json from "../xml2json";
+import getNestedValues from "../../utils/getNestedValues";
 
 /**
  * Handles the GetRecordById request.
@@ -119,22 +120,26 @@ function parseDate (json, dateType) {
  * Gets the download links of the metadata
  * @param {Object} json - the response
  * @returns {Object[]|null} download links
+ * @see {@link https://www.isotc211.org/2005/gmd/distribution.xsd}
+ * @see {@link https://www.gdi-de.org/sites/default/files/2020-03/Deutsche_Uebersetzung_der_ISO-Felder.pdf}
  */
 function parseDownloadLinks (json) {
-    const links = json.GetRecordByIdResponse?.MD_Metadata?.distributionInfo?.MD_Distribution?.transferOptions,
-        obj = [];
+    const transferOptions = json.GetRecordByIdResponse?.MD_Metadata?.distributionInfo?.MD_Distribution?.transferOptions,
+        onlineResources = getNestedValues(transferOptions, "CI_OnlineResource"),
+        downloadResources = [];
 
-    links.forEach(link => {
-        if (link.MD_DigitalTransferOptions?.onLine?.CI_OnlineResource?.function?.CI_OnLineFunctionCode?.getAttributes().codeListValue === "download") {
-            const linkUrl = link.MD_DigitalTransferOptions?.onLine?.CI_OnlineResource?.linkage?.URL.getValue();
-
-            obj.push({
-                link: linkUrl,
-                linkName: link.MD_DigitalTransferOptions?.onLine?.CI_OnlineResource?.name?.CharacterString.getValue() || linkUrl
+    onlineResources.forEach(resource => {
+        if (resource?.function?.CI_OnLineFunctionCode?.getAttributes().codeListValue === "download") {
+            downloadResources.push({
+                // location (address) for on-line access
+                link: resource?.linkage?.URL.getValue(),
+                // name of the online resource
+                linkName: resource?.name?.CharacterString.getValue() || resource?.linkage?.URL.getValue()
             });
         }
     });
-    return obj.length > 0 ? obj : null;
+
+    return downloadResources.length > 0 ? downloadResources : null;
 }
 
 /**
