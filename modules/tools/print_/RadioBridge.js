@@ -37,7 +37,11 @@ Radio.channel("GFI").reply({
 });
 
 Radio.channel("CswParser").on({
-    "getMetaDataForPrint": async function (cswObj) {
+    "getMetaDataForPrint": async function (cswObj, layer) {
+        if (layer.get("datasets") && Array.isArray(layer.get("datasets")) && layer.get("datasets")[0] !== null && typeof layer.get("datasets")[0] === "object") {
+            cswObj.cswUrl = layer.get("datasets")[0].hasOwnProperty("csw_url") ? layer.get("datasets")[0].csw_url : null;
+        }
+
         cswObj.parsedData = {};
 
         if (cswObj.cswUrl === null || typeof cswObj.cswUrl === "undefined") {
@@ -46,6 +50,7 @@ Radio.channel("CswParser").on({
 
             cswObj.cswUrl = Radio.request("Util", "getProxyURL", cswService.get("url"));
         }
+
         const metadata = await getRecordById(Radio.request("Util", "getProxyURL", cswObj.cswUrl), cswObj.metaId);
 
         cswObj.parsedData = {};

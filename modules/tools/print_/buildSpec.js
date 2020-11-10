@@ -951,7 +951,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             cswObj.keyList = ["date", "orgaOwner", "address", "email", "tel", "url"];
             cswObj.uniqueId = uniqueId;
 
-            Radio.trigger("CswParser", "getMetaDataForPrint", cswObj);
+            Radio.trigger("CswParser", "getMetaDataForPrint", cswObj, layer);
         }
     },
 
