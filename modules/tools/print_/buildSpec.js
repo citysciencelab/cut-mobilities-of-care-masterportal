@@ -986,7 +986,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 legendObj.legendType = "wfsImage";
                 legendObj.imageUrl = graphic;
             }
-            valuesArray.push(legendObj);
+            if (typeof legendObj.color !== "undefined") {
+                valuesArray.push(legendObj);
+            }
         });
         return [].concat(...valuesArray);
     },
@@ -997,7 +999,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - Fill color from SVG.
      */
     getFillColorFromSVG: function (svgString) {
-        return svgString.split(/fill:(.+)/)[1].split(/;(.+)/)[0];
+        if (svgString.split(/fill:(.+)/)[1]) {
+            return svgString.split(/fill:(.+)/)[1].split(/;(.+)/)[0];
+        }
+        return undefined;
     },
 
     /**
