@@ -21,7 +21,8 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
             request = sinon.spy(() => ({}));
             trigger = sinon.spy();
             state = {
-                withoutGUI: false
+                withoutGUI: false,
+                currentInteraction: "draw"
             };
             sinon.stub(Radio, "request").callsFake(request);
             sinon.stub(Radio, "trigger").callsFake(trigger);

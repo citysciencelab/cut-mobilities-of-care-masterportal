@@ -102,6 +102,7 @@ export default {
             drawToolModel.setIsActive(true);
 
             this.close();
+            this.$store.dispatch("Tools/Draw/toggleInteraction", "modify");
             this.$store.dispatch("Tools/setToolActive", {id: "draw", active: true});
         }
     }

@@ -24,9 +24,9 @@ function setActive ({state, commit, dispatch, rootState}, active) {
         commit("setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
         commit("setImgPath", rootState?.configJs?.wfsImgPath);
 
-        dispatch("createDrawInteractionAndAddToMap", {active: true});
-        dispatch("createSelectInteractionAndAddToMap", false);
-        dispatch("createModifyInteractionAndAddToMap", false);
+        dispatch("createDrawInteractionAndAddToMap", {active: state.currentInteraction === "draw"});
+        dispatch("createSelectInteractionAndAddToMap", state.currentInteraction === "delete");
+        dispatch("createModifyInteractionAndAddToMap", state.currentInteraction === "modify");
 
         if (state.withoutGUI) {
             dispatch("toggleInteraction", "draw");

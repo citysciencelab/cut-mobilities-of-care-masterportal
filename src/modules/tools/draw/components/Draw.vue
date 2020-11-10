@@ -58,7 +58,7 @@ export default {
             if (value) {
                 new DownloadView(this.$store);
                 this.setActive(value);
-                this.setCanvasCursor("crosshair");
+                this.setCanvasCursorByInteraction(this.currentInteraction);
             }
             else {
                 this.resetModule();
@@ -68,7 +68,7 @@ export default {
     },
     mounted () {
         if (this.active) {
-            this.setCanvasCursor("crosshair");
+            this.setCanvasCursorByInteraction(this.currentInteraction);
         }
     },
     created () {
@@ -125,6 +125,14 @@ export default {
             this.mapElement.style.cursor = cursorType;
             this.mapElement.onmousedown = this.onMouseDown;
             this.mapElement.onmouseup = this.onMouseUp;
+        },
+        setCanvasCursorByInteraction (interaction) {
+            if (interaction === "modify" || interaction === "delete") {
+                this.setCanvasCursor("pointer");
+            }
+            else {
+                this.setCanvasCursor("crosshair");
+            }
         },
         onMouseDown () {
             if (this.mapElement.style.cursor === "pointer") {
@@ -539,7 +547,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'draw' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'draw'"
-                            @click="toggleInteraction('draw'); setCanvasCursor('crosshair')"
+                            @click="toggleInteraction('draw'); setCanvasCursorByInteraction('draw')"
                         >
                             <span class="glyphicon glyphicon-pencil" />
                             {{ $t("common:modules.tools.draw.button.draw") }}
@@ -577,7 +585,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'modify' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'modify'"
-                            @click="toggleInteraction('modify'); setCanvasCursor('pointer')"
+                            @click="toggleInteraction('modify'); setCanvasCursorByInteraction('modify')"
                         >
                             <span class="glyphicon glyphicon-wrench" />
                             {{ $t("common:modules.tools.draw.button.edit") }}
@@ -603,7 +611,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'delete'"
-                            @click="toggleInteraction('delete'); setCanvasCursor('pointer')"
+                            @click="toggleInteraction('delete'); setCanvasCursorByInteraction('delete')"
                         >
                             <span class="glyphicon glyphicon-trash" />
                             {{ $t("common:modules.tools.draw.button.delete") }}
