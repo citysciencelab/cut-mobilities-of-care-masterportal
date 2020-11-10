@@ -28,7 +28,7 @@ export default function xml2json (srcDom) {
         // checking is child has siblings of same name
         const childIsArray = children.filter(eachChild => eachChild.nodeName === child.nodeName).length > 1,
             // the key is equal to the nodeName property without the xmlns, if existing
-            keyName = substrStartFromValue(child.nodeName, ":");
+            keyName = child.nodeName.search(":") !== -1 ? substrStartFromValue(child.nodeName, ":") : child.nodeName;
 
         // if child is array, save the values as an array of objects, else as object
         if (childIsArray) {

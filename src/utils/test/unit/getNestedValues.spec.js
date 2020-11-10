@@ -20,14 +20,14 @@ describe("src/utils/getNestedValues.js", () => {
             children: ["Robb", "Sans", "Arya"]
         },
         Rickard: {
-            fullName: "Rickard Strak",
+            fullName: "Rickard Stark",
             details: {
                 stillAlive: false
             },
             children: ["Ned", "Brandon", "Lyanna", "Benjen"]
         },
         Arya: {
-            fullName: "Arya Strak",
+            fullName: "Arya Stark",
             details: {
                 age: 17,
                 stillAlive: true
@@ -65,7 +65,7 @@ describe("src/utils/getNestedValues.js", () => {
 
     it("should return an array with valid values", () => {
         expect(getNestedValues(starks, "Arya")).to.deep.equal([{
-            fullName: "Arya Strak",
+            fullName: "Arya Stark",
             details: {
                 age: 17,
                 stillAlive: true
