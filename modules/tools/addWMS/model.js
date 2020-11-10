@@ -77,6 +77,10 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
             this.displayError("Bitte die URL eines WMS in das Textfeld eingeben!");
             return;
         }
+        else if (url.includes("http:")) {
+            Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.errorHttpsMessage"));
+            return;
+        }
         Radio.trigger("Util", "showLoader");
         $.ajax({
             timeout: 4000,
