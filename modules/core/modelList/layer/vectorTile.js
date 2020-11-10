@@ -1,7 +1,8 @@
 import MVT from "ol/format/MVT";
 import OpenLayersVectorTileLayer from "ol/layer/VectorTile";
 import OpenLayersVectorTileSource from "ol/source/VectorTile";
-import {createXYZ} from "ol/tilegrid";
+import TileGrid from "ol/tilegrid/TileGrid";
+import {extentFromProjection} from "ol/tilegrid";
 import stylefunction from "ol-mapbox-style/dist/stylefunction";
 import store from "../../../../src/app-store/index";
 
@@ -38,21 +39,25 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @return {void}
      */
     createLayerSource: function () {
-        const params = {
-                projection: this.get("epsg") ? this.get("epsg") : store.state.Map.projection.getCode(),
+        const mapEpsg = store.getters["Map/projection"].getCode(),
+            dataEpsg = this.get("epsg") || mapEpsg,
+            layerExtent = this.get("extent") || extentFromProjection(dataEpsg),
+            origin = this.get("origin") || [layerExtent[0], layerExtent[1]],
+            resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
+            tileSize = this.get("tileSize") || 512,
+            params = {
+                projection: dataEpsg,
                 tilePixelRatio: 1,
                 format: new MVT(),
-                url: Radio.request("Util", "getProxyURL", this.get("url"))
-            },
-            tileGrid = this.get("tileGridExtent") ? createXYZ({
-                extent: this.get("tileGridExtent"),
-                maxResolution: store.state.Map.maxResolution,
-                maxZoom: store.state.Map.maxZoomLevel
-            }) : null;
+                url: Radio.request("Util", "getProxyURL", this.get("url")),
+                tileGrid: new TileGrid({
+                    extent: layerExtent,
+                    origin: origin,
+                    resolutions: resolutions,
+                    tileSize: tileSize
+                })
+            };
 
-        if (tileGrid) {
-            params.tileGrid = tileGrid;
-        }
         this.setLayerSource(new OpenLayersVectorTileSource(params));
     },
 
