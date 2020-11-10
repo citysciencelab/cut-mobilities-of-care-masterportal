@@ -22,6 +22,20 @@ describe("addWMS/model", function () {
         });
     });
 
+    describe("isVersionEnabled", function () {
+        it("should return false if the type of version is not string", function () {
+            expect(model.isVersionEnabled(null)).to.be.false;
+        });
+        it("should return false if the version is lower than 1.3.0", function () {
+            expect(model.isVersionEnabled("0.3.0")).to.be.false;
+            expect(model.isVersionEnabled("1.2.9")).to.be.false;
+        });
+        it("should return true if the version is equal or higher than 1.3.0", function () {
+            expect(model.isVersionEnabled("1.3.0")).to.be.true;
+            expect(model.isVersionEnabled("2.3.5")).to.be.true;
+        });
+    });
+
     describe("getIfInExtent", function () {
         let capability = {
                 Capability: {

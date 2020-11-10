@@ -93,6 +93,8 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
                     const parser = new WMSCapabilities(),
                         uniqId = this.getAddWmsUniqueId(),
                         capability = parser.read(data),
+                        version = capability?.version,
+                        checkVersion = this.isVersionEnabled(version),
                         currentExtent = Radio.request("Parser", "getPortalConfig")?.mapView?.extent,
                         checkExtent = this.getIfInExtent(capability, currentExtent);
 
@@ -101,7 +103,12 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
                         return;
                     }
 
-                    this.setWMSVersion(capability.version);
+                    if (!checkVersion) {
+                        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.checkVersion"));
+                        return;
+                    }
+
+                    this.setWMSVersion(version);
                     this.setWMSUrl(url);
 
                     if (Radio.request("Parser", "getItemByAttributes", {id: "ExternalLayer"}) === undefined) {
@@ -157,6 +164,28 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
         else {
             Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.get("wmsUrl"), this.get("version"));
         }
+    },
+
+    /**
+     * Getter if the version is enabled and above 1.3.0
+     * @param {String} version the version of current external wms layer
+     * @returns {Boolean} true or false
+     */
+    isVersionEnabled: function (version) {
+        if (typeof version !== "string") {
+            return false;
+        }
+
+        const parsedVersion = version.split(".");
+
+        if (parseInt(parsedVersion[0], 10) < 1) {
+            return false;
+        }
+        else if (parsedVersion.length >= 2 && parseInt(parsedVersion[0], 10) === 1 && parseInt(parsedVersion[1], 10) < 3) {
+            return false;
+        }
+
+        return true;
     },
 
     /**
