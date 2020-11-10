@@ -131,7 +131,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 console.error(i18next.t("common:modules.featureViaURL.messages.noNameDefined", {layerId}));
                 return;
             }
-            geometryType = layers[pos].geometryType;
+            geometryType = layer.type !== undefined ? layer.type : layers[pos].geometryType;
             if (geometryType !== "LineString" && geometryType !== "Point" && geometryType !== "Polygon" && geometryType !== "MultiPoint" && geometryType !== "MultiLineString" && geometryType !== "MultiPolygon") {
                 console.error(i18next.t("common:modules.featureViaURL.messages.geometryNotSupported"), {layerId, geometryType});
                 return;
