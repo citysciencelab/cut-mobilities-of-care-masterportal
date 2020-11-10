@@ -199,6 +199,7 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="tool-draw-circleInnerDiameter"
+                            v-model="circleInnerDiameter"
                             class="form-control"
                             :style="{borderColor: innerBorderColor}"
                             type="number"
@@ -218,6 +219,7 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="tool-draw-circleOuterDiameter"
+                            v-model="circleOuterDiameter"
                             class="form-control"
                             :style="{borderColor: outerBorderColor}"
                             type="number"
@@ -262,6 +264,7 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="tool-draw-text"
+                            v-model="text"
                             class="form-control"
                             type="text"
                             :placeholder="$t('common:modules.tools.draw.clickToPlaceText')"
