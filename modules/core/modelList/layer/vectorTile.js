@@ -29,6 +29,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
 
         if (mapEPSG !== vtEPSG) {
             console.warn(`VT Layer ${this.get("name")}: Map (${mapEPSG}) and layer (${vtEPSG}) projection mismatch. View will be erroneous.`);
+            this.set("isNeverVisibleInTree", true);
         }
 
         Layer.prototype.initialize.apply(this);
@@ -41,17 +42,17 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     createLayerSource: function () {
         const mapEpsg = store.getters["Map/projection"].getCode(),
             dataEpsg = this.get("epsg") || mapEpsg,
-            layerExtent = this.get("extent") || extentFromProjection(dataEpsg),
-            origin = this.get("origin") || [layerExtent[0], layerExtent[1]],
+            extent = this.get("extent") || extentFromProjection(dataEpsg),
+            origin = this.get("origin") || [extent[0], extent[2]],
             resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
             tileSize = this.get("tileSize") || 512,
             params = {
                 projection: dataEpsg,
                 tilePixelRatio: 1,
                 format: new MVT(),
-                url: Radio.request("Util", "getProxyURL", this.get("url")),
+                url: this.get("url"),
                 tileGrid: new TileGrid({
-                    extent: layerExtent,
+                    extent: extent,
                     origin: origin,
                     resolutions: resolutions,
                     tileSize: tileSize
