@@ -43,21 +43,23 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
         const mapEpsg = store.getters["Map/projection"].getCode(),
             dataEpsg = this.get("epsg") || mapEpsg,
             extent = this.get("extent") || extentFromProjection(dataEpsg),
-            origin = this.get("origin") || [extent[0], extent[2]],
+            origin = this.get("origin") || [extent[0], extent[3]], // upper left corner = [minX, maxY]
             resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
             tileSize = this.get("tileSize") || 512,
             params = {
                 projection: dataEpsg,
-                tilePixelRatio: 1,
                 format: new MVT(),
-                url: this.get("url"),
-                tileGrid: new TileGrid({
-                    extent: extent,
-                    origin: origin,
-                    resolutions: resolutions,
-                    tileSize: tileSize
-                })
+                url: this.get("url")
             };
+
+        if (dataEpsg !== "EPSG:3857") {
+            params.tileGrid = new TileGrid({
+                extent: extent,
+                origin: origin,
+                resolutions: resolutions,
+                tileSize: tileSize
+            });
+        }
 
         this.setLayerSource(new OpenLayersVectorTileSource(params));
     },
