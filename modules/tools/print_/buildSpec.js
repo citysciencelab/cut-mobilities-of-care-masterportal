@@ -468,10 +468,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     buildTextStyle: function (style) {
         // use openlayers kml default font, if not set
         const font = style.getFont() ? style.getFont() : "bold 16px Helvetica",
-            isFontSizeInFont = font.split(" ").length === 2 && font.split(" ")[0].endsWith("px"),
+            size = this.getFontSize(font),
+            isFontSizeInFont = size !== null,
             textScale = style.getScale() ? style.getScale() : 1,
-            fontSize = isFontSizeInFont ? font.split(" ")[0] : 10 * textScale,
-            fontFamily = isFontSizeInFont ? font.split(" ")[1] : font,
+            fontSize = isFontSizeInFont ? size : 10 * textScale,
+            fontFamily = isFontSizeInFont ? this.getFontFamily(font, fontSize) : font,
             fontColor = style.getFill().getColor();
 
         return {
@@ -486,6 +487,34 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             fontFamily: fontFamily,
             labelAlign: this.getLabelAlign(style)
         };
+    },
+
+    /**
+     * Inspects the given fontDef for family.
+     * @param {String} fontDef the defined font
+     * @param {String} fontSize the size incuding in the font
+     * @returns {String} the font-family or an empty String if not contained
+     */
+    getFontFamily: function (fontDef, fontSize) {
+        const index = fontDef ? fontDef.indexOf(" ", fontDef.indexOf(fontSize)) : -1;
+
+        if (index > -1) {
+            return fontDef.substring(index + 1);
+        }
+        return "";
+    },
+    /**
+     * Inspects the given fontDef for numbers (=size).
+     * @param {String} fontDef the defined font
+     * @returns {String} the font-size or null if not contained
+     */
+    getFontSize: function (fontDef) {
+        const size = fontDef ? fontDef.match(/\d/g) : null;
+
+        if (Array.isArray(size) && size.length > 0) {
+            return size.join("");
+        }
+        return null;
     },
 
     /**
