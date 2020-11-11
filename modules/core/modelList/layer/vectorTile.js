@@ -24,7 +24,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
-        const mapEPSG = Radio.request("MapView", "getProjection").getCode(),
+        const mapEPSG = store.getters["Map/projection"].getCode(),
             vtEPSG = this.get("epsg");
 
         if (mapEPSG !== vtEPSG) {
