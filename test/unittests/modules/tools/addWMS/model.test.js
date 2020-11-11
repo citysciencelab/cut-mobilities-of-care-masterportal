@@ -23,24 +23,24 @@ describe("addWMS/model", function () {
     });
 
     describe("getIfInExtent", function () {
-        const capability = {
-            Capability: {
-                Layer: {
-                    "BoundingBox": [
-                        {
-                            "crs": "EPSG:25832",
-                            "extent": [
-                                302907.887193,
-                                5435104.982326,
-                                389523.673913,
-                                5508222.768538
-                            ]
-                        }
-                    ]
+        let capability = {
+                Capability: {
+                    Layer: {
+                        "BoundingBox": [
+                            {
+                                "crs": "EPSG:25832",
+                                "extent": [
+                                    302907.887193,
+                                    5435104.982326,
+                                    389523.673913,
+                                    5508222.768538
+                                ]
+                            }
+                        ]
+                    }
                 }
-            }
-        };
-        let currentExtent = [];
+            },
+            currentExtent = [];
 
         it("schould return false if the currentExtent does not intersect the capability extent", function () {
             currentExtent = [
@@ -73,6 +73,59 @@ describe("addWMS/model", function () {
 
         it("should return true if the currentExtent is not in the right format", function () {
             currentExtent = "";
+            expect(model.getIfInExtent(capability, currentExtent)).to.be.true;
+        });
+
+        it("should return true if the layer in Capability does not have the right crs", function () {
+            capability = {
+                Capability: {
+                    Layer: {
+                        "BoundingBox": [
+                            {
+                                "crs": "EPSG:3067",
+                                "extent": [
+                                    336385.4535501953,
+                                    6628495.2621008465,
+                                    447592.181149918,
+                                    7646073.290737241
+                                ]
+                            }
+                        ]
+                    }
+                }
+            };
+            currentExtent = [
+                455000,
+                5809000,
+                730000,
+                6075800
+            ];
+            expect(model.getIfInExtent(capability, currentExtent)).to.be.true;
+        });
+
+        it("should return true if the layer in Capability does not have the right extent", function () {
+            capability = {
+                Capability: {
+                    Layer: {
+                        "BoundingBox": [
+                            {
+                                "crs": "EPSG:25832",
+                                "extent": [
+                                    302907.887193,
+                                    5435104.982326,
+                                    389523.673913
+                                ]
+                            }
+                        ]
+                    }
+                }
+            };
+            currentExtent = [
+                455000,
+                5809000,
+                730000,
+                6075800
+            ];
             expect(model.getIfInExtent(capability, currentExtent)).to.be.true;
         });
     });

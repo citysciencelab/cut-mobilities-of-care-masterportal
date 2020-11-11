@@ -1,6 +1,7 @@
 import Tool from "../../core/modelList/tool/model";
 import {WMSCapabilities} from "ol/format.js";
 import {intersects} from "ol/extent";
+import {transform as transformCoord, getProjection} from "masterportalAPI/src/crs";
 
 const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     /**
@@ -166,7 +167,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      */
     getIfInExtent: function (capability, currentExtent) {
         const layer = capability?.Capability?.Layer?.BoundingBox?.filter(bbox => {
-            return bbox?.crs === "EPSG:25832";
+            return bbox?.crs && bbox?.crs.includes("EPSG") && getProjection(bbox?.crs) !== undefined && Array.isArray(bbox?.extent) && bbox?.extent.length === 4;
         });
         let layerExtent;
 
@@ -175,11 +176,12 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
             return true;
         }
 
-        if (Array.isArray(layer) && layer.length && layer[0].hasOwnProperty("extent")) {
-            layerExtent = layer[0].extent;
-        }
+        if (Array.isArray(layer) && layer.length) {
+            const firstLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[0], layer[0].extent[1]]),
+                secondLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[2], layer[0].extent[3]]);
 
-        if (Array.isArray(layerExtent) && layerExtent.length === 4) {
+            layerExtent = [firstLayerExtent[0], firstLayerExtent[1], secondLayerExtent[0], secondLayerExtent[1]];
+
             return intersects(currentExtent, layerExtent);
         }
 
