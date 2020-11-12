@@ -296,7 +296,6 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="tool-draw-text"
-                            v-model="text"
                             class="form-control"
                             type="text"
                             :placeholder="$t('common:modules.tools.draw.clickToPlaceText')"
