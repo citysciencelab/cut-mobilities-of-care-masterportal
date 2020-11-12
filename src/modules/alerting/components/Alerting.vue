@@ -13,9 +13,7 @@ export default {
     },
 
     data: function () {
-        return {
-            showModal: false
-        };
+        return {};
     },
 
     computed: {
@@ -34,7 +32,7 @@ export default {
             // then remove get params and make it end with slash
             urlToCheck = urlToCheck.replace(/\/*\?.*$/, "/");
 
-            return urlToCheck;            
+            return urlToCheck;
         },
 
         console: () => console
@@ -59,7 +57,6 @@ export default {
         let initialDisplayedAlerts;
 
         this.initialize();
-
         if (localStorage[this.localStorageDisplayedAlertsKey] !== undefined) {
             try {
                 initialDisplayedAlerts = JSON.parse(localStorage[this.localStorageDisplayedAlertsKey]);
@@ -121,7 +118,7 @@ export default {
 
             collectedAlerts.forEach(singleAlert => {
                 this.addSingleAlert(singleAlert);
-            });            
+            });
         },
 
         fetchBroadcast: function (fetchBroadcastUrl) {
@@ -160,6 +157,8 @@ export default {
                 <div
                     v-for="(singleAlert, singleAlertIndex) in alertCategory.content"
                     :key="singleAlert.hash"
+                    class="singleAlertWrapper"
+                    :class="singleAlert.displayClass"
                 >
                     <div
                         class="singleAlertContainer"
