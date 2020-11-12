@@ -131,8 +131,8 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 console.error(i18next.t("common:modules.featureViaURL.messages.noNameDefined", {layerId}));
                 return;
             }
-            geometryType = layers[pos].geometryType;
-            if (geometryType !== "LineString" && geometryType !== "Point" && geometryType !== "Polygon") {
+            geometryType = layer.type !== undefined ? layer.type : layers[pos].geometryType;
+            if (geometryType !== "LineString" && geometryType !== "Point" && geometryType !== "Polygon" && geometryType !== "MultiPoint" && geometryType !== "MultiLineString" && geometryType !== "MultiPolygon") {
                 console.error(i18next.t("common:modules.featureViaURL.messages.geometryNotSupported"), {layerId, geometryType});
                 return;
             }
@@ -146,7 +146,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
             }
             this.get("layerIds").push(layerId);
             Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
-            if (typeof zoomTo !== "undefined" && zoomTo === layerId) {
+            if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {
                 Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(layerId), layerId);
             }
         });

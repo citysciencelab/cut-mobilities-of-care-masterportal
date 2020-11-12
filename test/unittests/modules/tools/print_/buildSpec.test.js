@@ -1014,4 +1014,49 @@ describe("tools/print_/buildSpec", function () {
             expect(buildSpecModel.rgbStringToRgbArray("rgb(0,12,345,0.1)")).to.deep.equal([0, 12, 345, 0.1]);
         });
     });
+    describe("getFontSize", function () {
+        it("should return \"16\" as size", function () {
+            expect(buildSpecModel.getFontSize("bold 16px Helvetica")).to.equals("16");
+        });
+        it("should return \"16\" as size", function () {
+            expect(buildSpecModel.getFontSize("16px Helvetica")).to.equals("16");
+        });
+        it("should return \"16\" as size", function () {
+            expect(buildSpecModel.getFontSize("bold 16em Helvetica")).to.equals("16");
+        });
+        it("should return null as size if called with undefined", function () {
+            expect(buildSpecModel.getFontSize(undefined)).to.equals(null);
+        });
+        it("should return null as size if called with null", function () {
+            expect(buildSpecModel.getFontSize(null)).to.equals(null);
+        });
+        it("should return null as size if called with empty string", function () {
+            expect(buildSpecModel.getFontSize("")).to.equals(null);
+        });
+
+    });
+    describe("getFontFamily", function () {
+        it("should return the font family", function () {
+            expect(buildSpecModel.getFontFamily("bold 16px Helvetica", "16")).to.equals("Helvetica");
+            expect(buildSpecModel.getFontFamily("bold 20px Sans Serif", "20")).to.equals("Sans Serif");
+            expect(buildSpecModel.getFontFamily("20px Sans Serif", "20")).to.equals("Sans Serif");
+        });
+        it("should return \"\" if called with undefined", function () {
+            expect(buildSpecModel.getFontFamily(undefined, undefined)).to.equals("");
+            expect(buildSpecModel.getFontFamily("", undefined)).to.equals("");
+            expect(buildSpecModel.getFontFamily(undefined, "")).to.equals("");
+        });
+        it("should return \"\" if called with null", function () {
+            expect(buildSpecModel.getFontFamily(null, null)).to.equals("");
+            expect(buildSpecModel.getFontFamily("", null)).to.equals("");
+            expect(buildSpecModel.getFontFamily(null, "")).to.equals("");
+        });
+        it("should return \"\" if called with nonsense", function () {
+            expect(buildSpecModel.getFontFamily("asdfghjklhghggh", "16")).to.equals("");
+            expect(buildSpecModel.getFontFamily("", "pzuouk")).to.equals("");
+            expect(buildSpecModel.getFontFamily("16", "")).to.equals("");
+        });
+
+
+    });
 });

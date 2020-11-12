@@ -531,7 +531,8 @@
         {
           "id": "1132",
           "styleId": "1132",
-          "name": "100 Jahre Stadtgruen POIs"
+          "name": "100 Jahre Stadtgruen POIs",
+          "transparency": 75
         },
         {
           "id": "16100",
