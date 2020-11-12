@@ -119,7 +119,9 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
     },
 
     setLayerList: function (value) {
-        this.set("layerList", value);
+        const withoutUrlFeatures = value.filter(v => isNaN(v.id) === false);
+
+        this.set("layerList", withoutUrlFeatures);
     },
 
     setZoomLevel: function (zoomLevel) {
