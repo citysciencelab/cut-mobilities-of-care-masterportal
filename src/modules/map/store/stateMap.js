@@ -6,6 +6,7 @@ import {MapMode} from "./enums";
  * @typedef {Object} MapState
  * @property {?module:ol/Map} map currently active map instance
  * @property {?[Number, Number]} size - The size in pixels of the map in the DOM
+ * @property {?OLCesium} map3d - the OLCesium 3d map
  * @property {?module:ol/layer[]} layerList - all layers of the map
  * @property {?Object[]} gfiFeatures - features for the gfi
  * @property {?Number} initialZoomLevel initial zoom level
@@ -29,7 +30,7 @@ import {MapMode} from "./enums";
  * @property {?Object.<String, LayerData>} layers register of existing layers
  * @property {?Number[]} overlayIds list of layer ids
  * @property {?Object.<String, LayerData>} overlays list of existing overlays
- * @property {MapMode} mapMode
+ * @property {?MapMode} mapMode
  */
 const state = {
     map: null,

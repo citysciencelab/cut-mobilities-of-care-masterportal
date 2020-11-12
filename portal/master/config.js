@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["einwohnerabfrage", "VueAddon", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken"],
+    addons: ["einwohnerabfrage", "VueAddon", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas"],
     alerting: {
         // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json"
     },

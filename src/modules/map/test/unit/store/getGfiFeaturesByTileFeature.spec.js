@@ -14,7 +14,6 @@ describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
             const expected = [
                     "Buildings",
                     "buildings_3d",
-                    "",
                     {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
                     null
                 ],

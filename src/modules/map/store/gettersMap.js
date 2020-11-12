@@ -69,6 +69,7 @@ const gettersMap = {
      * gets the features at the given pixel for the gfi
      * @param {object} state - the map state
      * @param {object} state.map - the openlayers map
+     * @param {object} state.map3d - the OLCesium  3d map
      * @param {number[]} state.clickPixel - the pixel coordinate of the click event
      * @returns {object[]} gfi features
      */

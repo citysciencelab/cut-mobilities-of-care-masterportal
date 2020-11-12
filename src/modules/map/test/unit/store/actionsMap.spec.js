@@ -1,13 +1,13 @@
 import {expect} from "chai";
 import sinon from "sinon";
+import {MapMode} from "../../../store/enums";
 import actions from "../../../store/actions/actionsMap.js";
 
 describe("src/modules/map/store/actions/actionsMap.js", () => {
     describe("updateClick: Listener for click on the map", () => {
         it("commits setClickCoord and setClickPixel in MODE_2D", () => {
             const getters = {
-                    // MODE_2D
-                    mapMode: 0
+                    mapMode: MapMode.MODE_2D
                 },
                 rootGetters = {
                     "Tools/Gfi/active": false
@@ -28,8 +28,7 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
 
         it("commits setClickCoord and setClickPixel in MODE_3D", () => {
             const getters = {
-                    // MODE_3D
-                    mapMode: 1
+                    mapMode: MapMode.MODE_3D
                 },
                 rootGetters = {
                     "Tools/Gfi/active": false
@@ -55,7 +54,7 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
 
         it("commits setClickCoord, setClickPixel and setFeaturesAtCoordinate if gfi tool is active", () => {
             const getters = {
-                    mapMode: 0
+                    mapMode: MapMode.MODE_2D
                 },
                 rootGetters = {
                     "Tools/Gfi/active": true
@@ -78,7 +77,7 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
         it("commits setGfiFeature", async () => {
             const getters = {
                     clickCoord: sinon.spy(),
-                    mapMode: 0,
+                    mapMode: MapMode.MODE_2D,
                     visibleWmsLayerList: {
                         filter: function () {
                             return [];

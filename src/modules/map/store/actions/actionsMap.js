@@ -1,6 +1,7 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
 import {getWmsFeaturesByMimeType} from "./getWmsFeaturesByMimeType";
+import {MapMode} from "../enums";
 
 let unsubscribes = [],
     loopId = null;
@@ -122,12 +123,10 @@ const actions = {
     updateClick ({getters, commit, dispatch, rootGetters}, evt) {
         const {mapMode} = getters;
 
-        // MODE_2D
-        if (mapMode === 0) {
+        if (mapMode === MapMode.MODE_2D) {
             commit("setClickCoord", evt.coordinate);
             commit("setClickPixel", evt.pixel);
         }
-        // MODE_3D
         else {
             commit("setClickCoord", evt.pickedPosition);
             commit("setClickPixel", [evt.position.x, evt.position.y]);
