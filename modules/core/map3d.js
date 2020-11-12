@@ -155,8 +155,8 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
             cartographicPickedPosition;
 
         if (cartesian) {
-            if (!Radio.request("ModelList", "getModelByAttributes", {type: "folder", isPinned: true})) {
-                $(".nav li:first-child").removeClass("open");
+            if (document.querySelector(".nav li")?.classList.contains("open")) {
+                document.querySelector(".nav li").classList.remove("open");
             }
             cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
             coords = [window.Cesium.Math.toDegrees(cartographic.longitude), window.Cesium.Math.toDegrees(cartographic.latitude)];
