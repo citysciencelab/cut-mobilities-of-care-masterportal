@@ -105,7 +105,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             gfiAttributes: this.get("gfiAttributes"),
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
-            gfiIconPath: this.get("gfiIconPath"),
+            // gfiIconPath: this.get("gfiIconPath"),
             id: this.get("id"),
             hitTolerance: this.get("hitTolerance"),
             altitudeMode: this.get("altitudeMode"),

@@ -4,14 +4,13 @@ import {createGfiFeature, openFeaturesInNewWindow, getXmlFeatures, getHtmlFeatur
 describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
     describe("createGfiFeature", () => {
         it("should return an object with specific functions to get the given params", () => {
-            const feature = createGfiFeature("layerName", "gfiTheme", "https://url/einzelmarker_dunkel.png", "attributesToShow", "featureProperties", "gfiFormat", "id", "url");
+            const feature = createGfiFeature("layerName", "gfiTheme", "attributesToShow", "featureProperties", "gfiFormat", "id", "url");
 
             expect(feature).to.be.an("object");
 
             expect(feature.getGfiUrl).to.be.a("function");
             expect(feature.getTitle).to.be.a("function");
             expect(feature.getTheme).to.be.a("function");
-            expect(feature.getIconPath).to.be.a("function");
             expect(feature.getAttributesToShow).to.be.a("function");
             expect(feature.getProperties).to.be.a("function");
             expect(feature.getGfiFormat).to.be.a("function");
@@ -20,7 +19,6 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(feature.getGfiUrl()).to.equal("url");
             expect(feature.getTitle()).to.equal("layerName");
             expect(feature.getTheme()).to.equal("gfiTheme");
-            expect(feature.getIconPath()).to.equal("https://url/einzelmarker_dunkel.png");
             expect(feature.getAttributesToShow()).to.equal("attributesToShow");
             expect(feature.getProperties()).to.equal("featureProperties");
             expect(feature.getGfiFormat()).to.equal("gfiFormat");
@@ -99,7 +97,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             let lastMimeType = "",
                 lastUrl = "";
 
-            await getXmlFeatures("url", "layerName", "gfiTheme", "gfiIconPath", "attributesToShow", (mimeType, url) => {
+            await getXmlFeatures("url", "layerName", "gfiTheme", "attributesToShow", (mimeType, url) => {
                 // dummy for requestGfi
                 lastMimeType = mimeType;
                 lastUrl = url;
@@ -113,7 +111,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(lastUrl).to.equal("url");
         });
         it("should call requestGfi and return a wms feature with the received properties", async () => {
-            const result = await getXmlFeatures("url", "layerName", "gfiTheme", "gfiIconPath", "attributesToShow", () => {
+            const result = await getXmlFeatures("url", "layerName", "gfiTheme", "attributesToShow", () => {
                 // dummy for requestGfi
                 return new Promise(resolve => {
                     // simulation of featureInfos[feature{getProperties()}]
@@ -130,13 +128,11 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(result[0].getGfiUrl).to.be.a("function");
             expect(result[0].getTitle).to.be.a("function");
             expect(result[0].getTheme).to.be.a("function");
-            expect(result[0].getIconPath).to.be.a("function");
             expect(result[0].getAttributesToShow).to.be.a("function");
             expect(result[0].getProperties).to.be.a("function");
 
             expect(result[0].getGfiUrl()).to.equal("url");
             expect(result[0].getTitle()).to.equal("layerName");
-            expect(result[0].getIconPath()).to.equal("gfiIconPath");
             expect(result[0].getTheme()).to.equal("gfiTheme");
             expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
             expect(result[0].getProperties()).to.equal("featureProperties");
@@ -148,7 +144,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             let lastMimeType = "",
                 lastUrl = "";
 
-            await getHtmlFeature("url", "layerName", "gfiTheme", "gfiIconPath", "attributesToShow", (mimeType, url) => {
+            await getHtmlFeature("url", "layerName", "gfiTheme", "attributesToShow", (mimeType, url) => {
                 // dummy for requestGfi
                 lastMimeType = mimeType;
                 lastUrl = url;
@@ -166,7 +162,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
     describe("getWmsFeaturesByMimeType", () => {
         it("should call openWindow before anything else if http: url is given", async () => {
             let calledOpenWindow = false;
-            const result = await getWmsFeaturesByMimeType("text/xml", "http:url", {layerName: "layerName", layerId: "layerId"}, "gfiTheme", "gfiIconPath", "attributesToShow", null, "requestGfi", () => {
+            const result = await getWmsFeaturesByMimeType("text/xml", "http:url", {layerName: "layerName", layerId: "layerId"}, "gfiTheme", "attributesToShow", null, "requestGfi", () => {
                 calledOpenWindow = true;
             });
 
@@ -174,7 +170,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(result).to.be.an("array").to.be.empty;
         });
         it("should call requestGfi if mimeType text/xml is given", async () => {
-            const result = await getWmsFeaturesByMimeType("text/xml", "url", {layerName: "layerName", layerId: "layerId"}, "gfiTheme", "gfiIconPath", "attributesToShow", null, () => {
+            const result = await getWmsFeaturesByMimeType("text/xml", "url", {layerName: "layerName", layerId: "layerId"}, "gfiTheme", "attributesToShow", null, () => {
                 // dummy for requestGfi
                 return new Promise(resolve => {
                     // simulation of featureInfos[feature{getProperties()}]
@@ -193,7 +189,7 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(result[0].getProperties()).to.equal("featureProperties");
         });
         it("should call requestGfi if mimeType text/html is given", async () => {
-            const result = await getWmsFeaturesByMimeType("text/html", "url", "layerName", "gfiTheme", "gfiIconPath", "attributesToShow", null, () => {
+            const result = await getWmsFeaturesByMimeType("text/html", "url", "layerName", "gfiTheme", "attributesToShow", null, () => {
                 // dummy for requestGfi
                 return new Promise(resolve => {
                     // simulation of featureInfos[feature{getProperties()}]

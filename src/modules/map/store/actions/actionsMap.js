@@ -161,7 +161,7 @@ const actions = {
                 layerName = layer.get("name"),
                 layerId = layer.get("id"),
                 gfiTheme = layer.get("gfiTheme") || "default",
-                gfiIconPath = layer.get("gfiIconPath"),
+                // gfiIconPath = layer.get("gfiIconPath"),
                 gfiAttributes = layer.get("gfiAttributes"),
                 gfiParams = {
                     INFO_FORMAT: mimeType,
@@ -170,7 +170,7 @@ const actions = {
                 url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams),
                 gfiAsNewWindow = layer.get("gfiAsNewWindow");
 
-            return getWmsFeaturesByMimeType(mimeType, url, {layerName, layerId}, gfiTheme, gfiIconPath, gfiAttributes, gfiAsNewWindow, null, null);
+            return getWmsFeaturesByMimeType(mimeType, url, {layerName, layerId}, gfiTheme, gfiAttributes, gfiAsNewWindow, null, null);
         }));
 
         // only commit if features found

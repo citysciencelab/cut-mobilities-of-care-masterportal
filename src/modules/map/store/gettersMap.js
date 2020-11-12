@@ -82,7 +82,6 @@ const gettersMap = {
                         featuresAtPixel.push(createGfiFeature(
                             layer.get("name"),
                             layer.get("gfiTheme"),
-                            layer.get("gfiIconPath"),
                             layer.get("gfiAttributes"),
                             clusteredFeature.getProperties(),
                             layer.get("gfiFormat"),
@@ -96,7 +95,6 @@ const gettersMap = {
                     featuresAtPixel.push(createGfiFeature(
                         layer.get("name"),
                         layer.get("gfiTheme"),
-                        layer.get("gfiIconPath"),
                         layer.get("gfiAttributes"),
                         feature.getProperties(),
                         layer.get("gfiFormat"),

@@ -17,6 +17,7 @@ Radio.channel("VisibleVector").on({
                 foundLayer.get("gfiTheme"),
                 hit.gfiAttributes,
                 hit.feature.getProperties(),
+                null, // for gfiFormat
                 hit.id
             );
 

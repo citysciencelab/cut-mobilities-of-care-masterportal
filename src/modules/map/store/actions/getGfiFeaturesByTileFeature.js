@@ -75,15 +75,14 @@ function isCesiumEntity (entity) {
 export function getGfiFeature (layerAttributes, properties, createGfiFeatureOpt = null) {
     const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "Buildings",
         gfiTheme = layerAttributes && layerAttributes.gfiTheme ? layerAttributes.gfiTheme : "buildings_3d",
-        gfiIconPath = layerAttributes && layerAttributes.gfiIconPath ? layerAttributes.gfiIconPath : "",
         attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes : {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
         featureProperties = properties && properties.attributes ? properties.attributes : properties;
 
     if (typeof createGfiFeatureOpt === "function") {
-        return createGfiFeatureOpt(layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties);
+        return createGfiFeatureOpt(layerName, gfiTheme, attributesToShow, featureProperties);
     }
 
-    return createGfiFeature(layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties);
+    return createGfiFeature(layerName, gfiTheme, attributesToShow, featureProperties);
 }
 
 /**

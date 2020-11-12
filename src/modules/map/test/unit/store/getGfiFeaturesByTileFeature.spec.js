@@ -18,9 +18,9 @@ describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
                     {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
                     null
                 ],
-                result = getGfiFeature(null, null, (layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties) => {
+                result = getGfiFeature(null, null, (layerName, gfiTheme, attributesToShow, featureProperties) => {
                     // createGfiFeatureOpt
-                    return [layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties];
+                    return [layerName, gfiTheme, attributesToShow, featureProperties];
                 });
 
             expect(result).to.deep.equal(expected);
@@ -29,14 +29,13 @@ describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
             const layerAttributes = {
                     name: "name",
                     gfiTheme: "gfiTheme",
-                    gfiIconPath: "gfiIconPath",
                     gfiAttributes: "gfiAttributes"
                 },
                 properties = "properties",
-                expected = ["name", "gfiTheme", "gfiIconPath", "gfiAttributes", "properties"],
-                result = getGfiFeature(layerAttributes, properties, (layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties) => {
+                expected = ["name", "gfiTheme", "gfiAttributes", "properties"],
+                result = getGfiFeature(layerAttributes, properties, (layerName, gfiTheme, attributesToShow, featureProperties) => {
                     // createGfiFeatureOpt
-                    return [layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties];
+                    return [layerName, gfiTheme, attributesToShow, featureProperties];
                 });
 
             expect(result).to.deep.equal(expected);
@@ -45,7 +44,7 @@ describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
             const properties = {
                     attributes: "properties"
                 },
-                result = getGfiFeature(null, properties, (layerName, gfiTheme, gfiIconPath, attributesToShow, featureProperties) => {
+                result = getGfiFeature(null, properties, (layerName, gfiTheme, attributesToShow, featureProperties) => {
                     // createGfiFeatureOpt
                     return featureProperties;
                 });
