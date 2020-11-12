@@ -44,6 +44,7 @@
     "d3": "4.9.x",
     "d3-scale-chromatic": "^1.5.0",
     "dom-parser": "^0.1.5",
+    "dom-storage": "^2.1.0",
     "html2canvas": "^1.0.0-rc.5",
     "https-proxy-agent": "^3.0.0",
     "i18next": "^19.0.1",
@@ -128,9 +129,5 @@
     "hooks": {
       "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
     }
-  },
-  "jest": {
-    "verbose": true,
-    "testURL": "localhost"
   }
 }

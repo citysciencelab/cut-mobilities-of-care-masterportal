@@ -7,6 +7,7 @@ export default {
     alertProto: {
         category: "Info",
         content: "",
+        displayClass: "info",
         displayFrom: false, // "2020-01-01 00:00:00"
         displayUntil: false, // "2030-01-01 00:00:00"
         hash: "",

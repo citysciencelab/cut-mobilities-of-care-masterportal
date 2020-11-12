@@ -48,5 +48,8 @@ module.exports = {
             // requestAnimationFrame: "raf"
         }),
         new VueLoaderPlugin()
-    ]
+    ],
+    node: {
+        fs: "empty"
+    }    
 };

@@ -8,6 +8,7 @@
 
   "alerts": {
     "Test1": {
+      "displayClass": "error",
       "category": "Test 1",
       "content": "Lorem Ipsum 1 (global content)",
       "displayFrom": "2020-03-01 20:15:55",
@@ -16,14 +17,16 @@
       "once": {"seconds": 15}
     },
     "Test2": {
+      "displayClass": "info",
       "category": "Test 1",
       "content": "Lorem Ipsum 2 (content for master)",
       "displayFrom": false,
       "displayUntil": "2022-05-17 14:30",
-      "mustBeConfirmed": true,
+      "mustBeConfirmed": false,
       "once": {"seconds": 30}
     },
     "Test3": {
+      "displayClass": "error",
       "category": "Test 2",
       "content": "Lorem Ipsum 3 (content for basic)",
       "displayFrom": false,
@@ -32,6 +35,7 @@
       "once": {"seconds": 45}
     },
     "Test4": {
+      "displayClass": "warning",
       "category": "Test 2",
       "content": "Lorem Ipsum 4 (global content)",
       "displayFrom": false,
