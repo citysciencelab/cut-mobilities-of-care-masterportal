@@ -29,7 +29,7 @@ const Button3dModel = Backbone.Model.extend(/** @lends Button3dModel.prototype *
     /**
     * change language - sets default values for the language
     * @param {String} lng the language changed to
-    * @returns {Void}  -
+    * @returns {void}  -
     */
     changeLang: function () {
         this.set({

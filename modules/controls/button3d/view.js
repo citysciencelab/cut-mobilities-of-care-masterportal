@@ -74,7 +74,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     /**
      * Shows the 3D button as selected.
      * Shows the 3D button as not selected.
-     * @param  {string} mapMode - map mode of the map.
+     * @param  {String} mapMode - map mode of the map.
      * @returns {void}
      */
     change: function (mapMode) {
@@ -119,7 +119,7 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      * initial render function for the table UiStyle - this is necessary because $el has classes attached that are styled for red buttons (which are not used in table style)
      * @pre the bound element $e is in its initial state (with some css classes)
      * @post the table template is attached to $el, $el has been striped from its css classes and $el is append to the list #table-tools-menu
-     * @returns {Void}  -
+     * @returns {void}  -
      */
     renderToToolbarInit: function () {
         this.renderToToolbar();
