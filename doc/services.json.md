@@ -473,6 +473,7 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
 |imageLinks|nein|String,String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird in der angegebenen Reihenfolge nach den Attributen gesucht. Der erste Treffer wird verwendet.|
+|showFavoriteIcons|nein|Boolean|true|Gibt an ob eine Leiste mit Icons angezeigt werden soll, mittels derer sich verschiedene Werkzeuge verwenden lassen. Die Icons werden nur angezeigt, wenn die enstprechenden Werkzeuge konfiguriert sind. Bisher verwendbar für die Werkzeuge: compareFeatures/vergleichsliste (Bisher nicht für WMS verfügbar) und routing/Routenplaner.
 
 **Beispiel gfiTheme für das template "Default":**
 
@@ -481,7 +482,8 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
 "gfiTheme": {
    "name": "default",
    "params": {
-         "imageLinks": ["imageLink", "linkImage", "abc"],
+        "imageLinks": ["imageLink", "linkImage", "abc"],
+        "showFavoriteIcons": true
    }
 }
 ```

@@ -21,7 +21,8 @@ export default {
     data: () => {
         return {
             imageLinks: ["bildlink", "link_bild"],
-            importedComponents: []
+            importedComponents: [],
+            showFavoriteIcons: true
         };
     },
     computed: {
@@ -42,12 +43,20 @@ export default {
             }
             return undefined;
         },
+
+        /**
+         * Returns the mimeType of the gfi feature.
+         * @returns {String} The mimeType.
+         */
         mimeType: function () {
             return this.feature.getGfiUrl()?.mimeType;
         }
     },
     created () {
-        this.initialize();
+        this.showFavoriteIcons = this.feature.getTheme()?.params?.hasOwnProperty("showFavoriteIcons") ?
+            this.feature.getTheme().params.showFavoriteIcons : this.showFavoriteIcons;
+
+        this.replacesConfiguredImageLinks();
         this.setImportedComponents();
     },
     methods: {
@@ -70,16 +79,6 @@ export default {
         },
 
         /**
-         * Checks if the feature is on the comparelist.
-         * Starts to prepare the data and sets up the listener.
-         * @param {Object} feature The feature from property
-         * @returns {void}
-         */
-        initialize: function () {
-            this.replacesConfiguredImageLinks();
-        },
-
-        /**
          * Replaces  the configured imageLinks from the gfiTheme.params to the imageLinks.
          * @returns {void}
          */
@@ -99,7 +98,10 @@ export default {
 
 <template>
     <div class="gfi-theme-images">
-        <div class="favorite-icon-container">
+        <div
+            v-if="showFavoriteIcons"
+            class="favorite-icon-container"
+        >
             <template v-for="component in importedComponents">
                 <component
                     :is="component"

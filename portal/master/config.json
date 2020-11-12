@@ -714,6 +714,12 @@
         {
           "id": "8145",
           "visibility": false,
+          "gfiTheme": {
+            "name": "default",
+            "params": {
+              "showFavoriteIcons": false
+            }
+          },
           "styleId": "8145",
           "hitTolerance": 25,
           "mouseHoverField": "kategorie",
