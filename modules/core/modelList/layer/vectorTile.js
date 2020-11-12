@@ -52,7 +52,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                 url: this.get("url")
             };
 
-        if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin")) {
+        if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("resolutions") || this.get("tileSize")) {
             params.tileGrid = new TileGrid({
                 extent: extent,
                 origin: origin,
