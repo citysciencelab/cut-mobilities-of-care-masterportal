@@ -6,5 +6,6 @@ export default {
     legends: [],
     layerIdForLayerInfo: "",
     layerInfoLegend: {},
-    showCollapseAllButton: false
+    showCollapseAllButton: false,
+    legendOnChanged: []
 };

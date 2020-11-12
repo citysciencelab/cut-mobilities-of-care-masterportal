@@ -359,7 +359,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         symbolizers: []
                     };
                     if (geometryType === "Point" || geometryType === "MultiPoint") {
-                        styleObject.symbolizers.push(this.buildPointStyle(style, layer));
+                        if (style.getImage() !== null || style.getText() !== null) {
+                            styleObject.symbolizers.push(this.buildPointStyle(style, layer));
+                        }
                     }
                     else if (geometryType === "Polygon" || geometryType === "MultiPolygon") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));

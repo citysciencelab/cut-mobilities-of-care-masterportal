@@ -1,4 +1,5 @@
 import Item from ".././item";
+import store from "../../../../src/app-store";
 
 const Layer = Item.extend(/** @lends Layer.prototype */{
     defaults: {
@@ -751,12 +752,13 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Setter for legend
+     * Setter for legend, commits the legend to vue store using "Legend/setLegendOnChanged"
      * @param {String} value legend
      * @returns {void}
      */
     setLegend: function (value) {
         this.set("legend", value);
+        store.commit("Legend/setLegendOnChanged", value);
     },
 
     /**

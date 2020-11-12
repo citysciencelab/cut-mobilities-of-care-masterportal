@@ -63,11 +63,34 @@ const configPaths = [
             });
         },
 
+        /**
+         * Sets the id of the layer to state.layerIdForLayerInfo
+         * @param {Object} param0 State
+         * @param{String} id Id of layer
+         * @returns {void}
+         */
         setLayerIdForLayerInfo: function ({state}, id) {
             state.layerIdForLayerInfo = id;
         },
+
+        /**
+         * Sets the legendObj to state.layerInfoLegend
+         * @param {Object} param0 State
+         * @param{String} legendObj contains legend infos
+         * @returns {void}
+         */
         setLegendForLayerInfo: function ({state}, legendObj) {
             state.layerInfoLegend = legendObj;
+        },
+
+        /**
+         * This will check if legend is changed from other module/component
+         * @param {Object} param0 State
+         * @param {Object} legendValue the changed legend value
+         * @returns {void}
+         */
+        setLegendOnChanged: function ({state}, legendValue) {
+            state.legendOnChanged = legendValue;
         }
     };
 

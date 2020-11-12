@@ -92,6 +92,7 @@ export default {
                         <img
                             v-if="!legendPart.graphic.endsWith('.pdf')"
                             :src="legendPart.graphic"
+                            class="left"
                         >
                         <!--Legend PDF as Link-->
                         <a
@@ -127,6 +128,10 @@ export default {
         padding-bottom: 5px;
         img {
             max-width: 100%;
+            &.left {
+                max-width: 50px;
+                padding: 5px 0;
+            }
         }
     }
     .layer-legend.collapsing {
