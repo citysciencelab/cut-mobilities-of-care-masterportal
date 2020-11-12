@@ -42,10 +42,6 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     createLayerSource: function () {
         const mapEpsg = store.getters["Map/projection"].getCode(),
             dataEpsg = this.get("epsg") || mapEpsg,
-            extent = this.get("extent") || extentFromProjection(dataEpsg),
-            origin = this.get("origin") || [extent[0], extent[3]], // upper left corner = [minX, maxY]
-            resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
-            tileSize = this.get("tileSize") || 512,
             params = {
                 projection: dataEpsg,
                 format: new MVT(),
@@ -53,6 +49,11 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
             };
 
         if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("resolutions") || this.get("tileSize")) {
+            const extent = this.get("extent") || extentFromProjection(dataEpsg),
+                origin = this.get("origin") || [extent[0], extent[3]], // upper left corner = [minX, maxY]
+                resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
+                tileSize = this.get("tileSize") || 512;
+
             params.tileGrid = new TileGrid({
                 extent: extent,
                 origin: origin,
