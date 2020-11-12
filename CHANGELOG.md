@@ -21,9 +21,10 @@
 - Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
 - Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 - Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
-- Es gibt einen neuen Parameter an Layern, die auch das gfiTheme unterstützen: gfiIconPath, er gibt den Pfad zu dem Icon an, dass als fallback genutzt wird, fall kein Icon definiert ist.
+- Es gibt einen neuen Parameter an Layern, die auch das gfiTheme unterstützen: gfiIconPath, er gibt den Pfad zu dem Icon an, der als Fallback genutzt wird, falls kein Icon definiert ist.
 
 ### Changed
+- Das Tool "GFI" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Gleichzeitig wurden die speziellen Themes ausgelagert als Addons. Es gibt im Masterportal selber nur noch das default Theme.
 - Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Das Zeichnen von Punkten wurde geändert, alle Punkte basieren jetzt auf Bild-Dateien. Größe und Deckkraft können nicht mehr eingestellt werden, für diese Funktionalität steht das Zeichnen von Kreisen zur Verfügung. Das Bereitstellen von anderen Bilddateien wurde angepasst, siehe Doku der config.json.
 - Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
 - Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von Vue.js. Weiterhin heißt es fortan "Datei-Import".
