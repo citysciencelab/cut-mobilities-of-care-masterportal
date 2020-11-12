@@ -13,11 +13,21 @@
 </head>
 <body>
     <div id="masterportal-root"></div>
-    <div class="loading">
-        <img id="portal-logo" src="../../img/Logo_Masterportal.svg">
-        <div id="init-loader"><img src="../../img/ajax-loader.gif"></div>
+    <div class="centered" id="centered">
+        <div id="logo-txt-box">
+            <img id="logo-hamburg" src="https://geoportal-hamburg.de/lgv-config/img/hh-logo.png" />
+            <div id="logo-text">Hamburg</div>
+            <div id="portal-text">Master - Portal</div>
+        </div>
+        <div class="loading">
+            <div class="loading-box">
+                <span class="loader"></span>
+            </div>
+        </div>
     </div>
-    <div id="loader" style="display: none;"><img src="../../img/ajax-loader.gif"></div>
+    <div class="logo-right-bottom" id="logo-right-bottom">
+        <img height="55" src="../../img/Logo_Masterportal.svg">
+    </div>
     <script src="https://lib.virtualcitymap.de/v3.6.x/lib/Cesium/Cesium.js"></script>
     <script type="text/javascript" src="../../build/js/masterportal.js"></script>
 </body>

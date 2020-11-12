@@ -107,6 +107,18 @@ label {
     z-index: 2000;
 }
 
+.centered {
+    position: absolute;
+    width: 300px;
+    height: 130px;
+    top: 50%;
+    left: 50%;
+    margin-top: -65px;
+    margin-left: -150px;
+    background: #FFFFFF;
+    opacity: 0.8;
+}
+
 #loader img {
     position: absolute;
     left: 50%;
@@ -115,21 +127,71 @@ label {
     margin-top: -5px;
 }
 
-#portal-text {
-    display: none;
-}
-
 .loading {
-    position: absolute;
-    top: 30%;
-    left: 32.5%;
-    z-index: 9999;
-    text-align: center;
-    width: 35%;
+    position: relative;
+    margin: 10px;
 }
 
 .loading div {
     font-size:5vmin;
     line-height: 130%;
-    margin-top: 5%;
 }
+
+.loading-box {
+    margin-top: 50px;
+}
+.logo-right-bottom {
+    position: fixed;
+    right: 60px;
+    bottom: 32px;
+}
+@media (max-width: 830px) {
+    .logo-right-bottom {
+        position: fixed;
+        right: 60px;
+        bottom: 25px;
+        text-align: left;
+        left: 50%;
+        margin-left: -50px;
+    }
+}
+
+#logo-hamburg {
+    position: relative;
+    top: 5px;
+    left: 98px;
+}
+#logo-text {
+    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+    position: relative;
+    text-align: center;
+    top: 8px;
+    font-size: 34px;
+}
+#portal-text {
+    position: relative;
+    text-align: center;
+    top: 6px;
+    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+    font-size: 28px;
+}
+.loader {
+    position: absolute;
+    left: 128px;
+    top: -25px;
+    border: 5px solid #b3bbc1;
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+    border-top: 5px solid #919191;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+#logo-txt-box {
+    position: relative;
+}
+

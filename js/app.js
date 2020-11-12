@@ -414,6 +414,7 @@ async function loadApp () {
         });
     }
 
+    Radio.trigger("Util", "hidePreLoadContainers");
     Radio.trigger("Util", "hideLoader");
 }
 
