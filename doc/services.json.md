@@ -17,8 +17,8 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |featureCount|ja|String||Anzahl der zurückzugebenden Features bei GFI-Abfragen. Entspricht dem *GetFeatureInfo-Parameter "FEATURE_COUNT"*|`"1"`|
 |format|ja|String||Grafikformat der Kachel, die vom Portal über den *GetMap* aufgerufen wird. Muss einem der Werte aus den Capabilities unter *Capability/Request/GetMap/Format* entsprechen.|`"image/jpeg"`|
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
-|gfiIconPath|nein|String|Pfad für das Icon, dass als fallback genutzt wird, fall kein Icon definiert ist.|`""https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png""`|
+|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|gfiIconPath|nein|String|Pfad für das Icon, das als Fallback genutzt wird, falls kein Icon definiert ist.|`""https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png""`|
 |gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
 |id|ja|String||Frei wählbare Layer-ID|`"8"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
@@ -189,8 +189,8 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
 |useProxyUrlForGfi|nein|boolean|undefined|Flag um die GFI-Abfrage für einen Layer über einen reverse proxy laufen zu lassen.|false|
-|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
-|gfiIconPath|nein|String|Pfad für das Icon, dass als fallback genutzt wird, fall kein Icon definiert ist.|`""https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png""`|
+|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|gfiIconPath|nein|String|Pfad für das Icon, das als Fallback genutzt wird, falls kein Icon definiert ist.|`""https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png""`|
 **Beispiel WFS:**
 
 ```
@@ -472,7 +472,7 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|imageLinks|nein|String,String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird in der angegebenen Reihenfolge nach den Attributen gesucht. Der erste Treffer wird verwendet.|
+|imageLinks|nein|String/String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird in der angegebenen Reihenfolge nach den Attributen gesucht. Der erste Treffer wird verwendet.|
 |showFavoriteIcons|nein|Boolean|true|Gibt an ob eine Leiste mit Icons angezeigt werden soll, mittels derer sich verschiedene Werkzeuge verwenden lassen. Die Icons werden nur angezeigt, wenn die enstprechenden Werkzeuge konfiguriert sind. Bisher verwendbar für die Werkzeuge: compareFeatures/vergleichsliste (Bisher nicht für WMS verfügbar) und routing/Routenplaner.
 
 **Beispiel gfiTheme für das template "Default":**
@@ -495,9 +495,9 @@ Mit diesem Theme lassen sich historische Daten zu einem Layer der SensorThings-A
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|**[charts](#markdown-header-gfi_theme_sensor_params_charts)**|ja|Object||Enthält die zur Konfiguration der Diagramme.|
-|**[data](#markdown-header-gfi_theme_sensor_params_data)**|nein|Object||Gibt wie die Spaltenbeschriftungen in den daten sein sollen.|
-|header|nein|Object|{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}|Gibt an welche Attribute für die Kopfzeilen verwendet werden sollen. Die Anzeigename jedes Attributes lässt sich hier angeben. z.B. lässt sich das Attribut "description" als "Beschreibung" anzeigen. |
+|**[charts](#markdown-header-gfi_theme_sensor_params_charts)**|ja|Object||Enthält die Attribute zur Konfiguration der Diagramme.|
+|**[data](#markdown-header-gfi_theme_sensor_params_data)**|nein|Object||Gibt an wie die Spaltenbeschriftungen in den Daten sein sollen.|
+|header|nein|Object|{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}|Gibt an welche Attribute für die Kopfzeilen verwendet werden sollen. Der Anzeigename jedes Attributes lässt sich hier angeben. Z.B. lässt sich das Attribut "description" als "Beschreibung" anzeigen. |
 |**[historicalData](#markdown-header-gfi_theme_sensor_params_historicalData)**|nein|Object||Gibt an für welchen Zeitraum die historischen Observations angefragt werden sollen.|
 
 **Beispiel gfiTheme für das template "Sensor":**
@@ -530,7 +530,7 @@ Mit diesem Theme lassen sich historische Daten zu einem Layer der SensorThings-A
                     "color": "rgba(220, 0, 0, 1)"
                 },
                 "outoforder": {
-                    "title": "Außer Betrieb",
+                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
                     "color": "rgba(175, 175, 175, 1)"
                 }
             }
@@ -550,7 +550,7 @@ Hier werden die Parameter für die Anzeige der Grafiken konfiguriert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|values|ja|String[] / **[valuesObject](#markdown-header-gfi_theme_sensor_params_charts_valuesObject)**||Hier wird definiert, zu welchen Results der Observations Grafiken angezeigt werden sollen. Es wird für jeden Result ein eigener Reiter mit einer eigenen Grafik angelegt. Die Results können als Array oder Object angegeben werden. Beim object lassen sich weitere ttribute definieren.|
+|values|ja|String[] / **[valuesObject](#markdown-header-gfi_theme_sensor_params_charts_valuesObject)**||Hier wird definiert, zu welchen Results der Observations Grafiken angezeigt werden sollen. Es wird für jeden Result ein eigener Reiter mit einer eigenen Grafik angelegt. Die Results können als Array oder Object angegeben werden. Beim object lassen sich weitere Attribute definieren.|
 |hoverBackgroundColor|nein|String|"rgba(0, 0, 0, 0.8)"|Die Hintergundfarbe der Balken beim Hovern.|
 |barPercentage|nein|Number|1.0|Breite der Balken in der Grafik.|
 
@@ -594,7 +594,7 @@ Hier wird das Layout für eine einzelne Grafik zu einem result konfiguriert.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
-|title|nein|String||Angabe eines Titels für die Grafik|
+|title|nein|String||Angabe eines Titels für die Grafik. Der Titel kann auch mit einem Pfad in der Übersetzungsdatei angegeben werden. Dazu besteht die Möglichkeit die Übersetzungsdateien unter masterportal/locales zu erweitern.|
 |colcor|nein|String|"rgba(0, 0, 0, 1)"|Die Farbe der Balken.|
 
 ```
@@ -603,6 +603,14 @@ Hier wird das Layout für eine einzelne Grafik zu einem result konfiguriert.
     "title": "Verfügbar",
     "color": "rgba(0, 220, 0, 1)"
 }
+```
+
+```
+#!json
+"charging": {
+"title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+"color": "rgba(220, 0, 0, 1)"
+},
 ```
 
 ***
@@ -774,8 +782,8 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
 |useProxyUrlForGfi|nein|boolean|undefined|Flag um die GFI-Abfrage für einen Layer über einen reverse proxy laufen zu lassen.|false|
-|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
-|gfiIconPath|nein|String|Pfad für das Icon, dass als fallback genutzt wird, fall kein Icon definiert ist.|`""https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png""`|
+|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|gfiIconPath|nein|String|Pfad für das Icon, das als Fallback genutzt wird, falls kein Icon definiert ist.|`""https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png""`|
 **Beispiel GeoJSON:**
 
 ```

@@ -20,7 +20,6 @@ export default {
     },
     data () {
         return {
-            // flag if gfi content is html
             isContentHtml: false,
             showMarker: true
         };
@@ -132,7 +131,7 @@ export default {
             if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
                 theme = configTheme;
             }
-            else if (this.$themeAddons && this.$themeAddons.includes(configTheme)) { // handling of addon-themes
+            else if (this.$gfiThemeAddons && this.$gfiThemeAddons.includes(configTheme)) {
                 theme = configTheme;
             }
             else {

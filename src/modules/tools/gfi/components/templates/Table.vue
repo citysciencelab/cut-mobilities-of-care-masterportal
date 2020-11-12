@@ -172,7 +172,7 @@ export default {
             if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
                 theme = configTheme;
             }
-            else if (this.$themeAddons && this.$themeAddons.includes(configTheme)) { // handling of addon-themes
+            else if (this.$gfiThemeAddons && this.$gfiThemeAddons.includes(configTheme)) {
                 theme = configTheme;
             }
             else {
@@ -255,7 +255,7 @@ export default {
         .title {
             color: #F2F2F2;
             margin-right: 50px;
-             white-space: nowrap;
+            white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
         }

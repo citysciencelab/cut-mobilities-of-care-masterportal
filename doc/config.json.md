@@ -1009,7 +1009,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 |centerMapToClickPoint|nein|Boolean|false|Wenn der Parameter auf true gesetzt wird, verschiebt sich die Karte beim Klick auf ein Feature so, dass das Feature im Mittelpunkt der sichtbaren Karte liegt. Dies ist nur bei der Verwendung des desktopTypes "Detached" relevant.|false|
 |glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
 |isActive|nein|Boolean|true|Gibt an, ob das GFI per default aktiviert ist.|false|
-|desktopType|nein|String|"deatached"|Gibt an welches Template für die GetFeatureInfo im Desktopmodus verwendet wird. Bei Attached wird das GFI direkt auf dem Punkt positioniert. Bei Deatched wird ein Marker auf den geklickten Punkt gesetzt und das GFI wird rechts auf der Karte platziert.|false|
+|desktopType|nein|String|"detached"|Gibt an welches Template für die GetFeatureInfo im Desktopmodus verwendet wird. Bei Attached wird das GFI direkt auf dem Punkt positioniert. Bei Detached wird ein Marker auf den geklickten Punkt gesetzt und das GFI wird rechts auf der Karte platziert.|false|
 |centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
 |highlightVectorRules|nein|**[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)**||Regeldefinitionen zum Überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
 
@@ -2408,8 +2408,8 @@ Hier werden WMS typische Attribute aufgelistet.
 
 Der Parameter *gfiAsNewWindow* wird nur berücksichtigt wenn infoFormat text/html ist.
 
-Mit dem Parameter *gfiAsNewWindow* lassen Sich html-Inhalte Ihres WMS-Service einfach in einem eigenen Fenster oder Browser-Tab öffnen, anstatt in einem iFrame im GFI.
-Um html-Inhalt in einem einfachen Standard-Fenster des Browsers zu öffnen, geben Sie für *gfiAsNewWindow* anstatt *null* ein leeres Objekt an.
+Mit dem Parameter *gfiAsNewWindow* lassen sich html-Inhalte Ihres WMS-Service einfach in einem eigenen Fenster oder Browser-Tab öffnen, anstatt in einem iFrame im GFI.
+Um html-Inhalte in einem einfachen Standard-Fenster des Browsers zu öffnen, geben Sie für *gfiAsNewWindow* anstatt *null* ein leeres Objekt an.
 
 Beispiel:
 ```
@@ -2422,12 +2422,12 @@ Beispiel:
 }
 ```
 
-Sie können nun das Verhalten des Öffnens durch den Parameter *name* beinflussen:
+Sie können nun das Verhalten des Öffnens durch den Parameter *name* beeinflussen:
 
 |name|Default|Browser|Beschreibung|Beispiel|
 |----|-------|-------|------------|--------|
 |_blank|ja|alle|Öffnet ein neues Browser-Fenster oder Browser-Tab (browserabhängig) mit dem html-Inhalt.|{"name": "_blank"}|
-|_self|nein|alle|Öffnet den html-Inhalt aktuellen Browser-Fenster.|{"name": "_self"}|
+|_self|nein|alle|Öffnet den html-Inhalt im aktuellen Browser-Fenster.|{"name": "_self"}|
 
 Haben Sie *name* auf *_blank* gestellt (oder lassen Sie *name* ganz weg), lässt sich die Erscheinung des Fensters mithilfe des Parameters *specs* beeinflussen.
 Beachten Sie, dass sich beliebig viele der folgenden Einstellungen durch Komma-Separation (z.B. {"specs": "width=800,height=700"} kombinieren lassen (siehe Beispiel unten).

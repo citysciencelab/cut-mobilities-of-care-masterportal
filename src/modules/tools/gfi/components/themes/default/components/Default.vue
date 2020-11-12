@@ -1,5 +1,5 @@
 <script>
-import beautifyWfsKey from "../../../../../../../utils/beautifyWfsKey.js";
+import beautifyKey from "../../../../../../../utils/beautifyKey.js";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
@@ -60,7 +60,7 @@ export default {
         this.setImportedComponents();
     },
     methods: {
-        beautifyWfsKey,
+        beautifyKey,
         isWebLink,
         isPhoneNumber,
         getPhoneNumberAsWebLink,
@@ -70,7 +70,7 @@ export default {
          * Sets the imported components to importedComponents.
          * @returns {void}
          */
-        setImportedComponents: function () { // todo auslagern in eine util Funktion
+        setImportedComponents: function () {
             Object.keys(this.$options.components).forEach(componentName => {
                 if (componentName !== "Default") {
                     this.importedComponents.push(this.$options.components[componentName]);
@@ -130,7 +130,7 @@ export default {
                     :key="key"
                 >
                     <td class="bold">
-                        {{ beautifyWfsKey(key) }}
+                        {{ beautifyKey(key) }}
                     </td>
                     <td v-if="isWebLink(value)">
                         <a

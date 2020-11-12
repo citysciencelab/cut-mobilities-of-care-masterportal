@@ -76,12 +76,9 @@ export default {
      */
     isSimpleStyle: (state) => {
         if (state?.queryParams?.style) {
-            if (state.queryParams.style === "simple") {
-                return true;
-            }
-            return false;
+            return state.queryParams.style === "simple";
         }
-        else if (state?.configJs?.uiStyle && state.configJs.uiStyle === "simple") {
+        else if (state?.configJs?.uiStyle === "simple") {
             return true;
         }
         return false;
@@ -94,12 +91,9 @@ export default {
      */
     isTableStyle: (state) => {
         if (state?.queryParams?.style) {
-            if (state.queryParams.style === "table") {
-                return true;
-            }
-            return false;
+            return state.queryParams.style === "table";
         }
-        else if (state?.configJs?.uiStyle && state.configJs.uiStyle === "table") {
+        else if (state?.configJs?.uiStyle === "table") {
             return true;
         }
         return false;

@@ -2,9 +2,6 @@ import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo.js";
 import Feature from "ol/Feature";
 import axios from "axios";
 
-// Testlayer für ESRI -> Geologische_Karte_5000
-// Testlayer für html -> Bohrdaten GLA & Eventlots
-
 /**
  * handles the GetFeatureInfo request
  * @param {String} mimeType - text/xml | text/html

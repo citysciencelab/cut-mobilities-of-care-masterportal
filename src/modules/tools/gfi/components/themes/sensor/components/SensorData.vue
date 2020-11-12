@@ -1,5 +1,5 @@
 <script>
-import beautifyWfsKey from "../../../../../../../utils/beautifyWfsKey.js";
+import beautifyKey from "../../../../../../../utils/beautifyKey.js";
 import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
@@ -63,7 +63,7 @@ export default {
         isPhoneNumber,
         getPhoneNumberAsWebLink,
         isEmailAddress,
-        beautifyWfsKey
+        beautifyKey
     }
 };
 </script>
@@ -91,7 +91,7 @@ export default {
                     class="row"
                 >
                     <th>
-                        {{ beautifyWfsKey(key) }}
+                        {{ beautifyKey(key) }}
                     </th>
                     <td
                         v-for="(property, index) in value"

@@ -10,7 +10,7 @@ const WMSLayer = Layer.extend({
         return Object.assign(Layer.prototype.defaults, {
             infoFormat: "text/xml",
             gfiAsNewWindow: null,
-            // Eine Veränderung der CACHEID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
+            // A change of the CACHEID initiates a reload of the service by openlayers and bypasses the browser cache.
             cacheId: parseInt(Math.random() * 10000000, 10),
             supported: ["2D", "3D"],
             showSettings: true,
@@ -31,7 +31,7 @@ const WMSLayer = Layer.extend({
             "change:SLDBody": this.updateSourceSLDBody
         });
 
-        // Hack für Dienste die nicht EPSG:4326 untertützen
+        // Hack for services that do not support EPSG:4326
         if (this.get("notSupportedFor3D").includes(this.get("id"))) {
             this.set("supported", ["2D"]);
         }
@@ -101,8 +101,6 @@ const WMSLayer = Layer.extend({
                 params: params
             }));
         }
-        // this.registerErrorListener();
-        // this.registerLoadingListeners();
     },
 
     /**
@@ -136,7 +134,7 @@ const WMSLayer = Layer.extend({
     },
 
     /**
-     * Wenn der Parameter "legendURL" leer ist, wird er auf GetLegendGraphic gesetzt.
+     * If the parameter "legendURL" is empty, it is set to GetLegendGraphic.
      * @return {void}
      */
     createLegend: function () {
