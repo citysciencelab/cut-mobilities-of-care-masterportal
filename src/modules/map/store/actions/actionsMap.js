@@ -241,15 +241,14 @@ const actions = {
      * @param {Object} actionParams first action parameter
      * @returns {void}
      */
-    resetView ({state}) {
+    resetView ({state, dispatch}) {
         const {initialCenter, initialResolution, map} = state,
             view = map.getView();
 
         view.setCenter(initialCenter);
         view.setResolution(initialResolution);
 
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "hideMarker");
+        dispatch("MapMarker/removePointMarker");
     },
     /**
      * Sets the resolution by the given index of available resolutions.

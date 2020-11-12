@@ -1,3 +1,5 @@
+import extractEventCoordinates from "../../../../src/utils/extractEventCoordinates";
+
 const POIModel = Backbone.Model.extend({
     defaults: {
         poiDistances: [],
@@ -196,12 +198,12 @@ const POIModel = Backbone.Model.extend({
             feature = selectedPoiFeatures.features.find(function (feat) {
                 return feat.getId() === id;
             }),
-            extent = feature.getGeometry().getExtent();
+            extent = feature.getGeometry().getExtent(),
+            coordinate = extractEventCoordinates(extent),
+            resolutions = Radio.request("MapView", "getResolutions"),
+            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
 
-        Radio.trigger("MapMarker", "zoomTo", {
-            type: "POI",
-            coordinate: extent
-        });
+        Radio.trigger("Map", "zoomToExtent", coordinate, {maxZoom: index});
     },
 
     /**

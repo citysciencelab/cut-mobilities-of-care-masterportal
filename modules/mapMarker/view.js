@@ -28,19 +28,9 @@ const MapMarkerView = Backbone.View.extend(/** @lends MapMarkerView.prototype */
      * @fires Core#RadioRequestUtilIsViewMobile
      */
     initialize: function (config) {
-        const channel = Radio.channel("MapMarker");
         let markerPosition = "";
 
         this.model = new MapMarkerModel(config);
-
-        channel.on({
-            "zoomTo": this.zoomTo,
-            "hideMarker": this.hideMarker,
-            "showMarker": this.showMarker,
-            "hidePolygon": this.hidePolygon,
-            "showPolygon": this.showPolygon,
-            "zoomToBKGSearchResult": this.zoomToBKGSearchResult
-        }, this);
 
         if (Radio.request("ParametricURL", "getProjectionFromUrl") !== undefined) {
             this.model.setProjectionFromParamUrl(Radio.request("ParametricURL", "getProjectionFromUrl"));

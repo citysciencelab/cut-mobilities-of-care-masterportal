@@ -13,6 +13,7 @@ import GdiModel from "./gdi/model";
 import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
 import "./RadioBridge.js";
+import store from "../../src/app-store/index";
 
 /**
  * @member SearchbarTemplate
@@ -70,11 +71,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      * @fires Title#RadioTriggerTitleSetSize
      * @fires Searchbar#RadioTriggerSearchbarSearchAll
      * @fires GFI#RadioTriggerGFISetIsVisible
-     * @fires MapMarker#RadioTriggerMapMarkerZoomTo
      * @fires Searchbar#RadioTriggerSearchbarHit
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
-     * @fires MapMarker#RadioTriggerMapMarkerHidePolygon
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     initialize: function (config) {
         this.model = new Searchbar(config);
@@ -449,7 +446,38 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
         }
         else {
-            Radio.trigger("MapMarker", "zoomTo", hit, 5000);
+            const resolutions = Radio.request("MapView", "getResolutions"),
+                index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
+            let extent = [];
+
+            if (hit?.coordinate) {
+                if (hit.coordinate.length === 2) {
+                    store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+                    Radio.trigger("MapView", "setCenter", hit.coordinate, {maxZoom: index});
+                }
+                else {
+                    store.dispatch("MapMarker/removePolygonMarker");
+                    store.dispatch("MapMarker/placingPolygonMarker", hit);
+                    extent = store.getters["MapMarker/wkt"].getGeometry().getExtent();
+                    Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
+                }
+            }
+            else {
+                const isMobile = Radio.request("Util", "isViewMobile");
+
+                // desktop - topics tree is expanded
+                if (isMobile === false) {
+                    Radio.trigger("ModelList", "showModelInTree", hit.id);
+                }
+                // mobil
+                else {
+                    // adds the model to list, if not contained
+                    Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
+                    Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
+                }
+                // triggers selection of checkbox in tree
+                Radio.trigger("ModelList", "refreshLightTree");
+            }
         }
         // 5. Triggere hit by the radio
         // is needed for IDA and sgv-online, ...
@@ -850,7 +878,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         this.model.setSearchString("");
         this.setSearchbarString("");
         this.hideMarker();
-        Radio.trigger("MapMarker", "hideMarker");
+        store.dispatch("MapMarker/removePointMarker");
+        store.dispatch("MapMarker/removePolygonMarker");
         this.hideMenu();
         this.$("#searchInputUL").html("");
     },
@@ -858,7 +887,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     /**
      * Handler for mouseenter event on hit.
      * @param {$.Event} evt Event
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      * @returns {void}
      */
     showMarker: function (evt) {
@@ -873,7 +901,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             return;
         }
         else if (hit && hit.hasOwnProperty("coordinate")) {
-            Radio.trigger("MapMarker", "showMarker", hit.coordinate);
+            store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
             return;
         }
         else if (hit && hit.hasOwnProperty("type") && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject"))) {
@@ -886,8 +914,6 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     /**
      * Hides all map markers.
      * @param {event} evt mouse leave event
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
-     * @fires MapMarker#RadioTriggerMapMarkerHidePolygon
      * @returns {void}
      */
     hideMarker: function (evt) {
@@ -905,7 +931,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             }
         }
         else if (this.$(".dropdown-menu-search").css("display") === "block") {
-            Radio.trigger("MapMarker", "hideMarker");
+            store.dispatch("MapMarker/removePointMarker");
         }
     },
 

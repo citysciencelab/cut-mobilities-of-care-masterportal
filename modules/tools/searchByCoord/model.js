@@ -1,5 +1,6 @@
 import proj4 from "proj4";
 import Tool from "../../core/modelList/tool/model";
+import store from "../../../src/app-store";
 
 const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -231,7 +232,8 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
 
             this.set("newCenter", [easting, northing]);
         }
-        Radio.trigger("MapMarker", "zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
+        store.dispatch("MapMarker/placingPointMarker", this.get("newCenter"));
+        Radio.trigger("MapView", "setCenter", this.get("newCenter"), store.getters["MapMarker/zoomLevel"]);
     },
     // setter for coordinatesEasting
     setCoordinatesEasting: function (value) {

@@ -4,6 +4,7 @@ import {extend as olExpandExtent} from "ol/extent.js";
 import {Point} from "ol/geom.js";
 import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
+import store from "../../../../src/app-store";
 
 const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -169,7 +170,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         Radio.trigger("MapView", "setCenter", coords, this.get("zoomLevel"));
 
         if (setMarker) {
-            Radio.trigger("MapMarker", "showMarker", coords);
+            store.dispatch("MapMarker/placingPointMarker", coords);
         }
     },
 

@@ -6,6 +6,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import Feature from "ol/Feature.js";
 import {getVectorContext} from "ol/render.js";
 import thousandsSeparator from "../../../../src/utils/thousandsSeparator";
+import store from "../../../../src/app-store";
 
 const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     defaults: Object.assign({}, PendlerCoreModel.prototype.defaults, {
@@ -65,7 +66,6 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * @property {String} colors=[] contains colors of circles
      * @property {String} glyphicon="glyphicon-play-circle" icon to start the animation
      * @property {Object} animationLayer={} contains the layer of the animation
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires  Core#RadioTriggerMapRemoveLayer
      * @fires Core#RadioTriggerMapRender
      */
@@ -141,7 +141,6 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * Bricht eine Animation ab (und entfernt die zugehörigen Punkte).
      * Verwendung beispielsweise bei Änderung der Abfrageparameter.
      * @returns {void} Kein Rückgabewert
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires  Core#RadioTriggerMapRemoveLayer
      */
     clear: function () {
@@ -154,12 +153,12 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         if (animationLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", animationLayer);
         }
-        Radio.trigger("MapMarker", "hideMarker");
 
         if (labelLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
-        Radio.trigger("MapMarker", "hideMarker");
+        store.dispatch("MapMarker/removePointMarker");
+
     },
 
     /**

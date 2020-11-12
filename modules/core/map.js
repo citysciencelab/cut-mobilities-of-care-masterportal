@@ -64,7 +64,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @fires Core.ModelList#RadioTriggerModelListAddInitiallyNeededModels
      * @fires Core#RadioRequestParametricURLGetZoomToExtent
      * @fires Core#RadioTriggerMapIsReady
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      * @fires Core#RadioTriggerMapViewSetCenter
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      * @fires Core#RadioTriggerMapChange
@@ -201,8 +200,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * Function is registered as an event listener if the config-parameter "inputMap" is present
      * and always sets a mapMarker at the clicked position without activating it.
      * Also triggers the RemoteInterface with the marker coordinates.
-     * @param  {event} event - The MapBrowserPointerEvent
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     * @param  {event} event - The MapBrowserPointerEventShowMarker
      * @fires Core#RadioTriggerMapViewSetCenter
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      * @returns {void}
@@ -210,8 +208,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     addMarker: function (event) {
         let coords = event.coordinate;
 
-        // Set the marker on the map.
-        Radio.trigger("MapMarker", "showMarker", coords);
+        store.dispatch("MapMarker/placingPointMarker", coords);
 
         // If the marker should be centered, center the map around it.
         if (Config.inputMap.setCenter) {

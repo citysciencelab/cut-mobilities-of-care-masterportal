@@ -34,7 +34,7 @@ describe("src/modules/footer/components/Footer.vue", () => {
 
     beforeEach(() => {
         store = new Vuex.Store({
-            namespaces: true,
+            namespaced: true,
             modules: {
                 Footer
             },

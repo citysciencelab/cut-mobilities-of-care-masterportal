@@ -1,4 +1,5 @@
 import Tool from "../../core/modelList/tool/model";
+import store from "../../../src/app-store";
 
 const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -81,9 +82,7 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @property {String} tryAgainLater="", filled with "Bitte versuchen Sie es später erneut."- translated
      * @constructs
      * @listens i18next#RadioTriggerLanguageChanged
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapRegisterListener
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     initialize: function () {
         this.superInitialize();
@@ -299,7 +298,8 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
             });
             this.setParcelFound(true);
 
-            Radio.trigger("MapMarker", "zoomTo", {type: this.get("mapMarkerType"), coordinate: coordinate});
+            store.dispatch("MapMarker/placingPointMarker", coordinate);
+            Radio.trigger("MapView", "setCenter", coordinate, store.getters["MapMarker/zoomLevel"]);
             // use a timeout here, else the resolution-change is not ready and in the addon showParcelGfi/RadioBridge the wrong result is returned for parcelsearch
             setTimeout(() => {
                 Radio.trigger("ParcelSearch", "parcelFound", attributes);
