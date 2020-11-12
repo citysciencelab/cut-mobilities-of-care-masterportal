@@ -120,13 +120,28 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
      */
     pushFeature: function (layer, feature) {
         this.get("selectedFeatures").push(feature);
-        this.get("selectedFeaturesWithRenderInformation").push({
-            feature,
-            properties: this.translateGFI(
-                feature.getProperties(),
-                layer.get("gfiAttributes")
-            )
-        });
+        if (feature.get("features") === undefined) {
+            const item = feature;
+
+            this.get("selectedFeaturesWithRenderInformation").push({
+                item,
+                properties: this.translateGFI(
+                    item.getProperties(),
+                    layer.get("gfiAttributes")
+                )
+            });
+        }
+        else {
+            feature.get("features").forEach(item => {
+                this.get("selectedFeaturesWithRenderInformation").push({
+                    item,
+                    properties: this.translateGFI(
+                        item.getProperties(),
+                        layer.get("gfiAttributes")
+                    )
+                });
+            });
+        }
     },
 
     /**
