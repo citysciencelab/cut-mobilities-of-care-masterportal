@@ -146,6 +146,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                     console.warn("The URL-Parameter: " + parameterNameUpperCase + " is not supported in The Masterportal!");
                 }
             });
+
             this.setResult(result);
             Object.keys(result).forEach(param => {
                 if (possibleUrlParameters.hasOwnProperty(param)) {
@@ -261,7 +262,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
         // Read out transparency value. If missing null.
         if (transparencyListString === "") {
-            transparencyList = layerIdList.map(() => 0);
+            transparencyList = layerIdList.map(() => null);
         }
         else if (transparencyListString.indexOf(",") > -1) {
             transparencyList = transparencyListString.split(",").map(val => {
@@ -280,10 +281,18 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         layerIdList.forEach((val, index) => {
             const layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
                 layerExisting = getLayerWhere({id: val}),
-                treeType = Radio.request("Parser", "getTreeType");
+                treeType = Radio.request("Parser", "getTreeType"),
+                optionsOfLayer = {
+                    id: val,
+                    visibility: visibilityList[index]
+                };
+
             let layerToPush;
 
-            layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
+            if (transparencyList[index] !== null) {
+                optionsOfLayer.transparency = transparencyList[index];
+            }
+            layerParams.push(optionsOfLayer);
 
             if (layerConfigured === undefined && layerExisting !== null && treeType === "light") {
                 layerToPush = Object.assign({

@@ -1,7 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getCenter, getResolution, setResolution} = require("../../../library/scripts"),
-    {isBasic, isDefault, isCustom} = require("../../../settings"),
     {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
@@ -26,7 +25,7 @@ async function SearchByCoordTests ({builder, url, resolution, capability}) {
                 searchButton: By.css("div#window .win-body button"),
                 searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]")
             },
-            expectedResolution = isBasic(url) || isCustom(url) || isDefault(url) ? 0.66 : 0.13;
+            expectedResolution = 0.66;
         let driver, searchMarkerContainer, counter;
 
         before(async function () {

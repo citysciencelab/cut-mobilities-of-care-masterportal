@@ -183,7 +183,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     getDrawLayerInfo: function (layer, extent) {
         const featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
             features = Radio.request("Util", "sortBy", featuresInExtent, function (feature) {
-                return feature.getStyle().getZIndex();
+                if (feature.getStyle() && typeof feature.getStyle === "function" && typeof feature.getStyle().getZIndex === "function") {
+                    return feature.getStyle().getZIndex();
+                }
+                return 0;
+
             });
 
         if (features.length > 0) {
@@ -387,7 +391,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (style.getImage() instanceof CircleStyle) {
             return this.buildPointStyleCircle(style.getImage());
         }
-        else if (style.getImage() instanceof Icon) {
+        else if (style.getImage() instanceof Icon && style.getImage().getScale() > 0) {
             return this.buildPointStyleIcon(style.getImage(), layer);
         }
         return this.buildTextStyle(style.getText());
@@ -462,11 +466,13 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - Text Style for mapfish print.
      */
     buildTextStyle: function (style) {
-        // There are different kinds of font definitions: One sets size and font and an other sets only the name. Both are used in masterportal.
-        const isFontSizeInFont = style.getFont().split(" ").length === 2 && style.getFont().split(" ")[0].endsWith("px"),
+        // use openlayers kml default font, if not set
+        const font = style.getFont() ? style.getFont() : "bold 16px Helvetica",
+            size = this.getFontSize(font),
+            isFontSizeInFont = size !== null,
             textScale = style.getScale() ? style.getScale() : 1,
-            fontSize = isFontSizeInFont ? style.getFont().split(" ")[0] : 10 * textScale,
-            fontFamily = isFontSizeInFont ? style.getFont().split(" ")[1] : style.getFont(),
+            fontSize = isFontSizeInFont ? size : 10 * textScale,
+            fontFamily = isFontSizeInFont ? this.getFontFamily(font, fontSize) : font,
             fontColor = style.getFill().getColor();
 
         return {
@@ -481,6 +487,34 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             fontFamily: fontFamily,
             labelAlign: this.getLabelAlign(style)
         };
+    },
+
+    /**
+     * Inspects the given fontDef for family.
+     * @param {String} fontDef the defined font
+     * @param {String} fontSize the size incuding in the font
+     * @returns {String} the font-family or an empty String if not contained
+     */
+    getFontFamily: function (fontDef, fontSize) {
+        const index = fontDef ? fontDef.indexOf(" ", fontDef.indexOf(fontSize)) : -1;
+
+        if (index > -1) {
+            return fontDef.substring(index + 1);
+        }
+        return "";
+    },
+    /**
+     * Inspects the given fontDef for numbers (=size).
+     * @param {String} fontDef the defined font
+     * @returns {String} the font-size or null if not contained
+     */
+    getFontSize: function (fontDef) {
+        const size = fontDef ? fontDef.match(/\d/g) : null;
+
+        if (Array.isArray(size) && size.length > 0) {
+            return size.join("");
+        }
+        return null;
     },
 
     /**
@@ -697,7 +731,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         let styles;
 
         if (feature.getStyleFunction() !== undefined) {
-            styles = feature.getStyleFunction().call(feature);
+            try {
+                styles = feature.getStyleFunction().call(feature);
+            }
+            catch (e) {
+                styles = feature.getStyleFunction().call(this, feature);
+            }
         }
         else {
             styles = layer.getStyleFunction().call(layer, feature);

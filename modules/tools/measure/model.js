@@ -105,6 +105,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             "3D Messen": "3d"
         },
         geomtype: "LineString",
+        drawingFeature: false,
         unit: "m",
         decimal: 1,
         hits3d: [],
@@ -436,6 +437,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     createInteraction: function (drawType) {
         const that = this,
             value = this.getLocalizedValues()[drawType];
+
         let textPoint;
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
@@ -451,6 +453,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
+                that.set("drawingFeature", evt.feature);
                 that.setIsDrawing(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
@@ -459,6 +462,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 that.registerClickListener(that);
             }, this);
             this.get("draw").on("drawend", function (evt) {
+                that.set("drawingFeature", false);
                 that.setIsDrawing(false);
                 evt.feature.set("styleId", evt.feature.ol_uid);
                 that.unregisterPointerMoveListener(that);
@@ -510,8 +514,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     moveTextPoint: function (evt) {
         const point = this.get("textPoint"),
             geom = point.getGeometry(),
-            currentLine = this.get("draw").getOverlay().getSource().getFeatures()[0],
-            styles = this.generateTextStyles(currentLine);
+            styles = this.generateTextStyles();
 
         geom.setCoordinates(evt.coordinate);
         point.setStyle(styles);
@@ -575,8 +578,9 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @param {object} feature - geometry feature
      * @returns {object} styles
      */
-    generateTextStyles: function (feature) {
-        const fill = new Fill({
+    generateTextStyles: function () {
+        const feature = this.get("drawingFeature"),
+            fill = new Fill({
                 color: [0, 0, 0, 1]
             }),
             stroke = new Stroke({
@@ -590,7 +594,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             output = {},
             styles = [];
 
-        if (feature !== undefined) {
+        if (feature !== false) {
             geom = feature.getGeometry();
         }
 
@@ -665,7 +669,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             pointFeature.setStyle(this.generate3dTextStyles(distance, heightDiff));
         }
         else {
-            pointFeature.setStyle(this.generateTextStyles(feature));
+            pointFeature.setStyle(this.generateTextStyles());
         }
         pointFeature.set("styleId", this.uniqueId("measureStyle"));
         return pointFeature;

@@ -30,7 +30,10 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
     initialize: function () {
         this.listenTo(this.model, {
             "change:isActive": this.render,
-            "toggleButtonValueChanged": this.toggleElements
+            "toggleButtonValueChanged": this.toggleElements,
+            "change:currentLng": () => {
+                this.rerender();
+            }
         });
 
         if (Radio.request("Util", "getUiStyle") === "TABLE") {
@@ -67,6 +70,25 @@ const ShadowView = Backbone.View.extend(/** @lends ShadowView.prototype */{
             this.undelegateEvents();
         }
 
+        return this;
+    },
+
+    rerender: async function () {
+        if (this.model.get("isActive")) {
+            await this.datepickerView.rerender();
+            this.setElement(document.getElementsByClassName("win-body")[0]);
+            this.$el.html(this.template({}));
+            this.$el.append(this.toggleButtonView.render().el);
+            this.$el.append(this.datepickerView.render().el);
+            this.$el.append(this.timesliderView.render().el);
+            this.$el.append(this.datesliderView.render().el);
+            this.toggleElements(this.model.get("isShadowEnabled"));
+            this.model.toggleShadow(this.model.get("isShadowEnabled"));
+            document.getElementsByClassName("title-checkbox")[0].firstChild.nextSibling.innerText = this.model.get("shadowDisplay");
+            document.getElementsByClassName("title-values")[0].children[0].children[0].innerText = String(this.model.get("time"));
+            document.getElementsByClassName("title-values")[1].children[0].children[0].innerText = String(this.model.get("date"));
+            this.delegateEvents();
+        }
         return this;
     },
 

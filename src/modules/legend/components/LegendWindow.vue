@@ -210,9 +210,11 @@ export default {
             layerSource.forEach(layer => {
                 legends.push(this.prepareLegend(layer.get("legend")));
             });
-            legends = legends.flat();
+            // legends = legends.flat(); does not work in unittest and older browser versions
+            legends = [].concat(...legends);
             return legends;
         },
+
         /**
          * Generates the legend object and adds it to the legend array in the store.
          * @param {String} id Id of layer.
@@ -368,18 +370,29 @@ export default {
 
             Object.keys(scalingValues).forEach(key => {
                 const clonedStyle = style.clone(),
-                    olFeature = new Feature();
+                    olFeature = new Feature(),
+                    imageScale = clonedStyle.get("imageScale");
+                let svg,
+                    svgSize,
+                    image,
+                    imageSize,
+                    imageSizeWithScale;
 
                 olFeature.set(scalingAttribute, key);
                 clonedStyle.setFeature(olFeature);
                 clonedStyle.setIsClustered(false);
                 olStyle = clonedStyle.getStyle();
                 if (Array.isArray(olStyle)) {
+                    svg = olStyle[0].getImage().getSrc();
+                    svgSize = olStyle[0].getImage().getSize();
+                    image = olStyle[1].getImage().getSrc();
+                    imageSize = olStyle[1].getImage().getSize();
+                    imageSizeWithScale = [imageSize[0] * imageScale, imageSize[1] * imageScale];
                     nominalCircleSegments.push({
                         name: key,
-                        graphic: [olStyle[0].getImage().getSrc(), olStyle[1].getImage().getSrc()],
-                        iconSize: olStyle[0].getImage().getSize(),
-                        iconSizeDifferenz: (olStyle[1].getImage().getSize()[0] - olStyle[0].getImage().getSize()[0]) / 2
+                        graphic: [svg, image],
+                        iconSize: imageSizeWithScale,
+                        iconSizeDifferenz: Math.abs((imageSize[0] * imageScale - svgSize[0]) / 2)
                     });
                 }
                 else {

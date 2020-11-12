@@ -240,6 +240,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
         }, this);
 
         convertedFeatures = new DOMParser().parseFromString(this.convertFeatures(features, format), "text/xml");
+        this.addUniqueStyleId(convertedFeatures);
 
         convertedFeatures.getElementsByTagName("Placemark").forEach((placemark, i) => {
             const style = placemark.getElementsByTagName("Style")[0];
@@ -269,6 +270,17 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
 
         });
         return new XMLSerializer().serializeToString(convertedFeatures);
+    },
+
+    /**
+     * Each extendedData in converted features contains a styleId, this must be unique, else printing does not work.
+     * @param {Document} convertedFeatures converted features
+     * @returns {void}
+     */
+    addUniqueStyleId: function (convertedFeatures) {
+        convertedFeatures.getElementsByTagName("ExtendedData").forEach((extendedData) => {
+            extendedData.getElementsByTagName("value")[0].textContent = Radio.request("Util", "uniqueId", "");
+        });
     },
 
     /**

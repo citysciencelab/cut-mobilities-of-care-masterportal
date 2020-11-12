@@ -332,7 +332,7 @@ zoomToGeometry: {
 |----|-------------|---|-------|------------|
 |epsg|nein|Integer|4326|EPSG-Code für die Projektion der übergebenen Koordinaten der Feature.|
 |**[layers](#markdown-header-featureviaurllayers)**|ja|Object[]||Array an Layerkonfigurationen für die übergebenen Feature.|
-|zoomTo||String||Id des **[layers](#markdown-header-featureviaurllayers)**, zu welchem beim Start des Masterportals gezoomed werden soll. Beim Nichtangabe wird der normale Startpunkt der Karte verwendet.|
+|zoomTo||String oder Array||Id des **[layers](#markdown-header-featureviaurllayers)** oder Array von möglichen Layern, zu welchen beim Start des Masterportals gezoomed werden soll. Beim Nichtangabe wird der normale Startpunkt der Karte verwendet.|
 
 **Beispiel:**
 ```
@@ -357,6 +357,24 @@ featureViaURL: {
             "geometryType": "Polygon",
             "name": "URL Polygon Features",
             "styleId": "url_polygons"
+        },
+        {
+            "id": "urlMultiPointFeatures",
+            "geometryType": "MultiPoint",
+            "name": "URL MultiPoint Features",
+            "styleId": "url_mulitpoints"
+        },
+        {
+            "id": "urlMultiLineStringFeatures",
+            "geometryType": "MultiLineString",
+            "name": "URL MultiLineString Features",
+            "styleId": "url_multilinestring"
+        },
+        {
+            "id": "urlMultiPolygonFeatures",
+            "geometryType": "MultiPolygon",
+            "name": "URL MultiPolygon Features",
+            "styleId": "url_multipolygons"
         }
     ]
 }
@@ -371,7 +389,7 @@ Die beschriebenen Parameter sind für die eines einzelnen Layer-Objektes im **[l
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |id|ja|String||Eindeutige ID für den zu erstellenden Layer.|
-|geometryType|ja|enum["LineString", "Point", "Polygon"]||Geometrietyp der darzustellenden Feature.|
+|geometryType|ja|enum["LineString", "Point", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon"]||Geometrietyp der darzustellenden Feature.|
 |name|ja|String||Name des Layers; wird im Themenbaum, der Legende und im GFI-Popup dargestellt.|
 |styleId|nein|String||Eindeutige ID für den Style, welcher für die Feature verwendet werden soll. Die Styles stammen aus der **[style.json](style.json.md)**.|
 

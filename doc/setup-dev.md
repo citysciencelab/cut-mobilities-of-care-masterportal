@@ -97,3 +97,59 @@ für alle npm-Pakete:
 ```
 # npm update
 ```
+
+## Debugging im Visual Studio Code einrichten
+### 1.	Firefox/Chrome-Debugger als Erweiterung installieren
+![Debugger for Chrome im Marketplace](https://vscode-westus.azurewebsites.net/assets/docs/nodejs/reactjs/debugger-for-chrome.png)
+
+### 2.	In die Debugger-Sicht wechseln
+ ![Debugger Sicht](https://i0.wp.com/www.mattgoldspink.co.uk/wp-content/uploads/2019/02/Screenshot-2019-02-01-at-21.03.13.png?w=640&ssl=1)
+
+### 3.	Die Konfiguration launch.json öffnen
+![Konfiguration launch.json öffnen](https://docs.microsoft.com/ja-jp/windows/images/vscode-debug-launch-configuration.png)
+
+### 4.	Hinzufügen einer neuen Konfiguration für Firefox in die gerade geöffnete launch.json…
+    
+```javascript 
+
+    {
+        "name": "Launch localhost",
+        "type": "firefox",
+        "request": "launch",
+        "reAttach": true,
+        "url": "https://localhost:9001/",
+        "webRoot": "${workspaceFolder}/build",
+        "pathMappings": [
+            {
+            "url": "webpack:///modules/core",
+            "path": "${workspaceFolder}/modules/core"
+            }
+        ]
+    },
+```
+
+…oder/und  für Chrome
+
+```javascript
+
+    {
+        "name": "Launch Chrome",
+        "type": "chrome",
+        "request": "launch",
+        "url": "https://localhost:9001/",
+        "webRoot": "${workspaceFolder}/build", 
+    },
+```
+
+### 5.  Server starten
+```
+> npm start
+```
+
+### 6.	Debugger auswählen (1) und starten (2)
+![Debugger auswählen und starten](https://i.stack.imgur.com/aJatw.png)
+ 
+
+### 7.	Breakpoint setzen
+![Breakpoint setzen](https://docs.microsoft.com/en-us/sharepoint/dev/images/vscode-debugging-breakpoint-configured.png)
+  
