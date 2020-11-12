@@ -60,8 +60,6 @@
     "olcs": "^2.10.0",
     "rbush": "^3.0.1",
     "vcs-oblique": "^2.0.1",
-    "video.js": "6.x",
-    "videojs-flash": "^2.1.0",
     "vue": "^2.6.11",
     "vue-loader": "^15.7.2",
     "vue-template-compiler": "^2.6.10",
