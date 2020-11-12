@@ -6,7 +6,7 @@ import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
 import LegendSingleLayer from "./LegendSingleLayer.vue";
 import {isArrayOfStrings} from "../../../utils/objectHelpers";
-import colorToRgb from "../../../utils/colorToRgb";
+import colorArrayToRgb from "../../../utils/colorArrayToRgb";
 
 export default {
     name: "LegendWindow",
@@ -442,10 +442,10 @@ export default {
          * @returns {string} svg
          */
         drawCircleStyle: function (style) {
-            const circleStrokeColor = style.get("circleStrokeColor") ? colorToRgb(style.get("circleStrokeColor")) : "black",
+            const circleStrokeColor = style.get("circleStrokeColor") ? colorArrayToRgb(style.get("circleStrokeColor")) : "black",
                 circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
                 circleStrokeWidth = style.get("circleStrokeWidth"),
-                circleFillColor = style.get("circleFillColor") ? colorToRgb(style.get("circleFillColor")) : "black",
+                circleFillColor = style.get("circleFillColor") ? colorArrayToRgb(style.get("circleFillColor")) : "black",
                 circleFillOpacity = style.get("circleFillColor")[3] || 0,
                 circleRadius = style.get("circleRadius"),
                 widthAndHeight = (circleRadius + 1.5) * 2;
@@ -475,7 +475,7 @@ export default {
          * @returns {Object} - prepared legendObj.
          */
         prepareLegendForLineString (legendObj, style) {
-            const strokeColor = style.get("lineStrokeColor") ? colorToRgb(style.get("lineStrokeColor")) : "black",
+            const strokeColor = style.get("lineStrokeColor") ? colorArrayToRgb(style.get("lineStrokeColor")) : "black",
                 strokeWidth = style.get("lineStrokeWidth"),
                 strokeOpacity = style.get("lineStrokeColor")[3] || 0,
                 strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
@@ -506,8 +506,8 @@ export default {
          * @returns {Object} - prepare legendObj
          */
         prepareLegendForPolygon (legendObj, style) {
-            const fillColor = style.get("polygonFillColor") ? colorToRgb(style.get("polygonFillColor")) : "black",
-                strokeColor = style.get("polygonStrokeColor") ? colorToRgb(style.get("polygonStrokeColor")) : "black",
+            const fillColor = style.get("polygonFillColor") ? colorArrayToRgb(style.get("polygonFillColor")) : "black",
+                strokeColor = style.get("polygonStrokeColor") ? colorArrayToRgb(style.get("polygonStrokeColor")) : "black",
                 strokeWidth = style.get("polygonStrokeWidth"),
                 fillOpacity = style.get("polygonFillColor")[3] || 0,
                 strokeOpacity = style.get("polygonStrokeColor")[3] || 0;

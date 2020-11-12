@@ -1,3 +1,4 @@
+import colorArrayToRgb from "../../../src/utils/colorArrayToRgb";
 import SnippetModel from "../model";
 import ValueModel from "../value/model";
 
@@ -106,8 +107,8 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     createPolygonSVG: function (style) {
         let svg = "";
-        const fillColor = style.get("polygonFillColor") ? this.colorToRgb(style.get("polygonFillColor")) : "black",
-            strokeColor = style.get("polygonStrokeColor") ? this.colorToRgb(style.get("polygonStrokeColor")) : "black",
+        const fillColor = style.get("polygonFillColor") ? colorArrayToRgb(style.get("polygonFillColor")) : "black",
+            strokeColor = style.get("polygonStrokeColor") ? colorArrayToRgb(style.get("polygonStrokeColor")) : "black",
             strokeWidth = style.get("polygonStrokeWidth"),
             fillOpacity = style.get("polygonFillColor")[3] || 0,
             strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
@@ -136,10 +137,10 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     createCircleSVG: function (style) {
         let svg = "";
-        const circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
+        const circleStrokeColor = style.get("circleStrokeColor") ? colorArrayToRgb(style.get("circleStrokeColor")) : "black",
             circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
             circleStrokeWidth = style.get("circleStrokeWidth"),
-            circleFillColor = style.get("circleFillColor") ? this.colorToRgb(style.get("circleFillColor")) : "black",
+            circleFillColor = style.get("circleFillColor") ? colorArrayToRgb(style.get("circleFillColor")) : "black",
             circleFillOpacity = style.get("circleFillColor")[3] || 0;
 
         svg += "<svg height='25' width='25'>";
@@ -166,7 +167,7 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     createLineSVG: function (style) {
         let svg = "";
-        const strokeColor = style.get("lineStrokeColor") ? this.colorToRgb(style.get("lineStrokeColor")) : "black",
+        const strokeColor = style.get("lineStrokeColor") ? colorArrayToRgb(style.get("lineStrokeColor")) : "black",
             strokeWidth = style.get("lineStrokeWidth"),
             strokeOpacity = style.get("lineStrokeColor")[3] || 0,
             strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
@@ -186,16 +187,6 @@ const MultiCheckboxModel = SnippetModel.extend({
         svg += "</svg>";
 
         return svg;
-    },
-
-
-    /**
-     * Returns a rgb color string that can be interpreted in SVG.
-     * @param   {integer[]} color color set in style
-     * @returns {string} svg color
-     */
-    colorToRgb: function (color) {
-        return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
     },
 
 
