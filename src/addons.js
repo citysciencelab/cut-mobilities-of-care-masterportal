@@ -11,7 +11,7 @@ const allAddons = VUE_ADDONS || {};
  */
 export default async function (config) {
     Vue.prototype.$toolAddons = []; // add .$toolAddons to store tools in
-    Vue.prototype.$themeAddons = []; // add .$themeAddons to store themes in
+    Vue.prototype.$gfiThemeAddons = []; // add .$gfiThemeAddons to store themes in
     if (config) {
         const addons = config.map(async addonKey => {
             try {
@@ -22,7 +22,7 @@ export default async function (config) {
                         await loadToolAddons(addonKey);
                     }
                     else if (addonConf.type === "gfiTheme") {
-                        await loadThemes(addonKey);
+                        await loadGfiThemes(addonKey);
                     }
                 }
             }
@@ -37,47 +37,26 @@ export default async function (config) {
 }
 
 /**
- * Loads the themes and creates the Vue component and adds it to Vue instance globally
+ * Loads the gfi themes and creates the Vue component and adds it to Vue instance globally
  * @param {String} addonKey specified in config.js
  * @returns {void}
  */
-async function loadThemes (addonKey) {
-    const addonModule = await import(
-        /* webpackChunkName: "[request]" */
-        /* webpackInclude: /addons[\\\/].*[\\\/]index.js$/ */
-        /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
-        `../addons/${allAddons[addonKey].entry}`
-    ),
-        addon = addonModule.default;
-
-    // Add the locale
-    for (const localeKey in addon.locales) {
-        i18next.addResourceBundle(localeKey, "additional", addon.locales[localeKey], true);
-    }
+async function loadGfiThemes (addonKey) {
+    const addon = await loadAddon(addonKey);
 
     Vue.component(addon.component.name, addon.component);
-    // Add the componentName to a global array on vue instance called $themeAddons
-    Vue.prototype.$themeAddons.push(addon.component.name);
+    // Add the componentName to a global array on vue instance called $gfiThemeAddons
+    Vue.prototype.$gfiThemeAddons.push(addon.component.name);
 }
+
 /**
- * Loads the tool addon, creates the Vue component and adds it to Vue instance globally.
+ * Creates the Vue component and adds it to Vue instance globally.
  * Registeres the store at module "Tools" and adds the local-files.
  * @param {String} addonKey specified in config.js
  * @returns {void}
  */
 async function loadToolAddons (addonKey) {
-    const addonModule = await import(
-        /* webpackChunkName: "[request]" */
-        /* webpackInclude: /addons[\\\/].*[\\\/]index.js$/ */
-        /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
-        `../addons/${allAddons[addonKey].entry}`
-    ),
-        addon = addonModule.default;
-
-    // Add the locale
-    for (const localeKey in addon.locales) {
-        i18next.addResourceBundle(localeKey, "additional", addon.locales[localeKey], true);
-    }
+    const addon = await loadAddon(addonKey);
 
     // Add the addonKey to a global array on vue instance
     Vue.prototype.$toolAddons.push(addon.component.name);
@@ -85,5 +64,27 @@ async function loadToolAddons (addonKey) {
     // register the vuex store module
     store.registerModule(["Tools", addon.component.name], addon.store);
     store.dispatch("Tools/addTool", addon.component);
+}
+
+/**
+ * Loads the addon with locales.
+ * @param {String} addonKey specified in config.js
+ * @returns {Object} The addon.
+ */
+async function loadAddon (addonKey) {
+    const addonModule = await import(
+        /* webpackChunkName: "[request]" */
+        /* webpackInclude: /addons[\\\/].*[\\\/]index.js$/ */
+        /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+        `../addons/${allAddons[addonKey].entry}`
+    ),
+        addon = addonModule.default;
+
+    // Add the locale
+    for (const localeKey in addon.locales) {
+        i18next.addResourceBundle(localeKey, "additional", addon.locales[localeKey], true);
+    }
+
+    return addon;
 }
 
