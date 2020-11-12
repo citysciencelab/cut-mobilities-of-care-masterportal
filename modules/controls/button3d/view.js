@@ -1,6 +1,7 @@
 import Button3dTemplate from "text-loader!./template.html";
 import Button3dTemplateTable from "text-loader!./templateTable.html";
 import Button3dModel from "./model";
+import store from "../../../src/app-store";
 /**
  * @member Button3dTemplate
  * @description Template used for the 3D Button
@@ -73,21 +74,28 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
     /**
      * Shows the 3D button as selected.
      * Shows the 3D button as not selected.
-     * @param  {string} map Mode of the map.
+     * @param  {string} mapMode - map mode of the map.
      * @returns {void}
      */
-    change: function (map) {
-        if (map === "3D") {
+    change: function (mapMode) {
+        if (mapMode === "3D") {
             // 3d close
             this.$("#button3D").addClass("toggleButtonPressed");
             this.$("#3d-titel-open").hide();
             this.$("#3d-titel-close").show();
+            store.commit("Map/setMapMode", 1);
         }
         else {
             // 3d open
             this.$("#button3D").removeClass("toggleButtonPressed");
             this.$("#3d-titel-close").hide();
             this.$("#3d-titel-open").show();
+            if (mapMode === "2D") {
+                store.commit("Map/setMapMode", 0);
+            }
+            else {
+                store.commit("Map/setMapMode", 2);
+            }
         }
     },
     /**
