@@ -222,6 +222,7 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
                 properties[key] = "<a href=" + value + " target=\"_blank\">" + value + "</a>";
             }
         });
+        // showAll => just use properties and make key look nice
         if (gfiAttributes === "showAll") {
             return Object
                 .entries(properties)
