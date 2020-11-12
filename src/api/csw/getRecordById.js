@@ -125,19 +125,22 @@ function parseDate (json, dateType) {
  */
 function parseDownloadLinks (json) {
     const transferOptions = json.GetRecordByIdResponse?.MD_Metadata?.distributionInfo?.MD_Distribution?.transferOptions,
-        onlineResources = getNestedValues(transferOptions, "CI_OnlineResource"),
         downloadResources = [];
 
-    onlineResources.forEach(resource => {
-        if (resource?.function?.CI_OnLineFunctionCode?.getAttributes().codeListValue === "download") {
-            downloadResources.push({
-                // location (address) for on-line access
-                link: resource?.linkage?.URL.getValue(),
-                // name of the online resource
-                linkName: resource?.name?.CharacterString.getValue() || resource?.linkage?.URL.getValue()
-            });
-        }
-    });
+    if (transferOptions) {
+        const onlineResources = getNestedValues(transferOptions, "CI_OnlineResource");
+
+        onlineResources.forEach(resource => {
+            if (resource?.function?.CI_OnLineFunctionCode?.getAttributes().codeListValue === "download") {
+                downloadResources.push({
+                    // location (address) for on-line access
+                    link: resource?.linkage?.URL.getValue(),
+                    // name of the online resource
+                    linkName: resource?.name?.CharacterString.getValue() || resource?.linkage?.URL.getValue()
+                });
+            }
+        });
+    }
 
     return downloadResources.length > 0 ? downloadResources : null;
 }
