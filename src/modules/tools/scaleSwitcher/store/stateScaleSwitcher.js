@@ -1,15 +1,15 @@
 /**
  * User type definition
- * @typedef {object} ScaleSwitcherState
- * @property {boolean} active if true, scaleSwitcher will rendered
- * @property {string} id id of the ScaleSwitcher component
- * @property {string} currentScale scale selected in ScaleSwitcher
- * @property {string} name displayed as title (config-param)
- * @property {string} glyphicon icon next to title (config-param)
- * @property {boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
- * @property {boolean} resizableWindow if true, window is resizable (config-param)
- * @property {boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
- * @property {boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
+ * @typedef {Object} ScaleSwitcherState
+ * @property {Boolean} active if true, scaleSwitcher will rendered
+ * @property {String} id id of the ScaleSwitcher component
+ * @property {String} currentScale scale selected in ScaleSwitcher
+ * @property {String} name displayed as title (config-param)
+ * @property {String} glyphicon icon next to title (config-param)
+ * @property {Boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
+ * @property {Boolean} resizableWindow if true, window is resizable (config-param)
+ * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
+ * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
  */
 const state = {
     active: false,

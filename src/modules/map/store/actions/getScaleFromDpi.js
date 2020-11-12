@@ -4,8 +4,8 @@ import {transform} from "ol/proj";
 /**
  * Return current scale depending on map zoom and device dpi.
  * @param {module:ol/Map} map openlayer map object
- * @param {number} dpi device dpi
- * @returns {?number} scale as the x in '1 : x'
+ * @param {Number} dpi device dpi
+ * @returns {?Number} scale as the x in '1 : x'
  */
 function getScaleFromDpi (map, dpi) {
     const view = map.getView(),
@@ -35,8 +35,8 @@ function getScaleFromDpi (map, dpi) {
 
 /**
  * returns the rounded scale
- * @param {number} scale to round
- * @returns {number} rounded scale
+ * @param {Number} scale to round
+ * @returns {Number} rounded scale
  */
 function getRoundedScale (scale) {
     if (scale > 10000) {

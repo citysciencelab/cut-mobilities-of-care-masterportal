@@ -2,11 +2,11 @@ export default {
     /**
      * Registers a new control element.
      * Can be called e.g. by an addon, if Store is globally accessible.
-     * @param {object} state current state
-     * @param {string} name name of control in config.json
-     * @param {object} control Vue Component
-     * @param {boolean} [hiddenMobile=false] whether component is visible in mobile resolution
-     * @param {boolean} [bottomControlsFlag=false] whether component is to be shown at lower end of the page
+     * @param {Object} state current state
+     * @param {String} name name of control in config.json
+     * @param {Object} control Vue Component
+     * @param {Boolean} [hiddenMobile=false] whether component is visible in mobile resolution
+     * @param {Boolean} [bottomControlsFlag=false] whether component is to be shown at lower end of the page
      * @returns {void}
      */
     registerModule (state, name, control, hiddenMobile = false, bottomControlsFlag = false) {
@@ -29,8 +29,8 @@ export default {
     },
     /**
      * Removes a control element.
-     * @param {object} state current state
-     * @param {string} name name of control to remove from state
+     * @param {Object} state current state
+     * @param {String} name name of control to remove from state
      * @returns {void}
      */
     unregisterModule (state, name) {

@@ -29,8 +29,8 @@ export default {
 
     /**
      * Sets config.json.
-     * @param {object} state store state
-     * @param {object} config config.json
+     * @param {Object} state store state
+     * @param {Object} config config.json
      * @returns {void}
      */
     setConfigJson (state, config) {
@@ -38,8 +38,8 @@ export default {
     },
     /**
      * Sets config.js.
-     * @param {object} state store state
-     * @param {object} config config.js
+     * @param {Object} state store state
+     * @param {Object} config config.js
      * @returns {void}
      */
     setConfigJs (state, config) {
@@ -47,8 +47,8 @@ export default {
     },
     /**
      * Sets mobile flag.
-     * @param {object} state store state
-     * @param {boolean} mobile whether browser resolution indicates mobile device
+     * @param {Object} state store state
+     * @param {Boolean} mobile whether browser resolution indicates mobile device
      * @returns {void}
      */
     setMobile (state, mobile) {
@@ -56,8 +56,8 @@ export default {
     },
     /**
      * Sets i18NextInitialized flag. Is done after languages for addons are loaded.
-     * @param {object} state store state
-     * @param {boolean} isInitialized whether i18Next is initialized
+     * @param {Object} state store state
+     * @param {Boolean} isInitialized whether i18Next is initialized
      * @returns {void}
      */
     setI18Nextinitialized (state, isInitialized) {
