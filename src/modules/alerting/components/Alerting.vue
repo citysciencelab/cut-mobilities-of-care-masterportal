@@ -106,7 +106,7 @@ export default {
                 collectedAlertIds = [...collectedAlertIds, ...data.globalAlerts];
             }
 
-            if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object") {
+            if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object" && Array.isArray(data.restrictedAlerts[this.currentUrl])) {
                 collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[this.currentUrl]];
             }
 
@@ -204,6 +204,19 @@ export default {
             line-height:18px;
             margin:0 0 8px 0;
             padding:0;
+        }
+
+        div.singleAlertWrapper {
+            &.error {
+                margin-left:-24px;
+                border-left: 4px solid rgba(255, 0, 0, 0.9);
+                padding-left: 21px;
+            }
+            &.warning {
+                margin-left:-24px;
+                border-left: 4px solid rgba(255, 125, 0, 0.7);
+                padding-left: 21px;
+            }
         }
 
         div.singleAlertContainer {
