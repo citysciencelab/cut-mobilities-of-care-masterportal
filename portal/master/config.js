@@ -1,5 +1,8 @@
 const Config = {
     addons: ["einwohnerabfrage", "VueAddon", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas"],
+    alerting: {
+        // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json"
+    },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     simpleMap: false,
     wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
