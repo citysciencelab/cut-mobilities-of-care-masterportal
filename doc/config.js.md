@@ -54,11 +54,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 ## alerting ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|category|nein|String|"alert-info"|Bestimmt das Layout des Bootstrap-Alerts. Siehe **[Bootstrap](https://getbootstrap.com/docs/3.4/components/#alerts)**|
-|fadeOut|nein|Integer|null|Angabe in Millisekunden, in der der Alert verblasst.|
-|isDismissable|nein|Boolean|true|Legt fest, ob der Alert weggeklickt werden kann, indem eine weitere Bootstrap-Class am alert gesetzt wird.|
-|isConfirmable|nein|Boolean|false|Legt fest, ob der Alert mit einem OK-Button bestätigt werden muss.|
-|position|nein|String|"top-center"|Position des Alerts. Mögliche Werte: "top-center", "center-center" und "bottom-center")|
+|fetchBroadcastUrl|nein|String|false|Hier kann eine URL definiert werden, unter der das Masterportal initial eine für das Alerting spezifische Konfigurationsdatei laden kann.|
+|localStorageDisplayedAlertsKey|nein|String|"displayedAlerts"|Frei wählbarer Key, unter dem im Local Storage des Browsers Daten bezüglich des Alertings gespeichert werden.|
 
 ***
 
