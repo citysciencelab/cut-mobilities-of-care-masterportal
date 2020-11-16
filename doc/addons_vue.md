@@ -6,7 +6,7 @@ Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auc
 
 Alle Addons liegen in einem Ordner namens "addons" auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der **[config.js](config.js.md)** konfigurieren.
 
-Folgende Struktur ist dabei zu beachten:
+Folgende Struktur ist dabei zu beachten, hier am Beispiel eines Werkzeuges (MyAddon1) und eines GFI-Themes (MyGfiTheme):
 
 ## 1. Dateistruktur von Addons ##
 
@@ -23,7 +23,7 @@ addons
 |   |   |-- gettersMyAddon1.js
 |   |   |-- indexMyAddon1.js
 |   |   |-- mutationsMyAddon1.js
-|   |   |-- MyAddon1.js //is the equivalent of index.js
+|   |   |-- index.js
 |   |
 |	|-- locales
 |	|   |-- de
@@ -44,18 +44,81 @@ addons
 |   |   |	|   |-- actionsMyAddon1.spec.js
 |   |   |	|   |-- gettersMyAddon1.spec.js
 |   |   |	|   |-- mutationsMyAddon1.spec.js
+
+|-- MyGfiTheme
+|   index.js
+|   |-- components
+|	|   |-- MyGfiTheme.vue
+|   |   |-- ...
+|	|-- locales
+|	|   |-- de
+|   |	|   |-- additional.json
+|	|   |-- en
+|   |	|   |-- additional.json
+|   |
+|	|-- doc
+|	|   |-- config.json.md
+|   |
+|	|-- test
+|	|   |-- end2end
+|   |	|   |-- MyGfiTheme.e2e.js
+|	|   |-- unit
+|   |	|   |-- components
+|   |   |	|   |-- MyGfiTheme.spec.js
+
+|-- MyGFIThemesFolder
+|   |-- MyGFISubFolder
+|   |   index.js
+|   |   |-- components
+|   |   |   |-- MyGfiTheme.vue
+|   |   |   |-- ...
+|   |   |-- locales
+|   |   |   |-- de
+|   |   |   |   |-- additional.json
+|   |   |   |-- en
+|   |   |   |   |-- additional.json
+|   |   |
+|   |   |-- doc
+|   |   |   |-- config.json.md
+|   |   |
+|   |   |-- test
+|   |   |   |-- end2end
+|   |   |   |   |-- MyGfiTheme.e2e.js
+|   |   |   |-- unit
+|   |   |   |   |-- components
+|   |   |   |   |   |-- MyGfiTheme.spec.js
+
+
+
 ```
 Der Entrypoint eines jeden Addons muss eine Datei namens **index.js** auf der root-Ebene des Addon-Folders sein.
 
-1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und die vom *addons/[key]* Ordner.
-Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
+1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und weiteren Angaben zum Addon.
+Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur. 
+
+Es werden 2 Arten von Addons unterstützt:
+
+Werkzeuge: `"type": "tool"`
+
+GFI-Themes: `"type": "gfiTheme"`
+
+Von allen Einträge in der addonsConf.json, die ein Objekt enthalten wird davon ausgegangen, dass sie mit vue programmiert sind (alte backbone-ddons enthalten nur einen String).
+
+Standardmäßig entspricht der Key eines Addons dem Namen seines Ordners im Addons Ordner. Mit dem Parameter "path" jedoch kann ein willkürlicher Pfad definiert werden. Dadurch können mehrere Addons in Ordnern gruppiert werden.
 
 #### Beispiel **addonsConf.json** ####
 ```json
 {
   [...]
   "MyAddon1": {
-    vue: true
+    "type": "tool"
+  },
+  "MyGfiTheme": {
+    "type": "gfiTheme"
+  },
+  "AnotherGFITheme": {
+    "type": "gfiTheme",
+    "path": "MyGFIThemesFolder/MyGFISubFolder"
   }
 }
 ```
@@ -64,9 +127,9 @@ Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordner
 
 ## 2. Beispiel-Addon ##
 
-Hier legen wir kurz ein Beispiel-Addon an!
+Hier legen wir kurz ein Beispiel-Addon für ein Werkzeug an!
 
-2.1. Dateien erstellen: Das Beispiel-Addon trägt den Namen *VueAddon* und seine Enrypoint-Datei heißt *index.js*. Die Komponente *VueAddon.vue* liegt im Ordner *components*. Daraus ergibt sich eine Dateistruktur wie folgt:
+2.1. Dateien erstellen: Das Beispiel-Addon trägt den Namen *VueAddon* und seine Entrypoint-Datei heißt *index.js*. Die Komponente *VueAddon.vue* liegt im Ordner *components*. Daraus ergibt sich eine Dateistruktur wie folgt:
 
 ```
 myMasterPortalFolder/
@@ -76,7 +139,7 @@ myMasterPortalFolder/
             components/
                 VueAddon.vue
             store
-                VueAddon.js
+                index.js
     devtools/
     doc/
     [...]
@@ -85,7 +148,7 @@ myMasterPortalFolder/
 2.2. Addon-Code schreiben:
 
 ```js
-// myMasterPortalFolder/addons/VueAddon/store/VueAddon.js
+// myMasterPortalFolder/addons/VueAddon/store/index.js
 
 import GenericTool from "../../../src/modules/tools/indexTools";
 import composeModules from "../../../src/app-store/utils/composeModules";
@@ -182,8 +245,6 @@ export default {
     </Tool>
 </template>
 ```
-
-Alle weiteren Dateien zum VueAddon können [hier](./VueAddon.zip) heruntergeladen werden.
 
 2.3 Die `index.js` Datei schreiben:
 Die `index.js` dient dazu alle Komponenten (Vue-Components, Store und Übersetzungen) zu aggregieren und als einen

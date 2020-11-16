@@ -8,10 +8,10 @@
  *  - getByDotSyntax(ex, ["drinks", ["milk.fresh"]]) === "tasty"
  *
  * @Todo Needs to be a helper, should not be here
- * @param {object} obj - The object to search in
- * @param {array|string} path - Array or String with the key.
- * @param {string} separator - Charactor to separate multiple keys
- * @returns {mixed} Retrieved value or undefined, if nothing found
+ * @param {Object} obj - The object to search in
+ * @param {(String|String[])} path - string or array of strings with the key
+ * @param {String} separator - Charactor to separate multiple keys
+ * @returns {*}  Retrieved value or undefined, if nothing found
  */
 function getByDotSyntax (obj, path, separator = ".") {
     const pathArray = createKeyPathArray(path);
@@ -30,9 +30,9 @@ export {getByDotSyntax};
  *  - const ex = {drinks: {milk: {fresh: "tasty"}}};
  *  - getByArraySyntax(ex, ["drinks", "milk", "fresh"]) === "tasty"
  *
- * @param {object} obj - The object to search in
- * @param {array} pathArray - Array with path keys
- * @returns {mixed} Retrieved value or undefined, if nothing found
+ * @param {Object} obj - The object to search in
+ * @param {String[]} pathArray - Array with path keys
+ * @returns {*}  Retrieved value or undefined, if nothing found
  */
 function getByArraySyntax (obj, pathArray) {
     const step = pathArray.shift();
@@ -61,9 +61,9 @@ export {getByArraySyntax};
  * If Arrays dont contain Strings or Arrays, it returns false.
  * If Strings start or end with the separator, it returns false.
  *
- * @param {array|string} path - Array or String with the key path.
- * @param {string} separator - Charactor to separate multiple keys
- * @returns {array|boolean} Array of path strings or false
+ * @param {String|String[]} path string or array of strings with the key path
+ * @param {String} separator Charactor to separate multiple keys
+ * @returns {String[]|Boolean} Array of path strings or false
  */
 function createKeyPathArray (path, separator = ".") {
     let result = [];
@@ -101,11 +101,11 @@ function createKeyPathArray (path, separator = ".") {
  * Module configs must be objects.
  * Module must have default values for those properties.
  *
- * @param {object} context - The store's context
- * @param {array} configPaths - Array of paths to search for in root state
- * @param {string} moduleName - Name of the module
- * @param {boolean} [recursiveFallback=true] - (optional) determines whether the fallbackOption is executed
- * @returns {boolean} True, if successfully merged
+ * @param {Object} context - The store's context
+ * @param {String[]} configPaths - Array of paths to search for in root state
+ * @param {String} moduleName - Name of the module
+ * @param {Boolean} [recursiveFallback=true] - (optional) determines whether the fallbackOption is executed
+ * @returns {Boolean} true, if successfully merged
  */
 function fetchFirstModuleConfig (context, configPaths, moduleName, recursiveFallback = true) {
     const missingSources = [],
@@ -163,9 +163,9 @@ export {fetchFirstModuleConfig};
 
 /**
  * Deep merges one object into another. If given source param is no object or an Array, nothing happens.
- * @param {object} source - Source object to merge into target object
- * @param {object} target - Target object that will be modified
- * @returns {object} - The resulting merged object
+ * @param {Object} source - Source object to merge into target object
+ * @param {Object} target - Target object that will be modified
+ * @returns {Object} - The resulting merged object
  */
 function deepMerge (source, target) {
     if (source instanceof Object === false) {

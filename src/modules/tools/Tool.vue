@@ -190,7 +190,7 @@ export default {
         },
         /**
          * handles the drag Start event to resize the sidebar
-         * @param {*} event the DOM-event
+         * @param {Event} event the DOM-event
          * @returns {void}
          */
         dragStart: function (event) {

@@ -18,6 +18,9 @@ const actions = {
 
         if (toolId !== undefined) {
             commit(toolId + "/setActive", active);
+            if (toolId !== "Gfi") {
+                commit("Gfi/setActive", !state[toolId].deactivateGFI);
+            }
         }
     },
 
@@ -41,9 +44,9 @@ const actions = {
 
     /**
      * Sets the config-params for every configured tool into state from that tool.
-     * @param {object} context the context Vue instance
-     * @param {object} configuredTool the tool component
-     * @returns {boolean} false, if config does not contain the tool
+     * @param {Object} context the context Vue instance
+     * @param {Object} configuredTool the tool component
+     * @returns {Boolean} false, if config does not contain the tool
      */
     pushAttributesToStoreElements: (context, configuredTool) => {
         return fetchFirstModuleConfig(context, [configuredTool.configPath], configuredTool.component.name);
@@ -52,7 +55,7 @@ const actions = {
     /**
      * Adds a tool dynamically to componentMap.
      * @param {Object} state state object; in this case rootState = state
-     * @param {object} tool tool to be added dynamically
+     * @param {Object} tool tool to be added dynamically
      * @returns {void}
      */
     addTool: ({state, commit}, tool) => {
@@ -62,7 +65,7 @@ const actions = {
     /**
      * Control the activation of the tools.
      * Deactivate all activated tools and then activate the given tool if it is available.
-     * @param {string} activeToolName - Name of the tool to be activated.
+     * @param {String} activeToolName - Name of the tool to be activated.
      * @returns {void}
      */
     controlActivationOfTools: ({getters, commit, dispatch}, activeToolName) => {
@@ -76,7 +79,7 @@ const actions = {
 
     /**
      * Checks if a tool should be open initially controlled by the url param "isinitopen".
-     * @param {string} toolName - Name from the toolComponent
+     * @param {String} toolName - Name from the toolComponent
      * @returns {void}
      */
     activateByUrlParam: ({rootState, dispatch}, toolName) => {
@@ -106,7 +109,7 @@ const actions = {
     /**
      * Activates a tool in the ModelList
      * @param {Object} state state object; in this case rootState = state
-     * @param {string} activeTool The tool to activate.
+     * @param {String} activeTool The tool to activate.
      * @returns {void}
      */
     activateToolInModelList ({state}, activeTool) {

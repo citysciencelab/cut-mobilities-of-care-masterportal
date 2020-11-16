@@ -1,7 +1,8 @@
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 
-/** @const {String} [Path array of possible config locations. First one found will be used] */
-/** @const {object} [vue actions] */
+/**
+ * @const {String} configPath an array of possible config locations. First one found will be used
+ */
 const configPaths = [
     "configJson.Portalconfig.portalTitle"
 ];
@@ -9,8 +10,8 @@ const configPaths = [
 export default {
     /**
      * Sets the config-params of this tool into state.
-     * @param {object} context the context Vue instance
-     * @returns {boolean} false, if config does not contain the tool
+     * @param {Object} context the context Vue instance
+     * @returns {Boolean} false, if config does not contain the tool
      */
     initialize: context => fetchFirstModuleConfig(context, configPaths, "portalTitle")
 };

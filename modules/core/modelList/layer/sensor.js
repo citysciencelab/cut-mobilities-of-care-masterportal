@@ -159,7 +159,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             name: this.get("name"),
             typ: this.get("typ"),
             gfiAttributes: this.get("gfiAttributes"),
-            gfiTheme: typeof this.get("gfiTheme") === "object" ? this.get("gfiTheme").name : this.get("gfiTheme"),
+            gfiTheme: this.get("gfiTheme"),
             routable: this.get("routable"),
             id: this.get("id"),
             altitudeMode: this.get("altitudeMode")
@@ -447,6 +447,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         thing.properties.dataStreamId = [];
         thing.properties.dataStreamName = [];
         thing.properties.dataStreamValue = [];
+        thing.properties.dataPhenomenonTime = [];
 
         dataStreams.forEach(dataStream => {
             const dataStreamId = String(dataStream["@iot.id"]),
@@ -461,20 +462,24 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             thing.properties.dataStreamId.push(dataStreamId);
             thing.properties.dataStreamName.push(dataStreamName);
 
-            if (this.get("showNoDataValue")) {
+            if (dataStreamValue) {
+                thing.properties[key] = dataStreamValue;
+                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, this.get("timezone"));
+                thing.properties.dataStreamValue.push(dataStreamValue);
+                thing.properties.dataPhenomenonTime.push(phenomenonTime);
+            }
+            else if (this.get("showNoDataValue")) {
                 thing.properties[key] = this.get("noDataValue");
                 thing.properties[key + "_phenomenonTime"] = this.get("noDataValue");
                 thing.properties.dataStreamValue.push(this.get("noDataValue"));
             }
-            else if (dataStreamValue) {
-                thing.properties[key] = dataStreamValue;
-                thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, this.get("timezone"));
-                thing.properties.dataStreamValue.push(dataStreamValue);
-            }
+
         });
+
         thing.properties.dataStreamId = thing.properties.dataStreamId.join(" | ");
         thing.properties.dataStreamValue = thing.properties.dataStreamValue.join(" | ");
         thing.properties.dataStreamName = thing.properties.dataStreamName.join(" | ");
+        thing.properties.dataPhenomenonTime = thing.properties.dataPhenomenonTime.join(" | ");
     },
 
     /**
@@ -484,14 +489,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     addDatastreamProperties: function (thingProperties, dataStreamProperties) {
-        Object.entries(dataStreamProperties).forEach(([key, value]) => {
-            if (thingProperties[key] !== undefined) {
-                thingProperties[key] = thingProperties[key] + " | " + value;
-            }
-            else {
-                thingProperties[key] = value;
-            }
-        });
+        if (dataStreamProperties) {
+            Object.entries(dataStreamProperties).forEach(([key, value]) => {
+                if (thingProperties[key] !== undefined) {
+                    thingProperties[key] = thingProperties[key] + " | " + value;
+                }
+                else {
+                    thingProperties[key] = value;
+                }
+            });
+        }
     },
 
     /**
