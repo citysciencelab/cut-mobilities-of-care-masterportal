@@ -179,7 +179,7 @@ const initialState = Object.assign({}, stateDraw),
          */
         createModifyInteractionAndAddToMap ({state, commit, dispatch}, active) {
             const modifyInteraction = createModifyInteraction(state.layer),
-                selectInteractionModify = createSelectInteraction(state.layer);
+                selectInteractionModify = createSelectInteraction(state.layer, 10);
 
             commit("setModifyInteraction", modifyInteraction);
             dispatch("manipulateInteraction", {interaction: "modify", active: active});
