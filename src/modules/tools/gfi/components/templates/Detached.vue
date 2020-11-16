@@ -1,8 +1,8 @@
 <script>
 import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
-import {mapGetters, mapMutations} from "vuex";
 import getTheme from "../../utils/getTheme";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import "jquery-ui/ui/widgets/draggable";
 import "jquery-ui/ui/widgets/resizable";
 
@@ -107,11 +107,11 @@ export default {
         this.setMarker();
     },
     beforeDestroy: function () {
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "hideMarker");
+        this.removePointMarker();
     },
     methods: {
         ...mapMutations("Map", ["setCenter"]),
+        ...mapActions("MapMarker", ["removePointMarker", "placingPointMarker"]),
         close () {
             this.$emit("close");
         },
@@ -126,8 +126,8 @@ export default {
                 if (this.centerMapToClickPoint) {
                     this.setCenter(this.clickCoord);
                 }
-                // TODO replace trigger when MapMarker is migrated
-                Radio.trigger("MapMarker", "showMarker", this.clickCoord);
+
+                this.placingPointMarker(this.clickCoord);
             }
         }
     }

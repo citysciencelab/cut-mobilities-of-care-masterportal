@@ -1,4 +1,4 @@
-import extractEventCoordinates from "../../../../src/utils/extractEventCoordinates";
+import {extractEventCoordinates} from "../../../../src/utils/extractEventCoordinates";
 
 const POIModel = Backbone.Model.extend({
     defaults: {

@@ -72,7 +72,6 @@ import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
 import OrientationView from "../modules/controls/orientation/view";
-// import MapMarkerView from "../modules/mapMarker/view";
 import SearchbarView from "../modules/searchbar/view";
 import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
@@ -185,10 +184,6 @@ async function loadApp () {
         layerInformationModelSettings.metaDataCatalogueId = Config.metaDataCatalogueId;
     }
     new LayerinformationModel(layerInformationModelSettings);
-
-    if (Config.hasOwnProperty("footer")) {
-        // new FooterView(Config.footer);
-    }
 
     if (Config.hasOwnProperty("clickCounter") && Config.clickCounter.hasOwnProperty("desktop") && Config.clickCounter.desktop !== "" && Config.clickCounter.hasOwnProperty("mobile") && Config.clickCounter.mobile !== "") {
         new ClickCounterModel(Config.clickCounter.desktop, Config.clickCounter.mobile, Config.clickCounter.staticLink);
@@ -372,8 +367,6 @@ async function loadApp () {
             }
         });
     }
-
-    // new MapMarkerView(mapMarkerConfig);
 
     searchbarAttributes = Radio.request("Parser", "getItemsByAttributes", {type: "searchBar"})[0].attr;
     sbconfig = Object.assign({}, Config.hasOwnProperty("quickHelp") ? {quickHelp: Config.quickHelp} : {});

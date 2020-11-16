@@ -1,8 +1,8 @@
 <script>
 import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
-import {mapGetters} from "vuex";
 import getTheme from "../../utils/getTheme";
+import {mapGetters, mapActions} from "vuex";
 import "jquery-ui/ui/widgets/draggable";
 
 export default {
@@ -67,14 +67,15 @@ export default {
                 }
             });
         });
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "showMarker", this.clickCoord);
+
+        this.placingPointMarker(this.clickCoord);
     },
     beforeDestroy: function () {
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "hideMarker");
+        this.removePointMarker();
     },
     methods: {
+        ...mapActions("MapMarker", ["removePointMarker", "placingPointMarker"]),
+
         close () {
             this.$emit("close");
         },

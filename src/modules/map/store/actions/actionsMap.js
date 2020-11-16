@@ -135,7 +135,7 @@ const actions = {
 
         if (rootGetters["Tools/Gfi/active"]) {
             commit("setGfiFeatures", null);
-            Radio.trigger("MapMarker", "hidePolygon");
+            dispatch("MapMarker/removePolygonMarker");
             dispatch("collectGfiFeatures");
         }
     },

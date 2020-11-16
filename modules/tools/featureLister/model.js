@@ -1,5 +1,5 @@
 import Tool from "../../core/modelList/tool/model";
-import extractEventCoordinates from "../../../src/utils/extractEventCoordinates";
+import {extractEventCoordinates} from "../../../src/utils/extractEventCoordinates";
 
 const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
