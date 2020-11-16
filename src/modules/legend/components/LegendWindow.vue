@@ -561,11 +561,13 @@ export default {
             const conditions = style.get("conditions");
             let name = "";
 
-            Object.keys(conditions).forEach(attribute => {
-                const value = style.get("conditions")[attribute];
+            if (conditions) {
+                Object.keys(conditions).forEach(attribute => {
+                    const value = style.get("conditions")[attribute];
 
-                name += value;
-            });
+                    name += value;
+                });
+            }
 
             return name;
         },

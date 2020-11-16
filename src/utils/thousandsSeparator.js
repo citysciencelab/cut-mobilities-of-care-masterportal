@@ -4,11 +4,11 @@
  * @param {(Number|String)} num the number as number or string
  * @param {String} [delimAbs="."] the letter(s) to use as thousand point
  * @param {String} [delimDec=","] the letter(s) to use as decimal point
- * @returns {(String|Boolean)}  the given number with thousands seperators or false if any invalid num was given
+ * @returns {String}  the given number with thousands seperators or an empty string if any invalid num was given
  */
 function thousandsSeparator (num, delimAbs = ".", delimDec = ",") {
     if (typeof num !== "number" && typeof num !== "string") {
-        return false;
+        return "";
     }
 
     const value = typeof num !== "string" ? num.toString() : num,

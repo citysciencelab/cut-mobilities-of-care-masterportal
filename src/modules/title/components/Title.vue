@@ -97,6 +97,7 @@ export default {
             <img
                 id="logo"
                 :src="logo"
+                :alt="title"
             >
             <span
                 id="title-text"

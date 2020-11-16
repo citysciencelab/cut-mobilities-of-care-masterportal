@@ -10,7 +10,6 @@ const Config = {
             }
         ]
     },
-    gfiWindow: "attached",
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     mouseHover: {
         numFeaturesToShow: 2,

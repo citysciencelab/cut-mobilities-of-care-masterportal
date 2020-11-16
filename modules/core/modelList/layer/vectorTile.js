@@ -1,7 +1,10 @@
 import MVT from "ol/format/MVT";
 import OpenLayersVectorTileLayer from "ol/layer/VectorTile";
 import OpenLayersVectorTileSource from "ol/source/VectorTile";
+import TileGrid from "ol/tilegrid/TileGrid";
+import {extentFromProjection} from "ol/tilegrid";
 import stylefunction from "ol-mapbox-style/dist/stylefunction";
+import store from "../../../../src/app-store/index";
 
 import Layer from "./model";
 
@@ -21,11 +24,12 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
     initialize: function () {
-        const mapEPSG = Radio.request("MapView", "getProjection").getCode(),
+        const mapEPSG = store.getters["Map/projection"].getCode(),
             vtEPSG = this.get("epsg");
 
         if (mapEPSG !== vtEPSG) {
             console.warn(`VT Layer ${this.get("name")}: Map (${mapEPSG}) and layer (${vtEPSG}) projection mismatch. View will be erroneous.`);
+            this.set("isNeverVisibleInTree", true);
         }
 
         Layer.prototype.initialize.apply(this);
@@ -36,10 +40,29 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @return {void}
      */
     createLayerSource: function () {
-        this.setLayerSource(new OpenLayersVectorTileSource({
-            format: new MVT(),
-            url: this.get("url")
-        }));
+        const mapEpsg = store.getters["Map/projection"].getCode(),
+            dataEpsg = this.get("epsg") || mapEpsg,
+            params = {
+                projection: dataEpsg,
+                format: new MVT(),
+                url: this.get("url")
+            };
+
+        if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("resolutions") || this.get("tileSize")) {
+            const extent = this.get("extent") || extentFromProjection(dataEpsg),
+                origin = this.get("origin") || [extent[0], extent[3]], // upper left corner = [minX, maxY]
+                resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
+                tileSize = this.get("tileSize") || 512;
+
+            params.tileGrid = new TileGrid({
+                extent: extent,
+                origin: origin,
+                resolutions: resolutions,
+                tileSize: tileSize
+            });
+        }
+
+        this.setLayerSource(new OpenLayersVectorTileSource(params));
     },
 
     /**

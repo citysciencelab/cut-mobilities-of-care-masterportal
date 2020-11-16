@@ -192,7 +192,7 @@ export default {
     },
     /**
      * Adds the name of a successfully imported file to list of imported filenames
-     * @param {string} fileName name of the file
+     * @param {String} fileName name of the file
      * @returns {void}
      */
     addImportedFilename: ({state, commit}, fileName) => {

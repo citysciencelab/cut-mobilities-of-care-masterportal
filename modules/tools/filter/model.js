@@ -1,6 +1,7 @@
 import WfsQueryModel from "./query/source/wfs";
 import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";
+import "./RadioBridge.js";
 
 const FilterModel = Tool.extend({
     defaults: Object.assign({}, Tool.prototype.defaults, {

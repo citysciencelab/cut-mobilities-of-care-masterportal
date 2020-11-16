@@ -182,6 +182,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    @import "~variables";
     div.alertCategoryContainer {
         margin-bottom:24px;
 
@@ -191,7 +192,7 @@ export default {
 
         h3 {
             border:none;
-            color:#333333;
+            color: @secondary_contrast;
             font-size:14px;
             font-weight:bold;
             letter-spacing:initial;

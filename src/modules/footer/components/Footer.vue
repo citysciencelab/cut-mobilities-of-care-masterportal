@@ -95,7 +95,7 @@ export default {
         box-shadow: 0px -6px 12px @shadow;
         padding: 4px 10px;
 
-        z-index: 0; /* TODO get rid of this - why is it even necessary? */
+        z-index: 2;
 
         display: flex;
         position: relative;
