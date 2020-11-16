@@ -113,36 +113,42 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
     },
 
     /**
-     * Pushes the given feature to the collection of currently selected features.
+     * Gets a feature or multiple features and forwards it/them to the pushFeatures Function.
+     * Also pushes the features to the selected features.
      * @param {module:ol/Layer} layer layer the feature belongs to (for gfi attributes)
      * @param {module:ol/Feature} feature feature to be pushed
      * @returns {void}
      */
-    pushFeature: function (layer, feature) {
+    prepareFeature: function (layer, feature) {
         this.get("selectedFeatures").push(feature);
         if (feature.get("features") === undefined) {
             const item = feature;
 
-            this.get("selectedFeaturesWithRenderInformation").push({
-                item,
-                properties: this.translateGFI(
-                    item.getProperties(),
-                    layer.get("gfiAttributes")
-                )
-            });
+            this.pushFeatures(layer, item);
         }
         else {
             feature.get("features").forEach(item => {
-                this.get("selectedFeaturesWithRenderInformation").push({
-                    item,
-                    properties: this.translateGFI(
-                        item.getProperties(),
-                        layer.get("gfiAttributes")
-                    )
-                });
+                this.pushFeatures(layer, item);
             });
         }
     },
+
+    /**
+     * Pushes the given feature and its properties to the selectedFeaturesWithRenderInformation array.
+     * @param {module:ol/Layer} layer layer the feature belongs to (for gfi attributes)
+     * @param {module:ol/Feature} item feature to be pushed
+     * @returns {void}
+     */
+    pushFeatures: function (layer, item) {
+        this.get("selectedFeaturesWithRenderInformation").push({
+            item,
+            properties: this.translateGFI(
+                item.getProperties(),
+                layer.get("gfiAttributes")
+            )
+        });
+    },
+
 
     /**
      * Infers features from interaction state and sets them to the selectedFeatures.
@@ -158,7 +164,7 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
             .forEach(
                 l => l.get("source").forEachFeatureIntersectingExtent(
                     extent,
-                    feature => this.pushFeature(l, feature)
+                    feature => this.prepareFeature(l, feature)
                 )
             );
 
