@@ -19,7 +19,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         featureType: "mrh_einpendler_gemeinde",
         attrAnzahl: "anzahl_einpendler",
         attrGemeinde: "wohnort",
-        alertId: "",
         attributionText: "<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
             "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>"
     }),
@@ -44,11 +43,9 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @property {String} featureType= "mrh_einpendler_gemeinde" name of a feature type
      * @property {String} attrAnzahl="anzahl_einpendler" name of the attribute for count of commuter
      * @property {String} attrGemeinde="wohnort" name of the attribute called 'gemeinde'
-     * @property {String} alertId="" id of an alert before download
      * @property {String} attributionText="<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
             "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>" text to show as an attribution
      * @fires //todo
-     * @listens Alerting#RadioTriggerAlertConfirmed
      */
     initialize: function () {
         const channel = Radio.channel("Animation");
@@ -296,14 +293,13 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @returns {void}
      */
     createAlertBeforeDownload: function () {
-        const alertId = "PendlerDownload";
-
-        this.setAlertId(alertId);
         Radio.trigger("Alert", "alert", {
-            id: alertId,
-            text: this.get("attributionText"),
-            dismissable: false,
-            confirmable: true
+            category: i18next.t("common:modules.alerting.categories.warning"),
+            confirmText: i18next.t("common:button.download"),
+            content: this.get("attributionText"),
+            displayClass: "warning",
+            legacy_onConfirm: this.download.bind(this),
+            mustBeConfirmed: true
         });
     },
     /**
@@ -477,14 +473,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      */
     setZoomLevel: function (value) {
         this.set("zoomLevel", value);
-    },
-    /**
-     * Sets the id of the alert
-     * @param {String} value alert-id
-     * @returns {void}
-     */
-    setAlertId: function (value) {
-        this.set("alertId", value);
     }
 });
 

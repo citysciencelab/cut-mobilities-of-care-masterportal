@@ -92,6 +92,9 @@ export default {
 
         if (singleAlert !== false) {
             commit("setAlertAsRead", singleAlert);
+            if (typeof singleAlert.legacy_onConfirm === "function") {
+                singleAlert.legacy_onConfirm();
+            }
         }
     },
     addSingleAlert: function ({state, commit}, newAlert) {
@@ -121,7 +124,14 @@ export default {
             alertProtoClone[key] = newAlertObj[key];
         }
 
-        alertProtoClone.hash = objectHash(alertProtoClone.content);
+        alertProtoClone.hash = alertProtoClone.content;
+        if (typeof alertProtoClone.displayFrom === "string") {
+            alertProtoClone.hash = alertProtoClone.hash + alertProtoClone.displayFrom;
+        }
+        if (typeof alertProtoClone.displayUntil === "string") {
+            alertProtoClone.hash = alertProtoClone.hash + alertProtoClone.displayUntil;
+        }
+        alertProtoClone.hash = objectHash(alertProtoClone.hash);
 
         isUnique = findSingleAlertByHash(state.alerts, alertProtoClone.hash) === false;
         if (!isUnique) {
