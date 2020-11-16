@@ -26,10 +26,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         trefferAnzahl: "top5",
         attrAnzahl: "anzahl_einpendler",
         attrGemeinde: "wohnort",
-        attrGemeindeContrary: "arbeitsort",
-        alertId: "",
-        attributionText: "<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
-            "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>"
+        attrGemeindeContrary: "arbeitsort"
     }),
     /**
      * @class PendlerCoreModel
@@ -52,9 +49,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @property {String} featureType= "mrh_einpendler_gemeinde" name of a feature type
      * @property {String} attrAnzahl="anzahl_einpendler" name of the attribute for count of commuter
      * @property {String} attrGemeinde="wohnort" name of the attribute called 'gemeinde'
-     * @property {String} alertId="" id of an alert before download
-     * @property {String} attributionText="<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
-            "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>" text to show as an attribution
      * @fires //todo
      * @listens Alerting#RadioTriggerAlertConfirmed
      */
@@ -72,10 +66,10 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             "change:isActive": function (model, value) {
                 if (value) {
                     this.resetWindow();
-                    Radio.trigger("Attributions", "createAttribution", model.get("name"), this.get("attributionText"), "Pendler");
+                    Radio.trigger("Attributions", "createAttribution", model.get("name"), i18next.t("common:modules.tools.pendler.general.attributionText"), "Pendler");
                 }
                 else {
-                    Radio.trigger("Attributions", "removeAttribution", model.get("name"), this.get("attributionText"), "Pendler");
+                    Radio.trigger("Attributions", "removeAttribution", model.get("name"), i18next.t("common:modules.tools.pendler.general.attributionText"), "Pendler");
                 }
             }
         });
@@ -129,14 +123,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
                 this.sendRequest("POST", value, data => {
                     this.parseFeatures(data, this.get("featureType"));
                 });
-            }
-        });
-        this.listenTo(Radio.channel("Alert"), {
-            "confirmed": function (id) {
-                if (id === this.get("alertId")) {
-                    this.download();
-                }
-                this.setAlertId("");
             }
         });
         this.sendRequest("GET", this.get("params"), this.parseKreise);
@@ -315,19 +301,13 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         this.setPostBody(postBody);
     },
     /**
-     * Creates a confirmable alert with the 'attributionText'
+     * Creates a confirmable alert with the csvDownloadConfirm text
      * @returns {void}
      */
     createAlertBeforeDownload: function () {
-        const alertId = "PendlerDownload";
-
-        this.setAlertId(alertId);
-        Radio.trigger("Alert", "alert", {
-            id: alertId,
-            text: this.get("attributionText"),
-            dismissable: false,
-            confirmable: true
-        });
+        if (confirm(i18next.t("common:modules.tools.pendler.general.csvDownloadConfirm"))) { // eslint-disable-line no-alert
+            this.download();
+        }
     },
     /**
      * downloads all line-features as csv file
@@ -641,14 +621,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      */
     setZoomLevel: function (value) {
         this.set("zoomLevel", value);
-    },
-    /**
-     * Sets the id of the alert
-     * @param {String} value alert-id
-     * @returns {void}
-     */
-    setAlertId: function (value) {
-        this.set("alertId", value);
     }
 });
 
