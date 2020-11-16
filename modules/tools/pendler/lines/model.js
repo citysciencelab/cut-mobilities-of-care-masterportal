@@ -53,7 +53,6 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
         }) Layer zur Darstellung der Beschriftung an Punkten am Strahlenende
      * @property {String} glyphicon="glyphicon-play-circle" icon to start the animation
      * @fires Core#RadioTriggerMapRender
-     * @listens Alerting#RadioTriggerAlertConfirmed
      */
 
     /**

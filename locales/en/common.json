@@ -98,7 +98,13 @@
           }
         },
         "alerting": {
-            "hideMessage": "Do not show the message anymore"
+            "hideMessage": "Diese Meldung nicht mehr anzeigen",
+            "categories": {
+                "error": "Error",
+                "info": "Info",
+                "success": "Success",
+                "warning": "Warning"
+            }
         },
         "cswParser": {
             "noMetadataMessage": "No metadata available."

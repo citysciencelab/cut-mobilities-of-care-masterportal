@@ -176,7 +176,7 @@ export default {
                             <a
                                 @click="markAsRead(singleAlert.hash)"
                             >
-                                {{ $t("common:modules.alerting.hideMessage") }}
+                                {{ singleAlert.confirmText }}
                             </a>
                         </p>
                     </div>
