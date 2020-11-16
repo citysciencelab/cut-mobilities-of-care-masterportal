@@ -6,6 +6,7 @@ import {GeoJSON} from "ol/format.js";
 import {Image, Tile, Vector, Group} from "ol/layer.js";
 import store from "../../../src/app-store/index";
 import "./RadioBridge.js";
+import isObject from "../../../src/utils/isObject";
 
 const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype */{
     defaults: {
@@ -710,6 +711,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             geojsonFormat = new GeoJSON();
         let convertedFeature;
 
+        // remove all object properties except geometry. Otherwise mapfish runs into an error
+        Object.keys(clonedFeature.getProperties()).forEach(property => {
+            if (isObject(clonedFeature.get(property)) && property !== "geometry") {
+                clonedFeature.unset(property);
+            }
+        });
         // take over id from feature because the feature id is not set in the clone.
         clonedFeature.setId(feature.getId());
         // circle is not suppported by geojson
