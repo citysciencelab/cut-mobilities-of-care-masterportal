@@ -9,7 +9,8 @@ const WMSLayer = Layer.extend({
         // extended die Layer defaults by value
         return Object.assign(Layer.prototype.defaults, {
             infoFormat: "text/xml",
-            // Eine Veränderung der CACHEID initiiert von openlayers ein reload des Dienstes und umgeht den Browser-Cache
+            gfiAsNewWindow: null,
+            // A change of the CACHEID initiates a reload of the service by openlayers and bypasses the browser cache.
             cacheId: parseInt(Math.random() * 10000000, 10),
             supported: ["2D", "3D"],
             showSettings: true,
@@ -30,7 +31,7 @@ const WMSLayer = Layer.extend({
             "change:SLDBody": this.updateSourceSLDBody
         });
 
-        // Hack für Dienste die nicht EPSG:4326 untertützen
+        // Hack for services that do not support EPSG:4326
         if (this.get("notSupportedFor3D").includes(this.get("id"))) {
             this.set("supported", ["2D"]);
         }
@@ -100,8 +101,6 @@ const WMSLayer = Layer.extend({
                 params: params
             }));
         }
-        // this.registerErrorListener();
-        // this.registerLoadingListeners();
     },
 
     /**
@@ -118,7 +117,11 @@ const WMSLayer = Layer.extend({
                 legendURL: this.get("legendURL"),
                 routable: this.get("routable"),
                 gfiTheme: this.get("gfiTheme"),
-                infoFormat: this.get("infoFormat")
+                // gfiIconPath: this.get("gfiIconPath"),
+                gfiAttributes: this.get("gfiAttributes"),
+                infoFormat: this.get("infoFormat"),
+                gfiAsNewWindow: this.get("gfiAsNewWindow"),
+                featureCount: this.get("featureCount")
             };
 
         if (this.get("singleTile") !== true) {
@@ -131,7 +134,7 @@ const WMSLayer = Layer.extend({
     },
 
     /**
-     * Wenn der Parameter "legendURL" leer ist, wird er auf GetLegendGraphic gesetzt.
+     * If the parameter "legendURL" is empty, it is set to GetLegendGraphic.
      * @return {void}
      */
     createLegend: function () {
@@ -302,7 +305,27 @@ const WMSLayer = Layer.extend({
     */
     newCacheId: function () {
         this.set("cacheId", parseInt(Math.random() * 10000000, 10));
+    },
+
+    /**
+     * setter for gfiAsNewWindow
+     * @param {Object} value see doc/config.json.md for more information
+     * @param {String} [value.name="_blank"] the browsing context or the target attribute to open the window (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
+     * @param {String} [value.specs=""] a comma-separated list of items - the setup to open the window with (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
+     * @returns {Void}  -
+     */
+    setGfiAsNewWindow: function (value) {
+        this.set("gfiAsNewWindow", value);
+    },
+
+    /**
+     * getter for gfiAsNewWindow
+     * @returns {Object}  see setGfiAsNewWindow above or doc/config.json.md for more information
+     */
+    getGfiAsNewWindow: function () {
+        return this.get("gfiAsNewWindow");
     }
+
 });
 
 export default WMSLayer;

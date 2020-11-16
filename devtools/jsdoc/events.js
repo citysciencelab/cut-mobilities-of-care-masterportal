@@ -1299,15 +1299,6 @@
 /** -------------------- UTIL -------------------- */
 
 /**
- * @event Core#RadioRequestUtilChangeTimeZone
- * @description Changes the timezone for the given historical data.
- * @param {Object[]} historicalData data from feature.
- * @param {Object[]} utc timezone.
- * @returns {Object[]} data with changed timezone.
- * @example Radio.request("Util", "changeTimeZone", historicalData, utc);
- */
-
-/**
  * @event Core#RadioTriggerUtilIsViewMobileChanged
  * @description is triggered by Util if mobil is changed
  * @param {boolean} isViewMobile flag if current view is in mobile mode
@@ -1613,37 +1604,6 @@
  * @event Title#RadioTriggerTitleSetSize
  * @description is triggered when title has to be resized
  * @example Radio.trigger("Title", "setSize");
- */
-
-
-/** -------------------- GFI -------------------- */
-
-/**
- * @event GFI#RadioTriggerGFISetIsVisible
- * @description sets isVisible
- * @param {boolean} isVisible visibility of gfi
- * @example Radio.trigger("GFI", "setIsVisible", false);
- */
-
-/**
- * @event GFI#RadioRequestGFIGetCurrentView
- * @description returns currentView
- * @returns {Backbone.View} GFI-View
- * @example Radio.request("GFI", "getCurrentView");
- */
-
- /**
- * @event GFI#RadioTriggerGFIChangeFeature
- * @description updates the current gfi Feature if it matches.
- * @param {ol.Feature} feature The feature that has changed.
- * @example Radio.trigger("GFI", "changeFeature", feature);
- */
-
-/** -------------------- GFI.THEME -------------------- */
-
-/**
- * @event Theme#changeIsReady
- * @description Triggered when gfi theme is loaded
  */
 
 /** -------------------- MAPMARKER -------------------- */
@@ -2516,6 +2476,10 @@
 
 /**
  * @event Tools.ParcelSearch#RadioRequestParcelSearchParcelFound
+ * @description Todo
+ */
+/**
+ * @event Tools.ParcelSearch#RadioRequestParcelSearchCreateReport
  * @description Todo
  */
 

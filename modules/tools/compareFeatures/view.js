@@ -19,7 +19,6 @@ const CompareFeaturesView = Backbone.View.extend({
     },
 
     initialize: function () {
-        // this.model = new CompareFeaturesModel();
         this.template = _.template(CompareFeaturesTemplate);
         this.templateNoFeatures = _.template(CompareFeaturesTemplateNoFeatures);
         this.templateFeedback = _.template(CompareFeaturesTemplateFeedback);

@@ -11,7 +11,12 @@ const webdriver = require("selenium-webdriver"),
 
 /**
  * Tests regarding coord tool.
- * @param {e2eTestParams} params parameter set
+ * @param {Object} params e2eTestParams
+ * @param {module:selenium-webdriver.Builder} params.builder the selenium.Builder object
+ * @param {String} params.url the url to test
+ * @param {String} params.resolution formatted as "AxB" with A, B integers
+ * @param {String} param.config to switch the config between namedProjectionsBasic, -Master -Default or -Custom ("basic", "master", "default", "custom")
+ * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
 async function CoordTests ({builder, url, resolution, config, capability}) {
@@ -37,9 +42,9 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
 
         /**
          * Repeatable parameterized workflow.
-         * @param {object} params parameter object
-         * @param {boolean} [params.clickAfterFirstMove=false] if true, will click after first mouse move
-         * @param {boolean} [params.expectUnchanged=false] if true, will expect values for east, north, and marker style to be unchanges
+         * @param {Object} params parameter object
+         * @param {Boolean} [params.clickAfterFirstMove=false] if true, will click after first mouse move
+         * @param {Boolean} [params.expectUnchanged=false] if true, will expect values for east, north, and marker style to be unchanges
          * @returns {void}
          */
         async function moveAndClickAndCheck ({clickAfterFirstMove = false, expectUnchanged = false}) {

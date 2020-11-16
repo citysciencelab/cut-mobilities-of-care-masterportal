@@ -1,11 +1,11 @@
 /**
- * @typedef {number} MapMode
+ * @typedef {Number} MapMode
  **/
 
 /**
  * Enum for map mode.
  * @readonly
- * @enum {number}
+ * @enum {Number}
  */
 export const MapMode = {
     "MODE_2D": 0,

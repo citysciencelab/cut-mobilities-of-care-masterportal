@@ -1,14 +1,14 @@
 /**
  * User type definition
- * @typedef {object} FooterState
- * @property {boolean} showFooter Indicates whether the footer is displayed.
- * @property {object[]} urls Array of URL configuration objects
- * @property {string} urls[].alias Name of the link for desktop playout.
- * @property {string} urls[].alias_mobil Name of the link for mobile application.
- * @property {string} urls[].bezeichnung Name before the link.
- * @property {string} urls[].url The URL to be called.
- * @property {string} urls[].toolModelId The id of the model whose tool should be opened, an url is then not necessary.
- * @property {boolean} showVersionFlag if the version number of the Master Portal should be displayed in the footer.
+ * @typedef {Object} FooterState
+ * @property {Boolean} showFooter Indicates whether the footer is displayed.
+ * @property {Object[]} urls Array of URL configuration objects
+ * @property {String} urls[].alias Name of the link for desktop playout.
+ * @property {String} urls[].alias_mobil Name of the link for mobile application.
+ * @property {String} urls[].bezeichnung Name before the link.
+ * @property {String} urls[].url The URL to be called.
+ * @property {String} urls[].toolModelId The id of the model whose tool should be opened, an url is then not necessary.
+ * @property {Boolean} showVersionFlag if the version number of the Master Portal should be displayed in the footer.
  */
 const state = {
     showFooter: false,

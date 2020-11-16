@@ -185,7 +185,7 @@
         },
         "footer": {
             "designation": "Kartographie und Gestaltung:",
-            "cardDiscrepancy": "Kartenunstimmigkeit"
+            "mapDiscrepancy": "Kartenunstimmigkeit"
         },
         "tools": {
             "info": {
@@ -400,42 +400,47 @@
                 }
             },
             "gfi": {
+                "favoriteIcons": {
+                  "compareFeatureIcon": {
+                    "toCompareList": "Auf die Vergleichsliste",
+                    "fromCompareList": "Von der Vergleichsliste entfernen"
+                  },
+                  "routingicon": {
+                    "routingDestination": "Als Ziel übernehmen"
+                  }
+                },
                 "themes": {
                     "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
-                    "trafficCount": {
-                        "infoLabel": "Info",
-                        "dayLabel": "Tag",
-                        "weekLabel": "Woche",
-                        "yearLabel": "Jahr",
-                        "period": "Zeitraum",
-                        "number": "Anzahl",
-                        "totalSince": "Insgesamt seit",
-                        "sinceBeginningOfTheYear": "Seit Jahresbeginn",
-                        "overThePastYear": "Im Vorjahr",
-                        "onThePreviousDay": "Am Vortag",
-                        "highestDay": "Stärkster Tag im Jahr",
-                        "highestWeek": "Stärkste Woche im Jahr",
-                        "highestMonth": "Stärkster Monat im Jahr",
-                        "dateLabel": "Datum",
-                        "clockLabel": "Uhr",
-                        "tableLabel": "Tabelle",
-                        "notice": "Aufgrund nicht verfügbarer Daten können Lücken im Diagramm und leere Tabellenzellen auftreten.",
-                        "lastupdateLabel": "Letzte Aktualisierung:",
-                        "diagramLabel": "Diagramm",
-                        "calendarweek": "KW",
-                        "infraredsensor": "Infrarotsensor",
-                        "countingstation": "Zählstation",
-                        "carLabel": "KFZ",
-                        "bicycleLabel": "Fahrrad",
-                        "idLabel": "ID:",
-                        "typeLabel": "Art: ",
-                        "meansOfTransportLabel": "Verkehrsmittel: ",
-                        "directionLabel": "Richtung:",
-                        "carsHeaderSuffix": "KFZ abs.",
-                        "trucksHeaderSuffix": "SV-Anteil in %",
-                        "yAxisTextDay": "Anzahl / 15 Min.",
-                        "yAxisTextWeek": "Anzahl / Tag",
-                        "yAxisTextYear": "Anzahl / Woche"
+                    "default": {
+                      "imgAlt": "Es konnte kein Bild geladen werden."
+                    },
+                    "sensor": {
+                      "sensor": {
+                        "dataName": "Daten",
+                        "header": {
+                          "name": "Name",
+                          "description": "Beschreibung",
+                          "ownerThing": "Eigentümer"
+                        }
+                      },
+                      "sensorBarChart": {
+                        "clock": "{{value}} Uhr",
+                        "chartTitleAverage": "Mittelwert aus",
+                        "month": "{{count}} Monat",
+                        "month_plural": "{{count}} Monaten",
+                        "year": "{{count}} Jahr",
+                        "year_plural": "{{count}} Jahren",
+                        "previousWeekday": "Vorheriger Wochentag",
+                        "nextWeekday": "Nächster Wochentag"
+                      },
+                      "sensorData": {
+                        "firstColumnHeaderName": "Eigenschaften"
+                      },
+                      "chargingStations": {
+                        "available": "Verfügbarkeit",
+                        "charging": "Auslastung",
+                        "outoforder": "Außer Betrieb"
+                      }
                     }
                 }
             },
@@ -468,7 +473,8 @@
                 "currentPosition": "Aktueller Standpunkt",
                 "routingCalcError": "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator",
                 "routingCalcAborted": "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten",
-                "addressRequestFailed": "Adressabfrage fehlgeschlagen"
+                "addressRequestFailed": "Adressabfrage fehlgeschlagen",
+                "selectedDestination": "Gewähltes Ziel"
             },
             "searchByCoord": {
                 "exampleAcronym": "Bsp.",

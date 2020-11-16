@@ -10,9 +10,9 @@ const getters = {
 
     /**
      * Transforms the projection.
-     * @param {object} state state of this tool
-     * @param {object} targetProjection the target projection
-     * @returns {object} the transformed projection
+     * @param {Object} state state of this tool
+     * @param {Object} targetProjection the target projection
+     * @returns {Object} the transformed projection
      */
     getTransformedPosition: state => (map, targetProjection) => {
         let positionTargetProjection = [0, 0];
@@ -28,9 +28,9 @@ const getters = {
     },
     /**
      * Returns the projection to the given name.
-     * @param {object} state state of this tool
-     * @param {string} name of the projection
-     * @returns {object} projection
+     * @param {Object} state state of this tool
+     * @param {String} name of the projection
+     * @returns {Object} projection
      */
     getProjectionByName: state => (name) => {
         const projections = state.projections;

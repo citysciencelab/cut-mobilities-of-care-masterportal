@@ -33,7 +33,9 @@ export default {
         }
     },
     computed: {
-        /** @returns {string} glyphicon name with added prefix 'glyphicon-' if it was missing */
+        /**
+         * @returns {String} glyphicon name with added prefix 'glyphicon-' if it was missing
+         */
         glyphiconClass () {
             return this.iconName.startsWith("glyphicon-") ? this.iconName : `glyphicon-${this.iconName}`;
         }

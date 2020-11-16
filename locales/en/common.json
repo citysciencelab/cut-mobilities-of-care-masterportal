@@ -178,7 +178,7 @@
         },
         "footer": {
             "designation": "Cartography and design:",
-            "cardDiscrepancy": "Card discrepancy"
+            "mapDiscrepancy": "Map discrepancy"
         },
         "tools": {
             "info": {
@@ -393,42 +393,47 @@
                 }
             },
             "gfi": {
+                "favoriteIcons": {
+                    "compareFeatureIcon": {
+                      "toCompareList": "Add to compare list",
+                      "fromCompareList": "Remove from compare list"
+                    },
+                    "routingicon": {
+                        "routingDestination": "Assign as destination"
+                    }
+                },
                 "themes": {
                     "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
-                    "trafficCount": {
-                        "infoLabel": "Info",
-                        "dayLabel": "Day",
-                        "weekLabel": "Week",
-                        "yearLabel": "Year",
-                        "period": "Period of time",
-                        "number": "Number",
-                        "totalSince": "Total since",
-                        "sinceBeginningOfTheYear": "Since beginning of the year",
-                        "overThePastYear": "In the previous year",
-                        "onThePreviousDay": "On the previous day",
-                        "highestDay": "Day with highest number in the year",
-                        "highestWeek": "Week with highest number in the year",
-                        "highestMonth": "Month with highest number in the year",
-                        "dateLabel": "Date",
-                        "clockLabel": "",
-                        "tableLabel": "Table",
-                        "notice": "Due to unavailable data, gaps in the chart and empty table cells may occur.",
-                        "lastupdateLabel": "Last update:",
-                        "diagramLabel": "Diagram",
-                        "calendarweek": "CW",
-                        "infraredsensor": "Infrared sensor",
-                        "countingstation": "Counting station",
-                        "carLabel": "Car",
-                        "bicycleLabel": "Bicycle",
-                        "idLabel": "ID:",
-                        "typeLabel": "Type:",
-                        "meansOfTransportLabel": "Transportation:",
-                        "directionLabel": "Direction:",
-                        "carsHeaderSuffix": "The count of cars",
-                        "trucksHeaderSuffix": "Trucks proportion in %",
-                        "yAxisTextDay": "Count / 15 Min.",
-                        "yAxisTextWeek": "Count / Day",
-                        "yAxisTextYear": "Count / Week"
+                    "default": {
+                      "imgAlt": "No image could be loaded."
+                    },
+                    "sensor": {
+                      "sensor": {
+                        "dataName": "Data",
+                        "header": {
+                          "name": "Name",
+                          "description": "Description",
+                          "ownerThing": "Owner"
+                        }
+                      },
+                      "sensorBarChart": {
+                        "clock": "{{value}} o'clock",
+                        "chartTitleAverage": "Average off",
+                        "month": "{{count}} month",
+                        "month_plural": "{{count}} months",
+                        "year": "{{count}} year",
+                        "year_plural": "{{count}} years",
+                        "previousWeekday": "Previous Weekday",
+                        "nextWeekday": "Next weekday"
+                      },
+                      "sensorData": {
+                        "firstColumnHeaderName": "Properties"
+                      },
+                      "chargingStations": {
+                        "available": "Available",
+                        "charging": "Charging",
+                        "outoforder": "Out of order"
+                      }
                     }
                 }
             },
@@ -461,7 +466,8 @@
                 "currentPosition": "Current position",
                 "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
                 "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
-                "addressRequestFailed": "Address request failed"
+                "addressRequestFailed": "Address request failed",
+                "selectedDestination": "Selected destination"
             },
             "searchByCoord": {
                 "exampleAcronym": "e.g.",

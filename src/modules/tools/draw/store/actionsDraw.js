@@ -16,7 +16,7 @@ const initialState = Object.assign({}, stateDraw),
          * Adds an interaction to the current map instance.
          *
          * @param {Object} context actions context object.
-         * @param {ol/interaction/Interaction} interaction interaction with the map.
+         * @param {module:ol/interaction/Interaction} interaction interaction with the map.
          * @returns {void}
          */
         addInteraction ({rootState}, interaction) {
@@ -39,7 +39,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} prm Parameter object.
          * @param {module:ol/Feature} prm.feature Line, Polygon or Point.
          * @param {String} prm.targetProjection Target projection if the projection differs from the map's projection.
-         * @returns {Array} Coordinates of the center point of the geometry.
+         * @returns {module:ol/coordinate~Coordinate} Coordinates of the center point of the geometry.
          */
         createCenterPoint ({rootState}, {feature, targetProjection}) {
             let centerPoint,
