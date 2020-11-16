@@ -4,7 +4,7 @@ import VectorSource from "ol/source/Vector.js";
 import {never} from "ol/events/condition";
 
 import Tool from "../../core/modelList/tool/model";
-import isURL from "../../../src/utils/isURL";
+import isURL from "../../../src/utils/urlHelper";
 
 /**
  * Feature zipped with its properties prepared for display (aka beautified).
