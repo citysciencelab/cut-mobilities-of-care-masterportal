@@ -80,7 +80,7 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                         if (objFromRawList === null || objFromRawList === undefined) {
                             objFromRawList = getLayerWhere({id: childLayer.id});
                         }
-                        if (objFromRawList !== null &&  objFromRawList !== undefined) {
+                        if (objFromRawList !== null && objFromRawList !== undefined) {
                             return Object.assign(objFromRawList, childLayer, {"isChildLayer": true});
                         }
 
