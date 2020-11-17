@@ -287,11 +287,6 @@
             "name": "translate#common:menu.tools.coord",
             "glyphicon": "glyphicon-screenshot"
           },
-          "selectFeatures": {
-            "name": "selectFeatures",
-            "glyphicon": "glyphicon-lamp",
-            "isShadowEnabled": true
-          },
           "shadow": {
             "name": "translate#common:menu.tools.shadow",
             "glyphicon": "glyphicon-lamp",
