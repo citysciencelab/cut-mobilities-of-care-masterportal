@@ -4,7 +4,7 @@ import VectorSource from "ol/source/Vector.js";
 import {never} from "ol/events/condition";
 
 import Tool from "../../core/modelList/tool/model";
-import isURL from "../../../src/utils/urlHelper";
+import {isUrl} from "../../../src/utils/urlHelper";
 
 /**
  * Feature zipped with its properties prepared for display (aka beautified).
@@ -218,7 +218,7 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
     translateGFI: function (properties, gfiAttributes) {
         // makes links in result list clickable
         Object.entries(properties).forEach(([key, value]) => {
-            if (isURL(value)) {
+            if (typeof value === "string" && isUrl(value)) {
                 properties[key] = "<a href=" + value + " target=\"_blank\">" + value + "</a>";
             }
         });
