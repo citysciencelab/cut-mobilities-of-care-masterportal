@@ -1,20 +1,13 @@
-## Unit Tests ##
+# Unit tests in Vue
 
-**Beispiel:**
-*masterportal/src/modules/tools/scale/tests*
+For am example test suite, see *masterportal/src/modules/tools/scale/tests*. Tests can be started in the Masterportal's root folder by either calling `npm run test:vue` (one-time run) or `npm run test:vue:watch` (updates on file changes).
 
-**Aufrufe**:
+## How to write tests
 
-npm run test:vue
+### Test file location
 
-npm run test:vue:watch
-*******************************************************************************
+Test files are to be saved with the file extension `.spec.js`. All test files are to be placed next to the component and store being tested in a separate `test/unit` folder. For illustration, the following example was constructed using the `ScaleSwitcher` component.
 
-## Wie man Tests schreibt: ###
-
-### Ort ###
-
-Die Tests *.spec.js liegen neben der Komponente und dem Store. Hier am Beispiel des ScaleSwitchers:
 ```
 src
 |-- modules
@@ -42,15 +35,14 @@ src
 |   |   |   |   |	|   |-- mutationsScaleSwitcher.spec.js
 ```
 
+## File structure
 
+The following sub-chapters contain example test files that may be used as guideline.
 
-### Struktur ###
+### Component test
 
-**BeispielStruktur: Komponente testen**
-
-Komponente *modules/tools/scale/components/ScaleSwitcher.vue*
-```
-
+```js
+// modules/tools/scale/components/ScaleSwitcher.vue
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import ScaleSwitcherComponent from "../../../components/ScaleSwitcher.vue";
@@ -176,14 +168,14 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
     });
 });
 ```
-**BeispielStruktur: getters testen**
 
-Datei *modules/tools/scale/store/gettersScaleSwitcher.js*
-```
+### Store/getters test
+
+```js
+// modules/tools/scale/store/gettersScaleSwitcher.js
 import {expect} from "chai";
 import getters from "../../../store/gettersScaleSwitcher";
 import stateScaleSwitcher from "../../../store/stateScaleSwitcher";
-
 
 const {currentScale} = getters;
 
@@ -201,17 +193,17 @@ describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => 
         it("returns the name default value from state", () => {
             expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");
         });
-        // (...) - weitere default-Werte testen
+        // (...) - test further default values
     });
 });
-
 ```
-**BeispielStruktur: actions testen**
 
-Datei *modules/tools/scale/store/actionsScaleSwitcher.js*
+### Store/actions test
 
-Es wird die Funktion *testAction* aus *test/unittests/VueTestUtils* genutzt.
-```
+Note the use of the `testAction` function imported from `test/unittests/VueTestUtils`. This tool shortens the code required and provides a sound action test base.
+
+```js
+// modules/tools/scale/store/actionsScaleSwitcher.js
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsScaleSwitcher";
 
@@ -247,15 +239,14 @@ describe("src/modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js", () => 
         });
     });
 });
-
 ```
 
-**BeispielStruktur: mutations testen**
-Datei *modules/tools/scale/store/mutationsScaleSwitcher.js*
-```
+### Store/mutations test
+
+```js
+// modules/tools/scale/store/mutationsScaleSwitcher.js
 import {expect} from "chai";
 import mutations from "../../../store/mutationsScaleSwitcher";
-
 
 const {setCurrentScale} = mutations;
 
@@ -274,67 +265,63 @@ describe("src/modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js", () =
 });
 ```
 
-### mocha ###
+## About the libraries
 
-**Describe** wird benutzt um einen Abschnitt Kenntlich zu machen.
-Im Beispiel wird das Äußere **describe** benutzt, um zu beschreiben Welches Modul getestet wird.
-Im Inneren **describe** wird die Funktion, die gerade getestet werden soll beschrieben.
+### Mocha
 
-**Syntax:**
-```
-    describe(name, callback)
-```
+`describe` is used to declare a section. In the example, the outer `describe` is used to describe the module being tested. Nested `describe`s are used to name the function currently under test.
 
+You may use `describe.only` to run only a specific test section, or `describe.skip` to temporarily comment out tests during development.
 
-**It** kapselt die einzelnen Testcases. Als erster Parameter wird ein Text übergeben der Beschreibt welche Eigenschaft die zu testende Methode haben sollte.
-Als zweiten Parameter wird eine Callback übergeben, in der mit Hilfe eines *expect* (siehe unten) geprüft wird, ob die Eingenschaft tatsächlich besteht.
-
-**Syntax:**
-```
-    it(testcaseDescription, callback)
+```js
+describe(name, callback)
 ```
 
-**before** ist eine Funktion, die benutzt werden kann, um Vorbereitungen für eine Gruppe von Tests durchzuführen. Sie wird innerhalb einen **describe** genau *einmal* ausgeführt.
+With `it`, the single test cases are encapsulated. For the first parameter, provide a descriptive text that outlines a property the method under test should have.
 
-**beforeEach** ist eine Funktion, die benutzt werden kann, um Vorbereitungen für einzelne Testfälle durchzuführen. Sie wird für *jedes* **it** in einem **describe** *einmal* durchgeführt.
+For the second parameter, provide a callback function that checks whether this described property actually holds. Use `expect` (see below) for checks.
 
-[mehr Infos zu mocha](https://mochajs.org/)
+The suffixes `.skip` and `.only` work the same way as described for `describe`.
 
-### chai ###
-
-Innerhalb eines **it** sollte ein **expect** stehen.
-
-**expect** kann genutzt werden, um eine oder mehrere Eigenschaften eines Objektes zu untersuchen.
-
-**Syntax:**
-```
- expect(model.testMe()).to.be.true;
-
- expect(model.testMe()).to.deep.equal({name: "Jon Snow"});
+```js
+it(testCaseDescription, callback)
 ```
 
-[mehr Infos zu chai](https://chaijs.com/api/bdd/)
+The function `before` is used for test preparations for multiple `it` cases and is executed *once* within the surrounding `describe`.
 
+The function `beforeEach` is used for test preparations per `it` case and is therefore executed `once` per `it` in the surrounding `describe`.
 
-### Best practices ###
+The functions `after` and `afterEach` work comparably after test execution.
 
-Ein Test sollte immer möglichst nur aus genau **einem Grund** fehlschlagen.
-D.h. pro **It** sollte möglichst nur ein **expect** verwendet werden.
+For more documentation regarding Mocha, please read the [Mocha documentation pages](https://mochajs.org/).
 
-Tests sollten möglichst **simple** sein. Lieber schnell zwei kleine Tests schreiben als ein kompliziertes Konstrukt das mehrere Sachen auf einmal abdeckt.
+### Chai
 
-Man sollte sich überlegen welche **Corner-Cases** man testen sollte.
-D.h. Ungewöhnliche Fälle testen, z.b. sehr hohe oder sehr geringe Eingaben oder unsinnige Eingaben, wie undefined oder ein Leerstring.
+Each `it` case should contain a call to the `expect` function.
 
-Positiv und **negativ** testen.
-D.h. nicht nur testen, ob das erwünschte Ergebnis produziert wird, sondern auch, dass keine Unerwünschten Nebeneffekte auftreten.
+`expect` can be used to check one or multiple properties of an object.
 
-### Links ###
+```js
+expect(model.testMe()).to.be.true;
 
-[vue test utils](https://vue-test-utils.vuejs.org/)
+expect(model.testMe()).to.deep.equal({name: "Jon Snow"});
+```
 
-[vue-testing-handbook](https://lmiller1990.github.io/vue-testing-handbook/)
+For more documentation regarding Chai, please read the [Chai API reference](https://chaijs.com/api/bdd/).
 
-[vue.js testing guide](https://vuejs.org/v2/guide/unit-testing.html#ad)
+## Best practices
 
-[vuex testing](https://vuex.vuejs.org/guide/testing.html)
+A test should fail for a *single reason*. That is, per `it` only a single `expect` should be used, if possible.
+
+Test cases should be *simple*. Two small quick tests are preferred to one complex construct covering multiple cases.
+
+When testing, ponder which *edge cases* should be considered. That is, test with unusual values, e.g. extremely high or low values, or seemingly nonsensical inputs like `undefined` or the empty string.
+
+Test positively and negatively. That is, do not only ensure that the expected result is returned, but also validate no undesired side effects are produced.
+
+## Further reading
+
+* [Vue test utils](https://vue-test-utils.vuejs.org/)
+* [Vue testing handbook](https://lmiller1990.github.io/vue-testing-handbook/)
+* [Vue.js testing guide](https://vuejs.org/v2/guide/unit-testing.html#ad)
+* [VueX testing](https://vuex.vuejs.org/guide/testing.html)
