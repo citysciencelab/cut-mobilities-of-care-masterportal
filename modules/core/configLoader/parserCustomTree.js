@@ -74,8 +74,12 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                 // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
                 else if (layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
                     layerExtended.children = layerExtended.children.map(childLayer => {
-                        objFromRawList = getLayerWhere({id: childLayer.id});
-
+                        if (childLayer.styles && childLayer.styles[0]) {
+                            objFromRawList = getLayerWhere({id: childLayer.id + childLayer.styles[0]});
+                        }
+                        if (objFromRawList === null) {
+                            objFromRawList = getLayerWhere({id: childLayer.id});
+                        }
                         if (objFromRawList !== null) {
                             return Object.assign(objFromRawList, childLayer, {"isChildLayer": true});
                         }

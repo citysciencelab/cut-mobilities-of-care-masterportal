@@ -202,7 +202,7 @@ export function cloneByStyle (response) {
             response.splice(response.indexOf(obj), 0, cloneObj);
         });
         // Das ursprüngliche Objekt wird gelöscht
-        rawLayerArray = response.filter(value => value !== obj);
+        rawLayerArray = response.filter(value => value.id !== obj.id);
     });
 
     return rawLayerArray;
