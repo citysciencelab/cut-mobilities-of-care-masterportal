@@ -135,7 +135,7 @@ const actions = {
 
         if (rootGetters["Tools/Gfi/active"]) {
             commit("setGfiFeatures", null);
-            dispatch("MapMarker/removePolygonMarker");
+            dispatch("MapMarker/removePolygonMarker", null, {root: true});
             dispatch("collectGfiFeatures");
         }
     },
@@ -248,7 +248,7 @@ const actions = {
         view.setCenter(initialCenter);
         view.setResolution(initialResolution);
 
-        dispatch("MapMarker/removePointMarker");
+        dispatch("MapMarker/removePointMarker", null, {root: true});
     },
     /**
      * Sets the resolution by the given index of available resolutions.

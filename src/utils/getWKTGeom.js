@@ -12,9 +12,9 @@ function getWKTGeom (content, geometryType) {
     // TODO therefore I set the priorities on the development of the mapMarker in vue
     // TODO but this should be still an open issue although it works...
     const format = new WKT(),
-        type = content.geometryType ? content.geometryType : geometryType, // the default value is POLYGON because for type street, there is no geometryType defined. But it should be polygon
-        geometry = content.coordinate ? content.coordinate : content,
-        interiorGeometry = content.interiorGeometry;
+        type = content?.geometryType ? content.geometryType : geometryType, // the default value is POLYGON because for type street, there is no geometryType defined. But it should be polygon
+        geometry = content?.coordinate ? content.coordinate : content,
+        interiorGeometry = content?.interiorGeometry;
     let wkt,
         regExp;
 

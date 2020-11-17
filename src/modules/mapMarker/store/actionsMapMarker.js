@@ -1,69 +1,82 @@
-import mapMarkerState from "../../mapMarker/store/stateMapMarker";
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 import {getWKTGeom} from "../../../utils/getWKTGeom";
-import map from "../../map/store/indexMap";
+import {Stroke, Fill} from "ol/style.js";
+import Style from "ol/style/Style";
 
-// Path array of possible config locations. First one found will be used.
+/**
+ * @const {String} configPaths an array of possible config locations. First one found will be used
+ * @const {Object} actions vue actions
+ */
 const configPaths = [
     "configJs.mapMarker"
 ];
 
 export default {
+    /**
+     * Sets the config-params of this mapMarker into state.
+     * @param {Object} context The context Vue instance.
+     * @returns {Boolean} false, if config does not contain the mapMarker.
+     */
     initialize: context => {
-        const configFetchSuccess = fetchFirstModuleConfig(context, configPaths, "MapMarker", false);
-
-        if (!configFetchSuccess) {
-            // insert fallback: recursive config dearch for backwards compatibility
-            // see helpers.js@fetchFirstModuleConfig() for alternative place for this
-        }
-
-        // In case we need more than one config, we need to call fetchFirstModuleConfig() more than once.
-        /*
-        const additionalConfigFetchSuccess = fetchFirstModuleConfig(rootState, additionalConfigPaths, "Alerting");
-
-        if (!additionalConfigFetchSuccess) {
-            ...
-        }
-        */
+        return fetchFirstModuleConfig(context, configPaths, "MapMarker", false);
     },
+
     /**
-     * With this function the coordinate, which has to be marked by the MapMarker, is written to the MapMarker state.
-     * @param {Array} state - the state.
-     * @param {Array} value - the array with the markable coordinate pair.
-     * @returns {void} returns nothing.
+     * Set the style for teh polygon.
+     * @returns {void}
      */
-    placingPointMarker (state, value = []) {
+    setPolygonStyle ({state, commit}) {
+        const style = new Style({
+            fill: new Fill({
+                color: state.polygonStyle.fillColorPolygon
+            }),
+            stroke: new Stroke(state.polygonStyle.strokeStylePolygon)
+        });
+
+        commit("setPolygonStyle", style);
+    },
+
+    /**
+     * With this function the coordinate, which has to be marked by the mapMarker, is written to the MapMarker state.
+     * @param {String[]} value The array with the markable coordinate pair.
+     * @returns {void}
+     */
+    placingPointMarker ({commit}, value = []) {
+        commit("setResultToMark", []);
+
         if (Array.isArray(value)) {
-            mapMarkerState.resultToMark = [];
-            mapMarkerState.resultToMark = value;
+            commit("setResultToMark", value);
         }
-        else {
-            mapMarkerState.resultToMark = [];
-        }
-    },
-    /**
-     * This function has the task to remove the coordinate from the MapMarker state.
-     * This is necessary / triggered if the MapMarker should be removed.
-     * @returns {void} returns nothing.
-     */
-    removePointMarker () {
-        mapMarkerState.resultToMark = [];
-    },
-    placingPolygonMarker (state, wktcontent) {
-        mapMarkerState.wkt = getWKTGeom(wktcontent);
-        mapMarkerState.markerPolygon.getSource().addFeature(mapMarkerState.wkt);
-        mapMarkerState.markerPolygon.setVisible(true);
-        map.state.map.addLayer(mapMarkerState.markerPolygon);
     },
 
     /**
-     * Deletes the polygon
-     * @return {void}
+     * This function has the task to remove the coordinate from the mapMarker state.
+     * This is necessary / triggered if the MapMarker should be removed.
+     * @returns {void}
      */
-    removePolygonMarker: function () {
-        mapMarkerState.wkt = [];
-        map.state.map.removeLayer(mapMarkerState.markerPolygon);
-        mapMarkerState.markerPolygon.getSource().clear();
-        mapMarkerState.markerPolygon.setVisible(false);
+    removePointMarker ({commit}) {
+        commit("setResultToMark", []);
+    },
+
+    /**
+     * Converts polygon to the wkt format and add this to the map.
+     * @param {String[]} wktcontent The polygon to highlight in the map.
+     * @param {String} geometryType The type of geometry.
+     * @returns {void}
+     */
+    placingPolygonMarker ({state, commit}, {wktcontent, geometryType}) {
+        commit("addFeatureToMarkerPolygon", getWKTGeom(wktcontent, geometryType));
+        commit("setVisibilityMarkerPolygon", true);
+        commit("Map/addLayerToMap", state.markerPolygon, {root: true});
+    },
+
+    /**
+     * Removes the polygon from the map.
+     * @returns {void}
+     */
+    removePolygonMarker: function ({state, commit}) {
+        commit("Map/removeLayerFromMap", state.markerPolygon, {root: true});
+        commit("clearMarkerPolygon");
+        commit("setVisibilityMarkerPolygon", false);
     }
 };

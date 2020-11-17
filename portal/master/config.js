@@ -11,6 +11,12 @@ const Config = {
         wfsId: "4560",
         styleId: "location_eventlotse"
     },
+    mapMarker: {
+        pointStyleId: "location_eventlotse",
+        pinStyle: {
+            color: "#00AA00"
+        }
+    },
     zoomToGeometry: {
         layerId: "1692",
         attribute: "bezirk_name",

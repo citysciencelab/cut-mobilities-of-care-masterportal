@@ -2,27 +2,15 @@
 import {mapGetters, mapActions} from "vuex";
 import Overlay from "ol/Overlay.js";
 import mapMarkerState from "../store/stateMapMarker.js";
-import {Stroke, Fill} from "ol/style.js";
+import getters from "../store/gettersMapMarker";
 
 export default {
     name: "MapMarker",
     data: () => ({
-        isActive: false,
-        styleMapMarkerObject: {
-            pinColor: "#E10019",
-            fontSize: "38px",
-            height: "auto",
-            width: "auto",
-            fillColorPolygon: [8, 119, 95, 0.3],
-            strokeStylePolygon: {
-                color: "#08775f",
-                lineDash: [8],
-                width: 4
-            }
-        }
+        isActive: false
     }),
     computed: {
-        ...mapGetters("MapMarker", ["resultToMark", "wkt", "markerPolygon"]),
+        ...mapGetters("MapMarker", Object.keys(getters)),
         ...mapGetters("Map", ["map"]),
 
         /**
@@ -30,7 +18,7 @@ export default {
          * @returns {String} returns the color of the mapMarker.
          */
         mapMarkerStyle () {
-            return this.getMapMarkerColor();
+            return this.pinStyle;
         }
     },
     watch: {
@@ -47,48 +35,21 @@ export default {
             else {
                 this.mapMarkerUnderDeconstruction();
             }
-        },
-        wkt () {
-            this.setMapMarkerPolygonStyle();
         }
     },
     mounted () {
         this.initialize();
+        this.setPolygonStyle();
     },
     methods: {
-        ...mapActions("MapMarker", ["initialize", "placingPointMarker", "placingPolygonMarker"]),
-        /**
-         * Function to get the color. First checks, if the color is configured in the config.js resp. state.
-         * Is this not the case the default color gets extracted from the data property.
-         * @returns {String} returns the color of the mapMarker.
-         */
-        getMapMarkerColor: function () {
-            this.styleMapMarkerObject.color = mapMarkerState.pinColor ? mapMarkerState.pinColor : this.styleMapMarkerObject.pinColor;
-            return this.styleMapMarkerObject;
-        },
-        // TODO Beschreibung und ein einziges Styleobjekt mit setStyle hinzufügen!?
-        setMapMarkerPolygonStyle: function () {
-            const fillColorPolygon = mapMarkerState.fillColorPolygon ? mapMarkerState.fillColorPolygon : this.styleMapMarkerObject.fillColorPolygon,
-                strokeStylePolygon = mapMarkerState.strokeStylePolygon ? mapMarkerState.strokeStylePolygon : this.styleMapMarkerObject.strokeStylePolygon,
-                polygonStyleFill = new Fill({
-                    color: fillColorPolygon
-                }),
-                polygonStyleStroke = new Stroke({
-                    color: strokeStylePolygon.color,
-                    lineDash: strokeStylePolygon.lineDash,
-                    width: strokeStylePolygon.width
-                });
-
-            mapMarkerState.markerPolygon.style_.setFill(polygonStyleFill);
-            mapMarkerState.markerPolygon.style_.setStroke(polygonStyleStroke);
-        },
+        ...mapActions("MapMarker", ["initialize", "setPolygonStyle"]),
 
         /**
          * Function to construct the mapMarker. Therefore an overlay from openlayers is used.
          * The overlay consists of the element refMapMarker. refMapMarker is the div specified in the template section below.
          * After the overlay is completly constucted, it gets the position assigned, the variable "isActive" is set to true and
          * the overlay is added to the Map.
-         * @param {Array} result - An array with the coordinate pair, which has to be marked.
+         * @param {String[]} result - An array with the coordinate pair, which has to be marked.
          * @returns {void} returns nothing.
          */
         mapMarkerUnderConstruction: function (result) {
