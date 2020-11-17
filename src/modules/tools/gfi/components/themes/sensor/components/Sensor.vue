@@ -98,7 +98,7 @@ export default {
                     version = model.get("version"),
                     filterDate = this.createFilterDate(this.periodLength, this.periodUnit),
                     filterDataStream = this.createFilterDataStream(this.feature.getProperties()?.dataStreamId),
-                    requestQuery = `${url}v${version}/Datastreams?$select=@iot.id&$expand=Observations`
+                    requestQuery = `${url}/v${version}/Datastreams?$select=@iot.id&$expand=Observations`
                         + `($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt ${filterDate})`
                         + `&$filter=${filterDataStream}`;
 
