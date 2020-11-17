@@ -7,6 +7,7 @@ import {Image, Tile, Vector, Group} from "ol/layer.js";
 import store from "../../../src/app-store/index";
 import "./RadioBridge.js";
 import isObject from "../../../src/utils/isObject";
+import Geometry from "ol/geom/Geometry";
 
 const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype */{
     defaults: {
@@ -713,7 +714,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         // remove all object properties except geometry. Otherwise mapfish runs into an error
         Object.keys(clonedFeature.getProperties()).forEach(property => {
-            if (isObject(clonedFeature.get(property)) && property !== "geometry") {
+            if (isObject(clonedFeature.get(property)) && clonedFeature.get(property) instanceof Geometry === false) {
                 clonedFeature.unset(property);
             }
         });
