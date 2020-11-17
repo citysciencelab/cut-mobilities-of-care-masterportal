@@ -1,20 +1,21 @@
-> In wenigen Schritten zum ersten, eigenen Portal
+>Creating your own portal in a few easy steps
 
-# Quickstart für Anwender
+# Quick-start for users
 
 [TOC]
 
-So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf und passen es nach Ihren Wünschen an.
+This file describes the steps required to set up your first portal on your own server and configure it according to meet your requirements
 
-#### Beispiel-Anwendungen auf Ihren Server legen
-1. Um ein eigenes Portal aufzusetzen, laden Sie bitte zunächst mit einem Klick auf den nachfolgenden Link die **[letzte stabile Version aus Bitbucket](https://bitbucket.org/geowerkstatt-hamburg/masterportal/downloads/examples.zip)** herunter.
+## Host an example application on your server
 
-2. Um das Portal öffentlich zugänglich zu machen (zum Beispiel im Internet), ist es notwendig, das Portal auf einem Webserver bereitzustellen. Dazu verschieben Sie die ZIP-Datei auf Ihren Webserver (z.B. in das htdocs-Verzeichnis eines Apache-Servers) und entpacken Sie dort.
+1. To set up your portal, please download the **[last stable version from Bitbucket](https://bitbucket.org/geowerkstatt-hamburg/masterportal/downloads/examples.zip)** by clicking the link provided.
 
-3. Der Ordner examples enthält die folgende Struktur:
+2. To publish your portal (e.g. to the Internet) it's required to host the portal with a web server. For this purpose, move the ZIP file to your web server (e.g. to the `htdocs` folder of an Apache server) and unpack the archive.
+
+3. The folder `examples` holds the following file and folder structure:
 
     - Basic/
-        -ressources/
+        - ressources/
             - img/
                 - ...
             - rest-services-internet.json
@@ -28,30 +29,29 @@ So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf
             - css/
             - img/
                 - compass/
-                    - ... (Bilder zur Darstellung des Kompass im 3D-Modus)
+                    - ... (images for display of the 3d mode compass)
                 - ajax-loader.gif
             - js/
                 - masterportal.js
 
-    Im Ordner *Basic* befindet sich eine Beispiel-Anwendungen mit den portalspezifischen Konfigurationsdateien **[*config.js*](config.js.md)** und **[*config.json*](config.json.md)** und der index.html.
+    The folder *Basic* comes with an example application providing the portal-specific configuration files **[config.js](config.js.md)**, **[config.json](config.json.md)**, and the index.html.
 
-    Darin enthalten ist auch der Ordner *ressources*, der die globalen Konfigurationsdateien **[*services.json*](services.json.md)**, **[*rest-services.json*](rest-services.json.md)** und **[*style.json*](style.json.md)** enthält sowie die benötigten Bilder (Ordner *img*) dieser Portalinstanz.
+    Also contained is the folder *ressources* providing the global configuration files **[services.json](services.json.md)**, **[rest-services.json](rest-services.json.md)**, and **[style.json](style.json.md)**, as well as the required images (folder *img*) of this portal instance.
 
-    Der Ordner *mastercode* enthält die komprimierte Javascript-Datei und die css-Dateien des Masterportals. Im Ordner *img* sind die für das Masterportal notwenidgen Bilder abgelegt (Der Kompass für den 3D-Modus und das Ladebild)
+    The folder *mastercode* contains the compressed JavaScript and CSS files of the Masterportal. Here, the folder *img* holds the compass and loading screen images.
 
+4. You may decide to change the name of the folder *examples*. Should you decide to do so, also change "examples" to your new folder name in the URLs that follow. The portal should now be available by following this link.
+    - https://[web-server-name]/examples/Basic/index.html
 
-4. Wenn Sie den Ordnernamen *examples* belassen haben, können Sie die Beispielportale mit folgenden URLs über einen Browser aufrufen (anderenfalls ersetzen Sie *examples* durch den von Ihnen gewählten Ordnernamen):
-    - https://[Name-des-Webservers]/examples/Basic/index.html
+## Configure example application
 
+By following these steps you can modify the example application to become your custom portal:
 
-#### Beispiel-Anwendung anpassen
-So wird aus einer Beispiel-Anwendung ein individuelles Portal:
+1. If need be, change the global configuration files in the folder *ressources* to add aerial view images of other regions, to add icons, to modify existing icons, and so on.
 
-1. Gegebenenfalls können Sie die globalen Konfigurationsdateien im Ordner *ressources* anpassen (z.B. Luftbilder anderer Bundesländer verfügbar machen, neue Icons hinzufügen, bestehende Icons verändern etc.)
+2. Please subsequently duplicate the folder *Basic* and rename it to your portal name, e.g. *my_portal*.
 
-2. Anschließend duplizieren Sie bitte den Ordner *Basic* und benennen ihn um (z.B. in *mein_portal*).
+3. You may now modify the configuration files **[config.js](config.js.md)** and **[config.json](config.json.md)** within this new folder *my_portal*. For example, you may define which layers are to appear in the layer tree, configure the tools required, customize the background layers, change the display name of the portal, and so on. For all options, please refer to the full documentation of the **[config.js](config.js.md)** and **[config.json](config.json.md)** files.
 
-3. Sie können nun die Konfigurationsdateien config.js und config.json innerhalb des neuen Ordners *mein_portal* anpassen (z.B. die Themen im Themenbaum festlegen, die passenden Werkzeuge zur Verfügung stellen, die Hintergrundkarten anpassen, den Namen des Portals ändern ...) Hier finden Sie die Dokumentation der **[config.js](config.js.md)** und der **[config.json](config.json.md)**.
-
-4. Ihr neues Portal können Sie nun mit folgender URL über den Browser abrufen:
-    - https://[NameDesWebservers]/examples/mein_portal/index.html
+4. Your new portal may now be opened by navigating to the URL:
+    - https://[web-server-name]/examples/my_portal/index.html
