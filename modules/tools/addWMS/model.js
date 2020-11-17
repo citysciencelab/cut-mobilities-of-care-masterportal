@@ -120,6 +120,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
                     capability.Capability.Layer.Layer.forEach(layer => {
                         this.parseLayer(layer, uniqId, 1);
                     });
+                    Radio.trigger("ModelList", "closeAllExpandedFolder");
 
                     Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.completeMessage"));
 
