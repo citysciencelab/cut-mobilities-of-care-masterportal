@@ -231,7 +231,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
             this.set("emptyResult", true);
             return;
         }
-        this.centerGemeinde(true);
+
         topFeatures = this.selectFeatures(rawFeatures);
         coloredFeatures = this.colorFeatures(topFeatures);
         // Bestimme statistische Kenngrößen
@@ -242,6 +242,8 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
 
         this.preparePendlerLegend(coloredFeatures);
         this.createLineString(coloredFeatures);
+
+        this.zoomToExtentOfFeatureGroup(coloredFeatures);
     },
     /**
      * creates the line features and adds them to the path layers source
@@ -320,8 +322,6 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         // set the order to have labels allways above the animation
         this.assertLayerOnTop("animationLayer");
         this.assertLayerOnTop("pendlerLabelLayer");
-
-        this.zoomToExtentOfFeatureGroup(features);
     },
     /**
      * Starts the aniamtion
