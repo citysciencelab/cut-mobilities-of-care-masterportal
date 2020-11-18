@@ -35,9 +35,9 @@ export default {
         />
         <!-- HUD elements; always present -->
         <div class="elements-positioned-over-map">
+            <LegendWindow />
             <ControlBar class="controls" />
             <Footer />
-            <LegendWindow />
             <MapMarker />
         </div>
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
