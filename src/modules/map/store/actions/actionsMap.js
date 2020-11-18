@@ -168,8 +168,7 @@ const actions = {
                 },
                 url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams),
                 gfiAsNewWindow = layer.get("gfiAsNewWindow");
-console.log(layer);
-console.log(gfiAsNewWindow);
+
             return getWmsFeaturesByMimeType(mimeType, url, {layerName, layerId}, gfiTheme, gfiAttributes, gfiAsNewWindow, null, null);
         }));
 
