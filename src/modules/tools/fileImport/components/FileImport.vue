@@ -1,5 +1,6 @@
 <script>
 import Tool from "../../Tool.vue";
+import getComponent from "../../../../utils/getComponent";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersFileImport";
 import mutations from "../store/mutationsFileImport";
@@ -79,7 +80,7 @@ export default {
         },
         close () {
             this.setActive(false);
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
+            const model = getComponent(this.storePath.id);
 
             if (model) {
                 model.set("isActive", false);

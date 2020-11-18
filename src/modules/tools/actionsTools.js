@@ -1,4 +1,5 @@
 import {fetchFirstModuleConfig} from "../../utils/fetchFirstModuleConfig";
+import getComponent from "../../utils/getComponent";
 
 const actions = {
     /**
@@ -113,7 +114,7 @@ const actions = {
      * @returns {void}
      */
     activateToolInModelList ({state}, activeTool) {
-        const model = Radio.request("ModelList", "getModelByAttributes", {id: state[activeTool]?.id});
+        const model = getComponent(state[activeTool]?.id);
 
         if (model) {
             model.set("isActive", true);
