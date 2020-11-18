@@ -25,7 +25,6 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         createReport: false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
         parcelFound: false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
         glyphicon: "glyphicon-search",
-        mapMarkerType: "Parcel",
         // translations
         searchText: "",
         generateReportText: "",
@@ -38,7 +37,8 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         districtsLoadFailed: "",
         wrongConfigParcelsearch: "",
         parcelSearchImpossible: "",
-        tryAgainLater: ""
+        tryAgainLater: "",
+        zoomLevel: 7
 
     }),
     /**
@@ -298,8 +298,9 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
             });
             this.setParcelFound(true);
 
+            console.log(coordinate);
             store.dispatch("MapMarker/placingPointMarker", coordinate);
-            Radio.trigger("MapView", "setCenter", coordinate, store.getters["MapMarker/zoomLevel"]);
+            Radio.trigger("MapView", "setCenter", coordinate, this.get("zoomLevel"));
             // use a timeout here, else the resolution-change is not ready and in the addon showParcelGfi/RadioBridge the wrong result is returned for parcelsearch
             setTimeout(() => {
                 Radio.trigger("ParcelSearch", "parcelFound", attributes);

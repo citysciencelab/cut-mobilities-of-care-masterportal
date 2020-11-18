@@ -17,7 +17,8 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
         cartesianEastingLabel: "",
         cartesianNorthingLabel: "",
         exampleAcronym: "",
-        searchButtonText: ""
+        searchButtonText: "",
+        zoomLevel: 7
     }),
 
     /**
@@ -233,7 +234,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
             this.set("newCenter", [easting, northing]);
         }
         store.dispatch("MapMarker/placingPointMarker", this.get("newCenter"));
-        Radio.trigger("MapView", "setCenter", this.get("newCenter"), store.getters["MapMarker/zoomLevel"]);
+        Radio.trigger("MapView", "setCenter", this.get("newCenter"), this.get("zoomLevel"));
     },
     // setter for coordinatesEasting
     setCoordinatesEasting: function (value) {
