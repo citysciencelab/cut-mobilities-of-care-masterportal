@@ -1,7 +1,7 @@
 const Config = {
     addons: ["einwohnerabfrage", "VueAddon", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas"],
     alerting: {
-        // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json"
+        // fetchBroadcastUrl: "https://localhost:9001/portal/master/resources/broadcastedPortalAlerts.json"
     },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     simpleMap: false,
@@ -10,10 +10,6 @@ const Config = {
         attribute: "flaechenid",
         wfsId: "4560",
         styleId: "location_eventlotse"
-    },
-    mapMarker: {
-        pointStyleId: "mapMarkerPoint",
-        polygonStyleId: "mapMarkerPolygon"
     },
     zoomToGeometry: {
         layerId: "1692",

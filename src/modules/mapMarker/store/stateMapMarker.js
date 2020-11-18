@@ -11,8 +11,8 @@ import {Style} from "ol/style.js";
  * @property {Object} markerPolygon The vector layer for the polygon map marker.
  */
 export default {
-    pointStyleId: "mapMarkerPoint",
-    polygonStyleId: "mapMarkerPolygon",
+    pointStyleId: "defaultMapMarkerPoint",
+    polygonStyleId: "defaultMapMarkerPolygon",
     markerPoint: new VectorLayer({
         name: "markerPoint",
         source: new VectorSource(),

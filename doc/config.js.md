@@ -158,16 +158,16 @@ footer: {
 ## mapMarker ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|pointStyleId|nein|String|"mapMarkerPoint"|StyleId zur Konfiguration des MapMarkers für Punkte in der style.json.|
-|polygonStyleId|nein|String|"mapMarkerPolygon"|StyleId zur Konfiguration des MapMarkers für Polygone in der style.json.|
+|pointStyleId|nein|String|"defaultMapMarkerPoint"|StyleId zur Konfiguration des MapMarkers für Punkte in der style.json. Per default wird die mapMarker.svg aus dem Ordner "img" des Masterportals verwendet.|
+|polygonStyleId|nein|String|"defaultMapMarkerPolygon"|StyleId zur Konfiguration des MapMarkers für Polygone in der style.json.|
 
 **Beispiel:**
 
 ```
 #!json
 mapMarker: {
-    pointStyleId: "mapMarkerPoint",
-    polygonStyleId: "mapMarkerPolygon"
+    pointStyleId: "customMapMarkerPoint",
+    polygonStyleId: "customMapMarkerPolygon"
 }
 ```
 

@@ -6,10 +6,10 @@ describe("src/modules/mapMarker/store/gettersMapMarker.js", () => {
 
     describe("MapMarker getters", () => {
         it("returns the pointStyleId from state", () => {
-            expect(getters.pointStyleId(stateMapMarker)).to.equals("mapMarkerPoint");
+            expect(getters.pointStyleId(stateMapMarker)).to.equals("defaultMapMarkerPoint");
         });
         it("returns the polygonStyleId from state", () => {
-            expect(getters.polygonStyleId(stateMapMarker)).to.equals("mapMarkerPolygon");
+            expect(getters.polygonStyleId(stateMapMarker)).to.equals("defaultMapMarkerPolygon");
         });
         it("returns the markerPoint from state", () => {
             expect(getters.markerPoint(stateMapMarker).getSource()).is.not.undefined;

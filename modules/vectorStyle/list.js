@@ -122,6 +122,8 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             filteredData = [];
 
         dataWithDefaultValue.push({styleId: "default", rules: [{style: {}}]});
+        dataWithDefaultValue.push(this.getMapmarkerPointDefaultStyle());
+        dataWithDefaultValue.push(this.getMapmarkerPolygonDefaultStyle());
 
         styleIds.push(this.getStyleIdsFromLayers(layers));
         styleIds.push(this.getStyleIdForZoomToFeature());
@@ -231,6 +233,48 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             styleId = Config.zoomToFeature.styleId;
         }
         return styleId;
+    },
+
+    /**
+     * Gets the default style for mapmarker as point.
+     * @returns {Object} The default style for mapMarker point Style.
+     */
+    getMapmarkerPointDefaultStyle: function () {
+        return {
+            styleId: "defaultMapMarkerPoint",
+            rules: [{
+                style:
+                {
+                    type: "icon",
+                    imageName: "mapMarker.svg",
+                    imagePath: "../../img/",
+                    imageScale: 1,
+                    imageWidth: 34,
+                    imageHeight: 48,
+                    imageOffsetY: 46,
+                    imageOffsetYUnit: "pixels"
+                }
+            }]
+        };
+    },
+
+    /**
+     * Gets the default style for mapmarker as polygon.
+     * @returns {Object} The default style for mapMarker polygon Style.
+     */
+    getMapmarkerPolygonDefaultStyle: function () {
+        return {
+            styleId: "defaultMapMarkerPolygon",
+            rules: [{
+                style:
+                {
+                    polygonStrokeColor: [8, 119, 95, 1],
+                    polygonStrokeWidth: 4,
+                    polygonFillColor: [8, 119, 95, 0.3],
+                    polygonStrokeDash: [8]
+                }
+            }]
+        };
     },
 
     /**
