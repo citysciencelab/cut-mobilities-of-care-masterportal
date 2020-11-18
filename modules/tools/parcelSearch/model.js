@@ -298,7 +298,6 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
             });
             this.setParcelFound(true);
 
-            console.log(coordinate);
             store.dispatch("MapMarker/placingPointMarker", coordinate);
             Radio.trigger("MapView", "setCenter", coordinate, this.get("zoomLevel"));
             // use a timeout here, else the resolution-change is not ready and in the addon showParcelGfi/RadioBridge the wrong result is returned for parcelsearch

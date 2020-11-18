@@ -2,15 +2,11 @@ import {WKT} from "ol/format.js";
 
 /**
  * Help function for determining a feature with textual description.
- * @param {object} content - Object with the type of geometry, the geometry itself and the geometry of interior parts.
- * @param {String} geometryType - the type of geometry.
- * @returns {string} wkt WellKnownText-Geom
+ * @param {Object|String[]} content Object with the type of geometry, the geometry itself and the geometry of interior parts.
+ * @param {String} [geometryType="POLYGON"] The type of geometry.
+ * @returns {ol/Feature} Feature with WellKnownText-Geom.
  */
-function getWKTGeom (content, geometryType) {
-    // TODO that's pretty ugly. Isn't there a better / nicer solution!?
-    // TODO I have not adjust it jet, because it works and
-    // TODO therefore I set the priorities on the development of the mapMarker in vue
-    // TODO but this should be still an open issue although it works...
+function getWKTGeom (content, geometryType = "POLYGON") {
     const format = new WKT(),
         type = content?.geometryType ? content.geometryType : geometryType, // the default value is POLYGON because for type street, there is no geometryType defined. But it should be polygon
         geometry = content?.coordinate ? content.coordinate : content,
@@ -44,7 +40,7 @@ function getWKTGeom (content, geometryType) {
                 if (index2 % 2 === 0) {
                     wkt += coord + " ";
                 }
-                else if (index2 === list.length - 1 && interiorGeometry.indexOf(index + 1) !== -1) {
+                else if (index2 === list.length - 1 && interiorGeometry?.indexOf(index + 1) !== -1) {
                     wkt += coord + ")";
                 }
                 else if (index2 === list.length - 1) {
@@ -55,10 +51,10 @@ function getWKTGeom (content, geometryType) {
                 }
             });
 
-            if (interiorGeometry.indexOf(index + 1) !== -1) {
+            if (interiorGeometry?.indexOf(index + 1) !== -1) {
                 wkt += ",(";
             }
-            else if (index === geometry.length - 1 && interiorGeometry.indexOf(index + 1) === -1) {
+            else if (index === geometry.length - 1 && interiorGeometry?.indexOf(index + 1) === -1) {
                 wkt += ")";
             }
             else {

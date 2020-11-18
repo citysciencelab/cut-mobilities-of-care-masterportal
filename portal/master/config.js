@@ -12,10 +12,8 @@ const Config = {
         styleId: "location_eventlotse"
     },
     mapMarker: {
-        pointStyleId: "location_eventlotse",
-        pinStyle: {
-            color: "#00AA00"
-        }
+        pointStyleId: "mapMarkerPoint",
+        polygonStyleId: "mapMarkerPolygon"
     },
     zoomToGeometry: {
         layerId: "1692",

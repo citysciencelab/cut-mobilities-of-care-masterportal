@@ -112,6 +112,9 @@
         "layerInformation": {
             "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
         },
+        "mapMarker": {
+          "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
+        },
         "featureViaURL": {
             "coordLabel": "Coordinates",
             "featureLabel": "Label",

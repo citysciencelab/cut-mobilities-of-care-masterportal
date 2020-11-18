@@ -16,6 +16,38 @@
     ]
   },
   {
+    "styleId": "mapMarkerPoint",
+    "rules":
+    [
+      {
+        "style":
+          {
+          "type": "icon",
+          "imageName": "marker_red_small.svg",
+          "imageScale" : 1,
+          "imageWidth": 34,
+          "imageHeight": 48,
+          "imageOffsetY": 46,
+          "imageOffsetYUnit": "pixels"
+          }
+      }
+    ]
+  },
+  {
+    "styleId": "mapMarkerPolygon",
+    "rules": [
+      {
+        "style":
+          {
+          "polygonStrokeColor": [8, 119, 95, 1],
+          "polygonStrokeWidth": 4,
+          "polygonFillColor": [8, 119, 95, 0.3],
+          "polygonStrokeDash": [8]
+          }
+      }
+    ]
+  },
+  {
     "styleId": "1711",
     "rules": [
       {

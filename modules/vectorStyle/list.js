@@ -1,5 +1,6 @@
 import WFSStyle from "./model";
 import StyleModel from "./styleModel";
+import store from "../../src/app-store";
 
 const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     /**
@@ -124,6 +125,8 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         styleIds.push(this.getStyleIdsFromLayers(layers));
         styleIds.push(this.getStyleIdForZoomToFeature());
+        styleIds.push(this.getStyleIdForMapMarkerPoint());
+        styleIds.push(this.getStyleIdForMapMarkerPolygon());
         styleIds.push(this.getStyleIdsFromTools(tools));
         styleIds.push(this.getFeatureViaURLStyles());
 
@@ -226,6 +229,32 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         if (Config && Config.hasOwnProperty("zoomToFeature") && Config.zoomToFeature.hasOwnProperty("styleId")) {
             styleId = Config.zoomToFeature.styleId;
+        }
+        return styleId;
+    },
+
+    /**
+     * gets style id from MapMarker
+     * @returns {String} - Style id of mapMarker.
+     */
+    getStyleIdForMapMarkerPoint: function () {
+        let styleId;
+
+        if (store.getters["MapMarker/pointStyleId"]) {
+            styleId = store.getters["MapMarker/pointStyleId"];
+        }
+        return styleId;
+    },
+
+    /**
+     * gets style id from MapMarker
+     * @returns {String} - Style id of mapMarker.
+     */
+    getStyleIdForMapMarkerPolygon: function () {
+        let styleId;
+
+        if (store.getters["MapMarker/polygonStyleId"]) {
+            styleId = store.getters["MapMarker/polygonStyleId"];
         }
         return styleId;
     }

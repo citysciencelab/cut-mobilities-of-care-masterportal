@@ -11,32 +11,36 @@ const mutations = {
      */
     ...generateSimpleMutations(mapMarkerState),
 
-    addFeatureToMarkerPolygon (state, wkt) {
-        state.markerPolygon.getSource().addFeature(wkt);
+    /**
+     * Adds a feature to the given map marker source.
+     * @param {Object} state The state of mapMarker.
+     * @param {ol/Feature} feature The feature to be added.
+     * @param {String} marker The marker to which the feature should be added.
+     * @returns {void}
+     */
+    addFeatureToMarker (state, {feature, marker}) {
+        state[marker].getSource().addFeature(feature);
     },
 
-    addFeatureToMarkerPoint (state, feature) {
-        state.markerPoint.getSource().addFeature(feature);
+    /**
+     * Clears the given map marker source.
+     * @param {Object} state The state of mapMarker.
+     * @param {String} marker The marker to be cleared.
+     * @returns {void}
+     */
+    clearMarker (state, marker) {
+        state[marker].getSource().clear();
     },
 
-    clearMarkerPolygon (state) {
-        state.markerPolygon.getSource().clear();
-    },
-
-    clearMarkerPoint (state) {
-        state.markerPoint.getSource().clear();
-    },
-
-    setVisibilityMarkerPolygon (state, visible) {
-        state.markerPolygon.setVisible(visible);
-    },
-
-    setVisibilityMarkerPoint (state, visible) {
-        state.markerPoint.setVisible(visible);
-    },
-
-    setPolygonStyle (state, style) {
-        state.markerPolygon.setStyle(style);
+    /**
+     * Sets the visibility of the given map marker.
+     * @param {Object} state The state of mapMarker.
+     * @param {Boolean} visibility The visibility.
+     * @param {String} marker The marker whose visibility should be changed.
+     * @returns {void}
+     */
+    setVisibilityMarker (state, {visibility, marker}) {
+        state[marker].setVisible(visibility);
     }
 };
 

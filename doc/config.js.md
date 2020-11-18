@@ -158,32 +158,16 @@ footer: {
 ## mapMarker ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|type|nein|enum["Overlay", "Layer"]|"Overlay"|Typ des MapMarkers.|
-|mapMarkerStyleId|nein|String|"mapMarkerStyle"|Style Id des MapMarkers.|
-|pinColor|nein|String|"#E10019"|Farbe des MapMarkers.|
-|fillColorPolygon|nein|Array|[8, 119, 95, 0.3]|Farbe und Transparenz des MapMarker Polygons. Die letzte Zahl gibt das Maß der Transparenz an.|
-|**[strokeStylePolygon](#markdown-header-mapMarkerstrokeStylePolygon)**|nein|Object||Objekt mit Angaben zum Styling der Umrandung des MapMarker Polygons. Hier existieren mehrere Konfigurationsmöglichkeiten, wie nachfolgend beschrieben.|
-
-***
-### mapMarker.strokeStylePolygon ###
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|color|nein|String, Array|"#08775f"|Farbe des Umrings des MapMarker Polygons.|
-|lineDash|nein|Array|[8]|Möglichkeit eine gestrichelte Linie zu konfigurieren. 0 wäre eine durchgehende Linie. Mit steigender Zahl steigt die Länge der einzelnen Striche und deren Anzahl nimmt ab.|
-|width|nein|Number|4|Parameter, der die Stärke des Umrisses spezifiziert.|
+|pointStyleId|nein|String|"mapMarkerPoint"|StyleId zur Konfiguration des MapMarkers für Punkte in der style.json.|
+|polygonStyleId|nein|String|"mapMarkerPolygon"|StyleId zur Konfiguration des MapMarkers für Polygone in der style.json.|
 
 **Beispiel:**
 
 ```
 #!json
 mapMarker: {
-    pinColor: "#045000",
-    fillColorPolygon: [52, 12, 254, 0.3],
-    strokeStylePolygon: {
-        color: "red",
-        lineDash: [0],
-        width: 4
-    }
+    pointStyleId: "mapMarkerPoint",
+    polygonStyleId: "mapMarkerPolygon"
 }
 ```
 

@@ -1,7 +1,7 @@
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 import {getWKTGeom} from "../../../utils/getWKTGeom";
-import {Stroke, Fill} from "ol/style.js";
-import Style from "ol/style/Style";
+import Point from "ol/geom/Point.js";
+import Feature from "ol/Feature.js";
 
 /**
  * @const {String} configPaths an array of possible config locations. First one found will be used
@@ -22,30 +22,28 @@ export default {
     },
 
     /**
-     * Set the style for teh polygon.
-     * @returns {void}
-     */
-    setPolygonStyle ({state, commit}) {
-        const style = new Style({
-            fill: new Fill({
-                color: state.polygonStyle.fillColorPolygon
-            }),
-            stroke: new Stroke(state.polygonStyle.strokeStylePolygon)
-        });
-
-        commit("setPolygonStyle", style);
-    },
-
-    /**
      * With this function the coordinate, which has to be marked by the mapMarker, is written to the MapMarker state.
      * @param {String[]} value The array with the markable coordinate pair.
      * @returns {void}
      */
-    placingPointMarker ({commit}, value = []) {
-        commit("setResultToMark", []);
+    placingPointMarker ({state, commit, dispatch}, value) {
+        const styleListModel = Radio.request("StyleList", "returnModelById", state.pointStyleId);
 
-        if (Array.isArray(value)) {
-            commit("setResultToMark", value);
+        dispatch("removePointMarker");
+
+        if (styleListModel) {
+            const iconfeature = new Feature({
+                    geometry: new Point(value)
+                }),
+                featureStyle = styleListModel.createStyle(iconfeature, false);
+
+            iconfeature.setStyle(featureStyle);
+            commit("addFeatureToMarker", {feature: iconfeature, marker: "markerPoint"});
+            commit("setVisibilityMarker", {visibility: true, marker: "markerPoint"});
+            commit("Map/addLayerToMap", state.markerPoint, {root: true});
+        }
+        else {
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.pointStyleId}), {root: true});
         }
     },
 
@@ -54,8 +52,10 @@ export default {
      * This is necessary / triggered if the MapMarker should be removed.
      * @returns {void}
      */
-    removePointMarker ({commit}) {
-        commit("setResultToMark", []);
+    removePointMarker ({state, commit}) {
+        commit("Map/removeLayerFromMap", state.markerPoint, {root: true});
+        commit("clearMarker", "markerPoint");
+        commit("setVisibilityMarker", {visbility: false, marker: "markerPoint"});
     },
 
     /**
@@ -64,19 +64,32 @@ export default {
      * @param {String} geometryType The type of geometry.
      * @returns {void}
      */
-    placingPolygonMarker ({state, commit}, {wktcontent, geometryType}) {
-        commit("addFeatureToMarkerPolygon", getWKTGeom(wktcontent, geometryType));
-        commit("setVisibilityMarkerPolygon", true);
-        commit("Map/addLayerToMap", state.markerPolygon, {root: true});
+    placingPolygonMarker ({state, commit, dispatch}, {wktcontent, geometryType}) {
+        const styleListModel = Radio.request("StyleList", "returnModelById", state.polygonStyleId);
+
+        dispatch("removePolygonMarker");
+
+        if (styleListModel) {
+            const feature = getWKTGeom(wktcontent, geometryType),
+                featureStyle = styleListModel.createStyle(feature, false);
+
+            feature.setStyle(featureStyle);
+            commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
+            commit("setVisibilityMarker", {visibility: true, marker: "markerPolygon"});
+            commit("Map/addLayerToMap", state.markerPolygon, {root: true});
+        }
+        else {
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.polygonStyleId}), {root: true});
+        }
     },
 
     /**
-     * Removes the polygon from the map.
+     * Removes the polygon map marker from the map.
      * @returns {void}
      */
     removePolygonMarker: function ({state, commit}) {
         commit("Map/removeLayerFromMap", state.markerPolygon, {root: true});
-        commit("clearMarkerPolygon");
-        commit("setVisibilityMarkerPolygon", false);
+        commit("clearMarker", "markerPolygon");
+        commit("setVisibilityMarker", {visbility: false, marker: "markerPolygon"});
     }
 };
