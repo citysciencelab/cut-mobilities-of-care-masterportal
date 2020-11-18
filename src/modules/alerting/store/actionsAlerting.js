@@ -58,26 +58,31 @@ function checkAlertViewRestriction (displayedAlerts, alertToCheck) {
 }
 
 export default {
+    /**
+     * Initially read given configs
+     * @param {object} context context
+     * @returns {void}
+     */
     initialize: context => {
-        const configFetchSuccess = fetchFirstModuleConfig(context, configPaths, "Alerting");
-
-        if (!configFetchSuccess) {
-            // insert fallback: recursive config dearch for backwards compatibility
-            // see helpers.js@fetchFirstModuleConfig() for alternative place for this
-        }
-
-        // In case we need more than one config, we need to call fetchFirstModuleConfig() more than once.
-        /*
-        const additionalConfigFetchSuccess = fetchFirstModuleConfig(rootState, additionalConfigPaths, "Alerting");
-
-        if (!additionalConfigFetchSuccess) {
-            ...
-        }
-        */
+        fetchFirstModuleConfig(context, configPaths, "Alerting");
     },
+
+    /**
+     * Mapping to equilavent mutation
+     * @param {object} commit commit
+     * @param {object} alerts alerts to be set
+     * @returns {void}
+     */
     setDisplayedAlerts: function ({commit}, alerts = {}) {
         commit("setDisplayedAlerts", alerts);
     },
+
+    /**
+     * Removes read alerts, set displayed alerts as displayed and hide modal.
+     * @param {object} state state
+     * @param {object} commit commit
+     * @returns {void}
+     */
     cleanup: function ({state, commit}) {
         state.alerts.forEach(singleAlert => {
             if (!singleAlert.mustBeConfirmed) {
@@ -87,6 +92,14 @@ export default {
         });
         commit("setReadyToShow", false);
     },
+
+    /**
+     * Marks a single alert as read. Triggers callback function if defined. As a coclusion, the callback
+     * function does only work if the alert must be confirmed and has not been read.
+     * @param {object} state state
+     * @param {string} hash Hash of read alert
+     * @returns {void}
+     */
     alertHasBeenRead: function ({state, commit}, hash) {
         const singleAlert = findSingleAlertByHash(state.alerts, hash);
 
@@ -97,6 +110,17 @@ export default {
             }
         }
     },
+
+    /**
+     * Checks a new alert object, if it may be added to alerting queue. This includes checking, if
+     *  1: alert is already in queue
+     *  2: alert is limited to be displayed in a past time
+     *  3: alert is limited to be display in the future
+     *  4: alert has already been read and is not ready to be displayed again yet
+     * @param {object} state state
+     * @param {object} newAlert alert object to be added to queue
+     * @returns {void}
+     */
     addSingleAlert: function ({state, commit}, newAlert) {
         const objectHash = require("object-hash"),
             newAlertObj = typeof newAlert === "string" ? {content: newAlert} : newAlert,

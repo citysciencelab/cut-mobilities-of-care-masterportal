@@ -12,10 +12,6 @@ export default {
         Modal
     },
 
-    data: function () {
-        return {};
-    },
-
     computed: {
         ...mapGetters("Alerting", [
             "displayedAlerts",
@@ -25,26 +21,37 @@ export default {
             "sortedAlerts"
         ]),
 
-        currentUrl: () => {
-            // remove hashes
-            let urlToCheck = document.URL.replace(/#.*$/, "");
+        /**
+         * Reads current URL and returns it without hash and without get params, always ending with slash.
+         * This is needed to have a normalized URL tocompare with configured BroadcastConfig URLs;
+         * see example file /portal/master/ressources/broadcastedPortalAlerts.json
+         * @returns {String} The normalized current browser URL
+         */
+        currentUrl: () => document.URL.replace(/#.*$/, "").replace(/\/*\?.*$/, "/"),
 
-            // then remove get params and make it end with slash
-            urlToCheck = urlToCheck.replace(/\/*\?.*$/, "/");
-
-            return urlToCheck;
-        },
-
+        /**
+         * Console mapping to be able to debug in template.
+         * @returns {Void} With capital V
+         */
         console: () => console
     },
 
     watch: {
+        /**
+         * Syncs localstorage with displayedAlerts prop.
+         * @param {object} newDisplayedAlerts newly changed displayedAlerts object
+         * @returns {void}
+         */
         displayedAlerts (newDisplayedAlerts) {
             // Local storage is synced with this.displayedAlerts
             localStorage[this.localStorageDisplayedAlertsKey] = JSON.stringify(newDisplayedAlerts);
         }
     },
 
+    /**
+     * Created hook: Creates event listener for legacy Radio calls (to be removed seometime).
+     * @returns {void}
+     */
     created () {
         Backbone.Events.listenTo(Radio.channel("Alert"), {
             "alert": newAlert => {
@@ -53,6 +60,10 @@ export default {
         });
     },
 
+    /**
+     * Mounted hook: Initially sets up localstorage and then fetches BroadcastConfig.
+     * @returns {void}
+     */
     mounted () {
         let initialDisplayedAlerts;
 
@@ -73,11 +84,6 @@ export default {
 
         if (this.fetchBroadcastUrl !== undefined && this.fetchBroadcastUrl !== false) {
             this.fetchBroadcast(this.fetchBroadcastUrl);
-            /* DEBUG: This will enable constant alerts to test *
-            setInterval(() => {
-                this.fetchBroadcast(this.fetchBroadcastUrl);
-            }, 5000);
-            /**/
         }
     },
 
@@ -90,15 +96,18 @@ export default {
             "setDisplayedAlerts"
         ]),
 
+        /**
+         * Do this after successfully fetching broadcastConfig:
+         * Process configured data and add each resulting alert into the state.
+         * @returns {void}
+         */
         axiosCallback: function (response) {
-            // handle success
             const data = response.data,
                 collectedAlerts = [];
 
             let collectedAlertIds = [];
 
             if (data.alerts === undefined || typeof data.alerts !== "object") {
-                console.warn("No alerts defined.");
                 return;
             }
 
@@ -121,16 +130,28 @@ export default {
             });
         },
 
+        /**
+         * Just a wrapper method for the XHR request for the sake of testing.
+         * @returns {void}
+         */
         fetchBroadcast: function (fetchBroadcastUrl) {
             axios.get(fetchBroadcastUrl).then(this.axiosCallback).catch(function (error) {
                 console.warn(error);
             });
         },
 
+        /**
+         * When closing the modal, update all alerts' have-been-read states.
+         * @returns {void}
+         */
         onModalHid: function () {
             this.cleanup();
         },
 
+        /**
+         * Update a single alert's has-been-read state.
+         * @returns {void}
+         */
         markAsRead: function (hash) {
             this.alertHasBeenRead(hash);
         }
@@ -206,6 +227,10 @@ export default {
             padding:0;
         }
 
+        /* 
+            This is only for now. Because there havent been defined any styles yet.
+            Negative margin may be bad in the long run.
+        */
         div.singleAlertWrapper {
             &.error {
                 margin-left:-24px;
