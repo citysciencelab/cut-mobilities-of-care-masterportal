@@ -40,15 +40,15 @@ describe("Pendler-Lines", function () {
 
             model = new Model();
 
-            // eslint-disable-next-line no-unused-vars
             model.createFeatures = function (features) {
                 // Überschreibe die Funktion mit einem Setter zur Abfrage des Ergebnisses
                 model.set("relevantFeatures", features);
             };
-
-            // eslint-disable-next-line no-unused-vars
-            model.centerGemeinde = function (setMarker) {
-                // Überschreibe Funktion mit Dummy
+            model.centerGemeinde = function () {
+                // override function with dummy
+            };
+            model.zoomToExtentOfFeatureGroup = function () {
+                // override function with dummy
             };
 
             model.set("lineFeatures", featuresInput);
