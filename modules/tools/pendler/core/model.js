@@ -294,8 +294,8 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      */
     createAlertBeforeDownload: function () {
         Radio.trigger("Alert", "alert", {
-            category: i18next.t("common:modules.alerting.categories.warning"),
-            confirmText: i18next.t("common:button.download"),
+            category: "common:modules.alerting.categories.warning",
+            confirmText: "common:button.download",
             content: this.get("attributionText"),
             displayClass: "warning",
             legacy_onConfirm: this.download.bind(this),

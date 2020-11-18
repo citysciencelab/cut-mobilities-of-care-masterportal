@@ -151,7 +151,7 @@ export default {
                 :class="{ last: categoryIndex === sortedAlerts.length-1 }"
             >
                 <h3>
-                    {{ alertCategory.category }}
+                    {{ $t(alertCategory.category) }}
                 </h3>
 
                 <div
@@ -176,7 +176,7 @@ export default {
                             <a
                                 @click="markAsRead(singleAlert.hash)"
                             >
-                                {{ singleAlert.confirmText }}
+                                {{ $t(singleAlert.confirmText) }}
                             </a>
                         </p>
                     </div>
