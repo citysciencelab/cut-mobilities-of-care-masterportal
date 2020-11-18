@@ -124,8 +124,8 @@ const PolygonStyleModel = StyleModel.extend(/** @lends PolygonStyleModel.prototy
 
     /**
      * Makes sure that one rgb color always consists of four values
-     * @param {array} newColor Color in rgb
-     * @return {array} normColor
+     * @param {Number[]} newColor Color in rgb
+     * @return {Number[]} normColor
      */
     normalizeRgbColor: function (newColor) {
         const defaultArray = [1, 1, 1, 1];

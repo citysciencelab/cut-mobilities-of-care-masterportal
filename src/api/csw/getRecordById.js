@@ -8,7 +8,7 @@ import getNestedValues from "../../utils/getNestedValues";
  * @param {String} url - the csw request url
  * @param {String} metadataId - the metadata id
  * @param {String} [outputSchema="http://www.isotc211.org/2005/gmd"] - the output schema of the response
- * @param {String} [elementSetName="full"] - specify which properties include in the response
+ * @param {String} [elementSetName="full"] - specify which properties are included in the response
  * @param {String} [version="2.0.2"] - csw api version
  * @returns {Promise<Object|undefined>}  Promise object represents the GetFeatureInfo request
  */
@@ -188,8 +188,8 @@ function parseContactByRole (json, role) {
 }
 
 /**
- *
- * @param {Object} error -
+ * handles an axios error
+ * @param {Object} error the axios error
  * @returns {void}
  * @see {@link https://github.com/axios/axios#handling-errors}
  */

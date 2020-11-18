@@ -25,9 +25,9 @@ export default function xml2json (srcDom) {
     }
 
     children.forEach(child => {
-        // checking is child has siblings of same name
+        // checking if child has siblings of same name
         const childIsArray = children.filter(eachChild => eachChild.nodeName === child.nodeName).length > 1,
-            // the key is equal to the nodeName property without the xmlns, if existing
+            // the key is equal to the nodeName property without the xmlns if exists
             keyName = child.nodeName.search(":") !== -1 ? substrStartFromValue(child.nodeName, ":") : child.nodeName;
 
         // if child is array, save the values as an array of objects, else as object
@@ -49,7 +49,7 @@ export default function xml2json (srcDom) {
 
 /**
  * Gets the names and the values from the attributes of a node
- * @param {Object} nodeAttributes - collection of node's attributes as a NamedNodeMap object
+ * @param {Object} nodeAttributes - collection of nodes attributes as a NamedNodeMap object
  * @returns {Object} name value pairs
  */
 function parseNodeAttributes (nodeAttributes) {
@@ -86,5 +86,5 @@ function parseNodeAttributes (nodeAttributes) {
             }
         });
     }
-// apply the fix to all HTMLElements (window.Element) and to SVG/XML (window.Node)
+    // apply the fix to all HTMLElements (window.Element) and to SVG/XML (window.Node)
 })(window.Node || window.Element);

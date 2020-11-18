@@ -155,7 +155,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
 
     /**
      * Showing the hint information if the current print scale and the current map scale are not the same
-     * @param {Event} evt - event that triggered from the mouseenter or mouseout action
+     * @param {Event} evt - event that triggered from the mouseenter or mouseleave action
      * @returns {void}
      */
     showHintInfoScale: function (evt) {

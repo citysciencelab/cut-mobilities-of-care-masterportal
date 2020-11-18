@@ -179,7 +179,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * change language - sets default values for the language
      * @param {String} lng the language changed to
-     * @returns {Void}  -
+     * @returns {void}
      */
     changeLang: function (lng) {
         this.set({
@@ -212,7 +212,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * Gets the capabilities for a specific print configuration
      * @param {Backbone.Model} model - this
-     * @param {boolean} value - is this tool activated or not
+     * @param {Boolean} value - is this tool activated or not
      * @returns {void}
      */
     getCapabilites: function (model, value) {
@@ -229,7 +229,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * Sets the capabilities from mapfish resonse.
-     * @param {object[]} response - config.yaml from mapfish.
+     * @param {Object[]} response - config.yaml from mapfish.
      * @fires Core#RadioRequestMapViewGetOptions
      * @returns {void}
      */
@@ -247,9 +247,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * Choose the layout which is configured as currentlayout
-     * @param {object[]} [layouts=[]] - All Layouts.
-     * @param {string} [currentLayoutName=""] - The name from current layout.
-     * @returns {object} The choosen current layout.
+     * @param {Object[]} [layouts=[]] - All Layouts.
+     * @param {String} [currentLayoutName=""] - The name from current layout.
+     * @returns {Object} The choosen current layout.
      */
     chooseCurrentLayout: function (layouts = [], currentLayoutName = "") {
         const currentLayout = layouts.filter(layout => layout.name === currentLayoutName);
@@ -324,9 +324,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * sends a request to create a print job
-     * @param {string} payload - POST body
-     * @param {string} printAppId - id of the print configuration
-     * @param {string} format - print job output format
+     * @param {String} payload - POST body
+     * @param {String} printAppId - id of the print configuration
+     * @param {String} format - print job output format
      * @returns {void}
      */
     createPrintJob: function (payload, printAppId, format) {
@@ -363,7 +363,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * if the tool is activated and there is a layout,
      * a callback function is registered to the postrender event of the map
      * @param {Backbone.Model} model - this
-     * @param {boolean} value - is this tool activated or not
+     * @param {Boolean} value - is this tool activated or not
      * @returns {void}
      */
     togglePostrenderListener: function (model, value) {
@@ -467,9 +467,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * draws the print page
      * @param {ol.Size} mapSize - size of the map in px
-     * @param {number} resolution - resolution of the map in m/px
-     * @param {number} printMapSize - size of the map on the report in dots
-     * @param {number} scale - the optimal print scale
+     * @param {Number} resolution - resolution of the map in m/px
+     * @param {Number} printMapSize - size of the map on the report in dots
+     * @param {Number} scale - the optimal print scale
      * @param {CanvasRenderingContext2D} context - context of the postrender event
      * @returns {void}
      */
@@ -495,10 +495,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * gets the optimal print scale for a map
      * @param {ol.Size} mapSize - size of the map in px
-     * @param {number} resolution - resolution of the map in m/px
+     * @param {Number} resolution - resolution of the map in m/px
      * @param {ol.Size} printMapSize - size of the map on the report in dots
-     * @param {object[]} scaleList - supported print scales, sorted in ascending order
-     * @returns {number} the optimal scale
+     * @param {Object[]} scaleList - supported print scales, sorted in ascending order
+     * @returns {Number} the optimal scale
      */
     getOptimalScale: function (mapSize, resolution, printMapSize, scaleList) {
         const mapWidth = mapSize[0] * resolution,
@@ -520,10 +520,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * gets the optimal map resolution for a print scale and a map size
-     * @param {number} scale - print scale for the report
-     * @param {number[]} mapSize - the current map size
-     * @param {number[]} printMapSize - size of the map on the report
-     * @returns {number} the optimal resolution
+     * @param {Number} scale - print scale for the report
+     * @param {Number[]} mapSize - the current map size
+     * @param {Number[]} printMapSize - size of the map on the report
+     * @returns {Number} the optimal resolution
      */
     getOptimalResolution: function (scale, mapSize, printMapSize) {
         const dotsPerMeter = this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH"),
@@ -535,7 +535,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * returns the size of the map on the report
-     * @returns {number[]} width and height
+     * @returns {Number[]} width and height
      */
     getPrintMapSize: function () {
         const layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
@@ -545,7 +545,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * returns the supported scales of the map in the report
-     * @returns {number[]} scale list
+     * @returns {Number[]} scale list
      */
     getPrintMapScales: function () {
         const layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
@@ -642,8 +642,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * returns a capabilities attribute object of the current layout, corresponding to the given name
-     * @param {string} name - name of the attribute to get
-     * @returns {object|undefined} corresponding attribute or null
+     * @param {String} name - name of the attribute to get
+     * @returns {Object|undefined} corresponding attribute or null
      */
     getAttributeInLayoutByName: function (name) {
         return this.get("currentLayout").attributes.find(function (attribute) {
@@ -653,9 +653,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * returns the layout for the given layout name
-     * @param {object[]} layoutList - available layouts of the specified print configuration
-     * @param {string} layoutName - name for the layout to be found
-     * @returns {object} layout
+     * @param {Object[]} layoutList - available layouts of the specified print configuration
+     * @param {String} layoutName - name for the layout to be found
+     * @returns {Object} layout
      */
     getLayoutByName: function (layoutList, layoutName) {
         return layoutList.find(function (layout) {
@@ -665,9 +665,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * sorts an array numerically and ascending
-     * @param {number} a - first value
-     * @param {number} b - next value
-     * @returns {number} a negative, zero, or positive value
+     * @param {Number} a - first value
+     * @param {Number} b - next value
+     * @returns {Number} a negative, zero, or positive value
      */
     sortNumbers: function (a, b) {
         return a - b;
@@ -675,9 +675,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * Performs an asynchronous HTTP request
-     * @param {string} serviceUrl - the url of the print service
-     * @param {string} requestType - GET || POST
-     * @param {function} successCallback - called if the request succeeds
+     * @param {String} serviceUrl - the url of the print service
+     * @param {String} requestType - GET || POST
+     * @param {Function} successCallback - called if the request succeeds
      * @param {JSON} data - payload
      * @returns {void}
      */
@@ -692,7 +692,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {object[]} value - available layouts of the specified print configuration
+     * @param {Object[]} value - available layouts of the specified print configuration
      * @returns {void}
      */
     setLayoutList: function (value) {
@@ -700,7 +700,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {object[]} value - current print layout
+     * @param {Object[]} value - current print layout
      * @returns {void}
      */
     setCurrentLayout: function (value) {
@@ -708,7 +708,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {string[]} value - available formats of the specified print configuration
+     * @param {String[]} value - available formats of the specified print configuration
      * @returns {void}
      */
     setFormatList: function (value) {
@@ -716,7 +716,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {string} value - current print format
+     * @param {String} value - current print format
      * @returns {void}
      */
     setCurrentFormat: function (value) {
@@ -724,7 +724,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {number} value - current print scale
+     * @param {Number} value - current print scale
      * @returns {void}
      */
     setCurrentScale: function (value) {
@@ -732,7 +732,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if the legend is to be printed
+     * @param {Boolean} value - true if the legend is to be printed
      * @returns {void}
      */
     setIsLegendSelected: function (value) {
@@ -740,28 +740,28 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if mapfish can print gfi
+     * @param {Boolean} value - true if mapfish can print gfi
      * @returns {void}
      */
     setIsGfiAvailable: function (value) {
         this.set("isGfiAvailable", value);
     },
     /**
-     * @param {boolean} value - true if gfi is active
+     * @param {Boolean} value - true if gfi is active
      * @returns {void}
      */
     setIsGfiActive: function (value) {
         this.set("isGfiActive", value);
     },
     /**
-     * @param {boolean} value - true if mapfish can print legend
+     * @param {Boolean} value - true if mapfish can print legend
      * @returns {void}
      */
     setIsLegendAvailable: function (value) {
         this.set("isLegendAvailable", value);
     },
     /**
-     * @param {boolean} value - true if mapfish can print scale
+     * @param {Boolean} value - true if mapfish can print scale
      * @returns {void}
      */
     setIsScaleAvailable: function (value) {
@@ -769,7 +769,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if gfi is to be printed
+     * @param {Boolean} value - true if gfi is to be printed
      * @returns {void}
      */
     setIsGfiSelected: function (value) {
@@ -777,7 +777,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if the current layout supports meta data
+     * @param {Boolean} value - true if the current layout supports meta data
      * @returns {void}
      */
     setIsMetaDataAvailable: function (value) {
@@ -785,7 +785,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {string} value - title for the printout
+     * @param {String} value - title for the printout
      * @returns {void}
      */
     setTitle: function (value) {
@@ -793,7 +793,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if the scale is selected by the user
+     * @param {Boolean} value - true if the scale is selected by the user
      * @returns {void}
      */
     setIsScaleSelectedManually: function (value) {
@@ -801,7 +801,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {string} value - mapfish print service url
+     * @param {String} value - mapfish print service url
      * @returns {void}
      */
     setMapfishServiceUrl: function (value) {
@@ -810,7 +810,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * Setter for placeholder.
-     * @param {string} value - Placeholder for the title.
+     * @param {String} value - Placeholder for the title.
      * @returns {void}
      */
     setTitlePlaceholder: function (value) {
@@ -819,7 +819,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * setter the event listener
-     * @param {*} value - the event triggerd with event listener
+     * @param {*} value - the event triggered with event listener
      * @returns {void}
      */
     setEventListener: function (value) {
