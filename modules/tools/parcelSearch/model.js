@@ -67,7 +67,6 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @property {Boolean} createReport=false todo
      * @property {Boolean} parcelFound=false todo
      * @property {String} glyphicon="glyphicon-search" todo
-     * @property {String} mapMarkerType="Parcel" todo
      * @property {String} searchText="", filled with "Suchen"- translated
      * @property {String} generateReportText="", filled with "Bericht erzeugen"- translated
      * @property {String} parcelNumberText="", filled with "Flurstücksnummer"- translated
