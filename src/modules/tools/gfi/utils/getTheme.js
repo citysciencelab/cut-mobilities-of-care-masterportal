@@ -2,14 +2,12 @@ import upperFirst from "../../../../utils/upperFirst";
 /**
  * Returns the right gfi Theme
  * it check if the right Theme (Component) is there, if yes just use this component, otherwise use the default theme
- * @param {String|Object} theme from layer configuration
+ * @param {String|Object} themeFromFeature configured theme
  * @param {Object} components components of the theme template
  * @param {Array} addonThemes list of names of themes defined in addons
  * @returns {String} the name of the gfi Theme
  */
 function getTheme (themeFromFeature, components, addonThemes) {
-    console.log("components:", components);
-    console.log("addonThemes:", addonThemes);
     const gfiComponents = Object.keys(components),
         configTheme = upperFirst(typeof themeFromFeature === "object" ? themeFromFeature.name : themeFromFeature);
 
