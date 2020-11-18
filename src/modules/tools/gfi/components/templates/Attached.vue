@@ -2,7 +2,7 @@
 import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
 import {mapGetters} from "vuex";
-import upperFirst from "../../../../../utils/upperFirst";
+import getTheme from "../../utils/getTheme";
 import Overlay from "ol/Overlay.js";
 import "bootstrap/js/tooltip";
 import "bootstrap/js/popover";
@@ -40,7 +40,7 @@ export default {
          * @returns {String} the name of the theme
          */
         theme: function () {
-            return this.getTheme();
+            return getTheme(this.feature.getTheme(), this.$options.components, this.$gfiThemeAddons);
         }
     },
     mounted: function () {
@@ -105,32 +105,6 @@ export default {
                 $(this.overlay.getElement()).remove();
                 Radio.trigger("Map", "removeOverlay", this.overlay);
             }
-        },
-
-        /**
-         * Returns the right gfi Theme
-         * it check if the right Theme (Component) is there, if yes just use this component, otherwise use the default theme
-         * @returns {String} the name of the gfi Theme
-         */
-        getTheme () {
-            const gfiComponents = Object.keys(this.$options.components),
-                gfiTheme = this.feature.getTheme(),
-                configTheme = upperFirst(typeof gfiTheme === "object" ? gfiTheme.name : gfiTheme);
-
-            let theme = "";
-
-            if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
-                theme = configTheme;
-            }
-            else if (this.$gfiThemeAddons && this.$gfiThemeAddons.includes(configTheme)) {
-                theme = configTheme;
-            }
-            else {
-                console.warn(String("The gfi theme '" + configTheme + "' could not be found, the default theme will be used. Please check your configuration!"));
-                theme = "Default";
-            }
-
-            return theme;
         }
     }
 };
