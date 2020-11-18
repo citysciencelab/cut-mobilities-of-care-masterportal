@@ -28,6 +28,7 @@ import store from "[...]/src/app-store/index";
 
 store.dispatch("Alerting/addSingleAlert", {
     "category": "Info",
+    "confirmText": "OK, ich fange jetzt gleich an!",
     "content": "Bitte erstellen Sie die Quartalsberichte!",
     "displayClass": "warning",
     "displayFrom": "2020-10-01 00:00:00",
@@ -42,6 +43,7 @@ store.dispatch("Alerting/addSingleAlert", {
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |category|nein|String|"Info"|Überschrift und gleichzeitig Referenzwert zum Gruppieren von Alerts gleicher "category".|
+|confirmText|nein|String|"als gelesen markieren"|Text des klickbaren Links, mit dem man das Alert zur Kenntnis nimmt. Nur nötig, wenn "mustBeConfirmed" true ist.|
 |content|ja|String|""|Botschaft. Kann auch HTML beinhalten.|
 |displayClass|nein|String|"info"|CSS Klasse für das Wrapper-Element des Alerts. Derzeit vorgefertigte Werte: "info", "warning", "error"|
 |displayFrom|nein|Boolean/String|false|Zeitpunkt, ab dem das Alert angezeigt werden darf. Bei false gibt es keine Begrenzung. Format: "YYYY-MM-DD HH-II-SS"|
