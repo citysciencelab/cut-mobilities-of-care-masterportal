@@ -154,19 +154,12 @@ const actions = {
             });
 
         Promise.all(gfiWmsLayerList.map(layer => {
-            const mimeType = layer.get("infoFormat"),
-                layerName = layer.get("name"),
-                layerId = layer.get("id"),
-                gfiTheme = layer.get("gfiTheme") || "default",
-                gfiAttributes = layer.get("gfiAttributes"),
-                gfiParams = {
-                    INFO_FORMAT: mimeType,
-                    FEATURE_COUNT: layer.get("featureCount")
-                },
-                url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams),
-                gfiAsNewWindow = layer.get("gfiAsNewWindow");
-
-            return getWmsFeaturesByMimeType(mimeType, url, {layerName, layerId}, gfiTheme, gfiAttributes, gfiAsNewWindow, null, null);
+            const gfiParams = {
+                INFO_FORMAT: layer.get("infoFormat"),
+                FEATURE_COUNT: layer.get("featureCount")
+            },
+            url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
+            return getWmsFeaturesByMimeType(layer, url);
         }))
             .then(gfiFeatures => {
                 // only commit if features found

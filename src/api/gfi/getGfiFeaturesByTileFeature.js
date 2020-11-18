@@ -77,13 +77,33 @@ export function getGfiFeature (layerAttributes, properties, createGfiFeatureOpt 
     const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "Buildings",
         gfiTheme = layerAttributes && layerAttributes.gfiTheme ? layerAttributes.gfiTheme : "buildings_3d",
         attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes : {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
-        featureProperties = properties && properties.attributes ? properties.attributes : properties;
+        featureProperties = properties && properties.attributes ? properties.attributes : properties,
+
+        layer = {
+            get: (key) => {
+                if (key === "name") {
+                    return layerName;
+                }
+                else if (key === "gfiTheme") {
+                    return gfiTheme;
+                }
+                else if (key === "gfiAttributes") {
+                    return attributesToShow;
+                }
+                return null;
+            }
+        },
+        feature = {
+            getProperties: () => {
+                return featureProperties;
+            }
+        };
 
     if (typeof createGfiFeatureOpt === "function") {
-        return createGfiFeatureOpt(layerName, gfiTheme, attributesToShow, featureProperties);
+        return createGfiFeatureOpt(layer.get("name"), layer.get("gfiTheme"), layer.get("gfiAttributes"), feature.getProperties());
     }
 
-    return createGfiFeature(layerName, gfiTheme, attributesToShow, featureProperties);
+    return createGfiFeature(layer, feature);
 }
 
 /**

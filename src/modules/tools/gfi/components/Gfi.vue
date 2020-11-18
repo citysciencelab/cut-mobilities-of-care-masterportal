@@ -148,7 +148,7 @@ export default {
             }
         },
         createMappedProperties: function (feature) {
-            if (feature === null || !feature.hasOwnProperty("getProperties") || feature.getProperties() === null) {
+            if (feature === null || feature === undefined || !feature.hasOwnProperty("getProperties") || feature.getProperties() === null) {
                 return;
             }
 
