@@ -99,6 +99,7 @@ export default {
         /**
          * Do this after successfully fetching broadcastConfig:
          * Process configured data and add each resulting alert into the state.
+         * @param {object} response received response object
          * @returns {void}
          */
         axiosCallback: function (response) {
@@ -132,6 +133,7 @@ export default {
 
         /**
          * Just a wrapper method for the XHR request for the sake of testing.
+         * @param {string} fetchBroadcastUrl fetchBroadcastUrl
          * @returns {void}
          */
         fetchBroadcast: function (fetchBroadcastUrl) {
@@ -150,6 +152,7 @@ export default {
 
         /**
          * Update a single alert's has-been-read state.
+         * @param {string} hash hash
          * @returns {void}
          */
         markAsRead: function (hash) {
@@ -227,7 +230,7 @@ export default {
             padding:0;
         }
 
-        /* 
+        /*
             This is only for now. Because there havent been defined any styles yet.
             Negative margin may be bad in the long run.
         */
