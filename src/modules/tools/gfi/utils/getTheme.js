@@ -9,8 +9,7 @@ import upperFirst from "../../../../utils/upperFirst";
  */
 function getTheme (themeFromFeature, components, addonThemes) {
     const gfiComponents = Object.keys(components),
-        configTheme = upperFirst(typeof themeFromFeature === "object" ? themeFromFeature.name : themeFromFeature);
-
+        configTheme = upperFirst(themeFromFeature && typeof themeFromFeature === "object" ? themeFromFeature.name : themeFromFeature);
     let theme = "";
 
     if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
