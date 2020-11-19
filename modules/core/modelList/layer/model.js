@@ -771,7 +771,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setLegend: function (value) {
         this.set("legend", value);
-        store.commit("Legend/setLegendOnChanged", value);
+        store.dispatch("Legend/setLegendOnChanged", value);
     },
 
     /**
