@@ -1,10 +1,12 @@
 import Layer from "./model";
+import getProxyURL from "../../../../src/utils/getProxyURL";
 
 const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
-        selectionIDX: -1
+        selectionIDX: -1,
+        useProxy: false
     }),
     /**
      * @description Class to render Cesium Entities
@@ -13,6 +15,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
      * @memberof Core.ModelList.Layer
      * @constructs
      * @property {Object} entities
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      */
     initialize: function () {
         Layer.prototype.initialize.apply(this);
@@ -28,7 +31,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
 
     /**
      * toggles the layer and creates the necessary resources and adds it to the 3d map
-     * @returns {void} -
+     * @returns {void}
      * @override
      */
     toggleLayerOnMap: function () {
@@ -93,9 +96,15 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
             heading = 0,
             pitch = 0,
             roll = 0;
-
         const allowPicking = typeof model.allowPicking === "boolean" ? model.allowPicking : true,
             attributes = model.attributes ? model.attributes : {};
+
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyURL()
+         */
+        // model.url = this.get("useProxy") ? getProxyURL(model.url) : model.url;
 
         if (typeof model.url !== "string") {
             return null;

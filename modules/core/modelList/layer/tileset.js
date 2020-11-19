@@ -1,5 +1,6 @@
 import Layer from "./model";
 import {getTilesetStyle} from "./tilesetHelper";
+import getProxyURL from "../../../../src/utils/getProxyURL";
 
 /**
  * @type {symbol}
@@ -17,6 +18,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @constructs
      * @memberof Core.ModelList.Layer.Tileset
      * @property {Object} [vectorStyle="undefined"] vectorStyle
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @listens Core#RadioTriggerMapChange
      * @fires Core#RadioRequestIsMap3d
      * @fires Core#RadioRequestGetMap3d
@@ -24,6 +26,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
+        useProxy: true,
         /**
          * [cesium3DTilesetDefaults description]
          * @link https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
@@ -119,7 +122,13 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     prepareLayerObject: function () {
-        const options = this.combineOptions(this.get("cesium3DTilesetOptions"), Radio.request("Util", "getProxyURL", this.get("url"))),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyURL()
+         */
+        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+            options = this.combineOptions(this.get("cesium3DTilesetOptions"), url),
             tileset = new Cesium.Cesium3DTileset(options);
 
         tileset.style = this.styling();

@@ -2,6 +2,7 @@ import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import {MapMode} from "../enums";
+import getProxyURL from "../../../../utils/getProxyURL";
 
 let unsubscribes = [],
     loopId = null;
@@ -155,10 +156,17 @@ const actions = {
 
         Promise.all(gfiWmsLayerList.map(layer => {
             const gfiParams = {
-                    INFO_FORMAT: layer.get("infoFormat"),
-                    FEATURE_COUNT: layer.get("featureCount")
-                },
-                url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
+                INFO_FORMAT: layer.get("infoFormat"),
+                FEATURE_COUNT: layer.get("featureCount")
+            };
+            let url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
+
+            /**
+             * @deprecated in the next major-release!
+             * useProxy
+             * getProxyURL()
+             */
+            url = layer.get("useProxy") ? getProxyURL(url) : url;
 
             return getWmsFeaturesByMimeType(layer, url);
         }))

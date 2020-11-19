@@ -199,7 +199,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
 
         // Wenn zu wenig Farben konfiguriert wurden wird ein alternatives Farbschema berechnet und angewendet (als Fallback)
         if (colors.length < features.length) {
-            console.warn("Die Anzahl an konfigurierten Farben reicht zur Darstellung der Ergebnisse nicht aus. Generiere ein alternatives Farbschema.");
+            console.warn(" The number of configured colors is not sufficient to display the results. Generate an alternative color scheme.");
             colors = this.generateColors(features.length);
         }
 

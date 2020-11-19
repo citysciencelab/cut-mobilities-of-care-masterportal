@@ -1,6 +1,10 @@
 import getQueryParams from "../utils/getQueryParams";
+import {generateSimpleGetters} from "./utils/generators";
+import appStoreState from "./state";
 
 export default {
+    ...generateSimpleGetters(appStoreState),
+
     masterPortalVersionNumber: state => state?.masterPortalVersionNumber,
     mobile: state => state.mobile,
     dpi: state => state.dpi,
@@ -10,7 +14,7 @@ export default {
     loaderText: state => state?.configJs?.loaderText || "",
     scaleLineConfig: state => state?.configJs?.scaleLine || null,
     uiStyle: state => (getQueryParams()?.uiStyle || state?.configJs?.uiStyle)?.toUpperCase(),
-    // gfiWindow is deprecated
+    // gfiWindow is deprecated in the next major-release
     gfiWindow: state => state?.configJs.gfiWindow,
     ignoredKeys: state => state?.configJs.ignoredKeys || [],
     // configJSON desctructuring

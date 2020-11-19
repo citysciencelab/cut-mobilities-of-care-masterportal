@@ -2,11 +2,13 @@ import Layer from "./model";
 import ImageLayer from "ol/layer/Image.js";
 import Projection from "ol/proj/Projection.js";
 import StaticImageSource from "ol/source/ImageStatic.js";
+import getProxyURL from "../../../../src/utils/getProxyURL";
 
 const StaticImageLayer = Layer.extend({
 
     defaults: Object.assign({}, Layer.prototype.defaults, {
-        supported: ["2D", "3D"]
+        supported: ["2D", "3D"],
+        useProxy: true
     }),
 
     /**
@@ -14,7 +16,13 @@ const StaticImageLayer = Layer.extend({
      * @return {void}
      */
     createLayerSource: function () {
-        const extent = this.get("extent"),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyURL()
+         */
+        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+            extent = this.get("extent"),
             projection = new Projection({
                 code: "static-image",
                 units: "pixels",
@@ -22,7 +30,7 @@ const StaticImageLayer = Layer.extend({
             });
 
         this.setLayerSource(new StaticImageSource({
-            url: this.get("url"),
+            url: url,
             projection: projection,
             imageExtent: extent
         }));

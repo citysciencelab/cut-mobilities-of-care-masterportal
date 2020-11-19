@@ -3,6 +3,7 @@ import VectorSource from "ol/source/Vector.js";
 import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {WFS} from "ol/format.js";
+import getProxyURL from "../../../../src/utils/getProxyURL";
 
 const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -10,7 +11,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         showSettings: true,
         isClustered: false,
         allowedVersions: ["1.1.0"],
-        altitudeMode: "clampToGround"
+        altitudeMode: "clampToGround",
+        useProxy: true
     }),
     /**
      * @class WFSLayer
@@ -21,6 +23,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @property {Boolean} showSettings=true Flag if settings selectable.
      * @property {Boolean} isClustered=false Flag if layer is clustered.
      * @property {String[]} allowedVersions=["1.1.0"] Allowed Version of WFS requests.
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
@@ -135,7 +138,13 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     updateSource: function (showLoader) {
-        const params = {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyURL()
+         */
+        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+            params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
                 SRSNAME: Radio.request("MapView", "getProjection").getCode(),
@@ -152,7 +161,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
                     Radio.trigger("Util", "showLoader");
                 }
             },
-            url: Radio.request("Util", "getProxyURL", this.get("url")),
+            url: url,
             data: params,
             async: true,
             type: "GET",
