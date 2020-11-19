@@ -1,9 +1,7 @@
 import PendlerCoreModel from "../core/model";
-import {Stroke, Style, Text} from "ol/style.js";
-import {Point} from "ol/geom.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
-import Feature from "ol/Feature.js";
+import thousandsSeparator from "../../../../src/utils/thousandsSeparator";
 
 
 const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
@@ -67,7 +65,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
             // Ein Feature entspricht einer Gemeinde. Extraktion der für die Legende
             // nötigen Attribute (abhängig von der gewünschten Richtung).
             pendlerLegend.push({
-                anzahlPendler: feature.get(this.get("attrAnzahl")),
+                anzahlPendler: thousandsSeparator(feature.get(this.get("attrAnzahl"))),
                 name: feature.get(this.get("attrGemeinde"))
             });
         });
@@ -125,55 +123,15 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
      * @returns {void} Keine Rückgabe
      */
     createFeatures: function (features) {
-        let lineLayerFeature,
-            labelCoordinates,
-            labelLayerFeature;
+        const layer = this.get("pendlerLineLayer");
 
+        this.addCenterLabelToLayer(feature => feature.get(this.get("attrGemeindeContrary")), features, layer);
         features.forEach(feature => {
-            // Erzeuge die Strahlen
-            lineLayerFeature = new Feature({
-                geometry: feature.getGeometry()
-            });
-
-            lineLayerFeature.setStyle(new Style({
-                stroke: new Stroke({
-                    color: [192, 9, 9, 1],
-                    width: "3"
-                })
-            }));
-            // "styleId" neccessary for print, that style and feature can be linked
-            lineLayerFeature.set("styleId", Radio.request("Util", "uniqueId"));
-            this.get("pendlerLineLayer").getSource().addFeature(lineLayerFeature);
-
-            // Erzeuge die Beschriftung. Dafür wird ein (unsichtbarere) Punkt am Ende jeder Linie gesetzt.
-            // Wo das Ende ist (erste oder zweite Koordinate) entschreidet sich dabei aus der (Pendel-)Richtung
-            if (this.get("direction") === "wohnort") {
-                labelCoordinates = feature.getGeometry().getCoordinates().slice(-1);
-            }
-            else {
-                labelCoordinates = feature.getGeometry().getCoordinates()[0];
-            }
-
-            labelLayerFeature = new Feature({
-                geometry: new Point(labelCoordinates)
-            });
-
-            labelLayerFeature.setStyle(new Style({
-                text: new Text({
-                    text: feature.get(this.get("attrAnzahl")),
-                    font: "10pt sans-serif",
-                    placement: "point",
-                    stroke: new Stroke({
-                        color: [255, 255, 255, 1],
-                        width: 5
-                    })
-                })
-            }));
-            // "styleId" neccessary for print, that style and feature can be linked
-            labelLayerFeature.set("styleId", Radio.request("Util", "uniqueId"));
-            this.get("pendlerLabelLayer").getSource().addFeature(labelLayerFeature);
-
+            this.addBeamFeatureToLayer(feature, layer);
+            this.addLabelFeatureToLayer(feature.get(this.get("attrGemeinde")) + "\n" + thousandsSeparator(feature.get(this.get("attrAnzahl"))), feature, layer);
         });
+
+        this.zoomToExtentOfFeatureGroup(features);
     },
 
     /**
@@ -190,7 +148,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
         }
 
         labelLayer = this.get("pendlerLabelLayer");
-        if (lineLayer !== undefined) {
+        if (labelLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
         Radio.trigger("MapMarker", "hideMarker");

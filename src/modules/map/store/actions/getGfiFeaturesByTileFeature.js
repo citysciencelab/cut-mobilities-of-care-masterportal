@@ -1,3 +1,4 @@
+import getComponent from "../../../../utils/getComponent";
 import {createGfiFeature} from "./getWmsFeaturesByMimeType";
 
 /**
@@ -119,7 +120,7 @@ export function getLayerModelFromTileFeature (tileFeature, getModelByAttributesO
     if (typeof getModelByAttributesOpt === "function") {
         return getModelByAttributesOpt(filter);
     }
-    return Radio.request("ModelList", "getModelByAttributes", filter);
+    return getComponent(filter.id);
 }
 
 /**

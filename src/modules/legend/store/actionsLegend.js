@@ -19,7 +19,8 @@ const configPaths = [
 
         /**
          * Shows or hides the legend.
-         * @param {Object} param0 State
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
          * @param {Boolean} showLegend Flag if legend should be shown or not
          * @returns {void}
          */
@@ -29,7 +30,8 @@ const configPaths = [
 
         /**
          * Adds the legend of one layer to the legends in the store
-         * @param {Object} param0 State
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
          * @param {Object} legendObj Legend object of one layer
          * @returns {void}
          */
@@ -42,7 +44,8 @@ const configPaths = [
 
         /**
          * Sorts the Legend Entries by position descending
-         * @param {Object} param0 State
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
          * @returns {void}
          */
         sortLegend: function ({state}) {
@@ -53,7 +56,8 @@ const configPaths = [
 
         /**
          * Removes a layer legend from the legends in the store by given id.
-         * @param {Object} param0 State
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
          * @param {String} id Id of layer.
          * @returns {void}
          */
@@ -65,8 +69,9 @@ const configPaths = [
 
         /**
          * Sets the id of the layer to state.layerIdForLayerInfo
-         * @param {Object} param0 State
-         * @param{String} id Id of layer
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
+         * @param {String} id Id of layer
          * @returns {void}
          */
         setLayerIdForLayerInfo: function ({state}, id) {
@@ -74,9 +79,21 @@ const configPaths = [
         },
 
         /**
+         * Sets the time as counter id to state.layerCounterIdForLayerInfo
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
+         * @param {String} time the timestamp used as id
+         * @returns {void}
+         */
+        setLayerCounterIdForLayerInfo: function ({state}, time) {
+            state.layerCounterIdForLayerInfo = time;
+        },
+
+        /**
          * Sets the legendObj to state.layerInfoLegend
-         * @param {Object} param0 State
-         * @param{String} legendObj contains legend infos
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
+         * @param {String} legendObj contains legend infos
          * @returns {void}
          */
         setLegendForLayerInfo: function ({state}, legendObj) {
@@ -85,7 +102,8 @@ const configPaths = [
 
         /**
          * This will check if legend is changed from other module/component
-         * @param {Object} param0 State
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
          * @param {Object} legendValue the changed legend value
          * @returns {void}
          */

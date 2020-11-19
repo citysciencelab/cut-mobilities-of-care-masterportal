@@ -1,6 +1,6 @@
 import sinon from "sinon";
 import {expect} from "chai";
-import actions from "../../store/actionsDraw";
+import actions from "../../../store/actionsDraw";
 
 describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
     let commit, dispatch, state, target;
@@ -21,7 +21,8 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
             request = sinon.spy(() => ({}));
             trigger = sinon.spy();
             state = {
-                withoutGUI: false
+                withoutGUI: false,
+                currentInteraction: "draw"
             };
             sinon.stub(Radio, "request").callsFake(request);
             sinon.stub(Radio, "trigger").callsFake(trigger);

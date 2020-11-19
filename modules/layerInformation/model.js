@@ -1,6 +1,7 @@
 import ViewMobile from "./viewMobile";
 import View from "./view";
 import Overlay from "ol/Overlay.js";
+import "./RadioBridge.js";
 
 const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationModel.prototype */{
     defaults: {
@@ -64,7 +65,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             }
         });
         this.listenTo(Radio.channel("CswParser"), {
-            "fetchedMetaData": this.fetchedMetaData
+            "fetchedMetaDataForLayerInformation": this.fetchedMetaData
         });
         this.bindView(Radio.request("Util", "isViewMobile"));
         this.listenTo(Radio.channel("Map"), {
@@ -86,13 +87,16 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             if (this.get("layerName") === cswObj?.layerName && cswObj?.parsedData?.downloadLinks) {
                 const downloadLinks = this.get("downloadLinks");
 
-                cswObj.parsedData.downloadLinks.forEach(link => downloadLinks.push(link));
+                cswObj.parsedData.downloadLinks.forEach(link => {
+                    downloadLinks.push(link);
+                });
                 this.setDownloadLinks(Radio.request("Util", "sortBy", downloadLinks, "linkName"));
             }
             else {
                 this.updateMetaData(cswObj.parsedData);
                 this.setLayerName(cswObj.layerName);
             }
+            this.trigger("sync");
         }
     },
     /**
@@ -146,11 +150,12 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             if (metaId !== null) {
                 this.get("uniqueIdList").push(uniqueId);
                 cswObj.layerName = attrs.layername;
+                cswObj.cswUrl = attrs.cswUrl;
                 cswObj.metaId = metaId;
                 cswObj.keyList = ["abstractText", "datePublication", "dateRevision", "periodicity", "title", "downloadLinks"];
                 cswObj.uniqueId = uniqueId;
 
-                Radio.trigger("CswParser", "getMetaData", cswObj);
+                Radio.trigger("CswParser", "getMetaDataForLayerInformation", cswObj);
             }
         }
     },
@@ -204,21 +209,20 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         this.set(attrs);
         this.setMetadataURL();
         this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetadataMessage"));
-
         if (this.areMetaIdsSet(this.get("metaID"))) {
+            this.set("downloadLinks", []);
             this.requestMetaData(attrs);
         }
         else {
             this.set("title", this.get("layername"));
             this.set("abstractText", i18next.t("common:modules.layerInformation.noMetadataMessage"));
             this.set("date", null);
-            this.set("metaURL", null);
             this.set("downloadLinks", null);
             this.set("datePublication", null);
             this.set("dateRevision", null);
             this.set("periodicity", null);
+            this.trigger("sync");
         }
-        this.trigger("sync");
     },
 
     /**
@@ -234,6 +238,9 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             service = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId"));
             if (service === undefined) {
                 console.warn("Rest Service mit der ID " + this.get("metaDataCatalogueId") + " ist rest-services.json nicht konfiguriert!");
+            }
+            else if (typeof this.get("showDocUrl") !== "undefined") {
+                metaURL = this.get("showDocUrl") + metaID;
             }
             else {
                 metaURL = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId")).get("url") + metaID;

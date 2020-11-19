@@ -248,6 +248,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             if (placemark.getElementsByTagName("Point").length > 0 && skip[i] === false) {
                 if (placemark.getElementsByTagName("name")[0]) {
                     const labelStyle = placemark.getElementsByTagName("LabelStyle")[0],
+                        // please be aware of devtools/tasks/replace.js and devtools/tasks/customBuildPortalconfigsReplace.js if you change the path of the svg
                         iconUrl = window.location.origin + "/img/tools/draw/circle_blue.svg";
 
                     if (textFonts[i]) {
@@ -256,6 +257,7 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
                     style.innerHTML += this.createKmlIconStyle(iconUrl, 0);
                 }
                 else if (hasIconUrl[i] === false && pointColors[i]) {
+                    // please be aware of devtools/tasks/replace.js and devtools/tasks/customBuildPortalconfigsReplace.js if you change the path of the svg
                     const iconUrl = window.location.origin + "/img/tools/draw/circle_" + this.getIconColor(pointColors[i]) + ".svg",
                         iconStyle = this.createKmlIconStyle(iconUrl, 1);
 

@@ -52,14 +52,14 @@ describe("src/modules/tools/fileImport/components/FileImport.vue", () => {
     it("renders the fileImport", () => {
         const wrapper = shallowMount(FileImportComponent, {store, localVue});
 
-        expect(wrapper.find("#kml-import").exists()).to.be.true;
+        expect(wrapper.find("#tool-file-import").exists()).to.be.true;
     });
 
     it("do not render the fileImport tool if not active", () => {
         store.commit("Tools/FileImport/setActive", false);
         const wrapper = shallowMount(FileImportComponent, {store, localVue});
 
-        expect(wrapper.find("#kml-import").exists()).to.be.false;
+        expect(wrapper.find("#tool-file-import").exists()).to.be.false;
     });
 
     it("import method is initially set to \"auto\"", () => {

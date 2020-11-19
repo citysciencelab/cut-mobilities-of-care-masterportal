@@ -65,6 +65,7 @@ export default {
         <div
             id="modal-1-outer-wrapper"
             @mousedown="discardByClickOutside"
+            @dragenter.prevent="discardByClickOutside"
         >
             <div
                 id="modal-1-inner-wrapper"

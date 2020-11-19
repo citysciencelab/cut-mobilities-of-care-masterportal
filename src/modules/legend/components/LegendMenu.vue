@@ -23,7 +23,7 @@ export default {
                 root.append(this.$el);
             }
             else {
-                root.after(this.$el);
+                root.parentNode.insertBefore(this.$el, root.nextSibling);
             }
         }
     },

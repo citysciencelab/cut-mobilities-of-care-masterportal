@@ -1,5 +1,6 @@
 <script>
 import Tool from "../../Tool.vue";
+import getComponent from "../../../../utils/getComponent";
 import {Pointer} from "ol/interaction.js";
 import {getProjections} from "masterportalAPI/src/crs";
 import {mapGetters, mapActions, mapMutations} from "vuex";
@@ -133,7 +134,7 @@ export default {
             // TODO replace trigger when Menu is migrated
             // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             // else the menu-entry for this tool is always highlighted
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.SupplyCoord.id});
+            const model = getComponent(this.$store.state.Tools.SupplyCoord.id);
 
             if (model) {
                 model.set("isActive", false);

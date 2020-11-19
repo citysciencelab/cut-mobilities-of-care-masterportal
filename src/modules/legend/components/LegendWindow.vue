@@ -23,12 +23,17 @@ export default {
                 this.createLegend();
             }
         },
-        layerIdForLayerInfo (layerIdForLayerInfo) {
-            this.createLegendForLayerInfo(layerIdForLayerInfo);
+        layerCounterIdForLayerInfo (layerCounterIdForLayerInfo) {
+            if (layerCounterIdForLayerInfo) {
+                this.createLegendForLayerInfo(this.layerIdForLayerInfo);
+            }
         },
         legendOnChanged (legend) {
             if (legend) {
                 this.createLegend();
+                if (this.layerIdForLayerInfo) {
+                    this.createLegendForLayerInfo(this.layerIdForLayerInfo);
+                }
             }
         }
     },

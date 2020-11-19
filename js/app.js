@@ -14,7 +14,6 @@ import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import WPS from "../modules/core/wps";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
-import CswParserModel from "../modules/cswParser/model";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
 import GraphModel from "../modules/tools/graph/model";
 import ColorScale from "../modules/tools/colorScale/model";
@@ -100,7 +99,6 @@ async function loadApp () {
     const legacyAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
         layerInformationModelSettings = {},
-        cswParserSettings = {},
         mapMarkerConfig = Config.hasOwnProperty("mapMarker") ? Config.mapMarker : {},
         style = Radio.request("Util", "getUiStyle");
     /* eslint-disable no-undef */
@@ -165,11 +163,6 @@ async function loadApp () {
 
     app.$mount();
 
-    if (Config.hasOwnProperty("cswId")) {
-        cswParserSettings.cswId = Config.cswId;
-    }
-
-    new CswParserModel(cswParserSettings);
     new GraphModel();
     new WFSTransactionModel();
     new MenuLoader();
