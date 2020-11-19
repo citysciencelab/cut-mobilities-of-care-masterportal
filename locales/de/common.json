@@ -114,7 +114,7 @@
             "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
         },
         "mapMarker": {
-          "noStyleModel": "Zu der angegebenen StyleId: {{styleId}} konnte keine Style gefunden werden. Bitte überprüfen sie ihre konfiguration."
+          "noStyleModel": "Zu der angegebenen StyleId: {{styleId}} konnte keine Style gefunden werden. Bitte überprüfen sie ihre Konfiguration."
         },
         "featureViaURL": {
             "coordLabel": "Koordinaten",

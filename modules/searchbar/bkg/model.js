@@ -225,7 +225,6 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
      * @returns {void}
      */
     zoomToBKGSearchResult: function (data, zoomLevel) {
-        data.features[0].properties.bbox.type = "Polygon";
         if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
             Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, zoomLevel !== undefined ? zoomLevel : this.get("zoomLevel"));
             store.dispatch("MapMarker/placingPointMarker", data.features[0].geometry.coordinates);

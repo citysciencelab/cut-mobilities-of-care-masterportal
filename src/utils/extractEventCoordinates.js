@@ -1,16 +1,16 @@
 /**
  * Help function for determining a feature with textual description.
- * @param {Object} coordinateArray The array containing the coordinates.
+ * @param {Object} eventCoordinates The array containing the coordinates.
  * @returns {String[]} Returns an array with coordinates.
  */
-function extractEventCoordinates (coordinateArray) {
+function extractEventCoordinates (eventCoordinates) {
     let coordinates;
 
-    if (coordinateArray !== undefined && Array.isArray(coordinateArray)) {
-        coordinates = coordinateArray;
+    if (eventCoordinates !== undefined && Array.isArray(eventCoordinates)) {
+        coordinates = eventCoordinates;
     }
-    else if (coordinateArray !== undefined && !Array.isArray(coordinateArray)) {
-        coordinates = coordinateArray.split(" ");
+    else if (eventCoordinates !== undefined && !Array.isArray(eventCoordinates)) {
+        coordinates = eventCoordinates.split(" ");
     }
 
     return coordinates;
