@@ -6,6 +6,7 @@
 
 import store from "../../../src/app-store";
 import {getRecordById} from "../../../src/api/csw/getRecordById.js";
+import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 store.watch((state, getters) => getters["Tools/Gfi/currentFeature"], feature => {
     if (feature !== null) {
@@ -48,10 +49,20 @@ Radio.channel("CswParser").on({
             const cswId = Config.cswId || "3",
                 cswService = Radio.request("RestReader", "getServiceById", cswId);
 
-            cswObj.cswUrl = Radio.request("Util", "getProxyURL", cswService.get("url"));
+            /**
+             * @deprecated in the next major-release!
+             * useProxy
+             * getProxyUrl()
+             */
+            cswObj.cswUrl = getProxyUrl(cswService.get("url"));
         }
 
-        const metadata = await getRecordById(Radio.request("Util", "getProxyURL", cswObj.cswUrl), cswObj.metaId);
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const metadata = await getRecordById(getProxyUrl(cswObj.cswUrl), cswObj.metaId);
 
         cswObj.parsedData = {};
         cswObj.parsedData.orgaOwner = metadata.getOwner().name || "n.N.";

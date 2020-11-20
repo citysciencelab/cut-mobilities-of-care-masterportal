@@ -5,7 +5,7 @@ import TileGrid from "ol/tilegrid/TileGrid";
 import {extentFromProjection} from "ol/tilegrid";
 import stylefunction from "ol-mapbox-style/dist/stylefunction";
 import store from "../../../../src/app-store/index";
-import getProxyURL from "../../../../src/utils/getProxyURL";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 import Layer from "./model";
 
@@ -46,9 +46,9 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             mapEpsg = store.getters["Map/projection"].getCode(),
             dataEpsg = this.get("epsg") || mapEpsg,
             params = {

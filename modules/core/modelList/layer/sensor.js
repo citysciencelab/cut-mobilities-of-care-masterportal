@@ -8,7 +8,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import {buffer, containsExtent} from "ol/extent";
 import {GeoJSON} from "ol/format.js";
 import changeTimeZone from "../../../../src/utils/changeTimeZone.js";
-import getProxyURL from "../../../../src/utils/getProxyURL";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -71,9 +71,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url");
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url");
 
         // set subscriptionTopics as instance variable (!)
         this.setSubscriptionTopics({});
@@ -202,9 +202,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter");
 
@@ -630,9 +630,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             aggregatedArray = [];
 
         allThings.forEach(thing => {
@@ -749,12 +749,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     createMqttConnectionToSensorThings: function () {
-/**
+        /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             mqttOptions = Object.assign({
                 mqttUrl: "wss://" + url.split("/")[2] + this.get("mqttPath"),
                 mqttVersion: "3.1.1",

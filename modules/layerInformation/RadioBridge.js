@@ -1,4 +1,5 @@
 import {getRecordById} from "../../src/api/csw/getRecordById.js";
+import getProxyUrl from "../../src/utils/getProxyUrl";
 
 Radio.channel("CswParser").on({
     "getMetaDataForLayerInformation": async function (cswObj) {
@@ -8,10 +9,20 @@ Radio.channel("CswParser").on({
             const cswId = Config.cswId || "3",
                 cswService = Radio.request("RestReader", "getServiceById", cswId);
 
-            cswObj.cswUrl = Radio.request("Util", "getProxyURL", cswService.get("url"));
+            /**
+             * @deprecated in the next major-release!
+             * useProxy
+             * getProxyUrl()
+             */
+            cswObj.cswUrl = getProxyUrl(cswService.get("url"));
         }
 
-        const metadata = await getRecordById(Radio.request("Util", "getProxyURL", cswObj.cswUrl), cswObj.metaId);
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const metadata = await getRecordById(getProxyUrl(cswObj.cswUrl), cswObj.metaId);
 
         cswObj.parsedData.title = metadata.getTitle();
         cswObj.parsedData.abstractText = metadata.getAbstract();

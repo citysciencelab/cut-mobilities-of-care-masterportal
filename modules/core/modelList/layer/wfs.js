@@ -3,7 +3,7 @@ import VectorSource from "ol/source/Vector.js";
 import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {WFS} from "ol/format.js";
-import getProxyURL from "../../../../src/utils/getProxyURL";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -12,7 +12,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         isClustered: false,
         allowedVersions: ["1.1.0"],
         altitudeMode: "clampToGround",
-        useProxy: true
+        useProxy: false
     }),
     /**
      * @class WFSLayer
@@ -108,7 +108,6 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             gfiAttributes: this.get("gfiAttributes"),
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
-            // gfiIconPath: this.get("gfiIconPath"),
             id: this.get("id"),
             hitTolerance: this.get("hitTolerance"),
             altitudeMode: this.get("altitudeMode"),
@@ -141,9 +140,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",

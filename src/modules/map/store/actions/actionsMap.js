@@ -2,7 +2,7 @@ import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import {MapMode} from "../enums";
-import getProxyURL from "../../../../utils/getProxyURL";
+import getProxyUrl from "../../../../utils/getProxyUrl";
 
 let unsubscribes = [],
     loopId = null;
@@ -164,9 +164,9 @@ const actions = {
             /**
              * @deprecated in the next major-release!
              * useProxy
-             * getProxyURL()
+             * getProxyUrl()
              */
-            url = layer.get("useProxy") ? getProxyURL(url) : url;
+            url = layer.get("useProxy") ? getProxyUrl(url) : url;
 
             return getWmsFeaturesByMimeType(layer, url);
         }))

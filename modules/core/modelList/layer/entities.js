@@ -1,5 +1,5 @@
 import Layer from "./model";
-import getProxyURL from "../../../../src/utils/getProxyURL";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -102,9 +102,9 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        // model.url = this.get("useProxy") ? getProxyURL(model.url) : model.url;
+        model.url = this.get("useProxy") ? getProxyUrl(model.url) : model.url;
 
         if (typeof model.url !== "string") {
             return null;

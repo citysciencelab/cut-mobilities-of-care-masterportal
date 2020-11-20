@@ -1,10 +1,6 @@
 import getQueryParams from "../utils/getQueryParams";
-import {generateSimpleGetters} from "./utils/generators";
-import appStoreState from "./state";
 
 export default {
-    ...generateSimpleGetters(appStoreState),
-
     masterPortalVersionNumber: state => state?.masterPortalVersionNumber,
     mobile: state => state.mobile,
     dpi: state => state.dpi,
@@ -17,6 +13,7 @@ export default {
     // gfiWindow is deprecated in the next major-release
     gfiWindow: state => state?.configJs.gfiWindow,
     ignoredKeys: state => state?.configJs.ignoredKeys || [],
+    proxyHost: state => state?.configJs?.proxyHost || "",
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,

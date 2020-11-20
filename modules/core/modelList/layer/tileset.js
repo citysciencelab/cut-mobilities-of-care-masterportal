@@ -1,6 +1,6 @@
 import Layer from "./model";
 import {getTilesetStyle} from "./tilesetHelper";
-import getProxyURL from "../../../../src/utils/getProxyURL";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 /**
  * @type {symbol}
@@ -26,7 +26,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
-        useProxy: true,
+        useProxy: false,
         /**
          * [cesium3DTilesetDefaults description]
          * @link https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
@@ -125,9 +125,9 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             options = this.combineOptions(this.get("cesium3DTilesetOptions"), url),
             tileset = new Cesium.Cesium3DTileset(options);
 

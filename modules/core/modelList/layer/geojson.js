@@ -3,14 +3,14 @@ import VectorSource from "ol/source/Vector.js";
 import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
-import getProxyURL from "../../../../src/utils/getProxyURL";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         isClustered: false,
         altitudeMode: "clampToGround",
-        useProxy: true
+        useProxy: false
     }),
 
     /**
@@ -113,9 +113,9 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url"),
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             typ = this.get("typ"),
             xhr = new XMLHttpRequest(),
             that = this;
@@ -345,7 +345,12 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             boxId = feature.get("_id");
         let url = "https://api.opensensemap.org/boxes/" + boxId + "/data/" + sensorId;
 
-        url = Radio.request("Util", "getProxyURL", url);
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        url = this.get("useProxy") ? getProxyUrl(url) : url;
         xhr.open("GET", url, async);
         xhr.onload = function (event) {
             let response = JSON.parse(event.currentTarget.responseText);

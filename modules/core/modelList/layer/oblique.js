@@ -1,7 +1,7 @@
 import Layer from "./model";
 import Collection from "vcs-oblique/src/vcs/oblique/collection";
 import {get} from "ol/proj.js";
-import getProxyURL from "../../../../src/utils/getProxyURL";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -9,7 +9,7 @@ const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
         showSettings: false,
         isVisibleInTree: false,
         selectionIDX: -1,
-        useProxy: true
+        useProxy: false
     }),
     /**
      * @class ObliqueLayer
@@ -61,9 +61,9 @@ const ObliqueLayer = Layer.extend(/** @lends  ObliqueLayer.prototype*/{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url");
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url");
         let projection = "",
             proj = "",
             obliqueCollection = "",

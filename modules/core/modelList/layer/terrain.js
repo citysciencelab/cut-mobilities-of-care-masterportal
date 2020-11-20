@@ -1,5 +1,5 @@
 import Layer from "./model";
-import getProxyURL from "../../../../src/utils/getProxyURL";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
     /**
@@ -56,9 +56,9 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
         /**
          * @deprecated in the next major-release!
          * useProxy
-         * getProxyURL()
+         * getProxyUrl()
          */
-        const url = this.get("useProxy") ? getProxyURL(this.get("url")) : this.get("url");
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url");
         let options;
 
         if (this.has("terrainProvider") === false) {
