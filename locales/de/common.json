@@ -415,6 +415,7 @@
                 }
             },
             "gfi": {
+                "errorMessage": "Bei der Informationsabfrage (GetFeatureInfo) ist ein Fehler aufgetreten.<br>Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
                 "favoriteIcons": {
                   "compareFeatureIcon": {
                     "toCompareList": "Auf die Vergleichsliste",
@@ -425,7 +426,6 @@
                   }
                 },
                 "themes": {
-                    "errorMessage": "Bei der Informationsabfrage des Layers: <b>{{name}}</b> mit der LayerId: <b>{{id}}</b> ist ein Fehler aufgetreten.<br> Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut. Falls das Problem weiterhin auftritt, wenden Sie sich bitte an den Betreiber des Dienstes.",
                     "default": {
                       "imgAlt": "Es konnte kein Bild geladen werden."
                     },

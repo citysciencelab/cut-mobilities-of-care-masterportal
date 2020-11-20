@@ -147,20 +147,17 @@ const actions = {
      * @param {Function} store.commit - function to commit a mutation
      * @returns {void}
      */
-    async collectGfiFeatures ({getters, commit}) {
+    collectGfiFeatures ({getters, commit, dispatch}) {
         const {clickCoord, visibleWmsLayerListAtResolution, resolution, projection, gfiFeaturesAtPixel} = getters,
             gfiWmsLayerList = visibleWmsLayerListAtResolution.filter(layer => {
                 return layer.get("gfiAttributes") !== "ignore";
             });
 
-        let gfiFeatures = [];
-
-        gfiFeatures = await Promise.all(gfiWmsLayerList.map(layer => {
+        Promise.all(gfiWmsLayerList.map(layer => {
             const mimeType = layer.get("infoFormat"),
                 layerName = layer.get("name"),
                 layerId = layer.get("id"),
                 gfiTheme = layer.get("gfiTheme") || "default",
-                // gfiIconPath = layer.get("gfiIconPath"),
                 gfiAttributes = layer.get("gfiAttributes"),
                 gfiParams = {
                     INFO_FORMAT: mimeType,
@@ -170,12 +167,17 @@ const actions = {
                 gfiAsNewWindow = layer.get("gfiAsNewWindow");
 
             return getWmsFeaturesByMimeType(mimeType, url, {layerName, layerId}, gfiTheme, gfiAttributes, gfiAsNewWindow, null, null);
-        }));
-
-        // only commit if features found
-        if (gfiFeaturesAtPixel.concat(...gfiFeatures).length > 0) {
-            commit("setGfiFeatures", gfiFeaturesAtPixel.concat(...gfiFeatures));
-        }
+        }))
+            .then(gfiFeatures => {
+                // only commit if features found
+                if (gfiFeaturesAtPixel.concat(...gfiFeatures).length > 0) {
+                    commit("setGfiFeatures", gfiFeaturesAtPixel.concat(...gfiFeatures));
+                }
+            })
+            .catch(error => {
+                console.warn(error);
+                dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.gfi.errorMessage"), {root: true});
+            });
     },
 
     /**
