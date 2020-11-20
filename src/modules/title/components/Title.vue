@@ -15,6 +15,11 @@ export default {
         this.$nextTick(() => {
             this.initialize();
         });
+        const navBar = document.getElementsByClassName("navbar-collapse")[0],
+            searchBar = navBar.lastChild;
+
+        navBar.insertBefore(this.$el, searchBar);
+        this.renderDependingOnSpace();
     },
     created () {
         const myBus = Backbone.Events;
@@ -22,10 +27,6 @@ export default {
         myBus.listenTo(Radio.channel("Title"), {
             "setSize": () => {
                 setTimeout(() => {
-                    const navBar = document.getElementsByClassName("navbar-collapse")[0],
-                        searchBar = navBar.lastChild;
-
-                    navBar.insertBefore(this.$el, searchBar);
                     this.renderDependingOnSpace();
                 }, 500);
             }

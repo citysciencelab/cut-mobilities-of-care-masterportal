@@ -132,7 +132,7 @@ export default {
             this.$el.style.top = "auto";
             this.$el.style.bottom = "0";
             this.$el.style.left = "0";
-            this.$el.style.marginBottom = "60px";
+            this.$el.style.marginBottom = "75px";
             this.$el.querySelector(".header").classList.add("header-min");
             el.draggable("disable");
         },
