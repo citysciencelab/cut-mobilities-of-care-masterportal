@@ -119,7 +119,7 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
     },
 
     setLayerList: function (value) {
-        const withoutUrlFeatures = value.filter(v => v.id !== "urlPointFeatures" && v.id !== "urlLineFeatures" && v.id !== "urlPolygonFeatures" && v.id !== "urlMultiPointFeatures" && v.id !== "urlMultiLineStringFeatures" && v.id !== "urlMultiPolygonFeatures");
+        const withoutUrlFeatures = value.filter(v => v.attributes.parentId !== "featureViaURLFolder");
 
         this.set("layerList", withoutUrlFeatures);
     },
