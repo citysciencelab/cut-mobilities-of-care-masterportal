@@ -22,15 +22,16 @@ export default {
     },
     mounted () {
         this.$nextTick(() => {
+            const navBar = document.getElementsByClassName("navbar-collapse")[0],
+                searchBar = document.getElementById("searchbar");
+
+            navBar.insertBefore(this.$el, searchBar);
+            if (this.title !== "" || this.logo !== "" || this.link !== "" || this.toolTip !== "") {
+                this.renderDependingOnSpace();
+            }
+
             this.initialize();
         });
-        const navBar = document.getElementsByClassName("navbar-collapse")[0],
-            searchBar = navBar.lastChild;
-
-        navBar.insertBefore(this.$el, searchBar);
-        if (this.title !== "" || this.logo !== "" || this.link !== "" || this.toolTip !== "") {
-            this.renderDependingOnSpace();
-        }
     },
     methods: {
         ...mapActions("Title", ["initialize"]),
