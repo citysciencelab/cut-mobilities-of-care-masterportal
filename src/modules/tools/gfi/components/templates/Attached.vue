@@ -102,7 +102,7 @@ export default {
         removePopover () {
             const overlayElement = this.overlay.getElement();
 
-            if (overlayElement !== null && overlayElement.parentNode !== null) {
+            if (overlayElement !== null && typeof overlayElement !== "undefined" && overlayElement.parentNode !== null) {
                 $(this.overlay.getElement()).popover("destroy");
 
                 overlayElement.parentNode.removeChild(overlayElement);

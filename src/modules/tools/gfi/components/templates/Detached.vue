@@ -105,7 +105,6 @@ export default {
         });
 
         this.setMarker();
-        console.info(this.$el);
     },
     beforeDestroy: function () {
         this.removePointMarker();
