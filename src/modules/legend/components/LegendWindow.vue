@@ -5,6 +5,8 @@ import getters from "../store/gettersLegend";
 import mutations from "../store/mutationsLegend";
 import actions from "../store/actionsLegend";
 import LegendSingleLayer from "./LegendSingleLayer.vue";
+import {isArrayOfStrings} from "../../../utils/objectHelpers";
+import colorArrayToRgb from "../../../utils/colorArrayToRgb";
 
 export default {
     name: "LegendWindow",
@@ -21,8 +23,18 @@ export default {
                 this.createLegend();
             }
         },
-        layerIdForLayerInfo (layerIdForLayerInfo) {
-            this.createLegendForLayerInfo(layerIdForLayerInfo);
+        layerCounterIdForLayerInfo (layerCounterIdForLayerInfo) {
+            if (layerCounterIdForLayerInfo) {
+                this.createLegendForLayerInfo(this.layerIdForLayerInfo);
+            }
+        },
+        legendOnChanged (legend) {
+            if (legend) {
+                this.createLegend();
+                if (this.layerIdForLayerInfo) {
+                    this.createLegendForLayerInfo(this.layerIdForLayerInfo);
+                }
+            }
         }
     },
     created () {
@@ -80,12 +92,20 @@ export default {
         createLegendForLayerInfo (layerIdForLayerInfo) {
             const layerForLayerInfo = Radio.request("ModelList", "getModelByAttributes", {type: "layer", id: layerIdForLayerInfo});
             let legendObj = null,
-                isValidLegend = null;
+                isValidLegend = null,
+                legend = null;
+
+            if (layerForLayerInfo.get("typ") === "GROUP") {
+                legend = this.prepareLegendForGroupLayer(layerForLayerInfo.get("layerSource"));
+            }
+            else {
+                legend = this.prepareLegend(layerForLayerInfo.get("legend"));
+            }
 
             legendObj = {
                 id: layerForLayerInfo.get("id"),
                 name: layerForLayerInfo.get("name"),
-                legend: this.prepareLegend(layerForLayerInfo.get("legend")),
+                legend,
                 position: layerForLayerInfo.get("selectionIDX")
             };
 
@@ -252,7 +272,7 @@ export default {
         prepareLegend (legendInfos) {
             let preparedLegend = [];
 
-            if (this.isArrayOfStrings(legendInfos)) {
+            if (isArrayOfStrings(legendInfos)) {
                 preparedLegend = legendInfos;
             }
             else if (Array.isArray(legendInfos)) {
@@ -435,10 +455,10 @@ export default {
          * @returns {string} svg
          */
         drawCircleStyle: function (style) {
-            const circleStrokeColor = style.get("circleStrokeColor") ? this.colorToRgb(style.get("circleStrokeColor")) : "black",
+            const circleStrokeColor = style.get("circleStrokeColor") ? colorArrayToRgb(style.get("circleStrokeColor")) : "black",
                 circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
                 circleStrokeWidth = style.get("circleStrokeWidth"),
-                circleFillColor = style.get("circleFillColor") ? this.colorToRgb(style.get("circleFillColor")) : "black",
+                circleFillColor = style.get("circleFillColor") ? colorArrayToRgb(style.get("circleFillColor")) : "black",
                 circleFillOpacity = style.get("circleFillColor")[3] || 0,
                 circleRadius = style.get("circleRadius"),
                 widthAndHeight = (circleRadius + 1.5) * 2;
@@ -468,7 +488,7 @@ export default {
          * @returns {Object} - prepared legendObj.
          */
         prepareLegendForLineString (legendObj, style) {
-            const strokeColor = style.get("lineStrokeColor") ? this.colorToRgb(style.get("lineStrokeColor")) : "black",
+            const strokeColor = style.get("lineStrokeColor") ? colorArrayToRgb(style.get("lineStrokeColor")) : "black",
                 strokeWidth = style.get("lineStrokeWidth"),
                 strokeOpacity = style.get("lineStrokeColor")[3] || 0,
                 strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;
@@ -499,8 +519,8 @@ export default {
          * @returns {Object} - prepare legendObj
          */
         prepareLegendForPolygon (legendObj, style) {
-            const fillColor = style.get("polygonFillColor") ? this.colorToRgb(style.get("polygonFillColor")) : "black",
-                strokeColor = style.get("polygonStrokeColor") ? this.colorToRgb(style.get("polygonStrokeColor")) : "black",
+            const fillColor = style.get("polygonFillColor") ? colorArrayToRgb(style.get("polygonFillColor")) : "black",
+                strokeColor = style.get("polygonStrokeColor") ? colorArrayToRgb(style.get("polygonStrokeColor")) : "black",
                 strokeWidth = style.get("polygonStrokeWidth"),
                 fillOpacity = style.get("polygonFillColor")[3] || 0,
                 strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
@@ -570,33 +590,6 @@ export default {
             }
 
             return name;
-        },
-
-        /**
-         * Returns a rgb color string that can be interpreted in SVG.
-         * @param   {integer[]} color color set in style
-         * @returns {string} svg color
-         */
-        colorToRgb: function (color) {
-            return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
-        },
-
-        /**
-         * Checks if the input is an array of strings.
-         * @param {*} input The input to be checked.
-         * @returns {boolean} - Flag of input is an array of strings
-         */
-        isArrayOfStrings (input) {
-            let isArrayOfStrings = false;
-
-            if (Array.isArray(input)) {
-                if (input.length > 0) {
-                    isArrayOfStrings = input.every(legendInfo => {
-                        return typeof legendInfo === "string";
-                    });
-                }
-            }
-            return isArrayOfStrings;
         },
 
         /**

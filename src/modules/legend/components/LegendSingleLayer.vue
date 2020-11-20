@@ -19,9 +19,13 @@ export default {
     },
     watch: {
         legendObj () {
-            if (this.renderToId !== "") {
-                document.getElementById(this.renderToId).append(this.$el);
-            }
+            this.$nextTick(() => {
+                if (this.renderToId !== "" && document.getElementById(this.renderToId) !== null) {
+                    this.$el.style.display = "block";
+                    document.getElementById(this.renderToId).appendChild(new DOMParser().parseFromString(this.$el.outerHTML, "text/html").firstChild);
+                    this.$el.style.display = "none";
+                }
+            });
         }
     }
 };
@@ -92,6 +96,7 @@ export default {
                         <img
                             v-if="!legendPart.graphic.endsWith('.pdf')"
                             :src="legendPart.graphic"
+                            class="left"
                         >
                         <!--Legend PDF as Link-->
                         <a
@@ -127,6 +132,10 @@ export default {
         padding-bottom: 5px;
         img {
             max-width: 100%;
+            &.left {
+                max-width: 50px;
+                padding: 5px 0;
+            }
         }
     }
     .layer-legend.collapsing {

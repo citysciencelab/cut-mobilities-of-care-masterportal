@@ -127,7 +127,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             "setIsSelectedOnChildLayers": this.setIsSelectedOnChildLayers,
             "setIsSelectedOnParent": this.setIsSelectedOnParent,
             "showModelInTree": this.showModelInTree,
-            "closeAllExpandedFolder": this.closeExpandedFolder,
+            "closeAllExpandedFolder": this.closeAllExpandedFolder,
             "setAllDescendantsInvisible": this.setAllDescendantsInvisible,
             "renderTree": function () {
                 this.trigger("renderTree");

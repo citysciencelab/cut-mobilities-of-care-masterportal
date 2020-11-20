@@ -37,7 +37,7 @@ So setzen Sie in wenigen Schritten das erste Portal auf Ihrem eigenen Server auf
 
     Darin enthalten ist auch der Ordner *ressources*, der die globalen Konfigurationsdateien **[*services.json*](services.json.md)**, **[*rest-services.json*](rest-services.json.md)** und **[*style.json*](style.json.md)** enthält sowie die benötigten Bilder (Ordner *img*) dieser Portalinstanz.
 
-    Der Ordner *mastercode* enthält die komprimierte Javascript-Datei und die css-Dateien des Masterportals. Im Ordner *img* sind die für das Masterportal notwenidgen Bilder abgelegt (Der Kompass für den 3D-Modus und das Ladebild)
+    Der Ordner *mastercode* enthält die komprimierte Javascript-Datei und die css-Dateien des Masterportals. Im Ordner *img* sind die für das Masterportal notwendigen Bilder abgelegt (Der Kompass für den 3D-Modus, das Ladebild sowie svg-Dateien fürs Zeichen-Tool.)
 
 
 4. Wenn Sie den Ordnernamen *examples* belassen haben, können Sie die Beispielportale mit folgenden URLs über einen Browser aufrufen (anderenfalls ersetzen Sie *examples* durch den von Ihnen gewählten Ordnernamen):

@@ -7,7 +7,9 @@ const {
     sortLegend,
     removeLegend,
     setLayerIdForLayerInfo,
-    setLegendForLayerInfo
+    setLayerCounterIdForLayerInfo,
+    setLegendForLayerInfo,
+    setLegendOnChanged
 } = actions;
 
 describe("src/modules/legend/store/actionsLegend.js", () => {
@@ -162,6 +164,48 @@ describe("src/modules/legend/store/actionsLegend.js", () => {
 
             setLegendForLayerInfo({state}, layerInfoLegend);
             expect(state.layerInfoLegend).to.deep.equal({
+                id: "123",
+                name: "foobar",
+                legend: ["getLegendGraphicRequest"],
+                position: 1
+            });
+        });
+    });
+    describe("setLayerCounterIdForLayerInfo", () => {
+        it("should set legend counter id with time for layerInfo", () => {
+            const state = {
+                    layerInfoLegend: {}
+                },
+                layerInfoLegend = {
+                    id: "123",
+                    name: "foobar",
+                    legend: ["getLegendGraphicRequest"],
+                    position: 1
+                };
+
+            setLayerCounterIdForLayerInfo({state}, layerInfoLegend);
+            expect(state.layerCounterIdForLayerInfo).to.deep.equal({
+                id: "123",
+                name: "foobar",
+                legend: ["getLegendGraphicRequest"],
+                position: 1
+            });
+        });
+    });
+    describe("setLegendOnChanged", () => {
+        it("should set changed legend", () => {
+            const state = {
+                    legendOnChanged: {}
+                },
+                legendOnChanged = {
+                    id: "123",
+                    name: "foobar",
+                    legend: ["getLegendGraphicRequest"],
+                    position: 1
+                };
+
+            setLegendOnChanged({state}, legendOnChanged);
+            expect(state.legendOnChanged).to.deep.equal({
                 id: "123",
                 name: "foobar",
                 legend: ["getLegendGraphicRequest"],

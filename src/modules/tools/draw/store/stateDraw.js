@@ -89,6 +89,8 @@ const symbol = {
         renderToWindow: true,
         resizableWindow: true,
         selectInteraction: null,
+        selectInteractionModify: null,
+        selectedFeature: null,
         strokeWidth: 1,
         symbol,
         text: "",

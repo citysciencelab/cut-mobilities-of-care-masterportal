@@ -32,3 +32,19 @@ function convertArrayElementsToString (array = [], ignoreCase = false) {
 
     return arrayWithStrings;
 }
+
+/**
+ * Checks if the input is an array of strings.
+ * @param {Array} input The input to be checked.
+ * @returns {boolean} - Flag of input is an array of strings
+ */
+export function isArrayOfStrings (input) {
+    let containsOnlyStrings = false;
+
+    if (Array.isArray(input) && input.length > 0) {
+        containsOnlyStrings = input.every(legendInfo => {
+            return typeof legendInfo === "string";
+        });
+    }
+    return containsOnlyStrings;
+}

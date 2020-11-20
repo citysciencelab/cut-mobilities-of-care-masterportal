@@ -12,12 +12,6 @@ export default {
         Modal
     },
 
-    data: function () {
-        return {
-            showModal: false
-        };
-    },
-
     computed: {
         ...mapGetters("Alerting", [
             "displayedAlerts",
@@ -27,16 +21,37 @@ export default {
             "sortedAlerts"
         ]),
 
+        /**
+         * Reads current URL and returns it without hash and without get params, always ending with slash.
+         * This is needed to have a normalized URL tocompare with configured BroadcastConfig URLs;
+         * see example file /portal/master/ressources/broadcastedPortalAlerts.json
+         * @returns {String} The normalized current browser URL
+         */
+        currentUrl: () => document.URL.replace(/#.*$/, "").replace(/\/*\?.*$/, "/"),
+
+        /**
+         * Console mapping to be able to debug in template.
+         * @returns {Void} With capital V
+         */
         console: () => console
     },
 
     watch: {
+        /**
+         * Syncs localstorage with displayedAlerts prop.
+         * @param {object} newDisplayedAlerts newly changed displayedAlerts object
+         * @returns {void}
+         */
         displayedAlerts (newDisplayedAlerts) {
             // Local storage is synced with this.displayedAlerts
             localStorage[this.localStorageDisplayedAlertsKey] = JSON.stringify(newDisplayedAlerts);
         }
     },
 
+    /**
+     * Created hook: Creates event listener for legacy Radio calls (to be removed seometime).
+     * @returns {void}
+     */
     created () {
         Backbone.Events.listenTo(Radio.channel("Alert"), {
             "alert": newAlert => {
@@ -45,11 +60,14 @@ export default {
         });
     },
 
+    /**
+     * Mounted hook: Initially sets up localstorage and then fetches BroadcastConfig.
+     * @returns {void}
+     */
     mounted () {
         let initialDisplayedAlerts;
 
         this.initialize();
-
         if (localStorage[this.localStorageDisplayedAlertsKey] !== undefined) {
             try {
                 initialDisplayedAlerts = JSON.parse(localStorage[this.localStorageDisplayedAlertsKey]);
@@ -66,11 +84,6 @@ export default {
 
         if (this.fetchBroadcastUrl !== undefined && this.fetchBroadcastUrl !== false) {
             this.fetchBroadcast(this.fetchBroadcastUrl);
-            /* DEBUG: This will enable constant alerts to test *
-            setInterval(() => {
-                this.fetchBroadcast(this.fetchBroadcastUrl);
-            }, 5000);
-            /**/
         }
     },
 
@@ -83,51 +96,65 @@ export default {
             "setDisplayedAlerts"
         ]),
 
+        /**
+         * Do this after successfully fetching broadcastConfig:
+         * Process configured data and add each resulting alert into the state.
+         * @param {object} response received response object
+         * @returns {void}
+         */
+        axiosCallback: function (response) {
+            const data = response.data,
+                collectedAlerts = [];
+
+            let collectedAlertIds = [];
+
+            if (data.alerts === undefined || typeof data.alerts !== "object") {
+                return;
+            }
+
+            if (Array.isArray(data.globalAlerts)) {
+                collectedAlertIds = [...collectedAlertIds, ...data.globalAlerts];
+            }
+
+            if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object" && Array.isArray(data.restrictedAlerts[this.currentUrl])) {
+                collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[this.currentUrl]];
+            }
+
+            for (const alertId in data.alerts) {
+                if (collectedAlertIds.includes(alertId)) {
+                    collectedAlerts.push(data.alerts[alertId]);
+                }
+            }
+
+            collectedAlerts.forEach(singleAlert => {
+                this.addSingleAlert(singleAlert);
+            });
+        },
+
+        /**
+         * Just a wrapper method for the XHR request for the sake of testing.
+         * @param {string} fetchBroadcastUrl fetchBroadcastUrl
+         * @returns {void}
+         */
         fetchBroadcast: function (fetchBroadcastUrl) {
-            // remove hashes
-            let urlToCheck = document.URL.replace(/#.*$/, "");
-
-            // then remove get params and make it end with slash
-            urlToCheck = urlToCheck.replace(/\/*\?.*$/, "/");
-
-            axios.get(fetchBroadcastUrl).then(response => {
-                // handle success
-                const data = response.data,
-                    collectedAlerts = [];
-
-                let collectedAlertIds = [];
-
-                if (data.alerts === undefined || typeof data.alerts !== "object") {
-                    console.warn("No alerts defined.");
-                    return;
-                }
-
-                if (Array.isArray(data.globalAlerts)) {
-                    collectedAlertIds = [...collectedAlertIds, ...data.globalAlerts];
-                }
-
-                if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object") {
-                    collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[urlToCheck]];
-                }
-
-                for (const alertId in data.alerts) {
-                    if (collectedAlertIds.includes(alertId)) {
-                        collectedAlerts.push(data.alerts[alertId]);
-                    }
-                }
-
-                collectedAlerts.forEach(singleAlert => {
-                    this.addSingleAlert(singleAlert);
-                });
-            }).catch(function (error) {
+            axios.get(fetchBroadcastUrl).then(this.axiosCallback).catch(function (error) {
                 console.warn(error);
             });
         },
 
+        /**
+         * When closing the modal, update all alerts' have-been-read states.
+         * @returns {void}
+         */
         onModalHid: function () {
             this.cleanup();
         },
 
+        /**
+         * Update a single alert's has-been-read state.
+         * @param {string} hash hash
+         * @returns {void}
+         */
         markAsRead: function (hash) {
             this.alertHasBeenRead(hash);
         }
@@ -148,12 +175,14 @@ export default {
                 :class="{ last: categoryIndex === sortedAlerts.length-1 }"
             >
                 <h3>
-                    {{ alertCategory.category }}
+                    {{ $t(alertCategory.category) }}
                 </h3>
 
                 <div
                     v-for="(singleAlert, singleAlertIndex) in alertCategory.content"
                     :key="singleAlert.hash"
+                    class="singleAlertWrapper"
+                    :class="singleAlert.displayClass"
                 >
                     <div
                         class="singleAlertContainer"
@@ -171,7 +200,7 @@ export default {
                             <a
                                 @click="markAsRead(singleAlert.hash)"
                             >
-                                {{ $t("common:modules.alerting.hideMessage") }}
+                                {{ $t(singleAlert.confirmText) }}
                             </a>
                         </p>
                     </div>
@@ -199,6 +228,23 @@ export default {
             line-height:18px;
             margin:0 0 8px 0;
             padding:0;
+        }
+
+        /*
+            This is only for now. Because there havent been defined any styles yet.
+            Negative margin may be bad in the long run.
+        */
+        div.singleAlertWrapper {
+            &.error {
+                margin-left:-24px;
+                border-left: 4px solid rgba(255, 0, 0, 0.9);
+                padding-left: 21px;
+            }
+            &.warning {
+                margin-left:-24px;
+                border-left: 4px solid rgba(255, 125, 0, 0.7);
+                padding-left: 21px;
+            }
         }
 
         div.singleAlertContainer {

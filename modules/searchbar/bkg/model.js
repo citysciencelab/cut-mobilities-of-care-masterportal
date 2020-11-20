@@ -1,4 +1,5 @@
 import "../model";
+import store from "../../../src/app-store/index";
 
 const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype */{
     defaults: {
@@ -193,15 +194,17 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
      * @returns {void}
      */
     handleBKGSearchResult: function (data, showOrHideMarker, eventType) {
+        const zoomLevel = this.get("zoomLevel");
+
         if (showOrHideMarker === true) {
-            Radio.trigger("MapMarker", "showMarker", data.features[0].geometry.coordinates);
+            store.dispatch("MapMarker/placingPointMarker", data.features[0].geometry.coordinates);
         }
         else {
-            Radio.trigger("MapMarker", "hideMarker");
+            store.dispatch("MapMarker/removePointMarker");
         }
 
         if ((eventType === "mouseover" && this.get("zoomToResultOnHover")) || (eventType === "click" && this.get("zoomToResultOnClick"))) {
-            Radio.trigger("MapMarker", "zoomToBKGSearchResult", data, this.get("zoomLevel"));
+            this.zoomToBKGSearchResult(data, zoomLevel);
         }
         /**
          * zoomToResult
@@ -209,7 +212,30 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
          */
         else if (eventType === "mouseover" && this.get("zoomToResult")) {
             console.warn("Parameter 'zoomToResult' is deprecated. Please use 'zoomToResultOnHover' or 'zoomToResultOnClick' instead.");
-            Radio.trigger("MapMarker", "zoomToBKGSearchResult", data, this.get("zoomLevel"));
+            this.zoomToBKGSearchResult(data, zoomLevel);
+        }
+    },
+
+    /**
+     * Triggered by bkg this method receives the XML of the searched address.
+     * @param {string} data Die Data-Object des request.
+     * @fires Core#RadioTriggerMapZoomToExtent
+     * @fires Core#RadioTriggerMapViewSetCenter
+     * @param {number} zoomLevel The level to zoom.
+     * @returns {void}
+     */
+    zoomToBKGSearchResult: function (data, zoomLevel) {
+        if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
+            Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, zoomLevel !== undefined ? zoomLevel : this.get("zoomLevel"));
+            store.dispatch("MapMarker/placingPointMarker", data.features[0].geometry.coordinates);
+        }
+
+        else if (data.features.length !== 0 && data.features[0].properties !== null && data.features[0].properties.bbox !== null &&
+            data.features[0].properties.bbox.type !== null && data.features[0].properties.bbox.type === "Polygon") {
+            const polygon = data.features[0].properties.bbox.coordinates[0].reduce((a, b) => a.concat(b), []);
+
+            store.dispatch("MapMarker/setWKTGeom", "POLYGON", polygon);
+            store.dispatch("MapMarker/placingPolygonMarker", {wktcontent: polygon});
         }
     },
 

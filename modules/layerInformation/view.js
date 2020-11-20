@@ -62,7 +62,8 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
      * @returns {void}
      */
     setLayerIdForLayerInfo: function () {
-        store.commit("Legend/setLayerIdForLayerInfo", this.model.get("id"));
+        store.dispatch("Legend/setLayerIdForLayerInfo", this.model.get("id"));
+        store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
     },
     /**
      * Toggles the tab after click.

@@ -45,7 +45,7 @@ describe("LegendWindow.vue", () => {
             getters,
             mutations
         });
-        store.commit("Legend/setShowLegend", true);
+        store.dispatch("Legend/setShowLegend", true);
         store.state.Legend.legends = [];
     });
 
@@ -231,35 +231,6 @@ describe("LegendWindow.vue", () => {
                 wrapper = shallowMount(LegendWindowComponent, {store, localVue});
                 wrapper.vm.addLegend(legendObj);
                 expect(wrapper.vm.isLegendChanged(legendObj.id, legendObj)).to.be.equals(false);
-            });
-        });
-        describe("isArrayOfStrings", () => {
-            it("returns true if input is an array of strings", () => {
-                const input = ["a", "", "abc"];
-
-                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
-                expect(wrapper.vm.isArrayOfStrings(input)).to.be.equals(true);
-            });
-            it("returns false if input is an empty array", () => {
-                const input = [];
-
-                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
-                expect(wrapper.vm.isArrayOfStrings(input)).to.be.equals(false);
-            });
-            it("returns false if input is not an array of strings", () => {
-                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
-                expect(wrapper.vm.isArrayOfStrings(["", "", "", {}])).to.be.equals(false);
-                expect(wrapper.vm.isArrayOfStrings(["", "", "", 1])).to.be.equals(false);
-                expect(wrapper.vm.isArrayOfStrings(["", "", "", false])).to.be.equals(false);
-                expect(wrapper.vm.isArrayOfStrings(["", "", "", null])).to.be.equals(false);
-                expect(wrapper.vm.isArrayOfStrings(["", "", "", undefined])).to.be.equals(false);
-            });
-        });
-        describe("colorToRgb", () => {
-            it("transforms a color array into a rgb-color string", () => {
-                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
-                expect(wrapper.vm.colorToRgb([1, 2, 3])).to.be.equals("rgb(1,2,3)");
-                expect(wrapper.vm.colorToRgb([1, 2, 3, 0.5])).to.be.equals("rgb(1,2,3)");
             });
         });
         describe("prepareLegendForGroupLayer", () => {

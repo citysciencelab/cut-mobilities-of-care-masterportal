@@ -1,7 +1,7 @@
 <script>
 import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
-import upperFirst from "../../../../../utils/upperFirst";
+import getTheme from "../../utils/getTheme";
 
 export default {
     name: "Mobile",
@@ -30,7 +30,7 @@ export default {
          * @returns {String} the name of the theme
          */
         theme: function () {
-            return this.getTheme();
+            return getTheme(this.feature.getTheme(), this.$options.components, this.$gfiThemeAddons);
         }
     },
     mounted: function () {
@@ -59,32 +59,6 @@ export default {
             if (!document.getElementsByClassName("modal-dialog").length && document.getElementsByClassName("gfi").length) {
                 document.getElementsByClassName("gfi")[0].appendChild(this.$el);
             }
-        },
-
-        /**
-         * Returns the right gfi Theme
-         * it check if the right Theme (Component) is there, if yes just use this component, otherwise use the default theme
-         * @returns {String} the name of the gfi Theme
-         */
-        getTheme () {
-            const gfiComponents = Object.keys(this.$options.components),
-                gfiTheme = this.feature.getTheme(),
-                configTheme = upperFirst(typeof gfiTheme === "object" ? gfiTheme.name : gfiTheme);
-
-            let theme = "";
-
-            if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
-                theme = configTheme;
-            }
-            else if (this.$gfiThemeAddons && this.$gfiThemeAddons.includes(configTheme)) {
-                theme = configTheme;
-            }
-            else {
-                console.warn(String("The gfi theme '" + configTheme + "' could not be found, the default theme will be used. Please check your configuration!"));
-                theme = "Default";
-            }
-
-            return theme;
         }
     }
 };
