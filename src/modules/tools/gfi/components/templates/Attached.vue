@@ -100,9 +100,12 @@ export default {
          * @returns {void}
          */
         removePopover () {
-            if (this.overlay.getElement()) {
+            const overlayElement = this.overlay.getElement();
+
+            if (overlayElement !== null && overlayElement.parentNode !== null) {
                 $(this.overlay.getElement()).popover("destroy");
-                $(this.overlay.getElement()).remove();
+
+                overlayElement.parentNode.removeChild(overlayElement);
                 Radio.trigger("Map", "removeOverlay", this.overlay);
             }
         }

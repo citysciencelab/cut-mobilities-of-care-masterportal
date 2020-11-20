@@ -15,15 +15,17 @@ export default {
         this.$nextTick(() => {
             this.initialize();
         });
-        $(this.$el).insertAfter(document.getElementById("root"));
     },
     created () {
-
         const myBus = Backbone.Events;
 
         myBus.listenTo(Radio.channel("Title"), {
             "setSize": () => {
                 setTimeout(() => {
+                    const navBar = document.getElementsByClassName("navbar-collapse")[0],
+                        searchBar = navBar.lastChild;
+
+                    navBar.insertBefore(this.$el, searchBar);
                     this.renderDependingOnSpace();
                 }, 500);
             }

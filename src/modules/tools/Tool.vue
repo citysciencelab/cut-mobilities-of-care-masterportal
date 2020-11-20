@@ -52,10 +52,17 @@ export default {
 
             if (newValue === false) {
                 this.draggable = false;
-                $(".backdrop").remove();
+                const backdropElement = document.querySelector(".backdrop");
+
+                if (backdropElement !== null) {
+                    backdropElement.parentNode.removeChild(backdropElement);
+                }
             }
             else if (!this.renderToWindow && Radio.request("Util", "isViewMobile")) {
-                $("#masterportal-container").append("<div class='backdrop'></div>");
+                const div = document.createElement("div");
+
+                div.classList.add("backdrop");
+                document.querySelector("#masterportal-container").appendChild(div);
             }
             if (newValue && gfiModel) {
                 gfiModel.setIsActive(!this.deactivateGFI);
@@ -115,14 +122,18 @@ export default {
          *  @return {void}
          */
         minimize: function () {
-            const el = $(this.$el);
+            const el = $(this.$el),
+                elStyle = window.getComputedStyle(this.$el);
 
-            this.maxPosTop = el.css("top");
-            this.maxPosLeft = el.css("left");
-            $(".win-body-vue").hide();
-            el.find(".glyphicon-minus").hide();
-            el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
-            $(".header").addClass("header-min");
+            this.maxPosTop = elStyle.getPropertyValue("top");
+            this.maxPosLeft = elStyle.getPropertyValue("left");
+            document.querySelector(".win-body-vue").style.display = "none";
+            this.$el.querySelector(".glyphicon-minus").style.display = "none";
+            this.$el.style.top = "auto";
+            this.$el.style.bottom = "0";
+            this.$el.style.left = "0";
+            this.$el.style.marginBottom = "60px";
+            this.$el.querySelector(".header").classList.add("header-min");
             el.draggable("disable");
         },
         /**
@@ -130,13 +141,16 @@ export default {
          *  @return {void}
          */
         maximize: function () {
-            if ($(".win-body-vue").css("display") === "none") {
+            if (document.querySelector(".win-body-vue").style.display === "none") {
                 const el = $(this.$el);
 
-                $(".win-body-vue").show();
-                $(".glyphicon-minus").show();
-                el.css({"top": this.maxPosTop, "bottom": "", "left": this.maxPosLeft, "margin-bottom": "30px"});
-                $(".header").removeClass("header-min");
+                document.querySelector(".win-body-vue").style.display = "block";
+                this.$el.querySelector(".glyphicon-minus").style.display = "inline-block";
+                this.$el.style.top = this.maxPosTop;
+                this.$el.style.bottom = "";
+                this.$el.style.left = this.maxPosLeft;
+                this.$el.style.marginBottom = "30px";
+                this.$el.querySelector(".header").classList.remove("header-min");
                 el.draggable("enable");
             }
         },

@@ -50,9 +50,9 @@ export default {
             containment: "#map",
             handle: ".legend-title",
             stop: function (event, ui) {
-                const legendElem = $(".legend-window"),
-                    legendOuterWidth = legendElem.outerWidth(true),
-                    legendOuterHeight = legendElem.outerHeight(true),
+                const legendElem = ui.helper[0].querySelector(".legend-window"),
+                    legendOuterWidth = legendElem.offsetWidth,
+                    legendOuterHeight = legendElem.offsetHeight,
                     mapWidth = document.getElementById("map").offsetWidth,
                     mapHeight = document.getElementById("map").offsetHeight;
 
