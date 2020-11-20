@@ -4,23 +4,9 @@ import {mapGetters, mapActions} from "vuex";
 export default {
     name: "Title",
     computed: {
-        ...mapGetters("Title", [
-            "link",
-            "toolTip",
-            "logo",
-            "title"
-        ])
+        ...mapGetters("Title", ["link", "toolTip", "logo", "title"])
     },
-    mounted () {
-        this.$nextTick(() => {
-            this.initialize();
-        });
-        const navBar = document.getElementsByClassName("navbar-collapse")[0],
-            searchBar = navBar.lastChild;
 
-        navBar.insertBefore(this.$el, searchBar);
-        this.renderDependingOnSpace();
-    },
     created () {
         const myBus = Backbone.Events;
 
@@ -31,6 +17,16 @@ export default {
                 }, 500);
             }
         });
+    },
+    mounted () {
+        this.$nextTick(() => {
+            this.initialize();
+        });
+        const navBar = document.getElementsByClassName("navbar-collapse")[0],
+            searchBar = navBar.lastChild;
+
+        navBar.insertBefore(this.$el, searchBar);
+        this.renderDependingOnSpace();
     },
     methods: {
         ...mapActions("Title", ["initialize"]),
@@ -88,7 +84,10 @@ export default {
 </script>
 
 <template>
-    <div class="portal-title">
+    <div
+        v-if="title !== '' || logo !== '' || link !== '' || toolTip !== ''"
+        class="portal-title"
+    >
         <a
             :href="link"
             target="_blank"
