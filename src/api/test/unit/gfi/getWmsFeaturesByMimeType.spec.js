@@ -1,7 +1,13 @@
 import {expect} from "chai";
-import {createGfiFeature, openFeaturesInNewWindow, getXmlFeatures, getHtmlFeature, getWmsFeaturesByMimeType} from "../../../store/actions/getWmsFeaturesByMimeType.js";
+import {
+    createGfiFeature,
+    openFeaturesInNewWindow,
+    getXmlFeatures,
+    getHtmlFeature,
+    getWmsFeaturesByMimeType
+} from "../../../gfi/getWmsFeaturesByMimeType.js";
 
-describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
+describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
     describe("createGfiFeature", () => {
         it("should return an object with specific functions to get the given params", () => {
             const feature = createGfiFeature("layerName", "gfiTheme", "attributesToShow", "featureProperties", "gfiFormat", "id", "url");

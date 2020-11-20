@@ -1,6 +1,6 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
-import {getWmsFeaturesByMimeType} from "./getWmsFeaturesByMimeType";
+import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import {MapMode} from "../enums";
 
 let unsubscribes = [],

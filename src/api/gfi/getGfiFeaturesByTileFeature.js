@@ -1,4 +1,4 @@
-import getComponent from "../../../../utils/getComponent";
+import getComponent from "../../utils/getComponent";
 import {createGfiFeature} from "./getWmsFeaturesByMimeType";
 
 /**
