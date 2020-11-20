@@ -13,7 +13,9 @@ export default {
         myBus.listenTo(Radio.channel("Title"), {
             "setSize": () => {
                 setTimeout(() => {
-                    this.renderDependingOnSpace();
+                    if (this.title !== "" || this.logo !== "" || this.link !== "" || this.toolTip !== "") {
+                        this.renderDependingOnSpace();
+                    }
                 }, 500);
             }
         });
@@ -26,7 +28,9 @@ export default {
             searchBar = navBar.lastChild;
 
         navBar.insertBefore(this.$el, searchBar);
-        this.renderDependingOnSpace();
+        if (this.title !== "" || this.logo !== "" || this.link !== "" || this.toolTip !== "") {
+            this.renderDependingOnSpace();
+        }
     },
     methods: {
         ...mapActions("Title", ["initialize"]),
