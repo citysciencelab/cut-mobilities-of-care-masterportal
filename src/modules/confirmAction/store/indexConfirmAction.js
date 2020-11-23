@@ -1,7 +1,7 @@
-import state from "./stateAlerting";
-import mutations from "./mutationsAlerting";
-import getters from "./gettersAlerting";
-import actions from "./actionsAlerting";
+import state from "./stateConfirmAction";
+import mutations from "./mutationsConfirmAction";
+import getters from "./gettersConfirmAction";
+import actions from "./actionsConfirmAction";
 
 export default {
     namespaced: true,

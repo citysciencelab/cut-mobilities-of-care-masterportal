@@ -1,9 +1,4 @@
 export default {
-    fetchBroadcastUrl: false,
-    // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json",
-    // fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/broadcastedPortalAlerts.json",
-    localStorageDisplayedAlertsKey: "displayedAlerts",
-    readyToShow: false,
     alertProto: {
         category: "Info",
         confirmText: "Als gelesen markieren",
@@ -17,5 +12,10 @@ export default {
         once: false // {seconds: 59, minutes: ...} (see moment.js)
     },
     alerts: [],
-    displayedAlerts: {}
+    displayedAlerts: {},
+    fetchBroadcastUrl: false,
+    // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json",
+    // fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/broadcastedPortalAlerts.json",
+    localStorageDisplayedAlertsKey: "displayedAlerts",
+    showTheModal: false
 };

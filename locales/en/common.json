@@ -106,6 +106,12 @@
                 "warning": "Warning"
             }
         },
+        "confirmAction": {
+            "defaultHeadline": "Confirmation request",
+            "defaultCopy": "Please confirm this action.",
+            "defaultConfirmCaption": "OK",
+            "defaultDenyCaption": "Cancel"
+        },
         "cswParser": {
             "noMetadataMessage": "No metadata available.",
             "continual": "continual",

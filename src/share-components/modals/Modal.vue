@@ -6,6 +6,10 @@ export default {
         showModal: {
             type: Boolean,
             default: false
+        },
+        forceClickToClose: {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -24,6 +28,7 @@ export default {
     watch: {
         // Mapping prop to data
         showModal: function (newShowing) {
+            console.log("SHOW MODAL:", newShowing);
             if (newShowing !== this.showing) {
                 this.showing = newShowing;
             }
@@ -31,6 +36,8 @@ export default {
 
         // Trigger modalHid to parent component
         showing: function (newShowing) {
+            console.log("SHOWING:", newShowing);
+            
             if (!newShowing) {
                 this.$emit("modalHid");
             }
@@ -43,14 +50,21 @@ export default {
 
     methods: {
         discardByClickX: function () {
+            this.$emit("clickedOnX");
             this.showing = false;
         },
         discardByClickOutside: function (event) {
+            if (this.forceClickToClose) {
+                return;
+            }
+            
             // Ignore bubbled events
             if (event.target !== this.$el.querySelector("#modal-1-outer-wrapper")) {
                 return;
             }
-            this.discardByClickX();
+            
+            this.$emit("clickedOutside");
+            this.showing = false;
         }
     }
 };

@@ -1,10 +1,14 @@
 export default {
-    readyToShow: false,
     confirmActionProto: {
-        actionConfirmed: false,
-        actionDenied: false,
-        copy: "Bitte bestätigen Sie diese Aktion",
-        headline: "Bestätigung benötigt"
+        actionConfirmedCallback: false,
+        actionDeniedCallback: false,
+        actionEscapedCallback: false,
+        confirmCaption: "common:modules.confirmAction.defaultConfirmCaption",
+        copy: "common:modules.confirmAction.defaultCopy",
+        denyCaption: "common:modules.confirmAction.defaultDenyCaption",
+        forceClickToClose: true,
+        headline: "common:modules.confirmAction.defaultHeadline"
     },
-    queue: []
+    queue: [],
+    showTheModal: false
 };

@@ -17,7 +17,7 @@ export default {
             "displayedAlerts",
             "fetchBroadcastUrl",
             "localStorageDisplayedAlertsKey",
-            "readyToShow",
+            "showTheModal",
             "sortedAlerts"
         ]),
 
@@ -165,7 +165,7 @@ export default {
 <template>
     <div>
         <Modal
-            :show-modal="readyToShow"
+            :show-modal="showTheModal"
             @modalHid="onModalHid"
         >
             <div

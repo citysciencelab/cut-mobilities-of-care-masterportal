@@ -10,21 +10,21 @@ export default {
     },
 
     /**
-     * Pops the last action.
+     * Removes the oldest confirmAction.
      * @param {object} state state
      * @returns {void}
      */
-    removeLastAction (state) {
-        state.queue.pop();
+    removeOldestAction (state) {
+        state.queue.shift();
     },
 
     /**
-     * Sets the readyToShow flag toggling the modal's visibility.
+     * Sets the showTheModal flag toggling the modal's visibility.
      * @param {object} state state
-     * @param {boolean} readyToShow visibility flag
+     * @param {boolean} showTheModal visibility flag
      * @returns {void}
      */
-    setReadyToShow (state, readyToShow) {
-        state.readyToShow = readyToShow;
+    setReadyToShow (state, showTheModal) {
+        state.showTheModal = showTheModal;
     }
 };

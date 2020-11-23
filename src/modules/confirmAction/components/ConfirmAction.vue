@@ -13,14 +13,10 @@ export default {
 
     computed: {
         ...mapGetters("ConfirmAction", [
-            "queue"
-        ]),
-
-        /**
-         * Console mapping to be able to debug in template.
-         * @returns {Void} With capital V
-         */
-        console: () => console
+            "currentConfirmAction",
+            "queue",
+            "showTheModal"
+        ])
     },
 
     /**
@@ -33,29 +29,20 @@ export default {
                 this.addSingleAction(newAction);
             }
         });
-        
-        Radio.trigger("ConfirmAction", "add", {
-            actionConfirmed: () => {
-                console.log("CONFIRMED");
-            },
-            actionDenied: {
-                console.log("DENIED");
-            },
-            copy: "copy much",
-            headline: "healine1"
-        });
     },
 
     methods: {
         ...mapActions("ConfirmAction", [
-            "actionConfirmed",
-            "actionDenied",
+            "actionConfirmedCallback",
+            "actionDeniedCallback",
+            "actionEscapedCallback",
             "addSingleAction",
+            "cleanup",
             "initialize"
         ]),
 
         /**
-         * When closing the modal, update all alerts' have-been-read states.
+         * When closing the modal, remove the displayed confirmation action.
          * @returns {void}
          */
         onModalHid: function () {
@@ -68,33 +55,37 @@ export default {
 <template>
     <div>
         <Modal
-            :show-modal="readyToShow"
+            :show-modal="showTheModal"
+            :force-click-to-close="currentConfirmAction.forceClickToClose"
             @modalHid="onModalHid"
+            @clickedOnX="actionEscapedCallback"
+            @clickedOutside="actionEscapedCallback"
         >
-            <div id="actionDescriptionContainer">
+            <div id="confirmActionContainer">
                 <h3>
-                    Foo
+                    {{ $t(currentConfirmAction.headline) }}
                 </h3>
-
                 <p
-                    v-if="singleAlert.mustBeConfirmed"
-                    class="confirm"
+                    id="confirmation-copy"
                 >
-                    copy
+                    {{ $t(currentConfirmAction.copy) }}
                 </p>
-            </div>
-            
-            <div id="conformationContainer">
-                <button
-                    @click="actionConfirmed"
-                >
-                    OK
-                </button>
-                <button
-                    @click="actionDenied"
-                >
-                    Abbrechen
-                </button>
+                <div id="confirmation-button-container">
+                    <button
+                        id="modal-button-left"
+                        class="btn btn-lgv-grey"
+                        @click="actionConfirmedCallback"
+                    >
+                        {{ $t(currentConfirmAction.confirmCaption) }}
+                    </button>
+                    <button
+                        id="modal-button-right"
+                        class="btn btn-lgv-grey"
+                        @click="actionDeniedCallback"
+                    >
+                        {{ $t(currentConfirmAction.denyCaption) }}
+                    </button>
+                </div>
             </div>
         </Modal>
     </div>
@@ -103,6 +94,29 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
 
-
-
+    h3 {
+        border:none;
+        color: @secondary_contrast;
+        font-size:14px;
+        font-weight:bold;
+        letter-spacing:initial;
+        line-height:18px;
+        padding:0;
+    }
+    #confirmation-copy {
+        color:#777777;
+        font-size:12px;
+    }
+    #confirmation-button-container {
+        overflow:hidden;
+        margin-top:12px;
+    }
+    #modal-button-left {
+        float:left;
+        margin: 0 12px 0 0;
+    }
+    #modal-button-right {
+        float:right;
+        margin: 0 0 0 12px;
+    }
 </style>

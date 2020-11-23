@@ -1,11 +1,11 @@
 export default {
     /**
-     * Getter for readyToShow.
+     * Getter for showTheModal.
      * @param {object} state state
-     * @returns {boolean} readyToShow
+     * @returns {boolean} showTheModal
      */
-    readyToShow: (state) => {
-        return state.readyToShow;
+    showTheModal: (state) => {
+        return state.showTheModal;
     },
 
     /**
@@ -13,7 +13,10 @@ export default {
      * @param {object} state state
      * @returns {array} oldest ConfirmAction
      */
-    nextConfirmAction: (state) => {
-        return state.queue[state.queue.length - 1];
+    currentConfirmAction: (state) => {
+        if (state.queue.length > 0) {
+            return state.queue[0];
+        }
+        return state.confirmActionProto;
     }
 };
