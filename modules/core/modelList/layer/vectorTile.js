@@ -48,18 +48,29 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                 url: this.get("url")
             };
 
-        if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("resolutions") || this.get("tileSize")) {
+        if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("origins") || this.get("resolutions") || this.get("tileSize")) {
             const extent = this.get("extent") || extentFromProjection(dataEpsg),
                 origin = this.get("origin") || [extent[0], extent[3]], // upper left corner = [minX, maxY]
                 resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
-                tileSize = this.get("tileSize") || 512;
+                tileSize = this.get("tileSize") || 512,
+                origins = this.get("origins");
 
-            params.tileGrid = new TileGrid({
-                extent: extent,
-                origin: origin,
-                resolutions: resolutions,
-                tileSize: tileSize
-            });
+            if (origins) {
+                params.tileGrid = new TileGrid({
+                    extent: extent,
+                    origins: origins,
+                    resolutions: resolutions,
+                    tileSize: tileSize
+                });
+            }
+            else {
+                params.tileGrid = new TileGrid({
+                    extent: extent,
+                    origin: origin,
+                    resolutions: resolutions,
+                    tileSize: tileSize
+                });
+            }
         }
 
         this.setLayerSource(new OpenLayersVectorTileSource(params));

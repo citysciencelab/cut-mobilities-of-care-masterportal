@@ -260,6 +260,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |epsg|nein|String|EPSG-Code des Portals|EPSG-String; wird zum Abgleich benutzt, bei Schiefstand wird jedoch nur eine Warnung ausgegeben. VTL sollten aus Performanzgründen serverseitig passend vorgehalten werden. Ist der Wert "EPSG:3857" und weder "extend", noch "origin", noch "resolutions", noch "tileSize" sind gesetzt, dann wird kein GridSet erzeugt. Der Ol-default wird verwendet.|`"EPSG:3857"`|
 |extent|nein|Number[4]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, wird der Extent des Portal-EPSG verwendet.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
 |origin|nein|Number[2]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, wird die obere linke Ecke des Extents verwendet.|`[-9497963.94293634221, 9997963.94293634221]`|
+|origins|nein|Number[2][]||Wird benötigt um das GridSet des VTC zu definieren. Wird "origins" konfiguriert, so wird der Parameter "origin" ignoriert. Falls "origins" nicht konfiguriert wird, so wird "origin" benutzt|`[[239323.44497139292, 9336416.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9321005.0],[239323.44497139292, 9320646.0],[239323.44497139292, 9320467.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9320109.0],[239323.44497139292, 9320145.0],[239323.44497139292, 9320109.0]]`|
 |resolutions|nein|Number[]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, werden die Resolutions des Portals verwendet.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453, 0.59716428347787265, 0.29858214173893632, 0.14929107086946816]`|
 |tileSize|nein|Number|512|Wird benötigt um die Größe der VTC-Kachel zu definieren.|`256`|
 |id|ja|String||Frei wählbare Layer-ID|`"41"`|
@@ -489,7 +490,7 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
         "imageLinks": ["imageLink", "linkImage", "abc"],
         "showFavoriteIcons": true,
         "gfiIconPath":  "https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png",
-        
+
    }
 }
 ```
