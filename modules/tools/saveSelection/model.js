@@ -117,7 +117,14 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
     },
 
     setLayerList: function (value) {
-        const withoutUrlFeatures = value.filter(v => v.attributes.parentId !== "featureViaURLFolder");
+        const getIds = [];
+        let withoutUrlFeatures = [];
+
+        Config.featureViaURL.layers.forEach(element => {
+            getIds.push(element.id);
+        });
+
+        withoutUrlFeatures = value.filter((v) => !getIds.includes(v.id));
 
         this.set("layerList", withoutUrlFeatures);
     },
