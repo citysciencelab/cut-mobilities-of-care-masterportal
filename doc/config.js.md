@@ -31,6 +31,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |inputMap.targetProjection|nein|String|`EPSG:25832`|Das Zielkoordninatensystem, in dem die Koordinaten des Markers gesendet werden sollen.|`targetprojection: "EPSG:4326"`|
 |mapMarker|nein|**[mapMarker](#markdown-header-mapmarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer fefiniert werden.||
 |metaDataCatalogueId|nein|String|"2"|URL des in den Layerinformationen verlinkten Metadatenkatalogs. Die ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"MetadatenkatalogURL"`|
+|**[metadata](#markdown-header-metadata)**|nein|Object||Darin kann angegeben werden, welche Metdaten-URLs über einen Proxy angefragt werden sollen.||
 |**[mouseHover](#markdown-header-mousehover)**|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in **[config.json](config.json.md)** (*Themenconfig.Fachdaten.Layer*).|`true`|
 |obliqueMap|nein|Boolean|false|Legt fest eine Schrägluftbild Karte erstellt werden soll. Benötigt zusätzlich noch eine Schrägluftbildebene.||
 |portalConf|nein|String|"config.json"|Pfad zur config.json des Portals. Es kann auch ein Knotenpunkt angegeben werden. Der Weiterführende Pfad wird dann über den URL-Parameter "config" gesteuert.|Direkter Pfad: "../masterTree/config.json"; Knotenpunkt: "../../portal/master/". Zusätzlich muss dann in der URL der Parameter "config=config.json" stehen.|
@@ -288,6 +289,26 @@ tree: {
             isFolderSelectable: false
         }
 ```
+
+***
+
+## metadata ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|useProxy|nein|String[]||Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt welche Metadaten-URLs über einen Proxy angefragt werden sollen, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|
+
+**Beispiel:**
+
+```
+#!json
+metadata: {
+    useProxy: [
+        "https://metaver.de/csw"
+    ]
+}
+```
+
+***
 
 ***
 

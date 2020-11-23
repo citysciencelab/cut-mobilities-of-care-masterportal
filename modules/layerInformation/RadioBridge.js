@@ -1,20 +1,18 @@
 import {getRecordById} from "../../src/api/csw/getRecordById.js";
 import getProxyUrl from "../../src/utils/getProxyUrl";
+import store from "../../src/app-store/index";
 
 Radio.channel("CswParser").on({
     "getMetaDataForLayerInformation": async function (cswObj) {
+        let metadata;
+
         cswObj.parsedData = {};
 
-        if (cswObj.cswUrl === null || typeof cswObj.cswUrl === "undefined") {
+        if (cswObj?.cswUrl === null || typeof cswObj?.cswUrl === "undefined") {
             const cswId = Config.cswId || "3",
                 cswService = Radio.request("RestReader", "getServiceById", cswId);
 
-            /**
-             * @deprecated in the next major-release!
-             * useProxy
-             * getProxyUrl()
-             */
-            cswObj.cswUrl = getProxyUrl(cswService.get("url"));
+            cswObj.cswUrl = cswService.get("url");
         }
 
         /**
@@ -22,19 +20,32 @@ Radio.channel("CswParser").on({
          * useProxy
          * getProxyUrl()
          */
-        const metadata = await getRecordById(getProxyUrl(cswObj.cswUrl), cswObj.metaId);
+        if (store?.getters?.metadata?.useProxy?.includes(cswObj?.cswUrl)) {
+            metadata = await getRecordById(getProxyUrl(cswObj.cswUrl), cswObj.metaId);
+        }
+        else {
+            metadata = await getRecordById(cswObj.cswUrl, cswObj.metaId);
+        }
 
-        cswObj.parsedData.title = metadata.getTitle();
-        cswObj.parsedData.abstractText = metadata.getAbstract();
-        cswObj.parsedData.periodicity = metadata.getFrequenzy();
-        cswObj.parsedData.dateRevision = metadata.getRevisionDate();
-        cswObj.parsedData.downloadLinks = metadata.getDownloadLinks();
-        if (typeof metadata.getPublicationDate() !== "undefined") {
-            cswObj.parsedData.datePublication = metadata.getPublicationDate();
+        if (typeof metadata === "undefined") {
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.layerInformation.errorMessage", {cswObjCswUrl: cswObj.cswUrl}));
+            cswObj.parsedData.title = "";
+            cswObj.parsedData.abstractText = i18next.t("common:modules.layerInformation.noMetadataLoaded");
         }
-        else if (typeof metadata.getCreationDate() !== "undefined") {
-            cswObj.parsedData.datePublication = metadata.getCreationDate();
+        else {
+            cswObj.parsedData.title = metadata?.getTitle();
+            cswObj.parsedData.abstractText = metadata?.getAbstract();
+            cswObj.parsedData.periodicity = metadata?.getFrequenzy();
+            cswObj.parsedData.dateRevision = metadata?.getRevisionDate();
+            cswObj.parsedData.downloadLinks = metadata?.getDownloadLinks();
+            if (typeof metadata?.getPublicationDate() !== "undefined") {
+                cswObj.parsedData.datePublication = metadata.getPublicationDate();
+            }
+            else if (typeof metadata?.getCreationDate() !== "undefined") {
+                cswObj.parsedData.datePublication = metadata.getCreationDate();
+            }
         }
-        Radio.trigger("CswParser", "fetchedMetaDataForLayerInformation", cswObj, metadata);
+
+        Radio.trigger("CswParser", "fetchedMetaDataForLayerInformation", cswObj);
     }
 });

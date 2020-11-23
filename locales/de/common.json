@@ -111,7 +111,18 @@
             "noMetadataMessage": "Keine Metadaten vorhanden."
         },
         "layerInformation": {
-            "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
+          "additionalMetadata": "weitere Metadaten",
+          "addressSuffix": "Adresse",
+          "closeButton": "Schließen",
+          "downloadDataset": "Datensatz herunterladen",
+          "errorMessage": "Die Abfrage der Metadaten ist fehlgeschlagen. Falls das Problem weiterhin besteht, wenden Sie sich bitte an den Eigentümer des Dienstes: <b>{{cswObjCswUrl}}</b>",
+          "informationAndLegend": "Informationen und Legend",
+          "lastModified": "Letzte Änderung",
+          "legend": "Legende",
+          "noMetadataLoaded": "Es konnten keine Metadaten geladen werden!",
+          "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
+          "periodicityTitle": "Periodizität",
+          "publicationCreation": "Publikation / Erstellung"
         },
         "mapMarker": {
           "noStyleModel": "Zu der angegebenen StyleId: {{styleId}} konnte keine Style gefunden werden. Bitte überprüfen sie ihre Konfiguration."

@@ -13,6 +13,9 @@ export default {
     // gfiWindow is deprecated in the next major-release
     gfiWindow: state => state?.configJs.gfiWindow,
     ignoredKeys: state => state?.configJs.ignoredKeys || [],
+    // metadata is deprecated in the next major-relase, because it is only used for proxyUrl
+    metadata: state => state?.configJs.metadata || {},
+    // proxyHost is deprecated in the next major-release
     proxyHost: state => state?.configJs?.proxyHost || "",
     // configJSON desctructuring
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
