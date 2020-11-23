@@ -4,29 +4,33 @@ import {mapGetters, mapActions} from "vuex";
 export default {
     name: "Title",
     computed: {
-        ...mapGetters("Title", [
-            "link",
-            "toolTip",
-            "logo",
-            "title"
-        ])
+        ...mapGetters("Title", ["link", "toolTip", "logo", "title"])
     },
-    mounted () {
-        this.$nextTick(() => {
-            this.initialize();
-        });
-        $(this.$el).insertAfter(document.getElementById("root"));
-    },
-    created () {
 
+    created () {
         const myBus = Backbone.Events;
 
         myBus.listenTo(Radio.channel("Title"), {
             "setSize": () => {
                 setTimeout(() => {
-                    this.renderDependingOnSpace();
+                    if (this.title !== "" || this.logo !== "" || this.link !== "" || this.toolTip !== "") {
+                        this.renderDependingOnSpace();
+                    }
                 }, 500);
             }
+        });
+    },
+    mounted () {
+        this.$nextTick(() => {
+            const navBar = document.getElementsByClassName("navbar-collapse")[0],
+                searchBar = document.getElementById("searchbar");
+
+            navBar.insertBefore(this.$el, searchBar);
+            if (this.title !== "" || this.logo !== "" || this.link !== "" || this.toolTip !== "") {
+                this.renderDependingOnSpace();
+            }
+
+            this.initialize();
         });
     },
     methods: {
@@ -85,7 +89,10 @@ export default {
 </script>
 
 <template>
-    <div class="portal-title">
+    <div
+        v-if="title !== '' || logo !== '' || link !== '' || toolTip !== ''"
+        class="portal-title"
+    >
         <a
             :href="link"
             target="_blank"

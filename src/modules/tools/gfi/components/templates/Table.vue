@@ -88,12 +88,11 @@ export default {
                 this.rotateAngle = 0;
             }
 
-            $(".gfi-detached-table").css({
-                "transform": "rotate(" + this.rotateAngle + "deg)",
-                "-webkit-transform-origin": width - 20 + "px " + headerHeight + "px",
-                "-ms-transform-origin": width - 20 + "px " + headerHeight + "px",
-                "-moz-transform-origin": width - 20 + "px " + headerHeight + "px"
-            });
+            this.$el.style.transform = "rotate(" + this.rotateAngle + "deg)";
+            this.$el.style.WebkitTransform = width - 20 + "px " + headerHeight + "px";
+            this.$el.style.msTransform = width - 20 + "px " + headerHeight + "px";
+            this.$el.style.MozTransform = width - 20 + "px " + headerHeight + "px";
+
         },
         move: function (evt) {
             const touch = evt.touches[0],

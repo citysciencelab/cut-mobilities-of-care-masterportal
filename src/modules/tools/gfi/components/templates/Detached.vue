@@ -95,11 +95,11 @@ export default {
             $(".gfi-detached").draggable({
                 containment: "#map",
                 handle: ".gfi-header",
-                drag: function () {
-                    $(".gfi-detached").css("right", "inherit");
+                drag: function (evt, ui) {
+                    ui.helper[0].style.right = "inherit";
                 },
                 stop: function (evt, ui) {
-                    $(".gfi-detached").css("left", (ui.position.left + 1) + "px");
+                    ui.helper[0].style.left = (ui.position.left + 1) + "px";
                 }
             });
         });

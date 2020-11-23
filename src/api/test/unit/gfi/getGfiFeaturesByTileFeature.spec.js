@@ -6,9 +6,9 @@ import {
     getGfiFeatureByCesiumEntity,
     getGfiFeatureByOlFeature,
     getGfiFeaturesByOlFeature
-} from "../../../store/actions/getGfiFeaturesByTileFeature.js";
+} from "../../../gfi/getGfiFeaturesByTileFeature.js";
 
-describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
+describe("src/api/gfi/getGfiFeaturesByTileFeature.js", () => {
     describe("getGfiFeature", () => {
         it("should use default values for layer attributes - but not for properties", () => {
             const expected = [
