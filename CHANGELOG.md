@@ -6,6 +6,7 @@
 
 ## Unreleased - in development
 ### Added
+- Neues Modul "Confirm Action" für Vue hinzugefügt.
 - RemoteInterface wurde für Vue hinzugefügt.
 - Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
