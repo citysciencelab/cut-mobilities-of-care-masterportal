@@ -28,7 +28,6 @@ export default {
     watch: {
         // Mapping prop to data
         showModal: function (newShowing) {
-            console.log("SHOW MODAL:", newShowing);
             if (newShowing !== this.showing) {
                 this.showing = newShowing;
             }
@@ -36,8 +35,6 @@ export default {
 
         // Trigger modalHid to parent component
         showing: function (newShowing) {
-            console.log("SHOWING:", newShowing);
-            
             if (!newShowing) {
                 this.$emit("modalHid");
             }
@@ -57,12 +54,12 @@ export default {
             if (this.forceClickToClose) {
                 return;
             }
-            
+
             // Ignore bubbled events
             if (event.target !== this.$el.querySelector("#modal-1-outer-wrapper")) {
                 return;
             }
-            
+
             this.$emit("clickedOutside");
             this.showing = false;
         }
