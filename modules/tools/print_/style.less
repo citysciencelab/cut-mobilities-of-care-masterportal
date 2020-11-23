@@ -4,4 +4,28 @@
         margin-top: 2px;
         margin-left: 0;
 	}
+    .form-group {
+        &.scale{
+            position: relative;
+            .hint {
+                position: absolute;
+                width: 20px;
+                right: -5px;
+                top: 7px;
+                cursor: pointer;
+                text-align: center;
+            }
+            .hint-info {
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 25px;
+                width: 100%;
+                z-index: 10;
+                background: #fff;
+                border: 1px solid #555;
+                padding: 5px;
+            }
+        }
+    }
 }

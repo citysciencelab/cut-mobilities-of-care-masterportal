@@ -2,6 +2,7 @@
 import * as moment from "moment";
 import axios from "axios";
 
+import getComponent from "../../../../../../../utils/getComponent";
 import SensorChartsData from "./SensorData.vue";
 import SensorChartsBarChart from "./SensorBarChart.vue";
 import {processHistoricalDataByWeekdays} from "../library/processHistoricalDataByWeekdays";
@@ -91,14 +92,14 @@ export default {
          * @returns {void}
          */
         loadHistoricalData: function () {
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.feature.getLayerId()});
+            const model = getComponent(this.feature.getLayerId());
 
             if (model) {
                 const url = model.get("url"),
                     version = model.get("version"),
                     filterDate = this.createFilterDate(this.periodLength, this.periodUnit),
                     filterDataStream = this.createFilterDataStream(this.feature.getProperties()?.dataStreamId),
-                    requestQuery = `${url}v${version}/Datastreams?$select=@iot.id&$expand=Observations`
+                    requestQuery = `${url}/v${version}/Datastreams?$select=@iot.id&$expand=Observations`
                         + `($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt ${filterDate})`
                         + `&$filter=${filterDataStream}`;
 

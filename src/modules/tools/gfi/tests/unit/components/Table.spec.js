@@ -2,6 +2,7 @@ import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import Table from "../../../components/templates/Table.vue";
+import sinon from "sinon";
 
 const localVue = createLocalVue();
 
@@ -20,6 +21,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
             computed: {
                 clickCoord: () => []
             },
+            store: new Vuex.Store({
+                namespaced: true,
+                modules: {
+                    MapMarker: {
+                        namespaced: true,
+                        actions: {
+                            removePointMarker: sinon.stub(),
+                            placingPointMarker: sinon.stub()
+                        }
+                    }
+                }
+            }),
             localVue
         });
 
@@ -37,6 +50,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
             computed: {
                 clickCoord: () => []
             },
+            store: new Vuex.Store({
+                namespaced: true,
+                modules: {
+                    MapMarker: {
+                        namespaced: true,
+                        actions: {
+                            removePointMarker: sinon.stub(),
+                            placingPointMarker: sinon.stub()
+                        }
+                    }
+                }
+            }),
             localVue
         });
 
@@ -54,6 +79,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
             computed: {
                 clickCoord: () => []
             },
+            store: new Vuex.Store({
+                namespaced: true,
+                modules: {
+                    MapMarker: {
+                        namespaced: true,
+                        actions: {
+                            removePointMarker: sinon.stub(),
+                            placingPointMarker: sinon.stub()
+                        }
+                    }
+                }
+            }),
             localVue
         });
 
@@ -71,6 +108,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 computed: {
                     clickCoord: () => []
                 },
+                store: new Vuex.Store({
+                    namespaced: true,
+                    modules: {
+                        MapMarker: {
+                            namespaced: true,
+                            actions: {
+                                removePointMarker: sinon.stub(),
+                                placingPointMarker: sinon.stub()
+                            }
+                        }
+                    }
+                }),
                 localVue
             }),
             button = wrapper.find("span.glyphicon-remove");
@@ -91,6 +140,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 computed: {
                     clickCoord: () => []
                 },
+                store: new Vuex.Store({
+                    namespaced: true,
+                    modules: {
+                        MapMarker: {
+                            namespaced: true,
+                            actions: {
+                                removePointMarker: sinon.stub(),
+                                placingPointMarker: sinon.stub()
+                            }
+                        }
+                    }
+                }),
                 localVue
             }),
             modal = wrapper.find(".gfi-content");
@@ -111,6 +172,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 computed: {
                     clickCoord: () => []
                 },
+                store: new Vuex.Store({
+                    namespaced: true,
+                    modules: {
+                        MapMarker: {
+                            namespaced: true,
+                            actions: {
+                                removePointMarker: sinon.stub(),
+                                placingPointMarker: sinon.stub()
+                            }
+                        }
+                    }
+                }),
                 localVue
             }),
             button = wrapper.find("span.icon-turnarticle");
@@ -130,6 +203,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 computed: {
                     clickCoord: () => []
                 },
+                store: new Vuex.Store({
+                    namespaced: true,
+                    modules: {
+                        MapMarker: {
+                            namespaced: true,
+                            actions: {
+                                removePointMarker: sinon.stub(),
+                                placingPointMarker: sinon.stub()
+                            }
+                        }
+                    }
+                }),
                 localVue
             }),
             button = wrapper.find("span.icon-turnarticle");
@@ -155,6 +240,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 computed: {
                     clickCoord: () => []
                 },
+                store: new Vuex.Store({
+                    namespaced: true,
+                    modules: {
+                        MapMarker: {
+                            namespaced: true,
+                            actions: {
+                                removePointMarker: sinon.stub(),
+                                placingPointMarker: sinon.stub()
+                            }
+                        }
+                    }
+                }),
                 localVue
             }),
             footer = wrapper.find(".gfi-footer");

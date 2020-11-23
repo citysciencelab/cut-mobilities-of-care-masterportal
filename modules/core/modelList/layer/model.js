@@ -1,4 +1,5 @@
 import Item from ".././item";
+import store from "../../../../src/app-store";
 
 const Layer = Item.extend(/** @lends Layer.prototype */{
     defaults: {
@@ -582,9 +583,17 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      */
     showLayerInformation: function () {
+        let cswUrl = null,
+            showDocUrl = null,
+            layerMetaId = null;
+
+        if (this.get("datasets") && Array.isArray(this.get("datasets")) && this.get("datasets")[0] !== null && typeof this.get("datasets")[0] === "object") {
+            cswUrl = this.get("datasets")[0].hasOwnProperty("csw_url") ? this.get("datasets")[0].csw_url : null;
+            showDocUrl = this.get("datasets")[0].hasOwnProperty("show_doc_url") ? this.get("datasets")[0].show_doc_url : null;
+            layerMetaId = this.get("datasets")[0].hasOwnProperty("md_id") ? this.get("datasets")[0].md_id : null;
+        }
         const metaID = [],
-            name = this.get("name"),
-            layerMetaId = this.get("datasets") && this.get("datasets")[0] ? this.get("datasets")[0].md_id : null;
+            name = this.get("name");
 
         metaID.push(layerMetaId);
 
@@ -594,9 +603,14 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             "layername": name,
             "url": this.get("url"),
             "typ": this.get("typ"),
+            "cswUrl": cswUrl,
+            "showDocUrl": showDocUrl,
             "urlIsVisible": this.get("urlIsVisible")
         });
 
+        if (this.createLegend && {}.toString.call(this.createLegend) === "[object Function]") {
+            this.createLegend();
+        }
         this.setLayerInfoChecked(true);
     },
 
@@ -751,12 +765,13 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
     },
 
     /**
-     * Setter for legend
+     * Setter for legend, commits the legend to vue store using "Legend/setLegendOnChanged"
      * @param {String} value legend
      * @returns {void}
      */
     setLegend: function (value) {
         this.set("legend", value);
+        store.dispatch("Legend/setLegendOnChanged", value);
     },
 
     /**

@@ -1,7 +1,7 @@
 import stateMap from "./stateMap";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
-import {createGfiFeature} from "./actions/getWmsFeaturesByMimeType.js";
-import {getGfiFeaturesByTileFeature} from "./actions/getGfiFeaturesByTileFeature.js";
+import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
+import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTileFeature";
 
 const gettersMap = {
     ...generateSimpleGetters(stateMap),

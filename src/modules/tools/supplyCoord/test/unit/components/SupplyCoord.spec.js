@@ -51,7 +51,7 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
 
     beforeEach(() => {
         store = new Vuex.Store({
-            namespaces: true,
+            namespaced: true,
             modules: {
                 Tools: {
                     namespaced: true,

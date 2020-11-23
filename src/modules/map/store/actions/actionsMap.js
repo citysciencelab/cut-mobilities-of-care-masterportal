@@ -1,6 +1,6 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
-import {getWmsFeaturesByMimeType} from "./getWmsFeaturesByMimeType";
+import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import {MapMode} from "../enums";
 
 let unsubscribes = [],
@@ -135,7 +135,7 @@ const actions = {
 
         if (rootGetters["Tools/Gfi/active"]) {
             commit("setGfiFeatures", null);
-            Radio.trigger("MapMarker", "hidePolygon");
+            dispatch("MapMarker/removePolygonMarker", null, {root: true});
             dispatch("collectGfiFeatures");
         }
     },
@@ -241,15 +241,14 @@ const actions = {
      * @param {Object} actionParams first action parameter
      * @returns {void}
      */
-    resetView ({state}) {
+    resetView ({state, dispatch}) {
         const {initialCenter, initialResolution, map} = state,
             view = map.getView();
 
         view.setCenter(initialCenter);
         view.setResolution(initialResolution);
 
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "hideMarker");
+        dispatch("MapMarker/removePointMarker", null, {root: true});
     },
     /**
      * Sets the resolution by the given index of available resolutions.
