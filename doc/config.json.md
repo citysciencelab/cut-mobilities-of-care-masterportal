@@ -2388,7 +2388,7 @@ Hier werden WMS typische Attribute aufgelistet.
 |featureCount|nein|Integer|1|Anzahl der Features, die bei einer GetFeatureInfo-Abfrage zurückgegeben werden sollen.|false|
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
-|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html|false|
+|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt. |false|
 |gfiAsNewWindow|nein|Object|null|Wird nur berücksichtigt wenn infoFormat text/html ist. Beachten Sie **[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)** für mehr Informationen.|true|
 |styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
 
