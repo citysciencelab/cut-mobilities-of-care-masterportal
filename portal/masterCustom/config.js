@@ -1,4 +1,5 @@
 const Config = {
+    addons: ["schulinfo"],
     clickCounter: {},
     footer: {
         urls: [
