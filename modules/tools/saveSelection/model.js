@@ -120,10 +120,11 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
         const getIds = [];
         let withoutUrlFeatures = [];
 
-        Config.featureViaURL.layers.forEach(element => {
-            getIds.push(element.id);
-        });
-
+        if (Config.featureViaURL !== undefined) {
+            Config.featureViaURL.layers.forEach(element => {
+                getIds.push(element.id);
+            });
+        }
         withoutUrlFeatures = value.filter((v) => !getIds.includes(v.id));
 
         this.set("layerList", withoutUrlFeatures);
