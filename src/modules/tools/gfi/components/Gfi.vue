@@ -152,8 +152,8 @@ export default {
                 return;
             }
 
-            if (Array.isArray(feature.getProperties())) {
-                feature.getProperties().forEach(singleFeature => {
+            if (Array.isArray(feature.getFeatures())) {
+                feature.getFeatures().forEach(singleFeature => {
                     this.createMappedProperties(singleFeature);
                 });
                 return;

@@ -83,7 +83,7 @@ export default {
         }
     },
     created: function () {
-        if (this.feature.getGfiUrl()?.mimeType === "text/html") {
+        if (this.feature.getMimeType() === "text/html") {
             this.isContentHtml = true;
         }
         this.$on("hidemarker", () => {

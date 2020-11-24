@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {createGfiFeature, openFeaturesInNewWindow} from "../../../store/actions/getWmsFeaturesByMimeType.js";
+import {createGfiFeature, openFeaturesInNewWindow, getXmlFeatures, handleXmlResponse, getHtmlFeature, handleHTMLResponse, getWmsFeaturesByMimeType} from "../../../store/actions/getWmsFeaturesByMimeType.js";
 
 describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
     const url = "url";
@@ -105,80 +105,119 @@ describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
             expect(result).to.be.true;
             expect(lastUrl).to.equal("http:url");
         });
-        // it("should call the openWindow function with the params from gfiAsNewWindow", () => {
-        //     let lastUrl = "",
-        //         lastName = "",
-        //         lastSpecs = "";
-        //     const result = openFeaturesInNewWindow("url", {
-        //         name: "name",
-        //         specs: "specs"
-        //     }, (url, name, specs) => {
-        //         lastUrl = url;
-        //         lastName = name;
-        //         lastSpecs = specs;
-        //     });
+        it("should call the openWindow function with the params from gfiAsNewWindow", () => {
+            let lastUrl = "",
+                lastName = "",
+                lastSpecs = "";
+            const result = openFeaturesInNewWindow("url", {
+                name: "name",
+                specs: "specs"
+            }, (anUrl, name, specs) => {
+                lastUrl = anUrl;
+                lastName = name;
+                lastSpecs = specs;
+            });
 
-        //     expect(result).to.be.true;
-        //     expect(lastUrl).to.equal("url");
-        //     expect(lastName).to.equal("name");
-        //     expect(lastSpecs).to.equal("specs");
-        // });
+            expect(result).to.be.true;
+            expect(lastUrl).to.equal("url");
+            expect(lastName).to.equal("name");
+            expect(lastSpecs).to.equal("specs");
+        });
     });
 
-    // describe("getXmlFeatures", () => {
-    //     it("should call requestGfi and return a wms feature with the received properties", async () => {
-    //     const result = await getXmlFeatures(layer, url);
+    describe("getXmlFeatures", () => {
+        it("should call requestGfi and return an empty array, because url is no String", async () => {
+            const result = await getXmlFeatures(layer, {url});
 
-    //     expect(result).to.be.an("array").to.have.lengthOf(1);
-    //     expect(result[0]).to.be.an("object");
+            expect(result).to.be.an("array").to.have.lengthOf(0);
+        });
 
-    //     expect(result[0].getGfiUrl).to.be.a("function");
-    //     expect(result[0].getTitle).to.be.a("function");
-    //     expect(result[0].getTheme).to.be.a("function");
-    //     expect(result[0].getAttributesToShow).to.be.a("function");
-    //     expect(result[0].getProperties).to.be.a("function");
+        describe("handleXmlResponse", () => {
+            it("should return a wms feature with the received properties", async () => {
+                const result = await handleXmlResponse([aFeature], layer, url);
 
-    //     expect(result[0].getGfiUrl()).to.equal("url");
-    //     expect(result[0].getTitle()).to.equal("layerName");
-    //     expect(result[0].getTheme()).to.equal("gfiTheme");
-    //     expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
-    //     expect(result[0].getProperties()).to.equal("featureProperties");
-    // });
-    // });
+                expect(result).to.be.an("array").to.have.lengthOf(1);
+                expect(result[0]).to.be.an("object");
 
-    // describe("getHtmlFeature", () => {
-    //     it("should call requestGfi with mimeType text/html and the given url", async () => {
-    //         let lastMimeType = "",
-    //             lastUrl = "";
+                expect(result[0].getGfiUrl).to.be.a("function");
+                expect(result[0].getTitle).to.be.a("function");
+                expect(result[0].getTheme).to.be.a("function");
+                expect(result[0].getAttributesToShow).to.be.a("function");
+                expect(result[0].getProperties).to.be.a("function");
 
-    //         await getHtmlFeature(layer, url);
+                expect(result[0].getGfiUrl()).to.equal("url");
+                expect(result[0].getTitle()).to.equal("layerName");
+                expect(result[0].getTheme()).to.equal("gfiTheme");
+                expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
+                expect(result[0].getProperties()).to.equal("featureProperties");
+            });
+            it("should return an empty array if called with undefined", async () => {
+                let result = await handleXmlResponse([undefined], layer, url);
 
-    //         expect(lastMimeType).to.equal("text/html");
-    //         expect(lastUrl).to.equal("url");
-    //     });
-    // });
+                expect(result).to.be.an("array").to.have.lengthOf(0);
+                result = await handleXmlResponse([aFeature], undefined, url);
+                expect(result).to.be.an("array").to.have.lengthOf(1);
+                expect(result[0]).to.be.an("object");
+                expect(result[0].getProperties).to.be.undefined;
+            });
+        });
 
-    // describe("getWmsFeaturesByMimeType", () => {
-    //     it("should call openWindow before anything else if http: url is given", async () => {
-    //         let calledOpenWindow = false;
-    //         const result = await getWmsFeaturesByMimeType(layer, url);
+        describe("getHtmlFeature", () => {
+            it("should call requestGfi and return an empty array, because url is no String", async () => {
+                const result = await getHtmlFeature(layer, {url});
 
-    //         expect(calledOpenWindow).to.be.true;
-    //         expect(result).to.be.an("array").to.be.empty;
-    //     });
-    //     it("should call requestGfi if mimeType text/xml is given", async () => {
-    //         const result = await getWmsFeaturesByMimeType(layer, url);
+                expect(result).to.be.an("array").to.have.lengthOf(0);
+            });
 
-    //         expect(result).to.be.an("array").to.have.lengthOf(1);
-    //         expect(result[0]).to.be.an("object");
-    //         expect(result[0].getProperties).to.be.a("function");
-    //         expect(result[0].getProperties()).to.equal("featureProperties");
-    //     });
-    //     it("should call requestGfi if mimeType text/html is given", async () => {
-    //         layer.infoFormat = "text/html";
-    //         const result = await getWmsFeaturesByMimeType(layer, url);
+        });
+        describe("handleHTMLResponse", () => {
+            it("handles response with mimeType text/html, empty body and the given url", async () => {
+                const documentMock = {
+                        getElementsByTagName: () => []
+                    },
+                    result = handleHTMLResponse(documentMock, layer, url);
 
-    //         expect(result).to.be.empty;
-    //     });
-    // });
+                expect(result.length).to.equal(0);
+            });
+            it("handles response with mimeType text/html, filled body and the given url", async () => {
+                const documentMock = {
+                        getElementsByTagName: () => [
+                            {
+                                children: ["child1", "child2"]
+                            }
+                        ]
+                    },
+                    result = handleHTMLResponse(documentMock, layer, url);
+
+                expect(result).to.be.an("array").to.have.lengthOf(1);
+                expect(result[0]).to.be.an("object");
+                expect(result[0].getGfiUrl()).to.equal("url");
+                expect(result[0].getTitle()).to.equal("layerName");
+                expect(result[0].getTheme()).to.equal("gfiTheme");
+                expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
+                expect(result[0].getProperties()).to.deep.equal({});
+            });
+        });
+    });
+
+
+    describe("getWmsFeaturesByMimeType", () => {
+        it("should call openWindow before anything else if http: url is given", async () => {
+            layer.gfiAsNewWindow = () => true;
+            const result = await getWmsFeaturesByMimeType(layer, url);
+
+            expect(result).to.be.an("array").to.be.empty;
+        });
+        it("should call requestGfi if mimeType text/xml is given", async () => {
+            const result = await getWmsFeaturesByMimeType(layer, url);
+
+            expect(result).to.be.empty;
+        });
+        it("should call requestGfi if mimeType text/html is given", async () => {
+            layer.infoFormat = "text/html";
+            const result = await getWmsFeaturesByMimeType(layer, url);
+
+            expect(result).to.be.empty;
+        });
+    });
 });

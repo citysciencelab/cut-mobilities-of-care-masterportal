@@ -70,10 +70,9 @@ function isCesiumEntity (entity) {
  * @param {(Object|String)} [layerAttributes.gfiAttributes] an object of attributes to show or a string "showAll" or "ignore"
  * @param {Object} properties an object with a key "attributes" or the data of the feature as simple key/value pairs
  * @param {Object} [properties.attributes] if set, the data of the feature as simple key/value pairs
- * @param {Function} [createGfiFeatureOpt=null] a function to create the gfiFeature with (instead of imported createGfiFeature; for testing only)
  * @returns {Object}  an object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl}
  */
-export function getGfiFeature (layerAttributes, properties, createGfiFeatureOpt = null) {
+export function getGfiFeature (layerAttributes, properties) {
     const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "Buildings",
         gfiTheme = layerAttributes && layerAttributes.gfiTheme ? layerAttributes.gfiTheme : "buildings_3d",
         attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes : {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
@@ -99,11 +98,7 @@ export function getGfiFeature (layerAttributes, properties, createGfiFeatureOpt 
             }
         };
 
-    if (typeof createGfiFeatureOpt === "function") {
-        return createGfiFeatureOpt(layer.get("name"), layer.get("gfiTheme"), layer.get("gfiAttributes"), feature.getProperties());
-    }
-
-    return createGfiFeature(layer, feature);
+    return createGfiFeature(layer, "", feature);
 }
 
 /**

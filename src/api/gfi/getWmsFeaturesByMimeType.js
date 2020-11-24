@@ -85,23 +85,34 @@ export function getXmlFeatures (layer, url) {
         return [];
     }
     return requestGfi("text/xml", url).then(featureInfos => {
-        let result = [];
-
-        if (Array.isArray(featureInfos)) {
-            featureInfos.forEach(function (feature) {
-                if (typeof feature === "object" && feature !== null && typeof feature.getProperties === "function") {
-                    result.push(createGfiFeature(layer, url, feature));
-                }
-            });
-        }
-
-        // Create a merged feature because some themes might display multiple features at once
-        if (result.length > 0 && ["DataTable"].indexOf(layer.get("gfiTheme")) !== -1) {
-            result = [createGfiFeature(layer, url, result)];
-        }
-
-        return result;
+        return handleXmlResponse(featureInfos, layer, url);
     });
+}
+/**
+ * returns a list of objects representing the features called by url
+ * @param {Object} featureInfos response from requestGFI
+ * @param {Object} layer to show the properties of
+ * @param {String} [layer.gfiTheme] the title of the theme - it does not check if the theme exists
+ * @param {String} url the url to call the wms features from
+ * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
+ */
+export function handleXmlResponse (featureInfos, layer, url) {
+    let result = [];
+
+    if (Array.isArray(featureInfos)) {
+        featureInfos.forEach(function (feature) {
+            if (typeof feature === "object" && feature !== null && typeof feature.getProperties === "function") {
+                result.push(createGfiFeature(layer, url, feature));
+            }
+        });
+    }
+
+    // Create a merged feature because some themes might display multiple features at once
+    if (result.length > 0 && layer && ["DataTable"].indexOf(layer.get("gfiTheme")) !== -1) {
+        result = [createGfiFeature(layer, url, null, result)];
+    }
+
+    return result;
 }
 
 /**
@@ -118,11 +129,22 @@ export function getHtmlFeature (layer, url) {
         return [];
     }
     return requestGfi("text/html", url).then(document => {
-        if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0]?.children.length >= 1) {
-            return [createGfiFeature(layer, url)];
-        }
-        return [];
+        return handleHTMLResponse(document, layer, url);
     });
+}
+
+/**
+ * returns a list of objects representing the features called by url
+ * @param {Object} document response from requestGFI, mimeType is "text/html"
+ * @param {Object} layer to show the properties of
+ * @param {String} url the url to call the wms features from
+ * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
+ */
+export function handleHTMLResponse (document, layer, url) {
+    if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0]?.children.length >= 1) {
+        return [createGfiFeature(layer, url)];
+    }
+    return [];
 }
 
 /**
@@ -137,9 +159,10 @@ export function getHtmlFeature (layer, url) {
  * @param {String|Object} [feature] the feature to get the id and the properties from
  * @param {?Object} [feature.properties] an object with the data of the feature as simple key/value pairs
  * @param {String} [feature.id=""] id the id of the feature
+ * @param {Object[]} features a list of features
  * @returns {Object} an object{getTitle, getTheme, getAttributesToShow, getProperties, getGfiFormat, getId, getGfiUrl, getLayerId}
  */
-export function createGfiFeature (layer, url = "", feature) {
+export function createGfiFeature (layer, url = "", feature, features = null) {
     if (!layer) {
         return {};
     }
@@ -148,11 +171,13 @@ export function createGfiFeature (layer, url = "", feature) {
         getTheme: () => layer.get("gfiTheme") || "default",
         getAttributesToShow: () => layer.get("gfiAttributes"),
         getProperties: () => feature ? feature.getProperties() : {},
+        getFeatures: () => features,
         getGfiFormat: () => layer.get("gfiFormat") ? layer.get("gfiFormat") : null,
         getId: () => feature ? feature.getId() : "",
-        getGfiUrl: () => url ? url : "",
+        getGfiUrl: () => url,
+        getMimeType: () => layer.get("infoFormat"),
         getLayerId: () => layer.get("id") ? layer.get("id") : ""
     };
 }
 
-export default {getWmsFeaturesByMimeType, openFeaturesInNewWindow, getXmlFeatures, createGfiFeature};
+export default {getWmsFeaturesByMimeType, openFeaturesInNewWindow, getXmlFeatures, createGfiFeature, handleXmlResponse, handleHTMLResponse};
