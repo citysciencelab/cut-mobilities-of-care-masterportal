@@ -73,6 +73,32 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
                 Radio.trigger("Map", "addOverlay", this.get("overlay"));
             }
         }, this);
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.setAdditionalMetadata(i18next.t("common:modules.layerInformation.additionalMetadata"));
+        this.setAddressSuffix(i18next.t("common:modules.layerInformation.addressSuffix"));
+        this.setCloseButton(i18next.t("common:modules.layerInformation.closeButton"));
+        this.setDownloadDataset(i18next.t("common:modules.layerInformation.downloadDataset"));
+        this.setInformationAndLegend(i18next.t("common:modules.layerInformation.informationAndLegend"));
+        this.setLastModified(i18next.t("common:modules.layerInformation.lastModified"));
+        this.setLegend(i18next.t("common:modules.layerInformation.legend"));
+        this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetaDataMessage"));
+        this.setNoMetadataLoaded(i18next.t("common:modules.layerInformation.noMetadataLoaded"));
+        this.setPeriodicityTitle(i18next.t("common:modules.layerInformation.periodicityTitle"));
+        this.setPublicationCreation(i18next.t("common:modules.layerInformation.publicationCreation"));
+        this.set("currentLng", lng);
     },
 
     /**

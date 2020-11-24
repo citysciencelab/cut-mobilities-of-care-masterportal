@@ -265,7 +265,8 @@
           "einwohnerabfrage": {
             "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
-            "onlyDesktop": false
+            "onlyDesktop": false,
+            "useProxy": true
           },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
