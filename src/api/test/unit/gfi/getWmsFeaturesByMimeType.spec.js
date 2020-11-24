@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {createGfiFeature, openFeaturesInNewWindow, getXmlFeatures, handleXmlResponse, getHtmlFeature, handleHTMLResponse, getWmsFeaturesByMimeType} from "../../../gfi/getWmsFeaturesByMimeType.js";
 
-describe("src/modules/map/store/actions/getWmsFeaturesByMimeType.js", () => {
+describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
     const url = "url";
     let layer = null,
         aFeature = null;
