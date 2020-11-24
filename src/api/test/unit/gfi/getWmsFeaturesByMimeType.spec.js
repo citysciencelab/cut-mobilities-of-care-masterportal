@@ -131,76 +131,72 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
 
             expect(result).to.be.an("array").to.have.lengthOf(0);
         });
+    });
+    describe("handleXmlResponse", () => {
+        it("should return a wms feature with the received properties", async () => {
+            const result = await handleXmlResponse([aFeature], layer, url);
 
-        describe("handleXmlResponse", () => {
-            it("should return a wms feature with the received properties", async () => {
-                const result = await handleXmlResponse([aFeature], layer, url);
+            expect(result).to.be.an("array").to.have.lengthOf(1);
+            expect(result[0]).to.be.an("object");
 
-                expect(result).to.be.an("array").to.have.lengthOf(1);
-                expect(result[0]).to.be.an("object");
+            expect(result[0].getGfiUrl).to.be.a("function");
+            expect(result[0].getTitle).to.be.a("function");
+            expect(result[0].getTheme).to.be.a("function");
+            expect(result[0].getAttributesToShow).to.be.a("function");
+            expect(result[0].getProperties).to.be.a("function");
 
-                expect(result[0].getGfiUrl).to.be.a("function");
-                expect(result[0].getTitle).to.be.a("function");
-                expect(result[0].getTheme).to.be.a("function");
-                expect(result[0].getAttributesToShow).to.be.a("function");
-                expect(result[0].getProperties).to.be.a("function");
-
-                expect(result[0].getGfiUrl()).to.equal("url");
-                expect(result[0].getTitle()).to.equal("layerName");
-                expect(result[0].getTheme()).to.equal("gfiTheme");
-                expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
-                expect(result[0].getProperties()).to.equal("featureProperties");
-            });
-            it("should return an empty array if called with undefined", async () => {
-                let result = await handleXmlResponse([undefined], layer, url);
-
-                expect(result).to.be.an("array").to.have.lengthOf(0);
-                result = await handleXmlResponse([aFeature], undefined, url);
-                expect(result).to.be.an("array").to.have.lengthOf(1);
-                expect(result[0]).to.be.an("object");
-                expect(result[0].getProperties).to.be.undefined;
-            });
+            expect(result[0].getGfiUrl()).to.equal("url");
+            expect(result[0].getTitle()).to.equal("layerName");
+            expect(result[0].getTheme()).to.equal("gfiTheme");
+            expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
+            expect(result[0].getProperties()).to.equal("featureProperties");
         });
+        it("should return an empty array if called with undefined", async () => {
+            let result = await handleXmlResponse([undefined], layer, url);
 
-        describe("getHtmlFeature", () => {
-            it("should call requestGfi and return an empty array, because url is no String", async () => {
-                const result = await getHtmlFeature(layer, {url});
-
-                expect(result).to.be.an("array").to.have.lengthOf(0);
-            });
-
-        });
-        describe("handleHTMLResponse", () => {
-            it("handles response with mimeType text/html, empty body and the given url", async () => {
-                const documentMock = {
-                        getElementsByTagName: () => []
-                    },
-                    result = handleHTMLResponse(documentMock, layer, url);
-
-                expect(result.length).to.equal(0);
-            });
-            it("handles response with mimeType text/html, filled body and the given url", async () => {
-                const documentMock = {
-                        getElementsByTagName: () => [
-                            {
-                                children: ["child1", "child2"]
-                            }
-                        ]
-                    },
-                    result = handleHTMLResponse(documentMock, layer, url);
-
-                expect(result).to.be.an("array").to.have.lengthOf(1);
-                expect(result[0]).to.be.an("object");
-                expect(result[0].getGfiUrl()).to.equal("url");
-                expect(result[0].getTitle()).to.equal("layerName");
-                expect(result[0].getTheme()).to.equal("gfiTheme");
-                expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
-                expect(result[0].getProperties()).to.deep.equal({});
-            });
+            expect(result).to.be.an("array").to.have.lengthOf(0);
+            result = await handleXmlResponse([aFeature], undefined, url);
+            expect(result).to.be.an("array").to.have.lengthOf(1);
+            expect(result[0]).to.be.an("object");
+            expect(result[0].getProperties).to.be.undefined;
         });
     });
+    describe("getHtmlFeature", () => {
+        it("should call requestGfi and return an empty array, because url is no String", async () => {
+            const result = await getHtmlFeature(layer, {url});
 
+            expect(result).to.be.an("array").to.have.lengthOf(0);
+        });
 
+    });
+    describe("handleHTMLResponse", () => {
+        it("handles response with mimeType text/html, empty body and the given url", async () => {
+            const documentMock = {
+                    getElementsByTagName: () => []
+                },
+                result = handleHTMLResponse(documentMock, layer, url);
+
+            expect(result.length).to.equal(0);
+        });
+        it("handles response with mimeType text/html, filled body and the given url", async () => {
+            const documentMock = {
+                    getElementsByTagName: () => [
+                        {
+                            children: ["child1", "child2"]
+                        }
+                    ]
+                },
+                result = handleHTMLResponse(documentMock, layer, url);
+
+            expect(result).to.be.an("array").to.have.lengthOf(1);
+            expect(result[0]).to.be.an("object");
+            expect(result[0].getGfiUrl()).to.equal("url");
+            expect(result[0].getTitle()).to.equal("layerName");
+            expect(result[0].getTheme()).to.equal("gfiTheme");
+            expect(result[0].getAttributesToShow()).to.equal("attributesToShow");
+            expect(result[0].getProperties()).to.deep.equal({});
+        });
+    });
     describe("getWmsFeaturesByMimeType", () => {
         it("should call openWindow before anything else if http: url is given", async () => {
             layer.gfiAsNewWindow = () => true;
