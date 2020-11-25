@@ -1603,18 +1603,14 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|earthRadius|nein|Number|6378137|Erdradius in Meters.|false|
-|falseEasting|nein|Number|500000|FalseEasting der Projektion.|false|
-|scaleFactor|nein|Number|0.9996|Verzerrungsfaktor.|false|
+|earthRadius|nein|Number|6378137|Erdradius in Meter.|false|
 
 **Beispiel**
 ```
 #!json
 "measure": {
     "name": "translate#common:menu.tools.measure",
-    "earthRadius": 6378137,
-    "falseEasting": 500000,
-    "scaleFactor": 0.9996
+    "earthRadius": 6378137
 },
 ```
 
