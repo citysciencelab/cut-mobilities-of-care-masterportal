@@ -43,6 +43,7 @@ import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
+import hidePreLoadContainers from "../src/utils/hidePreLoadContainers";
 
 /**
  * WFSFeatureFilterView
@@ -414,7 +415,7 @@ async function loadApp () {
         });
     }
 
-    Radio.trigger("Util", "hidePreLoadContainers");
+    hidePreLoadContainers();
     Radio.trigger("Util", "hideLoader");
 }
 

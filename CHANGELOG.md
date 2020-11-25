@@ -36,6 +36,8 @@
 - Die Version des Packages https-proxy-agent wurde in der package.json aktualisiert.
 - Die Version des Packages zip-a-folder wurde in der package.json aktualisiert.
 - Das Package moment-timezone-data-webpack-plugin wurde entfernt.
+- In der index.html ist unter der id "loader" und der class "loader" ein neuer css-Loader eingebunden, dessen Darstellung über css geändert werden kann. Oberhalb davon werden Portaltitel und Portallogo während des Ladens des masterportals gezeigt. Sie sind in der index.html unter der id "portal-logo-box" zu finden.
+- Ein kleines masterportal-Logo erscheint jetzt während des Ladens des masterportals unten rechts in der Ecke.
 
 ### Deprecated
 - Die Möglichkeit URLs über einen Proxy umzuleiten (useProxy) ist deprecated.

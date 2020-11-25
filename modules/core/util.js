@@ -100,7 +100,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         channel.on({
             "hideLoader": this.hideLoader,
             "hideLoadingModule": this.hideLoadingModule,
-            "hidePreLoadContainers": this.hidePreLoadContainers,
             "showLoader": this.showLoader,
             "setUiStyle": this.setUiStyle,
             "copyToClipboard": this.copyToClipboard
@@ -602,17 +601,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     hideLoadingModule: function () {
         $(".loading").fadeOut(this.get("fadeOut"));
-    },
-
-    /**
-     * hides the loder containers until the timeout has expired
-     * @returns {void}
-     */
-    hidePreLoadContainers: function () {
-        setTimeout(function () {
-            document.getElementById("centered").style.visibility = "hidden";
-            document.getElementById("logo-right-bottom").style.zIndex = "-99";
-        }, 5000);
     },
 
     /**
