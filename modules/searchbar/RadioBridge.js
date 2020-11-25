@@ -4,7 +4,7 @@
  * It can be deleted, if this module has been refactored.
  */
 import store from "../../src/app-store";
-import {createGfiFeature} from "../../src/modules/map/store/actions/getWmsFeaturesByMimeType";
+import {createGfiFeature} from "../../src/api/gfi/getWmsFeaturesByMimeType";
 
 Radio.channel("VisibleVector").on({
     "gfiOnClick": function (hit) {

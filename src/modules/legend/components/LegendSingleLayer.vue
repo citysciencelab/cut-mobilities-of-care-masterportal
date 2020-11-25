@@ -19,9 +19,13 @@ export default {
     },
     watch: {
         legendObj () {
-            if (this.renderToId !== "") {
-                document.getElementById(this.renderToId).append(this.$el);
-            }
+            this.$nextTick(() => {
+                if (this.renderToId !== "" && document.getElementById(this.renderToId) !== null) {
+                    this.$el.style.display = "block";
+                    document.getElementById(this.renderToId).appendChild(new DOMParser().parseFromString(this.$el.outerHTML, "text/html").firstChild);
+                    this.$el.style.display = "none";
+                }
+            });
         }
     }
 };

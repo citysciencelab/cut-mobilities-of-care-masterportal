@@ -38,7 +38,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      * @fires Core#RadioRequestParametricURLGetProjectionFromUrl
      * @fires Core#RadioRequestParametricURLGetZoomLevel
      * @fires ClickCounter#RadioTriggerClickCounterZoomChanged
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapViewChangedCenter
      * @fires Core#RadioTriggerMapViewChangedOptions
      * @fires Core#RadioTriggerMapViewChangedZoomLevel
@@ -161,7 +160,6 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
     /**
      * Sets center and resolution to initial values
      * @fires Core#RadioRequestParametricURLGetCenter
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @returns {void}
      */
     resetView: function () {
@@ -175,7 +173,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
 
         this.get("view").setCenter(center);
         this.get("view").setResolution(resolution);
-        Radio.trigger("MapMarker", "hideMarker");
+        store.dispatch("MapMarker/removePointMarker");
     },
 
     /**

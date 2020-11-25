@@ -93,7 +93,9 @@ const OrientationView = Backbone.View.extend({
             this.$("#geolocate").addClass("toggleButtonPressed");
         }
         else {
-            this.model.untrack();
+            if (this.model.get("geolocation") !== null) {
+                this.model.untrack();
+            }
             this.$("#geolocate").removeClass("toggleButtonPressed");
         }
     },
@@ -117,7 +119,7 @@ const OrientationView = Backbone.View.extend({
         if (this.model.get("tracking") === false) {
             this.model.track();
         }
-        else {
+        else if (this.model.get("geolocation") !== null) {
             this.model.untrack();
         }
     },

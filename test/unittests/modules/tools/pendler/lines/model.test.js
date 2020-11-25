@@ -40,15 +40,15 @@ describe("Pendler-Lines", function () {
 
             model = new Model();
 
-            // eslint-disable-next-line no-unused-vars
             model.createFeatures = function (features) {
                 // Überschreibe die Funktion mit einem Setter zur Abfrage des Ergebnisses
                 model.set("relevantFeatures", features);
             };
-
-            // eslint-disable-next-line no-unused-vars
-            model.centerGemeinde = function (setMarker) {
-                // Überschreibe Funktion mit Dummy
+            model.centerGemeinde = function () {
+                // override function with dummy
+            };
+            model.zoomToExtentOfFeatureGroup = function () {
+                // override function with dummy
             };
 
             model.set("lineFeatures", featuresInput);
@@ -86,14 +86,25 @@ describe("Pendler-Lines", function () {
         });
 
         it("Jedes Feature hat zur Darstellung in der Legende neben einem Namen auch das Attribut \"Pendler-Anzahl\"", function () {
+            const features = model.get("pendlerLegend");
 
-            expect(model.get("pendlerLegend")).to.have.lengthOf(10);
+            expect(features).to.have.lengthOf(10);
 
-            model.get("pendlerLegend").forEach(feature => {
+            features.forEach(feature => {
                 expect(feature.name.length).to.be.above(0);
-                expect(feature.anzahlPendler).to.be.above(0);
+                expect(feature.anzahlPendler).to.exist;
             });
 
+            expect(features[0].anzahlPendler).to.equal("11");
+            expect(features[1].anzahlPendler).to.equal("10");
+            expect(features[2].anzahlPendler).to.equal("9");
+            expect(features[3].anzahlPendler).to.equal("9");
+            expect(features[4].anzahlPendler).to.equal("8");
+            expect(features[5].anzahlPendler).to.equal("7");
+            expect(features[6].anzahlPendler).to.equal("7");
+            expect(features[7].anzahlPendler).to.equal("7");
+            expect(features[8].anzahlPendler).to.equal("6");
+            expect(features[9].anzahlPendler).to.equal("5");
         });
     });
 });

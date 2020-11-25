@@ -33,6 +33,7 @@ describe("src/modules/tools/gfi/components/themes/senor/components/SensorData.vu
                             layerName: "abc | xyz"
                         };
                     },
+                    getMimeType: () => "text/xml",
                     getTheme: function () {
                         return {
                             name: "sensor",
@@ -122,6 +123,7 @@ describe("src/modules/tools/gfi/components/themes/senor/components/SensorData.vu
                                 layerName: "abc | xyz"
                             };
                         },
+                        getMimeType: () => "text/xml",
                         getTheme: function () {
                             return {
                                 name: "sensor",

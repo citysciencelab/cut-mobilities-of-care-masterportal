@@ -3,6 +3,8 @@ import BuildSpecModel from "./buildSpec";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import BuildCanvasModel from "./buildCanvas";
 import "./RadioBridge.js";
+import store from "../../../src/app-store/index";
+import thousandsSeparator from "../../../src/utils/thousandsSeparator.js";
 
 const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -47,7 +49,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         INCHES_PER_METER: 39.37,
         glyphicon: "glyphicon-print",
         eventListener: undefined,
-        moveendListener: undefined,
         dpiForPdf: 200,
         currentLng: "",
         // translations
@@ -59,7 +60,14 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         withLegendLabel: "",
         withInfoLabel: "",
         printLabel: "",
-        layoutNameList: []
+        layoutNameList: [],
+        currentMapScale: "",
+        hintInfoScale: "",
+        visibleLayer: [],
+        invisibleLayer: [],
+        zoomLevel: null,
+        hintInfo: "",
+        spec: new BuildSpecModel()
     }),
 
     /**
@@ -100,6 +108,12 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @property {String} scaleLabel Label text for print-window
      * @property {String} legendLabel Label text for print-window
      * @property {String} printLabel Label text for print-window
+     * @property {String[]} layoutNameList the list of layout name
+     * @property {ol/Layer[]} visibleLayer the list of visibile layers
+     * @property {ol/Layer[]} invisibleLayer the list of invisible but active layer
+     * @property {String} currentMapScale the current map scale
+     * @property {String} hintInfoScale the hint information when the current print scale and map scale are not the same
+     * @property {String} hintInfo the hint text for the layer could not be printed
      * @fires Core#RadioRequestMapViewGetOptions
      * @listens Print#ChangeIsActive
      * @listens MapView#RadioTriggerMapViewChangedOptions
@@ -117,12 +131,27 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                     this.getCapabilites(model, value);
                 }
                 this.togglePostrenderListener(model, value);
+                if (value) {
+                    this.setCurrentMapScale(store.state.Map.scale);
+                }
             }
         });
 
         this.listenTo(Radio.channel("MapView"), {
             "changedOptions": function () {
                 this.setIsScaleSelectedManually(false);
+                if (typeof this.get("eventListener") !== "undefined") {
+                    this.updateCanvasLayer();
+                }
+            }
+        });
+
+        this.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": function () {
+                if (typeof this.get("eventListener") !== "undefined") {
+                    this.setVisibleLayer(this.getVisibleLayer().concat(this.get("invisibleLayer")));
+                    this.updateCanvasLayer();
+                }
             }
         });
 
@@ -150,7 +179,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * change language - sets default values for the language
      * @param {String} lng the language changed to
-     * @returns {Void}  -
+     * @returns {void}
      */
     changeLang: function (lng) {
         this.set({
@@ -164,6 +193,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             withInfoLabel: i18next.t("common:modules.tools.print.withInfoLabel"),
             vtlWarning: i18next.t("common:modules.tools.print.vtlWarning"),
             layoutNameList: i18next.t("common:modules.tools.print.layoutNameList", {returnObjects: true}),
+            hintInfoScale: i18next.t("common:modules.tools.print.hintInfoScale"),
             currentLng: lng
         });
     },
@@ -182,7 +212,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * Gets the capabilities for a specific print configuration
      * @param {Backbone.Model} model - this
-     * @param {boolean} value - is this tool activated or not
+     * @param {Boolean} value - is this tool activated or not
      * @returns {void}
      */
     getCapabilites: function (model, value) {
@@ -199,7 +229,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * Sets the capabilities from mapfish resonse.
-     * @param {object[]} response - config.yaml from mapfish.
+     * @param {Object[]} response - config.yaml from mapfish.
      * @fires Core#RadioRequestMapViewGetOptions
      * @returns {void}
      */
@@ -217,9 +247,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * Choose the layout which is configured as currentlayout
-     * @param {object[]} [layouts=[]] - All Layouts.
-     * @param {string} [currentLayoutName=""] - The name from current layout.
-     * @returns {object} The choosen current layout.
+     * @param {Object[]} [layouts=[]] - All Layouts.
+     * @param {String} [currentLayoutName=""] - The name from current layout.
+     * @returns {Object} The choosen current layout.
      */
     chooseCurrentLayout: function (layouts = [], currentLayoutName = "") {
         const currentLayout = layouts.filter(layout => layout.name === currentLayoutName);
@@ -232,9 +262,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     print: function () {
-        const visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
-                return layer.getVisible() === true;
-            }),
+        const visibleLayerList = this.getVisibleLayer(),
             attr = {
                 "layout": this.get("currentLayout").name,
                 "outputFilename": this.get("filename"),
@@ -250,26 +278,31 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                 }
             };
 
-        let spec = new BuildSpecModel(attr);
+        let spec = this.get("spec");
+
+        spec.set(attr);
 
         if (this.get("isMetaDataAvailable")) {
             spec.setMetadata(true);
         }
-        if (this.get("isLegendAvailable")) {
-            spec.buildLegend(this.get("isLegendSelected"), this.get("isMetaDataAvailable"));
-        }
+
         if (this.get("isScaleAvailable")) {
             spec.buildScale(this.get("currentScale"));
         }
-        spec.buildLayers(this.sortVisibleLayerListByZindex(visibleLayerList));
+        spec.buildLayers(visibleLayerList);
 
         if (this.get("isGfiAvailable")) {
             spec.buildGfi(this.get("isGfiSelected"), Radio.request("GFI", "getGfiForPrint"));
         }
-        spec = spec.toJSON();
 
-        spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
-        this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
+        if (this.get("isLegendAvailable")) {
+            spec.buildLegend(this.get("isLegendSelected"), this.get("isMetaDataAvailable"));
+        }
+        else {
+            spec = spec.toJSON();
+            spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
+            this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
+        }
     },
 
     /**
@@ -291,13 +324,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * sends a request to create a print job
-     * @param {string} printAppId - id of the print configuration
-     * @param {string} payload - POST body
-     * @param {string} format - print job output format
+     * @param {String} payload - POST body
+     * @param {String} printAppId - id of the print configuration
+     * @param {String} format - print job output format
      * @returns {void}
      */
-    createPrintJob: function (printAppId, payload, format) {
-        const url = this.get("mapfishServiceUrl") + printAppId + "/report." + format;
+    createPrintJob: function (payload, printAppId, format) {
+        const printId = printAppId || this.get("printAppId"),
+            printFormat = format || this.get("currentFormat"),
+            url = this.get("mapfishServiceUrl") + printId + "/report." + printFormat;
 
         Radio.trigger("Util", "showLoader");
         this.sendRequest(url, "POST", this.waitForPrintJob, payload);
@@ -328,63 +363,56 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * if the tool is activated and there is a layout,
      * a callback function is registered to the postrender event of the map
      * @param {Backbone.Model} model - this
-     * @param {boolean} value - is this tool activated or not
+     * @param {Boolean} value - is this tool activated or not
      * @returns {void}
      */
     togglePostrenderListener: function (model, value) {
         const canvasModel = new BuildCanvasModel(),
-            foundVectorTileLayers = [];
+            foundVectorTileLayers = [],
+            visibleLayerList = this.getVisibleLayer();
 
         /*
          * Since MapFish 3 does not yet support VTL (see https://github.com/mapfish/mapfish-print/issues/659),
          * they are filtered in the following code and an alert is shown to the user informing him about which
          * layers will not be printed.
          */
-        let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
-                if (layer.get("typ") === "VectorTile") {
-                    foundVectorTileLayers.push(layer.get("name"));
-                    return false;
-                }
-                return layer.getVisible() === true;
-            }),
-            canvasLayer;
-
         if (foundVectorTileLayers.length && this.get("isActive")) {
             Radio.trigger("Alert", "alert", `${this.get("vtlWarning")} ${foundVectorTileLayers.join(", ")}`);
         }
 
-        visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
+        this.setVisibleLayer(visibleLayerList);
 
         if (value && model.get("layoutList").length !== 0 && visibleLayerList.length >= 1) {
-            canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
+            const canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
+
             this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
-            this.setMoveendListener(Radio.request("Map", "registerListener", "moveend", this.updateCanvasLayer.bind(this)));
         }
         else {
             Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
-            Radio.trigger("Map", "unregisterListener", this.get("moveendListener"));
             this.setEventListener(undefined);
-            this.setMoveendListener(undefined);
+            if (this.get("invisibleLayer").length) {
+                this.setOriginalPrintLayer();
+                this.setHintInfo("");
+            }
         }
         Radio.trigger("Map", "render");
     },
 
     /**
-     * upate to draw the print page rectangle onto the canvas when the map changes
+     * update to draw the print page rectangle onto the canvas when the map changes
      * @returns {void}
      */
     updateCanvasLayer: function () {
-        const canvasModel = new BuildCanvasModel();
-        let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
-                return layer.getVisible() === true;
-            }),
-            canvasLayer = {};
-
-        visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
+        const canvasModel = new BuildCanvasModel(),
+            visibleLayerList = this.getVisibleLayer();
+        let canvasLayer = {};
 
         Radio.trigger("Map", "unregisterListener", this.get("eventListener"));
         canvasLayer = canvasModel.getCanvasLayer(visibleLayerList);
-        this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
+        this.setCurrentMapScale(store.state.Map.scale);
+        if (Object.keys(canvasLayer).length) {
+            this.setEventListener(canvasLayer.on("postrender", this.createPrintMask.bind(this)));
+        }
     },
 
     /**
@@ -406,10 +434,13 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             scale = this.getOptimalScale(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), this.getPrintMapScales());
             this.setCurrentScale(scale);
         }
+
         this.drawMask(frameState.size, context);
         this.drawPrintPage(frameState.size, frameState.viewState.resolution, this.getPrintMapSize(), scale, context);
         context.fillStyle = "rgba(0, 5, 25, 0.55)";
         context.fill();
+
+        this.setPrintLayers(scale);
     },
 
     /**
@@ -436,9 +467,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * draws the print page
      * @param {ol.Size} mapSize - size of the map in px
-     * @param {number} resolution - resolution of the map in m/px
-     * @param {number} printMapSize - size of the map on the report in dots
-     * @param {number} scale - the optimal print scale
+     * @param {Number} resolution - resolution of the map in m/px
+     * @param {Number} printMapSize - size of the map on the report in dots
+     * @param {Number} scale - the optimal print scale
      * @param {CanvasRenderingContext2D} context - context of the postrender event
      * @returns {void}
      */
@@ -464,10 +495,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     /**
      * gets the optimal print scale for a map
      * @param {ol.Size} mapSize - size of the map in px
-     * @param {number} resolution - resolution of the map in m/px
+     * @param {Number} resolution - resolution of the map in m/px
      * @param {ol.Size} printMapSize - size of the map on the report in dots
-     * @param {object[]} scaleList - supported print scales, sorted in ascending order
-     * @returns {number} the optimal scale
+     * @param {Object[]} scaleList - supported print scales, sorted in ascending order
+     * @returns {Number} the optimal scale
      */
     getOptimalScale: function (mapSize, resolution, printMapSize, scaleList) {
         const mapWidth = mapSize[0] * resolution,
@@ -489,10 +520,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * gets the optimal map resolution for a print scale and a map size
-     * @param {number} scale - print scale for the report
-     * @param {number[]} mapSize - the current map size
-     * @param {number[]} printMapSize - size of the map on the report
-     * @returns {number} the optimal resolution
+     * @param {Number} scale - print scale for the report
+     * @param {Number[]} mapSize - the current map size
+     * @param {Number[]} printMapSize - size of the map on the report
+     * @returns {Number} the optimal resolution
      */
     getOptimalResolution: function (scale, mapSize, printMapSize) {
         const dotsPerMeter = this.get("INCHES_PER_METER") * this.get("DOTS_PER_INCH"),
@@ -504,7 +535,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * returns the size of the map on the report
-     * @returns {number[]} width and height
+     * @returns {Number[]} width and height
      */
     getPrintMapSize: function () {
         const layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
@@ -514,7 +545,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * returns the supported scales of the map in the report
-     * @returns {number[]} scale list
+     * @returns {Number[]} scale list
      */
     getPrintMapScales: function () {
         const layoutMapInfo = this.getAttributeInLayoutByName("map").clientInfo;
@@ -523,9 +554,96 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
+     * returns the visible layers and set into variable
+     * @returns {Number[]} scale list
+     */
+    getVisibleLayer: function () {
+        let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
+            return layer.getVisible() === true;
+        });
+
+        visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
+
+        return visibleLayerList;
+    },
+
+    /**
+     * Getting und showing the layer which is visible in print scale
+     * @param {String} scale - the current print scale
+     * @returns {void} -
+     */
+    setPrintLayers: function (scale) {
+        const visibleLayer = this.get("visibleLayer"),
+            resoByMaxScale = Radio.request("MapView", "getResoByScale", scale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResoByScale", scale, "min"),
+            invisibleLayer = [];
+
+        let invisibleLayerNames = "",
+            hintInfo = "";
+
+        visibleLayer.forEach(layer => {
+            const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
+
+            if (resoByMaxScale > layer.getMaxResolution() || resoByMinScale <= layer.getMinResolution()) {
+                invisibleLayer.push(layer);
+                invisibleLayerNames += "- " + layer.get("name") + "<br>";
+                layer.setVisible(false);
+                if (layerModel !== undefined) {
+                    layerModel.setIsOutOfRange(true);
+                }
+            }
+            else {
+                layer.setVisible(true);
+                if (layerModel !== undefined) {
+                    layerModel.setIsOutOfRange(false);
+                }
+            }
+        });
+
+        hintInfo = i18next.t("common:modules.tools.print.invisibleLayer", {scale: "1: " + thousandsSeparator(scale, " ")});
+        hintInfo = hintInfo + "<br>" + invisibleLayerNames;
+
+        if (invisibleLayer.length && hintInfo !== this.get("hintInfo")) {
+            store.dispatch("Alerting/addSingleAlert", hintInfo);
+            this.setHintInfo(hintInfo);
+        }
+
+        if (!invisibleLayer.length) {
+            this.setHintInfo("");
+        }
+
+        this.setInvisibleLayer(invisibleLayer);
+        this.updateCanvasLayer();
+    },
+
+    /**
+     * Getting und showing the layer which is visible in map scale
+     * @returns {void} -
+     */
+    setOriginalPrintLayer: function () {
+        const invisibleLayer = this.get("invisibleLayer"),
+            mapScale = this.get("currentMapScale"),
+            resoByMaxScale = Radio.request("MapView", "getResoByScale", mapScale, "max"),
+            resoByMinScale = Radio.request("MapView", "getResoByScale", mapScale, "min");
+
+        invisibleLayer.forEach(layer => {
+            const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
+
+            if (resoByMaxScale <= layer.getMaxResolution() && resoByMinScale > layer.getMinResolution()) {
+                layerModel.setIsOutOfRange(false);
+            }
+            else {
+                layerModel.setIsOutOfRange(true);
+            }
+            layer.setVisible(true);
+
+        });
+    },
+
+    /**
      * returns a capabilities attribute object of the current layout, corresponding to the given name
-     * @param {string} name - name of the attribute to get
-     * @returns {object|undefined} corresponding attribute or null
+     * @param {String} name - name of the attribute to get
+     * @returns {Object|undefined} corresponding attribute or null
      */
     getAttributeInLayoutByName: function (name) {
         return this.get("currentLayout").attributes.find(function (attribute) {
@@ -535,9 +653,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * returns the layout for the given layout name
-     * @param {object[]} layoutList - available layouts of the specified print configuration
-     * @param {string} layoutName - name for the layout to be found
-     * @returns {object} layout
+     * @param {Object[]} layoutList - available layouts of the specified print configuration
+     * @param {String} layoutName - name for the layout to be found
+     * @returns {Object} layout
      */
     getLayoutByName: function (layoutList, layoutName) {
         return layoutList.find(function (layout) {
@@ -547,9 +665,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * sorts an array numerically and ascending
-     * @param {number} a - first value
-     * @param {number} b - next value
-     * @returns {number} a negative, zero, or positive value
+     * @param {Number} a - first value
+     * @param {Number} b - next value
+     * @returns {Number} a negative, zero, or positive value
      */
     sortNumbers: function (a, b) {
         return a - b;
@@ -557,9 +675,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * Performs an asynchronous HTTP request
-     * @param {string} serviceUrl - the url of the print service
-     * @param {string} requestType - GET || POST
-     * @param {function} successCallback - called if the request succeeds
+     * @param {String} serviceUrl - the url of the print service
+     * @param {String} requestType - GET || POST
+     * @param {Function} successCallback - called if the request succeeds
      * @param {JSON} data - payload
      * @returns {void}
      */
@@ -574,7 +692,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {object[]} value - available layouts of the specified print configuration
+     * @param {Object[]} value - available layouts of the specified print configuration
      * @returns {void}
      */
     setLayoutList: function (value) {
@@ -582,7 +700,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {object[]} value - current print layout
+     * @param {Object[]} value - current print layout
      * @returns {void}
      */
     setCurrentLayout: function (value) {
@@ -590,7 +708,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {string[]} value - available formats of the specified print configuration
+     * @param {String[]} value - available formats of the specified print configuration
      * @returns {void}
      */
     setFormatList: function (value) {
@@ -598,7 +716,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {string} value - current print format
+     * @param {String} value - current print format
      * @returns {void}
      */
     setCurrentFormat: function (value) {
@@ -606,7 +724,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {number} value - current print scale
+     * @param {Number} value - current print scale
      * @returns {void}
      */
     setCurrentScale: function (value) {
@@ -614,7 +732,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if the legend is to be printed
+     * @param {Boolean} value - true if the legend is to be printed
      * @returns {void}
      */
     setIsLegendSelected: function (value) {
@@ -622,28 +740,28 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if mapfish can print gfi
+     * @param {Boolean} value - true if mapfish can print gfi
      * @returns {void}
      */
     setIsGfiAvailable: function (value) {
         this.set("isGfiAvailable", value);
     },
     /**
-     * @param {boolean} value - true if gfi is active
+     * @param {Boolean} value - true if gfi is active
      * @returns {void}
      */
     setIsGfiActive: function (value) {
         this.set("isGfiActive", value);
     },
     /**
-     * @param {boolean} value - true if mapfish can print legend
+     * @param {Boolean} value - true if mapfish can print legend
      * @returns {void}
      */
     setIsLegendAvailable: function (value) {
         this.set("isLegendAvailable", value);
     },
     /**
-     * @param {boolean} value - true if mapfish can print scale
+     * @param {Boolean} value - true if mapfish can print scale
      * @returns {void}
      */
     setIsScaleAvailable: function (value) {
@@ -651,7 +769,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if gfi is to be printed
+     * @param {Boolean} value - true if gfi is to be printed
      * @returns {void}
      */
     setIsGfiSelected: function (value) {
@@ -659,7 +777,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if the current layout supports meta data
+     * @param {Boolean} value - true if the current layout supports meta data
      * @returns {void}
      */
     setIsMetaDataAvailable: function (value) {
@@ -667,7 +785,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {string} value - title for the printout
+     * @param {String} value - title for the printout
      * @returns {void}
      */
     setTitle: function (value) {
@@ -675,7 +793,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {boolean} value - true if the scale is selected by the user
+     * @param {Boolean} value - true if the scale is selected by the user
      * @returns {void}
      */
     setIsScaleSelectedManually: function (value) {
@@ -683,7 +801,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * @param {string} value - mapfish print service url
+     * @param {String} value - mapfish print service url
      * @returns {void}
      */
     setMapfishServiceUrl: function (value) {
@@ -692,7 +810,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
 
     /**
      * Setter for placeholder.
-     * @param {string} value - Placeholder for the title.
+     * @param {String} value - Placeholder for the title.
      * @returns {void}
      */
     setTitlePlaceholder: function (value) {
@@ -700,8 +818,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} value  - todo
+     * setter the event listener
+     * @param {*} value - the event triggered with event listener
      * @returns {void}
      */
     setEventListener: function (value) {
@@ -709,12 +827,39 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} value  - todo
+     * setter the current map scale
+     * @param {String} value - the current map scale
      * @returns {void}
      */
-    setMoveendListener: function (value) {
-        this.set("moveendListener", value);
+    setCurrentMapScale: function (value) {
+        this.set("currentMapScale", value);
+    },
+
+    /**
+     * setter the visible layer list before printing
+     * @param {ol/Layer[]} value - the visible layer list
+     * @returns {void}
+     */
+    setVisibleLayer: function (value) {
+        this.set("visibleLayer", value);
+    },
+
+    /**
+     * setter the invisible layer list before printing
+     * @param {ol/Layer[]} value - the invisible layer list
+     * @returns {void}
+     */
+    setInvisibleLayer: function (value) {
+        this.set("invisibleLayer", value);
+    },
+
+    /**
+     * setter for the hint information
+     * @param {String} value - the hint text
+     * @returns {void}
+     */
+    setHintInfo: function (value) {
+        this.set("hintInfo", value);
     }
 });
 

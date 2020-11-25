@@ -1,4 +1,5 @@
 import SearchByCoordTemplate from "text-loader!./template.html";
+import store from "../../../src/app-store";
 
 const SearchByCoordView = Backbone.View.extend({
     events: {
@@ -28,7 +29,7 @@ const SearchByCoordView = Backbone.View.extend({
             this.delegateEvents();
         }
         else {
-            Radio.trigger("MapMarker", "hideMarker");
+            store.dispatch("MapMarker/removePointMarker");
             this.undelegateEvents();
         }
         return this;
