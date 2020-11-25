@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {createGfiFeature, openFeaturesInNewWindow, getXmlFeatures, handleXmlResponse, getHtmlFeature, handleHTMLResponse, getWmsFeaturesByMimeType} from "../../../gfi/getWmsFeaturesByMimeType.js";
+import {createGfiFeature, openFeaturesInNewWindow, getXmlFeatures, handleXmlResponse, getHtmlFeature, handleHTMLResponse} from "../../../gfi/getWmsFeaturesByMimeType.js";
 
 describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
     const url = "url";
