@@ -148,18 +148,15 @@ export default {
             }
         },
         createMappedProperties: function (feature) {
-            if (feature === null || feature === undefined || !feature.hasOwnProperty("getProperties") || feature.getProperties() === null) {
-                return;
-            }
-
-            if (Array.isArray(feature.getFeatures())) {
+            if (Array.isArray(feature?.getFeatures())) {
                 feature.getFeatures().forEach(singleFeature => {
                     this.createMappedProperties(singleFeature);
                 });
-                return;
-            }
 
-            feature.getMappedProperties = () => this.prepareProperties(feature.getProperties(), feature.getAttributesToShow(), this.ignoredKeys);
+            }
+            else if (feature?.getProperties() && feature?.getProperties() !== null) {
+                feature.getMappedProperties = () => this.prepareProperties(feature.getProperties(), feature.getAttributesToShow(), this.ignoredKeys);
+            }
         },
         /**
          * Checks which properties should be displayed.
