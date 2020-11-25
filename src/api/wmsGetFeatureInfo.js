@@ -20,7 +20,7 @@ export function requestGfi (mimeType, url) {
             return doc;
         })
         .catch(error => {
-            console.warn(error);
+            throw error;
         });
 }
 

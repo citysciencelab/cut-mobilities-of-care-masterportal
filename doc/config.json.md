@@ -105,7 +105,7 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 |zoomToResult|nein|Boolean|false|Deprecated in 3.0.0. Bitte "zoomToResultOnHover" oder "zoomToResultOnClick" verwenden. Gibt an, ob auf das Feature beim Mousehover auf die Adresse gezoomt werden soll.|false|
 |zoomToResultOnHover|nein|Boolean|false|Gibt an, ob auf das Feature beim Mousehover auf die Adresse gezoomt werden soll.|false|
 |zoomToResultOnClick|nein|Boolean|true|Gibt an, ob auf das Feature beim Klick auf die Adresse gezoomt werden soll.|false|
-|zoomLevel|nein|Boolean|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
+|zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
 
 **Beispiel**
 ```
@@ -1325,6 +1325,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
 |configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. **[Beispiel](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
 |parcelDenominator|nein|Boolean|false|Flag, ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|false|
 |styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben.|false|
+|zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
 
 **Beispiel**
 ```
@@ -1337,6 +1338,27 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
     "configJSON": "/lgv-config/gemarkungen_hh.json",
     "parcelDenominator": false,
     "styleId": "flaecheninfo"
+}
+```
+
+***
+
+#### Portalconfig.menu.tool.searchByCoord
+
+[inherits]: # (Portalconfig.menu.tool)
+Koordinatensuche.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
+
+**Beispiel**
+```
+#!json
+"searchByCoord": {
+    "name": "Flurstückssuche",
+    "glyphicon": "glyphicon-record",
+    "zoomLevel": 7
 }
 ```
 
@@ -2366,7 +2388,7 @@ Hier werden WMS typische Attribute aufgelistet.
 |featureCount|nein|Integer|1|Anzahl der Features, die bei einer GetFeatureInfo-Abfrage zurückgegeben werden sollen.|false|
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
-|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html|false|
+|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt. |false|
 |gfiAsNewWindow|nein|Object|null|Wird nur berücksichtigt wenn infoFormat text/html ist. Beachten Sie **[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)** für mehr Informationen.|true|
 |styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
 

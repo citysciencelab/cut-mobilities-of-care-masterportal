@@ -50,9 +50,9 @@ export default {
             containment: "#map",
             handle: ".legend-title",
             stop: function (event, ui) {
-                const legendElem = $(".legend-window"),
-                    legendOuterWidth = legendElem.outerWidth(true),
-                    legendOuterHeight = legendElem.outerHeight(true),
+                const legendElem = ui.helper[0].querySelector(".legend-window"),
+                    legendOuterWidth = legendElem.offsetWidth,
+                    legendOuterHeight = legendElem.offsetHeight,
                     mapWidth = document.getElementById("map").offsetWidth,
                     mapHeight = document.getElementById("map").offsetHeight;
 
@@ -92,12 +92,20 @@ export default {
         createLegendForLayerInfo (layerIdForLayerInfo) {
             const layerForLayerInfo = Radio.request("ModelList", "getModelByAttributes", {type: "layer", id: layerIdForLayerInfo});
             let legendObj = null,
-                isValidLegend = null;
+                isValidLegend = null,
+                legend = null;
+
+            if (layerForLayerInfo.get("typ") === "GROUP") {
+                legend = this.prepareLegendForGroupLayer(layerForLayerInfo.get("layerSource"));
+            }
+            else {
+                legend = this.prepareLegend(layerForLayerInfo.get("legend"));
+            }
 
             legendObj = {
                 id: layerForLayerInfo.get("id"),
                 name: layerForLayerInfo.get("name"),
-                legend: this.prepareLegend(layerForLayerInfo.get("legend")),
+                legend,
                 position: layerForLayerInfo.get("selectionIDX")
             };
 

@@ -3,6 +3,7 @@ import Alerting from "./modules/alerting/components/Alerting.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
+import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
 import {mapState} from "vuex";
 
@@ -13,6 +14,7 @@ export default {
         ToolManager,
         Alerting,
         LegendWindow,
+        MapMarker,
         Footer
     },
     computed: {
@@ -36,6 +38,7 @@ export default {
             <LegendWindow />
             <ControlBar class="controls" />
             <Footer />
+            <MapMarker />
         </div>
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
         <Alerting />

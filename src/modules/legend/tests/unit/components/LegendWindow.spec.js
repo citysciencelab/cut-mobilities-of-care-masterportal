@@ -45,7 +45,7 @@ describe("LegendWindow.vue", () => {
             getters,
             mutations
         });
-        store.commit("Legend/setShowLegend", true);
+        store.dispatch("Legend/setShowLegend", true);
         store.state.Legend.legends = [];
     });
 

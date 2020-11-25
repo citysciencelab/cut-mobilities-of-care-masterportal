@@ -5,7 +5,6 @@ export default {
     /**
      * Remembers the projection and shows mapmarker at the given position.
      * @param {Event} event - pointerdown-event, to get the position from
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      * @returns {void}
      */
     positionClicked: function ({commit, dispatch, state}, event) {
@@ -16,8 +15,7 @@ export default {
         dispatch("changedPosition", position);
         commit("setUpdatePosition", !updatePosition);
 
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "showMarker", position);
+        dispatch("MapMarker/placingPointMarker", position, {root: true});
     },
     /**
      * Sets the current projection and its name to state.
@@ -86,10 +84,9 @@ export default {
      * @param {Number[]} position contains coordinates of mouse position
      * @returns {void}
      */
-    checkPosition ({state, commit}, position) {
+    checkPosition ({state, commit, dispatch}, position) {
         if (state.updatePosition) {
-            // TODO replace trigger when MapMarker is migrated
-            Radio.trigger("MapMarker", "showMarker", position);
+            dispatch("MapMarker/placingPointMarker", position, {root: true});
 
             commit("setPositionMapProjection", position);
         }

@@ -4,6 +4,7 @@ import {extend as olExpandExtent} from "ol/extent.js";
 import {Point} from "ol/geom.js";
 import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
+import store from "../../../../src/app-store";
 
 const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -169,7 +170,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         Radio.trigger("MapView", "setCenter", coords, this.get("zoomLevel"));
 
         if (setMarker) {
-            Radio.trigger("MapMarker", "showMarker", coords);
+            store.dispatch("MapMarker/placingPointMarker", coords);
         }
     },
 
@@ -305,9 +306,14 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @returns {void}
      */
     createAlertBeforeDownload: function () {
-        if (confirm(i18next.t("common:modules.tools.pendler.general.csvDownloadConfirm"))) { // eslint-disable-line no-alert
-            this.download();
-        }
+        Radio.trigger("Alert", "alert", {
+            category: "common:modules.alerting.categories.warning",
+            confirmText: "common:button.download",
+            content: this.get("attributionText"),
+            displayClass: "warning",
+            legacy_onConfirm: this.download.bind(this),
+            mustBeConfirmed: true
+        });
     },
     /**
      * downloads all line-features as csv file
