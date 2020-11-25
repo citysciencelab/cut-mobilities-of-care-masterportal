@@ -26,7 +26,7 @@ The FROST Server is an open source SensorThings Server developed by the Fraunhof
 
 ### The REST API - HTTP
 
-To narrow down the topics to subscribe to, use a HTTP REST call to fetch all required IDs.
+To subscribe to required IDs of Things, use a HTTP REST call to fetch all required IDs.
 
 >⚠️ `expand`, `filter`, and so on as URL query parameters are usable with HTTP REST calls only. With mqtt, you may subscribe to a plain path, and URL queries ("?" and beyond) will be ignored.
 
@@ -76,11 +76,11 @@ URL in detail:
   - )
 - &$expand=Locations
 
-You will receive only Things with their Location within the given polygon. Use this to increase network request speed by only retrieving and subscribing to Things in the user's current view.
+You will only receive Things located within the given polygon. Use this to increase network request speed by only retrieving and subscribing to Things in the user's current view.
 
 ### The REST API - mqtt
 
-mqtt is a protocol developed for the *Internet of Things* to keep an open connection to servers and communicate with pull (commands from client to server) and push (messages from server to client), using an established connection that does not close in the meantime.
+mqtt is a protocol developed for the *Internet of Things* to keep an open connection to servers and communicate with pull (commands from client to server) and push (messages from server to client) requests, using an established connection that does not close in the meantime.
 
 In the browser, this might e.g. be implemented by using socket.io.
 
@@ -440,7 +440,7 @@ mqtt.subscribe("v1.0/Datastreams(1234)/Observations", {
 });
 ```
 
-Please note that messages are not received like when using "subscribe", but will come in via an `on(message)` event.
+Please note that Messages are not received when using "subscribe", but will come in via an `on(message)` event.
 
 The `on(message)` event's messages must be redirected to your processes with help of the supplied topics.
 
