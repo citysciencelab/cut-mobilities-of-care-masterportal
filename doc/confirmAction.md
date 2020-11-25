@@ -24,7 +24,7 @@ const
         actionDeniedCallback: denyCallback,
         actionEscapedCallback: escapeCallback,
         confirmCaption: "OK",
-        copy: "Wollen Sie dieses wichtige Dokument wirklich löschen?",
+        textContent: "Wollen Sie dieses wichtige Dokument wirklich löschen?",
         denyCaption: "Abbrechen",
         forceClickToClose: true,
         headline: "Achtung"
@@ -40,7 +40,7 @@ store.dispatch("ConfirmAction/addSingleAction", confirmActionSettings);
 |actionConfirmedCallback|nein|Function|false|Callback Funktion, welche bei Click auf den Confirm Button ausgeführt wird.|
 |actionDeniedCallback|nein|Function|false|Callback Funktion, welche bei Click auf den Deny Button ausgeführt wird.|
 |confirmCaption|nein|String|"common:modules.confirmAction.defaultConfirmCaption"|Beschriftung des Confirm Buttons.|
-|copy|nein|String|"common:modules.confirmAction.defaultCopy"|Angezeigter Text.|
+|textContent|nein|String|"common:modules.confirmAction.defaultCopy"|Angezeigter Text.|
 |denyCaption|nein|String|"common:modules.confirmAction.defaultDenyCaption"|Beschriftung des Deny Buttons.|
 |forceClickToClose|nein|Boolean|true|Flag, ob das Modal nur durch Click auf das X geschlossen werden kann.|
 |headline|nein|String|"common:modules.confirmAction.defaultHeadline"|Headline.|

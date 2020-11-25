@@ -1,8 +1,7 @@
 <script>
 
 import Modal from "../../../share-components/modals/Modal.vue";
-import {mapGetters} from "vuex";
-import {mapActions} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
     name: "ConfirmAction",
@@ -17,18 +16,6 @@ export default {
             "queue",
             "showTheModal"
         ])
-    },
-
-    /**
-     * Created hook: Creates event listener for legacy Radio calls (to be removed seometime).
-     * @returns {void}
-     */
-    created () {
-        Backbone.Events.listenTo(Radio.channel("ConfirmAction"), {
-            "add": newAction => {
-                this.addSingleAction(newAction);
-            }
-        });
     },
 
     methods: {
@@ -66,9 +53,9 @@ export default {
                     {{ $t(currentConfirmAction.headline) }}
                 </h3>
                 <p
-                    id="confirmation-copy"
+                    id="confirmation-textContent"
                 >
-                    {{ $t(currentConfirmAction.copy) }}
+                    {{ $t(currentConfirmAction.textContent) }}
                 </p>
                 <div id="confirmation-button-container">
                     <button
@@ -103,7 +90,7 @@ export default {
         line-height:18px;
         padding:0;
     }
-    #confirmation-copy {
+    #confirmation-textContent {
         color:#777777;
         font-size:12px;
     }

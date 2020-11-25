@@ -14,8 +14,6 @@ export default {
     alerts: [],
     displayedAlerts: {},
     fetchBroadcastUrl: false,
-    // fetchBroadcastUrl: "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json",
-    // fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/broadcastedPortalAlerts.json",
     localStorageDisplayedAlertsKey: "displayedAlerts",
     showTheModal: false
 };

@@ -4,7 +4,7 @@ export default {
         actionDeniedCallback: false,
         actionEscapedCallback: false,
         confirmCaption: "common:modules.confirmAction.defaultConfirmCaption",
-        copy: "common:modules.confirmAction.defaultCopy",
+        textContent: "common:modules.confirmAction.defaultCopy",
         denyCaption: "common:modules.confirmAction.defaultDenyCaption",
         forceClickToClose: true,
         headline: "common:modules.confirmAction.defaultHeadline"

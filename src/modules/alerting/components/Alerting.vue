@@ -2,8 +2,7 @@
 
 import Modal from "../../../share-components/modals/Modal.vue";
 import axios from "axios";
-import {mapGetters} from "vuex";
-import {mapActions} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
     name: "Alerting",

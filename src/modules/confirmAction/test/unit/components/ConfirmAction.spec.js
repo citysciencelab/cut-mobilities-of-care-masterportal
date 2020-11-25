@@ -56,7 +56,7 @@ describe("src/modules/confirmAction/components/ConfirmAction.vue", function () {
                 actionConfirmedCallback: confirmCallback,
                 actionDeniedCallback: denyCallback,
                 confirmCaption: "Confirm",
-                copy: "Copy",
+                textContent: "TextContent",
                 denyCaption: "Deny",
                 forceClickToClose: true,
                 headline: "Headline"
@@ -77,9 +77,9 @@ describe("src/modules/confirmAction/components/ConfirmAction.vue", function () {
                 expect(wrapper.find("#confirmActionContainer h3").exists()).to.be.true;
                 expect(wrapper.find("#confirmActionContainer h3").text()).to.equal("Headline");
             });
-            it("Copy reads \"Copy\"", function () {
-                expect(wrapper.find("#confirmActionContainer #confirmation-copy").exists()).to.be.true;
-                expect(wrapper.find("#confirmActionContainer #confirmation-copy").text()).to.equal("Copy");
+            it("TextContent reads \"TextContent\"", function () {
+                expect(wrapper.find("#confirmActionContainer #confirmation-textContent").exists()).to.be.true;
+                expect(wrapper.find("#confirmActionContainer #confirmation-textContent").text()).to.equal("TextContent");
             });
             it("Confirm button reads \"Confirm\"", function () {
                 expect(wrapper.find("#confirmActionContainer #modal-button-left").exists()).to.be.true;
