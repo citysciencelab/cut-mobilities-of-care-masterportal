@@ -40,6 +40,10 @@ const colorOptions = [
         {caption: "24 px", value: 24},
         {caption: "32 px", value: 32}
     ],
+    unitOptions = [
+        {caption: "m", value: "m"},
+        {caption: "km", value: "km"}
+    ],
     keyStore = {
         getters: Object.keys(getters),
         mutations: Object.keys(mutations),
@@ -82,6 +86,7 @@ export {
     drawTypeOptions,
     fontOptions,
     fontSizeOptions,
+    unitOptions,
     keyStore,
     pointSizeOptions,
     strokeOptions,

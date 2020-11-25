@@ -2,8 +2,8 @@ import sinon from "sinon";
 import {expect} from "chai";
 import actions from "../../../store/actionsDraw";
 
-describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
-    let commit, dispatch, state, target;
+describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
+    let commit, dispatch, state, target, getters;
 
     beforeEach(() => {
         commit = sinon.spy();
@@ -11,6 +11,22 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
     });
 
     afterEach(sinon.restore);
+
+    /**
+     * @param {String} id id to use for drawType and options prefix
+     * @param {Object} [drawTypeOptions={}] the object to use for the drawType options
+     * @param {Object} [gettersOptions={}] additional key value pairs to add to the resulting getters
+     * @returns {Object}  a mocked getters for this test
+     */
+    function createGetters (id, drawTypeOptions = {}, gettersOptions = {}) {
+        return Object.assign({
+            drawType: {
+                id,
+                geometry: ""
+            },
+            getStyleSettings: () => drawTypeOptions
+        }, gettersOptions);
+    }
 
     describe("setActive", () => {
         let active,
@@ -72,62 +88,72 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
             expect(request.firstCall.args).to.eql(["Map", "createLayerIfNotExists", "import_draw_layer"]);
         });
     });
-    describe("setCircleInnerDiameter", () => {
-        it("should commit as intended", () => {
-            state = {unit: "m"};
-            target = {value: "42.5"};
-
-            actions.setCircleInnerDiameter({state, commit}, {target});
+    describe("setStyleSettings", () => {
+        it("should commit on the mutation key recognized by the current drawType", () => {
+            getters = createGetters("drawType");
+            actions.setStyleSettings({getters, commit}, "styleSettings");
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setCircleInnerDiameter", 42.5]);
+            expect(commit.firstCall.args).to.eql(["setDrawTypeSettings", "styleSettings"]);
+        });
+    });
+    describe("setCircleInnerDiameter", () => {
+        it("should commit as intended", () => {
+            getters = createGetters("test", {circleInnerDiameter: 0, unit: "m"});
+            target = {value: "42.5"};
+
+            actions.setCircleInnerDiameter({getters, commit}, {target});
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {circleInnerDiameter: 42.5, unit: "m"}]);
         });
     });
     describe("setCircleMethod", () => {
         it("should commit as intended", () => {
             const method = Symbol();
 
+            getters = createGetters("test", {circleMethod: null});
             target = {options: [{value: method}], selectedIndex: 0};
 
-            actions.setCircleMethod({commit}, {target});
+            actions.setCircleMethod({commit, getters}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setCircleMethod", method]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {circleMethod: method}]);
         });
     });
     describe("setCircleOuterDiameter", () => {
         it("should commit as intended", () => {
-            state = {unit: "m"};
+            getters = createGetters("test", {circleOuterDiameter: 0, unit: "m"});
             target = {value: "42.5"};
 
-            actions.setCircleOuterDiameter({state, commit}, {target});
+            actions.setCircleOuterDiameter({getters, commit}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setCircleOuterDiameter", 42.5]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {circleOuterDiameter: 42.5, unit: "m"}]);
         });
     });
     describe("setColor", () => {
         it("should commit as intended", () => {
-            state = {opacity: 3};
+            getters = createGetters("test", {color: [255, 255, 255], opacity: 3});
             target = {options: [{value: "0,1,2"}], selectedIndex: 0};
 
-            actions.setColor({state, commit, dispatch}, {target});
+            actions.setColor({getters, commit, dispatch}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setColor", [0, 1, 2, 3]]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {color: [0, 1, 2, 3], opacity: 3}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
     });
     describe("setColorContour", () => {
         it("should commit as intended", () => {
-            state = {opacityContour: 3};
+            getters = createGetters("test", {colorContour: [255, 255, 255], opacityContour: 3});
             target = {options: [{value: "0,1,2"}], selectedIndex: 0};
 
-            actions.setColorContour({state, commit, dispatch}, {target});
+            actions.setColorContour({getters, commit, dispatch}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setColorContour", [0, 1, 2, 3]]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {colorContour: [0, 1, 2, 3], opacityContour: 3}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
@@ -141,10 +167,9 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
             target = {options: [{id: id, value: geometry}], selectedIndex: 0};
             actions.setDrawType({commit, dispatch}, {target});
 
-            expect(commit.calledThrice).to.be.true;
+            expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
-            expect(commit.secondCall.args).to.eql(["setCircleMethod", "interactive"]);
-            expect(commit.thirdCall.args).to.eql(["setDrawType", {id, geometry}]);
+            expect(commit.secondCall.args).to.eql(["setDrawType", {id, geometry}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
@@ -154,69 +179,55 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
 
             expect(commit.calledWithExactly("setFreeHand", true)).to.be.true;
         });
-        it("should commit 'defined' to 'setCircleMethod' if the id of the selectedElement equals 'drawDoubleCircle'", () => {
-            target = {options: [{id: "drawDoubleCircle", value: geometry}], selectedIndex: 0};
-            actions.setDrawType({commit, dispatch}, {target});
-
-            expect(commit.calledWithExactly("setCircleMethod", "defined")).to.be.true;
-        });
-        it("should commit 'interactive' to 'setCircleMethod' if the id of the selectedElement equals anything other than 'drawDoubleCircle'", () => {
-            const id = Symbol();
-
-            target = {options: [{id, value: geometry}], selectedIndex: 0};
-            actions.setDrawType({commit, dispatch}, {target});
-
-            expect(commit.calledWithExactly("setCircleMethod", "interactive")).to.be.true;
-        });
     });
     describe("setFont", () => {
         it("should commit as intended", () => {
+            getters = createGetters("test", {font: "Courier New"});
             target = {options: [{value: "Arial"}], selectedIndex: 0};
 
-            actions.setFont({commit, dispatch}, {target});
+            actions.setFont({commit, dispatch, getters}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setFont", "Arial"]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {font: "Arial"}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
     });
     describe("setFontSize", () => {
         it("should commit as intended", () => {
+            getters = createGetters("test", {fontSize: 10});
             target = {options: [{value: 16}], selectedIndex: 0};
 
-            actions.setFontSize({commit, dispatch}, {target});
+            actions.setFontSize({commit, dispatch, getters}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setFontSize", 16]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {fontSize: 16}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
     });
     describe("setOpacity", () => {
         it("should commit as intended", () => {
-            state = {color: [0, 1, 2]};
+            getters = createGetters("test", {color: [0, 1, 2, 3], opacity: 3});
             target = {options: [{value: "3.5"}], selectedIndex: 0};
 
-            actions.setOpacity({state, commit, dispatch}, {target});
+            actions.setOpacity({getters, commit, dispatch}, {target});
 
-            expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setOpacity", 3.5]);
-            expect(commit.secondCall.args).to.eql(["setColor", [0, 1, 2, 3.5]]);
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {color: [0, 1, 2, 3.5], opacity: 3.5}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
     });
     describe("setOpacityContour", () => {
         it("should commit as intended", () => {
-            state = {colorContour: [0, 1, 2]};
+            getters = createGetters("test", {colorContour: [0, 1, 2, 3], opacityContour: 3});
             target = {options: [{value: "3.5"}], selectedIndex: 0};
 
-            actions.setOpacityContour({state, commit, dispatch}, {target});
+            actions.setOpacityContour({getters, commit, dispatch}, {target});
 
-            expect(commit.calledTwice).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setOpacityContour", 3.5]);
-            expect(commit.secondCall.args).to.eql(["setColorContour", [0, 1, 2, 3.5]]);
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {colorContour: [0, 1, 2, 3.5], opacityContour: 3.5}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
@@ -235,12 +246,13 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
     });
     describe("setStrokeWidth", () => {
         it("should commit as intended", () => {
+            getters = createGetters("test", {strokeWidth: 1});
             target = {options: [{value: "6"}], selectedIndex: 0};
 
-            actions.setStrokeWidth({commit, dispatch}, {target});
+            actions.setStrokeWidth({commit, dispatch, getters}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setStrokeWidth", 6]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {strokeWidth: 6}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
@@ -279,31 +291,29 @@ describe("src/modules/tools/draw/store/actions/setterDraw.js", () => {
     });
     describe("setText", () => {
         it("should commit as intended", () => {
+            getters = createGetters("test", {text: "test"});
             target = {value: "My Text"};
 
-            actions.setText({commit, dispatch}, {target});
+            actions.setText({commit, dispatch, getters}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setText", "My Text"]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {text: "My Text"}]);
             expect(dispatch.calledOnce).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
     });
     describe("setUnit", () => {
         it("should commit as intended", () => {
-            const circleInnerDiameter = Symbol(),
-                circleOuterDiameter = Symbol();
-
-            state = {circleInnerDiameter, circleOuterDiameter};
+            getters = createGetters("test", {unit: "m", circleInnerDiameter: 1, circleOuterDiameter: 2});
             target = {options: [{value: "km"}], selectedIndex: 0};
 
-            actions.setUnit({state, commit, dispatch}, {target});
+            actions.setUnit({getters, commit, dispatch}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setUnit", "km"]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {unit: "km", circleInnerDiameter: 1, circleOuterDiameter: 2}]);
             expect(dispatch.calledTwice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["setCircleInnerDiameter", {target: {value: circleInnerDiameter}}]);
-            expect(dispatch.secondCall.args).to.eql(["setCircleOuterDiameter", {target: {value: circleOuterDiameter}}]);
+            expect(dispatch.firstCall.args).to.eql(["setCircleInnerDiameter", {target: {value: 1}}]);
+            expect(dispatch.secondCall.args).to.eql(["setCircleOuterDiameter", {target: {value: 2}}]);
         });
     });
 });

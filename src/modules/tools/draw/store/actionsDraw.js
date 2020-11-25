@@ -2,7 +2,7 @@ import {Draw} from "ol/interaction.js";
 import {getMapProjection, transform} from "masterportalAPI/src/crs";
 
 import {drawInteractionOnDrawEvent} from "./actions/drawInteractionOnDrawEvent";
-import * as setter from "./actions/setterDraw";
+import * as setters from "./actions/settersDraw";
 import * as withoutGUI from "./actions/withoutGUIDraw";
 import {createDrawInteraction, createModifyInteraction, createSelectInteraction} from "../utils/createInteractions";
 import {createStyle} from "../utils/style/createStyle";
@@ -95,8 +95,9 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
          * @returns {void}
          */
-        createDrawInteractionAndAddToMap ({state, commit, dispatch}, {active, maxFeatures}) {
-            const drawInteraction = createDrawInteraction(state);
+        createDrawInteractionAndAddToMap ({state, commit, dispatch, getters}, {active, maxFeatures}) {
+            const styleSettings = getters.getStyleSettings(),
+                drawInteraction = createDrawInteraction(state, styleSettings);
 
             commit("setDrawInteraction", drawInteraction);
             dispatch("manipulateInteraction", {interaction: "draw", active: active});
@@ -105,7 +106,7 @@ const initialState = Object.assign({}, stateDraw),
 
             // NOTE: This leads to the creation of a second circle instead of a MultiPolygon right now.
             if (state.drawType.id === "drawDoubleCircle") {
-                const drawInteractionTwo = createDrawInteraction(state);
+                const drawInteractionTwo = createDrawInteraction(state, styleSettings);
 
                 commit("setDrawInteractionTwo", drawInteractionTwo);
                 dispatch("manipulateInteraction", {interaction: "draw", active: active});
@@ -225,7 +226,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        createSelectInteractionModifyListener ({state, commit, dispatch}) {
+        createSelectInteractionModifyListener ({state, commit, getters, dispatch}) {
             state.selectInteractionModify.on("select", event => {
                 if (state.currentInteraction !== "modify" || !event.selected.length) {
                     // reset interaction - if not reset, the ol default would be used, this shouldn't be what we want at this point
@@ -238,6 +239,7 @@ const initialState = Object.assign({}, stateDraw),
 
                 // the last selected feature is allways on top
                 const feature = event.selected[event.selected.length - 1];
+                let styleSettings = null;
 
                 commit("setSelectedFeature", feature);
 
@@ -253,15 +255,20 @@ const initialState = Object.assign({}, stateDraw),
                     commit("setDrawType", feature.get("drawState").drawType);
                 }
 
+                styleSettings = getters.getStyleSettings();
+
+                styleSettings.color = feature.get("drawState").color;
+                styleSettings.colorContour = feature.get("drawState").colorContour;
+                styleSettings.strokeWidth = feature.get("drawState").strokeWidth;
+                styleSettings.opacity = feature.get("drawState").opacity;
+                styleSettings.opacityContour = feature.get("drawState").opacityContour;
+                styleSettings.font = feature.get("drawState").font;
+                styleSettings.fontSize = feature.get("drawState").fontSize;
+                styleSettings.text = feature.get("drawState").text;
+
                 commit("setSymbol", feature.get("drawState").symbol);
-                commit("setColor", feature.get("drawState").color);
-                commit("setColorContour", feature.get("drawState").colorContour);
-                commit("setStrokeWidth", feature.get("drawState").strokeWidth);
-                commit("setOpacity", feature.get("drawState").opacity);
-                commit("setOpacityContour", feature.get("drawState").opacityContour);
-                commit("setFont", feature.get("drawState").font);
-                commit("setFontSize", feature.get("drawState").fontSize);
-                commit("setText", feature.get("drawState").text);
+
+                setters.setStyleSettings({getters, commit}, styleSettings);
 
                 // ui reason: this is the short period of time the ol default mark of select interaction is seen at mouse click event of a feature
                 setTimeout(() => {
@@ -275,25 +282,26 @@ const initialState = Object.assign({}, stateDraw),
          * @param {ol/Feature} feature the openlayer feature to append the current "drawState" to
          * @returns {void}
          */
-        addDrawStateToFeature ({state}, feature) {
+        addDrawStateToFeature ({getters}, feature) {
             if (!feature) {
                 return;
             }
+            const styleSettings = getters.getStyleSettings();
 
             feature.set("drawState", {
                 // copies
-                strokeWidth: state.strokeWidth,
-                opacity: state.opacity,
-                opacityContour: state.opacityContour,
-                font: state.font,
-                fontSize: parseInt(state.fontSize, 10),
-                text: state.text,
+                strokeWidth: styleSettings.strokeWidth,
+                opacity: styleSettings.opacity,
+                opacityContour: styleSettings.opacityContour,
+                font: styleSettings.font,
+                fontSize: parseInt(styleSettings.fontSize, 10),
+                text: styleSettings.text,
 
-                // clones
-                drawType: JSON.parse(JSON.stringify(state.drawType)),
-                symbol: JSON.parse(JSON.stringify(state.symbol)),
-                color: JSON.parse(JSON.stringify(state.color)),
-                colorContour: JSON.parse(JSON.stringify(state.colorContour))
+                // clones - styleSettings are a clone already
+                drawType: JSON.parse(JSON.stringify(getters.drawType)),
+                symbol: JSON.parse(JSON.stringify(getters.symbol)),
+                color: styleSettings.color,
+                colorContour: styleSettings.colorContour
             });
         },
         /**
@@ -412,12 +420,6 @@ const initialState = Object.assign({}, stateDraw),
          * @returns {void}
          */
         resetModule ({state, commit, dispatch, getters}) {
-            const color = initialState.color,
-                colorContour = initialState.colorContour;
-
-            color[3] = initialState.opacity;
-            colorContour[3] = initialState.opacityContour;
-
             commit("setActive", false);
             dispatch("toggleInteraction", "draw");
             dispatch("manipulateInteraction", {interaction: "draw", active: false});
@@ -429,22 +431,15 @@ const initialState = Object.assign({}, stateDraw),
             dispatch("removeInteraction", state.selectInteraction);
 
             commit("setSelectedFeature", null);
-            commit("setCircleMethod", initialState.circleMethod);
-            commit("setCircleInnerDiameter", initialState.circleInnerDiameter);
-            commit("setCircleOuterDiameter", initialState.circleOuterDiameter);
-            commit("setColor", color);
-            commit("setColorContour", colorContour);
             commit("setDrawType", initialState.drawType);
             commit("setFreeHand", initialState.freeHand);
-            commit("setOpacity", initialState.opacity);
-            commit("setOpacityContour", initialState.opacityContour);
             commit("setPointSize", initialState.pointSize);
             commit("setSymbol", getters.iconList[0]);
             commit("setWithoutGUI", initialState.withoutGUI);
 
             state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
         },
-        ...setter,
+        ...setters,
         /**
          * Starts the Download Tool for the drawn features.
          * NOTE: Draw Tool is not hidden.
@@ -522,9 +517,11 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        updateDrawInteraction ({state, commit, dispatch}) {
+        updateDrawInteraction ({state, commit, getters, dispatch}) {
             if (state.currentInteraction === "modify" && state.selectedFeature !== null) {
-                state.selectedFeature.setStyle(createStyle(state));
+                const styleSettings = getters.getStyleSettings();
+
+                state.selectedFeature.setStyle(createStyle(state, styleSettings));
                 dispatch("addDrawStateToFeature", state.selectedFeature);
                 return;
             }
