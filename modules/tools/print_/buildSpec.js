@@ -5,6 +5,9 @@ import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Image, Tile, Vector, Group} from "ol/layer.js";
 import store from "../../../src/app-store/index";
+import "./RadioBridge.js";
+import isObject from "../../../src/utils/isObject";
+import Geometry from "ol/geom/Geometry";
 
 const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype */{
     defaults: {
@@ -21,7 +24,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     initialize: function () {
         this.listenTo(Radio.channel("CswParser"), {
-            "fetchedMetaData": this.fetchedMetaData
+            "fetchedMetaDataForPrint": this.fetchedMetaData
         });
     },
 
@@ -35,6 +38,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
+            if (this.get("uniqueIdList").length === 0) {
+                Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
+            }
         }
     },
 
@@ -187,7 +193,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     return feature.getStyle().getZIndex();
                 }
                 return 0;
-
             });
 
         if (features.length > 0) {
@@ -707,6 +712,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             geojsonFormat = new GeoJSON();
         let convertedFeature;
 
+        // remove all object properties except geometry. Otherwise mapfish runs into an error
+        Object.keys(clonedFeature.getProperties()).forEach(property => {
+            if (isObject(clonedFeature.get(property)) && clonedFeature.get(property) instanceof Geometry === false) {
+                clonedFeature.unset(property);
+            }
+        });
         // take over id from feature because the feature id is not set in the clone.
         clonedFeature.setId(feature.getId());
         // circle is not suppported by geojson
@@ -905,10 +916,13 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
-        if (isMetaDataAvailable) {
+        if (isMetaDataAvailable && metaDataLayerList.length > 0) {
             metaDataLayerList.forEach(function (layerName) {
                 this.getMetaData(layerName);
             }.bind(this));
+        }
+        else {
+            Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
         }
     },
 
@@ -945,7 +959,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             cswObj.keyList = ["date", "orgaOwner", "address", "email", "tel", "url"];
             cswObj.uniqueId = uniqueId;
 
-            Radio.trigger("CswParser", "getMetaData", cswObj);
+            Radio.trigger("CswParser", "getMetaDataForPrint", cswObj, layer);
         }
     },
 
@@ -980,7 +994,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 legendObj.legendType = "wfsImage";
                 legendObj.imageUrl = graphic;
             }
-            valuesArray.push(legendObj);
+            if (typeof legendObj.color !== "undefined") {
+                valuesArray.push(legendObj);
+            }
         });
         return [].concat(...valuesArray);
     },
@@ -991,7 +1007,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {String} - Fill color from SVG.
      */
     getFillColorFromSVG: function (svgString) {
-        return svgString.split(/fill:(.+)/)[1].split(/;(.+)/)[0];
+        if (svgString.split(/fill:(.+)/)[1]) {
+            return svgString.split(/fill:(.+)/)[1].split(/;(.+)/)[0];
+        }
+        return undefined;
     },
 
     /**

@@ -34,11 +34,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                     getTheme: function () {
                         return "images";
                     },
-                    getGfiUrl: () => {
-                        return {
-                            "url": "http", "mimeType": "text/html"
-                        };
-                    }
+                    getGfiUrl: () => "http",
+                    getMimeType: () => "text/xml"
                 }
             },
             localVue,
@@ -123,7 +120,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             }
                         };
                     },
-                    getGfiUrl: () => ""
+                    getGfiUrl: () => "",
+                    getMimeType: () => "text/xml"
                 }
             },
             localVue,
@@ -153,6 +151,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             }
                         };
                     },
+                    getMimeType: () => "text/xml",
                     getGfiUrl: () => ""
                 }
             },

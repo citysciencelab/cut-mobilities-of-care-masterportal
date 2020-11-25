@@ -16,6 +16,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 feature: {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
+                    getMimeType: () => "text/xml",
                     getGfiUrl: () => ""
                 }
             },
@@ -44,6 +45,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 feature: {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
+                    getMimeType: () => "text/xml",
                     getGfiUrl: () => ""
                 }
             },
@@ -72,6 +74,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 feature: {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
+                    getMimeType: () => "text/xml",
                     getGfiUrl: () => ""
                 }
             },
@@ -101,6 +104,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     feature: {
                         getTheme: () => "Default",
                         getTitle: () => "Hallo",
+                        getMimeType: () => "text/xml",
                         getGfiUrl: () => ""
                     }
                 },
@@ -132,6 +136,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     feature: {
                         getTheme: () => "Default",
                         getTitle: () => "Hallo",
+                        getMimeType: () => "text/xml",
                         getGfiUrl: () => ""
                     }
                 },
@@ -163,6 +168,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     feature: {
                         getTheme: () => "Default",
                         getTitle: () => "Hallo",
+                        getMimeType: () => "text/xml",
                         getGfiUrl: () => ""
                     }
                 },
@@ -195,11 +201,8 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 feature: {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
-                    getGfiUrl: () => {
-                        return {
-                            "url": "http", "mimeType": "text/html"
-                        };
-                    }
+                    getMimeType: () => "text/html",
+                    getGfiUrl: () => "http"
                 }
             },
             computed: {
@@ -227,6 +230,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 feature: {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
+                    getMimeType: () => "text/xml",
                     getGfiUrl: () => ""
                 }
             },

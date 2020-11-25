@@ -50,7 +50,7 @@ export default {
         :class="['control-icon', 'glyphicon', glyphiconClass, inline ? 'inline' : 'standalone']"
         :title="title"
         :disabled="disabled"
-        @click="onClick"
+        @click.stop="onClick"
         @keyup.space.stop.prevent="onClick"
     >
         <!-- children should usually be placed absolutely in relation to ControlIcon -->

@@ -1,7 +1,7 @@
 import stateMap from "./stateMap";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
-import {createGfiFeature} from "./actions/getWmsFeaturesByMimeType.js";
-import {getGfiFeaturesByTileFeature} from "./actions/getGfiFeaturesByTileFeature.js";
+import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
+import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTileFeature";
 
 const gettersMap = {
     ...generateSimpleGetters(stateMap),
@@ -81,27 +81,17 @@ const gettersMap = {
                 if (feature.getProperties().features) {
                     feature.get("features").forEach(function (clusteredFeature) {
                         featuresAtPixel.push(createGfiFeature(
-                            layer.get("name"),
-                            layer.get("gfiTheme"),
-                            layer.get("gfiAttributes"),
-                            clusteredFeature.getProperties(),
-                            layer.get("gfiFormat"),
-                            clusteredFeature.getId(),
+                            layer,
                             "",
-                            layer.get("id")
+                            clusteredFeature
                         ));
                     });
                 }
                 else {
                     featuresAtPixel.push(createGfiFeature(
-                        layer.get("name"),
-                        layer.get("gfiTheme"),
-                        layer.get("gfiAttributes"),
-                        feature.getProperties(),
-                        layer.get("gfiFormat"),
-                        feature.getId(),
+                        layer,
                         "",
-                        layer.get("id")
+                        feature
                     ));
                 }
             }

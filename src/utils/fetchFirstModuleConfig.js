@@ -172,7 +172,10 @@ function deepMerge (source, target) {
         return target;
     }
 
-    if (target instanceof Object === false || Array.isArray(source)) {
+    if (target instanceof Object === false) {
+        if (Array.isArray(source)) {
+            return [...source];
+        }
         return {...source};
     }
 
