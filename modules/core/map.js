@@ -536,7 +536,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         this.get("view").fit(extentToZoom, {
             size: this.get("map").getSize(),
-            duration: options.hasOwnProperty("duration") ? options.duration : 800,
+            duration: options && options.hasOwnProperty("duration") ? options.duration : 800,
             ...options
         });
     },
