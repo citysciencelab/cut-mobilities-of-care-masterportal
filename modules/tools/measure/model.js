@@ -770,7 +770,11 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         const length = line.getLength(),
             output = {},
             coords = line.getCoordinates(),
-            scaleError = this.get("scale") / 1000; // Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
+            scaleError = this.get("scale") / 1000, // Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
+            falseEasting = this.get("falseEasting") || 500000,
+            earthRadius = this.get("earthRadius") || 6378137,
+            scaleFactor = this.get("scaleFactor") || 0.9996,
+            invScaleFactor = 1 - scaleFactor;
 
         let lengthRed = "",
             fehler = 0,
@@ -779,14 +783,12 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         for (let i = 0; i < coords.length; i++) {
             rechtswertMittel += coords[i][0];
             if (i < coords.length - 1) {
-                // http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
-                // Seite 5:
                 fehler += Math.pow(scaleError, 2);
             }
         }
         fehler = Math.sqrt(fehler);
-        rechtswertMittel = rechtswertMittel / coords.length / 1000;
-        lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2)))) - (0.0004 * length);
+        rechtswertMittel = rechtswertMittel / coords.length;
+        lengthRed = length - (scaleFactor * length * (Math.pow(rechtswertMittel - falseEasting, 2) / (2 * Math.pow(earthRadius, 2)))) - (invScaleFactor * length);
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km") {
                 output.measure = (lengthRed / 1000).toFixed(1) + " " + this.get("unit");
@@ -817,7 +819,11 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         const area = polygon.getArea(),
             output = {},
             coords = polygon.getLinearRing(0).getCoordinates(),
-            scaleError = this.get("scale") / 1000;
+            scaleError = this.get("scale") / 1000,
+            falseEasting = this.get("falseEasting") || 500000,
+            earthRadius = this.get("earthRadius") || 6378137,
+            scaleFactor = this.get("scaleFactor") || 0.9996,
+            invScaleFactor = 1 - scaleFactor;
 
         let areaRed = "",
             rechtswertMittel = 0,
@@ -834,8 +840,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         }
 
         fehler = 0.5 * scaleError * Math.sqrt(fehler);
-        rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
-        areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2))) - (0.0008 * area);
+        rechtswertMittel = rechtswertMittel / coords.length;
+        areaRed = area - (Math.pow(scaleFactor, 2) * area * (Math.pow(rechtswertMittel - falseEasting, 2) / Math.pow(earthRadius, 2))) - (Math.pow(invScaleFactor, 2) * area);
 
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km²") {
