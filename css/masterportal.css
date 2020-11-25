@@ -173,3 +173,20 @@ label {
     }
   }
 
+  /* deprecated  */
+  .loading {
+    position: absolute;
+    top: 30%;
+    left: 32.5%;
+    z-index: 9999;
+    text-align: center;
+    width: 35%;
+}
+
+.loading div {
+    font-size:5vmin;
+    line-height: 130%;
+    margin-top: 5%;
+}
+
+

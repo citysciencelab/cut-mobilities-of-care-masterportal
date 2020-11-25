@@ -37,7 +37,6 @@ const MobileMenu = Backbone.View.extend({
 
         $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
         $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
-        document.getElementsByClassName("portal-title")[0].style.display = "none";
         this.addViews(rootModels);
         return this;
     },
