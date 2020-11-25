@@ -197,23 +197,4 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
             expect(result[0].getProperties()).to.deep.equal({});
         });
     });
-    describe("getWmsFeaturesByMimeType", () => {
-        it("should call openWindow before anything else if http: url is given", async () => {
-            layer.gfiAsNewWindow = () => true;
-            const result = await getWmsFeaturesByMimeType(layer, url);
-
-            expect(result).to.be.an("array").to.be.empty;
-        });
-        it("should call requestGfi if mimeType text/xml is given", async () => {
-            const result = await getWmsFeaturesByMimeType(layer, url);
-
-            expect(result).to.be.empty;
-        });
-        it("should call requestGfi if mimeType text/html is given", async () => {
-            layer.infoFormat = "text/html";
-            const result = await getWmsFeaturesByMimeType(layer, url);
-
-            expect(result).to.be.empty;
-        });
-    });
 });

@@ -155,10 +155,11 @@ const actions = {
 
         Promise.all(gfiWmsLayerList.map(layer => {
             const gfiParams = {
-                INFO_FORMAT: layer.get("infoFormat"),
-                FEATURE_COUNT: layer.get("featureCount")
-            },
-            url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
+                    INFO_FORMAT: layer.get("infoFormat"),
+                    FEATURE_COUNT: layer.get("featureCount")
+                },
+                url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
+
             return getWmsFeaturesByMimeType(layer, url);
         }))
             .then(gfiFeatures => {
