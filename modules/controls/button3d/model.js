@@ -29,7 +29,7 @@ const Button3dModel = Backbone.Model.extend(/** @lends Button3dModel.prototype *
     /**
     * change language - sets default values for the language
     * @param {String} lng the language changed to
-    * @returns {Void}  -
+    * @returns {void}  -
     */
     changeLang: function () {
         this.set({
@@ -37,6 +37,15 @@ const Button3dModel = Backbone.Model.extend(/** @lends Button3dModel.prototype *
             openView3dText: i18next.t("common:modules.controls.3d.openView3d"),
             closeView3dText: i18next.t("common:modules.controls.3d.closeView3d")
         });
+    },
+
+    /**
+     * sets the button title/tooltip
+     * @param {String} value -
+     * @returns {void}
+     */
+    setButtonTitle: function (value) {
+        this.set("buttonTitle", value);
     }
 });
 

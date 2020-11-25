@@ -23,7 +23,7 @@ function cancelDrawWithoutGUI ({commit, dispatch}, cursor) {
 
     if (typeof cursor?.cursor !== "undefined") {
         // TODO: The cursor changes from the map need to happen here
-        $("#map").removeClass("no-cursor");
+        document.querySelector("#map").classList.remove("no-cursor");
     }
 }
 

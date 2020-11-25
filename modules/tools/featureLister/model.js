@@ -1,4 +1,5 @@
 import Tool from "../../core/modelList/tool/model";
+import {extractEventCoordinates} from "../../../src/utils/extractEventCoordinates";
 
 const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -108,7 +109,6 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
     /**
      * Takes the selected feature, checks the properties and zooms to it
      * @fires Alerting#RadioTriggerAlertAlert
-     * @fires MapMarker#RadioTriggerMapMarkerZoomTo
      * @return {void}
      */
     getFeatureWithFeatureId: function () {
@@ -126,7 +126,7 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
 
             // Zoom auf Extent
             if (geometry) {
-                Radio.trigger("MapMarker", "zoomTo", {type: "Feature-Lister-Click", coordinate: geometry});
+                Radio.trigger("Map", "zoomToExtent", extractEventCoordinates(geometry));
             }
             else {
                 Radio.trigger("Alert", "alert", {
