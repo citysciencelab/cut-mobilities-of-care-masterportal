@@ -17,7 +17,7 @@ describe("tools/measure/model", function () {
             model.setScale(1000);
             model.setUnit("m");
             expect(model.formatLength(geom)).to.deep.equal({
-                measure: "996.54 m",
+                measure: "996.53 m",
                 deviance: "(+/- 1.00 m)"
             });
         });
@@ -39,7 +39,7 @@ describe("tools/measure/model", function () {
             model.setScale(1000);
             model.setUnit("m²");
             expect(model.formatArea(geom)).to.deep.equal({
-                measure: "496536 m²",
+                measure: "496933 m²",
                 deviance: "(+/- 1000 m²)"
             });
         });
@@ -97,7 +97,7 @@ describe("tools/measure/model", function () {
             textStyles = model.generateTextStyles(feature);
 
             expect(textStyles).to.be.an("array").of.length(2);
-            expect(textStyles[0].getText().getText()).to.equal("996.54 m");
+            expect(textStyles[0].getText().getText()).to.equal("996.53 m");
             expect(textStyles[1].getText().getText()).to.equal("(+/- 1.00 m)");
         });
         it("should generate textStyles for Polygon", function () {
@@ -112,7 +112,7 @@ describe("tools/measure/model", function () {
             const textStyles = model.generateTextStyles(feature);
 
             expect(textStyles).to.be.an("array").of.length(2);
-            expect(textStyles[0].getText().getText()).to.equal("496536 m");
+            expect(textStyles[0].getText().getText()).to.equal("496933 m");
             expect(textStyles[1].getText().getText()).to.equal("(+/- 1000 m)");
         });
     });
