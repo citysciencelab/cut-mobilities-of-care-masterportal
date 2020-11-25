@@ -1,4 +1,5 @@
 import ParcelSearchTemplate from "text-loader!./template.html";
+import store from "../../../src/app-store";
 
 const ParcelSearchView = Backbone.View.extend({
     events: {
@@ -66,7 +67,7 @@ const ParcelSearchView = Backbone.View.extend({
         }
         else {
             this.$el.empty();
-            Radio.trigger("MapMarker", "hideMarker");
+            store.dispatch("MapMarker/removePointMarker");
         }
 
         return this;

@@ -1,5 +1,5 @@
 const Config = {
-    wfsImgPath: "./ressources/img/",
+    wfsImgPath: "./resources/img/",
     namedProjections: [
         ["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
     ],
@@ -15,11 +15,11 @@ const Config = {
         showVersion: true
     },
     quickHelp: {
-        imgPath: "./ressources/img/"
+        imgPath: "./resources/img/"
     },
-    layerConf: "./ressources/services-internet.json",
-    restConf: "./ressources/rest-services-internet.json",
-    styleConf: "./ressources/style_v3.json",
+    layerConf: "./resources/services-internet.json",
+    restConf: "./resources/rest-services-internet.json",
+    styleConf: "./resources/style_v3.json",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,

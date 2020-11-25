@@ -1,8 +1,8 @@
 <script>
 import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
-import {mapGetters, mapMutations} from "vuex";
-import upperFirst from "../../../../../utils/upperFirst";
+import getTheme from "../../utils/getTheme";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import "jquery-ui/ui/widgets/draggable";
 import "jquery-ui/ui/widgets/resizable";
 
@@ -42,7 +42,7 @@ export default {
          * @returns {String} the name of the theme
          */
         theme: function () {
-            return this.getTheme();
+            return getTheme(this.feature.getTheme(), this.$options.components, this.$gfiThemeAddons);
         },
 
         /**
@@ -95,11 +95,11 @@ export default {
             $(".gfi-detached").draggable({
                 containment: "#map",
                 handle: ".gfi-header",
-                drag: function () {
-                    $(".gfi-detached").css("right", "inherit");
+                drag: function (evt, ui) {
+                    ui.helper[0].style.right = "inherit";
                 },
                 stop: function (evt, ui) {
-                    $(".gfi-detached").css("left", (ui.position.left + 1) + "px");
+                    ui.helper[0].style.left = (ui.position.left + 1) + "px";
                 }
             });
         });
@@ -107,39 +107,13 @@ export default {
         this.setMarker();
     },
     beforeDestroy: function () {
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "hideMarker");
+        this.removePointMarker();
     },
     methods: {
         ...mapMutations("Map", ["setCenter"]),
+        ...mapActions("MapMarker", ["removePointMarker", "placingPointMarker"]),
         close () {
             this.$emit("close");
-        },
-
-        /**
-         * Returns the right gfi Theme
-         * it check if the right Theme (Component) is there, if yes just use this component, otherwise use the default theme
-         * @returns {String} the name of the gfi Theme
-         */
-        getTheme () {
-            const gfiComponents = Object.keys(this.$options.components),
-                gfiTheme = this.feature.getTheme(),
-                configTheme = upperFirst(typeof gfiTheme === "object" ? gfiTheme.name : gfiTheme);
-
-            let theme = "";
-
-            if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
-                theme = configTheme;
-            }
-            else if (this.$gfiThemeAddons && this.$gfiThemeAddons.includes(configTheme)) {
-                theme = configTheme;
-            }
-            else {
-                console.warn(String("The gfi theme '" + configTheme + "' could not be found, the default theme will be used. Please check your configuration!"));
-                theme = "Default";
-            }
-
-            return theme;
         },
 
         /**
@@ -152,8 +126,8 @@ export default {
                 if (this.centerMapToClickPoint) {
                     this.setCenter(this.clickCoord);
                 }
-                // TODO replace trigger when MapMarker is migrated
-                Radio.trigger("MapMarker", "showMarker", this.clickCoord);
+
+                this.placingPointMarker(this.clickCoord);
             }
         }
     }

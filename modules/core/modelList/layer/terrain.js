@@ -36,6 +36,7 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
 
             if (this.get("isVisibleInMap") === true) {
                 map3d.getCesiumScene().terrainProvider = this.get("terrainProvider");
+                this.createLegend();
             }
             else {
                 map3d.getCesiumScene().terrainProvider = new Cesium.EllipsoidTerrainProvider({});
@@ -61,6 +62,38 @@ const TerrainLayer = Layer.extend(/** @lends TerrainLayer.prototype */{
         }
     },
 
+    /**
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     * @returns {void}
+     */
+    createLegend: function () {
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let legend = this.get("legend");
+
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (styleModel && legend === true) {
+            this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
+        }
+    },
 
     /**
      * Register interaction with map view. (For Tileset Layer this is not necessary)
