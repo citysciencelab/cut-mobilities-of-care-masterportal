@@ -89,6 +89,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     changeLang: function (lng) {
         this.setAdditionalMetadata(i18next.t("common:modules.layerInformation.additionalMetadata"));
         this.setAddressSuffix(i18next.t("common:modules.layerInformation.addressSuffix"));
+        this.setAttachFileMessage(i18next.t("common:modules.layerInformation.attachFileMessage"));
         this.setCloseButton(i18next.t("common:modules.layerInformation.closeButton"));
         this.setDownloadDataset(i18next.t("common:modules.layerInformation.downloadDataset"));
         this.setInformationAndLegend(i18next.t("common:modules.layerInformation.informationAndLegend"));
@@ -236,6 +237,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         this.setMetadataURL();
         this.setAdditionalMetadata(i18next.t("common:modules.layerInformation.additionalMetadata"));
         this.setAddressSuffix(i18next.t("common:modules.layerInformation.addressSuffix"));
+        this.setAttachFileMessage(i18next.t("common:modules.layerInformation.attachFileMessage"));
         this.setCloseButton(i18next.t("common:modules.layerInformation.closeButton"));
         this.setDownloadDataset(i18next.t("common:modules.layerInformation.downloadDataset"));
         this.setInformationAndLegend(i18next.t("common:modules.layerInformation.informationAndLegend"));
@@ -330,6 +332,15 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     */
     setAddressSuffix: function (value) {
         this.set("addressSuffix", value);
+    },
+
+    /**
+    * Setter function for attachFileMessage
+    * @param {String} value attach file message
+    * @returns {void}
+    */
+    setAttachFileMessage: function (value) {
+        this.set("attachFileMessage", value);
     },
 
     /**

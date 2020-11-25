@@ -112,6 +112,7 @@
         "layerInformation": {
           "additionalMetadata": "additional metadata",
           "addressSuffix": "Address",
+          "attachFileMessage": "Attach file type during download if necessary",
           "closeButton": "Close",
           "downloadDataset": "Download dataset",
           "errorMessage": "The query of the metadata failed. If the problem persists, please contact the owner of the service: <b>{{cswObjCswUrl}}</b>",
