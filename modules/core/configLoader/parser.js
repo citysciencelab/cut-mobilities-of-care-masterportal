@@ -142,7 +142,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             type: "featureViaURL",
             attr: this.get("portalConfig").featureViaURL
         });
-        
+
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
             this.parseTree(this.get("baselayer"), "tree", 0);
@@ -810,7 +810,6 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     setItemList: function (value) {
-        console.log("setItemList:", value);
         this.set("itemList", value);
     },
 
