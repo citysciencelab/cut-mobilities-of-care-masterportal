@@ -11,6 +11,11 @@ const Config = {
         wfsId: "4560",
         styleId: "location_eventlotse"
     },
+    metadata: {
+        useProxy: [
+            "https://metaver.de/csw"
+        ]
+    },
     zoomToGeometry: {
         layerId: "1692",
         attribute: "bezirk_name",

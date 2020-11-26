@@ -1,5 +1,10 @@
 const Config = {
     wfsImgPath: "./resources/img/",
+    metadata: {
+        useProxy: [
+            "https://metaver.de/csw"
+        ]
+    },
     namedProjections: [
         ["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]
     ],

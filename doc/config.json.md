@@ -162,7 +162,7 @@ Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 |incrementalSearch|nein|Boolean|true|Gibt an ob eine Suchverfollständigung (Autocomplete) stattfinden soll. Wenn `incrementalSearch` auf `false` gesetzt wird, so wird eine Surche nur durch einen Klick auf die Lupe bzw. durch Enter gestartet. Dies ist sinvoll, wenn die Anzahl erlaubter Anfragen an den eingebundenen Dienst kontigentiert ist.|false|
 |serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.md)** vor.|false|
 |classes|nein|**[LocationFinderClass](#markdown-header-portalconfigsearchbarlocationfinderLocationFinderClass)**||Kann Klassen (mit Eigenschaften) enthalten die berücksichtigt werden sollen. Wenn hier nichts angegeben wird, so werden alle Klassen berücksichtigt.|false|
-|useProxy|nein|Boolean|false|Gibt an ob ein Proxy verwendet werden soll.|false|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |spatialReference|nein|String||Koordinatensystem, in dem das Ergebnis angefragt werden soll. Standardmäßig wird  hier der Wert von Portalconfig.mapView.epsg verwendet.|false|
 
 ##### Portalconfig.searchbar.locationFinder.LocationFinderClass #####
@@ -955,7 +955,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linienhafte Objekte.|false|
-|measure|nein|**[tool](#markdown-header-portalconfigmenutool)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
+|measure|nein|**[tool](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
 |routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
@@ -963,7 +963,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |searchByCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |selectFeatures|nein|**[tool](#markdown-header-portalconfigmenutool)**||Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute.|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
-|styleWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
+|styleWMS|nein|**[styleWMS](#markdown-header-portalconfigmenutool)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
 |styleVT|nein|**[tool](#markdown-header-portalconfigmenutool)**||Style-Auswahl zu VT-Diensten. Ermöglicht das Umschalten des Stylings eines Vector Tile Layers, wenn in der services.json mehrere Styles für ihn eingetragen sind.|false|
 |supplyCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
@@ -1217,6 +1217,7 @@ Objekt, das eine Filtereinstellung definiert.
 |predefinedRules|nein|**[predefinedRule](#markdown-header-portalconfigmenutoolfilterpredefinedquerypredefinedrule)**[]||Filterregel die die Daten vorfiltert.|true|
 |attributeWhiteList|nein|String[]/**[attributeWhiteListObject](#markdown-header-portalconfigmenutoolfilterpredefinedqueryattributewhitelistobject)**[]||Whitelist an Attributen die verwendet werden sollen.|true|
 |snippetType|nein|String||Datentyp des Attributes. Wenn nicht angegeben, wird der Datentyp automatisch ermittelt. Er kann in Ausnahmefällen auch manuell überschrieben werden. Beispielsweise mit "checkbox-classic". Dies wird im Projekt DIPAS auf der Touchtabl-Variante des Portals benötigt.|true|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel**
 ```
@@ -1389,6 +1390,7 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 |isLegendSelected|nein|Boolean|false|Gibt an, ob die Checkbox, zum Legende mitdrucken, aktiviert sein soll. Wird nur angezeigt wenn der Druckdienst (Mapfish Print 3) das Drucken der Legende unterstützt.|false|
 |legendText|nein|String|"Mit Legende"|Beschreibender Text für die printLegend-Checkbox.|false|
 |dpiForPdf|nein|Number|200|Auflösung der Karte im PDF.|false|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel Konfiguration mit MapfishPrint2**
 ```
@@ -1578,7 +1580,7 @@ Die linienhafte Darstellung der Pendler wird für das Pendlerportal der MRH(Metr
 "animation": {
     "name": "Pendler (Animation)",
     "glyphicon": "glyphicon-play-circle",
-    "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+    "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
     "params": {
         "REQUEST": "GetFeature",
         "SERVICE": "WFS",
@@ -1595,6 +1597,26 @@ Die linienhafte Darstellung der Pendler wird für das Pendlerportal der MRH(Metr
 
 ***
 
+#### Portalconfig.menu.tool.measure
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden auch die Messungenauigkeiten mit angegeben.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|earthRadius|nein|Number|6378137|Erdradius in Meter.|false|
+
+**Beispiel**
+```
+#!json
+"measure": {
+    "name": "translate#common:menu.tools.measure",
+    "earthRadius": 6378137
+},
+```
+
+***
 #### Portalconfig.menu.tool.animation
 
 [inherits]: # (Portalconfig.menu.tool.pendlerCore)
@@ -1607,6 +1629,7 @@ Die Pendleranimation wird für das Pendlerportal der MRH(Metropolregion Hamburg)
 |minPx|nein|Integer|5|Minimalgröße der Kreisdarstellung der Pendler.|false|
 |maxPx|nein|Integer|20|Maximalgröße der Kreisdarstellung der Pendler.|false|
 |colors|nein|String[]|[]|Anzahl der Farben im RGBA-Muster ("rgba(255,0,0,1)").|false|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel**
 ```
@@ -1615,7 +1638,7 @@ Die Pendleranimation wird für das Pendlerportal der MRH(Metropolregion Hamburg)
     "name": "Pendler (Animation)",
     "glyphicon": "glyphicon-play-circle",
     "steps": 30,
-    "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+    "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
     "params": {
         "REQUEST": "GetFeature",
         "SERVICE": "WFS",
@@ -1644,7 +1667,7 @@ Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Se
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |zoomLevel|nein|Integer|1|Zoomstufe auf die gezoomt wird bei Auswahl einer Gemeinde.|false|
-|url|nein|String|"http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung"|URL des WFS Dienstes der abgefragt werden soll.|false|
+|url|nein|String|"https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung"|URL des WFS Dienstes der abgefragt werden soll.|false|
 |params|nein|**[param](#markdown-header-portalconfigmenutoolpendlercoreparam)**||Parameter mit denen der Dienst abgefragt werden soll.|false|
 |featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType (Layer) des WFS Dienstes.|false|
 |attrAnzahl|nein|String|"anzahl_einpendler"|Attribut das die Anzahl der Pendler pro Gemeinde enthält.|false|
@@ -1824,6 +1847,7 @@ Die Planungen müssen im virtualcityPLANNER auf öffentlich gesetzt sein, dann k
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |serviceId|ja|String||Id des services. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel**
 ```
@@ -1881,6 +1905,18 @@ Todo
 
 ***
 
+#### Portalconfig.menu.tool.styleWMS
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+
+***
+
 #### Portalconfig.menu.tool.wfst
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1899,6 +1935,7 @@ Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.js
 |areaButton|nein|[areaButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
 |edit|nein|[edit](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit wekcher Beschriftung er angezeigt wird.|
 |delete|nein|[delete](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der delete Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel**
 ```

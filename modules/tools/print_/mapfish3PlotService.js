@@ -5,6 +5,7 @@ import BuildCanvasModel from "./buildCanvas";
 import "./RadioBridge.js";
 import store from "../../../src/app-store/index";
 import thousandsSeparator from "../../../src/utils/thousandsSeparator.js";
+import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -67,7 +68,8 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         invisibleLayer: [],
         zoomLevel: null,
         hintInfo: "",
-        spec: new BuildSpecModel()
+        spec: new BuildSpecModel(),
+        useProxy: false
     }),
 
     /**
@@ -114,6 +116,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @property {String} currentMapScale the current map scale
      * @property {String} hintInfoScale the hint information when the current print scale and map scale are not the same
      * @property {String} hintInfo the hint text for the layer could not be printed
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Core#RadioRequestMapViewGetOptions
      * @listens Print#ChangeIsActive
      * @listens MapView#RadioTriggerMapViewChangedOptions
@@ -682,8 +685,15 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      * @returns {void}
      */
     sendRequest: function (serviceUrl, requestType, successCallback, data) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(serviceUrl) : serviceUrl;
+
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", serviceUrl),
+            url: url,
             type: requestType,
             data: data,
             context: this,

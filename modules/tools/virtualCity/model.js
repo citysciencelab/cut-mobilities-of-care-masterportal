@@ -1,11 +1,13 @@
 import axios from "axios";
 import Planning from "./planning";
 import Tool from "../../core/modelList/tool/model";
+import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
         planningCache: {},
-        readyPromise: null
+        readyPromise: null,
+        useProxy: false
     }),
 
     /**
@@ -14,6 +16,7 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
      * @memberof Tools.VirtualCity
      * @constructs
      * @property {String} serviceID=undefined Id of service in rest-services.json thats contains the service url
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @listens VirtualCity#RadioRequestVirtualCityGetPlanningById
      * @listens VirtualCity#RadioRequestVirtualCityGetPlannings
      * @listens VirtualCity#RadioRequestVirtualCityActivatePlanning
@@ -73,7 +76,13 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
      */
     getPlannings () {
         if (!this.get("readyPromise")) {
-            const service = Radio.request("RestReader", "getServiceById", this.get("serviceId"));
+            const service = Radio.request("RestReader", "getServiceById", this.get("serviceId")),
+                /**
+                 * @deprecated in the next major-release!
+                 * useProxy
+                 * getProxyUrl()
+                 */
+                url = this.get("useProxy") ? getProxyUrl(service.get("url")) : service.get("url");
 
             if (!service) {
                 return Promise.reject(new Error("Could not find service"));
@@ -84,7 +93,7 @@ const VirtualCity = Tool.extend(/** @lends VirtualCity.prototype */{
 
                     if (Array.isArray(data)) {
                         data.forEach((planningData)=> {
-                            const planning = new Planning(Object.assign(planningData, {url: service.get("url"), id: planningData._id}));
+                            const planning = new Planning(Object.assign(planningData, {url: url, id: planningData._id}));
 
                             this.get("planningCache")[planning.id] = planning;
                         }, this);
