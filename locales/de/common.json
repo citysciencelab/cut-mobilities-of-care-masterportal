@@ -108,7 +108,19 @@
             "en": "Englisch"
         },
         "cswParser": {
-            "noMetadataMessage": "Keine Metadaten vorhanden."
+            "noMetadataMessage": "Keine Metadaten vorhanden.",
+            "continual": "kontinuierlich",
+            "daily": "täglich",
+            "weekly": "wöchentlich",
+            "fortnightly": "zweimal wöchentlich",
+            "monthly": "monatlich",
+            "quarterly": "quartalsweise",
+            "biannually": "zweimal jährlich",
+            "annually": "jährlich",
+            "asNeeded": "bei Bedarf",
+            "irregular": "unregelmäßige Intervalle",
+            "notPlanned": "nicht geplant",
+            "unknown": "unbekannt"
         },
         "layerInformation": {
           "additionalMetadata": "weitere Metadaten",
@@ -123,7 +135,11 @@
           "noMetadataLoaded": "Es konnten keine Metadaten geladen werden!",
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodizität",
-          "publicationCreation": "Publikation / Erstellung"
+          "publicationCreation": "Publikation / Erstellung",
+          "buildings":"Gebäude",
+          "roofType":"Dachtyp",
+          "roofHeight":"Dachhöhe",
+          "objectType":"Objektart"
         },
         "mapMarker": {
           "noStyleModel": "Zu der angegebenen StyleId: {{styleId}} konnte keine Style gefunden werden. Bitte überprüfen sie ihre Konfiguration."

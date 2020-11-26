@@ -107,7 +107,19 @@
             }
         },
         "cswParser": {
-            "noMetadataMessage": "No metadata available."
+            "noMetadataMessage": "No metadata available.",
+            "continual": "continual",
+            "daily": "daily",
+            "weekly": "weekly",
+            "fortnightly": "fortnightly",
+            "monthly": "monthly",
+            "quarterly": "quarterly",
+            "biannually": "biannually",
+            "annually": "annually",
+            "asNeeded": "as needed",
+            "irregular": "irregular intervals",
+            "notPlanned": "not planned",
+            "unknown": "unknown"
         },
         "layerInformation": {
           "additionalMetadata": "additional metadata",
@@ -122,7 +134,11 @@
           "noMetadataLoaded": "No metadata could be loaded!",
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
-          "publicationCreation": "Publication / Creation"
+          "publicationCreation": "Publication / Creation",
+          "buildings":"Buildings",
+          "roofType":"Roof type",
+          "roofHeight":"Roof height",
+          "objectType":"Object type"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
