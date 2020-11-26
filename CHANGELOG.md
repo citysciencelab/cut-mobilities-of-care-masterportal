@@ -63,7 +63,7 @@
 - In Geo-Online kann der Marker wieder über die URL gesetzt werden.
 - Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn
 - Im Styling wurde das Feld legendValue nicht ausgelesen. Dies funktioniert nun wieder.
-
+- Im Kontaktformular werden auch email-Adressen mit einer Domain-Endung die länger als 2 Zeichen ist als gültig anerkannt (z.B. name@foo.hamburg)
 ---
 
 ## v2.5.5 - 2020-09-24
