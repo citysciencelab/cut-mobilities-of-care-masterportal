@@ -142,7 +142,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             type: "featureViaURL",
             attr: this.get("portalConfig").featureViaURL
         });
-
+        
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
             this.parseTree(this.get("baselayer"), "tree", 0);
@@ -485,6 +485,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     url: hit.source.url,
                     version: hit.source.version,
                     gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
+                    gfiTheme: hit.source.gfiTheme ? hit.source.gfiTheme : "default",
                     datasets: hit.source.datasets,
                     isJustAdded: true
                 });
@@ -809,6 +810,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @returns {void}
      */
     setItemList: function (value) {
+        console.log("setItemList:", value);
         this.set("itemList", value);
     },
 
