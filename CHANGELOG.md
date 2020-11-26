@@ -38,6 +38,7 @@
 - Das Package moment-timezone-data-webpack-plugin wurde entfernt.
 - In der index.html ist unter der id "loader" und der class "loader" ein neuer css-Loader eingebunden, dessen Darstellung über css geändert werden kann. Oberhalb davon werden Portaltitel und Portallogo während des Ladens des masterportals gezeigt. Sie sind in der index.html unter der id "portal-logo-box" zu finden.
 - Ein kleines masterportal-Logo erscheint jetzt während des Ladens des masterportals unten rechts in der Ecke.
+- In der Konfiguration des Werkzeugs "Strecke/Fläche messen" kann jetzt der Erdradius angegeben werden.
 
 ### Deprecated
 - Die Möglichkeit URLs über einen Proxy umzuleiten (useProxy) ist deprecated.
@@ -64,6 +65,8 @@
 - Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn
 - Im Styling wurde das Feld legendValue nicht ausgelesen. Dies funktioniert nun wieder.
 - Im Kontaktformular werden auch email-Adressen mit einer Domain-Endung die länger als 2 Zeichen ist als gültig anerkannt (z.B. name@foo.hamburg)
+- Unstimmigkeiten beim Messen mit dem Werkzeug "Strecke/Fläche messen" wurden beseitigt.
+
 ---
 
 ## v2.5.5 - 2020-09-24
