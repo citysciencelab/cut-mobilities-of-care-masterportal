@@ -72,18 +72,18 @@ function parseAbstract (json) {
 function parseFrequenzy (json) {
     const attributes = json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.resourceMaintenance?.MD_MaintenanceInformation?.maintenanceAndUpdateFrequency?.MD_MaintenanceFrequencyCode?.getAttributes(),
         frequencyTypes = {
-            continual: i18next.t("common:modules.cswParser.continual"),
-            daily: i18next.t("common:modules.cswParser.daily"),
-            weekly: i18next.t("common:modules.cswParser.weekly"),
-            fortnightly: i18next.t("common:modules.cswParser.fortnightly"),
-            monthly: i18next.t("common:modules.cswParser.monthly"),
-            quarterly: i18next.t("common:modules.cswParser.quarterly"),
-            biannually: i18next.t("common:modules.cswParser.biannually"),
-            annually: i18next.t("common:modules.cswParser.annually"),
-            asNeeded: i18next.t("common:modules.cswParser.asNeeded"),
-            irregular: i18next.t("common:modules.cswParser.irregular"),
-            notPlanned: i18next.t("common:modules.cswParser.notPlanned"),
-            unknown: i18next.t("common:modules.cswParser.unknown")
+            continual: "common:modules.cswParser.continual",
+            daily: "common:modules.cswParser.daily",
+            weekly: "common:modules.cswParser.weekly",
+            fortnightly: "common:modules.cswParser.fortnightly",
+            monthly: "common:modules.cswParser.monthly",
+            quarterly: "common:modules.cswParser.quarterly",
+            biannually: "common:modules.cswParser.biannually",
+            annually: "common:modules.cswParser.annually",
+            asNeeded: "common:modules.cswParser.asNeeded",
+            irregular: "common:modules.cswParser.irregular",
+            notPlanned: "common:modules.cswParser.notPlanned",
+            unknown: "common:modules.cswParser.unknown"
         };
 
     if (attributes?.codeListValue) {

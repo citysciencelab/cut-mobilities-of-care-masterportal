@@ -12,6 +12,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         uniqueIdList: [],
         datePublication: null,
         dateRevision: null,
+        periodicityKey: null,
         periodicity: null,
         idCounter: 0,
         overlay: new Overlay({element: undefined})
@@ -27,6 +28,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @property {Array} uniqueIdList todo
      * @property {String} datePublication=null Date of publication
      * @property {String} dateRevision=null Date of revision
+     * @property {String} periodicityKey=null to translate
      * @property {String} periodicity=null Periodicity
      * @property {Number} idCounter=0 counter for unique ids
      * @property {Overlay} overlay=new Overlay({element: undefined}) the overlay
@@ -99,6 +101,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         this.setNoMetadataLoaded(i18next.t("common:modules.layerInformation.noMetadataLoaded"));
         this.setPeriodicityTitle(i18next.t("common:modules.layerInformation.periodicityTitle"));
         this.setPublicationCreation(i18next.t("common:modules.layerInformation.publicationCreation"));
+        this.setPeriodicity(i18next.t(this.get("periodicityKey")));
         this.set("currentLng", lng);
     },
 
@@ -246,6 +249,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetaDataMessage"));
         this.setNoMetadataLoaded(i18next.t("common:modules.layerInformation.noMetadataLoaded"));
         this.setPeriodicityTitle(i18next.t("common:modules.layerInformation.periodicityTitle"));
+        this.setPeriodicity(i18next.t(this.get("periodicityKey")));
         this.setPublicationCreation(i18next.t("common:modules.layerInformation.publicationCreation"));
         if (this.areMetaIdsSet(this.get("metaID"))) {
             this.set("downloadLinks", []);
@@ -258,7 +262,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             this.set("downloadLinks", null);
             this.set("datePublication", null);
             this.set("dateRevision", null);
-            this.set("periodicity", null);
+            this.setPeriodicity(null);
             this.trigger("sync");
         }
     },
@@ -386,6 +390,14 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     */
     setPeriodicityTitle: function (value) {
         this.set("periodicityTitle", value);
+    },
+    /**
+    * Setter function for periodicity
+    * @param {String} value periodicity
+    * @returns {void}
+    */
+    setPeriodicity: function (value) {
+        this.set("periodicity", value);
     },
 
     /**
