@@ -9,10 +9,7 @@ export default {
     components: {},
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
-        ...mapGetters(["mobile", "uiStyle"]),
-        showLegendInMenu () {
-            return Boolean(this.name);
-        }
+        ...mapGetters(["mobile", "uiStyle"])
     },
     mounted () {
         const root = this.uiStyle === "TABLE" ? document.getElementById("table-tools-menu") : document.getElementById("root");

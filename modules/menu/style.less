@@ -44,10 +44,23 @@
         left: 0px; 
     }
 }
-@media (min-width: 768px) {
+@media (min-width: 767px) {
     .navbar {
         .container-fluid {
             padding-left: 0;
+        }
+    }
+}
+@media (max-width: 767px) {
+    .navbar {
+        .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+    .navbar-collapse {
+        &.in {
+            max-height: inherit;
         }
     }
 }

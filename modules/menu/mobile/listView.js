@@ -8,6 +8,7 @@ import "jquery-ui/ui/effects/effect-slide";
 import "jquery-ui/ui/effect";
 import "bootstrap/js/dropdown";
 import "bootstrap/js/collapse";
+import store from "../../../src/app-store";
 
 
 const MobileMenu = Backbone.View.extend({
@@ -38,6 +39,7 @@ const MobileMenu = Backbone.View.extend({
         $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
         $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
         this.addViews(rootModels);
+        store.dispatch("Legend/setShowLegendInMenu", true);
         return this;
     },
     traverseTree: function (model) {
@@ -113,9 +115,18 @@ const MobileMenu = Backbone.View.extend({
             slideOut,
             groupedModels;
 
+        if (modelsToShow.length > 0 && modelsToShow[0].get("parentId") === "root") {
+            store.dispatch("Legend/setShowLegendInMenu", true);
+        }
+        else {
+            store.dispatch("Legend/setShowLegendInMenu", false);
+        }
+
+
         if (direction === "descent") {
             slideIn = "right";
             slideOut = "left";
+
         }
         else {
             slideIn = "left";
@@ -136,14 +147,18 @@ const MobileMenu = Backbone.View.extend({
                 });
                 // Im default-Tree werden folder und layer alphabetisch sortiert
                 if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
-                    groupedModels.folder.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
-                    groupedModels.other.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
+                    if (groupedModels.folder) {
+                        groupedModels.folder.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
+                    }
+                    if (groupedModels.other) {
+                        groupedModels.other.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
+                    }
                 }
                 // Folder zuerst zeichnen
-                if (groupedModels.folder !== undefined) {
+                if (groupedModels.folder) {
                     that.addViews(groupedModels.folder);
                 }
-                if (groupedModels.other !== undefined) {
+                if (groupedModels.other) {
                     groupedModels.other.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
                     that.addViews(groupedModels.other);
                 }
@@ -178,7 +193,6 @@ const MobileMenu = Backbone.View.extend({
             switch (model.get("type")) {
                 case "folder": {
                     attr = model.toJSON();
-
                     if (attr.isLeafFolder && attr.isExpanded && !attr.isFolderSelectable) {
                         // if the selectAll-checkbox should be hidden: don't add folder-view
                         // for expanded leaf-folder -> omit empty group item.
