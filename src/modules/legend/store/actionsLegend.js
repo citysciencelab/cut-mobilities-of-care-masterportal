@@ -82,8 +82,7 @@ const configPaths = [
 
         /**
          * Sets the id of the layer to state.layerIdForLayerInfo
-         * @param {Object} param dependencies
-         * @param {Object} param.state the state
+         * @param {Object} param.commit the commit
          * @param {String} id Id of layer
          * @returns {void}
          */
@@ -93,13 +92,22 @@ const configPaths = [
 
         /**
          * Sets the time as counter id to state.layerCounterIdForLayerInfo
-         * @param {Object} param dependencies
-         * @param {Object} param.state the state
+         * @param {Object} param.commit the commit
          * @param {String} time the timestamp used as id
          * @returns {void}
          */
         setLayerCounterIdForLayerInfo: function ({commit}, time) {
             commit("setLayerCounterIdForLayerInfo", time);
+        },
+
+        /**
+         * Sets the legendObj to state.layerInfoLegend
+         * @param {Object} param.commit the commit
+         * @param {String} legendObj contains legend infos
+         * @returns {void}
+         */
+        setLegendForLayerInfo: function ({commit}, legendObj) {
+            commit("setLayerInfoLegend", legendObj);
         },
 
         /**

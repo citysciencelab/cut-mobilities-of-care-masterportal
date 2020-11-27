@@ -9,7 +9,8 @@ const {
     setShowLegendInMenu,
     setLegendOnChanged,
     setLayerCounterIdForLayerInfo,
-    setLayerIdForLayerInfo
+    setLayerIdForLayerInfo,
+    setLegendForLayerInfo
 } = actions;
 
 describe("src/modules/legend/store/actionsLegend.js", () => {
@@ -203,6 +204,23 @@ describe("src/modules/legend/store/actionsLegend.js", () => {
 
             testAction(setLayerCounterIdForLayerInfo, payload, state, {}, [
                 {type: "setLayerCounterIdForLayerInfo", payload: payload}
+            ], {}, done);
+        });
+    });
+    describe("setLegendForLayerInfo", () => {
+        it("should set legendForLayerInfo", done => {
+            const payload = {
+                    id: "123",
+                    name: "foobar",
+                    legend: ["getLegendGraphicRequest"],
+                    position: 1
+                },
+                state = {
+                    legendForLayerInfo: null
+                };
+
+            testAction(setLegendForLayerInfo, payload, state, {}, [
+                {type: "setLayerInfoLegend", payload: payload}
             ], {}, done);
         });
     });
