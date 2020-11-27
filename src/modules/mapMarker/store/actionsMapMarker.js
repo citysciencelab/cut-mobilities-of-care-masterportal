@@ -22,6 +22,18 @@ export default {
     },
 
     /**
+     * Checks if the MapMarker should be set initially by the url param "marker".
+     * @returns {void}
+     */
+    activateByUrlParam: ({rootState, dispatch}) => {
+        if (rootState.queryParams instanceof Object && rootState?.queryParams?.marker) {
+            const coordinates = rootState.queryParams.marker.split(",");
+
+            dispatch("placingPointMarker", coordinates.map(coordinate => parseFloat(coordinate, 10)));
+        }
+    },
+
+    /**
      * With this function the coordinate, which has to be marked by the mapMarker, is written to the MapMarker state.
      * @param {String[]} value The array with the markable coordinate pair.
      * @returns {void}

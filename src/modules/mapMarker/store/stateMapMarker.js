@@ -24,5 +24,6 @@ export default {
         source: new VectorSource(),
         visible: false,
         style: new Style()
-    })
+    }),
+    urlParameter: null
 };
