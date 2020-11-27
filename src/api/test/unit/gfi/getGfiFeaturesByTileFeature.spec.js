@@ -19,10 +19,10 @@ before(function () {
 describe("src/api/gfi/getGfiFeaturesByTileFeature.js", () => {
     describe("getGfiFeature", () => {
         it("should use default values for layer attributes - but not for properties", () => {
-            const atts = {"roofType": "modules.layerInformation.roofType", "measuredHeight": "modules.layerInformation.roofHeight", "function": "modules.layerInformation.objectType"},
+            const atts = {"roofType": "common:modules.layerInformation.roofType", "measuredHeight": "common:modules.layerInformation.roofHeight", "function": "common:modules.layerInformation.objectType"},
                 result = getGfiFeature(null, null);
 
-            expect(result.getTitle()).to.equal("modules.layerInformation.Buildings");
+            expect(result.getTitle()).to.equal("common:modules.layerInformation.buildings");
             expect(result.getTheme()).to.equal("buildings_3d");
             expect(result.getAttributesToShow()).to.deep.equal(atts);
             expect(result.getProperties()).to.deep.equal(null);
@@ -47,7 +47,7 @@ describe("src/api/gfi/getGfiFeaturesByTileFeature.js", () => {
                 },
                 result = getGfiFeature(null, properties);
 
-            expect(result.getTitle()).to.equal("modules.layerInformation.Buildings");
+            expect(result.getTitle()).to.equal("common:modules.layerInformation.buildings");
             expect(result.getTheme()).to.equal("buildings_3d");
             expect(result.getProperties()).to.equal("properties attributes");
         });

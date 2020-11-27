@@ -130,7 +130,7 @@ export default {
                     :key="key"
                 >
                     <td class="bold">
-                        {{ beautifyKey(key) }}
+                        {{ beautifyKey($t(key)) }}
                     </td>
                     <td v-if="isWebLink(value)">
                         <a
