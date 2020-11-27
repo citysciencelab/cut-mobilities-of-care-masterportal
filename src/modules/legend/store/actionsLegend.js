@@ -81,6 +81,28 @@ const configPaths = [
         },
 
         /**
+         * Sets the id of the layer to state.layerIdForLayerInfo
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
+         * @param {String} id Id of layer
+         * @returns {void}
+         */
+        setLayerIdForLayerInfo: function ({commit}, id) {
+            commit("setLayerIdForLayerInfo", id);
+        },
+
+        /**
+         * Sets the time as counter id to state.layerCounterIdForLayerInfo
+         * @param {Object} param dependencies
+         * @param {Object} param.state the state
+         * @param {String} time the timestamp used as id
+         * @returns {void}
+         */
+        setLayerCounterIdForLayerInfo: function ({commit}, time) {
+            commit("setLayerCounterIdForLayerInfo", time);
+        },
+
+        /**
          * This will check if legend is changed from other module/component
          * @param {Object} param.commit the commit
          * @param {Object} legendValue the changed legend value

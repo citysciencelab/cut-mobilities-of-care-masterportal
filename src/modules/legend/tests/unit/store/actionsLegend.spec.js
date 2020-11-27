@@ -7,7 +7,9 @@ const {
     sortLegend,
     removeLegend,
     setShowLegendInMenu,
-    setLegendOnChanged
+    setLegendOnChanged,
+    setLayerCounterIdForLayerInfo,
+    setLayerIdForLayerInfo
 } = actions;
 
 describe("src/modules/legend/store/actionsLegend.js", () => {
@@ -177,6 +179,30 @@ describe("src/modules/legend/store/actionsLegend.js", () => {
 
             testAction(setLegendOnChanged, legendOnChanged, state, {}, [
                 {type: "setLegendOnChanged", payload: legendOnChanged}
+            ], {}, done);
+        });
+    });
+    describe("setLayerIdForLayerInfo", () => {
+        it("should set LayerIdForLayerInfo", done => {
+            const payload = "id",
+                state = {
+                    layerIdForLayerInfo: null
+                };
+
+            testAction(setLayerIdForLayerInfo, payload, state, {}, [
+                {type: "setLayerIdForLayerInfo", payload: payload}
+            ], {}, done);
+        });
+    });
+    describe("setLayerCounterIdForLayerInfo", () => {
+        it("should set layerCounterIdForLayerInfo", done => {
+            const payload = "12:00",
+                state = {
+                    layerCounterIdForLayerInfo: null
+                };
+
+            testAction(setLayerCounterIdForLayerInfo, payload, state, {}, [
+                {type: "setLayerCounterIdForLayerInfo", payload: payload}
             ], {}, done);
         });
     });
