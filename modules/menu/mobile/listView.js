@@ -122,11 +122,9 @@ const MobileMenu = Backbone.View.extend({
             store.dispatch("Legend/setShowLegendInMenu", false);
         }
 
-
         if (direction === "descent") {
             slideIn = "right";
             slideOut = "left";
-
         }
         else {
             slideIn = "left";
@@ -193,6 +191,7 @@ const MobileMenu = Backbone.View.extend({
             switch (model.get("type")) {
                 case "folder": {
                     attr = model.toJSON();
+
                     if (attr.isLeafFolder && attr.isExpanded && !attr.isFolderSelectable) {
                         // if the selectAll-checkbox should be hidden: don't add folder-view
                         // for expanded leaf-folder -> omit empty group item.
