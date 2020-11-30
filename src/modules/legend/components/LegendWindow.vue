@@ -20,6 +20,8 @@ export default {
     watch: {
         showLegend (showLegend) {
             if (showLegend) {
+                // Navigation wird geschlossen
+                document.getElementsByClassName("navbar-collapse")[0].classList.remove("in");
                 this.createLegend();
             }
         },
