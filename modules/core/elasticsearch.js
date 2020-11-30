@@ -1,3 +1,5 @@
+import getProxyUrl from "../../src/utils/getProxyUrl";
+
 const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
     /**
      * @class ElasticModel
@@ -35,7 +37,12 @@ const ElasticModel = Backbone.Model.extend(/** @lends ElasticModel.prototype */{
 
         if (url) {
             xhrRequests = this.abortXhrRequestByServiceId(xhrRequests, serviceId);
-            url = useProxy ? Radio.request("Util", "getProxyURL", url) : url;
+            /**
+             * @deprecated in the next major-release!
+             * useProxy
+             * getProxyUrl()
+             */
+            url = useProxy ? getProxyUrl(url) : url;
             result = this.xhrSend(serviceId, url, xhrConfig, result);
             xhrRequests = this.abortXhrRequestByServiceId(xhrRequests, serviceId);
             this.setXhrRequests(xhrRequests);

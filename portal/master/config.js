@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["einwohnerabfrage", "VueAddon", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas"],
+    addons: ["einwohnerabfrage", "VueAddon", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     alerting: {
         // fetchBroadcastUrl: "https://localhost:9001/portal/master/resources/broadcastedPortalAlerts.json"
     },
@@ -10,6 +10,11 @@ const Config = {
         attribute: "flaechenid",
         wfsId: "4560",
         styleId: "location_eventlotse"
+    },
+    metadata: {
+        useProxy: [
+            "https://metaver.de/csw"
+        ]
     },
     zoomToGeometry: {
         layerId: "1692",

@@ -15,6 +15,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
+                    getMimeType: () => "text/xml",
                     getTitle: () => "Hallo"
                 }
             },
@@ -44,6 +45,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
+                    getMimeType: () => "text/xml",
                     getTitle: () => "Hallo"
                 }
             },
@@ -73,6 +75,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
+                    getMimeType: () => "text/xml",
                     getTitle: () => "Hallo"
                 }
             },
@@ -102,6 +105,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/xml",
                         getTitle: () => "Hallo"
                     }
                 },
@@ -134,6 +138,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/xml",
                         getTitle: () => "Hallo"
                     }
                 },
@@ -166,6 +171,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/xml",
                         getTitle: () => "Hallo"
                     }
                 },
@@ -197,6 +203,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/xml",
                         getTitle: () => "Hallo"
                     }
                 },
@@ -231,6 +238,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/xml",
                         getTitle: () => "Hallo"
                     }
                 },

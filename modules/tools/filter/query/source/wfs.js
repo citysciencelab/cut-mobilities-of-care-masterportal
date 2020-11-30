@@ -1,4 +1,5 @@
 import SourceModel from "./model";
+import getProxyUrl from "../../../../../src/utils/getProxyUrl";
 
 const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
 
@@ -7,7 +8,6 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
      * @extends SourceModel
      * @memberof Tools.Filter.Query.Source
      * @constructs
-     * @fires Util#getProxyURL
      */
     initialize: function () {
         this.initializeFunction();
@@ -23,7 +23,12 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
      * @returns {void}
      */
     buildQueryDatastructureByType: function (layerObject) {
-        const url = Radio.request("Util", "getProxyURL", layerObject.url),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(layerObject.url) : layerObject.url,
             featureType = layerObject.featureType,
             version = layerObject.version,
             featureAttributesMap = this.requestMetadata(url, featureType, version, this.parseResponse);

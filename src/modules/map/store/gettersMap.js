@@ -77,31 +77,21 @@ const gettersMap = {
         const featuresAtPixel = [];
 
         map.forEachFeatureAtPixel(clickPixel, function (feature, layer) {
-            if (layer.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
+            if (layer?.getVisible() && layer?.get("gfiAttributes") && layer?.get("gfiAttributes") !== "ignore") {
                 if (feature.getProperties().features) {
                     feature.get("features").forEach(function (clusteredFeature) {
                         featuresAtPixel.push(createGfiFeature(
-                            layer.get("name"),
-                            layer.get("gfiTheme"),
-                            layer.get("gfiAttributes"),
-                            clusteredFeature.getProperties(),
-                            layer.get("gfiFormat"),
-                            clusteredFeature.getId(),
+                            layer,
                             "",
-                            layer.get("id")
+                            clusteredFeature
                         ));
                     });
                 }
                 else {
                     featuresAtPixel.push(createGfiFeature(
-                        layer.get("name"),
-                        layer.get("gfiTheme"),
-                        layer.get("gfiAttributes"),
-                        feature.getProperties(),
-                        layer.get("gfiFormat"),
-                        feature.getId(),
+                        layer,
                         "",
-                        layer.get("id")
+                        feature
                     ));
                 }
             }

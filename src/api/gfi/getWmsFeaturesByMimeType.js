@@ -2,31 +2,32 @@ import {requestGfi} from "../wmsGetFeatureInfo";
 
 /**
  * returns a list of wms features for the given url and mimeType
- * @param {String} mimeType the infoFormat of the wms (either text/xml or text/html)
+ * @param {Object} layer to show the properties of
+ * @param {Object} [layer.mimeType] the infoFormat of the wms (either text/xml or text/html)
+ * @param {String} [layer.layerName] the name of the requesting layer
+ * @param {String} [layer.layerId] the id of the requesting layer
+ * @param {String} [layer.gfiTheme] the title of the theme - it does not check if the theme exists
+ * @param {(Object|String)} [layer.attributesToShow] an object of attributes to show or a string "showAll" or "ignore"
+ * @param {Object} [layer.gfiAsNewWindow] null or an object of how to open the gfi in a new window
+ * @param {String} [layer.gfiAsNewWindow.name="_blank"] the browsing context or the target attribute to open the window (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
+ * @param {String} [layer.gfiAsNewWindow.specs=""] a comma-separated list of items - the setup to open the window with (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
  * @param {String} url the url to call the wms features from
- * @param {Object} layerInfo info of the layer
- * @param {String} layerInfo.layerName the name of the requesting layer
- * @param {String} layerInfo.layerId the id of the requesting layer
- * @param {String} gfiTheme the title of the theme - it does not check if the theme exists
- * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
- * @param {Object} gfiAsNewWindow null or an object of how to open the gfi in a new window
- * @param {String} [gfiAsNewWindow.name="_blank"] the browsing context or the target attribute to open the window (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
- * @param {String} [gfiAsNewWindow.specs=""] a comma-separated list of items - the setup to open the window with (see https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
- * @param {Function} [requestGfiOpt=null] a function (mimeType, url) to call the wms url with (for testing only)
- * @param {Function} [openWindowOpt=null] a function (url, name, specs) to open a new browser window with if gfiAsNewWindow is given (for testing only)
  * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
-export function getWmsFeaturesByMimeType (mimeType, url, layerInfo, gfiTheme, attributesToShow, gfiAsNewWindow, requestGfiOpt = null, openWindowOpt = null) {
-    if (openFeaturesInNewWindow(url, gfiAsNewWindow, typeof openWindowOpt === "function" ? openWindowOpt : window.open) === true) {
+export function getWmsFeaturesByMimeType (layer, url) {
+    const mimeType = layer.get("infoFormat"),
+        gfiAsNewWindow = layer.get("gfiAsNewWindow");
+
+    if (openFeaturesInNewWindow(url, gfiAsNewWindow, window.open) === true) {
         return [];
     }
 
     if (mimeType === "text/xml") {
-        return getXmlFeatures(url, layerInfo.layerName, gfiTheme, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, layerInfo.layerId);
+        return getXmlFeatures(layer, url);
     }
 
     // mimeType === "text/html"
-    return getHtmlFeature(url, layerInfo.layerName, gfiTheme, attributesToShow, typeof requestGfiOpt === "function" ? requestGfiOpt : requestGfi, mimeType);
+    return getHtmlFeature(layer, url, mimeType);
 }
 
 /**
@@ -71,83 +72,112 @@ export function openFeaturesInNewWindow (url, gfiAsNewWindow, openWindow) {
 
 /**
  * returns a list of objects representing the features called by url
+ * @param {Object} layer to show the properties of
+ * @param {String} [layer.layerName] the name of the requesting layer
+ * @param {String} [layer.gfiTheme] the title of the theme - it does not check if the theme exists
+ * @param {(Object|String)} [layer.attributesToShow] an object of attributes to show or a string "showAll" or "ignore"
+ * @param {String} [layer.layerId] the id of the requesting layer
  * @param {String} url the url to call the wms features from
- * @param {String} layerName the name of the requesting layer
- * @param {String} gfiTheme the title of the theme - it does not check if the theme exists
- * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
- * @param {Function} callRequestGfi a function (mimeType, url) to call the wms url with
- * @param {String} layerId the id of the requesting layer
  * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
-export function getXmlFeatures (url, layerName, gfiTheme, attributesToShow, callRequestGfi, layerId) {
-    if (typeof url !== "string" || typeof callRequestGfi !== "function") {
+export function getXmlFeatures (layer, url) {
+    if (typeof url !== "string") {
         return [];
     }
-    return callRequestGfi("text/xml", url).then(featureInfos => {
-        let result = [];
+    return requestGfi("text/xml", url).then(featureInfos => {
+        return handleXmlResponse(featureInfos, layer, url);
+    });
+}
+/**
+ * returns a list of objects representing the features called by url
+ * @param {Object} featureInfos response from requestGFI
+ * @param {Object} layer to show the properties of
+ * @param {String} [layer.gfiTheme] the title of the theme - it does not check if the theme exists
+ * @param {String} url the url to call the wms features from
+ * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
+ */
+export function handleXmlResponse (featureInfos, layer, url) {
+    let result = [];
 
-        if (Array.isArray(featureInfos)) {
-            featureInfos.forEach(function (feature) {
-                if (typeof feature === "object" && feature !== null && typeof feature.getProperties === "function") {
-                    result.push(createGfiFeature(layerName, gfiTheme, attributesToShow, feature.getProperties(), null, feature.getId(), url, layerId));
-                }
-            });
-        }
+    if (Array.isArray(featureInfos)) {
+        featureInfos.forEach(function (feature) {
+            if (typeof feature === "object" && feature !== null && typeof feature.getProperties === "function") {
+                result.push(createGfiFeature(layer, url, feature));
+            }
+        });
+    }
 
-        // Create a merged feature because some themes might display multiple features at once
-        if (result.length > 0 && ["DataTable"].indexOf(gfiTheme) !== -1) {
-            result = [createGfiFeature(layerName, gfiTheme, attributesToShow, result, null, null, url, layerId)];
-        }
+    // Create a merged feature because some themes might display multiple features at once
+    if (result.length > 0 && layer && ["DataTable"].indexOf(layer.get("gfiTheme")) !== -1) {
+        result = [createGfiFeature(layer, url, null, result)];
+    }
 
-        return result;
+    return result;
+}
+
+/**
+ * returns a list of objects representing the features called by url
+ * @param {Object} layer to show the properties of
+ * @param {String} [layer.layerName] the name of the requesting layer
+ * @param {String} [layer.gfiTheme] the title of the theme - it does not check if the theme exists
+ * @param {(Object|String)} [layer.attributesToShow] an object of attributes to show or a string "showAll" or "ignore"
+ * @param {String} url the url to call the wms features from
+ * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
+ */
+export function getHtmlFeature (layer, url) {
+    if (typeof url !== "string") {
+        return [];
+    }
+    return requestGfi("text/html", url).then(document => {
+        return handleHTMLResponse(document, layer, url);
     });
 }
 
 /**
  * returns a list of objects representing the features called by url
+ * @param {Object} document response from requestGFI, mimeType is "text/html"
+ * @param {Object} layer to show the properties of
  * @param {String} url the url to call the wms features from
- * @param {String} layerName the name of the requesting layer
- * @param {String} gfiTheme the title of the theme - it does not check if the theme exists
- * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
- * @param {Function} callRequestGfi a function (mimeType, url) to call the wms url with
- * @param {String} [mimeType=""] the mimeType from the layer
  * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
-export function getHtmlFeature (url, layerName, gfiTheme, attributesToShow, callRequestGfi, mimeType) {
-    if (typeof url !== "string" || typeof callRequestGfi !== "function") {
-        return [];
+export function handleHTMLResponse (document, layer, url) {
+    if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0]?.children.length >= 1) {
+        return [createGfiFeature(layer, url)];
     }
-    return callRequestGfi("text/html", url).then(document => {
-        if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0]?.children.length >= 1) {
-            return [createGfiFeature(layerName, gfiTheme, attributesToShow, null, null, undefined, {url, mimeType}, null)];
-        }
-        return [];
-    });
+    return [];
 }
 
 /**
  * create an object representing a feature
- * @param {String} layerName the name of the requesting layer
- * @param {String} gfiTheme the title of the theme - it does not check if the theme exists
- * @param {(Object|String)} attributesToShow an object of attributes to show or a string "showAll" or "ignore"
- * @param {?Object} featureProperties an object with the data of the feature as simple key/value pairs
- * @param {Object} [gfiFormat=null] the gfiFormat as defined at the layer
- * @param {String} [id=""] id the id of the feature
- * @param {String|Object} [url=""] the url to call the wms features from
- * @param {String} [layerId=""] the ID from the layer
+ * @param {Object} layer to show the properties of
+ * @param {String} [layer.layerName] the name of the requesting layer
+ * @param {String} [layer.layerId] the id of the requesting layer
+ * @param {String} [layer.gfiTheme] the title of the theme - it does not check if the theme exists
+ * @param {(Object|String)} [layer.attributesToShow] an object of attributes to show or a string "showAll" or "ignore"
+ * @param {Object} [layer.gfiFormat=null] the gfiFormat as defined at the layer
+ * @param {String} url the url to call the wms features from
+ * @param {String|Object} [feature] the feature to get the id and the properties from
+ * @param {?Object} [feature.properties] an object with the data of the feature as simple key/value pairs
+ * @param {String} [feature.id=""] id the id of the feature
+ * @param {Object[]} features a list of features
  * @returns {Object} an object{getTitle, getTheme, getAttributesToShow, getProperties, getGfiFormat, getId, getGfiUrl, getLayerId}
  */
-export function createGfiFeature (layerName, gfiTheme, attributesToShow, featureProperties, gfiFormat = null, id = "", url = "", layerId = "") {
+export function createGfiFeature (layer, url = "", feature, features = null) {
+    if (!layer) {
+        return {};
+    }
     return {
-        getTitle: () => layerName,
-        getTheme: () => gfiTheme,
-        getAttributesToShow: () => attributesToShow,
-        getProperties: () => featureProperties,
-        getGfiFormat: () => gfiFormat,
-        getId: () => id,
+        getTitle: () => layer.get("name"),
+        getTheme: () => layer.get("gfiTheme") || "default",
+        getAttributesToShow: () => layer.get("gfiAttributes"),
+        getProperties: () => feature ? feature.getProperties() : {},
+        getFeatures: () => features,
+        getGfiFormat: () => layer.get("gfiFormat") ? layer.get("gfiFormat") : null,
+        getId: () => feature ? feature.getId() : "",
         getGfiUrl: () => url,
-        getLayerId: () => layerId
+        getMimeType: () => layer.get("infoFormat"),
+        getLayerId: () => layer.get("id") ? layer.get("id") : ""
     };
 }
 
-export default {getWmsFeaturesByMimeType, openFeaturesInNewWindow, getXmlFeatures, createGfiFeature};
+export default {getWmsFeaturesByMimeType, openFeaturesInNewWindow, getXmlFeatures, createGfiFeature, handleXmlResponse, handleHTMLResponse};

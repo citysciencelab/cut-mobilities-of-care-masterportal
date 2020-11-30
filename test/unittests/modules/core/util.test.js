@@ -202,48 +202,6 @@ describe("core/Util", function () {
         });
     });
 
-    describe("generate proxy url", function () {
-        it("should generate key without hostname from url", function () {
-            let proxyURL = "";
-
-            model = new Model();
-
-            proxyURL = model.getProxyURL("https://dies.ist.ein.test/PFAD_ZU_TEST-QUELLE");
-            expect(proxyURL).to.be.equal("/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
-        });
-
-        it("should generate key with hostname from url", function () {
-            let proxyURL = "";
-
-            model = new Model({
-                proxyHost: "https://test-proxy.example.com"
-            });
-
-            proxyURL = model.getProxyURL("https://dies.ist.ein.test/PFAD_ZU_TEST-QUELLE");
-            expect(proxyURL).to.be.equal("https://test-proxy.example.com/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
-        });
-        it("shouldn't transform url for local ressources I", function () {
-            let proxyURL = "";
-
-            model = new Model({
-                proxyHost: "https://test-proxy.example.com"
-            });
-
-            proxyURL = model.getProxyURL("http://localhost/test.json");
-            expect(proxyURL).to.be.equal("http://localhost/test.json");
-        });
-        it("shouldn't transform url for local ressources II", function () {
-            let proxyURL = "";
-
-            model = new Model({
-                proxyHost: "https://test-proxy.example.com"
-            });
-
-            proxyURL = model.getProxyURL("./test.json");
-            expect(proxyURL).to.be.equal("./test.json");
-        });
-    });
-
     describe("renameKeys", function () {
         const obj = {
             name: "Reder",
