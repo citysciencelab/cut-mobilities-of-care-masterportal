@@ -171,7 +171,6 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                 }
 
                 stylefunction(this.get("layer"), style, Object.keys(style.sources)[0]);
-                // stylefunction(this.get("layer"), style, "esri");
                 this.set("selectedStyleID", id);
             });
     },
