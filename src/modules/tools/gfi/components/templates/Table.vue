@@ -1,8 +1,8 @@
 <script>
 import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
-import {mapGetters} from "vuex";
-import upperFirst from "../../../../../utils/upperFirst";
+import getTheme from "../../utils/getTheme";
+import {mapGetters, mapActions} from "vuex";
 import "jquery-ui/ui/widgets/draggable";
 
 export default {
@@ -38,7 +38,7 @@ export default {
          * @returns {String} the name of the theme
          */
         theme: function () {
-            return this.getTheme();
+            return getTheme(this.feature.getTheme(), this.$options.components, this.$gfiThemeAddons);
         }
     },
     mounted: function () {
@@ -67,14 +67,15 @@ export default {
                 }
             });
         });
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "showMarker", this.clickCoord);
+
+        this.placingPointMarker(this.clickCoord);
     },
     beforeDestroy: function () {
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "hideMarker");
+        this.removePointMarker();
     },
     methods: {
+        ...mapActions("MapMarker", ["removePointMarker", "placingPointMarker"]),
+
         close () {
             this.$emit("close");
         },
@@ -87,12 +88,11 @@ export default {
                 this.rotateAngle = 0;
             }
 
-            $(".gfi-detached-table").css({
-                "transform": "rotate(" + this.rotateAngle + "deg)",
-                "-webkit-transform-origin": width - 20 + "px " + headerHeight + "px",
-                "-ms-transform-origin": width - 20 + "px " + headerHeight + "px",
-                "-moz-transform-origin": width - 20 + "px " + headerHeight + "px"
-            });
+            this.$el.style.transform = "rotate(" + this.rotateAngle + "deg)";
+            this.$el.style.WebkitTransform = width - 20 + "px " + headerHeight + "px";
+            this.$el.style.msTransform = width - 20 + "px " + headerHeight + "px";
+            this.$el.style.MozTransform = width - 20 + "px " + headerHeight + "px";
+
         },
         move: function (evt) {
             const touch = evt.touches[0],
@@ -155,32 +155,6 @@ export default {
                     this.$el.style.mozTransformOrigin = transformOrigin;
                 }
             }
-        },
-
-        /**
-         * Returns the right gfi Theme
-         * it check if the right Theme (Component) is there, if yes just use this component, otherwise use the default theme
-         * @returns {String} the name of the gfi Theme
-         */
-        getTheme () {
-            const gfiComponents = Object.keys(this.$options.components),
-                gfiTheme = this.feature.getTheme(),
-                configTheme = upperFirst(typeof gfiTheme === "object" ? gfiTheme.name : gfiTheme);
-
-            let theme = "";
-
-            if (gfiComponents && Array.isArray(gfiComponents) && gfiComponents.length && gfiComponents.includes(configTheme)) {
-                theme = configTheme;
-            }
-            else if (this.$gfiThemeAddons && this.$gfiThemeAddons.includes(configTheme)) {
-                theme = configTheme;
-            }
-            else {
-                console.warn(String("The gfi theme '" + configTheme + "' could not be found, the default theme will be used. Please check your configuration!"));
-                theme = "Default";
-            }
-
-            return theme;
         }
     }
 };

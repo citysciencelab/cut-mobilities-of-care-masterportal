@@ -2,6 +2,7 @@
 import * as moment from "moment";
 import axios from "axios";
 
+import getComponent from "../../../../../../../utils/getComponent";
 import SensorChartsData from "./SensorData.vue";
 import SensorChartsBarChart from "./SensorBarChart.vue";
 import {processHistoricalDataByWeekdays} from "../library/processHistoricalDataByWeekdays";
@@ -91,7 +92,7 @@ export default {
          * @returns {void}
          */
         loadHistoricalData: function () {
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.feature.getLayerId()});
+            const model = getComponent(this.feature.getLayerId());
 
             if (model) {
                 const url = model.get("url"),

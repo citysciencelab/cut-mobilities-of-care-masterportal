@@ -1,6 +1,8 @@
 >This file describes the `proxyconf.json` file structure and functionality.
 
-# proxyconf.json
+>**_[GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Hence, the mechanism to request URLs via a proxy is _deprecated_. For additional information, please check _[chapter 4.7.1 of the GDI-DE documentation](https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile)_.**
+
+# proxyconf.json (_deprecated_)
 
 ## Why do I need a proxy for my local development environment?
 

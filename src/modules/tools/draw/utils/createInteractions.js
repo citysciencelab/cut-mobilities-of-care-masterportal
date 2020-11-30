@@ -31,12 +31,14 @@ function createModifyInteraction (layer) {
 /**
  * Creates a select interaction (for deleting features) and returns it.
  *
- * @param  {module:ol/layer/Vector} layer The layer in which the features are drawn.
+ * @param {module:ol/layer/Vector} layer The layer in which the features are drawn.
+ * @param {Number} [hitTolerance=0] - Hit-detection tolerance. Pixels inside the radius around the given position will be checked for features.
  * @returns {module:ol/interaction/Select} The select interaction.
  */
-function createSelectInteraction (layer) {
+function createSelectInteraction (layer, hitTolerance = 0) {
     return new Select({
-        layers: [layer]
+        layers: [layer],
+        hitTolerance: hitTolerance
     });
 }
 

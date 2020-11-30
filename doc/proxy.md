@@ -1,6 +1,8 @@
 >**[back to Masterportal documentation](doc.md)**
 
-# Proxy
+>**_[GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Hence, the mechanism to request URLs via a proxy is _deprecated_. For additional information, please check _[chapter 4.7.1 of the GDI-DE documentation](https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile)_.**
+
+# Proxy (*deprecated*)
 
 Various Masterportal functions send XHR requests to other domains, e.g. `WMS GetFeatureInfo` requests or calls to `WFS` and `CSW` services. These are restricted by the **[same-origin policy](https://en.wikipedia.org/wiki/Same-origin_policy)** implemented in all browsers.
 

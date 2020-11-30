@@ -14,6 +14,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
+                    getMimeType: () => "text/html",
                     getTitle: () => "Hallo"
                 }
             },
@@ -28,6 +29,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
+                    getMimeType: () => "text/html",
                     getTitle: () => "Hallo"
                 }
             },
@@ -42,6 +44,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
             propsData: {
                 feature: {
                     getTheme: () => "Default",
+                    getMimeType: () => "text/html",
                     getTitle: () => "Hallo"
                 }
             },
@@ -57,6 +60,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/html",
                         getTitle: () => "Hallo"
                     }
                 },
@@ -74,6 +78,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/html",
                         getTitle: () => "Hallo"
                     }
                 },
@@ -92,6 +97,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/html",
                         getTitle: () => "Hallo"
                     }
                 },
@@ -109,6 +115,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
+                        getMimeType: () => "text/html",
                         getTitle: () => "Hallo"
                     }
                 },
