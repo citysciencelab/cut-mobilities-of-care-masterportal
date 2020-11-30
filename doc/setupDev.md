@@ -72,7 +72,7 @@ For changes to take effect, close and reopen all your command lines. The `setx` 
 
 ### Globally install npm packages with administrative rights (optional)
 
-Some npm packages for the setup require global admin installation to be runnable via command line with your user account. To prepare this step, run in a `cmd` with administrative rights:
+Some npm packages for the setup require global admin installation to be runnable via command line with your user account. To prepare this step, run a `cmd` with administrative rights:
 
 >⚠️ Please determine the correct system path before running this line. The example path is taken from a german Windows 10 installation.
 ```console
@@ -112,7 +112,7 @@ $ npm start
 
 After compilation, you may open <https://localhost:9001/portal/master> for a comprehensive demo application.
 
-To use services in the local development environment, requests have to be handled with a **[proxy](/doc/proxyconf.md)** The `webpack.dev.js` refers to the `devtools/proxyconf.json`, using `devtools/proxyconf_examples.json` as fallback should none have been added. The `devtools/proxyconf.json` is ignored by git so that you may configure your required development proxies in that file.
+To use services in the local development environment, requests have to be handled with a **[proxy](/doc/proxyconf.md)** The `webpack.dev.js` refers to the `devtools/proxyconf.json`, using `devtools/proxyconf_examples.json` as fallback should none have been added. The `devtools/proxyconf.json` is ignored by git so that you may configure your required development proxies in that file. __Please note that proxies are currently deprecated.__
 
 ### `npm run test`
 
