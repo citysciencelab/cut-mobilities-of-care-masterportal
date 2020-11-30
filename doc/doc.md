@@ -12,9 +12,9 @@ The Masterportal builds on global and portal-specific configuration files alike.
 
 These files describe central information to be used by multiple portals:
 
-* **[services.json](services.json.md)**: lists all available WMS layers and WFS FeatureTypes
+* **[services.json](services.json.md)**: lists all available layers
 * **[rest-services.json](rest-services.json.md)**: URLs to various external services
-* **[style.json](style.json.md)**: holds style definitions for WFS FeatureTypes
+* **[style.json](style.json.md)**: holds style definitions for vector layers
 
 ### Portal-specific configuration files
 
