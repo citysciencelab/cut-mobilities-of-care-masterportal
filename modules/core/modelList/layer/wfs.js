@@ -72,8 +72,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (!allowedVersions.includes(version)) {
             isVersionValid = false;
 
-            console.error("An attempt is made to load WFS-Layer: \"" + name + "\" with version: \"" + allowedVersions[0] + "\"!"
-                + " Please use for wfs only the versions: " + allowedVersions + ", because only these are accepted by openlayers!");
+            console.warn(`The WFS layer: "${name}" is configured in version: ${version}.`
+             + ` OpenLayers accepts WFS only in the versions: ${allowedVersions},`
+             + ` It tries to load the layer: "${name}" in version ${allowedVersions[0]}!`);
         }
         return isVersionValid;
     },
