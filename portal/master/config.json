@@ -265,7 +265,8 @@
           "einwohnerabfrage": {
             "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
-            "onlyDesktop": false
+            "onlyDesktop": false,
+            "useProxy": true
           },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
@@ -371,7 +372,7 @@
             "name": "translate#common:menu.tools.commuterAnimation",
             "glyphicon": "glyphicon-play-circle",
             "steps": 30,
-            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+            "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
             "params": {
               "REQUEST": "GetFeature",
               "SERVICE": "WFS",

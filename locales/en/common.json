@@ -107,10 +107,38 @@
             }
         },
         "cswParser": {
-            "noMetadataMessage": "No metadata available."
+            "noMetadataMessage": "No metadata available.",
+            "continual": "continual",
+            "daily": "daily",
+            "weekly": "weekly",
+            "fortnightly": "fortnightly",
+            "monthly": "monthly",
+            "quarterly": "quarterly",
+            "biannually": "biannually",
+            "annually": "annually",
+            "asNeeded": "as needed",
+            "irregular": "irregular intervals",
+            "notPlanned": "not planned",
+            "unknown": "unknown"
         },
         "layerInformation": {
-            "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
+          "additionalMetadata": "additional metadata",
+          "addressSuffix": "Address",
+          "attachFileMessage": "Attach file type during download if necessary",
+          "closeButton": "Close",
+          "downloadDataset": "Download dataset",
+          "errorMessage": "The query of the metadata failed. If the problem persists, please contact the owner of the service: <b>{{cswObjCswUrl}}</b>",
+          "informationAndLegend": "Information and legend",
+          "lastModified": "Last modified",
+          "legend": "Legend",
+          "noMetadataLoaded": "No metadata could be loaded!",
+          "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
+          "periodicityTitle": "Periodicity",
+          "publicationCreation": "Publication / Creation",
+          "buildings":"Buildings",
+          "roofType":"Roof type",
+          "roofHeight":"Roof height",
+          "objectType":"Object type"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
@@ -414,6 +442,7 @@
                 }
             },
             "gfi": {
+                "errorMessage": "An error has occurred  during the information request (GetFeatureInfo).<br>Please try again later. If the problem persists, please contact the operator of the service.",
                 "favoriteIcons": {
                     "compareFeatureIcon": {
                       "toCompareList": "Add to compare list",
@@ -424,7 +453,6 @@
                     }
                 },
                 "themes": {
-                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
                     "default": {
                       "imgAlt": "No image could be loaded."
                     },

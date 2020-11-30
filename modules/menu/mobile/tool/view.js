@@ -14,10 +14,30 @@ const ItemView = Backbone.View.extend({
     className: "list-group-item",
     template: _.template(ItemTemplate),
     render: function () {
-        const attr = this.model.toJSON();
+        const attr = this.translateName(this.model.toJSON());
 
         this.$el.html(this.template(attr));
         return this;
+    },
+    /**
+     * Looks for the key "translate#" in the name of the model. If found the name will be translated.
+     * The name is not yet translated, because it is from an addon.
+     * @param {Array} attr attributes of this model
+     * @returns {Array} attributes of this model maybe with translated name, if necessary
+     */
+    translateName: function (attr) {
+        if (attr.name && attr.name.indexOf("translate#") === 0) {
+            // addons-model: name is not translated in app.js, must be done here
+            const translationKey = attr.name.substr("translate#".length);
+
+            if (i18next.exists(translationKey)) {
+                const name = i18next.t(translationKey);
+
+                this.model.set("name", name);
+                attr.name = name;
+            }
+        }
+        return attr;
     },
     checkItem: function () {
         if (!this.model.collection) {

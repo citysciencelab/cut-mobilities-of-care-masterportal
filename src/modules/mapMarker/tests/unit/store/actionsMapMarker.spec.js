@@ -5,7 +5,13 @@ import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 import {Style} from "ol/style.js";
 
-const {placingPointMarker, removePointMarker, placingPolygonMarker, removePolygonMarker} = actions;
+const {
+    placingPointMarker,
+    removePointMarker,
+    placingPolygonMarker,
+    removePolygonMarker,
+    activateByUrlParam
+} = actions;
 
 describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
     describe("placingPointMarker", () => {
@@ -86,6 +92,28 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
                 {type: "clearMarker", payload: "markerPolygon"},
                 {type: "setVisibilityMarker", payload: {visbility: false, marker: "markerPolygon"}}
             ], {}, done);
+        });
+    });
+
+    describe("activateByUrlParam", () => {
+        it("activateByUrlParam marker=565874,5934140", done => {
+            const rootState = {
+                queryParams: {
+                    "marker": "565874,5934140"
+                }
+            };
+
+            testAction(activateByUrlParam, null, {}, rootState, [
+                {type: "placingPointMarker", payload: [565874, 5934140], dispatch: true}
+            ], {}, done);
+        });
+        it("activateByUrlParam no marker", done => {
+            const rootState = {
+                queryParams: {
+                }
+            };
+
+            testAction(activateByUrlParam, null, {}, rootState, [], {}, done);
         });
     });
 });
