@@ -170,7 +170,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                     );
                 }
 
-                stylefunction(this.get("layer"), style, "esri");
+                stylefunction(this.get("layer"), style, Object.keys(style.sources)[0]);
                 this.set("selectedStyleID", id);
             });
     },
