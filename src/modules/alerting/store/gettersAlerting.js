@@ -27,12 +27,12 @@ export default {
     },
 
     /**
-     * Getter for readyToShow.
+     * Getter for showTheModal.
      * @param {object} state state
-     * @returns {boolean} readyToShow
+     * @returns {boolean} showTheModal
      */
-    readyToShow: (state) => {
-        return state.readyToShow;
+    showTheModal: (state) => {
+        return state.showTheModal;
     },
 
     /**

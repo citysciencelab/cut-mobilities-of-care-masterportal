@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
+import ConfirmAction from "../modules/confirmAction/store/indexConfirmAction";
 import Footer from "../modules/footer/store/indexFooter";
 import Language from "../modules/language/store/indexLanguage";
 import Title from "../modules/title/store/indexTitle";
@@ -23,6 +24,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
+        ConfirmAction,
         Alerting,
         Footer,
         Language,
