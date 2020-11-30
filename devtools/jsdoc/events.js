@@ -1319,14 +1319,6 @@
  */
 
 /**
- * @event Core#RadioRequestUtilGetProxyURL
- * @description returns the proxyURL
- * @param {String} url to be proxied
- * @returns {string} proxyURL
- * @example Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
- */
-
-/**
  * @event Core#RadioRequestUtilGetIgnoredKeys
  * @description returns the ignoredKeys
  * @returns {string[]} ignoredKeys
@@ -1604,43 +1596,6 @@
  * @event Title#RadioTriggerTitleSetSize
  * @description is triggered when title has to be resized
  * @example Radio.trigger("Title", "setSize");
- */
-
-/** -------------------- MAPMARKER -------------------- */
-
-/**
- * @event MapMarker#RadioTriggerMapMarkerZoomTo
- * @description triggers MapMarker to zoom to given hit using given scale
- * @param {object} hit contains the hit
- * @param {number} scale for map
- * @example Radio.trigger("MapMarker", "zoomTo", hit, scale);
- */
-
-/**
- * @event MapMarker#RadioTriggerMapMarkerHideMarker
- * @description hides the mapMarker
- * @example Radio.trigger("MapMarker", "hideMarker");
- */
-
-/**
- * @event MapMarker#RadioTriggerMapMarkerHidePolygon
- * @description hides the mapMarkerPolygon
- * @example Radio.trigger("MapMarker", "hidePolygon");
- */
-
-/**
- * @event MapMarker#RadioTriggerMapMarkerShowMarker
- * @description shows the mapMarker
- * @param {number[]} coordinate mapMarker position
- * @example Radio.trigger("MapMarker", "showMarker", coordinate);
- */
-
-/**
- * @event MapMarker#RadioTriggerMapMarkerShowPolygon
- */
-
-/**
- * @event MapMarker#RadioTriggerMapMarkerZoomToBKGSearchResult
  */
 
 /** -------------------- GFIVIEW -------------------- */

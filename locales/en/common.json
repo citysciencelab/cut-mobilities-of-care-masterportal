@@ -98,13 +98,56 @@
           }
         },
         "alerting": {
-            "hideMessage": "Do not show the message anymore"
+            "hideMessage": "Diese Meldung nicht mehr anzeigen",
+            "categories": {
+                "error": "Error",
+                "info": "Info",
+                "success": "Success",
+                "warning": "Warning"
+            }
+        },
+        "confirmAction": {
+            "defaultHeadline": "Confirmation request",
+            "defaultCopy": "Please confirm this action.",
+            "defaultConfirmCaption": "OK",
+            "defaultDenyCaption": "Cancel"
         },
         "cswParser": {
-            "noMetadataMessage": "No metadata available."
+            "noMetadataMessage": "No metadata available.",
+            "continual": "continual",
+            "daily": "daily",
+            "weekly": "weekly",
+            "fortnightly": "fortnightly",
+            "monthly": "monthly",
+            "quarterly": "quarterly",
+            "biannually": "biannually",
+            "annually": "annually",
+            "asNeeded": "as needed",
+            "irregular": "irregular intervals",
+            "notPlanned": "not planned",
+            "unknown": "unknown"
         },
         "layerInformation": {
-            "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)"
+          "additionalMetadata": "additional metadata",
+          "addressSuffix": "Address",
+          "attachFileMessage": "Attach file type during download if necessary",
+          "closeButton": "Close",
+          "downloadDataset": "Download dataset",
+          "errorMessage": "The query of the metadata failed. If the problem persists, please contact the owner of the service: <b>{{cswObjCswUrl}}</b>",
+          "informationAndLegend": "Information and legend",
+          "lastModified": "Last modified",
+          "legend": "Legend",
+          "noMetadataLoaded": "No metadata could be loaded!",
+          "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
+          "periodicityTitle": "Periodicity",
+          "publicationCreation": "Publication / Creation",
+          "buildings":"Buildings",
+          "roofType":"Roof type",
+          "roofHeight":"Roof height",
+          "objectType":"Object type"
+        },
+        "mapMarker": {
+          "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
         },
         "featureViaURL": {
             "coordLabel": "Coordinates",
@@ -192,9 +235,12 @@
                 "completeMessage": "The layers of the requested WMS were added to the topic tree under the menu item <strong>External Subject Data</strong>!",
                 "error": "Unfortunately no (valid) WMS could be found under the given URL!",
                 "errorMessage": "The specified service could not be loaded. Please make sure that the URL was entered correctly.<br><br> If the problem persists, please contact the operator of the service with the following note:<br><strong>It should be ensured that a CORS header is set for the service. This is recommended by the <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> in chapter 4.7.1.</strong>",
+                "errorHttpsMessage": "The WMS you requested is located under a http-url. The master portal can only integrate WMS via https (SSL).",
                 "placeholder": "Please enter the WMS-URL here.",
                 "textExample": "Example: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
-                "textLoadLayer": "Load layer"
+                "textLoadLayer": "Load layer",
+                "ifInExtent": "The geodata provided via the WMS are outside the displayable range. Adding WMS is not possible.",
+                "checkVersion": "Adding WMS is possible only if the version of external wms layer equals or is greater than 1.3.0."
             },
             "contact": {
                 "textPlaceholder": "Please write down your message in here and press &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
@@ -224,7 +270,9 @@
                     "A4 Querformat": "A4 landscape format",
                     "A3 Hochformat": "A3 portrait format",
                     "A3 Querformat": "A3 landscape format"
-                }
+                },
+                "hintInfoScale": "The selected print scale differs from the scale in the map window. This can lead to a different map layout in print.",
+                "invisibleLayer": "The following topics cannot be printed in the selected print scale {{scale}}:"
             },
             "shadow": {
                 "shadowDisplay": "Shadow display"
@@ -312,6 +360,10 @@
                     "top5": "Top 5",
                     "top10": "Top 10",
                     "top15": "Top 15"
+                },
+                "general": {
+                    "attributionText": "<b>The data should not be used for commercial purposes.</b><br>Source: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>",
+                    "csvDownloadConfirm": "The data should not be used for commercial purposes.\r\nSource: Bundesagentur für Arbeit - https://statistik.arbeitsagentur.de/"
                 }
             },
             "compareFeatures": {
@@ -340,7 +392,10 @@
             },
             "fileImport": {
                 "captions": {
-                    "intro": "Import your file via drag and drop or alternatively use the browse dialogue.<br><br>KML files (*.kml), GPX files (*.gpx) or GeoJson files (*.geojson, *.json) can be imported.",
+                    "introInfo": "Import your file via drag and drop or alternatively use the browse dialogue.",
+                    "introFormats": "You can import KML files (*.kml), GPX files (*.gpx) or GeoJson files (*.geojson, *.json).",
+                    "introDrawTool": "Use the tool &quot;$t(common:menu.tools.draw)&quot; to change imported geometries in color and style.",
+                    "drawTool": "Open: $t(common:menu.tools.draw)",
                     "dropzone": "Drop file here",
                     "browse": "Browse files",
                     "supportedFiletypes": {
@@ -393,6 +448,7 @@
                 }
             },
             "gfi": {
+                "errorMessage": "An error has occurred  during the information request (GetFeatureInfo).<br>Please try again later. If the problem persists, please contact the operator of the service.",
                 "favoriteIcons": {
                     "compareFeatureIcon": {
                       "toCompareList": "Add to compare list",
@@ -403,7 +459,6 @@
                     }
                 },
                 "themes": {
-                    "errorMessage": "An error has occurred when requesting information about the layer: <b>{{name}}</b> with the LayerId: <b>{{id}}</b> Please try again later. If the problem persists, please contact the operator of the service.",
                     "default": {
                       "imgAlt": "No image could be loaded."
                     },

@@ -1,4 +1,5 @@
 import Tool from "../../core/modelList/tool/model";
+import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -34,7 +35,8 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
         pleaseEnterInteger: "",
         pleaseChooseColor: "",
         checkTheValues: "",
-        overlappingValueRanges: ""
+        overlappingValueRanges: "",
+        useProxy: false
     }),
 
     /**
@@ -84,6 +86,7 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @property {String} pleaseChooseColor: "" contains the translated text
      * @property {String} checkTheValues: "" contains the translated text
      * @property {String} overlappingValueRanges: "" contains the translated text
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @listens StyleWMS#RadioTriggerStyleWMSopenStyleWMS
      * @listens StyleWMS#changeModel
      * @listens StyleWMS#changeAttributeName
@@ -93,7 +96,6 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
      * @fires List#RadioRequestModelListGetModelsByAttributes
      * @fires List#RadioTriggerModelListSetModelAttributesById
      * @fires List#RadioRequestModelListGetModelByAttributes
-     * @fires Util#RadioRequestUtilGetProxyUrl
      * @fires StyleWMSModel#sync
      * @fires StyleWMSModel#changeIsactive
      * @listens i18next#RadioTriggerLanguageChanged
@@ -349,13 +351,19 @@ const StyleWmsModel = Tool.extend(/** @lends StyleWmsModel.prototype */{
     /**
      * Checks the current service if it is made from esri software or not.
      * @param {Layer} model WmsLayerModel The model of the layer to be checked
-     * @fires Util#RadioRequestUtilGetProxyUrl
      * @returns {void}
      */
     requestWmsSoftware: function (model) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(model.get("url")) : model.get("url");
+
         if (model) {
             $.ajax({
-                url: Radio.request("Util", "getProxyURL", model.get("url")) + "?SERVICE=" + model.get("typ") + "&VERSION=" + model.get("version") + "&REQUEST=GetCapabilities",
+                url: url + "?SERVICE=" + model.get("typ") + "&VERSION=" + model.get("version") + "&REQUEST=GetCapabilities",
                 context: this,
                 success: this.checkWmsSoftwareResponse,
                 async: false

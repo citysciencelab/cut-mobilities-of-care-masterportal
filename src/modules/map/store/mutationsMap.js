@@ -51,6 +51,28 @@ const mutations = {
      */
     setScales (state, {scales}) {
         state.scales = scales;
+    },
+
+    /**
+     * Adds a layer to the map.
+     * @param {Object} state The state object.
+     * @param {ol/layer} layer The layer to be added to the map.
+     * @returns {void}
+     */
+    addLayerToMap (state, layer) {
+        state.map.addLayer(layer);
+    },
+
+    /**
+     * Removes a layer from the map.
+     * @param {Object} state The state object.
+     * @param {ol/layer} layer The layer to be removed from the map
+     * @returns {void}
+     */
+    removeLayerFromMap (state, layer) {
+        if (state.map) {
+            state.map.removeLayer(layer);
+        }
     }
 };
 

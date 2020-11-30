@@ -38,7 +38,7 @@ This file describes the steps required to set up your first portal on your own s
 
     Also contained is the folder *ressources* providing the global configuration files **[services.json](services.json.md)**, **[rest-services.json](rest-services.json.md)**, and **[style.json](style.json.md)**, as well as the required images (folder *img*) of this portal instance.
 
-    The folder *mastercode* contains the compressed JavaScript and CSS files of the Masterportal. Here, the folder *img* holds the compass and loading screen images.
+    The folder *mastercode* contains the compressed JavaScript and CSS files of the Masterportal. Here, the folder *img* holds the compass and loading screen images and svg files used in the draw tool.
 
 4. You may decide to change the name of the folder *examples*. Should you decide to do so, also change "examples" to your new folder name in the URLs that follow. The portal should now be available by following this link.
     - https://[web-server-name]/examples/Basic/index.html

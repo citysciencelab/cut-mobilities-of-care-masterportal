@@ -5,8 +5,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
         config: "",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         uiStyle: "DEFAULT",
-        proxy: true,
-        proxyHost: "",
         loaderOverlayTimeoutReference: null,
         loaderOverlayTimeout: 40,
         // the loaderOverlayCounter has to be set to 1 initialy, because it is shown on start and hidden at the end of app.js
@@ -21,12 +19,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @property {String} config="" todo
      * @property {String[]} ignoredKeys=["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"] List of ignored attribute names when displaying attribute information of all layer types.
      * @property {String} uiStyle="DEFAULT" Controls the layout of the controls.
-     * @property {String} proxy=true Specifies whether points should be replaced by underscores in URLs. This prevents CORS errors. Attention: A reverse proxy must be set up on the server side.
-     * @property {String} proxyHost="" Hostname of a remote proxy (CORS must be activated there).
      * @property {String} loaderOverlayTimeoutReference=null todo
      * @property {String} loaderOverlayTimeout="20" Timeout for the loadergif.
      * @listens Core#RadioRequestUtilIsViewMobile
-     * @listens Core#RadioRequestUtilGetProxyURL
      * @listens Core#RadioRequestUtilIsApple
      * @listens Core#RadioRequestUtilIsAndroid
      * @listens Core#RadioRequestUtilIsOpera
@@ -64,7 +59,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 return this.get("isViewMobile");
             },
             "getMasterPortalVersionNumber": this.getMasterPortalVersionNumber,
-            "getProxyURL": this.getProxyURL,
             "isApple": this.isApple,
             "isAndroid": this.isAndroid,
             "isOpera": this.isOpera,
@@ -624,50 +618,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     getPathFromLoader: function () {
         return $("#loader").children("img").first().attr("src");
-    },
-
-    /**
-     * rewrites the URL by replacing the dots with underlined
-     * @param {Stirng} url url to rewrite
-     * @returns {String} proxy URL
-     */
-    getProxyURL: function (url) {
-        const parser = document.createElement("a");
-        let protocol = "",
-            result = url,
-            hostname = "",
-            port = "";
-
-        if (this.get("proxy")) {
-            parser.href = url;
-            protocol = parser.protocol;
-
-            if (protocol.indexOf("//") === -1) {
-                protocol += "//";
-            }
-
-            port = parser.port;
-
-            if (!parser.hostname) {
-                parser.hostname = window.location.hostname;
-            }
-
-            if (parser.hostname === "localhost" || !parser.hostname) {
-                return url;
-            }
-
-            if (port) {
-                result = url.replace(":" + port, "");
-            }
-
-            result = url.replace(protocol, "");
-            // www und www2 usw. raus
-            // hostname = result.replace(/www\d?\./, "");
-            hostname = parser.hostname.split(".").join("_");
-            result = this.get("proxyHost") + "/" + result.replace(parser.hostname, hostname);
-
-        }
-        return result;
     },
 
     /**

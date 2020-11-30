@@ -5,6 +5,7 @@ import {Icon, Style} from "ol/style.js";
 import {Vector as VectorLayer} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import getProxyUrl from "../../src/utils/getProxyUrl";
 
 const ZoomToFeature = Backbone.Model.extend({
     defaults: {
@@ -21,7 +22,8 @@ const ZoomToFeature = Backbone.Model.extend({
             anchorXUnits: "fraction",
             anchorYUnits: "pixels"
         }, // @deprecated in version 3.0.0
-        imageScale: 2 // @deprecated in version 3.0.0
+        imageScale: 2, // @deprecated in version 3.0.0,
+        useProxy: false
     },
     initialize: function () {
         this.setStyleListModel(Radio.request("StyleList", "returnModelById", this.get("styleId")));
@@ -171,10 +173,17 @@ const ZoomToFeature = Backbone.Model.extend({
         this.sendRequest(url, data);
     },
 
-    // feuert den AJAX request ab
+    // fires the AJAX request
     sendRequest: function (url, data) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const requestUrl = this.get("useProxy") ? getProxyUrl(url) : url;
+
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", url),
+            url: requestUrl,
             data: encodeURI(data),
             context: this,
             async: false,
@@ -182,7 +191,7 @@ const ZoomToFeature = Backbone.Model.extend({
             success: this.parseFeatures,
             timeout: 6000,
             error: function () {
-                const msg = "URL: " + Radio.request("Util", "getProxyURL", url) + " nicht erreichbar.";
+                const msg = "URL: " + requestUrl + " nicht erreichbar.";
 
                 Radio.trigger("Alert", "alert", msg);
             }

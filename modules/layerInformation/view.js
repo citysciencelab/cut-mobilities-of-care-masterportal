@@ -24,7 +24,9 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
      */
     initialize: function () {
         this.listenTo(this.model, {
-            // model.fetch() feuert das Event sync, sobald der Request erfoglreich war
+            "change:currentLng": () => {
+                this.render();
+            },
             "sync": function () {
                 this.render();
                 this.$el.on({
@@ -46,14 +48,16 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     render: function () {
         const attr = this.model.toJSON();
 
-        this.$el.html(this.template(attr));
-        $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").append(this.$el);
-        this.$el.draggable({
-            containment: "#map",
-            handle: ".header"
-        });
-        this.setLayerIdForLayerInfo();
-        this.delegateEvents();
+        if (this.model.get("isVisible")) {
+            this.$el.html(this.template(attr));
+            $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").append(this.$el);
+            this.$el.draggable({
+                containment: "#map",
+                handle: ".header"
+            });
+            this.setLayerIdForLayerInfo();
+            this.delegateEvents();
+        }
         return this;
     },
 
@@ -62,7 +66,8 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
      * @returns {void}
      */
     setLayerIdForLayerInfo: function () {
-        store.commit("Legend/setLayerIdForLayerInfo", this.model.get("id"));
+        store.dispatch("Legend/setLayerIdForLayerInfo", this.model.get("id"));
+        store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
     },
     /**
      * Toggles the tab after click.

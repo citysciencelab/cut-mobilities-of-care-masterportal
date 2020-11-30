@@ -6,6 +6,7 @@
 
 ## Unreleased - in development
 ### Added
+- Neues Modul "Confirm Action" für Vue hinzugefügt.
 - RemoteInterface wurde für Vue hinzugefügt.
 - Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
@@ -23,6 +24,7 @@
 - Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
 
 ### Changed
+- Es werden nun alle URLs vom Portal direkt angefragt, ohne den Umweg über einen Proxy zu gehen, da von der GDI-DE empfohlen wird serverseitig einen CORS-Header einzurichten. Siehe dazu https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile Kapitel 4.7.1. Es besteht aber die Möglichkeit gezielt URLs bestimmter Dienste über einen Proxy umzuleiten. Diese Möglichkeit ist jedoch deprecated.
 - Das Tool "GFI" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Gleichzeitig wurden die speziellen Themes ausgelagert als Addons. Es gibt im Masterportal selber nur noch das default Theme.
 - Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Das Zeichnen von Punkten wurde geändert, alle Punkte basieren jetzt auf Bild-Dateien. Größe und Deckkraft können nicht mehr eingestellt werden, für diese Funktionalität steht das Zeichnen von Kreisen zur Verfügung. Das Bereitstellen von anderen Bilddateien wurde angepasst, siehe Doku der config.json.
 - Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
@@ -35,8 +37,12 @@
 - Die Version des Packages https-proxy-agent wurde in der package.json aktualisiert.
 - Die Version des Packages zip-a-folder wurde in der package.json aktualisiert.
 - Das Package moment-timezone-data-webpack-plugin wurde entfernt.
+- In der index.html ist unter der id "loader" und der class "loader" ein neuer css-Loader eingebunden, dessen Darstellung über css geändert werden kann. Oberhalb davon werden Portaltitel und Portallogo während des Ladens des masterportals gezeigt. Sie sind in der index.html unter der id "portal-logo-box" zu finden.
+- Ein kleines masterportal-Logo erscheint jetzt während des Ladens des masterportals unten rechts in der Ecke.
+- In der Konfiguration des Werkzeugs "Strecke/Fläche messen" kann jetzt der Erdradius angegeben werden.
 
 ### Deprecated
+- Die Möglichkeit URLs über einen Proxy umzuleiten (useProxy) ist deprecated.
 - RemoteInterface via Backbone Radio ist ab jetzt deprecated.
 - WfsFeatureFilter ist deprecated. Bitte das Modul Filter benutzen.
 - ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
@@ -59,6 +65,8 @@
 - In Geo-Online kann der Marker wieder über die URL gesetzt werden.
 - Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn
 - Im Styling wurde das Feld legendValue nicht ausgelesen. Dies funktioniert nun wieder.
+- Im Kontaktformular werden auch email-Adressen mit einer Domain-Endung die länger als 2 Zeichen ist als gültig anerkannt (z.B. name@foo.hamburg)
+- Unstimmigkeiten beim Messen mit dem Werkzeug "Strecke/Fläche messen" wurden beseitigt.
 
 ---
 

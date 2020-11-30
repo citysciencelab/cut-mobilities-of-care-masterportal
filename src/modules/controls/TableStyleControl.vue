@@ -49,7 +49,7 @@ export default {
          * of it instead of this current cross-rendering. Another mechanism is then needed to make the
          * ControlBar not render the affected controls.
          */
-        $("#table-tools-menu").append(this.$el);
+        document.querySelector("#table-tools-menu").appendChild(this.$el);
     }
 };
 </script>

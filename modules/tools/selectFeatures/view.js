@@ -61,9 +61,9 @@ const SelectFeaturesView = Backbone.View.extend(/** @lends SelectFeaturesView.pr
      */
     featureZoom: function (evt) {
         const featureIndex = evt.currentTarget.id.split("-")[0],
-            {feature} = this.model.get("selectedFeaturesWithRenderInformation")[featureIndex];
+            {item} = this.model.get("selectedFeaturesWithRenderInformation")[featureIndex];
 
-        Radio.request("Map", "getMap").getView().fit(feature.getGeometry());
+        Radio.request("Map", "getMap").getView().fit(item.getGeometry());
     }
 });
 
