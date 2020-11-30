@@ -102,6 +102,12 @@
                 "warning": "Achtung"
             }
         },
+        "confirmAction": {
+            "defaultHeadline": "Bestätigung benötigt",
+            "defaultCopy": "Bitte bestätigen Sie diese Aktion.",
+            "defaultConfirmCaption": "OK",
+            "defaultDenyCaption": "Abbrechen"
+        },
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",

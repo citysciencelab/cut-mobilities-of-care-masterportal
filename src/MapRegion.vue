@@ -1,5 +1,6 @@
 <script>
 import Alerting from "./modules/alerting/components/Alerting.vue";
+import ConfirmAction from "./modules/confirmAction/components/ConfirmAction.vue";
 import ControlBar from "./modules/controls/ControlBar.vue";
 import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
@@ -10,6 +11,7 @@ import {mapState} from "vuex";
 export default {
     name: "MapRegion",
     components: {
+        ConfirmAction,
         ControlBar,
         ToolManager,
         Alerting,
@@ -41,6 +43,7 @@ export default {
             <MapMarker />
         </div>
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
+        <ConfirmAction />
         <Alerting />
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
         <ToolManager v-if="configJson" />
