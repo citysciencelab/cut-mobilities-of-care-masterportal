@@ -5,26 +5,24 @@ describe("modules/searchbar/osm", function () {
     let model = {};
 
     const config = {
-        "searchBar":
-            {
-                "osm": {
-                    "minChars": 3,
-                    "serviceId": "10",
-                    "limit": 60,
-                    "states": "Hamburg",
-                    "classes": "place,highway,building,shop,historic,leisure"
-                },
-                "visibleWFS":
-                {
-                    "minChars": 3
-                },
-                "zoomLevel": 9,
-                "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
-            }
+        "searchBar": {
+            "osm": {
+                "minChars": 3,
+                "serviceId": "10",
+                "limit": 60,
+                "states": "Hamburg",
+                "classes": "place,highway,building,shop,historic,leisure"
+            },
+            "visibleWFS": {
+                "minChars": 3
+            },
+            "zoomLevel": 9,
+            "placeholder": "Suche nach Adresse/Krankenhaus/B-Plan"
+        }
     };
 
     before(function () {
-        model = new Model(config);
+        model = new Model(config.searchBar.osm);
     });
 
     describe("isSearched", function () {

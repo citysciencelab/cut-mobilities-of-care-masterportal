@@ -750,6 +750,9 @@
             "tooltipMessage": "Click to start and exit",
             "tooltipMessagePolygon": "Click to add a point"
         },
+        "value": {
+            "deleteSelection": "Delete selection"
+        },
         "slider": {
             "date": "Date",
             "time": "Time",

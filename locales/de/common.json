@@ -751,6 +751,9 @@
             "tooltipMessage": "Klicken zum Starten und Beenden",
             "tooltipMessagePolygon": "Klicken um Stützpunkt hinzuzufügen"
         },
+        "value": {
+            "deleteSelection": "Auswahl löschen"
+        },
         "slider": {
             "date": "Datum",
             "time": "Uhrzeit",

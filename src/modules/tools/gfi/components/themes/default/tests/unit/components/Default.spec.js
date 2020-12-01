@@ -23,7 +23,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             phonenumber5: "+43123456",
                             url: "https",
                             url2: "file",
-                            Test_String: "Hallo Welt"
+                            Test_String: "Hallo Welt",
+                            testBrTag: "moin<br>123"
                         };
                     },
                     getProperties: function () {
@@ -90,6 +91,12 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         wrapper.findAll("a[href^=mailto]").wrappers.forEach(a => {
             expect(a.attributes("href")).to.have.string("@");
         });
+    });
+
+    it("should the value as html if the value includes the tag <br>", () => {
+        const countTdTags = wrapper.findAll("td").wrappers.length;
+
+        expect(wrapper.findAll("td").wrappers[countTdTags - 1].text()).equals("moin123");
     });
 
     it("should render an a and img if imageAttribute is existst in feature.properties", () => {

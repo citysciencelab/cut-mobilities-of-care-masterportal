@@ -154,13 +154,12 @@ export function handleHTMLResponse (document, layer, url) {
  * @param {String} [layer.layerId] the id of the requesting layer
  * @param {String} [layer.gfiTheme] the title of the theme - it does not check if the theme exists
  * @param {(Object|String)} [layer.attributesToShow] an object of attributes to show or a string "showAll" or "ignore"
- * @param {Object} [layer.gfiFormat=null] the gfiFormat as defined at the layer
  * @param {String} url the url to call the wms features from
  * @param {String|Object} [feature] the feature to get the id and the properties from
  * @param {?Object} [feature.properties] an object with the data of the feature as simple key/value pairs
  * @param {String} [feature.id=""] id the id of the feature
  * @param {Object[]} features a list of features
- * @returns {Object} an object{getTitle, getTheme, getAttributesToShow, getProperties, getGfiFormat, getId, getGfiUrl, getLayerId}
+ * @returns {Object} an object{getTitle, getTheme, getAttributesToShow, getProperties, getId, getGfiUrl, getLayerId}
  */
 export function createGfiFeature (layer, url = "", feature, features = null) {
     if (!layer) {
@@ -172,7 +171,6 @@ export function createGfiFeature (layer, url = "", feature, features = null) {
         getAttributesToShow: () => layer.get("gfiAttributes"),
         getProperties: () => feature ? feature.getProperties() : {},
         getFeatures: () => features,
-        getGfiFormat: () => layer.get("gfiFormat") ? layer.get("gfiFormat") : null,
         getId: () => feature ? feature.getId() : "",
         getGfiUrl: () => url,
         getMimeType: () => layer.get("infoFormat"),
