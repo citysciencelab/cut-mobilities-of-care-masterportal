@@ -158,6 +158,19 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
         });
     });
+    describe("setOuterColorContour", () => {
+        it("should commit as intended", () => {
+            getters = createGetters("test", {outerColorContour: [255, 255, 255], opacityContour: 3});
+            target = {options: [{value: "0,1,2"}], selectedIndex: 0};
+
+            actions.setOuterColorContour({getters, commit, dispatch}, {target});
+
+            expect(commit.calledOnce).to.be.true;
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {outerColorContour: [0, 1, 2, 3], opacityContour: 3}]);
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.firstCall.args).to.eql(["updateDrawInteraction"]);
+        });
+    });
     describe("setDrawType", () => {
         const geometry = Symbol();
 
