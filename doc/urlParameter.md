@@ -27,6 +27,6 @@ Special URL parameters exist to change configuration details or execute initial 
 |STYLE|Activates a special UI variant. E.g. `simple` may be set to hide all UI elements in an iFrame scenario.|`&style=simple`|
 |TRANSPARENCY|Only works when used in combination with `LAYERIDS`. Transparency can be set separated by commas from 0 to 100; the transparency will be applied to the `LAYERIDS` layer of the same index.|`&layerids=453,2128&transparency=0,40`|
 |VISIBILITY|Only works when used in combination with `LAYERIDS`. Visibility can be set separated by commas as true or false; the visibility will be applied to the `LAYERIDS` layer of the same index.|`&layerids=453,2128&visibility=true,false`|
-|ZOOMLEVEL|The initial zoom level is the given zoom level; see siehe **[config.view.options](config.js.md)**.|`&zoomlevel=2`|
+|ZOOMLEVEL|The initial zoom level is the given zoom level; see **[config.view.options](config.js.md)**.|`&zoomlevel=2`|
 |ZOOMTOEXTENT|Zooms to an extent.|`&zoomToExtent=510000,5850000,625000,6000000`|
 |ZOOMTOGEOMETRY|Zooms to a feature requested from a WFS. Allowed parameters depend on **[config.zoomToGeometry](config.js.md)**. As an alternative to the feature name, features may also be addressed by their `geometries` array index, starting at 1.|`&zoomToGeometry=bergedorf`|
