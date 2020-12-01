@@ -104,7 +104,7 @@ const initialState = Object.assign({}, stateDraw),
             dispatch("createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeatures});
             dispatch("addInteraction", drawInteraction);
 
-            // NOTE: This leads to the creation of a second circle instead of a MultiPolygon right now.
+            // NOTE: This leads to the creation of a second (the outer) circle instead of a MultiPolygon right now.
             if (state.drawType.id === "drawDoubleCircle") {
                 const drawInteractionTwo = createDrawInteraction(state, styleSettings);
 
@@ -259,6 +259,7 @@ const initialState = Object.assign({}, stateDraw),
 
                 styleSettings.color = feature.get("drawState").color;
                 styleSettings.colorContour = feature.get("drawState").colorContour;
+                styleSettings.outerColorContour = feature.get("drawState").outerColorContour;
                 styleSettings.strokeWidth = feature.get("drawState").strokeWidth;
                 styleSettings.opacity = feature.get("drawState").opacity;
                 styleSettings.opacityContour = feature.get("drawState").opacityContour;
@@ -301,7 +302,8 @@ const initialState = Object.assign({}, stateDraw),
                 drawType: JSON.parse(JSON.stringify(getters.drawType)),
                 symbol: JSON.parse(JSON.stringify(getters.symbol)),
                 color: styleSettings.color,
-                colorContour: styleSettings.colorContour
+                colorContour: styleSettings.colorContour,
+                outerColorContour: styleSettings.outerColorContour
             });
         },
         /**
