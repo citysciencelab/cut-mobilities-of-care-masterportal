@@ -104,6 +104,35 @@ export default {
     },
 
     /**
+     * Creates a feature from the given geometry and adds it to the map.
+     * @param {Object} store.getters - The Map Marker getters.
+     * @param {Function} store.commit - Function to commit a mutation.
+     * @param {Function} store.dispatch Function to dispatch an action.
+     * @param {module:ol/geom/SimpleGeometry} geometry - The given geometry.
+     * @returns {void}
+     */
+    placingPolygonMarkerByGeom ({getters, commit, dispatch}, geometry) {
+        const styleListModel = Radio.request("StyleList", "returnModelById", getters.polygonStyleId);
+
+        dispatch("removePolygonMarker");
+
+        if (styleListModel && geometry) {
+            const feature = new Feature({
+                    geometry: geometry
+                }),
+                featureStyle = styleListModel.createStyle(feature, false);
+
+            feature.setStyle(featureStyle);
+            commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
+            commit("setVisibilityMarker", {visibility: true, marker: "markerPolygon"});
+            commit("Map/addLayerToMap", getters.markerPolygon, {root: true});
+        }
+        else {
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: getters.polygonStyleId}), {root: true});
+        }
+    },
+
+    /**
      * Removes the polygon map marker from the map.
      * @returns {void}
      */
