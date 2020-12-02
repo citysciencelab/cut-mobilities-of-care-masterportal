@@ -734,7 +734,9 @@
             "toggleCollapseAll": "Toggle all legends"
         },
         "zoomToGeometry": {
-          "alertNoFoundFeature" : "No object was found! Please check the input parameters."
+          "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
+          "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
+          "alertRequiredService": "Details: A required service is not responding."
         }
     },
     "snippets": {
