@@ -97,15 +97,15 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
             expect(commit.firstCall.args).to.eql(["setDrawTypeSettings", "styleSettings"]);
         });
     });
-    describe("setCircleInnerDiameter", () => {
+    describe("setCircleDiameter", () => {
         it("should commit as intended", () => {
-            getters = createGetters("test", {circleInnerDiameter: 0, unit: "m"});
-            target = {value: "42.5"};
+            getters = createGetters("test", {circleDiameter: 0, unit: "m"});
+            target = 42.5;
 
-            actions.setCircleInnerDiameter({getters, commit}, {target});
+            actions.setCircleDiameter({getters, commit, dispatch}, target);
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setTestSettings", {circleInnerDiameter: 42.5, unit: "m"}]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {circleDiameter: 42.5, unit: "m"}]);
         });
     });
     describe("setCircleMethod", () => {
@@ -124,9 +124,9 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
     describe("setCircleOuterDiameter", () => {
         it("should commit as intended", () => {
             getters = createGetters("test", {circleOuterDiameter: 0, unit: "m"});
-            target = {value: "42.5"};
+            target = 42.5;
 
-            actions.setCircleOuterDiameter({getters, commit}, {target});
+            actions.setCircleOuterDiameter({getters, commit, dispatch}, target);
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setTestSettings", {circleOuterDiameter: 42.5, unit: "m"}]);
@@ -317,16 +317,13 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
     });
     describe("setUnit", () => {
         it("should commit as intended", () => {
-            getters = createGetters("test", {unit: "m", circleInnerDiameter: 1, circleOuterDiameter: 2});
+            getters = createGetters("test", {unit: "m", circleDiameter: 1, circleOuterDiameter: 2});
             target = {options: [{value: "km"}], selectedIndex: 0};
 
             actions.setUnit({getters, commit, dispatch}, {target});
 
             expect(commit.calledOnce).to.be.true;
-            expect(commit.firstCall.args).to.eql(["setTestSettings", {unit: "km", circleInnerDiameter: 1, circleOuterDiameter: 2}]);
-            expect(dispatch.calledTwice).to.be.true;
-            expect(dispatch.firstCall.args).to.eql(["setCircleInnerDiameter", {target: {value: 1}}]);
-            expect(dispatch.secondCall.args).to.eql(["setCircleOuterDiameter", {target: {value: 2}}]);
+            expect(commit.firstCall.args).to.eql(["setTestSettings", {unit: "km", circleDiameter: 1, circleOuterDiameter: 2}]);
         });
     });
 });

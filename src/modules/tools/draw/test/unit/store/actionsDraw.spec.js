@@ -124,7 +124,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             // dispatches interaction-related actions
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: activeSymbol}]);
-            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeaturesSymbol}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionListener", {isOuterCircle: false, drawInteraction: "", maxFeatures: maxFeaturesSymbol}]);
             expect(dispatch.thirdCall.args[0]).to.eql("addInteraction");
             expect(typeof dispatch.thirdCall.args[1]).to.eql("object");
         });
@@ -142,11 +142,11 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             // dispatches interaction-related actions
             expect(dispatch.callCount).to.equal(6);
             expect(dispatch.args[0]).to.eql(["manipulateInteraction", {interaction: "draw", active: activeSymbol}]);
-            expect(dispatch.args[1]).to.eql(["createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeaturesSymbol}]);
+            expect(dispatch.args[1]).to.eql(["createDrawInteractionListener", {isOuterCircle: false, drawInteraction: "", maxFeatures: maxFeaturesSymbol}]);
             expect(dispatch.args[2][0]).to.eql("addInteraction");
             expect(typeof dispatch.args[2][1]).to.eql("object");
             expect(dispatch.args[3]).to.eql(["manipulateInteraction", {interaction: "draw", active: activeSymbol}]);
-            expect(dispatch.args[4]).to.eql(["createDrawInteractionListener", {doubleCircle: true, drawInteraction: "Two", maxFeatures: maxFeaturesSymbol}]);
+            expect(dispatch.args[4]).to.eql(["createDrawInteractionListener", {isOuterCircle: true, drawInteraction: "Two", maxFeatures: maxFeaturesSymbol}]);
             expect(dispatch.args[5][0]).to.eql("addInteraction");
             expect(typeof dispatch.args[5][1]).to.eql("object");
         });
@@ -170,7 +170,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
 
         it("defines a drawstart and drawend function on the interaction", () => {
             actions.createDrawInteractionListener({state, dispatch}, {
-                doubleCircle: false,
+                isOuterCircle: false,
                 drawInteraction: ""
             });
 
@@ -180,7 +180,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
 
         it("defines a second drawstart function when maxFeatures is set", () => {
             actions.createDrawInteractionListener({state, dispatch}, {
-                doubleCircle: false,
+                isOuterCircle: false,
                 drawInteraction: "",
                 maxFeatures: 5
             });
@@ -225,16 +225,23 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         });
 */
         it("enables the drawstart to dispatch and uses the correct parameters", () => {
-            const doubleCircleSymbol = Symbol();
+            const isOuterCircleSymbol = Symbol(),
+                event = {
+                    feature: {
+                        set: () => {
+                            return false;
+                        }
+                    }
+                };
 
             actions.createDrawInteractionListener({state, dispatch}, {
-                doubleCircle: doubleCircleSymbol,
+                isOuterCircle: isOuterCircleSymbol,
                 drawInteraction: ""
             });
 
-            definedFunctions.drawstart[0]();
+            definedFunctions.drawstart[0](event);
 
-            expect(dispatch.calledWithMatch("drawInteractionOnDrawEvent", {drawInteraction: "", doubleCircle: doubleCircleSymbol})).to.be.true;
+            expect(dispatch.calledWithMatch("drawInteractionOnDrawEvent", "")).to.be.true;
         });
 
         it("enables the maxFeatures drawstart to dispatch, does so on maxFeatures reached", () => {
@@ -247,7 +254,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             };
 
             actions.createDrawInteractionListener({state, dispatch}, {
-                doubleCircle: Symbol(),
+                isOuterCircle: Symbol(),
                 drawInteraction: "",
                 maxFeatures: 5
             });
@@ -306,6 +313,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         beforeEach(() => {
             trigger = sinon.spy();
             definedFunctions = {
+                modifystart: [],
                 modifyend: []
             };
             state = {
@@ -319,7 +327,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         });
 
         it("should define a modifyend function on the interaction", () => {
-            actions.createModifyInteractionListener({state, dispatch});
+            actions.createModifyInteractionListener({state, dispatch, commit});
 
             expect(definedFunctions.modifyend).to.have.length(1);
         });

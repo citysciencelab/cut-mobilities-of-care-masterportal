@@ -1,15 +1,4 @@
 /**
- * Function to adjust the value / diameter to the units meters or kilometers.
- *
- * @param {String} diameter diameter of the circle.
- * @param {String} unit unit of the diameter.
- * @return {(String|Number)} returns value / string without comma.
- */
-function adjustValueToUnits (diameter, unit) {
-    return unit === "km" ? diameter * 1000 : diameter;
-}
-
-/**
  * sets the styleSettings for the current drawType
  *
  * @param {Object} context the dipendencies
@@ -50,19 +39,18 @@ function setActive ({state, commit, dispatch, rootState}, active) {
 
 /**
  * Sets the inner diameter for the circle of the current drawType.
- *
+ * @info the internal representation of circleDiameter is always in meters
  * @param {Object} context actions context object.
- * @param {Event} event event fired by changing the input for the circleInnerDiameter.
- * @param {HTMLInputElement} event.target The HTML input element for the circleInnerDiameter.
+ * @param {Number} diameter the diameter of the inner circle in meters
  * @returns {void}
  */
-function setCircleInnerDiameter ({getters, commit}, {target}) {
-    const styleSettings = getters.getStyleSettings(),
-        adjustedInnerDiameter = adjustValueToUnits(target.value, styleSettings.unit);
+function setCircleDiameter ({getters, commit, dispatch}, diameter) {
+    const styleSettings = getters.getStyleSettings();
 
-    styleSettings.circleInnerDiameter = parseFloat(adjustedInnerDiameter);
+    styleSettings.circleDiameter = diameter;
 
     setStyleSettings({getters, commit}, styleSettings);
+    dispatch("updateCircleDiameterDuringModify", diameter);
 }
 
 /**
@@ -84,19 +72,18 @@ function setCircleMethod ({getters, commit}, {target}) {
 
 /**
  * Sets the outer diameter for the circle of the current drawType.
- *
+ * @info the internal representation of circleOuterDiameter is always in meters
  * @param {Object} context actions context object.
- * @param {Event} event event fired by changing the input for the circleOuterDiameter.
- * @param {HTMLInputElement} event.target The HTML input element for the circleOuterDiameter.
+ * @param {Number} diameter the diameter of the inner circle in meters
  * @returns {void}
  */
-function setCircleOuterDiameter ({getters, commit}, {target}) {
-    const styleSettings = getters.getStyleSettings(),
-        adjustedOuterDiameter = adjustValueToUnits(target.value, styleSettings.unit);
+function setCircleOuterDiameter ({getters, commit, dispatch}, diameter) {
+    const styleSettings = getters.getStyleSettings();
 
-    styleSettings.circleOuterDiameter = parseFloat(adjustedOuterDiameter);
+    styleSettings.circleOuterDiameter = diameter;
 
     setStyleSettings({getters, commit}, styleSettings);
+    dispatch("updateCircleDiameterDuringModify", diameter);
 }
 
 /**
@@ -346,14 +333,13 @@ function setUnit ({getters, commit, dispatch}, {target}) {
     styleSettings.unit = unit;
 
     setStyleSettings({getters, commit}, styleSettings);
-    dispatch("setCircleInnerDiameter", {target: {value: styleSettings.circleInnerDiameter}});
-    dispatch("setCircleOuterDiameter", {target: {value: styleSettings.circleOuterDiameter}});
+    dispatch("updateDrawInteraction");
 }
 
 export {
     setStyleSettings,
     setActive,
-    setCircleInnerDiameter,
+    setCircleDiameter,
     setCircleMethod,
     setCircleOuterDiameter,
     setColor,

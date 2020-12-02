@@ -6,8 +6,10 @@ import * as setters from "./actions/settersDraw";
 import * as withoutGUI from "./actions/withoutGUIDraw";
 import {createDrawInteraction, createModifyInteraction, createSelectInteraction} from "../utils/createInteractions";
 import {createStyle} from "../utils/style/createStyle";
+import createTooltipOverlay from "../utils/style/createTooltipOverlay";
 import {drawTypeOptions} from "../store/constantsDraw";
 import {getDrawTypeByGeometryType} from "../utils/getDrawTypeByGeometryType";
+import {calculateCircle} from "../utils/circleCalculations";
 
 import stateDraw from "./stateDraw";
 
@@ -101,7 +103,7 @@ const initialState = Object.assign({}, stateDraw),
 
             commit("setDrawInteraction", drawInteraction);
             dispatch("manipulateInteraction", {interaction: "draw", active: active});
-            dispatch("createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeatures});
+            dispatch("createDrawInteractionListener", {isOuterCircle: false, drawInteraction: "", maxFeatures});
             dispatch("addInteraction", drawInteraction);
 
             // NOTE: This leads to the creation of a second (the outer) circle instead of a MultiPolygon right now.
@@ -110,7 +112,7 @@ const initialState = Object.assign({}, stateDraw),
 
                 commit("setDrawInteractionTwo", drawInteractionTwo);
                 dispatch("manipulateInteraction", {interaction: "draw", active: active});
-                dispatch("createDrawInteractionListener", {doubleCircle: true, drawInteraction: "Two", maxFeatures: maxFeatures});
+                dispatch("createDrawInteractionListener", {isOuterCircle: true, drawInteraction: "Two", maxFeatures});
                 dispatch("addInteraction", drawInteractionTwo);
             }
         },
@@ -119,20 +121,52 @@ const initialState = Object.assign({}, stateDraw),
          *
          * @param {Object} context actions context object.
          * @param {Object} payload payload object.
-         * @param {Boolean} payload.doubleCircle Determines if a doubleCircle is supposed to be drawn.
+         * @param {Boolean} payload.doubleCircle Determines if the outer circle of a doubleCircle is supposed to be drawn.
          * @param {String} payload.drawInteraction Either an empty String or "Two" to identify for which drawInteraction this is used.
          * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
          * @returns {void}
          */
-        createDrawInteractionListener ({state, dispatch}, {doubleCircle, drawInteraction, maxFeatures}) {
+        createDrawInteractionListener ({rootState, state, dispatch, getters, commit}, {isOuterCircle, drawInteraction, maxFeatures}) {
             const interaction = state["drawInteraction" + drawInteraction];
             let centerPoint,
-                geoJSONAddCenter;
+                geoJSONAddCenter,
+                toolTip;
 
+            interaction.on("drawstart", event => {
+                event.feature.set("isOuterCircle", isOuterCircle);
+                dispatch("drawInteractionOnDrawEvent", drawInteraction);
+
+                if (!toolTip && state?.drawType?.id === "drawCircle" || state?.drawType?.id === "drawDoubleCircle") {
+                    toolTip = createTooltipOverlay({getters, commit, dispatch});
+                    rootState.Map.map.addOverlay(toolTip);
+                    rootState.Map.map.on("pointermove", toolTip.get("mapPointerMoveEvent"));
+                    event.feature.getGeometry().on("change", toolTip.get("featureChangeEvent"));
+                }
+            });
+            if (maxFeatures && maxFeatures > 0) {
+                interaction.on("drawstart", () => {
+                    const featureCount = state.layer.getSource().getFeatures().length;
+
+                    if (featureCount > maxFeatures - 1) {
+                        dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures}), {root: true});
+                        dispatch("deactivateDrawInteractions");
+                        dispatch("removeInteraction", interaction);
+                    }
+                });
+            }
             interaction.on("drawend", event => {
                 dispatch("uniqueID").then(id => {
                     event.feature.set("styleId", id);
+
                     dispatch("addDrawStateToFeature", event.feature);
+
+                    if (toolTip) {
+                        event.feature.getGeometry().un("change", toolTip.get("featureChangeEvent"));
+                        toolTip.getElement().parentNode.removeChild(toolTip.getElement());
+                        rootState.Map.map.un("pointermove", toolTip.get("mapPointerMoveEvent"));
+                        rootState.Map.map.removeOverlay(toolTip);
+                        toolTip = null;
+                    }
 
                     // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map, drawing is cancelled and editing is started
                     if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
@@ -155,21 +189,6 @@ const initialState = Object.assign({}, stateDraw),
                     }
                 });
             });
-            interaction.on("drawstart", () => {
-                dispatch("drawInteractionOnDrawEvent", {drawInteraction, doubleCircle});
-            });
-
-            if (maxFeatures && maxFeatures > 0) {
-                interaction.on("drawstart", () => {
-                    const featureCount = state.layer.getSource().getFeatures().length;
-
-                    if (featureCount > maxFeatures - 1) {
-                        dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.limitReached", {count: maxFeatures}), {root: true});
-                        dispatch("deactivateDrawInteractions");
-                        dispatch("removeInteraction", interaction);
-                    }
-                });
-            }
         },
         /**
          * Creates a modify interaction and adds it to the map.
@@ -198,11 +217,58 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        createModifyInteractionListener ({state, dispatch}) {
+        createModifyInteractionListener ({rootState, state, dispatch, commit, getters}) {
+            let toolTip,
+                changeInProgress = false;
+
+            state.modifyInteraction.on("modifystart", event => {
+                if (state.selectedFeature) {
+                    // set selectedFeature to null to avoid change of last selected feature
+                    commit("setSelectedFeature", null);
+                }
+
+                event.features.getArray().forEach(feature => {
+                    let center = null;
+
+                    if (typeof feature.getGeometry().getCenter === "function") {
+                        center = JSON.stringify(feature.getGeometry().getCenter());
+                    }
+                    feature.getGeometry().once("change", () => {
+                        if (changeInProgress) {
+                            return;
+                        }
+                        changeInProgress = true;
+
+                        if (!state.selectedFeature || state.selectedFeature.ol_uid !== feature.ol_uid) {
+                            if (!toolTip && (state.drawType.id === "drawCircle" || state.drawType.id === "drawDoubleCircle")) {
+                                if (center === JSON.stringify(feature.getGeometry().getCenter())) {
+                                    dispatch("setAsCurrentFeatureAndApplyStyleSettings", feature);
+                                    toolTip = createTooltipOverlay({getters, commit, dispatch});
+                                    rootState.Map.map.addOverlay(toolTip);
+                                    rootState.Map.map.on("pointermove", toolTip.get("mapPointerMoveEvent"));
+                                    state.selectedFeature.getGeometry().on("change", toolTip.get("featureChangeEvent"));
+                                }
+                            }
+                            else {
+                                dispatch("setAsCurrentFeatureAndApplyStyleSettings", feature);
+                            }
+                        }
+                    });
+                });
+            });
             state.modifyInteraction.on("modifyend", event => {
                 let centerPoint,
                     centerPointCoords,
                     geoJSONAddCenter;
+
+                changeInProgress = false;
+                if (toolTip) {
+                    state.selectedFeature.getGeometry().un("change", toolTip.get("featureChangeEvent"));
+                    toolTip.getElement().parentNode.removeChild(toolTip.getElement());
+                    rootState.Map.map.un("pointermove", toolTip.get("mapPointerMoveEvent"));
+                    rootState.Map.map.removeOverlay(toolTip);
+                    toolTip = null;
+                }
 
                 // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map
                 if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
@@ -226,7 +292,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        createSelectInteractionModifyListener ({state, commit, getters, dispatch}) {
+        createSelectInteractionModifyListener ({state, commit, dispatch}) {
             state.selectInteractionModify.on("select", event => {
                 if (state.currentInteraction !== "modify" || !event.selected.length) {
                     // reset interaction - if not reset, the ol default would be used, this shouldn't be what we want at this point
@@ -237,39 +303,10 @@ const initialState = Object.assign({}, stateDraw),
                     return;
                 }
 
-                // the last selected feature is allways on top
+                // the last selected feature is always on top
                 const feature = event.selected[event.selected.length - 1];
-                let styleSettings = null;
 
-                commit("setSelectedFeature", feature);
-
-                if (typeof feature.get("drawState") === "undefined") {
-                    // setDrawType changes visibility of all select- and input-boxes
-                    commit("setDrawType", getDrawTypeByGeometryType(feature.getGeometry().getType(), drawTypeOptions));
-
-                    // use current state as standard for extern features (e.g. kml or gpx import)
-                    dispatch("addDrawStateToFeature", feature);
-                }
-                else {
-                    // setDrawType changes visibility of all select- and input-boxes
-                    commit("setDrawType", feature.get("drawState").drawType);
-                }
-
-                styleSettings = getters.getStyleSettings();
-
-                styleSettings.color = feature.get("drawState").color;
-                styleSettings.colorContour = feature.get("drawState").colorContour;
-                styleSettings.outerColorContour = feature.get("drawState").outerColorContour;
-                styleSettings.strokeWidth = feature.get("drawState").strokeWidth;
-                styleSettings.opacity = feature.get("drawState").opacity;
-                styleSettings.opacityContour = feature.get("drawState").opacityContour;
-                styleSettings.font = feature.get("drawState").font;
-                styleSettings.fontSize = feature.get("drawState").fontSize;
-                styleSettings.text = feature.get("drawState").text;
-
-                commit("setSymbol", feature.get("drawState").symbol);
-
-                setters.setStyleSettings({getters, commit}, styleSettings);
+                dispatch("setAsCurrentFeatureAndApplyStyleSettings", feature);
 
                 // ui reason: this is the short period of time the ol default mark of select interaction is seen at mouse click event of a feature
                 setTimeout(() => {
@@ -287,7 +324,15 @@ const initialState = Object.assign({}, stateDraw),
             if (!feature) {
                 return;
             }
-            const styleSettings = getters.getStyleSettings();
+            const styleSettings = getters.getStyleSettings(),
+                // use clones of drawType and symbol
+                symbol = JSON.parse(JSON.stringify(getters.symbol));
+            let drawType = JSON.parse(JSON.stringify(getters.drawType));
+
+            if (getters.drawType.id === "drawDoubleCircle") {
+                // the double circle should behave like a circle on modify
+                drawType = {geometry: "Circle", id: "drawCircle"};
+            }
 
             feature.set("drawState", {
                 // copies
@@ -297,14 +342,15 @@ const initialState = Object.assign({}, stateDraw),
                 font: styleSettings.font,
                 fontSize: parseInt(styleSettings.fontSize, 10),
                 text: styleSettings.text,
-
-                // clones - styleSettings are a clone already
-                drawType: JSON.parse(JSON.stringify(getters.drawType)),
-                symbol: JSON.parse(JSON.stringify(getters.symbol)),
+                circleMethod: styleSettings.circleMethod,
+                circleDiameter: styleSettings.circleDiameter,
+                circleOuterDiameter: styleSettings.circleOuterDiameter,
+                drawType,
+                symbol,
                 color: styleSettings.color,
                 colorContour: styleSettings.colorContour,
                 outerColorContour: styleSettings.outerColorContour
-            });
+            }, false);
         },
         /**
          * Creates a select interaction (for deleting features) and adds it to the map.
@@ -537,6 +583,23 @@ const initialState = Object.assign({}, stateDraw),
             dispatch("createDrawInteractionAndAddToMap", {active: true});
         },
         /**
+         * Updates the selected feature during modify for circles
+         *
+         * @param {Object} context actions context object.
+         * @param {Number} diameter the diameter of the circle
+         * @returns {void}
+         */
+        updateCircleDiameterDuringModify ({state, rootState, dispatch}, diameter) {
+            if (state.currentInteraction === "modify" && state.selectedFeature !== null && (state.drawType.id === "drawCircle" || state.drawType.id === "drawDoubleCircle")) {
+                const feature = state.selectedFeature,
+                    circleCenter = feature.getGeometry().getCenter();
+
+                calculateCircle({feature}, circleCenter, diameter, rootState.Map.map);
+
+                dispatch("addDrawStateToFeature", state.selectedFeature);
+            }
+        },
+        /**
          * Adds or removes one element from the redoArray.
          *
          * @param {Object} context actions context object.
@@ -555,6 +618,48 @@ const initialState = Object.assign({}, stateDraw),
                 redoArray.push(feature);
             }
             commit("setRedoArray", redoArray);
+        },
+        /**
+         * sets the given feature as currentFeature and applies the styleSettings
+         * @param {Object} context actions context object.
+         * @param {ol/Feature} feature the openlayer feature to append the current "drawState" to
+         * @returns {void}
+         */
+        setAsCurrentFeatureAndApplyStyleSettings: ({commit, dispatch, getters}, feature) => {
+            let styleSettings = null;
+
+            commit("setSelectedFeature", feature);
+
+            if (typeof feature.get("drawState") === "undefined") {
+                // setDrawType changes visibility of all select- and input-boxes
+                commit("setDrawType", getDrawTypeByGeometryType(feature.getGeometry().getType(), drawTypeOptions));
+
+                // use current state as standard for extern features (e.g. kml or gpx import)
+                dispatch("addDrawStateToFeature", feature);
+            }
+            else {
+                // setDrawType changes visibility of all select- and input-boxes
+                commit("setDrawType", feature.get("drawState").drawType);
+            }
+
+            styleSettings = getters.getStyleSettings();
+
+            styleSettings.color = feature.get("drawState").color;
+            styleSettings.colorContour = feature.get("drawState").colorContour;
+            styleSettings.outerColorContour = feature.get("drawState").outerColorContour;
+            styleSettings.strokeWidth = feature.get("drawState").strokeWidth;
+            styleSettings.opacity = feature.get("drawState").opacity;
+            styleSettings.opacityContour = feature.get("drawState").opacityContour;
+            styleSettings.font = feature.get("drawState").font;
+            styleSettings.fontSize = feature.get("drawState").fontSize;
+            styleSettings.text = feature.get("drawState").text;
+            styleSettings.circleMethod = feature.get("drawState").circleMethod;
+            styleSettings.circleDiameter = feature.get("drawState").circleDiameter;
+            styleSettings.circleOuterDiameter = feature.get("drawState").circleOuterDiameter;
+
+            commit("setSymbol", feature.get("drawState").symbol);
+
+            setters.setStyleSettings({commit, getters}, styleSettings);
         },
         ...withoutGUI
     };

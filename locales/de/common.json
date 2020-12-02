@@ -562,6 +562,7 @@
                 "drawDoubleCircle": "Doppelkreis",
                 "doubleCirclePlaceholder": "Bitte geben Sie einen Durchmesser ein",
                 "diameter": "Durchmesser",
+                "innerDiameter": "Innerer Durchmesser",
                 "outerDiameter": "Äußerer Durchmesser",
                 "unit": "Einheit",
                 "text": "Text",

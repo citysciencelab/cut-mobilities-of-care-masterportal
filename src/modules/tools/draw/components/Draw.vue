@@ -25,6 +25,7 @@ export default {
          * @returns {Boolean} currentInteraction === "draw": return false and activate the HTML elements, else: return true and deactivate the HTML elements.
          */
         drawHTMLElements () {
+            // remember: true means disable, false means enable
             return !(this.currentInteraction === "draw");
         },
         /**
@@ -35,50 +36,73 @@ export default {
             if (this.selectedFeature !== null && this.currentInteraction === "modify") {
                 return false;
             }
+            // remember: true means disable, false means enable
             return !(this.currentInteraction === "draw");
         },
         /**
-         * Disables the input for the diameter and the unit for the drawType "drawCircle" if the circleMethod is not set to "defined".
-         * @returns {Boolean} return false if drawing is enabled and circleMethod is set to "defined", else return true.
+         * Enables the input for the diameter if the circleMethod is "defined", for interaction "modify" the rule of drawHTMLElementsModifyFeature takes place.
+         * @returns {Boolean} returns true to disable the input, false to enable the input
          */
         drawCircleMethods () {
-            return this.drawType.id === "drawCircle" ?
-                this.drawHTMLElements || this.getStyleSettings()?.circleMethod !== "defined"
-                : this.drawHTMLElements;
+            if (this.currentInteraction === "draw") {
+                // remember: true means disable, false means enable
+                return !(this.getStyleSettings()?.circleMethod === "defined");
+            }
+            return this.drawHTMLElementsModifyFeature;
         },
 
-        circleInnerDiameterComputed: {
+        circleDiameterComputed: {
             /**
-             * getter for the computed property circleInnerDiameter of the current drawType
+             * getter for the computed property circleDiameter of the current drawType
+             * @info the internal representation of circleDiameter is always in meters
              * @returns {Number} the current diameter
              */
             get () {
-                return this.getStyleSettings()?.circleInnerDiameter;
+                if (this.getStyleSettings()?.unit === "km") {
+                    return this.getStyleSettings()?.circleDiameter / 1000;
+                }
+                return this.getStyleSettings()?.circleDiameter;
             },
             /**
-             * setter for the computed property circleInnerDiameter of the current drawType
+             * setter for the computed property circleDiameter of the current drawType
+             * @info the internal representation of circleDiameter is always in meters
              * @param {Number} value the value to set the target to
              * @returns {void}
              */
             set (value) {
-                this.setCircleInnerDiameter({target: {value, unit: this.getStyleSettings()?.unit}});
+                if (this.getStyleSettings()?.unit === "km") {
+                    this.setCircleDiameter(value * 1000);
+                }
+                else {
+                    this.setCircleDiameter(value);
+                }
             }
         },
         circleOuterDiameterComputed: {
             /**
              * getter for the computed property circleOuterDiameter of the current drawType
+             * @info the internal representation of circleOuterDiameter is always in meters
              * @returns {Number} the current diameter
              */
             get () {
+                if (this.getStyleSettings()?.unit === "km") {
+                    return this.getStyleSettings()?.circleOuterDiameter / 1000;
+                }
                 return this.getStyleSettings()?.circleOuterDiameter;
             },
             /**
              * setter for the computed property circleOuterDiameter of the current drawType
+             * @info the internal representation of circleOuterDiameter is always in meters
              * @param {Number} value the value to set the target to
              * @returns {void}
              */
             set (value) {
-                this.setCircleOuterDiameter({target: {value, unit: this.getStyleSettings()?.unit}});
+                if (this.getStyleSettings()?.unit === "km") {
+                    this.setCircleOuterDiameter(value * 1000);
+                }
+                else {
+                    this.setCircleOuterDiameter(value);
+                }
             }
         },
         /**
@@ -159,7 +183,7 @@ export default {
             return this.getStyleSettings()?.color;
         },
         /**
-         * computed property of the label for the normal colorContour - incase this is a double circle
+         * computed property of the label for the normal colorContour - in case this is a double circle
          * @returns {String} the label to use for the normal colorContour
          */
         colorContourLabelComputed () {
@@ -167,6 +191,16 @@ export default {
                 return this.$i18n.i18next.t("common:modules.tools.draw.innerColorContour");
             }
             return this.$i18n.i18next.t("common:modules.tools.draw.colorContour");
+        },
+        /**
+         * computed property of the label for the normal innerDiameter - in case this is a double circle
+         * @returns {String} the label to use for the normal innerDiameter
+         */
+        innerDiameterLabelComputed () {
+            if (this.drawType.id === "drawDoubleCircle" && this.currentInteraction !== "modify") {
+                return this.$i18n.i18next.t("common:modules.tools.draw.innerDiameter");
+            }
+            return this.$i18n.i18next.t("common:modules.tools.draw.diameter");
         }
 
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
@@ -319,7 +353,7 @@ export default {
                 role="form"
             >
                 <div
-                    v-if="drawType.id === 'drawCircle'"
+                    v-if="drawType.id === 'drawCircle' && currentInteraction !== 'modify'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
@@ -329,7 +363,7 @@ export default {
                         <select
                             id="tool-draw-circleMethod"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setCircleMethod"
                         >
                             <option
@@ -352,18 +386,18 @@ export default {
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
-                        {{ $t("common:modules.tools.draw.diameter") }}
+                        {{ innerDiameterLabelComputed }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <input
-                            id="tool-draw-circleInnerDiameter"
-                            v-model="circleInnerDiameterComputed"
+                            id="tool-draw-circleDiameter"
+                            v-model="circleDiameterComputed"
                             class="form-control"
                             :style="{borderColor: innerBorderColor}"
                             type="number"
                             :placeholder="$t('common:modules.tools.draw.doubleCirclePlaceholder')"
                             :disabled="drawCircleMethods"
-                            @input="setCircleInnerDiameter"
+                            min="0"
                         />
                     </div>
                 </div>
@@ -382,8 +416,8 @@ export default {
                             :style="{borderColor: outerBorderColor}"
                             type="number"
                             :placeholder="$t('common:modules.tools.draw.doubleCirclePlaceholder')"
-                            :disabled="drawHTMLElements"
-                            @input="setCircleOuterDiameter"
+                            :disabled="drawCircleMethods"
+                            min="0"
                         >
                     </div>
                 </div>
@@ -398,7 +432,7 @@ export default {
                         <select
                             id="tool-draw-circleUnit"
                             class="form-control input-sm"
-                            :disabled="drawCircleMethods"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setUnit"
                         >
                             <option
@@ -610,7 +644,7 @@ export default {
                     </div>
                 </div>
                 <div
-                    v-if="drawType.id === 'drawDoubleCircle' && currentInteraction !== 'modify'"
+                    v-if="drawType.id === 'drawDoubleCircle'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">

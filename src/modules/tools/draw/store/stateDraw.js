@@ -29,6 +29,7 @@ const symbol = {
      * @property {Boolean} resizableWindow Determines whether the Tool window can be resized.
      * @property {module:ol/interaction/Select} selectInteraction The select interaction of the draw tool.
      * @property {Object} symbol The symbol for the point.
+     * @property {module:ol/Feature} tooltipCircleDiameterNode the tooltip to show when a circles diameter is created or changed
      * @property {Boolean} withoutGUI Determines whether the window for the draw tool is rendered or not.
      * @property {Number} zIndex Determines in which order features are rendered on the view.
      * @property {Object} drawSymbolSettings the values used for the drawType drawSymbol
@@ -51,7 +52,7 @@ const symbol = {
      * @property {Object} drawCircleSettings the values used for the drawType drawCircle
      * @property {String} drawCircleSettings.circleMethod The method for drawing features of drawType "Circle".
      * @property {String} drawCircleSettings.unit The unit of measurement (e.g. "km").
-     * @property {Number} drawCircleSettings.circleInnerDiameter The inner diameter for feature of drawType "Circle".
+     * @property {Number} drawCircleSettings.circleDiameter The inner diameter for feature of drawType "Circle".
      * @property {Number} drawCircleSettings.strokeWidth Stroke width.
      * @property {String[]} drawCircleSettings.color The color of the drawn feature represented as an array.
      * @property {Number} drawCircleSettings.opacity The opacity of the color of the drawn features. NOTE: The values of the transparencySettings are opacity values.
@@ -60,7 +61,7 @@ const symbol = {
      * @property {Object} drawDoubleCircleSettings the values used for the drawType drawDoubleCircle
      * @property {String} drawDoubleCircleSettings.circleMethod The method for drawing features of drawType "DoubleCircle".
      * @property {String} drawDoubleCircleSettings.unit The unit of measurement (e.g. "km").
-     * @property {Number} drawDoubleCircleSettings.circleInnerDiameter The inner diameter for feature of drawType "DoubleCircle".
+     * @property {Number} drawDoubleCircleSettings.circleDiameter The inner diameter for feature of drawType "DoubleCircle".
      * @property {Number} drawDoubleCircleSettings.circleOuterDiameter The outer diameter for feature of drawType "DoubleCircle".
      * @property {Number} drawDoubleCircleSettings.strokeWidth Stroke width.
      * @property {String[]} drawDoubleCircleSettings.color The color of the drawn feature represented as an array.
@@ -113,6 +114,7 @@ const symbol = {
         selectInteractionModify: null,
         selectedFeature: null,
         symbol,
+        tooltipCircleDiameterNode: null,
         withoutGUI: false,
         zIndex: 0,
         name: "common:menu.tools.draw",
@@ -142,7 +144,7 @@ const symbol = {
         drawCircleSettings: {
             circleMethod: "interactive",
             unit: "m",
-            circleInnerDiameter: 0,
+            circleDiameter: 0,
             strokeWidth: 1,
             color: [55, 126, 184, 1],
             opacity: 1,
@@ -152,7 +154,7 @@ const symbol = {
         drawDoubleCircleSettings: {
             circleMethod: "defined",
             unit: "m",
-            circleInnerDiameter: 0,
+            circleDiameter: 0,
             circleOuterDiameter: 0,
             strokeWidth: 1,
             color: [55, 126, 184, 1],

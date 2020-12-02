@@ -561,6 +561,7 @@
                 "drawDoubleCircle": "Double circle",
                 "doubleCirclePlaceholder": "Please enter a diameter",
                 "diameter": "Diameter",
+                "innerDiameter": "Inner diameter",
                 "outerDiameter": "Outer diameter",
                 "unit": "Unit",
                 "text": "Text",
