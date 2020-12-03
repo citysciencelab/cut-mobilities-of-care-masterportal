@@ -24,7 +24,8 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         pinTopicsTreeText: "",
         hideAllTopicsText: "",
         showAllTopicsText: "",
-        categoryText: ""
+        categoryText: "",
+        toolsName: ""
     }),
     /**
      * @class Folder
@@ -98,6 +99,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
             hideAllTopicsText: i18next.t("common:tree.hideAllTopics"),
             showAllTopicsText: i18next.t("common:tree.showAllTopics"),
             categoryText: i18next.t("common:tree.category"),
+            toolsName: i18next.t("common:menu.tools.name"),
             currentLng: lng
         });
         // translate name of folder, key is defined in config.json

@@ -6,9 +6,15 @@ const ToolView = Backbone.View.extend({
         "click": "toggleToolMenu"
     },
     initialize: function () {
+        this.collection = Radio.request("ModelList", "getCollection");
         this.render();
         this.listenTo(Radio.channel("TableMenu"), {
             "hideMenuElementTool": this.closeToolMenu
+        });
+        this.listenTo(this.collection, {
+            "change:currentLng": () => {
+                this.render();
+            }
         });
     },
     id: "table-tools",
@@ -28,7 +34,7 @@ const ToolView = Backbone.View.extend({
                 }
                 case "folder": {
                     if (model.get("id") === "tools") {
-                        this.addToolsMenuView();
+                        this.addToolsMenuView(model);
                     }
                     break;
                 }
@@ -37,8 +43,10 @@ const ToolView = Backbone.View.extend({
         });
         return this;
     },
-    addToolsMenuView: function () {
-        $("#table-nav").append(this.$el.html(this.template()));
+    addToolsMenuView: function (model) {
+        const attr = model.toJSON();
+
+        $("#table-nav").append(this.$el.html(this.template(attr)));
     },
     addToolView: function (model) {
         if (model.get("isVisibleInMenu")) {
