@@ -439,6 +439,7 @@
             "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
+                "copyToClipboard": "Inhalt wurde in die Zwischenablage kopiert.",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"

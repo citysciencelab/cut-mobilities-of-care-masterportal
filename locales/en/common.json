@@ -438,6 +438,7 @@
             "supplyCoord": {
                 "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
+                "copyToClipboard": "Content was copied to the clipboard.",
                 "hdms": {
                     "eastingLabel": "Longitude",
                     "northingLabel": "Latitude"
