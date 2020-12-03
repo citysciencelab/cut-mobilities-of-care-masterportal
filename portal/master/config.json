@@ -667,7 +667,7 @@
           ],
           "name": "Eignungsflächen",
           "legendURL": [
-            "http://www.geoportal-hamburg.de/legende/legende_solar.png"
+            "https://www.geoportal-hamburg.de/legende/legende_solar.png"
           ],
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
