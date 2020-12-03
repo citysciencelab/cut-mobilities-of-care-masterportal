@@ -137,8 +137,32 @@ export default {
 }
 
 .modal-footer {
+    color: #646262;
     padding: 0;
     font-size: 22px;
+
+    .pager {
+        background-color: @secondary;
+        padding: 6px;
+        cursor: pointer;
+        width: 50%;
+        margin: 0;
+    }
+
+    .pager-left {
+        float: left;
+        border-right: 1px solid #ddd;
+    }
+
+    .pager-right {
+        float: right;
+    }
+
+    .disabled {
+        cursor: not-allowed;
+        background-color: @primary_inactive_contrast;
+        opacity: 0.2;
+    }
 }
 
 </style>
