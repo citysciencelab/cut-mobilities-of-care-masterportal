@@ -47,7 +47,7 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
             // is necessary, because the class needed by the legend and the legend does not exist
             setTimeout(() => {
                 this.setLayerIdForLayerInfo();
-            }, 300);
+            }, 400);
         }
         return this;
     },
