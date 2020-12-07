@@ -1,7 +1,7 @@
 import TemplateMobile from "text-loader!./templateMobile.html";
-// import ContentTemplate from "text-loader!../legend/content.html";
 import "bootstrap/js/tab";
 import "bootstrap/js/modal";
+import store from "../../src/app-store";
 /**
  * @member LayerInformationTemplateMobile
  * @description Template used to create the layer information for mobile devices
@@ -14,7 +14,7 @@ import "bootstrap/js/modal";
  */
 const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformationViewMobile.prototype */{
     events: {
-        // Das Event wird ausgelöst, sobald das Modal verborgen ist
+        // The event is triggered when the modal is hidden
         "hidden.bs.modal": "setIsVisibleToFalse"
     },
     /**
@@ -28,14 +28,12 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
      */
     initialize: function () {
         this.listenTo(this.model, {
-            // model.fetch() feuert das Event sync, sobald der Request erfoglreich war
             "sync": this.render,
             "removeView": this.remove
         });
     },
     className: "modal fade layerinformation",
     template: _.template(TemplateMobile),
-    // contentTemplate: _.template(ContentTemplate),
     /**
     * todo
     * @returns {*} returns this
@@ -43,25 +41,26 @@ const LayerInformationViewMobile = Backbone.View.extend(/** @lends LayerInformat
     render: function () {
         const attr = this.model.toJSON();
 
-        this.addContentHTML();
-        this.$el.html(this.template(attr));
-        this.$el.modal("show");
+        if (this.model.get("isVisible")) {
+            this.$el.html(this.template(attr));
+            this.$el.modal("show");
+            // is necessary, because the class needed by the legend and the legend does not exist
+            setTimeout(() => {
+                this.setLayerIdForLayerInfo();
+            }, 300);
+        }
         return this;
     },
+
     /**
-     * Adds the legend definition to the rendered HTML, this is needed by the template
+     * Triggers the event to create layerinfo legend
      * @returns {void}
      */
-    addContentHTML: function () {
-        const legends = this.model.get("legend");
-
-        if (legends.legend !== null) {
-            legends.legend.forEach(legend => {
-                console.error("Some Old Legend stuff was done here... " + legend + " cannot be shown");
-                // legend.html = this.contentTemplate(legend);
-            });
-        }
+    setLayerIdForLayerInfo: function () {
+        store.dispatch("Legend/setLayerIdForLayerInfo", this.model.get("id"));
+        store.dispatch("Legend/setLayerCounterIdForLayerInfo", Date.now());
     },
+
     /**
     * todo
     * @returns {void}
