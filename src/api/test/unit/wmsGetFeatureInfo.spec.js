@@ -133,7 +133,7 @@ describe("src/api/wmsGetFeatureInfo.js", () => {
                         <geofox_workspace:geofoxdb_stations fid="geofoxdb_stations.fid-3964547_1763c18f793_4f8c">
                             <geofox_workspace:supplier>Master</geofox_workspace:supplier>
                             <geofox_workspace:id>80000</geofox_workspace:id>
-                            <geofox_workspace:name>ThadenstraÃe (West)</geofox_workspace:name>
+                            <geofox_workspace:name>Thadenstrasse (West)</geofox_workspace:name>
                             <geofox_workspace:x>3563130</geofox_workspace:x>
                             <geofox_workspace:y>5936370</geofox_workspace:y>
                             <geofox_workspace:lines>610,283</geofox_workspace:lines>
@@ -148,13 +148,17 @@ describe("src/api/wmsGetFeatureInfo.js", () => {
                             <geofox_workspace:priority>0</geofox_workspace:priority>
                         </geofox_workspace:geofoxdb_stations>
                     </gml:featureMember>
-                </wfs:FeatureCollection>>",
-                expected = "testData",
-                result = parseDocumentString(documentString, "text/xml")`,
-                features = parseFeatures(documentString);
+                </wfs:FeatureCollection>`,
+                parser = new DOMParser(),
+                features = parseFeatures(parser.parseFromString(documentString, "text/xml"));
 
-                console.log(features);
             expect(features.length).equals(1);
+            expect(features[0].get("x")).equals("3563130");
+            expect(features[0].get("y")).equals("5936370");
+            expect(features[0].get("name")).equals("Thadenstrasse (West)");
+            expect(features[0].get("linekat")).equals("Niederflur-Nachtbus,Niederflur Stadtbus");
+            expect(features[0].get("lineshortkat")).equals("Nachtbus,Bus");
+            expect(features[0].getGeometry().getCoordinates()).to.include(563033.73375521, 5934434.5087641, 0);
         });
     });
 });

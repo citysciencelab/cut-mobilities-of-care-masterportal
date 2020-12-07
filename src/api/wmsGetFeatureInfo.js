@@ -58,7 +58,6 @@ export function handleResponseAxios (response) {
  * @returns {(Document|XMLDocument)}  a valid document, free of parser errors
  */
 export function parseDocumentString (documentString, mimeType, parseFromStringOpt = null) {
-    console.log(documentString);
     const domParser = new DOMParser(),
         doc = typeof parseFromStringOpt === "function" ? parseFromStringOpt(documentString, mimeType) : domParser.parseFromString(documentString, mimeType);
     let errObj = null,
@@ -89,17 +88,12 @@ export function parseDocumentString (documentString, mimeType, parseFromStringOp
  */
 export function parseFeatures (doc) {
     let features = [];
-    console.log(doc);
-    if (!(doc instanceof XMLDocument)) {
-        console.warn("requestGfi, parseFeatures: doc", doc);
-        throw Error("requestGfi, parseFeatures: the received doc is no valid XMLDocument");
-    }
 
     // OGC-conform
     if (doc.firstChild.tagName === "FeatureCollection" || doc.firstChild.tagName === "wfs:FeatureCollection") {
         const gfiFormat = new WMSGetFeatureInfo();
 
-        features = gfiFormat.readFeatures(doc).flat();
+        features = gfiFormat.readFeatures(doc);
     }
     // ESRI...
     else {
@@ -112,7 +106,7 @@ export function parseFeatures (doc) {
             features.push(feature);
         });
     }
-    console.log(features);
+
     return features;
 }
 
