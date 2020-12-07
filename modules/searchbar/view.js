@@ -446,7 +446,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // 4. Zoom if necessary on the result otherwise special handling
         if (hit.hasOwnProperty("triggerEvent")) {
             this.model.setHitIsClick(true);
-            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt?.handleObj?.type);
         }
         else {
             const resolutions = Radio.request("MapView", "getResolutions"),
