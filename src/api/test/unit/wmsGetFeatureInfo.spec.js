@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {handleResponseAxios, parseDocumentString} from "../../wmsGetFeatureInfo.js";
+import {handleResponseAxios, parseDocumentString, parseFeatures} from "../../wmsGetFeatureInfo.js";
 
 describe("src/api/wmsGetFeatureInfo.js", () => {
     describe("handleResponseAxios", () => {
@@ -122,6 +122,39 @@ describe("src/api/wmsGetFeatureInfo.js", () => {
 
             expect(result).to.be.an.instanceof(Document);
             expect(result.firstElementChild.innerHTML).to.equal(expected);
+        });
+        it("should return a parsed Document from the given documentString as text/xml with the infoFormat application/vnd.ogc.gml", () => {
+            const documentString = `<?xml version="1.0" encoding="UTF-8"?>
+                <wfs:FeatureCollection xmlns="http://www.opengis.net/wfs" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:geofox_workspace="geofox" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs https://map.geofox.de:443/geoserver/schemas/wfs/1.0.0/WFS-basic.xsd geofox https://map.geofox.de:443/geoserver/geofox_workspace/wfs?service=WFS&amp;version=1.0.0&amp;request=DescribeFeatureType&amp;typeName=geofox_workspace%3Ageofoxdb_stations">
+                    <gml:boundedBy>
+                        <gml:null>unknown</gml:null>
+                    </gml:boundedBy>
+                    <gml:featureMember>
+                        <geofox_workspace:geofoxdb_stations fid="geofoxdb_stations.fid-3964547_1763c18f793_4f8c">
+                            <geofox_workspace:supplier>Master</geofox_workspace:supplier>
+                            <geofox_workspace:id>80000</geofox_workspace:id>
+                            <geofox_workspace:name>ThadenstraÃe (West)</geofox_workspace:name>
+                            <geofox_workspace:x>3563130</geofox_workspace:x>
+                            <geofox_workspace:y>5936370</geofox_workspace:y>
+                            <geofox_workspace:lines>610,283</geofox_workspace:lines>
+                            <geofox_workspace:linekat>Niederflur-Nachtbus,Niederflur Stadtbus</geofox_workspace:linekat>
+                            <geofox_workspace:lineshortkat>Nachtbus,Bus</geofox_workspace:lineshortkat>
+                            <geofox_workspace:geom>
+                                <gml:Point srsName="http://www.opengis.net/gml/srs/epsg.xml#25832">
+                                    <gml:coordinates xmlns:gml="http://www.opengis.net/gml" decimal="." cs="," ts=" ">563033.73375521,5934434.5087641</gml:coordinates>
+                                </gml:Point>
+                            </geofox_workspace:geom>
+                            <geofox_workspace:short_name>ThadenstraÃe (West)</geofox_workspace:short_name>
+                            <geofox_workspace:priority>0</geofox_workspace:priority>
+                        </geofox_workspace:geofoxdb_stations>
+                    </gml:featureMember>
+                </wfs:FeatureCollection>>",
+                expected = "testData",
+                result = parseDocumentString(documentString, "text/xml")`,
+                features = parseFeatures(documentString);
+
+                console.log(features);
+            expect(features.length).equals(1);
         });
     });
 });

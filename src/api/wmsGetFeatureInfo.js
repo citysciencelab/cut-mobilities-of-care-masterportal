@@ -58,6 +58,7 @@ export function handleResponseAxios (response) {
  * @returns {(Document|XMLDocument)}  a valid document, free of parser errors
  */
 export function parseDocumentString (documentString, mimeType, parseFromStringOpt = null) {
+    console.log(documentString);
     const domParser = new DOMParser(),
         doc = typeof parseFromStringOpt === "function" ? parseFromStringOpt(documentString, mimeType) : domParser.parseFromString(documentString, mimeType);
     let errObj = null,
@@ -86,7 +87,9 @@ export function parseDocumentString (documentString, mimeType, parseFromStringOp
  * @param {XMLDocument} doc - data to be parsed
  * @returns {module:ol/Feature[]} array of openlayers features
  */
-function parseFeatures (doc) {
+export function parseFeatures (doc) {
+    let features = [];
+    console.log(doc);
     if (!(doc instanceof XMLDocument)) {
         console.warn("requestGfi, parseFeatures: doc", doc);
         throw Error("requestGfi, parseFeatures: the received doc is no valid XMLDocument");
@@ -96,20 +99,21 @@ function parseFeatures (doc) {
     if (doc.firstChild.tagName === "FeatureCollection" || doc.firstChild.tagName === "wfs:FeatureCollection") {
         const gfiFormat = new WMSGetFeatureInfo();
 
-        return gfiFormat.readFeatures(doc).flat();
+        features = gfiFormat.readFeatures(doc).flat();
     }
     // ESRI...
-    const features = [];
+    else {
+        doc.getElementsByTagName("FIELDS").forEach(element => {
+            const feature = new Feature();
 
-    doc.getElementsByTagName("FIELDS").forEach(element => {
-        const feature = new Feature();
-
-        element.attributes.forEach(attribute => {
-            feature.set(attribute.localName, attribute.value);
+            element.attributes.forEach(attribute => {
+                feature.set(attribute.localName, attribute.value);
+            });
+            features.push(feature);
         });
-        features.push(feature);
-    });
+    }
+    console.log(features);
     return features;
 }
 
-export default {requestGfi, handleResponseAxios, parseDocumentString};
+export default {requestGfi, handleResponseAxios, parseDocumentString, parseFeatures};
