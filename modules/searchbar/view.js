@@ -395,7 +395,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             // sz, does not want to work in a local environment, so first use the template as variable
             // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
         }
-        if (attr.hasOwnProperty("typelist")) {
+
+        if (attr.hasOwnProperty("typeList")) {
             this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
         }
     },
