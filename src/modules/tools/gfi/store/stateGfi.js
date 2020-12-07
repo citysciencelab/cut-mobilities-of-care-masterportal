@@ -17,7 +17,9 @@ const state = {
     active: false,
     currentFeature: null,
     desktopType: "",
-    centerMapToClickPoint: false
+    centerMapToClickPoint: false,
+    showMarker: true,
+    highlightVectorRules: null
 };
 
 export default state;

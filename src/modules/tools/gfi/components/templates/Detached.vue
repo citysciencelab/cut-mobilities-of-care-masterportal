@@ -20,13 +20,12 @@ export default {
     },
     data () {
         return {
-            isContentHtml: false,
-            showMarker: true
+            isContentHtml: false
         };
     },
     computed: {
         ...mapGetters("Map", ["clickCoord"]),
-        ...mapGetters("Tools/Gfi", ["centerMapToClickPoint"]),
+        ...mapGetters("Tools/Gfi", ["centerMapToClickPoint", "showMarker", "highlightVectorRules", "currentFeature"]),
 
         /**
          * Returns the title of the gfi.
@@ -82,11 +81,17 @@ export default {
             };
         }
     },
+    watch: {
+        currentFeature: function () {
+            this.highlightVectorFeature();
+        }
+    },
     created: function () {
         if (this.feature.getMimeType() === "text/html") {
             this.isContentHtml = true;
         }
         this.$on("hidemarker", () => {
+            commit("setShowMarker", false);
             this.showMarker = false;
         });
     },
@@ -104,14 +109,18 @@ export default {
             });
         });
 
+        this.highlightVectorFeature();
         this.setMarker();
     },
     beforeDestroy: function () {
+        this.removeHighlighting();
         this.removePointMarker();
     },
     methods: {
         ...mapMutations("Map", ["setCenter"]),
+        ...mapMutations("GFI", ["setShowMarker"]),
         ...mapActions("MapMarker", ["removePointMarker", "placingPointMarker"]),
+        ...mapActions("Map", ["highlightFeature", "removeHighlightFeature"]),
         close () {
             this.$emit("close");
         },
@@ -129,6 +138,33 @@ export default {
 
                 this.placingPointMarker(this.clickCoord);
             }
+        },
+        highlightVectorFeature () {
+            if(this.highlightVectorRules) {
+                this.removeHighlighting();
+                if (this.feature.getOlFeature().getGeometry().getType() === "Point") {
+                    this.highlightFeature({
+                        feature: this.feature.getOlFeature(),
+                        type: "increase",
+                        scale: this.highlightVectorRules.image.scale,
+                        layer:{id: this.feature.getLayerId()}
+                    });
+                }
+                else if (this.feature.getOlFeature().getGeometry().getType() === "Polygon") {
+                    this.highlightFeature({
+                        feature: this.feature.getOlFeature(),
+                        type: "highlightPolygon",
+                        style:{
+                            fill: this.highlightVectorRules.fill, stroke: this.highlightVectorRules.stroke
+                            },
+                        layer:{id: this.feature.getLayerId()}
+                    });
+                }
+            }
+        },
+
+        removeHighlighting: function () {
+            this.removeHighlightFeature();
         }
     }
 };
