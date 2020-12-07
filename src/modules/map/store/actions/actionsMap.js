@@ -1,5 +1,7 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
+import checkHowToHighlight from "./highlightFeature";
+import removeHighlighting from "./removeHighlighting";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import {MapMode} from "../enums";
 import getProxyUrl from "../../../../utils/getProxyUrl";
@@ -310,6 +312,13 @@ const actions = {
         const {map} = state;
 
         map.removeInteraction(interaction);
+    },
+    highlightFeature ({commit, dispatch}, highlightObject) {
+        checkHowToHighlight(commit, dispatch, highlightObject);
+    },
+    removeHighlightFeature ({commit, state}) {
+        removeHighlighting(commit, state);
+
     }
 };
 

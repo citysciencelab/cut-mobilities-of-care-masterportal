@@ -171,6 +171,7 @@ export function createGfiFeature (layer, url = "", feature, features = null) {
         getAttributesToShow: () => layer.get("gfiAttributes"),
         getProperties: () => feature ? feature.getProperties() : {},
         getFeatures: () => features,
+        getOlFeature: () => feature,
         getId: () => feature ? feature.getId() : "",
         getGfiUrl: () => url,
         getMimeType: () => layer.get("infoFormat"),

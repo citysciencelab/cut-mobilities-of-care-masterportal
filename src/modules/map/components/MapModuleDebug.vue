@@ -39,6 +39,11 @@ export default {
     mounted () {
         document.getElementsByTagName("body")[0].appendChild(this.$el);
     },
+    watch: {
+        vectorFeaturesLoaded(value) {
+            this.highlightFeature({type: "viaLayerAndLayerId"});
+        }
+    },
     methods: {
         // actions take preference over mutations (e.g. setMap should always be the action from UI perspective)
         ...mapMutations("Map", keyStore.mutations),
