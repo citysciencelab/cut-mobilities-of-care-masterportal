@@ -36,13 +36,13 @@ export default {
             });
         }
     },
-    mounted () {
-        document.getElementsByTagName("body")[0].appendChild(this.$el);
-    },
     watch: {
-        vectorFeaturesLoaded(value) {
+        vectorFeaturesLoaded () {
             this.highlightFeature({type: "viaLayerAndLayerId"});
         }
+    },
+    mounted () {
+        document.getElementsByTagName("body")[0].appendChild(this.$el);
     },
     methods: {
         // actions take preference over mutations (e.g. setMap should always be the action from UI perspective)

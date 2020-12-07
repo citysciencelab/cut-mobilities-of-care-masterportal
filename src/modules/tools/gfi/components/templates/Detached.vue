@@ -91,8 +91,7 @@ export default {
             this.isContentHtml = true;
         }
         this.$on("hidemarker", () => {
-            commit("setShowMarker", false);
-            this.showMarker = false;
+            this.hideMarker();
         });
     },
     mounted: function () {
@@ -139,30 +138,45 @@ export default {
                 this.placingPointMarker(this.clickCoord);
             }
         },
+        /**
+         * Hides the map marker
+         * @returns {void}
+         */
+        hideMarker () {
+            commit("setShowMarker", false);
+            this.showMarker = false;
+        },
+        /**
+         * Highlights a vector feature
+         * @returns {void}
+         */
         highlightVectorFeature () {
-            if(this.highlightVectorRules) {
+            if (this.highlightVectorRules) {
                 this.removeHighlighting();
                 if (this.feature.getOlFeature().getGeometry().getType() === "Point") {
                     this.highlightFeature({
                         feature: this.feature.getOlFeature(),
                         type: "increase",
                         scale: this.highlightVectorRules.image.scale,
-                        layer:{id: this.feature.getLayerId()}
+                        layer: {id: this.feature.getLayerId()}
                     });
                 }
                 else if (this.feature.getOlFeature().getGeometry().getType() === "Polygon") {
                     this.highlightFeature({
                         feature: this.feature.getOlFeature(),
                         type: "highlightPolygon",
-                        style:{
+                        style: {
                             fill: this.highlightVectorRules.fill, stroke: this.highlightVectorRules.stroke
-                            },
-                        layer:{id: this.feature.getLayerId()}
+                        },
+                        layer: {id: this.feature.getLayerId()}
                     });
                 }
             }
         },
-
+        /**
+         * Removes the feature highlighting
+         * @returns {void}
+         */
         removeHighlighting: function () {
             this.removeHighlightFeature();
         }

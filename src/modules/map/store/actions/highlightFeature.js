@@ -103,7 +103,7 @@ function increaseFeature (commit, highlightObject) {
         commit("setHighlightedFeature", feature);
         commit("setHighlightedFeatureStyle", feature.getStyle());
 
-        clonedStyle.getText()?.setScale(scaleFactor);
+        clonedStyle.getText().setScale(scaleFactor);
         clonedImage.setScale(clonedImage.getScale() * scaleFactor);
         feature.setStyle(clonedStyle);
     }
