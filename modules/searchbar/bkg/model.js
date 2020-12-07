@@ -1,5 +1,6 @@
 import "../model";
 import store from "../../../src/app-store/index";
+import {getWKTGeom} from "../../../src/utils/getWKTGeom";
 
 const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype */{
     defaults: {
@@ -232,8 +233,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
             data.features[0].properties.bbox.type !== null && data.features[0].properties.bbox.type === "Polygon") {
             const polygon = data.features[0].properties.bbox.coordinates[0].reduce((a, b) => a.concat(b), []);
 
-            store.dispatch("MapMarker/setWKTGeom", "POLYGON", polygon);
-            store.dispatch("MapMarker/placingPolygonMarker", {wktcontent: polygon});
+            store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(polygon));
         }
     },
 

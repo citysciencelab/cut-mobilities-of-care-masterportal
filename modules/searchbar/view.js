@@ -14,6 +14,7 @@ import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
 import "./RadioBridge.js";
 import store from "../../src/app-store/index";
+import {getWKTGeom} from "../../src/utils/getWKTGeom";
 
 /**
  * @member SearchbarTemplate
@@ -460,7 +461,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
                 }
                 else {
                     store.dispatch("MapMarker/removePolygonMarker");
-                    store.dispatch("MapMarker/placingPolygonMarker", {wktcontent: hit});
+                    store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
                     extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
                     Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
                 }
