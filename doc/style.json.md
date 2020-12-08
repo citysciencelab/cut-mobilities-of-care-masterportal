@@ -159,7 +159,7 @@ A *key* is always of type *String*.
 
 #### value
 
-A *value* if the reference value to compare the feature's property with name *key* to. *Values* may have these types::
+A *value* is the reference value which is compared to the feature's property with name *key*. *Values* may have these types:
 
 |Type|Description|
 |----|-----------|
@@ -425,7 +425,7 @@ Two types of cluster types may be shown, depending on the attribute *clusterText
 |clusterText|only if *clusterTextType* is set to `"text"`|String|`"undefined"`|Text to be displayed|
 |clusterTextAlign||String|`"center"`|Text alignment|
 |clusterTextFont||String|`"Comic Sans MS"`|Text font|
-|clusterTextScale||Integer|`2`|Text sclae|
+|clusterTextScale||Integer|`2`|Text scale|
 |clusterTextOffsetX||Integer|`0`|Text x offset|
 |clusterTextOffsetY||Integer|`2`|Text y offset|
 |clusterTextFillColor||Integer[]|`[255, 255, 255, 1]`|Text fill color in rgba|
