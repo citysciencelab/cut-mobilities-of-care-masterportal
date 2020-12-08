@@ -3,6 +3,9 @@ import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
 import Detached from "../../../components/templates/Detached.vue";
+import Feature from "ol/Feature";
+import Point from "ol/geom/Point";
+
 
 const localVue = createLocalVue();
 
@@ -11,6 +14,69 @@ config.mocks.$t = key => key;
 localVue.use(Vuex);
 
 describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
+    const highlightVectorRules = {
+            image: {
+                scale: 10
+            },
+            fill: sinon.stub(),
+            stroke: sinon.stub()
+        },
+        mockMutations = {
+            setCurrentFeature: () => sinon.stub(),
+            setShowMarker: () => SVGTextPositioningElement.stub()
+        },
+        mockGetters = {
+            centerMapToClickPoint: () => sinon.stub(),
+            showMarker: () => sinon.stub(),
+            highlightVectorRules: () => highlightVectorRules,
+            currentFeature: () => sinon.stub()
+        },
+        olFeature = new Feature({
+            name: "feature123"
+        });
+
+    olFeature.setId("feature1");
+    olFeature.setGeometry(new Point([10, 10]));
+
+    let store;
+
+    beforeEach(() => {
+        store = new Vuex.Store({
+            namespaced: true,
+            modules: {
+                Tools: {
+                    namespaced: true,
+                    modules: {
+                        GFI: {
+                            namespaced: true,
+                            mutations: mockMutations,
+                            getters: mockGetters
+                        }
+                    }
+                },
+                Map: {
+                    namespaced: true,
+                    actions: {
+                        removeHighlightFeature: sinon.stub(),
+                        highlightFeature: sinon.stub()
+                    },
+                    mutations: {
+                        setCenter: sinon.stub()
+                    },
+                    getters: {
+                        clickCoord: sinon.stub()
+                    }
+                },
+                MapMarker: {
+                    namespaced: true,
+                    actions: {
+                        removePointMarker: sinon.stub(),
+                        placingPointMarker: sinon.stub()
+                    }
+                }
+            }
+        });
+    });
 
     it("should have a title", () => {
         const wrapper = shallowMount(Detached, {
@@ -19,11 +85,12 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/xml",
-                    getGfiUrl: () => ""
+                    getGfiUrl: () => "",
+                    getLayerId: () => sinon.stub(),
+                    getOlFeature: () => olFeature
                 }
             },
             computed: {
-                clickCoord: () => [],
                 styleAll: () => [{
                     "right": ""
                 }],
@@ -32,9 +99,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     "max-height": ""
                 }]
             },
-            methods: {
-                setMarker: () => sinon.stub
-            },
+            store: store,
             localVue
         });
 
@@ -48,11 +113,12 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/xml",
-                    getGfiUrl: () => ""
+                    getGfiUrl: () => "",
+                    getLayerId: () => sinon.stub(),
+                    getOlFeature: () => olFeature
                 }
             },
             computed: {
-                clickCoord: () => [],
                 styleAll: () => [{
                     "right": ""
                 }],
@@ -61,9 +127,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     "max-height": ""
                 }]
             },
-            methods: {
-                setMarker: () => sinon.stub
-            },
+            store: store,
             localVue
         });
 
@@ -77,11 +141,12 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/xml",
-                    getGfiUrl: () => ""
+                    getGfiUrl: () => "",
+                    getLayerId: () => sinon.stub(),
+                    getOlFeature: () => olFeature
                 }
             },
             computed: {
-                clickCoord: () => [],
                 styleAll: () => [{
                     "right": ""
                 }],
@@ -90,9 +155,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     "max-height": ""
                 }]
             },
-            methods: {
-                setMarker: () => sinon.stub
-            },
+            store: store,
             localVue
         });
 
@@ -107,11 +170,12 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                         getTheme: () => "Default",
                         getTitle: () => "Hallo",
                         getMimeType: () => "text/xml",
-                        getGfiUrl: () => ""
+                        getGfiUrl: () => "",
+                        getLayerId: () => sinon.stub(),
+                        getOlFeature: () => olFeature
                     }
                 },
                 computed: {
-                    clickCoord: () => [],
                     styleAll: () => [{
                         "right": ""
                     }],
@@ -120,9 +184,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                         "max-height": ""
                     }]
                 },
-                methods: {
-                    setMarker: () => sinon.stub
-                },
+                store: store,
                 localVue
             }),
             button = wrapper.find(".close");
@@ -139,11 +201,12 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                         getTheme: () => "Default",
                         getTitle: () => "Hallo",
                         getMimeType: () => "text/xml",
-                        getGfiUrl: () => ""
+                        getGfiUrl: () => "",
+                        getLayerId: () => sinon.stub(),
+                        getOlFeature: () => olFeature
                     }
                 },
                 computed: {
-                    clickCoord: () => [],
                     styleAll: () => [{
                         "right": ""
                     }],
@@ -152,9 +215,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                         "max-height": ""
                     }]
                 },
-                methods: {
-                    setMarker: () => sinon.stub
-                },
+                store: store,
                 localVue
             }),
             modal = wrapper.find(".gfi-content");
@@ -171,11 +232,12 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                         getTheme: () => "Default",
                         getTitle: () => "Hallo",
                         getMimeType: () => "text/xml",
-                        getGfiUrl: () => ""
+                        getGfiUrl: () => "",
+                        getLayerId: () => sinon.stub(),
+                        getOlFeature: () => olFeature
                     }
                 },
                 computed: {
-                    clickCoord: () => [],
                     styleAll: () => [{
                         "right": ""
                     }],
@@ -187,9 +249,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 slots: {
                     footer: "<div>Footer</div>"
                 },
-                methods: {
-                    setMarker: () => sinon.stub
-                },
+                store: store,
                 localVue
             }),
             footer = wrapper.find(".gfi-footer");
@@ -208,7 +268,6 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 }
             },
             computed: {
-                clickCoord: () => [],
                 styleAll: () => [{
                     "right": ""
                 }],
@@ -217,9 +276,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     "max-height": ""
                 }]
             },
-            methods: {
-                setMarker: () => sinon.stub
-            },
+            store: store,
             localVue
         });
 
@@ -233,11 +290,12 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     getTheme: () => "Default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/xml",
-                    getGfiUrl: () => ""
+                    getGfiUrl: () => "",
+                    getLayerId: () => sinon.stub(),
+                    getOlFeature: () => olFeature
                 }
             },
             computed: {
-                clickCoord: () => [],
                 styleAll: () => [{
                     "right": ""
                 }],
@@ -246,9 +304,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     "max-height": ""
                 }]
             },
-            methods: {
-                setMarker: () => sinon.stub
-            },
+            store: store,
             localVue
         });
 

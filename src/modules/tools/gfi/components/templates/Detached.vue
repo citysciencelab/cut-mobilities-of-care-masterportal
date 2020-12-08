@@ -143,8 +143,7 @@ export default {
          * @returns {void}
          */
         hideMarker () {
-            commit("setShowMarker", false);
-            this.showMarker = false;
+            this.$store.commit("setShowMarker", false);
         },
         /**
          * Highlights a vector feature
