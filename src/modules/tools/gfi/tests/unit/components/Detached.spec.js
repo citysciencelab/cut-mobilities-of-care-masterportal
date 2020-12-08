@@ -1,10 +1,12 @@
 import Vuex from "vuex";
-import {shallowMount, createLocalVue} from "@vue/test-utils";
+import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
 import Detached from "../../../components/templates/Detached.vue";
 
 const localVue = createLocalVue();
+
+config.mocks.$t = key => key;
 
 localVue.use(Vuex);
 
