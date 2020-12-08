@@ -47,7 +47,8 @@
             "getInfos": "Retrieve information",
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
-            "selectFeatures": "Select features"
+            "selectFeatures": "Select features",
+            "layerAnalysis": "Analyse Layer"
         },
         "contact": "Mail",
         "info": "Information"

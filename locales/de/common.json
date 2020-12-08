@@ -48,7 +48,8 @@
             "addWms": "WMS hinzufügen",
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
-            "selectFeatures": "Features auswählen"
+            "selectFeatures": "Features auswählen",
+            "layerAnalysis": "Layer analysieren"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -604,6 +605,9 @@
             },
             "scaleSwitcher": {
                 "label": "Maßstab"
+            },
+            "layerAnalysis": {
+                "label": "Quelle auswählen"
             }
         },
         "controls": {

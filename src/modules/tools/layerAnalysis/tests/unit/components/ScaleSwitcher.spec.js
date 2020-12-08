@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import ScaleSwitcherComponent from "../../../components/ScaleSwitcher.vue";
+import ScaleSwitcherComponent from "../../../components/LayerAnalysis.vue";
 import ScaleSwitcher from "../../../store/indexScaleSwitcher";
 import {expect} from "chai";
 import sinon from "sinon";
