@@ -19,7 +19,7 @@ All layer information the portal needs to use the services is stored here. Confi
 |featureCount|yes|String||Amount of features retrieved on GFI requests. Corresponds to the *GetFeatureInfo parameter "FEATURE_COUNT"*.|`"1"`|
 |format|yes|String||Image format of tiles requested via *GetMap*. Must match one of the service's formats listed in *Capability/Request/GetMap/Format*.|`"image/jpeg"`|
 |gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown|`"ignore"`|
-|gfiTheme|yes|**[gfiTheme](#markdown-header-gfi_theme)**||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
+|gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |gutter|no|String|`"0"`|Additionally loaded tile contents in border pixel width. Serves to avoid cut symbols on tile borders.|`"0"`|
 |id|yes|String||Arbitrary id|`"8"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
@@ -175,7 +175,6 @@ WMTS layers can be added by
 |featureType|yes|String||Feature type to load. Must match a value of *FeatureTypeList/FeatureType/Name* in the *GetCapabilities* response. Provide without namespace.|`"bab_vkl"`|
 |featurePrefix|no|String||Used to identify a *FeatureType* in the service.|
 |gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
-|gfiFormat|no|String/Object||Optionally control the layer's GFI content. The contents may be chosen arbitrarily in each project. Controlling contents with this parameter is e.g. important when using a gfi-theme for multiple layers.|`{"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}`|
 |id|yes|String||Arbitrary id|`"44"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |legendURL|yes|String||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
@@ -187,7 +186,7 @@ WMTS layers can be added by
 |altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
 |altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
-|gfiTheme|yes|**[gfiTheme](#markdown-header-gfi_theme)**||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
+|gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 
 **WFS example:**
@@ -204,7 +203,6 @@ WMTS layers can be added by
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
-      "gfiFormat": {"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}                                             },
       "layerAttribution" : "nicht vorhanden",
       "legend" : true,
       "datasets" : [
@@ -255,7 +253,6 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
 |----|--------|----|-------|-----------|-------|
 |datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
 |gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
-|gfiFormat|no|String/Object||Optionally control the layer's GFI content. The contents may be chosen arbitrarily in each project. Controlling contents with this parameter is e.g. important when using a gfi-theme for multiple layers.|`{"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}`|
 |epsg|no|String|The portal's default EPSG code.|EPSG string used for checking the coordinate reference system. If the value does not match the VTL, a warning is shown. Vector tile services should offer the data in the target CRS for performance reasons. If `"EPSG:3857"` is set with neither `"extend"`, nor `"origin"`, `"resolutions"`, or `"tileSize"`, no *GridSet* is created. The OL default will be used instead.|`"EPSG:3857"`|
 |extent|no|Number[4]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's extent is used.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
 |origin|no|Number[2]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's top-left corner is used.|`[-9497963.94293634221, 9997963.94293634221]`|
@@ -275,6 +272,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
 |typ|yes|String||Must be set to `"VectorTile"` for this layer.|`"VectorTile"`|
 |url|yes|String||Service URL|`"https://example.com/3857/tile/{z}/{y}/{x}.pbf"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
+|gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 
 **VectorTile example:**
 
@@ -472,7 +470,6 @@ Definition of parameters for GFI template `"default"`.
 |----|--------|----|-------|-----------|
 |imageLinks|no|String/String[]|`["imgLink", "link_image"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
 |showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS) and `routing`.
-|gfiIconPath|no|String|`"https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png"`|Fallback icon, if no icon is defined.|
 
 
 **gfiTheme example for template "Default":**
@@ -482,9 +479,7 @@ Definition of parameters for GFI template `"default"`.
    "name": "default",
    "params": {
         "imageLinks": ["imageLink", "linkImage", "abc"],
-        "showFavoriteIcons": true,
-        "gfiIconPath":  "https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png",
-
+        "showFavoriteIcons": true
    }
 }
 ```
@@ -780,7 +775,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
 |altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
-|gfiTheme|yes|**[gfiTheme](#markdown-header-gfi_theme)**||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
+|gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 
 **GeoJSON layer example:**
 
@@ -794,7 +789,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "legendURL" : "",
-      "gfiTheme": "dipas"
+      "gfiTheme": "default"
    }
 ```
 

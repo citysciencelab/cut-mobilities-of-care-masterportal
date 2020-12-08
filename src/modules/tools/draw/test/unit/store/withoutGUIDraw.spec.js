@@ -3,7 +3,7 @@ import {expect} from "chai";
 import actions from "../../../store/actionsDraw";
 
 describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
-    let commit, dispatch, state;
+    let commit, dispatch, state, getters;
 
     beforeEach(() => {
         commit = sinon.spy();
@@ -116,8 +116,27 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
             sinon.stub(Radio, "request").callsFake(request);
         });
 
+        /**
+         * @param {String} id id to use for drawType and options prefix
+         * @param {Object} [drawTypeOptions={}] the object to use for the drawType options
+         * @param {Object} [gettersOptions={}] additional key value pairs to add to the resulting getters
+         * @returns {Object}  a mocked getters for this test
+         */
+        function createGetters (id, drawTypeOptions = {}, gettersOptions = {}) {
+            const result = Object.assign({
+                drawType: {
+                    id,
+                    geometry: ""
+                },
+                getStyleSettings: () => drawTypeOptions
+            }, gettersOptions);
+
+            return result;
+        }
+
         it("should commit and dispatch as intended if the given drawType is not a Point, LineString, Polygon or Circle", () => {
-            actions.initializeWithoutGUI({state, commit, dispatch}, {drawType});
+            getters = createGetters("test");
+            actions.initializeWithoutGUI({state, commit, dispatch, getters}, {drawType});
 
             expect(commit.callCount).to.equal(2);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
@@ -125,8 +144,8 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
         });
         it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle", () => {
             drawType = "Point";
-
-            actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, maxFeatures});
+            getters = createGetters(drawType);
+            actions.initializeWithoutGUI({state, commit, dispatch, getters}, {drawType, maxFeatures});
 
             expect(commit.callCount).to.equal(4);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
@@ -141,15 +160,14 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
         });
         it("should commit and dispatch as intended if the given drawType is a Point, LineString, Polygon or Circle and the color is defined", () => {
             drawType = "LineString";
+            getters = createGetters(drawType, {color: null, colorContour: null});
+            actions.initializeWithoutGUI({state, commit, dispatch, getters}, {drawType, color, maxFeatures});
 
-            actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, color, maxFeatures});
-
-            expect(commit.callCount).to.equal(6);
+            expect(commit.callCount).to.equal(5);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
             expect(commit.secondCall.args).to.eql(["setWithoutGUI", true]);
             expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawLine", geometry: "LineString"}]);
-            expect(commit.getCall(3).args).to.eql(["setColor", color]);
-            expect(commit.getCall(4).args).to.eql(["setColorContour", color]);
+            expect(commit.getCall(3).args).to.eql(["setLineStringSettings", {color, colorContour: color}]);
             expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
@@ -161,16 +179,15 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
                 resultColor = [0, 1, 2, 3.5];
 
             drawType = "Polygon";
-            state.color = resultColor.slice(0, 3);
+            getters = createGetters(drawType, {color: [0, 1, 2, 0], opacity: 0});
 
-            actions.initializeWithoutGUI({state, commit, dispatch}, {drawType, opacity, maxFeatures});
+            actions.initializeWithoutGUI({state, commit, dispatch, getters}, {drawType, opacity, maxFeatures});
 
-            expect(commit.callCount).to.equal(6);
+            expect(commit.callCount).to.equal(5);
             expect(commit.firstCall.args).to.eql(["setFreeHand", false]);
             expect(commit.secondCall.args).to.eql(["setWithoutGUI", true]);
             expect(commit.thirdCall.args).to.eql(["setDrawType", {id: "drawArea", geometry: "Polygon"}]);
-            expect(commit.getCall(3).args).to.eql(["setColor", resultColor]);
-            expect(commit.getCall(4).args).to.eql(["setOpacity", "3.5"]);
+            expect(commit.getCall(3).args).to.eql(["setPolygonSettings", {color: resultColor, opacity}]);
             expect(commit.lastCall.args).to.eql(["setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer")]);
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["createDrawInteractionAndAddToMap", {active: true, maxFeatures}]);
