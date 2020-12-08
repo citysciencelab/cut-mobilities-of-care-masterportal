@@ -282,7 +282,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         }
 
         if (Array.isArray(legend)) {
-            this.setlegend(legend);
+            this.setLegend(legend);
         }
         else if (styleModel && legend === true) {
             if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
