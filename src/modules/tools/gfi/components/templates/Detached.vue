@@ -117,7 +117,7 @@ export default {
     },
     methods: {
         ...mapMutations("Map", ["setCenter"]),
-        ...mapMutations("GFI", ["setShowMarker"]),
+        ...mapMutations("Tools/Gfi", ["setShowMarker"]),
         ...mapActions("MapMarker", ["removePointMarker", "placingPointMarker"]),
         ...mapActions("Map", ["highlightFeature", "removeHighlightFeature"]),
         close () {
@@ -143,7 +143,7 @@ export default {
          * @returns {void}
          */
         hideMarker () {
-            this.$store.commit("setShowMarker", false);
+            this.setShowMarker(false);
         },
         /**
          * Highlights a vector feature
@@ -152,7 +152,7 @@ export default {
         highlightVectorFeature () {
             if (this.highlightVectorRules) {
                 this.removeHighlighting();
-                if (this.feature.getOlFeature().getGeometry().getType() === "Point") {
+                if (this.feature.getOlFeature()?.getGeometry()?.getType() === "Point") {
                     this.highlightFeature({
                         feature: this.feature.getOlFeature(),
                         type: "increase",
@@ -160,7 +160,7 @@ export default {
                         layer: {id: this.feature.getLayerId()}
                     });
                 }
-                else if (this.feature.getOlFeature().getGeometry().getType() === "Polygon") {
+                else if (this.feature.getOlFeature()?.getGeometry()?.getType() === "Polygon") {
                     this.highlightFeature({
                         feature: this.feature.getOlFeature(),
                         type: "highlightPolygon",

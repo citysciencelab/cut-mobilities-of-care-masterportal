@@ -1,13 +1,12 @@
 /**
- * remove increased feature highlight
+ * reset highlighted feature style
  * @param {Function} commit commit function
  * @param {Function} state state function
  * @returns {void}
  */
-function removeHighlighting (commit, state) {
+function removeHighlightFeature ({commit, state}) {
     const highlightedFeature = state.highlightedFeature,
         highlightedFeatureStyle = state.getHighlightedFeatureStyle;
-
 
     if (highlightedFeature) {
         highlightedFeature.setStyle(highlightedFeatureStyle);
@@ -16,5 +15,5 @@ function removeHighlighting (commit, state) {
     }
 }
 
-export default removeHighlighting;
+export {removeHighlightFeature};
 

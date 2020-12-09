@@ -5,7 +5,7 @@
  * @param {Object} highlightObject to round
  * @returns {void}
  */
-function checkHowToHighlight (commit, dispatch, highlightObject) {
+function highlightFeature ({commit, dispatch}, highlightObject) {
     if (highlightObject.type === "increase") {
         increaseFeature(commit, highlightObject);
     }
@@ -103,11 +103,13 @@ function increaseFeature (commit, highlightObject) {
         commit("setHighlightedFeature", feature);
         commit("setHighlightedFeatureStyle", feature.getStyle());
 
-        clonedStyle.getText().setScale(scaleFactor);
+        if (clonedStyle.getText()) {
+            clonedStyle.getText().setScale(scaleFactor);
+        }
         clonedImage.setScale(clonedImage.getScale() * scaleFactor);
         feature.setStyle(clonedStyle);
     }
 }
 
-export default checkHowToHighlight;
+export {highlightFeature};
 

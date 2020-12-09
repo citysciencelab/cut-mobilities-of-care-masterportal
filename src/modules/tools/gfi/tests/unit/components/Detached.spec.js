@@ -6,11 +6,9 @@ import Detached from "../../../components/templates/Detached.vue";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 
-
 const localVue = createLocalVue();
 
 config.mocks.$t = key => key;
-
 localVue.use(Vuex);
 
 describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
