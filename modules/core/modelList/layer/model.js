@@ -345,7 +345,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             });
         }
         else if (
-            (this.get("typ") === "WFS" || this.get("typ") === "GeoJSON")
+            (this.get("typ") === "WFS" || this.get("typ") === "GeoJSON" || this.get("typ") === "VectorBase")
             && Radio.request("Parser", "getTreeType") === "light"
         ) {
             this.listenToOnce(this, {
