@@ -145,7 +145,7 @@ export default {
                         <a :href="`mailto:${value}`">{{ value }}</a>
                     </td>
                     <td
-                        v-else-if="value && value.includes('<br>')"
+                        v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
                     >
                     </td>
