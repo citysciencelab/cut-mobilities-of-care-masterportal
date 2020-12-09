@@ -760,7 +760,7 @@
           "id": "18106",
           "styleId": "18106",
           "clusterDistance": 50,
-          "loadThingsOnlyInCurrentExtent": false,
+          "loadThingsOnlyInCurrentExtent": true,
           "gfiTheme" : {
             "name": "sensor",
             "params" : {
