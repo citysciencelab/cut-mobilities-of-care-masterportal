@@ -59,7 +59,7 @@
     "object-hash": "^2.0.3",
     "ol-mapbox-style": "^6.1.2",
     "olcs": "^2.10.0",
-    "rbush": "^3.0.1",
+    "rbush": "^2.0.2",
     "vcs-oblique": "^2.0.1",
     "vue": "^2.6.11",
     "vue-loader": "^15.7.2",
