@@ -90,7 +90,7 @@ export function parseFeatures (doc) {
     let features = [];
 
     // OGC-conform
-    if (doc.firstChild.tagName === "FeatureCollection" || doc.firstChild.tagName === "wfs:FeatureCollection") {
+    if (doc.firstChild.tagName.includes("FeatureCollection")) {
         const gfiFormat = new WMSGetFeatureInfo();
 
         features = gfiFormat.readFeatures(doc);
