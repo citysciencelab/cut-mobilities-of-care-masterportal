@@ -32,17 +32,20 @@ export default {
 <template>
     <div class="anchor">
         <!-- OpenLayers node; control map itself via vuex map module -->
+        <div class="menu">
+            <LegendWindow />
+        </div>
         <div
             id="map"
         />
         <!-- HUD elements; always present -->
         <div class="elements-positioned-over-map">
-            <LegendWindow />
             <ControlBar class="controls" />
             <Footer />
             <MapMarker />
         </div>
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
+
         <ConfirmAction />
         <Alerting />
         <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
@@ -80,6 +83,14 @@ export default {
             .controls {
                 flex-grow: 1;
             }
+        }
+
+        .menu {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            width: 100%;
         }
     }
 </style>
