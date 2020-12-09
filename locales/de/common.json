@@ -738,7 +738,9 @@
             "toggleCollapseAll": "Alle Legenden ein-/ausklappen"
         },
         "zoomToGeometry": {
-          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter."
+          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter.",
+          "alertParameterizedAccess": "Der parametrisierte Aufruf des Portals ist leider schief gelaufen!",
+          "alertRequiredService": "Details: Ein benötigter Dienst antwortet nicht."
         }
     },
     "snippets": {
