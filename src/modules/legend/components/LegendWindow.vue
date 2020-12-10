@@ -18,9 +18,13 @@ export default {
         ...mapGetters(["mobile", "uiStyle"])
     },
     watch: {
+        /**
+         * Closes the mobile menu and create the legend.
+         * @param {Boolean} showLegend Should be show the legend.
+         * @returns {void}
+         */
         showLegend (showLegend) {
             if (showLegend) {
-                // closes the mobile menu
                 document.getElementsByClassName("navbar-collapse")[0].classList.remove("in");
                 this.createLegend();
             }
@@ -766,6 +770,7 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    @color_1: #000000;
     @color_2: rgb(255, 255, 255);
     @font_family_2: "MasterPortalFont", sans-serif;
     @background_color_3: #f2f2f2;
@@ -827,9 +832,7 @@ export default {
         font-family: @font_family_2;
         border-radius: 12px;
         background-color: @background_color_4;
-        position: absolute;
         width: 300px;
-        right: 0px;
         margin: 10px 10px 30px 10px;
         z-index: 9999;
         .legend-title-table {
@@ -850,13 +853,13 @@ export default {
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
             background-color: @background_color_3;
-            overflow-y: auto;
-            padding: 20px;
-            max-height: 72vH;
-            margin-top: 2px;
-            overflow: auto;
+            .panel {
+                background-color: @background_color_3;
+            }
             .layer-title {
+                border-radius: 12px;
                 padding: 5px;
+                color: @color_1;
                 font-weight: bold;
                 background-color: #e7e7e7;
                 span {
