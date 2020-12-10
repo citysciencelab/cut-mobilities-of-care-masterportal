@@ -5,7 +5,7 @@ export default {
     loaderOverlayCount: 0, // this is needed to handle multiple loader show calls
     initialLoaderIsHidden: false,
     loaderTimeoutReference: null,
-    /** 
+    /**
      * Shows Loader Overlay.
      * @param {int}     maxWait - Maximum loader duration
      * @returns {int}           - Count of virtual loader stacks
@@ -19,7 +19,7 @@ export default {
         document.getElementById("masterportal-container").classList.add("blurry");
         return ++this.loaderOverlayCount;
     },
-    /** 
+    /**
      * Hides Loader Overlay.
      * @returns {int}   - Count of virtual loader stacks
      */
@@ -35,7 +35,7 @@ export default {
         }
         return this.loaderOverlayCount;
     },
-    /** 
+    /**
      * Removes portal logos and titles from Loader
      * @returns {void}
      */
