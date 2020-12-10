@@ -164,7 +164,7 @@ export default {
                     this.highlightFeature({
                         feature: this.feature.getOlFeature(),
                         type: "highlightPolygon",
-                        style: {
+                        highlightStyle: {
                             fill: this.highlightVectorRules.fill, stroke: this.highlightVectorRules.stroke
                         },
                         layer: {id: this.feature.getLayerId()}
