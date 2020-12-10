@@ -115,11 +115,11 @@ Einen lokalen Entwicklungsserver starten.
 # npm start
 ```
 
-Unter den folgenden URLs gibt es umfassende Demo-Konfigurationen des Masterportals
-- https://localhost:9001/portal/basic Einfaches Portal, mit übersichtlicher Konfiguration
-- https://localhost:9001/portal/master Einfacher Themenbaum
-- https://localhost:9001/portal/masterCustom Komplexer Themenbaum, mit Ordnerstruktur
-- https://localhost:9001/portal/masterDefault Default Themenbaum, alle WMS-Layer aus der services.json werden geladen
+- Unter den folgenden URLs gibt es umfassende Demo-Konfigurationen des Masterportals
+    - https://localhost:9001/portal/basic Einfaches Portal, mit übersichtlicher Konfiguration
+    - https://localhost:9001/portal/master Einfacher Themenbaum
+    - https://localhost:9001/portal/masterCustom Komplexer Themenbaum, mit Ordnerstruktur
+    - https://localhost:9001/portal/masterDefault Default Themenbaum, alle WMS-Layer aus der services.json werden geladen
 
 
 ## npm run test
