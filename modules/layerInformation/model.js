@@ -159,6 +159,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     */
     updateMetaData: function (parsedData) {
         this.set(parsedData);
+        this.setPeriodicity(i18next.t(parsedData?.periodicityKey));
     },
     /**
     * Triggers getMetaData from CswParser, if metaID available in attrs
