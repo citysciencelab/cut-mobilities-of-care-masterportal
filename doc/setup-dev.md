@@ -139,7 +139,7 @@ Unittests durchführen. Dabei werden auch die Unittests der Addons ausgeführt (
 - bündelt alle Tests
 - die Unit-Tests werden in der Console ausgegeben.
 - bei Änderungen am getesten Code oder den Unit-Tests selbst muss der entsprechende Befehl erneut ausgeführt werden.
-- Es kann an den jeweiligen Befehl **:watch** z.B. ```npm run test:watch```angehangen werden, um die Tests bei verändeurngen automatisch neu durchlaufen zu lassen
+- Es kann an den jeweiligen Befehl **:watch** z.B. ```npm run test:watch```angehangen werden, um die Tests bei Veränderungen automatisch neu durchlaufen zu lassen.
 
 
 ## npm run build
