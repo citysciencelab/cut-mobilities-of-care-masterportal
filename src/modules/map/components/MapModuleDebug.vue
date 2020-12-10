@@ -36,11 +36,6 @@ export default {
             });
         }
     },
-    watch: {
-        vectorFeaturesLoaded () {
-            this.highlightFeature({type: "viaLayerAndLayerId"});
-        }
-    },
     mounted () {
         document.getElementsByTagName("body")[0].appendChild(this.$el);
     },

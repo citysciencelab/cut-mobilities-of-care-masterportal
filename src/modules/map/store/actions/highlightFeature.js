@@ -1,16 +1,15 @@
 /**
  * check how to highlight
- * @param {Function} commit commit function
- * @param {Function} dispatch commit function
- * @param {Object} highlightObject to round
+ * @param {Object} state state object
+ * @param {Object} highlightObject contains several parameters for feature highlighting
  * @returns {void}
  */
 function highlightFeature ({commit, dispatch}, highlightObject) {
     if (highlightObject.type === "increase") {
         increaseFeature(commit, highlightObject);
     }
-    else if (highlightObject.type === "viaLayerAndLayerId") {
-        highlightViaParametricUrl(dispatch, highlightObject.LayerAndLayerId);
+    else if (highlightObject.type === "viaLayerIdAndFeatureId") {
+        highlightViaParametricUrl(dispatch, highlightObject.LayerIdAndFeatureId);
     }
     else if (highlightObject.type === "highlightPolygon") {
         highlightPolygon(commit, dispatch, highlightObject);
@@ -20,13 +19,13 @@ function highlightFeature ({commit, dispatch}, highlightObject) {
  * highlights a polygon feature
  * @param {Function} commit commit function
  * @param {Function} dispatch commit function
- * @param {Object} highlightObject to round
+ * @param {Object} highlightObject contains several parameters for feature highlighting
  * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}
  */
 function highlightPolygon (commit, dispatch, highlightObject) {
-    if (highlightObject.style) {
-        const newStyle = highlightObject.style,
+    if (highlightObject.highlightStyle) {
+        const newStyle = highlightObject.highlightStyle,
             feature = highlightObject.feature,
             styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
             style = styleModelByLayerId ? styleModelByLayerId.createStyle(feature, false) : undefined,
@@ -47,14 +46,14 @@ function highlightPolygon (commit, dispatch, highlightObject) {
 
 }
 /**
- * highlights a feature via layer and layerid
+ * highlights a feature via layerid and featureid
  * @param {Function} dispatch commit function
- * @param {String} LayerAndLayerId to round
+ * @param {String} LayerIdAndFeatureId contains layerid and featureid
  * @fires ModelList#RadioRequestModelListGetModelByAttributes
  * @returns {void}
  */
-function highlightViaParametricUrl (dispatch, LayerAndLayerId) {
-    const featureToAdd = LayerAndLayerId ? LayerAndLayerId : Radio.request("ParametricURL", "getHighlightFeature");
+function highlightViaParametricUrl (dispatch, LayerIdAndFeatureId) {
+    const featureToAdd = LayerIdAndFeatureId ? LayerIdAndFeatureId : Radio.request("ParametricURL", "getHighlightFeature");
     let temp,
         feature;
 
@@ -67,12 +66,12 @@ function highlightViaParametricUrl (dispatch, LayerAndLayerId) {
     }
 }
 /**
-     * Searches the feature which shall be hightlighted
-     * @param {String} layerId Id of the layer, containing the feature to hightlight
-     * @param {String} featureId Id of feature which shall be hightlighted
-     * @fires ModelList#RadioRequestModelListGetModelByAttributes
-     * @returns {ol/feature} feature to highlight
-     */
+ * Searches the feature which shall be hightlighted
+ * @param {String} layerId Id of the layer, containing the feature to hightlight
+ * @param {String} featureId Id of feature which shall be hightlighted
+ * @fires ModelList#RadioRequestModelListGetModelByAttributes
+ * @returns {ol/feature} feature to highlight
+ */
 function getHighlightFeature (layerId, featureId) {
     const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
 
@@ -95,9 +94,9 @@ function increaseFeature (commit, highlightObject) {
             return feat.id.toString() === highlightObject.id;
         }).feature : highlightObject.feature,
         styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
-        style = styleModelByLayerId ? styleModelByLayerId.createStyle(feature, false) : highlightObject.layer.style(feature),
-        clonedStyle = style.clone(),
-        clonedImage = clonedStyle.getImage();
+        style = styleModelByLayerId ? styleModelByLayerId.createStyle(feature, false) : undefined,
+        clonedStyle = style ? style.clone() : undefined,
+        clonedImage = clonedStyle ? clonedStyle.getImage() : undefined;
 
     if (clonedImage) {
         commit("setHighlightedFeature", feature);
