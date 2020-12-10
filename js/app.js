@@ -43,7 +43,6 @@ import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
-import hidePreLoadContainers from "../src/utils/hidePreLoadContainers";
 
 /**
  * WFSFeatureFilterView
@@ -80,6 +79,7 @@ import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 import SelectFeaturesView from "../modules/tools/selectFeatures/view";
+import LoaderOverlay from "../src/utils/loaderOverlay";
 
 let sbconfig,
     controls,
@@ -415,8 +415,7 @@ async function loadApp () {
         });
     }
 
-    hidePreLoadContainers();
-    Radio.trigger("Util", "hideLoader");
+    LoaderOverlay.hide();
 }
 
 /**
