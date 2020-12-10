@@ -1,6 +1,6 @@
 {
 	"Portalconfig": {
-        "treeType": "light",
+    "treeType": "light",
 		"searchBar": {
 			"osm": {
 				"minChars": 3,
@@ -11,7 +11,7 @@
 			},
       "visibleVector": {},
       "tree": {},
-			"startoomLevel": 9,
+			"startZoomLevel": 9,
 			"placeholder": "Suche nach: - Adresse - Aktiven WFS"
 		},
 		"mapView": {
