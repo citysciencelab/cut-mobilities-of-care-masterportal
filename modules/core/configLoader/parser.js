@@ -424,7 +424,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * Creates the Masterportal Configuration for a GeoJSON Layer.
+     * Creates the Masterportal Configuration for a Vector Layer.
      * Adds the configuration to be parsed into the Portal.
      *
      * @param {String} name Name of the layer.
@@ -450,6 +450,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             legendURL: "",
             isBaseLayer: false,
             isVisibleInTree: true,
+            isSelected: true,
             cache: false,
             datasets: [],
             urlIsVisible: false
@@ -463,6 +464,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         }
 
         this.addItem(layer);
+        Radio.trigger("ModelList", "addModelsByAttributes", layer);
     },
 
     /**
