@@ -281,14 +281,14 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             if (service === undefined) {
                 console.warn("Rest Service mit der ID " + this.get("metaDataCatalogueId") + " ist rest-services.json nicht konfiguriert!");
             }
-            else if (typeof this.get("showDocUrl") !== "undefined") {
+            else if (typeof this.get("showDocUrl") !== "undefined" && this.get("showDocUrl") !== null) {
                 metaURL = this.get("showDocUrl") + metaID;
             }
             else {
                 metaURL = Radio.request("RestReader", "getServiceById", this.get("metaDataCatalogueId")).get("url") + metaID;
             }
 
-            if (metaID !== "" && metaURLs.indexOf(metaURL) === -1) {
+            if (metaID !== null && metaID !== "" && metaURLs.indexOf(metaURL) === -1) {
                 metaURLs.push(metaURL);
             }
         }, this);
