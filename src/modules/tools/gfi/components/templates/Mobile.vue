@@ -15,6 +15,9 @@ export default {
             required: true
         }
     },
+    data: function () {
+        return {reactOnOutsideClick: false};
+    },
     computed: {
         /**
          * Returns the title of the gfi.
@@ -36,11 +39,9 @@ export default {
     mounted: function () {
         this.$nextTick(function () {
             this.showMobileComponent();
-            // add the click event later, else if clicked to open this is recognized as a click outside and this closes immediately
+            // add reaction to click event later, else: if clicked to open it is recognized as a click outside and close is called
             setTimeout(() => {
-                if (document.getElementsByClassName("modal-mask") && document.getElementsByClassName("modal-mask")[0]) {
-                    document.getElementsByClassName("modal-mask")[0].addEventListener("click", this.closeByClickOutside, true);
-                }
+                this.reactOnOutsideClick = true;
             }, 400);
         });
     },
@@ -50,7 +51,7 @@ export default {
         },
         closeByClickOutside: function (event) {
             // stop event bubbling
-            if (event.target !== this.$el) {
+            if (!this.reactOnOutsideClick || event.target !== this.$el) {
                 return;
             }
             this.close();
@@ -73,6 +74,7 @@ export default {
 <template>
     <div
         class="modal-mask"
+        @click="closeByClickOutside"
     >
         <div class="modal-dialog">
             <div class="modal-content">
