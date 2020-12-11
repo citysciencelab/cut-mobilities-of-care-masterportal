@@ -1540,17 +1540,17 @@ Routing module.
 
 Module used to draw features on the map. This includes points, which may also be represented by symbols, and (double) circles, polygons, polylines, and text.
 
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|name|yes|String||Tool name in the menu.|false|
-|iconList|no|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{"id": "iconPoint", "type": "simple_point", "value": "simple_point"}, {"id": "yellow pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|List of symbols the user may choose from to draw colored symbols or dots. Images may be used, too, as shown in the example.|false|
-|drawSymbolSettings|no|**[drawSymbolSet](#markdown-header-portalconfigmenutooldrawdrawsymbolset)**|{"color": [55, 126, 184, 1], "opacity": 1}|Pre-configuration for symbol drawing.|false|
-|drawLineSettings|no|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Pre-configuration for line drawing.|false|
-|drawCurveSettings|no|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Pre-configuration for freehand drawing.|false|
-|drawAreaSettings|no|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{"strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for area drawing.|false|
-|drawCircleSettings|no|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{"circleMethod": "interactive", "unit": "m", "circleRadius": null, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for circle drawing.|false|
-|drawDoubleCircleSettings|no|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{"circleMethod": "defined", "unit": "m", "circleRadius": 0, "circleOuterRadius": 0, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "outerColorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for double circle drawing.|false|
-|writeTextSettings|no|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{"text": "", "fontSize": 10, "font": "Arial", "color": [55, 126, 184, 1], "opacity": 1}|Pre-configuration for text writing.|false|
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name des Werkzeugs im Menü.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {"id": "gelber Pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines farbigen Punktes oder eines Symbols hat. Es können wie im Beispiel eigene Bild-Dateien verwendet werden.|false|
+|drawSymbolSettings|nein|**[drawSymbolSet](#markdown-header-portalconfigmenutooldrawdrawsymbolset)**|{color: [55, 126, 184, 1], opacity: 1}|Voreinstellung für das Zeichnen von Symbolen.|false|
+|drawLineSettings|nein|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Linien.|false|
+|drawCurveSettings|nein|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Freihand-Linien.|false|
+|drawAreaSettings|nein|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], opacityContour: 1, tooltipStyle: {fontSize: "16px", paddingTop: "3px", paddingLeft: "3px", paddingRight: "3px", backgroundColor: "rgba(255, 255, 255, .9)"}}|Voreinstellung für das Zeichnen von Flächen.|false|
+|drawCircleSettings|nein|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{circleMethod: "interactive", unit: "m", circleRadius: null, strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], opacityContour: 1}|Voreinstellung für das Zeichnen von Kreisen.|false|
+|drawDoubleCircleSettings|nein|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{circleMethod: "defined", unit: "m", circleRadius: 0, circleOuterRadius: 0, strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], outerColorContour: [0, 0, 0, 1], opacityContour: 1}|Voreinstellung für das Zeichnen von Doppel-Kreisen.|false|
+|writeTextSettings|nein|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{text: "", fontSize: 10, font: "Arial", color: [55, 126, 184, 1], opacity: 1}|Voreinstellung für das Schreiben von Texten.|false|
 
 **Example**
 

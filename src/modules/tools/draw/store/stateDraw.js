@@ -51,6 +51,7 @@ const symbol = {
      * @property {Number} drawAreaSettings.opacityContour The opacity of the color of the contours for features of drawType "LineString". NOTE: The values of the transparencySettings are opacity values.
      * @property {Object} drawCircleSettings the values used for the drawType drawCircle
      * @property {String} drawCircleSettings.circleMethod The method for drawing features of drawType "Circle".
+     * @property {Object} drawCircleSettings.tooltipStyle The custom style for the tooltip of drawType "Circle".
      * @property {String} drawCircleSettings.unit The unit of measurement (e.g. "km").
      * @property {Number} drawCircleSettings.circleDiameter The inner diameter for feature of drawType "Circle".
      * @property {Number} drawCircleSettings.strokeWidth Stroke width.
@@ -149,7 +150,14 @@ const symbol = {
             color: [55, 126, 184, 1],
             opacity: 1,
             colorContour: [0, 0, 0, 1],
-            opacityContour: 1
+            opacityContour: 1,
+            tooltipStyle: {
+                fontSize: "14px",
+                paddingTop: "3px",
+                paddingLeft: "3px",
+                paddingRight: "3px",
+                backgroundColor: "rgba(255, 255, 255, .9)"
+            }
         },
         drawDoubleCircleSettings: {
             circleMethod: "defined",

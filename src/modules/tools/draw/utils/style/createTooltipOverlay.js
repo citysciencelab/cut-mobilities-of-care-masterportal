@@ -32,6 +32,12 @@ function createToolTipOverlay ({getters, commit, dispatch}) {
 
     element.className = "ol-tooltip ol-tooltip-measure";
 
+    if (styleSettings.hasOwnProperty("tooltipStyle") && Object.keys(styleSettings.tooltipStyle).length !== 0) {
+        Object.keys(styleSettings.tooltipStyle).forEach(key => {
+            element.style[key] = styleSettings.tooltipStyle[key];
+        });
+    }
+
     toolTip = new Overlay({
         element,
         offset: [0, -15],
