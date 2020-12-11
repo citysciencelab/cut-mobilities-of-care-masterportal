@@ -118,7 +118,7 @@ describe("src/modules/map/store/actions/highlightFeature.js", () => {
         it("should highlight the vector feature via layerid and featureid", done => {
             const highlightObject = {
                 type: "viaLayerIdAndFeatureId",
-                LayerIdAndFeatureId: "testLayer,feature1"
+                layerIdAndFeatureId: "testLayer,feature1"
             };
 
             sinon.stub(Radio, "request").callsFake(requestLayerList);

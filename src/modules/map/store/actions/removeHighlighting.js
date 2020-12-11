@@ -6,7 +6,7 @@
  */
 function removeHighlightFeature ({commit, state}) {
     const highlightedFeature = state.highlightedFeature,
-        highlightedFeatureStyle = state.getHighlightedFeatureStyle;
+        highlightedFeatureStyle = state.highlightedFeatureStyle;
 
     if (highlightedFeature) {
         highlightedFeature.setStyle(highlightedFeatureStyle);

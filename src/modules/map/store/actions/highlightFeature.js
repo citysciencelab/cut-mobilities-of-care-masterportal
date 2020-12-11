@@ -9,7 +9,7 @@ function highlightFeature ({commit, dispatch}, highlightObject) {
         increaseFeature(commit, highlightObject);
     }
     else if (highlightObject.type === "viaLayerIdAndFeatureId") {
-        highlightViaParametricUrl(dispatch, highlightObject.LayerIdAndFeatureId);
+        highlightViaParametricUrl(dispatch, highlightObject.layerIdAndFeatureId);
     }
     else if (highlightObject.type === "highlightPolygon") {
         highlightPolygon(commit, dispatch, highlightObject);
@@ -27,9 +27,7 @@ function highlightPolygon (commit, dispatch, highlightObject) {
     if (highlightObject.highlightStyle) {
         const newStyle = highlightObject.highlightStyle,
             feature = highlightObject.feature,
-            styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
-            style = styleModelByLayerId ? styleModelByLayerId.createStyle(feature, false) : undefined,
-            clonedStyle = style ? style.clone() : undefined;
+            clonedStyle = styleObject(highlightObject, feature) ? styleObject(highlightObject, feature).clone() : undefined;
 
         if (clonedStyle) {
             commit("setHighlightedFeature", feature);
@@ -38,6 +36,7 @@ function highlightPolygon (commit, dispatch, highlightObject) {
             clonedStyle.getFill().setColor(newStyle.fill.color);
             clonedStyle.getStroke().setWidth(newStyle.stroke.width);
             feature.setStyle(clonedStyle);
+
         }
     }
     else {
@@ -48,12 +47,12 @@ function highlightPolygon (commit, dispatch, highlightObject) {
 /**
  * highlights a feature via layerid and featureid
  * @param {Function} dispatch commit function
- * @param {String} LayerIdAndFeatureId contains layerid and featureid
+ * @param {String} layerIdAndFeatureId contains layerid and featureid
  * @fires ModelList#RadioRequestModelListGetModelByAttributes
  * @returns {void}
  */
-function highlightViaParametricUrl (dispatch, LayerIdAndFeatureId) {
-    const featureToAdd = LayerIdAndFeatureId ? LayerIdAndFeatureId : Radio.request("ParametricURL", "getHighlightFeature");
+function highlightViaParametricUrl (dispatch, layerIdAndFeatureId) {
+    const featureToAdd = layerIdAndFeatureId;
     let temp,
         feature;
 
@@ -83,7 +82,7 @@ function getHighlightFeature (layerId, featureId) {
 /**
  * increases the icon of the feature
  * @param {Function} commit commit function
- * @param {Object} highlightObject to round
+ * @param {Object} highlightObject contains several parameters for feature highlighting
  * @fires VectorStyle#RadioRequestStyleListReturnModelById
  * @returns {void}
  */
@@ -93,9 +92,7 @@ function increaseFeature (commit, highlightObject) {
         feature = features ? features.find(feat => {
             return feat.id.toString() === highlightObject.id;
         }).feature : highlightObject.feature,
-        styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
-        style = styleModelByLayerId ? styleModelByLayerId.createStyle(feature, false) : undefined,
-        clonedStyle = style ? style.clone() : undefined,
+        clonedStyle = styleObject(highlightObject, feature) ? styleObject(highlightObject, feature).clone() : undefined,
         clonedImage = clonedStyle ? clonedStyle.getImage() : undefined;
 
     if (clonedImage) {
@@ -108,6 +105,19 @@ function increaseFeature (commit, highlightObject) {
         clonedImage.setScale(clonedImage.getScale() * scaleFactor);
         feature.setStyle(clonedStyle);
     }
+}
+/**
+ * Get style via styleList
+ * @param {Object} highlightObject contains several parameters for feature highlighting
+ * @param {ol/feature} feature openlayers feature to highlight
+ * @fires VectorStyle#RadioRequestStyleListReturnModelById
+ * @returns {ol/style} ol style
+ */
+function styleObject (highlightObject, feature) {
+    const styleModelByLayerId = Radio.request("StyleList", "returnModelById", highlightObject.layer.id),
+        style = styleModelByLayerId ? styleModelByLayerId.createStyle(feature, false) : undefined;
+
+    return style;
 }
 
 export {highlightFeature};
