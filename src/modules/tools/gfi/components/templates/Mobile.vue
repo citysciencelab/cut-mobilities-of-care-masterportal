@@ -36,6 +36,12 @@ export default {
     mounted: function () {
         this.$nextTick(function () {
             this.showMobileComponent();
+            //add the click event later, else if clicked to open this is recognized as a click outside and this closes immediately
+             setTimeout(() => {
+                 if(document.getElementsByClassName("modal-mask") && document.getElementsByClassName("modal-mask")[0]){
+                    document.getElementsByClassName("modal-mask")[0].addEventListener("click", this.closeByClickOutside, true);
+                 }
+            }, 400);
         });
     },
     methods: {
@@ -67,7 +73,6 @@ export default {
 <template>
     <div
         class="modal-mask"
-        @click="closeByClickOutside"
     >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -84,7 +89,7 @@ export default {
                         </span>
                     </button>
                     <h5 class="modal-title">
-                        {{ title }}
+                         {{ $t(title) }}
                     </h5>
                 </div>
                 <div class="modal-body">
