@@ -23,6 +23,7 @@
 - Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 - Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
 - Im Informationsfenster eines Layers wird ein Hinweistext bez. des Datei-Typs angezeigt, falls im Reiter"Datensatz herunterladen" mehrere Dateien angezeigt werden.
+- Highlight von Vector Features ist nach vue umgezogen und konsolidiert. Der Parameter highlightVectorRules beim GFI wird nur vom neuen VectorStylye Version 3 unterstützt.
 
 ### Changed
 - Es werden nun alle URLs vom Portal direkt angefragt, ohne den Umweg über einen Proxy zu gehen, da von der GDI-DE empfohlen wird serverseitig einen CORS-Header einzurichten. Siehe dazu https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile Kapitel 4.7.1. Es besteht aber die Möglichkeit gezielt URLs bestimmter Dienste über einen Proxy umzuleiten. Diese Möglichkeit ist jedoch deprecated.
