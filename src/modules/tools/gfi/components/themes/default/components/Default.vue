@@ -180,7 +180,7 @@ export default {
     }
 }
 .gfi-iFrame {
-        height: 350px;
+        height: 450px;
         resize: both;
 }
 @media (min-width: 768px) {
