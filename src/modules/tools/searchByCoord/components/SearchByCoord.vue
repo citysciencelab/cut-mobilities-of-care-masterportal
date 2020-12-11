@@ -32,7 +32,43 @@ export default {
 </script>
 
 <template lang="html">
-    <div></div>
+    <Tool
+        :title="name"
+        :icon="glyphicon"
+        :active="active"
+        :render-to-window="renderToWindow"
+        :resizable-window="resizableWindow"
+        :deactivateGFI="deactivateGFI"
+    >
+        <template v-slot:toolBody>
+            <div
+                v-if="active"
+                id="search-by-coord"
+            >
+                <label
+                    for="search-by-coord-select"
+                    class="col-md-5 col-sm-5 control-label"
+                >{{ $t("modules.tools.searchByCoord.coordinateSystem") }}</label>
+                <div class="col-md-7 col-sm-7">
+                    <select
+                        id="search-by-coord-select"
+                        class="font-arial form-control input-sm pull-left"
+                        @change="setResolutionByIndex($event.target.selectedIndex)"
+                    >
+                        <option>
+                            choose something
+                        </option>
+                    </select>
+                    <input
+                        placeholder="edit me"
+                    >
+                    <input
+                        placeholder="edit me2"
+                    >
+                </div>
+            </div>
+        </template>
+    </Tool>
 </template>
 
 <style lang="less" scoped>
@@ -41,7 +77,10 @@ export default {
     label {
         margin-top: 7px;
     }
-    #scale-switcher-select {
+    input {
+        margin-top: 7px;
+    }
+    #search-by-coord-select {
         border: 2px solid @secondary;
     }
 </style>

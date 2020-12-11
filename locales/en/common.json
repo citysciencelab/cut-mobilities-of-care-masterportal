@@ -525,6 +525,10 @@
                 "selectedDestination": "Selected destination"
             },
             "searchByCoord": {
+                "coordinateSystem": "Coordinate system",
+                "eastingLabel": "Easting",
+                "northingLabel": "Northing",
+                "search": "Search",
                 "exampleAcronym": "e.g.",
                 "errorMsg": {
                     "noCoord": "Please enter your {{valueKey}}.",

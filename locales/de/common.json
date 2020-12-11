@@ -526,6 +526,10 @@
                 "selectedDestination": "Gewähltes Ziel"
             },
             "searchByCoord": {
+                "coordinateSystem": "Koordinatensystem",
+                "eastingLabel": "Rechtswert",
+                "northingLabel": "Hochwert",
+                "search": "Suche",
                 "exampleAcronym": "Bsp.",
                 "errorMsg": {
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
