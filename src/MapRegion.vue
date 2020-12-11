@@ -75,9 +75,7 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            align-self: flex-end;
 
-            height: 100%;
             width: 100%;
 
             .controls {
