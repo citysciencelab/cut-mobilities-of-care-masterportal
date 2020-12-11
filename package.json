@@ -41,7 +41,7 @@
     "bootstrap-toggle": "2.x.x",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
-    "d3": "4.9.x",
+    "d3": "4.13.x",
     "d3-scale-chromatic": "^1.5.0",
     "dom-parser": "^0.1.5",
     "dom-storage": "^2.1.0",
