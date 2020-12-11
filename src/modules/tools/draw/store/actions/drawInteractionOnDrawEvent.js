@@ -68,7 +68,12 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState,
             styleSettings.colorContour = styleSettings.outerColorContour;
         }
 
-        event.feature.setStyle(createStyle(state, styleSettings));
+        event.feature.setStyle(function (feature) {
+            if (feature.get("isVisible")) {
+                return createStyle(feature.get("drawState"), styleSettings);
+            }
+            return undefined;
+        });
         commit("setZIndex", state.zIndex + 1);
     }));
 

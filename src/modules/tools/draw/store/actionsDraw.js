@@ -134,6 +134,8 @@ const initialState = Object.assign({}, stateDraw),
 
             interaction.on("drawstart", event => {
                 event.feature.set("isOuterCircle", isOuterCircle);
+                event.feature.set("isVisible", true);
+                dispatch("addDrawStateToFeature", event.feature);
                 dispatch("drawInteractionOnDrawEvent", drawInteraction);
 
                 if (!toolTip && state?.drawType?.id === "drawCircle" || state?.drawType?.id === "drawDoubleCircle") {
@@ -157,8 +159,6 @@ const initialState = Object.assign({}, stateDraw),
             interaction.on("drawend", event => {
                 dispatch("uniqueID").then(id => {
                     event.feature.set("styleId", id);
-
-                    dispatch("addDrawStateToFeature", event.feature);
 
                     if (toolTip) {
                         event.feature.getGeometry().un("change", toolTip.get("featureChangeEvent"));
@@ -324,7 +324,10 @@ const initialState = Object.assign({}, stateDraw),
             }
             const styleSettings = getters.getStyleSettings(),
                 // use clones of drawType and symbol
-                symbol = JSON.parse(JSON.stringify(getters.symbol));
+                symbol = JSON.parse(JSON.stringify(getters.symbol)),
+                zIndex = JSON.parse(JSON.stringify(getters.zIndex)),
+                imgPath = JSON.parse(JSON.stringify(getters.imgPath)),
+                pointSize = JSON.parse(JSON.stringify(getters.pointSize));
             let drawType = JSON.parse(JSON.stringify(getters.drawType));
 
             if (getters.drawType.id === "drawDoubleCircle") {
@@ -345,6 +348,9 @@ const initialState = Object.assign({}, stateDraw),
                 circleOuterDiameter: styleSettings.circleOuterDiameter,
                 drawType,
                 symbol,
+                zIndex,
+                imgPath,
+                pointSize,
                 color: styleSettings.color,
                 colorContour: styleSettings.colorContour,
                 outerColorContour: styleSettings.outerColorContour
@@ -567,7 +573,12 @@ const initialState = Object.assign({}, stateDraw),
             if (state.currentInteraction === "modify" && state.selectedFeature !== null) {
                 const styleSettings = getters.getStyleSettings();
 
-                state.selectedFeature.setStyle(createStyle(state, styleSettings));
+                state.selectedFeature.setStyle(function (feature) {
+                    if (feature.get("isVisible")) {
+                        return createStyle(feature.get("drawState"), styleSettings);
+                    }
+                    return undefined;
+                });
                 dispatch("addDrawStateToFeature", state.selectedFeature);
                 return;
             }

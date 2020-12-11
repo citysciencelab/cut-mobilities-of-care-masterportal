@@ -13,6 +13,9 @@ const symbol = {
      * @property {module:ol/interaction/Draw} drawInteractionTwo The second draw interaction of the draw tool needed if a double circle is to be drawn.
      * @property {Object} drawType The type of the draw interaction. The first parameter represents the type unique identifier of the draw interaction as a String and the second parameter represents the geometry of the drawType as a String.
      * @property {Number} fId ID of the last feature that was added to the redoArray.
+     * @property {Object[]} filterList Filter to show and hide featuers based on their drawtype.
+     * @property {String[]} filterList.drawTypes The drawtypes to be filtered.
+     * @property {String} filterList.name The name of the corresponding filter.
      * @property {Boolean} freeHand Distinction between a freeHand line drawing or a static one.
      * @property {String} glyphicon Glyphicon used in the header of the window.
      * @property {Object[]} iconList List of icons used for the point draw interaction.
@@ -89,6 +92,7 @@ const symbol = {
             geometry: "Point"
         },
         fId: 0,
+        filterList: null,
         freeHand: false,
         glyphicon: "glyphicon-pencil",
         iconList: [

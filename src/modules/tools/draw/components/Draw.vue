@@ -4,11 +4,13 @@ import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsDraw";
 import DownloadView from "../../../../../modules/tools/download/view";
+import DrawFeaturesFilter from "./DrawFeaturesFilter.vue";
 
 export default {
     name: "Draw",
     components: {
-        Tool
+        Tool,
+        DrawFeaturesFilter
     },
     data () {
         return {
@@ -348,6 +350,13 @@ export default {
                 </option>
             </select>
             <hr>
+            <template v-if="layer.getSource().getFeatures().length > 0 && filterList !== null">
+                <DrawFeaturesFilter
+                    :filterList="filterList"
+                    :features="layer.getSource().getFeatures()"
+                />
+                <hr>
+            </template>
             <form
                 class="form-horizontal"
                 role="form"
