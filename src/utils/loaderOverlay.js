@@ -4,6 +4,7 @@
 export default {
     loaderOverlayCount: 0, // this is needed to handle multiple loader show calls
     initialLoaderIsHidden: false,
+    isFading: false,
     loaderTimeoutReference: null,
     /**
      * Shows Loader Overlay.
@@ -39,6 +40,13 @@ export default {
         this.loaderOverlayCount--;
         if (this.loaderOverlayCount <= 0) {
             this.loaderOverlayCount = 0;
+            if (this.isFading) {
+                return this.loaderOverlayCount;
+            }
+            if (!this.initialLoaderIsHidden) {
+                this.fade();
+                return this.loaderOverlayCount;
+            }
 
             if (loader !== null) {
                 document.getElementById("loader").classList.remove("loader-is-loading");
@@ -46,31 +54,61 @@ export default {
             if (masterportalContainer !== null) {
                 document.getElementById("masterportal-container").classList.remove("blurry");
             }
-            if (!this.initialLoaderIsHidden) {
-                this.removePreLoadLogos();
-            }
         }
         return this.loaderOverlayCount;
     },
     /**
-     * Removes portal logos and titles from Loader
+     * Initiates the fade animation of MP logo and title. Ths may be interrupted by a mousedown event.
      * @returns {void}
      */
-    removePreLoadLogos: function () {
-        const portalLogoBox = document.getElementById("portal-logo-box"),
-            loader = document.getElementById("loader"),
+    fade: function () {
+        const loader = document.getElementById("loader"),
+            portalLogoBox = document.getElementById("portal-logo-box"),
+            loaderSpinnerItself = document.getElementById("loader-spinner-itself"),
             genericMasterPortalLogo = document.getElementById("generic-masterportal-logo");
 
+        this.isFading = true;
+        if (loader !== null) {
+            loader.addEventListener("mousedown", this.cleanup.bind(this), true);
+        }
+        if (loaderSpinnerItself !== null) {
+            loaderSpinnerItself.classList.add("initial-fadeout-animation");
+        }
+        if (portalLogoBox !== null) {
+            portalLogoBox.classList.add("initial-fadeout-animation");
+        }
+        if (genericMasterPortalLogo !== null) {
+            genericMasterPortalLogo.classList.add("initial-fadeout-animation");
+        }
+
+        setTimeout(this.cleanup.bind(this), 3400);
+    },
+    /**
+     * Removes portal logos and titles from Loader, also removes animation classes.
+     * @returns {void}
+     */
+    cleanup: function () {
+        const loader = document.getElementById("loader"),
+            portalLogoBox = document.getElementById("portal-logo-box"),
+            loaderSpinnerItself = document.getElementById("loader-spinner-itself"),
+            genericMasterPortalLogo = document.getElementById("generic-masterportal-logo");
+
+        this.initialLoaderIsHidden = true;
+        this.isFading = false;
+        this.hide();
+
+        if (loader !== null) {
+            loader.classList.remove("loader-is-initially-loading");
+        }
+        if (loaderSpinnerItself !== null) {
+            loaderSpinnerItself.classList.remove("initial-fadeout-animation");
+        }
         if (portalLogoBox !== null) {
             portalLogoBox.parentNode.removeChild(portalLogoBox);
         }
         if (genericMasterPortalLogo !== null) {
             genericMasterPortalLogo.parentNode.removeChild(genericMasterPortalLogo);
         }
-        if (loader !== null) {
-            document.getElementById("loader").classList.remove("loader-has-solid-bg");
-        }
 
-        this.initialLoaderIsHidden = true;
     }
 };
