@@ -414,7 +414,6 @@ async function loadApp () {
             }
         });
     }
-
     LoaderOverlay.hide();
 }
 
