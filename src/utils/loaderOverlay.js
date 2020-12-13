@@ -23,7 +23,7 @@ export default {
         if (loader !== null) {
             document.getElementById("loader").classList.add("loader-is-loading");
         }
-        if (masterportalContainer !== null) {
+        if (masterportalContainer !== null && this.initialLoaderIsHidden) {
             document.getElementById("masterportal-container").classList.add("blurry");
         }
 
