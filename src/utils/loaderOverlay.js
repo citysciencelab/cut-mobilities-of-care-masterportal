@@ -8,8 +8,8 @@ export default {
     loaderTimeoutReference: null,
     /**
      * Shows Loader Overlay.
-     * @param {int}     maxWait - Maximum loader duration
-     * @returns {int}           - Count of virtual loader stacks
+     * @param {number}     maxWait - Maximum loader duration
+     * @returns {number}           - Count of virtual loader stacks
      */
     show: function (maxWait = 25000) {
         const loader = document.getElementById("loader"),
@@ -31,7 +31,7 @@ export default {
     },
     /**
      * Hides Loader Overlay.
-     * @returns {int}   - Count of virtual loader stacks
+     * @returns {number}   - Count of virtual loader stacks
      */
     hide: function () {
         const loader = document.getElementById("loader"),
