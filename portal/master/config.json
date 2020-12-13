@@ -426,6 +426,10 @@
           "VueAddon": {
             "name": "AddonTool",
             "glyphicon": "glyphicon-screenshot"
+          },
+          "TacticalMark": {
+            "name": "Taktische Zeichen",
+            "glyphicon": "glyphicon-map-marker"
           }
         }
       },
