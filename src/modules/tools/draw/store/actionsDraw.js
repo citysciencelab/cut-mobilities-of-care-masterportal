@@ -233,24 +233,22 @@ const initialState = Object.assign({}, stateDraw),
                     if (typeof feature.getGeometry().getCenter === "function") {
                         center = JSON.stringify(feature.getGeometry().getCenter());
                     }
-                    feature.getGeometry().once("change", () => {
+                    feature.getGeometry().once("change", async () => {
                         if (changeInProgress) {
                             return;
                         }
                         changeInProgress = true;
 
                         if (!state.selectedFeature || state.selectedFeature.ol_uid !== feature.ol_uid) {
+                            await dispatch("setAsCurrentFeatureAndApplyStyleSettings", feature);
+
                             if (!toolTip && (state.drawType.id === "drawCircle" || state.drawType.id === "drawDoubleCircle")) {
                                 if (center === JSON.stringify(feature.getGeometry().getCenter())) {
-                                    dispatch("setAsCurrentFeatureAndApplyStyleSettings", feature);
                                     toolTip = createTooltipOverlay({getters, commit, dispatch});
                                     rootState.Map.map.addOverlay(toolTip);
                                     rootState.Map.map.on("pointermove", toolTip.get("mapPointerMoveEvent"));
                                     state.selectedFeature.getGeometry().on("change", toolTip.get("featureChangeEvent"));
                                 }
-                            }
-                            else {
-                                dispatch("setAsCurrentFeatureAndApplyStyleSettings", feature);
                             }
                         }
                     });
@@ -628,7 +626,6 @@ const initialState = Object.assign({}, stateDraw),
         setAsCurrentFeatureAndApplyStyleSettings: ({commit, dispatch, getters}, feature) => {
             let styleSettings = null;
 
-            commit("setSelectedFeature", feature);
 
             if (typeof feature.get("drawState") === "undefined") {
                 // setDrawType changes visibility of all select- and input-boxes
@@ -641,6 +638,7 @@ const initialState = Object.assign({}, stateDraw),
                 // setDrawType changes visibility of all select- and input-boxes
                 commit("setDrawType", feature.get("drawState").drawType);
             }
+            commit("setSelectedFeature", feature);
 
             styleSettings = getters.getStyleSettings();
 
