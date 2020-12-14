@@ -150,7 +150,7 @@ export default {
                     <div class="form-group form-group-sm">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button
-                                class="btn btn-sm btn-block"
+                                class="btn btn-md btn-block"
                                 @click="searchCoordinate()"
                             >
                                 {{ $t("common:modules.tools.searchByCoord.search") }}
