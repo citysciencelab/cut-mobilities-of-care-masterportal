@@ -136,7 +136,7 @@ export default {
 
 .modal-body {
     overflow-y: auto;
-    max-height: 66vh;
+    max-height: 80vh;
     padding: 0;
     table {
         margin-bottom: 0;
