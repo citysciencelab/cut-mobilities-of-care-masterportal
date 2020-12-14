@@ -145,9 +145,9 @@ label {
     #generic-masterportal-logo {
         position: absolute;
         bottom: 15%;
-        width:160px;
+        width:250px;
         left:50%;
-        margin-left:-80px;
+        margin-left:-125px;
         padding: 20px 20px 10px 20px;
         border-radius: 14px;
     }
@@ -164,14 +164,6 @@ label {
         margin-left:-80px;
         padding: 20px 20px 10px 20px;
         border-radius: 14px;
-        /*
-        position:absolute;
-        bottom:0;
-        right:0;
-        width:12%;
-        border-radius:14px 0 0 0;
-        padding: 20px 10px 10px 20px;
-        */
     }
 }
 #loader-spinner-itself {
@@ -207,7 +199,7 @@ label {
 }
 #generic-masterportal-logo {
     text-align:center;
-    background-color:#FFFFFF;
+    background-color:rgba(255,255,255,0.8);
     opacity:1;
     transition:opacity 0.35s 3s;
 }
@@ -220,7 +212,7 @@ label {
 #portal-logo-box {
     opacity:1;
     transition:opacity 0.35s 3s;
-    background-color:#FFFFFF;
+    background-color:rgba(255,255,255,0.8);
     font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
     font-size:36px;
     margin-bottom:24px;
