@@ -80,12 +80,18 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         const wrapper = shallowMount(Detached, {
             propsData: {
                 feature: {
-                    getTheme: () => "Default",
+                    getTheme: () => "default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/xml",
                     getGfiUrl: () => "",
                     getLayerId: () => sinon.stub(),
                     getOlFeature: () => olFeature
+                }
+            },
+            components: {
+                Default: {
+                    name: "Default",
+                    template: "<span />"
                 }
             },
             computed: {
@@ -104,16 +110,22 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         expect(wrapper.find(".gfi-header h5").text()).to.be.equal("Hallo");
     });
 
-    it("should have the child component Default (-Theme)", () => {
+    it("should have the child component default (-Theme)", () => {
         const wrapper = shallowMount(Detached, {
             propsData: {
                 feature: {
-                    getTheme: () => "Default",
+                    getTheme: () => "default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/xml",
                     getGfiUrl: () => "",
                     getLayerId: () => sinon.stub(),
                     getOlFeature: () => olFeature
+                }
+            },
+            components: {
+                Default: {
+                    name: "Default",
+                    template: "<span />"
                 }
             },
             computed: {
@@ -136,12 +148,18 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         const wrapper = shallowMount(Detached, {
             propsData: {
                 feature: {
-                    getTheme: () => "Default",
+                    getTheme: () => "default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/xml",
                     getGfiUrl: () => "",
                     getLayerId: () => sinon.stub(),
                     getOlFeature: () => olFeature
+                }
+            },
+            components: {
+                Default: {
+                    name: "Default",
+                    template: "<span />"
                 }
             },
             computed: {
@@ -165,12 +183,18 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         const wrapper = shallowMount(Detached, {
                 propsData: {
                     feature: {
-                        getTheme: () => "Default",
+                        getTheme: () => "default",
                         getTitle: () => "Hallo",
                         getMimeType: () => "text/xml",
                         getGfiUrl: () => "",
                         getLayerId: () => sinon.stub(),
                         getOlFeature: () => olFeature
+                    }
+                },
+                components: {
+                    Default: {
+                        name: "Default",
+                        template: "<span />"
                     }
                 },
                 computed: {
@@ -196,12 +220,18 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         const wrapper = shallowMount(Detached, {
                 propsData: {
                     feature: {
-                        getTheme: () => "Default",
+                        getTheme: () => "default",
                         getTitle: () => "Hallo",
                         getMimeType: () => "text/xml",
                         getGfiUrl: () => "",
                         getLayerId: () => sinon.stub(),
                         getOlFeature: () => olFeature
+                    }
+                },
+                components: {
+                    Default: {
+                        name: "Default",
+                        template: "<span />"
                     }
                 },
                 computed: {
@@ -227,12 +257,18 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         const wrapper = shallowMount(Detached, {
                 propsData: {
                     feature: {
-                        getTheme: () => "Default",
+                        getTheme: () => "default",
                         getTitle: () => "Hallo",
                         getMimeType: () => "text/xml",
                         getGfiUrl: () => "",
                         getLayerId: () => sinon.stub(),
                         getOlFeature: () => olFeature
+                    }
+                },
+                components: {
+                    Default: {
+                        name: "Default",
+                        template: "<span />"
                     }
                 },
                 computed: {
@@ -259,10 +295,16 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         const wrapper = shallowMount(Detached, {
             propsData: {
                 feature: {
-                    getTheme: () => "Default",
+                    getTheme: () => "default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/html",
                     getGfiUrl: () => "http"
+                }
+            },
+            components: {
+                Default: {
+                    name: "Default",
+                    template: "<span />"
                 }
             },
             computed: {
@@ -285,12 +327,18 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
         const wrapper = shallowMount(Detached, {
             propsData: {
                 feature: {
-                    getTheme: () => "Default",
+                    getTheme: () => "default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/xml",
                     getGfiUrl: () => "",
                     getLayerId: () => sinon.stub(),
                     getOlFeature: () => olFeature
+                }
+            },
+            components: {
+                Default: {
+                    name: "Default",
+                    template: "<span />"
                 }
             },
             computed: {
