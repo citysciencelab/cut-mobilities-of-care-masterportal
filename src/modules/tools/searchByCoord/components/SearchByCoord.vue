@@ -13,7 +13,8 @@ export default {
     data: function () {
         return {
             coordinatesEasting: "",
-            coordinatesNorthing: ""
+            coordinatesNorthing: "",
+            errors: []
         };
     },
     computed: {
@@ -71,6 +72,15 @@ export default {
             return "modules.tools.searchByCoord." + type + "." + key;
         },
         /**
+         * Returns the label mame depending on the selected projection.
+         * @param {String} key in the language files
+         * @returns {String} the name of the label
+         */
+        errorMessage (key) {
+
+            return i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: key});
+        },
+        /**
          * Stores the projections and adds interaction pointermove to map.
          * @returns {void}
          */
@@ -86,20 +96,21 @@ export default {
                 validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
                 coordinates = [coordinatesEasting, coordinatesNorthing];
 
-            console.log(this.currentProjection.title);
             if (this.currentProjection.title === "ETRS89/UTM 32N") {
                 console.log("gets executed");
                 for (const coord of coordinates) {
 
                     if (coord === undefined || coord.length < 1) {
-                        console.log("Leere Eingabe");
+                        this.errors.push(coord);
+                        console.log("Leere Eingabe " + this.errors);
                         // value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: value.key});
 
                         // $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
                         // $(fieldName).parent().addClass("has-error");
                     }
                     else if (!coord.match(validETRS89)) {
-                        console.log("Eingabe ist inkorrekt");
+                        this.errors.push(coord);
+                        console.log(this.errors);
                         // value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: value.key, valueExample: value.example});
 
                         // $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
@@ -113,6 +124,7 @@ export default {
             }
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
+            this.errors = [];
             this.validateInput(coordinatesEasting, coordinatesNorthing);
             console.log("searching coordinate");
             console.log(coordinatesEasting);
@@ -175,9 +187,14 @@ export default {
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 564459.13'"
                             >
                         </div>
+                        <p v-if="errors.length">
+                            Fehler
+                        </p>
                     </div>
                     <div class="form-group form-group-sm">
                         <label
+                            id="coordinatesNorthingLabel"
+                            for="coordinatesNorthingField"
                             class="col-md-5 col-sm-5 control-label"
                         >{{ $t(label("northingLabel")) }}</label>
                         <div class="col-md-7 col-sm-7">
@@ -189,6 +206,9 @@ export default {
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 5935103.67'"
                             >
                         </div>
+                        <p v-if="errors.length">
+                            Fehler
+                        </p>
                     </div>
                     <div class="form-group form-group-sm">
                         <div class="col-md-12 col-sm-12 col-xs-12">
