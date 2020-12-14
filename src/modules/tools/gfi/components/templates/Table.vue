@@ -180,7 +180,7 @@ export default {
                 </span>
             </p>
             <p class="title">
-                <span class="gfi-title">{{ title }}</span>
+                <span class="gfi-title">{{ $t(title) }}</span>
             </p>
         </div>
         <!-- theme -->
