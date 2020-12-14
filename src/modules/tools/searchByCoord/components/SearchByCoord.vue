@@ -127,6 +127,7 @@ export default {
                                 id="coordinatesEastingField"
                                 type="text"
                                 class="form-control"
+                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 564459.13'"
                             >
                         </div>
                     </div>
@@ -139,6 +140,7 @@ export default {
                                 id="coordinatesNorthingField"
                                 type="text"
                                 class="form-control"
+                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 5935103.67'"
                             >
                         </div>
                     </div>
