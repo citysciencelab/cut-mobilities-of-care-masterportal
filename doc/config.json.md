@@ -1544,6 +1544,7 @@ Module used to draw features on the map. This includes points, which may also be
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
 |iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {"id": "gelber Pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines farbigen Punktes oder eines Symbols hat. Es können wie im Beispiel eigene Bild-Dateien verwendet werden.|false|
+|filterList|nein|[filter](#markdown-header-portalconfigmenutooldrawfilter)**[]|null|Mit dem Filter können Features nach ihrem "drawType" gefiltert werden.||
 |drawSymbolSettings|nein|**[drawSymbolSet](#markdown-header-portalconfigmenutooldrawdrawsymbolset)**|{color: [55, 126, 184, 1], opacity: 1}|Voreinstellung für das Zeichnen von Symbolen.|false|
 |drawLineSettings|nein|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Linien.|false|
 |drawCurveSettings|nein|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Freihand-Linien.|false|
@@ -1592,7 +1593,6 @@ Module used to draw features on the map. This includes points, which may also be
 ```
 
 ***
-
 #### Portalconfig.menu.tool.draw.icon
 
 Dot object consisting of text, type, and value.
@@ -1631,6 +1631,28 @@ Dot object consisting of text, type, and value.
 
 ***
 
+#### Portalconfig.menu.tool.draw.filter
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|name|ja|String||Name des Filters||
+|drawTypes|ja|Array||Die Typen kommasepariert. Mögliche Typen sind: drawArea, drawCircle, drawSymbol, drawLine, drawCurve, drawDoubleCircle, writeText.
+
+**Beispiel**
+
+```
+#!json
+    "filterList": [{
+            "drawTypes": ["drawSymbol", "writeText"],
+            "name": "Symbole und Beschriftung"
+        },
+        {
+            "drawTypes": ["drawArea", "drawCircle", "drawDoubleCircle"],
+            "name": "Polygone und Radien"
+        }],
+```
+
+***
 
 #### Portalconfig.menu.tool.draw.drawSymbolSet
 
