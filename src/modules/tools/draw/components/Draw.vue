@@ -203,6 +203,21 @@ export default {
                 return this.$i18n.i18next.t("common:modules.tools.draw.innerDiameter");
             }
             return this.$i18n.i18next.t("common:modules.tools.draw.diameter");
+        },
+
+        /**
+         * Checks if the filter list is valid.
+         * @returns {boolean} True if valid.
+         */
+        isFilterListValid () {
+            if (this.filterList === null) {
+                return false;
+            }
+            if (!Array.isArray(this.filterList) || !this.filterList.length) {
+                console.warn(this.filterList, "Die Konfiguration für den Filter ist nicht valide.");
+                return false;
+            }
+            return true;
         }
 
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
@@ -253,6 +268,7 @@ export default {
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions),
+        ...mapActions("Alerting", ["addSingleAlert"]),
         /**
          * checks if both given arrays have the same number at their first 3 positions
          * note: the opacity (4th number) will be ignored - this is only about color
@@ -350,7 +366,7 @@ export default {
                 </option>
             </select>
             <hr>
-            <template v-if="layer.getSource().getFeatures().length > 0 && filterList !== null">
+            <template v-if="layer.getSource().getFeatures().length > 0 && isFilterListValid">
                 <DrawFeaturesFilter
                     :filterList="filterList"
                     :features="layer.getSource().getFeatures()"
