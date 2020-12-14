@@ -15,6 +15,9 @@ export default {
             required: true
         }
     },
+    data: function () {
+        return {reactOnOutsideClick: false};
+    },
     computed: {
         /**
          * Returns the title of the gfi.
@@ -36,6 +39,10 @@ export default {
     mounted: function () {
         this.$nextTick(function () {
             this.showMobileComponent();
+            // add reaction to click event later, else: if clicked to open it is recognized as a click outside and close is called
+            setTimeout(() => {
+                this.reactOnOutsideClick = true;
+            }, 400);
         });
     },
     methods: {
@@ -44,7 +51,7 @@ export default {
         },
         closeByClickOutside: function (event) {
             // stop event bubbling
-            if (event.target !== this.$el) {
+            if (!this.reactOnOutsideClick || event.target !== this.$el) {
                 return;
             }
             this.close();
@@ -84,7 +91,7 @@ export default {
                         </span>
                     </button>
                     <h5 class="modal-title">
-                        {{ title }}
+                        {{ $t(title) }}
                     </h5>
                 </div>
                 <div class="modal-body">
