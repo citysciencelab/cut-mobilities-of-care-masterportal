@@ -73,6 +73,9 @@ export default {
 
             this.setProjections(pr);
 
+        },
+        searchCoordinate () {
+            console.log("searching coordinate");
         }
     }};
 </script>
@@ -142,6 +145,16 @@ export default {
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 5935103.67'"
                             >
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <button
+                                class="btn btn-sm btn-block"
+                                @click="searchCoordinate()"
+                            >
+                                {{ $t("common:modules.tools.searchByCoord.search") }}
+                            </button>
                         </div>
                     </div>
                 </form>
