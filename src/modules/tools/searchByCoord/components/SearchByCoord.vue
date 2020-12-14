@@ -1,6 +1,7 @@
 <script>
 import Tool from "../../Tool.vue";
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
+import {getProjections} from "masterportalAPI/src/crs";
 import getters from "../store/gettersSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
 
@@ -10,13 +11,29 @@ export default {
         Tool
     },
     computed: {
-        ...mapGetters("Tools/SearchByCoord", Object.keys(getters))
+        ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
+        ...mapGetters("Map", ["projection", "mouseCoord"]),
+        /**
+         * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
+         */
+        currentSelection: {
+            get () {
+                return this.$store.state.Tools.SearchByCoord.currentSelection;
+            },
+            set (newValue) {
+                this.setCurrentSelection(newValue);
+            }
+        }
     },
     created () {
         this.$on("close", this.close);
+        this.createInteraction();
     },
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
+        ...mapActions("Tools/SearchByCoord", [
+            "newProjectionSelected"
+        ]),
 
         close () {
             this.setActive(false);
@@ -27,6 +44,35 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        /**
+         * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
+         * @param {Event} event changed selection event
+         * @returns {void}
+         */
+        selectionChanged (event) {
+            this.setCurrentSelection(event.target.value);
+            this.newProjectionSelected();
+        },
+        /**
+         * Returns the label mame depending on the selected projection.
+         * @param {String} key in the language files
+         * @returns {String} the name of the label
+         */
+        label (key) {
+            const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
+
+            return "modules.tools.searchByCoord." + type + "." + key;
+        },
+        /**
+         * Stores the projections and adds interaction pointermove to map.
+         * @returns {void}
+         */
+        createInteraction () {
+            const pr = getProjections();
+
+            this.setProjections(pr);
+
         }
     }};
 </script>
@@ -45,42 +91,64 @@ export default {
                 v-if="active"
                 id="search-by-coord"
             >
-                <label
-                    for="search-by-coord-select"
-                    class="col-md-5 col-sm-5 control-label"
-                >{{ $t("modules.tools.searchByCoord.coordinateSystem") }}</label>
-                <div class="col-md-7 col-sm-7">
-                    <select
-                        id="search-by-coord-select"
-                        class="font-arial form-control input-sm pull-left"
-                        @change="setResolutionByIndex($event.target.selectedIndex)"
-                    >
-                        <option>
-                            choose something
-                        </option>
-                    </select>
-                    <input
-                        placeholder="edit me"
-                    >
-                    <input
-                        placeholder="edit me2"
-                    >
-                </div>
+                <form
+                    class="form-horizontal"
+                    role="form"
+                >
+                    <div class="form-group form-group-sm">
+                        <label
+                            class="col-md-5 col-sm-5 control-label"
+                        >{{ $t("modules.tools.searchByCoord.coordinateSystem") }}</label>
+                        <div class="col-md-7 col-sm-7">
+                            <select
+                                id="coordSystemField"
+                                v-model="currentSelection"
+                                class="font-arial form-control input-sm pull-left"
+                                @change="selectionChanged($event)"
+                            >
+                                <option
+                                    v-for="(projection, i) in projections"
+                                    :key="i"
+                                    :value="projection.name"
+                                >
+                                    {{ projection.title ? projection.title : projection.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label
+                            id="coordinatesEastingLabel"
+                            for="coordinatesEastingField"
+                            class="col-md-5 col-sm-5 control-label"
+                        >{{ $t(label("eastingLabel")) }}</label>
+                        <div class="col-md-7 col-sm-7">
+                            <input
+                                id="coordinatesEastingField"
+                                type="text"
+                                class="form-control"
+                            >
+                        </div>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label
+                            class="col-md-5 col-sm-5 control-label"
+                        >{{ $t(label("northingLabel")) }}</label>
+                        <div class="col-md-7 col-sm-7">
+                            <input
+                                id="coordinatesNorthingField"
+                                type="text"
+                                class="form-control"
+                            >
+                        </div>
+                    </div>
+                </form>
             </div>
         </template>
     </Tool>
 </template>
 
-<style lang="less" scoped>
+// <style lang="less" scoped>
     @import "~variables";
 
-    label {
-        margin-top: 7px;
-    }
-    input {
-        margin-top: 7px;
-    }
-    #search-by-coord-select {
-        border: 2px solid @secondary;
-    }
 </style>

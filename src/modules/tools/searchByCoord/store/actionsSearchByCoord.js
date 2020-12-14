@@ -1,5 +1,13 @@
-const actions = {
-    // NOTE write actions here if you need them
-};
+export default {
+    /**
+     * Sets the current projection and its name to state.
+     * @returns {void}
+     */
+    newProjectionSelected ({commit, state, getters}) {
+        const targetProjectionName = state.currentSelection,
+            targetProjection = getters.getProjectionByName(targetProjectionName);
 
-export default actions;
+        commit("setCurrentProjectionName", targetProjectionName);
+        commit("setCurrentProjection", targetProjection);
+    }
+};

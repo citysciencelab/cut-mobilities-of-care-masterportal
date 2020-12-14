@@ -527,16 +527,22 @@
             },
             "searchByCoord": {
                 "coordinateSystem": "Koordinatensystem",
-                "eastingLabel": "Rechtswert",
-                "northingLabel": "Hochwert",
+                "hdms": {
+                    "eastingLabel": "Länge",
+                    "northingLabel": "Breite"
+                },
+                "cartesian": {
+                    "eastingLabel": "Rechtswert",
+                    "northingLabel": "Hochwert"
+                },
                 "search": "Suche",
                 "exampleAcronym": "Bsp.",
                 "errorMsg": {
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
                     "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
                 },
-                "hdmsEastingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "Wert der $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
+                "hdmsEastingText": "Wert der $t(common:modules.tools.searchByCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "Wert der $t(common:modules.tools.searchByCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",

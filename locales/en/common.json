@@ -526,16 +526,22 @@
             },
             "searchByCoord": {
                 "coordinateSystem": "Coordinate system",
-                "eastingLabel": "Easting",
-                "northingLabel": "Northing",
+                "hdms": {
+                    "eastingLabel": "Longitude",
+                    "northingLabel": "Latitude"
+                },
+                "cartesian": {
+                    "eastingLabel": "Easting",
+                    "northingLabel": "Northing"
+                },
                 "search": "Search",
                 "exampleAcronym": "e.g.",
                 "errorMsg": {
                     "noCoord": "Please enter your {{valueKey}}.",
                     "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})"
                 },
-                "hdmsEastingText": "value for the $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "value for the $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
+                "hdmsEastingText": "value for the $t(common:modules.tools.searchByCoord.hdms.eastingLabel)",
+                "hdmsNorthingText": "value for the $t(common:modules.tools.searchByCoord.hdms.northingLabel)"
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",
