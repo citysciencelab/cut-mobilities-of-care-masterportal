@@ -133,7 +133,6 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         deleteMeasurements: "",
         stretch: "",
         area: "",
-        finishWithDoubleClick: "",
         earthRadius: 6378137
     }),
     /**
