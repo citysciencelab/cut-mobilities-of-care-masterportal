@@ -133,6 +133,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         deleteMeasurements: "",
         stretch: "",
         area: "",
+        finishWithDoubleClick: "",
         earthRadius: 6378137
     }),
     /**
@@ -465,6 +466,17 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 that.registerClickListener(that);
             }, this);
             this.get("draw").on("drawend", function (evt) {
+                if (that.get("uiStyle") === "TABLE") {
+                    const point = that.get("textPoint");
+
+                    if (point) {
+                        const styles = point.getStyle();
+
+                        if (styles && styles[1] && styles[1].getText()) {
+                            styles[1].getText().setText("");
+                        }
+                    }
+                }
                 that.set("drawingFeature", false);
                 that.setIsDrawing(false);
                 evt.feature.set("styleId", evt.feature.ol_uid);
@@ -787,11 +799,11 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km") {
                 output.measure = (lengthRed / 1000).toFixed(1) + " " + this.get("unit");
-                output.deviance = "Abschließen mit Doppelklick";
+                output.deviance = i18next.t("common:modules.tools.measure.finishWithDoubleClick");
             }
             else {
                 output.measure = lengthRed.toFixed(0) + " " + this.get("unit");
-                output.deviance = "Abschließen mit Doppelklick";
+                output.deviance = i18next.t("common:modules.tools.measure.finishWithDoubleClick");
             }
         }
         else if (this.get("unit") === "km") {
@@ -840,11 +852,11 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km²") {
                 output.measure = (areaRed / 1000000).toFixed(1) + " " + this.get("unit");
-                output.deviance = "Abschließen mit Doppelklick";
+                output.deviance = i18next.t("common:modules.tools.measure.finishWithDoubleClick");
             }
             else {
                 output.measure = areaRed.toFixed(0) + " " + this.get("unit");
-                output.deviance = "Abschließen mit Doppelclick";
+                output.deviance = i18next.t("common:modules.tools.measure.finishWithDoubleClick");
             }
         }
         else if (this.get("unit") === "km²") {
