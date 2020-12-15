@@ -12,8 +12,8 @@ export default {
     },
     data: function () {
         return {
-            coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "53° 33′ 25" : "564459.13"},
-            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "9° 59′ 50" : "5935103.67"},
+            coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "53° 33' 25" : "564459.13"},
+            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "9° 59' 50" : "5935103.67"},
             errors: []
         };
     },
@@ -66,8 +66,8 @@ export default {
         selectionChanged (event) {
             this.setCurrentSelection(event.target.value);
             this.newProjectionSelected();
-            this.coordinatesEasting.example = this.currentProjectionName === "EPSG:4326" ? "53° 33′ 25" : "564459.13";
-            this.coordinatesNorthing.example = this.currentProjectionName === "EPSG:4326" ? "9° 59′ 50" : "5935103.67";
+            this.coordinatesEasting.example = this.currentProjectionName === "EPSG:4326" ? "53° 33' 25" : "564459.13";
+            this.coordinatesNorthing.example = this.currentProjectionName === "EPSG:4326" ? "9° 59' 50" : "5935103.67";
             this.searchCoordinate(this.coordinatesEasting, this.coordinatesNorthing);
         },
         /**
@@ -156,6 +156,7 @@ export default {
                     }
                 }
             }
+
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
             this.errors = [];
