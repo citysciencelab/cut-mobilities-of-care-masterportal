@@ -94,16 +94,13 @@ export default {
         validateInput (coordinatesEasting, coordinatesNorthing) {
             const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
                 validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´]{0,1}\s*[0-9]{0,2}['`´]{0,2}["]{0,2}\s*$/,
-                validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
                 coordinates = [coordinatesEasting, coordinatesNorthing];
 
             if (this.currentProjection.title === "ETRS89/UTM 32N") {
                 for (const coord of coordinates) {
-                    console.log(coord.name);
 
                     if (coord.value === "" || coord.value.length < 1) {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
-                        console.log(i18next.t(coord.errorMessage));
                     }
                     else if (!coord.value.match(validETRS89)) {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
@@ -116,11 +113,9 @@ export default {
             }
             if (this.currentProjection.title === "WGS 84 (long/lat)") {
                 for (const coord of coordinates) {
-                    console.log(coord.name);
 
                     if (coord.value === "" || coord.value.length < 1) {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
-                        console.log(i18next.t(coord.errorMessage));
                     }
                     else if (!coord.value.match(validWGS84)) {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
@@ -131,9 +126,38 @@ export default {
                     }
                 }
             }
+            if (this.currentProjection.title === "Bessel/Gauß-Krüger 3") {
+                for (const coord of coordinates) {
+
+                    if (coord.value === "" || coord.value.length < 1) {
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
+                    }
+                    else if (!coord.value.match(validETRS89)) {
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
+                    }
+                    else {
+                        coordinatesEasting.errorMessage = "";
+                        coordinatesNorthing.errorMessage = "";
+                    }
+                }
+            }
+            if (this.currentProjection.title === "ETRS89/Gauß-Krüger 3") {
+                for (const coord of coordinates) {
+
+                    if (coord.value === "" || coord.value.length < 1) {
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
+                    }
+                    else if (!coord.value.match(validETRS89)) {
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
+                    }
+                    else {
+                        coordinatesEasting.errorMessage = "";
+                        coordinatesNorthing.errorMessage = "";
+                    }
+                }
+            }
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
-            console.log("searching coordinate");
             this.errors = [];
             this.coordinatesEasting.name = i18next.t(this.label("eastingLabel"));
             this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
