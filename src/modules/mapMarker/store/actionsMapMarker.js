@@ -37,14 +37,24 @@ export default {
      * @param {String[]} value The array with the markable coordinate pair.
      * @returns {void}
      */
-    placingPointMarker ({state, commit, dispatch}, value) {
+    placingPointMarker ({state, commit, dispatch, rootState}, value) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.pointStyleId);
+        let coordValues = [];
 
         dispatch("removePointMarker");
 
         if (styleListModel) {
+            if(rootState.Map.mapMode === MapMode.MODE_3D){
+                // else an error is thrown in proj4/lib/checkSanity: coordinates must be finite numbers 
+                value.forEach(val => {
+                    coordValues.push(Math.round(val)); 
+                });
+            }
+            else{
+                coordValues = value;
+            }
             const iconfeature = new Feature({
-                    geometry: new Point(value)
+                    geometry: new Point(valuesRounded)
                 }),
                 featureStyle = styleListModel.createStyle(iconfeature, false);
 
