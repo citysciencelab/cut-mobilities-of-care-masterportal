@@ -12,8 +12,8 @@ export default {
     },
     data: function () {
         return {
-            coordinatesEasting: "",
-            coordinatesNorthing: "",
+            coordinatesEasting: {name: "", value: "", errorMessage: "", example: "564459.13"},
+            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: "5935103.67"},
             errors: []
         };
     },
@@ -35,6 +35,7 @@ export default {
     created () {
         this.$on("close", this.close);
         this.createInteraction();
+        this.coordinatesNorthing.errorMessage = "";
     },
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
@@ -72,15 +73,6 @@ export default {
             return "modules.tools.searchByCoord." + type + "." + key;
         },
         /**
-         * Returns the label mame depending on the selected projection.
-         * @param {String} key in the language files
-         * @returns {String} the name of the label
-         */
-        errorMessage (key) {
-
-            return i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: key});
-        },
-        /**
          * Stores the projections and adds interaction pointermove to map.
          * @returns {void}
          */
@@ -97,38 +89,30 @@ export default {
                 coordinates = [coordinatesEasting, coordinatesNorthing];
 
             if (this.currentProjection.title === "ETRS89/UTM 32N") {
-                console.log("gets executed");
                 for (const coord of coordinates) {
+                    coord.errorMessage = "";
+                    console.log(coord.name);
 
-                    if (coord === undefined || coord.length < 1) {
-                        this.errors.push(coord);
-                        console.log("Leere Eingabe " + this.errors);
-                        // value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: value.key});
-
-                        // $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
-                        // $(fieldName).parent().addClass("has-error");
+                    if (coord.value === "" || coord.value.length < 1) {
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
+                        console.log(i18next.t(coord.errorMessage));
                     }
-                    else if (!coord.match(validETRS89)) {
-                        this.errors.push(coord);
-                        console.log(this.errors);
-                        // value.ErrorMsg = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: value.key, valueExample: value.example});
-
-                        // $(fieldName).after("<span class='text-danger'><small>" + value.ErrorMsg + "</small></span>");
-                        // $(fieldName).parent().addClass("has-error");
+                    else if (!coord.value.match(validETRS89)) {
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
                     }
-                    else {
-                        // $(fieldName).parent().removeClass("has-error");
-                        // Radio.trigger("Alert", "alert:remove");
-                    }
+                    // else {
+                    //     // $(fieldName).parent().removeClass("has-error");
+                    //     // Radio.trigger("Alert", "alert:remove");
+                    // }
                 }
             }
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
-            this.errors = [];
-            this.validateInput(coordinatesEasting, coordinatesNorthing);
             console.log("searching coordinate");
-            console.log(coordinatesEasting);
-            console.log(coordinatesNorthing);
+            this.errors = [];
+            this.coordinatesEasting.name = i18next.t(this.label("eastingLabel"));
+            this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
+            this.validateInput(coordinatesEasting, coordinatesNorthing);
         }
     }};
 </script>
@@ -181,14 +165,14 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <input
                                 id="coordinatesEastingField"
-                                v-model="coordinatesEasting"
+                                v-model="coordinatesEasting.value"
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 564459.13'"
                             >
                         </div>
-                        <p v-if="errors.length">
-                            Fehler
+                        <p v-if="coordinatesEasting.errorMessage.length">
+                            {{ coordinatesEasting.errorMessage }}
                         </p>
                     </div>
                     <div class="form-group form-group-sm">
@@ -200,14 +184,14 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <input
                                 id="coordinatesNorthingField"
-                                v-model="coordinatesNorthing"
+                                v-model="coordinatesNorthing.value"
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 5935103.67'"
                             >
                         </div>
-                        <p v-if="errors.length">
-                            Fehler
+                        <p v-if="coordinatesNorthing.errorMessage.length">
+                            {{ $t(coordinatesNorthing.errorMessage) }}
                         </p>
                     </div>
                     <div class="form-group form-group-sm">
