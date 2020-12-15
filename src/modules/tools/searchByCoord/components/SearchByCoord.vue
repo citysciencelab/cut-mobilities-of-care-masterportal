@@ -12,8 +12,8 @@ export default {
     },
     data: function () {
         return {
-            coordinatesEasting: {name: "", value: "", errorMessage: "", example: "564459.13"},
-            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: "5935103.67"},
+            coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "53° 33′ 25" : "564459.13"},
+            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "9° 59′ 50" : "5935103.67"},
             errors: []
         };
     },
@@ -35,7 +35,12 @@ export default {
     created () {
         this.$on("close", this.close);
         this.createInteraction();
+    },
+    beforeUpdate () {
+        this.coordinatesEasting.errorMessage = "";
+        this.coordinatesEasting.value = "";
         this.coordinatesNorthing.errorMessage = "";
+        this.coordinatesNorthing.value = "";
     },
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
@@ -61,6 +66,9 @@ export default {
         selectionChanged (event) {
             this.setCurrentSelection(event.target.value);
             this.newProjectionSelected();
+            this.coordinatesEasting.example = this.currentProjectionName === "EPSG:4326" ? "53° 33′ 25" : "564459.13";
+            this.coordinatesNorthing.example = this.currentProjectionName === "EPSG:4326" ? "9° 59′ 50" : "5935103.67";
+            this.searchCoordinate(this.coordinatesEasting, this.coordinatesNorthing);
         },
         /**
          * Returns the label mame depending on the selected projection.
@@ -69,6 +77,7 @@ export default {
          */
         label (key) {
             const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
+
 
             return "modules.tools.searchByCoord." + type + "." + key;
         },
@@ -90,7 +99,6 @@ export default {
 
             if (this.currentProjection.title === "ETRS89/UTM 32N") {
                 for (const coord of coordinates) {
-                    coord.errorMessage = "";
                     console.log(coord.name);
 
                     if (coord.value === "" || coord.value.length < 1) {
@@ -100,10 +108,27 @@ export default {
                     else if (!coord.value.match(validETRS89)) {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
                     }
-                    // else {
-                    //     // $(fieldName).parent().removeClass("has-error");
-                    //     // Radio.trigger("Alert", "alert:remove");
-                    // }
+                    else {
+                        coordinatesEasting.errorMessage = "";
+                        coordinatesNorthing.errorMessage = "";
+                    }
+                }
+            }
+            if (this.currentProjection.title === "WGS 84 (long/lat)") {
+                for (const coord of coordinates) {
+                    console.log(coord.name);
+
+                    if (coord.value === "" || coord.value.length < 1) {
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
+                        console.log(i18next.t(coord.errorMessage));
+                    }
+                    else if (!coord.value.match(validWGS84)) {
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
+                    }
+                    else {
+                        coordinatesEasting.errorMessage = "";
+                        coordinatesNorthing.errorMessage = "";
+                    }
                 }
             }
         },
@@ -168,7 +193,7 @@ export default {
                                 v-model="coordinatesEasting.value"
                                 type="text"
                                 class="form-control"
-                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 564459.13'"
+                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEasting.example"
                             >
                         </div>
                         <p v-if="coordinatesEasting.errorMessage.length">
@@ -187,11 +212,11 @@ export default {
                                 v-model="coordinatesNorthing.value"
                                 type="text"
                                 class="form-control"
-                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + ' 5935103.67'"
+                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthing.example"
                             >
                         </div>
                         <p v-if="coordinatesNorthing.errorMessage.length">
-                            {{ $t(coordinatesNorthing.errorMessage) }}
+                            {{ coordinatesNorthing.errorMessage }}
                         </p>
                     </div>
                     <div class="form-group form-group-sm">
