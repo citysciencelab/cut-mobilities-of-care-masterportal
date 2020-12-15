@@ -607,7 +607,8 @@
                 "label": "Maßstab"
             },
             "layerAnalysis": {
-                "label": "Quelle auswählen"
+                "selectLabel": "Quell-Layer auswählen",
+                "rangeLabel": "Radius auswählen"
             }
         },
         "controls": {

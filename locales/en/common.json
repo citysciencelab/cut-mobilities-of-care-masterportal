@@ -604,7 +604,11 @@
             },
             "scaleSwitcher": {
                 "label": "Scale"
-            }
+            },
+          "layerAnalysis": {
+            "selectLabel": "Choose source layer",
+            "rangeLabel": "Choose radius"
+          }
         },
         "controls": {
             "fullScreen": {

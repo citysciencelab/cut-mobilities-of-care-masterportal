@@ -53,6 +53,7 @@
     "imports-loader": "^0.8.0",
     "jquery": "^3.4.1",
     "jquery-ui": "1.x",
+    "jsts": "^2.6.1",
     "moment": "2.x",
     "moment-timezone": "^0.5.28",
     "mqtt": "4.x",
