@@ -43,20 +43,20 @@ async function loadUrl (driver, url, mode) {
     await driver.get(url);
 
     if (isBasic(url) || isMaster(url)) {
-        await driver.wait(until.elementLocated(By.id("loader")), 90000);
+        await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 90000);
         if (isBasic(url)) {
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
-            await driver.wait(until.elementLocated(By.css(".loading")), 90000);
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css(".loading"))));
+            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader-spinner-itself"))));
+            await driver.wait(until.elementLocated(By.css("portal-logo-box")), 90000);
+            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("portal-logo-box"))));
         }
         if (isMaster(url)) {
             // wait for logo to disappear (only appears in master)
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("portal-logo"))));
+            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("generic-masterportal-logo"))));
         }
     }
 
     if (isCustom(url) || isDefault(url)) {
-        const loading = await driver.wait(until.elementLocated(By.className("loading")), 90000);
+        const loading = await driver.wait(until.elementLocated(By.id("portal-logo-box")), 90000);
 
         await driver.wait(until.elementIsNotVisible(loading), 90000);
     }
