@@ -44,15 +44,9 @@ async function loadUrl (driver, url, mode) {
 
     if (isBasic(url) || isMaster(url)) {
         await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 90000);
-        if (isBasic(url)) {
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader-spinner-itself"))));
-            await driver.wait(until.elementLocated(By.id("portal-logo-box")), 90000);
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
-        }
-        if (isMaster(url)) {
-            // wait for logo to disappear (only appears in master)
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("portal-logo-box"))));
-        }
+        await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader-spinner-itself"))));
+        await driver.wait(until.elementLocated(By.id("portal-logo-box")), 90000);
+        await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
     }
 
     if (isCustom(url) || isDefault(url)) {
