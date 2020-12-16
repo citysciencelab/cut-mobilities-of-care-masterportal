@@ -42,17 +42,17 @@ async function prepareOB (driver) {
 async function loadUrl (driver, url, mode) {
     await driver.get(url);
 
-    if (isBasic(url) || isMaster(url)) {
-        await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 90000);
+    if (isBasic(url)) {
+        await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 100000);
         await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader-spinner-itself"))));
-        await driver.wait(until.elementLocated(By.id("portal-logo-box")), 90000);
+        await driver.wait(until.elementLocated(By.id("loader")), 100000);
         await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
     }
 
-    if (isCustom(url) || isDefault(url)) {
-        const loading = await driver.wait(until.elementLocated(By.id("loader")), 90000);
+    if (isCustom(url) || isDefault(url) || isMaster(url)) {
+        const loading = await driver.wait(until.elementLocated(By.id("loader")), 120000);
 
-        await driver.wait(until.elementIsNotVisible(loading), 90000);
+        await driver.wait(until.elementIsNotVisible(loading), 120000);
     }
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
