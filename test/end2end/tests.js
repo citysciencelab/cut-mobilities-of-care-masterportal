@@ -84,7 +84,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     require("./tests/modules/Legend.js"),
                     require("./tests/modules/tools/List.js"),
                     require("./tests/modules/tools/Measure.js"),
-                    require("./tests/modules/tools/ParcelSearch.js"),
+                    // require("./tests/modules/tools/ParcelSearch.js"),
                     // require("./tests/modules/tools/SearchByCoord.js"),
 
                     // non-module tests
