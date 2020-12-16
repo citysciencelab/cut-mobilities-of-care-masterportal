@@ -43,6 +43,7 @@
 - Ein kleines masterportal-Logo erscheint jetzt während des Ladens des masterportals unten rechts in der Ecke.
 - In der Konfiguration des Werkzeugs "Strecke/Fläche messen" kann jetzt der Erdradius angegeben werden.
 - Das Modul MapMarker funktioniert nun auf Basis von Vue.js. Es ist nun möglich den Style für Punkt- und Polygon-Marker in der Style.json zu konfigurieren.
+- Die Beta-Warnung für die Schrägluftbilder wurde entfernt.
 
 ### Deprecated
 - Die Möglichkeit URLs über einen Proxy umzuleiten (useProxy) ist deprecated.
