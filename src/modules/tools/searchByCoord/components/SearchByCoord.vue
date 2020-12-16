@@ -170,8 +170,7 @@ export default {
             }
             if (selectedCoordinates.length === 2) {
                 this.setMarker(selectedCoordinates);
-                Radio.trigger("MapView", "setCenter", selectedCoordinates);
-                // this.setCenter(selectedCoordinates, "0");
+                this.setCenter(selectedCoordinates);
             }
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {

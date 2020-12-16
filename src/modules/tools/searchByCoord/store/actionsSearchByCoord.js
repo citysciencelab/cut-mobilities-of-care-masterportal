@@ -20,9 +20,10 @@ export default {
 
         dispatch("MapMarker/placingPointMarker", position, {root: true});
     },
-    setCenter: function ({dispatch}, coordinates, zoomLevel) {
-        console.log(coordinates);
+    setCenter: function ({commit}, coordinates) {
+        // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
+        const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
 
-        dispatch("MapView/setCenter", coordinates, zoomLevel, {root: true});
+        commit("Map/setCenter", newCoords, {root: true});
     }
 };
