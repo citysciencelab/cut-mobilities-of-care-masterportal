@@ -14,7 +14,6 @@ import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
 import "./RadioBridge.js";
 import store from "../../src/app-store/index";
-import {getWKTGeom} from "../../src/utils/getWKTGeom";
 
 /**
  * @member SearchbarTemplate
@@ -449,7 +448,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             this.model.setHitIsClick(true);
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
 
-            this.setMarkerZoom(hit);
+            if (hit?.coordinate) {
+                this.setMarkerZoom(hit);
+            }
         }
         else if (hit?.coordinate) {
             this.setMarkerZoom(hit);
