@@ -1,6 +1,5 @@
 const {until, By} = require("selenium-webdriver"),
-    {getResolution} = require("./scripts"),
-    {isBasic, isMaster, isCustom, isDefault} = require("../settings");
+    {getResolution} = require("./scripts");
 
 /**
  * Activates 3D mode for opened Masterportal.
@@ -40,20 +39,20 @@ async function prepareOB (driver) {
  * @returns {void}
  */
 async function loadUrl (driver, url, mode) {
+    let loading = "",
+        spinner = "";
+
     await driver.get(url);
 
-    if (isBasic(url)) {
-        // await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 90000);
-        // await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader-spinner-itself"))));
-        await driver.wait(until.elementLocated(By.id("loader")), 90000);
-        await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
-    }
+    loading = await driver.wait(until.elementLocated(By.id("loader")), 90000);
 
-    if (isCustom(url) || isDefault(url) || isMaster(url)) {
-        const loading = await driver.wait(until.elementLocated(By.id("loader")), 90000);
+    await driver.wait(until.elementIsNotVisible(loading), 90000);
 
-        await driver.wait(until.elementIsNotVisible(loading), 90000);
-    }
+    spinner = await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 90000);
+
+    await driver.wait(until.elementIsNotVisible(spinner), 90000);
+
+    // }
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
     await driver.wait(async () => await driver.executeScript(getResolution) !== null);
