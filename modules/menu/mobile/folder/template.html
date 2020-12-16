@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <div class="folder-item">
     <span class="glyphicon <%= glyphicon %>"></span>
+    <% if (isSecured) { %>
+        <span class="glyphicon glyphicon-lock"></span>
+    <% } %>
     <span class="title"><%= name %></span>
 </div>

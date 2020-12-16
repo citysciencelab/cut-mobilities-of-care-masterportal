@@ -4,7 +4,7 @@ import checkChildrenDatasets from "../../checkChildrenDatasets.js";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .layer-item": "toggleIsSelected",
+        "click .layer-item": "preToggleIsSelected",
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
         "click .selected-layer-item > div": "toggleIsVisibleInMap",
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
@@ -29,6 +29,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
+     * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
         checkChildrenDatasets(this.model);
@@ -113,6 +114,69 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.find(".item-settings").slideDown();
         }
     },
+
+    /**
+     * handles toggeling of secured and not-secured layers
+     * @returns {void}
+     */
+    preToggleIsSelected: function () {
+        const isErrorCalled = false;
+
+        // if layer is secured and not selected
+        if (this.model.get("isSecured") && !this.model.get("isSelected")) {
+            this.triggerBrowserAuthentication(this.toggleIsSelected.bind(this), isErrorCalled);
+        }
+        else {
+            this.toggleIsSelected();
+        }
+    },
+
+    /**
+     * triggers the browser basic authentication if the selected layer is secured
+     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
+     * @param {Boolean} isErrorCalled - Flag if the function is called from error function
+     * @returns {void}
+     */
+    triggerBrowserAuthentication: function (successFunction, isErrorCalled) {
+        const that = this;
+
+        $.ajax({
+            xhrFields: {
+                withCredentials: true
+            },
+            url: this.model.get("authenticationUrl"),
+            type: "GET",
+            success: successFunction,
+            error: function () {
+                that.errorFunction(successFunction, isErrorCalled);
+            }
+        });
+    },
+
+    /**
+     * Error handling for triggering the browser basic authentication
+     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
+     * @param {Number} isErrorCalled - Flag if the function is called from error function
+     * @fires Alerting#RadioTriggerAlertAlert
+     * @returns {void}
+     */
+    errorFunction: function (successFunction, isErrorCalled) {
+        const isError = isErrorCalled,
+            layerName = this.model.get("name"),
+            authenticationUrl = this.model.get("authenticationUrl");
+
+        if (isError === false) {
+            this.triggerBrowserAuthentication(successFunction, !isError);
+        }
+        else if (isError === true) {
+            Radio.trigger("Alert", "alert", {
+                text: "Entschuldigung, der abgeicherte Layer \"" + layerName + "\" konnte nicht geladen werden. Bitte wenden sie sich an den Administrator und teilen Sie ihm mit, ob Sie aufgefordert wurden einen Nutzernamen und ein Passwort einzugeben.",
+                kategorie: "alert-danger"
+            });
+            console.warn("Triggering the basic browser authentication for the secured layer \"" + layerName + "\" was not successfull. Something went wrong with the authenticationUrl (" + authenticationUrl + ")");
+        }
+    },
+
 
     /**
      * todo
