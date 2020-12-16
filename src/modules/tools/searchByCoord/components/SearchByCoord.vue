@@ -12,9 +12,9 @@ export default {
     },
     data: function () {
         return {
+            mapElement: document.getElementById("map"),
             coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "53° 33' 25" : "564459.13"},
-            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "9° 59' 50" : "5935103.67"},
-            errors: []
+            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "9° 59' 50" : "5935103.67"}
         };
     },
     computed: {
@@ -45,7 +45,9 @@ export default {
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
         ...mapActions("Tools/SearchByCoord", [
-            "newProjectionSelected"
+            "newProjectionSelected",
+            "setMarker",
+            "setCenter"
         ]),
 
         close () {
@@ -68,6 +70,10 @@ export default {
             this.newProjectionSelected();
             this.coordinatesEasting.example = this.currentProjectionName === "EPSG:4326" ? "53° 33' 25" : "564459.13";
             this.coordinatesNorthing.example = this.currentProjectionName === "EPSG:4326" ? "9° 59' 50" : "5935103.67";
+            this.coordinatesEasting.errorMessage = "";
+            this.coordinatesEasting.value = "";
+            this.coordinatesNorthing.errorMessage = "";
+            this.coordinatesNorthing.value = "";
             this.searchCoordinate(this.coordinatesEasting, this.coordinatesNorthing);
         },
         /**
@@ -94,9 +100,11 @@ export default {
         validateInput (coordinatesEasting, coordinatesNorthing) {
             const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
                 validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´]{0,1}\s*[0-9]{0,2}['`´]{0,2}["]{0,2}\s*$/,
-                coordinates = [coordinatesEasting, coordinatesNorthing];
+                coordinates = [coordinatesEasting, coordinatesNorthing],
+                selectedCoordinates = [];
 
             if (this.currentProjection.title === "ETRS89/UTM 32N") {
+
                 for (const coord of coordinates) {
 
                     if (coord.value === "" || coord.value.length < 1) {
@@ -108,6 +116,7 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
+                        selectedCoordinates.push(coord.value);
                     }
                 }
             }
@@ -123,6 +132,7 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
+                        selectedCoordinates.push(coord.value);
                     }
                 }
             }
@@ -138,6 +148,7 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
+                        selectedCoordinates.push(coord.value);
                     }
                 }
             }
@@ -153,13 +164,17 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
+                        selectedCoordinates.push(coord.value);
                     }
                 }
             }
-
+            if (selectedCoordinates.length === 2) {
+                this.setMarker(selectedCoordinates);
+                Radio.trigger("MapView", "setCenter", selectedCoordinates);
+                // this.setCenter(selectedCoordinates, "0");
+            }
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
-            this.errors = [];
             this.coordinatesEasting.name = i18next.t(this.label("eastingLabel"));
             this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
             this.validateInput(coordinatesEasting, coordinatesNorthing);
