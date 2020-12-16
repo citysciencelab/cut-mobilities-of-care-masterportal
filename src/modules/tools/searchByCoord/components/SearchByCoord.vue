@@ -233,11 +233,13 @@ export default {
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEasting.example"
+                            ><p
+                                v-if="coordinatesEasting.errorMessage.length"
+                                class="error-text"
                             >
+                                {{ coordinatesEasting.errorMessage }}
+                            </p>
                         </div>
-                        <p v-if="coordinatesEasting.errorMessage.length">
-                            {{ coordinatesEasting.errorMessage }}
-                        </p>
                     </div>
                     <div class="form-group form-group-sm">
                         <label
@@ -252,11 +254,13 @@ export default {
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthing.example"
+                            ><p
+                                v-if="coordinatesNorthing.errorMessage.length"
+                                class="error-text"
                             >
+                                {{ coordinatesNorthing.errorMessage }}
+                            </p>
                         </div>
-                        <p v-if="coordinatesNorthing.errorMessage.length">
-                            {{ coordinatesNorthing.errorMessage }}
-                        </p>
                     </div>
                     <div class="form-group form-group-sm">
                         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -276,5 +280,8 @@ export default {
 
 // <style lang="less" scoped>
     @import "~variables";
-
+.error-text {
+    font-size: 85%;
+    color: #a94442;
+}
 </style>
