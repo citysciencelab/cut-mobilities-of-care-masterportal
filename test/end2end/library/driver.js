@@ -43,8 +43,8 @@ async function loadUrl (driver, url, mode) {
     await driver.get(url);
 
     if (isBasic(url)) {
-        await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 90000);
-        await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader-spinner-itself"))));
+        // await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 90000);
+        // await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader-spinner-itself"))));
         await driver.wait(until.elementLocated(By.id("loader")), 90000);
         await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
     }
