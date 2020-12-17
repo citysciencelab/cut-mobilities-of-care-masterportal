@@ -23,6 +23,9 @@ export default {
     removeMarker: function ({dispatch}) {
         dispatch("MapMarker/removePointMarker", null, {root: true});
     },
+    setZoom: function ({dispatch}, zoomLevel) {
+        dispatch("Map/setZoomLevel", zoomLevel, {root: true});
+    },
     setCenter: function ({commit}, coordinates) {
         // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
         const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];

@@ -15,6 +15,7 @@ export default {
             mapElement: document.getElementById("map"),
             coordinateSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
             currentCoordinateSystem: "ETRS89",
+            zoomLevel: 7,
             coordinatesEasting: {name: "", value: "", errorMessage: "", example: ""},
             coordinatesNorthing: {name: "", value: "", errorMessage: "", example: ""}
         };
@@ -38,7 +39,8 @@ export default {
             "newProjectionSelected",
             "setMarker",
             "removeMarker",
-            "setCenter"
+            "setCenter",
+            "setZoom"
         ]),
 
         close () {
@@ -146,10 +148,12 @@ export default {
 
                     this.setMarker(transformedCoordinates);
                     this.setCenter(transformedCoordinates);
+                    this.setZoom(this.zoomLevel);
                 }
                 else {
                     this.setMarker(selectedCoordinates);
                     this.setCenter(selectedCoordinates);
+                    this.setZoom(this.zoomLevel);
                 }
             }
         },
