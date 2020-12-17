@@ -6,6 +6,19 @@
 
 ## Unreleased - in development
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
+
+## v2.6.0 - 2020-12-17
+### Added
 - Neue Konfigurationsmöglichkeiten für "highlightVectorRules" hinzugefügt.
 - Ein neues Tool "Alerting" wurde hinzugefügt.
 - i18n wurde für zahlreiche Stellen angepasst.
@@ -233,7 +246,7 @@
 - Doku:
     - *setup.md* wurde angepasst
 - Konventionen: Wurden erweitert und überarbeitet.
-- Eslint: Überarbeitung der Regel function-paren-newline, sobald bei einem Paramter einer Funktion ein Zeilenumbruch verwendet wird ist dies bei allen Parametern erforderlich.
+- Eslint: Überarbeitung der Regel function-paren-newline, sobald bei einem Parameter einer Funktion ein Zeilenumbruch verwendet wird ist dies bei allen Parametern erforderlich.
 - master Portale: Intranet URL's entfernt.
 - Fonts: Erzeugung einer eigenen Fontclass MasterportalFont, um den Font des Masterportals zentral setzen zu können.
 - camelCase: Umbenennung diverser Ordner und Dateien entsprechend der camelCase Konvention.
@@ -249,7 +262,7 @@
 - Layer: Fortan können auch Layer deaktiviert werden, die im aktuellen Maßstab nicht sichtbar sind.
 - Filter: Der Filter kann im Internet Explorer wieder geöffnet werden.
 - Filter: Ein Fehler verhinderte die Verwendung des Filters. Dieser wurde behoben.
-- Elastic-Search: Es kann wieder nach konfigurierten Fachtemen gesucht werden.
+- Elastic-Search: Es kann wieder nach konfigurierten Fachthemen gesucht werden.
 - Suche: Ein Fehler wurde beseitig, der beim Entfernen des eingegebenen Suchbegriffs aufgetreten ist.
 - Messtool: Die voreingestellte Einheit (m² oder m) wurde auf die jeweilige Auswahl (Fläche oder Strecke) abgestimmt.
 - Themenbaum: Der Themenbaum lässt sich wieder inital öffnen.

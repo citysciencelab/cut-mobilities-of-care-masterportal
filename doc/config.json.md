@@ -1988,7 +1988,6 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|false|
 |layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
 |sliderType|nein|enum["player","handle"]|"player"|Typ des Layer sliders. Entweder als "player" mit Start/Pause/Stop-Buttons oder als "handle" mit einem Hebel. Bei "handle" wird die Transparenz der Layer zusätzlich mit angepasst.|false|
-
 **Beispiel**
 ```
 #!json
@@ -2882,7 +2881,7 @@ Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der K
     "visibility": true,
     "extent": [560296.72, 5932154.22, 562496.72, 5933454.22]
 }
-```
+`````
 
 ***
 #### Themenconfig.Layer.Vector
