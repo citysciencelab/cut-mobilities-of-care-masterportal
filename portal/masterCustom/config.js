@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["schulinfo"],
+    addons: ["trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     clickCounter: {},
     footer: {
         urls: [

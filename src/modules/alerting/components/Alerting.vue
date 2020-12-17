@@ -2,8 +2,7 @@
 
 import Modal from "../../../share-components/modals/Modal.vue";
 import axios from "axios";
-import {mapGetters} from "vuex";
-import {mapActions} from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
     name: "Alerting",
@@ -17,7 +16,7 @@ export default {
             "displayedAlerts",
             "fetchBroadcastUrl",
             "localStorageDisplayedAlertsKey",
-            "readyToShow",
+            "showTheModal",
             "sortedAlerts"
         ]),
 
@@ -165,7 +164,7 @@ export default {
 <template>
     <div>
         <Modal
-            :show-modal="readyToShow"
+            :show-modal="showTheModal"
             @modalHid="onModalHid"
         >
             <div

@@ -6,6 +6,7 @@
 
 ## Unreleased - in development
 ### Added
+- Neues Modul "Confirm Action" für Vue hinzugefügt.
 - RemoteInterface wurde für Vue hinzugefügt.
 - Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
@@ -21,6 +22,7 @@
 - Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
 - Das Tool filter kann nun auch geclusterte Vektordienste filtern.
 - Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
+- Im Informationsfenster eines Layers wird ein Hinweistext bez. des Datei-Typs angezeigt, falls im Reiter"Datensatz herunterladen" mehrere Dateien angezeigt werden.
 
 ### Changed
 - Es werden nun alle URLs vom Portal direkt angefragt, ohne den Umweg über einen Proxy zu gehen, da von der GDI-DE empfohlen wird serverseitig einen CORS-Header einzurichten. Siehe dazu https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile Kapitel 4.7.1. Es besteht aber die Möglichkeit gezielt URLs bestimmter Dienste über einen Proxy umzuleiten. Diese Möglichkeit ist jedoch deprecated.
@@ -38,6 +40,7 @@
 - Das Package moment-timezone-data-webpack-plugin wurde entfernt.
 - In der index.html ist unter der id "loader" und der class "loader" ein neuer css-Loader eingebunden, dessen Darstellung über css geändert werden kann. Oberhalb davon werden Portaltitel und Portallogo während des Ladens des masterportals gezeigt. Sie sind in der index.html unter der id "portal-logo-box" zu finden.
 - Ein kleines masterportal-Logo erscheint jetzt während des Ladens des masterportals unten rechts in der Ecke.
+- In der Konfiguration des Werkzeugs "Strecke/Fläche messen" kann jetzt der Erdradius angegeben werden.
 
 ### Deprecated
 - Die Möglichkeit URLs über einen Proxy umzuleiten (useProxy) ist deprecated.
@@ -63,6 +66,8 @@
 - In Geo-Online kann der Marker wieder über die URL gesetzt werden.
 - Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn
 - Im Styling wurde das Feld legendValue nicht ausgelesen. Dies funktioniert nun wieder.
+- Im Kontaktformular werden auch email-Adressen mit einer Domain-Endung die länger als 2 Zeichen ist als gültig anerkannt (z.B. name@foo.hamburg)
+- Unstimmigkeiten beim Messen mit dem Werkzeug "Strecke/Fläche messen" wurden beseitigt.
 
 ---
 
