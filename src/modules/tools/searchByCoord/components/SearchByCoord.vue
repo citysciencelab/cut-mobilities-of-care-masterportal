@@ -3,6 +3,7 @@ import Tool from "../../Tool.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
+import proj4 from "proj4";
 
 export default {
     name: "SearchByCoord",
@@ -14,8 +15,8 @@ export default {
             mapElement: document.getElementById("map"),
             coordinateSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
             currentCoordinateSystem: "ETRS89",
-            coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33' 25"}, // TODO: examples need work!
-            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59' 50"}
+            coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33′ 25"},
+            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59′ 50"}
         };
     },
     computed: {
@@ -23,8 +24,8 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.coordinatesEasting.example = this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33' 25"; // TODO: just a workaround, has to be corrected
-        this.coordinatesNorthing.example = this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59' 50";
+        this.coordinatesEasting.example = this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33′ 25"; // TODO: just a workaround, has to be corrected
+        this.coordinatesNorthing.example = this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59′ 50";
     },
     beforeUpdate () {
         this.coordinatesEasting.errorMessage = "";
@@ -56,8 +57,8 @@ export default {
          * @returns {void}
          */
         selectionChanged () {
-            this.coordinatesEasting.example = this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33' 25";
-            this.coordinatesNorthing.example = this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59' 50";
+            this.coordinatesEasting.example = this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33′ 25";
+            this.coordinatesNorthing.example = this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59′ 50";
             this.coordinatesEasting.errorMessage = "";
             this.coordinatesEasting.value = "";
             this.coordinatesNorthing.errorMessage = "";
@@ -77,7 +78,7 @@ export default {
         },
         validateInput (coordinatesEasting, coordinatesNorthing) {
             const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
-                validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´]{0,1}\s*[0-9]{0,2}['`´]{0,2}["]{0,2}\s*$/,
+                validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
                 validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
                 coordinates = [coordinatesEasting, coordinatesNorthing],
                 selectedCoordinates = [];
@@ -111,7 +112,7 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
-                        selectedCoordinates.push(coord.value);
+                        selectedCoordinates.push(coord.value.split(/[\s°′″'"´`]+/));
                     }
                 }
             }
@@ -127,13 +128,17 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
-                        selectedCoordinates.push(coord.value);
+                        selectedCoordinates.push(coord.value.split(/[\s°]+/));
                     }
                 }
             }
             if (selectedCoordinates.length === 2) {
-                this.setMarker(selectedCoordinates);
-                this.setCenter(selectedCoordinates);
+                const newCoordinates = [selectedCoordinates[0][0], selectedCoordinates[1][0]];
+
+                // this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [selectedCoordinates[0][0], selectedCoordinates[1][0]]));
+
+                this.setMarker(newCoordinates);
+                this.setCenter(newCoordinates);
             }
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
