@@ -439,6 +439,7 @@
             "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
+                "copyToClipboard": "Inhalt wurde in die Zwischenablage kopiert.",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"
@@ -602,7 +603,8 @@
                 "findFurtherInf": "Weitere Informationen finden Sie hier",
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
-                "area": "Fläche"
+                "area": "Fläche",
+                "finishWithDoubleClick": "Abschließen mit Doppelklick"
             },
             "scaleSwitcher": {
                 "label": "Maßstab"
@@ -654,8 +656,7 @@
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",
                 "openViewOblique": "Schrägluftbilder einschalten",
-                "closeViewOblique": "Schrägluftbilder ausschalten",
-                "betaWarningOblique": "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!"
+                "closeViewOblique": "Schrägluftbilder ausschalten"
             },
             "freeze": {
                 "freeze": "Ansicht sperren",
@@ -737,7 +738,9 @@
             "toggleCollapseAll": "Alle Legenden ein-/ausklappen"
         },
         "zoomToGeometry": {
-          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter."
+          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter.",
+          "alertParameterizedAccess": "Der parametrisierte Aufruf des Portals ist leider schief gelaufen!",
+          "alertRequiredService": "Details: Ein benötigter Dienst antwortet nicht."
         }
     },
     "snippets": {

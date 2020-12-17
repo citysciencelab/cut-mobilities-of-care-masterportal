@@ -6,8 +6,6 @@ import WFSLayer from "./wfs";
 import GeoJSONLayer from "./geojson";
 import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
-import store from "../../../../src/app-store/index";
-
 
 const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -97,14 +95,9 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @return {void}
      */
     createLegend: function () {
-        const groupLegend = [];
-
         this.get("layerSource").forEach(layerSource => {
             layerSource.createLegend();
-            groupLegend.push(store.state.Legend.legendOnChanged[0]);
-        }, this);
-
-        this.setLegend(groupLegend);
+        });
     },
 
     /**
