@@ -34,7 +34,7 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
 
         this.addEventListeners();
 
-        $("#map").after(this.$el);
+        $("#sidebar").append(this.$el);
     },
     template: _.template(Template),
     /**

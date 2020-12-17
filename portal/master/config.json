@@ -263,6 +263,8 @@
         "glyphicon": "glyphicon-wrench",
         "children": {
           "einwohnerabfrage": {
+            "renderToWindow": false,
+            "resizable": true,
             "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
             "onlyDesktop": false,
@@ -333,6 +335,7 @@
             "isInitOpen": false
           },
           "draw": {
+            "renderToWindow": false,
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",
             "iconList": [
