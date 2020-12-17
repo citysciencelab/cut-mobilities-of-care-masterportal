@@ -220,6 +220,7 @@ export default {
                             <input
                                 id="coordinatesEastingField"
                                 v-model="coordinatesEasting.value"
+                                :class="{ inputError: coordinatesEasting.errorMessage.length }"
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEasting.example"
@@ -241,6 +242,7 @@ export default {
                             <input
                                 id="coordinatesNorthingField"
                                 v-model="coordinatesNorthing.value"
+                                :class="{ inputError: coordinatesNorthing.errorMessage.length }"
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthing.example"
@@ -273,5 +275,8 @@ export default {
 .error-text {
     font-size: 85%;
     color: #a94442;
+}
+.inputError {
+     border: 1px solid #a94442;
 }
 </style>
