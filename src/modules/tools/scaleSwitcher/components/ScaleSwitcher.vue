@@ -1,5 +1,6 @@
 <script>
 import {mapGetters, mapActions, mapMutations} from "vuex";
+import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
 import getters from "../store/gettersScaleSwitcher";
 import mutations from "../store/mutationsScaleSwitcher";
@@ -44,7 +45,7 @@ export default {
 
             // TODO replace trigger when ModelList is migrated
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.ScaleSwitcher.id});
+            const model = getComponent(this.$store.state.Tools.ScaleSwitcher.id);
 
             if (model) {
                 model.set("isActive", false);

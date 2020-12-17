@@ -24,8 +24,8 @@ describe("src/modules/tools/supplyCoord/store/actionsSupplyCoord.js", () => {
             testAction(positionClicked, payload, state, {}, [
                 {type: "setPositionMapProjection", payload: payload.coordinate},
                 {type: "changedPosition", payload: payload.coordinate, dispatch: true},
-                {type: "setUpdatePosition", payload: false}
-                // TODO add testing showMapMarker if MapMarker is migrated
+                {type: "setUpdatePosition", payload: false},
+                {type: "MapMarker/placingPointMarker", payload: payload.coordinate, dispatch: true}
             ], {}, done);
         });
     });

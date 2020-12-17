@@ -68,8 +68,9 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
 
             actions.updateClick({commit, getters, dispatch, rootGetters}, obj);
             expect(commit.calledThrice).to.be.true;
-            expect(dispatch.calledOnce).to.be.true;
-            expect(dispatch.args[0]).to.include.members(["collectGfiFeatures"]);
+            expect(dispatch.calledTwice).to.be.true;
+            expect(dispatch.args[0]).to.include.members(["MapMarker/removePolygonMarker"]);
+            expect(dispatch.args[1]).to.include.members(["collectGfiFeatures"]);
         });
     });
 
