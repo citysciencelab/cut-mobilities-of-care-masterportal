@@ -95,31 +95,86 @@ label {
     color: #000000;
 }
 
-/******* Ajax Loader *******/
-#loader {
-    background-color: rgba(0, 0, 0, 0.4);
-    color: #FFFFFF;
-    height: 100%;
+/*******Loader *******/
+.centered {
     position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 2000;
+    width: 300px;
+    height: 130px;
+    top: 50%;
+    left: 50%;
+    margin-top: -130px;
+    margin-left: -150px;
+    background: #FFFFFF;
+    opacity: 0.9;
 }
 
-#loader img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -21px;
-    margin-top: -5px;
+#logo-txt-box {
+    position: relative;
 }
 
 #portal-text {
-    display: none;
+    position: relative;
+    text-align: center;
+    top: 6px;
+    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+    font-size: 28px;
+}
+.logo-right-bottom {
+    position: fixed;
+    right: 60px;
+    bottom: 32px;
+    z-index : -1;
+}
+@media (max-width: 830px) {
+    .logo-right-bottom {
+        position: fixed;
+        right: 60px;
+        bottom: 25px;
+        text-align: left;
+        left: 50%;
+        margin-left: -50px;
+        z-index : -1;
+    }
 }
 
-.loading {
+#portal-logo {
+    position: relative;
+    top: 5px;
+    left: 98px;
+}
+#portal-logo-text {
+    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+    position: relative;
+    text-align: center;
+    top: 8px;
+    font-size: 34px;
+}
+/* loading-spinner */
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: 35px;
+    margin-left: -30px;
+    content: "";
+    width: 70px;
+    height: 70px;
+    border: 10px solid #dddddd;
+    border-top-color: #b3bbc1;
+    border-radius: 50%;
+    animation: spin 0.8s 0.1s ease-in-out infinite both;
+}
+@keyframes spin {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* deprecated  */
+  .loading {
     position: absolute;
     top: 30%;
     left: 32.5%;
@@ -133,3 +188,5 @@ label {
     line-height: 130%;
     margin-top: 5%;
 }
+
+

@@ -5,13 +5,15 @@ import TileGrid from "ol/tilegrid/TileGrid";
 import {extentFromProjection} from "ol/tilegrid";
 import stylefunction from "ol-mapbox-style/dist/stylefunction";
 import store from "../../../../src/app-store/index";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 import Layer from "./model";
 
 const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     defaults: {
         ...Layer.prototype.defaults,
-        selectedStyleID: undefined
+        selectedStyleID: undefined,
+        useProxy: false
     },
 
     /**
@@ -20,6 +22,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @memberof Core.ModelList.Layer
      * @constructs
      * @property {string} selectedStyleID Currently active style by ID
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
@@ -40,26 +43,43 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @return {void}
      */
     createLayerSource: function () {
-        const mapEpsg = store.getters["Map/projection"].getCode(),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            mapEpsg = store.getters["Map/projection"].getCode(),
             dataEpsg = this.get("epsg") || mapEpsg,
             params = {
                 projection: dataEpsg,
                 format: new MVT(),
-                url: this.get("url")
+                url: url
             };
 
-        if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("resolutions") || this.get("tileSize")) {
+        if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("origins") || this.get("resolutions") || this.get("tileSize")) {
             const extent = this.get("extent") || extentFromProjection(dataEpsg),
                 origin = this.get("origin") || [extent[0], extent[3]], // upper left corner = [minX, maxY]
                 resolutions = this.get("resolutions") || store.getters["Map/map"].getView().getResolutions(),
-                tileSize = this.get("tileSize") || 512;
+                tileSize = this.get("tileSize") || 512,
+                origins = this.get("origins");
 
-            params.tileGrid = new TileGrid({
-                extent: extent,
-                origin: origin,
-                resolutions: resolutions,
-                tileSize: tileSize
-            });
+            if (origins) {
+                params.tileGrid = new TileGrid({
+                    extent: extent,
+                    origins: origins,
+                    resolutions: resolutions,
+                    tileSize: tileSize
+                });
+            }
+            else {
+                params.tileGrid = new TileGrid({
+                    extent: extent,
+                    origin: origin,
+                    resolutions: resolutions,
+                    tileSize: tileSize
+                });
+            }
         }
 
         this.setLayerSource(new OpenLayersVectorTileSource(params));
@@ -91,7 +111,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     setConfiguredLayerStyle: function () {
         let stylingPromise;
 
-        if (this.get("styleId")) {
+        if (this.get("styleId") && this.get("styleId") !== "default") {
             this.set("selectedStyleID", this.get("styleId"));
             stylingPromise = this.setStyleById(this.get("styleId"));
         }
@@ -150,7 +170,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                     );
                 }
 
-                stylefunction(this.get("layer"), style, "esri");
+                stylefunction(this.get("layer"), style, Object.keys(style.sources)[0]);
                 this.set("selectedStyleID", id);
             });
     },

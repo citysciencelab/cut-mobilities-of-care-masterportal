@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <div class="header">
     <p class="pull-right">
-        <span class="glyphicon glyphicon-remove" title="Schließen"></span>
+        <span class="glyphicon glyphicon-remove" title="<%= closeButton %>"></span>
     </p>
     <p>
-        <span>Informationen und Legende</span>
+        <span><%= informationAndLegend %></span>
     </p>
 </div>
 
@@ -14,46 +14,53 @@
     <% if (metaURL !== null) { %>
     <% metaURL.forEach(function (url) { %>
         <br>
-        <% if (abstractText !== noMetaDataMessage) { %>
-            <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+        <% if (typeof abstractText !== "undefined" && abstractText !== noMetaDataMessage && abstractText !== noMetadataLoaded) { %>
+            <p class="pull-right"><a href="<%= url %>" target="_blank"><%= additionalMetadata %></a></p>
         <% } %>
     <% }); %>
     <% } %>
     <% if (typeof datePublication !== "undefined" && datePublication !== null) { %>
-        <p>Publikation / Erstellung: <%= datePublication %></p>
+        <p><%= publicationCreation %>: <%= datePublication %></p>
     <% } %>
     <% if (typeof dateRevision !== "undefined" && dateRevision !== null) { %>
-        <p>Letzte Änderung: <%= dateRevision %></p>
+        <p><%= lastModified %>: <%= dateRevision %></p>
     <% } %>
     <% if (typeof periodicity !== "undefined" && periodicity !== null) { %>
-        <p>Periodizität: <%= periodicity %></p>
+        <p><%= periodicityTitle %>: <%= periodicity %></p>
     <% } %>
         <hr>
         <ul class="nav nav-tabs">
-            <li value="layerinfo-legend" class="tab-toggle active"><a data-toggle="tab" href="#layerinfo-legend">Legende</a></li>
-            <% if (downloadLinks !== null) { %>
-            <li value="LayerInfoDataDownload" class="tab-toggle"><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
+            <li value="layerinfo-legend" class="tab-toggle active"><a data-toggle="tab" href="#layerinfo-legend"><%= legend %></a></li>
+            <% if (downloadLinks) { %>
+            <li value="LayerInfoDataDownload" class="tab-toggle"><a data-toggle="tab" href="#LayerInfoDataDownload"><%= downloadDataset %></a></li>
             <% } %>
             <% if (url !== null && urlIsVisible !== false) { %>
-            <li value="url" class="tab-toggle"><a data-toggle="tab" href="#url"><%= typ %>-Adresse</a></li>
+            <li value="url" class="tab-toggle"><a data-toggle="tab" href="#url"><%= typ %>-<%= addressSuffix %></a></li>
             <% } %>
         </ul>
         <br>
         <div class="tab-content">
             <div id="layerinfo-legend" class="tab-pane fade in active"></div>
             <div id="LayerInfoDataDownload" class="tab-pane fade">
+                <div class="layerInfoDownloadFirstCol pull-left"></div>
                 <ul class="list-unstyled">
-                    <% if (downloadLinks !== null) { %>
+                    <% if (downloadLinks) { %>
                         <% downloadLinks.forEach(function (downloadLink) { %>
                             <li><a href="<%= downloadLink.link %>" target="_blank"><%= downloadLink.linkName %> </a><li>
                         <% }); %>
                     <% } %>
                 </ul>
-            </div>
-            <div id="url" class="tab-pane fade">
-                <ul class="list-unstyled">
-                <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
-                </ul>
+                <% if (downloadLinks && downloadLinks.length > 1) { %>
+                    <div class="layerInfoDownloadSecCol pull-right">
+                        <span class="download-note"><%= attachFileMessage %></span>
+                    </div>
+                <% } %>
             </div>
         </div>
+        <div id="url" class="tab-pane fade">
+            <ul class="list-unstyled">
+                <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
+            </ul>
+        </div>
+    </div>
 </div>

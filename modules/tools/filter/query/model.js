@@ -307,7 +307,7 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         let options;
 
         if (!this.get("isSelected")) {
-            // die Query-Collection hört im Filter-Model auf diesen Trigger
+            // the query collection listens to this trigger in the filter model
             this.collection.trigger("deselectAllModels", this);
             this.collection.trigger("deactivateAllModels", this);
             this.setIsSelected(true);
@@ -324,7 +324,9 @@ const QueryModel = Backbone.Model.extend(/** @lends QueryModel.prototype */{
         }
         else {
             this.setIsSelected(false);
-            this.runFilter();
+            if (this.get("activateOnSelection")) {
+                this.runFilter();
+            }
         }
     },
 

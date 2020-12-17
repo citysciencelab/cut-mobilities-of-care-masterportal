@@ -19,13 +19,13 @@ const colorOptions = [
         ...colorOptions.slice(2)
     ],
     drawTypeOptions = [
-        {value: "Point", id: "drawSymbol"},
-        {value: "LineString", id: "drawLine"},
-        {value: "LineString", id: "drawCurve"},
-        {value: "Polygon", id: "drawArea"},
-        {value: "Circle", id: "drawCircle"},
-        {value: "Circle", id: "drawDoubleCircle"},
-        {value: "Point", id: "writeText"}
+        {geometry: "Point", id: "drawSymbol"},
+        {geometry: "LineString", id: "drawLine", altGeometry: ["MultiLineString"]},
+        {geometry: "LineString", id: "drawCurve"},
+        {geometry: "Polygon", id: "drawArea"},
+        {geometry: "Circle", id: "drawCircle"},
+        {geometry: "Circle", id: "drawDoubleCircle"},
+        {geometry: "Point", id: "writeText"}
     ],
     fontOptions = [
         {caption: "Arial", value: "Arial"},
@@ -39,6 +39,10 @@ const colorOptions = [
         {caption: "20 px", value: 20},
         {caption: "24 px", value: 24},
         {caption: "32 px", value: 32}
+    ],
+    unitOptions = [
+        {caption: "m", value: "m"},
+        {caption: "km", value: "km"}
     ],
     keyStore = {
         getters: Object.keys(getters),
@@ -82,6 +86,7 @@ export {
     drawTypeOptions,
     fontOptions,
     fontSizeOptions,
+    unitOptions,
     keyStore,
     pointSizeOptions,
     strokeOptions,

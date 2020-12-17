@@ -1,10 +1,12 @@
 import PendlerCoreModel from "../core/model";
-import {Circle, Fill, Style} from "ol/style.js";
+import {Circle, Fill, Style, Stroke} from "ol/style.js";
 import {Point, LineString} from "ol/geom.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import Feature from "ol/Feature.js";
 import {getVectorContext} from "ol/render.js";
+import thousandsSeparator from "../../../../src/utils/thousandsSeparator";
+import store from "../../../../src/app-store";
 
 const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     defaults: Object.assign({}, PendlerCoreModel.prototype.defaults, {
@@ -23,6 +25,12 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         colors: [],
         glyphicon: "glyphicon-play-circle",
         animationLayer: {},
+        // layer to show labels at the start and end of each animation
+        labelLayer: new VectorLayer({
+            source: new VectorSource(),
+            style: null,
+            name: "pendlerLabelLayer"
+        }),
         // translations
         workplace: "",
         domicile: "",
@@ -58,7 +66,6 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * @property {String} colors=[] contains colors of circles
      * @property {String} glyphicon="glyphicon-play-circle" icon to start the animation
      * @property {Object} animationLayer={} contains the layer of the animation
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires  Core#RadioTriggerMapRemoveLayer
      * @fires Core#RadioTriggerMapRender
      */
@@ -102,7 +109,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
             // Ein Feature entspricht einer Gemeinde. Extraktion der für die Legende
             // nötigen Attribute (abhängig von der gewünschten Richtung).
             pendlerLegend.push({
-                anzahlPendler: feature.get(this.get("attrAnzahl")),
+                anzahlPendler: thousandsSeparator(feature.get(this.get("attrAnzahl"))),
                 color: this.rgbaArrayToString(feature.color),
                 name: feature.get(this.get("attrGemeinde"))
             });
@@ -134,19 +141,24 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * Bricht eine Animation ab (und entfernt die zugehörigen Punkte).
      * Verwendung beispielsweise bei Änderung der Abfrageparameter.
      * @returns {void} Kein Rückgabewert
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires  Core#RadioTriggerMapRemoveLayer
      */
     clear: function () {
         if (this.get("animating")) {
             this.stopAnimation();
         }
-        const animationLayer = this.get("animationLayer");
+        const animationLayer = this.get("animationLayer"),
+            labelLayer = this.get("pendlerLabelLayer");
 
         if (animationLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", animationLayer);
         }
-        Radio.trigger("MapMarker", "hideMarker");
+
+        if (labelLayer !== undefined) {
+            Radio.trigger("Map", "removeLayer", labelLayer);
+        }
+        store.dispatch("MapMarker/removePointMarker");
+
     },
 
     /**
@@ -187,7 +199,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
 
         // Wenn zu wenig Farben konfiguriert wurden wird ein alternatives Farbschema berechnet und angewendet (als Fallback)
         if (colors.length < features.length) {
-            console.warn("Die Anzahl an konfigurierten Farben reicht zur Darstellung der Ergebnisse nicht aus. Generiere ein alternatives Farbschema.");
+            console.warn(" The number of configured colors is not sufficient to display the results. Generate an alternative color scheme.");
             colors = this.generateColors(features.length);
         }
 
@@ -218,7 +230,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
             this.set("emptyResult", true);
             return;
         }
-        this.centerGemeinde(true);
+
         topFeatures = this.selectFeatures(rawFeatures);
         coloredFeatures = this.colorFeatures(topFeatures);
         // Bestimme statistische Kenngrößen
@@ -229,6 +241,8 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
 
         this.preparePendlerLegend(coloredFeatures);
         this.createLineString(coloredFeatures);
+
+        this.zoomToExtentOfFeatureGroup(coloredFeatures);
     },
     /**
      * creates the line features and adds them to the path layers source
@@ -236,30 +250,22 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      * @returns {void}
      */
     createLineString: function (relevantFeatures) {
-        let startPoint,
-            endPoint,
-            steps,
-            directionX,
-            directionY,
-            lineCoords,
-            line,
+        let line,
             newEndPt,
-            i,
-            anzahlPendler,
-            gemeinde;
-
+            i;
 
         this.get("pathLayer").getSource().clear();
 
         relevantFeatures.forEach(feature => {
-            startPoint = feature.getGeometry().getFirstCoordinate();
-            endPoint = feature.getGeometry().getLastCoordinate();
-            steps = this.get("steps");
-            directionX = (endPoint[0] - startPoint[0]) / steps;
-            directionY = (endPoint[1] - startPoint[1]) / steps;
-            lineCoords = [];
-            anzahlPendler = feature.get(this.get("attrAnzahl"));
-            gemeinde = feature.get(this.get("attrGemeinde"));
+            const startPoint = feature.getGeometry().getFirstCoordinate(),
+                endPoint = feature.getGeometry().getLastCoordinate(),
+                steps = this.get("steps"),
+                directionX = (endPoint[0] - startPoint[0]) / steps,
+                directionY = (endPoint[1] - startPoint[1]) / steps,
+                lineCoords = [],
+                anzahlPendler = feature.get(this.get("attrAnzahl")),
+                gemeinde = feature.get(this.get("attrGemeinde")),
+                gemeindeContrary = feature.get(this.get("attrGemeindeContrary"));
 
             for (i = 0; i <= steps; i++) {
                 newEndPt = new Point([startPoint[0] + (i * directionX), startPoint[1] + (i * directionY), 0]);
@@ -271,6 +277,7 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
                 geometry: new LineString(lineCoords),
                 anzahlPendler: anzahlPendler,
                 gemeindeName: gemeinde,
+                centerName: gemeindeContrary,
                 color: feature.color
             });
 
@@ -280,34 +287,12 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     },
 
     /**
-     * Prepares the style of the circles
-     * @param {Number} anzahlPendler amount of 'pendler'
-     * @param {String} color dedicated color to draw the circle
-     * @returns {Object} the created style containing a circle
-     */
-    preparePointStyle: function (anzahlPendler, color) {
-        const minVal = this.get("minVal"),
-            maxVal = this.get("maxVal"),
-            minPx = this.get("minPx"),
-            maxPx = this.get("maxPx"),
-            percent = (anzahlPendler * 100) / (maxVal - minVal),
-            pixel = ((maxPx - minPx) / 100) * percent,
-            radius = Math.round(minPx + pixel),
-            style = new Style({
-                image: new Circle({
-                    radius: radius,
-                    fill: new Fill({color: color})
-                })
-            });
-
-        return style;
-    },
-    /**
      * Prepares the animation and stops the running animation or starts it. Ensures the 'Anzahl' is always on top of all layers.
      * @returns {void}
      */
     prepareAnimation: function () {
         const animationLayer = Radio.request("Map", "createLayerIfNotExists", "animationLayer"),
+            labelLayer = Radio.request("Map", "createLayerIfNotExists", "pendlerLabelLayer"),
             features = this.get("pathLayer").getSource().getFeatures();
 
         if (this.get("direction") === "wohnort") {
@@ -316,11 +301,14 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         else {
             this.setAnimationLimit(1);
         }
-        this.assertLayerOnTop("pendlerLabelLayer");
+
+        labelLayer.getSource().clear();
+        this.setLabelLayer(labelLayer);
+
         this.setAnimationCount(0);
         animationLayer.getSource().clear();
-        animationLayer.setZIndex(9);
-        this.addFeaturesToLayer(features, animationLayer);
+        this.addLabelsToLayer(features, labelLayer);
+        this.addBubblesToLayer(features, animationLayer);
         this.setAnimationLayer(animationLayer);
         animationLayer.on("postrender", this.moveFeature.bind(this));
         if (this.get("animating")) {
@@ -329,6 +317,10 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
         else {
             this.startAnimation();
         }
+
+        // set the order to have labels allways above the animation
+        this.assertLayerOnTop("animationLayer");
+        this.assertLayerOnTop("pendlerLabelLayer");
     },
     /**
      * Starts the aniamtion
@@ -426,33 +418,78 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
     },
 
     /**
-     * Füge Punkte nach Ende der Animation dem Layer hinzu
-     * @param {Object[]} features Hinzuzufügende Features
-     * @param {Object} layer Ziel-Layer
-     * @returns {void} Keine Rückgabe
+     * adding labels at the start and end of each geometry
+     * @param {Object[]} features features to add
+     * @param {Object} layer the layer to add the labels to
+     * @returns {void}
      */
-    addFeaturesToLayer: function (features, layer) {
-        let currentPoint, coordinates,
-            newFeature,
-            drawIndex,
-            style;
-
+    addLabelsToLayer: function (features, layer) {
+        this.addCenterLabelToLayer(feature => feature.get("centerName"), features, layer);
         features.forEach(feature => {
-            coordinates = feature.getGeometry().getCoordinates();
-            style = this.preparePointStyle(feature.get("anzahlPendler"), feature.get("color"));
-
-            // Ob die Features bei der Startposition oder der Endposition gezeichnet werden müssen,
-            // ist abhängig von der Anzahl der Durchgänge
-            drawIndex = this.get("animationLimit") % 2 === 1 ? 0 : coordinates.length - 1;
-
-            currentPoint = new Point(coordinates[drawIndex]);
-            newFeature = new Feature(currentPoint);
-            // "styleId" neccessary for print, that style and feature can be linked
-            newFeature.set("styleId", Radio.request("Util", "uniqueId"));
-            newFeature.setStyle(style);
-            layer.getSource().addFeature(newFeature);
+            this.addLabelFeatureToLayer(feature.get("gemeindeName") + "\n" + thousandsSeparator(feature.get("anzahlPendler")) + "\n\n\n", feature, layer);
         });
     },
+    /**
+     * adding animation bubbles at the end of each geometry
+     * this has to be done to be able to animate anything
+     * @param {Object[]} features features to add
+     * @param {Object} layer the layer to add the bubbles to
+     * @returns {void}
+     */
+    addBubblesToLayer: function (features, layer) {
+        features.forEach(feature => {
+            this.addAnimation(feature, layer);
+        });
+    },
+
+    /**
+     * adds the circles as fixed endpoints of the animation
+     * @param {ol/Feature} feature the ol/Feature - the placement is determined using coordinates of features and this.get("direction")
+     * @param {ol/layer/Vector} layer the layer to add the new features to
+     * @returns {void}
+     */
+    addAnimation: function (feature, layer) {
+        const coordinates = feature.getGeometry().getCoordinates(),
+            style = this.preparePointStyle(feature.get("anzahlPendler"), feature.get("color")),
+            drawIndex = this.get("direction") !== "wohnort" ? 0 : coordinates.length - 1,
+            currentPoint = new Point(coordinates[drawIndex]),
+            newFeature = new Feature(currentPoint);
+
+        // "styleId" neccessary for print, that style and feature can be linked
+        newFeature.set("styleId", Radio.request("Util", "uniqueId"));
+        newFeature.setStyle(style);
+
+        layer.getSource().addFeature(newFeature);
+    },
+
+    /**
+     * Prepares the style of the circles
+     * @param {Number} anzahlPendler amount of 'pendler'
+     * @param {String} color dedicated color to draw the circle
+     * @returns {Object} the created style containing a circle
+     */
+    preparePointStyle: function (anzahlPendler, color) {
+        const minVal = this.get("minVal"),
+            maxVal = this.get("maxVal"),
+            minPx = this.get("minPx"),
+            maxPx = this.get("maxPx"),
+            percent = (anzahlPendler * 100) / Math.max(1, maxVal - minVal),
+            pixel = ((maxPx - minPx) / 100) * percent,
+            radius = Math.round(minPx + pixel),
+            style = new Style({
+                image: new Circle({
+                    radius: radius,
+                    fill: new Fill({color: color}),
+                    stroke: new Stroke({
+                        color: [60, 60, 60, 1],
+                        width: 0.5
+                    })
+                })
+            });
+
+        return style;
+    },
+
     /**
      * Sets the animation count
      * @param {Number} value count of animations
@@ -524,6 +561,14 @@ const Animation = PendlerCoreModel.extend(/** @lends Animation.prototype */{
      */
     setAnimationLayer: function (value) {
         this.set("animationLayer", value);
+    },
+    /**
+     * Sets the layer of the labels
+     * @param {Object} value layer of the labels
+     * @returns {void}
+     */
+    setLabelLayer: function (value) {
+        this.set("pendlerLabelLayer", value);
     }
 });
 

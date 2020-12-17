@@ -8,20 +8,32 @@ import {createTextStyle} from "./createTextStyle";
  * Creates and returns the styling for the draw interaction.
  *
  * @param {Object} state state object of the Draw Tool
- * @param {String[]} state.color The color of the drawn feature represented as an array.
- * @param {String[]} state.colorContour The color of the contours of the drawn feature represented as an array.
  * @param {Object} state.drawType The type of the draw interaction. The first parameter represents the type unique identifier of the draw interaction as a String and the second parameter represents the geometry of the drawType as a String.
- * @param {String} state.font The font used for the text interaction.
- * @param {Number} state.fontSize The size of the font used for the text interaction.
  * @param {Number} state.pointSize The size of the point.
- * @param {Number} state.strokeWidth Stroke width.
  * @param {Object} state.symbol The symbol for the point.
- * @param {String} state.text The text to be written if the drawType "writeText" is chosen.
  * @param {Number} state.zIndex Determines in which order features are rendered on the view.
+ * @param {Object} styleSettings the settings to get the styling from
+ * @param {String[]} styleSettings.color The color of the drawn feature represented as an array.
+ * @param {String[]} styleSettings.colorContour The color of the contours of the drawn feature represented as an array.
+ * @param {String} styleSettings.font The font used for the text interaction.
+ * @param {Number} styleSettings.fontSize The size of the font used for the text interaction.
+ * @param {Number} styleSettings.strokeWidth Stroke width.
+ * @param {String} styleSettings.text The text to be written if the drawType "writeText" is chosen.
  * @returns {module:ol/style/Style} style of the draw interaction
  */
-export function createStyle ({color, colorContour, drawType, font, fontSize, imgPath, pointSize, strokeWidth, symbol, text, zIndex}) {
-    const isSimplePoint = symbol.type ? symbol.type === "simple_point" : false;
+export function createStyle (state, styleSettings) {
+    const drawType = state.drawType,
+        imgPath = state.imgPath,
+        pointSize = state.pointSize,
+        symbol = state.symbol,
+        zIndex = state.zIndex,
+        color = styleSettings.color,
+        colorContour = styleSettings.colorContour,
+        font = styleSettings.font,
+        fontSize = styleSettings.fontSize,
+        strokeWidth = styleSettings.strokeWidth,
+        text = styleSettings.text,
+        isSimplePoint = symbol.type ? symbol.type === "simple_point" : false;
     let style = new Style();
 
     if (drawType.id === "drawSymbol" && !isSimplePoint) {

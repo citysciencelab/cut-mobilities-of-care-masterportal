@@ -2,9 +2,12 @@ import {Draw} from "ol/interaction.js";
 import {getMapProjection, transform} from "masterportalAPI/src/crs";
 
 import {drawInteractionOnDrawEvent} from "./actions/drawInteractionOnDrawEvent";
-import * as setter from "./actions/setterDraw";
+import * as setters from "./actions/settersDraw";
 import * as withoutGUI from "./actions/withoutGUIDraw";
 import {createDrawInteraction, createModifyInteraction, createSelectInteraction} from "../utils/createInteractions";
+import {createStyle} from "../utils/style/createStyle";
+import {drawTypeOptions} from "../store/constantsDraw";
+import {getDrawTypeByGeometryType} from "../utils/getDrawTypeByGeometryType";
 
 import stateDraw from "./stateDraw";
 
@@ -92,17 +95,18 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
          * @returns {void}
          */
-        createDrawInteractionAndAddToMap ({state, commit, dispatch}, {active, maxFeatures}) {
-            const drawInteraction = createDrawInteraction(state);
+        createDrawInteractionAndAddToMap ({state, commit, dispatch, getters}, {active, maxFeatures}) {
+            const styleSettings = getters.getStyleSettings(),
+                drawInteraction = createDrawInteraction(state, styleSettings);
 
             commit("setDrawInteraction", drawInteraction);
             dispatch("manipulateInteraction", {interaction: "draw", active: active});
             dispatch("createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeatures});
             dispatch("addInteraction", drawInteraction);
 
-            // NOTE: This leads to the creation of a second circle instead of a MultiPolygon right now.
+            // NOTE: This leads to the creation of a second (the outer) circle instead of a MultiPolygon right now.
             if (state.drawType.id === "drawDoubleCircle") {
-                const drawInteractionTwo = createDrawInteraction(state);
+                const drawInteractionTwo = createDrawInteraction(state, styleSettings);
 
                 commit("setDrawInteractionTwo", drawInteractionTwo);
                 dispatch("manipulateInteraction", {interaction: "draw", active: active});
@@ -128,6 +132,7 @@ const initialState = Object.assign({}, stateDraw),
             interaction.on("drawend", event => {
                 dispatch("uniqueID").then(id => {
                     event.feature.set("styleId", id);
+                    dispatch("addDrawStateToFeature", event.feature);
 
                     // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map, drawing is cancelled and editing is started
                     if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
@@ -174,12 +179,17 @@ const initialState = Object.assign({}, stateDraw),
          * @returns {void}
          */
         createModifyInteractionAndAddToMap ({state, commit, dispatch}, active) {
-            const modifyInteraction = createModifyInteraction(state.layer);
+            const modifyInteraction = createModifyInteraction(state.layer),
+                selectInteractionModify = createSelectInteraction(state.layer, 10);
 
             commit("setModifyInteraction", modifyInteraction);
             dispatch("manipulateInteraction", {interaction: "modify", active: active});
             dispatch("createModifyInteractionListener");
             dispatch("addInteraction", modifyInteraction);
+
+            commit("setSelectInteractionModify", selectInteractionModify);
+            dispatch("createSelectInteractionModifyListener");
+            dispatch("addInteraction", selectInteractionModify);
         },
         /**
          * Listener to change the features through the modify interaction.
@@ -208,6 +218,92 @@ const initialState = Object.assign({}, stateDraw),
                         Radio.trigger("RemoteInterface", "postMessage", {"drawEnd": JSON.stringify(geoJSONAddCenter)});
                     });
                 }
+            });
+        },
+        /**
+         * Listener to select (for modify) the features through ol select interaction
+         *
+         * @param {Object} context actions context object.
+         * @returns {void}
+         */
+        createSelectInteractionModifyListener ({state, commit, getters, dispatch}) {
+            state.selectInteractionModify.on("select", event => {
+                if (state.currentInteraction !== "modify" || !event.selected.length) {
+                    // reset interaction - if not reset, the ol default would be used, this shouldn't be what we want at this point
+                    state.selectInteractionModify.getFeatures().clear();
+                    if (state.selectedFeature) {
+                        commit("setSelectedFeature", null);
+                    }
+                    return;
+                }
+
+                // the last selected feature is allways on top
+                const feature = event.selected[event.selected.length - 1];
+                let styleSettings = null;
+
+                commit("setSelectedFeature", feature);
+
+                if (typeof feature.get("drawState") === "undefined") {
+                    // setDrawType changes visibility of all select- and input-boxes
+                    commit("setDrawType", getDrawTypeByGeometryType(feature.getGeometry().getType(), drawTypeOptions));
+
+                    // use current state as standard for extern features (e.g. kml or gpx import)
+                    dispatch("addDrawStateToFeature", feature);
+                }
+                else {
+                    // setDrawType changes visibility of all select- and input-boxes
+                    commit("setDrawType", feature.get("drawState").drawType);
+                }
+
+                styleSettings = getters.getStyleSettings();
+
+                styleSettings.color = feature.get("drawState").color;
+                styleSettings.colorContour = feature.get("drawState").colorContour;
+                styleSettings.outerColorContour = feature.get("drawState").outerColorContour;
+                styleSettings.strokeWidth = feature.get("drawState").strokeWidth;
+                styleSettings.opacity = feature.get("drawState").opacity;
+                styleSettings.opacityContour = feature.get("drawState").opacityContour;
+                styleSettings.font = feature.get("drawState").font;
+                styleSettings.fontSize = feature.get("drawState").fontSize;
+                styleSettings.text = feature.get("drawState").text;
+
+                commit("setSymbol", feature.get("drawState").symbol);
+
+                setters.setStyleSettings({getters, commit}, styleSettings);
+
+                // ui reason: this is the short period of time the ol default mark of select interaction is seen at mouse click event of a feature
+                setTimeout(() => {
+                    state.selectInteractionModify.getFeatures().clear();
+                }, 300);
+            });
+        },
+        /**
+         * adds selected values from the state to the "drawState" of the given feature
+         * @param {Object} context actions context object.
+         * @param {ol/Feature} feature the openlayer feature to append the current "drawState" to
+         * @returns {void}
+         */
+        addDrawStateToFeature ({getters}, feature) {
+            if (!feature) {
+                return;
+            }
+            const styleSettings = getters.getStyleSettings();
+
+            feature.set("drawState", {
+                // copies
+                strokeWidth: styleSettings.strokeWidth,
+                opacity: styleSettings.opacity,
+                opacityContour: styleSettings.opacityContour,
+                font: styleSettings.font,
+                fontSize: parseInt(styleSettings.fontSize, 10),
+                text: styleSettings.text,
+
+                // clones - styleSettings are a clone already
+                drawType: JSON.parse(JSON.stringify(getters.drawType)),
+                symbol: JSON.parse(JSON.stringify(getters.symbol)),
+                color: styleSettings.color,
+                colorContour: styleSettings.colorContour,
+                outerColorContour: styleSettings.outerColorContour
             });
         },
         /**
@@ -279,6 +375,9 @@ const initialState = Object.assign({}, stateDraw),
                 if (typeof state.modifyInteraction !== "undefined" && state.modifyInteraction !== null) {
                     state.modifyInteraction.setActive(active);
                 }
+                if (typeof state.selectInteractionModify !== "undefined" && state.selectInteractionModify !== null) {
+                    state.selectInteractionModify.setActive(active);
+                }
             }
             else if (interaction === "delete") {
                 if (typeof state.selectInteraction !== "undefined" && state.selectInteraction !== null) {
@@ -323,39 +422,26 @@ const initialState = Object.assign({}, stateDraw),
          * @returns {void}
          */
         resetModule ({state, commit, dispatch, getters}) {
-            const color = initialState.color,
-                colorContour = initialState.colorContour;
-
-            color[3] = initialState.opacity;
-            colorContour[3] = initialState.opacityContour;
-
             commit("setActive", false);
+            dispatch("toggleInteraction", "draw");
             dispatch("manipulateInteraction", {interaction: "draw", active: false});
+
             dispatch("removeInteraction", state.drawInteraction);
             dispatch("removeInteraction", state.drawInteractionTwo);
-
-            dispatch("manipulateInteraction", {interaction: "modify", active: false});
             dispatch("removeInteraction", state.modifyInteraction);
-
-            dispatch("manipulateInteraction", {interaction: "delete", active: false});
+            dispatch("removeInteraction", state.selectInteractionModify);
             dispatch("removeInteraction", state.selectInteraction);
 
-            commit("setCircleMethod", initialState.circleMethod);
-            commit("setCircleInnerDiameter", initialState.circleInnerDiameter);
-            commit("setCircleOuterDiameter", initialState.circleOuterDiameter);
-            commit("setColor", color);
-            commit("setColorContour", colorContour);
+            commit("setSelectedFeature", null);
             commit("setDrawType", initialState.drawType);
             commit("setFreeHand", initialState.freeHand);
-            commit("setOpacity", initialState.opacity);
-            commit("setOpacityContour", initialState.opacityContour);
             commit("setPointSize", initialState.pointSize);
             commit("setSymbol", getters.iconList[0]);
             commit("setWithoutGUI", initialState.withoutGUI);
 
             state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
         },
-        ...setter,
+        ...setters,
         /**
          * Starts the Download Tool for the drawn features.
          * NOTE: Draw Tool is not hidden.
@@ -380,10 +466,12 @@ const initialState = Object.assign({}, stateDraw),
          */
         toggleInteraction ({commit, dispatch}, interaction) {
             commit("setCurrentInteraction", interaction);
+            commit("setSelectedFeature", null);
             if (interaction === "draw") {
                 dispatch("manipulateInteraction", {interaction: "draw", active: true});
                 dispatch("manipulateInteraction", {interaction: "modify", active: false});
                 dispatch("manipulateInteraction", {interaction: "delete", active: false});
+                dispatch("updateDrawInteraction");
             }
             else if (interaction === "modify") {
                 dispatch("manipulateInteraction", {interaction: "draw", active: false});
@@ -431,7 +519,15 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        updateDrawInteraction ({state, commit, dispatch}) {
+        updateDrawInteraction ({state, commit, getters, dispatch}) {
+            if (state.currentInteraction === "modify" && state.selectedFeature !== null) {
+                const styleSettings = getters.getStyleSettings();
+
+                state.selectedFeature.setStyle(createStyle(state, styleSettings));
+                dispatch("addDrawStateToFeature", state.selectedFeature);
+                return;
+            }
+
             dispatch("removeInteraction", state.drawInteraction);
             commit("setDrawInteraction", null);
             if (typeof state.drawInteractionTwo !== "undefined" && state.drawInteractionTwo !== null) {

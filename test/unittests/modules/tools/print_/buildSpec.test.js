@@ -215,7 +215,7 @@ describe("tools/print_/buildSpec", function () {
         it("should return prepared legend attributes for legend array of strings", function () {
             const legend = [
                 "SomeGetLegendGraphicRequest",
-                "<svg some really short svg with fill:rgb(255,0,0);></svg",
+                "<svg some really short svg with fill:rgb(255,0,0);></svg>",
                 "barfoo.png"
             ];
 
@@ -250,7 +250,7 @@ describe("tools/print_/buildSpec", function () {
                     name: "name_WMS"
                 },
                 {
-                    graphic: "<svg some really short svg with fill:rgb(255,0,0);></svg",
+                    graphic: "<svg some really short svg with fill:rgb(255,0,0);></svg>",
                     name: "name_SVG"
                 },
                 {
