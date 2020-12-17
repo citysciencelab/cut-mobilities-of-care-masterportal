@@ -155,6 +155,9 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
             cartographicPickedPosition;
 
         if (cartesian) {
+            if (document.querySelector(".nav li")?.classList.contains("open")) {
+                document.querySelector(".nav li").classList.remove("open");
+            }
             cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
             coords = [window.Cesium.Math.toDegrees(cartographic.longitude), window.Cesium.Math.toDegrees(cartographic.latitude)];
             height = scene.globe.getHeight(cartographic);

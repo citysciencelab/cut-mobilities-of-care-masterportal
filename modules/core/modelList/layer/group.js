@@ -6,6 +6,8 @@ import WFSLayer from "./wfs";
 import GeoJSONLayer from "./geojson";
 import SensorLayer from "./sensor";
 import HeatmapLayer from "./heatmap";
+import store from "../../../../src/app-store/index";
+
 
 const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -87,6 +89,7 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             });
 
         this.setLayer(groupLayer);
+        this.createLegend();
     },
 
     /**
@@ -94,9 +97,14 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
      * @return {void}
      */
     createLegend: function () {
+        const groupLegend = [];
+
         this.get("layerSource").forEach(layerSource => {
             layerSource.createLegend();
+            groupLegend.push(store.state.Legend.legendOnChanged[0]);
         }, this);
+
+        this.setLegend(groupLegend);
     },
 
     /**
@@ -121,6 +129,8 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
     showLayerInformation: function () {
         let legend = "";
         const metaID = [],
+            cswUrls = [],
+            showDocUrls = [],
             name = this.get("name");
 
         if (!this.get("layerSource")) {
@@ -129,11 +139,19 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
         legend = Radio.request("Legend", "getLegend", this);
 
         this.get("children").forEach(layer => {
-            const layerMetaId = layer.datasets && layer.datasets[0] ? layer.datasets[0].md_id : null;
+            let cswUrl = null,
+                showDocUrl = null,
+                layerMetaId = null;
 
-            if (layerMetaId) {
-                metaID.push(layerMetaId);
+            if (layer.datasets && Array.isArray(layer.datasets) && layer.datasets[0] !== null && typeof layer.datasets[0] === "object") {
+                cswUrl = layer.datasets[0].hasOwnProperty("csw_url") ? layer.datasets[0].csw_url : null;
+                showDocUrl = layer.datasets[0].hasOwnProperty("show_doc_url") ? layer.datasets[0].show_doc_url : null;
+                layerMetaId = layer.datasets[0].hasOwnProperty("md_id") ? layer.datasets[0].md_id : null;
             }
+
+            metaID.push(layerMetaId);
+            cswUrls.push(cswUrl);
+            showDocUrls.push(showDocUrl);
         });
 
         Radio.trigger("LayerInformation", "add", {
@@ -143,6 +161,8 @@ const GroupLayer = Layer.extend(/** @lends GroupLayer.prototype */{
             "layername": name,
             "url": null,
             "typ": null,
+            "cswUrl": cswUrls[0],
+            "showDocUrl": showDocUrls[0],
             "urlIsVisible": this.get("urlIsVisible")
         });
 

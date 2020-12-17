@@ -1,7 +1,8 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
-import {getWmsFeaturesByMimeType} from "./getWmsFeaturesByMimeType";
+import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import {MapMode} from "../enums";
+import getProxyUrl from "../../../../utils/getProxyUrl";
 
 let unsubscribes = [],
     loopId = null;
@@ -135,7 +136,7 @@ const actions = {
 
         if (rootGetters["Tools/Gfi/active"]) {
             commit("setGfiFeatures", null);
-            Radio.trigger("MapMarker", "hidePolygon");
+            dispatch("MapMarker/removePolygonMarker", null, {root: true});
             dispatch("collectGfiFeatures");
         }
     },
@@ -147,35 +148,38 @@ const actions = {
      * @param {Function} store.commit - function to commit a mutation
      * @returns {void}
      */
-    async collectGfiFeatures ({getters, commit}) {
+    collectGfiFeatures ({getters, commit, dispatch}) {
         const {clickCoord, visibleWmsLayerListAtResolution, resolution, projection, gfiFeaturesAtPixel} = getters,
             gfiWmsLayerList = visibleWmsLayerListAtResolution.filter(layer => {
                 return layer.get("gfiAttributes") !== "ignore";
             });
 
-        let gfiFeatures = [];
+        Promise.all(gfiWmsLayerList.map(layer => {
+            const gfiParams = {
+                INFO_FORMAT: layer.get("infoFormat"),
+                FEATURE_COUNT: layer.get("featureCount")
+            };
+            let url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams);
 
-        gfiFeatures = await Promise.all(gfiWmsLayerList.map(layer => {
-            const mimeType = layer.get("infoFormat"),
-                layerName = layer.get("name"),
-                layerId = layer.get("id"),
-                gfiTheme = layer.get("gfiTheme") || "default",
-                // gfiIconPath = layer.get("gfiIconPath"),
-                gfiAttributes = layer.get("gfiAttributes"),
-                gfiParams = {
-                    INFO_FORMAT: mimeType,
-                    FEATURE_COUNT: layer.get("featureCount")
-                },
-                url = layer.getSource().getFeatureInfoUrl(clickCoord, resolution, projection, gfiParams),
-                gfiAsNewWindow = layer.get("gfiAsNewWindow");
+            /**
+             * @deprecated in the next major-release!
+             * useProxy
+             * getProxyUrl()
+             */
+            url = layer.get("useProxy") ? getProxyUrl(url) : url;
 
-            return getWmsFeaturesByMimeType(mimeType, url, {layerName, layerId}, gfiTheme, gfiAttributes, gfiAsNewWindow, null, null);
-        }));
-
-        // only commit if features found
-        if (gfiFeaturesAtPixel.concat(...gfiFeatures).length > 0) {
-            commit("setGfiFeatures", gfiFeaturesAtPixel.concat(...gfiFeatures));
-        }
+            return getWmsFeaturesByMimeType(layer, url);
+        }))
+            .then(gfiFeatures => {
+                // only commit if features found
+                if (gfiFeaturesAtPixel.concat(...gfiFeatures).length > 0) {
+                    commit("setGfiFeatures", gfiFeaturesAtPixel.concat(...gfiFeatures));
+                }
+            })
+            .catch(error => {
+                console.warn(error);
+                dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.gfi.errorMessage"), {root: true});
+            });
     },
 
     /**
@@ -241,15 +245,14 @@ const actions = {
      * @param {Object} actionParams first action parameter
      * @returns {void}
      */
-    resetView ({state}) {
+    resetView ({state, dispatch}) {
         const {initialCenter, initialResolution, map} = state,
             view = map.getView();
 
         view.setCenter(initialCenter);
         view.setResolution(initialResolution);
 
-        // TODO replace trigger when MapMarker is migrated
-        Radio.trigger("MapMarker", "hideMarker");
+        dispatch("MapMarker/removePointMarker", null, {root: true});
     },
     /**
      * Sets the resolution by the given index of available resolutions.
