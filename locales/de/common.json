@@ -592,7 +592,7 @@
                 "enterFilename": "Bitte Dateiname angeben",
                 "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
                 "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
-                "unknownGeometry": "Unbekannte Geometry:"
+                "unknownGeometry": "Unbekannte Geometry:<br><strong>{{geometry}}</strong>"
             },
             "measure": {
                 "geometry": "Geometrie",

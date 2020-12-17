@@ -591,7 +591,7 @@
                 "enterFilename": "Please enter filename",
                 "createFirst": "Please create a drawing or text first!",
                 "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
-                "unknownGeometry": "Unknown geometry:"
+                "unknownGeometry": "Unknown geometry:<br><strong>{{geometry}}</strong>"
             },
             "measure": {
                 "geometry": "Geometry",
