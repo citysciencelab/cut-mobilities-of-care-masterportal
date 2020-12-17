@@ -37,11 +37,13 @@ export default {
         ...mapActions("Tools/SearchByCoord", [
             "newProjectionSelected",
             "setMarker",
+            "removeMarker",
             "setCenter"
         ]),
 
         close () {
             this.setActive(false);
+            this.removeMarker();
 
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.SearchByCoord.id});

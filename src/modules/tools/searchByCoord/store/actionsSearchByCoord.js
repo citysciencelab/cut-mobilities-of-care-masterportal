@@ -20,6 +20,9 @@ export default {
 
         dispatch("MapMarker/placingPointMarker", position, {root: true});
     },
+    removeMarker: function ({dispatch}) {
+        dispatch("MapMarker/removePointMarker", null, {root: true});
+    },
     setCenter: function ({commit}, coordinates) {
         // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
         const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
