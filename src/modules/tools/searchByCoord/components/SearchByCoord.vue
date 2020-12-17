@@ -17,7 +17,8 @@ export default {
             currentCoordinateSystem: "ETRS89",
             zoomLevel: 7,
             coordinatesEasting: {name: "", value: "", errorMessage: "", example: ""},
-            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: ""}
+            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: ""},
+            selectedCoordinates: []
         };
     },
     computed: {
@@ -83,9 +84,9 @@ export default {
             const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
                 validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
                 validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
-                coordinates = [coordinatesEasting, coordinatesNorthing],
-                selectedCoordinates = [];
+                coordinates = [coordinatesEasting, coordinatesNorthing];
 
+            this.selectedCoordinates = [];
             if (this.currentCoordinateSystem === "ETRS89") {
 
                 for (const coord of coordinates) {
@@ -99,7 +100,7 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
-                        selectedCoordinates.push(coord.value);
+                        this.selectedCoordinates.push(coord.value);
                     }
                 }
             }
@@ -115,7 +116,7 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
-                        selectedCoordinates.push(coord.value.split(/[\s°′″'"´`]+/));
+                        this.selectedCoordinates.push(coord.value.split(/[\s°′″'"´`]+/));
                     }
                 }
             }
@@ -131,19 +132,19 @@ export default {
                     else {
                         coordinatesEasting.errorMessage = "";
                         coordinatesNorthing.errorMessage = "";
-                        selectedCoordinates.push(coord.value.split(/[\s°]+/));
+                        this.selectedCoordinates.push(coord.value.split(/[\s°]+/));
                     }
                 }
             }
-            if (selectedCoordinates.length === 2) {
+            if (this.selectedCoordinates.length === 2) {
 
                 if (this.currentCoordinateSystem !== "ETRS89") {
-                    const easting = Number(selectedCoordinates[0][0]) +
-                (Number(selectedCoordinates[0][1] ? selectedCoordinates[0][1] : 0) / 60) +
-                (Number(selectedCoordinates[0][2] ? selectedCoordinates[0][2] : 0) / 60 / 60),
-                        northing = Number(selectedCoordinates[1][0]) +
-                (Number(selectedCoordinates[1][1] ? selectedCoordinates[1][1] : 0) / 60) +
-                (Number(selectedCoordinates[1][2] ? selectedCoordinates[1][2] : 0) / 60 / 60),
+                    const easting = Number(this.selectedCoordinates[0][0]) +
+                (Number(this.selectedCoordinates[0][1] ? this.selectedCoordinates[0][1] : 0) / 60) +
+                (Number(this.selectedCoordinates[0][2] ? this.selectedCoordinates[0][2] : 0) / 60 / 60),
+                        northing = Number(this.selectedCoordinates[1][0]) +
+                (Number(this.selectedCoordinates[1][1] ? this.selectedCoordinates[1][1] : 0) / 60) +
+                (Number(this.selectedCoordinates[1][2] ? this.selectedCoordinates[1][2] : 0) / 60 / 60),
                         transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [northing, easting]); // turning the coordinates around to make it work for WGS84
 
                     this.setMarker(transformedCoordinates);
@@ -151,8 +152,8 @@ export default {
                     this.setZoom(this.zoomLevel);
                 }
                 else {
-                    this.setMarker(selectedCoordinates);
-                    this.setCenter(selectedCoordinates);
+                    this.setMarker(this.selectedCoordinates);
+                    this.setCenter(this.selectedCoordinates);
                     this.setZoom(this.zoomLevel);
                 }
             }
