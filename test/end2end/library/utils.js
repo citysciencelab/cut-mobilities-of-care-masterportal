@@ -133,33 +133,33 @@ async function reclickUntilNotStale (driver, selector) {
  * @returns {void}
  */
 async function logBrowserstackUrlToTest (sessionId) {
-    const bsUrl = "https://api.browserstack.com/automate/builds.json";
+    // const bsUrl = "https://api.browserstack.com/automate/builds.json";
 
-    axios({
-        method: "get",
-        url: bsUrl,
-        responseType: "json",
-        auth: {
-            /* eslint-disable-next-line no-process-env */
-            username: process.env.bs_user,
-            /* eslint-disable-next-line no-process-env */
-            password: process.env.bs_key
-        }
-    }).then(res => {
-        res.data.forEach(entry => {
-            const build = entry.automation_build;
+    // axios({
+    //     method: "get",
+    //     url: bsUrl,
+    //     responseType: "json",
+    //     auth: {
+    //         /* eslint-disable-next-line no-process-env */
+    //         username: process.env.bs_user,
+    //         /* eslint-disable-next-line no-process-env */
+    //         password: process.env.bs_key
+    //     }
+    // }).then(res => {
+    //     res.data.forEach(entry => {
+    //         const build = entry.automation_build;
 
-            /* eslint-disable-next-line no-process-env */
-            if (build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
-                const url = `https://automate.browserstack.com/dashboard/v2/builds/${build.hashed_id}/sessions/`;
+    //         /* eslint-disable-next-line no-process-env */
+    //         if (build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
+    //             const url = `https://automate.browserstack.com/dashboard/v2/builds/${build.hashed_id}/sessions/`;
 
-                console.warn(`      ${url}${sessionId}`);
-            }
-        });
-    })
-        .catch(function (error) {
-            console.warn("Cannot get builds from browserstack: - an error occured calling the url: ", bsUrl, error);
-        });
+    //             console.warn(`      ${url}${sessionId}`);
+    //         }
+    //     });
+    // })
+    //     .catch(function (error) {
+    //         console.warn("Cannot get builds from browserstack: - an error occured calling the url: ", bsUrl, error);
+    //     });
 }
 
 /**
