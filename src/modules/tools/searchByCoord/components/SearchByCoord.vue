@@ -18,7 +18,8 @@ export default {
             zoomLevel: 7,
             coordinatesEasting: {name: "", value: "", errorMessage: "", example: ""},
             coordinatesNorthing: {name: "", value: "", errorMessage: "", example: ""},
-            selectedCoordinates: []
+            selectedCoordinates: [],
+            transformedCoordinates: []
         };
     },
     computed: {
@@ -88,9 +89,7 @@ export default {
 
             this.selectedCoordinates = [];
             if (this.currentCoordinateSystem === "ETRS89") {
-
                 for (const coord of coordinates) {
-
                     if (coord.value === "" || coord.value.length < 1) {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
                     }
@@ -136,32 +135,38 @@ export default {
                     }
                 }
             }
-            if (this.selectedCoordinates.length === 2) {
-
-                if (this.currentCoordinateSystem !== "ETRS89") {
-                    const easting = Number(this.selectedCoordinates[0][0]) +
-                (Number(this.selectedCoordinates[0][1] ? this.selectedCoordinates[0][1] : 0) / 60) +
-                (Number(this.selectedCoordinates[0][2] ? this.selectedCoordinates[0][2] : 0) / 60 / 60),
-                        northing = Number(this.selectedCoordinates[1][0]) +
-                (Number(this.selectedCoordinates[1][1] ? this.selectedCoordinates[1][1] : 0) / 60) +
-                (Number(this.selectedCoordinates[1][2] ? this.selectedCoordinates[1][2] : 0) / 60 / 60),
-                        transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [northing, easting]); // turning the coordinates around to make it work for WGS84
-
-                    this.setMarker(transformedCoordinates);
-                    this.setCenter(transformedCoordinates);
-                    this.setZoom(this.zoomLevel);
-                }
-                else {
-                    this.setMarker(this.selectedCoordinates);
-                    this.setCenter(this.selectedCoordinates);
-                    this.setZoom(this.zoomLevel);
-                }
-            }
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
             this.coordinatesEasting.name = i18next.t(this.label("eastingLabel"));
             this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
             this.validateInput(coordinatesEasting, coordinatesNorthing);
+            this.transformCoordinates();
+        },
+        transformCoordinates () {
+            if (this.selectedCoordinates.length === 2) {
+                this.setZoom(this.zoomLevel);
+                if (this.currentCoordinateSystem !== "ETRS89") {
+                    const latitude = this.selectedCoordinates[0],
+                        newLatitude = Number(latitude[0]) +
+                (Number(latitude[1] ? latitude[1] : 0) / 60) +
+                (Number(latitude[2] ? latitude[2] : 0) / 60 / 60),
+                        longitude = this.selectedCoordinates[1],
+                        newLongitude = Number(longitude[0]) +
+                (Number(longitude[1] ? longitude[1] : 0) / 60) +
+                (Number(longitude[2] ? longitude[2] : 0) / 60 / 60);
+
+                    this.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [newLongitude, newLatitude]); // turning the coordinates around to make it work for WGS84
+
+                    this.moveToCoordinates(this.transformedCoordinates);
+                }
+                else {
+                    this.moveToCoordinates(this.selectedCoordinates);
+                }
+            }
+        },
+        moveToCoordinates (coordinates) {
+            this.setMarker(coordinates);
+            this.setCenter(coordinates);
         },
         setExample () {
             if (this.currentCoordinateSystem === "ETRS89") {
