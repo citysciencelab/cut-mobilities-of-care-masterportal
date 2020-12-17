@@ -17,7 +17,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |featureCount|ja|String||Anzahl der zurückzugebenden Features bei GFI-Abfragen. Entspricht dem *GetFeatureInfo-Parameter "FEATURE_COUNT"*|`"1"`|
 |format|ja|String||Grafikformat der Kachel, die vom Portal über den *GetMap* aufgerufen wird. Muss einem der Werte aus den Capabilities unter *Capability/Request/GetMap/Format* entsprechen.|`"image/jpeg"`|
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
 |id|ja|String||Frei wählbare Layer-ID|`"8"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
@@ -175,7 +175,6 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |featureType|ja|String||featureType-Name im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *FeatureTypeList/FeatureType/Name* entsprechen. Allerdings ohne Namespace.|`"bab_vkl"`|
 |featurePrefix|nein|String||Dient der eindeutigen Identifizierung eines FeatureTypes im Dienst.|
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|gfiFormat|nein|String/Object||Optionale Steuerung des Inhaltes der GFI-Informationen für diesen Layer. Der Inhalt kann im Rahmen eines Projektes frei gewählt werden. Die Steuerung der Inhalte über diesen Parameter ist z.B. bei der Verwendung eines gfi-Themes für mehrere Layer von zentraler Bedeutung.|`{"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}`|
 |id|ja|String||Frei wählbare Layer-ID|`"44"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
@@ -187,7 +186,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 **Beispiel WFS:**
 
@@ -204,7 +203,6 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
-      "gfiFormat": {"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}                                             },
       "layerAttribution" : "nicht vorhanden",
       "legend" : true,
       "datasets" : [
@@ -256,7 +254,6 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |----|-------------|---|-------|------------|--------|
 |**[datasets](#markdown-header-wms_wfs_datasets)**|nein|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|gfiFormat|nein|String/Object||Optionale Steuerung des Inhaltes der GFI-Informationen für diesen Layer. Der Inhalt kann im Rahmen eines Projektes frei gewählt werden. Die Steuerung der Inhalte über diesen Parameter ist z.B. bei der Verwendung eines gfi-Themes für mehrere Layer von zentraler Bedeutung.|`{"exampleProjectSwitch" : {"domain": "statistical", "property": "school", "unit": "percent"}}`|
 |epsg|nein|String|EPSG-Code des Portals|EPSG-String; wird zum Abgleich benutzt, bei Schiefstand wird jedoch nur eine Warnung ausgegeben. VTL sollten aus Performanzgründen serverseitig passend vorgehalten werden. Ist der Wert "EPSG:3857" und weder "extend", noch "origin", noch "resolutions", noch "tileSize" sind gesetzt, dann wird kein GridSet erzeugt. Der Ol-default wird verwendet.|`"EPSG:3857"`|
 |extent|nein|Number[4]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, wird der Extent des Portal-EPSG verwendet.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
 |origin|nein|Number[2]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, wird die obere linke Ecke des Extents verwendet.|`[-9497963.94293634221, 9997963.94293634221]`|
@@ -276,6 +273,8 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |typ|ja|String||Muss in diesem Fall "VectorTile" sein.|`"VectorTile"`|
 |url|ja|String||Dienste URL|`"https://example.com/3857/tile/{z}/{y}/{x}.pbf"`|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+
 
 **Beispiel VectorTile:**
 
@@ -478,8 +477,6 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
 |----|-------------|---|-------|------------|
 |imageLinks|nein|String/String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird in der angegebenen Reihenfolge nach den Attributen gesucht. Der erste Treffer wird verwendet.|
 |showFavoriteIcons|nein|Boolean|true|Gibt an ob eine Leiste mit Icons angezeigt werden soll, mittels derer sich verschiedene Werkzeuge verwenden lassen. Die Icons werden nur angezeigt, wenn die enstprechenden Werkzeuge konfiguriert sind. Bisher verwendbar für die Werkzeuge: compareFeatures/vergleichsliste (Bisher nicht für WMS verfügbar) und routing/Routenplaner.
-|gfiIconPath|nein|String|Pfad für das Icon, dass als fallback genutzt wird, fall kein Icon definiert ist.|`""https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png""`|
-
 
 **Beispiel gfiTheme für das template "Default":**
 
@@ -489,9 +486,7 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
    "name": "default",
    "params": {
         "imageLinks": ["imageLink", "linkImage", "abc"],
-        "showFavoriteIcons": true,
-        "gfiIconPath":  "https://geoportal-hamburg.de/lgv-beteiligung/icons/einzelmarker_dunkel.png",
-
+        "showFavoriteIcons": true
    }
 }
 ```
@@ -616,8 +611,8 @@ Hier wird das Layout für eine einzelne Grafik zu einem result konfiguriert.
 ```
 #!json
 "charging": {
-"title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-"color": "rgba(220, 0, 0, 1)"
+   "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+   "color": "rgba(220, 0, 0, 1)"
 },
 ```
 
@@ -789,7 +784,9 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 |altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
 |altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-|gfiTheme|ja|String||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|**[gfiTheme](#markdown-header-gfi_theme)**|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht default gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+
 **Beispiel GeoJSON:**
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
@@ -804,7 +801,7 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "legendURL" : "",
-      "gfiTheme": "dipas"
+      "gfiTheme": "default"
    }
 ```
 

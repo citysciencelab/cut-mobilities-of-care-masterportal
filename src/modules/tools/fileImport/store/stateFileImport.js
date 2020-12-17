@@ -17,7 +17,7 @@
 export default {
     active: false,
     deactivateGFI: false,
-    glyphicon: "glyphicon-load",
+    glyphicon: "glyphicon-import",
     id: "fileImport",
     name: "KML-Datei laden",
     onlyDesktop: true,

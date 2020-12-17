@@ -395,7 +395,9 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             // sz, does not want to work in a local environment, so first use the template as variable
             // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
         }
-        this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
+        if (attr.hasOwnProperty("typelist")) {
+            this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
+        }
     },
 
     /**
@@ -418,12 +420,12 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         const modelHitList = this.model.get("hitList");
 
         // distingiush hit
-        if (evt.hasOwnProperty("cid")) { // in this case, evt = model
+        if (evt?.hasOwnProperty("cid")) { // in this case, evt = model
             pick = Radio.request("Util", "pick", modelHitList, [0]);
 
             hit = Object.values(pick)[0];
         }
-        else if (evt.hasOwnProperty("currentTarget") === true && evt.currentTarget.id) {
+        else if (evt?.hasOwnProperty("currentTarget") === true && evt.currentTarget.id) {
             hitID = evt.currentTarget.id;
             hit = Radio.request("Util", "findWhereJs", this.model.get("hitList"), {"id": hitID});
 
