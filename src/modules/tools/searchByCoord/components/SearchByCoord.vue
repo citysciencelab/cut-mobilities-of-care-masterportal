@@ -15,8 +15,8 @@ export default {
             mapElement: document.getElementById("map"),
             coordinateSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
             currentCoordinateSystem: "ETRS89",
-            coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33′ 25"},
-            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59′ 50"}
+            coordinatesEasting: {name: "", value: "", errorMessage: "", example: ""},
+            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: ""}
         };
     },
     computed: {
@@ -24,8 +24,7 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.coordinatesEasting.example = this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33′ 25"; // TODO: just a workaround, has to be corrected
-        this.coordinatesNorthing.example = this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59′ 50";
+        this.setExample();
     },
     beforeUpdate () {
         this.coordinatesEasting.errorMessage = "";
@@ -57,8 +56,7 @@ export default {
          * @returns {void}
          */
         selectionChanged () {
-            this.coordinatesEasting.example = this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33′ 25";
-            this.coordinatesNorthing.example = this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59′ 50";
+            this.setExample();
             this.coordinatesEasting.errorMessage = "";
             this.coordinatesEasting.value = "";
             this.coordinatesNorthing.errorMessage = "";
@@ -133,6 +131,7 @@ export default {
                 }
             }
             if (selectedCoordinates.length === 2) {
+
                 if (this.currentCoordinateSystem !== "ETRS89") {
                     const easting = Number(selectedCoordinates[0][0]) +
                 (Number(selectedCoordinates[0][1] ? selectedCoordinates[0][1] : 0) / 60) +
@@ -140,10 +139,10 @@ export default {
                         northing = Number(selectedCoordinates[1][0]) +
                 (Number(selectedCoordinates[1][1] ? selectedCoordinates[1][1] : 0) / 60) +
                 (Number(selectedCoordinates[1][2] ? selectedCoordinates[1][2] : 0) / 60 / 60),
-                        newCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [northing, easting]);
+                        transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [northing, easting]); // turning the coordinates around to make it work for WGS84
 
-                    this.setMarker(newCoordinates);
-                    this.setCenter(newCoordinates);
+                    this.setMarker(transformedCoordinates);
+                    this.setCenter(transformedCoordinates);
                 }
                 else {
                     this.setMarker(selectedCoordinates);
@@ -155,6 +154,20 @@ export default {
             this.coordinatesEasting.name = i18next.t(this.label("eastingLabel"));
             this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
             this.validateInput(coordinatesEasting, coordinatesNorthing);
+        },
+        setExample () {
+            if (this.currentCoordinateSystem === "ETRS89") {
+                this.coordinatesEasting.example = "564459.13";
+                this.coordinatesNorthing.example = "5935103.67";
+            }
+            else if (this.currentCoordinateSystem === "WGS84") {
+                this.coordinatesEasting.example = "53° 33′ 25″";
+                this.coordinatesNorthing.example = "9° 59′ 50″";
+            }
+            else {
+                this.coordinatesEasting.example = "53.55555°";
+                this.coordinatesNorthing.example = "10.01234°";
+            }
         }
     }};
 </script>
