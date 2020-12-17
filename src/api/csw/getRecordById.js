@@ -72,18 +72,18 @@ function parseAbstract (json) {
 function parseFrequenzy (json) {
     const attributes = json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.resourceMaintenance?.MD_MaintenanceInformation?.maintenanceAndUpdateFrequency?.MD_MaintenanceFrequencyCode?.getAttributes(),
         frequencyTypes = {
-            continual: "kontinuierlich",
-            daily: "täglich",
-            weekly: "wöchentlich",
-            fortnightly: "zweimal wöchentlich",
-            monthly: "monatlich",
-            quarterly: "quartalsweise",
-            biannually: "zweimal jährlich",
-            annually: "jährlich",
-            asNeeded: "bei Bedarf",
-            irregular: "unregelmäßige Intervalle",
-            notPlanned: "nicht geplant",
-            unknown: "unbekannt"
+            continual: "common:modules.cswParser.continual",
+            daily: "common:modules.cswParser.daily",
+            weekly: "common:modules.cswParser.weekly",
+            fortnightly: "common:modules.cswParser.fortnightly",
+            monthly: "common:modules.cswParser.monthly",
+            quarterly: "common:modules.cswParser.quarterly",
+            biannually: "common:modules.cswParser.biannually",
+            annually: "common:modules.cswParser.annually",
+            asNeeded: "common:modules.cswParser.asNeeded",
+            irregular: "common:modules.cswParser.irregular",
+            notPlanned: "common:modules.cswParser.notPlanned",
+            unknown: "common:modules.cswParser.unknown"
         };
 
     if (attributes?.codeListValue) {

@@ -73,9 +73,14 @@ function isCesiumEntity (entity) {
  * @returns {Object}  an object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl}
  */
 export function getGfiFeature (layerAttributes, properties) {
-    const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "Buildings",
+    const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "common:modules.layerInformation.buildings",
         gfiTheme = layerAttributes && layerAttributes.gfiTheme ? layerAttributes.gfiTheme : "buildings_3d",
-        attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes : {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
+        attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes :
+            {
+                "roofType": "common:modules.layerInformation.roofType",
+                "measuredHeight": "common:modules.layerInformation.roofHeight",
+                "function": "common:modules.layerInformation.objectType"
+            },
         featureProperties = properties && properties.attributes ? properties.attributes : properties,
 
         layer = {

@@ -8,6 +8,7 @@ import VectorLayer from "ol/layer/Vector.js";
 import {buffer, containsExtent} from "ol/extent";
 import {GeoJSON} from "ol/format.js";
 import changeTimeZone from "../../../../src/utils/changeTimeZone.js";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -21,7 +22,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          */
         timezone: "Europe/Berlin",
         version: "1.0",
-        useProxyURL: false,
         mqttPath: "/mqtt",
         subscriptionTopics: {},
         httpSubFolder: "",
@@ -32,7 +32,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         moveendListener: null,
         loadThingsOnlyInCurrentExtent: false,
         intvLoadingThingsInExtent: 0,
-        delayLoadingThingsInExtent: 1000
+        delayLoadingThingsInExtent: 1000,
+        useProxy: false
     }),
 
     /**
@@ -45,7 +46,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @property {String} utc="+1" UTC-Timezone to calulate correct time.
      * @property {String} timezone="Europe/Berlin" Sensors origin timezone name.
      * @property {String} version="1.0" Version the SensorThingsAPI is requested.
-     * @property {Boolean} useProxyUrl="1.0" Flag if url should be proxied.
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Core#RadioRequestMapViewGetOptions
      * @fires Core#RadioRequestUtilGetProxyURL
      * @fires Core#RadioTriggerUtilShowLoader
@@ -67,9 +68,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * The "name" and the "description" of each thing are also taken as "properties".
      */
     initialize: function () {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url");
+
         // set subscriptionTopics as instance variable (!)
         this.setSubscriptionTopics({});
-        this.setHttpSubFolder(this.get("url") && String(this.get("url")).split("/").length > 3 ? "/" + String(this.get("url")).split("/").slice(3).join("/") : "");
+        this.setHttpSubFolder(url && String(url).split("/").length > 3 ? "/" + String(url).split("/").slice(3).join("/") : "");
 
         try {
             this.createMqttConnectionToSensorThings();
@@ -191,7 +199,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     initializeConnection: function (onsuccess) {
-        const url = this.get("useProxyUrl") ? Radio.request("Util", "getProxyURL", this.get("url")) : this.get("url"),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             version = this.get("version"),
             urlParams = this.get("urlParameter");
 
@@ -614,7 +627,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {Object[]} - aggregatedThings
      */
     aggregatePropertiesOfThings: function (allThings) {
-        const aggregatedArray = [];
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            aggregatedArray = [];
 
         allThings.forEach(thing => {
             const aggregatedThing = {};
@@ -653,7 +672,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                     aggregatedThing.properties.Datastreams = thing.Datastreams;
                 }
             }
-            aggregatedThing.properties.requestUrl = this.get("url");
+            aggregatedThing.properties.requestUrl = url;
             aggregatedThing.properties.versionUrl = this.get("version");
 
             aggregatedArray.push(aggregatedThing);
@@ -730,14 +749,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     createMqttConnectionToSensorThings: function () {
-        if (!this.get("url")) {
-            return;
-        }
-
-        const mqttOptions = Object.assign({
-                mqttUrl: "wss://" + this.get("url").split("/")[2] + this.get("mqttPath"),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            mqttOptions = Object.assign({
+                mqttUrl: "wss://" + url.split("/")[2] + this.get("mqttPath"),
                 mqttVersion: "3.1.1",
-                rhPath: this.get("url"),
+                rhPath: url,
                 context: this
             }, this.get("mqttOptions")),
             mqtt = new SensorThingsMqtt(mqttOptions);

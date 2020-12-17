@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["schulinfo"],
+    addons: ["trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     clickCounter: {},
     footer: {
         urls: [
@@ -15,6 +15,11 @@ const Config = {
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
+    },
+    metadata: {
+        useProxy: [
+            "https://metaver.de/csw"
+        ]
     },
     namedProjections: [
         // GK DHDN

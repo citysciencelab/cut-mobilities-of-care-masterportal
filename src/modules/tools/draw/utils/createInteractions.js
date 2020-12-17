@@ -5,13 +5,14 @@ import {createStyle} from "./style/createStyle";
  * Creates a draw interaction to draw features on the map.
  *
  * @param {Object} state actions context object.
+ * @param {Object} styleSettings the settings of the current style
  * @returns {ol/interaction/Draw} draw interaction
  */
-function createDrawInteraction (state) {
+function createDrawInteraction (state, styleSettings) {
     return new Draw({
         source: state.layer.getSource(),
         type: state.drawType.geometry,
-        style: createStyle(state),
+        style: createStyle(state, styleSettings),
         freehand: state.freeHand
     });
 }

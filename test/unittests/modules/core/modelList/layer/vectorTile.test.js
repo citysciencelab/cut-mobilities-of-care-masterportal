@@ -104,7 +104,7 @@ describe("core/modelList/layer/vectorTile", function () {
                 set: sinon.spy((key, value) => {
                     expect(stylefunction.default.calledOnce).to.be.true;
                     expect(stylefunction.default.calledWith(
-                        Symbol.for("layer"), validStyle, "esri"
+                        Symbol.for("layer"), validStyle, undefined
                     )).to.be.true;
 
                     expect(key).to.equal("selectedStyleID");

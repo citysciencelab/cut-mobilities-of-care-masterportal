@@ -2,6 +2,11 @@ Hier wird im folgenden die proxyconf-Datei in ihrem Aufbau und ihrer Funktion be
 
 # Warum brauche ich für die lokale Entwicklungsumgebung einen Proxy?
 
+**Aktuell**
+Die GDI-DE empfiehlt serverseitig einen CORS-Header einzurichten. Daher ist die Möglichkeit URLs über einen Proxy anzufragen deprecated.
+Siehe für nähere Infos **[GDI-DE](https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile)** in Kapitel 4.7.1.
+
+**Deprecated**
 Ein Proxy wird benötigt um Daten von anderen Resourcen, die von einer anderne Domain geholt werden, laden zu dürfen. Wenn im Browser versucht wird direkt auf diese Daten zuzugreifen werden diese aufgrund der **[Same-Origin-Policy](https://de.wikipedia.org/wiki/Same-Origin-Policy)** geblockt.
 
 ***

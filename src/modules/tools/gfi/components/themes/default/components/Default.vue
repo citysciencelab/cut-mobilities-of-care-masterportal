@@ -130,7 +130,7 @@ export default {
                     :key="key"
                 >
                     <td class="bold">
-                        {{ beautifyKey(key) }}
+                        {{ beautifyKey($t(key)) }}
                     </td>
                     <td v-if="isWebLink(value)">
                         <a
@@ -143,6 +143,11 @@ export default {
                     </td>
                     <td v-else-if="isEmailAddress(value)">
                         <a :href="`mailto:${value}`">{{ value }}</a>
+                    </td>
+                    <td
+                        v-else-if="value.includes('<br>')"
+                        v-html="value"
+                    >
                     </td>
                     <td v-else>
                         {{ value }}
