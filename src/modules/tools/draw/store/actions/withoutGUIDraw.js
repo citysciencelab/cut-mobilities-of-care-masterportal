@@ -6,6 +6,7 @@ import {GeoJSON} from "ol/format.js";
 import MultiLine from "ol/geom/MultiLineString.js";
 import MultiPoint from "ol/geom/MultiPoint.js";
 import MultiPolygon from "ol/geom/MultiPolygon.js";
+import * as setters from "./settersDraw";
 
 /**
  * Resets and deactivates the Draw Tool.
@@ -192,8 +193,9 @@ function editFeaturesWithoutGUI ({dispatch}) {
  * @param {Boolean} prmObject.zoomToExtent The map will be zoomed to the extent of the GeoJson if set to true.
  * @returns {String} GeoJSON of all Features as a String
  */
-function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
-    const collection = Radio.request("ModelList", "getCollection");
+function initializeWithoutGUI ({state, commit, dispatch, getters}, {drawType, color, opacity, maxFeatures, initialJSON, transformWGS, zoomToExtent}) {
+    const collection = Radio.request("ModelList", "getCollection"),
+        drawTypeId = getDrawId(drawType);
     let featJSON,
         newColor,
         format;
@@ -206,18 +208,24 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
     commit("setWithoutGUI", true);
 
     if (["Point", "LineString", "Polygon", "Circle"].indexOf(drawType) > -1) {
-        commit("setDrawType", {id: getDrawId(drawType), geometry: drawType});
+        const styleSettings = getters.getStyleSettings();
+
+        commit("setDrawType", {id: drawTypeId, geometry: drawType});
 
         if (color) {
-            commit("setColor", color);
-            commit("setColorContour", color);
+            styleSettings.color = color;
+            styleSettings.colorContour = color;
+
+            setters.setStyleSettings({getters, commit}, styleSettings);
         }
         if (opacity) {
-            newColor = state.color;
-
+            newColor = styleSettings.color;
             newColor[3] = parseFloat(opacity);
-            commit("setColor", newColor);
-            commit("setOpacity", opacity);
+
+            styleSettings.color = newColor;
+            styleSettings.opacity = opacity;
+
+            setters.setStyleSettings({getters, commit}, styleSettings);
         }
 
         commit("setLayer", Radio.request("Map", "createLayerIfNotExists", "import_draw_layer"));
@@ -243,7 +251,7 @@ function initializeWithoutGUI ({state, commit, dispatch}, {drawType, color, opac
                 }
 
                 if (featJSON.length > 0) {
-                    state.layer.setStyle(createStyle(state));
+                    state.layer.setStyle(createStyle(state, styleSettings));
                     state.layer.getSource().addFeatures(featJSON);
                 }
                 if (featJSON.length > 0 && zoomToExtent) {

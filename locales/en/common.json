@@ -559,7 +559,9 @@
                 "interactive": "interactive",
                 "defined": "defined",
                 "transparencyOutline": "Transparency Outline",
-                "outlineColor": "Outline color",
+                "colorContour": "Outline color",
+                "innerColorContour": "Inner outline color",
+                "outerColorContour": "Outer outline color",
                 "fontSize": "Font size",
                 "fontName": "Font",
                 "size": "Size (in px)",
@@ -749,6 +751,9 @@
             "selectByPolygon": "Draw surface",
             "tooltipMessage": "Click to start and exit",
             "tooltipMessagePolygon": "Click to add a point"
+        },
+        "value": {
+            "deleteSelection": "Delete selection"
         },
         "slider": {
             "date": "Date",

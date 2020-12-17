@@ -28,8 +28,9 @@
 				"name": "Werkzeuge",
 				"children": {
 					"gfi": {
-						"name": "Informationen abfragen",
-						"isActive": true
+            "name": "Informationen abfragen",
+            "glyphicon": "glyphicon-info-sign",
+						"active": true
 					},
 					"searchByCoord": {
 						"name": "Koordinatensuche"
@@ -43,10 +44,11 @@
 					},
 					"draw": {
 						"name": "Zeichnen / Schreiben",
-                        "glyphicon": "glyphicon-pencil"
+            "glyphicon": "glyphicon-pencil"
 					},
 					"fileImport": {
-						"name": "Datei Import"
+            "name": "Datei Import",
+            "glyphicon": "glyphicon-import"
 					},
 					"saveSelection": {
 						"name": "Auswahl speichern"
