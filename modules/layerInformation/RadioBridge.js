@@ -35,7 +35,7 @@ Radio.channel("CswParser").on({
         else {
             cswObj.parsedData.title = metadata?.getTitle();
             cswObj.parsedData.abstractText = metadata?.getAbstract();
-            cswObj.parsedData.periodicity = metadata?.getFrequenzy();
+            cswObj.parsedData.periodicityKey = metadata?.getFrequenzy();
             cswObj.parsedData.dateRevision = metadata?.getRevisionDate();
             cswObj.parsedData.downloadLinks = metadata?.getDownloadLinks();
             if (typeof metadata?.getPublicationDate() !== "undefined") {

@@ -106,8 +106,26 @@
                 "warning": "Warning"
             }
         },
+        "confirmAction": {
+            "defaultHeadline": "Confirmation request",
+            "defaultCopy": "Please confirm this action.",
+            "defaultConfirmCaption": "OK",
+            "defaultDenyCaption": "Cancel"
+        },
         "cswParser": {
-            "noMetadataMessage": "No metadata available."
+            "noMetadataMessage": "No metadata available.",
+            "continual": "continual",
+            "daily": "daily",
+            "weekly": "weekly",
+            "fortnightly": "fortnightly",
+            "monthly": "monthly",
+            "quarterly": "quarterly",
+            "biannually": "biannually",
+            "annually": "annually",
+            "asNeeded": "as needed",
+            "irregular": "irregular intervals",
+            "notPlanned": "not planned",
+            "unknown": "unknown"
         },
         "layerInformation": {
           "additionalMetadata": "additional metadata",
@@ -122,7 +140,11 @@
           "noMetadataLoaded": "No metadata could be loaded!",
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
-          "publicationCreation": "Publication / Creation"
+          "publicationCreation": "Publication / Creation",
+          "buildings":"Buildings",
+          "roofType":"Roof type",
+          "roofHeight":"Roof height",
+          "objectType":"Object type"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
@@ -537,7 +559,9 @@
                 "interactive": "interactive",
                 "defined": "defined",
                 "transparencyOutline": "Transparency Outline",
-                "outlineColor": "Outline color",
+                "colorContour": "Outline color",
+                "innerColorContour": "Inner outline color",
+                "outerColorContour": "Outer outline color",
                 "fontSize": "Font size",
                 "fontName": "Font",
                 "size": "Size (in px)",
@@ -727,6 +751,9 @@
             "selectByPolygon": "Draw surface",
             "tooltipMessage": "Click to start and exit",
             "tooltipMessagePolygon": "Click to add a point"
+        },
+        "value": {
+            "deleteSelection": "Delete selection"
         },
         "slider": {
             "date": "Date",
