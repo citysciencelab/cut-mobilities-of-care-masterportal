@@ -158,6 +158,7 @@ const symbol = {
             color: [55, 126, 184, 1],
             opacity: 1,
             colorContour: [0, 0, 0, 1],
+            outerColorContour: [0, 0, 0, 1],
             opacityContour: 1
         },
         writeTextSettings: {

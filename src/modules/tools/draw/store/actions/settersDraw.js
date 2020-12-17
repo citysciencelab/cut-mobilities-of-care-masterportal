@@ -146,6 +146,29 @@ function setColorContour ({getters, commit, dispatch}, {target}) {
     setStyleSettings({getters, commit}, styleSettings);
     dispatch("updateDrawInteraction");
 }
+/**
+ * Sets the outer color of the contours of the drawType drawDoubleCircle.
+ *
+ * @param {Object} context actions context object.
+ * @param {Event} event event fired by changing the input for the colorContour.
+ * @param {HTMLSelectElement} event.target The HTML select element for the colorContour.
+ * @returns {void}
+ */
+function setOuterColorContour ({getters, commit, dispatch}, {target}) {
+    const color = target.options[target.selectedIndex].value.split(","),
+        colorCopy = [],
+        styleSettings = getters.getStyleSettings();
+
+    color.forEach(val => {
+        colorCopy.push(parseInt(val, 10));
+    });
+    colorCopy.push(styleSettings.opacityContour);
+
+    styleSettings.outerColorContour = colorCopy;
+
+    setStyleSettings({getters, commit}, styleSettings);
+    dispatch("updateDrawInteraction");
+}
 
 /**
  * Sets the drawType and triggers other methods to add the new interactions
@@ -335,6 +358,7 @@ export {
     setCircleOuterDiameter,
     setColor,
     setColorContour,
+    setOuterColorContour,
     setDrawType,
     setFont,
     setFontSize,
