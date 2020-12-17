@@ -602,7 +602,8 @@
                 "findFurtherInf": "Weitere Informationen finden Sie hier",
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
-                "area": "Fläche"
+                "area": "Fläche",
+                "finishInteraction": "Abschließen mit Doppelklick"
             },
             "scaleSwitcher": {
                 "label": "Maßstab"

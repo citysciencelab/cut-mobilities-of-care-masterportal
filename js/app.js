@@ -1,5 +1,4 @@
 import Vue from "vue";
-import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
 import store from "../src/app-store";
 import loadAddons from "../src/addons";
@@ -30,7 +29,6 @@ import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
-import MeasureView from "../modules/tools/measure/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import SearchByCoordView from "../modules/tools/searchByCoord/view";
@@ -44,6 +42,7 @@ import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
 import hidePreLoadContainers from "../src/utils/hidePreLoadContainers";
+import i18next from "./i18next";
 
 /**
  * WFSFeatureFilterView
@@ -132,14 +131,12 @@ async function loadApp () {
 
     store.commit("setConfigJs", Config);
 
-    Vue.use(VueI18Next);
-
     app = new Vue({
         el: "#masterportal-root",
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n: new VueI18Next(i18next, {namespaces: ["additional", "common"]})
+        i18n: i18next
     });
 
 
@@ -218,10 +215,6 @@ async function loadApp () {
             }
             case "shadow": {
                 new ShadowView({model: tool});
-                break;
-            }
-            case "measure": {
-                new MeasureView({model: tool});
                 break;
             }
             case "print": {

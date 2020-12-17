@@ -133,7 +133,7 @@ const gettersMap = {
      * @param {Object} g getters
      * @returns {Function} layer getter by id
      */
-    layerById: (_, g) => id => g.layers[id],
+    layerById: (_, g) => id => g.layers && g.layers[id],
     /**
      * @param {Object} _ state
      * @param {Object} g getters

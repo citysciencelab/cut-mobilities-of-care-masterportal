@@ -601,7 +601,8 @@
                 "findFurtherInf": "You can find further information here",
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
-                "area": "Area"
+                "area": "Area",
+                "finishInteraction": "Double click to finish"
             },
             "scaleSwitcher": {
                 "label": "Scale"

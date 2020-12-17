@@ -1815,18 +1815,20 @@ Die linienhafte Darstellung der Pendler wird für das Pendlerportal der MRH(Metr
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden auch die Messungenauigkeiten mit angegeben.
+Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden optional auch die Messungenauigkeiten mit angegeben.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |earthRadius|nein|Number|6378137|Erdradius in Meter.|false|
+|showInaccuracy|nein|Boolean|true|Whether inaccuracy should be shown. It is advised to keep this on to inform users of inaccurate measurement results.|false|
 
 **Beispiel**
 ```
 #!json
 "measure": {
     "name": "translate#common:menu.tools.measure",
-    "earthRadius": 6378137
+    "earthRadius": 6378137,
+    "showInaccuracy": true
 },
 ```
 

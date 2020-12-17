@@ -1,9 +1,9 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {areRegExpsInMeasureLayer, hasVectorLayerLength, getCoordinatesOfXthFeatureInLayer} = require("../../../library/scripts"),
-    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../library/utils"),
-    {isMobile, is3D} = require("../../../settings"),
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {areRegExpsInMeasureLayer, hasVectorLayerLength, getCoordinatesOfXthFeatureInLayer} = require("../../../../../../test/end2end/library/scripts"),
+    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {isMobile, is3D} = require("../../../../../../test/end2end/settings"),
     {By, until} = webdriver;
 
 /**

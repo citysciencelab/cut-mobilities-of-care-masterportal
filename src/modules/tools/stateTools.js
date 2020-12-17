@@ -3,6 +3,8 @@ import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
+import Measure from "./measure/components/Measure.vue";
+
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -15,7 +17,8 @@ const state = {
         scaleSwitcher: ScaleSwitcher,
         supplyCoord: SupplyCoord,
         fileImport: FileImport,
-        gfi: Gfi
+        gfi: Gfi,
+        measure: Measure
     },
     configuredTools: []
 };
