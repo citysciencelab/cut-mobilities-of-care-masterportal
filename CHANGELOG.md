@@ -6,7 +6,10 @@
 
 ## Unreleased - in development
 ### Added
-- Neues Modul "Confirm Action" für Vue hinzugefügt.
+- Neue Konfigurationsmöglichkeiten für "highlightVectorRules" hinzugefügt.
+- Ein neues Tool "Alerting" wurde hinzugefügt.
+- i18n wurde für zahlreiche Stellen angepasst.
+- Neues Modul "Confirm Action" hinzugefügt.
 - RemoteInterface wurde für Vue hinzugefügt.
 - Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
@@ -15,7 +18,7 @@
 - Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
 - Die “gfiAttribute”-keys können jetzt auch Objektpfade sein, analog zum neuen Styling.
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
-- Es wurde die Möglichkeit hinzugefügt über die URL Feature zu übergeben, welche dann in einem GeoJSON-Layer dargestellt werden.
+- Es wurde die Möglichkeit hinzugefügt über die URL Features zu übergeben, welche dann in einem GeoJSON-Layer dargestellt werden.
 - Es können nun Vector Tile Layer (VTL) als Layer eingebunden werden.
 - Für VTL wurde ein Tool hergestellt, mit dem zwischen externen Styles gewechselt werden kann.
 - Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
@@ -26,12 +29,14 @@
 - Der Parameter allowMultipleQueriesPerLayer, der im Tool Filter ermöglicht, dass mehrere Layer gleichzeitg gefiltert werden können, wurde in der Dokumentation beschrieben.
 
 ### Changed
+- Im Zuge des internen Umbaus von Backbone.js zu Vue.js wurden zahlreiche Module refactoriert oder neu erstellt. Folgende Module sind jetzt auf Basis von Vue.js: Alerting, ConfirmAction, Controls, Footer, Language, Map, MapMarker, RemoteInterface, ScaleLine, Title, Tools, Zahlreiche weitere Utils.
+- Der Ladebildschirm wurde überarbeitet.
 - Es werden nun alle URLs vom Portal direkt angefragt, ohne den Umweg über einen Proxy zu gehen, da von der GDI-DE empfohlen wird serverseitig einen CORS-Header einzurichten. Siehe dazu https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile Kapitel 4.7.1. Es besteht aber die Möglichkeit gezielt URLs bestimmter Dienste über einen Proxy umzuleiten. Diese Möglichkeit ist jedoch deprecated.
-- Das Tool "GFI" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Gleichzeitig wurden die speziellen Themes ausgelagert als Addons. Es gibt im Masterportal selber nur noch die Themes default zur tabellarischen Darstellung und sensor zur grafischen Anzeige von Sensordaten mit Zuständen/Status z.B. Elektroladesäulen. Die Verwendung infoFormates "text/html" ist weiterhin möglich, benötigt jedoch eine Tabelle zur Anzeige.
-- Im GFI Default-Theme werden Icons eingeblendet, um von dort andere Tools anzusteuern. Zur Verfügung stehen Icons für die Werkzeuge routing und compareFeatures.
+- Das Tool "GFI" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Gleichzeitig wurden die speziellen Themes ausgelagert als Addons. Es gibt im Masterportal selber nur noch die Themes "default" zur tabellarischen Darstellung und "sensor" zur grafischen Anzeige von Sensordaten mit Zuständen/Status z.B. Elektroladesäulen. Die Verwendung infoFormates "text/html" ist weiterhin möglich, benötigt jedoch eine Tabelle zur Anzeige.
+- Im GFI Theme "default" werden Icons eingeblendet, um von dort andere Tools anzusteuern. Zur Verfügung stehen Icons für die Werkzeuge "routing" und "compareFeatures".
 - Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Das Zeichnen von Punkten wurde geändert, alle Punkte basieren jetzt auf Bild-Dateien. Größe und Deckkraft können nicht mehr eingestellt werden, für diese Funktionalität steht das Zeichnen von Kreisen zur Verfügung. Das Bereitstellen von anderen Bilddateien wurde angepasst, siehe Doku der config.json.
 - Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
-- Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von Vue.js. Weiterhin heißt es fortan "Datei-Import".
+- Das Tool "KML-Import" wurde überarbeitet und heißt fortan "Datei-Import".
 - Babel wurde, um einen Support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.
 - Die Version des Packages fs-extra wurde in der package.json aktualisiert.
 - Die Version des Packages replace-in-file wurde in der package.json aktualisiert.
@@ -41,7 +46,6 @@
 - Die Version des Packages zip-a-folder wurde in der package.json aktualisiert.
 - Das Package moment-timezone-data-webpack-plugin wurde entfernt.
 - In der index.html ist unter der id "loader" und ein neuer css-Loader eingebunden, dessen Darstellung über css geändert werden kann. Oberhalb davon werden Portaltitel und Portallogo während des Ladens des masterportals gezeigt. Sie sind in der index.html unter der id "portal-logo-box" zu finden.
-- Ein kleines masterportal-Logo erscheint jetzt während des Ladens des masterportals unten rechts in der Ecke.
 - In der Konfiguration des Werkzeugs "Strecke/Fläche messen" kann jetzt der Erdradius angegeben werden.
 - Das Modul MapMarker funktioniert nun auf Basis von Vue.js. Es ist nun möglich den Style für Punkt- und Polygon-Marker in der Style.json zu konfigurieren.
 
@@ -53,6 +57,7 @@
 - Das Attribut coord für das Modul zur Koordinatenabfrage ist deprecated. Bitte das Attribut supplyCoord benutzen.
 
 ### Removed
+- Tool "Alerting" wurde entfernt und durch ein neues Tool ersetzt
 - @babel/polyfill wurde aus der package.json entfernt.
 - style-loader wurde aus der package.json entfernt.
 - es6-promise wurde aus der package.json entfernt.
@@ -63,18 +68,22 @@
 - Die Beta-Warnung für die Schrägluftbilder wurde entfernt.
 
 ### Fixed
-- Diverse Bugfixes
+- GFI Darstellung von HTML wurde überarbeitet.
+- Mehrere Bugs beim Schulinformationssystem wurden behoben.
+- Ein Bug wurde behoben, durch den die Legende bei Gruppenlayern nicht funktionierte.
+- Ein Bug wurde behoben, durch den das Mobile Menu doppelt angezeigt wurde.
 - Mit Google Earth erstellte KML Dateien werden mit dem Tool "Datei-Import" nun besser dargestellt.
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
-- Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
-- Ein Fehler in der VisibleVector Suche wurde behoben der verhindert hat, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
+- Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen.
+- Ein Fehler in der VisibleVector Suche wurde behoben. Dieser hatte verhindert, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
 - In Geo-Online kann der Marker wieder über die URL gesetzt werden.
-- Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn
+- Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn.
 - Im Styling wurde das Feld legendValue nicht ausgelesen. Dies funktioniert nun wieder.
-- Im Kontaktformular werden auch email-Adressen mit einer Domain-Endung die länger als 2 Zeichen ist als gültig anerkannt (z.B. name@foo.hamburg)
+- Im Kontaktformular werden auch Email-Adressen mit einer Domain-Endung die länger als 2 Zeichen ist als gültig anerkannt (z.B. name@foo.hamburg).
 - Unstimmigkeiten beim Messen mit dem Werkzeug "Strecke/Fläche messen" wurden beseitigt.
-- Ein Probkem mit ausgeblendeten Geo-JSOn Layern wurde behoben
+- Ein Problem mit Geo-JSOn Layern wurde behoben.
 - In der URL angegebene Layereigenschaften, wie Transparenz werden nun übernommen.
+- Viele weitere Bugfixes
 
 ---
 
