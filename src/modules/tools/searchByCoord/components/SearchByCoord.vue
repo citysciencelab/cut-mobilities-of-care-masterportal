@@ -133,12 +133,22 @@ export default {
                 }
             }
             if (selectedCoordinates.length === 2) {
-                const newCoordinates = [selectedCoordinates[0][0], selectedCoordinates[1][0]];
+                if (this.currentCoordinateSystem !== "ETRS89") {
+                    const easting = Number(selectedCoordinates[0][0]) +
+                (Number(selectedCoordinates[0][1] ? selectedCoordinates[0][1] : 0) / 60) +
+                (Number(selectedCoordinates[0][2] ? selectedCoordinates[0][2] : 0) / 60 / 60),
+                        northing = Number(selectedCoordinates[1][0]) +
+                (Number(selectedCoordinates[1][1] ? selectedCoordinates[1][1] : 0) / 60) +
+                (Number(selectedCoordinates[1][2] ? selectedCoordinates[1][2] : 0) / 60 / 60),
+                        newCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [northing, easting]);
 
-                // this.set("newCenter", proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [selectedCoordinates[0][0], selectedCoordinates[1][0]]));
-
-                this.setMarker(newCoordinates);
-                this.setCenter(newCoordinates);
+                    this.setMarker(newCoordinates);
+                    this.setCenter(newCoordinates);
+                }
+                else {
+                    this.setMarker(selectedCoordinates);
+                    this.setCenter(selectedCoordinates);
+                }
             }
         },
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
