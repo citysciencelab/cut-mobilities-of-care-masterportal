@@ -38,7 +38,8 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         wrongConfigParcelsearch: "",
         parcelSearchImpossible: "",
         tryAgainLater: "",
-        zoomLevel: 7
+        zoomLevel: 7,
+        mapMarkerType: "Point"
 
     }),
     /**
@@ -297,8 +298,11 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
             });
             this.setParcelFound(true);
 
-            store.dispatch("MapMarker/placingPointMarker", coordinate);
-            Radio.trigger("MapView", "setCenter", coordinate, this.get("zoomLevel"));
+            if (this.get("mapMarkerType") === "Point") {
+                store.dispatch("MapMarker/placingPointMarker", coordinate);
+                Radio.trigger("MapView", "setCenter", coordinate, this.get("zoomLevel"));
+            }
+
             // use a timeout here, else the resolution-change is not ready and in the addon showParcelGfi/RadioBridge the wrong result is returned for parcelsearch
             setTimeout(() => {
                 Radio.trigger("ParcelSearch", "parcelFound", attributes);

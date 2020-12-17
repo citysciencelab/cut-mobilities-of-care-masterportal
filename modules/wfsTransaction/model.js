@@ -1,7 +1,10 @@
 import {WFS} from "ol/format.js";
+import getProxyUrl from "../../src/utils/getProxyUrl";
 
 const WFSTransaction = Backbone.Model.extend({
-    defaults: {},
+    defaults: {
+        useProxy: false
+    },
     initialize: function () {
         const channel = Radio.channel("wfsTransaction");
 
@@ -91,7 +94,14 @@ const WFSTransaction = Backbone.Model.extend({
      * @returns {void}
      */
     sendRequest: function (url, data) {
-        $.ajax(Radio.request("Util", "getProxyURL", url), {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const requestUrl = this.get("useProxy") ? getProxyUrl(url) : url;
+
+        $.ajax(requestUrl, {
             type: "POST",
             dataType: "text", // receive type
             contentType: "text", // send type

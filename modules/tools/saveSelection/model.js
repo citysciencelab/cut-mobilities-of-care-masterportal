@@ -117,7 +117,17 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
     },
 
     setLayerList: function (value) {
-        this.set("layerList", value);
+        const getIds = [];
+        let withoutUrlFeatures = [];
+
+        if (Config.featureViaURL !== undefined) {
+            Config.featureViaURL.layers.forEach(element => {
+                getIds.push(element.id);
+            });
+        }
+        withoutUrlFeatures = value.filter((v) => !getIds.includes(v.id));
+
+        this.set("layerList", withoutUrlFeatures);
     },
 
     setZoomLevel: function (zoomLevel) {

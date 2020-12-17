@@ -10,7 +10,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |----|-------------|---|-------|------------|--------|
 |layerConf|ja|String||Pfad zur **[services.json](services.json.md)**, die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme (**[siehe Syntax](http://proj4js.org/#named-projections)**).|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
-|proxyUrl|ja|String||Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe **[print](#markdown-header-print)**).|`"/cgi-bin/proxy.cgi"`|
+|proxyUrl|ja|String||Deprecated im nächsten Major-Release, bitte nutzen Sie den Mapfish-Print 3. Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe **[print](#markdown-header-print)**).|`"/cgi-bin/proxy.cgi"`|
 |restConf|ja|String||Pfad zur **[rest-services.json](rest-services.json.md)**, die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-internet.json"`|
 |styleConf|ja|String||Pfad zur **[style.json](style.json.md)**, die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
 |addons|nein|Array|[]|Angabe der Namen der gewünschten Custom-Module. Diese befinden sich im Ordner /addons/ und deren Entrypoints werden mithilfe der Datei addonsConf.json definiert.|`["myAddon1", "myAddon2"]`|
@@ -22,7 +22,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
 |featureViaURL|nein|**[featureViaURL](#markdown-header-featureviaurl)**||Optionale Konfigurationseinstellungen für den URL-Parameter *featureViaURL*. Siehe **[URL-Parameter](URL-Parameter.md)**. Implementiert für den treeType *light* und *custom*.||
 |**[footer](#markdown-header-footer)**|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
-|gfiWindow|nein|String|"detached"|Deprecated, bitte das Attribut "Portalconfig.menu.tool.gfi.desktopType" in der **[config.json](#config.json.md)** verwenden. Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
+|gfiWindow|nein|String|"detached"|Deprecated im nächsten Major-Release, bitte das Attribut "Portalconfig.menu.tool.gfi.desktopType" in der **[config.json](#config.json.md)** verwenden. Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|
 |infoJson|nein|String|"info.json"|Pfad zur info.json, die Zusatzinformationen für Snippets enthält. Der Pfad ist relativ zur index.html.|`"info.json"`|
 |inputMap|nein|Object|`{}`|Ist dieses Objekt vorhanden und ist setMarker darin auf true gesetzt, dann wird das Masterportal als Eingabeelement für Daten konfiguriert. Das bedeutet, dass jeder Klick auf die Karte einen Map Marker setzt und die Koordinaten des Markers via RemoteInterface im gewünschten Koordninatensystem sendet.|`{setMarker: true, targetProjection: "EPSG:4326", setCenter: false}`|
@@ -31,11 +31,11 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |inputMap.targetProjection|nein|String|`EPSG:25832`|Das Zielkoordninatensystem, in dem die Koordinaten des Markers gesendet werden sollen.|`targetprojection: "EPSG:4326"`|
 |mapMarker|nein|**[mapMarker](#markdown-header-mapmarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer fefiniert werden.||
 |metaDataCatalogueId|nein|String|"2"|URL des in den Layerinformationen verlinkten Metadatenkatalogs. Die ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"MetadatenkatalogURL"`|
+|**[metadata](#markdown-header-metadata)**|nein|Object||Darin kann angegeben werden, welche Metdaten-URLs über einen Proxy angefragt werden sollen.||
 |**[mouseHover](#markdown-header-mousehover)**|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in **[config.json](config.json.md)** (*Themenconfig.Fachdaten.Layer*).|`true`|
 |obliqueMap|nein|Boolean|false|Legt fest eine Schrägluftbild Karte erstellt werden soll. Benötigt zusätzlich noch eine Schrägluftbildebene.||
 |portalConf|nein|String|"config.json"|Pfad zur config.json des Portals. Es kann auch ein Knotenpunkt angegeben werden. Der Weiterführende Pfad wird dann über den URL-Parameter "config" gesteuert.|Direkter Pfad: "../masterTree/config.json"; Knotenpunkt: "../../portal/master/". Zusätzlich muss dann in der URL der Parameter "config=config.json" stehen.|
 |postMessageUrl|nein|String|"http://localhost:8080"|Url auf die das Portal per post-Message agieren und reagieren kann.| "http://localhost:8080"|
-|proxy|nein|Boolean|true|Gibt an ob bei URLs Punkte durch Unterstriche ersetzt werden sollen. Dadurch werden CORS-Fehler verhindert. Achtung: Es muss serverseitig ein Reverse-Proxy eingerichtet werden.||
 |proxyHost|nein|String||Hostname eines remote Proxy (dort muss CORS aktiviert sein)|`"https://proxy.example.com"`|
 |[quickHelp]|nein|Object|`{}`|Aktiviert das QuickHelp-Modul. Dieses zeigt ein Hilfefenster für die verfügbaren Funktionen des jeweiligen Modul an. Bisher verfügbar für den Themenbaum (CustomTree), die Suchleiste (Searchbar) und für das Werkzeug: Messen (MeasureTool)).||
 |**[remoteInterface](#markdown-header-remoteinterface)**|nein|object||Optionale Konfiguration für das remoteInterface.||
@@ -292,6 +292,26 @@ tree: {
 
 ***
 
+## metadata ##
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|useProxy|nein|String[]||Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt welche Metadaten-URLs über einen Proxy angefragt werden sollen, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|
+
+**Beispiel:**
+
+```
+#!json
+metadata: {
+    useProxy: [
+        "https://metaver.de/csw"
+    ]
+}
+```
+
+***
+
+***
+
 ## zoomToFeature ##
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -299,6 +319,7 @@ tree: {
 |wfsId|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
 |attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
 |styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben..|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|
 
 **Beispiel:**
 

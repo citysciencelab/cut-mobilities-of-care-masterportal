@@ -8,5 +8,6 @@ export default {
     layerCounterIdForLayerInfo: "",
     layerInfoLegend: {},
     showCollapseAllButton: false,
-    legendOnChanged: []
+    legendOnChanged: [],
+    showLegendInMenu: true
 };

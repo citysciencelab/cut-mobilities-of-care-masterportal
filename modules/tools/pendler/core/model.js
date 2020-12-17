@@ -5,6 +5,7 @@ import {Point} from "ol/geom.js";
 import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
 import store from "../../../../src/app-store";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -27,7 +28,8 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         trefferAnzahl: "top5",
         attrAnzahl: "anzahl_einpendler",
         attrGemeinde: "wohnort",
-        attrGemeindeContrary: "arbeitsort"
+        attrGemeindeContrary: "arbeitsort",
+        useProxy: false
     }),
     /**
      * @class PendlerCoreModel
@@ -50,6 +52,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @property {String} featureType= "mrh_einpendler_gemeinde" name of a feature type
      * @property {String} attrAnzahl="anzahl_einpendler" name of the attribute for count of commuter
      * @property {String} attrGemeinde="wohnort" name of the attribute called 'gemeinde'
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires //todo
      * @listens Alerting#RadioTriggerAlertConfirmed
      */
@@ -137,10 +140,15 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @returns {void}
      */
     sendRequest: function (type, data, successFunction) {
-        const url = this.get("url");
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url");
 
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", url),
+            url: url,
             data: data,
             contentType: "text/xml",
             type: type,
