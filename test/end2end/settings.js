@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: {"browserName": "chrome", version: "80", acceptSslCerts: true, acceptInsecureCerts: true},
+        chrome: {"browserName": "chrome", version: "87", acceptSslCerts: true, acceptInsecureCerts: true},
         ie: webdriver.Capabilities.ie()
     },
     /** TODO
