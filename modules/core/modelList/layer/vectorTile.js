@@ -111,7 +111,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
     setConfiguredLayerStyle: function () {
         let stylingPromise;
 
-        if (this.get("styleId")) {
+        if (this.get("styleId") && this.get("styleId") !== "default") {
             this.set("selectedStyleID", this.get("styleId"));
             stylingPromise = this.setStyleById(this.get("styleId"));
         }
@@ -170,7 +170,7 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
                     );
                 }
 
-                stylefunction(this.get("layer"), style, "esri");
+                stylefunction(this.get("layer"), style, Object.keys(style.sources)[0]);
                 this.set("selectedStyleID", id);
             });
     },

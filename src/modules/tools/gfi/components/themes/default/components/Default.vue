@@ -144,6 +144,11 @@ export default {
                     <td v-else-if="isEmailAddress(value)">
                         <a :href="`mailto:${value}`">{{ value }}</a>
                     </td>
+                    <td
+                        v-else-if="value.includes('<br>')"
+                        v-html="value"
+                    >
+                    </td>
                     <td v-else>
                         {{ value }}
                     </td>

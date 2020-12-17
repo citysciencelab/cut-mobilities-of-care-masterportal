@@ -133,9 +133,9 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer. Wird nur durch Klic
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|false|
-|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.md)** vor.|false|
+|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/0d136a44a59dd3b64ec986c258763ac08603bf15/doc/rest-services.json.md)** vor.|false|
 |limit|nein|Number|50|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|false|
-|states|nein|string|""|Kann die Namen der Bundesländer enthalten. Trenner beliebig. Eventuell auch englische Ausprägungen eintragen, da die Daten frei im OpenSourceProjekt **https://www.openstreetmap.org** erfasst werden können.|false|
+|states|nein|string|""|Kann die Namen der Bundesländer enthalten. Trenner beliebig. Eventuell auch englische Ausprägungen eintragen, da die Daten frei im OpenSourceProjekt **[OpenStreetMap](https://www.openstreetmap.org)** erfasst werden können.|false|
 |classes|nein|string|[]|Kann die Klassen, für die Ergebnisse erzielt werden sollen, enthalten.|false|
 
 **Beispiel**
@@ -1120,6 +1120,8 @@ Der Filter bietet eine Vielzahl von Möglichkeiten um Vektor-Daten filtern zu k�
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
+|allowMultipleQueriesPerLayer|nein|Boolean|false|Regelt, ob beim selektieren nur der ausgewählte Layer gefiltert werden soll oder ob die Filtereinstellungen deselektierter Layer beibehalten werden sollen.|false|
+|deactivateGFI|nein|Boolean|false|Wenn das Attribute auf true gesetzt wird ist bei geöffnetem Filter die GFI-Abfrage deaktiviert.|false|
 |isGeneric|nein|Boolean|false|Zeigt an, ob sich der Filter dynamisch erzeugen lässt. Ist momentan noch nicht umgesetzt.|false|
 |minScale|nein|Integer||Minimale Zoomstufe auf die der Filter bei der Darstellung der Ergebnisse heranzoomt.|false|
 |liveZoomToFeatures|nein|Boolean|false|Gibt an, ob der Filter sofort nach der Filterung auf die Filterergebnisse zoomt.|false|
@@ -1477,6 +1479,13 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
 |iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {"id": "gelber Pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines farbigen Punktes oder eines Symbols hat. Es können wie im Beispiel eigene Bild-Dateien verwendet werden.|false|
+|drawSymbolSettings|nein|**[drawSymbolSet](#markdown-header-portalconfigmenutooldrawdrawsymbolset)**|{color: [55, 126, 184, 1], opacity: 1}|Voreinstellung für das Zeichnen von Symbolen.|false|
+|drawLineSettings|nein|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Linien.|false|
+|drawCurveSettings|nein|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Freihand-Linien.|false|
+|drawAreaSettings|nein|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], opacityContour: 1}|Voreinstellung für das Zeichnen von Flächen.|false|
+|drawCircleSettings|nein|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{circleMethod: "interactive", unit: "m", circleInnerDiameter: null, strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], opacityContour: 1}|Voreinstellung für das Zeichnen von Kreisen.|false|
+|drawDoubleCircleSettings|nein|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{circleMethod: "defined", unit: "m", circleInnerDiameter: 0, circleOuterDiameter: 0, strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], outerColorContour: [0, 0, 0, 1], opacityContour: 1}|Voreinstellung für das Zeichnen von Doppel-Kreisen.|false|
+|writeTextSettings|nein|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{text: "", fontSize: 10, font: "Arial", color: [55, 126, 184, 1], opacity: 1}|Voreinstellung für das Schreiben von Texten.|false|
 
 **Beispiel**
 
@@ -1503,7 +1512,16 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
             "scale": 0.5,
             "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
         }
-    ]
+    ],
+    "drawDoubleCircleSettings": {
+        "circleInnerDiameter": 3000,
+        "circleOuterDiameter": 6000,
+        "strokeWidth": 3,
+        "color": [55, 126, 184, 0],
+        "opacity": 0,
+        "colorContour": [228, 26, 28, 1],
+        "opacityContour": 1
+    }
 }
 ```
 
@@ -1545,6 +1563,202 @@ Punkt Objekt, bestehend aus der Beschriftung, dem Typ und dem Wert.
 ```
 
 ***
+
+
+#### Portalconfig.menu.tool.draw.drawSymbolSet
+
+Objekt zum Ändern des konfigurierten Default-Wertes des Punkt-Symbols im Zeichen-Tool.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|color|ja|Number[]|[55, 126, 184, 1]|Die voreingestellte Farbe des Symbols als RGB color array mit Alpha-Kanal, wenn es sich um einen Punkt handelt.|false|
+|opacity|ja|Number|1|Die voreingestellte Transparenz des Symbols in einer Range [0..1], wenn es sich um einen Punkt handelt.|false|
+
+
+**Beispiel**
+
+```
+#!json
+    {
+        color: [55, 126, 184, 1],
+        opacity: 1
+    }
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.drawLineSet
+
+Objekt zum Ändern des konfigurierten Default-Wertes für eine Linie im Zeichen-Tool.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|strokeWidth|ja|Number|1|Die voreingestellte Strichstärke (Dicke) der Linie in Pixel.|false|
+|colorContour|ja|Number[]|[0, 0, 0, 1]|Die voreingestellte Farbe der Linie als RGB color array mit Alpha-Kanal.|false|
+|opacityContour|ja|Number|1|Die voreingestellte Transparenz der Linie in einer Range [0..1].|false|
+
+**Beispiel**
+
+```
+#!json
+    {
+        strokeWidth: 1,
+        opacityContour: 1,
+        colorContour: [0, 0, 0, 1]
+    }
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.drawCurveSet
+
+Objekt zum Ändern des konfigurierten Default-Wertes für eine Freihandlinie im Zeichen-Tool.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|strokeWidth|ja|Number|1|Die voreingestellte Strichstärke (Dicke) der Freihandlinie in Pixel.|false|
+|colorContour|ja|Number[]|[0, 0, 0, 1]|Die voreingestellte Farbe der Freihandlinie als RGB color array mit Alpha-Kanal.|false|
+|opacityContour|ja|Number|1|Die voreingestellte Transparenz der Freihandlinie in einer Range [0..1].|false|
+
+**Beispiel**
+
+```
+#!json
+    {
+        strokeWidth: 1,
+        opacityContour: 1,
+        colorContour: [0, 0, 0, 1]
+    }
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.drawAreaSet
+
+Objekt zum Ändern des konfigurierten Default-Wertes für eine Fläche im Zeichen-Tool.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|strokeWidth|ja|Number|1|Die voreingestellte Strichstärke (Dicke) des Randes der Fläche in Pixel.|false|
+|color|ja|Number[]|[55, 126, 184, 1]|Die voreingestellte Farbe der Fläche als RGB color array mit Alpha-Kanal.|false|
+|opacity|ja|Number|1|Die voreingestellte Transparenz der Fläche in einer Range [0..1].|false|
+|colorContour|ja|Number[]|[0, 0, 0, 1]|Die voreingestellte Rand-Farbe der Fläche als RGB color array mit Alpha-Kanal.|false|
+|opacityContour|ja|Number|1|Die voreingestellte Transparenz der Rand-Farbe der Fläche in einer Range [0..1].|false|
+
+**Beispiel**
+
+```
+#!json
+    {
+        strokeWidth: 1,
+        color: [55, 126, 184, 1],
+        opacity: 1,
+        colorContour: [0, 0, 0, 1],
+        opacityContour: 1
+    }
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.drawCircleSet
+
+Objekt zum Ändern des konfigurierten Default-Wertes für einen Kreis im Zeichen-Tool.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|circleMethod|ja|String|"interactive"|Die voreingestellte Methode wie der Kreis gezogen werden soll. "interactive": Freihand, "defined": mit Angabe fixer Werte|false|
+|unit|ja|String|"m"|Die voreingestellte Maßeinheit mit der der Durchmesser des Kreises unter der circleMethod "defined" berechnet werden soll.|false|
+|circleInnerDiameter|ja|Number|0|Der voreingestellte Durchmesser des Kreises bezogen auf die Unit unter der circleMethod "defined".|false|
+|strokeWidth|ja|Number|1|Die voreingestellte Strichstärke (Dicke) des Randes des Kreises in Pixel.|false|
+|color|ja|Number[]|[55, 126, 184, 1]|Die voreingestellte Farbe des Kreises als RGB color array mit Alpha-Kanal.|false|
+|opacity|ja|Number|1|Die voreingestellte Transparenz des Kreises in einer Range [0..1].|false|
+|colorContour|ja|Number[]|[0, 0, 0, 1]|Die voreingestellte Rand-Farbe des Kreises als RGB color array mit Alpha-Kanal.|false|
+|opacityContour|ja|Number|1|Die voreingestellte Transparenz der Rand-Farbe des Kreises in einer Range [0..1].|false|
+
+**Beispiel**
+
+```
+#!json
+    {
+        circleMethod: "interactive",
+        unit: "m",
+        circleInnerDiameter: 0,
+        strokeWidth: 1,
+        color: [55, 126, 184, 1],
+        opacity: 1,
+        colorContour: [0, 0, 0, 1],
+        opacityContour: 1
+    }
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.drawDoubleCircleSet
+
+Objekt zum Ändern des konfigurierten Default-Wertes für einen Doppelkreis im Zeichen-Tool.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|circleMethod|ja|String|"defined"|Die voreingestellte Methode wie der Doppelkreis gezogen werden soll. "interactive": Freihand, "defined": mit Angabe fixer Werte|false|
+|unit|ja|String|"m"|Die voreingestellte Maßeinheit mit der der Durchmesser des Doppelkreises unter der circleMethod "defined" berechnet werden soll.|false|
+|circleInnerDiameter|ja|Number|0|Der voreingestellte Durchmesser des inneren Ringes des Doppelkreises bezogen auf die Unit unter der circleMethod "defined".|false|
+|circleOuterDiameter|ja|Number|0|Der voreingestellte Durchmesser des äußeren Ringes des Doppelkreises bezogen auf die Unit unter der circleMethod "defined".|false|
+|strokeWidth|ja|Number|1|Die voreingestellte Strichstärke (Dicke) des Randes des Doppelkreises in Pixel.|false|
+|color|ja|Number[]|[55, 126, 184, 1]|Die voreingestellte Farbe des Doppelkreises als RGB color array mit Alpha-Kanal.|false|
+|opacity|ja|Number|1|Die voreingestellte Transparenz des Doppelkreises in einer Range [0..1].|false|
+|colorContour|ja|Number[]|[0, 0, 0, 1]|Die voreingestellte innere Ring-Farbe des Doppelkreises als RGB color array mit Alpha-Kanal.|false|
+|outerColorContour|ja|Number[]|[0, 0, 0, 1]|Die voreingestellte äußere Ring-Farbe des Doppelkreises als RGB color array mit Alpha-Kanal.|false|
+|opacityContour|ja|Number|1|Die voreingestellte Transparenz der Rand-Farbe des Doppelkreises in einer Range [0..1].|false|
+
+**Beispiel**
+
+```
+#!json
+    {
+        circleMethod: "defined",
+        unit: "m",
+        circleInnerDiameter: 0,
+        circleOuterDiameter: 0,
+        strokeWidth: 1,
+        color: [55, 126, 184, 1],
+        opacity: 1,
+        colorContour: [0, 0, 0, 1],
+        opacityContour: 1
+    }
+```
+
+***
+
+#### Portalconfig.menu.tool.draw.writeTextSet
+
+Objekt zum Ändern des konfigurierten Default-Wertes für einen Text im Zeichen-Tool.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|text|ja|String|""|Der voreingestellte Text.|false|
+|fontSize|ja|Number|10|Die voreingestellte Schriftgröße.|false|
+|font|ja|String|"Arial"|Die voreingestellte Schriftart (beschränkt auf "Arial", "Calibri" oder "Times New Roman").|false|
+|color|ja|Number[]|[55, 126, 184, 1]|Die voreingestellte Farbe der Fläche als RGB color array mit Alpha-Kanal.|false|
+|opacity|ja|Number|1|Die voreingestellte Transparenz der Fläche in einer Range [0..1].|false|
+
+**Beispiel**
+
+```
+#!json
+    {
+        text: "",
+        fontSize: 10,
+        font: "Arial",
+        color: [55, 126, 184, 1],
+        opacity: 1
+    }
+```
+
+***
+
+
+
+
 
 #### Portalconfig.menu.tool.featureLister
 
@@ -2331,7 +2545,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|false|
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an, in denen der Layer verwendet werden kann.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|false|
-|gfiTheme|nein|String|"default"|Wert aus **[services.json](services.json.md)**. Gibt an, welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|true|
+|gfiTheme|nein|String/Object|"default"|Wert aus **[services.json](services.json.md)**. Gibt an, welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|true|
 |layerAttribution|nein|String||Wert aus **[services.json](services.json.md)**. HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|false|
 |legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
 |legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
@@ -2383,7 +2597,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|false|
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an, in denen der Layer verwendet werden kann.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|false|
-|gfiTheme|nein|String|"default"|Wert aus **[services.json](services.json.md)**. Gibt an, welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|true|
+|gfiTheme|nein|String/Object|"default"|Wert aus **[services.json](services.json.md)**. Gibt an, welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|true|
 |layerAttribution|nein|String||Wert aus **[services.json](services.json.md)**. HTML String. Dieser wird angezeigt, sobald der Layer aktiv ist.|false|
 |legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
 |legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
