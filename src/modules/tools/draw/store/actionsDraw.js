@@ -135,7 +135,6 @@ const initialState = Object.assign({}, stateDraw),
             interaction.on("drawstart", event => {
                 event.feature.set("isOuterCircle", isOuterCircle);
                 event.feature.set("isVisible", true);
-                dispatch("addDrawStateToFeature", event.feature);
                 dispatch("drawInteractionOnDrawEvent", drawInteraction);
 
                 if (!toolTip && state?.drawType?.id === "drawCircle" || state?.drawType?.id === "drawDoubleCircle") {
@@ -157,6 +156,7 @@ const initialState = Object.assign({}, stateDraw),
                 });
             }
             interaction.on("drawend", event => {
+                dispatch("addDrawStateToFeature", event.feature);
                 dispatch("uniqueID").then(id => {
                     event.feature.set("styleId", id);
 

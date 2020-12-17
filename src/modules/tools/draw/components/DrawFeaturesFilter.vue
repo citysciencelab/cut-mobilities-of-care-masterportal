@@ -15,8 +15,6 @@ export default {
         /**
          * Groups the features based on the filter configuration (filterList).
          * The key is the name of the filter to which the features belong to.
-         * @param {module:ol/Feature[]} features - The features to be grouped.
-         * @param {Object[]} filterList - The configured Filterlist.
          * @returns {Object} The grouped features.
          */
         groupedFeatures () {
