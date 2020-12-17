@@ -7,6 +7,7 @@ const AnimationView = Backbone.View.extend({
         "click .csv-download": "createAlertBeforeDownload",
         "click .btn-remove-features": "removeFeatures",
         "change #select-kreis": "setKreis",
+        "change #pendler-check-gemeinde": "checkGemeinde",
         "change #select-gemeinde": "setGemeinde",
         "change #select-trefferAnzahl": "setTrefferAnzahl",
         "change input[type=radio]": "setDirection"
@@ -17,7 +18,7 @@ const AnimationView = Backbone.View.extend({
             // ändert sich der Fensterstatus wird neu gezeichnet
             "change:isActive": this.render,
             // ändert sich eins dieser Attribute wird neu gezeichnet
-            "change:gemeinden change:gemeinde change:trefferAnzahl change:direction change:emptyResult change:animating change:pendlerLegend": this.render,
+            "change:gemeinden change:gemeinde change:trefferAnzahl change:direction change:emptyResult change:animating change:pendlerLegend change:featureType": this.render,
             "render": this.render,
             "change:currentLng": () => {
                 this.render(this.model, this.model.get("isActive"));
@@ -74,6 +75,15 @@ const AnimationView = Backbone.View.extend({
 
     setKreis: function (evt) {
         this.model.setKreis(evt.target.value);
+    },
+
+    checkGemeinde: function (evt) {
+        if (evt.currentTarget.checked === true) {
+            this.model.setFeatureType(this.model.get("wfsappGemeinde"));
+        }
+        else {
+            this.model.setFeatureType(this.model.get("wfsappKreise"));
+        }
     },
 
     setGemeinde: function (evt) {

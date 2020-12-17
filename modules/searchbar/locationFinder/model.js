@@ -1,5 +1,6 @@
 import "../model";
 import {transformFromMapProjection as mpapiTransformToMapProjection, getProjection as mpapiGetProjection} from "masterportalAPI/src/crs";
+import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel.prototype */{
     defaults: {
@@ -20,7 +21,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
      * @property {string} serviceUrl - URL of LocationFinder-Service
      * @property {Object} classes=[] - Filter results of LocationFinder to listed classes.
      * @property {*} ajaxRequest=null - Object for controlling ajax request
-     * @property {boolean} useProxy=false - Use proxy
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @param {Object} config - The configuration object of the LocationFinder search
      * @param {number} [config.incrementalSearch=true] - Enable/disable incremental search (autocomplete)
      * @param {number} config.serviceId - ID of rest service
@@ -47,8 +48,13 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                 "searchAll": this.search
             };
 
+            /**
+             * @deprecated in the next major-release!
+             * useProxy
+             * getProxyUrl()
+             */
             if (this.get("useProxy")) {
-                this.setServiceUrl(Radio.request("Util", "getProxyURL", service.get("url")));
+                this.setServiceUrl(getProxyUrl(service.get("url")));
             }
             else {
                 this.setServiceUrl(service.get("url"));

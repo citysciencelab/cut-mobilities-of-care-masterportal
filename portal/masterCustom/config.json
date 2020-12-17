@@ -216,7 +216,7 @@
                "name": "translate#common:menu.tools.getInfos",
                  "glyphicon":"glyphicon-info-sign",
                  "desktopType": "attached",
-                 "isActive":true
+                 "active":true
               },
               "print":{
                "name": "translate#common:menu.tools.print",

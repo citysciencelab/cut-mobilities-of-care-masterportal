@@ -37,7 +37,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @listens Core#RadioRequestParametricURLGetZoomToFeatureIds
      * @listens Core#RadioRequestParametricURLGetBrwId
      * @listens Core#RadioRequestParametricURLGetBrwLayerName
-     * @listens Core#RadioRequestParametricURLGetMarkerFromUrl
      * @listens Core#RadioTriggerParametricURLUpdateQueryStringParam
      * @fires Core#RadioTriggerParametricURLReady
      * @fires Alerting#RadioTriggerAlertAlert
@@ -95,9 +94,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             },
             "getBrwLayerName": function () {
                 return this.get("brwLayerName");
-            },
-            "getMarkerFromUrl": function () {
-                return this.get("markerFromUrl");
             }
         }, this);
 
@@ -673,7 +669,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @returns {void}
      */
     setMarkerFromUrl: function (coordinate) {
-        this.set("markerFromUrl", this.parseCoordinates(coordinate, "MARKER"));
+        store.commit("MapMarker/setUrlParameter", this.parseCoordinates(coordinate, "MARKER"));
     },
 
     /**

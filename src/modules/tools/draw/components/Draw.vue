@@ -1,5 +1,6 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsDraw";
 import DownloadView from "../../../../../modules/tools/download/view";
@@ -27,14 +28,147 @@ export default {
             return !(this.currentInteraction === "draw");
         },
         /**
+         * Enables or disables the select- or input-boxes depending on the state of currentInteraction and selectedFeature.
+         * @returns {Boolean} false activates the elements, true deactivates the elements
+         */
+        drawHTMLElementsModifyFeature () {
+            if (this.selectedFeature !== null && this.currentInteraction === "modify") {
+                return false;
+            }
+            return !(this.currentInteraction === "draw");
+        },
+        /**
          * Disables the input for the diameter and the unit for the drawType "drawCircle" if the circleMethod is not set to "defined".
          * @returns {Boolean} return false if drawing is enabled and circleMethod is set to "defined", else return true.
          */
         drawCircleMethods () {
             return this.drawType.id === "drawCircle" ?
-                this.drawHTMLElements || this.circleMethod !== "defined"
+                this.drawHTMLElements || this.getStyleSettings()?.circleMethod !== "defined"
                 : this.drawHTMLElements;
+        },
+
+        circleInnerDiameterComputed: {
+            /**
+             * getter for the computed property circleInnerDiameter of the current drawType
+             * @returns {Number} the current diameter
+             */
+            get () {
+                return this.getStyleSettings()?.circleInnerDiameter;
+            },
+            /**
+             * setter for the computed property circleInnerDiameter of the current drawType
+             * @param {Number} value the value to set the target to
+             * @returns {void}
+             */
+            set (value) {
+                this.setCircleInnerDiameter({target: {value, unit: this.getStyleSettings()?.unit}});
+            }
+        },
+        circleOuterDiameterComputed: {
+            /**
+             * getter for the computed property circleOuterDiameter of the current drawType
+             * @returns {Number} the current diameter
+             */
+            get () {
+                return this.getStyleSettings()?.circleOuterDiameter;
+            },
+            /**
+             * setter for the computed property circleOuterDiameter of the current drawType
+             * @param {Number} value the value to set the target to
+             * @returns {void}
+             */
+            set (value) {
+                this.setCircleOuterDiameter({target: {value, unit: this.getStyleSettings()?.unit}});
+            }
+        },
+        /**
+         * computed property for circleMethod of the current drawType
+         * @returns {String} "defined" or "interactive"
+         */
+        circleMethodComputed () {
+            return this.getStyleSettings()?.circleMethod;
+        },
+        /**
+         * computed property for the unit of the current drawType
+         * @returns {String} "m" or "km"
+         */
+        unitComputed () {
+            return this.getStyleSettings()?.unit;
+        },
+        /**
+         * computed property for the text of the current drawType
+         * @returns {String} the current text
+         */
+        textComputed () {
+            return this.getStyleSettings()?.text;
+        },
+        /**
+         * computed property for the font-size of the current drawType
+         * @returns {Number} the current font-size as number
+         */
+        fontSizeComputed () {
+            return this.getStyleSettings()?.fontSize;
+        },
+        /**
+         * computed property for the font family of the current drawType
+         * @returns {Number} the current font family
+         */
+        fontComputed () {
+            return this.getStyleSettings()?.font;
+        },
+        /**
+         * computed property for the stroke width of the current drawType
+         * @returns {Number} the current width as number
+         */
+        strokeWidthComputed () {
+            return this.getStyleSettings()?.strokeWidth;
+        },
+        /**
+         * computed property for the opacity linked to color of the current drawType
+         * @returns {Number} the current opacity as css range [0..1] - this is the value, not the caption (!)
+         */
+        opacityComputed () {
+            return this.getStyleSettings()?.opacity;
+        },
+        /**
+         * computed property for the opacity linked to colorContour of the current drawType
+         * @returns {Number} the current opacity (of colorContour) as css range [0..1] - this is the value, not the caption (!)
+         */
+        opacityContourComputed () {
+            return this.getStyleSettings()?.opacityContour;
+        },
+        /**
+         * computed property for the color of the current drawType
+         * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
+         */
+        colorContourComputed () {
+            return this.getStyleSettings()?.colorContour;
+        },
+        /**
+         * computed property for the outer color of a double circle
+         * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
+         */
+        outerColorContourComputed () {
+            return this.getStyleSettings()?.outerColorContour;
+        },
+        /**
+         * computed property for the colorContour of the current drawType
+         * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
+         */
+        colorComputed () {
+            return this.getStyleSettings()?.color;
+        },
+        /**
+         * computed property of the label for the normal colorContour - incase this is a double circle
+         * @returns {String} the label to use for the normal colorContour
+         */
+        colorContourLabelComputed () {
+            if (this.drawType.id === "drawDoubleCircle" && this.currentInteraction !== "modify") {
+                return this.$i18n.i18next.t("common:modules.tools.draw.innerColorContour");
+            }
+            return this.$i18n.i18next.t("common:modules.tools.draw.colorContour");
         }
+
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
     },
     watch: {
@@ -47,7 +181,7 @@ export default {
             if (value) {
                 new DownloadView(this.$store);
                 this.setActive(value);
-                this.setCanvasCursor("crosshair");
+                this.setCanvasCursorByInteraction(this.currentInteraction);
             }
             else {
                 this.resetModule();
@@ -57,7 +191,7 @@ export default {
     },
     mounted () {
         if (this.active) {
-            this.setCanvasCursor("crosshair");
+            this.setCanvasCursorByInteraction(this.currentInteraction);
         }
     },
     created () {
@@ -83,11 +217,23 @@ export default {
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions),
+        /**
+         * checks if both given arrays have the same number at their first 3 positions
+         * note: the opacity (4th number) will be ignored - this is only about color
+         * @param {Number[]} a a "color"-array e.g. white: [255, 255, 255, 1] or [255, 255, 255]
+         * @param {Number[]} b another "color"-array to compare with
+         * @returns {Boolean} true: the values at the first 3 positions of the given color arrays are identical
+         */
+        isEqualColorArrays (a, b) {
+            if (Array.isArray(a) && Array.isArray(b) && a.length >= 3 && b.length >= 3) {
+                return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+            }
+            return false;
+        },
         close () {
-            // NOTE: Line 50 can be moved to Line 41 when everything is completly in Vue
             this.resetModule();
             // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
+            const model = getComponent(this.storePath.id);
 
             if (model) {
                 model.set("isActive", false);
@@ -102,6 +248,14 @@ export default {
             this.mapElement.style.cursor = cursorType;
             this.mapElement.onmousedown = this.onMouseDown;
             this.mapElement.onmouseup = this.onMouseUp;
+        },
+        setCanvasCursorByInteraction (interaction) {
+            if (interaction === "modify" || interaction === "delete") {
+                this.setCanvasCursor("pointer");
+            }
+            else {
+                this.setCanvasCursor("crosshair");
+            }
         },
         onMouseDown () {
             if (this.mapElement.style.cursor === "pointer") {
@@ -127,9 +281,6 @@ export default {
                 return option.id;
             }
             return "noName";
-        },
-        isColorSelected (option) {
-            return this.color ? this.color.slice(0, this.color.length - 1).join(",") === option.value.join(",") : constants.pointColorOptions[0].color.join(",") === option.value.join(",");
         }
     }
 };
@@ -156,7 +307,8 @@ export default {
                     v-for="option in constants.drawTypeOptions"
                     :id="option.id"
                     :key="'draw-drawType-' + option.id"
-                    :value="option.value"
+                    :value="option.geometry"
+                    :selected="option.id === drawType.id"
                 >
                     {{ $t("common:modules.tools.draw." + option.id) }}
                 </option>
@@ -180,10 +332,16 @@ export default {
                             :disabled="drawHTMLElements"
                             @change="setCircleMethod"
                         >
-                            <option value="interactive">
+                            <option
+                                value="interactive"
+                                :selected="circleMethodComputed === 'interactive'"
+                            >
                                 {{ $t("common:modules.tools.draw.interactive") }}
                             </option>
-                            <option value="defined">
+                            <option
+                                value="defined"
+                                :selected="circleMethodComputed === 'defined'"
+                            >
                                 {{ $t("common:modules.tools.draw.defined") }}
                             </option>
                         </select>
@@ -199,7 +357,7 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="tool-draw-circleInnerDiameter"
-                            v-model="circleInnerDiameter"
+                            v-model="circleInnerDiameterComputed"
                             class="form-control"
                             :style="{borderColor: innerBorderColor}"
                             type="number"
@@ -219,7 +377,7 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="tool-draw-circleOuterDiameter"
-                            v-model="circleOuterDiameter"
+                            v-model="circleOuterDiameterComputed"
                             class="form-control"
                             :style="{borderColor: outerBorderColor}"
                             type="number"
@@ -244,13 +402,13 @@ export default {
                             @change="setUnit"
                         >
                             <option
-                                value="m"
-                                label="m"
-                            />
-                            <option
-                                value="km"
-                                label="km"
-                            />
+                                v-for="option in constants.unitOptions"
+                                :key="'draw-fontSize-' + option.value"
+                                :selected="option.value === unitComputed"
+                                :value="option.value"
+                            >
+                                {{ option.caption }}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -264,11 +422,11 @@ export default {
                     <div class="col-md-7 col-sm-7">
                         <input
                             id="tool-draw-text"
-                            v-model="text"
                             class="form-control"
                             type="text"
                             :placeholder="$t('common:modules.tools.draw.clickToPlaceText')"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
+                            :value="textComputed"
                             @input="setText"
                         >
                     </div>
@@ -284,12 +442,13 @@ export default {
                         <select
                             id="tool-draw-fontSize"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setFontSize"
                         >
                             <option
                                 v-for="option in constants.fontSizeOptions"
                                 :key="'draw-fontSize-' + option.value"
+                                :selected="option.value === fontSizeComputed"
                                 :value="option.value"
                             >
                                 {{ option.caption }}
@@ -308,13 +467,14 @@ export default {
                         <select
                             id="tool-draw-font"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setFont"
                         >
                             <option
                                 v-for="option in constants.fontOptions"
                                 :key="'draw-font-' + option.value"
                                 :value="option.value"
+                                :selected="option.value === fontComputed"
                             >
                                 {{ option.caption }}
                             </option>
@@ -332,7 +492,7 @@ export default {
                         <select
                             id="tool-draw-symbol"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setSymbol"
                         >
                             <!-- NOTE: caption of the iconList is deprecated in 3.0.0 -->
@@ -340,6 +500,7 @@ export default {
                                 v-for="option in iconList"
                                 :key="'draw-icon-' + (option.id ? option.id : option.caption)"
                                 :value="(option.id ? option.id : option.caption)"
+                                :selected="option.id === symbol.id"
                             >
                                 {{ $t(getIconLabelKey(option)) }}
                             </option>
@@ -357,13 +518,14 @@ export default {
                         <select
                             id="tool-draw-strokeWidth"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setStrokeWidth"
                         >
                             <option
                                 v-for="option in constants.strokeOptions"
                                 :key="'draw-stroke-' + option.value"
                                 :value="option.value"
+                                :selected="option.value === strokeWidthComputed"
                             >
                                 {{ option.caption }}
                             </option>
@@ -382,13 +544,13 @@ export default {
                             id="tool-draw-opacity"
                             :key="`tool-draw-opacity-select`"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setOpacity"
                         >
                             <option
                                 v-for="option in constants.transparencyOptions"
                                 :key="'draw-opacity-option-' + option.value"
-                                :selected="option.value === opacity"
+                                :selected="option.value === opacityComputed"
                                 :value="option.value"
                             >
                                 {{ option.caption }}
@@ -408,13 +570,13 @@ export default {
                             id="tool-draw-opacityContour"
                             :key="`tool-draw-opacityContour-select`"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setOpacityContour"
                         >
                             <option
                                 v-for="option in constants.transparencyOptions.slice(0, constants.transparencyOptions.length -1)"
                                 :key="'draw-opacityContour-option-' + option.value"
-                                :selected="option.value === opacityContour"
+                                :selected="option.value === opacityContourComputed"
                                 :value="option.value"
                             >
                                 {{ option.caption }}
@@ -427,19 +589,45 @@ export default {
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
-                        {{ $t("common:modules.tools.draw.outlineColor") }}
+                        {{ colorContourLabelComputed }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <select
                             id="tool-draw-colorContour"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setColorContour"
                         >
                             <option
                                 v-for="option in constants.colorContourOptions"
                                 :key="'draw-colorContour-' + option.color"
                                 :value="option.value"
+                                :selected="isEqualColorArrays(option.value, colorContourComputed)"
+                            >
+                                {{ $t("common:colors." + option.color) }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div
+                    v-if="drawType.id === 'drawDoubleCircle' && currentInteraction !== 'modify'"
+                    class="form-group form-group-sm"
+                >
+                    <label class="col-md-5 col-sm-5 control-label">
+                        {{ $t("common:modules.tools.draw.outerColorContour") }}
+                    </label>
+                    <div class="col-md-7 col-sm-7">
+                        <select
+                            id="tool-draw-outerColorContour"
+                            class="form-control input-sm"
+                            :disabled="drawHTMLElementsModifyFeature"
+                            @change="setOuterColorContour"
+                        >
+                            <option
+                                v-for="option in constants.colorContourOptions"
+                                :key="'draw-outerColorContour-' + option.color"
+                                :value="option.value"
+                                :selected="isEqualColorArrays(option.value, outerColorContourComputed)"
                             >
                                 {{ $t("common:colors." + option.color) }}
                             </option>
@@ -457,14 +645,14 @@ export default {
                         <select
                             id="tool-draw-pointColor"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setColor"
                         >
                             <option
                                 v-for="option in constants.pointColorOptions"
                                 :key="'draw-color-' + option.color"
                                 :value="option.value"
-                                :selected="isColorSelected(option)"
+                                :selected="isEqualColorArrays(option.value, colorComputed)"
                             >
                                 {{ $t("common:colors." + option.color) }}
                             </option>
@@ -482,13 +670,14 @@ export default {
                         <select
                             id="tool-draw-color"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setColor"
                         >
                             <option
                                 v-for="option in constants.colorOptions"
                                 :key="'draw-color-' + option.color"
                                 :value="option.value"
+                                :selected="isEqualColorArrays(option.value, colorComputed)"
                             >
                                 {{ $t("common:colors." + option.color) }}
                             </option>
@@ -508,7 +697,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'draw' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'draw'"
-                            @click="toggleInteraction('draw'); setCanvasCursor('crosshair')"
+                            @click="toggleInteraction('draw'); setCanvasCursorByInteraction('draw')"
                         >
                             <span class="glyphicon glyphicon-pencil" />
                             {{ $t("common:modules.tools.draw.button.draw") }}
@@ -546,7 +735,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'modify' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'modify'"
-                            @click="toggleInteraction('modify'); setCanvasCursor('pointer')"
+                            @click="toggleInteraction('modify'); setCanvasCursorByInteraction('modify')"
                         >
                             <span class="glyphicon glyphicon-wrench" />
                             {{ $t("common:modules.tools.draw.button.edit") }}
@@ -572,7 +761,7 @@ export default {
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-lgv-grey'"
                             :disabled="currentInteraction === 'delete'"
-                            @click="toggleInteraction('delete'); setCanvasCursor('pointer')"
+                            @click="toggleInteraction('delete'); setCanvasCursorByInteraction('delete')"
                         >
                             <span class="glyphicon glyphicon-trash" />
                             {{ $t("common:modules.tools.draw.button.delete") }}

@@ -17,6 +17,11 @@ module.exports = function (destination) {
             "to": "../mastercode/" + mastercodeVersionFolderName + "/img/ajax-loader.gif"
         },
         {
+            "files": destination + "/js/masterportal.js",
+            "from": /\/img\/tools\/draw\/circle_/g,
+            "to": "/mastercode/" + mastercodeVersionFolderName + "/img/tools/draw/circle_"
+        },
+        {
             "files": destination + "/index.html",
             "from": /\/*(\.+\/)*build/g,
             "to": "../mastercode/" + mastercodeVersionFolderName
@@ -40,6 +45,11 @@ module.exports = function (destination) {
             "files": destination + "/css/masterportal.css",
             "from": /url\s?\(\s?\/img\//g,
             "to": "url(../img/"
+        },
+        {
+            "files": destination + "/js/masterportal.js",
+            "from": /\..\/..\/img\//g,
+            "to": "../mastercode/" + mastercodeVersionFolderName + "/img/"
         },
         {
             "files": destination + "/js/masterportal.js",

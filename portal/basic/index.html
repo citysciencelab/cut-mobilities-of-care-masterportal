@@ -7,18 +7,27 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <title>Basic - Portal</title>
+    <title>Basic - Portal</title> <!-- Here you can enter your own Portal Title for the website -->
     <link rel="stylesheet" href="../../build/css/masterportal.css">
+    <link rel="stylesheet" href=""> <!-- Here you can configure your own fonts -->
+
 </head>
 <body>
-    <div id="masterportal-root"></div>
-    <div class="loading">
-        <img id="portal-logo" src="../../img/Logo_Masterportal.svg">
-        <div id="portal-text">Basic - Portal</div>
-        <div id="init-loader"><img src="../../img/ajax-loader.gif"></div>
+<div id="masterportal-root"></div>
+
+<div class="centered" id="portal-logo-box">
+    <!-- Here you can configure the start screen -->
+    <div id="logo-txt-box">
+        <img id="portal-logo" src=""/> <!-- Here an own logo can be integrated -->
+        <div id="portal-logo-text"></div> <!-- Here you can enter your own logo text -->
+        <div id="portal-text">Basic - Portal</div> <!-- Here you can enter your own Portal Title -->
     </div>
-    <div id="loader" style="display: none;"><img src="../../img/ajax-loader.gif"></div>
-    <script type="text/javascript" src="../../build/js/masterportal.js"></script>
-    </div>
+</div>
+<div id="loader" class="loader"></div>
+<div class="logo-right-bottom">
+    <img height="55" src="../../img/Logo_Masterportal.svg"> <!-- This logo should not be changed, as it is a central part of the Masterportal -->
+</div>
+
+<script type="text/javascript" src="../../build/js/masterportal.js"></script>
 </body>
 </html>

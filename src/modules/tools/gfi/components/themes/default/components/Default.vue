@@ -49,7 +49,7 @@ export default {
          * @returns {String} The mimeType.
          */
         mimeType: function () {
-            return this.feature.getGfiUrl()?.mimeType;
+            return this.feature.getMimeType();
         }
     },
     created () {
@@ -124,13 +124,13 @@ export default {
             </a>
         </div>
         <table class="table table-hover">
-            <tbody v-if="typeof feature.getMappedProperties === 'function'">
+            <tbody v-if="typeof feature.getMappedProperties === 'function' && mimeType !== 'text/html'">
                 <tr
                     v-for="(value, key) in feature.getMappedProperties()"
                     :key="key"
                 >
                     <td class="bold">
-                        {{ beautifyKey(key) }}
+                        {{ beautifyKey($t(key)) }}
                     </td>
                     <td v-if="isWebLink(value)">
                         <a
@@ -144,6 +144,11 @@ export default {
                     <td v-else-if="isEmailAddress(value)">
                         <a :href="`mailto:${value}`">{{ value }}</a>
                     </td>
+                    <td
+                        v-else-if="value.includes('<br>')"
+                        v-html="value"
+                    >
+                    </td>
                     <td v-else>
                         {{ value }}
                     </td>
@@ -153,7 +158,7 @@ export default {
                 <tr colspan="1">
                     <td>
                         <iframe
-                            :src="feature.getGfiUrl().url"
+                            :src="feature.getGfiUrl()"
                             class="gfi-iFrame"
                         >
                         </iframe>

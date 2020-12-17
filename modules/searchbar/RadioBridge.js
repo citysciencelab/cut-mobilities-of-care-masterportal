@@ -4,7 +4,7 @@
  * It can be deleted, if this module has been refactored.
  */
 import store from "../../src/app-store";
-import {createGfiFeature} from "../../src/modules/map/store/actions/getWmsFeaturesByMimeType";
+import {createGfiFeature} from "../../src/api/gfi/getWmsFeaturesByMimeType";
 
 Radio.channel("VisibleVector").on({
     "gfiOnClick": function (hit) {
@@ -12,13 +12,24 @@ Radio.channel("VisibleVector").on({
             foundLayer = layerList.find(function (layer) {
                 return layer.get("id") === hit.layer_id;
             }),
+            layer = {
+                get: (key) => {
+                    if (key === "name") {
+                        return hit.name;
+                    }
+                    else if (key === "gfiTheme") {
+                        return foundLayer.get("gfiTheme");
+                    }
+                    else if (key === "gfiAttributes") {
+                        return hit.gfiAttributes;
+                    }
+                    return null;
+                }
+            },
             feature = createGfiFeature(
-                hit.name,
-                foundLayer.get("gfiTheme"),
-                hit.gfiAttributes,
-                hit.feature.getProperties(),
-                null, // for gfiFormat
-                hit.id
+                layer,
+                null, // for url
+                hit.feature
             );
 
         store.commit("Map/setClickCoord", [hit.coordinate[0], hit.coordinate[1]]);
