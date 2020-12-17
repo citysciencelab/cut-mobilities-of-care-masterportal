@@ -4,21 +4,19 @@
 const state = {
     active: false,
     blob: undefined,
-    colorConstants: [],
     dataString: "",
+    deativateGfi: false,
+    disableDownload: true,
     features: [],
+    fileUrl: "",
+    fileContent: "",
     fileName: "",
-    formats: ["KML", "GEOJSON", "GPX"], // TODO(roehlipa): Can this be configured?
-    glyphicon: "glyphicon-plus", // TODO(roehlipa): Really needed?
+    formats: ["KML", "GEOJSON", "GPX"], // TODO(roehlipa): Can this be configured somewhere?
+    glyphicon: "glyphicon-plus",
     id: "download",
     isInternetExplorer: undefined,
-    name: "Download", // TODO(roehlipa): Really needed?
-    renderToWindow: true, // TODO(roehlipa): Really needed?
+    renderToWindow: true,
     selectedFormat: ""
 };
-
-// TODO add these to the send errors:
-//  createFirstText - "common:modules.tools.download.createFirst"
-//  unknownGeometry - "common:modules.tools.download.unknownGeometry"
 
 export default state;
