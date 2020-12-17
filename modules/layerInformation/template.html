@@ -50,9 +50,11 @@
                         <% }); %>
                     <% } %>
                 </ul>
-            </div>
-            <div class="layerInfoDownloadSecCol pull-right">
-                <span class="download-note"><%= attachFileMessage %></span>
+                <% if (downloadLinks && downloadLinks.length > 1) { %>
+                    <div class="layerInfoDownloadSecCol pull-right">
+                        <span class="download-note"><%= attachFileMessage %></span>
+                    </div>
+                <% } %>
             </div>
         </div>
         <div id="url" class="tab-pane fade">
