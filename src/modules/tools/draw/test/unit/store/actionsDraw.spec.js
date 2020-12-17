@@ -92,7 +92,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
          * @returns {Object}  a mocked state for this test
          */
         function getState (id) {
-            return {
+            const result = {
                 layer: {
                     getSource: () => ({})
                 },
@@ -102,13 +102,19 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
                 },
                 symbol: {}
             };
+
+            result[id + "Options"] = {};
+            return result;
         }
 
         const activeSymbol = Symbol(),
-            maxFeaturesSymbol = Symbol();
+            maxFeaturesSymbol = Symbol(),
+            getters = {
+                getStyleSettings: () => Symbol()
+            };
 
         it("commits and dispatches as expected", () => {
-            actions.createDrawInteractionAndAddToMap({state: getState("drawCircle"), commit, dispatch}, {active: activeSymbol, maxFeatures: maxFeaturesSymbol});
+            actions.createDrawInteractionAndAddToMap({state: getState("drawCircle"), commit, dispatch, getters}, {active: activeSymbol, maxFeatures: maxFeaturesSymbol});
 
             // commits setDrawInteraction
             expect(commit.calledOnce).to.be.true;
@@ -124,7 +130,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         });
 
         it("commits and dispatches a second set of information for drawDoubleCircle", () => {
-            actions.createDrawInteractionAndAddToMap({state: getState("drawDoubleCircle"), commit, dispatch}, {active: activeSymbol, maxFeatures: maxFeaturesSymbol});
+            actions.createDrawInteractionAndAddToMap({state: getState("drawDoubleCircle"), commit, dispatch, getters}, {active: activeSymbol, maxFeatures: maxFeaturesSymbol});
 
             // commits setDrawInteraction
             expect(commit.calledTwice).to.be.true;
@@ -584,15 +590,10 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             },
             listener = Symbol(),
             initialState = Object.assign({}, stateDraw),
-            color = initialState.color,
-            colorContour = initialState.colorContour,
             modifyInteraction = Symbol(),
             selectInteractionModify = Symbol(),
             selectInteraction = Symbol(),
             un = sinon.spy();
-
-        color[3] = initialState.opacity;
-        colorContour[3] = initialState.opacityContour;
 
         it("should commit and dispatch as intended", () => {
             state = {
@@ -609,21 +610,14 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(un.calledOnce).to.be.true;
             expect(un.firstCall.args).to.eql(["addFeature", listener]);
 
-            expect(commit.callCount).to.equal(14);
+            expect(commit.callCount).to.equal(7);
             expect(commit.getCall(0).args).to.eql(["setActive", false]);
             expect(commit.getCall(1).args).to.eql(["setSelectedFeature", null]);
-            expect(commit.getCall(2).args).to.eql(["setCircleMethod", initialState.circleMethod]);
-            expect(commit.getCall(3).args).to.eql(["setCircleInnerDiameter", initialState.circleInnerDiameter]);
-            expect(commit.getCall(4).args).to.eql(["setCircleOuterDiameter", initialState.circleOuterDiameter]);
-            expect(commit.getCall(5).args).to.eql(["setColor", color]);
-            expect(commit.getCall(6).args).to.eql(["setColorContour", colorContour]);
-            expect(commit.getCall(7).args).to.eql(["setDrawType", initialState.drawType]);
-            expect(commit.getCall(8).args).to.eql(["setFreeHand", initialState.freeHand]);
-            expect(commit.getCall(9).args).to.eql(["setOpacity", initialState.opacity]);
-            expect(commit.getCall(10).args).to.eql(["setOpacityContour", initialState.opacityContour]);
-            expect(commit.getCall(11).args).to.eql(["setPointSize", initialState.pointSize]);
-            expect(commit.getCall(12).args).to.eql(["setSymbol", iconSymbol]);
-            expect(commit.getCall(13).args).to.eql(["setWithoutGUI", initialState.withoutGUI]);
+            expect(commit.getCall(2).args).to.eql(["setDrawType", initialState.drawType]);
+            expect(commit.getCall(3).args).to.eql(["setFreeHand", initialState.freeHand]);
+            expect(commit.getCall(4).args).to.eql(["setPointSize", initialState.pointSize]);
+            expect(commit.getCall(5).args).to.eql(["setSymbol", iconSymbol]);
+            expect(commit.getCall(6).args).to.eql(["setWithoutGUI", initialState.withoutGUI]);
 
             expect(dispatch.callCount).to.equal(7);
             expect(dispatch.getCall(0).args).to.eql(["toggleInteraction", "draw"]);
@@ -758,14 +752,17 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
     });
     describe("updateDrawInteraction", () => {
         const drawInteraction = Symbol(),
-            drawInteractionTwo = Symbol();
+            drawInteractionTwo = Symbol(),
+            getters = {
+                getStyleSettings: () => Symbol()
+            };
 
         beforeEach(() => {
             state = {drawInteraction};
         });
 
         it("should commit and dispatch as intended", () => {
-            actions.updateDrawInteraction({state, commit, dispatch});
+            actions.updateDrawInteraction({state, commit, dispatch, getters});
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.firstCall.args).to.eql(["setDrawInteraction", null]);
@@ -776,7 +773,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         it("should also dispatch and commit for the second drawInteraction if its type is not 'undefined'", () => {
             state.drawInteractionTwo = drawInteractionTwo;
 
-            actions.updateDrawInteraction({state, commit, dispatch});
+            actions.updateDrawInteraction({state, commit, dispatch, getters});
 
             expect(commit.calledTwice).to.be.true;
             expect(commit.firstCall.args).to.eql(["setDrawInteraction", null]);
