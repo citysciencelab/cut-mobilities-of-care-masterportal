@@ -20,6 +20,8 @@ export default {
     watch: {
         showLegend (showLegend) {
             if (showLegend) {
+                // closes the mobile menu
+                document.getElementsByClassName("navbar-collapse")[0].classList.remove("in");
                 this.createLegend();
             }
         },

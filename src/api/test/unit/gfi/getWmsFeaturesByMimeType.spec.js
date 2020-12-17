@@ -19,9 +19,6 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
                 else if (key === "gfiAttributes") {
                     return "attributesToShow";
                 }
-                else if (key === "gfiFormat") {
-                    return "gfiFormat";
-                }
                 else if (key === "infoFormat") {
                     return "text/xml";
                 }
@@ -46,7 +43,6 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
             expect(feature.getTheme).to.be.a("function");
             expect(feature.getAttributesToShow).to.be.a("function");
             expect(feature.getProperties).to.be.a("function");
-            expect(feature.getGfiFormat).to.be.a("function");
             expect(feature.getId).to.be.a("function");
 
             expect(feature.getGfiUrl()).to.equal("url");
@@ -54,7 +50,6 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
             expect(feature.getTheme()).to.equal("gfiTheme");
             expect(feature.getAttributesToShow()).to.equal("attributesToShow");
             expect(feature.getProperties()).to.equal("featureProperties");
-            expect(feature.getGfiFormat()).to.equal("gfiFormat");
             expect(feature.getId()).to.equal("id");
         });
     });

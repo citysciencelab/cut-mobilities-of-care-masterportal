@@ -197,7 +197,7 @@ const ContactModel = Tool.extend(/** @lends ContactModel.prototype */{
     validate: function (attributes) {
         const userNameValid = attributes.userName !== undefined ? attributes.userName.length >= 3 : false,
             userEmailValid1 = attributes.userEmail !== undefined ? attributes.userEmail.length >= 1 : false,
-            userEmailValid2 = attributes.userEmail !== undefined ? attributes.userEmail.match(/^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,4}$/igm) !== null : false,
+            userEmailValid2 = attributes.userEmail !== undefined ? attributes.userEmail.match(/^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,14}$/igm) !== null : false,
             userTelValid = attributes.userTel !== undefined ? attributes.userTel.match(/^[0-9]{1}[0-9\-+()]*[0-9]$/ig) !== null : false,
             textValid = attributes.text !== undefined ? attributes.text.length >= 10 : false;
 

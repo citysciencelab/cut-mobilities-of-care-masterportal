@@ -4,7 +4,8 @@ import {mapGetters, mapActions} from "vuex";
 export default {
     name: "Title",
     computed: {
-        ...mapGetters("Title", ["link", "toolTip", "logo", "title"])
+        ...mapGetters("Title", ["link", "toolTip", "logo", "title"]),
+        ...mapGetters(["uiStyle", "mobile"])
     },
 
     created () {
@@ -21,20 +22,33 @@ export default {
         });
     },
     mounted () {
-        this.$nextTick(() => {
-            const navBar = document.getElementsByClassName("navbar-collapse")[0],
-                searchBar = document.getElementById("searchbar");
+        if (this.showTitle()) {
+            this.$nextTick(() => {
+                const navBar = document.getElementsByClassName("navbar-collapse")[0],
+                    searchBar = document.getElementById("searchbar");
 
-            navBar.insertBefore(this.$el, searchBar);
-            if (this.title !== "" || this.logo !== "" || this.link !== "" || this.toolTip !== "") {
-                this.renderDependingOnSpace();
-            }
+                navBar.insertBefore(this.$el, searchBar);
+                if (this.title !== "" || this.logo !== "" || this.link !== "" || this.toolTip !== "") {
+                    this.renderDependingOnSpace();
+                }
 
-            this.initialize();
-        });
+                this.initialize();
+            });
+        }
     },
     methods: {
         ...mapActions("Title", ["initialize"]),
+        /**
+         * Returns true, if the title should be shown.
+         * uistyle TABLE does not show the title.
+         * @returns {boolean} true, if the title should be shown
+         */
+        showTitle () {
+            if (this.uiStyle === "TABLE" || this.mobile) {
+                return false;
+            }
+            return true;
+        },
         /**
         * Depending on the available space, the titletext and titlelogo is rendered.
         * @returns {void}
