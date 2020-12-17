@@ -59,6 +59,7 @@ export default {
          */
         selectionChanged () {
             this.setExample();
+            this.removeMarker();
             this.coordinatesEasting.errorMessage = "";
             this.coordinatesEasting.value = "";
             this.coordinatesNorthing.errorMessage = "";
