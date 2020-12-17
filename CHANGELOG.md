@@ -10,7 +10,6 @@
 - RemoteInterface wurde für Vue hinzugefügt.
 - Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
-- Ein GFI-Theme trafficCount, zum Anzeigen von Verkehrsmengen wurde hinzugefügt.
 - Das Zeichenmodul wurde erweitert, um beim Zeichnen von Punkten verschiedene Glyphicons zu verwenden.
 - Es können nun Web Map Tile Services (WMTS) als Layer eingebunden werden.
 - Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
@@ -24,10 +23,12 @@
 - Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
 - Im Informationsfenster eines Layers wird ein Hinweistext bez. des Datei-Typs angezeigt, falls im Reiter"Datensatz herunterladen" mehrere Dateien angezeigt werden.
 - Highlight von Vector Features ist nach vue umgezogen und konsolidiert. Der Parameter highlightVectorRules beim GFI wird nur vom neuen VectorStylye Version 3 unterstützt.
+- Der Parameter allowMultipleQueriesPerLayer, der im Tool Filter ermöglicht, dass mehrere Layer gleichzeitg gefiltert werden können, wurde in der Dokumentation beschrieben.
 
 ### Changed
 - Es werden nun alle URLs vom Portal direkt angefragt, ohne den Umweg über einen Proxy zu gehen, da von der GDI-DE empfohlen wird serverseitig einen CORS-Header einzurichten. Siehe dazu https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile Kapitel 4.7.1. Es besteht aber die Möglichkeit gezielt URLs bestimmter Dienste über einen Proxy umzuleiten. Diese Möglichkeit ist jedoch deprecated.
-- Das Tool "GFI" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Gleichzeitig wurden die speziellen Themes ausgelagert als Addons. Es gibt im Masterportal selber nur noch das default und sensor Theme.
+- Das Tool "GFI" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Gleichzeitig wurden die speziellen Themes ausgelagert als Addons. Es gibt im Masterportal selber nur noch die Themes default zur tabellarischen Darstellung und sensor zur grafischen Anzeige von Sensordaten mit Zuständen/Status z.B. Elektroladesäulen. Die Verwendung infoFormates "text/html" ist weiterhin möglich, benötigt jedoch eine Tabelle zur Anzeige.
+- Im GFI Default-Theme werden Icons eingeblendet, um von dort andere Tools anzusteuern. Zur Verfügung stehen Icons für die Werkzeuge routing und compareFeatures.
 - Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Das Zeichnen von Punkten wurde geändert, alle Punkte basieren jetzt auf Bild-Dateien. Größe und Deckkraft können nicht mehr eingestellt werden, für diese Funktionalität steht das Zeichnen von Kreisen zur Verfügung. Das Bereitstellen von anderen Bilddateien wurde angepasst, siehe Doku der config.json.
 - Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
 - Das Tool "KML-Import" wurde überarbeitet und funktioniert jetzt auf Basis von Vue.js. Weiterhin heißt es fortan "Datei-Import".
@@ -43,7 +44,6 @@
 - Ein kleines masterportal-Logo erscheint jetzt während des Ladens des masterportals unten rechts in der Ecke.
 - In der Konfiguration des Werkzeugs "Strecke/Fläche messen" kann jetzt der Erdradius angegeben werden.
 - Das Modul MapMarker funktioniert nun auf Basis von Vue.js. Es ist nun möglich den Style für Punkt- und Polygon-Marker in der Style.json zu konfigurieren.
-- Die Beta-Warnung für die Schrägluftbilder wurde entfernt.
 
 ### Deprecated
 - Die Möglichkeit URLs über einen Proxy umzuleiten (useProxy) ist deprecated.
@@ -60,8 +60,10 @@
 - fs wurde aus der package.json entfernt.
 - Der Requestor wurde direkt in dem Tool featurelister integriert und daher entfernt.
 - Vom Tool "Draw" wird der Typ "glyphicon" nicht mehr von der iconList unterstützt, er wurde entfernt. Es sollen nur Bild-Dateien genutzt werden, siehe Doku der config.json.
+- Die Beta-Warnung für die Schrägluftbilder wurde entfernt.
 
 ### Fixed
+- Diverse Bugfixes
 - Mit Google Earth erstellte KML Dateien werden mit dem Tool "Datei-Import" nun besser dargestellt.
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
 - Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
@@ -71,6 +73,8 @@
 - Im Styling wurde das Feld legendValue nicht ausgelesen. Dies funktioniert nun wieder.
 - Im Kontaktformular werden auch email-Adressen mit einer Domain-Endung die länger als 2 Zeichen ist als gültig anerkannt (z.B. name@foo.hamburg)
 - Unstimmigkeiten beim Messen mit dem Werkzeug "Strecke/Fläche messen" wurden beseitigt.
+- Ein Probkem mit ausgeblendeten Geo-JSOn Layern wurde behoben
+- In der URL angegebene Layereigenschaften, wie Transparenz werden nun übernommen.
 
 ---
 
