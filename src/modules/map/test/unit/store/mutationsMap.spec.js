@@ -1,8 +1,11 @@
 import {expect} from "chai";
 import sinon from "sinon";
 import mutations from "../../../store/mutationsMap";
+import Map from "ol/Map";
+import VectorLayer from "ol/layer/Vector.js";
+import VectorSource from "ol/source/Vector.js";
 
-const {setCenter} = mutations;
+const {setCenter, addLayerToMap, removeLayerFromMap} = mutations;
 
 describe("src/modules/map/store/mutationsMap.js", () => {
     describe("setCenter", () => {
@@ -100,6 +103,47 @@ describe("src/modules/map/store/mutationsMap.js", () => {
 
             setCenter(state, [8]);
             expect(state.center).to.deep.equal([0, 7]);
+        });
+    });
+
+    describe("addLayerToMap", () => {
+        it("add a layer to the map", () => {
+            const state = {
+                    map: new Map()
+                },
+                layer = new VectorLayer({
+                    name: "layer123",
+                    source: new VectorSource(),
+                    visible: false
+                });
+
+            addLayerToMap(state, layer);
+
+            expect(state.map.getLayers().getLength()).to.equals(1);
+            expect(state.map.getLayers().getArray()[0].get("name")).to.equals("layer123");
+        });
+    });
+
+    describe("removeLayerFromMap", () => {
+        it("removes an layer from the map", () => {
+            const layer = new VectorLayer({
+                    name: "layer123",
+                    source: new VectorSource(),
+                    visible: false
+                }),
+                state = {
+                    map: new Map({
+                        layers: [
+                            layer
+                        ]
+                    })
+                };
+
+            expect(state.map.getLayers().getLength()).to.equals(1);
+            expect(state.map.getLayers().getArray()[0].get("name")).to.equals("layer123");
+
+            removeLayerFromMap(state, layer);
+            expect(state.map.getLayers().getLength()).to.equals(0);
         });
     });
 });

@@ -6,6 +6,7 @@ import Footer from "../modules/footer/store/indexFooter";
 import Language from "../modules/language/store/indexLanguage";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
+import MapMarker from "../modules/mapMarker/store/indexMapMarker";
 import Legend from "../modules/legend/store/indexLegend";
 
 import getters from "./getters";
@@ -22,18 +23,19 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
-        Map,
         Alerting,
-        Legend,
         Footer,
         Language,
-        Tools: {
-            ...toolsModule
-        },
+        Legend,
+        Map,
+        MapMarker,
+        Title,
         controls: {
             ...controlsModule
         },
-        Title: Title
+        Tools: {
+            ...toolsModule
+        }
     },
     state,
     mutations,

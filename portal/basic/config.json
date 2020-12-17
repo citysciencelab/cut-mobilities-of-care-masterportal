@@ -15,7 +15,7 @@
 			"placeholder": "Suche nach: - Adresse - Aktiven WFS"
 		},
 		"mapView": {
-			"backgroundImage": "./ressources/img/backgroundCanvas.jpeg",
+			"backgroundImage": "./resources/img/backgroundCanvas.jpeg",
 			"startCenter": [561210, 5932600],
 			"extent": [510000.0, 5850000.0, 625000.4, 6000000.0],
 			"startZoomLevel": 1

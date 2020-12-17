@@ -2,6 +2,7 @@ import WfsQueryModel from "./query/source/wfs";
 import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";
 import "./RadioBridge.js";
+import store from "../../../src/app-store";
 
 const FilterModel = Tool.extend({
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -329,7 +330,7 @@ const FilterModel = Tool.extend({
     },
     closeGFI: function () {
         Radio.trigger("GFI", "setIsVisible", false);
-        Radio.trigger("MapMarker", "hideMarker");
+        store.dispatch("MapMarker/removePointMarker");
     },
     collapseOpenSnippet: function () {
         const selectedQuery = this.get("queryCollection").findWhere({isSelected: true});

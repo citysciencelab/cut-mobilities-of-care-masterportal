@@ -2,7 +2,7 @@ import PendlerCoreModel from "../core/model";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 import thousandsSeparator from "../../../../src/utils/thousandsSeparator";
-
+import store from "../../../../src/app-store";
 
 const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
     defaults: Object.assign({}, PendlerCoreModel.prototype.defaults, {
@@ -51,7 +51,6 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
         }) Layer zur Darstellung der Beschriftung an Punkten am Strahlenende
      * @property {String} glyphicon="glyphicon-play-circle" icon to start the animation
      * @fires Core#RadioTriggerMapRender
-     * @listens Alerting#RadioTriggerAlertConfirmed
      */
 
     /**
@@ -152,7 +151,7 @@ const Lines = PendlerCoreModel.extend(/** @lends Lines.prototype */{
         if (labelLayer !== undefined) {
             Radio.trigger("Map", "removeLayer", labelLayer);
         }
-        Radio.trigger("MapMarker", "hideMarker");
+        store.dispatch("MapMarker/removePointMarker");
     },
 
     /**

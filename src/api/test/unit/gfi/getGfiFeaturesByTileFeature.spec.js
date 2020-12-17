@@ -6,23 +6,18 @@ import {
     getGfiFeatureByCesiumEntity,
     getGfiFeatureByOlFeature,
     getGfiFeaturesByOlFeature
-} from "../../../store/actions/getGfiFeaturesByTileFeature.js";
+} from "../../../gfi/getGfiFeaturesByTileFeature.js";
 
-describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
+describe("src/api/gfi/getGfiFeaturesByTileFeature.js", () => {
     describe("getGfiFeature", () => {
         it("should use default values for layer attributes - but not for properties", () => {
-            const expected = [
-                    "Buildings",
-                    "buildings_3d",
-                    {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
-                    null
-                ],
-                result = getGfiFeature(null, null, (layerName, gfiTheme, attributesToShow, featureProperties) => {
-                    // createGfiFeatureOpt
-                    return [layerName, gfiTheme, attributesToShow, featureProperties];
-                });
+            const atts = {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
+                result = getGfiFeature(null, null);
 
-            expect(result).to.deep.equal(expected);
+            expect(result.getTitle()).to.equal("Buildings");
+            expect(result.getTheme()).to.equal("buildings_3d");
+            expect(result.getAttributesToShow()).to.deep.equal(atts);
+            expect(result.getProperties()).to.deep.equal(null);
         });
         it("should get attributes and properties according to given parameters", () => {
             const layerAttributes = {
@@ -31,24 +26,22 @@ describe("src/modules/map/store/actions/getGfiFeaturesByTileFeature.js", () => {
                     gfiAttributes: "gfiAttributes"
                 },
                 properties = "properties",
-                expected = ["name", "gfiTheme", "gfiAttributes", "properties"],
-                result = getGfiFeature(layerAttributes, properties, (layerName, gfiTheme, attributesToShow, featureProperties) => {
-                    // createGfiFeatureOpt
-                    return [layerName, gfiTheme, attributesToShow, featureProperties];
-                });
+                result = getGfiFeature(layerAttributes, properties);
 
-            expect(result).to.deep.equal(expected);
+            expect(result.getTitle()).to.equal(layerAttributes.name);
+            expect(result.getTheme()).to.equal(layerAttributes.gfiTheme);
+            expect(result.getAttributesToShow()).to.deep.equal(layerAttributes.gfiAttributes);
+            expect(result.getProperties()).to.equal("properties");
         });
         it("should use properties.attributes as properties if any", () => {
             const properties = {
-                    attributes: "properties"
+                    attributes: "properties attributes"
                 },
-                result = getGfiFeature(null, properties, (layerName, gfiTheme, attributesToShow, featureProperties) => {
-                    // createGfiFeatureOpt
-                    return featureProperties;
-                });
+                result = getGfiFeature(null, properties);
 
-            expect(result).to.equal("properties");
+            expect(result.getTitle()).to.equal("Buildings");
+            expect(result.getTheme()).to.equal("buildings_3d");
+            expect(result.getProperties()).to.equal("properties attributes");
         });
     });
 

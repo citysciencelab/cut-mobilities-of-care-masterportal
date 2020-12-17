@@ -1,4 +1,4 @@
-import getComponent from "../../../../utils/getComponent";
+import getComponent from "../../utils/getComponent";
 import {createGfiFeature} from "./getWmsFeaturesByMimeType";
 
 /**
@@ -70,20 +70,35 @@ function isCesiumEntity (entity) {
  * @param {(Object|String)} [layerAttributes.gfiAttributes] an object of attributes to show or a string "showAll" or "ignore"
  * @param {Object} properties an object with a key "attributes" or the data of the feature as simple key/value pairs
  * @param {Object} [properties.attributes] if set, the data of the feature as simple key/value pairs
- * @param {Function} [createGfiFeatureOpt=null] a function to create the gfiFeature with (instead of imported createGfiFeature; for testing only)
  * @returns {Object}  an object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl}
  */
-export function getGfiFeature (layerAttributes, properties, createGfiFeatureOpt = null) {
+export function getGfiFeature (layerAttributes, properties) {
     const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "Buildings",
         gfiTheme = layerAttributes && layerAttributes.gfiTheme ? layerAttributes.gfiTheme : "buildings_3d",
         attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes : {"roofType": "Dachtyp", "measuredHeight": "Dachhöhe", "function": "Objektart"},
-        featureProperties = properties && properties.attributes ? properties.attributes : properties;
+        featureProperties = properties && properties.attributes ? properties.attributes : properties,
 
-    if (typeof createGfiFeatureOpt === "function") {
-        return createGfiFeatureOpt(layerName, gfiTheme, attributesToShow, featureProperties);
-    }
+        layer = {
+            get: (key) => {
+                if (key === "name") {
+                    return layerName;
+                }
+                else if (key === "gfiTheme") {
+                    return gfiTheme;
+                }
+                else if (key === "gfiAttributes") {
+                    return attributesToShow;
+                }
+                return null;
+            }
+        },
+        feature = {
+            getProperties: () => {
+                return featureProperties;
+            }
+        };
 
-    return createGfiFeature(layerName, gfiTheme, attributesToShow, featureProperties);
+    return createGfiFeature(layer, "", feature);
 }
 
 /**
