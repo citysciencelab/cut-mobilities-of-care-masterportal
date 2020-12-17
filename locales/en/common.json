@@ -527,8 +527,8 @@
             "searchByCoord": {
                 "coordinateSystem": "Coordinate system",
                 "hdms": {
-                    "eastingLabel": "Longitude",
-                    "northingLabel": "Latitude"
+                    "eastingLabel": "Latitude",
+                    "northingLabel": "Longitude"
                 },
                 "cartesian": {
                     "eastingLabel": "Easting",

@@ -1,7 +1,6 @@
 <script>
 import Tool from "../../Tool.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
-import {getProjections} from "masterportalAPI/src/crs";
 import getters from "../store/gettersSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
 
@@ -13,28 +12,19 @@ export default {
     data: function () {
         return {
             mapElement: document.getElementById("map"),
-            coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "53° 33' 25" : "564459.13"},
-            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentProjectionName === "EPSG:4326" ? "9° 59' 50" : "5935103.67"}
+            coordinateSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
+            currentCoordinateSystem: "ETRS89",
+            coordinatesEasting: {name: "", value: "", errorMessage: "", example: this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33' 25"}, // TODO: examples need work!
+            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59' 50"}
         };
     },
     computed: {
-        ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
-        ...mapGetters("Map", ["projection", "mouseCoord"]),
-        /**
-         * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
-         */
-        currentSelection: {
-            get () {
-                return this.$store.state.Tools.SearchByCoord.currentSelection;
-            },
-            set (newValue) {
-                this.setCurrentSelection(newValue);
-            }
-        }
+        ...mapGetters("Tools/SearchByCoord", Object.keys(getters))
     },
     created () {
         this.$on("close", this.close);
-        this.createInteraction();
+        this.coordinatesEasting.example = this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33' 25"; // TODO: just a workaround, has to be corrected
+        this.coordinatesNorthing.example = this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59' 50";
     },
     beforeUpdate () {
         this.coordinatesEasting.errorMessage = "";
@@ -65,11 +55,9 @@ export default {
          * @param {Event} event changed selection event
          * @returns {void}
          */
-        selectionChanged (event) {
-            this.setCurrentSelection(event.target.value);
-            this.newProjectionSelected();
-            this.coordinatesEasting.example = this.currentProjectionName === "EPSG:4326" ? "53° 33' 25" : "564459.13";
-            this.coordinatesNorthing.example = this.currentProjectionName === "EPSG:4326" ? "9° 59' 50" : "5935103.67";
+        selectionChanged () {
+            this.coordinatesEasting.example = this.currentCoordinateSystem === "ETRS89" ? "564459.13" : "53° 33' 25";
+            this.coordinatesNorthing.example = this.currentCoordinateSystem === "ETRS89" ? "5935103.67" : "9° 59' 50";
             this.coordinatesEasting.errorMessage = "";
             this.coordinatesEasting.value = "";
             this.coordinatesNorthing.errorMessage = "";
@@ -82,28 +70,19 @@ export default {
          * @returns {String} the name of the label
          */
         label (key) {
-            const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
+            const type = this.currentCoordinateSystem === "ETRS89" ? "cartesian" : "hdms";
 
 
             return "modules.tools.searchByCoord." + type + "." + key;
         },
-        /**
-         * Stores the projections and adds interaction pointermove to map.
-         * @returns {void}
-         */
-        createInteraction () {
-            const pr = getProjections();
-
-            this.setProjections(pr);
-
-        },
         validateInput (coordinatesEasting, coordinatesNorthing) {
             const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
                 validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´]{0,1}\s*[0-9]{0,2}['`´]{0,2}["]{0,2}\s*$/,
+                validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
                 coordinates = [coordinatesEasting, coordinatesNorthing],
                 selectedCoordinates = [];
 
-            if (this.currentProjection.title === "ETRS89/UTM 32N") {
+            if (this.currentCoordinateSystem === "ETRS89") {
 
                 for (const coord of coordinates) {
 
@@ -120,7 +99,7 @@ export default {
                     }
                 }
             }
-            if (this.currentProjection.title === "WGS 84 (long/lat)") {
+            if (this.currentCoordinateSystem === "WGS84") {
                 for (const coord of coordinates) {
 
                     if (coord.value === "" || coord.value.length < 1) {
@@ -136,29 +115,13 @@ export default {
                     }
                 }
             }
-            if (this.currentProjection.title === "Bessel/Gauß-Krüger 3") {
+            if (this.currentCoordinateSystem === "WGS84(Dezimalgrad)") {
                 for (const coord of coordinates) {
 
                     if (coord.value === "" || coord.value.length < 1) {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
                     }
-                    else if (!coord.value.match(validETRS89)) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
-                    }
-                    else {
-                        coordinatesEasting.errorMessage = "";
-                        coordinatesNorthing.errorMessage = "";
-                        selectedCoordinates.push(coord.value);
-                    }
-                }
-            }
-            if (this.currentProjection.title === "ETRS89/Gauß-Krüger 3") {
-                for (const coord of coordinates) {
-
-                    if (coord.value === "" || coord.value.length < 1) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
-                    }
-                    else if (!coord.value.match(validETRS89)) {
+                    else if (!coord.value.match(validWGS84_dez)) {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
                     }
                     else {
@@ -206,16 +169,15 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="coordSystemField"
-                                v-model="currentSelection"
+                                v-model="currentCoordinateSystem"
                                 class="font-arial form-control input-sm pull-left"
                                 @change="selectionChanged($event)"
                             >
                                 <option
-                                    v-for="(projection, i) in projections"
-                                    :key="i"
-                                    :value="projection.name"
+                                    v-for="(coordinateSystem) in coordinateSystems"
+                                    :key="coordinateSystem"
                                 >
-                                    {{ projection.title ? projection.title : projection.name }}
+                                    {{ coordinateSystem }}
                                 </option>
                             </select>
                         </div>
@@ -265,7 +227,7 @@ export default {
                     <div class="form-group form-group-sm">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button
-                                class="btn btn-md btn-block"
+                                class="btn btn-block"
                                 @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
                             >
                                 {{ $t("common:modules.tools.searchByCoord.search") }}

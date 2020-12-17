@@ -528,8 +528,8 @@
             "searchByCoord": {
                 "coordinateSystem": "Koordinatensystem",
                 "hdms": {
-                    "eastingLabel": "Länge",
-                    "northingLabel": "Breite"
+                    "eastingLabel": "Breite",
+                    "northingLabel": "Länge"
                 },
                 "cartesian": {
                     "eastingLabel": "Rechtswert",

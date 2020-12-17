@@ -11,22 +11,9 @@ const getters = {
      * @param {object} state state to generate getters for
      * @returns {object.<string, function>} object of getters
      */
-    ...generateSimpleGetters(searchByCoordState),
+    ...generateSimpleGetters(searchByCoordState)
 
     // NOTE overwrite getters here if you need a special behaviour in a getter
-    /**
-     * Returns the projection to the given name.
-     * @param {Object} state state of this tool
-     * @param {String} name of the projection
-     * @returns {Object} projection
-     */
-    getProjectionByName: state => (name) => {
-        const projections = state.projections;
-
-        return projections.find(projection => {
-            return projection.name === name;
-        });
-    }
 };
 
 export default getters;
