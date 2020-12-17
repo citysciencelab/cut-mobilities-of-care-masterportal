@@ -39,20 +39,12 @@ async function prepareOB (driver) {
  * @returns {void}
  */
 async function loadUrl (driver, url, mode) {
-    let loading = "",
-        spinner = "";
+    let loading = "";
 
     await driver.get(url);
 
-    loading = await driver.wait(until.elementLocated(By.id("loader")), 100000);
-
-    await driver.wait(until.elementIsNotVisible(loading), 100000);
-
-    spinner = await driver.wait(until.elementLocated(By.id("loader-spinner-itself")), 100000);
-
-    await driver.wait(until.elementIsNotVisible(spinner), 100000);
-
-    // }
+    loading = await driver.wait(until.elementLocated(By.id("loader")), 90000);
+    await driver.wait(until.elementIsNotVisible(loading), 90000);
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
     await driver.wait(async () => await driver.executeScript(getResolution) !== null);
