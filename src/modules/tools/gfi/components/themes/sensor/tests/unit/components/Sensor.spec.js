@@ -39,6 +39,7 @@ describe("src/modules/tools/gfi/components/themes/senor/components/Sensor.vue", 
                             }
                         };
                     },
+                    getMimeType: () => "text/xml",
                     getLayerId: function () {
                         return 456;
                     }
@@ -86,6 +87,7 @@ describe("src/modules/tools/gfi/components/themes/senor/components/Sensor.vue", 
                             ownerThing: "Eigentümer"
                         };
                     },
+                    getMimeType: () => "text/xml",
                     getTheme: function () {
                         return {
                             name: "sensor",
@@ -131,6 +133,7 @@ describe("src/modules/tools/gfi/components/themes/senor/components/Sensor.vue", 
                             ownerThing: "Eigentümer"
                         };
                     },
+                    getMimeType: () => "text/xml",
                     getTheme: function () {
                         return {
                             name: "sensor",
@@ -211,6 +214,7 @@ describe("src/modules/tools/gfi/components/themes/senor/components/Sensor.vue", 
                             ownerThing: "Eigentümer"
                         };
                     },
+                    getMimeType: () => "text/xml",
                     getTheme: function () {
                         return {
                             name: "sensor",

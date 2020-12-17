@@ -182,7 +182,7 @@ const WindowView = Backbone.View.extend(/** @lends WindowView.prototype */{
         }
         this.$(".win-body").hide();
         this.$(".glyphicon-minus").hide();
-        this.$el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "60px"});
+        this.$el.css({"top": "auto", "bottom": "0", "left": "0", "margin-bottom": "75px"});
         this.$(".header").addClass("header-min");
         this.$el.draggable("disable");
         this.resetSize();

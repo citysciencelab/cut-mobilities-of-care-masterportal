@@ -1,8 +1,15 @@
 image: node:12.13.1
 
 pipelines:
-    custom:  
-        build and test in Browser:        
+    custom:
+        validate config.json markdown:
+            - step:
+                caches:
+                    - node
+                script:
+                    - npm install
+                    - node ./node_modules/@masterportal/mpconfigparser/cli.js ./doc/config.json.md
+        build and test in Browser:
             - step:
                 caches:
                     - node

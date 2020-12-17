@@ -4,6 +4,7 @@ import {WFS} from "ol/format.js";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import {Feature} from "ol";
+import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -43,7 +44,8 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         vectorLayer: new VectorLayer(),
         source: new VectorSource(),
         toggleLayer: false,
-        isDeselectedLayer: false
+        isDeselectedLayer: false,
+        useProxy: false
     }),
 
     /**
@@ -88,6 +90,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @property {ol.VectorSource} source=new VectorSource() - VectorSource
      * @property {Boolean} toggleLayer=false - Flag if the current layer should be toggled
      * @property {Boolean} isDeselectedLayer=false - Flag if the current layer is deselected in the layer tree
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioTriggerUtilShowLoader
@@ -1365,12 +1368,18 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     sendTransaction: function (xmlString) {
-        const that = this;
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            that = this;
 
         Radio.trigger("Util", "showLoader");
         if (xmlString.length > 0) {
             $.ajax({
-                url: this.get("url"),
+                url: url,
                 method: "POST",
                 processData: false,
                 contentType: "text/xml",

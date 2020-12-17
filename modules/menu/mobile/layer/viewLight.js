@@ -42,6 +42,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             "change": this.toggleByMapMode
         });
 
+        // translates the i18n-props into current user-language. is done this way, because model's listener to languageChange reacts too late (after render, which ist riggered by creating new Menu)
+        this.model.changeLang();
         this.toggleByMapMode(Radio.request("Map", "getMapMode"));
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },

@@ -1,5 +1,6 @@
 import WFSStyle from "./model";
 import StyleModel from "./styleModel";
+import store from "../../src/app-store";
 
 const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     /**
@@ -121,10 +122,13 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
             filteredData = [];
 
         dataWithDefaultValue.push({styleId: "default", rules: [{style: {}}]});
+        dataWithDefaultValue.push(this.getMapmarkerPointDefaultStyle());
+        dataWithDefaultValue.push(this.getMapmarkerPolygonDefaultStyle());
 
         styleIds.push(this.getStyleIdsFromLayers(layers));
         styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
+        styleIds.push(this.getStyleIdForMapMarkerPolygon());
         styleIds.push(this.getStyleIdsFromTools(tools));
         styleIds.push(this.getFeatureViaURLStyles());
 
@@ -232,14 +236,69 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     },
 
     /**
+     * Gets the default style for mapmarker as point.
+     * @returns {Object} The default style for mapMarker point Style.
+     */
+    getMapmarkerPointDefaultStyle: function () {
+        return {
+            styleId: "defaultMapMarkerPoint",
+            rules: [{
+                style:
+                {
+                    type: "icon",
+                    imageName: "mapMarker.svg",
+                    imagePath: "../../img/",
+                    imageScale: 1,
+                    imageWidth: 34,
+                    imageHeight: 48,
+                    imageOffsetY: 46,
+                    imageOffsetYUnit: "pixels"
+                }
+            }]
+        };
+    },
+
+    /**
+     * Gets the default style for mapmarker as polygon.
+     * @returns {Object} The default style for mapMarker polygon Style.
+     */
+    getMapmarkerPolygonDefaultStyle: function () {
+        return {
+            styleId: "defaultMapMarkerPolygon",
+            rules: [{
+                style:
+                {
+                    polygonStrokeColor: [8, 119, 95, 1],
+                    polygonStrokeWidth: 4,
+                    polygonFillColor: [8, 119, 95, 0.3],
+                    polygonStrokeDash: [8]
+                }
+            }]
+        };
+    },
+
+    /**
      * gets style id from MapMarker
      * @returns {String} - Style id of mapMarker.
      */
     getStyleIdForMapMarkerPoint: function () {
         let styleId;
 
-        if (Config && Config.hasOwnProperty("mapMarker") && Config.mapMarker.hasOwnProperty("mapMarkerStyleId")) {
-            styleId = Config.mapMarker.mapMarkerStyleId;
+        if (store.getters["MapMarker/pointStyleId"]) {
+            styleId = store.getters["MapMarker/pointStyleId"];
+        }
+        return styleId;
+    },
+
+    /**
+     * gets style id from MapMarker
+     * @returns {String} - Style id of mapMarker.
+     */
+    getStyleIdForMapMarkerPolygon: function () {
+        let styleId;
+
+        if (store.getters["MapMarker/polygonStyleId"]) {
+            styleId = store.getters["MapMarker/polygonStyleId"];
         }
         return styleId;
     }

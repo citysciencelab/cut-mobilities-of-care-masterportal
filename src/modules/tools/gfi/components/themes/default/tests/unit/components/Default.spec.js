@@ -23,7 +23,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             phonenumber5: "+43123456",
                             url: "https",
                             url2: "file",
-                            Test_String: "Hallo Welt"
+                            Test_String: "Hallo Welt",
+                            testBrTag: "moin<br>123"
                         };
                     },
                     getProperties: function () {
@@ -34,11 +35,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                     getTheme: function () {
                         return "images";
                     },
-                    getGfiUrl: () => {
-                        return {
-                            "url": "http", "mimeType": "text/html"
-                        };
-                    }
+                    getGfiUrl: () => "http",
+                    getMimeType: () => "text/xml"
                 }
             },
             localVue,
@@ -95,6 +93,12 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         });
     });
 
+    it("should the value as html if the value includes the tag <br>", () => {
+        const countTdTags = wrapper.findAll("td").wrappers.length;
+
+        expect(wrapper.findAll("td").wrappers[countTdTags - 1].text()).equals("moin123");
+    });
+
     it("should render an a and img if imageAttribute is existst in feature.properties", () => {
         expect(wrapper.find(".gfi-theme-images > div:nth-child(2) > a").exists()).to.be.true;
         expect(wrapper.find(".gfi-theme-images > div:nth-child(2) > a > img").exists()).to.be.true;
@@ -123,7 +127,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             }
                         };
                     },
-                    getGfiUrl: () => ""
+                    getGfiUrl: () => "",
+                    getMimeType: () => "text/xml"
                 }
             },
             localVue,
@@ -153,6 +158,7 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             }
                         };
                     },
+                    getMimeType: () => "text/xml",
                     getGfiUrl: () => ""
                 }
             },
