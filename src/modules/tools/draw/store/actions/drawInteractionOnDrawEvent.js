@@ -10,19 +10,24 @@ const errorBorder = "#E10019";
 * @param {Object} context actions context object.
 * @param {Object} payload payload object.
 * @param {String} payload.drawInteraction Either an empty String or "Two" to identify for which drawInteraction this is used.
-* @param {Boolean} payload.doubleCircle Determines if a doubleCircle is supposed to be drawn.
+* @param {Boolean} payload.doubleCircle Determines if the outer Circle of a doubleCircle is supposed to be drawn.
 * @returns {void}
 */
-export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}, {drawInteraction, doubleCircle}) {
-    const interaction = state["drawInteraction" + drawInteraction],
-        circleMethod = state.circleMethod,
+export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState, getters}, {drawInteraction, doubleCircle}) {
+    const styleSettings = getters.getStyleSettings(),
+        interaction = state["drawInteraction" + drawInteraction],
+        circleMethod = styleSettings.circleMethod,
         drawType = state.drawType,
         layerSource = state.layer.getSource();
 
+    if (doubleCircle) {
+        styleSettings.colorContour = styleSettings.outerColorContour;
+    }
+
     commit("setAddFeatureListener", layerSource.once("addfeature", event => {
         if (circleMethod === "defined" && drawType.geometry === "Circle") {
-            const innerDiameter = !isNaN(state.circleInnerDiameter) ? state.circleInnerDiameter : null,
-                outerDiameter = !isNaN(state.circleOuterDiameter) ? state.circleOuterDiameter : null,
+            const innerDiameter = !isNaN(styleSettings.circleInnerDiameter) ? styleSettings.circleInnerDiameter : null,
+                outerDiameter = !isNaN(styleSettings.circleOuterDiameter) ? styleSettings.circleOuterDiameter : null,
                 circleDiameter = doubleCircle ? outerDiameter : innerDiameter,
                 circleCenter = event.feature.getGeometry().getCenter();
 
@@ -64,7 +69,7 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
                 state.innerBorderColor = "";
             }
         }
-        event.feature.setStyle(createStyle(state));
+        event.feature.setStyle(createStyle(state, styleSettings));
         commit("setZIndex", state.zIndex + 1);
     }));
 

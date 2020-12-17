@@ -70,7 +70,9 @@ const mutations = {
      * @returns {void}
      */
     removeLayerFromMap (state, layer) {
-        state.map.removeLayer(layer);
+        if (state.map) {
+            state.map.removeLayer(layer);
+        }
     }
 };
 

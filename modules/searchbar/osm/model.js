@@ -10,12 +10,13 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
         states: "",
         searchParams: [],
         classes: [],
-        ajaxRequest: null
+        ajaxRequest: null,
+        serviceId: 10
     },
 
     /**
-     * @class MapView
-     * @description Initialisierung der OSM Suche
+     * @class OsmModel
+     * @description Initialization of the OSM search
      * @extends Backbone.Model
      * @memberOf Searchbar.Osm
      * @constructs
@@ -27,11 +28,6 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @property {Array} searchParams=[] - todo
      * @property {Array} classes=[] - todo
      * @property {*} ajaxRequest=null - todo
-     * @param {Object} config - The configuration object of the OSM search.
-     * @param {number} [config.minChars=3] - Minimum number of characters before a search is initiated.
-     * @param {string} config.osmServiceUrl - ID from rest services for URL.
-     * @param {number} [config.limit=50] - Number of proposals requested.
-     * @param {string}  [osm.states=""] - List of the federal states for the hit selection..
      * @listens Searchbar#RadioTriggerSearchbarSearchAll
      * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Core#RadioRequestParametricURLGetInitString
@@ -41,33 +37,17 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
-    initialize: function (config) {
-        const service = Radio.request("RestReader", "getServiceById", config.serviceId);
+    initialize: function () {
+        const service = Radio.request("RestReader", "getServiceById", this.get("serviceId"));
 
-        if (config.minChars !== undefined) {
-            this.setMinChars(config.minChars);
-        }
         if (service !== undefined && service.get("url") !== undefined) {
             this.setOsmServiceUrl(service.get("url"));
-        }
-        if (config.limit !== undefined) {
-            this.setLimit(config.limit);
-        }
-        // über den Parameter "states" kann in der configdatei die Suche auf ander Bundesländer erweitert werden
-        // Der Eintrag in "states" muss ein string mit den gewünschten Ländern von "address.state" der Treffer sein...
-        if (config.states !== undefined) {
-            this.setStates(config.states);
-        }
-
-        if (config.classes !== undefined) {
-            this.setClasses(config.classes);
         }
 
         if (Radio.request("ParametricURL", "getInitString") !== undefined) {
             this.search(Radio.request("ParametricURL", "getInitString"));
         }
         this.listenTo(Radio.channel("Searchbar"), {
-            // "search": this.search
             "searchAll": this.search
         });
     },
@@ -81,7 +61,6 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {void}
      */
     search: function (searchString) {
-
         if (searchString.length >= this.get("minChars")) {
             Radio.trigger("Searchbar", "removeHits", "hitList", {type: "OpenStreetMap"});
             this.suggestByOSM(searchString);
@@ -142,7 +121,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
             county;
 
         data.forEach(hit => {
-            if (this.get("states").length === 0 || this.get("states").includes(hit.address.state)) {
+            if (this.get("states").length === 0 || this.get("states").includes(hit.address.state || hit.address.city)) {
                 if (this.isSearched(hit, this.get("searchParams"))) {
                     weg = hit.address.road || hit.address.pedestrian;
                     county = hit.address.county;
@@ -167,8 +146,11 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
                     }
 
                     bbox = hit.boundingbox;
-                    if (hit.address.house_number !== undefined) {
-                        // Zentrum der BoundingBox ermitteln und von lat/lon ins Zielkoordinatensystem transformieren...
+                    if (hit?.lon && hit?.lat) {
+                        center = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [parseFloat(hit.lon), parseFloat(hit.lat)]);
+                    }
+                    else if (hit.address.house_number !== undefined) {
+                        // Find the center of the BoundingBox and transform it from lat/lon to the target coordinate system...
                         north = (parseFloat(bbox[0]) + parseFloat(bbox[1])) / 2.0;
                         east = (parseFloat(bbox[2]) + parseFloat(bbox[3])) / 2.0;
                         center = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [east, north]);
@@ -207,10 +189,9 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      */
     isSearched: function (searched, params) {
         const hits = [],
-            address = searched.address !== undefined ? searched.address : {};
+            address = searched?.address || {};
 
         if (this.canShowHit(searched)) {
-
             params.forEach(param => {
                 if ((address.hasOwnProperty("house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
                     (address.hasOwnProperty("road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
@@ -236,7 +217,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {boolean} true | false
      */
     canShowHit: function (hit) {
-        const classesToShow = this.get("classes");
+        const classesToShow = this.get("classes").split(",");
         let result = false;
 
         if (classesToShow.length === 0) {
@@ -244,7 +225,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
         }
 
         classesToShow.forEach(classToShow => {
-            if (hit.class === classToShow || hit.extratags[classToShow] !== undefined) {
+            if (hit?.class === classToShow || hit.hasOwnProperty("extratags") && hit.extratags[classToShow] !== undefined) {
                 result = true;
             }
         });
@@ -335,57 +316,12 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
     },
 
     /**
-     * Setter for limit.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setLimit: function (value) {
-        this.set("limit", value);
-    },
-
-    /**
-     * Setter for states.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setStates: function (value) {
-        this.set("states", value);
-    },
-
-    /**
-     * Setter for street.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setStreet: function (value) {
-        this.set("street", value);
-    },
-
-    /**
      * Setter for searchParams.
      * @param {*} value - todo
      * @returns {void}
      */
     setSearchParams: function (value) {
         this.set("searchParams", value);
-    },
-
-    /**
-     * Setter for classes.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setClasses: function (value) {
-        this.set("classes", value.split(","));
-    },
-
-    /**
-     * Setter for minChars.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setMinChars: function (value) {
-        this.set("minChars", value);
     },
 
     /**

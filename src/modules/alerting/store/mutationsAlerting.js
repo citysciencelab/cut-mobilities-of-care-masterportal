@@ -32,13 +32,13 @@ export default {
     },
 
     /**
-     * Sets the readyToShow flag toggling the modal's visibility.
+     * Sets the showTheModal flag toggling the modal's visibility.
      * @param {object} state state
-     * @param {boolean} readyToShow visibility flag
+     * @param {boolean} showTheModal visibility flag
      * @returns {void}
      */
-    setReadyToShow (state, readyToShow) {
-        state.readyToShow = readyToShow;
+    setReadyToShow (state, showTheModal) {
+        state.showTheModal = showTheModal;
     },
 
     /**

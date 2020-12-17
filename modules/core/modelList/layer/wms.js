@@ -15,7 +15,8 @@ const WMSLayer = Layer.extend({
             supported: ["2D", "3D"],
             showSettings: true,
             extent: null,
-            notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"]
+            notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"],
+            useProxy: false
         });
     },
 

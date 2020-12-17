@@ -1319,14 +1319,6 @@
  */
 
 /**
- * @event Core#RadioRequestUtilGetProxyURL
- * @description returns the proxyURL
- * @param {String} url to be proxied
- * @returns {string} proxyURL
- * @example Radio.request("Util", "getProxyURL", this.get("gfiUrl"));
- */
-
-/**
  * @event Core#RadioRequestUtilGetIgnoredKeys
  * @description returns the ignoredKeys
  * @returns {string[]} ignoredKeys

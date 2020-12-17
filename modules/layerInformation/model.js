@@ -12,6 +12,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
         uniqueIdList: [],
         datePublication: null,
         dateRevision: null,
+        periodicityKey: null,
         periodicity: null,
         idCounter: 0,
         overlay: new Overlay({element: undefined})
@@ -27,6 +28,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
      * @property {Array} uniqueIdList todo
      * @property {String} datePublication=null Date of publication
      * @property {String} dateRevision=null Date of revision
+     * @property {String} periodicityKey=null to translate
      * @property {String} periodicity=null Periodicity
      * @property {Number} idCounter=0 counter for unique ids
      * @property {Overlay} overlay=new Overlay({element: undefined}) the overlay
@@ -73,6 +75,34 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
                 Radio.trigger("Map", "addOverlay", this.get("overlay"));
             }
         }, this);
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.setAdditionalMetadata(i18next.t("common:modules.layerInformation.additionalMetadata"));
+        this.setAddressSuffix(i18next.t("common:modules.layerInformation.addressSuffix"));
+        this.setAttachFileMessage(i18next.t("common:modules.layerInformation.attachFileMessage"));
+        this.setCloseButton(i18next.t("common:modules.layerInformation.closeButton"));
+        this.setDownloadDataset(i18next.t("common:modules.layerInformation.downloadDataset"));
+        this.setInformationAndLegend(i18next.t("common:modules.layerInformation.informationAndLegend"));
+        this.setLastModified(i18next.t("common:modules.layerInformation.lastModified"));
+        this.setLegend(i18next.t("common:modules.layerInformation.legend"));
+        this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetaDataMessage"));
+        this.setNoMetadataLoaded(i18next.t("common:modules.layerInformation.noMetadataLoaded"));
+        this.setPeriodicityTitle(i18next.t("common:modules.layerInformation.periodicityTitle"));
+        this.setPublicationCreation(i18next.t("common:modules.layerInformation.publicationCreation"));
+        this.setPeriodicity(i18next.t(this.get("periodicityKey")));
+        this.set("currentLng", lng);
     },
 
     /**
@@ -81,8 +111,8 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     * @returns {void}
     */
     fetchedMetaData: function (cswObj) {
-        if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
-            this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
+        if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj?.uniqueId)) {
+            this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj?.uniqueId);
 
             if (this.get("layerName") === cswObj?.layerName && cswObj?.parsedData?.downloadLinks) {
                 const downloadLinks = this.get("downloadLinks");
@@ -93,8 +123,8 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
                 this.setDownloadLinks(Radio.request("Util", "sortBy", downloadLinks, "linkName"));
             }
             else {
-                this.updateMetaData(cswObj.parsedData);
-                this.setLayerName(cswObj.layerName);
+                this.updateMetaData(cswObj?.parsedData);
+                this.setLayerName(cswObj?.layerName);
             }
             this.trigger("sync");
         }
@@ -208,7 +238,19 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
     setAttributes: function (attrs) {
         this.set(attrs);
         this.setMetadataURL();
-        this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetadataMessage"));
+        this.setAdditionalMetadata(i18next.t("common:modules.layerInformation.additionalMetadata"));
+        this.setAddressSuffix(i18next.t("common:modules.layerInformation.addressSuffix"));
+        this.setAttachFileMessage(i18next.t("common:modules.layerInformation.attachFileMessage"));
+        this.setCloseButton(i18next.t("common:modules.layerInformation.closeButton"));
+        this.setDownloadDataset(i18next.t("common:modules.layerInformation.downloadDataset"));
+        this.setInformationAndLegend(i18next.t("common:modules.layerInformation.informationAndLegend"));
+        this.setLastModified(i18next.t("common:modules.layerInformation.lastModified"));
+        this.setLegend(i18next.t("common:modules.layerInformation.legend"));
+        this.setNoMetaDataMessage(i18next.t("common:modules.layerInformation.noMetaDataMessage"));
+        this.setNoMetadataLoaded(i18next.t("common:modules.layerInformation.noMetadataLoaded"));
+        this.setPeriodicityTitle(i18next.t("common:modules.layerInformation.periodicityTitle"));
+        this.setPeriodicity(i18next.t(this.get("periodicityKey")));
+        this.setPublicationCreation(i18next.t("common:modules.layerInformation.publicationCreation"));
         if (this.areMetaIdsSet(this.get("metaID"))) {
             this.set("downloadLinks", []);
             this.requestMetaData(attrs);
@@ -220,7 +262,7 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
             this.set("downloadLinks", null);
             this.set("datePublication", null);
             this.set("dateRevision", null);
-            this.set("periodicity", null);
+            this.setPeriodicity(null);
             this.trigger("sync");
         }
     },
@@ -271,11 +313,118 @@ const LayerInformationModel = Backbone.Model.extend(/** @lends LayerInformationM
 
     /**
     * Setter function for noMetaDataMessage
-    * @param {Boolean} value no message data
+    * @param {String} value no message data
     * @returns {void}
     */
     setNoMetaDataMessage: function (value) {
         this.set("noMetaDataMessage", value);
+    },
+
+    /**
+    * Setter function for noMetdataLoaded
+    * @param {String} value no metdata loaded
+    * @returns {void}
+    */
+    setNoMetadataLoaded: function (value) {
+        this.set("noMetadataLoaded", value);
+    },
+
+    /**
+    * Setter function for addressSuffix
+    * @param {String} value address suffix
+    * @returns {void}
+    */
+    setAddressSuffix: function (value) {
+        this.set("addressSuffix", value);
+    },
+
+    /**
+    * Setter function for attachFileMessage
+    * @param {String} value attach file message
+    * @returns {void}
+    */
+    setAttachFileMessage: function (value) {
+        this.set("attachFileMessage", value);
+    },
+
+    /**
+    * Setter function for closeButton
+    * @param {String} value close button
+    * @returns {void}
+    */
+    setCloseButton: function (value) {
+        this.set("closeButton", value);
+    },
+
+    /**
+    * Setter function for downloadDataset
+    * @param {String} value download dataset
+    * @returns {void}
+    */
+    setDownloadDataset: function (value) {
+        this.set("downloadDataset", value);
+    },
+
+    /**
+    * Setter function for lastModified
+    * @param {String} value last modified
+    * @returns {void}
+    */
+    setLastModified: function (value) {
+        this.set("lastModified", value);
+    },
+
+    /**
+    * Setter function for legend
+    * @param {String} value legend
+    * @returns {void}
+    */
+    setLegend: function (value) {
+        this.set("legend", value);
+    },
+
+    /**
+    * Setter function for periodicityTitle
+    * @param {String} value periodicity title
+    * @returns {void}
+    */
+    setPeriodicityTitle: function (value) {
+        this.set("periodicityTitle", value);
+    },
+    /**
+    * Setter function for periodicity
+    * @param {String} value periodicity
+    * @returns {void}
+    */
+    setPeriodicity: function (value) {
+        this.set("periodicity", value);
+    },
+
+    /**
+    * Setter function for publicationCreation
+    * @param {String} value publication / creation
+    * @returns {void}
+    */
+    setPublicationCreation: function (value) {
+        this.set("publicationCreation", value);
+    },
+
+    /**
+    * Setter function for informationAndLegend
+    * @param {String} value information and legend
+    * @returns {void}
+    */
+    setInformationAndLegend: function (value) {
+        this.set("informationAndLegend", value);
+    },
+
+    /**
+    * Setter function for additionalMetadata
+    * @param {String} value additionalMetadata
+    * @returns {void}
+    */
+    setAdditionalMetadata: function (value) {
+        this.set("additionalMetadata", value);
     },
 
     /**

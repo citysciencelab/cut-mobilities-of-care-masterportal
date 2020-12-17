@@ -485,6 +485,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     url: hit.source.url,
                     version: hit.source.version,
                     gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
+                    gfiTheme: hit.source.gfiTheme ? hit.source.gfiTheme : "default",
                     datasets: hit.source.datasets,
                     isJustAdded: true
                 });

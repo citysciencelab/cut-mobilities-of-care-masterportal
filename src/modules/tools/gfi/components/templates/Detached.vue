@@ -153,7 +153,7 @@ export default {
                 </span>
             </button>
             <h5>
-                {{ title }}
+                {{ $t(title) }}
             </h5>
         </div>
         <!-- theme -->
