@@ -48,6 +48,9 @@
 - In der index.html ist unter der id "loader" und ein neuer css-Loader eingebunden, dessen Darstellung über css geändert werden kann. Oberhalb davon werden Portaltitel und Portallogo während des Ladens des masterportals gezeigt. Sie sind in der index.html unter der id "portal-logo-box" zu finden.
 - In der Konfiguration des Werkzeugs "Strecke/Fläche messen" kann jetzt der Erdradius angegeben werden.
 - Das Modul MapMarker funktioniert nun auf Basis von Vue.js. Es ist nun möglich den Style für Punkt- und Polygon-Marker in der Style.json zu konfigurieren.
+- Bei Tool WMS-hinzufügen, darf externe Layer nur ab Version 1.3 importiert werden.
+- Bei Tool WMS-hinzufügen, darf externe Layer außer Portalextent nicht importiert werden.
+- Bei Tool Druck, die Layers, die nicht "visible" in Dreuckmaßstab sind, werden "invisible" beim Druck.
 
 ### Deprecated
 - Die Möglichkeit URLs über einen Proxy umzuleiten (useProxy) ist deprecated.
