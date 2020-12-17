@@ -187,7 +187,7 @@ mapMarker: {
 |----|-------------|---|-------|------------|
 |enabled|ja|Boolean|true|Abhängig von diesem Schalter wird ein Button zum Umschalten von Sprachen angezeigt|
 |debug|nein|Boolean|false|Schalter um debug-Ausgaben bez. der Übersetzung in der console anzuzeigen|
-|languages|ja|Object|de: "deutsch", en: "englisch"|Kurzbezeichnung und Langbezeichnung der Sprachen|
+|languages|ja|Object|de: "deutsch", en: "englisch"|Konfiguration der im Portal verwendeten Sprachen. Bitte beachten, dass die entsprechenden Sprach-Dateien auch hinterlegt sein müssen.|
 |fallbackLanguage|nein|String|"de"|Sprache die benutzt wird, wenn Übersetzungen in der gewählten Sprache nicht verfügbar sind|
 |changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator", "htmlTag"]|Reihenfolge und woher die Benutzersprache erkannt werden soll, siehe auch https://github.com/i18next/i18next-browser-languageDetector|
 |loadPath|nein|String|"/locales/{{lng}}/{{ns}}.json"|Pfad, von dem Sprachdateien geladen werden, oder eine Funktion, die einen Pfad zurückgibt: function(lngs, Namensräume) { return path; } Der zurückgegebene Pfad interpoliert lng, ns, falls angegeben, wie bei einem statischen Pfad. Es kann auch eine Url angegebn werden, wie https://localhost:9001/locales/{{lng}}/{{ns}}.json. Siehe auch https://github.com/i18next/i18next-http-backend|

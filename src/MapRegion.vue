@@ -32,23 +32,24 @@ export default {
 <template>
     <div class="anchor">
         <!-- OpenLayers node; control map itself via vuex map module -->
-        <div id="map-wrapper">
-            <div id="map" />
-            <!-- HUD elements; always present -->
-            <div class="elements-positioned-over-map">
-                <LegendWindow />
-                <ControlBar class="controls" />
-                <Footer />
-                <MapMarker />
-            </div>
+        <div class="menu">
+            <LegendWindow />
         </div>
-        <div id="sidebar">
-            <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
-            <ToolManager v-if="configJson" />
+        <div
+            id="map"
+        />
+        <!-- HUD elements; always present -->
+        <div class="elements-positioned-over-map">
+            <ControlBar class="controls" />
+            <Footer />
+            <MapMarker />
         </div>
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
+
         <ConfirmAction />
         <Alerting />
+        <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
+        <ToolManager v-if="configJson" />
         <template v-if="i18NextInitialized">
             <component
                 :is="$options.components[addonKey]"
@@ -63,15 +64,6 @@ export default {
     .anchor {
         position: relative;
 
-        #map-wrapper {
-            position:relative;
-            flex-grow:1;
-            order:1;
-        }
-        #sidebar {
-            order:2;
-        }
-
         /* map itself should fill the whole region as "background" */
         #map {
             position: absolute;
@@ -83,14 +75,20 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            align-self: flex-end;
 
-            height: 100%;
             width: 100%;
 
             .controls {
                 flex-grow: 1;
             }
+        }
+
+        .menu {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            width: 100%;
         }
     }
 </style>
