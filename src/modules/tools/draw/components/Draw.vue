@@ -376,6 +376,7 @@ export default {
             <form
                 class="form-horizontal"
                 role="form"
+                @submit.prevent
             >
                 <div
                     v-if="drawType.id === 'drawCircle' && currentInteraction !== 'modify'"
