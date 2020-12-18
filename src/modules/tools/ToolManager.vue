@@ -13,8 +13,6 @@ export default {
     mounted () {
         /** Push the configured attributes to store from all configured tools. */
         this.configuredTools.forEach(configuredTool => this.pushAttributesToStoreElements(configuredTool));
-console.log(this.configuredTools);
-
         this.setToolActiveByConfig();
         this.configuredTools.forEach(configuredTool => this.activateByUrlParam(configuredTool?.component?.name));
     },

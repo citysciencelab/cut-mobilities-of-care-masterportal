@@ -54,7 +54,7 @@ export default {
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
         <ConfirmAction />
         <Alerting />
-       
+
         <template v-if="i18NextInitialized">
             <component
                 :is="$options.components[addonKey]"
