@@ -402,11 +402,6 @@ export default {
 }
 
 .sidebar-vue {
-    float: left;
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
     background-color: @background_color_1;
     .header();
     .win-body-vue {
