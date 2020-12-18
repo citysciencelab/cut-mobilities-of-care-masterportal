@@ -335,7 +335,6 @@
             "isInitOpen": false
           },
           "draw": {
-            "renderToWindow": false,
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",
             "iconList": [
