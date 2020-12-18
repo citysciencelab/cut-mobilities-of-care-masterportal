@@ -1,30 +1,35 @@
-#### Beschreibung
-Hier tauchen alle Funktionen auf, die sich unter dem Menüpunkt "Werkzeuge" befinden.
-Die Einträge werden in einer Liste verwaltet. Jeder Eintrag hat einen Titel, ein Glyphicon
-und "Aktivierungs-Attribut" (default = false). Alle Attribute sind optional und werden über
-die config.js gesteuert. Die Konfiguration gibt die Reihenfolge der Tools in der Werkzeuge-Liste
-im Portal wieder. Auflistung der verfügbaren Tools:
+# README
 
-* parcelSearch (Flurstückssuche)
+## Description
+
+All tools appearing in the menu "tools" are located in this folder. Entries are maintained in a list. Each list entry has a title, a glyphicon, and an active state (default: `false`). All attributes are optional and controlled in the `config.js` file. The order of tools in the configuration file determines the order of tools in the portal UI.
+
+### List of available tools
+
+* parcelSearch (Parcel search)
 * gfi (GetFeatureInfo)
-* coord (Koordinaten Abfrage)
-* print (Drucken)
-* measure (Messen)
-* draw (Zeichnen)
+* coord (Coordinate request)
+* print (Printing)
+* measure (Measuring)
+* draw (Drawing)
 * record (WFS-T)
 
-#### Konfiguration
+## Configuration
 
-    tools: {
-        parcelSearch: {
-            title: "Flurstückssuche",
-            glyphicon: "glyphicon-search"
+```js
+{
+    "tools": {
+        "parcelSearch": {
+            "title": "Parcel search",
+            "glyphicon": "glyphicon-search"
         },
-        gfi: {
-            title: "Informationen abfragen",
-            glyphicon: "glyphicon-info-sign",
-            isActive: true
+        "gfi": {
+            "title": "Request information",
+            "glyphicon": "glyphicon-info-sign",
+            "isActive": true
         },
-        coord: {},
-        ...
+        "coord": {},
+        // ...
     }
+}
+```

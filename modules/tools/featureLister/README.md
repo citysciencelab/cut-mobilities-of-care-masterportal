@@ -1,8 +1,11 @@
-#### Beschreibung
-Dieses Modul kann geladene Vektordaten in einer Tabelle darstellen. Über einen Config-Eintrag wird das Modul geladen. Es reagiert auf das layerlist:sendVisibleWFSlayerList Event.
-Dieses schickt alle geladenene WFS-Layer an das Modul. Das Modul merkt sich die Informationen und zeigt eine Auflistung im ersten Tab. Wird ein Eintrag (Layer) in diesem Tab ausgewählt,
-so wird dessem LayerId gespeichert. Aus der Layerliste wird dann der selektierte Layer gefiltert und gespeichert. Darauf wird reagiert und die Features des Layers werden ausgewertet und
-im zweiten Tab der Tabelle aufgelistet. Aus Performancegründen werden nicht alle Features geladen sondern max. soviele, wie in der Konfiguration angegeben. Sind nicht alle Features geladen,
-wird ein Knopf angezeigt, der das nachladen weiterer Features ernöglicht. Über ein Hover-Event wird gesteuert, dass gehoverte Features in der Karte gehighlighted werden. Durch Klick auf ein
-Ferature werden dessen Attribute in einem dritten Tab vollständig dargestellt. Zukünftig könnten hier die Attribute bei WFS-T auch editiert werden. Der Tabelle wurde eine Sortiermöglichkeit
-implementiert.
+# Readme
+
+## Description
+
+This module can be used to display loaded vector data as a table. It is loaded by configuration and reacts to the `layerlist:sendVisibleWFSlayerList` event.
+
+This event sends all loaded WFS layers to the module. It memorizes the information and displays a list in its first tab. Whenever an entry (layer) from the list is chosen, its LayerId is saved. Then, from the layer list, the selected layer is filtered and saved.
+
+As a reaction to that selection, the layer features are evaluated and listed in the second tab. For performance reasons, not all features, but at most the configured amount of features is initially loaded, and a button is shown that allows loading additional features to this table.
+
+A hover event controls highlighting hovered features in the map. By clicking a feature, its attributes are shown completely in a third tab. In the future, WFS-T attributes should be editable here. The table also provides sort functionalities.
