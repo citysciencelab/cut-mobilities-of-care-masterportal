@@ -109,7 +109,7 @@
     "raf": "^3.4.1",
     "regenerator-runtime": "^0.11.0",
     "replace-in-file": "^6.0.0",
-    "selenium-webdriver": "^4.0.0-alpha.8",
+    "selenium-webdriver": "^4.0.0-alpha.7",
     "sinon": "^7.3.2",
     "sinon-chai": "^3.3.0",
     "text-loader": "0.0.1",

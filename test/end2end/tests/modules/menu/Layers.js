@@ -101,23 +101,23 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                 expect(mapOrderedLayerIds).to.deep.equal(configGivenIdOrder);
             });
 
-            // it("allows activating and deactivating layers in LT", async function () {
-            //     const checkLayerId = configGivenIdOrder[0];
+            it("allows activating and deactivating layers in LT", async function () {
+                const checkLayerId = configGivenIdOrder[0];
 
-            //     expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.false;
-            //     await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
-            //     expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.true;
-            //     await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
-            //     expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.false;
-            //     await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
-            //     expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.true;
-            // });
+                expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.false;
+                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.true;
+                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.false;
+                await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
+                expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.true;
+            });
 
             it("opens an information window with the info button", async function () {
                 await (await driver.findElement(By.css("ul#root li.layer span.glyphicon-info-sign"))).click();
                 await driver.wait(
                     until.elementLocated(By.css("div#layerinformation-desktop")),
-                    8000,
+                    5000,
                     "Info window did not appear"
                 );
             });
@@ -135,32 +135,32 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                     await new Promise(r => setTimeout(r, 200));
                 });
 
-                // it("allows manipulating layer transparency", async function () {
-                //     /**
-                //      * @param {string} sign must be "plus" or "minus"
-                //      * @returns {WebdriverWebElement} fresh transparency button
-                //      */
-                //     async function getButton (sign) {
-                //         return driver.findElement(By.css(`span.transparency span.glyphicon-${sign}-sign`));
-                //     }
+                it("allows manipulating layer transparency", async function () {
+                    /**
+                     * @param {string} sign must be "plus" or "minus"
+                     * @returns {WebdriverWebElement} fresh transparency button
+                     */
+                    async function getButton (sign) {
+                        return driver.findElement(By.css(`span.transparency span.glyphicon-${sign}-sign`));
+                    }
 
-                //     const id = mapOrderedLayerIds[0];
+                    const id = mapOrderedLayerIds[0];
 
-                //     expect(await driver.executeScript(isLayerVisible, id, "1")).to.be.true;
+                    expect(await driver.executeScript(isLayerVisible, id, "1")).to.be.true;
 
-                //     // buttons have to be re-fetched each click since they tend to go stale
-                //     await (await getButton("plus")).click();
-                //     await (await getButton("plus")).click();
-                //     await (await getButton("plus")).click();
+                    // buttons have to be re-fetched each click since they tend to go stale
+                    await (await getButton("plus")).click();
+                    await (await getButton("plus")).click();
+                    await (await getButton("plus")).click();
 
-                //     expect(await driver.executeScript(isLayerVisible, id, "0.7")).to.be.true;
+                    expect(await driver.executeScript(isLayerVisible, id, "0.7")).to.be.true;
 
-                //     await (await getButton("minus")).click();
-                //     await (await getButton("minus")).click();
-                //     await (await getButton("minus")).click();
+                    await (await getButton("minus")).click();
+                    await (await getButton("minus")).click();
+                    await (await getButton("minus")).click();
 
-                //     expect(await driver.executeScript(isLayerVisible, id, "1")).to.be.true;
-                // });
+                    expect(await driver.executeScript(isLayerVisible, id, "1")).to.be.true;
+                });
 
                 it("arrows allow moving layers up in tree and map order", async function () {
                     await (await driver.findElement(By.css("ul#root li.layer div.layer-settings span.glyphicon-arrow-down"))).click();
@@ -215,7 +215,7 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                 it("allows removing layer from tree and map", async function () {
                     await (await driver.wait(
                         until.elementLocated(By.css("ul#root li.layer div.layer-settings span.remove-layer")),
-                        8000,
+                        5000,
                         "layer removal button did not appear in layer cog menu"
                     )).click();
 

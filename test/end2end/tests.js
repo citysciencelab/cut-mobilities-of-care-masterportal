@@ -70,7 +70,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     // require("./tests/modules/core/ParametricUrl.js"),
 
                     // modules/menu
-                    require("./tests/modules/menu/Layers.js"),
+                    // require("./tests/modules/menu/Layers.js"),
 
                     // modules/searchbar
                     // require("./tests/modules/searchbar/SearchCategories.js"),
