@@ -95,7 +95,7 @@ if (!("Config" in window)) {
 
     // Show error message without Alerting
     loadConfigJs.catch(() => {
-        document.getElementById("loader").style.visibility = "hidden";
+        document.getElementById("loader").style.display = "none";
         document.getElementById("map").appendChild(document.createTextNode("Die Portalkonfiguration konnte nicht vom Pfad '" + configPath + "'' geladen werden. Bitte wenden sie sich an den Administrator."));
     });
 }

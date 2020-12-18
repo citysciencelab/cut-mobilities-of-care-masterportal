@@ -1,5 +1,4 @@
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
-import {getWKTGeom} from "../../../utils/getWKTGeom";
 import Point from "ol/geom/Point.js";
 import Feature from "ol/Feature.js";
 
@@ -72,18 +71,16 @@ export default {
 
     /**
      * Converts polygon to the wkt format and add this to the map.
-     * @param {String[]} wktcontent The polygon to highlight in the map.
-     * @param {String} geometryType The type of geometry.
+     * @param {ol/Feature} feature The ol feature that is added to the map.
      * @returns {void}
      */
-    placingPolygonMarker ({state, commit, dispatch}, {wktcontent, geometryType}) {
+    placingPolygonMarker ({state, commit, dispatch}, feature) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.polygonStyleId);
 
         dispatch("removePolygonMarker");
 
         if (styleListModel) {
-            const feature = getWKTGeom(wktcontent, geometryType),
-                featureStyle = styleListModel.createStyle(feature, false);
+            const featureStyle = styleListModel.createStyle(feature, false);
 
             feature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
