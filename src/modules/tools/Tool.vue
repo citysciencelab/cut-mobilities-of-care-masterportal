@@ -35,18 +35,23 @@ export default {
             draggable: false,
             maxPosTop: 0,
             maxPosLeft: 0,
-            width: this.initialWidth,
+            width: parseFloat(this.initialWidth, 10),
             isDragging: false
         };
     },
     computed: {
         ...mapGetters(["uiStyle"]),
-        clientWidth () {
-            return this.width * window.innerWidth + "px";
+        sidebarWidthPixel () {
+            let pixelWidth = this.width;
+
+            if (pixelWidth <= 1) {
+                pixelWidth = this.width * window.innerWidth;
+            }
+            return pixelWidth + "px";
         }
     },
     watch: {
-        active (newValue) {
+        active: function (newValue) {
             const modelCollection = Radio.request("ModelList", "getCollection"),
                 gfiModel = modelCollection ? modelCollection.findWhere({id: "gfi"}) : undefined;
 
@@ -71,6 +76,9 @@ export default {
                 Radio.trigger("ModelList", "toggleDefaultTool");
             }
 
+            this.updateMap();
+        },
+        width: function () {
             this.updateMap();
         }
     },
@@ -108,12 +116,8 @@ export default {
          *  @return {void}
          */
         updateMap () {
-            if (!this.renderToWindow && this.active) {
-                // only set the map to full width, if not another sidebar is open
-                document.getElementById("map").style.width = (1 - this.width) * 100 + "%";
-            }
-            else {
-                document.getElementById("map").style.width = "100%";
+            if (this.renderToWindow || !this.active) {
+                return;
             }
             Radio.trigger("Map", "updateSize");
         },
@@ -220,8 +224,7 @@ export default {
             if (this.isDragging) {
                 const eventX = event.type === "touchmove" ? event.touches[0].clientX : event.clientX;
 
-                this.width = (window.innerWidth - eventX) / window.innerWidth;
-                this.updateMap();
+                this.width = window.innerWidth - eventX;
             }
         },
         /**
@@ -243,7 +246,7 @@ export default {
             (renderToWindow ? 'tool-window-vue ui-widget-content' : 'sidebar-vue'),
             (uiStyle === 'TABLE' ? 'table-tool-win-all-vue': '')
         ]"
-        :style="[renderToWindow ? '' : {width: clientWidth}]"
+        :style="[renderToWindow ? '' : {width: sidebarWidthPixel}]"
     >
         <div
             v-if="resizableWindow"
