@@ -170,7 +170,7 @@ WMTS layers can be added by
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
-|datasets|yes|**[datasets](#markdown-header-wms_wfs_datasets)**[]/Boolean||Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|datasets|yes|**[datasets](#markdown-header-wms_wfs_datasets)**[]/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
 |featureNS|yes|String||Usually referenced in the WFS *GetCapabilities*' header. Used to resolve the namespace given in *FeatureType/Name*.|`"http://www.deegree.org/app"`|
 |featureType|yes|String||Feature type to load. Must match a value of *FeatureTypeList/FeatureType/Name* in the *GetCapabilities* response. Provide without namespace.|`"bab_vkl"`|
 |featurePrefix|no|String||Used to identify a *FeatureType* in the service.|
@@ -251,7 +251,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
-|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
 |gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
 |epsg|no|String|The portal's default EPSG code.|EPSG string used for checking the coordinate reference system. If the value does not match the VTL, a warning is shown. Vector tile services should offer the data in the target CRS for performance reasons. If `"EPSG:3857"` is set with neither `"extend"`, nor `"origin"`, `"resolutions"`, or `"tileSize"`, no *GridSet* is created. The OL default will be used instead.|`"EPSG:3857"`|
 |extent|no|Number[4]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's extent is used.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
@@ -417,7 +417,7 @@ Enables filtering SensorThingsAPI requests.
 
 ## WMS_WFS_datasets
 
-Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.
+Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
@@ -426,7 +426,7 @@ Metadata specification. All metadata the layer data is referenced here. On click
 |md_name|no|String||Record name|
 |bbox|no|String||Record extension|
 |kategorie_opendata|no|String||Opendata category from the govdata.de code list|
-|kategorie_inspire|no|String||Inspure category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`|
+|kategorie_inspire|no|String||Inspire category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`|
 |kategorie_organisation|no|String||Organization name of the data holding body|
 
 ***
@@ -891,7 +891,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
-|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
 |id|yes|String||Arbitrary id|`"44"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |legendURL|yes|String||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
@@ -940,7 +940,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
-|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
 |id|yes|String||Arbitrary id|`"44"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |legendURL|yes|String||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
@@ -992,7 +992,7 @@ Used to display 3D models in Gltf or Glb format.
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
-|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
 |id|yes|String||Arbitrary id|`"41"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |legendURL|yes|String||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
