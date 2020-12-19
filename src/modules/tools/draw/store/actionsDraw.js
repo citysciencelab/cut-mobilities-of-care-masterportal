@@ -449,13 +449,11 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        startDownloadTool ({state}) {
+        startDownloadTool ({state, commit, dispatch}) {
             const features = state.layer.getSource().getFeatures();
 
-            Radio.trigger("Download", "start", {
-                features: features,
-                formats: ["KML", "GEOJSON", "GPX"]
-            });
+            commit("Tools/Download/setFeatures", features, {root: true});
+            dispatch("Tools/Download/setActive", true, {root: true})
         },
         /**
          * Enables the given interaction and disables the others.
