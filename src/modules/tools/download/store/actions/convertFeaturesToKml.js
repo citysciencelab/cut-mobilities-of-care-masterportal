@@ -1,20 +1,43 @@
 import {KML} from "ol/format.js";
-import {pointColorOptions} from "../../../draw/store/constantsDraw";
+import {colorOptions} from "../../../draw/store/constantsDraw";
 
+/**
+ * Adds a unique styleId to each ExtendedData Element of the converted Features.
+ * NOTE: The features can not be printed, if no unique id is present.
+ *
+ * @param {Document} convertedFeatures The features converted to KML.
+ * @returns {void}
+ */
 function addUniqueStyleId (convertedFeatures) {
-    convertedFeatures.getElementsByTagName("ExtendedData").forEach((extendedData) => {
+    convertedFeatures.getElementsByTagName("ExtendedData").forEach(extendedData => {
         extendedData.getElementsByTagName("value")[0].textContent = Radio.request("Util", "uniqueId", "");
     });
 }
 
-function allCompareEqual (array1, array2) {
-    // TODO: Shouldnt it be nested differently ? --> should the AND operator be in brackets?
-    if (!Array.isArray(array1) || Array.isArray(array1) && array1.length < 3 || !Array.isArray(array2) || Array.isArray(array2) && array2.length < 3) {
-        return false;
-    }
-    return array1[0] === array2[0] && array1[1] === array2[1] && array1[2] === array2[2];
+/**
+ * Checks whether bots arrays are of length 3 and whether their values are equal at the same positions.
+ * Used to check if two colors are the same.
+ *
+ * @param {number[]} arrOne First array.
+ * @param {number[]} arrTwo Second array.
+ * @returns {boolean} true, if both are arrays of length 3 consisting of the same values; false, else.
+ */
+function allCompareEqual (arrOne, arrTwo) {
+    return Array.isArray(arrOne)
+        && arrOne.length === 3
+        && Array.isArray(arrTwo)
+        && arrTwo.length === 3
+        && arrOne.every((val, index) => val === arrTwo[index]);
 }
 
+/**
+ * Creates the IconStyle-Part of a Point-KML. Contains the link to a SVG.
+ *
+ * @see https://developers.google.com/kml/documentation/kmlreference#iconstyle
+ * @param {string} url URL from where the Icon can be retrieved from.
+ * @param {number} scale Scale of the Icon. NOTE: If this value is 0, the Icon is not displayed.
+ * @returns {string} The IconStyle-Part of a KML-File.
+ */
 function createKmlIconStyle (url, scale) {
     const scaleTag = `<scale>${scale}</scale>`,
         href = `<href>${url}</href>`;
@@ -22,15 +45,28 @@ function createKmlIconStyle (url, scale) {
     return `<IconStyle>${scaleTag}<Icon>${href}</Icon></IconStyle>`;
 }
 
+/**
+ * If the given color is included in the color options of the Draw Tool the name of the color is returned.
+ *
+ * @param {number[]} color The color of which the name is to be retrieved.
+ * @returns {string} The name of the color corresponding to the number array.
+ */
 function getIconColor (color) {
-    const colOption = pointColorOptions.filter(option => allCompareEqual(color, option.value));
+    const selectedOption = colorOptions.filter(option => allCompareEqual(color, option.value));
 
-    if (colOption && colOption[0]) {
-        return colOption[0].color;
+    if (selectedOption && selectedOption[0]) {
+        return selectedOption[0].color;
     }
     return "";
 }
 
+/**
+ * Constructs the hotspot-tag (anchoring of the icon) of an IconStyle-Part of a Point-KML.
+ *
+ * @see https://developers.google.com/kml/documentation/kmlreference#hotspot
+ * @param {Object} anchor Values for the hotspot-tag are retrieved from this object.
+ * @returns {string} hotspot-Tag for a KML IconStyle.
+ */
 function getKmlHotSpotOfIconStyle (anchor) {
     const x = anchor.anchor[0],
         y = anchor.anchor[1],
@@ -39,10 +75,23 @@ function getKmlHotSpotOfIconStyle (anchor) {
     return `<hotSpot x="${x}" y="${y}" xunits="${xUnit}" yunits="${yUnit}" />`;
 }
 
-function getKmlScaleOfLableStyle (scale) {
-    return `<colorMode>normal</colorMode>${scale}<scale></scale>`;
+/**
+ * Adds the scale to the LabelStyle-Part of a Point-KML.
+ *
+ * @see https://developers.google.com/kml/documentation/kmlreference#iconstyle
+ * @param {number} scale Scale calculated from the fontSize of the feature.
+ * @returns {string} The LabelStyle-Part of a KML-File.
+ */
+function getKmlScaleOfLabelStyle (scale) {
+    return `<colorMode>normal</colorMode><scale>${scale}</scale>`;
 }
 
+/**
+ * Determines the scale value of the KML name tag corresponding to the size of the font of the feature.
+ *
+ * @param {string} fontSize The size of the font retrieved from the feature style text.
+ * @returns {number} Scale value for the KML name tag.
+ */
 function getScaleFromFontSize (fontSize) {
     const size = parseInt(fontSize.substr(0, 2), 10);
 
@@ -58,6 +107,12 @@ function getScaleFromFontSize (fontSize) {
     return 1;
 }
 
+/**
+ * Converts the features to KML while also saving its style information.
+ *
+ * @param {Object} context actions context object.
+ * @returns {string} The features written in KML as a String.
+*/
 export default function convertFeaturesToKml ({state, dispatch}) {
     const {features} = state,
         anchors = [],
@@ -65,13 +120,13 @@ export default function convertFeaturesToKml ({state, dispatch}) {
         format = new KML({extractStyles: true}),
         hasIconUrl = [],
         pointColors = [],
-        pointOpacities = [],
+        // pointOpacities = [], NOTE: This existed in the old version but seems to be of no use.
         skip = [],
-        textFonts = [];
-    let convertedFeatures = [];
+        textFonts = [],
+        convertedFeatures = new DOMParser().parseFromString(dispatch("convertFeatures", format), "text/xml");
 
     // TODO: Would something weird happen if this was not included?
-    pointOpacities.fill(undefined, 0, featureCount);
+    // pointOpacities.fill(undefined, 0, featureCount);
     pointColors.fill(undefined, 0, featureCount);
     hasIconUrl.fill(false, 0, featureCount);
     anchors.fill(undefined, 0, featureCount);
@@ -113,14 +168,13 @@ export default function convertFeaturesToKml ({state, dispatch}) {
                 }
                 else {
                     color = style.getImage().getFill().getColor();
-                    pointOpacities[i] = style.getImage().getFill().getColor()[3];
+                    // pointOpacities[i] = style.getImage().getFill().getColor()[3];
                     pointColors[i] = [color[0], color[1], color[2]];
                 }
             }
         }
     });
 
-    convertedFeatures = new DOMParser().parseFromString(dispatch("convertFeatures", format), "text/xml");
     addUniqueStyleId(convertedFeatures);
 
     convertedFeatures.getElementsByTagName("Placemark").forEach((placemark, i) => {
@@ -133,7 +187,7 @@ export default function convertFeaturesToKml ({state, dispatch}) {
                     iconUrl = `${window.location.origin}/img/tools/draw/circle_blue.svg`;
 
                 if (textFonts[i]) {
-                    labelStyle.innerHTML += getKmlScaleOfLableStyle(getScaleFromFontSize(textFonts[i]));
+                    labelStyle.innerHTML += getKmlScaleOfLabelStyle(getScaleFromFontSize(textFonts[i]));
                 }
                 style.innerHTML += createKmlIconStyle(iconUrl, 0);
             }
