@@ -8,6 +8,7 @@ import actions from "./actionsTools";
  * The imported tools.
  */
 import Draw from "./draw/store/indexDraw";
+import Download from "./download/store/indexDownload";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
@@ -21,6 +22,7 @@ export default {
     namespaced: true,
     modules: {
         Draw,
+        Download,
         FileImport,
         Gfi,
         ScaleSwitcher,

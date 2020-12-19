@@ -1,5 +1,5 @@
 /**
- *
+ * TODO: description
  */
 const state = {
     active: false,
