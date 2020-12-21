@@ -103,12 +103,18 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             Radio.trigger("Alert", "alert", this.get("createFirstText"));
             return;
         }
+        const newFeatures = [];
+
         obj.features.forEach(feature => {
+            const newFeature = feature.clone();
+
             if (feature.getGeometry() instanceof Circle) {
-                feature.setGeometry(fromCircle(feature.getGeometry()));
+                newFeature.setGeometry(fromCircle(feature.getGeometry()));
             }
+            newFeatures.push(newFeature);
         });
 
+        obj.features = newFeatures;
         this.setFormats(obj.formats);
         this.setFeatures(obj.features);
 
