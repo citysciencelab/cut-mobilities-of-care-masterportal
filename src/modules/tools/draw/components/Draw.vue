@@ -42,7 +42,7 @@ export default {
             return !(this.currentInteraction === "draw");
         },
         /**
-         * Enables the input for the diameter if the circleMethod is "defined", for interaction "modify" the rule of drawHTMLElementsModifyFeature takes place.
+         * Enables the input for the radius if the circleMethod is "defined", for interaction "modify" the rule of drawHTMLElementsModifyFeature takes place.
          * @returns {Boolean} returns true to disable the input, false to enable the input
          */
         drawCircleMethods () {
@@ -53,57 +53,57 @@ export default {
             return this.drawHTMLElementsModifyFeature;
         },
 
-        circleDiameterComputed: {
+        circleRadiusComputed: {
             /**
-             * getter for the computed property circleDiameter of the current drawType
-             * @info the internal representation of circleDiameter is always in meters
-             * @returns {Number} the current diameter
+             * getter for the computed property circleRadius of the current drawType
+             * @info the internal representation of circleRadius is always in meters
+             * @returns {Number} the current radius
              */
             get () {
                 if (this.getStyleSettings()?.unit === "km") {
-                    return this.getStyleSettings()?.circleDiameter / 1000;
+                    return this.getStyleSettings()?.circleRadius / 1000;
                 }
-                return this.getStyleSettings()?.circleDiameter;
+                return this.getStyleSettings()?.circleRadius;
             },
             /**
-             * setter for the computed property circleDiameter of the current drawType
-             * @info the internal representation of circleDiameter is always in meters
+             * setter for the computed property circleRadius of the current drawType
+             * @info the internal representation of circleRadius is always in meters
              * @param {Number} value the value to set the target to
              * @returns {void}
              */
             set (value) {
                 if (this.getStyleSettings()?.unit === "km") {
-                    this.setCircleDiameter(value * 1000);
+                    this.setCircleRadius(parseInt(value, 10) * 1000);
                 }
                 else {
-                    this.setCircleDiameter(value);
+                    this.setCircleRadius(parseInt(value, 10));
                 }
             }
         },
-        circleOuterDiameterComputed: {
+        circleOuterRadiusComputed: {
             /**
-             * getter for the computed property circleOuterDiameter of the current drawType
-             * @info the internal representation of circleOuterDiameter is always in meters
-             * @returns {Number} the current diameter
+             * getter for the computed property circleOuterRadius of the current drawType
+             * @info the internal representation of circleOuterRadius is always in meters
+             * @returns {Number} the current radius
              */
             get () {
                 if (this.getStyleSettings()?.unit === "km") {
-                    return this.getStyleSettings()?.circleOuterDiameter / 1000;
+                    return this.getStyleSettings()?.circleOuterRadius / 1000;
                 }
-                return this.getStyleSettings()?.circleOuterDiameter;
+                return this.getStyleSettings()?.circleOuterRadius;
             },
             /**
-             * setter for the computed property circleOuterDiameter of the current drawType
-             * @info the internal representation of circleOuterDiameter is always in meters
+             * setter for the computed property circleOuterRadius of the current drawType
+             * @info the internal representation of circleOuterRadius is always in meters
              * @param {Number} value the value to set the target to
              * @returns {void}
              */
             set (value) {
                 if (this.getStyleSettings()?.unit === "km") {
-                    this.setCircleOuterDiameter(value * 1000);
+                    this.setCircleOuterRadius(parseInt(value, 10) * 1000);
                 }
                 else {
-                    this.setCircleOuterDiameter(value);
+                    this.setCircleOuterRadius(parseInt(value, 10));
                 }
             }
         },
@@ -195,14 +195,14 @@ export default {
             return this.$i18n.i18next.t("common:modules.tools.draw.colorContour");
         },
         /**
-         * computed property of the label for the normal innerDiameter - in case this is a double circle
-         * @returns {String} the label to use for the normal innerDiameter
+         * computed property of the label for the normal innerRadius - in case this is a double circle
+         * @returns {String} the label to use for the normal innerRadius
          */
-        innerDiameterLabelComputed () {
+        innerRadiusLabelComputed () {
             if (this.drawType.id === "drawDoubleCircle" && this.currentInteraction !== "modify") {
-                return this.$i18n.i18next.t("common:modules.tools.draw.innerDiameter");
+                return this.$i18n.i18next.t("common:modules.tools.draw.innerRadius");
             }
-            return this.$i18n.i18next.t("common:modules.tools.draw.diameter");
+            return this.$i18n.i18next.t("common:modules.tools.draw.radius");
         },
 
         /**
@@ -412,15 +412,16 @@ export default {
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
-                        {{ innerDiameterLabelComputed }}
+                        {{ innerRadiusLabelComputed }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <input
-                            id="tool-draw-circleDiameter"
-                            v-model="circleDiameterComputed"
+                            id="tool-draw-circleRadius"
+                            v-model="circleRadiusComputed"
                             class="form-control"
                             :style="{borderColor: innerBorderColor}"
                             type="number"
+                            step="1"
                             :placeholder="$t('common:modules.tools.draw.doubleCirclePlaceholder')"
                             :disabled="drawCircleMethods"
                             min="0"
@@ -432,12 +433,12 @@ export default {
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
-                        {{ $t("common:modules.tools.draw.outerDiameter") }}
+                        {{ $t("common:modules.tools.draw.outerRadius") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <input
-                            id="tool-draw-circleOuterDiameter"
-                            v-model="circleOuterDiameterComputed"
+                            id="tool-draw-circleOuterRadius"
+                            v-model="circleOuterRadiusComputed"
                             class="form-control"
                             :style="{borderColor: outerBorderColor}"
                             type="number"

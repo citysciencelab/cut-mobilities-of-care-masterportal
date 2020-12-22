@@ -20,13 +20,13 @@ function createToolTipOverlay ({getters, commit, dispatch}) {
             },
             featureChangeEvent: evt => {
                 if (autoUnit && evt.target.getRadius() > 500 || !autoUnit && styleSettings.unit === "km") {
-                    toolTip.getElement().innerHTML = thousandsSeparator((Math.round(evt.target.getRadius()) * 0.002).toFixed(decimalsForKilometers)) + " km";
+                    toolTip.getElement().innerHTML = thousandsSeparator(Math.round(evt.target.getRadius()).toFixed(decimalsForKilometers)) + " km";
                 }
                 else {
-                    toolTip.getElement().innerHTML = thousandsSeparator(Math.round(evt.target.getRadius() * 2)) + " m";
+                    toolTip.getElement().innerHTML = thousandsSeparator(Math.round(evt.target.getRadius())) + " m";
                 }
 
-                setters.setCircleDiameter({getters, commit, dispatch}, Math.round(evt.target.getRadius() * 2));
+                setters.setCircleRadius({getters, commit, dispatch}, Math.round(evt.target.getRadius()));
             }
         };
 

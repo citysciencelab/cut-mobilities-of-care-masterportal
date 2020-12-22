@@ -20,16 +20,16 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState,
 
     commit("setAddFeatureListener", layerSource.once("addfeature", event => {
         if (circleMethod === "defined" && drawType.geometry === "Circle") {
-            const innerDiameter = !isNaN(styleSettings.circleDiameter) ? parseFloat(styleSettings.circleDiameter) : null,
-                outerDiameter = !isNaN(styleSettings.circleOuterDiameter) ? parseFloat(styleSettings.circleOuterDiameter) : null,
-                circleDiameter = event.feature.get("isOuterCircle") ? outerDiameter : innerDiameter,
+            const innerRadius = !isNaN(styleSettings.circleRadius) ? parseFloat(styleSettings.circleRadius) : null,
+                outerRadius = !isNaN(styleSettings.circleOuterRadius) ? parseFloat(styleSettings.circleOuterRadius) : null,
+                circleRadius = event.feature.get("isOuterCircle") ? outerRadius : innerRadius,
                 circleCenter = event.feature.getGeometry().getCenter();
 
-            if (innerDiameter === null || innerDiameter === 0) {
+            if (innerRadius === null || innerRadius === 0) {
                 state.innerBorderColor = errorBorder;
 
                 if (drawType.id === "drawDoubleCircle") {
-                    if (outerDiameter === null || outerDiameter === 0) {
+                    if (outerRadius === null || outerRadius === 0) {
                         dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedTwoCircles"), {root: true});
                         layerSource.removeFeature(event.feature);
                         state.outerBorderColor = errorBorder;
@@ -41,23 +41,23 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState,
                     }
                 }
                 else {
-                    dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedDiameter"), {root: true});
+                    dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedRadius"), {root: true});
                     layerSource.removeFeature(event.feature);
                 }
             }
             else {
-                if (outerDiameter === null || outerDiameter === 0) {
+                if (outerRadius === null || outerRadius === 0) {
                     if (drawType.id === "drawDoubleCircle") {
                         dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.draw.undefinedOuterCircle"), {root: true});
                         layerSource.removeFeature(event.feature);
                         state.outerBorderColor = errorBorder;
                     }
                     else {
-                        calculateCircle(event, circleCenter, circleDiameter, rootState.Map.map);
+                        calculateCircle(event, circleCenter, circleRadius, rootState.Map.map);
                     }
                 }
                 else {
-                    calculateCircle(event, circleCenter, circleDiameter, rootState.Map.map);
+                    calculateCircle(event, circleCenter, circleRadius, rootState.Map.map);
                     state.outerBorderColor = "";
                 }
                 state.innerBorderColor = "";

@@ -38,19 +38,19 @@ function setActive ({state, commit, dispatch, rootState}, active) {
 }
 
 /**
- * Sets the inner diameter for the circle of the current drawType.
- * @info the internal representation of circleDiameter is always in meters
+ * Sets the inner radius for the circle of the current drawType.
+ * @info the internal representation of circleRadius is always in meters
  * @param {Object} context actions context object.
- * @param {Number} diameter the diameter of the inner circle in meters
+ * @param {Number} radius the radius of the inner circle in meters
  * @returns {void}
  */
-function setCircleDiameter ({getters, commit, dispatch}, diameter) {
+function setCircleRadius ({getters, commit, dispatch}, radius) {
     const styleSettings = getters.getStyleSettings();
 
-    styleSettings.circleDiameter = diameter;
+    styleSettings.circleRadius = radius;
 
     setStyleSettings({getters, commit}, styleSettings);
-    dispatch("updateCircleDiameterDuringModify", diameter);
+    dispatch("updateCircleRadiusDuringModify", radius);
 }
 
 /**
@@ -71,19 +71,19 @@ function setCircleMethod ({getters, commit}, {target}) {
 }
 
 /**
- * Sets the outer diameter for the circle of the current drawType.
- * @info the internal representation of circleOuterDiameter is always in meters
+ * Sets the outer radius for the circle of the current drawType.
+ * @info the internal representation of circleOuterRadius is always in meters
  * @param {Object} context actions context object.
- * @param {Number} diameter the diameter of the inner circle in meters
+ * @param {Number} radius the radius of the inner circle in meters
  * @returns {void}
  */
-function setCircleOuterDiameter ({getters, commit, dispatch}, diameter) {
+function setCircleOuterRadius ({getters, commit, dispatch}, radius) {
     const styleSettings = getters.getStyleSettings();
 
-    styleSettings.circleOuterDiameter = diameter;
+    styleSettings.circleOuterRadius = radius;
 
     setStyleSettings({getters, commit}, styleSettings);
-    dispatch("updateCircleDiameterDuringModify", diameter);
+    dispatch("updateCircleRadiusDuringModify", radius);
 }
 
 /**
@@ -319,7 +319,7 @@ function setText ({getters, commit, dispatch}, {target}) {
 }
 
 /**
- * Sets the unit for the diameter of the circle of the current drawType.
+ * Sets the unit for the radius of the circle of the current drawType.
  *
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the unit.
@@ -339,9 +339,9 @@ function setUnit ({getters, commit, dispatch}, {target}) {
 export {
     setStyleSettings,
     setActive,
-    setCircleDiameter,
+    setCircleRadius,
     setCircleMethod,
-    setCircleOuterDiameter,
+    setCircleOuterRadius,
     setColor,
     setColorContour,
     setOuterColorContour,

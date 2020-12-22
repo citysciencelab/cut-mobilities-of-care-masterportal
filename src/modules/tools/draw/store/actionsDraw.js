@@ -344,8 +344,8 @@ const initialState = Object.assign({}, stateDraw),
                 fontSize: parseInt(styleSettings.fontSize, 10),
                 text: styleSettings.text,
                 circleMethod: styleSettings.circleMethod,
-                circleDiameter: styleSettings.circleDiameter,
-                circleOuterDiameter: styleSettings.circleOuterDiameter,
+                circleRadius: styleSettings.circleRadius,
+                circleOuterRadius: styleSettings.circleOuterRadius,
                 drawType,
                 symbol,
                 zIndex,
@@ -595,15 +595,15 @@ const initialState = Object.assign({}, stateDraw),
          * Updates the selected feature during modify for circles
          *
          * @param {Object} context actions context object.
-         * @param {Number} diameter the diameter of the circle
+         * @param {Number} radius the radius of the circle
          * @returns {void}
          */
-        updateCircleDiameterDuringModify ({state, rootState, dispatch}, diameter) {
+        updateCircleRadiusDuringModify ({state, rootState, dispatch}, radius) {
             if (state.currentInteraction === "modify" && state.selectedFeature !== null && (state.drawType.id === "drawCircle" || state.drawType.id === "drawDoubleCircle")) {
                 const feature = state.selectedFeature,
                     circleCenter = feature.getGeometry().getCenter();
 
-                calculateCircle({feature}, circleCenter, diameter, rootState.Map.map);
+                calculateCircle({feature}, circleCenter, radius, rootState.Map.map);
 
                 dispatch("addDrawStateToFeature", state.selectedFeature);
             }
@@ -663,8 +663,8 @@ const initialState = Object.assign({}, stateDraw),
             styleSettings.fontSize = feature.get("drawState").fontSize;
             styleSettings.text = feature.get("drawState").text;
             styleSettings.circleMethod = feature.get("drawState").circleMethod;
-            styleSettings.circleDiameter = feature.get("drawState").circleDiameter;
-            styleSettings.circleOuterDiameter = feature.get("drawState").circleOuterDiameter;
+            styleSettings.circleRadius = feature.get("drawState").circleRadius;
+            styleSettings.circleOuterRadius = feature.get("drawState").circleOuterRadius;
 
             commit("setSymbol", feature.get("drawState").symbol);
 
