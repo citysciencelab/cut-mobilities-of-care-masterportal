@@ -111,7 +111,8 @@
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
-            "en": "Englisch"
+            "en": "Englisch",
+            "it": "Italienisch"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
