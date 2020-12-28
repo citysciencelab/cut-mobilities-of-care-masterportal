@@ -281,7 +281,10 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             }
         }
 
-        if (styleModel && legend === true) {
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (styleModel && legend === true) {
             if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
                 styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
             }

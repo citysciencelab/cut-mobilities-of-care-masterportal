@@ -157,7 +157,6 @@ const MobileMenu = Backbone.View.extend({
                     that.addViews(groupedModels.folder);
                 }
                 if (groupedModels.other) {
-                    groupedModels.other.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
                     that.addViews(groupedModels.other);
                 }
             }

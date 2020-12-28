@@ -139,8 +139,7 @@ const WMSLayer = Layer.extend({
      * @return {void}
      */
     createLegend: function () {
-        const legends = [],
-            version = this.get("version");
+        const version = this.get("version");
         let legend = this.get("legend");
 
         /**
@@ -159,8 +158,12 @@ const WMSLayer = Layer.extend({
             }
         }
 
-        if (legend === true || Array.isArray(legend)) {
-            const layerNames = this.get("layers").split(",");
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (legend === true) {
+            const layerNames = this.get("layers").split(","),
+                legends = [];
 
             if (layerNames.length === 1) {
                 legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers")));
@@ -170,7 +173,6 @@ const WMSLayer = Layer.extend({
                     legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName));
                 });
             }
-
             this.setLegend(legends);
         }
         else if (typeof legend === "string") {

@@ -38,12 +38,7 @@ Radio.channel("CswParser").on({
             cswObj.parsedData.periodicityKey = metadata?.getFrequenzy();
             cswObj.parsedData.dateRevision = metadata?.getRevisionDate();
             cswObj.parsedData.downloadLinks = metadata?.getDownloadLinks();
-            if (typeof metadata?.getPublicationDate() !== "undefined") {
-                cswObj.parsedData.datePublication = metadata.getPublicationDate();
-            }
-            else if (typeof metadata?.getCreationDate() !== "undefined") {
-                cswObj.parsedData.datePublication = metadata.getCreationDate();
-            }
+            cswObj.parsedData.datePublication = metadata?.getPublicationDate() || metadata?.getCreationDate();
         }
 
         Radio.trigger("CswParser", "fetchedMetaDataForLayerInformation", cswObj);

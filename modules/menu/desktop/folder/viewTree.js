@@ -87,7 +87,6 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
         else if (this.model.get("parentId") === "ExternalLayer") {
             // fixes Bug BG-750: IE11 height was negative
             $("#" + this.model.get("parentId")).css("height", "0px");
-
         }
         return this;
     },

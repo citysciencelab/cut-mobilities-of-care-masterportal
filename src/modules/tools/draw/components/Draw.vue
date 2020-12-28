@@ -145,11 +145,28 @@ export default {
             return this.getStyleSettings()?.colorContour;
         },
         /**
+         * computed property for the outer color of a double circle
+         * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
+         */
+        outerColorContourComputed () {
+            return this.getStyleSettings()?.outerColorContour;
+        },
+        /**
          * computed property for the colorContour of the current drawType
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         colorComputed () {
             return this.getStyleSettings()?.color;
+        },
+        /**
+         * computed property of the label for the normal colorContour - incase this is a double circle
+         * @returns {String} the label to use for the normal colorContour
+         */
+        colorContourLabelComputed () {
+            if (this.drawType.id === "drawDoubleCircle" && this.currentInteraction !== "modify") {
+                return this.$i18n.i18next.t("common:modules.tools.draw.innerColorContour");
+            }
+            return this.$i18n.i18next.t("common:modules.tools.draw.colorContour");
         }
 
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
@@ -572,7 +589,7 @@ export default {
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
-                        {{ $t("common:modules.tools.draw.outlineColor") }}
+                        {{ colorContourLabelComputed }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <select
@@ -586,6 +603,31 @@ export default {
                                 :key="'draw-colorContour-' + option.color"
                                 :value="option.value"
                                 :selected="isEqualColorArrays(option.value, colorContourComputed)"
+                            >
+                                {{ $t("common:colors." + option.color) }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div
+                    v-if="drawType.id === 'drawDoubleCircle' && currentInteraction !== 'modify'"
+                    class="form-group form-group-sm"
+                >
+                    <label class="col-md-5 col-sm-5 control-label">
+                        {{ $t("common:modules.tools.draw.outerColorContour") }}
+                    </label>
+                    <div class="col-md-7 col-sm-7">
+                        <select
+                            id="tool-draw-outerColorContour"
+                            class="form-control input-sm"
+                            :disabled="drawHTMLElementsModifyFeature"
+                            @change="setOuterColorContour"
+                        >
+                            <option
+                                v-for="option in constants.colorContourOptions"
+                                :key="'draw-outerColorContour-' + option.color"
+                                :value="option.value"
+                                :selected="isEqualColorArrays(option.value, outerColorContourComputed)"
                             >
                                 {{ $t("common:colors." + option.color) }}
                             </option>
