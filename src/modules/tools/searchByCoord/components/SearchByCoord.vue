@@ -30,6 +30,9 @@ export default {
         this.setExample();
     },
     beforeUpdate () {
+        /**
+         * Without resetting these values there will be errors when switching between languages.
+         */
         this.coordinatesEasting.errorMessage = "";
         this.coordinatesEasting.value = "";
         this.coordinatesNorthing.errorMessage = "";
@@ -44,7 +47,10 @@ export default {
             "setCenter",
             "setZoom"
         ]),
-
+        /**
+         * Closes this tool window by setting active to false and removes the marker if it was placed.
+         * @returns {void}
+         */
         close () {
             this.setActive(false);
             this.removeMarker();
@@ -57,8 +63,7 @@ export default {
             }
         },
         /**
-         * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
-         * @param {Event} event changed selection event
+         * Called if selection of projection changed.
          * @returns {void}
          */
         selectionChanged () {
@@ -71,7 +76,7 @@ export default {
             this.searchCoordinate(this.coordinatesEasting, this.coordinatesNorthing);
         },
         /**
-         * Returns the label mame depending on the selected projection.
+         * Returns the label name depending on the selected projection.
          * @param {String} key in the language files
          * @returns {String} the name of the label
          */
@@ -81,6 +86,12 @@ export default {
 
             return "modules.tools.searchByCoord." + type + "." + key;
         },
+        /**
+         * Validates the user-input depending on the selected projection. If valid, the coordinates will be pushed in the selectedCoordinates array.
+         * @param {String} coordinatesEasting the coordinates user entered
+         * @param {String} coordinatesNorthing the coordinates user entered
+         * @returns {void}
+         */
         validateInput (coordinatesEasting, coordinatesNorthing) {
             const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
                 validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
@@ -136,12 +147,23 @@ export default {
                 }
             }
         },
+        /**
+         * Sets coordinates name for error messages and calls the validation function.
+         * When valid coordinates were entered the transformCoordinates gets called.
+         * @param {String} coordinatesEasting the coordinates user entered
+         * @param {String} coordinatesNorthing the coordinates user entered
+         * @returns {void}
+         */
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
             this.coordinatesEasting.name = i18next.t(this.label("eastingLabel"));
             this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
             this.validateInput(coordinatesEasting, coordinatesNorthing);
             this.transformCoordinates();
         },
+        /**
+         * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
+         * @returns {void}
+         */
         transformCoordinates () {
             if (this.selectedCoordinates.length === 2) {
                 this.setZoom(this.zoomLevel);
@@ -164,10 +186,20 @@ export default {
                 }
             }
         },
+        /**
+         * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
+         * @param {Array} coordinates from the validated coordinates
+         * @returns {void}
+         */
         moveToCoordinates (coordinates) {
             this.setMarker(coordinates);
             this.setCenter(coordinates);
         },
+        /**
+         * Sets the example messages according to the selected coordinate system.
+         * @param {Array} coordinates from the validated coordinates
+         * @returns {void}
+         */
         setExample () {
             if (this.currentCoordinateSystem === "ETRS89") {
                 this.coordinatesEasting.example = "564459.13";
