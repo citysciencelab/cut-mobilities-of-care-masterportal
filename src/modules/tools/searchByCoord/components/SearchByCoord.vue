@@ -87,7 +87,8 @@ export default {
             return "modules.tools.searchByCoord." + type + "." + key;
         },
         /**
-         * Validates the user-input depending on the selected projection. If valid, the coordinates will be pushed in the selectedCoordinates array.
+         * Validates the user-input depending on the selected projection and sets the error messages.
+         * If valid, the coordinates will be pushed in the selectedCoordinates array.
          * @param {String} coordinatesEasting the coordinates user entered
          * @param {String} coordinatesNorthing the coordinates user entered
          * @returns {void}
@@ -118,10 +119,10 @@ export default {
                 for (const coord of coordinates) {
 
                     if (coord.value === "" || coord.value.length < 1) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
                     }
                     else if (!coord.value.match(validWGS84)) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: coord.name, valueExample: coord.example});
                     }
                     else {
                         coordinatesEasting.errorMessage = "";
@@ -134,10 +135,10 @@ export default {
                 for (const coord of coordinates) {
 
                     if (coord.value === "" || coord.value.length < 1) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
                     }
                     else if (!coord.value.match(validWGS84_dez)) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
+                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: coord.name, valueExample: coord.example});
                     }
                     else {
                         coordinatesEasting.errorMessage = "";
@@ -209,7 +210,7 @@ export default {
                 this.coordinatesEasting.example = "53° 33′ 25″";
                 this.coordinatesNorthing.example = "9° 59′ 50″";
             }
-            else {
+            else if (this.currentCoordinateSystem === "WGS84(Dezimalgrad)") {
                 this.coordinatesEasting.example = "53.55555°";
                 this.coordinatesNorthing.example = "10.01234°";
             }

@@ -539,10 +539,10 @@
                 "exampleAcronym": "Bsp. ",
                 "errorMsg": {
                     "noCoord": "Bitte geben Sie Ihren {{valueKey}} vollständig ein.",
-                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
-                },
-                "hdmsEastingText": "Wert der $t(common:modules.tools.searchByCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "Wert der $t(common:modules.tools.searchByCoord.hdms.northingLabel)"
+                    "noMatch": "Die Eingabe für den {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})",
+                    "hdmsNoCoord": "Bitte geben Sie Ihren Wert der {{valueKey}} vollständig ein.",
+                    "hdmsNoMatch": "Die Eingabe für den Wert der {{valueKey}} ist nicht korrekt! (Beispiel: {{valueExample}})"
+                }
             },
             "draw": {
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
