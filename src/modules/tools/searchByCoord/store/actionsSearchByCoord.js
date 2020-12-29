@@ -20,12 +20,26 @@ export default {
 
         dispatch("MapMarker/placingPointMarker", position, {root: true});
     },
+    /**
+     * Removes the marker from selected position.
+     * @returns {void}
+     */
     removeMarker: function ({dispatch}) {
         dispatch("MapMarker/removePointMarker", null, {root: true});
     },
+    /**
+     * Removes the marker from selected position.
+     * @param {Number} zoomLevel - Zoomlevel to zoom to
+     * @returns {void}
+     */
     setZoom: function ({dispatch}, zoomLevel) {
         dispatch("Map/setZoomLevel", zoomLevel, {root: true});
     },
+    /**
+     * Takes the selected coordinates and centers the map to the new position.
+     * @param {Array} coordinates - coordinates for new center position
+     * @returns {void}
+     */
     setCenter: function ({commit}, coordinates) {
         // coordinates come as string and have to be changed to numbers for setCenter from mutations to work.
         const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
