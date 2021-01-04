@@ -35,8 +35,10 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        clearLayer ({state}) {
+        clearLayer ({state, dispatch}) {
             state.layer.getSource().clear();
+            // NOTE(roehlipa): As an alternative it could be committed directly; would this make it cleaner?
+            dispatch("setDownloadFeatures");
         },
         convertFeaturesToKml,
         /**
@@ -210,6 +212,8 @@ const initialState = Object.assign({}, stateDraw),
                     centerPointCoords,
                     geoJSONAddCenter;
 
+                dispatch("setDownloadFeatures");
+
                 // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map
                 if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
                     centerPointCoords = dispatch("createCenterPoint", {feature: event.features.getArray()[0], targetProjection: Config.inputMap.targetProjection});
@@ -332,12 +336,13 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        createSelectInteractionListener ({state}) {
+        createSelectInteractionListener ({state, dispatch}) {
             state.selectInteraction.on("select", event => {
                 // remove feature from source
                 state.layer.getSource().removeFeature(event.selected[0]);
                 // remove feature from interaction
                 state.selectInteraction.getFeatures().clear();
+                dispatch("setDownloadFeatures");
             });
         },
         /**

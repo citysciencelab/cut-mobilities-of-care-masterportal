@@ -11,7 +11,7 @@ const projections = getProjections("EPSG:25832", "EPSG:4326", "32");
  * @param {Boolean} isPolygon Determines whether the given coordinates are a polygon or a line.
  * @returns {ol/Coordinate[]} Transformed coordinates.
  */
-function transformCoordinates (coords, isPolygon) {
+function transform (coords, isPolygon) {
     const transCoords = [];
 
     // NOTE(roehlipa): The polygon parts look like they would not work as intended. Simply copied from the old version.
@@ -39,6 +39,6 @@ function transformPoint (coords) {
 }
 
 export {
-    transformCoordinates,
+    transform,
     transformPoint
 };
