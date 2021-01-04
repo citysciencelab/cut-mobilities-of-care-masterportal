@@ -84,7 +84,8 @@
         "language": {
             "languageTitle": "Please choose a language",
             "de": "German",
-            "en": "English"
+            "en": "English",
+            "it": "Italian"
         },
         "core": {
           "modelList": {
@@ -438,6 +439,7 @@
             "supplyCoord": {
                 "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
+                "copyToClipboard": "Content was copied to the clipboard.",
                 "hdms": {
                     "eastingLabel": "Longitude",
                     "northingLabel": "Latitude"
@@ -611,7 +613,8 @@
                 "findFurtherInf": "You can find further information here",
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
-                "area": "Area"
+                "area": "Area",
+                "finishWithDoubleClick": "Complete with double click"
             },
             "scaleSwitcher": {
                 "label": "Scale"
@@ -663,8 +666,7 @@
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",
                 "openViewOblique": "show oblique aerial photos",
-                "closeViewOblique": "close oblique aerial photos",
-                "betaWarningOblique": "The view for oblique aerial photos is currently still in the beta version!"
+                "closeViewOblique": "close oblique aerial photos"
             },
             "freeze": {
                 "freeze": "Freeze view",
@@ -746,7 +748,9 @@
             "toggleCollapseAll": "Toggle all legends"
         },
         "zoomToGeometry": {
-          "alertNoFoundFeature" : "No object was found! Please check the input parameters."
+          "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
+          "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
+          "alertRequiredService": "Details: A required service is not responding."
         }
     },
     "snippets": {
