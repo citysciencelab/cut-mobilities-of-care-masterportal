@@ -138,15 +138,41 @@ label {
     display:block;
 }
 
+#generic-masterportal-logo {
+    background-color:rgba(255,255,255,0.8);
+    opacity:1;
+    padding: 20px 20px 10px 20px;
+    position: absolute;
+    text-align:center;
+    transition:opacity 0.35s 3s;
+    width:170px;
+}
+#generic-masterportal-logo.initial-fadeout-animation {
+    opacity:0;
+}
+#generic-masterportal-logo img {
+    width:100%;
+}
 @media (max-width: 1023px) {
     #loader-spinner-itself.default {
         border: 5px solid #AAAAAA;
     }
+    #generic-masterportal-logo {
+        bottom: 15%;
+        left:50%;
+        margin-left:-85px;
+        border-radius: 14px;
+    }    
 }
 @media (min-width: 1024px) {
     #loader-spinner-itself.default {
         border: 8px solid #AAAAAA;
     }
+    #generic-masterportal-logo {
+        bottom: 0;
+        right: 0;
+        border-radius: 14px 0 0 0;
+    }    
 }
 #loader-spinner-itself.default {
     animation: loaderSpinAnimation 1s 0.1s ease-in-out infinite both;
@@ -180,26 +206,6 @@ label {
     to {
         transform: rotate(360deg);
     }
-}
-
-#generic-masterportal-logo {
-    background-color:rgba(255,255,255,0.8);
-    border-radius: 14px;
-    bottom: 15%;
-    left:50%;
-    margin-left:-125px;
-    opacity:1;
-    padding: 20px 20px 10px 20px;
-    position: absolute;
-    text-align:center;
-    transition:opacity 0.35s 3s;
-    width:250px;
-}
-#generic-masterportal-logo.initial-fadeout-animation {
-    opacity:0;
-}
-#generic-masterportal-logo img {
-    width:100%;
 }
 #portal-logo-box {
     opacity:1;

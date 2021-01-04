@@ -111,7 +111,8 @@
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
-            "en": "Englisch"
+            "en": "Englisch",
+            "it": "Italienisch"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
@@ -603,7 +604,8 @@
                 "findFurtherInf": "Weitere Informationen finden Sie hier",
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
-                "area": "Fläche"
+                "area": "Fläche",
+                "finishWithDoubleClick": "Abschließen mit Doppelklick"
             },
             "scaleSwitcher": {
                 "label": "Maßstab"
@@ -655,8 +657,7 @@
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",
                 "openViewOblique": "Schrägluftbilder einschalten",
-                "closeViewOblique": "Schrägluftbilder ausschalten",
-                "betaWarningOblique": "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!"
+                "closeViewOblique": "Schrägluftbilder ausschalten"
             },
             "freeze": {
                 "freeze": "Ansicht sperren",

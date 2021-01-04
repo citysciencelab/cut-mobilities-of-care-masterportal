@@ -85,15 +85,15 @@
 				{
           "id": "453",
           "name": "Stadtplan",
-					"visibility": true
+				  "visibility": true
 				},
 				{
           "id": "452",
           "name": "Luftbilder DOP 20"
 				},
 				{
-					"id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
-					"name": "Geobasiskarten (farbig)"
+				  "id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
+				  "name": "Geobasiskarten (farbig)"
 				}
 			]
 		},
@@ -113,20 +113,19 @@
 				},
 				{
 					"id": "3302",
-					"name": "Trinkwasser",
-					"gfiTheme": "trinkwasser"
+					"name": "Trinkwasser"
 				},
 				{
-					"id": "myId2",
-					"children": [
-						{
-							"id": "682"
-						},
-						{
-							"id": "1731"
-						}
-					],
-					"name": "Kita und Krankenhäuser"
+				  "id": "myId2",
+				  "children": [
+				    {
+				        "id": "682"
+				    },
+				    {
+				        "id": "1731"
+				    }
+				  ],
+				  "name": "Kita und Krankenhäuser"
 				},
 				{
 					"id": "2003",
@@ -148,23 +147,23 @@
 					"searchField":  "name"
 				},
 				{
-					"id": "8712",
-					"name": "WFS Schulen",
-					"styleId": "8712",
-					"mouseHoverField": ["schulname", "kapitelbezeichnung"],
-					"searchField": ["schulname", "fremdsprache"]
+				  "id": "8712",
+				  "name": "WFS Schulen",
+				  "styleId": "8712",
+				  "mouseHoverField": ["schulname", "kapitelbezeichnung"],
+				  "searchField": ["schulname", "fremdsprache"]
 				},
 				{
-					"id": "4560",
-					"name": "WFS Polygon (Default Style)"
+				  "id": "4560",
+				  "name": "WFS Polygon (Default Style)"
 				},
 				{
-					"id": "1132",
-					"name": "WFS Point (Default Style)"
+				  "id": "1132",
+				  "name": "WFS Point (Default Style)"
 				},
 				{
-					"id": "1133",
-					"name": "WFS Line (Default Style)"
+				  "id": "1133",
+				  "name": "WFS Line (Default Style)"
 				}
 			]
 		}

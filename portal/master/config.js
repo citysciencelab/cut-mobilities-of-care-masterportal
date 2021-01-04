@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["einwohnerabfrage", "VueAddon", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
+    addons: ["einwohnerabfrage", "VueAddon", "TacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     alerting: {
         // fetchBroadcastUrl: "https://localhost:9001/portal/master/resources/broadcastedPortalAlerts.json"
     },
@@ -83,7 +83,8 @@ const Config = {
         debug: false,
         languages: {
             de: "deutsch",
-            en: "englisch"
+            en: "englisch",
+            it: "italienisch"
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]

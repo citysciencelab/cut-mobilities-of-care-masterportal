@@ -829,6 +829,8 @@ export default {
     }
 
     .legend-window-table {
+        position: absolute;
+        right: 0px;
         font-family: @font_family_2;
         border-radius: 12px;
         background-color: @background_color_4;

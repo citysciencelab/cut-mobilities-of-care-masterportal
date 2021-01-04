@@ -6,7 +6,7 @@
     "url": "https://www.masterportal.org"
   },
   "bugs": "https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues",
-  "version": "2.5.5-dev",
+  "version": "2.6.0-dev",
   "license": "MIT",
   "description": "The MasterPortal as OpenSource Geoportal",
   "repository": {
@@ -59,8 +59,10 @@
     "object-hash": "^2.0.3",
     "ol-mapbox-style": "^6.1.2",
     "olcs": "^2.10.0",
+    "polyfill-object.fromentries": "^1.0.1",
     "rbush": "^2.0.2",
-    "vcs-oblique": "^2.0.1",
+    "rbush-knn": "^2.1.0",
+    "vcs-oblique": "^2.0.2",
     "vue": "^2.6.11",
     "vue-loader": "^15.7.2",
     "vue-template-compiler": "^2.6.10",
