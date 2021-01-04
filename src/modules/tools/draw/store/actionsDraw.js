@@ -244,8 +244,8 @@ const initialState = Object.assign({}, stateDraw),
                 }
 
                 // the last selected feature is allways on top
-                const feature = event.selected[event.selected.length - 1];
-                let styleSettings = null;
+                const feature = event.selected[event.selected.length - 1],
+                    styleSettings = getters.getStyleSettings();
 
                 commit("setSelectedFeature", feature);
 
@@ -362,6 +362,7 @@ const initialState = Object.assign({}, stateDraw),
          * Activates or deactivates the given Interactions based on the given parameters.
          *
          * @param {Object} context actions context object.
+         * @param {Object} payload Payload object.
          * @param {String} payload.interaction name of the interaction to be manipulated.
          * @param {Boolean} payload.active Value to set the drawInteractions to.
          * @return {void}
