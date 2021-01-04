@@ -12,7 +12,7 @@ const colorOptions = [
         {color: "white", value: [255, 255, 255]},
         {color: "yellow", value: [255, 255, 51]}
     ],
-    pointColorOptions = colorOptions,
+    pointColorOptions = colorOptions, // TODO(roehlipa): In which situations is this needed?
     colorContourOptions = [
         colorOptions[1],
         colorOptions[0],

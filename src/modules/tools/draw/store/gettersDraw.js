@@ -5,13 +5,13 @@ const getters = {
     ...generateSimpleGetters(initialState),
 
     /**
-     * returns a clone of the current drawTypeSettings
+     * Returns a clone of the current drawTypeSettings
      *
-     * @param {Object} state the state dipendency
-     * @returns {Object} the cloned current drawTypeSettings
+     * @param {Object} state Current state object of the store.
+     * @returns {Object} The cloned current drawTypeSettings
      */
     getStyleSettings (state) {
-        return () => {
+        return () => { // TODO(roehlipa): Is there a reason why this is wrapped in a function?
             const stateKey = state.drawType.id + "Settings";
 
             return JSON.parse(JSON.stringify(state[stateKey]));

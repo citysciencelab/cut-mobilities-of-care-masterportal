@@ -10,7 +10,7 @@ const symbol = {
      * @property {Object[]} deactivatedDrawInteractions Array of draw interactions which are deactivated in the process of the tool. Can be used to reactivate them from another point.
      * @property {Boolean} deactivateGFI If set to true, the activation of the tool deactivates the GFI tool.
      * @property {String} download.dataString Data that will be written to the file for the Download.
-     * @property {Boolean} download.disabled Whether the Download Button is disabled or not. TODO(roehlipa): This needs to be updated if the user deletes / edits the features afterwards.
+     * @property {Boolean} download.disabled Whether the Download Button is disabled or not.
      * @property {ol/Feature[]} download.features Features that are drawn on the Map.
      * @property {String} download.fileName Name for the to be downloaded file.
      * @property {String} download.fileUrl The URL encoded dataString.
@@ -133,7 +133,9 @@ const symbol = {
         zIndex: 0,
         name: "Zeichnen / Schreiben",
         imgPath: "",
-
+        // // // // // //
+        // UI SETTINGS //
+        // // // // // //
         drawSymbolSettings: {
             color: [55, 126, 184, 1],
             opacity: 1
