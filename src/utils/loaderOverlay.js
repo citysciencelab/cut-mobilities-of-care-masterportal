@@ -109,6 +109,6 @@ export default {
         if (genericMasterPortalLogo !== null) {
             genericMasterPortalLogo.parentNode.removeChild(genericMasterPortalLogo);
         }
-
+        window.INITIAL_LOADING = false;
     }
 };

@@ -94,9 +94,14 @@ if (!("Config" in window)) {
     });
 
     // Show error message without Alerting
-    loadConfigJs.catch(() => {
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("map").appendChild(document.createTextNode("Die Portalkonfiguration konnte nicht vom Pfad '" + configPath + "'' geladen werden. Bitte wenden sie sich an den Administrator."));
+    loadConfigJs.catch((e) => {
+        console.warn("loadConfigJs.catch e:", e);
+        if (document.getElementById("loader")) {
+            document.getElementById("loader").style.display = "none";
+        }
+        if (document.getElementById("map")) {
+            document.getElementById("map").appendChild(document.createTextNode("Die Portalkonfiguration konnte nicht vom Pfad '" + configPath + "'' geladen werden. Bitte wenden sie sich an den Administrator."));
+        }
     });
 }
 else {
