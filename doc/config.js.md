@@ -29,7 +29,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |inputMap.setCenter|nein|Boolean|false|Soll die Karte nach dem setzen eines Markers um den Marker zentriert werden?|`setCenter: true`|
 |inputMap.setMarker|nein|Boolean|false|Flag zum aktivieren und deaktivieren der in inputMap konfigurierten Funktionalität.|`setMarker: true`|
 |inputMap.targetProjection|nein|String|`EPSG:25832`|Das Zielkoordninatensystem, in dem die Koordinaten des Markers gesendet werden sollen.|`targetprojection: "EPSG:4326"`|
-|mapMarker|nein|**[mapMarker](#markdown-header-mapmarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer fefiniert werden.||
+|mapMarker|nein|**[mapMarker](#markdown-header-mapmarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer definiert werden.||
 |metaDataCatalogueId|nein|String|"2"|URL des in den Layerinformationen verlinkten Metadatenkatalogs. Die ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"MetadatenkatalogURL"`|
 |**[metadata](#markdown-header-metadata)**|nein|Object||Darin kann angegeben werden, welche Metdaten-URLs über einen Proxy angefragt werden sollen.||
 |**[mouseHover](#markdown-header-mousehover)**|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in **[config.json](config.json.md)** (*Themenconfig.Fachdaten.Layer*).|`true`|

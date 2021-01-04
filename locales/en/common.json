@@ -84,7 +84,8 @@
         "language": {
             "languageTitle": "Please choose a language",
             "de": "German",
-            "en": "English"
+            "en": "English",
+            "it": "Italian"
         },
         "core": {
           "modelList": {
