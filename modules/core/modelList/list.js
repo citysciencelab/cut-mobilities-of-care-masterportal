@@ -23,7 +23,7 @@ import PrintV2 from "../../tools/print/model";
 import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Measure from "../../tools/measure/model";
-import Download from "../../tools/download/model";
+// import Download from "../../tools/download/model";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../tools/contact/model";
@@ -273,9 +273,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "measure") {
                 return new Measure(attrs, options);
             }
-            else if (attrs.id === "download") {
+            /* else if (attrs.id === "download") {
                 return new Download(attrs, options);
-            }
+            }*/
             else if (attrs.id === "searchByCoord") {
                 return new SearchByCoord(attrs, options);
             }
