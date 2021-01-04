@@ -203,7 +203,10 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
                 tool.setIsActive(false);
             }
         });
-        document.getElementById("root").firstChild.classList.remove("open");
+
+        if (document.getElementById("root").hasChildNodes()) {
+            document.getElementById("root").firstChild.classList.remove("open");
+        }
     },
 
     /**

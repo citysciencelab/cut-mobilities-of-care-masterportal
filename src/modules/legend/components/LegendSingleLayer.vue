@@ -42,6 +42,7 @@ export default {
             <div
                 v-for="legendPart in legendObj.legend"
                 :key="JSON.stringify(legendPart)"
+                class="layer-legend-container"
             >
                 <!-- String -->
                 <template
@@ -137,6 +138,9 @@ export default {
                 padding: 5px 0;
             }
         }
+    }
+    .layer-legend-container {
+        position: relative;
     }
     .layer-legend.collapsing {
         -webkit-transition: none;

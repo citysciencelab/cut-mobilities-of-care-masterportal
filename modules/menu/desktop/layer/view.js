@@ -19,6 +19,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeIsOutOfRange
      * @listens Map#RadioTriggerMapChange
      * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires ModelList#RadioRequestModelListSetIsSelectedOnParent
      */
     initialize: function () {

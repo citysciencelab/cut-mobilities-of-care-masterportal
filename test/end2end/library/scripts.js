@@ -329,7 +329,13 @@ function getCoordinatesOfXthFeatureInLayer () {
 
     return null;
 }
-
+/**
+ * Returns true, if loader is no longer visible.
+ * @returns {void}
+ */
+function isInitalLoadingFinished () {
+    return typeof window.INITIAL_LOADING === "boolean" && window.INITIAL_LOADING === false;
+}
 /**
  * @param {HTMLElement} img image to check
  * @returns {boolean} true if image loaded */
@@ -476,6 +482,7 @@ module.exports = {
     isFullscreen,
     isLayerVisible,
     imageLoaded,
+    isInitalLoadingFinished,
     isObModeOn,
     getOrderedLayerIds,
     getObModeResolution,
