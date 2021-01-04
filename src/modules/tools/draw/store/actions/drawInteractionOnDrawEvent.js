@@ -11,7 +11,7 @@ const errorBorder = "#E10019";
 * @param {Object} payload payload object.
 * @param {String} payload.drawInteraction Either an empty String or "Two" to identify for which drawInteraction this is used.
 * @param {Boolean} payload.doubleCircle Determines if the outer Circle of a doubleCircle is supposed to be drawn.
-* @returns {void}
+* @returns {undefined}
 */
 export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState, getters}, {drawInteraction, doubleCircle}) {
     const styleSettings = getters.getStyleSettings(),

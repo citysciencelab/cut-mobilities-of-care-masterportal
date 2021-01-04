@@ -14,7 +14,7 @@ function adjustValueToUnits (diameter, unit) {
  *
  * @param {Object} context the dipendencies
  * @param {Object} styleSettings the style to set
- * @returns {void}
+ * @returns {undefined}
  */
 function setStyleSettings ({getters, commit}, styleSettings) {
     const stateKey = getters.drawType.id + "Settings",
@@ -29,7 +29,7 @@ function setStyleSettings ({getters, commit}, styleSettings) {
  *
  * @param {Object} context actions context object.
  * @param {Boolean} active Value deciding whether the tool gets activated or deactivated.
- * @returns {void}
+ * @returns {undefined}
  */
 function setActive ({state, commit, dispatch, rootState}, active) {
     commit("setActive", active);
@@ -54,7 +54,7 @@ function setActive ({state, commit, dispatch, rootState}, active) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the circleInnerDiameter.
  * @param {HTMLInputElement} event.target The HTML input element for the circleInnerDiameter.
- * @returns {void}
+ * @returns {undefined}
  */
 function setCircleInnerDiameter ({getters, commit}, {target}) {
     const styleSettings = getters.getStyleSettings(),
@@ -71,7 +71,7 @@ function setCircleInnerDiameter ({getters, commit}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the circleMethod.
  * @param {HTMLSelectElement} event.target The HTML select element for the circleMethod.
- * @returns {void}
+ * @returns {undefined}
  */
 function setCircleMethod ({getters, commit}, {target}) {
     const circleMethod = target.options[target.selectedIndex].value,
@@ -88,7 +88,7 @@ function setCircleMethod ({getters, commit}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the circleOuterDiameter.
  * @param {HTMLInputElement} event.target The HTML input element for the circleOuterDiameter.
- * @returns {void}
+ * @returns {undefined}
  */
 function setCircleOuterDiameter ({getters, commit}, {target}) {
     const styleSettings = getters.getStyleSettings(),
@@ -105,7 +105,7 @@ function setCircleOuterDiameter ({getters, commit}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the color.
  * @param {HTMLSelectElement} event.target The HTML select element for the color.
- * @returns {void}
+ * @returns {undefined}
  */
 function setColor ({getters, commit, dispatch}, {target}) {
     const color = target.options[target.selectedIndex].value.split(","),
@@ -129,7 +129,7 @@ function setColor ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the colorContour.
  * @param {HTMLSelectElement} event.target The HTML select element for the colorContour.
- * @returns {void}
+ * @returns {undefined}
  */
 function setColorContour ({getters, commit, dispatch}, {target}) {
     const color = target.options[target.selectedIndex].value.split(","),
@@ -152,7 +152,7 @@ function setColorContour ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the colorContour.
  * @param {HTMLSelectElement} event.target The HTML select element for the colorContour.
- * @returns {void}
+ * @returns {undefined}
  */
 function setOuterColorContour ({getters, commit, dispatch}, {target}) {
     const color = target.options[target.selectedIndex].value.split(","),
@@ -177,7 +177,7 @@ function setOuterColorContour ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the drawType.
  * @param {HTMLSelectElement} event.target The HTML select element for the drawTypes.
- * @returns {void}
+ * @returns {undefined}
  */
 function setDrawType ({commit, dispatch}, {target}) {
     const selectedElement = target.options[target.selectedIndex];
@@ -194,7 +194,7 @@ function setDrawType ({commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the font.
  * @param {HTMLSelectElement} event.target The HTML select element for the font.
- * @returns {void}
+ * @returns {undefined}
  */
 function setFont ({getters, commit, dispatch}, {target}) {
     const font = target.options[target.selectedIndex].value,
@@ -212,7 +212,7 @@ function setFont ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the fontSize.
  * @param {HTMLSelectElement} event.target The HTML select element for the fontSize.
- * @returns {void}
+ * @returns {undefined}
  */
 function setFontSize ({getters, commit, dispatch}, {target}) {
     const fontSize = target.options[target.selectedIndex].value,
@@ -230,7 +230,7 @@ function setFontSize ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the opacity.
  * @param {HTMLSelectElement} event.target The HTML select element for the opacity.
- * @returns {void}
+ * @returns {undefined}
  */
 function setOpacity ({getters, commit, dispatch}, {target}) {
     const opacity = parseFloat(target.options[target.selectedIndex].value),
@@ -249,7 +249,7 @@ function setOpacity ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the opacityContour.
  * @param {HTMLSelectElement} event.target The HTML select element for the opacityContour.
- * @returns {void}
+ * @returns {undefined}
  */
 function setOpacityContour ({getters, commit, dispatch}, {target}) {
     const opacityContour = parseFloat(target.options[target.selectedIndex].value),
@@ -268,7 +268,7 @@ function setOpacityContour ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the pointSize.
  * @param {HTMLSelectElement} event.target The HTML select element for the pointSize.
- * @returns {void}
+ * @returns {undefined}
  */
 function setPointSize ({commit, dispatch}, {target}) {
     const selectedElement = target.options[target.selectedIndex];
@@ -283,7 +283,7 @@ function setPointSize ({commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the strokewidth.
  * @param {HTMLSelectElement} event.target The HTML select element for the strokewidth.
- * @returns {void}
+ * @returns {undefined}
  */
 function setStrokeWidth ({getters, commit, dispatch}, {target}) {
     const strokeWidth = target.options[target.selectedIndex].value,
@@ -301,7 +301,7 @@ function setStrokeWidth ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the symbol.
  * @param {HTMLSelectElement} event.target The HTML select element for the symbol.
- * @returns {void}
+ * @returns {undefined}
  */
 function setSymbol ({state, commit, dispatch}, {target}) {
     const selectedElement = target.options[target.selectedIndex],
@@ -319,7 +319,7 @@ function setSymbol ({state, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the text.
  * @param {HTMLInputElement} event.target The HTML input element for the text.
- * @returns {void}
+ * @returns {undefined}
  */
 function setText ({getters, commit, dispatch}, {target}) {
     const text = target.value,
@@ -337,7 +337,7 @@ function setText ({getters, commit, dispatch}, {target}) {
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the unit.
  * @param {HTMLSelectElement} event.target The HTML select element for the unit.
- * @returns {void}
+ * @returns {undefined}
  */
 function setUnit ({getters, commit, dispatch}, {target}) {
     const unit = target.options[target.selectedIndex].value,

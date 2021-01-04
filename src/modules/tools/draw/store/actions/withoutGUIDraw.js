@@ -13,7 +13,7 @@ import * as setters from "./settersDraw";
  *
  * @param {Object} contect actions context object.
  * @param {String} cursor If a cursor has been added through the RemoteInterface, it gets removed.
- * @returns {void}
+ * @returns {undefined}
  */
 function cancelDrawWithoutGUI ({commit, dispatch}, cursor) {
     commit("setWithoutGUI", true);
@@ -154,7 +154,7 @@ function downloadFeaturesWithoutGUI ({state, rootState}, payload) {
  *
  * @param {Object} context actions context object.
  * @param {String} geomType singleGeometry (default) or multiGeometry ("multiGeometry")
- * @returns {void}
+ * @returns {undefined}
  */
 function downloadViaRemoteInterface ({dispatch}, geomType) {
     dispatch("downloadFeaturesWithoutGUI", geomType).then(result => {
@@ -171,7 +171,7 @@ function downloadViaRemoteInterface ({dispatch}, geomType) {
  * Used in the RemoteInterface.
  *
  * @param {Object} context actions context object.
- * @returns {void}
+ * @returns {undefined}
  */
 function editFeaturesWithoutGUI ({dispatch}) {
     dispatch("toggleInteraction", "modify");
