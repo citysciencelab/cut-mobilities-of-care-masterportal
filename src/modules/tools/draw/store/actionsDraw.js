@@ -255,8 +255,6 @@ const initialState = Object.assign({}, stateDraw),
                     commit("setDrawType", feature.get("drawState").drawType);
                 }
 
-                styleSettings = getters.getStyleSettings();
-
                 styleSettings.color = feature.get("drawState").color;
                 styleSettings.colorContour = feature.get("drawState").colorContour;
                 styleSettings.outerColorContour = feature.get("drawState").outerColorContour;
