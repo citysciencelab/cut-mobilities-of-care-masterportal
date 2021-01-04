@@ -7,21 +7,21 @@ Das Masterportal baut auf globalen und portalspezifischen Konfigurationsdateien 
 
 Globale Konfigurationsdateien. (Es ergibt Sinn, dass diese von allen Portalen gemeinsam genutzt werden):
 
-* **[services.json](services.json.md)**:  alle verfügbaren WMS-Layer und WFS-FeatureTypes
-* **[rest-services.json](rest-services.json.md)**: URLs zu verschiedenen Diensten
-* **[style.json](style.json.md)**: Style-Definitionen für WFS-FeatureTypes
+* **[services.json](services.json.de.md)**:  alle verfügbaren WMS-Layer und WFS-FeatureTypes
+* **[rest-services.json](rest-services.json.de.md)**: URLs zu verschiedenen Diensten
+* **[style.json](style.json.de.md)**: Style-Definitionen für WFS-FeatureTypes
 
 Portalspezifische Konfigurationsdateien:
 
-* **[config.js](config.js.md)**: Konfiguration von Pfaden zu weiteren Konfigurationsdateien und zu nutzenden Diensten.
-* **[config.json](config.json.md)**: Konfiguration der Portal-Oberfläche und der Inhalte.
+* **[config.js](config.js.de.md)**: Konfiguration von Pfaden zu weiteren Konfigurationsdateien und zu nutzenden Diensten.
+* **[config.json](config.json.de.md)**: Konfiguration der Portal-Oberfläche und der Inhalte.
 
-Die folgende Abbildung zeigt schematisch das Zusammenspiel der Dateien. Wichtig ist, dass sich die Dateien index.html, **[config.js](config.js.md)** und **[config.json](config.json.md)** im selben Verzeichnis befinden.
+Die folgende Abbildung zeigt schematisch das Zusammenspiel der Dateien. Wichtig ist, dass sich die Dateien index.html, **[config.js](config.js.de.md)** und **[config.json](config.json.de.md)** im selben Verzeichnis befinden.
 
-!**[Konfig-Überblick.png](Konfig-Überblick.png)**
+!**[Konfig-Überblick.png](Konfig-Überblick.de.png)**
 
 # URL-Parameter #
-Das Masterportal kann über **[URL-Parameter](URL-Parameter.md)** aufgerufen werden.
+Das Masterportal kann über **[URL-Parameter](urlParameter.de.md)** aufgerufen werden.
 
 # Proxies #
-Für das Abfragen von Attributinformationen (WMS GetFeatureInfo) oder für das Laden von WFS-Layern werden vom Masterportal **[Proxies](proxies.md)** vorausgesetzt.
+Für das Abfragen von Attributinformationen (WMS GetFeatureInfo) oder für das Laden von WFS-Layern werden vom Masterportal **[Proxies](proxy.de.md)** vorausgesetzt.

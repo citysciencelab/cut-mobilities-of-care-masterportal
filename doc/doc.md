@@ -25,7 +25,7 @@ These files define the distinguishing features of an instance:
 
 The following figure schematically demonstrates the ensemble of files. Please mind that the files **index.html**, **[config.js](config.js.md)**, and **[config.json](config.json.md)** must be placed in the same path.
 
-![Konfig-Überblick.png](Konfig-Überblick.png)
+![configOverview.png](configOverview.png)
 
 ## URL parameters
 
