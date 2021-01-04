@@ -4,7 +4,7 @@ This is a step-by-step instruction for creating a new tool based on [Vue](https:
 
 ## Example requirement
 
-A tool to control the map scale in needed. Scales are to be chosen from a drop-down menu. The map must react on selections by setting the appropriate zoom level. The tool is also supposed to react on scale changes from other sources (e.g. the zoom buttons) and update the drop-down menu accordingly.
+A tool to control the map scale is needed. Scales are to be chosen from a drop-down menu. The map must react on selections by setting the appropriate zoom level. The tool is also supposed to react on scale changes from other sources (e.g. the zoom buttons) and update the drop-down menu accordingly.
 
 ## Creating a new tool
 
@@ -220,7 +220,7 @@ export default {
 
 ## Use getters as computed properties in the ScaleSwitcher.vue
 
-Import vuex' helper function `mapGetters` in the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, and the *ScaleSwitchers* getters. All getter keys of the *ScaleSwitcher* and the Vuex *Map* module getters `scale` and `scales` are added. For `scale`, a setter is provided. Using `scale`, the current *Map* scale can be retrieved, and `scales` represents all available *Map* scales.
+Import the vuex helper function `mapGetters` in the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, and the *ScaleSwitchers* getters. All getter keys of the *ScaleSwitcher* and the Vuex *Map* module getters `scale` and `scales` are added. For `scale`, a setter is provided. Using `scale`, the current *Map* scale can be retrieved, and `scales` represents all available *Map* scales.
 
 ```js
 import Tool from "../../Tool.vue";
@@ -245,7 +245,7 @@ import getters from "../store/gettersScaleSwitcher";
 
 ## Use mutations as methods in the ScaleSwitcher.vue
 
-Import vuex' helper function `mapMutations` in the `modules/tools/scale/components/ScaleSwitcher.vue`, and the *ScaleSwitcher* mutations. All mutation keys of the *ScaleSwitcher* are added.
+Import the vuex helper function `mapMutations` in the `modules/tools/scale/components/ScaleSwitcher.vue`, and the *ScaleSwitcher* mutations. All mutation keys of the *ScaleSwitcher* are added.
 
 ```js
 import Tool from "../../Tool.vue";
