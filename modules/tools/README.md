@@ -2,13 +2,15 @@
 
 ## Description
 
-All tools appearing in the menu "tools" are located in this folder. Entries are maintained in a list. Each list entry has a title, a glyphicon, and an active state (default: `false`). All attributes are optional and controlled in the `config.js` file. The order of tools in the configuration file determines the order of tools in the portal UI.
+All tools appearing in the menu "tools" are located in this folder. Entries are maintained in a list. Each list entry has a title, a glyphicon, and an active state (default: `false`). All attributes are optional and controlled in the `config.json` file. The order of tools in the configuration file determines the order of tools in the portal UI.
 
-### List of available tools
+### A selection of available tools
+
+For a complete list, please see chapter *Portalconfig.menu.tools.children* in the `config.json` file.
 
 * parcelSearch (Parcel search)
 * gfi (GetFeatureInfo)
-* coord (Coordinate request)
+* supplyCoord (Coordinate request)
 * print (Printing)
 * measure (Measuring)
 * draw (Drawing)
@@ -26,9 +28,9 @@ All tools appearing in the menu "tools" are located in this folder. Entries are 
         "gfi": {
             "title": "Request information",
             "glyphicon": "glyphicon-info-sign",
-            "isActive": true
+            "active": true
         },
-        "coord": {},
+        "supplyCoord": {},
         // ...
     }
 }
