@@ -1,12 +1,15 @@
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
-import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsDraw";
+import Download from "../components/Download.vue";
+import getComponent from "../../../../utils/getComponent";
+
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import Tool from "../../Tool.vue";
 
 export default {
     name: "Draw",
     components: {
+        Download,
         Tool
     },
     data () {
@@ -743,18 +746,6 @@ export default {
                 <div class="form-group form-group-sm">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <button
-                            id="tool-draw-downloadInteraction"
-                            class="btn btn-sm btn-block btn-lgv-grey"
-                            @click="startDownloadTool"
-                        >
-                            <span class="glyphicon glyphicon-floppy-disk" />
-                            {{ $t("common:button.download") }}
-                        </button>
-                    </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button
                             id="tool-draw-deleteInteraction"
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-lgv-grey'"
@@ -779,6 +770,8 @@ export default {
                     </div>
                 </div>
             </div>
+            <hr>
+            <Download />
         </template>
     </Tool>
 </template>

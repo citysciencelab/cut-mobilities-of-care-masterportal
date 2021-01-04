@@ -1,5 +1,5 @@
 import {KML} from "ol/format.js";
-import {colorOptions} from "../../../draw/store/constantsDraw";
+import {colorOptions} from "../constantsDraw";
 
 /**
  * Adds a unique styleId to each ExtendedData Element of the converted Features.
@@ -113,9 +113,9 @@ function getScaleFromFontSize (fontSize) {
  * @param {Object} context actions context object.
  * @returns {string} The features written in KML as a String.
 */
-export default function convertFeaturesToKml ({state, dispatch}) {
-    const {features} = state,
-        anchors = [],
+export default async function convertFeaturesToKml ({state, dispatch}) {
+    const anchors = [],
+        features = state.download.features,
         featureCount = features.length,
         format = new KML({extractStyles: true}),
         hasIconUrl = [],
@@ -123,10 +123,9 @@ export default function convertFeaturesToKml ({state, dispatch}) {
         // pointOpacities = [], NOTE: This existed in the old version but seems to be of no use.
         skip = [],
         textFonts = [],
-        convertedFeatures = new DOMParser().parseFromString(dispatch("convertFeatures", format), "text/xml");
+        convertedFeatures = new DOMParser().parseFromString(await dispatch("convertFeatures", format), "text/xml");
 
-    // TODO: Would something weird happen if this was not included?
-    // pointOpacities.fill(undefined, 0, featureCount);
+    // TODO(roehlipa): Would something weird happen if this was not included?
     pointColors.fill(undefined, 0, featureCount);
     hasIconUrl.fill(false, 0, featureCount);
     anchors.fill(undefined, 0, featureCount);

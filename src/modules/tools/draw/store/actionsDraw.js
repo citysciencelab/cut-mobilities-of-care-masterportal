@@ -1,12 +1,15 @@
 import {Draw} from "ol/interaction.js";
 import {getMapProjection, transform} from "masterportalAPI/src/crs";
 
+import * as actionsDownload from "./actions/actionsDownload";
+import convertFeaturesToKml from "./actions/convertFeaturesToKml";
 import {drawInteractionOnDrawEvent} from "./actions/drawInteractionOnDrawEvent";
 import * as setters from "./actions/settersDraw";
 import * as withoutGUI from "./actions/withoutGUIDraw";
+
 import {createDrawInteraction, createModifyInteraction, createSelectInteraction} from "../utils/createInteractions";
 import {createStyle} from "../utils/style/createStyle";
-import {drawTypeOptions} from "../store/constantsDraw";
+import {drawTypeOptions} from "./constantsDraw";
 import {getDrawTypeByGeometryType} from "../utils/getDrawTypeByGeometryType";
 
 import stateDraw from "./stateDraw";
@@ -15,6 +18,7 @@ import stateDraw from "./stateDraw";
 
 const initialState = Object.assign({}, stateDraw),
     actions = {
+        ...actionsDownload,
         /**
          * Adds an interaction to the current map instance.
          *
@@ -34,6 +38,7 @@ const initialState = Object.assign({}, stateDraw),
         clearLayer ({state}) {
             state.layer.getSource().clear();
         },
+        convertFeaturesToKml,
         /**
          * Returns the center point of a Line or Polygon or a point itself.
          * If a targetprojection is given, the values are transformed.
@@ -133,6 +138,7 @@ const initialState = Object.assign({}, stateDraw),
                 dispatch("uniqueID").then(id => {
                     event.feature.set("styleId", id);
                     dispatch("addDrawStateToFeature", event.feature);
+                    dispatch("setDownloadFeatures");
 
                     // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map, drawing is cancelled and editing is started
                     if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
@@ -437,22 +443,14 @@ const initialState = Object.assign({}, stateDraw),
             commit("setSymbol", getters.iconList[0]);
             commit("setWithoutGUI", initialState.withoutGUI);
 
+            commit("setDownloadDataString", initialState.download.dataString);
+            commit("setDownloadFeatures", initialState.download.features);
+            commit("setDownloadFileName", initialState.download.fileName);
+            commit("setDownloadSelectedFormat", initialState.download.selectedFormat);
+
             state.layer.getSource().un("addFeature", state.addFeatureListener.listener);
         },
         ...setters,
-        /**
-         * Starts the Download Tool for the drawn features.
-         * NOTE: Draw Tool is not hidden.
-         *
-         * @param {Object} context actions context object.
-         * @returns {void}
-         */
-        startDownloadTool ({state, commit, dispatch}) {
-            const features = state.layer.getSource().getFeatures();
-
-            commit("Tools/Download/setFeatures", features, {root: true});
-            dispatch("Tools/Download/setActive", true, {root: true})
-        },
         /**
          * Enables the given interaction and disables the others.
          *

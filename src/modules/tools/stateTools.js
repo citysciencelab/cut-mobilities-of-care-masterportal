@@ -1,5 +1,4 @@
 import Draw from "./draw/components/Draw.vue";
-import Download from "./download/components/Download.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
@@ -14,7 +13,6 @@ import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 const state = {
     componentMap: {
         draw: Draw,
-        download: Download,
         fileImport: FileImport,
         gfi: Gfi,
         scaleSwitcher: ScaleSwitcher,
