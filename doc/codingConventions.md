@@ -92,10 +92,11 @@ All the following rules must hold.
 
 #### A.8 Changelog
 
-* A.8.1 The changelog language is German.
-* A.8.2 Deleting and adding features is recorded in the changelog.
+* A.8.1 The changelog language is English.
+* A.8.2 Deleting and adding features as well as fixing bugs is recorded in the changelog.
 * A.8.3 Changes regarding UI, interfaces, or configuration are recorded in the changelog.
 * A.8.4 Entries are assigned to one of the following categories: Added, Changed, Deprecated, Removed, Fixed.
+* A.8.5 Entries are to be written in simple language. Avoid jargon. The changelog is read by users and developers alike.
 
 ---
 
