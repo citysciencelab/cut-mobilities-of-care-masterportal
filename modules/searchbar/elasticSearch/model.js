@@ -70,6 +70,10 @@ const ElasticSearchModel = Backbone.Model.extend(/** @lends ElasticSearchModel.p
             payload = this.appendSearchStringToPayload(this.get("payload"), searchStringAttribute, searchString),
             xhrConfig = {
                 serviceId: this.get("serviceId"),
+                /**
+                * @deprecated in the next major-release!
+                * useProxy
+                */
                 useProxy: this.get("useProxy"),
                 type: this.get("type"),
                 async: this.get("async"),

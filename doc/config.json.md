@@ -503,19 +503,6 @@ Konfiguration der Suche über die sichtbaren VectorLayer. Bei der Layerdefinitio
 ```
 ***
 
-### Portalconfig.portalLanguage
-Konfiguration der Sprache
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|enabled|nein|Boolean|true|Aktiviert die Sprach-Umschalter-GUI im Portal.|Die Sprache kann dann nur noch über andere Eingriffe (z.B. Kommandozeile Backbone.i18next.changeLanguage("en")) umgeschaltet werden.|
-|debug|nein|Boolean|false|Kann für die Entwicklungsphase auf true gesetzt werden, um das Sprach-Tool zu debuggen.||
-|languages|nein|Object|{"de": "deutsch, "en": "english"}|Konfiguration der im Portal verwendeten Sprachen. Bitte beachten, dass die entsprechenden Sprach-Dateien auch hinterlegt sein müssen.||
-|startLanguage|nein|String|"de"|Die Standard-Sprache die beim Start automatisch aktiv sein soll.|Bitte beachten, dass dieser Wert ignoriert wird, wenn eine andere Start-Bedingung erfüllt ist. Die startLanguage ist zugleich der Fallback, falls eine Sprache nicht erkannt wird oder Sprach-Schlüssel fehlen.|
-|changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator"]|Stellt die Reihenfolge der Sprach-Eingriffe ein, auf die beim Start geachtet werden soll.|
-
-***
-
 ### Portalconfig.controls
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -2001,7 +1988,6 @@ Der Layerslider ist ein Werkzeug um verschiedene Layer in der Anwendung hinterei
 |timeInterval|nein|Integer|2000|Zeitintervall in ms bis der nächste Layer angeschaltet wird.|false|
 |layerIds|ja|**[layerId](#markdown-header-portalconfigmenutoollayersliderlayerid)**[]|[]|Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
 |sliderType|nein|enum["player","handle"]|"player"|Typ des Layer sliders. Entweder als "player" mit Start/Pause/Stop-Buttons oder als "handle" mit einem Hebel. Bei "handle" wird die Transparenz der Layer zusätzlich mit angepasst.|false|
-
 **Beispiel**
 ```
 #!json
@@ -2545,7 +2531,6 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|false|
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an, in denen der Layer verwendet werden kann.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|false|
-|gfiTheme|nein|String/Object|"default"|Wert aus **[services.json](services.json.md)**. Gibt an, welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|true|
 |layerAttribution|nein|String||Wert aus **[services.json](services.json.md)**. HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|false|
 |legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
 |legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
@@ -2597,7 +2582,6 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|false|
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an, in denen der Layer verwendet werden kann.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|false|
-|gfiTheme|nein|String/Object|"default"|Wert aus **[services.json](services.json.md)**. Gibt an, welches theme für die GetFeatureInfo (gfi) verwendet werden soll.|true|
 |layerAttribution|nein|String||Wert aus **[services.json](services.json.md)**. HTML String. Dieser wird angezeigt, sobald der Layer aktiv ist.|false|
 |legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
 |legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
@@ -2640,7 +2624,7 @@ Hier werden WMS typische Attribute aufgelistet.
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
 |infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt. |false|
-|gfiAsNewWindow|nein|Object|null|Wird nur berücksichtigt wenn infoFormat text/html ist. Beachten Sie **[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)** für mehr Informationen.|true|
+|gfiAsNewWindow|nein|**[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)**|null|Wird nur berücksichtigt wenn infoFormat text/html ist.|true|
 |styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
 
 **Beispiel**
@@ -2653,7 +2637,6 @@ Hier werden WMS typische Attribute aufgelistet.
     "visibility": true,
     "supported": ["2D"],
     "extent": [454591, 5809000, 700000, 6075769],
-    "gfiTheme": "default",
     "layerAttribution": "MyBoldAttribution for layer 123456",
     "legend": "https://myServer/myService/legend.pdf",
     "maxScale": "100000",
@@ -2684,41 +2667,24 @@ Der Parameter *gfiAsNewWindow* wird nur berücksichtigt wenn infoFormat text/htm
 Mit dem Parameter *gfiAsNewWindow* lassen sich html-Inhalte Ihres WMS-Service einfach in einem eigenen Fenster oder Browser-Tab öffnen, anstatt in einem iFrame im GFI.
 Um html-Inhalte in einem einfachen Standard-Fenster des Browsers zu öffnen, geben Sie für *gfiAsNewWindow* anstatt *null* ein leeres Objekt an.
 
-Beispiel:
-```
-#!json
-{
-    "id": "123456",
-    // (...)
-    "gfiAsNewWindow": {},
-    // (...)
-}
-```
-
 Sie können nun das Verhalten des Öffnens durch den Parameter *name* beeinflussen:
 
-|name|Default|Browser|Beschreibung|Beispiel|
-|----|-------|-------|------------|--------|
-|_blank|ja|alle|Öffnet ein neues Browser-Fenster oder Browser-Tab (browserabhängig) mit dem html-Inhalt.|{"name": "_blank"}|
-|_self|nein|alle|Öffnet den html-Inhalt im aktuellen Browser-Fenster.|{"name": "_self"}|
+**Hinweis zur SSL-Verschlüsselung**
 
-Haben Sie *name* auf *_blank* gestellt (oder lassen Sie *name* ganz weg), lässt sich die Erscheinung des Fensters mithilfe des Parameters *specs* beeinflussen.
-Beachten Sie, dass sich beliebig viele der folgenden Einstellungen durch Komma-Separation (z.B. {"specs": "width=800,height=700"} kombinieren lassen (siehe Beispiel unten).
+Ist *gfiAsNewWindow* nicht bereits eingestellt, wird *gfiAsNewWindow* automatisch gesetzt (mit Standard-Einstellungen), wenn die aufzurufende Url nicht SSL-verschlüsselt ist (https).
 
-|specs|Werte|Default|Browser|Beschreibung|Beispiel|
-|-----|-----|-------|-------|------------|--------|
-|width|pixels|Abhängig vom Seiteninhalt|alle|Festlegung der Fenster-Breite (beachten Sie ggf. scrollbars und resizable korrekt einzustellen).|{"specs": "width=800"}|
-|height|pixels|Abhängig vom Seiteninhalt|alle|Festlegung der Höhe des Fensters (beachten Sie ggf. scrollbars und resizable korrekt einzustellen).|{"specs": "height=600"}|
-|left|pixels|ganz links|alle|Festlegen der horizontalen Position des Fensters.|{"specs": "left=500"}|
-|top|pixels|ganz oben|alle|Festlegen der vertikalen Position des Fensters.|{"specs": "top=20"}|
-|scrollbars|yes,no,1,0|no|IE, Firefox, Opera|Darstellung von Scroll-Balken|{"specs": "scrollbars=yes"}|
-|toolbar|yes,no,1,0|no|IE, Firefox|Anzeige der Werkzeug-Leiste.|{"specs": "toolbar=yes"}|
-|resizable|yes,no,1,0|no|IE|Soll das Fenster in seiner Größe veränderbar sein? (IE only)|{"specs": "resizable=yes"}|
+Nicht SSL-verschlüsselter Inhalt kann im Masterportal aufgrund der *no mixed content*-policy moderner Browser nicht in einem iFrame dargestellt werden.
+Bitte beachten Sie, dass automatische Weiterleitungen (z.B. per Javascript) im iFrame auf eine unsichere http-Verbindung (kein SSL) nicht automatisch erkannt und vom Browser ggf. unterbunden werden.
+Stellen Sie in einem solchen Fall *gfiAsNewWindow* wie oben beschrieben manuell ein.
 
-Weitere Einstellungsmöglichkeiten entnehmen Sie bitte den einschlägigen Informationen zum Thema "javascript + window.open":
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|_blank|ja|alle|Öffnet ein neues Browser-Fenster oder Browser-Tab (browserabhängig) mit dem html-Inhalt.Haben Sie *name* auf *_blank* gestellt (oder lassen Sie *name* ganz weg), lässt sich die Erscheinung des Fensters mithilfe des Parameters *specs* beeinflussen. B|{"name": "_blank"}|ja|
+|_self|nein|alle|Öffnet den html-Inhalt im aktuellen Browser-Fenster.eachten Sie, dass sich beliebig viele der folgenden Einstellungen durch Komma-Separation (z.B. {"specs": "width=800,height=700"} kombinieren lassen. Weitere Einstellungsmöglichkeiten entnehmen Sie bitte den einschlägigen Informationen zum Thema "javascript + window.open":
 [https://www.w3schools.com/jsref/met_win_open.asp](https://www.w3schools.com/jsref/met_win_open.asp) (deutsch),
 [https://javascript.info/popup-windows](https://javascript.info/popup-windows) (englisch),
-[https://developer.mozilla.org/en-US/docs/Web/API/Window/open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (englisch)
+[https://developer.mozilla.org/en-US/docs/Web/API/Window/open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (englisch)|{"name": "_self"}|ja|
+
 
 Beispiel:
 ```
@@ -2733,14 +2699,6 @@ Beispiel:
     // (...)
 }
 ```
-
-**Hinweis zur SSL-Verschlüsselung**
-
-Ist *gfiAsNewWindow* nicht bereits eingestellt, wird *gfiAsNewWindow* automatisch gesetzt (mit Standard-Einstellungen), wenn die aufzurufende Url nicht SSL-verschlüsselt ist (https).
-
-Nicht SSL-verschlüsselter Inhalt kann im Masterportal aufgrund der *no mixed content*-policy moderner Browser nicht in einem iFrame dargestellt werden.
-Bitte beachten Sie, dass automatische Weiterleitungen (z.B. per Javascript) im iFrame auf eine unsichere http-Verbindung (kein SSL) nicht automatisch erkannt und vom Browser ggf. unterbunden werden.
-Stellen Sie in einem solchen Fall *gfiAsNewWindow* wie oben beschrieben manuell ein.
 
 ***
 
@@ -2923,7 +2881,7 @@ Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der K
     "visibility": true,
     "extent": [560296.72, 5932154.22, 562496.72, 5933454.22]
 }
-```
+`````
 
 ***
 #### Themenconfig.Layer.Vector
@@ -2956,7 +2914,6 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
     "visibility": true,
     "supported": ["2D"],
     "extent": [454591, 5809000, 700000, 6075769],
-    "gfiTheme": "default",
     "layerAttribution": "MyBoldAttribution for layer 123456",
     "legend": "https://myServer/myService/legend.pdf",
     "maxScale": "100000",
