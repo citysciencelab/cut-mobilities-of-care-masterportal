@@ -1,4 +1,4 @@
 # Testing #
 
-* [Unit-Test-Dokumentation](unittestingVue.md)
-* [Browser-Test-Dokumentation](browsertesting.md)
+* [Unit-Test-Dokumentation](unitTestVue.de.md)
+* [Browser-Test-Dokumentation](browserTest.de.md)
