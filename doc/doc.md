@@ -1,27 +1,36 @@
->Das Masterportal benötigt verschiedene Konfigurationsdateien, die auf diesen Seiten dokumentiert sind. Außerdem werden die verfügbaren URL-Parameter sowie die für das Master-Portal notwendigen Proxies beschrieben.
+# Documentation overview
+
+>The Masterportal requires various configuration files documented on these pages. Furthermore, available URL parameters and required proxies are described.
 
 [TOC]
 
-# Konfigurationsdateien #
-Das Masterportal baut auf globalen und portalspezifischen Konfigurationsdateien auf.
+## Configuration files
 
-Globale Konfigurationsdateien. (Es ergibt Sinn, dass diese von allen Portalen gemeinsam genutzt werden):
+The Masterportal builds on global and portal-specific configuration files alike.
 
-* **[services.json](services.json.md)**:  alle verfügbaren WMS-Layer und WFS-FeatureTypes
-* **[rest-services.json](rest-services.json.md)**: URLs zu verschiedenen Diensten
-* **[style.json](style.json.md)**: Style-Definitionen für WFS-FeatureTypes
+### Global configuration files
 
-Portalspezifische Konfigurationsdateien:
+These files describe central information to be used by multiple portals:
 
-* **[config.js](config.js.md)**: Konfiguration von Pfaden zu weiteren Konfigurationsdateien und zu nutzenden Diensten.
-* **[config.json](config.json.md)**: Konfiguration der Portal-Oberfläche und der Inhalte.
+* **[services.json](services.json.md)**: lists all available layers
+* **[rest-services.json](rest-services.json.md)**: URLs to various external services
+* **[style.json](style.json.md)**: holds style definitions for vector layers
 
-Die folgende Abbildung zeigt schematisch das Zusammenspiel der Dateien. Wichtig ist, dass sich die Dateien index.html, **[config.js](config.js.md)** und **[config.json](config.json.md)** im selben Verzeichnis befinden.
+### Portal-specific configuration files
 
-!**[Konfig-Überblick.png](Konfig-Überblick.png)**
+These files define the distinguishing features of an instance:
 
-# URL-Parameter #
-Das Masterportal kann über **[URL-Parameter](URL-Parameter.md)** aufgerufen werden.
+* **[config.js](config.js.md)**: Configuration of paths to further configuration files and services
+* **[config.json](config.json.md)**: Configuration of portal appearance and available contents
 
-# Proxies #
-Für das Abfragen von Attributinformationen (WMS GetFeatureInfo) oder für das Laden von WFS-Layern werden vom Masterportal **[Proxies](proxies.md)** vorausgesetzt.
+The following figure schematically demonstrates the ensemble of files. Please mind that the files **index.html**, **[config.js](config.js.md)**, and **[config.json](config.json.md)** must be placed in the same path.
+
+![configOverview.png](configOverview.png)
+
+## URL parameters
+
+The Masterportal can be called with **[URL parameters](urlParameter.md)** to e.g. call functions initially or describe a view.
+
+## Proxies
+
+For requesting attribution information via `WMS GetFeatureInfo` and for loading WFS layers, **[proxies](proxies.md)** have to be defined.

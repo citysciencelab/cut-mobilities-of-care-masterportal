@@ -11,8 +11,7 @@ Um die Browsertests lokal ausführen zu können müssen Driver für den lokalen 
 Dazu den Treiber downloaden (siehe https://docs.seleniumhq.org/download/) und in den Umgebungsvariablen verfügbar machen (unter Windows in 'path'). Die exe muss dabei in einem Ordner liegen, in dem exe-Dateien ausgeführt werden können. 'chromedriver' muss dann in der Console ohne Adminrechte aufrufbar sein.
 
 2. Dev-server starten:
-Um die Tests lokal ausführen zu können muss ein Dev-Server gestartet sein. Standardmäßig wird die URL per http angefragt, so dass der browsertestserver gestartet sein sollte, der das Portal lokal unter http anbietet. Möchte man mit dem "normalen" Devserver unter "npm start" testen muss man die entsprechende URL dem dem Aufruf unter 3. mitgeben.
-$ npm run browsertestserver
+Um die Tests lokal ausführen zu können muss ein Dev-Server mit `npm start` gestartet sein. Dann können mit `npm run browsertest` in einem separaten Fenster die Tests angestoßen werden.
 
 3. Test starten:
 $ ./node_modules/.bin/mocha ./test/end2end/TestRunner.js
