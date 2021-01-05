@@ -6,7 +6,7 @@
 
 # config.json
 
-The *config.json* file contains all configuration of the portal interface. It controls which elements are placed where on the menu bar, how the map is to be centered initially, and which layers are to be loaded. See **[this file for an example](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/portal/master/config.json)**.
+The *config.json* file contains all configuration of the portal interface. It controls which elements are placed where on the menu bar, how the map is to be centered initially, and which layers are to be loaded. See **[this file for an example](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/portal/basic/config.json)**.
 
 The configuration is separated into two sections, **[Portalconfig](#markdown-header-Portalconfig)** and **[Themenconfig](#markdown-header-Themenconfig)**
 
@@ -32,7 +32,6 @@ The section *Portalconfig* controls the following properties:
 5. Menu entries and availability as well as order of tools (*menu*)
 6. Type and properties of used search services (*searchBar*)
 7. Deletability of topics (*layersRemovable*)
-8. Which languages are to be used (*portalLanguage*)
 
 The configuration options listed in the following table exist:
 
@@ -47,7 +46,6 @@ The configuration options listed in the following table exist:
 |menu|no|**[menu](#markdown-header-portalconfigmenu)**||Menu entries and their order are configured in this entry. The order of tools corresponds to the order in the object specifying them; see **[Tools](#markdown-header-portalconfigmenutools)**.|false|
 |searchBar|no|**[searchBar](#markdown-header-portalconfigsearchbar)**||The search bar allows requesting information from various search services at once.|false|
 |layersRemovable|no|Boolean|false|Defines whether layers may be removed from a portal during its run-time.|false|
-|portalLanguage|no|**[portalLanguage](#markdown-header-portalLanguage)**||This configuration allows setting the portal's languages and the default language.|false|
 
 ***
 
