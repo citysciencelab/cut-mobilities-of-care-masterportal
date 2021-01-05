@@ -1,6 +1,8 @@
 import testAction from "../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsMapMarker";
 
+import Feature from "ol/Feature";
+import Polygon from "ol/geom/Polygon";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 import {Style} from "ol/style.js";
@@ -55,10 +57,9 @@ describe("src/modules/mapMarker/store/actionsMapMarker.js", () => {
 
     describe("placingPolygonMarker", () => {
         it("placingPolygonMarker if no styleListModel exist", done => {
-            const payload = {
-                    wktcontent: [10, 10, 20, 20, 30, 30, 40, 40, 10, 10],
-                    geometryType: "POLYGON"
-                },
+            const payload = new Feature({
+                    geometry: new Polygon([[[565086.1948534324, 5934664.461947621], [565657.6945448224, 5934738.54524095], [565625.9445619675, 5934357.545446689], [565234.3614400891, 5934346.962119071], [565086.1948534324, 5934664.461947621]]])
+                }),
                 state = {
                     markerPolygon: new VectorLayer({
                         name: "markerPolygon",

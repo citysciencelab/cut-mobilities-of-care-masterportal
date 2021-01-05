@@ -1,13 +1,14 @@
 /**
  * User type definition
  * @typedef {Object} GfiState
- * @property {String} id id of the gfi component
- * @property {String} name displayed as title (config-param)
- * @property {String} glyphicon icon next to title (config-param)
- * @property {Boolean} active - true if the gfi is active
- * @property {Object} currentFeature - the current feature that is displayed
- * @property {String} desktopType - specifies which template is used in desktop mode
- * @property {Boolean} centerMapToClickPoint - specifies if the map should be centered when clicking on a feature
+ * @property {String} id Id of the gfi component.
+ * @property {String} name Displayed as title (config-param).
+ * @property {String} glyphicon Icon next to title (config-param).
+ * @property {Boolean} active True if the gfi is active.
+ * @property {Object} currentFeature The current feature that is displayed.
+ * @property {String} desktopType Specifies which template is used in desktop mode.
+ * @property {Boolean} centerMapToClickPoint specifies if the map should be centered when clicking on a feature.
+ * @property {Boolean} isVisibleInMenu Indicates whether there is a menu entry for the GFI.
  *
  */
 const state = {
@@ -17,7 +18,10 @@ const state = {
     active: false,
     currentFeature: null,
     desktopType: "",
-    centerMapToClickPoint: false
+    centerMapToClickPoint: false,
+    showMarker: true,
+    highlightVectorRules: null,
+    isVisibleInMenu: true
 };
 
 export default state;
