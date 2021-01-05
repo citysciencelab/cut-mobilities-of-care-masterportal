@@ -11,11 +11,6 @@ Derzeit ist Babel nicht in der Lage, TPL Dateien zu übersetzen und Internet Exp
 
 ---
 
-#### A.4.1
-Weitere Infos bezüglich Vue befinden sich [hier](./conventions/vue.md).
-
----
-
 #### A.4.3
 *Beispiel des JSDoc zweier Funktionen*
 ```javascript

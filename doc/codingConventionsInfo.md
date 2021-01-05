@@ -12,12 +12,6 @@ Babel currently does not translate TPL files. Since the IE11 does not support ar
 
 ---
 
-#### A.4.1
-
-You may look up additional information regarding Vue [here](./conventions/vue.md).
-
----
-
 #### A.4.3
 
 These two examples illustrate how to write JSDoc comment blocks.
