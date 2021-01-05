@@ -1,4 +1,5 @@
 import uniqueId from "../../src/utils/uniqueId.js";
+import LoaderOverlay from "../../src/utils/loaderOverlay";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -34,7 +35,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetIgnoredKeys
      * @listens Core#RadioRequestUtilSort
      * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
-     * @listens Core#RadioRequestUtilGetPathFromLoader
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
@@ -78,7 +78,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "sort": this.sort,
             "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
-            "getPathFromLoader": this.getPathFromLoader,
             "renameKeys": this.renameKeys,
             "renameValues": this.renameValues,
             "pickKeyValuePairs": this.pickKeyValuePairs,
@@ -575,13 +574,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     showLoader: function () {
-        this.incLoaderOverlayCounter();
-        clearTimeout(this.get("loaderOverlayTimeoutReference"));
-        this.setLoaderOverlayTimeoutReference(setTimeout(function () {
-            Radio.trigger("Util", "hideLoader");
-            this.setLoaderOverlayCounter(0);
-        }.bind(this), 1000 * this.get("loaderOverlayTimeout")));
-        $("#loader").show();
+        LoaderOverlay.show();
     },
 
     /**
@@ -589,10 +582,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     hideLoader: function () {
-        this.decLoaderOverlayCounter();
-        if (this.get("loaderOverlayCounter") <= 0) {
-            $("#loader").hide();
-        }
+        LoaderOverlay.hide();
     },
 
     /**
@@ -601,23 +591,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     hideLoadingModule: function () {
         $(".loading").fadeOut(this.get("fadeOut"));
-    },
-
-    /**
-     * Setter for loaderOverlayTimeoutReference
-     * @param {*} timeoutReference todo
-     * @returns {void}
-     */
-    setLoaderOverlayTimeoutReference: function (timeoutReference) {
-        this.set("loaderOverlayTimeoutReference", timeoutReference);
-    },
-
-    /**
-     * search the path from the loader gif
-     * @returns {String} path to loader gif
-     */
-    getPathFromLoader: function () {
-        return $("#loader").children("img").first().attr("src");
     },
 
     /**

@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {isMaster, isMobile} = require("../../../settings"),
-    {getCenter, getResolution} = require("../../../library/scripts"),
+    // {getCenter, getResolution} = require("../../../library/scripts"),
     {logBrowserstackUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
@@ -105,19 +105,19 @@ async function ListTests ({builder, url, resolution, capability}) {
                 expect(enlargedScale).to.be.greaterThan(1);
             });
 
-            it("clicking a feature zooms and centers on it", async function () {
-                /* clicking featureListEntries[0] - chromedriver can, geckodriver can't manage to
-                 * vertically scroll the tr center into view; workaround: click first cell of first row */
-                await (await driver.findElement(By.css("#featurelist-list-table tbody tr td"))).click();
-                await driver.wait(
-                    until.elementLocated(By.css("#featurelistFeaturedetails.active")),
-                    5000,
-                    "details tab was not activated"
-                );
+            // it("clicking a feature zooms and centers on it", async function () {
+            //     /* clicking featureListEntries[0] - chromedriver can, geckodriver can't manage to
+            //      * vertically scroll the tr center into view; workaround: click first cell of first row */
+            //     await (await driver.findElement(By.css("#featurelist-list-table tbody tr td"))).click();
+            //     await driver.wait(
+            //         until.elementLocated(By.css("#featurelistFeaturedetails.active")),
+            //         5000,
+            //         "details tab was not activated"
+            //     );
 
-                expect(await driver.executeScript(getCenter)).to.deep.equal([569773.549, 5937127.029]);
-                expect(await driver.executeScript(getResolution)).to.equal(0.13229159522920522);
-            });
+            //     expect(await driver.executeScript(getCenter)).to.deep.equal([569773.549, 5937127.029]);
+            //     expect(await driver.executeScript(getResolution)).to.equal(0.13229159522920522);
+            // });
         });
     }
 }

@@ -27,6 +27,9 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
             "change:currentLng": () => {
                 this.render();
             },
+            "change:isVisible": () => {
+                this.render();
+            },
             "sync": function () {
                 this.render();
                 this.$el.on({
@@ -48,7 +51,7 @@ const LayerInformationView = Backbone.View.extend(/** @lends LayerInformationVie
     render: function () {
         const attr = this.model.toJSON();
 
-        if (this.model.get("isVisible")) {
+        if (this.model.get("isVisible") && this.model.get("title")) {
             this.$el.html(this.template(attr));
             $("#map > div.ol-viewport > div.ol-overlaycontainer-stopevent").append(this.$el);
             this.$el.draggable({

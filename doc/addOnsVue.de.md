@@ -4,7 +4,7 @@ Um eigene Entwicklungen in das MasterPortal zu integrieren existiert ein Mechani
 
 Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch **[Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](02_vue_tutorial_new_module_scale_switcher.md)**). Es liegt lediglich außerhalb des Repositories und erlaubt so eine getrennte Verwaltung.
 
-Alle Addons liegen in einem Ordner namens "addons" auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der **[config.js](config.js.md)** konfigurieren.
+Alle Addons liegen in einem Ordner namens "addons" auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der **[config.js](config.js.md)** konfigurieren. Es ist möglich, dass Addons eine eigene `package.json` Datei besitzen, um weitere Dependencies zu definieren.
 
 Folgende Struktur ist dabei zu beachten, hier am Beispiel eines Werkzeuges (MyAddon1) und eines GFI-Themes (MyGfiTheme):
 
@@ -44,6 +44,8 @@ addons
 |   |   |	|   |-- actionsMyAddon1.spec.js
 |   |   |	|   |-- gettersMyAddon1.spec.js
 |   |   |	|   |-- mutationsMyAddon1.spec.js
+|   |
+|   |-- package.json
 
 |-- MyGfiTheme
 |   index.js
@@ -65,6 +67,8 @@ addons
 |	|   |-- unit
 |   |	|   |-- components
 |   |   |	|   |-- MyGfiTheme.spec.js
+|   |
+|   |-- package.json
 
 |-- MyGFIThemesFolder
 |   |-- MyGFISubFolder
@@ -87,6 +91,8 @@ addons
 |   |   |   |-- unit
 |   |   |   |   |-- components
 |   |   |   |   |   |-- MyGfiTheme.spec.js
+|   |   |
+|   |   |-- package.json
 
 
 
@@ -94,7 +100,8 @@ addons
 Der Entrypoint eines jeden Addons muss eine Datei namens **index.js** auf der root-Ebene des Addon-Folders sein.
 
 1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und weiteren Angaben zum Addon.
-Das nachfolgende Beispiel basiert auf die oben beschriebene beispielhafte Ordnerstruktur.
+
+Das nachfolgende Beispiel basiert auf der oben beispielhaft beschriebenen Ordnerstruktur.
 
 Es werden 2 Arten von Addons unterstützt:
 
@@ -102,7 +109,7 @@ Werkzeuge: `"type": "tool"`
 
 GFI-Themes: `"type": "gfiTheme"`
 
-Von allen Einträge in der addonsConf.json, die ein Objekt enthalten wird davon ausgegangen, dass sie mit vue programmiert sind (alte backbone-ddons enthalten nur einen String).
+Von allen Einträgen in der addonsConf.json, die ein Objekt enthalten wird davon ausgegangen, dass sie mit vue programmiert sind (alte backbone-ddons enthalten nur einen String).
 
 Standardmäßig entspricht der Key eines Addons dem Namen seines Ordners im Addons Ordner. Mit dem Parameter "path" jedoch kann ein willkürlicher Pfad definiert werden. Dadurch können mehrere Addons in Ordnern gruppiert werden.
 
@@ -125,9 +132,26 @@ Standardmäßig entspricht der Key eines Addons dem Namen seines Ordners im Addo
 
 1.3. Es sollen hier ausschließlich nur die Dateien landen, welche zu *addons* gehören.
 
+1.4 Falls weitere Dependencies, die noch nicht im Masterportal vorhanden sind, für ein Addon benötigt werden, können diese über eine separate `package.json` installiert werden. Dazu reicht eine minimale `package.json` aus:
+
+#### Beispiel **package.json** ####
+```json
+{
+  "name": "exampleAddon",
+  "version": "1.0.0",
+  "description": "I'm an example! I can say hello world.",
+  "dependencies": {
+    "hello": "^0.3.2"
+  }
+}
+
+```
+
+`npm install` muss für jedes Addon separat ausgeführt werden!
+
 ## 2. Beispiel-Addon ##
 
-Hier legen wir kurz ein Beispiel-Addon für ein Werkzeug an!
+Hier legen wir ein kurzes Beispiel-Addon für ein Werkzeug an!
 
 2.1. Dateien erstellen: Das Beispiel-Addon trägt den Namen *VueAddon* und seine Entrypoint-Datei heißt *index.js*. Die Komponente *VueAddon.vue* liegt im Ordner *components*. Daraus ergibt sich eine Dateistruktur wie folgt:
 
@@ -165,7 +189,9 @@ export default composeModules([GenericTool, {
     getters
 }]);
 ```
+
 Der `state`, die `mutations`, `actions` und `getters` können in separaten Dateien liegen oder werden hier direkt angegeben. Die Angabe von ```namespaced:true``` ist verpflichtend.
+
 ```vue
 // myMasterPortalFolder/addons/VueAddon/components/VueAddon.vue
 
@@ -272,7 +298,6 @@ export default {
 };
 ```
 
-
 2.4. Die Addons-Config-Datei erstellen:
 
 ```json
@@ -285,8 +310,8 @@ export default {
 }
 ```
 
-
 2.5. Das Beispiel-Addon in der config.js Datei des Portals aktivieren:
+
 ```js
 // myMasterPortalFolder/config.js
 
@@ -297,8 +322,8 @@ const Config = {
 };
 ```
 
-
 2.6. Das Beispiel-Addon als Werkzeug in der config.json definieren, damit es als Menüpunkt erscheint.
+
 ```json
 // myMasterPortalFolder/config.json
 ...
@@ -312,7 +337,6 @@ const Config = {
           },
 ```
 
-
 2.7. JSDoc schreiben. Dazu einen im Ordner jsdoc einen Datei namespaces.js anlegen und als memberOf Addons **eintragen**.
 
 ```js
@@ -321,7 +345,6 @@ const Config = {
  * @memberof Addons
  */
 ```
-
 
 2.8. In der model.js muss bei memberOf als Prefix Addons. angegeben werden.
 
