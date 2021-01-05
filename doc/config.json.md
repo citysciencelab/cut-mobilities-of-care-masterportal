@@ -533,20 +533,6 @@ Visible vector layer search configuration. For all vector layers supposed to be 
 
 ***
 
-### Portalconfig.portalLanguage
-
-Portal language configuration.
-
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|enabled|no|Boolean|true|Activates a language switcher UI element. If not set, the language may only be changed by using the console line `Backbone.i18next.changeLanguage("en")`.||
-|debug|no|Boolean|false|Set to `true` during development to debug the language tool.||
-|languages|no|Object|{"de": "deutsch, "en": "english"}|Configuration of portal languages. Please mind that the respective language files must exist within the locale directory.||
-|startLanguage|no|String|"de"|The initial language active on portal start up. Please mind that this value is ignored if another start condition applies. The startLanguage is also used as fallback if a language or locale key can not be resolved.||
-|changeLanguageOnStartWhen|no|Array|["querystring", "localStorage", "navigator"]|Defines the order of initial language setting on start up.||
-
-***
-
 ### Portalconfig.controls
 
 |Name|Required|Type|Default|Description|Expert|
@@ -2642,7 +2628,6 @@ Also, type-specific attributes for **[WMS](#markdown-header-themenconfiglayerwms
 |visibility|no|Boolean|false|Layer visibility.|false|
 |supported|no|String[]|["2D", "3D"]|List of modes the layer may be used in.|false|
 |extent|no|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Layer extent.|false|
-|gfiTheme|no|String/Object|"default"|**[services.json](services.json.md)** value. Defines which *GetFeatureInfo* (gfi) theme is to be used.|true|
 |layerAttribution|no|String||**[services.json](services.json.md)** value. HTML string shown when the layer is active.|false|
 |legendURL|no|String||**[services.json](services.json.md)** value. URL used to request the legend graphic. _Deprecated, please use "legend" instead._|false|
 |legend|no|Boolean/String||**[services.json](services.json.md)** value. URL used to request the legend graphic. Use `true` to dynamically generate the legend from a WMS request or the styling. If of type string, it's expected to be a path to an image or a PDF file.|false|
@@ -2692,7 +2677,6 @@ Layer definition. Multiple ways to define layers exist. Most attributes are defi
 |visibility|no|Boolean|false|Layer visibility.|false|
 |supported|no|String[]|["2D", "3D"]|List of modes the layer may be used in.|false|
 |extent|no|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Layer extent.|false|
-|gfiTheme|no|String/Object|"default"|**[services.json](services.json.md)** value. Defines which *GetFeatureInfo* (gfi) theme is to be used.|true|
 |layerAttribution|no|String||**[services.json](services.json.md)** value. HTML string shown when the layer is active.|false|
 |legendURL|no|String||**[services.json](services.json.md)** value. URL used to request the legend graphic. _Deprecated, please use "legend" instead._|false|
 |legend|no|Boolean/String||**[services.json](services.json.md)** value. URL used to request the legend graphic. Use `true` to dynamically generate the legend from a WMS request or the styling. If of type string, it's expected to be a path to an image or a PDF file.|false|
@@ -2735,7 +2719,7 @@ List of typical WMS attributes.
 |geomType|no|String||Geometry type of WMS data. Currently, only `"polygon"` is supported. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|false|
 |styleable|no|Boolean||Whether the `styleWMS` tool may use this layer. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|true|
 |infoFormat|no|String|"text/xml"|**[services.json](services.json.md)** value. WMS *GetFeatureInfo* response format. `"text/xml"` and `"text/html"` are available. When using `"text/html"`, the service response is checked and will only be used when it contains a fully valid and filled HTML table.|false|
-|gfiAsNewWindow|no|Object|null|Relevant if `"text/html"` is used. Please read **[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)** for more information.|true|
+|gfiAsNewWindow|no|**[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)**|null|Relevant if `"text/html"` is used.|true|
 |styles|no|String[]||Will be sent to the server if defined. The server will interpret and apply these styles and return the corresponding styled tiles.|true|
 
 **Example**
@@ -2748,7 +2732,6 @@ List of typical WMS attributes.
     "visibility": true,
     "supported": ["2D"],
     "extent": [454591, 5809000, 700000, 6075769],
-    "gfiTheme": "default",
     "layerAttribution": "MyBoldAttribution for layer 123456",
     "legend": "https://myServer/myService/legend.pdf",
     "maxScale": "100000",
@@ -2778,40 +2761,20 @@ The parameter `gfiAsNewWindow` is only in use when `infoFormat` is set to `"text
 
 This feature allows opening WMS HTML responses in their own window or tab rather than in an iFrame or GFI. To open HTML contents in a standard browser window, set the empty object `{}` instead of `null`.
 
-**Example**
-
-```js
-{
-    "id": "123456",
-    // (...)
-    "gfiAsNewWindow": {},
-    // (...)
-}
-```
-
 You may change the opening behaviour by setting the parameter `name`:
 
-|Name|Required|Type|Default|Description|
-|----|--------|----|-------|-----------|
-|_blank|yes|all|Opens a new browser window or tab (browser-dependant) with HTML contents.|{"name": "_blank"}|
-|_self|no|all|Opens the HTML contents within the current browser window.|{"name": "_self"}|
+**Note on SSL encryption**
 
-If `name` is set to `"_blank"` (or if `name` is not defined), the `specs` parameter defines the window properties. Please mind that many of the following parameters may be chained with comma separation, e.g. `{"specs": "width=800,height=700"}`. See example below.
+If `gfiAsNewWindow` is not defined, it's applied with default values when the called URL is not SSL-encrypted (HTTPS).
 
-|specs|Values|Default|Browser|Description|Example|
-|-----|------|-------|-------|-----------|-------|
-|width|pixels|Depending on page contents|all|Defines the window width. Please consider setting the `scrollbars` and `resizable` properties accordingly.|{"specs": "width=800"}|
-|height|pixels|Depending on page contents|all|Defines the window height. Please consider setting the `scrollbars` and `resizable` properties accordingly.|{"specs": "height=600"}|
-|left|pixels|leftmost|all|Defines the horizontal window position.|{"specs": "left=500"}|
-|top|pixels|top|all|Defines the vertical window position.|{"specs": "top=20"}|
-|scrollbars|yes,no,1,0|no|IE, Firefox, Opera|Display of scrollbars|{"specs": "scrollbars=yes"}|
-|toolbar|yes,no,1,0|no|IE, Firefox|Display of the browser's toolbar|{"specs": "toolbar=yes"}|
-|resizable|yes,no,1,0|no|IE|Should the window be resizable? (IE only)|{"specs": "resizable=yes"}|
+Due to the *No Mixed Content* policy of all modern browsers, unencrypted content may not be displayed in an iFrame. Please mind that automatic forwarding (e.g. in Javascript) in iFrames to an insecure HTTP connection (without SSL) is not automatically recognized and may be prevented by the browser.
 
-For more options, please read the documentation regarding `javascript` and `window.open`:
-* [W3 Schools: Met win open](https://www.w3schools.com/jsref/met_win_open.asp) (deutsch),
-* [JavaScript Info: Popup windows](https://javascript.info/popup-windows) (englisch),
-* [MDN: Window open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (englisch)
+For such cases, define `gfiAsNewWindow` manually as described above.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|_blank|yes|all|Opens a new browser tab or window (depending on browser) with the specified HTML content. If you set `name` to `"_blank"` (or did not set `name`) the window appearance can be changed with the `specs` parameter.|{"name": "_blank"}|ja|
+|_self|no|all|Opens the specified HTML content within the current browser window. You may add an arbitrary amount of comma-separated properties like `{"specs": "width=800,height=700"}`. For more options, please read the documentation regarding `javascript` and `window.open`: [W3 Schools: Met win open](https://www.w3schools.com/jsref/met_win_open.asp) (German), [JavaScript Info: Popup windows](https://javascript.info/popup-windows) (English), [MDN: Window open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (English)|{"name": "_self"}|ja|
 
 **Example**
 
@@ -2826,14 +2789,6 @@ For more options, please read the documentation regarding `javascript` and `wind
     // (...)
 }
 ```
-
-**Note on SSL encryption**
-
-If `gfiAsNewWindow` is not defined, it's applied with default values when the called URL is not SSL-encrypted (HTTPS).
-
-Due to the *No Mixed Content* policy of all modern browsers, unencrypted content may not be displayed in an iFrame. Please mind that automatic forwarding (e.g. in Javascript) in iFrames to an insecure HTTP connection (without SSL) is not automatically recognized and may be prevented by the browser.
-
-For such cases, define `gfiAsNewWindow` manually as described above.
 
 ***
 
@@ -3048,7 +3003,6 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
     "visibility": true,
     "supported": ["2D"],
     "extent": [454591, 5809000, 700000, 6075769],
-    "gfiTheme": "default",
     "layerAttribution": "MyBoldAttribution for layer 123456",
     "legend": "https://myServer/myService/legend.pdf",
     "maxScale": "100000",
