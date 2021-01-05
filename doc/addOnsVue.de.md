@@ -1,10 +1,10 @@
 # Vue.js Addons #
 
-Um eigene Entwicklungen in das MasterPortal zu integrieren existiert ein Mechanismus der es erlaubt, Code von außerhalb des MasterPortal-Repositories in die MasterPortal Sourcen zu integrieren. Siehe auch **[lokale Entwicklungsumgebung einrichten](setup-dev.md)**.
+Um eigene Entwicklungen in das MasterPortal zu integrieren existiert ein Mechanismus der es erlaubt, Code von außerhalb des MasterPortal-Repositories in die MasterPortal Sourcen zu integrieren. Siehe auch **[lokale Entwicklungsumgebung einrichten](setupDev.de.md)**.
 
-Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch **[Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](02_vue_tutorial_new_module_scale_switcher.md)**). Es liegt lediglich außerhalb des Repositories und erlaubt so eine getrennte Verwaltung.
+Das Addon selbst ist identisch wie ein natives Modul zu programmieren (siehe auch **[Tutorial 01: Ein neues Modul erstellen (Scale Switcher)](vueTutorial.de.md)**). Es liegt lediglich außerhalb des Repositories und erlaubt so eine getrennte Verwaltung.
 
-Alle Addons liegen in einem Ordner namens "addons" auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der **[config.js](config.js.md)** konfigurieren. Es ist möglich, dass Addons eine eigene `package.json` Datei besitzen, um weitere Dependencies zu definieren.
+Alle Addons liegen in einem Ordner namens "addons" auf Root-Ebene des Masterportals. Beliebig viele dieser Addons lassen sich in einem Portal in der **[config.js](config.js.de.md)** konfigurieren. Es ist möglich, dass Addons eine eigene `package.json` Datei besitzen, um weitere Dependencies zu definieren.
 
 Folgende Struktur ist dabei zu beachten, hier am Beispiel eines Werkzeuges (MyAddon1) und eines GFI-Themes (MyGfiTheme):
 
@@ -100,6 +100,7 @@ addons
 Der Entrypoint eines jeden Addons muss eine Datei namens **index.js** auf der root-Ebene des Addon-Folders sein.
 
 1.2. Direkt in dem Ordner muss die Konfigurationsdatei **addonsConf.json** liegen. Diese beinhaltet einen JSON bestehend aus den *Namen* der *Addons* als Keys und weiteren Angaben zum Addon.
+
 Das nachfolgende Beispiel basiert auf der oben beispielhaft beschriebenen Ordnerstruktur.
 
 Es werden 2 Arten von Addons unterstützt:
