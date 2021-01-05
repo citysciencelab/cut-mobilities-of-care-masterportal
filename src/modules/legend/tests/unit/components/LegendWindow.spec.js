@@ -22,11 +22,15 @@ describe("LegendWindow.vue", () => {
             }
         },
         getters = {
-            mobile: state => state.mobile
+            mobile: state => state.mobile,
+            uiStyle: state => state.uiStyle
         },
         mutations = {
             setMobile (state, mobile) {
                 state.mobile = mobile;
+            },
+            setUiStyle (state, uiStyle) {
+                state.uiStyle = uiStyle;
             }
         };
     let store,
@@ -62,11 +66,19 @@ describe("LegendWindow.vue", () => {
                 wrapper = shallowMount(LegendWindowComponent, {store, localVue});
 
                 expect(wrapper.find(".legend-window").exists()).to.be.true;
+                expect(wrapper.find(".legend-title").exists()).to.be.true;
             });
             it("renders the legend window in mobile view", () => {
                 store.commit("setMobile", true);
                 wrapper = shallowMount(LegendWindowComponent, {store, localVue});
                 expect(wrapper.find(".legend-window-mobile").exists()).to.be.true;
+                expect(wrapper.find(".legend-title").exists()).to.be.true;
+            });
+            it("renders the legend window in table view", () => {
+                store.commit("setUiStyle", "TABLE");
+                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
+                expect(wrapper.find(".legend-window-table").exists()).to.be.true;
+                expect(wrapper.find(".legend-title-table").exists()).to.be.true;
             });
         });
         describe("showCollapseAllButton", () => {

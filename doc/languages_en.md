@@ -301,7 +301,7 @@ Part of the config.json you can edit for translation of the tools
 The following possibilities and following hierarchy exist:
 
 * "name": "Zeichnen / Schreiben" --> is never translated
-* "name": "translate#example:foo.bar.exampleMenuTitle" --> is translated, if the key exists
+* "name": "translate#common:foo.bar.exampleMenuTitle" --> is translated, if the key exists
 * no name specified (the Name field does not exist) --> Name comes from the model.js (here ../tools/draw/model.js)
 
 #### Define tool name in the model.js
@@ -312,7 +312,7 @@ const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
         name: "Zeichnen / Schreiben",
         ...
-```     
+```
 
 If it should be translated, the key for the translation of the name can be entered in the field "nameTranslationKey".
 ```
@@ -383,7 +383,7 @@ i18next.t('keyWithCount', {count: 100}); // -> "100 items"
 
 ### Nesting
 
-Nesting allows you to reference other keys in a translation. 
+Nesting allows you to reference other keys in a translation.
 
 keys
 ```

@@ -1,26 +1,25 @@
 Um Erweiterungen für das MasterPortal zu schreiben und beizutragen finden sie hier weitere Informationen.
 
-* **[lokale Entwicklungsumgebung einrichten](setup-dev.md)**
-* **[lokale Entwicklungsumgebung einrichten mit proxy](setup-dev-proxy.md)**
-
+* **[lokale Entwicklungsumgebung einrichten](setupDev.de.md)**
 
 Es sind folgende Code-Konventionen einzuhalten:
 
-* **[Code-Konventionen](codingConventions.md)**
+* **[Code-Konventionen](codingConventions.de.md)**
 
 Um Code dem Projekt beizutragen ist der Workflow und die "Definition of Done" einzuhalten:
 
-* **[Git-Workflow](git-workflow.md)**
+* **[Git-Workflow](gitWorkflow.de.md)**
 
 Zum Schreiben von Unittests:
 
-* **[Test-Dokumentation](Testing.md)**
+* **[Test-Dokumentation](testing.de.md)**
 
-Um Code zu schreiben der nicht im Masterportal-Repository landen soll sondern als Custom-Module eingebunden wird:
+Um Code zu schreiben der nicht im Masterportal-Repository landen soll, sondern als Addon eingebunden wird:
 
-* **[Custom-Modules](addons_vue.md)**
+* **[Addons](addonsVue.de.md)**
 
 Weitere Infos:
 
-* **[Tutorial: Ein neues Modul erstellen (Scale Switcher)](02_tutorial_new_module_scale_switcher.md)**
-* **[Community Board (Entwicklerforum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)**
+* **[Tutorial: Ein neues Modul erstellen (Scale Switcher)](vueTutorial.de.md)**
+* **[Community Board (Entwickler- und Anwenderforum)](https://trello.com/c/qajdXkMa/110-willkommen)**
+* **[Issue-Tracker](https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues?status=new&status=open)**

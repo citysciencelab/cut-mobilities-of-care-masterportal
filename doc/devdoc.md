@@ -16,11 +16,12 @@ About writing unit and end-to-end tests:
 
 * **[Test documentation](test.md)**
 
-To write code that's not supposed to be added to the Masterportal repository, features may be added to a Masterportal instance as custom modules:
+To write code that's not supposed to be added to the Masterportal repository, features may be added to a Masterportal instance as add-ons:
 
-* **[Custom modules](addonsVue.md)**
+* **[Add-ons](addonsVue.md)**
 
 Further links:
 
-* **[Tutorial: Creating a new module (Scale Switcher)](02_tutorial_new_module_scale_switcher.md)**
-* **[Community Board (Developer forum, Issue tracker)](https://trello.com/c/qajdXkMa/110-willkommen)**
+* **[Tutorial: Creating a new module (Scale Switcher)](vueTutorial.md)**
+* **[Community Board (Developer and user forum)](https://trello.com/c/qajdXkMa/110-willkommen)**
+* **[Issue tracker](https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues?status=new&status=open)**
