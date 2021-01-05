@@ -1,5 +1,7 @@
 import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
+import * as highlightFeature from "./highlightFeature";
+import * as removeHighlightFeature from "./removeHighlighting";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import {MapMode} from "../enums";
 import getProxyUrl from "../../../../utils/getProxyUrl";
@@ -310,7 +312,9 @@ const actions = {
         const {map} = state;
 
         map.removeInteraction(interaction);
-    }
+    },
+    ...highlightFeature,
+    ...removeHighlightFeature
 };
 
 export default actions;

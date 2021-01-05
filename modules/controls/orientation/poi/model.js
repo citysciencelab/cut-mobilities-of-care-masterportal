@@ -148,7 +148,9 @@ const POIModel = Backbone.Model.extend({
                     const type = legendInfo.styleObject.get("type");
 
                     if (type === "icon") {
-                        imagePath = legendInfo.styleObject.get("imagePath") + legendInfo.styleObject.get("imageName");
+                        const featureStyle = style.createStyle(feat, false);
+
+                        imagePath = featureStyle.getImage().getSrc();
                     }
                     else if (type === "circle") {
                         imagePath = this.createCircleSVG(style);
