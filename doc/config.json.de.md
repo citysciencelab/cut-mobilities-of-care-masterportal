@@ -1,4 +1,4 @@
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+>Zurück zur **[Dokumentation Masterportal](doc.de.md)**.
 
 [TOC]
 
@@ -96,12 +96,12 @@ ProxyPass /bkg_suggest http://sg.geodatenzentrum.de/gdz_geokodierung__[UUID]/sug
 |epsg|nein|String|"EPSG:25832"|EPSG-Code des zu verwendenden Koordinatensystems.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Koordinaten-Ausdehnung innerhalb dieser der Suchalgorithmus suchen soll.|false|
 |filter|nein|String|"filter=(typ:*)"|Filter string der an die BKG-Schnittstelle geschickt wird.|false|
-|geosearchServiceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
+|geosearchServiceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|false|
 |minChars|nein|Integer|3|Deprecated in 3.0.0. Bitte "minCharacters" verwenden.|false|
 |minCharacters|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 |score|nein|Number|0.6|Score der die Qualität der Suchergebnisse definiert.|false|
 |suggestCount|nein|Integer|20|Anzahl der Vorschläge.|false|
-|suggestServiceId|ja|String||Id des Vorschlagsdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
+|suggestServiceId|ja|String||Id des Vorschlagsdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|false|
 |zoomToResult|nein|Boolean|false|Deprecated in 3.0.0. Bitte "zoomToResultOnHover" oder "zoomToResultOnClick" verwenden. Gibt an, ob auf das Feature beim Mousehover auf die Adresse gezoomt werden soll.|false|
 |zoomToResultOnHover|nein|Boolean|false|Gibt an, ob auf das Feature beim Mousehover auf die Adresse gezoomt werden soll.|false|
 |zoomToResultOnClick|nein|Boolean|true|Gibt an, ob auf das Feature beim Klick auf die Adresse gezoomt werden soll.|false|
@@ -133,7 +133,7 @@ Suche bei OpenStreetMap über Stadt, Strasse und Hausnummer. Wird nur durch Klic
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |minChars|nein|Number|3|Mindestanzahl an Zeichen im Suchstring, bevor die Suche initiiert wird.|false|
-|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/0d136a44a59dd3b64ec986c258763ac08603bf15/doc/rest-services.json.md)** vor.|false|
+|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.de.md)** vor.|false|
 |limit|nein|Number|50|Gibt die maximale Zahl der gewünschten, ungefilterten Ergebnisse an.|false|
 |states|nein|string|""|Kann die Namen der Bundesländer enthalten. Trenner beliebig. Eventuell auch englische Ausprägungen eintragen, da die Daten frei im OpenSourceProjekt **[OpenStreetMap](https://www.openstreetmap.org)** erfasst werden können.|false|
 |classes|nein|string|[]|Kann die Klassen, für die Ergebnisse erzielt werden sollen, enthalten.|false|
@@ -160,7 +160,7 @@ Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |incrementalSearch|nein|Boolean|true|Gibt an ob eine Suchverfollständigung (Autocomplete) stattfinden soll. Wenn `incrementalSearch` auf `false` gesetzt wird, so wird eine Surche nur durch einen Klick auf die Lupe bzw. durch Enter gestartet. Dies ist sinvoll, wenn die Anzahl erlaubter Anfragen an den eingebundenen Dienst kontigentiert ist.|false|
-|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.md)** vor.|false|
+|serviceId|ja|String||Gibt die ID für die URL in der **[rest-services.json](rest-services.json.de.md)** vor.|false|
 |classes|nein|**[LocationFinderClass](#markdown-header-portalconfigsearchbarlocationfinderLocationFinderClass)**||Kann Klassen (mit Eigenschaften) enthalten die berücksichtigt werden sollen. Wenn hier nichts angegeben wird, so werden alle Klassen berücksichtigt.|false|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |spatialReference|nein|String||Koordinatensystem, in dem das Ergebnis angefragt werden soll. Standardmäßig wird  hier der Wert von Portalconfig.mapView.epsg verwendet.|false|
@@ -217,7 +217,7 @@ Konfiguration des Gazetteer Suchdienstes
 |searchParcels|nein|Boolean|false|Gibt an, ob nach Flurstücken gesucht werden soll.|false|
 |searchStreetKey|nein|Boolean|false|Gibt an, ob nach Straßenschlüsseln gesucht werden soll.|false|
 |searchStreet|nein|Boolean|false|Gibt an, ob nach Straßen gesucht werden soll. Vorraussetzung für **searchHouseNumbers**.|false|
-|serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
+|serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|false|
 
 **Beispiel**
 ```
@@ -242,7 +242,7 @@ Deprecated in 3.0.0. Bitte **[elasticSearch](#markdown-header-portalconfigsearch
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
-|serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
+|serviceID|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|false|
 |queryObject|ja|**[queryObject](#markdown-header-portalconfigsearchbargdiqueryobject)**||Query Objekt, das vom Elastic Search Model ausgelesen wird.|false|
 
 **Beispiel**
@@ -289,7 +289,7 @@ Konfiguration des Elastic Search Suchdienstes
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
-|serviceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|false|
+|serviceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|false|
 |type|nein|enum["POST", "GET"]|"POST"|Art des Requests.|false|
 |payload|nein|**[CustomObject](#markdown-header-datatypescustomobject)**|{}|Payload der mitgeschickt werden soll. Der Payload muss das Attribut für den searchString vorhalten.|false|
 |searchStringAttribute|nein|String|"searchString"|Attributname im payload für den searchString.|false|
@@ -2047,7 +2047,7 @@ Die Planungen müssen im virtualcityPLANNER auf öffentlich gesetzt sein, dann k
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|serviceId|ja|String||Id des services. Wird aufgelöst in der **[rest-services.json](rest-services.json.md)**.|
+|serviceId|ja|String||Id des services. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel**
@@ -2123,7 +2123,7 @@ Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal
 [inherits]: # (Portalconfig.menu.tool)
 
 Das WFS-T Tool bietet die Möglichkeit Features aus Web Feature Services (WFS) in der Oberfläche sowohl zu visualisieren (Get Feature), zu aktualisieren (update) und zu löschen (delete), als auch die Möglichkeit neue Features hizuzufügen (insert).
-Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.json.md).
+Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.json.de.md).
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
@@ -2519,24 +2519,24 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 
 [type:Extent]: # (Datatypes.Extent)
 
-Hier werden die GruppenLayer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein Großteil der Attribute ist in der **[services.json](services.json.md)** definiert, kann jedoch hier am Layer überschrieben werden.
+Hier werden die GruppenLayer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein Großteil der Attribute ist in der **[services.json](services.json.de.md)** definiert, kann jedoch hier am Layer überschrieben werden.
 Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#markdown-header-themenconfiglayerwms)** und **[Vector](#markdown-header-themenconfiglayervector)**.
 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen.|false|
+|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.de.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen.|false|
 |children|nein|**[Layer](#markdown-header-themenconfiglayer)**[]||Wird dieses Attribut verwendet, so wird ein Gruppenlayer erzeugt, der beliebig viele Layer beinhaltet. In diesem Fall ist eine einzigartige Id manuell zu wählen.|false|
 |name|nein|String||Name des Layers.|false|
 |transparency|nein|Integer|0|Transparenz des Layers.|false|
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|false|
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an, in denen der Layer verwendet werden kann.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|false|
-|layerAttribution|nein|String||Wert aus **[services.json](services.json.md)**. HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|false|
-|legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|maxScale|nein|String||Wert aus **[services.json](services.json.md)**. Maximaler Maßstab bei dem der Layer angezeigt werden soll.|false|
-|minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem der Layer angezeigt werden soll.|false|
+|layerAttribution|nein|String||Wert aus **[services.json](services.json.de.md)**. HTML String. Dieser wird angezeigt sobald der Layer aktiv ist.|false|
+|legendURL|nein|String||Wert aus **[services.json](services.json.de.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
+|legend|nein|Boolean/String||Wert aus **[services.json](services.json.de.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
+|maxScale|nein|String||Wert aus **[services.json](services.json.de.md)**. Maximaler Maßstab bei dem der Layer angezeigt werden soll.|false|
+|minScale|nein|String||Wert aus **[services.json](services.json.de.md)**. Minimaler Maßstab bei dem der Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer Reload des Layers. Angabe in ms. Minimum ist 500.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige, ob der Layer niemals im Themenbaum sichtbar ist.|false|
 |urlIsVisible|nein|Boolean|true|Anzeige, ob die URL in der Layerinformation angezeigt werden soll.|false|
@@ -2570,24 +2570,24 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 
 [type:WMS]: # (Themenconfig.Layer.WMS)
 
-Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein Großteil der Attribute ist in der **[services.json](services.json.md)** definiert, kann jedoch hier am Layer überschrieben werden.
+Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein Großteil der Attribute ist in der **[services.json](services.json.de.md)** definiert, kann jedoch hier am Layer überschrieben werden.
 Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#markdown-header-themenconfiglayerwms)** und **[Vector](#markdown-header-themenconfiglayervector)**.
 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen. ACHTUNG: Hierbei ist wichtig, dass die angegebenen ids dieselbe URL ansprechen, also den selben Dienst benutzen. Bei Konfiguration eines Arrays von Ids ist die Angabe der minScale und maxScale in der services.json für jeden Layer notwendig.|false|
+|id|ja|String/String[]||Id des Layers. In der **[services.json](services.json.de.md)** werden die ids aufgelöst und die notwendigen Informationen herangezogen. ACHTUNG: Hierbei ist wichtig, dass die angegebenen ids dieselbe URL ansprechen, also den selben Dienst benutzen. Bei Konfiguration eines Arrays von Ids ist die Angabe der minScale und maxScale in der services.json für jeden Layer notwendig.|false|
 |name|nein|String||Name des Layers.|false|
 |entities|ja|**[Entity3D](#markdown-header-themenconfiglayerentity3d)**[]||Modelle, die angezeigt werden sollen |false|
 |transparency|nein|Integer|0|Transparenz des Layers.|false|
 |visibility|nein|Boolean|false|Sichtbarkeit des Layers.|false|
 |supported|nein|String[]|["2D", "3D"]|Gibt die Modi an, in denen der Layer verwendet werden kann.|false|
 |extent|nein|**[Extent](#markdown-header-datatypesextent)**|[454591, 5809000, 700000, 6075769]|Ausdehnung des Layers.|false|
-|layerAttribution|nein|String||Wert aus **[services.json](services.json.md)**. HTML String. Dieser wird angezeigt, sobald der Layer aktiv ist.|false|
-|legendURL|nein|String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|maxScale|nein|String||Wert aus **[services.json](services.json.md)**. Maximaler Maßstab bei dem der Layer angezeigt werden soll.|false|
-|minScale|nein|String||Wert aus **[services.json](services.json.md)**. Minimaler Maßstab bei dem der Layer angezeigt werden soll.|false|
+|layerAttribution|nein|String||Wert aus **[services.json](services.json.de.md)**. HTML String. Dieser wird angezeigt, sobald der Layer aktiv ist.|false|
+|legendURL|nein|String||Wert aus **[services.json](services.json.de.md)**. URL die verwendet wird, um die Legende anzufragen. Deprecated, bitte "legend" verwenden.|false|
+|legend|nein|Boolean/String||Wert aus **[services.json](services.json.de.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
+|maxScale|nein|String||Wert aus **[services.json](services.json.de.md)**. Maximaler Maßstab bei dem der Layer angezeigt werden soll.|false|
+|minScale|nein|String||Wert aus **[services.json](services.json.de.md)**. Minimaler Maßstab bei dem der Layer angezeigt werden soll.|false|
 |autoRefresh|nein|Integer||Automatischer Reload des Layers. Angabe in ms. Minimum ist 500.|false|
 |isNeverVisibleInTree|nein|Boolean|false|Anzeige, ob der Layer niemals im Themenbaum sichtbar ist.|false|
 |urlIsVisible|nein|Boolean|true|Anzeige, ob die URL in der Layerinformation angezeigt werden soll.|false|
@@ -2624,7 +2624,7 @@ Hier werden WMS typische Attribute aufgelistet.
 |featureCount|nein|Integer|1|Anzahl der Features, die bei einer GetFeatureInfo-Abfrage zurückgegeben werden sollen.|false|
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
-|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt. |false|
+|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.de.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt. |false|
 |gfiAsNewWindow|nein|**[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)**|null|Wird nur berücksichtigt wenn infoFormat text/html ist.|true|
 |styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
 
@@ -2887,7 +2887,7 @@ Mit StaticImage lassen sich Bilder als Layer laden und georeferenziert auf der K
 
 [inherits]: # (Themenconfig.Layer)
 
-Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), [SensorLayer](sensorThings.md), und Vector Tile Layer.
+Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSON (nur in EPSG:4326), [SensorLayer](sensorThings.de.md), und Vector Tile Layer.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -2898,7 +2898,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |routable|nein|Boolean||Gibt an, ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug **[routing](#markdown-header-portalconfigmenutoolrouting)** konfiguriert sein.|false|
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|false|
 |additionalInfoField|nein|String|"name"|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden, wird der Layername angegeben.|false|
-|styleId|nein|String||Id die den Style definiert. Id wird in der **[style.json](style.json.md)** aufgelöst.|false|
+|styleId|nein|String||Id die den Style definiert. Id wird in der **[style.json](style.json.de.md)** aufgelöst.|false|
 |styleGeometryType|nein|String[],String||Geometrietypen für einen WFS-Style, falls nur bestimmte Geometrien eines Layers angezeigt werden sollen **[siehe dazu](style.json.md#markdown-header-abbildungsvorschriften)**.
 |hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|false|
 |vtStyles|nein|**[vtStyle](#markdown-header-themenconfiglayervectorvtstyle)**[]||Auswählbare externe Style-Definition (nur für Vector Tile Layer)|false|
