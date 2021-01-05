@@ -29,7 +29,7 @@
     - The target branch has been merged to the feature branch immediately before opening the pull request. Hence, there are no merge conflicts.
     - The code is fine:
         - There are no warnings or errors in the linter report.
-        - The code honors the **[conventions](conventions.md)**.
+        - The code honors the **[conventions](codingConventions.md)**.
     - The documentation has been extended:
         - **[User documentation](doc.md)**
         - **[Developer documentation](devdoc.md)**
