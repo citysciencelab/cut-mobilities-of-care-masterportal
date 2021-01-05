@@ -1,7 +1,7 @@
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
-import {getWKTGeom} from "../../../utils/getWKTGeom";
 import Point from "ol/geom/Point.js";
 import Feature from "ol/Feature.js";
+import {MapMode} from "../../map/store/enums";
 
 /**
  * @const {String} configPaths an array of possible config locations. First one found will be used
@@ -38,14 +38,24 @@ export default {
      * @param {String[]} value The array with the markable coordinate pair.
      * @returns {void}
      */
-    placingPointMarker ({state, commit, dispatch}, value) {
+    placingPointMarker ({state, rootState, commit, dispatch}, value) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.pointStyleId);
+        let coordValues = [];
 
         dispatch("removePointMarker");
 
         if (styleListModel) {
+            if (rootState.Map.mapMode === MapMode.MODE_3D) {
+                // else an error is thrown in proj4/lib/checkSanity: coordinates must be finite numbers
+                value.forEach(val => {
+                    coordValues.push(Math.round(val));
+                });
+            }
+            else {
+                coordValues = value;
+            }
             const iconfeature = new Feature({
-                    geometry: new Point(value)
+                    geometry: new Point(coordValues)
                 }),
                 featureStyle = styleListModel.createStyle(iconfeature, false);
 
@@ -72,18 +82,16 @@ export default {
 
     /**
      * Converts polygon to the wkt format and add this to the map.
-     * @param {String[]} wktcontent The polygon to highlight in the map.
-     * @param {String} geometryType The type of geometry.
+     * @param {ol/Feature} feature The ol feature that is added to the map.
      * @returns {void}
      */
-    placingPolygonMarker ({state, commit, dispatch}, {wktcontent, geometryType}) {
+    placingPolygonMarker ({state, commit, dispatch}, feature) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.polygonStyleId);
 
         dispatch("removePolygonMarker");
 
         if (styleListModel) {
-            const feature = getWKTGeom(wktcontent, geometryType),
-                featureStyle = styleListModel.createStyle(feature, false);
+            const featureStyle = styleListModel.createStyle(feature, false);
 
             feature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});

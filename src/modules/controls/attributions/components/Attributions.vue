@@ -109,7 +109,7 @@ export default {
             color: @secondary_contrast;
             background-color: @secondary;
 
-            max-width: calc(100vw - 410px);
+            max-width: 40vw;
             width: max-content;
             min-width: min-content;
 

@@ -86,30 +86,28 @@ export function parseDocumentString (documentString, mimeType, parseFromStringOp
  * @param {XMLDocument} doc - data to be parsed
  * @returns {module:ol/Feature[]} array of openlayers features
  */
-function parseFeatures (doc) {
-    if (!(doc instanceof XMLDocument)) {
-        console.warn("requestGfi, parseFeatures: doc", doc);
-        throw Error("requestGfi, parseFeatures: the received doc is no valid XMLDocument");
-    }
+export function parseFeatures (doc) {
+    let features = [];
 
     // OGC-conform
-    if (doc.firstChild.tagName === "FeatureCollection") {
+    if (doc.firstChild.tagName.includes("FeatureCollection")) {
         const gfiFormat = new WMSGetFeatureInfo();
 
-        return gfiFormat.readFeatures(doc).flat();
+        features = gfiFormat.readFeatures(doc);
     }
     // ESRI...
-    const features = [];
+    else {
+        doc.getElementsByTagName("FIELDS").forEach(element => {
+            const feature = new Feature();
 
-    doc.getElementsByTagName("FIELDS").forEach(element => {
-        const feature = new Feature();
-
-        element.attributes.forEach(attribute => {
-            feature.set(attribute.localName, attribute.value);
+            element.attributes.forEach(attribute => {
+                feature.set(attribute.localName, attribute.value);
+            });
+            features.push(feature);
         });
-        features.push(feature);
-    });
+    }
+
     return features;
 }
 
-export default {requestGfi, handleResponseAxios, parseDocumentString};
+export default {requestGfi, handleResponseAxios, parseDocumentString, parseFeatures};

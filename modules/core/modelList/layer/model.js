@@ -185,7 +185,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     featuresLoaded: function (features) {
+        const highlightFeature = Radio.request("ParametricURL", "getHighlightFeature");
+
         Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
+        if (highlightFeature) {
+            store.dispatch("Map/highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: highlightFeature});
+        }
     },
 
     /**
