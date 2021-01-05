@@ -1,21 +1,9 @@
 import * as d3 from "d3";
 
 const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
-    defaults: {},
-
-    /**
-     * @class GraphModel
-     * @extends Backbone.Model
-     * @memberof Tools.Graph
-     * @constructs
-     * @listens Tools.Graph#RadioTriggerGraphCreateGraph
-     * @listens Tools.Graph#RadioRequestGraphGetGraphParams
-     */
-    initialize: function () {
-        const channel = Radio.channel("Graph");
-
-        this.currentGraphConfig = null;
-        this.localeFormatKeys = [
+    defaults: {
+        currentGraphConfig: null,
+        localeFormatKeys: [
             "decimal",
             "thousands",
             "grouping",
@@ -28,7 +16,19 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             "shortDays",
             "months",
             "shortMonths"
-        ];
+        ]
+    },
+
+    /**
+     * @class GraphModel
+     * @extends Backbone.Model
+     * @memberof Tools.Graph
+     * @constructs
+     * @listens Tools.Graph#RadioTriggerGraphCreateGraph
+     * @listens Tools.Graph#RadioRequestGraphGetGraphParams
+     */
+    initialize: function () {
+        const channel = Radio.channel("Graph");
 
         channel.on({
             "createGraph": this.createGraph
@@ -53,16 +53,16 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     changeLanguage: function (languageKey) {
         // may be called initially without language key; skip in that case
         if (languageKey) {
-            const locales = this.localeFormatKeys.reduce((accumulator, current) => {
-                accumulator[current] = JSON.parse(i18next.t(`common:modules.tools.graph.localeFormat.${current}`));
+            const locales = this.get("localeFormatKeys").reduce((accumulator, current) => {
+                accumulator[current] = i18next.t(`common:modules.tools.graph.localeFormat.${current}`, {returnObjects: true});
                 return accumulator;
             }, {});
 
             d3.formatDefaultLocale(locales);
         }
 
-        if (this.currentGraphConfig) {
-            this.createGraph(this.currentGraphConfig);
+        if (this.get("currentGraphConfig")) {
+            this.createGraph(this.get("currentGraphConfig"));
         }
     },
 
@@ -77,7 +77,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         const d3Div = d3.select(graphConfig.selector).nodes()[0];
 
         if (d3Div) {
-            this.currentGraphConfig = graphConfig;
+            this.setCurrentGraphConfig(graphConfig);
             const translatedGraphConfig = this.translateGraphConfig(graphConfig);
 
             d3Div.innerHTML = "<div class=\"graph-tooltip-div\"></div>";
@@ -93,7 +93,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             }
         }
         else {
-            this.currentGraphConfig = null;
+            this.setCurrentGraphConfig(null);
         }
     },
 
@@ -957,10 +957,19 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * Setter for attribute "graphParams".
      * @param {Object} value Graph params.
-     * @returns {Void}  -
+     * @returns {void}
      */
     setGraphParams: function (value) {
         this.set("graphParams", value);
+    },
+
+    /**
+     * Setter for attribute "currentGraphConfig".
+     * @param {Object} value currentGraphConfig
+     * @returns {void}
+     */
+    setCurrentGraphConfig: function (value) {
+        this.set("currentGraphConfig", value);
     }
 });
 
