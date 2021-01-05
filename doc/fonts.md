@@ -1,21 +1,19 @@
-# Fonts im Masterportal #
+# Masterportal font usage
 
-Im Masterportal werden zwei Schriftarten verwandt "MasterPortalFont" und "MasterPortalFont Bold". Hinter diesen Bezeichnungen verbirgt sich standardmäßig die Schriftart "roboto", sie steht unter Apache Lizenz 2.0 und kann beliebig verwandt werden.
+The Masterportal comes bundled with the two fonts *MasterPortalFont* and *MasterPortalFont Bold*. By default, this is the renamed font "Roboto", which is available under the Apache License 2.0 and can be used arbitrarily.
 
-Die Bezeichnung "MasterPortalFont" und deren Verwendung im Masterportal CSS-Code erlaubt es Nutzern auf einfache Weise ihre eigene bzw. eine andere Schriftart einzubinden. Dazu muss lediglich in eine zusätzliche CSS-Datei erstellt und in der Index-html als Link-tag oder Code eingefügt werden.
+The name *MasterPortalFont* and its usage in the Masterportal CSS files allows users to easily supply their own fonts. For this purpose, create an additional CSS file and insert it into the `index.html` as a link tag, or directly as code.
 
-Dort kann dann für die jeweilige Bezeichnung eine andere Schriftart hinterlegt werden, z.B.:
+For the given name, any other font may be used, e.g. with this CSS:
 
-```
-    @font-face {
-        font-family: 'MasterPortalFont';
-        src: url('https://fonts.gstatic.com/s/comingsoon/v11/qWcuB6mzpYL7AJ2VfdQR1t-VWDk.woff2');
-    }
+```css
+  @font-face {
+    font-family: 'MasterPortalFont';
+    src: url('https://fonts.gstatic.com/s/comingsoon/v11/qWcuB6mzpYL7AJ2VfdQR1t-VWDk.woff2');
+  }
 
-
-    @font-face {
-        font-family: 'MasterPortalFont Bold';
-        src: url('https://fonts.gstatic.com/s/permanentmarker/v9/Fh4uPib9Iyv2ucM6pGQMWimMp004La2Cfw.woff2');
-    }
-
+  @font-face {
+    font-family: 'MasterPortalFont Bold';
+    src: url('https://fonts.gstatic.com/s/permanentmarker/v9/Fh4uPib9Iyv2ucM6pGQMWimMp004La2Cfw.woff2');
+  }
 ```
