@@ -15,6 +15,9 @@ export default {
             required: true
         }
     },
+    data: function () {
+        return {reactOnOutsideClick: false};
+    },
     computed: {
         /**
          * Returns the title of the gfi.
@@ -36,6 +39,10 @@ export default {
     mounted: function () {
         this.$nextTick(function () {
             this.showMobileComponent();
+            // add reaction to click event later, else: if clicked to open it is recognized as a click outside and close is called
+            setTimeout(() => {
+                this.reactOnOutsideClick = true;
+            }, 400);
         });
     },
     methods: {
@@ -44,7 +51,7 @@ export default {
         },
         closeByClickOutside: function (event) {
             // stop event bubbling
-            if (event.target !== this.$el) {
+            if (!this.reactOnOutsideClick || event.target !== this.$el) {
                 return;
             }
             this.close();
@@ -84,7 +91,7 @@ export default {
                         </span>
                     </button>
                     <h5 class="modal-title">
-                        {{ title }}
+                        {{ $t(title) }}
                     </h5>
                 </div>
                 <div class="modal-body">
@@ -129,7 +136,7 @@ export default {
 
 .modal-body {
     overflow-y: auto;
-    max-height: 66vh;
+    max-height: 80vh;
     padding: 0;
     table {
         margin-bottom: 0;
@@ -137,8 +144,32 @@ export default {
 }
 
 .modal-footer {
+    color: #646262;
     padding: 0;
     font-size: 22px;
+
+    .pager {
+        background-color: @secondary;
+        padding: 6px;
+        cursor: pointer;
+        width: 50%;
+        margin: 0;
+    }
+
+    .pager-left {
+        float: left;
+        border-right: 1px solid #ddd;
+    }
+
+    .pager-right {
+        float: right;
+    }
+
+    .disabled {
+        cursor: not-allowed;
+        background-color: @primary_inactive_contrast;
+        opacity: 0.2;
+    }
 }
 
 </style>

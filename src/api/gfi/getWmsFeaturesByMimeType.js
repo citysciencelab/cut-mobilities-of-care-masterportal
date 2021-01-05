@@ -15,19 +15,19 @@ import {requestGfi} from "../wmsGetFeatureInfo";
  * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
 export function getWmsFeaturesByMimeType (layer, url) {
-    const mimeType = layer.get("infoFormat"),
+    const infoFormat = layer.get("infoFormat"),
         gfiAsNewWindow = layer.get("gfiAsNewWindow");
 
     if (openFeaturesInNewWindow(url, gfiAsNewWindow, window.open) === true) {
         return [];
     }
 
-    if (mimeType === "text/xml") {
+    if (infoFormat === "text/xml" || infoFormat === "application/vnd.ogc.gml") {
         return getXmlFeatures(layer, url);
     }
 
     // mimeType === "text/html"
-    return getHtmlFeature(layer, url, mimeType);
+    return getHtmlFeature(layer, url);
 }
 
 /**
@@ -171,6 +171,7 @@ export function createGfiFeature (layer, url = "", feature, features = null) {
         getAttributesToShow: () => layer.get("gfiAttributes"),
         getProperties: () => feature ? feature.getProperties() : {},
         getFeatures: () => features,
+        getOlFeature: () => feature,
         getId: () => feature ? feature.getId() : "",
         getGfiUrl: () => url,
         getMimeType: () => layer.get("infoFormat"),

@@ -1,5 +1,6 @@
 import "../model";
 import store from "../../../src/app-store/index";
+import {getWKTGeom} from "../../../src/utils/getWKTGeom";
 
 const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype */{
     defaults: {
@@ -94,26 +95,24 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
         if (data.length === 1) {
             this.bkgSearch({
                 name: data[0].suggestion
-            });
+            }, true, "click");
         }
-        else {
-            data.forEach(function (hit) {
-                if (hit.score > this.get("score")) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", {
-                        name: hit.suggestion,
-                        metaName: hit.suggestion,
-                        type: i18next.t("common:modules.searchbar.type.location"),
-                        bkg: true,
-                        glyphicon: "glyphicon-road",
-                        id: this.uniqueId("bkgSuggest"),
-                        triggerEvent: {
-                            channel: "Searchbar",
-                            event: "bkgSearch"
-                        }
-                    });
-                }
-            }, this);
-        }
+        data.forEach(hit => {
+            if (hit.score > this.get("score")) {
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
+                    name: hit.suggestion,
+                    metaName: hit.suggestion,
+                    type: i18next.t("common:modules.searchbar.type.location"),
+                    bkg: true,
+                    glyphicon: "glyphicon-road",
+                    id: this.uniqueId("bkgSuggest"),
+                    triggerEvent: {
+                        channel: "Searchbar",
+                        event: "bkgSearch"
+                    }
+                });
+            }
+        });
         Radio.trigger("Searchbar", "createRecommendedList", "bkg");
     },
     /**
@@ -175,10 +174,10 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
      * Starts the precise search of a selected BKG proposal.
      * @param  {object} hit - Object of the BKG proposal.
      * @param  {boolean} showOrHideMarker - Indicates whether the marker should be shown or hidden.
-     * @param  {event} eventType - The type of event that triggered this function.
+     * @param  {event} [eventType="click"] - The type of event that triggered this function.
      * @return {void}
      */
-    bkgSearch: function (hit, showOrHideMarker, eventType) {
+    bkgSearch: function (hit, showOrHideMarker, eventType = "click") {
         const name = hit.name,
             request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&count=1&query=" + encodeURIComponent(name);
 
@@ -234,8 +233,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
             data.features[0].properties.bbox.type !== null && data.features[0].properties.bbox.type === "Polygon") {
             const polygon = data.features[0].properties.bbox.coordinates[0].reduce((a, b) => a.concat(b), []);
 
-            store.dispatch("MapMarker/setWKTGeom", "POLYGON", polygon);
-            store.dispatch("MapMarker/placingPolygonMarker", {wktcontent: polygon});
+            store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(polygon));
         }
     },
 

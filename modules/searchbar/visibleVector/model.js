@@ -237,9 +237,8 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     getCentroidPoint: function (geometry) {
         let coordinates;
 
-
         if (geometry.getType() === "Point") {
-            coordinates = geometry.getCoordinates();
+            coordinates = geometry.getCoordinates().slice(0, 2);
         }
         else {
             coordinates = this.getCenterFromExtent(geometry.getExtent());
