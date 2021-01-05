@@ -76,10 +76,11 @@ A.7.4 Die Dokumentation (z.B. languages_de.md und languages_en.md) ist auf Engli
 ---
 
 #### A.8 Changelog
-A.8.1 Die Sprache für Einträge im Changelog ist Deutsch.
-A.8.2 Das Löschen oder Hinzufügen eines Features ist im Changelog erfasst.
+A.8.1 Die Sprache für Einträge im Changelog ist Englisch.
+A.8.2 Das Löschen oder Hinzufügen eines Features sowie Bugfixes sind im Changelog zu erfassen.
 A.8.3 Änderungen, welche das UI, Schnittstellen oder Konfigurationen ändern, sind im Changelog erfasst.
 A.8.4 Einträge sind einer der folgenden Kategorien zugeordnet: Added, Changed, Deprecated, Removed, Fixed.
+A.8.5 Einträge sollen in einer einfachen Sprache geschrieben werden (kein Fachjargon). Der Changelog soll den Anwender und Entwickler informieren.
 
 ---
 
