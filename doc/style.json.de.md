@@ -1,4 +1,4 @@
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+>Zurück zur **[Dokumentation Masterportal](doc.de.md)**.
 
 # Dokumentation der deprecated Version
 Hier geht es zur **[Dokumentation der alten Version](style.json-deprecated.md)**.
@@ -21,14 +21,14 @@ Erst zu dem Zeitpunkt, wenn ein Layer visualisiert werden soll, werden aus der i
 > Hinweis: Malformed style.json Dateien werden vollständig abgewiesen und führen zur Ausgabe einer entsprechenden Fehlermeldung. Wir empfehlen eine syntaktische Prüfung z.B. über freie Online-Validatoren, wie [jsonlint](https://jsonlint.com/ "jsonlint").
 
 ## Konfiguration des Styling-Moduls
-Der Pfad zur verwendenden *style.json* wird in der **[config.js](config.js.md)** definiert und ist dort dokumentiert. Bitte beachten Sie folgende Parameter:
+Der Pfad zur verwendenden *style.json* wird in der **[config.js](config.js.de.md)** definiert und ist dort dokumentiert. Bitte beachten Sie folgende Parameter:
 
 - *useVectorStyleBeta*: Zum steuern der Version.
 - *styleConf*: Zum definieren des Pfades zur Datei.
 > Hinweis: Fehlerhafte Pfadangaben werden über eine entsprechende Fehlermeldung mitgeteilt.
 
 ## Layerverknüpfung
-In der **[config.json](config.json.md)** erfolgt im Abschnitt *Themenconfig.Layer.Vector* die Definition der Layer im Portal. Dort wird für jeden Vektorlayer auch eine *styleId* zwingend verlangt. Diese styleId stellt die Verbindung zur *style.json* dar und wird in dieser ebenfalls über das Attribut *styleId* verknüpft Siehe [hier](#markdown-header-aufbau).
+In der **[config.json](config.json.de.md)** erfolgt im Abschnitt *Themenconfig.Layer.Vector* die Definition der Layer im Portal. Dort wird für jeden Vektorlayer auch eine *styleId* zwingend verlangt. Diese styleId stellt die Verbindung zur *style.json* dar und wird in dieser ebenfalls über das Attribut *styleId* verknüpft Siehe [hier](#markdown-header-aufbau).
 > Hinweis: Eine fehlerhafte Verknüpfung führt zu keinem Laufzeitfehler. Es wird eine Meldung in der console ausgegeben, der Adminsitratoren auf die Fehlkonfiguration hinweist. Der Portalnutzer bekommt hiervon nur insofern etwas mit, als dass das Styling dem openlayers default entspricht.
 
 ## Aufbau
@@ -253,7 +253,7 @@ Eine individuelle Legendenbeschriftung kann gesetzt werden. Siehe hierzu [Legend
 Die Abbildungsvorschriften für Punkte unterscheiden sich in
 
 - einfache Punktgeometrien: Siehe nachfolgenden Parameter *type*.
-- geclusterte Punkthaufen: Wird in der Layerconfiguration (**[config.json](config.json.md)**) eine *clusterDistance* gesetzt, so wird ein ClusterStyle erzeugt. Siehe nachfolgenden Parameter *clusterType*.
+- geclusterte Punkthaufen: Wird in der Layerconfiguration (**[config.json](config.json.de.md)**) eine *clusterDistance* gesetzt, so wird ein ClusterStyle erzeugt. Siehe nachfolgenden Parameter *clusterType*.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
