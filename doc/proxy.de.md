@@ -1,4 +1,4 @@
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+>Zurück zur **[Dokumentation Masterportal](doc.de.md)**.
 
 **Aktuell**
 Die GDI-DE empfiehlt serverseitig einen CORS-Header einzurichten. Daher ist die Möglichkeit URLs über einen Proxy anzufragen deprecated.
