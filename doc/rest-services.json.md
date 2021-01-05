@@ -1,41 +1,38 @@
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+>**[Return to the Masterportal documentation](doc.md)**.
 
 # rest-services.json
 
-Das in der *config.js* erzeugte Objekt enthält den Key *restConf*, dessen Value auf einen Pfad zu einer JSON – Datei verweist. Dieser Pfad wird initial ausgewertet und die Datei unter der entsprechenden URL geladen, ausgewertet und im Hauptspeicher abgelegt. Einzelne Module lesen die Webservice-Definition aus dieser Datei aus.
+This is the file referred to by the *config.js* as `restConf`. It is read on Masterportal start-up and kept in memory. Modules may then refer to the web service definitions in it.
 
-In dieser Datei werden alle Service-URLs definiert und gebündelt, die nicht vom Typ WFS oder WMS sind, also nicht für die visuelle Darstellung von Informationen herangezogen werden. Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/src/master/rest-services-internet.json)**.
+The file defines all web services that do not belong to OGC services like WMS and WFS; that is, all services not requested for visually representing data. See our **[master restConf file](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/src/master/rest-services-internet.json)** for an example.
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|id|ja|String||String als eindeutiger Identifikator dieses Eintrags in der rest-services.json.|`"1"`|
-|name|ja|String||Die Bezeichung des Services.|`"CSW Summary"`|
-|typ|ja|String||Der Typ des Services.|`"CSW"`|
-|url|ja|String||Die URL des Webservices.|`"http://metaver.de/trefferanzeige?docuuid="`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|id|yes|String||Unique `rest-services.json` entry ID|`"1"`|
+|name|yes|String||Service name|`"CSW Summary"`|
+|typ|yes|String||Service type|`"CSW"`|
+|url|yes|String||Service URL|`"http://metaver.de/trefferanzeige?docuuid="`|
 
 
-**Folgende Services werden üblicherweise hier definiert:**
+## Usually defined services
 
-1.	Druckservices
-2.	Metadatenquellen (CSW HMDK)
-3.	Routing Berechnungsdienst
-4.	BKG Geokodierungsdienste
-5.	Gazetteer URL
-6.	WPS
-7.	Email Services
-8.  virtualcityPLANNER Service
+1. Print services
+2. Metadata sources (CSW HMDK)
+3. Routing service
+4. BKG geocoding service
+5. Gazetteer URL
+6. WPS
+7. Email Services
+8. virtualcityPLANNER Service
 
-Häufig unterscheiden sich die zu verwendenden URLs zwischen Intranet und Internet-Nutzung. Aus diesem Grund erscheint meist das Vorhalten zweier identischer Dateien sinnvoll, die sich nur hinsichtlich der Webservice-URLs unterscheiden.
-Hier kommen meist folgende Dateien zum Einsatz (Dateinamen frei wählbar):
+In some scenarios different URLs are required, depending on whether requests are sent from an Intranet or the Internet. This can be solved by providing two files only differing in their service URLs. While filenames can be chosen freely, we suggest using these names:
 
--	rest-services-internet.json
--	rest-services-intranet.json
+* `rest-services-internet.json`
+* `rest-services-intranet.json`
 
-**Beispiel rest-services-internet.json**
+## `rest-services-internet.json` example file
 
-```
-#!json
-
+```json
 [
   {
     "id": "1",
@@ -45,7 +42,7 @@ Hier kommen meist folgende Dateien zum Einsatz (Dateinamen frei wählbar):
   },
   {
     "id" : "2",
-    "name" : "Metadaten-URL",
+    "name" : "Metadata URL",
     "url" : "http://metaver.de/trefferanzeige?docuuid=",
     "typ" : "URL"
   },
@@ -59,24 +56,24 @@ Hier kommen meist folgende Dateien zum Einsatz (Dateinamen frei wählbar):
 ]
 ```
 
-**virtualcityPLANNER Service**
+## virtualcityPLANNER Service
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|id|ja|String||String als eindeutiger Identifikator dieses Eintrags in der rest-services.json.|`"1"`|
-|name|ja|String||Die Bezeichung des Services.|`"virtualcityPLANNER 1"`|
-|typ|ja|String||Der Typ des Services.|`"virtualcityPLANNER"`|
-|url|ja|String||Die URL des Webservices.|`"https://devel.virtualcityplanner.de"`|
-|scenarioId|ja|String||Die ScenarioId.|`"BjtEA4zwBEiZeG2CX"`|
-|projectId|ja|String||Die ProjektId.|`"2wbbuKTSqojZMBooz"`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|id|yes|String||Unique `rest-services.json` entry ID|`"1"`|
+|name|yes|String||Service name|`"virtualcityPLANNER 1"`|
+|typ|yes|String||Service type|`"virtualcityPLANNER"`|
+|url|yes|String||Service URL|`"https://devel.virtualcityplanner.de"`|
+|scenarioId|yes|String||ScenarioId|`"BjtEA4zwBEiZeG2CX"`|
+|projectId|yes|String||ProjectId|`"2wbbuKTSqojZMBooz"`|
 
 ```json
-  {
+{
     "id" : "virtualcityPLANNER",
     "name" : "virtualcityPLANNER",
     "url": "https://devel.virtualcityplanner.de",
     "projectId": "2wbbuKTSqojZMBooz",
     "typ": "virtualcityPLANNER",
     "scenarioId": "BjtEA4zwBEiZeG2CX"
-  }
+}
 ```
