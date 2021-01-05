@@ -1,438 +1,460 @@
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+>**[Return to the Masterportal documentation](doc.md)**
 
 [TOC]
 
-# config.js #
-Die *config.js* enthält die Konfigurationsoptionen für das Masterportal, die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen, z.B. Pfade zu weiteren Konfigurationsdateien. Die *config.js* liegt im Regelfall neben der index.html und neben der *config.json*.
-Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber hinaus gibt es für die Konfigurationen vom Typ *object* weitere Optionen, diese Konfigurationen sind verlinkt und werden im Anschluss an die folgende Tabelle jeweils genauer erläutert. Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/portal/master/config.js)**.
+# config.js
 
-|Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|layerConf|ja|String||Pfad zur **[services.json](services.json.md)**, die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
-|namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme (**[siehe Syntax](http://proj4js.org/#named-projections)**).|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
-|proxyUrl|ja|String||Deprecated im nächsten Major-Release, bitte nutzen Sie den Mapfish-Print 3. Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe **[print](#markdown-header-print)**).|`"/cgi-bin/proxy.cgi"`|
-|restConf|ja|String||Pfad zur **[rest-services.json](rest-services.json.md)**, die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-internet.json"`|
-|styleConf|ja|String||Pfad zur **[style.json](style.json.md)**, die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
-|addons|nein|Array|[]|Angabe der Namen der gewünschten Custom-Module. Diese befinden sich im Ordner /addons/ und deren Entrypoints werden mithilfe der Datei addonsConf.json definiert.|`["myAddon1", "myAddon2"]`|
-|**[alerting](#markdown-header-alerting)**|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
-|**[cameraParameter](#markdown-header-cameraparameter)**|nein|Object||Start Camera Parameter||
-|**[cesiumParameter](#markdown-header-cesiumparameter)**|nein|Object||Cesium Flags||
-|**[clickCounter](#markdown-header-clickcounter)**|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
-|cswId|nein|String|"3"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"meine CSW-ID"`|
-|defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
-|featureViaURL|nein|**[featureViaURL](#markdown-header-featureviaurl)**||Optionale Konfigurationseinstellungen für den URL-Parameter *featureViaURL*. Siehe **[URL-Parameter](URL-Parameter.md)**. Implementiert für den treeType *light* und *custom*.||
-|**[footer](#markdown-header-footer)**|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
-|gfiWindow|nein|String|"detached"|Deprecated im nächsten Major-Release, bitte das Attribut "Portalconfig.menu.tool.gfi.desktopType" in der **[config.json](#config.json.md)** verwenden. Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
-|ignoredKeys|nein|Array[String]|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|
-|infoJson|nein|String|"info.json"|Pfad zur info.json, die Zusatzinformationen für Snippets enthält. Der Pfad ist relativ zur index.html.|`"info.json"`|
-|inputMap|nein|Object|`{}`|Ist dieses Objekt vorhanden und ist setMarker darin auf true gesetzt, dann wird das Masterportal als Eingabeelement für Daten konfiguriert. Das bedeutet, dass jeder Klick auf die Karte einen Map Marker setzt und die Koordinaten des Markers via RemoteInterface im gewünschten Koordninatensystem sendet.|`{setMarker: true, targetProjection: "EPSG:4326", setCenter: false}`|
-|inputMap.setCenter|nein|Boolean|false|Soll die Karte nach dem setzen eines Markers um den Marker zentriert werden?|`setCenter: true`|
-|inputMap.setMarker|nein|Boolean|false|Flag zum aktivieren und deaktivieren der in inputMap konfigurierten Funktionalität.|`setMarker: true`|
-|inputMap.targetProjection|nein|String|`EPSG:25832`|Das Zielkoordninatensystem, in dem die Koordinaten des Markers gesendet werden sollen.|`targetprojection: "EPSG:4326"`|
-|mapMarker|nein|**[mapMarker](#markdown-header-mapmarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer definiert werden.||
-|metaDataCatalogueId|nein|String|"2"|URL des in den Layerinformationen verlinkten Metadatenkatalogs. Die ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"MetadatenkatalogURL"`|
-|**[metadata](#markdown-header-metadata)**|nein|Object||Darin kann angegeben werden, welche Metdaten-URLs über einen Proxy angefragt werden sollen.||
-|**[mouseHover](#markdown-header-mousehover)**|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in **[config.json](config.json.md)** (*Themenconfig.Fachdaten.Layer*).|`true`|
-|obliqueMap|nein|Boolean|false|Legt fest eine Schrägluftbild Karte erstellt werden soll. Benötigt zusätzlich noch eine Schrägluftbildebene.||
-|portalConf|nein|String|"config.json"|Pfad zur config.json des Portals. Es kann auch ein Knotenpunkt angegeben werden. Der Weiterführende Pfad wird dann über den URL-Parameter "config" gesteuert.|Direkter Pfad: "../masterTree/config.json"; Knotenpunkt: "../../portal/master/". Zusätzlich muss dann in der URL der Parameter "config=config.json" stehen.|
-|postMessageUrl|nein|String|"http://localhost:8080"|Url auf die das Portal per post-Message agieren und reagieren kann.| "http://localhost:8080"|
-|proxyHost|nein|String||Hostname eines remote Proxy (dort muss CORS aktiviert sein)|`"https://proxy.example.com"`|
-|[quickHelp]|nein|Object|`{}`|Aktiviert das QuickHelp-Modul. Dieses zeigt ein Hilfefenster für die verfügbaren Funktionen des jeweiligen Modul an. Bisher verfügbar für den Themenbaum (CustomTree), die Suchleiste (Searchbar) und für das Werkzeug: Messen (MeasureTool)).||
-|**[remoteInterface](#markdown-header-remoteinterface)**|nein|object||Optionale Konfiguration für das remoteInterface.||
-|scaleLine|nein|Boolean|false|Steuert, ob eine Maßstabsleiste unten rechts auf der Karte angezeigt wird.|`true`|
-|simpleMap|nein|Boolean|false|Fügt dem *„Auswahl speichern“-Dialog* eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht für Portale mit Baumtyp: *„light“*.|`false`|
-|startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
-|**[tree](#tree)**|nein|Object||||
-|uiStyle|nein|String|default|Steuert das Layout der Bedienelemente. |`table`|
-|**useVectorStyleBeta**|nein|Boolean|false|Konfigurationswert ob anstelle des produktiven vectorStyle-Moduls ein sich in der Entwicklung befindliches neues Modul zum Styling von Vektordaten verwendet werden soll. Die Verwendung bedingt eine neue Syntax der style.json. Deprecated mit Version 3.0.|useVectorStyleBeta: true|
-|wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
-|wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`""`|
-|**[zoomToFeature](#markdown-header-zoomtofeature)**|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe **[URL-Parameter](URL-Parameter.md)**.||
+The `config.js` contains Masterportal configuration not directly related to UI or layers. For example, paths to other configuration files belong here. This file is usually placed next to the `index.html` and `config.json` files.
 
-***
+In the following, all configuration options are described. For all configuration options of type `object`, further nested options are linked and described in detail after the main table. You may also refer to **[this config.js example file](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/portal/basic/config.js)**.
 
-## alerting ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|fetchBroadcastUrl|nein|String|false|Hier kann eine URL definiert werden, unter der das Masterportal initial eine für das Alerting spezifische Konfigurationsdatei laden kann.|
-|localStorageDisplayedAlertsKey|nein|String|"displayedAlerts"|Frei wählbarer Key, unter dem im Local Storage des Browsers Daten bezüglich des Alertings gespeichert werden.|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|layerConf|yes|String||Path to the **[services.json](services.json.md)** file containing all available WMS layers and WFS feature types. The path is relative to *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
+|namedProjections|yes|String[]||Definition of the usable coordinate systems. See **[syntax definition](http://proj4js.org/#named-projections)** for details..|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
+|proxyUrl|yes|String||_Deprecated in the next major release. Please use Mapfish-Print 3 instead._ Absolute server path to a proxy script called with *"?url="*. Required for the print service, see **[print](#markdown-header-print)**.|`"/cgi-bin/proxy.cgi"`|
+|restConf|yes|String||Path to the **[rest-services.json](rest-services.json.md)** file describing further services, e.g. print service, WPS, CSW. The path is relative to *js/main.js*.|`"../components/lgv-config/rest-services-internet.json"`|
+|styleConf|yes|String||Path to the **[style.json](style.json.md)** file describing vector layer (WFS) styles. The path is relative to *js/main.js*.|`"../components/lgv-config/style.json"`|
+|addons|no|String[]|`[]`|List of names for custom modules. The modules are to be placed in the folder `/addons/`, with their entry points being defined in the `addonsConf.json`.|`["myAddon1", "myAddon2"]`|
+|alerting|no|**[alerting](#markdown-header-alerting)**|`{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}`|Overrides the alert module's default values.|{fadeOut: 6000}|
+|cameraParameter|no|**[cameraParameter](#markdown-header-cameraparameter)**||Initial camera parameter||
+|cesiumParameter|no|**[cesiumParameter](#markdown-header-cesiumparameter)**||Cesium flags||
+|clickCounter|no|**[clickCounter](#markdown-header-clickcounter)**||Configuration of the clickCounter module that loads an iFrame per click.||
+|cswId|no|String|`"3"`|Reference to a CSW interface used to retrieve layer information. The ID will be resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`"my CSW-ID"`|
+|defaultToolId|no|String|`"gfi"`|The tool with the given ID will be active when no other tool is active.|"filter"|
+|featureViaURL|no|**[featureViaURL](#markdown-header-featureviaurl)**||Optional configuration for the URL parameter `featureViaURL`. See **[urlParameter](urlParameter.md)** for details. Implemented for treeTypes *light* and *custom*.||
+|footer|no|**[footer](#markdown-header-footer)**||If set, a footer is shown and configured with this object.||
+|gfiWindow|no|String|`"detached"`|_Deprecated in the next major release. Please use the attribute "Portalconfig.menu.tool.gfi.desktopType" of the **[config.json](#config.json.md)** instead._ Display type and attribute information for all layer types. **attached**: the attribute information window is opened at click position **detached**: the attribute information window is opened at the top right of the map; a marker is set to the click position.|`"attached"`|
+|ignoredKeys|no|String[]|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|List of attribute names to be ignored for attribute information lists of all layer types.|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|
+|infoJson|no|String|`"info.json"`|Path to the `info.json` file containing additional information on snippets. The path is relative to the *index.html*.|`"info.json"`|
+|inputMap|no|Object|`{}`|If this object is set, and its field `setMarker` is set to true, the Masterportal is configured as input element for data. In that case, each click sets a Map Marker and communicates the coordinates via **[remoteInterface](remoteInterface.md)** in the chosen coordinate reference system.|`{setMarker: true, targetProjection: "EPSG:4326", setCenter: false}`|
+|inputMap.setCenter|no|Boolean|`false`|Center on a marker after producing it?|`setCenter: true`|
+|inputMap.setMarker|no|Boolean|`false`|Flag to activate the 'setMarker' functionality.|`setMarker: true`|
+|inputMap.targetProjection|no|String|`"EPSG:25832"`|The target coordinate reference system. Coordinates will be translated to it before being communicated via **[remoteInterface](remoteInterface.md)**.|`targetprojection: "EPSG:4326"`|
+|mapMarker|no|**[mapMarker](#markdown-header-mapmarker)**||Overrides the map marker module's default values. Useful for 3D markers since OpenLayers's overlays can not be displayed in 3D mode. For this, the map marker has to be defined as vector layer.||
+|metaDataCatalogueId|no|String|`"2"`|URL to the metadata catalog linked to in the layer information window. The ID is resolved to a service of the **[rest-services.json](rest-services.json.md)** file.|`"MetaDataCatalogueUrl"`|
+|metadata|no|**[metadata](#markdown-header-metadata)**||Allows configuration of which metadata URLs are to be resolved via proxy.||
+|mouseHover|no|**[mouseHover](#markdown-header-mousehover)**||Activates the MouseHover feature for vector layers, both WFS and GeoJSON. For per-layer configuration, see the **[config.json](config.json.md)**'s section *Themenconfig.Fachdaten.Layer*.|`true`|
+|obliqueMap|no|Boolean|`false`|If set to `true`, an oblique map layer is created. An additional oblique layer must be defined.||
+|portalConf|no|String|`"config.json"`|Path to the portal's `config.json` file. You may also enter a node; in that case the taken path is controlled by the urlParameter `config`.|Direct path: "../masterTree/config.json"; Node: "../../portal/master/". In the node scenario, a query parameter like `config=config.json` must exist in the URL.|
+|postMessageUrl|no|String|`"http://localhost:8080"`|URL the portal is supposed to post messages to and receive messages from with the `postMessage` feature.|"http://localhost:8080"|
+|proxyHost|no|String||Host name of a remote proxy with CORS configured to support the portal's domain, among others.|`"https://proxy.example.com"`|
+|quickHelp|no|Object|`{}`|Activates the QuickHelp module. This displays a window containing help text for supported functions of the modules. Available for the layer tree (CustomTree), the search bar (Searchbar), and the measuring tool (MeasureTool).||
+|remoteInterface|no|**[remoteInterface](#markdown-header-remoteinterface)**||Optional remote interface configuration.||
+|scaleLine|no|Boolean|`false`|Controls whether a scale line is displayed at the bottom right of the map.|`true`|
+|simpleMap|no|Boolean|`false`|Adds a SimpleMap URL to the `Save selection` dialogue. When calling this URL, the menu bar, layer tree, and map controls are deactivated. Not implemented for tree type *„light“*.|`false`|
+|startingMap3D|bi|Boolean|`false`|Controls whether the map should start in 3D mode.||
+|tree|no|**[tree](#tree)**||||
+|uiStyle|no|String|`"default"`|Sets the control element layout. |`table`|
+|useVectorStyleBeta|no|Boolean|`false`|If set to `true`, the new styling module currently in development is used to create vector styles; else, the system currently in production is used. Please mind that the `style.json` file requires a different syntax than before if setting this flag to `true`. _Deprecated in major release 3.0._|useVectorStyleBeta: true|
+|wfsImgPath|no|String||Path to the folder holding images for the WFS styles. The path is relative to *js/main.js*.|`"../components/lgv-config/img/"`|
+|wpsID|no|String|`""`|Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`""`|
+|zoomToFeature|no|**[zoomToFeature](#markdown-header-zoomtofeature)**||Optional configuration of the URL query parameter `featureid`. For details, see **[urlParameter](urlParameter.md)**.||
 
 ***
 
-## cameraParameter ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|heading|nein|Number||Heading der Kamera in Radians.|
-|tilt|nein|Number||Tilt der Kamera in Radians.|
-|altitude|nein|Number||Höhe der Kamera in m.|
+## alerting
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|fetchBroadcastUrl|no|String|`false`|The alerting module will initially use a linked configuration file from this URL, if set.|
+|localStorageDisplayedAlertsKey|no|String|`"displayedAlerts"`|Arbitrary key used to store information regarding the alerting module in the browser's local storage.|
 
 ***
 
-## cesiumParameter ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|fog|nein|Object||Nebel Einstellungen. Optionen siehe **[fog]**|
-|enableLighting|nein|Boolean|false|aktiviert Lichteffekte auf dem Terrain von der Sonne aus.|
-|maximumScreenSpaceError|nein|Number|2.0|Gibt an wie detailliert die Terrain/Raster Kacheln geladen werden. 4/3 ist die beste Qualität.|
-|fxaa|nein|Number|true|aktiviert Fast Approximate Anti-alisasing.|
-|tileCacheSize|nein|Number|100|Größe des Tilecaches für Terrain/Raster Kacheln.|
+## cameraParameter
 
-[fog]: https://cesiumjs.org/Cesium/Build/Documentation/Fog.html
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|heading|no|Number||Camera's initial heading in radians|
+|tilt|no|Number||Camera's initial tile in radians|
+|altitude|no|Number||Camera's initial height in meters|
 
 ***
 
-## clickCounter ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|desktop|nein|String||URL des iFrames bei Desktopausspielung.|
-|mobile|nein|String||URL des iFrames bei mobiler Ausspielung.|
+## cesiumParameter
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|fog|no|Object||Fog options. See [fog documentation](https://cesiumjs.org/Cesium/Build/Documentation/Fog.html) for details.|
+|enableLighting|no|Boolean|`false`|Activates light effects on the map based on the sun's position.|
+|maximumScreenSpaceError|no|Number|`2.0`|Detail level in which terrain/raster tiles are fetched. 4/3 is the highest quality level.|
+|fxaa|no|Boolean|`true`|activates *fast approximate anti-aliasing*|
+|tileCacheSize|no|Number|`100`|terrain/raster tile cache size|
 
-**Beispiel:**
+***
 
-```
-#!json
+## clickCounter
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|desktop|no|String||iFrame URL for desktop applications|
+|mobile|no|String||iFrame URL for mobile applications|
 
-clickCounter:
+**Example:**
+
+```json
 {
-desktop: "http://static.hamburg.de/countframes/verkehrskarte_count.html",
-mobil: "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
-}
-
-```
-
-***
-
-## footer ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|**[urls](#markdown-header-footerurls)**|nein|Array[Object]||Array von URL-Konfigurationsobjekten. Auch hier existieren wiederum mehrere Konfigurationsmöglichkeiten, welche in der folgenden Tabelle aufgezeigt werden.|
-|showVersion|nein|Boolean|false|Flag, ob die Versionsnummer des Masterportals im Footer angezeigt werden soll.|
-
-***
-
-### footer.urls ###
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|alias|nein|String|"Landesbetrieb Geoniformation und Vermessung"|Bezeichnung des Links bei Desktop-Ausspielung.|
-|alias_mobil|nein|String|"LGV"|Bezeichnung bei mobiler Ausspielung.|
-|bezeichnung|nein|String|"Kartographie und Gestaltung: "|Bezeichnung vor dem Link.|
-|url|nein|String||URL die hinter dem ALias verlinkt wird z.B. „https://beispielSeite.de/“. Es besteht auch die Möglichkeit eine E-Mailadresse zu verlinken z.B. "mailto:meine@email.de"|
-|toolModelId|nein|String|"sdpdownload"|Die id des Models dessen Tool geöffnet werden soll, eine url ist dann nicht nötig.|
-
-**Beispiel:**
-
-```
-#!json
-footer: {
-    urls: [
-        {
-            "bezeichnung": "Kartographie und Gestaltung: ",
-            "url": "http://www.geoinfo.hamburg.de/",
-            "alias": "Landesbetrieb Geoniformation und Vermessung",
-            "alias_mobil": "LGV"
-        },
-        {
-            "bezeichnung": "",
-            "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-            "alias": "SDP Download",
-            "alias_mobil": "SDP"
-        },
-        {
-            "bezeichnung": "",
-            "url": "http://www.hamburg.de/bsu/timonline",
-            "alias": "Kartenunstimmigkeit"
-        },
-        {
-            "bezeichnung": "",
-            "url": "",
-            "alias": "SDP Download",
-            "toolModelId": "sdpdownload"
-        }
-    ],
-    "showVersion": true
-}
-```
-
-***
-
-## mapMarker ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|pointStyleId|nein|String|"defaultMapMarkerPoint"|StyleId zur Konfiguration des MapMarkers für Punkte in der style.json. Per default wird die mapMarker.svg aus dem Ordner "img" des Masterportals verwendet.|
-|polygonStyleId|nein|String|"defaultMapMarkerPolygon"|StyleId zur Konfiguration des MapMarkers für Polygone in der style.json.|
-
-**Beispiel:**
-
-```
-#!json
-mapMarker: {
-    pointStyleId: "customMapMarkerPoint",
-    polygonStyleId: "customMapMarkerPolygon"
-}
-```
-
-***
-
-## mouseHover ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|minShift|nein|Integer|5|Gibt an, wieviele Pixel sich die Position gegenüber vorher verändert haben muss, um ein neues Tooltip zu rendern.|
-|numFeaturesToShow|nein|Integer|2|Maximale Anzahl an Elementinformationen im Tooltip, bevor ein InfoText die Anzahl limitiert.|
-|infoText|nein|String|"(weitere Objekte. Bitte zoomen.)"|Meldung die bei Überschreiten der numFeaturesToShow mit im MouseHover angezeigt wird.|
-
-***
-
-## portalLanguage ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|enabled|ja|Boolean|true|Abhängig von diesem Schalter wird ein Button zum Umschalten von Sprachen angezeigt|
-|debug|nein|Boolean|false|Schalter um debug-Ausgaben bez. der Übersetzung in der console anzuzeigen|
-|languages|ja|Object|de: "deutsch", en: "englisch"|Konfiguration der im Portal verwendeten Sprachen. Bitte beachten, dass die entsprechenden Sprach-Dateien auch hinterlegt sein müssen.|
-|fallbackLanguage|nein|String|"de"|Sprache die benutzt wird, wenn Übersetzungen in der gewählten Sprache nicht verfügbar sind|
-|changeLanguageOnStartWhen|nein|Array|["querystring", "localStorage", "navigator", "htmlTag"]|Reihenfolge und woher die Benutzersprache erkannt werden soll, siehe auch https://github.com/i18next/i18next-browser-languageDetector|
-|loadPath|nein|String|"/locales/{{lng}}/{{ns}}.json"|Pfad, von dem Sprachdateien geladen werden, oder eine Funktion, die einen Pfad zurückgibt: function(lngs, Namensräume) { return path; } Der zurückgegebene Pfad interpoliert lng, ns, falls angegeben, wie bei einem statischen Pfad. Es kann auch eine Url angegebn werden, wie https://localhost:9001/locales/{{lng}}/{{ns}}.json. Siehe auch https://github.com/i18next/i18next-http-backend|
-
-**Beispiel:**
-
-```
-portalLanguage: {
-        enabled: true,
-        debug: false,
-        languages: {
-            de: "deutsch",
-            en: "englisch"
-        },
-        fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
-        loadPath: "/locales/{{lng}}/{{ns}}.json"
+    "clickCounter": {
+        "desktop": "http://static.hamburg.de/countframes/verkehrskarte_count.html",
+        "mobile": "http://static.hamburg.de/countframes/verkehrskarte-mobil_count.html"
     }
-```
-
-***
-
-## quickHelp ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|imgPath|nein|String|`"/"`|Gibt den Pfad (relativ oder absolut) zu einem Dateiordner an, in dem sich die Bilder für die Quickhelp befinden.|
-|searchbarAllgemeines1|nein|String|`"allgemein.png"`|Erstes Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Allgemeines. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|searchbarAllgemeines2|nein|String|`"allgemein_2.png"`|Zweites Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Allgemeines. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|searchbarAllgemeines3|nein|String|`"allgemein_3.png"`|Drittes Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Allgemeines. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|searchbarFlurstueckssuche|nein|String|`"allgemein_4.png"`|Bild zur Darstellung in der Quickhelp der Searchbar unter dem Menüpunkt Flurstückssuche. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|aufbau1|nein|String|`"themen.png"`|Erstes Bild zur Darstellung in der Quickhelp des Themenbaums (CustomTree) unter dem Menüpunkt Aufbau. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|aufbau2|nein|String|`"themen_2.png"`|Zweites Bild zur Darstellung in der Quickhelp des Themenbaums (CustomTree) unter dem Menüpunkt Aufbau. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|statistikFlaecheNiemeier|nein|String|`"Statistik_Flaeche_Niemeier.png"`|Erstes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Statistische Annäherung. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|statistikStreckeUniErlangen|nein|String|`"Statistik_Strecke_UniErlangen.png"`|Zweites Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Statsitische Annäherung. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|utmStreifen|nein|String|`"UTM_Streifen.png"`|Erstes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|utmVerzerrung|nein|String|`"UTM_Verzerrung.png"`|Zweites Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-|utmFormeln|nein|String|`"UTM_Formeln.png"`|Drittes Bild zur Darstellung in der Quickhelp des Werkzeugs Messen (MeasureTool) unter dem Menüpunkt Entzerrung in UTM. Das Bild muss unter dem angegebnen Dateiordner (imgPath) abgelegt sein|
-
-***
-
-## remoteInterface ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|postMessageUrl|nein|String|"http://localhost:8080"|Url auf die das Portal per post-Message agieren und reagieren kann.
-
-**Beispiel:**
-
-```
-#!json
-remoteInterface:{
-    postMessageUrl: "http://localhost:8080"
-}
-
-```
-***
-
-## tree ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|orderBy|nein|String|OpenData|Gibt die Kategorie an nach der initial der Themenbaum sortiert wird.|
-|layerIDsToIgnore|nein|Array|| Array mit LayerIDs aus der services.json die nicht im Themenbaum dargestellt werden.|
-|**[layerIDsToStyle](#markdown-header-treelayeridstostyle)**|nein|Array[Object]||Speziell für HVV Dienst. Enthält Objekte um verschiedene Styles zu einer layerId abzufragen.|
-|metaIDsToMerge|nein|Array||Fasst alle unter dieser metaID gefundenen Layer aus der services.json zu einem LAyer im Themenbaum zusammen.|
-|metaIDsToIgnore|nein|Array||Alle Layer der Service.json mit entsprechender metaID werden ignoriert im Themenbaum.|
-|isFolderSelectable|nein|Boolean|true|Legt auf globaler Ebene fest, ob eine Auswahlbox zur Selektierung aller Layer eines Ordners angezeigt werden soll. Diese Festlegung kann von Element-Eigenschaften überschrieben werden (vgl. **[config.json](config.json.md#Ordnerkonfiguration-Fachdaten)**).|
-
-***
-
-### tree.layerIDsToStyle ###
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|id|nein|Sring||Entsprechend der LayerId aus der service.json.|
-|styles|nein|String oder Array||Enthält einen zu verwendenden Style als String oder bei verschiedenen Styles ein Array aus Strings.|
-|name|nein|String oder Array||Enthält einen zu verwendenden Namen als String oder bei verschiedenen Namen ein Array aus Strings.|
-|legendUrl|nein|String oder Array||Enthält eine zu verwendenden Legende als String oder bei verschiedenen Legenden ein Array aus Strings.|
-
-**Beispiel:**
-
-```
-#!json
-
-tree: {
-            orderBy: "opendata",
-            layerIDsToIgnore: ["1912", "1913"],
-            layerIDsToStyle: [
-                {
-                    "id": "1935",
-                    "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
-                    "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
-                    "legendURL": ["http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png", "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png", "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
-                }
-            ],
-            metaIDsToMerge: [
-                "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1"
-            ],
-            metaIDsToIgnore: [
-                "09DE39AB-A965-45F4-B8F9-0C339A45B154"
-            ],
-            isFolderSelectable: false
-        }
-```
-
-***
-
-## metadata ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|useProxy|nein|String[]||Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt welche Metadaten-URLs über einen Proxy angefragt werden sollen, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|
-
-**Beispiel:**
-
-```
-#!json
-metadata: {
-    useProxy: [
-        "https://metaver.de/csw"
-    ]
 }
 ```
 
 ***
 
+## footer
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|urls|no|**[urls](#markdown-header-footerurls)**[]||Array of URL configuration objects.|
+|showVersion|no|Boolean|`false`|If `true`, the Masterportal version number is included in the footer.|
+
 ***
 
-## zoomToFeature ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|[imgLink(Deprecated in 3.0.0)]()|ja|String||Link für den Marker.|
-|wfsId|ja|String||ID des WFS-Layers von dem die Position abgefragt wird.|
-|attribute|ja|String||Attributname. Entspricht Attribut nach dem der WFS gefiltert wird.|
-|styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben..|
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|
+### footer.urls
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|alias|no|String|`"Landesbetrieb Geoinformation und Vermessung"`|Link text for desktop applications|
+|alias_mobil|no|String|`"LGV"`|Link text for mobile applications|
+|bezeichnung|no|String|`"Kartographie und Gestaltung: "`|Link prefix|
+|url|no|String||the URL the `alias` (or `alias_mobile`) text links to, e.g. `"https://example.com/"`. You may also link to mail creation with e.g. `"mailto:my_mail@example.com"`|
+|toolModelId|no|String|`"sdpdownload"`|The id of a module to be opened on clicking the link. Do not include a URL for such cases.|
 
-**Beispiel:**
+**Example:**
 
-```
-#!json
-zoomtofeature: {
-    attribute: "flaechenid",
-    wfsId: "4560",
-    styleId: "location_eventlotse"
+```json
+{
+    "footer": {
+        "urls": [
+            {
+                "bezeichnung": "Cartography and design: ",
+                "url": "http://www.geoinfo.hamburg.de/",
+                "alias": "Landesbetrieb Geoniformation und Vermessung",
+                "alias_mobil": "LGV"
+            },
+            {
+                "bezeichnung": "",
+                "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
+                "alias": "SDP Download",
+                "alias_mobil": "SDP"
+            },
+            {
+                "bezeichnung": "",
+                "url": "http://www.hamburg.de/bsu/timonline",
+                "alias": "Map inconsistencies"
+            },
+            {
+                "bezeichnung": "",
+                "url": "",
+                "alias": "SDP Download",
+                "toolModelId": "sdpdownload"
+            }
+        ],
+        "showVersion": true
+    }
 }
 ```
 
 ***
 
-## zoomToGeometry ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|[imgLink(Deprecated in 3.0.0)]()|ja|String||Link für den Marker.|
-|layerId|ja|String|"123456789"|ID des WFS-Layers aus dem der Umring abgefragt wird.|
-|attribute|ja|String|"bezirk_name"|Attributname. Entspricht dem Attribut nach dem der WFS gefiltert wird.|
-|geometries|ja|String|["BEZIRK1", "BEZIRK2"]|Enthäkt die Gemometrien, die aus dem WFS gefiltert werden können.|
+## mapMarker
 
-**Beispiel:**
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|pointStyleId|no|String|`"defaultMapMarkerPoint"`|StyleId to refer to a `style.json` point style. If not set, the `img/mapMarker.svg` is used.|
+|polygonStyleId|no|String|`"defaultMapMarkerPolygon"`|StyleId to refer to a `style.json` polygon style.|
 
-```
-#!json
-zoomToGeometry: {
-    layerId: "123456789",
-    attribute: "bezirk_name",
-    geometries: ["BEZIRK1", "BEZIRK2"]
+**Example:**
+
+```json
+{
+    "mapMarker": {
+        "pointStyleId": "customMapMarkerPoint",
+        "polygonStyleId": "customMapMarkerPolygon"
+    }
 }
 ```
 
 ***
 
-## featureViaURL ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|epsg|nein|Integer|4326|EPSG-Code für die Projektion der übergebenen Koordinaten der Feature.|
-|**[layers](#markdown-header-featureviaurllayers)**|ja|Object[]||Array an Layerkonfigurationen für die übergebenen Feature.|
-|zoomTo||String oder Array||Id des **[layers](#markdown-header-featureviaurllayers)** oder Array von möglichen Layern, zu welchen beim Start des Masterportals gezoomed werden soll. Beim Nichtangabe wird der normale Startpunkt der Karte verwendet.|
+## mouseHover
 
-**Beispiel:**
-```
-featureViaURL: {
-    epsg: 25832,
-    zoomTo: "urlPointFeatures",
-    layers: [
-        {
-            "id": "urlPointFeatures",
-            "geometryType": "Point",
-            "name": "URL Point Features",
-            "styleId": "url_points"
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|minShift|no|Integer|`5`|Minimum mouse position movement required to render a new tooltip; in pixels.|
+|numFeaturesToShow|no|Integer|`2`|Maximum amount of element information per tooltip; when exceeded, an information text informs the user of cut content.|
+|infoText|no|String|`"(Further objects. Please zoom.)"`|Information text shown when `numFeaturesToShow` is exceeded.|
+
+***
+
+## portalLanguage
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|enabled|yes|Boolean|`true`|Controls whether a button to switch the portal's language is provided.|
+|debug|no|Boolean|`false`|Controls whether debug information regarding translations is logged to the console.|
+|languages|yes|Object|`{ de: "deutsch", en: "englisch" }`|Language abbreviations. Please mind that matching locale files must exist.|
+|fallbackLanguage|no|String|`"de"`|Fallback language used if contents are not available in the currently selected language.|
+|changeLanguageOnStartWhen|no|String[]|`["querystring", "localStorage", "navigator", "htmlTag"]`|Order of user language detection. See [i18next browser language detection documentation](https://github.com/i18next/i18next-browser-languageDetector) for details.|
+|loadPath|no|String|`"/locales/{{lng}}/{{ns}}.json"`|Path to load language files from, or a function returning such a path: `function(lngs, namespaces) { return path; }`. `lng` and `ns` are read from the path, if given, as if from a static path. You may also provide a URL like `"https://localhost:9001/locales/{{lng}}/{{ns}}.json"`. See [i18next http backend documentation](https://github.com/i18next/i18next-http-backend) for details.|
+
+**Example:**
+
+```json
+{
+"portalLanguage": {
+        "enabled": true,
+        "debug": false,
+        "languages": {
+            "de": "deutsch",
+            "en": "englisch"
         },
-        {
-            "id": "urlLineFeatures",
-            "geometryType": "LineString",
-            "name": "URL Line Features",
-            "styleId": "url_lines"
-        },
-        {
-            "id": "urlPolygonFeatures",
-            "geometryType": "Polygon",
-            "name": "URL Polygon Features",
-            "styleId": "url_polygons"
-        },
-        {
-            "id": "urlMultiPointFeatures",
-            "geometryType": "MultiPoint",
-            "name": "URL MultiPoint Features",
-            "styleId": "url_mulitpoints"
-        },
-        {
-            "id": "urlMultiLineStringFeatures",
-            "geometryType": "MultiLineString",
-            "name": "URL MultiLineString Features",
-            "styleId": "url_multilinestring"
-        },
-        {
-            "id": "urlMultiPolygonFeatures",
-            "geometryType": "MultiPolygon",
-            "name": "URL MultiPolygon Features",
-            "styleId": "url_multipolygons"
-        }
-    ]
+        "fallbackLanguage": "de",
+        "changeLanguageOnStartWhen": ["querystring", "localStorage", "navigator", "htmlTag"],
+        "loadPath": "/locales/{{lng}}/{{ns}}.json"
+    }
 }
 ```
 
 ***
 
-### featureViaURL.layers ###
+## quickHelp
 
-Die beschriebenen Parameter sind für die eines einzelnen Layer-Objektes im **[layers](#markdown-header-featureviaurllayers)**-Array.
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|imgPath|no|String|`"/"`|An absolute or relative path to the folder containing the quick help images.|
+|searchbarAllgemeines1|no|String|`"allgemein.png"`|First quick help image regarding the Searchbar, belonging to the chapter "General information". The image must exist in the `imgPath` folder.|
+|searchbarAllgemeines2|no|String|`"allgemein_2.png"`|Second quick help image regarding the Searchbar, belonging to the chapter "General information". The image must exist in the `imgPath` folder.|
+|searchbarAllgemeines3|no|String|`"allgemein_3.png"`|Third quick help image regarding the Searchbar, belonging to the chapter "General information". The image must exist in the `imgPath` folder.|
+|searchbarFlurstueckssuche|no|String|`"allgemein_4.png"`|Quick help image regarding the Searchbar, belonging to the chapter "Parcel search". The image must exist in the `imgPath` folder.|
+|aufbau1|no|String|`"themen.png"`|First quick help image regarding the layer tree (CustomTree), belonging to the structure chapter. The image must exist in the `imgPath` folder.|
+|aufbau2|no|String|`"themen_2.png"`|Second quick help image regarding the layer tree (CustomTree), belonging to the structure chapter. The image must exist in the `imgPath` folder.|
+|statistikFlaecheNiemeier|no|String|`"Statistik_Flaeche_Niemeier.png"`|First quick help image regarding the measuring tool (MeasureTool), belonging to the "Statistical approximation" chapter. The image must exist in the `imgPath` folder.|
+|statistikStreckeUniErlangen|no|String|`"Statistik_Strecke_UniErlangen.png"`|Second quick help image regarding the measuring tool (MeasureTool), belonging to the "Statistical approximation" chapter. The image must exist in the `imgPath` folder.|
+|utmStreifen|no|String|`"UTM_Streifen.png"`|First quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
+|utmVerzerrung|no|String|`"UTM_Verzerrung.png"`|Second quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
+|utmFormeln|no|String|`"UTM_Formeln.png"`|Third quick help image regarding the measuring tool (MeasureTool), belonging to the "Equalization in UTM" chapter. The image must exist in the `imgPath` folder.|
 
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|id|ja|String||Eindeutige ID für den zu erstellenden Layer.|
-|geometryType|ja|enum["LineString", "Point", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon"]||Geometrietyp der darzustellenden Feature.|
-|name|ja|String||Name des Layers; wird im Themenbaum, der Legende und im GFI-Popup dargestellt.|
-|styleId|nein|String||Eindeutige ID für den Style, welcher für die Feature verwendet werden soll. Die Styles stammen aus der **[style.json](style.json.md)**.|
+***
 
-**Beispiel:**
+## remoteInterface
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|postMessageUrl|no|String|`"http://localhost:8080"`|URL the portal will post to and receive messages from with the `postMessage` feature.|
+
+**Example:**
+
+```json
+{
+    "remoteInterface": {
+        "postMessageUrl": "http://localhost:8080"
+    }
+}
 ```
-layers: [{
-    id: "urlPolygonFeatures",
-    geometryType: "Polygon",
-    name: "URL Polygon Features",
-    styleId: "url_polygons"
-}]
+***
+
+## tree
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|orderBy|no|String|`"OpenData"`|Category the layer tree is sorted by initially.|
+|layerIDsToIgnore|no|Array||Array of `services.json` layer ids not to be shown in the layer tree.|
+|layerIDsToStyle|no|**[layerIDsToStyle](#markdown-header-treelayeridstostyle)**[]||Special implementation for a HVV (Hamburg public transportation) service. Contains objects to request various styles of a layer id.|
+|metaIDsToMerge|no|String[]||All layers found in the `services.json` regarding these meta IDs are merged to a single layer of the layer tree.|
+|metaIDsToIgnore|no|String[]||All `services.json` layers listed will not be shown in the layer tree.|
+|isFolderSelectable|no|Boolean|`true`|Globally sets whether a selection box is provided on folders that de-/activates all layers in it. An override per element exists, see **[config.json](config.json.md#Ordnerkonfiguration-Fachdaten)**.|
+
+***
+
+### tree.layerIDsToStyle
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|id|no|Sring||a `services.json` layer's id|
+|styles|no|String/String[]||Style to be used as string; if multiple styles are to be used, they are listed in an array.|
+|name|no|String/String[]||Name to be used as string; if multiple names are to be used, they are listed in an array.|
+|legendUrl|no|String/String[]||Legend image URL to be used as string; if multiple legend images are to be used, their URLs are listed in an array.|
+
+**Example:**
+
+```json
+{
+    "tree": {
+        "orderBy": "opendata",
+        "layerIDsToIgnore": ["1912", "1913"],
+        "layerIDsToStyle": [
+            {
+                "id": "1935",
+                "styles": ["geofox_Faehre", "geofox-bahn", "geofox-bus", "geofox_BusName"],
+                "name": ["Fährverbindungen", "Bahnlinien", "Buslinien", "Busliniennummern"],
+                "legendURL": ["http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-faehre.png", "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bahn.png", "http://geoportal.metropolregion.hamburg.de/legende_mrh/hvv-bus.png", "http://87.106.16.168/legende_mrh/hvv-bus.png"]
+            }
+        ],
+        "metaIDsToMerge": [
+            "FE4DAF57-2AF6-434D-85E3-220A20B8C0F1"
+        ],
+        "metaIDsToIgnore": [
+            "09DE39AB-A965-45F4-B8F9-0C339A45B154"
+        ],
+        "isFolderSelectable": false
+    }
+}
 ```
 
 ***
 
->Zurück zur **[Dokumentation Übersetzungen im Masterportal](languages_de.md)**.
+## metadata
 
->Zurück zur **[Dokumentation Masterportal](doc.md)**
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|useProxy|no|String[]||_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Describes which metadata URLs are to be requested via proxy. The request will contain the requested URL as path, with dots replaced by underscores.|
+
+**Example:**
+
+```json
+{
+    "metadata": {
+        "useProxy": [
+            "https://metaver.de/csw"
+        ]
+    }
+}
+```
+
+***
+
+## zoomToFeature
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|imgLink|yes|String||Marker link. _Deprecated in the next major release._|
+|wfsId|yes|String||ID to a WFS layer of which features to a position are requested from.|
+|attribute|yes|String||Attribute by which the WFS is filtered.|
+|styleId|no|String||A styleId from the `styles.json` may be supplied to override the map marker's design|
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Whether the service URL is to be requested via proxy. The request will contain the requested URL as path, with dots replaced by underdashes.|
+
+**Example:**
+
+```json
+{
+    "zoomtofeature": {
+        "attribute": "flaechenid",
+        "wfsId": "4560",
+        "styleId": "location_eventlotse"
+    }
+}
+```
+
+***
+
+## zoomToGeometry
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|imgLink|yes|String||Marker link. _Deprecated in the next major release._|
+|layerId|yes|String|`"123456789"`|Id of the WFS layer the geometry is requested from.|
+|attribute|yes|String|`"district_name"`|Attribute by which the WFS is filtered.|
+|geometries|yes|String|`["DISTRICT1", "DISTRICT2"]`|Contains the geometries to be filtered from the WFS.|
+
+**Example:**
+
+```json
+{
+    "zoomToGeometry": {
+        "layerId": "123456789",
+        "attribute": "district_name",
+        "geometries": ["DISTRICT1", "DISTRICT2"]
+    }
+}
+```
+
+***
+
+## featureViaURL
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|epsg|no|Integer|`4326`|EPSG code for coordinate reference system to translate coordinates to.|
+|layers|yes|**[layers](#markdown-header-featureviaurllayers)**[]||Layer configuration array for given features.|
+|zoomTo||String/String[]||Id of **[layers](#markdown-header-featureviaurllayers)** or array thereof, to which the Masterportal initially zooms. If none are given, the usual initial center coordinate is used.|
+
+**Example:**
+
+```json
+{
+    "featureViaURL": {
+        "epsg": 25832,
+        "zoomTo": "urlPointFeatures",
+        "layers": [
+            {
+                "id": "urlPointFeatures",
+                "geometryType": "Point",
+                "name": "URL Point Features",
+                "styleId": "url_points"
+            },
+            {
+                "id": "urlLineFeatures",
+                "geometryType": "LineString",
+                "name": "URL Line Features",
+                "styleId": "url_lines"
+            },
+            {
+                "id": "urlPolygonFeatures",
+                "geometryType": "Polygon",
+                "name": "URL Polygon Features",
+                "styleId": "url_polygons"
+            },
+            {
+                "id": "urlMultiPointFeatures",
+                "geometryType": "MultiPoint",
+                "name": "URL MultiPoint Features",
+                "styleId": "url_mulitpoints"
+            },
+            {
+                "id": "urlMultiLineStringFeatures",
+                "geometryType": "MultiLineString",
+                "name": "URL MultiLineString Features",
+                "styleId": "url_multilinestring"
+            },
+            {
+                "id": "urlMultiPolygonFeatures",
+                "geometryType": "MultiPolygon",
+                "name": "URL MultiPolygon Features",
+                "styleId": "url_multipolygons"
+            }
+        ]
+    }
+}
+```
+
+***
+
+### featureViaURL.layers
+
+The parameters described apply for each entry of the **[layers](#markdown-header-featureviaurllayers)** array.
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|id|yes|String||unique ID for the layer to be created|
+|geometryType|yes|enum["LineString", "Point", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon"]||Geometry type of the feature to be shown.|
+|name|yes|String||Layer name displayed in the layer tree, the legend, and the GFI pop-up.|
+|styleId|no|String||Style id to be used for the feature, referring to the **[style.json](style.json.md)**.|
+
+**Example:**
+
+```json
+{
+    "layers": [{
+        "id": "urlPolygonFeatures",
+        "geometryType": "Polygon",
+        "name": "URL Polygon Features",
+        "styleId": "url_polygons"
+    }]
+}
+```
+
+***
+
+>**[Masterportal translation documentation](languages.md)**
+
+>**[Return to the Masterportal documentation](doc.md)**
