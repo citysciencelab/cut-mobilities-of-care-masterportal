@@ -1,4 +1,4 @@
-import getProxyUrl from "../../getProxyurl.js";
+import getProxyUrl from "../../getProxyUrl.js";
 import {expect} from "chai";
 
 describe("src/utils/getProxyUrl", function () {
