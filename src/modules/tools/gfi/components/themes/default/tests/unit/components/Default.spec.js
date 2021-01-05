@@ -24,6 +24,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             url: "https",
                             url2: "file",
                             Test_String: "Hallo Welt",
+                            emptyValue: "",
+                            undefinedValue: undefined,
                             testBrTag: "moin<br>123"
                         };
                     },

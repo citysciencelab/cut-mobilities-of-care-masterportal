@@ -1,9 +1,11 @@
 import Vuex from "vuex";
-import {shallowMount, createLocalVue} from "@vue/test-utils";
+import {shallowMount, createLocalVue, config} from "@vue/test-utils";
 import {expect} from "chai";
 import Mobile from "../../../components/templates/Mobile.vue";
 
 const localVue = createLocalVue();
+
+config.mocks.$t = key => key;
 
 localVue.use(Vuex);
 
@@ -13,7 +15,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
         const wrapper = shallowMount(Mobile, {
             propsData: {
                 feature: {
-                    getTheme: () => "Default",
+                    getTheme: () => "default",
                     getMimeType: () => "text/html",
                     getTitle: () => "Hallo"
                 }
@@ -28,7 +30,7 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
         const wrapper = shallowMount(Mobile, {
             propsData: {
                 feature: {
-                    getTheme: () => "Default",
+                    getTheme: () => "default",
                     getMimeType: () => "text/html",
                     getTitle: () => "Hallo"
                 }
@@ -57,6 +59,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
 
     it("should emitted close event if button is clicked", async () => {
         const wrapper = shallowMount(Mobile, {
+                data: function () {
+                    return {reactOnOutsideClick: true};
+                },
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
@@ -75,6 +80,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
 
     it("should emitted close event if clicked outside the modal", async () => {
         const wrapper = shallowMount(Mobile, {
+                data: function () {
+                    return {reactOnOutsideClick: true};
+                },
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
@@ -94,6 +102,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
 
     it("should not emitted close event if clicked inside the modal", async () => {
         const wrapper = shallowMount(Mobile, {
+                data: function () {
+                    return {reactOnOutsideClick: true};
+                },
                 propsData: {
                     feature: {
                         getTheme: () => "Default",
