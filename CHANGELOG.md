@@ -3,7 +3,6 @@
 
  Es wird die [Semantische Versionierung](https://semver.org/spec/v2.0.0.html) verwendet.
 
----
 
 ## Unreleased - in development
 ### Added
