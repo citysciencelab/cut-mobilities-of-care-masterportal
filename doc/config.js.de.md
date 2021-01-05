@@ -1,4 +1,4 @@
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+>Zurück zur **[Dokumentation Masterportal](doc.de.md)**.
 
 [TOC]
 
@@ -8,11 +8,11 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|layerConf|ja|String||Pfad zur **[services.json](services.json.md)**, die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
+|layerConf|ja|String||Pfad zur **[services.json](services.json.de.md)**, die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme (**[siehe Syntax](http://proj4js.org/#named-projections)**).|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
 |proxyUrl|ja|String||Deprecated im nächsten Major-Release, bitte nutzen Sie den Mapfish-Print 3. Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe **[print](#markdown-header-print)**).|`"/cgi-bin/proxy.cgi"`|
-|restConf|ja|String||Pfad zur **[rest-services.json](rest-services.json.md)**, die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-internet.json"`|
-|styleConf|ja|String||Pfad zur **[style.json](style.json.md)**, die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
+|restConf|ja|String||Pfad zur **[rest-services.json](rest-services.json.de.md)**, die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-internet.json"`|
+|styleConf|ja|String||Pfad zur **[style.json](style.json.de.md)**, die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
 |addons|nein|Array|[]|Angabe der Namen der gewünschten Custom-Module. Diese befinden sich im Ordner /addons/ und deren Entrypoints werden mithilfe der Datei addonsConf.json definiert.|`["myAddon1", "myAddon2"]`|
 |**[alerting](#markdown-header-alerting)**|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
 |**[cameraParameter](#markdown-header-cameraparameter)**|nein|Object||Start Camera Parameter||
@@ -20,9 +20,9 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |**[clickCounter](#markdown-header-clickcounter)**|nein|Object||Konfigurationsobjekt des ClickCounterModuls. Dieses lädt für jeden registrierten Klick ein iFrame.||
 |cswId|nein|String|"3"|Referenz auf eine CS-W Schnittstelle, die für die Layerinformation genutzt wird. ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"meine CSW-ID"`|
 |defaultToolId|nein|String|"gfi"|Id des Tools, das immer an sein soll, wenn kein anderes Tool aktiv ist.|"filter"|
-|featureViaURL|nein|**[featureViaURL](#markdown-header-featureviaurl)**||Optionale Konfigurationseinstellungen für den URL-Parameter *featureViaURL*. Siehe **[URL-Parameter](URL-Parameter.md)**. Implementiert für den treeType *light* und *custom*.||
+|featureViaURL|nein|**[featureViaURL](#markdown-header-featureviaurl)**||Optionale Konfigurationseinstellungen für den URL-Parameter *featureViaURL*. Siehe **[URL-Parameter](urlParameter.de.md)**. Implementiert für den treeType *light* und *custom*.||
 |**[footer](#markdown-header-footer)**|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
-|gfiWindow|nein|String|"detached"|Deprecated im nächsten Major-Release, bitte das Attribut "Portalconfig.menu.tool.gfi.desktopType" in der **[config.json](#config.json.md)** verwenden. Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
+|gfiWindow|nein|String|"detached"|Deprecated im nächsten Major-Release, bitte das Attribut "Portalconfig.menu.tool.gfi.desktopType" in der **[config.json](config.json.de.md)** verwenden. Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
 |ignoredKeys|nein|Array[String]|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|
 |infoJson|nein|String|"info.json"|Pfad zur info.json, die Zusatzinformationen für Snippets enthält. Der Pfad ist relativ zur index.html.|`"info.json"`|
 |inputMap|nein|Object|`{}`|Ist dieses Objekt vorhanden und ist setMarker darin auf true gesetzt, dann wird das Masterportal als Eingabeelement für Daten konfiguriert. Das bedeutet, dass jeder Klick auf die Karte einen Map Marker setzt und die Koordinaten des Markers via RemoteInterface im gewünschten Koordninatensystem sendet.|`{setMarker: true, targetProjection: "EPSG:4326", setCenter: false}`|
@@ -30,9 +30,9 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |inputMap.setMarker|nein|Boolean|false|Flag zum aktivieren und deaktivieren der in inputMap konfigurierten Funktionalität.|`setMarker: true`|
 |inputMap.targetProjection|nein|String|`EPSG:25832`|Das Zielkoordninatensystem, in dem die Koordinaten des Markers gesendet werden sollen.|`targetprojection: "EPSG:4326"`|
 |mapMarker|nein|**[mapMarker](#markdown-header-mapmarker)**||Konfigurationsobjekt zum Überschreiben der default Werte des MapMarker Moduls. Ist für die Nutzung eines 3D-Marker sinnvoll, da ol-Overlays nicht in 3D dargestellt werden können. Dafür muss der mapMarker als VectorLayer definiert werden.||
-|metaDataCatalogueId|nein|String|"2"|URL des in den Layerinformationen verlinkten Metadatenkatalogs. Die ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`"MetadatenkatalogURL"`|
+|metaDataCatalogueId|nein|String|"2"|URL des in den Layerinformationen verlinkten Metadatenkatalogs. Die ID wird über **[rest-services.json](rest-services.json.de.md)** aufgelöst.|`"MetadatenkatalogURL"`|
 |**[metadata](#markdown-header-metadata)**|nein|Object||Darin kann angegeben werden, welche Metdaten-URLs über einen Proxy angefragt werden sollen.||
-|**[mouseHover](#markdown-header-mousehover)**|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in **[config.json](config.json.md)** (*Themenconfig.Fachdaten.Layer*).|`true`|
+|**[mouseHover](#markdown-header-mousehover)**|nein|Object||Steuert, ob MouseHover für Vektorlayer (WFS und GeoJSON) aktiviert ist. Weitere Konfigurationsmöglichkeiten pro Layer in **[config.json](config.json.de.md)** (*Themenconfig.Fachdaten.Layer*).|`true`|
 |obliqueMap|nein|Boolean|false|Legt fest eine Schrägluftbild Karte erstellt werden soll. Benötigt zusätzlich noch eine Schrägluftbildebene.||
 |portalConf|nein|String|"config.json"|Pfad zur config.json des Portals. Es kann auch ein Knotenpunkt angegeben werden. Der Weiterführende Pfad wird dann über den URL-Parameter "config" gesteuert.|Direkter Pfad: "../masterTree/config.json"; Knotenpunkt: "../../portal/master/". Zusätzlich muss dann in der URL der Parameter "config=config.json" stehen.|
 |postMessageUrl|nein|String|"http://localhost:8080"|Url auf die das Portal per post-Message agieren und reagieren kann.| "http://localhost:8080"|
@@ -46,8 +46,8 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |uiStyle|nein|String|default|Steuert das Layout der Bedienelemente. |`table`|
 |**useVectorStyleBeta**|nein|Boolean|false|Konfigurationswert ob anstelle des produktiven vectorStyle-Moduls ein sich in der Entwicklung befindliches neues Modul zum Styling von Vektordaten verwendet werden soll. Die Verwendung bedingt eine neue Syntax der style.json. Deprecated mit Version 3.0.|useVectorStyleBeta: true|
 |wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
-|wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über **[rest-services.json](rest-services.json.md)** aufgelöst.|`""`|
-|**[zoomToFeature](#markdown-header-zoomtofeature)**|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe **[URL-Parameter](URL-Parameter.md)**.||
+|wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über **[rest-services.json](rest-services.json.de.md)** aufgelöst.|`""`|
+|**[zoomToFeature](#markdown-header-zoomtofeature)**|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe **[URL-Parameter](urlParameter.de.md)**.||
 
 ***
 
@@ -419,7 +419,7 @@ Die beschriebenen Parameter sind für die eines einzelnen Layer-Objektes im **[l
 |id|ja|String||Eindeutige ID für den zu erstellenden Layer.|
 |geometryType|ja|enum["LineString", "Point", "Polygon", "MultiPoint", "MultiLineString", "MultiPolygon"]||Geometrietyp der darzustellenden Feature.|
 |name|ja|String||Name des Layers; wird im Themenbaum, der Legende und im GFI-Popup dargestellt.|
-|styleId|nein|String||Eindeutige ID für den Style, welcher für die Feature verwendet werden soll. Die Styles stammen aus der **[style.json](style.json.md)**.|
+|styleId|nein|String||Eindeutige ID für den Style, welcher für die Feature verwendet werden soll. Die Styles stammen aus der **[style.json](style.json.de.md)**.|
 
 **Beispiel:**
 ```
@@ -433,6 +433,6 @@ layers: [{
 
 ***
 
->Zurück zur **[Dokumentation Übersetzungen im Masterportal](languages_de.md)**.
+>Zurück zur **[Dokumentation Übersetzungen im Masterportal](languages.de.md)**.
 
->Zurück zur **[Dokumentation Masterportal](doc.md)**
+>Zurück zur **[Dokumentation Masterportal](doc.de.md)**
