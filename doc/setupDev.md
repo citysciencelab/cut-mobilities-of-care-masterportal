@@ -29,16 +29,16 @@ $ git config --global https.proxy <proxy-url:port>
 
 ## Node.js
 
-Install **[Node.js](http://nodejs.org)**. Last known working version is *10.15.3 LTS* with *NPM version 6.4.1*.
+Install **[Node.js](http://nodejs.org)**. Last known working version is *v10.18.0 LTS* with *NPM version 6.13.4*.
 
 The Node Package Manager (**[NPM](http://npmjs.org)**) comes bundled with your Node.js installation. Please test the correct installation of these tools by executing `node -v` and `npm -v` in your command line; results should look like this:
 
 ```console
 $ node -v
-v10.5.3
+v10.18.0
 
 $ npm -v
-6.4.1
+6.13.4
 ```
 
 Npm can be configured via command line. Configuration entries are added to the file `C:\Users\<user>\.npmrc` that may also be edited directly. To view your complete configuration, run these lines:
@@ -50,13 +50,15 @@ $ npm config ls -l
 
 ### Cache configuration (optional)
 
-Npm will use a package cache to avoid overly reloading packages. By default, this cache is in `C:\Users\<user>\AppData\Roaming\npm-cache`. Depending on your system, this folder may be synchronized within a roaming profile and slow down the process of logging in/out. In such circumstances it is advised to change the cache path by either editing the `.npmrc` file or via `cmd` **and** `cmd` with administrator rights with e.g. this line:
+Npm will use a package cache to avoid overly reloading packages. By default, this cache is in `C:\Users\<user>\AppData\Roaming\npm-cache`. Depending on your system, this folder may be synchronized within a roaming profile and slow down the process of logging in/out. In such circumstances it is advised to change the cache path by either editing the `.npmrc` file, or via `cmd` **and** `cmd` with administrator rights with e.g. this line:
 
 ```console
 npm config set cache D:\npm-cache
 ```
 
 ### Proxy configuration (optional)
+
+Only relevant when a proxy is in use.
 
 Run in `cmd` **and** `cmd` with administrative rights these lines:
 
@@ -100,7 +102,7 @@ $ npm install
 
 With this, all dependencies are installed.
 
-In case add-ons are to be used, please refer to the **[add-ons documentation](/doc/addons_vue.md)** for further assistance.
+In case add-ons are to be used, please refer to the **[add-ons documentation](addonsVue.md)** for further assistance.
 
 ### `npm start`
 
@@ -110,13 +112,15 @@ This command starts a local development server.
 $ npm start
 ```
 
-After compilation, you may open <https://localhost:9001/portal/master> for a comprehensive demo application.
-
-To use services in the local development environment, requests have to be handled with a **[proxy](/doc/proxyconf.md)** The `webpack.dev.js` refers to the `devtools/proxyconf.json`, using `devtools/proxyconf_examples.json` as fallback should none have been added. The `devtools/proxyconf.json` is ignored by git so that you may configure your required development proxies in that file. __Please note that proxies are currently deprecated.__
+- After compilation, you may open the following links for comprehensive demo applications:
+    - https://localhost:9001/portal/basic A portal with a simple configuration
+    - https://localhost:9001/portal/master Simple topic tree
+    - https://localhost:9001/portal/masterCustom Complex topic tree with folder structure
+    - https://localhost:9001/portal/masterDefault Default topic tree loading all WMS layers from the `services.json` file
 
 ### `npm run test`
 
-Executes unit tests. This also includes the unit tests of **[add-ons](addons_vue.md)**.
+Executes unit tests. This also includes the unit tests of **[add-ons](addonsVue.md)**.
 
 ```console
 $ npm run test
@@ -136,7 +140,7 @@ Creates the distributable source folder for all portals, ready for publication.
 $ npm run build
 ```
 
-The created files are stored in the *dist* folder. The folder will be created automatically in the Masterportal folder root.
+The created files are stored in the *dist* folder. The folder will be created automatically in the Masterportal folder root. The source code is bundled within the **Mastercode** folder with the current version.
 
 ### `npm run buildExamples`
 

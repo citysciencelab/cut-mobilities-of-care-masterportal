@@ -62,6 +62,7 @@ export default {
             "newProjectionSelected"
         ]),
         ...mapActions("MapMarker", ["removePointMarker"]),
+        ...mapActions("Alerting", ["addSingleAlert"]),
         ...mapActions("Map", {
             addPointerMoveHandlerToMap: "addPointerMoveHandler",
             removePointerMoveHandlerFromMap: "removePointerMoveHandler",
@@ -75,6 +76,7 @@ export default {
          * @returns {void}
          */
         copyToClipboard ({target}) {
+            this.addSingleAlert(i18next.t("common:modules.tools.supplyCoord.copyToClipboard"));
             target.select();
             // seems to be required for mobile devices
             target.setSelectionRange(0, 99999);
