@@ -1,12 +1,12 @@
 # Vue.js Add-ons
 
-The Masterportal offers a mechanism to inject your own developments into the sources, without them becoming a part of the Masterportal repository.
+The Masterportal offers a mechanism to inject your own developments into the sources, without them becoming a part of the Masterportal repository. See **[setting up the development environment](setupDev.md)** for more information.
 
-An add-on in itself is identically programmed as a native module is. For an example, see **[Tutorial 01: Creating a new module (Scale Switcher)](02_vue_tutorial_new_module_scale_switcher.md)**. However, an add-on lives in another repository and thus allows separate management.
+An add-on in itself is identically programmed as a native module is. For an example, see **[Tutorial 01: Creating a new module (Scale Switcher)](vueTutorial.md)**. However, an add-on lives in another repository and thus allows separate management.
 
-All add-ons to be added are placed in the folder `addons` found at Masterportal root level. Any number of such add-ons may be configured in a portal's **[config.js](config.js.md)**.
+All add-ons to be added are placed in the folder `addons` found at Masterportal root level. Any number of such add-ons may be configured in a portal's **[config.js](config.js.md)**. Add-ons may bring their own `package.json` file to specify further dependencies.
 
-Please adhere to the following structure:
+Please adhere to the following structure, in this example adding a tool (MyAddon1) and a GFI theme (MyGfiTheme):
 
 ## Add-on folder structure
 
@@ -47,6 +47,56 @@ addons
 |   |   |	|   |-- actionsMyAddOn1.spec.js
 |   |   |	|   |-- gettersMyAddOn1.spec.js
 |   |   |	|   |-- mutationsMyAddOn1.spec.js
+|   |
+|   |-- package.json
+
+|-- MyGfiTheme
+|   index.js
+|   |-- components
+|	|   |-- MyGfiTheme.vue
+|   |   |-- ...
+|	|-- locales
+|	|   |-- de
+|   |	|   |-- additional.json
+|	|   |-- en
+|   |	|   |-- additional.json
+|   |
+|	|-- doc
+|	|   |-- config.json.md
+|   |
+|	|-- test
+|	|   |-- end2end
+|   |	|   |-- MyGfiTheme.e2e.js
+|	|   |-- unit
+|   |	|   |-- components
+|   |   |	|   |-- MyGfiTheme.spec.js
+|   |
+|   |-- package.json
+
+|-- MyGFIThemesFolder
+|   |-- MyGFISubFolder
+|   |   index.js
+|   |   |-- components
+|   |   |   |-- MyGfiTheme.vue
+|   |   |   |-- ...
+|   |   |-- locales
+|   |   |   |-- de
+|   |   |   |   |-- additional.json
+|   |   |   |-- en
+|   |   |   |   |-- additional.json
+|   |   |
+|   |   |-- doc
+|   |   |   |-- config.json.md
+|   |   |
+|   |   |-- test
+|   |   |   |-- end2end
+|   |   |   |   |-- MyGfiTheme.e2e.js
+|   |   |   |-- unit
+|   |   |   |   |-- components
+|   |   |   |   |   |-- MyGfiTheme.spec.js
+|   |   |
+|   |   |-- package.json
+
 ```
 
 The entry point of each add-on must be a file named `index.js` on add-on folder root level.
@@ -57,12 +107,42 @@ Within the add-ons folder, a configuration file `addonsConf.json` must exist. Th
 
 #### `addonsConf.json` example
 
-Matching the example above, this would be a fitting configuration
+Matching the example above, this would be a fitting configuration.
+
+Two types of add-ons are supported:
+* tools (`"type": "tool"`)
+* GFI themes (`"type": "gfiTheme"`)
+
+All entries to the `addonsConf.json` defined by an object are expected to be written in Vue. The deprecated Backbone add-ons are always defined by a string.
+
+By default, an add-on's key is the name of its folder. By using the parameter `path` you may specify any other path. This way, you may group multiple add-ons in a folder.
 
 ```json
 {
   "MyAddOn1": {
     "vue": true
+  },
+  "MyGfiTheme": {
+    "type": "gfiTheme"
+  },
+  "AnotherGFITheme": {
+    "type": "gfiTheme",
+    "path": "MyGFIThemesFolder/MyGFISubFolder"
+  }
+}
+```
+
+Only files related to `add-ons` may end up in this folder.
+
+For additional required dependencies not included in the Masterportal, add a separate minimal `package.json` file.
+
+```json
+{
+  "name": "exampleAddon",
+  "version": "1.0.0",
+  "description": "I'm an example! I can say hello world.",
+  "dependencies": {
+    "hello": "^0.3.2"
   }
 }
 ```
@@ -189,8 +269,6 @@ export default {
     </Tool>
 </template>
 ```
-
-You may download all further files regarding this example Vue add-on [here](./VueAddon.zip).
 
 ### Writing the `index.js` file
 
