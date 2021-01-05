@@ -14,6 +14,7 @@ import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
 import "./RadioBridge.js";
 import store from "../../src/app-store/index";
+import {getWKTGeom} from "../../src/utils/getWKTGeom";
 
 /**
  * @member SearchbarTemplate
@@ -395,7 +396,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             // sz, does not want to work in a local environment, so first use the template as variable
             // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
         }
-        if (attr.hasOwnProperty("typelist")) {
+
+        if (attr.hasOwnProperty("typeList")) {
             this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
         }
     },
@@ -445,7 +447,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         // 4. Zoom if necessary on the result otherwise special handling
         if (hit.hasOwnProperty("triggerEvent")) {
             this.model.setHitIsClick(true);
-            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
+            Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt?.handleObj?.type);
         }
         else {
             const resolutions = Radio.request("MapView", "getResolutions"),
@@ -459,7 +461,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
                 }
                 else {
                     store.dispatch("MapMarker/removePolygonMarker");
-                    store.dispatch("MapMarker/placingPolygonMarker", {wktcontent: hit});
+                    store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
                     extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
                     Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
                 }

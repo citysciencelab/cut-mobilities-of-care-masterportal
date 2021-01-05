@@ -125,7 +125,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
                 if (this.isSearched(hit, this.get("searchParams"))) {
                     weg = hit.address.road || hit.address.pedestrian;
                     county = hit.address.county;
-                    display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
+                    display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village || hit.address.suburb;
                     if (county !== undefined && display === undefined) {
                         display = county;
                     }
@@ -138,8 +138,8 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
 
                     // Tooltip
                     metaName = display;
-                    if (hit.address.postcode !== undefined && hit.address.state !== undefined) {
-                        metaName = metaName + ", " + hit.address.postcode + " " + hit.address.state;
+                    if (hit.address.postcode !== undefined && (hit.address.state !== undefined || hit.address.city !== undefined)) {
+                        metaName = metaName + ", " + hit.address.postcode + " " + (hit.address.state || hit.address.city);
                         if (hit.address.suburb !== undefined) {
                             metaName = metaName + " (" + hit.address.suburb + ")";
                         }
