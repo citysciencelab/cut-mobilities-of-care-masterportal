@@ -48,7 +48,7 @@
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
-            "layerAnalysis": "Analyse Layer"
+            "layerAnalysis": "Analyse Layer Overlapping"
         },
         "contact": "Mail",
         "info": "Information"

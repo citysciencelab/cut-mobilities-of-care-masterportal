@@ -49,7 +49,7 @@
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen",
-            "layerAnalysis": "Layer analysieren"
+            "layerAnalysis": "Layer-Überschneidung analysieren"
         },
         "contact": "Kontakt",
         "info": "Informationen"

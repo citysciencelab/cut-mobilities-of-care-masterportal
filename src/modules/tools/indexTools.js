@@ -12,7 +12,7 @@ import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
-import LayerAnalysis from "./layerAnalysis/store/indexLayerAnalysis";
+import LayerOverlapAnalysis from "./layerAnalysis/store/indexLayerOverlapAnalysis";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -26,7 +26,7 @@ export default {
         Gfi,
         ScaleSwitcher,
         SupplyCoord,
-        LayerAnalysis
+        LayerOverlapAnalysis
     },
     state,
     getters,

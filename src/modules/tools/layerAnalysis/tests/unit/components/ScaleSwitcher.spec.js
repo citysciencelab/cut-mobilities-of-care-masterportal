@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import ScaleSwitcherComponent from "../../../components/LayerAnalysis.vue";
+import ScaleSwitcherComponent from "../../../components/LayerOverlapAnalysis.vue";
 import ScaleSwitcher from "../../../store/indexScaleSwitcher";
 import {expect} from "chai";
 import sinon from "sinon";
@@ -10,7 +10,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("src/modules/tools/scaleSwitcher/components/LayerAnalysis.vue", () => {
+describe("src/modules/tools/scaleSwitcher/components/LayerOverlapAnalysis.vue", () => {
     const scales = ["1000", "5000", "10000"],
         mockMapGetters = {
             scales: () => scales,

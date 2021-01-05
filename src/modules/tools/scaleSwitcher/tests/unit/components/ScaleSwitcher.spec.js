@@ -10,7 +10,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("src/modules/tools/scaleSwitcher/components/LayerAnalysis.vue", () => {
+describe("src/modules/tools/scaleSwitcher/components/LayerOverlapAnalysis.vue", () => {
     const scales = ["1000", "5000", "10000"],
         mockMapGetters = {
             scales: () => scales,

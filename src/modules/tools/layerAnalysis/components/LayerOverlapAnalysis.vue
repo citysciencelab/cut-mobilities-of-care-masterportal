@@ -1,11 +1,12 @@
 <script>
-import {mapGetters, mapActions} from "vuex";
+import {mapGetters, mapActions, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
 import VectorSource from "ol/source/Vector.js";
 import Feature from "ol/Feature";
 import {Vector as VectorLayer} from "ol/layer";
+import {Fill, Stroke, Style} from "ol/style";
 import Tool from "../../Tool.vue";
-import getters from "../store/gettersLayerAnalysis";
+import getters from "../store/gettersLayerOverlapAnalysis";
 import * as jsts from "jsts/dist/jsts";
 import {
     LineString,
@@ -21,24 +22,37 @@ import {
  * Tool to switch the scale of the map. Listens to changes of the map's scale and sets the scale to this value.
  */
 export default {
-    name: "LayerAnalysis",
+    name: "LayerOverlapAnalysis",
     components: {
         Tool
     },
     data () {
         return {
-            selectedSourceLayer: null,
-            selectedTargetLayer: null,
-            bufferRadius: 0,
             timerId: null,
             parser: new jsts.io.OL3Parser(),
             GeoJSONWriter: new jsts.io.GeoJSONWriter(),
-            vectorLayer: {},
-            resultLayer: {}
+            resultLayerStyle: new Style({
+                fill: new Fill({
+                    color: ["105", "175", "105", "0.7"]
+                }),
+                stroke: new Stroke({
+                    color: ["0", "135", "255", "0.7"],
+                    width: 2
+                })
+            }),
+            bufferLayerStyle: new Style({
+                fill: new Fill({
+                    color: ["255", "230", "65", "0.3"]
+                }),
+                stroke: new Stroke({
+                    color: ["255", "50", "0", "0.5"],
+                    width: 2
+                })
+            })
         };
     },
     computed: {
-        ...mapGetters("Tools/LayerAnalysis", Object.keys(getters)),
+        ...mapGetters("Tools/LayerOverlapAnalysis", Object.keys(getters)),
         ...mapGetters("Map", ["map"]),
         sourceOptions: {
             get () {
@@ -49,51 +63,71 @@ export default {
             get () {
                 let options = Radio.request("ModelList", "getModelsByAttributes", {type: "layer", typ: "WFS"});
 
-                if (this.selectedSourceLayer) {
+                if (this.sourceLayerSelection) {
                     options = options.filter(layer => {
-                        return layer.get("id") !== this.selectedSourceLayer.get("id");
+                        return layer.get("id") !== this.sourceLayerSelection.get("id");
                     });
                 }
                 return options;
             }
-        }
-    },
-    watch: {
-        selectedSourceLayer (layer) {
-            this.clearResult();
-            this.selectedTargetLayer = null;
-            if (layer) {
-                this.sourceOptions.forEach(option => {
-                    option.setIsSelected(layer.get("id") === option.get("id"));
-                });
+        },
+        sourceLayerSelection: {
+            get () {
+                return this.selectedSourceLayer;
+            },
+            set (newVal) {
+                this.clearResult();
+                this.targetLayerSelection = null;
+                if (newVal) {
+                    this.sourceOptions.forEach(option => {
+                        option.setIsSelected(newVal.get("id") === option.get("id"));
+                    });
+                }
+                if (this.inputRadius) {
+                    this.clearBuffer();
+                    clearTimeout(this.timerId);
+                    this.timerId = setTimeout(() => {
+                        this.applyBufferRadius();
+                    }, 1000);
+                }
+                this.setSelectedSourceLayer(newVal);
             }
-            if (this.bufferRadius) {
+        },
+        targetLayerSelection: {
+            get () {
+                return this.selectedTargetLayer; // mapped getter?
+            },
+            set (newVal) {
+                this.setSelectedTargetLayer(newVal);
+            }
+        },
+        inputRadius: {
+            get () {
+                return this.bufferRadius;
+            },
+            set (newVal) {
+                this.clearResult();
                 this.clearBuffer();
+                this.setBufferRadius(newVal);
                 clearTimeout(this.timerId);
                 this.timerId = setTimeout(() => {
                     this.applyBufferRadius();
                 }, 1000);
             }
-        },
-        selectedTargetLayer (layer, prev) {
+        }
+    },
+    watch: {
+        targetLayerSelection (layer, prev) {
             this.clearResult();
             if (prev) {
                 prev.setIsSelected(false);
             }
             if (layer) {
                 layer.setIsSelected(layer.get("id"));
+                setTimeout(() => {
+                    this.checkIntersection();
+                }, 1000);
             }
-            setTimeout(() => {
-                this.checkIntersection();
-            }, 1000);
-        },
-        bufferRadius () {
-            this.clearResult();
-            this.clearBuffer();
-            clearTimeout(this.timerId);
-            this.timerId = setTimeout(() => {
-                this.applyBufferRadius();
-            }, 1000);
         }
     },
 
@@ -105,13 +139,21 @@ export default {
         this.$on("close", this.close);
     },
     methods: {
+        ...mapMutations("Tools/LayerOverlapAnalysis", [
+            "setSelectedSourceLayer",
+            "setSelectedTargetLayer",
+            "setVectorLayer",
+            "setBufferRadius",
+            "setResultLayer"
+        ]),
+        ...mapActions("Map", ["toggleLayerVisibility"]),
         clearResult () {
             this.map.removeLayer(this.resultLayer);
         },
         checkIntersection () {
             const resultFeatures = [];
 
-            this.selectedTargetLayer.get("layerSource").getFeatures().forEach(targetFeature => {
+            this.targetLayerSelection.get("layerSource").getFeatures().forEach(targetFeature => {
                 let foundIntersection = false;
 
                 this.vectorLayer.getSource().getFeatures().forEach(sourceFeature => {
@@ -125,10 +167,10 @@ export default {
                         }
                     }
                     else {
-                        const poly1 = this.parser.read(sourceGeometry),
-                            poly2 = this.parser.read(targetGeometry);
+                        const sourcePoly = this.parser.read(sourceGeometry),
+                            targetPoly = this.parser.read(targetGeometry);
 
-                        if (poly1.intersects(poly2)) {
+                        if (sourcePoly.intersects(targetPoly)) {
                             foundIntersection = true;
                         }
                     }
@@ -141,9 +183,10 @@ export default {
             if (resultFeatures) {
                 const vectorSource = new VectorSource();
 
-                this.resultLayer = new VectorLayer({
-                    source: vectorSource
-                });
+                this.setResultLayer(new VectorLayer({
+                    source: vectorSource,
+                    style: this.targetLayerSelection.get("style")
+                }));
 
                 vectorSource.addFeatures(resultFeatures);
                 this.map.addLayer(this.resultLayer);
@@ -162,9 +205,9 @@ export default {
                 newFeatures = [],
                 vectorSource = new VectorSource();
 
-            this.vectorLayer = new VectorLayer({
+            this.setVectorLayer(new VectorLayer({
                 source: vectorSource
-            });
+            }));
 
             this.parser.inject(
                 Point,
@@ -178,21 +221,20 @@ export default {
 
             features.forEach(feature => {
                 const jstsGeom = this.parser.read(feature.getGeometry()),
-                    buffered = jstsGeom.buffer(this.bufferRadius);
+                    buffered = jstsGeom.buffer(this.inputRadius),
+                    newFeature = new Feature({
+                        geometry: this.parser.write(buffered),
+                        name: "Buffers"
+                    });
 
-                newFeatures.push(new Feature({
-                    geometry: this.parser.write(buffered),
-                    name: "Buffers"
-                }));
+                newFeature.setStyle(this.bufferLayerStyle);
+                newFeatures.push(newFeature);
             });
 
             vectorSource.addFeatures(newFeatures);
 
             this.map.addLayer(this.vectorLayer);
         },
-        ...mapActions("Map", ["toggleLayerVisibility"]),
-        // ...mapMutations("Tools/ScaleSwitcher", Object.keys(mutations)),
-
         /**
          * Sets active to false.
          * @returns {void}
@@ -202,7 +244,7 @@ export default {
 
             // TODO replace trigger when ModelList is migrated
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = getComponent(this.$store.state.Tools.LayerAnalysis.id);
+            const model = getComponent(this.$store.state.Tools.LayerOverlapAnalysis.id);
 
             if (model) {
                 model.set("isActive", false);
@@ -233,7 +275,7 @@ export default {
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
                         id="layer-analysis-select"
-                        v-model="selectedSourceLayer"
+                        v-model="sourceLayerSelection"
                         class="font-arial form-control input-sm pull-left"
                     >
                         <option
@@ -253,8 +295,8 @@ export default {
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <input
                         id="layer-analysis-range-text"
-                        v-model="bufferRadius"
-                        :disabled="!selectedSourceLayer"
+                        v-model="inputRadius"
+                        :disabled="!sourceLayerSelection"
                         min="0"
                         max="3000"
                         step="10"
@@ -263,8 +305,8 @@ export default {
                     >
                     <input
                         id="layer-analysis-range"
-                        v-model="bufferRadius"
-                        :disabled="!selectedSourceLayer"
+                        v-model="inputRadius"
+                        :disabled="!sourceLayerSelection"
                         min="0"
                         max="3000"
                         step="10"
@@ -280,9 +322,9 @@ export default {
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
                         id="layer-analysis-select-target"
-                        v-model="selectedTargetLayer"
+                        v-model="targetLayerSelection"
                         class="font-arial form-control input-sm pull-left"
-                        :disabled="!selectedSourceLayer || !bufferRadius"
+                        :disabled="!sourceLayerSelection || !inputRadius"
                     >
                         <option
                             v-for="layer in targetOptions"

@@ -1,5 +1,5 @@
 import {generateSimpleMutations} from "../../../../app-store/utils/generators";
-import state from "./stateLayerAnalysis";
+import state from "./stateLayerOverlapAnalysis";
 
 const mutations = {
     /**
