@@ -1,16 +1,17 @@
-# Remote-Interface
+# Remote interface
 
-Mithilfe des Remote-Interface können sämtliche Actions aller Vue Components ausgeführt werden. Weiterhin kann eine festgelge Auswahl von Funktionen genutzt werden.
+The remote interface allows programmatic interaction with the Masterportal. It gives access to all registered VueX actions and a set of dedicated additional functions.
 
-## Generisches Remote-Interface für Vue-Actions
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|namespace|String|VueX Namespace der aufzurufenden Action|
-|action|String|Name der aufzurufenden Action|
-|args|Object|Parameter-Object für die Action|
+## Generic remote interface to call VueX actions
 
-#### Beispiel
-Eine beliebige Vue Action kann wie folgt aufgerufen werden:
+|Name|Type|Explanation|
+|-|-|-|
+|namespace|String|Namespace of VueX module|
+|action|String|Name of action to call on module|
+|args|Object|Parameter object provided as payload to action|
+
+### Example
+Any VueX action may be called as follows:
 
 ```js
 const myIframe = document.getElementById("my-iframe");
@@ -24,174 +25,243 @@ myIframe.contentWindow.postMessage({
 });
 ```
 
-Remote-Interface wird Folgendes aufrufen:
+The remote interface will interpret the message given and produce the following call:
 
 ```js
-store.dispatch("Name/Space/Of/VueX/Store/nameOfAction", {"param1": "value1", "paramX": "valueX"}, {root: true});
-
+store.dispatch(
+    "Name/Space/Of/VueX/Store/nameOfAction",
+    {
+        "param1": "value1",
+        "paramX": "valueX"
+    },
+    { root: true }
+);
 ```
 
-## Remote-Interface für spezifische Funktionen
-Der im Parameter-Object von .postMessage() gewählte Key entspricht dem Namen der aufzurufenden Funktion. Der Value als Array entspricht den zu übergebenden Parametern.
+## Calling a dedicated function via remote interface
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|nameOfFunction|Array|Parameter für die auszuführende Funktion|
-|domain|String|Domain des Empfänger-Windows|
+The singular key given to `.postMessage()`'s parameter object is to correspond to a function name. The value of this key must be an array and will be spread to be the call's parameters.
 
+|Name|Type|Explanation|
+|-|-|-|
+|`${nameOfFunction}`|Array|Parameters to call `${nameOfFunction}` with|
+|domain|String|Receiver window's domain|
 
-#### Beispiel
-Eine spezifische Funktion kann wie folgt aufgerufen werden:
+### Example
+
+A function may be called as follows:
 
 ```js
 const myIframe = document.getElementById("my-iframe");
-myIframe.contentWindow.postMessage({nameOfFunction: "specificFunction", ["param1", "param2", "paramX"]}, domain);
+const nameOfFunction = "this should be the name of a function";
+myIframe.contentWindow.postMessage(
+    { [nameOfFunction]: ["param1", "param2", "paramX"] },
+    domain
+);
 ```
 
-### Liste Direkt aufrufbarer Funktionen
+### List of dedicated functions
+
 #### showPositionByExtent
-Es wird ein Marker an die Zentrumskoordinate des übergebenen Extents gesetzt und die Karte auf diese Koordinate zentriert.
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|showPositionByExtent|Array|Extent, an dessen Zentrumskoordiante ein Marker gesetzt wird.|
-|domain|String|Domain des Empfänger-Windows|
+A map marker will be placed at the center of the given extent, and the map's view will center on it.
 
-#### Beispiel
+|Name|Type|Explanation|
+|-|-|-|
+|showPositionByExtent|Array|extent; map marker will be set to its center|
+|domain|String|receiver window's domain|
+
+##### Example
 
 ```js
 const myIframe = document.getElementById("my-iframe").contentWindow;
-iframe.postMessage({"showPositionByExtent": [xMin, yMin, xMax, yMax]}, domain);
+iframe.postMessage({
+    "showPositionByExtent": [xMin, yMin, xMax, yMax]
+}, domain);
 ```
 
 #### showPositionByExtentNoScroll
-Es wird ein Marker an die Zentrumskoordinate des übergebenen Extents gesetzt. Allerdings wird die Karte **nicht** auf diese Koordinate zentriert.
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|showPositionByExtentNoScroll|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
-|domain|String|Domain des Empfänger-Windows|
+A map marker will be placed at the center of the given extent. The map is **not** center to it, hence it may remain outside of the user's view.
 
-#### Beispiel
+|Name|Type|Explanation|
+|-|-|-|
+|showPositionByExtent|Array|extent; map marker will be set to its center|
+|domain|String|receiver window's domain|
+
+##### Example
+
 ```js
 const myIframe = document.getElementById("my-iframe").contentWindow;
-iframe.postMessage({"showPositionByExtentNoScroll": [xMin, yMin, xMax, yMax]}, domain);
+iframe.postMessage({
+    "showPositionByExtentNoScroll": [xMin, yMin, xMax, yMax]
+}, domain);
 ```
 #### transactFeatureById
-Ein Feature eines gegebenen WFST-Layers wird modifiziert.
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|transactFeaturesById|String|Id des Features.|
-|layerId|String|Id des Layers.|
-|attributes|String|JSON mit den Attributes des Features.|
-|mode|String|auszuführende Operation. Momentan nur "update" implementiert.|
-|domain|String|Domain des Empfänger-Windows|
+Modify a WFS-T layer's feature, triggering a server interaction.
 
-#### Beispiel
+|Name|Type|Explanation|
+|-|-|-|
+|transactFeaturesById|String|feature id|
+|layerId|String|WFS-T layer id|
+|attributes|String|JSON containing feature attributes|
+|mode|String|name of the WFS-T operation that is to be executed; Currently only "update" is available|
+|domain|String|receiver window's domain|
+
+##### Example
 ```js
 const myIframe = document.getElementById("my-iframe").contentWindow;
-iframe.postMessage({"transactFeatureById": "id", "layerId": layerId, "attributes": attrs, "mode": "update"}, domain);
+const id = "the id of the feature to modify";
+iframe.postMessage({
+    "transactFeatureById": id,
+    "layerId": layerId,
+    "attributes": attrs,
+    "mode": "update"
+}, domain);
 ```
 
 #### zoomToExtent
-Die Karte wird auf den übergebenen Extent gezoomt.
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|zoomToExtent|Array|Extent.|
-|domain|String|Domain des Empfänger-Windows|
+The map's view will fit the given extent.
 
-#### Beispiel
+|Name|Type|Explanation|
+|-|-|-|
+|zoomToExtent|Array|extent|
+|domain|String|receiver window's domain|
+
+##### Example
 ```js
 const myIframe = document.getElementById("my-iframe").contentWindow;
-iframe.postMessage({"zoomToExtent": [xmin, ymin, xmax, ymax]}, domain);
+iframe.postMessage({
+    "zoomToExtent": [xmin, ymin, xmax, ymax]
+}, domain);
 ```
 
 #### highlightfeature
-Ein Vektor-Feature in der Karte wird hervorgehoben.
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|highlightfeature|String|LayerId und FeatureId in einem String per Komma separiert|
-|domain|String|Domain des Empfänger-Windows|
+Highlight a vector feature on the map.
 
-#### Beispiel
+|Name|Type|Explanation|
+|-|-|-|
+|highlightfeature|String|id of layer and feature as comma-separated string|
+|domain|String|receiver window's domain|
+
+##### Example
+
 ```js
 const myIframe = document.getElementById("my-iframe").contentWindow;
-iframe.postMessage({"highlightfeature": "layerid,featureId"}, domain);
+iframe.postMessage({
+    "highlightfeature": "layerid,featureId"
+}, domain);
 ```
 
 #### hidePosition
-Der Map-Marker wird versteckt.
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|hidePosition|String|"hidePosition". Dadurch wird der Marker versteckt.|
-|domain|String|Domain des Empfänger-Windows|
+Hide the map marker.
 
-#### Beispiel
+|Name|Type|Explanation|
+|-|-|-|
+|hidePosition|String|used standalone (not in object)|
+|domain|String|receiver window's domain|
+
+##### Example
+
 ```js
 const myIframe = document.getElementById("my-iframe").contentWindow;
 iframe.postMessage("hidePosition", domain);
 ```
 
-## Generisches Remote-Interface für Backbone Radio (Depricated)
-Eine Möglichkeit, via postMessage direkt das Backbone-Radio des Masterportals anzusprechen ist, den Radio-Channel und die Funktion zu übergeben.
+## Generic remote interface for `Backbone.Radio` (deprecated)
 
-Achtung: Dieses Feature basiert auf Backbone-Radio, welches im gesamten Projekt als depricated gilt.
+The functions registered to the `Backbone.Radio` element may also be used via `postMessage()`. They are called by channel and function name.
 
-|Name|Typ|Beschreibung|
+> Please mind that the usage of Backbone.Radio itself is currently deprecated. Backbone will eventually be removed.
+
+|Name|Type|Explanation|
 |----|---|------------|
-|radio_channel|String|Der Radio-Channel, der angesprochen werden soll.|
-|radio_function|String|Die Funktion des Radio-Channels, die angesprochen werden soll.|
-|radio_para_object|Object|(optional) Ein Parameter-Objekt, das an die Radio-Funktion übergeben wird.|
-|domain|String|Domain des Empfänger-Windows|
+|radio_channel|String|radio channel to target|
+|radio_function|String|radio channel function to call|
+|radio_para_object|Object|optional parameter object forwarded to the called function|
+|domain|String|receiver window's domain|
 
-#### Beispiel
+### Example
 ```js
 const myIframe = document.getElementById("my-iframe").contentWindow;
-iframe.postMessage({"radio_channel": "MyRadioChannel", "radio_function": "myRequestedFunction", "radio_para_object": {"param1": "param1", "paramX": "paramX"}}, domain);
+iframe.postMessage({
+    "radio_channel": "MyRadioChannel",
+    "radio_function": "myRequestedFunction",
+    "radio_para_object": {
+        "param1": "param1",
+        "paramX": "paramX"
+    }
+}, domain);
 ```
 
-Remote-Interface wird Folgendes aufrufen:
+This will construct and execute the following call.
 
 ```js
-Radio.request("MyRadioChannel", "myRequestedFunction", {"param1": "param1", "paramX": "paramX"});
+Radio.request(
+    "MyRadioChannel",
+    "myRequestedFunction",
+    {
+        "param1": "param1",
+        "paramX": "paramX"
+    }
+);
 ```
 
-## Kommunikation vom Masterportal nach außen
-So, wie vom Parent Window über den iframe Events *an* das Masterportal geschuckt werden können, ist es ebenfalls möglich, in die entgegengesetzte Richtung zu kommunizieren.
+## Masterportal communication to the parent window
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|params|Object|Parameter als Object, welche an das Parent Window geschickt werden|
+Previously the *top-down* communication (parent to Masterportal) has been shown. The Masterportal may also communicate in the opposite direction.
 
-#### Beispiel
+|Name|Type|Explanation|
+|-|-|-|
+|params|Object|parameter object sent to parent window|
 
-Innerhalb eines Vue Components:
+### Examples
+
 ```js
-this.$remoteInterface.sendMessage({"param1": "param1", "paramX": "paramX"});
+// From a Vue component
+this.$remoteInterface.sendMessage({
+    "param1": "param1",
+    "paramX": "paramX"
+});
 ```
 
-Innerhalb einer VueX Action:
 ```js
-this._vm.$remoteInterface.sendMessage({"param1": "param1", "paramX": "paramX"});
+// From a VueX action
+this._vm.$remoteInterface.sendMessage({
+    "param1": "param1",
+    "paramX": "paramX"
+});
 ```
 
-Remote-Interface wird Folgendes aufrufen:
+The remote interface translates both to the following call:
+
 ```js
-parent.postMessage({"param1": "param1", "paramX": "paramX"}, options.postMessageUrl);
+parent.postMessage({
+    "param1": "param1",
+    "paramX": "paramX"
+}, options.postMessageUrl);
 ```
 
-## Kommunikation vom Masterportal nach außen via Backbone Radio (depricated)
-Ebensfalls noch möglich ist die Kommunikation über Backbone Radio.
+## Masterportal communication to the parent window via `Backbone.Radio` (deprecated)
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|params|Object|Parameter als Object, welche an das Parent Window geschickt werden|
+> Please mind that the usage of Backbone.Radio itself is currently deprecated. Backbone will eventually be removed.
 
-#### Beispiel
+|Name|Type|Explanation|
+|-|-|-|
+|params|Object|parameter object sent to parent window|
+
+### Example
+
 ```js
-Radio.trigger("RemoteInterface", "postMessage", {"param1": "param1", "paramX": "paramX"});
+Radio.trigger(
+    "RemoteInterface",
+    "postMessage", {
+        "param1": "param1",
+        "paramX": "paramX"
+    }
+);
 ```
