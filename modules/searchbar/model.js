@@ -8,7 +8,7 @@ const SearchbarModel = Backbone.Model.extend(/** @lends SearchbarModel.prototype
         hitList: [],
         isInitialSearch: true,
         isInitialRecommendedListCreated: false,
-        knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder"],
+        knownInitialSearchTasks: ["gazetteer", "specialWFS", "bkg", "tree", "osm", "locationFinder", "elasticSearch"],
         activeInitialSearchTasks: [],
         // translations
         i18nextTranslate: null,

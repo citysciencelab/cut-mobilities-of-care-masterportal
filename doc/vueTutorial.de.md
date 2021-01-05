@@ -7,7 +7,7 @@ Wir wollen ein Tool schreiben, über welches man den Kartenmaßstab steuern kann
 Darüber hinaus soll unser Tool auf Änderungen des Kartenmaßstabes reagieren und den entsprechend aktuellen Maßstab im Drop-Down-Menu anzeigen.
 
 ### Neues Tool anlegen
-In das Verzeichnis "src/modules/tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen soll ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scaleSwitcher". Darunter  die Ordner "components" und "store" anlegen und darin die für dieses Tool benötigten Dateien anlegen. Ebenso die Dateien für die Tests anlegen. Das [Tutorial für vue-Tests](02_vue_tutorial_tests zum_scale_switcher.md) beschreibt, wie der ScaleSwitcher getestet werden kann.
+In das Verzeichnis "src/modules/tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen soll ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scaleSwitcher". Darunter  die Ordner "components" und "store" anlegen und darin die für dieses Tool benötigten Dateien anlegen. Ebenso die Dateien für die Tests anlegen. Das [Tutorial für vue-Tests](unittestingVue.de.md) beschreibt, wie der ScaleSwitcher getestet werden kann.
 ```
 src
 |-- modules
@@ -58,7 +58,7 @@ export default {
 ```
 
 ### ScaleSwitcher-Komponente registrieren
-In die Datei *src/modules/tools/stateTools.js* wechseln, ScaleSwitcher importieren und als Komponente in der componentMap hinzufügen. Der ToolManager (src/modules/tools/ToolManager.vue) initialisiert die ScaleSwitcher-Komponente und lädt die Konfiguration des ScaleSwitchers aus der Konfigurationsdatei config.json und stellt diese im state zur Verfügung. Die Konfiguration wird unter den Pfaden "configJson.Portalconfig.menu.scaleSwitcher" und "configJson.Portalconfig.menu.tools.children.scaleSwitcher" in der config.json gesucht. Siehe auch [Dokumentation config.json](config.json.md). Die ToolManager.vue ist im Template-Bereich der MapRegion registriert. Sie wird nur erzeugt, wenn die [*v-if* Direktive](https://vuejs.org/v2/api/#v-if) "configJson" im state vorhanden ist.
+In die Datei *src/modules/tools/stateTools.js* wechseln, ScaleSwitcher importieren und als Komponente in der componentMap hinzufügen. Der ToolManager (src/modules/tools/ToolManager.vue) initialisiert die ScaleSwitcher-Komponente und lädt die Konfiguration des ScaleSwitchers aus der Konfigurationsdatei config.json und stellt diese im state zur Verfügung. Die Konfiguration wird unter den Pfaden "configJson.Portalconfig.menu.scaleSwitcher" und "configJson.Portalconfig.menu.tools.children.scaleSwitcher" in der config.json gesucht. Siehe auch [Dokumentation config.json](config.json.de.md). Die ToolManager.vue ist im Template-Bereich der MapRegion registriert. Sie wird nur erzeugt, wenn die [*v-if* Direktive](https://vuejs.org/v2/api/#v-if) "configJson" im state vorhanden ist.
 ```js
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 ... // import further Tools
@@ -146,7 +146,7 @@ export default mutations;
 ### actions definieren
 [Vuex actions](https://vuex.vuejs.org/guide/actions.html#actions) können in einer datei *modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js* festgelegt werden. Beim ScaleSwitcher werden keine Actions verwendet. activateByUrlParam und setToolActiveByConfig werden global über den ToolManager gesteuert.
 
-- "activateByUrlParam" prüft ob die Url den Parameter "isinitopen" für ein Tool enthält und aktiviert dieses gegebenenfalls. Siehe auch [Dokumentation Url-Parameter](URL-Parameter.md).
+- "activateByUrlParam" prüft ob die Url den Parameter "isinitopen" für ein Tool enthält und aktiviert dieses gegebenenfalls. Siehe auch [Dokumentation Url-Parameter](urlParameter.de.md).
 - die action "setToolActiveByConfig" setzt den state "active" eines Tools auf true, dann wird das Tool gerendert (siehe property active am Tool.vue).
 ```js
 const actions = {
@@ -328,7 +328,7 @@ methods: {
 ```
 
 ### Internationalisierung
-Das Label soll in verschiedenen Sprachen angezeigt werden. Dazu werden in den Übersetzungsdateien (*locales/[de/en]/common.json*) Schlüssel und Übersetzungen eingetragen, siehe [Dokumentation Internationalisierung](languages_de.md).
+Das Label soll in verschiedenen Sprachen angezeigt werden. Dazu werden in den Übersetzungsdateien (*locales/[de/en]/common.json*) Schlüssel und Übersetzungen eingetragen, siehe [Dokumentation Internationalisierung](languages.de.md).
 ```js
 "modules": {
     "tools": {
