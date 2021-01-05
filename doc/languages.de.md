@@ -74,121 +74,6 @@ Dies beinhaltet sowohl die allgemeinen Module als auch die am häufigsten verwen
 ### Additional Sprachdatei - additional.json
 Die Additional Sprachdatei wird für Addons (ehemalige custom modules) verwendet.
 
-
-
-
-## Wie man i18next in der Produktion verwendet
-
-Der folgende Abschnitt ist eine Anleitung, wie du i18next mit MV* in dein MP-Projekt integrieren kannst.
-
-
-
-### Übersetze dein Model
-
-Um die Werte für dein Model mit i18next zu übersetzen, kannst du die Werte einfach mit der Übersetzungsfunktion von i18next übersetzen.
-Durch das Horchen auf das Radio-Channel-Event "i18next#RadioTriggerLanguageChanged" kann das Model seine Übersetzungen während der Laufzeit ändern.
-
-
-ExampleModel
-```
-const ExampleModel = Backbone.Model.extend(/** @lends ExampleModel.prototype */ {
-    defaults: {
-        currentLng: "",
-        exampleTitle: "",
-        exampleText: ""
-    },
-    /**
-     * @class ExampleModel
-     * @extends Backbone.Model
-     * @memberof Example
-     * @constructs
-     * @listens i18next#RadioTriggerLanguageChanged
-     */
-    initialize: function () {
-        this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.changeLang
-        });
-
-        this.changeLang(i18next.language);
-    },
-    /**
-     * change language - sets default values for the language
-     * @param {String} lng the language changed to
-     * @returns {Void}  -
-     */
-    changeLang: function (lng) {
-        this.set({
-            currentLng: lng,
-            exampleTitle: i18next.t("common:foo.bar.exampleTitle"),
-            exampleText: i18next.t("common:foo.bar.exampleText")
-        });
-    }
-});
-
-export default ExampleModel;
-```
-
-
-#### Höre auf dein Model
-
-
-Wenn die View richtig eingerichtet ist, sollte er auf Änderungen im Model hören und das Template bereits rendern.
-Derzeit verwenden wir im Masterportal underscore für das Templating.
-Um zu zeigen, wie dies geschehen SOLLTE, verwenden wir das Model von oben und setzen den MV* wie folgt auf.
-
-ExampleTemplate
-```
-<!DOCTYPE html>
-<div class="title"><%= exampleTitle %></div>
-<div class="text"><%= exampleText %></div>
-```
-
-ExampleView
-```
-import ExampleTemplate from "text-loader!./template.html";
-import ExampleModel from "./model";
-
-const ExampleView = Backbone.View.extend(/** @lends ExampleView.prototype */{
-    /**
-     * @class ExampleView
-     * @extends Backbone.View
-     * @memberof Example
-     * @constructs
-     * @listens ExampleModel#changeExampleText
-     */
-    initialize: function () {
-        this.model = new ExampleModel();
-
-        this.listenTo(this.model, {
-            "change:currentLng": this.render
-        });
-
-        this.render();
-    },
-
-    /**
-     * renders the view
-     * @param {ExampleModel} model the model of the view
-     * @param {Boolean} value the values of the changes made to the model
-     * @returns {Void}  -
-     */
-    render: function () {
-        const template = _.template(ExampleTemplate),
-            params = this.model.toJSON();
-
-        this.$el.html(template(params));
-
-        return this;
-    }
-});
-
-export default ExampleView;
-```
-
-
-
-
-
 ## Übersetzung der Namen in der config.json
 
 Dieser Abschnitt beschreibt den Ansatz, wie i18next die in der config.json angegebenen Namen übersetzt.
@@ -415,6 +300,111 @@ Du hast einen Übersetzungsschlüssel in der config.json gesetzt, aber es wird i
 
 
 
+
+## Wie man i18next in der Produktion verwendet
+
+Der folgende Abschnitt ist eine Anleitung, wie du i18next mit MV* in dein MP-Projekt integrieren kannst.
+
+
+
+### Übersetze dein Model
+
+Um die Werte für dein Model mit i18next zu übersetzen, kannst du die Werte einfach mit der Übersetzungsfunktion von i18next übersetzen.
+Durch das Horchen auf das Radio-Channel-Event "i18next#RadioTriggerLanguageChanged" kann das Model seine Übersetzungen während der Laufzeit ändern.
+
+ExampleModel
+```js
+const ExampleModel = Backbone.Model.extend(/** @lends ExampleModel.prototype */ {
+    defaults: {
+        currentLng: "",
+        exampleTitle: "",
+        exampleText: ""
+    },
+    /**
+     * @class ExampleModel
+     * @extends Backbone.Model
+     * @memberof Example
+     * @constructs
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
+    initialize: function () {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set({
+            currentLng: lng,
+            exampleTitle: i18next.t("common:foo.bar.exampleTitle"),
+            exampleText: i18next.t("common:foo.bar.exampleText")
+        });
+    }
+});
+
+export default ExampleModel;
+```
+
+#### Höre auf dein Model
+
+Wenn die View richtig eingerichtet ist, sollte er auf Änderungen im Model hören und das Template bereits rendern.
+Derzeit verwenden wir im Masterportal underscore für das Templating.
+Um zu zeigen, wie dies geschehen SOLLTE, verwenden wir das Model von oben und setzen den MV* wie folgt auf.
+
+ExampleTemplate
+```html
+<!DOCTYPE html>
+<div class="title"><%= exampleTitle %></div>
+<div class="text"><%= exampleText %></div>
+```
+
+ExampleView
+```js
+import ExampleTemplate from "text-loader!./template.html";
+import ExampleModel from "./model";
+
+const ExampleView = Backbone.View.extend(/** @lends ExampleView.prototype */{
+    /**
+     * @class ExampleView
+     * @extends Backbone.View
+     * @memberof Example
+     * @constructs
+     * @listens ExampleModel#changeExampleText
+     */
+    initialize: function () {
+        this.model = new ExampleModel();
+
+        this.listenTo(this.model, {
+            "change:currentLng": this.render
+        });
+
+        this.render();
+    },
+
+    /**
+     * renders the view
+     * @param {ExampleModel} model the model of the view
+     * @param {Boolean} value the values of the changes made to the model
+     * @returns {Void}  -
+     */
+    render: function () {
+        const template = _.template(ExampleTemplate),
+            params = this.model.toJSON();
+
+        this.$el.html(template(params));
+
+        return this;
+    }
+});
+
+export default ExampleView;
+```
 
 ## Unit-Tests
 

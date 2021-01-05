@@ -63,109 +63,6 @@ The common language file contains all translations used throughout the Masterpor
 
 The additional language file is used for add-ons (formerly *custom modules*).
 
-## How to use i18next in production
-
-This section is a guide on how to integrate i18next into your Masterportal project using MV*.
-
-### Translate your model
-
-To translate values for your model with i18next, simply set the values using the translation function of i18next. Listening to the `Backbone.Radio` event `"i18next#RadioTriggerLanguageChanged"` allows value changes to the currently chosen language at run-time.
-
-**ExampleModel:**
-
-```js
-const ExampleModel = Backbone.Model.extend(/** @lends ExampleModel.prototype */ {
-    defaults: {
-        currentLng: "",
-        exampleTitle: "",
-        exampleText: ""
-    },
-    /**
-     * @class ExampleModel
-     * @extends Backbone.Model
-     * @memberof Example
-     * @constructs
-     * @listens i18next#RadioTriggerLanguageChanged
-     */
-    initialize: function () {
-        this.listenTo(Radio.channel("i18next"), {
-            "languageChanged": this.changeLang
-        });
-
-        this.changeLang(i18next.language);
-    },
-    /**
-     * change language - sets default values for the language
-     * @param {String} lng the language changed to
-     * @returns {Void}  -
-     */
-    changeLang: function (lng) {
-        this.set({
-            currentLng: lng,
-            exampleTitle: i18next.t("common:foo.bar.exampleTitle"),
-            exampleText: i18next.t("common:foo.bar.exampleText")
-        });
-    }
-});
-
-export default ExampleModel;
-```
-
-#### Listen to your model
-
-If set up properly, the view listens to model changes and renders the template when required. The Masterportal uses *Underscore.js* for templating. To show how this SHOULD be implemented, the model from above is used to set up the MV* in the following example.
-
-**ExampleTemplate:**
-
-```html
-<!DOCTYPE html>
-<div class="title"><%= exampleTitle %></div>
-<div class="text"><%= exampleText %></div>
-```
-
-**ExampleView:**
-
-```js
-import ExampleTemplate from "text-loader!./template.html";
-import ExampleModel from "./model";
-
-const ExampleView = Backbone.View.extend(/** @lends ExampleView.prototype */{
-    /**
-     * @class ExampleView
-     * @extends Backbone.View
-     * @memberof Example
-     * @constructs
-     * @listens ExampleModel#changeExampleText
-     */
-    initialize: function () {
-        this.model = new ExampleModel();
-
-        this.listenTo(this.model, {
-            "change:currentLng": this.render
-        });
-
-        this.render();
-    },
-
-    /**
-     * renders the view
-     * @param {ExampleModel} model the model of the view
-     * @param {Boolean} value the values of the changes made to the model
-     * @returns {Void}  -
-     */
-    render: function () {
-        const template = _.template(ExampleTemplate),
-            params = this.model.toJSON();
-
-        this.$el.html(template(params));
-
-        return this;
-    }
-});
-
-export default ExampleView;
-```
-
 ## Translation of config.json names
 
 This section describes how to use i18next to translate config.json values
@@ -401,6 +298,109 @@ Please check the correct spelling of the key. i18next can't find this key neithe
 Please check first whether the module controlled by this part of the config.json has been programmed to react to translations at all.
 
 >Expert hint: The `config.json` is translated initially when the Masterportal starts. For language changes, `i18next.translate` must be used in the code. If not used, the content will permanently remain in the initially active language.
+
+## How to use i18next in production
+
+This section is a guide on how to integrate i18next into your Masterportal project using MV*.
+
+### Translate your model
+
+To translate values for your model with i18next, simply set the values using the translation function of i18next. Listening to the `Backbone.Radio` event `"i18next#RadioTriggerLanguageChanged"` allows value changes to the currently chosen language at run-time.
+
+**ExampleModel:**
+
+```js
+const ExampleModel = Backbone.Model.extend(/** @lends ExampleModel.prototype */ {
+    defaults: {
+        currentLng: "",
+        exampleTitle: "",
+        exampleText: ""
+    },
+    /**
+     * @class ExampleModel
+     * @extends Backbone.Model
+     * @memberof Example
+     * @constructs
+     * @listens i18next#RadioTriggerLanguageChanged
+     */
+    initialize: function () {
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang(i18next.language);
+    },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng the language changed to
+     * @returns {Void}  -
+     */
+    changeLang: function (lng) {
+        this.set({
+            currentLng: lng,
+            exampleTitle: i18next.t("common:foo.bar.exampleTitle"),
+            exampleText: i18next.t("common:foo.bar.exampleText")
+        });
+    }
+});
+
+export default ExampleModel;
+```
+
+#### Listen to your model
+
+If set up properly, the view listens to model changes and renders the template when required. The Masterportal uses *Underscore.js* for templating. To show how this SHOULD be implemented, the model from above is used to set up the MV* in the following example.
+
+**ExampleTemplate:**
+
+```html
+<!DOCTYPE html>
+<div class="title"><%= exampleTitle %></div>
+<div class="text"><%= exampleText %></div>
+```
+
+**ExampleView:**
+
+```js
+import ExampleTemplate from "text-loader!./template.html";
+import ExampleModel from "./model";
+
+const ExampleView = Backbone.View.extend(/** @lends ExampleView.prototype */{
+    /**
+     * @class ExampleView
+     * @extends Backbone.View
+     * @memberof Example
+     * @constructs
+     * @listens ExampleModel#changeExampleText
+     */
+    initialize: function () {
+        this.model = new ExampleModel();
+
+        this.listenTo(this.model, {
+            "change:currentLng": this.render
+        });
+
+        this.render();
+    },
+
+    /**
+     * renders the view
+     * @param {ExampleModel} model the model of the view
+     * @param {Boolean} value the values of the changes made to the model
+     * @returns {Void}  -
+     */
+    render: function () {
+        const template = _.template(ExampleTemplate),
+            params = this.model.toJSON();
+
+        this.$el.html(template(params));
+
+        return this;
+    }
+});
+
+export default ExampleView;
+```
 
 ## Unit Tests
 
