@@ -276,7 +276,7 @@ const CompareFeaturesModel = Tool.extend({
                 }
             };
 
-        Radio.trigger("Print", "createPrintJob", "compareFeatures", encodeURIComponent(JSON.stringify(pdfDef)), "pdf");
+        Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(pdfDef)), "compareFeatures", "pdf");
     },
 
     prepareTableBody: function (features, rowsToShow) {

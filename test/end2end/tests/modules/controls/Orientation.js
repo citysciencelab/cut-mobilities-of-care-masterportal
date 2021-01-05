@@ -96,7 +96,7 @@ function Orientation ({builder, url, resolution, capability}) {
                 const center = await driver.executeScript(getCenter),
                     firstResult = await driver.findElement(By.css("div.modal-dialog div.active table.table tr:first-child td"));
 
-                await driver.wait(until.elementIsVisible(firstResult));
+                await driver.wait(until.elementIsVisible(firstResult), 8000);
                 await firstResult.click();
 
                 expect(center).not.to.eql(await driver.executeScript(getCenter));
