@@ -1,5 +1,6 @@
 import Tool from "../../core/modelList/tool/model";
 import {extractEventCoordinates} from "../../../src/utils/extractEventCoordinates";
+import store from "../../../src/app-store";
 
 const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -64,6 +65,12 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
         Radio.on("Map", "setGFIParams", this.highlightMouseFeature, this); // wird beim Öffnen eines GFI getriggert
         this.listenTo(this, {"change:layerid": this.getLayerWithLayerId});
         this.listenTo(this, {"change:featureid": this.getFeatureWithFeatureId});
+
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+
+        this.changeLang();
     },
 
     /**
@@ -147,38 +154,21 @@ const FeatureListerModel = Tool.extend(/** @lends FeatureListerModel.prototype *
      * @return {void}
      */
     highlightFeature: function (id) {
-        // Layer angepasst und nicht nur auf das eine Feature. Nach Merge MML-->Dev nochmal prüfen
         const layer = this.get("layer"),
-            features = layer.features,
-            feature = features.find(feat => {
-                return feat.id.toString() === id;
-            }).feature,
-            style = feature.getStyle() ? feature.getStyle() : layer.style(feature),
-            clonedStyle = style.clone(),
-            clonedImage = clonedStyle.getImage();
+            highlightObject = {
+                type: "increase",
+                id: id,
+                layer: layer
+            };
 
-        if (clonedImage) {
-            this.setHighlightedFeature(feature);
-            this.setHighlightedFeatureStyle(feature.getStyle());
-
-            clonedImage.setScale(clonedImage.getScale() * 1.5);
-
-            feature.setStyle(clonedStyle);
-        }
+        store.dispatch("Map/highlightFeature", highlightObject);
     },
     /**
      * Scales the style of the deselected feature back to previous value
      * @return {void}
      */
     downlightFeature: function () {
-        const highlightedFeature = this.get("highlightedFeature"),
-            highlightedFeatureStyle = this.get("highlightedFeatureStyle");
-
-        if (highlightedFeature) {
-            highlightedFeature.setStyle(highlightedFeatureStyle);
-            this.setHighlightedFeature(null);
-            this.setHighlightedFeatureStyle(null);
-        }
+        store.dispatch("Map/removeHighlightFeature", "decrease");
     },
     /**
      * Keeps the selected layer in mind

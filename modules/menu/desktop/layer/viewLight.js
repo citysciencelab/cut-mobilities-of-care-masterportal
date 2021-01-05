@@ -29,6 +29,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeCurrentLng
      * @listens Map#RadioTriggerMapChange
      * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem

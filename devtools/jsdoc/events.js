@@ -1439,13 +1439,6 @@
  */
 
 /**
- * @event Core#RadioRequestUtilGetPathFromLoader
- * @description returns the path to the loader gif
- * @returns {String} - path to loader gif
- * @example Radio.request("Util", "getPathFromLoader");
- */
-
-/**
  * @event Core#RadioRequestUtilGetMasterPortalVersionNumber
  * @description returns the masterportal version number
  * @returns {String} - masterportal version number
