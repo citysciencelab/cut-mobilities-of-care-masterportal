@@ -415,7 +415,10 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             }
         }
 
-        if (styleModel && legend === true) {
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (styleModel && legend === true) {
             this.setLegend(styleModel.getLegendInfos());
         }
         else if (typeof legend === "string") {

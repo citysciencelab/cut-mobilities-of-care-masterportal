@@ -82,8 +82,8 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
             .catch(error => {
                 console.warn("The fetch of the data failed with the following error message: " + error);
                 Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br>"
-                        + "<small>Details: Ein benötigter Dienst antwortet nicht.</small>",
+                    text: "<strong>" + i18next.t("modules.zoomToGeometry.alertParameterizedAccess") + "</strong> <br>"
+                    + "<small>" + i18next.t("modules.zoomToGeometry.alertRequiredService") + "</small>",
                     kategorie: "alert-warning"
                 });
             });

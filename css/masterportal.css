@@ -95,83 +95,141 @@ label {
     color: #000000;
 }
 
-/*******Loader *******/
-.centered {
-    position: absolute;
-    width: 300px;
-    height: 130px;
-    top: 50%;
-    left: 50%;
-    margin-top: -130px;
-    margin-left: -150px;
-    background: #FFFFFF;
-    opacity: 0.9;
-}
 
-#logo-txt-box {
-    position: relative;
-}
-
-#portal-text {
-    position: relative;
+/* For center anything in the unknown */
+.centered-box-wrapper {
     text-align: center;
-    top: 6px;
-    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
-    font-size: 28px;
+    white-space: nowrap;
 }
-.logo-right-bottom {
-    position: fixed;
-    right: 60px;
-    bottom: 32px;
-    z-index : -1;
+.centered-box-wrapper:before {
+    content: " ";
+    display: inline-block;
+    height: 100%;
+    margin-right: -0.25em;
+    vertical-align: middle;
 }
-@media (max-width: 830px) {
-    .logo-right-bottom {
-        position: fixed;
-        right: 60px;
-        bottom: 25px;
-        text-align: left;
-        left: 50%;
-        margin-left: -50px;
-        z-index : -1;
+.centered-box-wrapper > .centered-box-content {
+    display: inline-block;
+    vertical-align: middle;
+}
+/* End "For center anything in the unknown" */
+
+
+.blurry {
+    filter: blur(3px);
+}
+
+/* Loader Overlay */
+#loader {
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    background-color:rgba(255,255,255,0.4);
+    display:none;
+    padding-bottom:100px;
+    z-index:1000; /* z-index race yaaay! */
+}
+#loader.loader-is-initially-loading {
+    background-color:rgba(255,255,255,0);
+}
+#loader.loader-is-loading {
+    display:block;
+}
+
+#generic-masterportal-logo {
+    background-color:rgba(255,255,255,0.8);
+    opacity:1;
+    padding: 20px 20px 10px 20px;
+    position: absolute;
+    text-align:center;
+    transition:opacity 0.35s 3s;
+    width:170px;
+}
+#generic-masterportal-logo.initial-fadeout-animation {
+    opacity:0;
+}
+#generic-masterportal-logo img {
+    width:100%;
+}
+@media (max-width: 1023px) {
+    #loader-spinner-itself.default {
+        border: 5px solid #AAAAAA;
     }
+    #generic-masterportal-logo {
+        bottom: 15%;
+        left:50%;
+        margin-left:-85px;
+        border-radius: 14px;
+    }    
+}
+@media (min-width: 1024px) {
+    #loader-spinner-itself.default {
+        border: 8px solid #AAAAAA;
+    }
+    #generic-masterportal-logo {
+        bottom: 0;
+        right: 0;
+        border-radius: 14px 0 0 0;
+    }    
+}
+#loader-spinner-itself.default {
+    animation: loaderSpinAnimation 1s 0.1s ease-in-out infinite both;
+    border-radius: 50%;
+    border-top-color: #777777;
+    content: "";
+    transition:border-color 0.25s;
+}
+#loader-spinner-itself {
+    display:inline-block;
+    height: 5vw;
+    max-height:70px;
+    max-width:70px;
+    min-height:40px;
+    min-width:40px;
+    transition:opacity 0.35s;
+    opacity:1;
+    width: 5vw;
+}
+#loader-spinner-itself.default:hover {
+    border-top-color: #E10019;
+}
+#loader-spinner-itself.initial-fadeout-animation {
+    opacity:0;
 }
 
-#portal-logo {
-    position: relative;
-    top: 5px;
-    left: 98px;
-}
-#portal-logo-text {
-    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
-    position: relative;
-    text-align: center;
-    top: 8px;
-    font-size: 34px;
-}
-/* loading-spinner */
-.loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: 35px;
-    margin-left: -30px;
-    content: "";
-    width: 70px;
-    height: 70px;
-    border: 10px solid #dddddd;
-    border-top-color: #b3bbc1;
-    border-radius: 50%;
-    animation: spin 0.8s 0.1s ease-in-out infinite both;
-}
-@keyframes spin {
+@keyframes loaderSpinAnimation {
     from {
-      transform: rotate(0);
+        transform: rotate(0);
     }
     to {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
+}
+#portal-logo-box {
+    opacity:1;
+    transition:opacity 0.35s 3s;
+    background-color:rgba(255,255,255,0.8);
+    font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
+    font-size:36px;
+    margin-bottom:24px;
+    padding:15px 40px 30px 40px;
+    border-radius:14px;
+    text-align:center;
+}
+#portal-logo-box.initial-fadeout-animation {
+    opacity:0;
+}
+#portal-logo-main-title {
+    margin:10px 0 8px 0;    
+}
+#portal-logo-sub-title {
+    font-size:0.75em;
+    margin:8px 0 0 0;    
+}
+/* End "Loader Overlay" */
+
 
   /* deprecated  */
   .loading {

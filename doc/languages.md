@@ -274,7 +274,7 @@ Tools (de: "Werkzeuge") can be translated similarly to tools. This includes the 
 The following possibilities and hierarchy exist:
 
 * `"name": "Draw / Write"` is never translated
-* `"name": "translate#example:foo.bar.exampleMenuTitle"` is translated if the key exists
+* `"name": "translate#common:foo.bar.exampleMenuTitle"` is translated if the key exists
 * if no name is specified (that is, the field name does not exist), the name is set by the model.js (in this scenario, `../tools/draw/model.js`)
 
 #### Define tool name in the `model.js`

@@ -60,7 +60,10 @@ const state = {
     layers: null,
     overlayIds: null,
     overlays: null,
-    mapMode: MapMode.MODE_2D
+    mapMode: MapMode.MODE_2D,
+    highlightedFeature: null,
+    highlightedFeatureStyle: null,
+    vectorFeaturesLoaded: false
 };
 
 export default state;
