@@ -1,24 +1,28 @@
-# Weitere Informationen zu den Coding-Konventions
+# Additional information on the coding conventions
 
-Es folgen - falls vorhanden - Erläuterungen und Beispiele zu den jeweiligen Punkten aus [codingConventions.md](./codingConventions.md).
+Explanations and examples are given for some points mentioned in the [coding conventions](./codingConventions.md) below.
 
 ---
 
-### Teil A
+### Section A
 
 #### A.1.6
-Derzeit ist Babel nicht in der Lage, TPL Dateien zu übersetzen und Internet Explorer unterstützt keine Pfeil-Funktionen.
+
+Babel currently does not translate TPL files. Since the IE11 does not support arrow functions, they may not be used in the template.
 
 ---
 
 #### A.4.1
-Weitere Infos bezüglich Vue befinden sich [hier](./conventions/vue.md).
+
+You may look up additional information regarding Vue [here](./conventions/vue.md).
 
 ---
 
 #### A.4.3
-*Beispiel des JSDoc zweier Funktionen*
-```javascript
+
+These two examples illustrate how to write JSDoc comment blocks.
+
+```js
 /**
 * This function does some things that are explained right here.
 * @returns {Void}
@@ -28,11 +32,11 @@ functionWithoutParamsAndNoReturn: function () {
 }
 ```
 
-```javascript
+```js
 /**
 * This function does some things that are explained right here.
 * @param {String} param1 InputString.
-* @returns {String}  - ConcatenatedString
+* @returns {String} ConcatenatedString
 */
 functionWithParamsAndReturn: function (param1) {
     return param1 + "foobar";
@@ -42,17 +46,19 @@ functionWithParamsAndReturn: function (param1) {
 ---
 
 #### A.4.4
-*Beispiel einer initialize() Funktion*
-```javascript
+
+*Example for the `initialize()` function:*
+
+```js
 defaults: {
-        channel: Radio.channel("Alert"),
-        category: "alert-info",
-        isDismissable: true,
-        isConfirmable: false,
-        position: "top-center",
-        message: "",
-        animation: false
-    },
+    channel: Radio.channel("Alert"),
+    category: "alert-info",
+    isDismissable: true,
+    isConfirmable: false,
+    position: "top-center",
+    message: "",
+    animation: false
+},
 
 /**
  * @class AlertingModel
@@ -77,8 +83,9 @@ initialize: function () {
 },
 ```
 
-*Beispiel einer Instanziierung eines Templates:*
-```javascript
+*Example for template instantiation:*
+
+```js
 /**
  * @member AlertingTemplate
  * @description Template used to create the alert message
@@ -90,26 +97,32 @@ template: _.template(AlertingTemplate),
 ---
 
 #### A.4.5
-*Kommentar bei Vererbung*
-```javascript
+
+*Comment on inheritance:*
+
+```js
     const AlertingModel = Backbone.Model.extend(/** @lends AlertingModel.prototype */{
 ```
 
 ---
 
 #### A.4.6
-*Definition von Namespaces:*
-*Beispiel des Namespaces Alerting in Root:*
-```javascript
+
+Namespace definition.
+
+*Example namespace Alerting in Root:*
+
+```js
 /**
  * @namespace Alerting
  * @description Alerting system that responds to given events.
- * Used to have same alert all over the portal.
+ * Used to have the same alert all over the portal.
  */
 ```
 
-*Beispiel des Namespaces Modellist als Unterordner des Core:*
-```javascript
+*Example namespace ModelList as Core subfolder:*
+
+```js
 /**
  * @namespace ModelList
  * @memberof Core
@@ -117,8 +130,9 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Innerhalb von verschachtelten Namespaces:*
-```javascript
+*Example nested namespace:*
+
+```js
 /**
  * @event Core.ModelList.Layer#changeIsSelected
  * @param {Backbone.Model} model The model whose attribute hat changed.
@@ -127,9 +141,8 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel mit Namespace eines Moduls:*
-*Beispiel eines Events, das zum Namespace "Alerting" gehört:*
-```javascript
+*Example module namespace with event of namespace Alerting:*
+```js
 /**
  * @event Alerting#RadioTriggerAlertAlert
  * @param {String/Object} alert The alert object or string needed to create the alert.
@@ -140,9 +153,11 @@ template: _.template(AlertingTemplate),
 ---
 
 #### A.4.7
-*Definition von Events:*
-*Beispiel: Radio.trigger("Channel", "Event");*
-```javascript
+
+Event definition.
+
+*Example: `Radio.trigger("Channel", "Event");`*
+```js
 /**
  * @event Namespace#RadioTriggerChannelEvent
  * @description FooBar.
@@ -150,8 +165,8 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Radio.trigger("Channel", "EventWithData", data);*
-```javascript
+*Example: `Radio.trigger("Channel", "EventWithData", data);`*
+```js
 /**
  * @event Namespace#RadioTriggerChannelEventWithData
  * @description FooBar.
@@ -160,8 +175,8 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Radio.request("Channel", "Event");*
-```javascript
+*Example: `Radio.request("Channel", "Event");`*
+```js
 /**
  * @event Namespace#RadioRequestChannelEvent
  * @description FooBar.
@@ -170,8 +185,8 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Radio.request("Channel", "EventWithData", data);*
-```javascript
+*Example: `Radio.request("Channel", "EventWithData", data);`*
+```js
 /**
  * @event Namespace#RadioRequestChannelEventWithData
  * @description FooBar.
@@ -181,16 +196,16 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: Model.trigger("myTrigger");*
-```javascript
+*Example: `Model.trigger("myTrigger");`*
+```js
 /**
  * @event Namespace#MyTrigger
  * @description FooBar.
  */
 ```
 
-*Beispiel: Model.trigger("myTriggerWithData", data);*
-```javascript
+*Example: `Model.trigger("myTriggerWithData", data);`*
+```js
 /**
  * @event Namespace#MyTriggerWithData
  * @param {*} data Data to be sent with the event
@@ -198,10 +213,8 @@ template: _.template(AlertingTemplate),
  */
 ```
 
-*Beispiel: this.listenTo(this, {
-    "change:attributeOne": this.doSomething
-});*
-```javascript
+*Example: `this.listenTo(this, { "change:attributeOne": this.doSomething });`*
+```js
 /**
  * @event Namespace#changeAttributeOne
  * @description FooBar.
@@ -211,47 +224,54 @@ template: _.template(AlertingTemplate),
 ---
 
 #### A.5.1
-*Beispiele einer testbaren und einer nicht testbaren Funktion*
-```javascript
-function testbareFunktion (uebergabeParameter) {
+
+Example for testable and untestable functions.
+
+```js
+function testableFunction (uebergabeParameter) {
     let rueckgabeParameter = "Hello " + uebergabeParameter;
 
     return rueckgabeParameter
 }
 
 const arr = [];
-function nichtTestbareFunktion (param) {
+function untestableFunction (param) {
     setTimeout(() => {
         arr.push(param);
     }, 1000);
 }
-
 ```
 
 ---
 
 #### A.5.2
-Weitere Informationen zu Unit-Tests [hier](./unittestingVue.md).
 
-Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mocha](https://mochajs.org/)** verwendet.
+For more information on unit tests in Vue, refer to [the Vue unit test documentation](./unitTestVue.md).
+
+Tests employ the libraries **[Chai](https://www.chaijs.com/)** and **[Mocha](https://mochajs.org/)**.
 
 ---
 
 #### A.6.2
-Erweitere die Dokumentation in den .md-Dateien wie im Folgenden beschrieben:
-a) Erweitere die **[config.js.md](./config.js.md)**, wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
-b) Erweitere die **[config.json.md](./config.json.md)**, wenn du neue Konfigurationsparameter für die Portaloberfläche erzeugt hast oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
-c) Es werden immer die folgenden Parameter in der Dokumentation für die Konfigurationsparameter befüllt:
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-"Expert" gibt es nur in der config.json.
-d) Ein Parameter endet in der .md Datei immer mit einer horizontalen Trennlinie.
-e) Je nach Verschachtelung des Parameters wird die Überschrift ausgewählt. Auf der obersten Ebene mit # darunter mit ##.
-f) Konfigurationsparameter die ein Objekt sind und selber weitere Parameter enthalten werden in einem eigenen Bereich einzeln beschrieben und verlinkt.
-g) Bei komplexen Konfigurationsparametern ist eine Beispielkonfiguration gefordert.
-h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[rest-services.json.md](./rest-services.json.md)** und **[style.json.md](./style.json.md)**, wenn du für diese globalen Konfigurationsdateien neue Parameter benötigst/verwendest.
 
+Extend the `.md` file documentation by following these instructions.
 
-*Verschachtelung in .json wird mit der Anzahl von # dargestellt:*
+* For new configuration parameters that do not directly influence the Masterportal UI and displayed layers, or on changes to such existing parameters, extend the file **[config.js.md](./config.js.md)**.
+* For new configuration parameters regarding the Masterportal UI, or on changes to such existing parameters, extend the **[config.json.md](./config.json.md)**.
+* The following parameters are mandatory for documenting configuration parameters:
+    |Name|Required|Type|Default|Description|Expert|
+    |-|-|-|-|-|-|
+    The row `Expert` only applies to the **[config.json.md](./config.json.md)**.
+* Each parameter in a `.md` file ends on a horizontal separation line produced by e.g. `***` or `---`.
+* The heading to be used depends on the parameter nesting. The top level starts with `#`, the next level with `##`, and so on. Please mind that Markdown only supports up to six chapter levels.
+* Configuration parameters describing an object containing further parameters are modelled in separate chapters and are each linked and described.
+* For complex configuration parameters, an example configuration is required.
+* Also extend the files **[services.json.md](./services.json.md)**, **[rest-services.json.md](./rest-services.json.md)**, and **[style.json.md](./style.json.md)**, if you add or change parameters to these global configuration files.
+
+For a more formal definition of the **[config.json.md](./config.json.md)** requirements, see [Masterportal configuration parser](https://bitbucket.org/geowerkstatt-hamburg/mpconfigparser/src/master/README.md).
+
+*Nesting in .json is modeled with the amount of #*
+
 ```
     # config.json
     .
@@ -261,19 +281,19 @@ h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[r
     ## Portalconfig
 ```
 
-*8.3.6 - Parameter sind verschachtelt, wenn sie selber ein Objekt sind*
+*Parameters are nested when describing an object themselves:*
 ```
     ## Portalconfig
     |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
     |----|-------------|---|-------|------------|------|
-    |controls|nein|[controls](#markdown-header-portalconfigcontrols)||Mit den Controls kann festgelegt werden, welche Interaktionen in der Karte möglich sein sollen.|false|
+    |controls|nein|[controls](#markdown-header-portalconfigcontrols)||Description text.|false|
     ***
 
     ### Portalconfig.controls
 
 ```
 
-*8.3.7 - Beispiel einer komplexen Beispielkonfiguration*
+*Example of a complex configuration*
 ```
     "osm": {
         "minChars": 3,
@@ -287,24 +307,25 @@ h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[r
 ---
 
 #### A.6.4
-Bei Veränderung/Refactoring/Löschen eines Parameters:
-a) Markiere den Parameter in der Doku mit "Deprecated in [nächstes Major-Release]".
-b) Markiere den Code für den alten Parameter mit "@deprecated in [nächstes Major-Release]" im JSDoc.
 
-*Beispiel Änderung eines Parameters:*
-*Beispiel des deprecated Parameters "Baumtyp" in der config.json.md:*
-```markdown
+On changing, refactoring, or deleting a parameter:
+
+* Note "Deprecated in [next major release]" within the parameter's documentation.
+* Mark the old parameter's code as deprecated by adding "@deprecated in [next major release]" within the JSDoc comment.
+
+For example, the following annotations mark the parameter "Baumtyp" within the `config.json` and code as deprecated:
+
+```md
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|Baumtyp|nein|enum["light", "default", "custom"]|"light"|Deprecated in 3.0.0 Bitte Attribut "treeType" verwenden.|false|
+|Baumtyp|nein|enum["light", "default", "custom"]|"light"|Deprecated in 3.0.0. Use "treeType" instead.|false|
 ```
 
-*Beispiel des deprecated Parameter "Baumtyp" im Code:*
-```javascript
+```js
 /**
-* this.updateTreeType
-* @deprecated in 3.0.0
-*/
+ * this.updateTreeType
+ * @deprecated in 3.0.0
+ */
 attributes = this.updateTreeType(attributes, response);
 ...
 /**
@@ -332,20 +353,25 @@ updateTreeType: function (attributes, response) {
 ---
 
 #### A.7.1
-Es wird die Bibliothek [i18next](https://www.i18next.com/) verwendet.
+
+The library [i18next](https://www.i18next.com/) is used for internationalization.
 
 ---
 
 #### A.8.3
-Weitere Informationen zur Versionierung [hier](./Versionierung.md).
-Schreibe für jeden Pull request einen Eintrag im [CHANGELOG](../CHANGELOG.md) unter dem Punkt Unreleased. Vermeide Fachjargon. Der Changelog soll die NutzerIn und EntwicklerIn informieren.
+
+For more information of versions, read the [versioning documentation](./versioning.md).
+
+For each pull request, add an entry to the chapter "Unreleased" of the [CHANGELOG](../CHANGELOG.md) file. Avoid technical jargon. The changelog is supposed to be readable by both users and developers.
 
 ---
 
-### Teil B (optional)
+### Section B (optional)
 
 #### B.3.1
-```
+
+```js
+// code example for generating simple getters
 import state from "./state";
 import {generateSimpleMutations} from "~generators";
 
@@ -356,15 +382,17 @@ const mutations = {
 ----
 
 #### B.4.2
-* [mapState](https://vuex.vuejs.org/guide/state.html#the-mapstate-helper)
-* [mapGetters](https://vuex.vuejs.org/guide/getters.html#the-mapgetters-helper)
-* [mapMutations](https://vuex.vuejs.org/guide/mutations.html#committing-mutations-in-components)
-* [mapActions](https://vuex.vuejs.org/guide/actions.html#dispatching-actions-in-components)
+
+* [mapState documentation](https://vuex.vuejs.org/guide/state.html#the-mapstate-helper)
+* [mapGetters documentation](https://vuex.vuejs.org/guide/getters.html#the-mapgetters-helper)
+* [mapMutations documentation](https://vuex.vuejs.org/guide/mutations.html#committing-mutations-in-components)
+* [mapActions documentation](https://vuex.vuejs.org/guide/actions.html#dispatching-actions-in-components)
 
 ---
 
 #### B.5.4
-```
+
+```html
 <style lang="less" scoped>
     @import "~variables";
 </style>
@@ -373,15 +401,17 @@ const mutations = {
 ---
 
 #### B.6
-*Beispiel mit einfachem Text:*
-```javascript
-    import store from "masterportal/src/app-store/index";
-    store.dispatch("Alerting/addSingleAlert", "My First Alert Message.");
+
+An example simply displaying "My First Alert Message":
+
+```js
+import store from "masterportal/src/app-store/index";
+store.dispatch("Alerting/addSingleAlert", "My First Alert Message.");
 ```
 
-*Beispiele von Fehlermeldungen:*
-Negativ-Beispiel: "CSW-Request fehlgeschlagen".
-Positiv-Beispiel: "Die weiteren Informationen zu Themen konnten nicht geladen werden."
+On phrasing, please use the following examples as a guideline.
 
-Negativ-Beispiel: "Sie haben das Passwort vergessen".
-Positiv-Beispiel: "Bitte geben sie ihr Passwort an".
+|Positive example|Negative example|
+|-|-|
+|Further information on this topic could not be loaded.|CSW request failed|
+|Please enter your password|You forgot to enter your password|
