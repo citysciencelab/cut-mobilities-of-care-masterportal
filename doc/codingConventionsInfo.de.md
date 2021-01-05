@@ -231,7 +231,7 @@ function nichtTestbareFunktion (param) {
 ---
 
 #### A.5.2
-Weitere Informationen zu Unit-Tests [hier](./unittestingVue.md).
+Weitere Informationen zu Unit-Tests [hier](./unitTestVue.de.md).
 
 Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mocha](https://mochajs.org/)** verwendet.
 
@@ -239,8 +239,8 @@ Zum Testen werden die Bibliotheken **[Chai](https://www.chaijs.com/)** und **[Mo
 
 #### A.6.2
 Erweitere die Dokumentation in den .md-Dateien wie im Folgenden beschrieben:
-a) Erweitere die **[config.js.md](./config.js.md)**, wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
-b) Erweitere die **[config.json.md](./config.json.md)**, wenn du neue Konfigurationsparameter für die Portaloberfläche erzeugt hast oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
+a) Erweitere die **[config.js.md](./config.js.de.md)**, wenn du neue Konfigurationsparameter erzeugt hast die sich nicht auf die Portal-Oberfläche oder die dargestellten Layer beziehen oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
+b) Erweitere die **[config.json.md](./config.json.de.md)**, wenn du neue Konfigurationsparameter für die Portaloberfläche erzeugt hast oder wenn du Erweiterungen/Anpassungen der vorhandenen Parameter vorgenommen hast.
 c) Es werden immer die folgenden Parameter in der Dokumentation für die Konfigurationsparameter befüllt:
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 "Expert" gibt es nur in der config.json.
@@ -248,7 +248,7 @@ d) Ein Parameter endet in der .md Datei immer mit einer horizontalen Trennlinie.
 e) Je nach Verschachtelung des Parameters wird die Überschrift ausgewählt. Auf der obersten Ebene mit # darunter mit ##.
 f) Konfigurationsparameter die ein Objekt sind und selber weitere Parameter enthalten werden in einem eigenen Bereich einzeln beschrieben und verlinkt.
 g) Bei komplexen Konfigurationsparametern ist eine Beispielkonfiguration gefordert.
-h) Erweitere ebenso die Dateien **[services.json.md](./services.json.md)**, **[rest-services.json.md](./rest-services.json.md)** und **[style.json.md](./style.json.md)**, wenn du für diese globalen Konfigurationsdateien neue Parameter benötigst/verwendest.
+h) Erweitere ebenso die Dateien **[services.json.md](./services.json.de.md)**, **[rest-services.json.md](./rest-services.json.de.md)** und **[style.json.md](./style.json.de.md)**, wenn du für diese globalen Konfigurationsdateien neue Parameter benötigst/verwendest.
 
 
 *Verschachtelung in .json wird mit der Anzahl von # dargestellt:*
@@ -337,7 +337,7 @@ Es wird die Bibliothek [i18next](https://www.i18next.com/) verwendet.
 ---
 
 #### A.8.3
-Weitere Informationen zur Versionierung [hier](./Versionierung.md).
+Weitere Informationen zur Versionierung [hier](./versioning.de.md).
 Schreibe für jeden Pull request einen Eintrag im [CHANGELOG](../CHANGELOG.md) unter dem Punkt Unreleased. Vermeide Fachjargon. Der Changelog soll die NutzerIn und EntwicklerIn informieren.
 
 ---
