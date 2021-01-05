@@ -8,7 +8,7 @@
 ### Added
 
 ### Changed
-
+- The language of the changelog has been changed to English.
 ### Deprecated
 
 ### Removed
