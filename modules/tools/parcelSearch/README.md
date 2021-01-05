@@ -1,13 +1,19 @@
-#### Beschreibung
-Dieses Modul ist eine Alternative zu der Flurstückssuche in searchbar/gaz. Hier werden die Gemarkungen
-(Name und Nummer) in einem Auswahlmenü aufgelistet. Die Gemarkungen werden im lgv-config Repository
-in der Datei gemarkung.json gepflegt. Für die Suche wird der/die/das? StoredQuery mit der ID
-"Flurstueck" genutzt. In der Portaloberfläche befindet sich die Flurstückssuche im Menüreiter
-Werkzeuge.
-#### Konfiguration
-    tools: {
-        parcelSearch: true,
-        ...
+# README
+
+## Description
+
+This module is an alternative to the parcel search function offered in `searchbar/gaz`. Districts (by name and number) are listed in a select element. District data is maintained in the `gemarkung.json` file versioned in the `lgv-config` repository.
+
+This search uses the StoredQuery with ID `Flurstueck`. The portal UI is located in the menu tool `Parcel search`.
+## Configuration
+
+```js
+{
+    "tools": {
+        "parcelSearch": true,
+        // ...
     },
-    gemarkungen: "../components/lgv-config/gemarkung.json",
-    ...
+    "gemarkungen": "../components/lgv-config/gemarkung.json",
+    // ...
+}
+```
