@@ -53,4 +53,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    #main-nav{
+        flex-grow:0;
+    }
 </style>

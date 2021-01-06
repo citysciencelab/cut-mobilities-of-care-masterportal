@@ -117,6 +117,7 @@ export default {
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
+        :initialWidth="300"
     >
         <template v-slot:toolBody>
             <div
@@ -237,7 +238,6 @@ export default {
 
     .cta {
         margin-bottom:12px;
-        max-width:300px;
     }
     .drop-area-fake {
         background-color: #FFFFFF;

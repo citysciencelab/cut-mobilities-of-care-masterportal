@@ -44,7 +44,19 @@ const SidebarModel = Backbone.Model.extend(/** @lends SidebarModel.prototype */{
      * @returns{void}
      */
     setWidth: function (value = "auto") {
-        this.set("width", value);
+        let res = parseFloat(value, 10);
+        
+        if (isNaN(res)) {
+            res = "auto";
+        }
+        if (res <= 1) {
+            res = Math.round(res * window.innerWidth) + "px";
+        }
+        else {
+            res = Math.round(res) + "px";
+        }
+        
+        this.set("width", res);
     }
 });
 

@@ -44,11 +44,18 @@ export default {
                 <Footer />
                 <MapMarker />
             </div>
+            <ToolManager
+                v-if="configJson"
+                :showInSidebar="false"
+            />
         </div>
 
         <div id="sidebar">
             <!-- Alternatively to adding the configJson lifecycle hook to every component, the Main component can wait mounting its children until the config is parsed -->
-            <ToolManager v-if="configJson" />
+            <ToolManager
+                v-if="configJson"
+                :showInSidebar="true"
+            />
         </div>
 
         <!-- elements that are somewhere above the map, but don't have a fixed position or are not always present -->
@@ -66,6 +73,13 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    #sidebar, .sidebar{
+        position: relative;
+    }
+    #sidebar .tool-manager{
+        height:100%;
+    }
+
     .anchor {
         position: relative;
 
@@ -76,6 +90,8 @@ export default {
         }
         #sidebar {
             order:2;
+            flex-grow:0;
+            height:100%;
         }
 
         /* map itself should fill the whole region as "background" */

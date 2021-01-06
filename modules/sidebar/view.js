@@ -73,10 +73,10 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      * @param {boolean} draggable is the sidebar resizeable?
      * @returns {void}
      */
-    addContent: function (element, draggable = false) {
+    addContent: function (element, draggable = false, fixedWidth) {
         this.$el.html(this.template({draggable}));
         this.$el.find("#sidebar-content").html(element);
-        this.model.setWidth();
+        this.model.setWidth(fixedWidth);
     },
     /**
      * Setter for "width".
@@ -113,6 +113,12 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      */
     toggle: function (visible) {
         this.model.setIsVisible(Boolean(visible));
+        if (visible === true) {
+            $("#sidebar .tool-manager").hide();
+        }
+        else {
+            $("#sidebar .tool-manager").show();
+        }
     },
 
     /**
