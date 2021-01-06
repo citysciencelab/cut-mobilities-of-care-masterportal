@@ -11,7 +11,7 @@ describe("src/modules/tools/draw/utils/download/transformGeometry.js", () => {
                 [691848.0014020792, 5340259.803759704]
             ];
 
-            expect(transform(coords, false)).to.deep.equal(
+            expect(transform(coords, false)).to.eql(
                 [
                     [11.553402467114491, 48.18048612894288],
                     [11.575007532544808, 48.18114662023035],
@@ -27,7 +27,7 @@ describe("src/modules/tools/draw/utils/download/transformGeometry.js", () => {
                 [689546.127645091, 5338656.429625526]
             ]];
 
-            expect(transform(coords, true)).to.deep.equal(
+            expect(transform(coords, true)).to.eql(
                 [[
                     [11.549606597773037, 48.17285700012215],
                     [11.600757126507961, 48.179280978813836],
@@ -41,7 +41,7 @@ describe("src/modules/tools/draw/utils/download/transformGeometry.js", () => {
         it("should transform point coordinates from EPSG:25832 to EPSG:4326", function () {
             const coords = [690054.1273707711, 5340593.1785796825];
 
-            expect(transformPoint(coords)).to.deep.equal([11.557298950358712, 48.19011266676286]);
+            expect(transformPoint(coords)).to.eql([11.557298950358712, 48.19011266676286]);
         });
     });
 });
