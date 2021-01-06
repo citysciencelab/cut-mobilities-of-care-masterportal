@@ -79,6 +79,17 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 ```
 
 ***
+## WMS-Layer.isSecured ##
+WMS Layer der zu einem abgesicherte WMS Dienst gehört.
+
+**ACHTUNG: Wenn der Layer zu einem abgesicherten Dienst gehört, müssen folgende Änderungen am Service vorgenommen werden!**
+
+* Es müssen anhand des Referer zwei Header gesetzt werden.
+* Die Konfiguration hierfür muss z.B. im Apache Webserver erfolgen.
+* `Access-Control-Allow-Credentials: true`
+* Dynamische Umschreibung des nachfolgenden HTTP Headers von: `Access-Control-Allow-Origin: *` nach `Access-Control-Allow-Origin: URL des zugreifenden Portals`
+
+***
 
 ## WMTS-Layer ##
 

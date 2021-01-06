@@ -122,6 +122,7 @@ WMS Layer der zu einem abgesicherte WMS Dienst gehört.
 `Access-Control-Allow-Origin: *` <br>
 nach <br>
 `Access-Control-Allow-Origin: URL des zugreifenden Portals`
+* Dynamic rewrite of the following HTTP header from: `Access-Control-Allow-Origin: *` to `Access-Control-Allow-Origin: URL of the accessing portal`
 
 ***
 
