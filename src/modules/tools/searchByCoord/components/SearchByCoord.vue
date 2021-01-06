@@ -38,13 +38,7 @@ export default {
         this.setExample();
     },
     beforeUpdate () {
-        /**
-         * Without resetting these values there will be errors when switching between languages.
-         */
-        this.coordinatesEasting.errorMessage = "";
-        this.coordinatesEasting.value = "";
-        this.coordinatesNorthing.errorMessage = "";
-        this.coordinatesNorthing.value = "";
+        this.resetValues();
     },
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
@@ -72,6 +66,16 @@ export default {
             }
         },
         /**
+         * Resets the coordinate values and error messages.
+         * @returns {void}
+         */
+        resetValues () {
+            this.coordinatesEasting.errorMessage = "";
+            this.coordinatesEasting.value = "";
+            this.coordinatesNorthing.errorMessage = "";
+            this.coordinatesNorthing.value = "";
+        },
+        /**
          * Called if selection of projection changed.
          * @returns {void}
          */
@@ -79,9 +83,7 @@ export default {
             this.newCoordSystemSelected(this.currentCoordinateSystem);
             this.setExample();
             this.removeMarker();
-            this.coordinatesEasting.value = "";
-            this.coordinatesNorthing.value = "";
-            this.searchCoordinate(this.coordinatesEasting, this.coordinatesNorthing);
+            this.resetValues();
         },
         /**
          * Returns the label name depending on the selected projection.
